@@ -1,0 +1,2168 @@
+{
+  "schema": "opf-native-title-wrap/v1",
+  "sourceCommit": "09acf5561dae0758ed3496381fa9c0591168b5f9",
+  "fontProfile": "office / visual",
+  "widthUnits": "px",
+  "cases": [
+    {
+      "name": "01-demand-generation-campaign-brief-s1",
+      "file": "examples/gallery/business-functions/demand-generation-campaign-brief.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Demand Generation Campaign Brief",
+      "lines": [
+        "Demand Generation ",
+        "Campaign Brief"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 418.114688,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 844.8
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 638.63525390625,
+        "unbroken": 976.50146484375
+      },
+      "after": {
+        "path": "pptx/01-demand-generation-campaign-brief-s1.pptx",
+        "sha256": "84d75ee3af5d2c0fd8fc0cd2090c2986944c70a6e0a5145d4f25cf665fad39ab"
+      },
+      "preview": {
+        "path": "preview/01-demand-generation-campaign-brief-s1.png",
+        "sha256": "83d6facd8b041ea2783f600eda98b9a67b1ce3cd0a205df3e5188d6b853b7536"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/01-demand-generation-campaign-brief-s1.pptx",
+        "sha256": "ff77528cd9cbb4ef3d9b1a87bab7c14f449626d85632afb685140e1067a304d0"
+      }
+    },
+    {
+      "name": "02-employee-town-hall-run-of-show-s1",
+      "file": "examples/gallery/business-functions/employee-town-hall-run-of-show.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Employee Town Hall Run of Show",
+      "lines": [
+        "Employee Town ",
+        "Hall Run of Show"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 478.518267,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 198.33398710937504,
+        "width": 659.33202578125
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 560.34423828125,
+        "unbroken": 668.58642578125
+      },
+      "after": {
+        "path": "pptx/02-employee-town-hall-run-of-show-s1.pptx",
+        "sha256": "5f2e52bee387c9f673d010fb657c3eb8c46a704366c2f67f2ab7a916d6f245a6"
+      },
+      "preview": {
+        "path": "preview/02-employee-town-hall-run-of-show-s1.png",
+        "sha256": "41df7017c7255f24e2f7908898ab0f7b5235bac09e9beb27953cbcea41c9e328"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/02-employee-town-hall-run-of-show-s1.pptx",
+        "sha256": "6e33b8b4f94c9a4e7ff2498ad657abe3c9b64da5b3097a0bfa243ebf344e28ca"
+      }
+    },
+    {
+      "name": "03-engineering-capacity-planning-s1",
+      "file": "examples/gallery/business-functions/engineering-capacity-planning.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Engineering Capacity Planning",
+      "lines": [
+        "Engineering ",
+        "Capacity Planning"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 473.863313,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 153.38525664062504,
+        "width": 749.22948671875
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 650.07568359375,
+        "unbroken": 758.48388671875
+      },
+      "after": {
+        "path": "pptx/03-engineering-capacity-planning-s1.pptx",
+        "sha256": "b1ac07f9c10f664adce68976a83029fdcc35b204ba01d7b1fbca37329b77bd22"
+      },
+      "preview": {
+        "path": "preview/03-engineering-capacity-planning-s1.png",
+        "sha256": "bca96e57706ad32997d4445021028dd99358c04001e70f2bc51cf16ca03d3f5e"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/03-engineering-capacity-planning-s1.pptx",
+        "sha256": "715d66bdbf318de35c4fc88742207681d827884873c6dd6598071f50198e8cef"
+      }
+    },
+    {
+      "name": "04-onboarding-experience-redesign-s1",
+      "file": "examples/gallery/business-functions/onboarding-experience-redesign.opf.json",
+      "slide": 1,
+      "width": 1280,
+      "height": 720,
+      "title": "Onboarding Experience Redesign",
+      "lines": [
+        "Onboarding ",
+        "Experience Redesign"
+      ],
+      "fontSize": 75,
+      "alignment": "center",
+      "originalBox": {
+        "x": 57.6,
+        "y": 415.855,
+        "width": 1164.8,
+        "height": 186.925
+      },
+      "wrap": {
+        "x": 178.57399999999993,
+        "width": 922.8520000000001
+      },
+      "need": 11.648,
+      "widths": {
+        "widest": 824.0999999999999,
+        "unbroken": 934.5000000000001
+      },
+      "after": {
+        "path": "pptx/04-onboarding-experience-redesign-s1.pptx",
+        "sha256": "259aaaa68d740189b3417dc34736118fb716334f98cf31b6fdf857c6ef57d831"
+      },
+      "preview": {
+        "path": "preview/04-onboarding-experience-redesign-s1.png",
+        "sha256": "b58a5590772f91e032f50b4ec851154776728279a993aebc3df335d22d078833"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/04-onboarding-experience-redesign-s1.pptx",
+        "sha256": "e50246bee0522504c72da0da4b105975ee8aa8d10a4adbe9018219eff4d3516c"
+      }
+    },
+    {
+      "name": "05-partner-ecosystem-launch-kit-s1",
+      "file": "examples/gallery/business-functions/partner-ecosystem-launch-kit.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Partner Ecosystem Launch Kit",
+      "lines": [
+        "Partner Ecosystem ",
+        "Launch Kit"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 464.948133,
+        "width": 995.2128,
+        "height": 201.771733
+      },
+      "wrap": {
+        "x": 63.5136,
+        "width": 995.2128
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 773.6788266666666,
+        "unbroken": 1095.6039733333332
+      },
+      "after": {
+        "path": "pptx/05-partner-ecosystem-launch-kit-s1.pptx",
+        "sha256": "9c73cfa28ae7b86c06657434e4cb8cf3c65f7f3cde251b356e6aed7e56e52dc1"
+      },
+      "preview": {
+        "path": "preview/05-partner-ecosystem-launch-kit-s1.png",
+        "sha256": "433f17487dc366f5faf185d5362ecb709b0d38f20b19f302f8d6cbad2c22294a"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/05-partner-ecosystem-launch-kit-s1.pptx",
+        "sha256": "f80214897a663cd170b11dff58358a554a64170151ad4dcec24792ac199c6790"
+      }
+    },
+    {
+      "name": "06-pricing-and-packaging-decision-s1",
+      "file": "examples/gallery/business-functions/pricing-and-packaging-decision.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Pricing and Packaging Decision",
+      "lines": [
+        "Pricing and ",
+        "Packaging Decision"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 461.059405,
+        "width": 995.2128,
+        "height": 201.771733
+      },
+      "wrap": {
+        "x": 311.1542962291668,
+        "width": 747.5721037708332
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 678.1418619791666,
+        "unbroken": 757.5242317708332
+      },
+      "after": {
+        "path": "pptx/06-pricing-and-packaging-decision-s1.pptx",
+        "sha256": "2ddf34fa902d50a5d92bc58b0fe257916852eabea17b7a435ceaab57a153b127"
+      },
+      "preview": {
+        "path": "preview/06-pricing-and-packaging-decision-s1.png",
+        "sha256": "31d41ec8cb7e9b73a393dd5940ba5da83dc75dc294c39f2fb31a5426c2e66707"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/06-pricing-and-packaging-decision-s1.pptx",
+        "sha256": "50f47d7cce3bb2b6bc0ae2f3838b0d2c90678bd9c8c3366a3425f9bb3eb6d2b3"
+      }
+    },
+    {
+      "name": "07-product-roadmap-decision-review-s1",
+      "file": "examples/gallery/business-functions/product-roadmap-decision-review.opf.json",
+      "slide": 1,
+      "width": 1279.968,
+      "height": 799.9680000000001,
+      "title": "Product Roadmap Decision Review",
+      "lines": [
+        "Product Roadmap ",
+        "Decision Review"
+      ],
+      "fontSize": 83.32,
+      "alignment": "left",
+      "originalBox": {
+        "x": 63.99744,
+        "y": 464.569741,
+        "width": 1151.97312,
+        "height": 203.3008
+      },
+      "wrap": {
+        "x": 63.99744,
+        "width": 950.3624758312499
+      },
+      "need": 11.5197312,
+      "widths": {
+        "widest": 635.2336328125,
+        "unbroken": 961.8822070312499
+      },
+      "after": {
+        "path": "pptx/07-product-roadmap-decision-review-s1.pptx",
+        "sha256": "f46fbca4c43653149cc1a47b931dae77f3a5018dd9dc7cc9c2b50ab5dd25b266"
+      },
+      "preview": {
+        "path": "preview/07-product-roadmap-decision-review-s1.png",
+        "sha256": "9bdc1844ddfa51e2c047ddee89e45919e556d9ca04bd0a7b6f0a5dc494e3a6fc"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/07-product-roadmap-decision-review-s1.pptx",
+        "sha256": "2ad80ab56c970714f39f3830a1f84506df7b9d1ddf659cb8e2e37ea89d51d69f"
+      }
+    },
+    {
+      "name": "08-revenue-forecast-inspection-s1",
+      "file": "examples/gallery/business-functions/revenue-forecast-inspection.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Revenue Forecast Inspection",
+      "lines": [
+        "Revenue Forecast ",
+        "Inspection"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 347.794323,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 65.28,
+        "width": 925.44
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 644.306640625,
+        "unbroken": 1041.9140625
+      },
+      "after": {
+        "path": "pptx/08-revenue-forecast-inspection-s1.pptx",
+        "sha256": "85651078237a4fdc381a3b5bb373ed25057783b21663ebdb98c3b1c26bd021af"
+      },
+      "preview": {
+        "path": "preview/08-revenue-forecast-inspection-s1.png",
+        "sha256": "364dc90ca033fb89e17a7b6b191ca23bd06eed4a26ae4f9e451f03775d19408f"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/08-revenue-forecast-inspection-s1.pptx",
+        "sha256": "08396bb9949d91e1e0047172f659e99a6a900958980c1fde469182d80049b575"
+      }
+    },
+    {
+      "name": "09-scope-3-reporting-readiness-s1",
+      "file": "examples/gallery/business-functions/scope-3-reporting-readiness.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Scope 3 Reporting Readiness",
+      "lines": [
+        "Scope 3 Reporting ",
+        "Readiness"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 418.114688,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 844.8
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 579.19921875,
+        "unbroken": 924.169921875
+      },
+      "after": {
+        "path": "pptx/09-scope-3-reporting-readiness-s1.pptx",
+        "sha256": "fe8b23abb5e50a4bf16f93ce5c718ea931ab1a710b31d9244ee199a3aa86acf6"
+      },
+      "preview": {
+        "path": "preview/09-scope-3-reporting-readiness-s1.png",
+        "sha256": "a20c14e0eccb40ea5abf14e5b1d9b18a813f340d8bbef0636a4b586c0fd11623"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/09-scope-3-reporting-readiness-s1.pptx",
+        "sha256": "cc8dd0d68967edf5ec4dc1d7180fe378ebe5b71bd3d04b21ad3032c9fcd6497c"
+      }
+    },
+    {
+      "name": "10-visual-brand-system-sampler-s1",
+      "file": "examples/gallery/design-and-media/visual-brand-system-sampler.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Visual Brand System Sampler",
+      "lines": [
+        "Visual Brand ",
+        "System Sampler"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 461.059405,
+        "width": 995.2128,
+        "height": 201.771733
+      },
+      "wrap": {
+        "x": 347.73640560416675,
+        "width": 710.9899943958333
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 578.4495572916667,
+        "unbroken": 720.9421223958333
+      },
+      "after": {
+        "path": "pptx/10-visual-brand-system-sampler-s1.pptx",
+        "sha256": "7c4e3c5cf308464d0ab68c23f80d5dd26123d4feeb48d9a118ab03facf37b041"
+      },
+      "preview": {
+        "path": "preview/10-visual-brand-system-sampler-s1.png",
+        "sha256": "0e583c8a14ca68520ae5d9d291390c853e72eded0c404fd58eb7a38221f3d778"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/10-visual-brand-system-sampler-s1.pptx",
+        "sha256": "94c90111e2c9209f047d96cd190772f22509b3468c2022b5337149963a76164b"
+      }
+    },
+    {
+      "name": "11-apprenticeship-partnership-deck-s1",
+      "file": "examples/gallery/education/apprenticeship-partnership-deck.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Apprenticeship Partnership Deck",
+      "lines": [
+        "Apprenticeship ",
+        "Partnership Deck"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 473.863313,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 65.28,
+        "width": 925.44
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 621.35498046875,
+        "unbroken": 984.7216796875
+      },
+      "after": {
+        "path": "pptx/11-apprenticeship-partnership-deck-s1.pptx",
+        "sha256": "1d1b4a99aa287874c75a37222e01c478cf6b1634f0cb8543dcd861cf4b44f85a"
+      },
+      "preview": {
+        "path": "preview/11-apprenticeship-partnership-deck-s1.png",
+        "sha256": "4eb027fa7461d699e58cd0f83d23cfaedc05c6a84bd7cab59a9b0cfc50babd81"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/11-apprenticeship-partnership-deck-s1.pptx",
+        "sha256": "f341ef35267654ecd0b4a0512a524bf106e9ba9f4a2b0262033a4777c8d87316"
+      }
+    },
+    {
+      "name": "12-campus-energy-action-brief-s1",
+      "file": "examples/gallery/education/campus-energy-action-brief.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Campus Energy Action Brief",
+      "lines": [
+        "Campus Energy ",
+        "Action Brief"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 473.863313,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 124.70605742187504,
+        "width": 806.58788515625
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 565.283203125,
+        "unbroken": 815.84228515625
+      },
+      "after": {
+        "path": "pptx/12-campus-energy-action-brief-s1.pptx",
+        "sha256": "ed5d6164198749de2e58f7192bc73f777da7b7c2c64e440f7039b7baec807ea0"
+      },
+      "preview": {
+        "path": "preview/12-campus-energy-action-brief-s1.png",
+        "sha256": "211eb7a880acf58442c976641f9cab18f4ab77bfb11cc5c1dab71f097be2f885"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/12-campus-energy-action-brief-s1.pptx",
+        "sha256": "763485477b9d62da917c8982d2cc91599c8f12eb145b88fc3c1663ca0b4323fe"
+      }
+    },
+    {
+      "name": "13-district-literacy-acceleration-plan-s1",
+      "file": "examples/gallery/education/district-literacy-acceleration-plan.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "District Literacy Acceleration Plan",
+      "lines": [
+        "District Literacy ",
+        "Acceleration Plan"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 422.26,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 844.8
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 604.35,
+        "unbroken": 1009.2750000000001
+      },
+      "after": {
+        "path": "pptx/13-district-literacy-acceleration-plan-s1.pptx",
+        "sha256": "33e62b603e19944e96066004f69a0f009fa165f87c80e1d795892352d6619a5a"
+      },
+      "preview": {
+        "path": "preview/13-district-literacy-acceleration-plan-s1.png",
+        "sha256": "4c3818fde2b181c713f90c735f9c09b4e7de3e7c467f414ae5ef01b0d6a14bb9"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/13-district-literacy-acceleration-plan-s1.pptx",
+        "sha256": "1556658bb0f66d26839bdf8693bfa70109af956e8cbc456ce0e9295a7f68aee4"
+      }
+    },
+    {
+      "name": "14-school-safety-preparedness-brief-s1",
+      "file": "examples/gallery/education/school-safety-preparedness-brief.opf.json",
+      "slide": 1,
+      "width": 1280,
+      "height": 720,
+      "title": "School Safety Preparedness Brief",
+      "lines": [
+        "School Safety ",
+        "Preparedness Brief"
+      ],
+      "fontSize": 75,
+      "alignment": "left",
+      "originalBox": {
+        "x": 57.6,
+        "y": 416.9,
+        "width": 1164.8,
+        "height": 186.25
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 1062.1270000000002
+      },
+      "need": 11.648,
+      "widths": {
+        "widest": 743.4000000000001,
+        "unbroken": 1073.775
+      },
+      "after": {
+        "path": "pptx/14-school-safety-preparedness-brief-s1.pptx",
+        "sha256": "b88b428686ab9b886228918c9a3d439b5e936c3739d4c9c5e99bb7d9e04e9d9b"
+      },
+      "preview": {
+        "path": "preview/14-school-safety-preparedness-brief-s1.png",
+        "sha256": "c639daacbbefac1ec6b43c4effb7c67cd6cf117bd543c0bf4133610145f43547"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/14-school-safety-preparedness-brief-s1.pptx",
+        "sha256": "b179aa98b0294ee66710b530480eb25beda16a2b85fcf909d8a203b0c6aeff56"
+      }
+    },
+    {
+      "name": "15-student-mental-health-capacity-review-s1",
+      "file": "examples/gallery/education/student-mental-health-capacity-review.opf.json",
+      "slide": 1,
+      "width": 1279.968,
+      "height": 799.9680000000001,
+      "title": "Student Mental Health Capacity Review",
+      "lines": [
+        "Student Mental Health ",
+        "Capacity Review"
+      ],
+      "fontSize": 83.32,
+      "alignment": "left",
+      "originalBox": {
+        "x": 63.99744,
+        "y": 464.569741,
+        "width": 1151.97312,
+        "height": 203.3008
+      },
+      "wrap": {
+        "x": 63.99744,
+        "width": 1115.7006008312499
+      },
+      "need": 11.5197312,
+      "widths": {
+        "widest": 795.8117773437499,
+        "unbroken": 1127.2203320312499
+      },
+      "after": {
+        "path": "pptx/15-student-mental-health-capacity-review-s1.pptx",
+        "sha256": "c6c2caa25237de74a123bd38ee5a727fe78fcf2ddef12e7badf4fb12a549aeb5"
+      },
+      "preview": {
+        "path": "preview/15-student-mental-health-capacity-review-s1.png",
+        "sha256": "34604f1f9e68fbb59a15ee0735740ffdbd463fab94d81296894a4e3425b8f057"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/15-student-mental-health-capacity-review-s1.pptx",
+        "sha256": "219f8a844e31086dd0b027da0febafd086319f8a7153bab7e95f07f4b156980e"
+      }
+    },
+    {
+      "name": "16-workforce-pathway-partnership-s1",
+      "file": "examples/gallery/education/workforce-pathway-partnership.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Workforce Pathway Partnership",
+      "lines": [
+        "Workforce Pathway ",
+        "Partnership"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 418.114688,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 844.8
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 620.8740234375,
+        "unbroken": 1004.150390625
+      },
+      "after": {
+        "path": "pptx/16-workforce-pathway-partnership-s1.pptx",
+        "sha256": "86b0c940f4d80839b55b13c88797a8184056c0862e55c9e25aed941dc7e4ba0a"
+      },
+      "preview": {
+        "path": "preview/16-workforce-pathway-partnership-s1.png",
+        "sha256": "c3b39fba6d0d94b57f115b2422423a87cd65238b6c6b488cd31f39efefaf3670"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/16-workforce-pathway-partnership-s1.pptx",
+        "sha256": "ad446bf49ca853e9167b6305c1016b877560afd6bd1503758c2693647143f10d"
+      }
+    },
+    {
+      "name": "17-digital-services-modernization-s1",
+      "file": "examples/gallery/government/digital-services-modernization.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Digital Services Modernization",
+      "lines": [
+        "Digital Services ",
+        "Modernization"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 476.631267,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 65.28,
+        "width": 925.44
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 625.9399999999999,
+        "unbroken": 1237.855
+      },
+      "after": {
+        "path": "pptx/17-digital-services-modernization-s1.pptx",
+        "sha256": "edb6b77af3620b2f053a735d66d96e54ebaeb048ad18d402a816ea1ebed4f51a"
+      },
+      "preview": {
+        "path": "preview/17-digital-services-modernization-s1.png",
+        "sha256": "0977bb80403fbcdd48321a91e7dafa104ce9fa19b67a2bea9aa1b51fee2efbd2"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/17-digital-services-modernization-s1.pptx",
+        "sha256": "9aae866941b8774eabc443988bb3089d18afc50bafacb456536ba9489217fcd2"
+      }
+    },
+    {
+      "name": "18-police-training-program-update-s1",
+      "file": "examples/gallery/government/police-training-program-update.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Police Training Program Update",
+      "lines": [
+        "Police Training ",
+        "Program Update"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 418.114688,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 168.83139843749993,
+        "width": 733.5686015625
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 515.4052734375,
+        "unbroken": 742.0166015625
+      },
+      "after": {
+        "path": "pptx/18-police-training-program-update-s1.pptx",
+        "sha256": "50ab0a232d832e233b81442aaacbaede938f39e8a359a723b06bde2b273fac01"
+      },
+      "preview": {
+        "path": "preview/18-police-training-program-update-s1.png",
+        "sha256": "5f83ad3cc28e59f77c952adaef3a1e32e4fc1d203b1ae23061608bb434daa84c"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/18-police-training-program-update-s1.pptx",
+        "sha256": "7e926339d73c8b4f27787f5e8a8c6515a2be2b141408a1f4a049dde96fdcd7bb"
+      }
+    },
+    {
+      "name": "19-vaccination-outreach-briefing-s1",
+      "file": "examples/gallery/government/vaccination-outreach-briefing.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Vaccination Outreach Briefing",
+      "lines": [
+        "Vaccination ",
+        "Outreach Briefing"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 461.059405,
+        "width": 995.2128,
+        "height": 201.771733
+      },
+      "wrap": {
+        "x": 312.4060019583334,
+        "width": 746.3203980416666
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 613.9818489583333,
+        "unbroken": 756.2725260416667
+      },
+      "after": {
+        "path": "pptx/19-vaccination-outreach-briefing-s1.pptx",
+        "sha256": "064702527e9b93d0902e1db7bae612f6cfc02b6a2e0c9b04dace6a84880a0089"
+      },
+      "preview": {
+        "path": "preview/19-vaccination-outreach-briefing-s1.png",
+        "sha256": "8375692cd13bdd85462f149d86e42e829b243e29025206f386b471b7c87368c5"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/19-vaccination-outreach-briefing-s1.pptx",
+        "sha256": "3254b3e99dcc76ddf96711ea0c24d34ba6c7a58a833a8d45f0d923e86924f75b"
+      }
+    },
+    {
+      "name": "20-workforce-reskilling-initiative-s1",
+      "file": "examples/gallery/government/workforce-reskilling-initiative.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Workforce Reskilling Initiative",
+      "lines": [
+        "Workforce ",
+        "Reskilling Initiative"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 461.059405,
+        "width": 995.2128,
+        "height": 201.771733
+      },
+      "wrap": {
+        "x": 342.04316341666674,
+        "width": 716.6832365833333
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 661.5870442708333,
+        "unbroken": 726.6353645833333
+      },
+      "after": {
+        "path": "pptx/20-workforce-reskilling-initiative-s1.pptx",
+        "sha256": "7601c6e13109c5a785200474378b88718222d776ec610ad6f5894d7a61a2dec4"
+      },
+      "preview": {
+        "path": "preview/20-workforce-reskilling-initiative-s1.png",
+        "sha256": "edba9a9eab40a15bff85b9db84c5bb36668f8f0405f0928a87ed7c1874837a4c"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/20-workforce-reskilling-initiative-s1.pptx",
+        "sha256": "c724715e27ef83bd5b1575670218bbf70d0ffac526a365c8f4f758fa3818f527"
+      }
+    },
+    {
+      "name": "21-airline-disruption-recovery-review-s1",
+      "file": "examples/gallery/industries/airline-disruption-recovery-review.opf.json",
+      "slide": 1,
+      "width": 1279.968,
+      "height": 799.9680000000001,
+      "title": "Airline Disruption Recovery Review",
+      "lines": [
+        "Airline Disruption ",
+        "Recovery Review"
+      ],
+      "fontSize": 83.32,
+      "alignment": "left",
+      "originalBox": {
+        "x": 63.99744,
+        "y": 464.569741,
+        "width": 1151.97312,
+        "height": 203.3008
+      },
+      "wrap": {
+        "x": 63.99744,
+        "width": 952.5593898937499
+      },
+      "need": 11.5197312,
+      "widths": {
+        "widest": 617.5769531249999,
+        "unbroken": 964.0791210937499
+      },
+      "after": {
+        "path": "pptx/21-airline-disruption-recovery-review-s1.pptx",
+        "sha256": "c1b7dd683bf1406a8cc3d86ee469e3a429146bfb255d513402a1ae45608ced78"
+      },
+      "preview": {
+        "path": "preview/21-airline-disruption-recovery-review-s1.png",
+        "sha256": "4e109881710c5cfb8401bcb788340be6bee22602b2b87f0aaed7f4d06a4eb724"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/21-airline-disruption-recovery-review-s1.pptx",
+        "sha256": "668d469355d15756560ab6c574f75f02ef9c58cb427e56703712aad6cfabd068"
+      }
+    },
+    {
+      "name": "22-ambulatory-access-recovery-plan-s1",
+      "file": "examples/gallery/industries/ambulatory-access-recovery-plan.opf.json",
+      "slide": 1,
+      "width": 1279.968,
+      "height": 799.9680000000001,
+      "title": "Ambulatory Access Recovery Plan",
+      "lines": [
+        "Ambulatory Access ",
+        "Recovery Plan"
+      ],
+      "fontSize": 83.32,
+      "alignment": "left",
+      "originalBox": {
+        "x": 63.99744,
+        "y": 469.186827,
+        "width": 1151.97312,
+        "height": 203.3008
+      },
+      "wrap": {
+        "x": 63.99744,
+        "width": 1025.38302270625
+      },
+      "need": 11.5197312,
+      "widths": {
+        "widest": 690.4005859375,
+        "unbroken": 1036.90275390625
+      },
+      "after": {
+        "path": "pptx/22-ambulatory-access-recovery-plan-s1.pptx",
+        "sha256": "0ba2b8028330169c4bf02d95db1665aa956d714a16fc9af4231851ec8165a6b2"
+      },
+      "preview": {
+        "path": "preview/22-ambulatory-access-recovery-plan-s1.png",
+        "sha256": "eb7c948be140732222d6dcf797225ac70a0debfdde29eb69eff593b87f3cb021"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/22-ambulatory-access-recovery-plan-s1.pptx",
+        "sha256": "9e5481280157ac50354cce550de93fc4002b3b780af72ffd6f6e6edb1cd4f6e6"
+      }
+    },
+    {
+      "name": "23-battery-line-supplier-readiness-s1",
+      "file": "examples/gallery/industries/battery-line-supplier-readiness.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Battery Line Supplier Readiness",
+      "lines": [
+        "Battery Line ",
+        "Supplier Readiness"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 473.863313,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 157.09985625000004,
+        "width": 741.8002875
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 694.31884765625,
+        "unbroken": 751.0546875
+      },
+      "after": {
+        "path": "pptx/23-battery-line-supplier-readiness-s1.pptx",
+        "sha256": "a16abc0a97d2fcf1d03fe14aec82e9b1905b9a991b36d8dd6479c22eb7eb676e"
+      },
+      "preview": {
+        "path": "preview/23-battery-line-supplier-readiness-s1.png",
+        "sha256": "4a77e8e7779935994ab0d9dff03bf98f6d0bc8db14fa6115f19c1954613b7365"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/23-battery-line-supplier-readiness-s1.pptx",
+        "sha256": "7a5d8af5091ecc56769bd63e7e86102810b7c9153cc246b74b6dadb9ab717699"
+      }
+    },
+    {
+      "name": "24-boutique-hotel-revenue-recovery-s1",
+      "file": "examples/gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Boutique Hotel Revenue Recovery",
+      "lines": [
+        "Boutique Hotel ",
+        "Revenue Recovery"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 418.114688,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 144.40512890624993,
+        "width": 757.99487109375
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 588.134765625,
+        "unbroken": 766.44287109375
+      },
+      "after": {
+        "path": "pptx/24-boutique-hotel-revenue-recovery-s1.pptx",
+        "sha256": "a211966169301347bea237a68a66bf5a8db4b1fac7539fed083d78cbe2cb76a0"
+      },
+      "preview": {
+        "path": "preview/24-boutique-hotel-revenue-recovery-s1.png",
+        "sha256": "8bc5fb1bdc85f4d5d4dc5220345ecc40297a87b9cee6cf22a869045a856e338f"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/24-boutique-hotel-revenue-recovery-s1.pptx",
+        "sha256": "12fcf6c57d58c54bbfd23bf2ada57b620633a93c6a3854f4bcb1632ffe33e8e3"
+      }
+    },
+    {
+      "name": "25-branch-modernization-investment-case-s1",
+      "file": "examples/gallery/industries/branch-modernization-investment-case.opf.json",
+      "slide": 1,
+      "width": 1280,
+      "height": 720,
+      "title": "Branch Modernization Investment Case",
+      "lines": [
+        "Branch Modernization ",
+        "Investment Case"
+      ],
+      "fontSize": 75,
+      "alignment": "center",
+      "originalBox": {
+        "x": 57.6,
+        "y": 422.26,
+        "width": 1164.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 1164.8
+      },
+      "need": 11.648,
+      "widths": {
+        "widest": 901.2,
+        "unbroken": 1389.75
+      },
+      "after": {
+        "path": "pptx/25-branch-modernization-investment-case-s1.pptx",
+        "sha256": "7bb4921436776adb76a0b3c0dfdd50d7e685c2bbc4420dd83aa06dac7b379ed9"
+      },
+      "preview": {
+        "path": "preview/25-branch-modernization-investment-case-s1.png",
+        "sha256": "0e315ca54d586fbe3d7553a2a14775d20c093059a082edc962d293337a673e0f"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/25-branch-modernization-investment-case-s1.pptx",
+        "sha256": "2989b76b17073e8bcdfd4f309cf0acb2e41c50615e4369d823331406ef2522fd"
+      }
+    },
+    {
+      "name": "26-claims-triage-operating-model-s1",
+      "file": "examples/gallery/industries/claims-triage-operating-model.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Claims Triage Operating Model",
+      "lines": [
+        "Claims Triage ",
+        "Operating Model"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 465.20892,
+        "width": 995.2128,
+        "height": 202.205747
+      },
+      "wrap": {
+        "x": 63.5136,
+        "width": 995.2128
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 744.3611328124999,
+        "unbroken": 1141.3537369791666
+      },
+      "after": {
+        "path": "pptx/26-claims-triage-operating-model-s1.pptx",
+        "sha256": "93a776e338d994437ed0fb7c4be1186c7376be898bf33e807cc9cc61f0233387"
+      },
+      "preview": {
+        "path": "preview/26-claims-triage-operating-model-s1.png",
+        "sha256": "61b2342ffd8bcdce43b0027bfc315927542a44d211a99cca3c10a4be99d5ce68"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/26-claims-triage-operating-model-s1.pptx",
+        "sha256": "8baba99f9fe0f6ba81acf6f720093facaed5d7507ba2428c1a7c368fd9f45662"
+      }
+    },
+    {
+      "name": "27-cold-chain-waste-reduction-review-s1",
+      "file": "examples/gallery/industries/cold-chain-waste-reduction-review.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Cold Chain Waste Reduction Review",
+      "lines": [
+        "Cold Chain Waste ",
+        "Reduction Review"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 418.114688,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 844.8
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 572.5341796875,
+        "unbroken": 910.14404296875
+      },
+      "after": {
+        "path": "pptx/27-cold-chain-waste-reduction-review-s1.pptx",
+        "sha256": "4294592a8f70226d45c1245847bd4ffb1d0392ab432e2d4282024452e67e0444"
+      },
+      "preview": {
+        "path": "preview/27-cold-chain-waste-reduction-review-s1.png",
+        "sha256": "68d6b4725e4b3d7826f222e63e3d859d9040108b48daf0bdfa26df43ccea1fa7"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/27-cold-chain-waste-reduction-review-s1.pptx",
+        "sha256": "0dbc8ef0d629331e5ac3032cae6cae180d0fd4f7343e83d893dd9c4fdadd3018"
+      }
+    },
+    {
+      "name": "28-construction-safety-stand-down-s1",
+      "file": "examples/gallery/industries/construction-safety-stand-down.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Construction Safety Stand Down",
+      "lines": [
+        "Construction ",
+        "Safety Stand Down"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 461.059405,
+        "width": 995.2128,
+        "height": 201.771733
+      },
+      "wrap": {
+        "x": 367.2791660208334,
+        "width": 691.4472339791666
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 667.4821744791666,
+        "unbroken": 701.3993619791667
+      },
+      "after": {
+        "path": "pptx/28-construction-safety-stand-down-s1.pptx",
+        "sha256": "0a00321c7a8fc4cf9bc6dbb99123616bb3c9176d9f0e50c2a53aeb42d1dfe053"
+      },
+      "preview": {
+        "path": "preview/28-construction-safety-stand-down-s1.png",
+        "sha256": "d56a80d623d79ae4df8e90ff40d0ef4148832f4890bce9acacc924fe07a51c25"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/28-construction-safety-stand-down-s1.pptx",
+        "sha256": "14dd4d0487acf79958b365cbe696dd8d3f0ea9cfebb433217f6555723adab76d"
+      }
+    },
+    {
+      "name": "29-consulting-margin-recovery-plan-s1",
+      "file": "examples/gallery/industries/consulting-margin-recovery-plan.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Consulting Margin Recovery Plan",
+      "lines": [
+        "Consulting Margin ",
+        "Recovery Plan"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 306.877344,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 844.8
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 574.91455078125,
+        "unbroken": 886.81640625
+      },
+      "after": {
+        "path": "pptx/29-consulting-margin-recovery-plan-s1.pptx",
+        "sha256": "995119b72cf8aac2df8d159300f113d4cba891ac801b73fdf4f1bac63a3cbd06"
+      },
+      "preview": {
+        "path": "preview/29-consulting-margin-recovery-plan-s1.png",
+        "sha256": "0da6b9b1b45bc40b7c4bf83a9fae378f7c429b8a9cf014d809f4728ff26065cd"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/29-consulting-margin-recovery-plan-s1.pptx",
+        "sha256": "30fd17095b3b8694f6ae4d65722cb84198ab5b74fd9e875ae36898dfbbcd8d7c"
+      }
+    },
+    {
+      "name": "30-fan-experience-operations-brief-s1",
+      "file": "examples/gallery/industries/fan-experience-operations-brief.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Fan Experience Operations Brief",
+      "lines": [
+        "Fan Experience ",
+        "Operations Brief"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 461.059405,
+        "width": 995.2128,
+        "height": 201.771733
+      },
+      "wrap": {
+        "x": 127.88035091666677,
+        "width": 930.8460490833332
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 571.504609375,
+        "unbroken": 940.7981770833333
+      },
+      "after": {
+        "path": "pptx/30-fan-experience-operations-brief-s1.pptx",
+        "sha256": "2ab448db543e8754318deeaa84f0dbdb8f8ad4243549daa8469e59d768415d66"
+      },
+      "preview": {
+        "path": "preview/30-fan-experience-operations-brief-s1.png",
+        "sha256": "da145f72314be94aea7a1b7b2c33335c752ddc12b7038876d5f0913142f4f78a"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/30-fan-experience-operations-brief-s1.pptx",
+        "sha256": "43b710c037900c13c52f943ebc669c221b8d64b82402c8b3584f477fc57c6692"
+      }
+    },
+    {
+      "name": "31-food-bank-distribution-capacity-plan-s1",
+      "file": "examples/gallery/industries/food-bank-distribution-capacity-plan.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Food Bank Distribution Capacity Plan",
+      "lines": [
+        "Food Bank Distribution ",
+        "Capacity Plan"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 422,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 844.8
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 753.6,
+        "unbroken": 1061.4750000000001
+      },
+      "after": {
+        "path": "pptx/31-food-bank-distribution-capacity-plan-s1.pptx",
+        "sha256": "89475e7aad6578334975400cc62094f3f75e36901241feedbeb1647a46bd7ab6"
+      },
+      "preview": {
+        "path": "preview/31-food-bank-distribution-capacity-plan-s1.png",
+        "sha256": "1f3611ac3149e24d57ce03c30f2f1bf31e5a0605aae411fefb1ec7716f8d07fd"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/31-food-bank-distribution-capacity-plan-s1.pptx",
+        "sha256": "29d38edc2e755d81221abaa79d73fdb1ac2e8ed1aa6a07cefdd9173239ca1e02"
+      }
+    },
+    {
+      "name": "32-grid-resilience-capital-plan-s1",
+      "file": "examples/gallery/industries/grid-resilience-capital-plan.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Grid Resilience Capital Plan",
+      "lines": [
+        "Grid Resilience ",
+        "Capital Plan"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 473.863313,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 119.74634062500004,
+        "width": 816.50731875
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 547.1875,
+        "unbroken": 825.76171875
+      },
+      "after": {
+        "path": "pptx/32-grid-resilience-capital-plan-s1.pptx",
+        "sha256": "62c9170839483475baf6c938e5db0d7e667b6bfe2472bc5ebb5bf1c2efe2711d"
+      },
+      "preview": {
+        "path": "preview/32-grid-resilience-capital-plan-s1.png",
+        "sha256": "f8d5d4f559d9c343a4781d9670b1750ee0935b8d2a8ec2b671c5d311d0568d24"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/32-grid-resilience-capital-plan-s1.pptx",
+        "sha256": "4f87f028f114b39d11870a67bc685babcc0e21578434c2fbe5a4ba0ae5192227"
+      }
+    },
+    {
+      "name": "33-managed-detection-market-update-s1",
+      "file": "examples/gallery/industries/managed-detection-market-update.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 600,
+      "title": "Managed Detection Market Update",
+      "lines": [
+        "Managed Detection ",
+        "Market Update"
+      ],
+      "fontSize": 62.49333333333333,
+      "alignment": "left",
+      "originalBox": {
+        "x": 48,
+        "y": 351.25936,
+        "width": 864,
+        "height": 152.483733
+      },
+      "wrap": {
+        "x": 48,
+        "width": 782.2756266666667
+      },
+      "need": 8.64,
+      "widths": {
+        "widest": 574.2512399999999,
+        "unbroken": 790.9156266666666
+      },
+      "after": {
+        "path": "pptx/33-managed-detection-market-update-s1.pptx",
+        "sha256": "95d6fe83c46951bda3557e1ec147de05225a6b93636fe32aa0ebd48468c22e14"
+      },
+      "preview": {
+        "path": "preview/33-managed-detection-market-update-s1.png",
+        "sha256": "091c927b8cc92fa75f63d3695f1398fcb66201cc4f2632bfa5a7209a5d340bb8"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/33-managed-detection-market-update-s1.pptx",
+        "sha256": "f1e961c7a56c623c5fe965f6cbdd62bcb2561b9c961e6c73bb8f5fe1d503d6aa"
+      }
+    },
+    {
+      "name": "34-mixed-use-leasing-pipeline-review-s1",
+      "file": "examples/gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+      "slide": 1,
+      "width": 1279.968,
+      "height": 799.9680000000001,
+      "title": "Mixed Use Leasing Pipeline Review",
+      "lines": [
+        "Mixed Use Leasing ",
+        "Pipeline Review"
+      ],
+      "fontSize": 83.32,
+      "alignment": "left",
+      "originalBox": {
+        "x": 63.99744,
+        "y": 464.569741,
+        "width": 1151.97312,
+        "height": 203.3008
+      },
+      "wrap": {
+        "x": 63.99744,
+        "width": 945.3583937999999
+      },
+      "need": 11.5197312,
+      "widths": {
+        "widest": 654.354921875,
+        "unbroken": 956.878125
+      },
+      "after": {
+        "path": "pptx/34-mixed-use-leasing-pipeline-review-s1.pptx",
+        "sha256": "b4909f0b37ae23923a651dc8217cb2e0005eda5f8b5f3905e9178c61e778928b"
+      },
+      "preview": {
+        "path": "preview/34-mixed-use-leasing-pipeline-review-s1.png",
+        "sha256": "918770ca4796f0c9362a19ef7c77d8d439d4c71aafafc1e87c8dfd5011d0dd87"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/34-mixed-use-leasing-pipeline-review-s1.pptx",
+        "sha256": "ef85877c02a594e6c7e9b45e0c9265841fa8fa3762f381ea4e1be4e14de0131d"
+      }
+    },
+    {
+      "name": "35-rural-broadband-expansion-proposal-s1",
+      "file": "examples/gallery/industries/rural-broadband-expansion-proposal.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Rural Broadband Expansion Proposal",
+      "lines": [
+        "Rural Broadband ",
+        "Expansion Proposal"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 478.561333,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 65.28,
+        "width": 925.44
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 804.8649999999999,
+        "unbroken": 1138.405
+      },
+      "after": {
+        "path": "pptx/35-rural-broadband-expansion-proposal-s1.pptx",
+        "sha256": "d69618faf3d16eb44b42edfe36182cf38169269571bf8af421f2afae47385b91"
+      },
+      "preview": {
+        "path": "preview/35-rural-broadband-expansion-proposal-s1.png",
+        "sha256": "265e944142810b1a5ce725f134f57fce66d94816a9296e278901243e6bf04752"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/35-rural-broadband-expansion-proposal-s1.pptx",
+        "sha256": "fe3a10eb13b210d6a78b853b7f2d225f3b467b25cea93d843ca8ca91648d5a5a"
+      }
+    },
+    {
+      "name": "36-satellite-maintenance-readiness-review-s1",
+      "file": "examples/gallery/industries/satellite-maintenance-readiness-review.opf.json",
+      "slide": 1,
+      "width": 1280,
+      "height": 720,
+      "title": "Satellite Maintenance Readiness Review",
+      "lines": [
+        "Satellite Maintenance ",
+        "Readiness Review"
+      ],
+      "fontSize": 75,
+      "alignment": "center",
+      "originalBox": {
+        "x": 57.6,
+        "y": 418.114688,
+        "width": 1164.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 125.80446874999993,
+        "width": 1028.3910625
+      },
+      "need": 11.648,
+      "widths": {
+        "widest": 695.068359375,
+        "unbroken": 1040.0390625
+      },
+      "after": {
+        "path": "pptx/36-satellite-maintenance-readiness-review-s1.pptx",
+        "sha256": "7b6a7592c46bfe3d993e347521d17793ee05db1607ef77cbc3ce65952aed8685"
+      },
+      "preview": {
+        "path": "preview/36-satellite-maintenance-readiness-review-s1.png",
+        "sha256": "ddb5d4e8eeeba0e00828621dbe7f4602873d422493b248cc7e8b61978ab57d03"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/36-satellite-maintenance-readiness-review-s1.pptx",
+        "sha256": "65963ac801d2aa2c18ac6bac4365954a3162b4ca495b89420fa9ef0baf29a30d"
+      }
+    },
+    {
+      "name": "37-streaming-churn-winback-strategy-s1",
+      "file": "examples/gallery/industries/streaming-churn-winback-strategy.opf.json",
+      "slide": 1,
+      "width": 1122.24,
+      "height": 793.92,
+      "title": "Streaming Churn Winback Strategy",
+      "lines": [
+        "Streaming Churn ",
+        "Winback Strategy"
+      ],
+      "fontSize": 82.69333333333333,
+      "alignment": "right",
+      "originalBox": {
+        "x": 63.5136,
+        "y": 461.059405,
+        "width": 995.2128,
+        "height": 201.771733
+      },
+      "wrap": {
+        "x": 150.85520768750007,
+        "width": 907.8711923124999
+      },
+      "need": 9.952128,
+      "widths": {
+        "widest": 617.4543229166667,
+        "unbroken": 917.8233203125
+      },
+      "after": {
+        "path": "pptx/37-streaming-churn-winback-strategy-s1.pptx",
+        "sha256": "cb9af57a3048ca0343bf179b1bf9b1ebd509d2e07508a14c42cc7d65d5c9cb9c"
+      },
+      "preview": {
+        "path": "preview/37-streaming-churn-winback-strategy-s1.png",
+        "sha256": "9d742f2fa0832e74b0acc803832b72d67d4a546603b327c0670b5bc2ce996314"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/37-streaming-churn-winback-strategy-s1.pptx",
+        "sha256": "7383396d1174acf627f23c4425999c5ba8dc9ed6e569269e677ab4f2615a5ea5"
+      }
+    },
+    {
+      "name": "38-veterinary-staffing-stabilization-s1",
+      "file": "examples/gallery/industries/veterinary-staffing-stabilization.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Veterinary Staffing Stabilization",
+      "lines": [
+        "Veterinary Staffing ",
+        "Stabilization"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 347.794323,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 65.28,
+        "width": 925.44
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 668.75244140625,
+        "unbroken": 1135.380859375
+      },
+      "after": {
+        "path": "pptx/38-veterinary-staffing-stabilization-s1.pptx",
+        "sha256": "3c97c16c6f870201d444abf7e4c1acd92c9345f837775976d02d7d17496ee9f7"
+      },
+      "preview": {
+        "path": "preview/38-veterinary-staffing-stabilization-s1.png",
+        "sha256": "d0c6fc318b0c3dbc56001d2b622a776e5b2e738e9865a561452ad3143111652d"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/38-veterinary-staffing-stabilization-s1.pptx",
+        "sha256": "c622a22081ba6926f3953ed94132b8d6ed2d5c07415a8a25cf6f9cc7e9d07808"
+      }
+    },
+    {
+      "name": "39-arabic-digital-services-brief-s1",
+      "file": "examples/gallery/international/arabic-digital-services-brief.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Arabic Digital Services Brief",
+      "lines": [
+        "Arabic Digital ",
+        "Services Brief"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 347.794323,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 126.84350859375004,
+        "width": 802.3129828125
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 499.9560546875,
+        "unbroken": 811.5673828125
+      },
+      "after": {
+        "path": "pptx/39-arabic-digital-services-brief-s1.pptx",
+        "sha256": "a9bf18573f905cc305e07d8cddd6b34d605421730d68caff35f4c2b5f0c8a0e3"
+      },
+      "preview": {
+        "path": "preview/39-arabic-digital-services-brief-s1.png",
+        "sha256": "7d31a2a61ed78f92ce0658e84404b4d68eefc4adc3dd030fe2528ec5deb5ee98"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/39-arabic-digital-services-brief-s1.pptx",
+        "sha256": "1db5e3846718793d70f807fbe0a714b77c150bcc9af2443c90cfd35867d73ea5"
+      }
+    },
+    {
+      "name": "40-brazil-climate-adaptation-brief-s1",
+      "file": "examples/gallery/international/brazil-climate-adaptation-brief.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Brazil Climate Adaptation Brief",
+      "lines": [
+        "Brazil Climate ",
+        "Adaptation Brief"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 418.114688,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 98.04282421874993,
+        "width": 804.35717578125
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 515.88134765625,
+        "unbroken": 812.80517578125
+      },
+      "after": {
+        "path": "pptx/40-brazil-climate-adaptation-brief-s1.pptx",
+        "sha256": "51a07a13a0dbfcf7d525755f6d85f3e49f130606a147b4a625f6ac7a7eb7fa65"
+      },
+      "preview": {
+        "path": "preview/40-brazil-climate-adaptation-brief-s1.png",
+        "sha256": "48059ab2611108d563381aa4d9cebc437142cb9c44c414c3eff120ddc28b9778"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/40-brazil-climate-adaptation-brief-s1.pptx",
+        "sha256": "5709fc2ff84e03cc9862bddad7f7bd2f2d73a5514d70fde8805be758fa8fdf15"
+      }
+    },
+    {
+      "name": "41-customer-qbr-renewal-deck-s1",
+      "file": "examples/gallery/presentation-types/customer-qbr-renewal-deck.opf.json",
+      "slide": 1,
+      "width": 1056,
+      "height": 816,
+      "title": "Customer QBR Renewal Deck",
+      "lines": [
+        "Customer QBR ",
+        "Renewal Deck"
+      ],
+      "fontSize": 85,
+      "alignment": "center",
+      "originalBox": {
+        "x": 65.28,
+        "y": 473.863313,
+        "width": 925.44,
+        "height": 207.4
+      },
+      "wrap": {
+        "x": 97.72851835937504,
+        "width": 860.54296328125
+      },
+      "need": 9.2544,
+      "widths": {
+        "widest": 539.50927734375,
+        "unbroken": 869.79736328125
+      },
+      "after": {
+        "path": "pptx/41-customer-qbr-renewal-deck-s1.pptx",
+        "sha256": "5877cd03e3b431e53feab49a6ac729554b4bb534003a1b05ce4a096b0c7892ef"
+      },
+      "preview": {
+        "path": "preview/41-customer-qbr-renewal-deck-s1.png",
+        "sha256": "75c7f0cb08c7cac8e875189163523e09eee2bc2229d7cac98a564487a1317a29"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/41-customer-qbr-renewal-deck-s1.pptx",
+        "sha256": "6722e2400d8bdab378c0888546c9e2ca88a6423f00f4689c9cc71c8263236651"
+      }
+    },
+    {
+      "name": "42-seed-pitch-for-climate-risk-api-s1",
+      "file": "examples/gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json",
+      "slide": 1,
+      "width": 960,
+      "height": 720,
+      "title": "Seed Pitch for Climate Risk API",
+      "lines": [
+        "Seed Pitch for ",
+        "Climate Risk API"
+      ],
+      "fontSize": 75,
+      "alignment": "right",
+      "originalBox": {
+        "x": 57.6,
+        "y": 421.667,
+        "width": 844.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 80.3729999999999,
+        "width": 822.027
+      },
+      "need": 8.448,
+      "widths": {
+        "widest": 608.5500000000001,
+        "unbroken": 830.475
+      },
+      "after": {
+        "path": "pptx/42-seed-pitch-for-climate-risk-api-s1.pptx",
+        "sha256": "39f94971e397ba1da54e486ac6b287bbee732d6a0f71d729ebc5f7af3c97ddc9"
+      },
+      "preview": {
+        "path": "preview/42-seed-pitch-for-climate-risk-api-s1.png",
+        "sha256": "caf2b0fd43a96b93623f693b80ddcc54259f26748098e2f0b2031aa642b2fd31"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/42-seed-pitch-for-climate-risk-api-s1.pptx",
+        "sha256": "1981b5eebe27bc03817580b910fd7cfc167924000a560cb065c35c4f8231de42"
+      }
+    },
+    {
+      "name": "43-icons-and-arrangements-s6",
+      "file": "examples/technical/icons-and-arrangements.opf.json",
+      "slide": 6,
+      "width": 1280,
+      "height": 720,
+      "title": "How each round feeds the next",
+      "lines": [
+        "How each round ",
+        "feeds the next"
+      ],
+      "fontSize": 54,
+      "alignment": "left",
+      "originalBox": {
+        "x": 57.6,
+        "y": 294.12,
+        "width": 456.32,
+        "height": 131.76
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 456.32
+      },
+      "need": 4.5632,
+      "widths": {
+        "widest": 370.669921875,
+        "unbroken": 508.8076171875
+      },
+      "after": {
+        "path": "pptx/43-icons-and-arrangements-s6.pptx",
+        "sha256": "8b88e443b0a512f7b99d53d247d29fe7a1f5000147c3d87ac3bc118704a6e37a"
+      },
+      "preview": {
+        "path": "preview/43-icons-and-arrangements-s6.png",
+        "sha256": "6701d63e4c0ac94c2bb66b39f188877fec6e02d8b768d5e12a13063f0ad95537"
+      },
+      "diagnostics": [
+        {
+          "code": "native-body-fallback",
+          "path": "slides.0.items",
+          "reason": "multi-column",
+          "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+        }
+      ],
+      "beforeGeometryControl": {
+        "path": "before/43-icons-and-arrangements-s6.pptx",
+        "sha256": "9dfb1f21522e760744471c34f616906d4412cf56a140500aed89caceb50091e5"
+      }
+    },
+    {
+      "name": "44-icons-and-arrangements-s9",
+      "file": "examples/technical/icons-and-arrangements.opf.json",
+      "slide": 9,
+      "width": 1280,
+      "height": 720,
+      "title": "What happens after sign-up",
+      "lines": [
+        "What happens ",
+        "after sign-up"
+      ],
+      "fontSize": 54,
+      "alignment": "left",
+      "originalBox": {
+        "x": 57.6,
+        "y": 294.12,
+        "width": 456.32,
+        "height": 131.76
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 446.2893390625
+      },
+      "need": 4.5632,
+      "widths": {
+        "widest": 331.3828125,
+        "unbroken": 450.8525390625
+      },
+      "after": {
+        "path": "pptx/44-icons-and-arrangements-s9.pptx",
+        "sha256": "e05c702c7489c23efc173aae6eada8d8dd1aa4cc5a025bffd5b321ad4ac00c50"
+      },
+      "preview": {
+        "path": "preview/44-icons-and-arrangements-s9.png",
+        "sha256": "68d87e22993d755d17d5714492af8a79151c07d5f7a8b7485352ef121c3d605e"
+      },
+      "diagnostics": [
+        {
+          "code": "native-body-fallback",
+          "path": "slides.0.items",
+          "reason": "multi-column",
+          "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+        },
+        {
+          "code": "smartart-unavailable",
+          "path": "slides.0.items",
+          "reason": "its entries wrap to 7 lines in all (at most 6 matched PowerPoint), so OPF's own vertical flow is drawn; OPF's own layout does not hold it either: OPF's vertical-flow-columns layout passed PowerPoint's comparison for 5 to 6 entries, not 4",
+          "message": "The vertical flow is exported as native shapes, not live SmartArt: its entries wrap to 7 lines in all (at most 6 matched PowerPoint), so OPF's own vertical flow is drawn; OPF's own layout does not hold it either: OPF's vertical-flow-columns layout passed PowerPoint's comparison for 5 to 6 entries, not 4."
+        }
+      ],
+      "beforeGeometryControl": {
+        "path": "before/44-icons-and-arrangements-s9.pptx",
+        "sha256": "3239034c11c25e7a8765b7d563e2d4adff66a623abfa9e62c6330786127a8648"
+      }
+    },
+    {
+      "name": "45-layout-sampler-s1",
+      "file": "examples/technical/layout-sampler.opf.json",
+      "slide": 1,
+      "width": 1280,
+      "height": 720,
+      "title": "A smaller pilot. A clearer decision.",
+      "lines": [
+        "A smaller pilot. ",
+        "A clearer decision."
+      ],
+      "fontSize": 65,
+      "alignment": "center",
+      "originalBox": {
+        "x": 57.6,
+        "y": 252.13,
+        "width": 570.4,
+        "height": 158.6
+      },
+      "wrap": null,
+      "need": 5.704,
+      "widths": {
+        "widest": 509.49462890625,
+        "unbroken": 469.69482421875
+      },
+      "after": {
+        "path": "pptx/45-layout-sampler-s1.pptx",
+        "sha256": "439210a343e604da7eeb903fac6106c7771a48c43052a0461ae211cf088bddc6"
+      },
+      "preview": {
+        "path": "preview/45-layout-sampler-s1.png",
+        "sha256": "93aece02efd6aeef6667cd66431599e583ba8e0a146912369a3381366835c850"
+      },
+      "diagnostics": [
+        {
+          "code": "native-body-fallback",
+          "path": "slides.0.title",
+          "reason": "tight-wrap",
+          "message": "Native title export cannot preserve the measured line breaks with a wrap margin inside its title area; the measured lines were exported."
+        }
+      ]
+    },
+    {
+      "name": "46-layout-sampler-s4",
+      "file": "examples/technical/layout-sampler.opf.json",
+      "slide": 4,
+      "width": 1280,
+      "height": 720,
+      "title": "Three parts, one decision",
+      "lines": [
+        "Three parts, ",
+        "one decision"
+      ],
+      "fontSize": 54,
+      "alignment": "left",
+      "originalBox": {
+        "x": 57.6,
+        "y": 292.121563,
+        "width": 570.4,
+        "height": 131.76
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 362.171
+      },
+      "need": 5.704,
+      "widths": {
+        "widest": 289.564453125,
+        "unbroken": 367.875
+      },
+      "after": {
+        "path": "pptx/46-layout-sampler-s4.pptx",
+        "sha256": "989919464ce3e2b5b2b34df41c31d3bdeaa041e9f19a5825b326647dab20297f"
+      },
+      "preview": {
+        "path": "preview/46-layout-sampler-s4.png",
+        "sha256": "be4801ac0fa23cfaa82ede052a06ed945e4b794eb94e1e68ebfa26f7992a286c"
+      },
+      "diagnostics": [],
+      "beforeGeometryControl": {
+        "path": "before/46-layout-sampler-s4.pptx",
+        "sha256": "7f4f83972face21752de9a300d8bc17c141e420714401cd8e1d1447721572134"
+      }
+    },
+    {
+      "name": "47-layout-sampler-s32",
+      "file": "examples/technical/layout-sampler.opf.json",
+      "slide": 32,
+      "width": 1280,
+      "height": 720,
+      "title": "Four ways to run the pilot",
+      "lines": [
+        "Four ways to ",
+        "run the pilot"
+      ],
+      "fontSize": 54,
+      "alignment": "left",
+      "originalBox": {
+        "x": 57.6,
+        "y": 292.121563,
+        "width": 456.32,
+        "height": 131.76
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 370.5627765625
+      },
+      "need": 4.5632,
+      "widths": {
+        "widest": 288.4833984375,
+        "unbroken": 375.1259765625
+      },
+      "after": {
+        "path": "pptx/47-layout-sampler-s32.pptx",
+        "sha256": "93209f56c65e61e643c2c2c117e73ceec28116c2f56b76c019de70b2827853c2"
+      },
+      "preview": {
+        "path": "preview/47-layout-sampler-s32.png",
+        "sha256": "8be3feeac80e947c1e7b975f52df70646ff8e257d7f1a0e1b9d32c1002cd5e5d"
+      },
+      "diagnostics": [
+        {
+          "code": "native-body-fallback",
+          "path": "slides.0.blocks.0.items",
+          "reason": "multi-column",
+          "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+        },
+        {
+          "code": "smartart-unavailable",
+          "path": "slides.0.blocks.0.items",
+          "reason": "its entries wrap to 8 lines in all (at most 6 matched PowerPoint), so OPF's own matrix is drawn; OPF's own layout does not hold it either: OPF's matrix-quadrants layout did not pass PowerPoint's comparison",
+          "message": "The matrix is exported as native shapes, not live SmartArt: its entries wrap to 8 lines in all (at most 6 matched PowerPoint), so OPF's own matrix is drawn; OPF's own layout does not hold it either: OPF's matrix-quadrants layout did not pass PowerPoint's comparison."
+        }
+      ],
+      "beforeGeometryControl": {
+        "path": "before/47-layout-sampler-s32.pptx",
+        "sha256": "2278b2a9c04505fd917b93e00c3487f7451e95d166cb3dddd2f8ea92c3cfb45f"
+      }
+    },
+    {
+      "name": "48-layout-sampler-s33",
+      "file": "examples/technical/layout-sampler.opf.json",
+      "slide": 33,
+      "width": 1280,
+      "height": 720,
+      "title": "How each pilot round feeds the next",
+      "lines": [
+        "How each pilot ",
+        "round feeds the next"
+      ],
+      "fontSize": 52,
+      "alignment": "left",
+      "originalBox": {
+        "x": 57.6,
+        "y": 294.561563,
+        "width": 456.32,
+        "height": 126.88
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 456.32
+      },
+      "need": 4.5632,
+      "widths": {
+        "widest": 449.921875,
+        "unbroken": 467.03515625
+      },
+      "after": {
+        "path": "pptx/48-layout-sampler-s33.pptx",
+        "sha256": "31a2844e184023079d63dfdd68536004bbf4940c5dcaf01b42b6535be81efccf"
+      },
+      "preview": {
+        "path": "preview/48-layout-sampler-s33.png",
+        "sha256": "1081c1fe414454db4e46ba948b216e1640132fe7c49d0e6436e46e0c637a37c0"
+      },
+      "diagnostics": [
+        {
+          "code": "native-body-fallback",
+          "path": "slides.0.blocks.0.items",
+          "reason": "multi-column",
+          "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+        }
+      ],
+      "beforeGeometryControl": {
+        "path": "before/48-layout-sampler-s33.pptx",
+        "sha256": "3ebc6d0eae94dc63322d7d7580eb37b6d02f0bce91940a2eaf4f2d26440042ee"
+      }
+    },
+    {
+      "name": "49-layout-sampler-s36",
+      "file": "examples/technical/layout-sampler.opf.json",
+      "slide": 36,
+      "width": 1280,
+      "height": 720,
+      "title": "How a team joins the pilot",
+      "lines": [
+        "How a team ",
+        "joins the pilot"
+      ],
+      "fontSize": 54,
+      "alignment": "left",
+      "originalBox": {
+        "x": 57.6,
+        "y": 292.121563,
+        "width": 456.32,
+        "height": 131.76
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 387.1741046875
+      },
+      "need": 4.5632,
+      "widths": {
+        "widest": 308.8125,
+        "unbroken": 391.7373046875
+      },
+      "after": {
+        "path": "pptx/49-layout-sampler-s36.pptx",
+        "sha256": "fa8dfbd1f253d706330f3a25694581ed2bdfd68736cf20a251398aeabd0688b5"
+      },
+      "preview": {
+        "path": "preview/49-layout-sampler-s36.png",
+        "sha256": "f52e9465a0e3790fed33bd77c15e52aae23d2912b25401d375eb47ad90d03a4f"
+      },
+      "diagnostics": [
+        {
+          "code": "native-body-fallback",
+          "path": "slides.0.blocks.0.items",
+          "reason": "multi-column",
+          "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+        }
+      ],
+      "beforeGeometryControl": {
+        "path": "before/49-layout-sampler-s36.pptx",
+        "sha256": "8d4bfb46970953821fd62387c8ed14baa2f822c0a2ee0e6932177f8079544042"
+      }
+    },
+    {
+      "name": "50-slide-design-overrides-s4",
+      "file": "examples/technical/slide-design-overrides.opf.json",
+      "slide": 4,
+      "width": 1280,
+      "height": 720,
+      "title": "Image Fill Override",
+      "lines": [
+        "Image Fill ",
+        "Override"
+      ],
+      "fontSize": 75,
+      "alignment": "left",
+      "originalBox": {
+        "x": 57.6,
+        "y": 268.5,
+        "width": 524.8,
+        "height": 183
+      },
+      "wrap": {
+        "x": 57.6,
+        "width": 524.8
+      },
+      "need": 5.247999999999999,
+      "widths": {
+        "widest": 306.4453125,
+        "unbroken": 596.19140625
+      },
+      "after": {
+        "path": "pptx/50-slide-design-overrides-s4.pptx",
+        "sha256": "375f14120b713bcb2d28ab0dec66fab0db8a9e2ce73ac0597b7bd458d12c5f95"
+      },
+      "preview": {
+        "path": "preview/50-slide-design-overrides-s4.png",
+        "sha256": "a84742afa7e94c5f7c53df31e34942f8c957da024656f6b1bb681e8b7aeb710f"
+      },
+      "diagnostics": [
+        {
+          "code": "unresolved-asset",
+          "path": "slides.0.blocks.0.image",
+          "reason": "file-unreadable",
+          "message": "The local image file could not be read; the image exports as the unavailable-image placeholder (or the picture's fallback)."
+        }
+      ],
+      "beforeGeometryControl": {
+        "path": "before/50-slide-design-overrides-s4.pptx",
+        "sha256": "a986eb6b2cabee37432f71d6b2d5e5dcf24b6876bfb978ad6159d35e196bc65a"
+      }
+    }
+  ],
+  "sourceFiles": {
+    "packages/pptx/src/index.js": "03b950eaf394eeffaf14bf386cabfa693b57ea9c3ca8d677e087c02c16199cb7",
+    "packages/pptx/src/native-body.js": "af1259a5a6f3a8f1e451e08fe2617299714fa70811e7a6abf21cf7bcf97fa98d",
+    "packages/pptx/dist/index.js": "03b950eaf394eeffaf14bf386cabfa693b57ea9c3ca8d677e087c02c16199cb7",
+    "packages/pptx/dist/native-body.js": "af1259a5a6f3a8f1e451e08fe2617299714fa70811e7a6abf21cf7bcf97fa98d"
+  }
+}
