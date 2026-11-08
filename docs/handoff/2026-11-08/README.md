@@ -8,7 +8,7 @@ This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Un
 
 v0.33.0 is PUBLISHED AND VERIFIED. Real Release42465429345 completed SUCCESS, including all slow gates, commit/tag, trusted publish follow and all three site-bump jobs. Release commit26fd4de9cee7e57f9e0620eddcad2dcef04e00e3; public GitHub release published2026-11-08T09:56:21Z. Independent fresh registry check at10:00:03UTC confirms all seven latest versions0.33.0, exact gitHead, integrity and provenance metadata. Final maintained publish observer91249 exited0; no release watcher remains. Source033 is frozen. Genuine site/consumer updates are active; the owner now authorizes agent deployments and native Wrangler Previews under the current CI/CD contract. Parent native qualification hold is lifted with fresh process preflight and owned pinned-font setup.
 
-v0.34.0 is unpublished. Reviewed source is on codex/integration-034; final source/native/golden/CI acceptance and genuine0.33siteadoption remain gates. SH-26 is not yet folded because four native RTL pages visibly reverse Latin text; the separate corrective PR is in preparation. Use CURRENT.md for accepted evidence and every remainder.
+v0.34.0 is unpublished. Reviewed source is on codex/integration-034; final source/native/golden/CI acceptance and genuine0.33siteadoption remain gates. SH-26 and its first RTL correction are folded at integration67; the original four pages are now readable in actual Office, but new explicit-language/non-ASCII-digit contrast failures keep overall native acceptance held. Use CURRENT.md for accepted evidence and every remainder.
 
 ## Current evidence and site review checkpoint: 2026-11-08T18:07:34.990Z
 
