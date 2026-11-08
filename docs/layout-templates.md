@@ -303,6 +303,12 @@ slide that pins any block with `region` keeps the binding above as written.
      3 to 6. Mosaic pictures are cropped to fill (`cover`) unless the block, slide, deck or theme sets `imageFit` (the
      layout's own `contain` gives way). A lead plus cards is the first block across the region (a short one at the lead
      size) over the others in the balanced grid below, each row at the height it needs, placed by the region's anchor.
+   - The closing's `details` region already flows, so its blocks join nothing; it takes the same lead plus cards (the
+     guarded rule `closing-lead`). A layout whose one body region is a flowing `supporting` region, holding 3 to 6 plain
+     texts that its `auto` flow would stack (a text too long for a cell of the balanced grid) and that read as neither
+     paragraph columns (LH-70) nor a lead plus stack (LH-67), and whose other texts fill whole rows of the balanced grid (2, 3 or 4 of them, never a short last row), sets the first text, its call to action, across the region
+     over the others in the balanced grid, as Claude Design draws a closing's details under its call to action. It is
+     kept only when no text reads smaller and nothing more is found (the size guard).
    - The join is kept unless it overflows more than leaving the extra blocks below the grid (counting `text-overflow` and
      `small-cell`): measured blocks such as tables or timelines that need more room than the joined cells give stay below
      the grid with `opf/layout-unplaced`, where they read whole (three tables in `table-beside`'s narrow region broke their
