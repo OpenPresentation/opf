@@ -1,0 +1,2953 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "d7ba4e11cc1a7369e63c20924593e5dbefba5357",
+  "baseCommit": "56981114388f2d23444270abac13b6568ee363f6",
+  "files": [
+    {
+      "path": "suite/actions/rtl-ltr-run-oracle.json",
+      "source": "C:\\opf-work\\ltr-run-oracle-suite-01\\actions\\rtl-ltr-run-oracle.json",
+      "bytes": 111,
+      "sha256": "e2e208c320e28f538416cbc77062d93c27d603ac5359abff560270e537f225ab"
+    },
+    {
+      "path": "suite/inputs/rtl-ltr-run-oracle.pptx",
+      "source": "C:\\opf-work\\ltr-run-oracle-suite-01\\inputs\\rtl-ltr-run-oracle.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "suite/previews/rtl-ltr-run-oracle-1.png",
+      "source": "C:\\opf-work\\ltr-run-oracle-suite-01\\previews\\rtl-ltr-run-oracle-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "suite/suite.json",
+      "source": "C:\\opf-work\\ltr-run-oracle-suite-01\\suite.json",
+      "bytes": 3518,
+      "sha256": "a5955832565b687b1293ae028740da803dd37e53070427d5acc6b6133a17c75c"
+    },
+    {
+      "path": "preflight/furniture-harness.log",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "path": "preflight/harness/furniture.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json",
+      "bytes": 310122,
+      "sha256": "24af4ae6e88f435e8d82e1ddf7e161a5dbc731dd0119312428edb57c5fd9ce83"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/close-failure.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/copy-failure.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/copy-identity-change.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/empty-list.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/existing-output-saved.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/existing-output.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/fractional-move-index.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-common-op-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-common-op-null.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-common-op-number.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/legacy-text-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/malformed-json.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/move-index-four.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/multi-empty-alt.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/non-list-root.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/null-entry.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/numeric-target.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/numeric-text.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-chartName-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-chartName-empty.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-chartName-number.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-chartName-too-long.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-common-op-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-common-op-null.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-common-op-number.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-common-shape-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-common-shape-null.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-common-shape-number.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-common-slide-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-common-slide-null.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-edge-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-edge-case.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-edge-unsupported.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-index-upper-bound.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-kind-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-kind-case.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-kind-marker.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-kind-slice.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-kind-unsupported.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-missing-chartKind.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-missing-chartName.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-missing-edge.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-missing-valueSign.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-pointIndex-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-pointIndex-null.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-pointIndex-string.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-shapeName-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-shapeName-empty.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-sign-array.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-sign-boolean.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-sign-fraction.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-sign-string.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-sign-too-high.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-sign-too-low.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-unknown-field.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/point-zero-sign.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/quit-failure.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/same-path.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\serialized-curved-refusal.json",
+      "bytes": 9449,
+      "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/singleton-empty-text.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/slide-index-four.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/slide-index-zero.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/string-slide-index.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-bool-size.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-both.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-color.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-empty.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-extra-key.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-hash-color.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-overflow.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-reference-color.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-short-color.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-size.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-string-size.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-too-big.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/style-zero.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/success-saved.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/success.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/twenty-one-actions.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/unknown-operation.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/unknown-property.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/unowned-quit.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/writable-open.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/furniture.json.plans/wrong-open-path.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\furniture.json.plans\\wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "preflight/harness/process/failure/owned worker with spaces.ps1",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\failure\\owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "path": "preflight/harness/process/failure/worker.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\failure\\worker.json",
+      "bytes": 342,
+      "sha256": "7762dce47bf93594ccfcf2c068fcfbbe09eb80aa8c66f8832be96377b63a76d2"
+    },
+    {
+      "path": "preflight/harness/process/failure/worker.stderr.log",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\failure\\worker.stderr.log",
+      "bytes": 336,
+      "sha256": "d51e14385656feda86e10543b6fa810fd3e6db6a12b42f06a263df6fd3c48e0e"
+    },
+    {
+      "path": "preflight/harness/process/failure/worker.stdout.log",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\failure\\worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "preflight/harness/process/report.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\report.json",
+      "bytes": 1745,
+      "sha256": "b971cf6fbbf16c0c4df488f9bf289d8fa9fce53841c1b51e6a64473a277bbaf2"
+    },
+    {
+      "path": "preflight/harness/process/success/owned worker with spaces.ps1",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\success\\owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "path": "preflight/harness/process/success/worker.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\success\\worker.json",
+      "bytes": 341,
+      "sha256": "d93194454df5ed58297ad0caeae88a519e1725909f198c843713e6b48b431354"
+    },
+    {
+      "path": "preflight/harness/process/success/worker.stderr.log",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\success\\worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "preflight/harness/process/success/worker.stdout.log",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\success\\worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "path": "preflight/harness/process/timeout/owned worker with spaces.ps1",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\timeout\\owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "path": "preflight/harness/process/timeout/worker.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\timeout\\worker.json",
+      "bytes": 340,
+      "sha256": "2ac44bc3b94613d653a7d37f142b4920e82099efc5bb2debd5c6436138866347"
+    },
+    {
+      "path": "preflight/harness/process/timeout/worker.stderr.log",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\timeout\\worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "preflight/harness/process/timeout/worker.stdout.log",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\harness\\process\\timeout\\worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "preflight/inputs/action-plan.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\inputs\\action-plan.json",
+      "bytes": 111,
+      "sha256": "e2e208c320e28f538416cbc77062d93c27d603ac5359abff560270e537f225ab"
+    },
+    {
+      "path": "preflight/inputs/case.pptx",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\inputs\\case.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "preflight/process-check.log",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "path": "preflight/runner.json",
+      "source": "C:\\opf-work\\qualification034-ltr-oracle-preflight-01\\runner.json",
+      "bytes": 10262,
+      "sha256": "71a54342e9ab80e2debf1e247ea45abc0fb0cee9a8ada5c1f05ac09a9bf39c7b"
+    },
+    {
+      "path": "qualification/after-oracle-test-01.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/after-oracle-test-01.log",
+      "bytes": 193,
+      "sha256": "c46c561c36ecabfa275cc09b46c603180f9abc02f1aee74ca75208df76b2ee97"
+    },
+    {
+      "path": "qualification/base-worker-comparison.json",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/base-worker-comparison.json",
+      "bytes": 1820,
+      "sha256": "89a5f736155903628a2a4f0cdb45273e5903ff133da5ac8bd1688c255d3e2232"
+    },
+    {
+      "path": "qualification/before-oracle-test.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/before-oracle-test.log",
+      "bytes": 1104,
+      "sha256": "a2fa7d9ef057ac091b63569ed385102e714c40dd65a2bbf1bd1b6f6374f5ef06"
+    },
+    {
+      "path": "qualification/changed-plan.json",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/changed-plan.json",
+      "bytes": 414,
+      "sha256": "bdec94f8c2ae19124afe00cd76324c1b6070d4df349a1b084fb959655158fe53"
+    },
+    {
+      "path": "qualification/compare-protected-functions.ps1",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/compare-protected-functions.ps1",
+      "bytes": 1775,
+      "sha256": "9c593f19470118379eebf962944c2a5892e5ae990f88753beebbf21fad7eb2d4"
+    },
+    {
+      "path": "qualification/focused-qualified.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/focused-qualified.log",
+      "bytes": 1042,
+      "sha256": "10295488a8833353107961b6838706aa5fa594c9c608d35b89e68773e2fd6a56"
+    },
+    {
+      "path": "qualification/hydrate-required.mjs",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/hydrate-required.mjs",
+      "bytes": 2931,
+      "sha256": "49e0a8118c1be78980057aafccf98b7d50a060f4b6d3fc91f30f422e27099691"
+    },
+    {
+      "path": "qualification/hydration.json",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/hydration.json",
+      "bytes": 523672,
+      "sha256": "4af8df7c0f7baa50dab3b86d8c67e6a42a048d2f0b27115fcb139fb056bf0cbb"
+    },
+    {
+      "path": "qualification/hydration.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/hydration.log",
+      "bytes": 34,
+      "sha256": "83ba8c323340089c52544970091ae4bb89f11caab5234027a3c15c7c618ddac8"
+    },
+    {
+      "path": "qualification/install.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/install.log",
+      "bytes": 4411,
+      "sha256": "f824362367a18c91b52b1fdd24656acff7125fcf4d0bba448dd92c5c8c7bbb1d"
+    },
+    {
+      "path": "qualification/oracle-suite-identity.json",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/oracle-suite-identity.json",
+      "bytes": 1326,
+      "sha256": "a20058a8faa2c6fcc58644189c73aab2b1d3e8c9539707f2522090db30c0ff4b"
+    },
+    {
+      "path": "qualification/preflight-producer-first-import.json",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/preflight-producer-first-import.json",
+      "bytes": 492,
+      "sha256": "0c134ddae3848c0d48f5ba197c4d20b387db2e32bb2ed08fbc46877b44fcf763"
+    },
+    {
+      "path": "qualification/preflight.exit.json",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/preflight.exit.json",
+      "bytes": 645,
+      "sha256": "02cbd3bbffc4c1a2e52ced1c7cc5f58f9565652ee7016496ba9a0fa548e3cbaa"
+    },
+    {
+      "path": "qualification/preflight.stderr.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/preflight.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "qualification/preflight.stdout.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/preflight.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "qualification/prepare-and-validate-suite.mjs",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/prepare-and-validate-suite.mjs",
+      "bytes": 4674,
+      "sha256": "c743d788dcfe67aa7e86e969491ab54029f18dfaa826fa72c740beaf99093f6e"
+    },
+    {
+      "path": "qualification/prepare-preflight.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/prepare-preflight.log",
+      "bytes": 204,
+      "sha256": "ed418bfa705f938bc474ba877078b8a99cbe733a92a3d27f444bcfc707b612c9"
+    },
+    {
+      "path": "qualification/protected-functions.json",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/protected-functions.json",
+      "bytes": 6821,
+      "sha256": "a0c72dea8299b231e8172cc3317a48a5476df5ac4de01f699e3f2fbb6def53c3"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json",
+      "bytes": 168930,
+      "sha256": "3bc826d0eda122f34831bd16ae67be0830dc251b5ea32406e4f8289f1b67d9ea"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/combined-legacy.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\combined-legacy.json",
+      "bytes": 268,
+      "sha256": "5b360dde4b8a8f90dcda43274c9276efd8e810ea88a7e24406a3c4975b11d220"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/combined-oracle.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\combined-oracle.json",
+      "bytes": 272,
+      "sha256": "5f104b4d16b67733a1eeeeecafc3ae82eec1c3e5898295a8cae55e85141a3511"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/plan-api-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\plan-api-field.json",
+      "bytes": 171,
+      "sha256": "72f26fbdf5ff51972bc93a6f14ba6e1c19eb375e0f5a3e0b4352fca632fa6dda"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/plan-case.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\plan-case.json",
+      "bytes": 140,
+      "sha256": "4298ce156810a1649322f12de26fd6383ab9eaf7e99ec6f83761e0d3d2b39dd5"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/plan-font-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\plan-font-field.json",
+      "bytes": 166,
+      "sha256": "31a50c04820d93f244aabd71ff7e6d3344e20580ada9d8d86b317451d432bb0b"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/plan-language-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\plan-language-field.json",
+      "bytes": 170,
+      "sha256": "4e36aa8a948740218a3adef35459878806948c315936dbfda45ef14f5711c802"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/plan-other-name.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\plan-other-name.json",
+      "bytes": 115,
+      "sha256": "da554fd8836ce7a846569838a5bad066f0bf43c8cb50bf2cf82a294562061dd6"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/plan-other-slide.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\plan-other-slide.json",
+      "bytes": 140,
+      "sha256": "ca729d7d70608762b8e4b76f57a0d0418c80737b23b807b4c219b52877d1fbee"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/plan-text-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\plan-text-field.json",
+      "bytes": 169,
+      "sha256": "ed563cf17836e3e85d811911c293bc552e622d73ed695bc16a510a6a5ce7b1ea"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/plan-unknown-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\plan-unknown-field.json",
+      "bytes": 170,
+      "sha256": "1bbd0a8034316b8f4694e4c8a2d0771a35c7f4c31e1dee594ccedce268552ff7"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/report.json.plans/sole-exact-plan.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\report.json.plans\\sole-exact-plan.json",
+      "bytes": 140,
+      "sha256": "52e1c53703522aeceec0229ea97772db0ceb6eae6bf0f152f8ee8f211c5b05b9"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/stderr.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-oracle/native-ltr-1D3fMV/stdout.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-1D3fMV\\stdout.log",
+      "bytes": 65,
+      "sha256": "75cd9c013eb8e7a78400eaf9d985841c22ddb51f8d8ea4cacaea79bed7fdf3b8"
+    },
+    {
+      "path": "mock-oracle/native-ltr-989pYx/stderr.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-989pYx\\stderr.log",
+      "bytes": 512,
+      "sha256": "52cfc536a80e484f00916b9bd68fb06b6575612243409cbef37863c2948f3969"
+    },
+    {
+      "path": "mock-oracle/native-ltr-989pYx/stdout.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-989pYx\\stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json",
+      "bytes": 168930,
+      "sha256": "8d6b7f3009c83c96ec666d265659619abcdf12298b8331b38844f913e6072b11"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/combined-legacy.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\combined-legacy.json",
+      "bytes": 268,
+      "sha256": "5b360dde4b8a8f90dcda43274c9276efd8e810ea88a7e24406a3c4975b11d220"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/combined-oracle.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\combined-oracle.json",
+      "bytes": 272,
+      "sha256": "5f104b4d16b67733a1eeeeecafc3ae82eec1c3e5898295a8cae55e85141a3511"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/plan-api-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\plan-api-field.json",
+      "bytes": 171,
+      "sha256": "72f26fbdf5ff51972bc93a6f14ba6e1c19eb375e0f5a3e0b4352fca632fa6dda"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/plan-case.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\plan-case.json",
+      "bytes": 140,
+      "sha256": "4298ce156810a1649322f12de26fd6383ab9eaf7e99ec6f83761e0d3d2b39dd5"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/plan-font-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\plan-font-field.json",
+      "bytes": 166,
+      "sha256": "31a50c04820d93f244aabd71ff7e6d3344e20580ada9d8d86b317451d432bb0b"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/plan-language-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\plan-language-field.json",
+      "bytes": 170,
+      "sha256": "4e36aa8a948740218a3adef35459878806948c315936dbfda45ef14f5711c802"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/plan-other-name.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\plan-other-name.json",
+      "bytes": 115,
+      "sha256": "da554fd8836ce7a846569838a5bad066f0bf43c8cb50bf2cf82a294562061dd6"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/plan-other-slide.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\plan-other-slide.json",
+      "bytes": 140,
+      "sha256": "ca729d7d70608762b8e4b76f57a0d0418c80737b23b807b4c219b52877d1fbee"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/plan-text-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\plan-text-field.json",
+      "bytes": 169,
+      "sha256": "ed563cf17836e3e85d811911c293bc552e622d73ed695bc16a510a6a5ce7b1ea"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/plan-unknown-field.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\plan-unknown-field.json",
+      "bytes": 170,
+      "sha256": "1bbd0a8034316b8f4694e4c8a2d0771a35c7f4c31e1dee594ccedce268552ff7"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/report.json.plans/sole-exact-plan.json",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\report.json.plans\\sole-exact-plan.json",
+      "bytes": 140,
+      "sha256": "52e1c53703522aeceec0229ea97772db0ceb6eae6bf0f152f8ee8f211c5b05b9"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/stderr.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-oracle/native-ltr-vQZ28w/stdout.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\native-ltr-vQZ28w\\stdout.log",
+      "bytes": 65,
+      "sha256": "75cd9c013eb8e7a78400eaf9d985841c22ddb51f8d8ea4cacaea79bed7fdf3b8"
+    },
+    {
+      "path": "mock-style-and-guard/property-probe.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\property-probe.json",
+      "bytes": 6113,
+      "sha256": "834cd175a4992010243516847421ff06d06887b3ec9c52f513f1c7361adde9c3"
+    },
+    {
+      "path": "mock-style-and-guard/report.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json",
+      "bytes": 310062,
+      "sha256": "72b8ebe4231c241565f4aabcdc69ee297552f6ee3ce25a7f070e7ea8528d18f8"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/close-failure.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/copy-failure.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/copy-identity-change-saved.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/copy-identity-change.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/empty-list.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/existing-output-saved.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/existing-output.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/foreign-at-adoption.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/foreign-at-quit.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/fractional-move-index.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-common-op-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-common-op-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-common-op-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-common-shape-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-common-shape-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-common-shape-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-common-slide-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-common-slide-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/legacy-text-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/malformed-json.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/move-index-four.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/multi-empty-alt.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/non-list-root.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/null-entry.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/numeric-target.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/numeric-text.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-chartName-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-chartName-empty.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-chartName-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-chartName-too-long.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-common-op-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-common-op-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-common-op-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-common-shape-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-common-shape-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-common-shape-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-common-slide-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-common-slide-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-edge-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-edge-case.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-edge-unsupported.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-index-upper-bound.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-kind-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-kind-case.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-kind-horizontal-bar.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-kind-marker.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-kind-slice.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-kind-unsupported.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-kind-vertical-bar.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-missing-chartKind.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-missing-chartName.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-missing-edge.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-missing-pointIndex.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-missing-seriesIndex.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-missing-valueSign.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-pointIndex-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-pointIndex-boolean.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-pointIndex-fraction.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-pointIndex-negative.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-pointIndex-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-pointIndex-string.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-pointIndex-too-high.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-pointIndex-zero.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-seriesIndex-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-seriesIndex-boolean.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-seriesIndex-fraction.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-seriesIndex-negative.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-seriesIndex-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-seriesIndex-string.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-seriesIndex-too-high.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-seriesIndex-zero.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-shapeName-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-shapeName-empty.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-sign-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-sign-boolean.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-sign-fraction.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-sign-string.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-sign-too-high.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-sign-too-low.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-unknown-field.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/point-zero-sign.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/quit-failure.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/same-path.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/serialized-curved-refusal.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\serialized-curved-refusal.json",
+      "bytes": 9449,
+      "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/singleton-empty-text.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/slide-index-four.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/slide-index-zero.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/string-slide-index.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-bool-size.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-both.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-color.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-empty.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-extra-key.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-hash-color.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-overflow.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-reference-color.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-short-color.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-size.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-string-size.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-too-big.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/style-zero.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/success-saved.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/success.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/twenty-one-actions.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/unknown-operation.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/unknown-property.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/unowned-quit.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/writable-open.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/wrong-close-owner.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-style-and-guard/report.json.plans/wrong-open-path.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-style-2cQWpC\\report.json.plans\\wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/actions.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\actions.log",
+      "bytes": 439,
+      "sha256": "1987cce211fa0a82b39fed7abd7a2a1836f4eb3456bf2de2230a3cd7eb1526d9"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/furniture-harness.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json",
+      "bytes": 310230,
+      "sha256": "dfd069e9e9bd882927482bc50e335d06daa211c11b2b1976a0e11d3d90179d13"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/close-failure.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/copy-failure.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/copy-identity-change.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/empty-list.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/existing-output-saved.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/existing-output.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/fractional-move-index.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-common-op-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-common-op-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-common-op-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/legacy-text-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/malformed-json.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/move-index-four.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/multi-empty-alt.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/non-list-root.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/null-entry.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/numeric-target.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/numeric-text.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-chartName-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-chartName-empty.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-chartName-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-chartName-too-long.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-common-op-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-common-op-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-common-op-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-common-shape-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-common-shape-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-common-shape-number.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-common-slide-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-common-slide-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-edge-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-edge-case.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-edge-unsupported.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-index-upper-bound.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-kind-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-kind-case.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-kind-marker.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-kind-slice.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-kind-unsupported.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-missing-chartKind.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-missing-chartName.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-missing-edge.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-missing-valueSign.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-pointIndex-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-pointIndex-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-pointIndex-string.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-shapeName-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-shapeName-empty.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-sign-array.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-sign-boolean.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-sign-fraction.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-sign-string.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-sign-too-high.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-sign-too-low.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-unknown-field.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/point-zero-sign.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/quit-failure.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/same-path.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\serialized-curved-refusal.json",
+      "bytes": 9449,
+      "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/singleton-empty-text.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/slide-index-four.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/slide-index-zero.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/string-slide-index.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-bool-size.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-both.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-color.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-empty.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-extra-key.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-hash-color.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-overflow.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-reference-color.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-short-color.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-size.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-string-size.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-too-big.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/style-zero.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/success-saved.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/success.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/twenty-one-actions.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/unknown-operation.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/unknown-property.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/unowned-quit.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/writable-open.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/furniture.json.plans/wrong-open-path.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\furniture.json.plans\\wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/failure/owned worker with spaces.ps1",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\failure\\owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/failure/worker.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\failure\\worker.json",
+      "bytes": 342,
+      "sha256": "319da2ae79f2a7ba62d97efacaced168a66be0a01528c9e4f7a29545b5e095a9"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/failure/worker.stderr.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\failure\\worker.stderr.log",
+      "bytes": 349,
+      "sha256": "587eec87b65a6962eed2924aab4c47c4254e84302640828de25f169a664e3106"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/failure/worker.stdout.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\failure\\worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/report.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\report.json",
+      "bytes": 1745,
+      "sha256": "b99fdd2df1cb29342357d7986aa23db906e54a573eaf5c6e8309e97538cb0414"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/success/owned worker with spaces.ps1",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\success\\owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/success/worker.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\success\\worker.json",
+      "bytes": 341,
+      "sha256": "6070b12b14d4735b404dd39ceabcc4ec24debf20dfd1415d4d2b7eecd883e6c1"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/success/worker.stderr.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\success\\worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/success/worker.stdout.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\success\\worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/timeout/owned worker with spaces.ps1",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\timeout\\owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/timeout/worker.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\timeout\\worker.json",
+      "bytes": 340,
+      "sha256": "08e7a0dbb91ae75833a61427032e3e1864db777ee35250a340edea750c671817"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/timeout/worker.stderr.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\timeout\\worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/harness/process/timeout/worker.stdout.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\harness\\process\\timeout\\worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/inputs/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\inputs\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/inputs/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\inputs\\case.pptx",
+      "bytes": 150,
+      "sha256": "b6060750ee120560c2d0592af40946d56ac3fc72716d48f2338677acbd562fe8"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/process-check.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "path": "mock-readonly-survey/attempt-valid/runner.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\attempt-valid\\runner.json",
+      "bytes": 6853,
+      "sha256": "8059f7ec5331ad080a24b12d741267586ad2416916eac75e3e84c2dce9336cf5"
+    },
+    {
+      "path": "mock-readonly-survey/bad-zip.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\bad-zip.log",
+      "bytes": 321,
+      "sha256": "bc0db4120ef0c684841fc03c6cd2d415f1b3e81a1a755eec7679e76867658fe7"
+    },
+    {
+      "path": "mock-readonly-survey/bad.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\bad.pptx",
+      "bytes": 9,
+      "sha256": "91e19e7364481599c9722ad21ec9cec4f4ac26b3dd2c0af221e7896a2c31062b"
+    },
+    {
+      "path": "mock-readonly-survey/controls.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\controls.json",
+      "bytes": 4145,
+      "sha256": "665767b1f15740761505006e9ca3a70587ad2f3380ccf9bca512e52dc895ba21"
+    },
+    {
+      "path": "mock-readonly-survey/declared-boolean.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\declared-boolean.log",
+      "bytes": 499,
+      "sha256": "5892cd88c8336a9dbedaa722b66cf949f14f3d89403c9552af440a8a4b0fefd6"
+    },
+    {
+      "path": "mock-readonly-survey/declared-string.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\declared-string.log",
+      "bytes": 499,
+      "sha256": "5892cd88c8336a9dbedaa722b66cf949f14f3d89403c9552af440a8a4b0fefd6"
+    },
+    {
+      "path": "mock-readonly-survey/declared-two.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\declared-two.log",
+      "bytes": 499,
+      "sha256": "5892cd88c8336a9dbedaa722b66cf949f14f3d89403c9552af440a8a4b0fefd6"
+    },
+    {
+      "path": "mock-readonly-survey/default30-slide-01.png",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\default30-slide-01.png",
+      "bytes": 1,
+      "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+    },
+    {
+      "path": "mock-readonly-survey/entries.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\entries.pptx",
+      "bytes": 440298,
+      "sha256": "0a1a9d11b2ec70560a6ebb004564d49cf97360be7e4d17e3f34014c877878d2e"
+    },
+    {
+      "path": "mock-readonly-survey/large.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\large.pptx",
+      "bytes": 16777217,
+      "sha256": "1003b1b5dc078189799a1216ce0f9fbcebb94e8b6b83c58c4b03345f07f94ced"
+    },
+    {
+      "path": "mock-readonly-survey/one.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\one.pptx",
+      "bytes": 150,
+      "sha256": "b6060750ee120560c2d0592af40946d56ac3fc72716d48f2338677acbd562fe8"
+    },
+    {
+      "path": "mock-readonly-survey/physical-two.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\physical-two.log",
+      "bytes": 422,
+      "sha256": "05bc1c84cd4f3a5d53b035562870f3b3828ea494e5f8ecfc13b32a6ee7f4e8db"
+    },
+    {
+      "path": "mock-readonly-survey/pure-report.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\pure-report.json",
+      "bytes": 4832,
+      "sha256": "df784fd0f6acebebb229b3d4dd87cae250076376013211ff2f2a9744bc1a4ec0"
+    },
+    {
+      "path": "mock-readonly-survey/pure.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\pure.log",
+      "bytes": 68,
+      "sha256": "71093606a8f050dbddec7f964c9db1332fa5e7faa1e1bd846b9a1e3dd5c2dfa5"
+    },
+    {
+      "path": "mock-readonly-survey/pure.ps1",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\pure.ps1",
+      "bytes": 4336,
+      "sha256": "b8d67fdd2aaf365fbbc62de807fa6616cdfe6a367ee54e0e9a1f8944f8a47675"
+    },
+    {
+      "path": "mock-readonly-survey/request-false-true/request.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\request-false-true\\request.json",
+      "bytes": 48,
+      "sha256": "eb13b0d0329ab5ef1c0a717c709e9ad7919b84471a3bf4286ff7c4f1fade3349"
+    },
+    {
+      "path": "mock-readonly-survey/request-false-true.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\request-false-true.log",
+      "bytes": 509,
+      "sha256": "0d07786d226ab57902ba7384d17c1be1f060a73be03474490f44ecd373096157"
+    },
+    {
+      "path": "mock-readonly-survey/request-true-false/request.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\request-true-false\\request.json",
+      "bytes": 49,
+      "sha256": "3a3140e8aa951ceb3c871570b9a0bbc48326e9973c6ec2ba3d4f8acde8e8adc9"
+    },
+    {
+      "path": "mock-readonly-survey/request-true-false.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\request-true-false.log",
+      "bytes": 509,
+      "sha256": "0d07786d226ab57902ba7384d17c1be1f060a73be03474490f44ecd373096157"
+    },
+    {
+      "path": "mock-readonly-survey/request-true-true/request.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\request-true-true\\request.json",
+      "bytes": 50,
+      "sha256": "1358b531339d50a240799ef6bf59d8c215426c7b60cc3490fb0edccd43a9aabd"
+    },
+    {
+      "path": "mock-readonly-survey/request-true-true.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\request-true-true.log",
+      "bytes": 479,
+      "sha256": "11e0dda6c5accb9edc1aec0ba34fe1a7e012360ad1dd36bc894143c1d89832b5"
+    },
+    {
+      "path": "mock-readonly-survey/suite-actions/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-actions\\action-plan.json",
+      "bytes": 68,
+      "sha256": "3993e29cbac8958bcc95e3554e6e63c0e1f3c2b6a8c292bbb0548ccf8ae30b1d"
+    },
+    {
+      "path": "mock-readonly-survey/suite-actions/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-actions\\case.pptx",
+      "bytes": 150,
+      "sha256": "b6060750ee120560c2d0592af40946d56ac3fc72716d48f2338677acbd562fe8"
+    },
+    {
+      "path": "mock-readonly-survey/suite-actions/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-actions\\suite.json",
+      "bytes": 1282,
+      "sha256": "5266e33c2c6fcf47e4d3047c2dd8963cbf9ff5d67fefe373ee4805f250c76919"
+    },
+    {
+      "path": "mock-readonly-survey/suite-bad-zip/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-bad-zip\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-bad-zip/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-bad-zip\\case.pptx",
+      "bytes": 9,
+      "sha256": "91e19e7364481599c9722ad21ec9cec4f4ac26b3dd2c0af221e7896a2c31062b"
+    },
+    {
+      "path": "mock-readonly-survey/suite-bad-zip/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-bad-zip\\suite.json",
+      "bytes": 1279,
+      "sha256": "77f785c85fd21db6617411eb3350b78dcb086fd140a02ed387b9b757e2ee7b3f"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-boolean/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-boolean\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-boolean/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-boolean\\case.pptx",
+      "bytes": 150,
+      "sha256": "b6060750ee120560c2d0592af40946d56ac3fc72716d48f2338677acbd562fe8"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-boolean/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-boolean\\suite.json",
+      "bytes": 1284,
+      "sha256": "c0ca8b0695bef1bf228a6c7cfcbdaaf6d7f8cb6ff067e42acd5a182758a7b901"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-string/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-string\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-string/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-string\\case.pptx",
+      "bytes": 150,
+      "sha256": "b6060750ee120560c2d0592af40946d56ac3fc72716d48f2338677acbd562fe8"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-string/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-string\\suite.json",
+      "bytes": 1283,
+      "sha256": "eac8c0e2d6a8f6c3044da122d682bbdd55c94f8f5b63c2fcd1a16a7fa783d3aa"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-two/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-two\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-two/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-two\\case.pptx",
+      "bytes": 150,
+      "sha256": "b6060750ee120560c2d0592af40946d56ac3fc72716d48f2338677acbd562fe8"
+    },
+    {
+      "path": "mock-readonly-survey/suite-declared-two/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-declared-two\\suite.json",
+      "bytes": 1281,
+      "sha256": "53945153e54d1aa90e82e6a802adc77b2c38f2927ceeb44768f32f5f31211c6e"
+    },
+    {
+      "path": "mock-readonly-survey/suite-physical-two/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-physical-two\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-physical-two/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-physical-two\\case.pptx",
+      "bytes": 278,
+      "sha256": "3a636d27b92b619f7d825eb133fc3dbd4c2a3169ec60c889433071a961bf9bb1"
+    },
+    {
+      "path": "mock-readonly-survey/suite-physical-two/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-physical-two\\suite.json",
+      "bytes": 1281,
+      "sha256": "3a57008bd532e3786b64c4e2e1969b6a68a30b46d86e900ee2bdf548411d7bf3"
+    },
+    {
+      "path": "mock-readonly-survey/suite-timeout-61/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-timeout-61\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-timeout-61/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-timeout-61\\case.pptx",
+      "bytes": 150,
+      "sha256": "b6060750ee120560c2d0592af40946d56ac3fc72716d48f2338677acbd562fe8"
+    },
+    {
+      "path": "mock-readonly-survey/suite-timeout-61/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-timeout-61\\suite.json",
+      "bytes": 1281,
+      "sha256": "13485eefa0ab20e9cdbfe447e2a5ca6300dd438e9a9ac55ce8faf81df3b06143"
+    },
+    {
+      "path": "mock-readonly-survey/suite-too-large/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-too-large\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-too-large/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-too-large\\case.pptx",
+      "bytes": 16777217,
+      "sha256": "1003b1b5dc078189799a1216ce0f9fbcebb94e8b6b83c58c4b03345f07f94ced"
+    },
+    {
+      "path": "mock-readonly-survey/suite-too-large/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-too-large\\suite.json",
+      "bytes": 1286,
+      "sha256": "566d9d78251f8ee4d70cfdae79d510909ab41fe2fe8aee4c42a9149b3374bd26"
+    },
+    {
+      "path": "mock-readonly-survey/suite-too-many-entries/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-too-many-entries\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-too-many-entries/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-too-many-entries\\case.pptx",
+      "bytes": 440298,
+      "sha256": "0a1a9d11b2ec70560a6ebb004564d49cf97360be7e4d17e3f34014c877878d2e"
+    },
+    {
+      "path": "mock-readonly-survey/suite-too-many-entries/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-too-many-entries\\suite.json",
+      "bytes": 1284,
+      "sha256": "bde559e9c7641c3e7024d0f22ae3acff42d54724956b63b6527104d714f24256"
+    },
+    {
+      "path": "mock-readonly-survey/suite-valid/action-plan.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-valid\\action-plan.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "mock-readonly-survey/suite-valid/case.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-valid\\case.pptx",
+      "bytes": 150,
+      "sha256": "b6060750ee120560c2d0592af40946d56ac3fc72716d48f2338677acbd562fe8"
+    },
+    {
+      "path": "mock-readonly-survey/suite-valid/suite.json",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\suite-valid\\suite.json",
+      "bytes": 1281,
+      "sha256": "13485eefa0ab20e9cdbfe447e2a5ca6300dd438e9a9ac55ce8faf81df3b06143"
+    },
+    {
+      "path": "mock-readonly-survey/survey100-slide-01.png",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\survey100-slide-01.png",
+      "bytes": 1,
+      "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+    },
+    {
+      "path": "mock-readonly-survey/survey92-slide-01.png",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\survey92-slide-01.png",
+      "bytes": 1,
+      "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+    },
+    {
+      "path": "mock-readonly-survey/timeout-61.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\timeout-61.log",
+      "bytes": 468,
+      "sha256": "b3ca4dd324cb61683dc5dd5eb27b7477a3bfe7c4e9559bf4bc82a2121841e5a9"
+    },
+    {
+      "path": "mock-readonly-survey/too-large.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\too-large.log",
+      "bytes": 399,
+      "sha256": "ac5a54902d001d84634fa310381849681e9ba3cf4ce6e1f22b86b109f4cf7c18"
+    },
+    {
+      "path": "mock-readonly-survey/too-many-entries.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\too-many-entries.log",
+      "bytes": 429,
+      "sha256": "84447d163ad49c5bfa9f919732fedf0178962ca1907b3048d7e93c4870029b03"
+    },
+    {
+      "path": "mock-readonly-survey/two.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\two.pptx",
+      "bytes": 278,
+      "sha256": "3a636d27b92b619f7d825eb133fc3dbd4c2a3169ec60c889433071a961bf9bb1"
+    },
+    {
+      "path": "mock-readonly-survey/unsupported.ps1",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\unsupported.ps1",
+      "bytes": 30,
+      "sha256": "cdc0d9e16e33a1be523c5992f67ff8caf9997a0a6c5a37b89468a7eec7f5250e"
+    },
+    {
+      "path": "mock-readonly-survey/valid.log",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\valid.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "mock-readonly-survey/zero.pptx",
+      "source": "C:\\Users\\micha\\AppData\\Local\\Temp\\opf-survey-HJX5ss\\zero.pptx",
+      "bytes": 160,
+      "sha256": "164a5e63dd2ee159863f0de97e9d1a67f66d338707d1f176bbc1a92f5e62b31b"
+    },
+    {
+      "path": "executed-source/packages/pptx/test/native-furniture-control.ps1",
+      "source": "C:/opf-work/rr105-ltr-oracle/packages/pptx/test/native-furniture-control.ps1",
+      "bytes": 75939,
+      "sha256": "ddb8745dbcd2561e9e2e9428158fae30742d00e4a5edf83377f28a3b8e318a37"
+    },
+    {
+      "path": "executed-source/packages/pptx/test/native-ltr-oracle-check.ps1",
+      "source": "C:/opf-work/rr105-ltr-oracle/packages/pptx/test/native-ltr-oracle-check.ps1",
+      "bytes": 8823,
+      "sha256": "cda79287ec905d2bb477ebeb462cb48cc194594d455ef1b4e77b92aa55fc761e"
+    },
+    {
+      "path": "executed-source/packages/pptx/test/native-ltr-oracle.mjs",
+      "source": "C:/opf-work/rr105-ltr-oracle/packages/pptx/test/native-ltr-oracle.mjs",
+      "bytes": 2727,
+      "sha256": "ae070027b19340f07e8bd18c97a459d82152eb21b310c8e9ec1a54148fa683e8"
+    },
+    {
+      "path": "executed-source/packages/pptx/test/native-furniture-harness-check.ps1",
+      "source": "C:/opf-work/rr105-ltr-oracle/packages/pptx/test/native-furniture-harness-check.ps1",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "executed-source/packages/pptx/test/native-process.ps1",
+      "source": "C:/opf-work/rr105-ltr-oracle/packages/pptx/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "executed-source/packages/pptx/test/native-process-check.ps1",
+      "source": "C:/opf-work/rr105-ltr-oracle/packages/pptx/test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "executed-source/scripts/native-acceptance/run-windows.ps1",
+      "source": "C:/opf-work/rr105-ltr-oracle/scripts/native-acceptance/run-windows.ps1",
+      "bytes": 15359,
+      "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+    },
+    {
+      "path": "source-569-to-d7ba.patch",
+      "source": "git diff --binary 56981114388f2d23444270abac13b6568ee363f6 d7ba4e11cc1a7369e63c20924593e5dbefba5357",
+      "bytes": 36720,
+      "sha256": "f58b59c763f0e4ec49f79c614becf3419fca36d1295ebf4d2dbc826f262ec61d"
+    },
+    {
+      "path": "sealing-producer.mjs",
+      "source": "C:\\opf-work\\rr105-ltr-oracle-evidence\\seal-source-and-suite.mjs",
+      "bytes": 5413,
+      "sha256": "370f399e8ab004363ba62e3241479eddc310ca191aa232b89da72036524710be"
+    }
+  ]
+}

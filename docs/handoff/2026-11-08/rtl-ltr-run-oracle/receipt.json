@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-08",
+  "scope": "NEVERMERGE native-format oracle tooling/source review. No Office invocation from this lane; no product fix, feature acceptance or release.",
+  "sourceCommit": "d7ba4e11cc1a7369e63c20924593e5dbefba5357",
+  "baseCommit": "56981114388f2d23444270abac13b6568ee363f6",
+  "sourceDirty": false,
+  "sourceBranch": "codex/rr-105-native-ltr-oracle",
+  "archive": {
+    "path": "qualified-source-and-suite.zip",
+    "bytes": 650645,
+    "sha256": "685d9ff2854203293615d5131cff1f49b52740c5b6b4a68b2a5bc4e14cd88a58",
+    "files": 491,
+    "losslessRoundTripVerified": true
+  },
+  "suiteSha256": "a5955832565b687b1293ae028740da803dd37e53070427d5acc6b6133a17c75c",
+  "inputSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+  "action": [
+    {
+      "op": "ltr-run-oracle",
+      "slideIndex": 1,
+      "shapeName": "OPF list slides.0.items line 0"
+    }
+  ],
+  "qualifications": {
+    "newMockControls": 37,
+    "nodeTests": 5,
+    "passed": 5,
+    "failed": 0,
+    "pureValidateOnlyExit": 0,
+    "protectedFunctionBodiesExact": 15,
+    "otherCe92WorkerFilesByteExact": 4,
+    "officeConstructed": false,
+    "mandatoryChangedCheck": "RUNNING; intentionally not represented by a partial or normalized pass result"
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "overallAcceptance": false,
+  "credentialSignatureScan": {
+    "files": 491,
+    "matches": []
+  }
+}

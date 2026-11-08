@@ -1,0 +1,36 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+import {execFileSync} from 'node:child_process';
+const source='C:/opf-work/rr105-ltr-oracle',evidence='C:/opf-work/rr105-ltr-oracle-evidence',dest='C:/opf-work/rr105-oracle-evidence/docs/handoff/2026-11-08/rtl-ltr-run-oracle';
+const head='d7ba4e11cc1a7369e63c20924593e5dbefba5357',base='56981114388f2d23444270abac13b6568ee363f6';
+const {zipSync,unzipSync}=createRequire(source+'/packages/pptx/package.json')('fflate');
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const git=args=>execFileSync('git',args,{cwd:source});
+assert.equal(git(['rev-parse','HEAD']).toString().trim(),head);
+assert.equal(git(['status','--porcelain']).toString().trim(),'');
+assert.ok(!fs.existsSync(dest),'do not replace any published or first-attempt evidence');
+const entries={},records=[];
+const add=(name,file)=>{const b=fs.readFileSync(file);assert.ok(!entries[name],name);entries[name]=new Uint8Array(b);records.push({path:name,source:file,bytes:b.length,sha256:sha(b)});};
+const tree=(prefix,root)=>{for(const ent of fs.readdirSync(root,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))){assert.ok(!ent.isSymbolicLink());const file=path.join(root,ent.name);if(ent.isDirectory())tree(prefix+'/'+ent.name,file);else add(prefix+'/'+ent.name,file);}};
+tree('suite','C:/opf-work/ltr-run-oracle-suite-01');
+tree('preflight','C:/opf-work/qualification034-ltr-oracle-preflight-01');
+for(const f of ['after-oracle-test-01.log','base-worker-comparison.json','before-oracle-test.log','changed-plan.json','compare-protected-functions.ps1','focused-qualified.log','hydrate-required.mjs','hydration.json','hydration.log','install.log','oracle-suite-identity.json','preflight-producer-first-import.json','preflight.exit.json','preflight.stderr.log','preflight.stdout.log','prepare-and-validate-suite.mjs','prepare-preflight.log','protected-functions.json'])add('qualification/'+f,evidence+'/'+f);
+for(const n of ['native-ltr-1D3fMV','native-ltr-989pYx','native-ltr-vQZ28w'])tree('mock-oracle/'+n,source+'/artifacts/'+n);
+tree('mock-style-and-guard','C:/Users/micha/AppData/Local/Temp/opf-style-2cQWpC');
+tree('mock-readonly-survey','C:/Users/micha/AppData/Local/Temp/opf-survey-HJX5ss');
+for(const file of ['packages/pptx/test/native-furniture-control.ps1','packages/pptx/test/native-ltr-oracle-check.ps1','packages/pptx/test/native-ltr-oracle.mjs','packages/pptx/test/native-furniture-harness-check.ps1','packages/pptx/test/native-process.ps1','packages/pptx/test/native-process-check.ps1','scripts/native-acceptance/run-windows.ps1'])add('executed-source/'+file,source+'/'+file);
+const patch=git(['diff','--binary',base,head]);entries['source-569-to-d7ba.patch']=new Uint8Array(patch);records.push({path:'source-569-to-d7ba.patch',source:'git diff --binary '+base+' '+head,bytes:patch.length,sha256:sha(patch)});
+add('sealing-producer.mjs',process.argv[1]);
+const patterns=[['github-token',/(?:gh[pousr]_[A-Za-z0-9_]{30,}|github_pat_[A-Za-z0-9_]{40,})/g],['private-key',/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/g],['aws-key',/AKIA[0-9A-Z]{16}/g],['slack-token',/xox[baprs]-[A-Za-z0-9-]{20,}/g]];
+const scan=[];for(const[name,b]of Object.entries(entries)){if(/\.(?:png|pptx|zip)$/.test(name))continue;for(const[kind,re]of patterns){re.lastIndex=0;const text=Buffer.from(b).toString('utf8');if(re.test(text))scan.push({path:name,kind});}}
+assert.deepEqual(scan,[],'credential-signature scan must pass without exposing values');
+fs.mkdirSync(dest,{recursive:true});const zipped=zipSync(entries,{level:6}),unpacked=unzipSync(zipped);assert.equal(Object.keys(unpacked).length,records.length);for(const r of records){assert.equal(unpacked[r.path].length,r.bytes);assert.equal(sha(unpacked[r.path]),r.sha256);}
+fs.writeFileSync(dest+'/qualified-source-and-suite.zip',zipped);
+fs.writeFileSync(dest+'/qualified-source-and-suite.files.json',JSON.stringify({schemaVersion:1,sourceCommit:head,baseCommit:base,files:records},null,2)+'\n');
+fs.copyFileSync(process.argv[1],dest+'/seal-source-and-suite.mjs');
+const receipt={schemaVersion:1,date:'2026-11-08',scope:'NEVERMERGE native-format oracle tooling/source review. No Office invocation from this lane; no product fix, feature acceptance or release.',sourceCommit:head,baseCommit:base,sourceDirty:false,sourceBranch:'codex/rr-105-native-ltr-oracle',archive:{path:'qualified-source-and-suite.zip',bytes:zipped.length,sha256:sha(zipped),files:records.length,losslessRoundTripVerified:true},suiteSha256:sha(fs.readFileSync('C:/opf-work/ltr-run-oracle-suite-01/suite.json')),inputSha256:'4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2',action:[{op:'ltr-run-oracle',slideIndex:1,shapeName:'OPF list slides.0.items line 0'}],qualifications:{newMockControls:37,nodeTests:5,passed:5,failed:0,pureValidateOnlyExit:0,protectedFunctionBodiesExact:15,otherCe92WorkerFilesByteExact:4,officeConstructed:false,mandatoryChangedCheck:'RUNNING; intentionally not represented by a partial or normalized pass result'},nativeAcceptance:false,registryAcceptance:false,overallAcceptance:false,credentialSignatureScan:{files:Object.keys(entries).length,matches:scan}};
+fs.writeFileSync(dest+'/receipt.json',JSON.stringify(receipt,null,2)+'\n');
+console.log(JSON.stringify(receipt,null,2));
