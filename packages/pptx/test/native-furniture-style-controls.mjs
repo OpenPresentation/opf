@@ -96,11 +96,16 @@ if (process.platform === "win32") {
 	assert.equal(report.accepted, 12);
 	assert.equal(report.rejected, 81);
 	assert.equal(report.cases.filter(item => item.name.startsWith("point-") && item.expected === "reject").length, 49);
-	assert.equal(report.chartPointControls.length, 43);
+	assert.equal(report.chartPointControls.length, 45);
 	assert.equal(report.chartPointControls.filter(item => /^(pie-translated|pie-full-circle|doughnut-radial)-/.test(item.name ?? "")).length, 9);
 	assert.equal(report.chartPointControls.filter(item => /^(pie-midradius|pie-center-nonfinite|pie-outer-nonfinite|doughnut-inner-nonfinite)/.test(item.name ?? "")).length, 6);
 	assert.deepEqual(report.chartPointControls.slice(-4).map(item => item.name), ["wrong-native-kind", "mixed-series-type", "unsupported-native-type", "doughnut-api-unavailable"]);
 	assert.ok(report.chartPointControls.every(item => item.passed));
+	const failedNative = report.chartPointControls.find(item => item.name === "serialized-curved-refusal");
+	assert.equal(failedNative.rawObservations, 12);
+	const serialized = JSON.parse(readFileSync(failedNative.path, "utf8").replace(/^\uFEFF/, ""));
+	assert.equal(serialized.actionPlan.chartPoints.length, 0);
+	assert.equal(serialized.actionPlan.currentChartPointProbe.sliceCoordinates.length, 12);
 	assert.equal(report.lifecycleControls.length, 14);
 	assert.ok(report.lifecycleControls.every(item => item.passed));
 	assert.deepEqual(report.lifecycleControls.map(item => item.name), ["readonly-copy-edit-reopen", "wrong-open-path", "writable-open", "copy-failure", "copy-identity-change", "refuse-input-overwrite", "refuse-existing-output", "refuse-unowned-close", "close-failure", "refuse-nonempty-application-adoption", "refuse-nonempty-application-quit", "quit-failure", "refuse-unowned-application-quit", "refuse-running-office"]);

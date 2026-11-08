@@ -325,7 +325,7 @@ function Read-FurnitureFiniteNumber($Object,[string]$Property,[string]$Stage) {
     return $number
 }
 function New-FurniturePointProbe($Action,[string]$Prefix) {
-    return [ordered]@{stage=$Prefix;chartName=$Action.chartName;shapeName=$Action.shapeName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;edge=$Action.edge;strategy='native-point-bounds';sliceCoordinates=(New-Object 'System.Collections.Generic.List[object]');pieCenterLocalPoints=$null}
+    return [ordered]@{stage=$Prefix;chartName=$Action.chartName;shapeName=$Action.shapeName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;edge=$Action.edge;strategy='native-point-bounds';sliceCoordinates=(New-Object 'System.Collections.Generic.List[object]');pieCenterLocalPoints=$null;curvedBoundsLocalPoints=$null;plotCenterLocalPoints=$null;circleCenterLocalPoints=$null;circleCenterMethod=$null}
 }
 function Read-FurnitureSlicePoint($Point,[int]$Index,[string]$Prefix,$Probe) {
     $coordinates=New-Object 'System.Collections.Generic.List[double]'
@@ -341,6 +341,100 @@ function Read-FurnitureSlicePoint($Point,[int]$Index,[string]$Prefix,$Probe) {
         $coordinates.Add($number)
     }
     return [pscustomobject]@{x=$coordinates[0];y=$coordinates[1]}
+}
+# Pure independent circular-outline bounds, from native points only. Endpoint boxes omit arc extrema.
+# Independent circumcenter from actual native outer1/2/3; PlotArea's inside box can be offset from the drawn rings.
+function Get-FurnitureNativeCircleCenter($Outer) {
+    if($null -eq $Outer -or @($Outer).Count -ne 3){Stop-FurnitureLifecycle 'Three observed native circle points are required'}
+    $points=New-Object 'System.Collections.Generic.List[object]'
+    foreach($candidate in $Outer){
+        if($null -eq $candidate){Stop-FurnitureLifecycle 'Observed native circle point is missing'}
+        $px=$candidate.PSObject.Properties['x'];$py=$candidate.PSObject.Properties['y']
+        if($null -eq $px -or $null -eq $py -or $null -eq $px.Value -or $null -eq $py.Value){Stop-FurnitureLifecycle 'Observed native circle coordinates are missing'}
+        try{$x=[double]$px.Value;$y=[double]$py.Value}catch{Stop-FurnitureLifecycle 'Observed native circle coordinates are not numeric'}
+        if([double]::IsNaN($x) -or [double]::IsInfinity($x) -or [double]::IsNaN($y) -or [double]::IsInfinity($y)){Stop-FurnitureLifecycle 'Observed native circle coordinates are not finite'}
+        $points.Add([pscustomobject]@{x=$x;y=$y})
+    }
+    $a=$points[0];$b=$points[1];$c=$points[2];$epsilon=0.001
+    $ux=$b.x-$a.x;$uy=$b.y-$a.y;$vx=$c.x-$a.x;$vy=$c.y-$a.y
+    $scale=[math]::Max([math]::Max([math]::Abs($ux),[math]::Abs($uy)),[math]::Max([math]::Abs($vx),[math]::Abs($vy)))
+    if([double]::IsNaN($scale) -or [double]::IsInfinity($scale) -or $scale -le $epsilon){Stop-FurnitureLifecycle 'Observed native circle is degenerate or not finite'}
+    # Normalize before the determinant to avoid translation/large-coordinate cancellation.
+    $closed=[math]::Sqrt($vx*$vx+$vy*$vy) -le $epsilon
+    if($closed){
+        # A closed slice's observed halfway arc point is antipodal. Tiny/coincident observations refuse below.
+        $cx=$a.x+$ux/2;$cy=$a.y+$uy/2;$method='closed-native-antipodal-midpoint'
+    }else{
+        $ux/=$scale;$uy/=$scale;$vx/=$scale;$vy/=$scale
+        $det=2*($ux*$vy-$uy*$vx)
+        if([math]::Abs($det)*$scale -le $epsilon){Stop-FurnitureLifecycle 'Observed native circle points are collinear or ill-conditioned at native precision'}
+        $u2=$ux*$ux+$uy*$uy;$v2=$vx*$vx+$vy*$vy
+        $cx=$a.x+$scale*($u2*$vy-$v2*$uy)/$det;$cy=$a.y+$scale*($ux*$v2-$vx*$u2)/$det;$method='native-outer123-circumcenter'
+    }
+    $radius=[math]::Sqrt([math]::Pow($a.x-$cx,2)+[math]::Pow($a.y-$cy,2))
+    if([double]::IsNaN($cx) -or [double]::IsInfinity($cx) -or [double]::IsNaN($cy) -or [double]::IsInfinity($cy) -or [double]::IsNaN($radius) -or [double]::IsInfinity($radius) -or $radius -le $epsilon){Stop-FurnitureLifecycle 'Observed native circle center/radius is degenerate or not finite'}
+    return [pscustomobject]@{x=$cx;y=$cy;method=$method}
+}
+
+function Get-FurnitureCurvedSliceBounds($Center,$Outer,$Inner=$null) {
+    $finitePoint={param($candidate)
+        if($null -eq $candidate) {Stop-FurnitureLifecycle 'Native curved point is missing'}
+        $px=$candidate.PSObject.Properties['x'];$py=$candidate.PSObject.Properties['y']
+        if($null -eq $px -or $null -eq $py -or $null -eq $px.Value -or $null -eq $py.Value) {Stop-FurnitureLifecycle 'Native curved point coordinates are missing'}
+        try {$cx=[double]$px.Value;$cy=[double]$py.Value} catch {Stop-FurnitureLifecycle 'Native curved point is not numeric'}
+        if([double]::IsNaN($cx) -or [double]::IsInfinity($cx) -or [double]::IsNaN($cy) -or [double]::IsInfinity($cy)) {Stop-FurnitureLifecycle 'Native curved point is not finite'}
+        return [pscustomobject]@{x=$cx;y=$cy}
+    }
+    $centerPoint=& $finitePoint $Center
+    if($null -eq $Outer -or @($Outer).Count -ne 3) {Stop-FurnitureLifecycle 'Three native outer arc points are required'}
+    $outerPoints=New-Object 'System.Collections.Generic.List[object]'
+    foreach($candidate in $Outer) {$outerPoints.Add((& $finitePoint $candidate))}
+    $distance={param($point) [math]::Sqrt([math]::Pow($point.x-$centerPoint.x,2)+[math]::Pow($point.y-$centerPoint.y,2))}
+    $radius=& $distance $outerPoints[2]
+    if([double]::IsNaN($radius) -or [double]::IsInfinity($radius) -or $radius -le 0.001) {Stop-FurnitureLifecycle 'Native circular radius is degenerate or not finite'}
+    # API observations are rounded in points. This consistency check is <0.002px, not a change to the four-pixel gate.
+    $epsilon=0.001;$turn=2*[math]::PI;$angleEpsilon=$epsilon/$radius
+    $normalize={param([double]$angle) $answer=$angle%$turn;if($answer -lt 0){$answer+=$turn};return $answer}
+    $angles=New-Object 'System.Collections.Generic.List[double]'
+    foreach($point in $outerPoints) {
+        $r=& $distance $point
+        if([double]::IsNaN($r) -or [double]::IsInfinity($r) -or [math]::Abs($r-$radius) -gt $epsilon) {Stop-FurnitureLifecycle 'Native outer points do not share the observed circular radius'}
+        $angles.Add((& $normalize ([math]::Atan2($point.y-$centerPoint.y,$point.x-$centerPoint.x))))
+    }
+    $start=$angles[0];$sweep=& $normalize ($angles[2]-$start);$middle=& $normalize ($angles[1]-$start)
+    $closed=[math]::Sqrt([math]::Pow($outerPoints[0].x-$outerPoints[2].x,2)+[math]::Pow($outerPoints[0].y-$outerPoints[2].y,2)) -le $epsilon
+    if($closed) {
+        if([math]::Abs($middle-[math]::PI) -gt $angleEpsilon) {Stop-FurnitureLifecycle 'Native closed arc is degenerate or ambiguous, not an observed full circle'}
+        $sweep=$turn
+    } else {
+        if($middle -gt $sweep+$angleEpsilon) {$start=$angles[2];$sweep=& $normalize ($angles[0]-$start);$middle=& $normalize ($angles[1]-$start)}
+        if($sweep -le $angleEpsilon -or $middle -le $angleEpsilon -or $middle -ge $sweep-$angleEpsilon -or [math]::Abs($middle-$sweep/2) -gt $angleEpsilon) {Stop-FurnitureLifecycle 'Native arc midpoint does not establish an unambiguous circular sweep'}
+    }
+    $points=New-Object 'System.Collections.Generic.List[object]'
+    foreach($point in $outerPoints) {$points.Add($point)}
+    $innerRadius=0.0
+    if($null -eq $Inner) {$points.Add($centerPoint)} else {
+        if(@($Inner).Count -ne 3) {Stop-FurnitureLifecycle 'Three native inner arc points are required'}
+        $innerPoints=New-Object 'System.Collections.Generic.List[object]'
+        foreach($candidate in $Inner) {$innerPoints.Add((& $finitePoint $candidate))}
+        $innerRadius=& $distance $innerPoints[2]
+        if([double]::IsNaN($innerRadius) -or [double]::IsInfinity($innerRadius) -or $innerRadius -le 0 -or $innerRadius -ge $radius-$epsilon) {Stop-FurnitureLifecycle 'Native inner radius is not a finite hole inside the outer circle'}
+        for($index=0;$index -lt 3;$index++) {
+            $point=$innerPoints[$index];$r=& $distance $point
+            $angle=& $normalize ([math]::Atan2($point.y-$centerPoint.y,$point.x-$centerPoint.x))
+            $difference=& $normalize ($angle-$angles[$index]);$difference=[math]::Min($difference,$turn-$difference)
+            if([double]::IsNaN($r) -or [double]::IsInfinity($r) -or [math]::Abs($r-$innerRadius) -gt $epsilon -or $difference -gt $angleEpsilon) {Stop-FurnitureLifecycle 'Native inner arc does not share the observed center and sweep'}
+            $points.Add($point)
+        }
+    }
+    foreach($angle in @(0.0,([math]::PI/2),[math]::PI,(3*[math]::PI/2))) {
+        $fromStart=& $normalize ($angle-$start)
+        if($closed -or $fromStart -le $sweep+$angleEpsilon) {
+            foreach($r in @($radius,$innerRadius)) {if($r -gt 0) {$points.Add([pscustomobject]@{x=$centerPoint.x+$r*[math]::Cos($angle);y=$centerPoint.y+$r*[math]::Sin($angle)})}}
+        }
+    }
+    $xs=$points | Measure-Object -Property x -Minimum -Maximum;$ys=$points | Measure-Object -Property y -Minimum -Maximum
+    return [pscustomobject]@{left=[double]$xs.Minimum;top=[double]$ys.Minimum;width=[double]($xs.Maximum-$xs.Minimum);height=[double]($ys.Maximum-$ys.Minimum);center=@($centerPoint.x,$centerPoint.y);outerRadius=$radius;innerRadius=$innerRadius;startAngle=$start;sweep=$sweep;fullCircle=$closed}
 }
 function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$null) {
     if($null -eq $Probe) {$Probe=New-FurniturePointProbe $Action $Prefix}
@@ -375,7 +469,28 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$
     $height=Read-FurnitureFiniteNumber $point 'Height' "$Prefix.point.height"
     if($width -lt 0 -or $height -lt 0) {Stop-FurnitureLifecycle 'Native point bounds are negative'}
     $x=$left+$width/2; $y=$top+$height/2
-    if($Action.chartKind -eq 'slice' -and $Action.edge -in @('start','end','center')) {
+    if($Action.chartKind -eq 'slice' -and $Action.edge -in @('top','bottom')) {
+        $one=Read-FurnitureSlicePoint $point 1 $Prefix $Probe
+        $two=Read-FurnitureSlicePoint $point 2 $Prefix $Probe
+        $three=Read-FurnitureSlicePoint $point 3 $Prefix $Probe
+        $innerArc=$null
+        if($chartType -eq 5) {
+            $four=Read-FurnitureSlicePoint $point 4 $Prefix $Probe
+            $center=[pscustomobject]@{x=2*$four.x-$three.x;y=2*$four.y-$three.y}
+            $Probe.pieCenterLocalPoints=@($center.x,$center.y)
+        } else {
+            $seven=Read-FurnitureSlicePoint $point 7 $Prefix $Probe
+            $eight=Read-FurnitureSlicePoint $point 8 $Prefix $Probe
+            $nine=Read-FurnitureSlicePoint $point 9 $Prefix $Probe
+            $innerArc=@($nine,$eight,$seven)
+            $center=Get-FurnitureNativeCircleCenter @($one,$two,$three)
+            $Probe.circleCenterLocalPoints=@($center.x,$center.y);$Probe.circleCenterMethod=$center.method
+        }
+        $curve=Get-FurnitureCurvedSliceBounds $center @($one,$two,$three) $innerArc
+        $Probe.curvedBoundsLocalPoints=$curve
+        $Probe.strategy='native-curved-slice-bounds'
+        $x=$curve.left+$curve.width/2;$y=if($Action.edge -eq 'top'){$curve.top}else{$curve.top+$curve.height}
+    } elseif($Action.chartKind -eq 'slice' -and $Action.edge -in @('start','end','center')) {
         # Native XlPieSliceIndex: outer-center2, outer-clockwise3, mid-clockwise-radius4,
         # inner-center8 (doughnut only). Index5 does not establish a radial midpoint.
         # https://learn.microsoft.com/en-us/office/vba/api/excel.xlpiesliceindex
@@ -421,7 +536,7 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$
     $overlayHeight=Read-FurnitureFiniteNumber $overlay 'Height' "$Prefix.overlay.height"
     $overlayX=$overlayLeft+$overlayWidth/2; $overlayY=$overlayTop+$overlayHeight/2
     $distance=[math]::Sqrt([math]::Pow($overlayX-$nativeX,2)+[math]::Pow($overlayY-$nativeY,2))*4/3
-    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativeSliceObservations=@($Probe.sliceCoordinates.ToArray());nativePieCenterLocalPoints=$Probe.pieCenterLocalPoints;coordinateStrategy=$Probe.strategy;nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
+    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativeSliceObservations=@($Probe.sliceCoordinates.ToArray());nativePieCenterLocalPoints=$Probe.pieCenterLocalPoints;nativeCurvedBoundsLocalPoints=$Probe.curvedBoundsLocalPoints;nativePlotCenterLocalPoints=$Probe.plotCenterLocalPoints;nativeCircleCenterLocalPoints=$Probe.circleCenterLocalPoints;nativeCircleCenterMethod=$Probe.circleCenterMethod;coordinateStrategy=$Probe.strategy;nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
 }
 
 function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {

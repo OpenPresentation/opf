@@ -101,3 +101,10 @@ E1 maintained runner1181at34ae758d71abb77845d6b3feb08d2d53308f3a99 is independen
 
 
 RR105034corpus continuation: [DOT/PlantUML native coverage](rr105-034-diagram-corpus.md) adds all13existing example slides to the maintained release corpus and a schema-derived missing-syntax guard. Existing Mermaid/033witnesses stay intact. Before-test fails onmissingdot; actual newnativequalification remains owed, separate from source acceptance.
+
+## SH25 curved native measurement continuation
+
+[The new tooling-only probe correction](sh25-curved-probe.md) preserves the actual endpoint-box failures and unchanged product rings. Independent native arc bounds replace that proxy only after all required coordinates are observed; new API availability and actual4px acceptance remain parent-owned and pending. The 26analytic controls and all existing guarded mocks pass without Office.
+
+- [SH25actual native circle](sh25-native-circle.md): NEWderived wrongPlotArea-center probe correction, actualrawcircumcenter; no product/tolerance change; nativequalification owed.
+

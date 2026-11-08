@@ -11,7 +11,7 @@ if(Test-Path -LiteralPath $planRoot) { throw 'Preserve the existing plan control
 $tokens=$null; $parseErrors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$tokens,[ref]$parseErrors)
 if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication','Get-ExactSlide','Read-FurnitureFiniteNumber','New-FurniturePointProbe','Read-FurnitureSlicePoint','Read-FurnitureChartPoint')
+$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication','Get-ExactSlide','Read-FurnitureFiniteNumber','New-FurniturePointProbe','Read-FurnitureSlicePoint','Get-FurnitureNativeCircleCenter','Get-FurnitureCurvedSliceBounds','Read-FurnitureChartPoint','Apply-FurnitureAction')
 foreach($name in $names) {
     $functionAst=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $functionAst) { throw "Missing reviewed function: $name" }
@@ -370,6 +370,9 @@ $coordinateCases=@(
 )
 foreach($spec in $coordinateCases) {
     $nativeFixture=New-ChartPointFixture $spec[0]
+    # Top/bottom mocks now supply actual circular arcs instead of assuming the unrelated endpoint box is a curve.
+    if($spec[0] -eq 'slice' -and $spec[1] -eq 'top') {$nativeFixture.point.SliceCoordinates=@{1=@(10,40);2=@(30,20);3=@(50,40);4=@(40,40)}}
+    if($spec[0] -eq 'slice' -and $spec[1] -eq 'bottom') {$nativeFixture.point.SliceCoordinates=@{1=@(50,30);2=@(30,50);3=@(10,30);4=@(20,30)}}
     $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind=$spec[0];edge=$spec[1];valueSign=$spec[2]}
     $nativeFixture.overlay.Left=$spec[3]-5; $nativeFixture.overlay.Top=$spec[4]-5
     $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'chart-probe'
@@ -453,6 +456,39 @@ foreach($failure in @('pie-midradius-getter-failure','pie-midradius-nonfinite','
     if($script:events.Count -ne $eventCount -or $nativeFixture.point.SliceCalls.Count -ne $expectedCalls) {throw 'A latched radial failure allowed later native calls'}
     $chartPointCases.Add([ordered]@{name=$failure;nativeCalls=$expectedCalls;partialRawCoordinates=@($probe.sliceCoordinates.ToArray());passed=$true})
 }
+
+function New-ActualDoughnutFixture {
+    $native=New-ChartPointFixture 'slice'
+    $raw=Get-Content -LiteralPath (Join-Path $PSScriptRoot 'fixtures/sh25-native-circle-observations.json') -Raw | ConvertFrom-Json
+    $native.chart.ChartType=-4120;$native.series.Values[0].ChartType=-4120;$native.point.SliceChartType=-4120
+    $native.point.SliceCoordinates=@{}
+    foreach($index in @(1,2,3,7,8,9)){$values=@($raw.probe.sliceCoordinates | Where-Object {$_.index -eq $index} | Sort-Object location | ForEach-Object {[double]$_.value});$native.point.SliceCoordinates[$index]=$values}
+    $native.chartShape.Left=$raw.chart.left;$native.chartShape.Top=$raw.chart.top
+    foreach($name in @('Left','Top','Width','Height')){$native.overlay.$name=$raw.overlay.($name.ToLowerInvariant())}
+    $native.chart | Add-Member -MemberType NoteProperty -Name ObservedPlotArea -Value ([pscustomobject]@{InsideLeft=($raw.probe.plotCenterLocalPoints[0]-50);InsideTop=($raw.probe.plotCenterLocalPoints[1]-50);InsideWidth=100;InsideHeight=100})
+    $script:plotCenterReads=0
+    $native.chart | Add-Member -MemberType ScriptProperty -Name PlotArea -Value {$script:plotCenterReads++;return $this.ObservedPlotArea}
+    return $native
+}
+$nativeFixture=New-ActualDoughnutFixture
+$action=[pscustomobject]@{op='measure-chart-point';slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='slice';edge='top';valueSign=1}
+$probe=New-FurniturePointProbe $action 'actual-native-circle'
+$actualCircle=Read-FurnitureChartPoint $nativeFixture.presentation $action 'actual-native-circle' $probe
+if(-not $actualCircle.withinFourPixels -or $script:plotCenterReads -ne 0){throw 'Actual native doughnut observations must pass without using PlotArea center'}
+$chartPointCases.Add([ordered]@{name='actual-doughnut-outer-circle';distancePixels=$actualCircle.distancePixels;observations=$actualCircle.nativeSliceObservations;passed=$true})
+$nativeFixture=New-ActualDoughnutFixture
+$nativeFixture.point.SliceCoordinates[7][0]+=5
+$script:report=[ordered]@{actionPlan=[ordered]@{chartPoints=@();currentChartPointProbe=$null}}
+$failureMessage=$null;try{Apply-FurnitureAction $nativeFixture.presentation $action 1}catch{$failureMessage=$_.Exception.Message}
+if($null -eq $failureMessage -or -not $script:officeOperationsStopped){throw 'Invalid actual inner circle was not refused'}
+$serializedPath=Join-Path $planRoot 'serialized-curved-refusal.json'
+$report | ConvertTo-Json -Depth 16 | Set-Content -LiteralPath $serializedPath -Encoding UTF8
+$serialized=Get-Content -LiteralPath $serializedPath -Raw | ConvertFrom-Json
+if(@($serialized.actionPlan.chartPoints).Count -ne 0 -or @($serialized.actionPlan.currentChartPointProbe.sliceCoordinates).Count -ne 12){throw 'Serialized failed report lost actual partial observations'}
+foreach($observation in $serialized.actionPlan.currentChartPointProbe.sliceCoordinates){if($null -eq $observation.rawValue -or $null -eq $observation.value){throw 'Serialized raw/value observation was lost'}}
+$eventsAtFailure=$script:events.Count;try{Apply-FurnitureAction $nativeFixture.presentation $action 2}catch{}
+if($eventsAtFailure -ne $script:events.Count){throw 'Serialized geometry refusal allowed later Office calls'}
+$chartPointCases.Add([ordered]@{name='serialized-curved-refusal';error=$failureMessage;path=$serializedPath;rawObservations=12;passed=$true})
 
 foreach($failure in @('wrong-native-kind','mixed-series-type','unsupported-native-type','doughnut-api-unavailable')) {
     $nativeFixture=New-ChartPointFixture 'vertical-bar'
