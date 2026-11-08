@@ -61,6 +61,8 @@ function Close-OpfOwnedPresentation {
     if ((Get-OpfFullPath ([string]$Presentation.FullName)).ToLowerInvariant() -ne (Get-OpfFullPath $OwnedPath).ToLowerInvariant()) {
         throw "Not closing $($Presentation.FullName): it is not the presentation this attempt opened."
     }
+    # Only the identified owned copy is discarded; SaveCopyAs has already preserved the edited derivative.
+    $Presentation.Saved = -1
     $Presentation.Close()
     return $true
 }
@@ -75,7 +77,7 @@ function Invoke-OpfOwnedEdit {
     $state = @{ tables = 0; edited = $false; found = $false }
     try {
         Invoke-OpfNativeStage $latch 'not-open' { Assert-OpfPathsNotOpen $Application @($Owned.fixture, $Owned.copy, $saved) } | Out-Null
-        $presentation = Invoke-OpfNativeStage $latch 'open-copy' { $Application.Presentations.Open($Owned.copy, 0, 0, 0) }
+        $presentation = Invoke-OpfNativeStage $latch 'open-copy' { $Application.Presentations.Open($Owned.copy, -1, 0, 0) }
         Invoke-OpfNativeStage $latch 'owned-identity' {
             if ((Get-OpfFullPath ([string]$presentation.FullName)).ToLowerInvariant() -ne (Get-OpfFullPath $Owned.copy).ToLowerInvariant()) { throw 'Opened presentation is not the owned copy.' }
         } | Out-Null
@@ -90,7 +92,7 @@ function Invoke-OpfOwnedEdit {
             }
             if ($state.tables -ne 1 -or -not $state.edited) { throw 'Browser export did not expose the expected native text/table.' }
         } | Out-Null
-        Invoke-OpfNativeStage $latch 'save-as' { $presentation.SaveAs($saved, 24) } | Out-Null
+        Invoke-OpfNativeStage $latch 'save-copy' { $presentation.SaveCopyAs($saved, 24) } | Out-Null
         Invoke-OpfNativeStage $latch 'close-copy' { [void](Close-OpfOwnedPresentation $presentation $Owned.copy) } | Out-Null
         $closed += $Owned.copy; $presentation = $null
         $reopened = Invoke-OpfNativeStage $latch 'open-saved' { $Application.Presentations.Open($saved, -1, 0, 0) }

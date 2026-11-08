@@ -40,9 +40,10 @@ function New-FakePresentation($List, [string]$Path, [string]$Text, [int]$Tables)
     $slide | Add-Member -MemberType ScriptMethod -Name Export -Value { param($p, $f, $w, $h) Set-Content -LiteralPath $p -Value 'png' }
     $slides = [pscustomobject]@{ Count = 1 }
     $slides | Add-Member -MemberType ScriptMethod -Name Item -Value { param($n) $slide }.GetNewClosure()
-    $presentation = [pscustomobject]@{ FullName = $Path; Slides = $slides; Range = $range }
-    $presentation | Add-Member -MemberType ScriptMethod -Name SaveAs -Value { param($p, $f) Set-Content -LiteralPath $p -Value ('saved:' + $this.Range.Text) -Encoding ascii; $List.Saved[$p] = $this.Range.Text }.GetNewClosure()
-    $presentation | Add-Member -MemberType ScriptMethod -Name Close -Value { $List.Log.Add('close:' + $this.FullName); $List.Remove($this) }.GetNewClosure()
+    $presentation = [pscustomobject]@{ FullName = $Path; Slides = $slides; Range = $range; Saved = $false }
+    $presentation | Add-Member -MemberType ScriptMethod -Name SaveAs -Value { param($p, $f) Set-Content -LiteralPath $p -Value ('saved:' + $this.Range.Text) -Encoding ascii; $List.Saved[$p] = $this.Range.Text; $this.FullName = $p }.GetNewClosure()
+    $presentation | Add-Member -MemberType ScriptMethod -Name SaveCopyAs -Value { param($p, $f) Set-Content -LiteralPath $p -Value ('saved:' + $this.Range.Text) -Encoding ascii; $List.Saved[$p] = $this.Range.Text; $List.Log.Add('save-copy:' + $p) }.GetNewClosure()
+    $presentation | Add-Member -MemberType ScriptMethod -Name Close -Value { if (-not $this.Saved) { throw 'Unsaved owned presentation would prompt on close.' }; $List.Log.Add('close:' + $this.FullName); $List.Remove($this) }.GetNewClosure()
     return $presentation
 }
 
@@ -123,6 +124,22 @@ Assert-Control $result.timedOut 'the deadline was enforced'
 Assert-Control (-not (Get-Process -Id $result.processId -ErrorAction SilentlyContinue)) 'the timed-out worker is gone'
 $cases += @{ case = 'timeout'; passed = $true }
 
+# SaveAs changes the presentation identity; SaveCopyAs leaves the owned input identity intact.
+$f = New-Fixture 'save-identity'
+$app = New-FakeApplication
+$owned = New-OpfOwnedCopy -FixturePath $f.fixture -AttemptDirectory $f.attempt
+$p = New-FakePresentation $app.Presentations $owned.copy 'Edited in native PowerPoint' 1
+$renamed = Join-Path $f.attempt 'renamed.pptx'
+$p.SaveAs($renamed,24)
+Assert-Control ($p.FullName -eq $renamed) 'SaveAs changes the presentation identity, like Office'
+Expect-Throw { Close-OpfOwnedPresentation $p $owned.copy } 'not the presentation this attempt opened' 'renaming invalidates the old identity guard'
+$q = New-FakePresentation $app.Presentations $owned.copy 'Edited in native PowerPoint' 1
+$saved = Join-Path $f.attempt 'copied.pptx'
+$q.SaveCopyAs($saved,24)
+Assert-Control ($q.FullName -eq $owned.copy) 'SaveCopyAs preserves the owned input identity'
+Assert-Control ($app.Saved[$saved] -eq 'Edited in native PowerPoint') 'SaveCopyAs persists the edited contents'
+Assert-Control ($report.stages -contains 'save-copy:ok') 'the maintained workflow saves a derivative copy'
+$cases += @{ case = 'save-identity'; passed = $true }
 @{ passed = $true; scope = 'Fake Office objects and an owned PowerShell worker. No PowerPoint process or COM class was created.'; powershell = $PSVersionTable.PSVersion.ToString(); cases = $cases } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $ReportPath -Encoding UTF8
 Remove-Item -LiteralPath $root -Recurse -Force
 Write-Output 'Native playground controls passed: ownership, already-open refusal, failure latch, close-only-owned, fresh attempts and worker timeout. No Office automation used.'
