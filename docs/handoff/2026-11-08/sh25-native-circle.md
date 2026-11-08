@@ -9,3 +9,6 @@ Vetoable narrow correction: derive doughnut center from actual native outer1/2/3
 The exact actual doughnut fixture fails first with the original radius error and passes afterward with zero PlotArea reads. Twenty independent circle-center analytic/refusal controls,26existing curved bounds and45point/lifecycle-related mocks pass without Office. A new test invokes the actual Apply-FurnitureAction path, serializes a deliberately failed inner-circle report, reopens it and proves all12raw/valueobservations survive; no capture code change or false loss claim. Existing14lifecycle/15font controls remain.
 
 Actual new helper qualification/full32case packet remain coordinator-owned and owed. Frozen1183is untouched. Source helper hash and raw mapped/evidence receipt follow before finalPRfreeze.
+
+Final candidate334dd11d95bc01c47f2f9269fa477c7f34804560, workerSHA2568AEA2E2774D4B07FFB3D98F482823B8385C7A37CCB7635757458133A34931BC4. [Complete original attempts/separate cleanup and raw check receipts](../../programs/shapes/sh25-native-circle-2026-11-08/README.md). Single mapped207.1s records inherited fallback archive lock/241unrun and sparse gzip omission(recovered; textpasses); no baseline/tolerance changes. Final source is ready for coordinator freeze/native pilot after PRreview.
+
