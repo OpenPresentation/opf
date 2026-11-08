@@ -1,0 +1,256 @@
+﻿{
+    "deck":  "athletics-budget-review",
+    "variant":  "default",
+    "name":  "athletics-budget-review",
+    "sha256":  "8fb44da95fac8f512706fbb56c36c8f4feeb03b499489e2ba24352d3a0e76b36",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.6,
+    "slideCount":  1,
+    "slideSize":  [
+                      792,
+                      612
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Chart",
+                       "footer":  {
+                                      "footer":  true,
+                                      "footerText":  "Summit State Athletics",
+                                      "slideNumber":  true,
+                                      "date":  false,
+                                      "placeholders":  [
+                                                           {
+                                                               "type":  15,
+                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                               "text":  "Summit State Athletics"
+                                                           },
+                                                           {
+                                                               "type":  13,
+                                                               "name":  "OPF furniture 0 part 4 line 0",
+                                                               "text":  "1"
+                                                           }
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF watermark",
+                                          "type":  13,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      273.6,
+                                                      183.6,
+                                                      244.8,
+                                                      244.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      48.96,
+                                                      65.28,
+                                                      694.08,
+                                                      56
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Signal Trend",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  45.900001525878906,
+                                                       "maxSize":  45.900001525878906,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     277.15,
+                                                                     65.28,
+                                                                     246.58,
+                                                                     55.08
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        277.15,
+                                                                        237.71
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      48.96,
+                                                      141.68,
+                                                      694.08,
+                                                      417.84
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  57,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 0 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      49.49,
+                                                      24.48,
+                                                      339.12,
+                                                      16.59
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Evidence",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.600000381469727,
+                                                       "maxSize":  13.600000381469727,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     49.49,
+                                                                     24.48,
+                                                                     56.29,
+                                                                     16.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        49.49,
+                                                                        53.54
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF image 1",
+                                          "type":  13,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      712.44,
+                                                      24.48,
+                                                      30.6,
+                                                      30.6
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 2 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      50.16,
+                                                      569.72,
+                                                      220.8,
+                                                      16.59
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  15,
+                                          "text":  {
+                                                       "text":  "Summit State Athletics",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.600000381469727,
+                                                       "maxSize":  13.600000381469727,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     50.16,
+                                                                     569.72,
+                                                                     137,
+                                                                     16.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        50.16,
+                                                                        134.25
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 3 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      285.6,
+                                                      569.72,
+                                                      220.8,
+                                                      16.59
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Internal planning draft",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.600000381469727,
+                                                       "maxSize":  13.600000381469727,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     331.51,
+                                                                     569.72,
+                                                                     131.74,
+                                                                     16.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        331.51,
+                                                                        128.99
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 4 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      522.24,
+                                                      569.72,
+                                                      220.8,
+                                                      16.59
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  13,
+                                          "text":  {
+                                                       "text":  "1",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.600000381469727,
+                                                       "maxSize":  13.600000381469727,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     735.74,
+                                                                     569.72,
+                                                                     10,
+                                                                     16.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        735.74,
+                                                                        7.26
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "seconds":  1.5
+}

@@ -1,0 +1,516 @@
+﻿{
+    "deck":  "table-and-code",
+    "variant":  "default",
+    "name":  "table-and-code",
+    "sha256":  "f54bd7b5486c50e98c6066152ebea11d40a239f26a6c62386fb881df80faa9ea",
+    "opened":  true,
+    "previewSlides":  2,
+    "openSeconds":  0.3,
+    "slideCount":  2,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Quarter Snapshot",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     311.55,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        303.81
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF table 1",
+                                          "type":  19,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      873.6,
+                                                      162
+                                                  ],
+                                          "rotation":  0,
+                                          "table":  {
+                                                        "rows":  4,
+                                                        "columns":  3,
+                                                        "edit":  true
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF text slides.0.bottom.text line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      380.07,
+                                                      873.6,
+                                                      25.62
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Growth was broad-based, with margin expansion from infrastructure savings.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     380.07,
+                                                                     696.95,
+                                                                     25.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        692.7
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Decision Rule",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     245.39,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        237.65
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF code 1 panel",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      279.2,
+                                                      151.8
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF code 1 filename line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      56.7,
+                                                      124.11,
+                                                      252.2,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "decision.py",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Roboto Mono",
+                                                       "bound":  [
+                                                                     56.7,
+                                                                     124.11,
+                                                                     82.25,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        56.7,
+                                                                        79.76
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF code 1 language line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      56.7,
+                                                      144.75,
+                                                      252.2,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "python",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Roboto Mono",
+                                                       "bound":  [
+                                                                     56.7,
+                                                                     144.75,
+                                                                     46,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        56.7,
+                                                                        43.51
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF code 1 body line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      56.7,
+                                                      168.39,
+                                                      252.2,
+                                                      20.13
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "if risk \u003e threshold:",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  16.5,
+                                                       "maxSize":  16.5,
+                                                       "font":  "Roboto Mono",
+                                                       "bound":  [
+                                                                     56.7,
+                                                                     168.39,
+                                                                     200.88,
+                                                                     19.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        56.7,
+                                                                        197.51
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF code 1 body line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      56.7,
+                                                      188.52,
+                                                      252.2,
+                                                      20.13
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "    escalate(owner)",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  16.5,
+                                                       "maxSize":  16.5,
+                                                       "font":  "Roboto Mono",
+                                                       "bound":  [
+                                                                     56.7,
+                                                                     188.52,
+                                                                     191,
+                                                                     19.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        56.7,
+                                                                        187.63
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF code 1 body line 3",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      56.7,
+                                                      208.65,
+                                                      252.2,
+                                                      20.13
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "else:",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  16.5,
+                                                       "maxSize":  16.5,
+                                                       "font":  "Roboto Mono",
+                                                       "bound":  [
+                                                                     56.7,
+                                                                     208.65,
+                                                                     52.75,
+                                                                     19.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        56.7,
+                                                                        49.38
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF code 1 body line 4",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      56.7,
+                                                      228.78,
+                                                      252.2,
+                                                      20.13
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "    approve(change)",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  16.5,
+                                                       "maxSize":  16.5,
+                                                       "font":  "Roboto Mono",
+                                                       "bound":  [
+                                                                     56.7,
+                                                                     228.78,
+                                                                     191,
+                                                                     19.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        56.7,
+                                                                        187.63
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.center+right.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.4,
+                                                      110.61,
+                                                      576.4,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Escalate only when the decision is irreversible",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     366.8,
+                                                                     110.61,
+                                                                     477.59,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        366.8,
+                                                                        472.72
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.center+right.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.4,
+                                                      146.61,
+                                                      576.4,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Keep reversible changes moving",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     366.8,
+                                                                     146.61,
+                                                                     335.07,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        366.8,
+                                                                        330.2
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.center+right.items line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.4,
+                                                      182.61,
+                                                      576.4,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Write the reason back to the audit log",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     366.8,
+                                                                     182.61,
+                                                                     388.3,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        366.8,
+                                                                        383.43
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  1.1
+}

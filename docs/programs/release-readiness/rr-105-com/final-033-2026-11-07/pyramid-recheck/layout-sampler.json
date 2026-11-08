@@ -1,0 +1,325 @@
+﻿{
+    "deck":  "layout-sampler",
+    "variant":  "default",
+    "name":  "layout-sampler",
+    "sha256":  "5d6dc1e2c12787303e045d0dabf25af6998623cfbc2a1e305598e0786d3f1ebf",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.9,
+    "slideCount":  1,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Pyramid",
+                       "footer":  {
+                                      "footer":  true,
+                                      "footerText":  "Illustrative example • fictional data",
+                                      "slideNumber":  true,
+                                      "date":  false,
+                                      "placeholders":  [
+                                                           {
+                                                               "type":  15,
+                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                               "text":  "Illustrative example • fictional data"
+                                                           },
+                                                           {
+                                                               "type":  13,
+                                                               "name":  "OPF furniture 0 part 1 line 0",
+                                                               "text":  "1"
+                                                           }
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF smartart slides.0.blocks.0.items",
+                                          "type":  24,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      873.6,
+                                                      383.19
+                                                  ],
+                                          "rotation":  0,
+                                          "smartArt":  {
+                                                           "layout":  "Basic Pyramid",
+                                                           "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/pyramid1",
+                                                           "nodes":  4,
+                                                           "texts":  [
+                                                                         "Goal",
+                                                                         "Evidence",
+                                                                         "Pilot teams",
+                                                                         "Shared baseline"
+                                                                     ],
+                                                           "sizes":  [
+                                                                         36,
+                                                                         36,
+                                                                         36,
+                                                                         36
+                                                                     ]
+                                                       },
+                                          "children":  [
+                                                           {
+                                                               "name":  null,
+                                                               "type":  1,
+                                                               "autoShapeType":  3,
+                                                               "box":  [
+                                                                           370.8,
+                                                                           110.61,
+                                                                           218.4,
+                                                                           95.8
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "Goal",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  -1,
+                                                                            "minSize":  36,
+                                                                            "maxSize":  36,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          399.87,
+                                                                                          26.33,
+                                                                                          81.18,
+                                                                                          43.15
+                                                                                      ],
+                                                                            "overflow":  [
+                                                                                             "top"
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             399.87,
+                                                                                             73.87
+                                                                                         ]
+                                                                        }
+                                                           },
+                                                           {
+                                                               "name":  null,
+                                                               "type":  1,
+                                                               "autoShapeType":  3,
+                                                               "box":  [
+                                                                           261.6,
+                                                                           206.41,
+                                                                           436.8,
+                                                                           95.8
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "Evidence",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  -1,
+                                                                            "minSize":  36,
+                                                                            "maxSize":  36,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          365.89,
+                                                                                          122.12,
+                                                                                          149.14,
+                                                                                          43.15
+                                                                                      ],
+                                                                            "overflow":  [
+                                                                                             "top"
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             365.89,
+                                                                                             141.83
+                                                                                         ]
+                                                                        }
+                                                           },
+                                                           {
+                                                               "name":  null,
+                                                               "type":  1,
+                                                               "autoShapeType":  3,
+                                                               "box":  [
+                                                                           152.4,
+                                                                           302.21,
+                                                                           655.2,
+                                                                           95.8
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "Pilot teams",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  -1,
+                                                                            "minSize":  36,
+                                                                            "maxSize":  36,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          349.15,
+                                                                                          217.92,
+                                                                                          182.62,
+                                                                                          43.15
+                                                                                      ],
+                                                                            "overflow":  [
+                                                                                             "top"
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             349.15,
+                                                                                             175.31
+                                                                                         ]
+                                                                        }
+                                                           },
+                                                           {
+                                                               "name":  null,
+                                                               "type":  1,
+                                                               "autoShapeType":  3,
+                                                               "box":  [
+                                                                           43.2,
+                                                                           398,
+                                                                           873.6,
+                                                                           95.8
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "Shared baseline",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  -1,
+                                                                            "minSize":  36,
+                                                                            "maxSize":  36,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          311.85,
+                                                                                          313.72,
+                                                                                          257.22,
+                                                                                          43.15
+                                                                                      ],
+                                                                            "overflow":  [
+                                                                                             "top"
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             311.85,
+                                                                                             249.91
+                                                                                         ]
+                                                                        }
+                                                           }
+                                                       ]
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      44.21,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "What the pilot builds on",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     44.21,
+                                                                     43.2,
+                                                                     414.5,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        44.21,
+                                                                        406.75
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 0 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.67,
+                                                      502.8,
+                                                      427.2,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  15,
+                                          "text":  {
+                                                       "text":  "Illustrative example • fictional data",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.67,
+                                                                     502.8,
+                                                                     181.96,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.67,
+                                                                        179.46
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 1 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      489.6,
+                                                      502.8,
+                                                      427.2,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  13,
+                                          "text":  {
+                                                       "text":  "1",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     910.35,
+                                                                     502.8,
+                                                                     8.88,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        910.35,
+                                                                        6.38
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+                                             {
+                                                 "sizesKept":  true,
+                                                 "framesKept":  true,
+                                                 "sizesBefore":  [
+                                                                     36,
+                                                                     36,
+                                                                     36,
+                                                                     36
+                                                                 ],
+                                                 "sizesAfter":  [
+                                                                    36,
+                                                                    36,
+                                                                    36,
+                                                                    36
+                                                                ]
+                                             }
+                                         ]
+                   }
+               ],
+    "seconds":  2.8
+}

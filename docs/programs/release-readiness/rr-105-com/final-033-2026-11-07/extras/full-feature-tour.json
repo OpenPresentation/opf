@@ -1,0 +1,200 @@
+﻿{
+    "deck":  "full-feature-tour",
+    "variant":  "default",
+    "name":  "full-feature-tour",
+    "sha256":  "1d8ca7e81c569c725bf024359c8863f0339e7085134bc2047f951af657ef1769",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.2,
+    "slideCount":  1,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Chart beside",
+                       "footer":  {
+                                      "footer":  true,
+                                      "footerText":  "Acme Corp",
+                                      "slideNumber":  true,
+                                      "date":  false,
+                                      "placeholders":  [
+                                                           {
+                                                               "type":  15,
+                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                               "text":  "Acme Corp"
+                                                           },
+                                                           {
+                                                               "type":  13,
+                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                               "text":  "1"
+                                                           }
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Revenue By Region",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     333.32,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        325.58
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  14,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      873.6,
+                                                      383.19
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  8,
+                                          "chart":  {
+                                                        "type":  51,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 0 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      44.65,
+                                                      502.8,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  15,
+                                          "text":  {
+                                                       "text":  "Acme Corp",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     44.65,
+                                                                     502.8,
+                                                                     60.63,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        44.65,
+                                                                        58.13
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 1 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.8,
+                                                      502.8,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Performance",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     446.61,
+                                                                     502.8,
+                                                                     69.28,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        446.61,
+                                                                        66.79
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 2 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      638.4,
+                                                      502.8,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  13,
+                                          "text":  {
+                                                       "text":  "1",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     910.4,
+                                                                     502.8,
+                                                                     8.88,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        910.4,
+                                                                        6.38
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "seconds":  0.4
+}

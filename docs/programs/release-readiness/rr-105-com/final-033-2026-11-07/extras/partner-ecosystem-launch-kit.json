@@ -1,0 +1,89 @@
+﻿{
+    "deck":  "partner-ecosystem-launch-kit",
+    "variant":  "default",
+    "name":  "partner-ecosystem-launch-kit",
+    "sha256":  "bbb93f04d94b4d3263afae8340d7a0d50f9b7fe3e92c6a8002a7214f9ce64ae0",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.1,
+    "slideCount":  1,
+    "slideSize":  [
+                      841.625,
+                      595.5
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Chart",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      47.64,
+                                                      47.64,
+                                                      746.41,
+                                                      54.47
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Signal Trend",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  44.650001525878906,
+                                                       "maxSize":  44.650001525878906,
+                                                       "font":  "Lucida Sans",
+                                                       "bound":  [
+                                                                     504.01,
+                                                                     47.64,
+                                                                     304.25,
+                                                                     53.58
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        504.01,
+                                                                        290
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      47.64,
+                                                      122.56,
+                                                      746.41,
+                                                      425.24
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  51,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "seconds":  0.3
+}

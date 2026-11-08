@@ -1,0 +1,491 @@
+﻿{
+    "deck":  "diagram-connectors",
+    "variant":  "default",
+    "name":  "diagram-connectors",
+    "sha256":  "00004bdc846b3ca74f2ffd7b1af873959acb7bb9b199d82dc213d60e6fbf8988",
+    "opened":  true,
+    "previewSlides":  2,
+    "openSeconds":  0.1,
+    "slideCount":  2,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.71,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Three teams share one plan",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.71,
+                                                                     43.2,
+                                                                     479.67,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.71,
+                                                                        471.93
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 1",
+                                          "type":  6,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      200.25,
+                                                      255.71,
+                                                      559.5,
+                                                      96
+                                                  ],
+                                          "rotation":  0,
+                                          "children":  [
+                                                           {
+                                                               "name":  "OPF diagram 1 edge L_A_B_0",
+                                                               "type":  1,
+                                                               "autoShapeType":  -2,
+                                                               "box":  [
+                                                                           323.13,
+                                                                           303.71,
+                                                                           72,
+                                                                           0
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "connector":  {
+                                                                                 "type":  1,
+                                                                                 "begin":  true,
+                                                                                 "end":  true
+                                                                             }
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 1 edge L_B_C_0",
+                                                               "type":  1,
+                                                               "autoShapeType":  -2,
+                                                               "box":  [
+                                                                           538.35,
+                                                                           303.71,
+                                                                           72,
+                                                                           0
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "connector":  {
+                                                                                 "type":  1,
+                                                                                 "begin":  true,
+                                                                                 "end":  true
+                                                                             }
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 1 node A",
+                                                               "type":  1,
+                                                               "autoShapeType":  5,
+                                                               "box":  [
+                                                                           212.25,
+                                                                           267.71,
+                                                                           110.88,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "Sales",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  0,
+                                                                            "minSize":  24,
+                                                                            "maxSize":  24,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          239.25,
+                                                                                          286.91,
+                                                                                          61.75,
+                                                                                          32.15
+                                                                                      ],
+                                                                            "overflow":  [
+
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             239.25,
+                                                                                             56.88
+                                                                                         ]
+                                                                        }
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 1 node B",
+                                                               "type":  1,
+                                                               "autoShapeType":  5,
+                                                               "box":  [
+                                                                           395.13,
+                                                                           267.71,
+                                                                           143.22,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "Planning",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  0,
+                                                                            "minSize":  24,
+                                                                            "maxSize":  24,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          421.74,
+                                                                                          286.91,
+                                                                                          94.87,
+                                                                                          32.15
+                                                                                      ],
+                                                                            "overflow":  [
+
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             421.74,
+                                                                                             90
+                                                                                         ]
+                                                                        }
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 1 node C",
+                                                               "type":  1,
+                                                               "autoShapeType":  5,
+                                                               "box":  [
+                                                                           610.35,
+                                                                           267.71,
+                                                                           136.41,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "Finance",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  0,
+                                                                            "minSize":  24,
+                                                                            "maxSize":  24,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          637.3,
+                                                                                          286.91,
+                                                                                          87.38,
+                                                                                          32.15
+                                                                                      ],
+                                                                            "overflow":  [
+
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             637.3,
+                                                                                             82.51
+                                                                                         ]
+                                                                        }
+                                                           }
+                                                       ]
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "One owner per region",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     372.79,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        365.05
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 2",
+                                          "type":  6,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      240,
+                                                      183.71,
+                                                      480,
+                                                      240
+                                                  ],
+                                          "rotation":  0,
+                                          "children":  [
+                                                           {
+                                                               "name":  "OPF diagram 2 edge L_H_N_0",
+                                                               "type":  5,
+                                                               "autoShapeType":  138,
+                                                               "box":  [
+                                                                           308.6,
+                                                                           267.71,
+                                                                           150.28,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 2 edge L_H_S_0",
+                                                               "type":  1,
+                                                               "autoShapeType":  -2,
+                                                               "box":  [
+                                                                           482.88,
+                                                                           267.71,
+                                                                           0,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "connector":  {
+                                                                                 "type":  1,
+                                                                                 "begin":  true,
+                                                                                 "end":  true
+                                                                             }
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 2 edge L_H_W_0",
+                                                               "type":  5,
+                                                               "autoShapeType":  138,
+                                                               "box":  [
+                                                                           506.88,
+                                                                           267.71,
+                                                                           146.99,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 2 node H",
+                                                               "type":  1,
+                                                               "autoShapeType":  5,
+                                                               "box":  [
+                                                                           387.54,
+                                                                           195.71,
+                                                                           190.7,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "Program lead",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  0,
+                                                                            "minSize":  24,
+                                                                            "maxSize":  24,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          414.52,
+                                                                                          214.91,
+                                                                                          141.59,
+                                                                                          32.15
+                                                                                      ],
+                                                                            "overflow":  [
+
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             414.52,
+                                                                                             136.72
+                                                                                         ]
+                                                                        }
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 2 node N",
+                                                               "type":  1,
+                                                               "autoShapeType":  5,
+                                                               "box":  [
+                                                                           252,
+                                                                           339.71,
+                                                                           113.21,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "North",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  0,
+                                                                            "minSize":  24,
+                                                                            "maxSize":  24,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          278.97,
+                                                                                          358.91,
+                                                                                          64.13,
+                                                                                          32.15
+                                                                                      ],
+                                                                            "overflow":  [
+
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             278.97,
+                                                                                             59.26
+                                                                                         ]
+                                                                        }
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 2 node S",
+                                                               "type":  1,
+                                                               "autoShapeType":  5,
+                                                               "box":  [
+                                                                           425.2,
+                                                                           339.71,
+                                                                           115.35,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "South",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  0,
+                                                                            "minSize":  24,
+                                                                            "maxSize":  24,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          452.25,
+                                                                                          358.91,
+                                                                                          66.12,
+                                                                                          32.15
+                                                                                      ],
+                                                                            "overflow":  [
+
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             452.25,
+                                                                                             61.25
+                                                                                         ]
+                                                                        }
+                                                           },
+                                                           {
+                                                               "name":  "OPF diagram 2 node W",
+                                                               "type":  1,
+                                                               "autoShapeType":  5,
+                                                               "box":  [
+                                                                           600.56,
+                                                                           339.71,
+                                                                           106.62,
+                                                                           72
+                                                                       ],
+                                                               "rotation":  0,
+                                                               "text":  {
+                                                                            "text":  "West",
+                                                                            "autoSize":  0,
+                                                                            "wordWrap":  0,
+                                                                            "minSize":  24,
+                                                                            "maxSize":  24,
+                                                                            "font":  "Aptos",
+                                                                            "bound":  [
+                                                                                          627.55,
+                                                                                          358.91,
+                                                                                          57.51,
+                                                                                          32.15
+                                                                                      ],
+                                                                            "overflow":  [
+
+                                                                                         ],
+                                                                            "inkBound":  [
+                                                                                             627.55,
+                                                                                             52.64
+                                                                                         ]
+                                                                        }
+                                                           }
+                                                       ]
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  0.5
+}

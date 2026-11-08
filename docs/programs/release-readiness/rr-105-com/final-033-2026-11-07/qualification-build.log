@@ -1,0 +1,20 @@
+smartart: preview 17, default ok, shapes ok
+smartart-arabic: preview 3, default ok
+smartart-japanese: preview 3, default ok
+layout-harvest: preview 20, default ok, native-body ok
+footers: preview 4, default ok, static ok
+shapes: preview 8, default ok
+shape-effects: preview 4, default ok
+shape-overlays: preview 6, default ok
+shape-overlays-rtl: preview 1, default ok
+diagrams: preview 7, default ok, picture ok
+diagrams-markdown: preview 3, default ok
+diagram-connectors: preview 2, default ok
+layout-sampler: preview 49, default ok, native-body ok
+chart-type-sampler: preview 3, default ok
+table-and-code: preview 2, default ok
+columns: preview 2, default ok
+header-footer-logo-set: preview 2, default ok
+full-feature-tour: preview 10, default ok
+data-story-academy: preview 16, default ok
+compliance-readiness-review: preview 9, default ok

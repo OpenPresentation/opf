@@ -1,0 +1,321 @@
+﻿[
+    {
+        "file":  "lh93",
+        "slide":  1,
+        "name":  "OPF chart 1",
+        "type":  57,
+        "series":  1,
+        "inside":  [
+                       67.229212598425192,
+                       41.378267716535433,
+                       220.81850393700788,
+                       288.30551181102362
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  160,
+                         "major":  80,
+                         "majorGridlines":  false
+                     }
+                 ]
+    },
+    {
+        "file":  "lh93",
+        "slide":  1,
+        "name":  "OPF chart 2",
+        "type":  57,
+        "series":  1,
+        "inside":  [
+                       124.78464566929134,
+                       41.378267716535433,
+                       220.81850393700788,
+                       288.30551181102362
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  160,
+                         "major":  80,
+                         "majorGridlines":  false
+                     }
+                 ]
+    },
+    {
+        "file":  "lh93",
+        "slide":  2,
+        "name":  "OPF chart 3",
+        "type":  57,
+        "series":  2,
+        "inside":  [
+                       54.064724409448822,
+                       41.378267716535433,
+                       220.81850393700788,
+                       288.30551181102362
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  120,
+                         "major":  100,
+                         "majorGridlines":  false
+                     }
+                 ]
+    },
+    {
+        "file":  "lh93",
+        "slide":  2,
+        "name":  "OPF chart 4",
+        "type":  57,
+        "series":  2,
+        "inside":  [
+                       124.78464566929134,
+                       41.378267716535433,
+                       220.81850393700788,
+                       288.30551181102362
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  120,
+                         "major":  100,
+                         "majorGridlines":  false
+                     }
+                 ]
+    },
+    {
+        "file":  "lh93",
+        "slide":  3,
+        "name":  "OPF chart 5",
+        "type":  58,
+        "series":  2,
+        "inside":  [
+                       31.10527559055118,
+                       25.103543307086614,
+                       335.69425196850392,
+                       304.58031496062995
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  100,
+                         "major":  50,
+                         "majorGridlines":  false
+                     }
+                 ]
+    },
+    {
+        "file":  "lh93",
+        "slide":  3,
+        "name":  "OPF chart 6",
+        "type":  58,
+        "series":  2,
+        "inside":  [
+                       103.86251968503937,
+                       25.103543307086614,
+                       262.93700787401576,
+                       304.58031496062995
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  100,
+                         "major":  50,
+                         "majorGridlines":  false
+                     }
+                 ]
+    },
+    {
+        "file":  "histogram-pareto",
+        "slide":  17,
+        "name":  "OPF chart 1",
+        "type":  118,
+        "series":  1,
+        "inside":  [
+                       1.4000000953674316,
+                       1.4000000953674316,
+                       0,
+                       0
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  12,
+                         "major":  null,
+                         "majorGridlines":  true
+                     }
+                 ]
+    },
+    {
+        "file":  "histogram-pareto",
+        "slide":  18,
+        "name":  "OPF chart 2",
+        "type":  122,
+        "series":  1,
+        "inside":  [
+                       1.4000000953674316,
+                       1.4000000953674316,
+                       0,
+                       0
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  5000,
+                         "major":  null,
+                         "majorGridlines":  true
+                     }
+                 ]
+    },
+    {
+        "file":  "chart-types",
+        "slide":  1,
+        "name":  "OPF chart 1",
+        "type":  121,
+        "series":  1,
+        "inside":  [
+                       1.4000000953674316,
+                       1.4000000953674316,
+                       0,
+                       0
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  14,
+                         "major":  null,
+                         "majorGridlines":  true
+                     }
+                 ]
+    },
+    {
+        "file":  "chart-types",
+        "slide":  1,
+        "name":  "OPF chart 2",
+        "type":  118,
+        "series":  1,
+        "inside":  [
+                       1.4000000953674316,
+                       1.4000000953674316,
+                       0,
+                       0
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  null,
+                         "max":  null,
+                         "major":  null,
+                         "majorGridlines":  false
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  15,
+                         "major":  null,
+                         "majorGridlines":  true
+                     }
+                 ]
+    },
+    {
+        "file":  "chart-types",
+        "slide":  1,
+        "name":  "OPF chart 3",
+        "type":  -4169,
+        "series":  1,
+        "inside":  [
+                       36.59496062992126,
+                       9.24,
+                       216.79007874015747,
+                       164.73
+                   ],
+        "axes":  [
+                     {
+                         "kind":  1,
+                         "min":  0,
+                         "max":  600,
+                         "major":  200,
+                         "majorGridlines":  true
+                     },
+                     {
+                         "kind":  2,
+                         "min":  0,
+                         "max":  250,
+                         "major":  50,
+                         "majorGridlines":  true
+                     }
+                 ]
+    }
+]

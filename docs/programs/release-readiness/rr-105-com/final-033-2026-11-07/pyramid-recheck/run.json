@@ -1,0 +1,24 @@
+﻿{
+    "environment":  {
+                        "powerPointVersion":  "16.0",
+                        "powerPointBuild":  "20527",
+                        "productVersion":  "16.0.20527.20112",
+                        "fileVersion":  "16.0.20527.20112",
+                        "windows":  "Windows 10 Home 25H2 build 26200.9711",
+                        "culture":  "en-US",
+                        "startedAt":  "2026-11-07T19:29:07.3354523-08:00",
+                        "revision":  "fa65126161f0247dd85ffb263eec522372d1f501",
+                        "opfVersion":  "0.32.1",
+                        "finishedAt":  "2026-11-07T19:29:10.1640576-08:00"
+                    },
+    "files":  [
+                  {
+                      "name":  "layout-sampler",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  2.8
+                  }
+              ]
+}

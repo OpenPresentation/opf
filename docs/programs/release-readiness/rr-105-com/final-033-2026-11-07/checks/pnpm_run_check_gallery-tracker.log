@@ -1,0 +1,204 @@
+
+> openpresentation-workspace@ check:gallery-tracker C:\opf-work\release-033-final
+> node --test scripts/build-gallery-tracker.test.mjs scripts/tracker-staleness.test.mjs && node scripts/build-gallery-tracker.mjs --check
+
+✔ every catalog record and every gallery item is exactly one record (13.4841ms)
+✔ statuses, gaps and the addressed flag are consistent (1.8845ms)
+✔ columns use their documented values and unknown where nothing measured (2.1196ms)
+✖ the committed tracker follows the configured freshness policy (1.3581ms)
+✔ rules match by gap, type, id and detail; links resolve against the burndown (0.5301ms)
+✔ native evidence counts only native or PowerPoint folders (6.155ms)
+✔ the gallery and editor snapshots read pages, previews, published ids, teasers and switch dimensions (8.8652ms)
+✖ a stale tracker, an unused rule and an unknown RR link fail the build (18.4037ms)
+✖ Pareto limitation preserves measured verdicts and remains an open data-preservation gap (18.393ms)
+✖ input limitations reject unknown records, duplicate scopes and missing evidence (17.7239ms)
+✖ offline catalog snapshot rejects missing and modified evidence (18.1695ms)
+✖ v2 layout identity never inherits historical same-name measurements (0.4057ms)
+✖ offline snapshot rejects wrong integrity, version and gitHead (18.2324ms)
+✖ old passing and failing audit/native channels cannot certify any schema2 layout (0.4628ms)
+✖ slide-size fallback retains the general gap without requiring a dedicated preset result (17.6022ms)
+✔ a stale tracker fails by default, so main, the merge queue, releases and a local pnpm test stay strict (0.8414ms)
+✔ OPF_TRACKER_STALE=warn turns the failure into a warning annotation (0.1991ms)
+✔ any other value is an error rather than a silent pass (0.2251ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 9
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 229.9601
+
+✖ failing tests:
+
+test at scripts\build-gallery-tracker.test.mjs:121:1
+✖ the committed tracker follows the configured freshness policy (1.3581ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\rr-20-pareto-series-scope\limitations.json'
+      at readFileSync (node:fs:484:20)
+      at readJson (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:75:45)
+      at buildTracker (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:292:49)
+      at checkTracker (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:692:23)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:122:21)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-20-pareto-series-scope\\limitations.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:201:1
+✖ a stale tracker, an unused rule and an unknown RR link fail the build (18.4037ms)
+  Error: ENOENT: no such file or directory, lstat 'C:\opf-work\release-033-final\docs\evidence\rr-42-native-20261002\values.json'
+      at cpSyncFn (node:internal/fs/cp/cp-sync:56:13)
+      at cpSync (node:fs:3219:3)
+      at scratchCopy (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:43:5)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:203:13)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-42-native-20261002\\values.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:225:1
+✖ Pareto limitation preserves measured verdicts and remains an open data-preservation gap (18.393ms)
+  Error: ENOENT: no such file or directory, lstat 'C:\opf-work\release-033-final\docs\evidence\rr-42-native-20261002\values.json'
+      at cpSyncFn (node:internal/fs/cp/cp-sync:56:13)
+      at cpSync (node:fs:3219:3)
+      at scratchCopy (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:43:5)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:226:15)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-42-native-20261002\\values.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:253:1
+✖ input limitations reject unknown records, duplicate scopes and missing evidence (17.7239ms)
+  Error: ENOENT: no such file or directory, lstat 'C:\opf-work\release-033-final\docs\evidence\rr-42-native-20261002\values.json'
+      at cpSyncFn (node:internal/fs/cp/cp-sync:56:13)
+      at cpSync (node:fs:3219:3)
+      at scratchCopy (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:43:5)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:255:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-42-native-20261002\\values.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:268:1
+✖ offline catalog snapshot rejects missing and modified evidence (18.1695ms)
+  Error: ENOENT: no such file or directory, lstat 'C:\opf-work\release-033-final\docs\evidence\rr-42-native-20261002\values.json'
+      at cpSyncFn (node:internal/fs/cp/cp-sync:56:13)
+      at cpSync (node:fs:3219:3)
+      at scratchCopy (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:43:5)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:269:15)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-42-native-20261002\\values.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:279:1
+✖ v2 layout identity never inherits historical same-name measurements (0.4057ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\rr-20-pareto-series-scope\limitations.json'
+      at readFileSync (node:fs:484:20)
+      at readJson (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:75:45)
+      at buildTracker (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:292:49)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:280:21)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-20-pareto-series-scope\\limitations.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:291:2
+✖ offline snapshot rejects wrong integrity, version and gitHead (18.2324ms)
+  Error: ENOENT: no such file or directory, lstat 'C:\opf-work\release-033-final\docs\evidence\rr-42-native-20261002\values.json'
+      at cpSyncFn (node:internal/fs/cp/cp-sync:56:13)
+      at cpSync (node:fs:3219:3)
+      at scratchCopy (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:43:5)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:293:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-42-native-20261002\\values.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:303:1
+✖ old passing and failing audit/native channels cannot certify any schema2 layout (0.4628ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\rr-20-pareto-series-scope\limitations.json'
+      at readFileSync (node:fs:484:20)
+      at readJson (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:75:45)
+      at buildTracker (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:292:49)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:304:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-20-pareto-series-scope\\limitations.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:326:1
+✖ slide-size fallback retains the general gap without requiring a dedicated preset result (17.6022ms)
+  Error: ENOENT: no such file or directory, lstat 'C:\opf-work\release-033-final\docs\evidence\rr-42-native-20261002\values.json'
+      at cpSyncFn (node:internal/fs/cp/cp-sync:56:13)
+      at cpSync (node:fs:3219:3)
+      at scratchCopy (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:43:5)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:327:15)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-42-native-20261002\\values.json'
+  }
+ ELIFECYCLE  Command failed with exit code 1.

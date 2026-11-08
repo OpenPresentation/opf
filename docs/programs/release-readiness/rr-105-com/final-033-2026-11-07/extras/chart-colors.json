@@ -1,0 +1,87 @@
+﻿{
+    "deck":  "chart-colors",
+    "variant":  "default",
+    "name":  "chart-colors",
+    "sha256":  "899bfdf69fc5e814d957208944548035923b29343661f6c49b2d18488ad10b65",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.3,
+    "slideCount":  1,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      41.18
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Series follow the deck palette, and colors sets the first two",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  33.75,
+                                                       "maxSize":  33.75,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     840.57,
+                                                                     40.5
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        834.07
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      102.38,
+                                                      873.6,
+                                                      394.42
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  51,
+                                                        "series":  4,
+                                                        "title":  "$M by quarter"
+                                                    }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "seconds":  0.5
+}

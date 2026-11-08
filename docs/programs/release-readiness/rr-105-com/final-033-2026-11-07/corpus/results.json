@@ -1,0 +1,4598 @@
+{
+  "environment": {
+    "powerPointVersion": "16.0",
+    "powerPointBuild": "20527",
+    "productVersion": "16.0.20527.20112",
+    "fileVersion": "16.0.20527.20112",
+    "windows": "Windows 10 Home 25H2 build 26200.9711",
+    "culture": "en-US",
+    "startedAt": "2026-11-07T19:13:19.2811527-08:00",
+    "revision": "2db20c01ef4d9b80db9797116dc83e41f65d1c68",
+    "opfVersion": "0.32.1",
+    "finishedAt": "2026-11-07T19:15:25.7759474-08:00"
+  },
+  "build": {
+    "revision": "2db20c01ef4d9b80db9797116dc83e41f65d1c68",
+    "opfVersion": "0.32.1"
+  },
+  "files": [
+    {
+      "name": "smartart",
+      "opens": {
+        "status": "pass",
+        "detail": "1.1s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "17"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "17 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0352,
+        "changed": 0.0522
+      }
+    },
+    {
+      "name": "smartart~shapes",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "17"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "17 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0352,
+        "changed": 0.0522
+      }
+    },
+    {
+      "name": "smartart-arabic",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "3"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "3 slides"
+      },
+      "worstVisual": {
+        "slide": 1,
+        "mean": 0.013,
+        "changed": 0.0171
+      }
+    },
+    {
+      "name": "smartart-japanese",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "3"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "3 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0216,
+        "changed": 0.0312
+      }
+    },
+    {
+      "name": "layout-harvest",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "20"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "20 slides"
+      },
+      "worstVisual": {
+        "slide": 19,
+        "mean": 0.0533,
+        "changed": 0.0626
+      }
+    },
+    {
+      "name": "layout-harvest~native-body",
+      "opens": {
+        "status": "pass",
+        "detail": "0.5s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "20"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "20 slides"
+      },
+      "worstVisual": {
+        "slide": 19,
+        "mean": 0.0533,
+        "changed": 0.0626
+      }
+    },
+    {
+      "name": "footers",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "4"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "4 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0115,
+        "changed": 0.0168
+      }
+    },
+    {
+      "name": "footers~static",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "4"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "4 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0115,
+        "changed": 0.0168
+      }
+    },
+    {
+      "name": "shapes",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "8"
+      },
+      "noOverflow": {
+        "status": "fail",
+        "detail": "s6 \"OPF\" bottom"
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "8 slides"
+      },
+      "worstVisual": {
+        "slide": 6,
+        "mean": 0.0152,
+        "changed": 0.0218
+      }
+    },
+    {
+      "name": "shape-effects",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "4"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "4 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0154,
+        "changed": 0.0213
+      }
+    },
+    {
+      "name": "shape-overlays",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "6"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "6 slides"
+      },
+      "worstVisual": {
+        "slide": 1,
+        "mean": 0.0275,
+        "changed": 0.0377
+      }
+    },
+    {
+      "name": "shape-overlays-rtl",
+      "opens": {
+        "status": "pass",
+        "detail": "0.1s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "1"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "1 slides"
+      },
+      "worstVisual": {
+        "slide": 1,
+        "mean": 0.0068,
+        "changed": 0.0085
+      }
+    },
+    {
+      "name": "diagrams",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "7"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "7 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.016,
+        "changed": 0.0247
+      }
+    },
+    {
+      "name": "diagrams~picture",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "7"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "7 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0164,
+        "changed": 0.0257
+      }
+    },
+    {
+      "name": "diagrams-markdown",
+      "opens": {
+        "status": "pass",
+        "detail": "0.1s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "3"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "3 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0131,
+        "changed": 0.0209
+      }
+    },
+    {
+      "name": "diagram-connectors",
+      "opens": {
+        "status": "pass",
+        "detail": "0.1s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "2"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "2 slides"
+      },
+      "worstVisual": {
+        "slide": 1,
+        "mean": 0.0075,
+        "changed": 0.0108
+      }
+    },
+    {
+      "name": "layout-sampler",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "49"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "49 slides"
+      },
+      "worstVisual": {
+        "slide": 28,
+        "mean": 0.0512,
+        "changed": 0.0834
+      }
+    },
+    {
+      "name": "layout-sampler~native-body",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "49"
+      },
+      "noOverflow": {
+        "status": "fail",
+        "detail": "s47 \"Share results with both teams.\" bottom"
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "49 slides"
+      },
+      "worstVisual": {
+        "slide": 28,
+        "mean": 0.0512,
+        "changed": 0.0834
+      }
+    },
+    {
+      "name": "chart-type-sampler",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "3"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "3 slides"
+      },
+      "worstVisual": {
+        "slide": 3,
+        "mean": 0.0314,
+        "changed": 0.0525
+      }
+    },
+    {
+      "name": "table-and-code",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "2"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "2 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0151,
+        "changed": 0.0256
+      }
+    },
+    {
+      "name": "columns",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "2"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "2 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0178,
+        "changed": 0.0268
+      }
+    },
+    {
+      "name": "header-footer-logo-set",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "2"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "2 slides"
+      },
+      "worstVisual": {
+        "slide": 1,
+        "mean": 0.0355,
+        "changed": 0.0563
+      }
+    },
+    {
+      "name": "full-feature-tour",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "10 visible of 11"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "11 slides"
+      },
+      "worstVisual": {
+        "slide": 4,
+        "mean": 0.0309,
+        "changed": 0.0492
+      }
+    },
+    {
+      "name": "data-story-academy",
+      "opens": {
+        "status": "pass",
+        "detail": "0.3s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "16"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "16 slides"
+      },
+      "worstVisual": {
+        "slide": 13,
+        "mean": 0.0483,
+        "changed": 0.082
+      }
+    },
+    {
+      "name": "compliance-readiness-review",
+      "opens": {
+        "status": "pass",
+        "detail": "0.2s"
+      },
+      "slides": {
+        "status": "pass",
+        "detail": "9 visible of 10"
+      },
+      "noOverflow": {
+        "status": "pass",
+        "detail": ""
+      },
+      "noShrink": {
+        "status": "pass",
+        "detail": ""
+      },
+      "roundtrip": {
+        "status": "pass",
+        "detail": "10 slides"
+      },
+      "worstVisual": {
+        "slide": 2,
+        "mean": 0.0336,
+        "changed": 0.0613
+      }
+    }
+  ],
+  "features": [
+    {
+      "id": "SH-02",
+      "title": "Shape blocks: presets, adjust values, custom paths, fills and strokes, text in shapes",
+      "changes": [
+        "sh-01-geometry",
+        "sh-02-shape-block"
+      ],
+      "file": "shapes",
+      "status": "fail",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "8"
+        },
+        "noOverflow": {
+          "status": "fail",
+          "detail": "s6 \"OPF\" bottom"
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0128/0.017, s2 0.0117/0.0164, s3 0.0123/0.0151, s4 0.0142/0.0206, s5 0.0086/0.0122, s6 0.0152/0.0218, s7 0.0128/0.0172, s8 0.015/0.0267"
+        },
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 43, arrangements 0, overlays 0, diagrams 0"
+        }
+      }
+    },
+    {
+      "id": "SH-02-native",
+      "title": "Shape blocks are native presets and freeforms (slide 8 is masked pictures)",
+      "changes": [
+        "sh-02-shape-block"
+      ],
+      "file": "shapes",
+      "slides": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "status": "pass",
+      "checks": {
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "SH-03",
+      "title": "Shape effects: shadow, inner shadow, glow, soft edge, reflection, blur",
+      "changes": [
+        "sh-03-effects"
+      ],
+      "file": "shape-effects",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "4"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0106/0.0143, s2 0.0154/0.0213, s3 0.0152/0.0213, s4 0.011/0.0153"
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "SH-04",
+      "title": "Overlay shapes and glued connectors",
+      "changes": [
+        "sh-04-overlays-connectors"
+      ],
+      "file": "shape-overlays",
+      "slides": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "6"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s2 0.019/0.0282, s3 0.0111/0.015, s4 0.0099/0.0126, s5 0.0101/0.0151"
+        },
+        "connectors": {
+          "status": "pass",
+          "detail": "s2 1, s3 4, s4 3, s5 11"
+        },
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 37, arrangements 0, overlays 50, diagrams 0"
+        }
+      }
+    },
+    {
+      "id": "SH-04-rtl",
+      "title": "Overlay shapes right to left",
+      "changes": [
+        "sh-04-overlays-connectors"
+      ],
+      "file": "shape-overlays-rtl",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.1s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "1"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0068/0.0085"
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "SH-05",
+      "title": "PPTX import of shapes after a PowerPoint save",
+      "changes": [
+        "sh-05-shape-import",
+        "sh-phase-2-integration"
+      ],
+      "file": "shapes",
+      "status": "pass",
+      "checks": {
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 43, arrangements 0, overlays 0, diagrams 0"
+        }
+      }
+    },
+    {
+      "id": "SH-07",
+      "title": "Native Mermaid diagrams: shapes, text and exact edge paths, read back as diagrams",
+      "changes": [
+        "sh-07-native-diagrams",
+        "sh-phase-2-integration"
+      ],
+      "file": "diagrams",
+      "slides": [
+        1,
+        6,
+        7
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "7"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0121/0.0163, s6 0.0089/0.0123, s7 0.0099/0.0139"
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        },
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 0, arrangements 0, overlays 0, diagrams 7"
+        }
+      }
+    },
+    {
+      "id": "SH-07-connectors",
+      "title": "Straight diagram edges without arrowheads are native connectors glued to their nodes",
+      "changes": [
+        "sh-07-native-diagrams",
+        "sh-phase-2-integration"
+      ],
+      "file": "diagram-connectors",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.1s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "2"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0075/0.0108, s2 0.006/0.0082"
+        },
+        "connectors": {
+          "status": "pass",
+          "detail": "s1 2, s2 1"
+        },
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 0, arrangements 0, overlays 0, diagrams 2"
+        }
+      }
+    },
+    {
+      "id": "SH-07-families",
+      "title": "Every Mermaid family as shapes",
+      "changes": [
+        "sh-07-native-diagrams"
+      ],
+      "file": "diagrams",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "7"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0121/0.0163, s2 0.016/0.0247, s3 0.0115/0.017, s4 0.0104/0.0128, s5 0.0145/0.0206, s6 0.0089/0.0123, s7 0.0099/0.0139"
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "SH-07-picture",
+      "title": "Diagrams as pictures (--diagrams picture)",
+      "changes": [
+        "sh-07-native-diagrams"
+      ],
+      "file": "diagrams~picture",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "7"
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0109/0.0151, s2 0.0164/0.0257, s3 0.0112/0.0169, s4 0.0108/0.0108, s5 0.0147/0.0217, s6 0.0089/0.0124, s7 0.0094/0.0137"
+        }
+      }
+    },
+    {
+      "id": "SH-07-md",
+      "title": "Mermaid in OPF Markdown",
+      "changes": [
+        "sh-07-native-diagrams"
+      ],
+      "file": "diagrams-markdown",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.1s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "3"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0115/0.016, s2 0.0131/0.0209, s3 0.0094/0.0137"
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "SH-09",
+      "title": "Live SmartArt: Basic Pyramid and Basic Matrix; a PowerPoint-saved copy imports back as the six arrangement layouts",
+      "changes": [
+        "sh-09-smartart-tier1"
+      ],
+      "file": "smartart",
+      "slides": [
+        1,
+        3
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "1.1s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "17"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0064/0.0083, s3 0.0076/0.0112"
+        },
+        "smartArt": {
+          "status": "pass",
+          "detail": "s1 Basic Pyramid 3, s3 Basic Matrix 4"
+        },
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 0, arrangements 0, overlays 0, diagrams 0"
+        }
+      }
+    },
+    {
+      "id": "SH-17",
+      "title": "Live SmartArt: Basic Chevron Process, Basic Process, Vertical Process",
+      "changes": [
+        "sh-17-linear-smartart"
+      ],
+      "file": "smartart",
+      "slides": [
+        7,
+        9,
+        11
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "1.1s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "17"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s7 0.0088/0.0124, s9 0.0088/0.0125, s11 0.0062/0.0085"
+        },
+        "smartArt": {
+          "status": "pass",
+          "detail": "s7 Basic Chevron Process 4, s9 Basic Process 4, s11 Vertical Process 3"
+        }
+      }
+    },
+    {
+      "id": "SH-18",
+      "title": "Live SmartArt: Basic Cycle",
+      "changes": [
+        "sh-18-cycle-smartart"
+      ],
+      "file": "smartart",
+      "slides": [
+        5
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "1.1s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "17"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s5 0.0071/0.0104"
+        },
+        "smartArt": {
+          "status": "pass",
+          "detail": "s5 Basic Cycle 5"
+        }
+      }
+    },
+    {
+      "id": "SH-19",
+      "title": "Live SmartArt on OPF's own layout definitions (stepped pyramid, card grid, wrapped chevrons and flows, columns)",
+      "changes": [
+        "sh-19-smartart-layouts"
+      ],
+      "file": "smartart",
+      "slides": [
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "1.1s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "17"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s13 0.0122/0.0161, s14 0.0066/0.0088, s15 0.0122/0.0177, s16 0.0122/0.0171, s17 0.0095/0.0128"
+        },
+        "smartArt": {
+          "status": "pass",
+          "detail": "s13 OPF Stepped Pyramid 7, s14 OPF Card Grid 3, s15 OPF Chevron Rows 8, s16 OPF Snaking Flow 8, s17 OPF Snaking Vertical Flow 6"
+        }
+      }
+    },
+    {
+      "id": "SH-19-native",
+      "title": "OPF's designs outside the live domain stay native shapes",
+      "changes": [
+        "sh-09-smartart-tier1",
+        "sh-17-linear-smartart",
+        "sh-18-cycle-smartart",
+        "sh-19-smartart-layouts"
+      ],
+      "file": "smartart",
+      "slides": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "1.1s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "17"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s2 0.0352/0.0522, s4 0.014/0.0194, s6 0.0208/0.0343, s8 0.0293/0.0434, s10 0.0253/0.0378, s12 0.0241/0.0352"
+        },
+        "noSmartArt": {
+          "status": "pass",
+          "detail": ""
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "SH-16",
+      "title": "SmartArt picture fallback (mc:AlternateContent)",
+      "changes": [
+        "sh-16-smartart-fallback"
+      ],
+      "file": "smartart",
+      "slides": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ],
+      "status": "not-run",
+      "checks": {
+        "fallback": {
+          "status": "not-run",
+          "detail": "fallback is graded by the reviewer"
+        }
+      },
+      "manual": "PowerPoint takes the mc:Choice (live SmartArt, checked by SH-09/17/18); the picture fallback is graded in Keynote and LibreOffice."
+    },
+    {
+      "id": "SH-smartart-shapes",
+      "title": "--smart-art shapes writes native shapes everywhere",
+      "changes": [
+        "sh-09-smartart-tier1"
+      ],
+      "file": "smartart~shapes",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "17"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0066/0.0086, s2 0.0352/0.0522, s3 0.008/0.0115, s4 0.014/0.0194, s5 0.0078/0.0111, s6 0.0208/0.0343, s7 0.0091/0.0127, s8 0.0293/0.0434, s9 0.0093/0.0129, s10 0.0253/0.0378, s11 0.0064/0.0089, s12 0.0241/0.0352, s13 0.0122/0.0162, s14 0.0066/0.0088, s15 0.0123/0.0177, s16 0.0122/0.017, s17 0.0096/0.0128"
+        },
+        "noSmartArt": {
+          "status": "pass",
+          "detail": ""
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "SH-smartart-rtl",
+      "title": "Arrangements right to left (native shapes by design)",
+      "changes": [
+        "sh-09-smartart-tier1",
+        "sh-17-linear-smartart",
+        "sh-18-cycle-smartart"
+      ],
+      "file": "smartart-arabic",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "3"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.013/0.0171, s2 0.011/0.0156, s3 0.0121/0.017"
+        },
+        "noSmartArt": {
+          "status": "pass",
+          "detail": ""
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "SH-smartart-cjk",
+      "title": "Arrangements in Japanese (native shapes by design)",
+      "changes": [
+        "sh-09-smartart-tier1",
+        "sh-17-linear-smartart"
+      ],
+      "file": "smartart-japanese",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "3"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0203/0.0297, s2 0.0216/0.0312, s3 0.0161/0.022"
+        },
+        "noSmartArt": {
+          "status": "pass",
+          "detail": ""
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "LH-158",
+      "title": "Picture bands: heading placement and panel over picture backgrounds",
+      "changes": [
+        "lh-158-picture-bands"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        1,
+        11
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0177/0.0236, s11 0.0138/0.0211"
+        }
+      }
+    },
+    {
+      "id": "LH-09",
+      "title": "Statements at display size under the accent rule",
+      "changes": [
+        "lh-09-statements"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        2
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s2 0.0339/0.0524"
+        }
+      }
+    },
+    {
+      "id": "LH-164",
+      "title": "Message surface (accent slide for one display message)",
+      "changes": [
+        "lh-164-message-surface",
+        "lh-180-181-surface-and-run-in-editing"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        2,
+        4
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s2 0.0339/0.0524, s4 0.016/0.0259"
+        }
+      }
+    },
+    {
+      "id": "LH-14",
+      "title": "Icons on list entries, metrics and groups (native ellipse + editable glyph)",
+      "changes": [
+        "lh-14-icons"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        3,
+        6,
+        7
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s3 0.0302/0.0505, s6 0.0176/0.0247, s7 0.0221/0.0338"
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "LH-165",
+      "title": "Icon cards and text tiles",
+      "changes": [
+        "lh-165-icon-cards"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        5,
+        8
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s5 0.021/0.0296, s8 0.0225/0.0333"
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "LH-132",
+      "title": "Portraits at card size; testimonial portrait",
+      "changes": [
+        "lh-132-portraits"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        9,
+        10
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s9 0.0172/0.0257, s10 0.0276/0.0404"
+        }
+      }
+    },
+    {
+      "id": "LH-168",
+      "title": "Steppers (badges on a connector)",
+      "changes": [
+        "lh-168-steppers"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        12
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s12 0.0385/0.0585"
+        },
+        "shapes": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "LH-169",
+      "title": "Figure rows and the emphasis band",
+      "changes": [
+        "lh-169-figure-rows"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        13
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s13 0.0301/0.0483"
+        }
+      }
+    },
+    {
+      "id": "LH-63",
+      "title": "Run-in heads and bold labels",
+      "changes": [
+        "lh-63-run-in-quotes"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        14
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s14 0.0389/0.0593"
+        }
+      }
+    },
+    {
+      "id": "LH-75",
+      "title": "Table and note side by side",
+      "changes": [
+        "lh-75-table-note-grids"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        15
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s15 0.025/0.0376"
+        },
+        "nativeTable": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "LH-18",
+      "title": "Shared heading tracks",
+      "changes": [
+        "lh-18-heading-tracks"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        16
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s16 0.0295/0.047"
+        }
+      }
+    },
+    {
+      "id": "LH-160",
+      "title": "Histogram and Pareto labels and bins",
+      "changes": [
+        "lh-160-chart-labels",
+        "lh-153-chart-follow-ups"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        17,
+        18
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s17 0.0174/0.0295, s18 0.0214/0.0358"
+        },
+        "nativeChart": {
+          "status": "pass",
+          "detail": "s17 118, s18 122"
+        }
+      }
+    },
+    {
+      "id": "LH-153",
+      "title": "Thousands grouping on waterfall labels and axes",
+      "changes": [
+        "lh-153-chart-follow-ups"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        19
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s19 0.0533/0.0626"
+        },
+        "nativeChart": {
+          "status": "pass",
+          "detail": "s19 119"
+        }
+      }
+    },
+    {
+      "id": "LH-155",
+      "title": "Closing takes the cover treatment",
+      "changes": [
+        "lh-155-closing"
+      ],
+      "file": "layout-harvest",
+      "slides": [
+        20
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s20 0.0185/0.0264"
+        }
+      }
+    },
+    {
+      "id": "LH-native-body",
+      "title": "Layout harvest slides with --body-text native",
+      "changes": [
+        "lh-wave-7-integration",
+        "lh-wave-8-integration"
+      ],
+      "file": "layout-harvest~native-body",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.5s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "20"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0256/0.032, s2 0.0462/0.0707, s3 0.0302/0.0505, s4 0.0262/0.0392, s5 0.021/0.0296, s6 0.0176/0.0247, s7 0.0221/0.0338, s8 0.0231/0.0345, s9 0.0172/0.0257, s10 0.0276/0.0404, s11 0.0138/0.0213, s12 0.0385/0.0585, s13 0.0301/0.0483, s14 0.0382/0.0583, s15 0.0246/0.0371, s16 0.0295/0.047, s17 0.0174/0.0295, s18 0.0214/0.0358, s19 0.0533/0.0626, s20 0.0181/0.0263"
+        }
+      }
+    },
+    {
+      "id": "LH-sampler",
+      "title": "Every gallery layout (waves 7 and 8 integration, LH-156 small fixes)",
+      "changes": [
+        "lh-wave-7-integration",
+        "lh-wave-8-integration",
+        "lh-156-small-fixes"
+      ],
+      "file": "layout-sampler",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "49"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0152/0.022, s2 0.0113/0.0171, s3 0.017/0.0261, s4 0.0143/0.0222, s5 0.0205/0.0325, s6 0.0248/0.0347, s7 0.0372/0.0583, s8 0.0267/0.0422, s9 0.0231/0.0352, s10 0.0288/0.0439, s11 0.0434/0.0666, s12 0.0348/0.0523, s13 0.0405/0.0641, s14 0.0276/0.0445, s15 0.0195/0.0319, s16 0.0282/0.0444, s17 0.0284/0.0482, s18 0.0196/0.0302, s19 0.008/0.0108, s20 0.0178/0.0279, s21 0.0109/0.0129, s22 0.0424/0.067, s23 0.0418/0.0655, s24 0.022/0.0355, s25 0.0184/0.0295, s26 0.0217/0.0352, s27 0.0315/0.0527, s28 0.0512/0.0834, s29 0.0345/0.0524, s30 0.0074/0.0101, s31 0.018/0.0265, s32 0.0152/0.0233, s33 0.0107/0.0163, s34 0.0105/0.0159, s35 0.0137/0.0194, s36 0.01/0.015, s37 0.027/0.0421, s38 0.0339/0.0527, s39 0.0211/0.0342, s40 0.0344/0.054, s41 0.0351/0.0549, s42 0.0483/0.0734, s43 0.0275/0.043, s44 0.0199/0.0306, s45 0.0151/0.025, s46 0.021/0.0337, s47 0.029/0.0436, s48 0.0185/0.0303, s49 0.0425/0.0662"
+        }
+      }
+    },
+    {
+      "id": "LH-sampler-charts",
+      "title": "Gallery chart and table layouts stay native",
+      "changes": [
+        "lh-wave-8-integration"
+      ],
+      "file": "layout-sampler",
+      "slides": [
+        22,
+        23
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "49"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s22 0.0424/0.067, s23 0.0418/0.0655"
+        },
+        "nativeChart": {
+          "status": "pass",
+          "detail": "s22 51, s23 51"
+        }
+      }
+    },
+    {
+      "id": "LH-sampler-tables",
+      "title": "Gallery table layouts stay native and editable",
+      "changes": [
+        "lh-75-table-note-grids"
+      ],
+      "file": "layout-sampler",
+      "slides": [
+        24,
+        25
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "49"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s24 0.022/0.0355, s25 0.0184/0.0295"
+        },
+        "nativeTable": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "LH-sampler-native-body",
+      "title": "Every gallery layout with --body-text native",
+      "changes": [
+        "lh-wave-8-integration"
+      ],
+      "file": "layout-sampler~native-body",
+      "status": "fail",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "49"
+        },
+        "noOverflow": {
+          "status": "fail",
+          "detail": "s47 \"Share results with both teams.\" bottom"
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0249/0.0327, s2 0.0113/0.0171, s3 0.0127/0.0206, s4 0.0133/0.0208, s5 0.02/0.0318, s6 0.0242/0.034, s7 0.0372/0.0583, s8 0.0267/0.0422, s9 0.0231/0.0352, s10 0.0288/0.0439, s11 0.0434/0.0666, s12 0.0348/0.0523, s13 0.0398/0.0632, s14 0.0276/0.0445, s15 0.0231/0.0367, s16 0.0282/0.0444, s17 0.0284/0.0482, s18 0.0196/0.0302, s19 0.008/0.0108, s20 0.0148/0.024, s21 0.0109/0.0129, s22 0.0436/0.0687, s23 0.0405/0.0642, s24 0.0232/0.0372, s25 0.0171/0.0283, s26 0.0216/0.0352, s27 0.0305/0.0518, s28 0.0512/0.0834, s29 0.0345/0.0524, s30 0.0074/0.0101, s31 0.018/0.0265, s32 0.0192/0.0279, s33 0.0101/0.0157, s34 0.0105/0.0159, s35 0.0137/0.0194, s36 0.0147/0.0206, s37 0.0274/0.0427, s38 0.0339/0.0527, s39 0.0211/0.0342, s40 0.0344/0.054, s41 0.0372/0.0574, s42 0.0483/0.0734, s43 0.0258/0.0414, s44 0.0199/0.0306, s45 0.0148/0.0246, s46 0.0227/0.0354, s47 0.0299/0.0449, s48 0.0178/0.0295, s49 0.0425/0.0662"
+        }
+      }
+    },
+    {
+      "id": "RR-102",
+      "title": "Header & Footer: footer, live slide number and date placeholders; a slide's own footer (number only) and a hidden footer",
+      "changes": [
+        "rr-102-header-footer-dialog"
+      ],
+      "file": "footers",
+      "slides": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "4"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0089/0.0143, s2 0.0115/0.0168, s3 0.0076/0.0119, s4 0.0081/0.0114"
+        },
+        "footer": {
+          "status": "pass",
+          "detail": ""
+        },
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 0, arrangements 0, overlays 0, diagrams 0"
+        }
+      }
+    },
+    {
+      "id": "RR-102-static",
+      "title": "--slide-numbers static",
+      "changes": [
+        "rr-102-header-footer-dialog"
+      ],
+      "file": "footers~static",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "4"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0089/0.0143, s2 0.0115/0.0168, s3 0.0076/0.0119, s4 0.0081/0.0114"
+        }
+      }
+    },
+    {
+      "id": "RR-102-logos",
+      "title": "Header and footer zones with logos",
+      "changes": [
+        "rr-102-header-footer-dialog"
+      ],
+      "file": "header-footer-logo-set",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "2"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0355/0.0563, s2 0.0189/0.0267"
+        }
+      }
+    },
+    {
+      "id": "RR-103",
+      "title": "Chart types export unchanged (no vendor names)",
+      "changes": [
+        "rr-103-no-vendor-names"
+      ],
+      "file": "chart-type-sampler",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "3"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.018/0.0275, s2 0.0236/0.0355, s3 0.0314/0.0525"
+        },
+        "nativeChart": {
+          "status": "pass",
+          "detail": "s1 121+118+-4169, s2 119+123+117, s3 -4111"
+        }
+      }
+    },
+    {
+      "id": "tables",
+      "title": "Native tables stay editable",
+      "changes": [],
+      "file": "table-and-code",
+      "slides": [
+        1
+      ],
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "2"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0131/0.0216"
+        },
+        "nativeTable": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "example-academy",
+      "title": "New example: Data Story Academy corporate programs",
+      "changes": [
+        "example-data-story-academy"
+      ],
+      "file": "data-story-academy",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "16"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0379/0.0558, s2 0.0287/0.0478, s3 0.0412/0.0726, s4 0.0294/0.0545, s5 0.0368/0.0589, s6 0.0299/0.0509, s7 0.0269/0.0475, s8 0.0362/0.0679, s9 0.0186/0.0335, s10 0.0379/0.072, s11 0.0304/0.05, s12 0.0338/0.055, s13 0.0483/0.082, s14 0.023/0.0415, s15 0.0201/0.037, s16 0.0248/0.0372"
+        },
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 0, arrangements 0, overlays 0, diagrams 0"
+        }
+      }
+    },
+    {
+      "id": "example-icons",
+      "title": "Gallery example with icons",
+      "changes": [
+        "lh-14-icons"
+      ],
+      "file": "compliance-readiness-review",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "9 visible of 10"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0225/0.0326, s2 0.0336/0.0613, s3 0.0087/0.0125, s4 0.0209/0.0334, s5 0.0259/0.0423, s6 0.031/0.054, s7 0.0292/0.045, s8 0.0047/0.0053, s9 undefined/undefined, s10 undefined/undefined"
+        }
+      }
+    },
+    {
+      "id": "feature-tour",
+      "title": "Full feature tour (regression)",
+      "changes": [],
+      "file": "full-feature-tour",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "10 visible of 11"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0135/0.0199, s2 0.0202/0.0305, s3 0.0216/0.0321, s4 0.0309/0.0492, s5 0.0167/0.027, s6 0.0214/0.0339, s7 0.0124/0.0211, s8 0.0162/0.0273, s9 0.0067/0.0042, s10 undefined/undefined, s11 undefined/undefined"
+        },
+        "roundtrip": {
+          "status": "pass",
+          "detail": "shapes 0, arrangements 0, overlays 0, diagrams 0"
+        }
+      }
+    },
+    {
+      "id": "RR-104",
+      "title": "Autofit cleanup: no shrink-on-overflow anywhere",
+      "changes": [
+        "(pending) rr-104"
+      ],
+      "file": "layout-sampler",
+      "status": "pass",
+      "checks": {
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        }
+      }
+    },
+    {
+      "id": "LH-184",
+      "title": "Columns",
+      "changes": [
+        "(pending) lh-184"
+      ],
+      "file": "columns",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "2"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.015/0.0225, s2 0.0178/0.0268"
+        }
+      }
+    },
+    {
+      "id": "LH-185",
+      "title": "Diagram direction",
+      "changes": [
+        "(pending) lh-185"
+      ],
+      "file": "diagrams",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.2s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "7"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0121/0.0163, s2 0.016/0.0247, s3 0.0115/0.017, s4 0.0104/0.0128, s5 0.0145/0.0206, s6 0.0089/0.0123, s7 0.0099/0.0139"
+        }
+      }
+    },
+    {
+      "id": "LH-186",
+      "title": "Layout before shrink",
+      "changes": [
+        "(pending) lh-186"
+      ],
+      "file": "layout-sampler",
+      "status": "review",
+      "checks": {
+        "opens": {
+          "status": "pass",
+          "detail": "0.3s"
+        },
+        "slides": {
+          "status": "pass",
+          "detail": "49"
+        },
+        "noOverflow": {
+          "status": "pass",
+          "detail": ""
+        },
+        "noShrink": {
+          "status": "pass",
+          "detail": ""
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0152/0.022, s2 0.0113/0.0171, s3 0.017/0.0261, s4 0.0143/0.0222, s5 0.0205/0.0325, s6 0.0248/0.0347, s7 0.0372/0.0583, s8 0.0267/0.0422, s9 0.0231/0.0352, s10 0.0288/0.0439, s11 0.0434/0.0666, s12 0.0348/0.0523, s13 0.0405/0.0641, s14 0.0276/0.0445, s15 0.0195/0.0319, s16 0.0282/0.0444, s17 0.0284/0.0482, s18 0.0196/0.0302, s19 0.008/0.0108, s20 0.0178/0.0279, s21 0.0109/0.0129, s22 0.0424/0.067, s23 0.0418/0.0655, s24 0.022/0.0355, s25 0.0184/0.0295, s26 0.0217/0.0352, s27 0.0315/0.0527, s28 0.0512/0.0834, s29 0.0345/0.0524, s30 0.0074/0.0101, s31 0.018/0.0265, s32 0.0152/0.0233, s33 0.0107/0.0163, s34 0.0105/0.0159, s35 0.0137/0.0194, s36 0.01/0.015, s37 0.027/0.0421, s38 0.0339/0.0527, s39 0.0211/0.0342, s40 0.0344/0.054, s41 0.0351/0.0549, s42 0.0483/0.0734, s43 0.0275/0.043, s44 0.0199/0.0306, s45 0.0151/0.025, s46 0.021/0.0337, s47 0.029/0.0436, s48 0.0185/0.0303, s49 0.0425/0.0662"
+        }
+      }
+    },
+    {
+      "id": "SH-11",
+      "title": "Small shape text in PowerPoint",
+      "changes": [
+        "(pending) sh-11"
+      ],
+      "file": "shapes",
+      "status": "fail",
+      "checks": {
+        "noOverflow": {
+          "status": "fail",
+          "detail": "s6 \"OPF\" bottom"
+        },
+        "visual": {
+          "status": "review",
+          "detail": "s1 0.0128/0.017, s2 0.0117/0.0164, s3 0.0123/0.0151, s4 0.0142/0.0206, s5 0.0086/0.0122, s6 0.0152/0.0218, s7 0.0128/0.0172, s8 0.015/0.0267"
+        }
+      }
+    },
+    {
+      "id": "mcp-viewer",
+      "title": "MCP deck viewer (show_deck)",
+      "changes": [
+        "mcp-deck-viewer"
+      ],
+      "file": "full-feature-tour",
+      "status": "not-run",
+      "checks": {},
+      "manual": "Not a PowerPoint feature; covered by the MCP package tests."
+    },
+    {
+      "id": "editor",
+      "title": "Editor: shapes, overlays, icons, surface and run-in editing",
+      "changes": [
+        "sh-06-editor-shapes",
+        "sh-06-editor-overlays",
+        "lh-166-editor-icons",
+        "lh-180-181-surface-and-run-in-editing"
+      ],
+      "file": "full-feature-tour",
+      "status": "not-run",
+      "checks": {},
+      "manual": "Editor features; their PPTX output is covered by the shape and icon decks."
+    },
+    {
+      "id": "ui-only",
+      "title": "Accessibility Checker, Edit Data, adjust handles, Change Shape",
+      "changes": [],
+      "file": "full-feature-tour",
+      "status": "not-run",
+      "checks": {},
+      "manual": "Not run: needs PowerPoint UI control, which the owner declined."
+    }
+  ],
+  "detail": {
+    "smartart": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0064,
+          "changed": 0.0083
+        },
+        {
+          "slide": 2,
+          "mean": 0.0352,
+          "changed": 0.0522
+        },
+        {
+          "slide": 3,
+          "mean": 0.0076,
+          "changed": 0.0112
+        },
+        {
+          "slide": 4,
+          "mean": 0.014,
+          "changed": 0.0194
+        },
+        {
+          "slide": 5,
+          "mean": 0.0071,
+          "changed": 0.0104
+        },
+        {
+          "slide": 6,
+          "mean": 0.0208,
+          "changed": 0.0343
+        },
+        {
+          "slide": 7,
+          "mean": 0.0088,
+          "changed": 0.0124
+        },
+        {
+          "slide": 8,
+          "mean": 0.0293,
+          "changed": 0.0434
+        },
+        {
+          "slide": 9,
+          "mean": 0.0088,
+          "changed": 0.0125
+        },
+        {
+          "slide": 10,
+          "mean": 0.0253,
+          "changed": 0.0378
+        },
+        {
+          "slide": 11,
+          "mean": 0.0062,
+          "changed": 0.0085
+        },
+        {
+          "slide": 12,
+          "mean": 0.0241,
+          "changed": 0.0352
+        },
+        {
+          "slide": 13,
+          "mean": 0.0122,
+          "changed": 0.0161
+        },
+        {
+          "slide": 14,
+          "mean": 0.0066,
+          "changed": 0.0088
+        },
+        {
+          "slide": 15,
+          "mean": 0.0122,
+          "changed": 0.0177
+        },
+        {
+          "slide": 16,
+          "mean": 0.0122,
+          "changed": 0.0171
+        },
+        {
+          "slide": 17,
+          "mean": 0.0095,
+          "changed": 0.0128
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 17,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [
+          "pyramid",
+          "matrix",
+          "cycle",
+          "chevrons",
+          "flow",
+          "vertical-flow"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": [
+        {
+          "slide": 1,
+          "layout": "Basic Pyramid",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/pyramid1",
+          "nodes": 3
+        },
+        {
+          "slide": 3,
+          "layout": "Basic Matrix",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/matrix3",
+          "nodes": 4
+        },
+        {
+          "slide": 5,
+          "layout": "Basic Cycle",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/cycle2",
+          "nodes": 5
+        },
+        {
+          "slide": 7,
+          "layout": "Basic Chevron Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/chevron1",
+          "nodes": 4
+        },
+        {
+          "slide": 9,
+          "layout": "Basic Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/process1",
+          "nodes": 4
+        },
+        {
+          "slide": 11,
+          "layout": "Vertical Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/process2",
+          "nodes": 3
+        },
+        {
+          "slide": 13,
+          "layout": "OPF Stepped Pyramid",
+          "layoutId": "urn:openpresentation.org/smartart/layout/pyramid-steps/dd063e064f852eae",
+          "nodes": 7
+        },
+        {
+          "slide": 14,
+          "layout": "OPF Card Grid",
+          "layoutId": "urn:openpresentation.org/smartart/layout/card-grid/78bfaacf6edc092c",
+          "nodes": 3
+        },
+        {
+          "slide": 15,
+          "layout": "OPF Chevron Rows",
+          "layoutId": "urn:openpresentation.org/smartart/layout/chevron-rows/757f9cdfa4c8a758",
+          "nodes": 8
+        },
+        {
+          "slide": 16,
+          "layout": "OPF Snaking Flow",
+          "layoutId": "urn:openpresentation.org/smartart/layout/flow-rows/c71716738f538ae6",
+          "nodes": 8
+        },
+        {
+          "slide": 17,
+          "layout": "OPF Snaking Vertical Flow",
+          "layoutId": "urn:openpresentation.org/smartart/layout/vertical-flow-columns/437264fac0368cbf",
+          "nodes": 6
+        }
+      ]
+    },
+    "smartart~shapes": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0066,
+          "changed": 0.0086
+        },
+        {
+          "slide": 2,
+          "mean": 0.0352,
+          "changed": 0.0522
+        },
+        {
+          "slide": 3,
+          "mean": 0.008,
+          "changed": 0.0115
+        },
+        {
+          "slide": 4,
+          "mean": 0.014,
+          "changed": 0.0194
+        },
+        {
+          "slide": 5,
+          "mean": 0.0078,
+          "changed": 0.0111
+        },
+        {
+          "slide": 6,
+          "mean": 0.0208,
+          "changed": 0.0343
+        },
+        {
+          "slide": 7,
+          "mean": 0.0091,
+          "changed": 0.0127
+        },
+        {
+          "slide": 8,
+          "mean": 0.0293,
+          "changed": 0.0434
+        },
+        {
+          "slide": 9,
+          "mean": 0.0093,
+          "changed": 0.0129
+        },
+        {
+          "slide": 10,
+          "mean": 0.0253,
+          "changed": 0.0378
+        },
+        {
+          "slide": 11,
+          "mean": 0.0064,
+          "changed": 0.0089
+        },
+        {
+          "slide": 12,
+          "mean": 0.0241,
+          "changed": 0.0352
+        },
+        {
+          "slide": 13,
+          "mean": 0.0122,
+          "changed": 0.0162
+        },
+        {
+          "slide": 14,
+          "mean": 0.0066,
+          "changed": 0.0088
+        },
+        {
+          "slide": 15,
+          "mean": 0.0123,
+          "changed": 0.0177
+        },
+        {
+          "slide": 16,
+          "mean": 0.0122,
+          "changed": 0.017
+        },
+        {
+          "slide": 17,
+          "mean": 0.0096,
+          "changed": 0.0128
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 17,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [
+          "pyramid",
+          "matrix",
+          "cycle",
+          "chevrons",
+          "flow",
+          "vertical-flow"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "smartart-arabic": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.013,
+          "changed": 0.0171
+        },
+        {
+          "slide": 2,
+          "mean": 0.011,
+          "changed": 0.0156
+        },
+        {
+          "slide": 3,
+          "mean": 0.0121,
+          "changed": 0.017
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 3,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [
+          "pyramid",
+          "flow",
+          "cycle"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "smartart-japanese": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0203,
+          "changed": 0.0297
+        },
+        {
+          "slide": 2,
+          "mean": 0.0216,
+          "changed": 0.0312
+        },
+        {
+          "slide": 3,
+          "mean": 0.0161,
+          "changed": 0.022
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 3,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [
+          "matrix",
+          "chevrons",
+          "vertical-flow"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "layout-harvest": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0177,
+          "changed": 0.0236
+        },
+        {
+          "slide": 2,
+          "mean": 0.0339,
+          "changed": 0.0524
+        },
+        {
+          "slide": 3,
+          "mean": 0.0302,
+          "changed": 0.0505
+        },
+        {
+          "slide": 4,
+          "mean": 0.016,
+          "changed": 0.0259
+        },
+        {
+          "slide": 5,
+          "mean": 0.021,
+          "changed": 0.0296
+        },
+        {
+          "slide": 6,
+          "mean": 0.0176,
+          "changed": 0.0247
+        },
+        {
+          "slide": 7,
+          "mean": 0.0221,
+          "changed": 0.0338
+        },
+        {
+          "slide": 8,
+          "mean": 0.0225,
+          "changed": 0.0333
+        },
+        {
+          "slide": 9,
+          "mean": 0.0172,
+          "changed": 0.0257
+        },
+        {
+          "slide": 10,
+          "mean": 0.0276,
+          "changed": 0.0404
+        },
+        {
+          "slide": 11,
+          "mean": 0.0138,
+          "changed": 0.0211
+        },
+        {
+          "slide": 12,
+          "mean": 0.0385,
+          "changed": 0.0585
+        },
+        {
+          "slide": 13,
+          "mean": 0.0301,
+          "changed": 0.0483
+        },
+        {
+          "slide": 14,
+          "mean": 0.0389,
+          "changed": 0.0593
+        },
+        {
+          "slide": 15,
+          "mean": 0.025,
+          "changed": 0.0376
+        },
+        {
+          "slide": 16,
+          "mean": 0.0295,
+          "changed": 0.047
+        },
+        {
+          "slide": 17,
+          "mean": 0.0174,
+          "changed": 0.0295
+        },
+        {
+          "slide": 18,
+          "mean": 0.0214,
+          "changed": 0.0358
+        },
+        {
+          "slide": 19,
+          "mean": 0.0533,
+          "changed": 0.0626
+        },
+        {
+          "slide": 20,
+          "mean": 0.0185,
+          "changed": 0.0264
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 20,
+        "shapes": 4,
+        "arrangements": 0,
+        "layouts": [
+          "cover",
+          "statement",
+          "team",
+          "section",
+          "process",
+          "two-column",
+          "comparison",
+          "pillars",
+          "closing"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "layout-harvest~native-body": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0256,
+          "changed": 0.032
+        },
+        {
+          "slide": 2,
+          "mean": 0.0462,
+          "changed": 0.0707
+        },
+        {
+          "slide": 3,
+          "mean": 0.0302,
+          "changed": 0.0505
+        },
+        {
+          "slide": 4,
+          "mean": 0.0262,
+          "changed": 0.0392
+        },
+        {
+          "slide": 5,
+          "mean": 0.021,
+          "changed": 0.0296
+        },
+        {
+          "slide": 6,
+          "mean": 0.0176,
+          "changed": 0.0247
+        },
+        {
+          "slide": 7,
+          "mean": 0.0221,
+          "changed": 0.0338
+        },
+        {
+          "slide": 8,
+          "mean": 0.0231,
+          "changed": 0.0345
+        },
+        {
+          "slide": 9,
+          "mean": 0.0172,
+          "changed": 0.0257
+        },
+        {
+          "slide": 10,
+          "mean": 0.0276,
+          "changed": 0.0404
+        },
+        {
+          "slide": 11,
+          "mean": 0.0138,
+          "changed": 0.0213
+        },
+        {
+          "slide": 12,
+          "mean": 0.0385,
+          "changed": 0.0585
+        },
+        {
+          "slide": 13,
+          "mean": 0.0301,
+          "changed": 0.0483
+        },
+        {
+          "slide": 14,
+          "mean": 0.0382,
+          "changed": 0.0583
+        },
+        {
+          "slide": 15,
+          "mean": 0.0246,
+          "changed": 0.0371
+        },
+        {
+          "slide": 16,
+          "mean": 0.0295,
+          "changed": 0.047
+        },
+        {
+          "slide": 17,
+          "mean": 0.0174,
+          "changed": 0.0295
+        },
+        {
+          "slide": 18,
+          "mean": 0.0214,
+          "changed": 0.0358
+        },
+        {
+          "slide": 19,
+          "mean": 0.0533,
+          "changed": 0.0626
+        },
+        {
+          "slide": 20,
+          "mean": 0.0181,
+          "changed": 0.0263
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 20,
+        "shapes": 4,
+        "arrangements": 0,
+        "layouts": [
+          "cover",
+          "statement",
+          "team",
+          "section",
+          "process",
+          "two-column",
+          "comparison",
+          "pillars",
+          "closing"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "footers": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0089,
+          "changed": 0.0143
+        },
+        {
+          "slide": 2,
+          "mean": 0.0115,
+          "changed": 0.0168
+        },
+        {
+          "slide": 3,
+          "mean": 0.0076,
+          "changed": 0.0119
+        },
+        {
+          "slide": 4,
+          "mean": 0.0081,
+          "changed": 0.0114
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 4,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "footers~static": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0089,
+          "changed": 0.0143
+        },
+        {
+          "slide": 2,
+          "mean": 0.0115,
+          "changed": 0.0168
+        },
+        {
+          "slide": 3,
+          "mean": 0.0076,
+          "changed": 0.0119
+        },
+        {
+          "slide": 4,
+          "mean": 0.0081,
+          "changed": 0.0114
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 4,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "shapes": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0128,
+          "changed": 0.017
+        },
+        {
+          "slide": 2,
+          "mean": 0.0117,
+          "changed": 0.0164
+        },
+        {
+          "slide": 3,
+          "mean": 0.0123,
+          "changed": 0.0151
+        },
+        {
+          "slide": 4,
+          "mean": 0.0142,
+          "changed": 0.0206
+        },
+        {
+          "slide": 5,
+          "mean": 0.0086,
+          "changed": 0.0122
+        },
+        {
+          "slide": 6,
+          "mean": 0.0152,
+          "changed": 0.0218
+        },
+        {
+          "slide": 7,
+          "mean": 0.0128,
+          "changed": 0.0172
+        },
+        {
+          "slide": 8,
+          "mean": 0.015,
+          "changed": 0.0267
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 8,
+        "shapes": 43,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [
+        {
+          "slide": 6,
+          "name": "OPF shape slides.5.blocks.3.shape",
+          "text": "OPF",
+          "sides": [
+            "bottom"
+          ],
+          "box": [
+            647.67,
+            312.71,
+            110.46,
+            184.1
+          ],
+          "bound": [
+            685.21,
+            345.47,
+            35.38,
+            158.08
+          ],
+          "font": "Aptos",
+          "size": 27.75
+        }
+      ],
+      "smartArt": []
+    },
+    "shape-effects": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0106,
+          "changed": 0.0143
+        },
+        {
+          "slide": 2,
+          "mean": 0.0154,
+          "changed": 0.0213
+        },
+        {
+          "slide": 3,
+          "mean": 0.0152,
+          "changed": 0.0213
+        },
+        {
+          "slide": 4,
+          "mean": 0.011,
+          "changed": 0.0153
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 4,
+        "shapes": 18,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "shape-overlays": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0275,
+          "changed": 0.0377
+        },
+        {
+          "slide": 2,
+          "mean": 0.019,
+          "changed": 0.0282
+        },
+        {
+          "slide": 3,
+          "mean": 0.0111,
+          "changed": 0.015
+        },
+        {
+          "slide": 4,
+          "mean": 0.0099,
+          "changed": 0.0126
+        },
+        {
+          "slide": 5,
+          "mean": 0.0101,
+          "changed": 0.0151
+        },
+        {
+          "slide": 6,
+          "mean": 0.0246,
+          "changed": 0.0351
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 6,
+        "shapes": 37,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 50
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "shape-overlays-rtl": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0068,
+          "changed": 0.0085
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 1,
+        "shapes": 4,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 3
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "diagrams": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0121,
+          "changed": 0.0163
+        },
+        {
+          "slide": 2,
+          "mean": 0.016,
+          "changed": 0.0247
+        },
+        {
+          "slide": 3,
+          "mean": 0.0115,
+          "changed": 0.017
+        },
+        {
+          "slide": 4,
+          "mean": 0.0104,
+          "changed": 0.0128
+        },
+        {
+          "slide": 5,
+          "mean": 0.0145,
+          "changed": 0.0206
+        },
+        {
+          "slide": 6,
+          "mean": 0.0089,
+          "changed": 0.0123
+        },
+        {
+          "slide": 7,
+          "mean": 0.0099,
+          "changed": 0.0139
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 7,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 7,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "diagrams~picture": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0109,
+          "changed": 0.0151
+        },
+        {
+          "slide": 2,
+          "mean": 0.0164,
+          "changed": 0.0257
+        },
+        {
+          "slide": 3,
+          "mean": 0.0112,
+          "changed": 0.0169
+        },
+        {
+          "slide": 4,
+          "mean": 0.0108,
+          "changed": 0.0108
+        },
+        {
+          "slide": 5,
+          "mean": 0.0147,
+          "changed": 0.0217
+        },
+        {
+          "slide": 6,
+          "mean": 0.0089,
+          "changed": 0.0124
+        },
+        {
+          "slide": 7,
+          "mean": 0.0094,
+          "changed": 0.0137
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 7,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 7,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "diagrams-markdown": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0115,
+          "changed": 0.016
+        },
+        {
+          "slide": 2,
+          "mean": 0.0131,
+          "changed": 0.0209
+        },
+        {
+          "slide": 3,
+          "mean": 0.0094,
+          "changed": 0.0137
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 3,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 3,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "diagram-connectors": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0075,
+          "changed": 0.0108
+        },
+        {
+          "slide": 2,
+          "mean": 0.006,
+          "changed": 0.0082
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 2,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 2,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "layout-sampler": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0152,
+          "changed": 0.022
+        },
+        {
+          "slide": 2,
+          "mean": 0.0113,
+          "changed": 0.0171
+        },
+        {
+          "slide": 3,
+          "mean": 0.017,
+          "changed": 0.0261
+        },
+        {
+          "slide": 4,
+          "mean": 0.0143,
+          "changed": 0.0222
+        },
+        {
+          "slide": 5,
+          "mean": 0.0205,
+          "changed": 0.0325
+        },
+        {
+          "slide": 6,
+          "mean": 0.0248,
+          "changed": 0.0347
+        },
+        {
+          "slide": 7,
+          "mean": 0.0372,
+          "changed": 0.0583
+        },
+        {
+          "slide": 8,
+          "mean": 0.0267,
+          "changed": 0.0422
+        },
+        {
+          "slide": 9,
+          "mean": 0.0231,
+          "changed": 0.0352
+        },
+        {
+          "slide": 10,
+          "mean": 0.0288,
+          "changed": 0.0439
+        },
+        {
+          "slide": 11,
+          "mean": 0.0434,
+          "changed": 0.0666
+        },
+        {
+          "slide": 12,
+          "mean": 0.0348,
+          "changed": 0.0523
+        },
+        {
+          "slide": 13,
+          "mean": 0.0405,
+          "changed": 0.0641
+        },
+        {
+          "slide": 14,
+          "mean": 0.0276,
+          "changed": 0.0445
+        },
+        {
+          "slide": 15,
+          "mean": 0.0195,
+          "changed": 0.0319
+        },
+        {
+          "slide": 16,
+          "mean": 0.0282,
+          "changed": 0.0444
+        },
+        {
+          "slide": 17,
+          "mean": 0.0284,
+          "changed": 0.0482
+        },
+        {
+          "slide": 18,
+          "mean": 0.0196,
+          "changed": 0.0302
+        },
+        {
+          "slide": 19,
+          "mean": 0.008,
+          "changed": 0.0108
+        },
+        {
+          "slide": 20,
+          "mean": 0.0178,
+          "changed": 0.0279
+        },
+        {
+          "slide": 21,
+          "mean": 0.0109,
+          "changed": 0.0129
+        },
+        {
+          "slide": 22,
+          "mean": 0.0424,
+          "changed": 0.067
+        },
+        {
+          "slide": 23,
+          "mean": 0.0418,
+          "changed": 0.0655
+        },
+        {
+          "slide": 24,
+          "mean": 0.022,
+          "changed": 0.0355
+        },
+        {
+          "slide": 25,
+          "mean": 0.0184,
+          "changed": 0.0295
+        },
+        {
+          "slide": 26,
+          "mean": 0.0217,
+          "changed": 0.0352
+        },
+        {
+          "slide": 27,
+          "mean": 0.0315,
+          "changed": 0.0527
+        },
+        {
+          "slide": 28,
+          "mean": 0.0512,
+          "changed": 0.0834
+        },
+        {
+          "slide": 29,
+          "mean": 0.0345,
+          "changed": 0.0524
+        },
+        {
+          "slide": 30,
+          "mean": 0.0074,
+          "changed": 0.0101
+        },
+        {
+          "slide": 31,
+          "mean": 0.018,
+          "changed": 0.0265
+        },
+        {
+          "slide": 32,
+          "mean": 0.0152,
+          "changed": 0.0233
+        },
+        {
+          "slide": 33,
+          "mean": 0.0107,
+          "changed": 0.0163
+        },
+        {
+          "slide": 34,
+          "mean": 0.0105,
+          "changed": 0.0159
+        },
+        {
+          "slide": 35,
+          "mean": 0.0137,
+          "changed": 0.0194
+        },
+        {
+          "slide": 36,
+          "mean": 0.01,
+          "changed": 0.015
+        },
+        {
+          "slide": 37,
+          "mean": 0.027,
+          "changed": 0.0421
+        },
+        {
+          "slide": 38,
+          "mean": 0.0339,
+          "changed": 0.0527
+        },
+        {
+          "slide": 39,
+          "mean": 0.0211,
+          "changed": 0.0342
+        },
+        {
+          "slide": 40,
+          "mean": 0.0344,
+          "changed": 0.054
+        },
+        {
+          "slide": 41,
+          "mean": 0.0351,
+          "changed": 0.0549
+        },
+        {
+          "slide": 42,
+          "mean": 0.0483,
+          "changed": 0.0734
+        },
+        {
+          "slide": 43,
+          "mean": 0.0275,
+          "changed": 0.043
+        },
+        {
+          "slide": 44,
+          "mean": 0.0199,
+          "changed": 0.0306
+        },
+        {
+          "slide": 45,
+          "mean": 0.0151,
+          "changed": 0.025
+        },
+        {
+          "slide": 46,
+          "mean": 0.021,
+          "changed": 0.0337
+        },
+        {
+          "slide": 47,
+          "mean": 0.029,
+          "changed": 0.0436
+        },
+        {
+          "slide": 48,
+          "mean": 0.0185,
+          "changed": 0.0303
+        },
+        {
+          "slide": 49,
+          "mean": 0.0425,
+          "changed": 0.0662
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 49,
+        "shapes": 0,
+        "arrangements": 6,
+        "layouts": [
+          "cover",
+          "section",
+          "agenda",
+          "agenda-split",
+          "statement",
+          "closing",
+          "text",
+          "list",
+          "quote",
+          "two-column",
+          "three-column",
+          "pillars",
+          "comparison",
+          "process",
+          "timeline",
+          "faq",
+          "metrics",
+          "scorecard",
+          "image",
+          "image-beside",
+          "gallery",
+          "chart",
+          "chart-beside",
+          "table",
+          "table-beside",
+          "code",
+          "hero",
+          "dashboard",
+          "team",
+          "logos",
+          "pyramid",
+          "matrix",
+          "cycle",
+          "chevrons",
+          "flow",
+          "vertical-flow"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": [
+        {
+          "slide": 31,
+          "layout": "Basic Pyramid",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/pyramid1",
+          "nodes": 4
+        },
+        {
+          "slide": 33,
+          "layout": "Basic Cycle",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/cycle2",
+          "nodes": 4
+        },
+        {
+          "slide": 34,
+          "layout": "Basic Chevron Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/chevron1",
+          "nodes": 4
+        },
+        {
+          "slide": 35,
+          "layout": "Basic Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/process1",
+          "nodes": 3
+        },
+        {
+          "slide": 36,
+          "layout": "Vertical Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/process2",
+          "nodes": 3
+        }
+      ]
+    },
+    "layout-sampler~native-body": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0249,
+          "changed": 0.0327
+        },
+        {
+          "slide": 2,
+          "mean": 0.0113,
+          "changed": 0.0171
+        },
+        {
+          "slide": 3,
+          "mean": 0.0127,
+          "changed": 0.0206
+        },
+        {
+          "slide": 4,
+          "mean": 0.0133,
+          "changed": 0.0208
+        },
+        {
+          "slide": 5,
+          "mean": 0.02,
+          "changed": 0.0318
+        },
+        {
+          "slide": 6,
+          "mean": 0.0242,
+          "changed": 0.034
+        },
+        {
+          "slide": 7,
+          "mean": 0.0372,
+          "changed": 0.0583
+        },
+        {
+          "slide": 8,
+          "mean": 0.0267,
+          "changed": 0.0422
+        },
+        {
+          "slide": 9,
+          "mean": 0.0231,
+          "changed": 0.0352
+        },
+        {
+          "slide": 10,
+          "mean": 0.0288,
+          "changed": 0.0439
+        },
+        {
+          "slide": 11,
+          "mean": 0.0434,
+          "changed": 0.0666
+        },
+        {
+          "slide": 12,
+          "mean": 0.0348,
+          "changed": 0.0523
+        },
+        {
+          "slide": 13,
+          "mean": 0.0398,
+          "changed": 0.0632
+        },
+        {
+          "slide": 14,
+          "mean": 0.0276,
+          "changed": 0.0445
+        },
+        {
+          "slide": 15,
+          "mean": 0.0231,
+          "changed": 0.0367
+        },
+        {
+          "slide": 16,
+          "mean": 0.0282,
+          "changed": 0.0444
+        },
+        {
+          "slide": 17,
+          "mean": 0.0284,
+          "changed": 0.0482
+        },
+        {
+          "slide": 18,
+          "mean": 0.0196,
+          "changed": 0.0302
+        },
+        {
+          "slide": 19,
+          "mean": 0.008,
+          "changed": 0.0108
+        },
+        {
+          "slide": 20,
+          "mean": 0.0148,
+          "changed": 0.024
+        },
+        {
+          "slide": 21,
+          "mean": 0.0109,
+          "changed": 0.0129
+        },
+        {
+          "slide": 22,
+          "mean": 0.0436,
+          "changed": 0.0687
+        },
+        {
+          "slide": 23,
+          "mean": 0.0405,
+          "changed": 0.0642
+        },
+        {
+          "slide": 24,
+          "mean": 0.0232,
+          "changed": 0.0372
+        },
+        {
+          "slide": 25,
+          "mean": 0.0171,
+          "changed": 0.0283
+        },
+        {
+          "slide": 26,
+          "mean": 0.0216,
+          "changed": 0.0352
+        },
+        {
+          "slide": 27,
+          "mean": 0.0305,
+          "changed": 0.0518
+        },
+        {
+          "slide": 28,
+          "mean": 0.0512,
+          "changed": 0.0834
+        },
+        {
+          "slide": 29,
+          "mean": 0.0345,
+          "changed": 0.0524
+        },
+        {
+          "slide": 30,
+          "mean": 0.0074,
+          "changed": 0.0101
+        },
+        {
+          "slide": 31,
+          "mean": 0.018,
+          "changed": 0.0265
+        },
+        {
+          "slide": 32,
+          "mean": 0.0192,
+          "changed": 0.0279
+        },
+        {
+          "slide": 33,
+          "mean": 0.0101,
+          "changed": 0.0157
+        },
+        {
+          "slide": 34,
+          "mean": 0.0105,
+          "changed": 0.0159
+        },
+        {
+          "slide": 35,
+          "mean": 0.0137,
+          "changed": 0.0194
+        },
+        {
+          "slide": 36,
+          "mean": 0.0147,
+          "changed": 0.0206
+        },
+        {
+          "slide": 37,
+          "mean": 0.0274,
+          "changed": 0.0427
+        },
+        {
+          "slide": 38,
+          "mean": 0.0339,
+          "changed": 0.0527
+        },
+        {
+          "slide": 39,
+          "mean": 0.0211,
+          "changed": 0.0342
+        },
+        {
+          "slide": 40,
+          "mean": 0.0344,
+          "changed": 0.054
+        },
+        {
+          "slide": 41,
+          "mean": 0.0372,
+          "changed": 0.0574
+        },
+        {
+          "slide": 42,
+          "mean": 0.0483,
+          "changed": 0.0734
+        },
+        {
+          "slide": 43,
+          "mean": 0.0258,
+          "changed": 0.0414
+        },
+        {
+          "slide": 44,
+          "mean": 0.0199,
+          "changed": 0.0306
+        },
+        {
+          "slide": 45,
+          "mean": 0.0148,
+          "changed": 0.0246
+        },
+        {
+          "slide": 46,
+          "mean": 0.0227,
+          "changed": 0.0354
+        },
+        {
+          "slide": 47,
+          "mean": 0.0299,
+          "changed": 0.0449
+        },
+        {
+          "slide": 48,
+          "mean": 0.0178,
+          "changed": 0.0295
+        },
+        {
+          "slide": 49,
+          "mean": 0.0425,
+          "changed": 0.0662
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 49,
+        "shapes": 0,
+        "arrangements": 6,
+        "layouts": [
+          "cover",
+          "section",
+          "agenda",
+          "agenda-split",
+          "statement",
+          "closing",
+          "text",
+          "list",
+          "quote",
+          "two-column",
+          "three-column",
+          "pillars",
+          "comparison",
+          "process",
+          "timeline",
+          "faq",
+          "metrics",
+          "scorecard",
+          "image",
+          "image-beside",
+          "gallery",
+          "chart",
+          "chart-beside",
+          "table",
+          "table-beside",
+          "code",
+          "hero",
+          "dashboard",
+          "team",
+          "logos",
+          "pyramid",
+          "matrix",
+          "cycle",
+          "chevrons",
+          "flow",
+          "vertical-flow"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [
+        {
+          "slide": 47,
+          "name": "OPF native body slides.46.blocks.4.text",
+          "text": "Share results with both teams.",
+          "sides": [
+            "bottom"
+          ],
+          "box": [
+            90.34,
+            420.51,
+            362.66,
+            34.61
+          ],
+          "bound": [
+            90.34,
+            420.51,
+            279.88,
+            67.19
+          ],
+          "font": "Aptos",
+          "size": 27.75
+        }
+      ],
+      "smartArt": [
+        {
+          "slide": 31,
+          "layout": "Basic Pyramid",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/pyramid1",
+          "nodes": 4
+        },
+        {
+          "slide": 33,
+          "layout": "Basic Cycle",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/cycle2",
+          "nodes": 4
+        },
+        {
+          "slide": 34,
+          "layout": "Basic Chevron Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/chevron1",
+          "nodes": 4
+        },
+        {
+          "slide": 35,
+          "layout": "Basic Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/process1",
+          "nodes": 3
+        },
+        {
+          "slide": 36,
+          "layout": "Vertical Process",
+          "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/process2",
+          "nodes": 3
+        }
+      ]
+    },
+    "chart-type-sampler": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.018,
+          "changed": 0.0275
+        },
+        {
+          "slide": 2,
+          "mean": 0.0236,
+          "changed": 0.0355
+        },
+        {
+          "slide": 3,
+          "mean": 0.0314,
+          "changed": 0.0525
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 3,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "table-and-code": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0131,
+          "changed": 0.0216
+        },
+        {
+          "slide": 2,
+          "mean": 0.0151,
+          "changed": 0.0256
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 2,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "columns": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.015,
+          "changed": 0.0225
+        },
+        {
+          "slide": 2,
+          "mean": 0.0178,
+          "changed": 0.0268
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 2,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "header-footer-logo-set": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0355,
+          "changed": 0.0563
+        },
+        {
+          "slide": 2,
+          "mean": 0.0189,
+          "changed": 0.0267
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 2,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "full-feature-tour": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0135,
+          "changed": 0.0199
+        },
+        {
+          "slide": 2,
+          "mean": 0.0202,
+          "changed": 0.0305
+        },
+        {
+          "slide": 3,
+          "mean": 0.0216,
+          "changed": 0.0321
+        },
+        {
+          "slide": 4,
+          "mean": 0.0309,
+          "changed": 0.0492
+        },
+        {
+          "slide": 5,
+          "mean": 0.0167,
+          "changed": 0.027
+        },
+        {
+          "slide": 6,
+          "mean": 0.0214,
+          "changed": 0.0339
+        },
+        {
+          "slide": 7,
+          "mean": 0.0124,
+          "changed": 0.0211
+        },
+        {
+          "slide": 8,
+          "mean": 0.0162,
+          "changed": 0.0273
+        },
+        {
+          "slide": 9,
+          "mean": 0.0067,
+          "changed": 0.0042
+        },
+        {
+          "slide": 10,
+          "hidden": true
+        },
+        {
+          "slide": 11,
+          "missing": true
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 11,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [
+          "cover",
+          "text",
+          "chart-beside",
+          "list"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "data-story-academy": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0379,
+          "changed": 0.0558
+        },
+        {
+          "slide": 2,
+          "mean": 0.0287,
+          "changed": 0.0478
+        },
+        {
+          "slide": 3,
+          "mean": 0.0412,
+          "changed": 0.0726
+        },
+        {
+          "slide": 4,
+          "mean": 0.0294,
+          "changed": 0.0545
+        },
+        {
+          "slide": 5,
+          "mean": 0.0368,
+          "changed": 0.0589
+        },
+        {
+          "slide": 6,
+          "mean": 0.0299,
+          "changed": 0.0509
+        },
+        {
+          "slide": 7,
+          "mean": 0.0269,
+          "changed": 0.0475
+        },
+        {
+          "slide": 8,
+          "mean": 0.0362,
+          "changed": 0.0679
+        },
+        {
+          "slide": 9,
+          "mean": 0.0186,
+          "changed": 0.0335
+        },
+        {
+          "slide": 10,
+          "mean": 0.0379,
+          "changed": 0.072
+        },
+        {
+          "slide": 11,
+          "mean": 0.0304,
+          "changed": 0.05
+        },
+        {
+          "slide": 12,
+          "mean": 0.0338,
+          "changed": 0.055
+        },
+        {
+          "slide": 13,
+          "mean": 0.0483,
+          "changed": 0.082
+        },
+        {
+          "slide": 14,
+          "mean": 0.023,
+          "changed": 0.0415
+        },
+        {
+          "slide": 15,
+          "mean": 0.0201,
+          "changed": 0.037
+        },
+        {
+          "slide": 16,
+          "mean": 0.0248,
+          "changed": 0.0372
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 16,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    },
+    "compliance-readiness-review": {
+      "visual": [
+        {
+          "slide": 1,
+          "mean": 0.0225,
+          "changed": 0.0326
+        },
+        {
+          "slide": 2,
+          "mean": 0.0336,
+          "changed": 0.0613
+        },
+        {
+          "slide": 3,
+          "mean": 0.0087,
+          "changed": 0.0125
+        },
+        {
+          "slide": 4,
+          "mean": 0.0209,
+          "changed": 0.0334
+        },
+        {
+          "slide": 5,
+          "mean": 0.0259,
+          "changed": 0.0423
+        },
+        {
+          "slide": 6,
+          "mean": 0.031,
+          "changed": 0.054
+        },
+        {
+          "slide": 7,
+          "mean": 0.0292,
+          "changed": 0.045
+        },
+        {
+          "slide": 8,
+          "mean": 0.0047,
+          "changed": 0.0053
+        },
+        {
+          "slide": 9,
+          "hidden": true
+        },
+        {
+          "slide": 10,
+          "missing": true
+        }
+      ],
+      "roundtrip": {
+        "ok": true,
+        "slides": 10,
+        "shapes": 0,
+        "arrangements": 0,
+        "layouts": [
+          "cover",
+          "text",
+          "chart",
+          "table-beside",
+          "timeline",
+          "dashboard",
+          "image",
+          "code",
+          "list"
+        ],
+        "diagrams": 0,
+        "overlays": 0
+      },
+      "overflow": [],
+      "smartArt": []
+    }
+  }
+}

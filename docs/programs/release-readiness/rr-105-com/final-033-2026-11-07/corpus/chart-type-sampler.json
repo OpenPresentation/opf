@@ -1,0 +1,353 @@
+﻿{
+    "deck":  "chart-type-sampler",
+    "variant":  "default",
+    "name":  "chart-type-sampler",
+    "sha256":  "06cb04959447e6c437285cc09f96f408b5aea2a6e37c8956106db2ded6d903e0",
+    "opened":  true,
+    "previewSlides":  3,
+    "openSeconds":  0.3,
+    "slideCount":  3,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Distribution And Outliers",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     433.77,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        426.03
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      279.2,
+                                                      209.4
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  121,
+                                                        "series":  1,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF chart 2",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      340.4,
+                                                      110.61,
+                                                      279.2,
+                                                      209.4
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  118,
+                                                        "series":  1,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF chart 3",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      637.6,
+                                                      110.61,
+                                                      279.2,
+                                                      209.4
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  -4169,
+                                                        "series":  1,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Composition And Flow",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     397.11,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        389.36
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 4",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      199,
+                                                      279.2,
+                                                      209.4
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  119,
+                                                        "series":  1,
+                                                        "title":  "Value"
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF chart 5",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      340.4,
+                                                      199,
+                                                      279.2,
+                                                      209.4
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  123,
+                                                        "series":  1,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF chart 6",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      637.6,
+                                                      199,
+                                                      279.2,
+                                                      209.4
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  117,
+                                                        "series":  1,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  3,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.2.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Revenue And Margin",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     357.45,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        349.71
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 7",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      873.6,
+                                                      386.19
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  -4111,
+                                                        "series":  2,
+                                                        "title":  "Revenue ($M) by quarter"
+                                                    }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  258,
+                                        "position":  3,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  258,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  3,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  1.3
+}

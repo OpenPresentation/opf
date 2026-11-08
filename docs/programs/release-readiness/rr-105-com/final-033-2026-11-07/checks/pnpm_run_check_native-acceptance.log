@@ -1,0 +1,122 @@
+
+> openpresentation-workspace@ check:native-acceptance C:\opf-work\release-033-final
+> node --test scripts/native-acceptance/*.test.mjs
+
+✖ source-candidate fallback references retain both published histories and exact theme-only review (3.3427ms)
+✔ whole-archive reference guard rejects any byte drift and unknown references (3.4632ms)
+✔ exact semantic edit passes without native or visual-fit acceptance (1.6495ms)
+✔ source, native/current words, style receipts, lifecycle and unrelated content mutations fail (4.7304ms)
+✔ independent native XML proves exact target words and literal run style; mutations fail (12.8305ms)
+✔ table comparator verifies native color observations, archive hashes and 54 slide imports (180.9284ms)
+✔ capture flags preserve historical absence and fail closed on mismatch/nonboolean (2.0528ms)
+✔ explicit uniform face/size and verified absent false styles retain portrait units (15.1151ms)
+✔ missing explicit styles, theme faces and mixed runs are unsupported (11.7676ms)
+✔ paragraph, list, presentation, master and layout inherited true styles are unsupported (9.8679ms)
+✔ uniform native descriptors compare all three phases without fidelity acceptance (2.2343ms)
+✔ name/style and over .02pt size mutations remain findings (12.9388ms)
+✔ missing/mixed descriptors, duplicate names, unrequested capture and edits are unsupported (12.8894ms)
+✔ title layout/master aliases and ambiguous or missing correspondence are unsupported (9.7643ms)
+✔ theme object defaults are verified empty or rejected as unsupported (7.4115ms)
+✔ named text compares point geometry, stable words and unavailable fidelity separately (1.9328ms)
+✔ geometry beyond unchanged .02pt gate is a finding, never native acceptance (0.4978ms)
+✔ text edits use exact supported action and reopening preserves edited words (0.4049ms)
+✔ missing, duplicate, nonfinite and unsuccessful observations fail closed (1.6326ms)
+✔ unsupported structural/style actions and unknown edit targets are not silently compared (0.6136ms)
+✔ PPTX named text uses actual EMU units and ordered rich runs/fields/paragraphs (7.1844ms)
+✔ PPTX missing transform, duplicate names, groups, rotations and slide mismatch fail closed (7.6087ms)
+✔ complete comparison binds sealed inputs, installed graph, worker snapshots and lifecycle (309.0059ms)
+✔ only source-named decorative shapes may expose additional empty native text frames (2.2487ms)
+✔ PPTX empty-frame identities come only from native shapes without txBody (3.875ms)
+✔ font route selection is opt-in, bounded and canonical without changing default CLI (2.4333ms)
+✖ five schema-valid route fixtures preserve corpus text, explicit upright styles and unresolved native scope (3.877ms)
+✖ measurement rows keep point sizes and upright weights through shared rich-text fitting (86.6745ms)
+✖ selected generation seals all files, shares measured handle and refuses reused outputs or mismatched pins (6.6523ms)
+✔ installed renderer font manifest pins every transferred face and license (137.3181ms)
+✔ tracked source retains 28 primary fixtures, all nine chart modes, measured features and reviewed actions (13.0679ms)
+✔ generation writes complete fresh receipts and never overwrites an attempt (268.2606ms)
+✔ furniture-layouts exports inherited carriers on distinct tagged layout variants (807.629ms)
+✔ runtime identity covers nested bytes and rejects symlink substitution (7.532ms)
+✔ prepare requires explicit reproducible inputs and rejects ambiguous CLI options (1.8086ms)
+✔ qualification: every deck exists and parses, ids are unique (9.3251ms)
+✔ qualification: every feature names a deck, a variant and checks the manifest defines (0.4973ms)
+✔ qualification: build arguments and file names (1.2976ms)
+✔ qualification: the grader reads a probed slide (0.9598ms)
+✔ Windows PowerShell child environment removes inherited module paths without changing its parent (1.351ms)
+✔ Windows runner parses and exercises pure refusal/identity controls without Office (2786.2912ms)
+✔ font registration is current-user/session-visible and preserves an ownership journal (1.0644ms)
+✔ Windows font controls validate sealed inputs and preserve unrelated state without installing fonts (1929.1561ms)
+✔ fresh Windows font probe enumerates well-formed families without registration (401.271ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 40
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3063.5946
+
+✖ failing tests:
+
+test at scripts\native-acceptance\chart-modes.test.mjs:7:1
+✖ source-candidate fallback references retain both published histories and exact theme-only review (3.3427ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\rr-68-native-chart-master-name-2026-10-15\comparison.json'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/native-acceptance/chart-modes.test.mjs:9:27)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-68-native-chart-master-name-2026-10-15\\comparison.json'
+  }
+
+test at scripts\native-acceptance\font-routes.test.mjs:30:1
+✖ five schema-valid route fixtures preserve corpus text, explicit upright styles and unresolved native scope (3.877ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\script-corpora-20261001\script-corpora.json'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async Promise.all (index 1)
+      at async loadFontRouteSource (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.mjs:22:37)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.test.mjs:31:15)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\script-corpora-20261001\\script-corpora.json'
+  }
+
+test at scripts\native-acceptance\font-routes.test.mjs:61:1
+✖ measurement rows keep point sizes and upright weights through shared rich-text fitting (86.6745ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\script-corpora-20261001\script-corpora.json'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async Promise.all (index 1)
+      at async loadFontRouteSource (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.mjs:22:37)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.test.mjs:65:15)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\script-corpora-20261001\\script-corpora.json'
+  }
+
+test at scripts\native-acceptance\font-routes.test.mjs:94:1
+✖ selected generation seals all files, shares measured handle and refuses reused outputs or mismatched pins (6.6523ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\script-corpora-20261001\script-corpora.json'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async Promise.all (index 1)
+      at async loadFontRouteSource (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.mjs:22:37)
+      at async generatePrimaryFixtures (file:///C:/opf-work/release-033-final/scripts/native-acceptance/generate.mjs:56:31)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.test.mjs:99:16)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\script-corpora-20261001\\script-corpora.json'
+  }
+ ELIFECYCLE  Command failed with exit code 1.

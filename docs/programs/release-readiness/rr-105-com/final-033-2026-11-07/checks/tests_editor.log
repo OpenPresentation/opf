@@ -1,0 +1,86 @@
+
+> @openpresentation/opf-editor@0.32.1 test:contract C:\opf-work\release-033-final\packages\editor
+> pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract
+
+
+> @openpresentation/opf-editor@0.32.1 build:deps C:\opf-work\release-033-final\packages\editor
+> pnpm --filter "@openpresentation/opf-editor^..." --fail-if-no-match run build
+
+Scope: 4 of 9 workspace projects
+../gallery build$ node scripts/build.mjs
+../gallery build: Built @openpresentation/gallery: 222 content records, 36 layout previews.
+../gallery build: Done
+../javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+../javascript build: reuse-build: javascript was built earlier in this CI job (OPF_REUSE_BUILD); reusing dist/
+../javascript build: Done
+../render build$ node scripts/build.mjs
+../render build: Done
+../pptx build$ node scripts/build.mjs
+../pptx build: Vendored upstream distribution and license match recorded hashes.
+../pptx build: Done
+
+> @openpresentation/opf-editor@0.32.1 build C:\opf-work\release-033-final\packages\editor
+> node scripts/build.mjs
+
+[1/144] node test/accepted-text.mjs
+Accepted text editor: 12 wide/portrait/alignment/card layouts match rendering across edit, undo/redo and explicit pagination.
+[2/144] node test/agent-handoff.mjs
+{"passed":true,"targets":["pptx","pdf","svg"]}
+[3/144] node test/annotations.mjs
+Annotations passed: 14 caption, reference, citation and footnote checks.
+[4/144] node test/assets.mjs
+Image uploads: 5 types by their bytes, size cap and type/content/script refusals, one undo step for the organization logo (one image for every shape, and each shape for both, light and dark backgrounds), watermark, slide image, background and zone image, asset ids and alt text, and the onAddAsset host hook.
+[5/144] node test/background-options.mjs
+Backgrounds: 5 types with scheme-slot colors, gradient stop validation, 54 patterns round-tripped through PPTX, scope, removal, one undo step each.
+[6/144] node test/block-convert.mjs
+Block conversion: 9 source kinds, 9 fixtures, text/list/quote/metric/code/timeline/chart/table pairs, loss reports, refusals, one undo step each, preview refresh.
+[7/144] node test/block-duplicate-ids.mjs
+Block duplication: root/nested/reserved IDs, id-less content and exact undo/redo.
+[8/144] node test/blocks.mjs
+Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.
+Block creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo.
+[9/144] node test/builtin-variables.mjs
+Editor built-in variables passed: listing (deck and slide scope), token insertion, header/footer variables and warnings.
+[10/144] node test/canvas-fields.mjs
+Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.
+[11/144] node test/catalog-optional-design.mjs
+Optional design catalog transactions and all three binding error paths passed.
+[12/144] node test/catalogs.mjs
+catalogs ok: one merged list, references from catalogRecords, embed on save and copy, copySlides on paste, approved catalog updates, reference findings
+catalogs ok: not-in-source records move to custom with their references
+catalogs ok: editing a catalog record forks it into custom (one undo step, references follow, no catalog updates)
+[13/144] node test/chart-alt.mjs
+chart alt: editor field, undo, review fix, find and replace
+[14/144] node test/chart-colors.mjs
+chart colors ok
+[15/144] node test/chart-highlight.mjs
+Chart highlight (editor): series and categories edit as one undoable patch, follow core's support table and the chart's own names, redraw in the preview and survive the PPTX round trip.
+[16/144] node test/chart-options.mjs
+Chart options (editor): axis titles, legend position and data labels edit as one undoable patch, follow core's support table, redraw in the preview and survive the PPTX round trip.
+[17/144] node test/chart-table-data.mjs
+Chart and table data (editor): DataColumn headers, shared datasets through fields, column number formats, chart mapping and import as a dataset, each one undoable patch; documents without the new fields behave as before.
+[18/144] node test/chrome-guide.mjs
+chrome guide checks passed: 22 blocks equal their example regions, 8 examples shown, links and sections present
+[19/144] node test/codemirror-guard.mjs
+node:fs:1938
+  binding.symlink(
+          ^
+
+Error: EPERM: operation not permitted, symlink 'C:\opf-work\release-033-final\node_modules\.pnpm\@codemirror+view@6.43.15\node_modules\@codemirror\state' -> 'C:\Users\micha\AppData\Local\Temp\opf-cm-copy-kxAB8A\node_modules\@codemirror\state'
+    at symlinkSync (node:fs:1938:11)
+    at file:///C:/opf-work/release-033-final/packages/editor/test/codemirror-guard.mjs:40:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\opf-work\\release-033-final\\node_modules\\.pnpm\\@codemirror+view@6.43.15\\node_modules\\@codemirror\\state',
+  dest: 'C:\\Users\\micha\\AppData\\Local\\Temp\\opf-cm-copy-kxAB8A\\node_modules\\@codemirror\\state'
+}
+
+Node.js v24.20.0
+run-tests: test/codemirror-guard.mjs failed (exit 1); 125 test(s) not run
+C:\opf-work\release-033-final\packages\editor:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf-editor@0.32.1 test:contract: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract`
+Exit status 1

@@ -1,0 +1,44 @@
+
+> openpresentation-workspace@ check:browser-safe C:\opf-work\release-033-final
+> node --test scripts/check-browser-safe.test.mjs && node scripts/check-browser-safe.mjs
+
+✔ a browser entry that imports a builtin, a peer or an engine module fails, and a clean one passes (0.9997ms)
+✔ engine modules are src/node/, the Node build src/index.ts and src/node-engine.ts only (0.1141ms)
+✔ a root bundle must reach the build its target names, and a browser one no builtin or peer (0.433ms)
+✔ a root bundle must load the schema engine its conditions name (CE-01) (0.1533ms)
+✖ #schema-engine resolves like a bundler resolves the package imports map (0.6466ms)
+✔ the tsup config names the two root builds and the CLI engine (0.7523ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 108.978
+
+✖ failing tests:
+
+test at scripts\check-browser-safe.test.mjs:52:1
+✖ #schema-engine resolves like a bundler resolves the package imports map (0.6466ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'C:\\opf-work\\release-033-final\\packages\\javascript\\src\\a.ts'
+  - 'src/a.ts'
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/check-browser-safe.test.mjs:56:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'C:\\opf-work\\release-033-final\\packages\\javascript\\src\\a.ts',
+    expected: 'src/a.ts',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+ ELIFECYCLE  Command failed with exit code 1.

@@ -1,0 +1,42 @@
+{
+  "manifestVersion": 1,
+  "revision": "fa65126161f0247dd85ffb263eec522372d1f501",
+  "opfVersion": "0.32.1",
+  "node": "v24.20.0",
+  "builtAt": "2026-11-08T03:29:05.559Z",
+  "decks": [
+    {
+      "id": "layout-sampler",
+      "source": "C:/opf-work/release-033-artifacts/pyramid-check/sources/layout-sampler.opf.json",
+      "selectedSourceSlides": "31",
+      "sourceSha256": "da92f989e1fe2813d13cdfd66058e28a29a5cd3ad05293094a6b762914fcd135",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/layout-sampler.pptx",
+          "ok": true,
+          "sha256": "5d6dc1e2c12787303e045d0dabf25af6998623cfbc2a1e305598e0786d3f1ebf",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

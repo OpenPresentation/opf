@@ -1,0 +1,518 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\release-033-final
+> node scripts/check-changed.mjs
+
+check-changed: 184 changed files since d19c4bb61 (plus uncommitted and untracked)
+ok  build (9.4 s)
+FAILED  pnpm run check:browser-safe (0.4 s)
+ok  biome (0.5 s)
+ok  pnpm run check:changes (0.7 s)
+ok  pnpm run check:catalog-free (2.5 s)
+ok  pnpm run check:diagram-doc-images (2.1 s)
+ok  pnpm run check:examples (46.3 s)
+ok  pnpm run check:font-hotlinks (7.0 s)
+FAILED  pnpm run check:gallery-tracker (0.5 s)
+FAILED  pnpm run check:native-acceptance (3.4 s)
+ok  pnpm run check:examples-convert (57.5 s)
+ok  pnpm run check:release-report (0.4 s)
+ok  pnpm run check:schema-docs (0.4 s)
+ok  pnpm run check:registry-golden (2.7 s)
+ok  pnpm run check:schema-strict (1.0 s)
+ok  pnpm run check:schema-examples (3.6 s)
+ok  pnpm run check:skill-glossary (0.4 s)
+ok  pnpm run check:spec (0.6 s)
+ok  pnpm run check:skill-commands (20.2 s)
+FAILED  pnpm run check:text (0.5 s)
+ok  pnpm run check:stability (67.3 s)
+ok  typecheck (23.8 s)
+FAILED  tests opf (74.6 s)
+FAILED  tests render (497.7 s)
+FAILED  tests pptx (48.5 s)
+FAILED  tests editor (19.0 s)
+
+--- pnpm run check:browser-safe failed (exit 1); last 44 lines of artifacts\check-changed\pnpm_run_check_browser-safe.log:
+
+> openpresentation-workspace@ check:browser-safe C:\opf-work\release-033-final
+> node --test scripts/check-browser-safe.test.mjs && node scripts/check-browser-safe.mjs
+
+✔ a browser entry that imports a builtin, a peer or an engine module fails, and a clean one passes (0.9997ms)
+✔ engine modules are src/node/, the Node build src/index.ts and src/node-engine.ts only (0.1141ms)
+✔ a root bundle must reach the build its target names, and a browser one no builtin or peer (0.433ms)
+✔ a root bundle must load the schema engine its conditions name (CE-01) (0.1533ms)
+✖ #schema-engine resolves like a bundler resolves the package imports map (0.6466ms)
+✔ the tsup config names the two root builds and the CLI engine (0.7523ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 108.978
+
+✖ failing tests:
+
+test at scripts\check-browser-safe.test.mjs:52:1
+✖ #schema-engine resolves like a bundler resolves the package imports map (0.6466ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'C:\\opf-work\\release-033-final\\packages\\javascript\\src\\a.ts'
+  - 'src/a.ts'
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/check-browser-safe.test.mjs:56:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'C:\\opf-work\\release-033-final\\packages\\javascript\\src\\a.ts',
+    expected: 'src/a.ts',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- pnpm run check:gallery-tracker failed (exit 1); last 60 lines of artifacts\check-changed\pnpm_run_check_gallery-tracker.log:
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-20-pareto-series-scope\\limitations.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:291:2
+✖ offline snapshot rejects wrong integrity, version and gitHead (19.0096ms)
+  Error: ENOENT: no such file or directory, lstat 'C:\opf-work\release-033-final\docs\evidence\rr-42-native-20261002\values.json'
+      at cpSyncFn (node:internal/fs/cp/cp-sync:56:13)
+      at cpSync (node:fs:3219:3)
+      at scratchCopy (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:43:5)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:293:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-42-native-20261002\\values.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:303:1
+✖ old passing and failing audit/native channels cannot certify any schema2 layout (0.3933ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\rr-20-pareto-series-scope\limitations.json'
+      at readFileSync (node:fs:484:20)
+      at readJson (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:75:45)
+      at buildTracker (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.mjs:292:49)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:304:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-20-pareto-series-scope\\limitations.json'
+  }
+
+test at scripts\build-gallery-tracker.test.mjs:326:1
+✖ slide-size fallback retains the general gap without requiring a dedicated preset result (18.1426ms)
+  Error: ENOENT: no such file or directory, lstat 'C:\opf-work\release-033-final\docs\evidence\rr-42-native-20261002\values.json'
+      at cpSyncFn (node:internal/fs/cp/cp-sync:56:13)
+      at cpSync (node:fs:3219:3)
+      at scratchCopy (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:43:5)
+      at TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/build-gallery-tracker.test.mjs:327:15)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-42-native-20261002\\values.json'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- pnpm run check:native-acceptance failed (exit 1); last 60 lines of artifacts\check-changed\pnpm_run_check_native-acceptance.log:
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/native-acceptance/chart-modes.test.mjs:9:27)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rr-68-native-chart-master-name-2026-10-15\\comparison.json'
+  }
+
+test at scripts\native-acceptance\font-routes.test.mjs:30:1
+✖ five schema-valid route fixtures preserve corpus text, explicit upright styles and unresolved native scope (3.877ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\script-corpora-20261001\script-corpora.json'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async Promise.all (index 1)
+      at async loadFontRouteSource (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.mjs:22:37)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.test.mjs:31:15)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\script-corpora-20261001\\script-corpora.json'
+  }
+
+test at scripts\native-acceptance\font-routes.test.mjs:61:1
+✖ measurement rows keep point sizes and upright weights through shared rich-text fitting (86.6745ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\script-corpora-20261001\script-corpora.json'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async Promise.all (index 1)
+      at async loadFontRouteSource (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.mjs:22:37)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.test.mjs:65:15)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\script-corpora-20261001\\script-corpora.json'
+  }
+
+test at scripts\native-acceptance\font-routes.test.mjs:94:1
+✖ selected generation seals all files, shares measured handle and refuses reused outputs or mismatched pins (6.6523ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\script-corpora-20261001\script-corpora.json'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async Promise.all (index 1)
+      at async loadFontRouteSource (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.mjs:22:37)
+      at async generatePrimaryFixtures (file:///C:/opf-work/release-033-final/scripts/native-acceptance/generate.mjs:56:31)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/native-acceptance/font-routes.test.mjs:99:16)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\script-corpora-20261001\\script-corpora.json'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- pnpm run check:text failed (exit 1); last 35 lines of artifacts\check-changed\pnpm_run_check_text.log:
+
+> openpresentation-workspace@ check:text C:\opf-work\release-033-final
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (1.6025ms)
+✖ real compressed evidence is scanned as its text, preserving input bytes (2.1279ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (1.8278ms)
+✔ existing recognized binary evidence remains distinct from text (0.1436ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.5299ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.3212ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 118.4
+
+✖ failing tests:
+
+test at scripts\check-text-integrity.test.mjs:17:1
+✖ real compressed evidence is scanned as its text, preserving input bytes (2.1279ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\rich-input-and-platform-ci-20260915\painting-Linux.json.gz'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/check-text-integrity.test.mjs:18:17)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rich-input-and-platform-ci-20260915\\painting-Linux.json.gz'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- tests opf failed (exit 1); last 60 lines of artifacts\check-changed\tests_opf.log:
+  ✔ keys, tags and numbers are still checked (0.8279ms)
+  ✔ an unresolved alias is an error (0.3752ms)
+✔ aliases: true (42.5431ms)
+▶ OPF findings are located in the YAML
+  ✔ a schema error points at the value that is wrong (3.0608ms)
+  ✔ a finding with no node of its own falls back to the nearest ancestor (1.4822ms)
+  ✔ findings are in source order and use the shared Finding shape (1.992ms)
+  ✔ validate options pick the rules, and every finding of the full run is located (48.0621ms)
+✔ OPF findings are located in the YAML (54.8606ms)
+▶ OPF to YAML
+  ✔ writes canonical schema key order, two-space block style and no folding (1.3595ms)
+  ✔ strings that would read as another type are quoted, and read back as the same text (6.8979ms)
+  ✔ keys that look like booleans are quoted too, and numbers stay numbers (1.7266ms)
+  ✔ an invalid deck throws OPFYamlError with code invalid-document (0.9897ms)
+  ✔ a value YAML cannot carry exactly is refused, never written wrongly (1.3369ms)
+  ✔ schemaComment prepends the editor modeline with the schema URL (2.2967ms)
+  ✔ scanYamlComments counts the comments a rewrite would lose (0.4475ms)
+  ✔ a read-write-read cycle is stable for hand-written YAML with comments, quotes and block scalars (3.3335ms)
+✔ OPF to YAML (18.8754ms)
+▶ the validate report of a YAML deck, and parseYamlData
+  ✔ fromYaml reports like validate does for JSON text, located in the YAML (1.4583ms)
+  ✔ parseYamlData reads any JSON-compatible root in the same dialect (0.5451ms)
+✔ the validate report of a YAML deck, and parseYamlData (2.1788ms)
+▶ the guide
+  ✔ the example deck is valid, canonical and reads back as shown (3.4254ms)
+  ✔ the alias example expands as the guide says (1.4569ms)
+✔ the guide (5.0206ms)
+▶ no built-in records
+  ✔ a gallery id resolves only when the host registers the default catalog (5.3464ms)
+  ✔ validate reports what no catalog defines, and nothing once the records are embedded (399.3473ms)
+✔ no built-in records (405.9898ms)
+▶ engine defaults
+  ✔ the engine defaults are spec/reference/engine-defaults.json, compiled into code (0.255ms)
+  ✔ they are the drawing fields of the gallery records minimal, cool-horizon and aptos (0.2274ms)
+  ✔ a deck that names nothing draws the same with and without the default catalog (40.8628ms)
+✔ engine defaults (41.6541ms)
+▶ the cover rule is a record rule
+  ✔ a template with only a title region centres a slide with no body, whatever its id (15.4292ms)
+  ✔ empty regions collapse while populated regions retain a content heading (10.9157ms)
+✔ the cover rule is a record rule (26.7799ms)
+▶ every default-catalog layout composed bare
+  ✔ validates and composes with a minimal document and no example additions (88.4454ms)
+✔ every default-catalog layout composed bare (88.8011ms)
+ℹ tests 3899
+ℹ suites 383
+ℹ pass 3898
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 73012.574
+
+✖ failing tests:
+
+test at test\script-width-estimates.test.mjs:1:1
+✖ test\script-width-estimates.test.mjs (336.3384ms)
+  'test failed'
+C:\opf-work\release-033-final\packages\javascript:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf@0.32.1 test: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs`
+Exit status 1
+
+--- tests render failed (exit 1); last 60 lines of artifacts\check-changed\tests_render.log:
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2063.8822
+[61/163] node test/icons.mjs
+icons passed: 9 checks (chips and glyphs at core's geometry and colors, a multicolor picture, nothing without icons).
+[62/163] node test/image-blocks.mjs
+image blocks: 24 render checks passed
+[63/163] node test/image-placeholders.mjs
+Image placeholders passed: 8 source-preserving theme, bounded-label/icon, accessible-description, alias override and resolver cases; opacity preserved and asset failures explicit.
+[64/163] node test/image-treatments.mjs
+image treatments: 15 treatments match their 0.14 frames and pixels
+[65/163] node test/item-alignment.mjs
+Item alignment passed: 18 preview anchors follow core item.alignment; 12 metric lines anchor at their alignment edge; traced content cards carry their item path.
+[66/163] node test/jpeg-orientation.mjs
+JPEG orientation passed: 24 raster/PDF and fit/crop cases across all eight orientations; independent Pillow pixels (max channel difference 2), original orientation-1 bytes and path-specific errors.
+[67/163] node test/latin-face-coverage.mjs
+Informational Latin-face coverage retains literal s, excludes mixed whitespace and reports real missing glyphs.
+[68/163] node test/layout-design-applied.mjs
+Layout design applied: 12 text fields at the layout, deck or slide alignment; contentBox, imageFit and listBullet follow the same merge.
+[69/163] node test/layout-template-goldens.mjs
+Template goldens passed: 624 slides, 36 templates (68.8 s).
+[70/163] node test/layout-templates.mjs
+Layout templates: 1265 region items, 614 cards, 95 bled pictures and 16 lists in columns drawn from core's geometry; 41 overflowing slides paginate into 182 pages with no text-overflow and 9192 region elements inside their region boxes.
+Gallery2 alignment: 108 registered layout/alignment cases preserve traced anchors.
+[71/163] node test/layout-variants.mjs
+layout variants: ok
+[72/163] node test/lazy-converters.mjs
+lazy converters: optional peers, converter-missing, font-package errors and the png/pdf subpaths pass
+[73/163] node test/lazy-faces.mjs
+{"test":"lazy-faces","decks":137,"facesCompared":969,"plannedFiles":741,"wholeFamilyFilesPerPolicy":1027}
+[74/163] node test/lazy-fonts.mjs
+{"test":"lazy-fonts","lazyFaces":94,"eagerFaces":33,"resolutionsCompared":558,"aptosDeckFiles":8,"aptosDeckBytes":6205868}
+[75/163] node test/lh-105-few-charts.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: 0 ticks
+    at file:///C:/opf-work/release-033-final/packages/render/test/lh-105-few-charts.mjs:29:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
+run-tests: test/lh-105-few-charts.mjs failed (exit 1); 88 test(s) not run
+C:\opf-work\release-033-final\packages\render:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf-render@0.32.1 test:contract: `pnpm run build:deps && pnpm run build && pnpm run check:fonts && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check`
+Exit status 1
+
+--- tests pptx failed (exit 1); last 60 lines of artifacts\check-changed\tests_pptx.log:
+✔ yVal/numLit: exponent overflow and nonzero underflow refuse the exact logical point (43.5637ms)
+✔ yVal/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (16.9307ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 58
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1857.1404
+[8/230] node test/chart-colors.mjs
+Native chart colors passed: 38 charts, no chart panel, axis/legend colors legible on the background and exact data reimport.
+[9/230] node test/chart-correctness.mjs
+Chart correctness (PPTX) passed: 7 checks; bar categories top to bottom, axis max within 1.25 x the data, waterfall total as a subtotal.
+[10/230] node test/chart-fallbacks.mjs
+pptx chart fallbacks ok
+[11/230] node test/chart-followups.mjs
+Chart follow-ups export passed: 14 checks (ring names, one plot height).
+[12/230] node test/chart-highlight.mjs
+Chart highlight passed: series and point fills, accent1 scheme colour, muted literal, schema order, label contrast, unsupported constructs, preview parity, provenance round trip.
+[13/230] node test/chart-layer.mjs
+Chart layer export passed: 37 checks (small charts, explicit options, emphasis parity, header row, legend option).
+[14/230] node test/chart-options.mjs
+Chart options: native c:title, c:legendPos and c:dLbls (and the chartex equivalents) in schema order, read back by fromPptx, unchanged without the fields, and in agreement with the preview.
+[15/230] node test/chart-palette-axis.mjs
+Chart palette and value axis passed: 15 checks (scheme-following series, theme colours, chart.colors, pinned slides, core value axis).
+[16/230] node test/chart-series-order.mjs
+Chart series schema order passed: 131 checks (every classic type in dml-chart.xsd sequence, the line, radar and scatter repairs, the stable rewrite, native import).
+[17/230] node test/chart-series-paint-import.mjs
+Chart-series solid paint import: current scheme/direct first/second series paths, no/empty/non-solid controls, unchanged data/design/highlight/provenance and unrelated slide. No native or pixel claim.
+[18/230] node test/chart-text-size.mjs
+Chart text size passed: 627 checks; axis, data label and legend text at the preview's size for 22 chart types on 8 slide and font-size settings, classic and chartex parts and the chartex style part.
+[19/230] node test/chart-types.mjs
+Chart types passed: 56 exports (19 classic chart types, rejected retired ids) with exact constructs and same-id reimport.
+[20/230] node test/chart-workbook-ranges.mjs
+Chart workbook ranges: 56 workbooks checked (PptxGenJS 10 families incl. bubble, every OPF chart type, anchored-table rule).
+[21/230] node test/chart-workbook-values.mjs
+Chart workbook values: 9 checks passed (8 OPF chart types and the engine's category, scatter and bubble workbooks keep 0; gaps are blank cells).
+[22/230] node test/chart-workbook.mjs
+Chart workbook checks passed: 37 bounded heading/preservation cases, Unicode/whitespace, rich shared strings, unsupported/external/corrupt metadata and deterministic actual export/reimport.
+[23/230] node test/chartex.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: histogram: value axis
+    at file:///C:/opf-work/release-033-final/packages/pptx/test/chartex.mjs:174:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '<cx:valScaling max="50" min="-20" majorUnit="20"/><cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:schemeClr val="tx1"><a:lumMod val="26167"/></a:schemeClr></a:solidFill></a:ln></cx:spPr></cx:majorGridlines><cx:tickLabels/><cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="1500"><a:solidFill><a:schemeClr val="tx1"><a:lumMod val="69598"/></a:schemeClr></a:solidFill><a:latin typeface="Aptos"/><a:ea typeface="Aptos"/><a:cs typeface="Aptos"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>',
+  expected: /^<cx:valScaling\/><cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
+run-tests: test/chartex.mjs failed (exit 1); 207 test(s) not run
+C:\opf-work\release-033-final\packages\pptx:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf-pptx@0.32.1 test:contract: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check`
+Exit status 1
+
+--- tests editor failed (exit 1); last 60 lines of artifacts\check-changed\tests_editor.log:
+[2/144] node test/agent-handoff.mjs
+{"passed":true,"targets":["pptx","pdf","svg"]}
+[3/144] node test/annotations.mjs
+Annotations passed: 14 caption, reference, citation and footnote checks.
+[4/144] node test/assets.mjs
+Image uploads: 5 types by their bytes, size cap and type/content/script refusals, one undo step for the organization logo (one image for every shape, and each shape for both, light and dark backgrounds), watermark, slide image, background and zone image, asset ids and alt text, and the onAddAsset host hook.
+[5/144] node test/background-options.mjs
+Backgrounds: 5 types with scheme-slot colors, gradient stop validation, 54 patterns round-tripped through PPTX, scope, removal, one undo step each.
+[6/144] node test/block-convert.mjs
+Block conversion: 9 source kinds, 9 fixtures, text/list/quote/metric/code/timeline/chart/table pairs, loss reports, refusals, one undo step each, preview refresh.
+[7/144] node test/block-duplicate-ids.mjs
+Block duplication: root/nested/reserved IDs, id-less content and exact undo/redo.
+[8/144] node test/blocks.mjs
+Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.
+Block creation passed: presets, implicit normalization, groups/regions, duplication, empty ancestor pruning, guards, metadata and undo.
+[9/144] node test/builtin-variables.mjs
+Editor built-in variables passed: listing (deck and slide scope), token insertion, header/footer variables and warnings.
+[10/144] node test/canvas-fields.mjs
+Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.
+[11/144] node test/catalog-optional-design.mjs
+Optional design catalog transactions and all three binding error paths passed.
+[12/144] node test/catalogs.mjs
+catalogs ok: one merged list, references from catalogRecords, embed on save and copy, copySlides on paste, approved catalog updates, reference findings
+catalogs ok: not-in-source records move to custom with their references
+catalogs ok: editing a catalog record forks it into custom (one undo step, references follow, no catalog updates)
+[13/144] node test/chart-alt.mjs
+chart alt: editor field, undo, review fix, find and replace
+[14/144] node test/chart-colors.mjs
+chart colors ok
+[15/144] node test/chart-highlight.mjs
+Chart highlight (editor): series and categories edit as one undoable patch, follow core's support table and the chart's own names, redraw in the preview and survive the PPTX round trip.
+[16/144] node test/chart-options.mjs
+Chart options (editor): axis titles, legend position and data labels edit as one undoable patch, follow core's support table, redraw in the preview and survive the PPTX round trip.
+[17/144] node test/chart-table-data.mjs
+Chart and table data (editor): DataColumn headers, shared datasets through fields, column number formats, chart mapping and import as a dataset, each one undoable patch; documents without the new fields behave as before.
+[18/144] node test/chrome-guide.mjs
+chrome guide checks passed: 22 blocks equal their example regions, 8 examples shown, links and sections present
+[19/144] node test/codemirror-guard.mjs
+node:fs:1938
+  binding.symlink(
+          ^
+
+Error: EPERM: operation not permitted, symlink 'C:\opf-work\release-033-final\node_modules\.pnpm\@codemirror+view@6.43.15\node_modules\@codemirror\state' -> 'C:\Users\micha\AppData\Local\Temp\opf-cm-copy-kxAB8A\node_modules\@codemirror\state'
+    at symlinkSync (node:fs:1938:11)
+    at file:///C:/opf-work/release-033-final/packages/editor/test/codemirror-guard.mjs:40:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'symlink',
+  path: 'C:\\opf-work\\release-033-final\\node_modules\\.pnpm\\@codemirror+view@6.43.15\\node_modules\\@codemirror\\state',
+  dest: 'C:\\Users\\micha\\AppData\\Local\\Temp\\opf-cm-copy-kxAB8A\\node_modules\\@codemirror\\state'
+}
+
+Node.js v24.20.0
+run-tests: test/codemirror-guard.mjs failed (exit 1); 125 test(s) not run
+C:\opf-work\release-033-final\packages\editor:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf-editor@0.32.1 test:contract: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract`
+Exit status 1
+
+step                               status     time
+build                              passed    9.4 s
+biome                              passed    0.5 s  110 files
+pnpm run check:browser-safe        FAILED    0.4 s
+pnpm run check:catalog-free        passed    2.5 s
+pnpm run check:changes             passed    0.7 s
+pnpm run check:diagram-doc-images  passed    2.1 s
+pnpm run check:examples            passed   46.3 s
+pnpm run check:examples-convert    passed   57.5 s
+pnpm run check:font-hotlinks       passed    7.0 s
+pnpm run check:gallery-tracker     FAILED    0.5 s
+pnpm run check:native-acceptance   FAILED    3.4 s
+pnpm run check:registry-golden     passed    2.7 s
+pnpm run check:release-report      passed    0.4 s
+pnpm run check:schema-docs         passed    0.4 s
+pnpm run check:schema-examples     passed    3.6 s
+pnpm run check:schema-strict       passed    1.0 s
+pnpm run check:skill-commands      passed   20.2 s
+pnpm run check:skill-glossary      passed    0.4 s
+
+check-changed: 8 of 26 steps failed: pnpm run check:browser-safe, pnpm run check:gallery-tracker, pnpm run check:native-acceptance, pnpm run check:text, tests opf, tests render, tests pptx, tests editor
+pnpm run check:spec                passed    0.6 s
+pnpm run check:stability           passed   67.3 s
+pnpm run check:text                FAILED    0.5 s
+typecheck                          passed   23.8 s
+tests opf                          FAILED   74.6 s
+tests render                       FAILED  497.7 s
+tests pptx                         FAILED   48.5 s
+tests editor                       FAILED   19.0 s
+total                                      806.4 s
+ ELIFECYCLE  Command failed with exit code 1.

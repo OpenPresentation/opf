@@ -1,0 +1,667 @@
+{
+  "manifestVersion": 1,
+  "revision": "2db20c01ef4d9b80db9797116dc83e41f65d1c68",
+  "opfVersion": "0.32.1",
+  "node": "v24.20.0",
+  "builtAt": "2026-11-08T03:20:04.872Z",
+  "decks": [
+    {
+      "id": "athletics-budget-review",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/athletics-budget-review.opf.json",
+      "selectedSourceSlides": "3",
+      "sourceSha256": "8a158286bb1c76a2ce70fdcb3514b3f0cc0f99c06ea6e21870e608beae5b9369",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/athletics-budget-review.pptx",
+          "ok": true,
+          "sha256": "8fb44da95fac8f512706fbb56c36c8f4feeb03b499489e2ba24352d3a0e76b36",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-colors",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/chart-colors.opf.json",
+      "selectedSourceSlides": "1",
+      "sourceSha256": "c38108c295afe832bf57a2f20f1207f41ae6b7afed9afed8f73fdf8039db7294",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/chart-colors.pptx",
+          "ok": true,
+          "sha256": "899bfdf69fc5e814d957208944548035923b29343661f6c49b2d18488ad10b65",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "color-variants",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/color-variants.opf.json",
+      "selectedSourceSlides": "2,4",
+      "sourceSha256": "6fe0078d755c718d2fce480bd0414d74f6c4bbdd7bf0029e32ba709f50505310",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/color-variants.pptx",
+          "ok": true,
+          "sha256": "6ae26370f87414c9b14924ad58c085d02b086b8e6545efd5937ee35405f03e29",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "full-feature-tour",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/full-feature-tour.opf.json",
+      "selectedSourceSlides": "4",
+      "sourceSha256": "c691c6e17fdbb6211dce9a2e33498b9c492237d4d06c541d95eb28bac87eaf40",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/full-feature-tour.pptx",
+          "ok": true,
+          "sha256": "1d8ca7e81c569c725bf024359c8863f0339e7085134bc2047f951af657ef1769",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "investor-relations-update",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/investor-relations-update.opf.json",
+      "selectedSourceSlides": "7",
+      "sourceSha256": "99a91dbf6469c17261bc7ec2bdbe507a9b445e459948293208688d368283abea",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/investor-relations-update.pptx",
+          "ok": true,
+          "sha256": "f5930d96838a705357d4750e14b30d8ad6a0a06c73f178683ef571b6ae9aad62",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "renewal-save-plan",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/renewal-save-plan.opf.json",
+      "selectedSourceSlides": "3",
+      "sourceSha256": "a2a6eb0f8f70b859495b8abcb4fad0cce283d884532eb9724f6b89c554069635",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/renewal-save-plan.pptx",
+          "ok": true,
+          "sha256": "faaaa2d363945376b0acaa72b786575c0d1446681647b0d5c7ec47ea96411915",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/chart",
+              "scope": "document",
+              "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alumni-giving-campaign",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/alumni-giving-campaign.opf.json",
+      "selectedSourceSlides": "3",
+      "sourceSha256": "9f49fcbcedc80c128b15be542c31eb4c132bd9de04ca91cfcd104b2cc90237a5",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/alumni-giving-campaign.pptx",
+          "ok": true,
+          "sha256": "b76c0f22c6e7ed5feed1eb9d574875273d36fbcc52a88b0e01c95d6fac4b814b",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/chart",
+              "scope": "document",
+              "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "research-findings-report",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/research-findings-report.opf.json",
+      "selectedSourceSlides": "3",
+      "sourceSha256": "99b31add7ce997765870f8dc2a4c82a8d22f38893631c386c7b21154c6820101",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/research-findings-report.pptx",
+          "ok": true,
+          "sha256": "45810e5f99511eb861b4d7fbcc26fbe0641587b4c3a923f4185a2c27a8d6b21e",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/chart",
+              "scope": "document",
+              "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "demand-generation-campaign-brief",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/demand-generation-campaign-brief.opf.json",
+      "selectedSourceSlides": "7",
+      "sourceSha256": "99c51e399af95f0ea600372b116b2ada580394fe03d34477d414faf7216f160a",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/demand-generation-campaign-brief.pptx",
+          "ok": true,
+          "sha256": "a8d9e0e4c3e81eaaad691555de8e9e0a802a8ed2434aac8b16b62ddad688e801",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/blocks/0/chart",
+              "scope": "document",
+              "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partner-ecosystem-launch-kit",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/partner-ecosystem-launch-kit.opf.json",
+      "selectedSourceSlides": "3",
+      "sourceSha256": "b1116078d847a7af5859c4549bc07cca86f28150857a7fef18954e4c4085227c",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/partner-ecosystem-launch-kit.pptx",
+          "ok": true,
+          "sha256": "bbb93f04d94b4d3263afae8340d7a0d50f9b7fe3e92c6a8002a7214f9ce64ae0",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/chart",
+              "scope": "document",
+              "message": "The 'pareto' chart is drawn as core's pareto-as-columns fallback: a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order, as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Lucida Sans, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Lucida Sans"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "visual-brand-system-sampler",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/visual-brand-system-sampler.opf.json",
+      "selectedSourceSlides": "3",
+      "sourceSha256": "b318175b68c6df065042cb4f3a19d9fbda22e18c20407da7f72169c3cd79acc9",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/visual-brand-system-sampler.pptx",
+          "ok": true,
+          "sha256": "3ca8f71ed652220a8c9fa2cc989e9c41ea8d3901e23fca149e294e0f0c1e0b6a",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/chart",
+              "scope": "document",
+              "message": "The 'pareto' chart is drawn as core's pareto-as-columns fallback: a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order, as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "curriculum-approval-brief",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/curriculum-approval-brief.opf.json",
+      "selectedSourceSlides": "7",
+      "sourceSha256": "c5d91c714e67f8f0fa071d319cd129bb5bad5f9556684240d580033390704737",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/curriculum-approval-brief.pptx",
+          "ok": true,
+          "sha256": "d5e1a0e8fd90974d2920d4dfd2b884af371f60d784a1b42ebd3be876ab0dc8e2",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/blocks/0/chart",
+              "scope": "document",
+              "message": "The 'pareto' chart is drawn as core's pareto-as-columns fallback: a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order, as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wildfire-evacuation-preparedness",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/wildfire-evacuation-preparedness.opf.json",
+      "selectedSourceSlides": "3",
+      "sourceSha256": "dd36a5635e4df1cc7f0f9577b3d09ce6d71b08f2be0f5c05ef5b3880c12c422d",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/wildfire-evacuation-preparedness.pptx",
+          "ok": true,
+          "sha256": "0b5d11b4c5c9174c717a637264e87ee77b5ab8e27ac8cf92f4a47bc7ff9e3e0f",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/chart",
+              "scope": "document",
+              "message": "The 'pareto' chart is drawn as core's pareto-as-columns fallback: a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order, as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "consulting-margin-recovery-plan",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/consulting-margin-recovery-plan.opf.json",
+      "selectedSourceSlides": "3",
+      "sourceSha256": "f59aa1230128a7f5d850f0a28d272fd312e5d88ed8a67dc87e79e6bc2a0cef80",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/consulting-margin-recovery-plan.pptx",
+          "ok": true,
+          "sha256": "148f94f6e4a5a5ef2cedcfbd7b580ac2024bfaea075783c313aa12b0d3dfe784",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/chart",
+              "scope": "document",
+              "message": "The 'pareto' chart is drawn as core's pareto-as-columns fallback: a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order, as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "product-launch-narrative",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/product-launch-narrative.opf.json",
+      "selectedSourceSlides": "7",
+      "sourceSha256": "03bdebf504dada415d1aaaae1ef95222749dce97fc157baf73b93887092cc960",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/product-launch-narrative.pptx",
+          "ok": true,
+          "sha256": "19a0764172dcc8e9502dfb51d590170104a052720cddf4b9b5d8cd762924c193",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "category": "pptx",
+              "path": "/slides/0/blocks/0/chart",
+              "scope": "document",
+              "message": "The 'pareto' chart is drawn as core's pareto-as-columns fallback: a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order, as the preview draws it.",
+              "help": "The chart data was reshaped to export a native chart; see the message.",
+              "adaptation": "chart-fallback"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lh93",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/lh93.opf.json",
+      "sourceSha256": "d591059ff0a5a2a85c1e4f1966e295b2e5218c2e7d96eea3273c1441b3d15e4f",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh93.pptx",
+          "ok": true,
+          "sha256": "d8f3b3d58de2489f67f4f5b7b49c0aa4d5441a40a7fe085697de165d9fb88750",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lh174",
+      "source": "C:/opf-work/release-033-artifacts/extras/sources/lh174.opf.json",
+      "sourceSha256": "c8bca549cdf2aaf4696d5630ad91c1160bf8a5032602c869b3adbd7114afdceb",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh174.pptx",
+          "ok": true,
+          "sha256": "a38be526107de16641be01fe9126e33c47a25ff18d025cd154d95fef354d5925",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

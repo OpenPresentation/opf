@@ -1,0 +1,152 @@
+﻿{
+    "environment":  {
+                        "powerPointVersion":  "16.0",
+                        "powerPointBuild":  "20527",
+                        "productVersion":  "16.0.20527.20112",
+                        "fileVersion":  "16.0.20527.20112",
+                        "windows":  "Windows 10 Home 25H2 build 26200.9711",
+                        "culture":  "en-US",
+                        "startedAt":  "2026-11-07T19:20:51.5093893-08:00",
+                        "revision":  "2db20c01ef4d9b80db9797116dc83e41f65d1c68",
+                        "opfVersion":  "0.32.1",
+                        "finishedAt":  "2026-11-07T19:21:01.7855865-08:00"
+                    },
+    "files":  [
+                  {
+                      "name":  "athletics-budget-review",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  1.5
+                  },
+                  {
+                      "name":  "chart-colors",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.5
+                  },
+                  {
+                      "name":  "color-variants",
+                      "opened":  true,
+                      "slides":  2,
+                      "preview":  2,
+                      "error":  null,
+                      "seconds":  0.5
+                  },
+                  {
+                      "name":  "full-feature-tour",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.4
+                  },
+                  {
+                      "name":  "investor-relations-update",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.8
+                  },
+                  {
+                      "name":  "renewal-save-plan",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.4
+                  },
+                  {
+                      "name":  "alumni-giving-campaign",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.5
+                  },
+                  {
+                      "name":  "research-findings-report",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.5
+                  },
+                  {
+                      "name":  "demand-generation-campaign-brief",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.8
+                  },
+                  {
+                      "name":  "partner-ecosystem-launch-kit",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.3
+                  },
+                  {
+                      "name":  "visual-brand-system-sampler",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.4
+                  },
+                  {
+                      "name":  "curriculum-approval-brief",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.7
+                  },
+                  {
+                      "name":  "wildfire-evacuation-preparedness",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.4
+                  },
+                  {
+                      "name":  "consulting-margin-recovery-plan",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.4
+                  },
+                  {
+                      "name":  "product-launch-narrative",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.7
+                  },
+                  {
+                      "name":  "lh93",
+                      "opened":  true,
+                      "slides":  3,
+                      "preview":  3,
+                      "error":  null,
+                      "seconds":  0.8
+                  },
+                  {
+                      "name":  "lh174",
+                      "opened":  true,
+                      "slides":  2,
+                      "preview":  2,
+                      "error":  null,
+                      "seconds":  0.7
+                  }
+              ]
+}

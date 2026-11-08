@@ -1,0 +1,586 @@
+﻿{
+    "deck":  "lh93",
+    "variant":  "default",
+    "name":  "lh93",
+    "sha256":  "d8f3b3d58de2489f67f4f5b7b49c0aa4d5441a40a7fe085697de165d9fb88750",
+    "opened":  true,
+    "previewSlides":  3,
+    "openSeconds":  0.2,
+    "slideCount":  3,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Two columns",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Pipeline by stage, this year and last",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     604.53,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        596.79
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.0.blocks.0.chart",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      119.61,
+                                                      427.8,
+                                                      377.19
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      61.2,
+                                                      137.61,
+                                                      391.8,
+                                                      341.19
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  57,
+                                                        "series":  1,
+                                                        "title":  "Deals by stage"
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.0.blocks.1.chart",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      489,
+                                                      119.61,
+                                                      427.8,
+                                                      377.19
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 2",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      507,
+                                                      137.61,
+                                                      391.8,
+                                                      341.19
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  57,
+                                                        "series":  1,
+                                                        "title":  "Deals by stage"
+                                                    }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "Two columns",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Hours by team",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     256.51,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        248.77
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.1.blocks.0.chart",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      119.61,
+                                                      427.8,
+                                                      377.19
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 3",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      61.2,
+                                                      137.61,
+                                                      391.8,
+                                                      341.19
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  57,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.1.blocks.1.chart",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      489,
+                                                      119.61,
+                                                      427.8,
+                                                      377.19
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 4",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      507,
+                                                      137.61,
+                                                      391.8,
+                                                      341.19
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  57,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  3,
+                       "hidden":  false,
+                       "layout":  "Two columns",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.2.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Share of effort",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     252.62,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        244.88
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.2.blocks.0.chart",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      119.61,
+                                                      427.8,
+                                                      377.19
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 5",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      61.2,
+                                                      137.61,
+                                                      391.8,
+                                                      341.19
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  58,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF chart 5 mark over 1 stack-swatch",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      96.3,
+                                                      151.18,
+                                                      8.1,
+                                                      8.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 5 mark over 2 stack-name",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      109.8,
+                                                      145.11,
+                                                      33.37,
+                                                      20.25
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Build",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.5,
+                                                       "maxSize":  13.5,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     109.8,
+                                                                     147.13,
+                                                                     32.75,
+                                                                     16.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        109.8,
+                                                                        30.01
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 5 mark over 3 stack-swatch",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      240.17,
+                                                      151.18,
+                                                      8.1,
+                                                      8.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 5 mark over 4 stack-name",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      253.67,
+                                                      145.11,
+                                                      26.55,
+                                                      20.25
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Run",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.5,
+                                                       "maxSize":  13.5,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     253.67,
+                                                                     147.13,
+                                                                     25.89,
+                                                                     16.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        253.67,
+                                                                        23.15
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF card slides.2.blocks.1.chart",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      489,
+                                                      119.61,
+                                                      427.8,
+                                                      377.19
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 6",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      507,
+                                                      137.61,
+                                                      391.8,
+                                                      341.19
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  58,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF chart 6 mark over 1 stack-swatch",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      614.88,
+                                                      151.18,
+                                                      8.1,
+                                                      8.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 6 mark over 2 stack-name",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      628.38,
+                                                      145.11,
+                                                      33.37,
+                                                      20.25
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Build",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.5,
+                                                       "maxSize":  13.5,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     628.38,
+                                                                     147.13,
+                                                                     32.75,
+                                                                     16.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        628.38,
+                                                                        30.01
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 6 mark over 3 stack-swatch",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      697.04,
+                                                      151.18,
+                                                      8.1,
+                                                      8.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 6 mark over 4 stack-name",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      710.54,
+                                                      145.11,
+                                                      26.55,
+                                                      20.25
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Run",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.5,
+                                                       "maxSize":  13.5,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     710.54,
+                                                                     147.13,
+                                                                     25.89,
+                                                                     16.2
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        710.54,
+                                                                        23.15
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  258,
+                                        "position":  3,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  258,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  3,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  0.8
+}

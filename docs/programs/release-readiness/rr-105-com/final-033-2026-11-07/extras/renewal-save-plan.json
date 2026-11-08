@@ -1,0 +1,223 @@
+﻿{
+    "deck":  "renewal-save-plan",
+    "variant":  "default",
+    "name":  "renewal-save-plan",
+    "sha256":  "faaaa2d363945376b0acaa72b786575c0d1446681647b0d5c7ec47ea96411915",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.1,
+    "slideCount":  1,
+    "slideSize":  [
+                      841.625,
+                      595.5
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Chart",
+                       "footer":  {
+                                      "footer":  true,
+                                      "footerText":  "Evergreen CRM",
+                                      "slideNumber":  true,
+                                      "date":  false,
+                                      "placeholders":  [
+                                                           {
+                                                               "type":  15,
+                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                               "text":  "Evergreen CRM"
+                                                           },
+                                                           {
+                                                               "type":  13,
+                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                               "text":  "1"
+                                                           }
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF watermark",
+                                          "type":  13,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      301.75,
+                                                      178.63,
+                                                      238.18,
+                                                      238.18
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      47.64,
+                                                      47.64,
+                                                      746.41,
+                                                      54.47
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Signal Trend",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  44.650001525878906,
+                                                       "maxSize":  44.650001525878906,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     562.87,
+                                                                     47.64,
+                                                                     239.77,
+                                                                     53.58
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        562.87,
+                                                                        231.15
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 1 mark under 1 hole",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      302.5,
+                                                      241.84,
+                                                      182.64,
+                                                      182.64
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  3,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      47.64,
+                                                      121.96,
+                                                      746.41,
+                                                      422.41
+                                                  ],
+                                          "rotation":  0,
+                                          "chart":  {
+                                                        "type":  -4120,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 0 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      48.15,
+                                                      554.29,
+                                                      237.58,
+                                                      16.15
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  15,
+                                          "text":  {
+                                                       "text":  "Evergreen CRM",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.239999771118164,
+                                                       "maxSize":  13.239999771118164,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     48.15,
+                                                                     554.29,
+                                                                     89.36,
+                                                                     15.89
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        48.15,
+                                                                        86.62
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 1 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      302.05,
+                                                      554.29,
+                                                      237.58,
+                                                      16.15
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Decision review",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.239999771118164,
+                                                       "maxSize":  13.239999771118164,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     375.95,
+                                                                     554.29,
+                                                                     92.54,
+                                                                     15.89
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        375.95,
+                                                                        89.79
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 2 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      556.46,
+                                                      554.29,
+                                                      237.58,
+                                                      16.15
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  13,
+                                          "text":  {
+                                                       "text":  "1",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  13.239999771118164,
+                                                       "maxSize":  13.239999771118164,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     786.84,
+                                                                     554.29,
+                                                                     9.87,
+                                                                     15.89
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        786.84,
+                                                                        7.13
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "seconds":  0.4
+}

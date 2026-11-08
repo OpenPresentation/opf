@@ -1,0 +1,607 @@
+﻿{
+    "deck":  "lh174",
+    "variant":  "default",
+    "name":  "lh174",
+    "sha256":  "a38be526107de16641be01fe9126e33c47a25ff18d025cd154d95fef354d5925",
+    "opened":  true,
+    "previewSlides":  2,
+    "openSeconds":  0.1,
+    "slideCount":  2,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      44.21,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "What changes in the release",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     44.21,
+                                                                     43.2,
+                                                                     489.81,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        44.21,
+                                                                        482.07
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      105.64,
+                                                      153.85,
+                                                      185.35,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Faster sync",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     105.64,
+                                                                     153.85,
+                                                                     149.19,
+                                                                     33.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        105.64,
+                                                                        143.57
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      318.73,
+                                                      158.85,
+                                                      598.07,
+                                                      27.76
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Changes reach every device in under a second.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  22.75,
+                                                       "maxSize":  22.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     318.73,
+                                                                     158.85,
+                                                                     463.11,
+                                                                     27.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        318.73,
+                                                                        458.49
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      60.71,
+                                                      285.67,
+                                                      230.27,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Offline mode",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     105.61,
+                                                                     285.67,
+                                                                     169.63,
+                                                                     33.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        105.61,
+                                                                        164.01
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 3",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      318.73,
+                                                      290.67,
+                                                      598.07,
+                                                      27.76
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Keep working without a connection.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  22.75,
+                                                       "maxSize":  22.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     318.73,
+                                                                     290.67,
+                                                                     352.74,
+                                                                     27.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        318.73,
+                                                                        348.12
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 4",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      105.64,
+                                                      417.48,
+                                                      185.35,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Shared folders",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     105.64,
+                                                                     417.48,
+                                                                     189.83,
+                                                                     33.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        105.64,
+                                                                        184.21
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.0.items line 5",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      318.73,
+                                                      422.48,
+                                                      598.07,
+                                                      27.76
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Invite a team to one folder.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  22.75,
+                                                       "maxSize":  22.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     318.73,
+                                                                     422.48,
+                                                                     262.58,
+                                                                     27.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        318.73,
+                                                                        257.96
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list rule slides.0.items 0",
+                                          "type":  9,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      237.8,
+                                                      873.6,
+                                                      0
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF list rule slides.0.items 1",
+                                          "type":  9,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      369.61,
+                                                      873.6,
+                                                      0
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF icon slides.0.items.0.icon chip",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      43.2,
+                                                      147.61,
+                                                      48.56,
+                                                      48.56
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF icon slides.0.items.0.icon glyph 0",
+                                          "type":  5,
+                                          "autoShapeType":  138,
+                                          "box":  [
+                                                      54.13,
+                                                      158.54,
+                                                      26.71,
+                                                      26.71
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF icon slides.0.items.2.icon chip",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      43.2,
+                                                      411.24,
+                                                      48.56,
+                                                      48.56
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF icon slides.0.items.2.icon glyph 0",
+                                          "type":  5,
+                                          "autoShapeType":  138,
+                                          "box":  [
+                                                      54.13,
+                                                      422.16,
+                                                      26.71,
+                                                      26.71
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Before you start",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     279.46,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        271.71
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      90.93,
+                                                      212.34,
+                                                      825.87,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Check your account email",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     90.93,
+                                                                     212.34,
+                                                                     317.86,
+                                                                     33.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        90.93,
+                                                                        312.24
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      53.61,
+                                                      260.84,
+                                                      863.19,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Install the desktop app",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     90.91,
+                                                                     260.84,
+                                                                     278.04,
+                                                                     33.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        90.91,
+                                                                        272.42
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      53.61,
+                                                      309.35,
+                                                      863.19,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Pick a workspace name",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     90.91,
+                                                                     309.35,
+                                                                     286.73,
+                                                                     33.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        90.91,
+                                                                        281.11
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.items line 3",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      90.93,
+                                                      357.86,
+                                                      825.87,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Invite two teammates",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     90.93,
+                                                                     357.86,
+                                                                     262.82,
+                                                                     33.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        90.93,
+                                                                        257.2
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF icon slides.1.items.0.icon chip",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      43.2,
+                                                      213.45,
+                                                      33.86,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF icon slides.1.items.0.icon glyph 0",
+                                          "type":  5,
+                                          "autoShapeType":  138,
+                                          "box":  [
+                                                      50.82,
+                                                      221.06,
+                                                      18.62,
+                                                      18.62
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF icon slides.1.items.3.icon chip",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      43.2,
+                                                      358.97,
+                                                      33.86,
+                                                      33.86
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF icon slides.1.items.3.icon glyph 0",
+                                          "type":  5,
+                                          "autoShapeType":  138,
+                                          "box":  [
+                                                      50.82,
+                                                      366.59,
+                                                      18.62,
+                                                      18.62
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  0.7
+}

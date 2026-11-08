@@ -1,0 +1,7 @@
+import fs from 'node:fs'; import {createRequire} from 'node:module';
+const sharp=createRequire('C:/opf-work/release-033-final/packages/render/package.json')('sharp');
+const dir='C:/opf-work/release-033-artifacts/qualification/powerpoint/sheets';
+const out='C:/opf-work/release-033-artifacts/qualification/review';fs.mkdirSync(out,{recursive:true});
+const names=fs.readdirSync(dir).filter(n=>n.endsWith('.png')).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+const index=[];const cellW=640,cellH=204;
+for(let first=0;first<names.length;first+=24){const slice=names.slice(first,first+24);const layers=[];for(let n=0;n<slice.length;n++){const file=slice[n],x=n%3*cellW,y=Math.floor(n/3)*cellH; const img=await sharp(`${dir}/${file}`).extract({left:0,top:0,width:1290,height:360}).resize(640,179).png().toBuffer();const label=Buffer.from(`<svg width="640" height="25"><rect width="640" height="25" fill="white"/><text x="5" y="18" font-size="14" fill="black">${file}: OPF | PowerPoint</text></svg>`);layers.push({input:label,left:x,top:y},{input:img,left:x,top:y+25});}const name=`review-${String(first/24).padStart(2,'0')}.png`;await sharp({create:{width:1920,height:Math.ceil(slice.length/3)*cellH,channels:3,background:'#999'}}).composite(layers).png().toFile(`${out}/${name}`);index.push({name,slides:slice});}fs.writeFileSync(`${out}/index.json`,JSON.stringify(index,null,2)+'\n');console.log(`${names.length} native comparison pairs in ${index.length} sheets`);

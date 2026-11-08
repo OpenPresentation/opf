@@ -1,0 +1,611 @@
+﻿{
+    "deck":  "investor-relations-update",
+    "variant":  "default",
+    "name":  "investor-relations-update",
+    "sha256":  "f5930d96838a705357d4750e14b30d8ad6a0a06c73f178683ef571b6ae9aad62",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.2,
+    "slideCount":  1,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "Chart beside",
+                       "footer":  {
+                                      "footer":  true,
+                                      "footerText":  "Asteria Robotics",
+                                      "slideNumber":  true,
+                                      "date":  false,
+                                      "placeholders":  [
+                                                           {
+                                                               "type":  15,
+                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                               "text":  "Asteria Robotics"
+                                                           },
+                                                           {
+                                                               "type":  13,
+                                                               "name":  "OPF furniture 0 part 4 line 0",
+                                                               "text":  "1"
+                                                           }
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF watermark",
+                                          "type":  13,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      372,
+                                                      162,
+                                                      216,
+                                                      216
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      57.6,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Evidence Pack",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     355.43,
+                                                                     57.6,
+                                                                     256.89,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        355.43,
+                                                                        249.14
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "type":  14,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      43.2,
+                                                      125.01,
+                                                      513.36,
+                                                      369.75
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  8,
+                                          "chart":  {
+                                                        "type":  57,
+                                                        "series":  2,
+                                                        "title":  {
+
+                                                                  }
+                                                    }
+                                      },
+                                      {
+                                          "name":  "OPF quote 0 part 0 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      588.06,
+                                                      138.51,
+                                                      315.24,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "“Teams already know ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     588.06,
+                                                                     138.51,
+                                                                     285.64,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        588.06,
+                                                                        273.77
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF quote 0 part 0 line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      588.06,
+                                                      175.11,
+                                                      315.24,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "where the friction is; the ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     588.06,
+                                                                     175.11,
+                                                                     318.27,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        588.06,
+                                                                        306.4
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF quote 0 part 0 line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      588.06,
+                                                      211.71,
+                                                      315.24,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "deck makes the ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     588.06,
+                                                                     211.71,
+                                                                     211.73,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        588.06,
+                                                                        199.86
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF quote 0 part 0 line 3",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      588.06,
+                                                      248.31,
+                                                      315.24,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "sequence of choices ",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     588.06,
+                                                                     248.31,
+                                                                     272.88,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        588.06,
+                                                                        261.01
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF quote 0 part 0 line 4",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      588.06,
+                                                      284.91,
+                                                      315.24,
+                                                      36.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "explicit.”",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  30,
+                                                       "maxSize":  30,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     588.06,
+                                                                     284.91,
+                                                                     119.32,
+                                                                     36
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        588.06,
+                                                                        113.2
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF quote 0 part 1 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      588.06,
+                                                      335.01,
+                                                      315.24,
+                                                      15.56
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Program sponsor – Planning interview",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12.75,
+                                                       "maxSize":  12.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     588.06,
+                                                                     335.01,
+                                                                     207.45,
+                                                                     15.3
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        588.06,
+                                                                        204.83
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF metric 1 pill",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      682.74,
+                                                      404.57,
+                                                      78.27,
+                                                      27.95
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF metric 1 value line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      574.56,
+                                                      382.07,
+                                                      77.95,
+                                                      69.54
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "2.4",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  57,
+                                                       "maxSize":  57,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     574.56,
+                                                                     382.07,
+                                                                     88,
+                                                                     68.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        574.56,
+                                                                        76.38
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF metric 1 unit line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      659.96,
+                                                      405.07,
+                                                      16.54,
+                                                      41.48
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "x",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  34,
+                                                       "maxSize":  34,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     659.96,
+                                                                     405.07,
+                                                                     21.88,
+                                                                     40.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        659.96,
+                                                                        15.01
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF metric 1 label line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      574.56,
+                                                      460.61,
+                                                      342.24,
+                                                      21.05
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Illustrative result",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  17.25,
+                                                       "maxSize":  17.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     574.56,
+                                                                     460.61,
+                                                                     127.46,
+                                                                     20.7
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        574.56,
+                                                                        123.96
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF metric 1 delta line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      709.82,
+                                                      408.02,
+                                                      41.7,
+                                                      21.05
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "+0.3x",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  17.25,
+                                                       "maxSize":  17.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     709.82,
+                                                                     408.02,
+                                                                     43.75,
+                                                                     20.7
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        709.82,
+                                                                        40.26
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF metric 1 trend mark",
+                                          "type":  1,
+                                          "autoShapeType":  35,
+                                          "box":  [
+                                                      692.22,
+                                                      412.85,
+                                                      12.42,
+                                                      12.42
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 0 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.67,
+                                                      21.6,
+                                                      427.2,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Evidence",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.67,
+                                                                     21.6,
+                                                                     49.78,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.67,
+                                                                        47.29
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF image 1",
+                                          "type":  13,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      889.8,
+                                                      21.6,
+                                                      27,
+                                                      27
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 2 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      44.65,
+                                                      503.76,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  15,
+                                          "text":  {
+                                                       "text":  "Asteria Robotics",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     44.65,
+                                                                     503.76,
+                                                                     87.66,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        44.65,
+                                                                        85.17
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 3 line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.8,
+                                                      503.76,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Decision review",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     439.15,
+                                                                     503.76,
+                                                                     84.19,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        439.15,
+                                                                        81.7
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 4 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      638.4,
+                                                      503.76,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  13,
+                                          "text":  {
+                                                       "text":  "1",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     910.4,
+                                                                     503.76,
+                                                                     8.88,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        910.4,
+                                                                        6.38
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "seconds":  0.8
+}
