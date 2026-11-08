@@ -131,3 +131,11 @@ test('an explicit payload auto count overrides an authored nested region single-
   region.listColumns=1;record.regions=[record.regions[0],{direction:'column',regions:[region]}];doc.slides[0].blocks[0].columns='auto';
   const result=compose(doc),item=body(result)[0];assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));assert.ok(item.listColumns.length>1);assert.deepEqual(entries(item).map(entry=>entry.value),doc.slides[0].blocks[0].items);
 });
+
+
+test('recompose:false keeps the whole requested layout while still allowing bounded within-region readable columns',()=>{
+  const doc=documentFor(fixture.cases[0].slide);doc.slides[0].blocks=[doc.slides[0].blocks[0]];delete doc.slides[0].design;
+  const normal=compose(doc),kept=compose(doc,{recompose:false});assert.equal(normal.recomposed,undefined);assert.equal(kept.recomposed,undefined);assert.deepEqual(kept,normal);
+  assert.ok(body(kept)[0].listColumns.length>1);assert.ok(!kept.diagnostics.some(d=>d.code==='text-overflow'));
+  doc.slides[0].blocks[0].columns=1;const fixed=compose(doc,{recompose:false});assert.equal(body(fixed)[0].listColumns,undefined);assert.ok(fixed.diagnostics.some(d=>d.code==='text-overflow'));
+});

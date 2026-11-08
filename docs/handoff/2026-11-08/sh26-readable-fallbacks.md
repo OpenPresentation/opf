@@ -74,7 +74,30 @@ to split every overflowing list. These cases require explicit `opf paginate`
 then `opf convert`, or `opf convert --paginate`. `--keep-slides` intentionally
 retains an unfit authored slide and its finding for diagnostic comparison.
 
-Source is still under review. Next are shipped-CLI whole-case before/after
-witnesses with the same font route, unaffected output invariance, the mandatory
-changed check, and a coordinator-owned new pinned golden batch. No local golden
+The first mapped check passed 12 of 13 steps, including real-font renderer
+controls, catalog-free/browser/stability checks and all seven type checks. Core
+passed 4,231 of 4,233: one expected pinned template snapshot delta and one real
+API regression. Treating `recompose:false` as a forced single column was wrong:
+it disables whole-layout recomposition, not bounded flow inside the same region.
+That restriction is removed; payload/region column counts remain binding. The
+existing full gallery floor invariant and 23 SH-26 controls pass after the fix.
+The original mapped receipts remain immutable; a second mandatory batch follows.
+
+The genuine CLI packet covers twelve authored cases and thirty resulting pages.
+Five ordinary/upright-pyramid/Venn/org/hierarchy controls retain entire PNG and
+PPTX bytes. All affected measured pages retain or grow the original 32 px; the
+four seven-label cases paginate to 37 px with at most 68 characters per line.
+Descriptions are complete; their singleton pages use the existing LH-77 heading
+rule. Native import normalizes default level zero and moves item numbering
+starts into block numbering; effective labels/levels/numbers are exact, while
+byte-exact blocks are reported separately rather than claimed universally.
+
+A suspected blank org-chart body was a display-path/cache false candidate:
+raw pixels, direct SVG and a byte-identical fresh display copy show the complete
+body. There is no product paint correction. All original diagnostic/refusal
+attempts remain preserved, including the unsupported PPTX `--slides` command.
+
+Source is still under review. Whole-case sheet review, bounded native-input
+derivatives, the second changed check, actual owner-run Office acceptance and
+a coordinator-owned new pinned golden batch remain the gates. No local golden
 edits, public examples/count changes, Office or publication are claimed.

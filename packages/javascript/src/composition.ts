@@ -11212,7 +11212,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (readable(current)) continue;
       const values = item.value as ListValue[], area = fallbackListAreas.get(item.path) ?? item.box, ownColumns = item.payload.columns;
       const mode = ownColumns === 'auto' || ownColumns === 1 || ownColumns === 2 || ownColumns === 3 ? ownColumns : region ? regionColumns.get(region.name) : undefined;
-      const counts = typeof mode === 'number' ? [mode] : options.recompose === false ? [1] : [1, 2, 3].filter(count => count <= values.length);
+      const counts = typeof mode === 'number' ? [mode] : [1, 2, 3].filter(count => count <= values.length);
       // Like listColumnsFor, slicing a multi-entry list must not promote a one-entry chunk into a new heading.
       // A genuinely single described heading retains its original listOptionsFor role.
       const listOptions = {...listOptionsFor(item.field, item.path, item.payload.numbering, values), ...(values.length > 1 ? {heading: false} : {})}, numbering = listOptions.numbering;
