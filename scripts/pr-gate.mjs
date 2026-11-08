@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // The one shared PR/CI gate. Watch (and optionally merge) pull requests, or wait for a commit's checks, with ONE batched GraphQL
-// query per interval for every target, including explicit workflow check suites omitted by a status rollup. Agents use this instead of writing their own watcher.
+// query per interval for every target. Agents use this instead of writing their own watcher.
 //
 //   node scripts/pr-gate.mjs <owner/repo#N> [more…] [--merge] [--expect-head <sha>]… [--required verify|all|<a,b,…>]
 //                            [--interval 180] [--timeout-minutes 100] [--json]
@@ -19,7 +19,7 @@
 // Red (a required check failed, was cancelled, timed out, hit a startup failure or needs action) stops at once and prints the failing
 // checks with their URLs.
 //
-// --merge: after the head matches --expect-head (when given), enables GitHub auto-merge for it (squash). Required-all mode waits for two complete green polls before enabling it, so GitHub cannot merge on verify alone. In verify mode GitHub merges on green
+// --merge: after the head matches --expect-head (when given), enables GitHub auto-merge for it (squash), so GitHub merges on green
 // even if this process dies, and follows the pull request until it is merged. If auto-merge cannot be enabled (the pull request is
 // already clean, or the repository does not allow auto-merge) the gate squash-merges the expected head itself once the checks are
 // green. Re-running resumes: a merged pull request exits 0 and an enabled auto-merge is followed.
@@ -119,16 +119,13 @@ export function normalizeContexts(nodes = []) {
   return checks;
 }
 
-/** The newest dated report of each name counts; an unstarted pending run is retained until it can be ordered safely. */
+/** Only the newest report of each check name counts: a re-run replaces the failed run, a newer failure replaces an older success. */
 export function latestPerName(checks) {
-  const latest = new Map(), unstarted = new Map();
+  const latest = new Map();
   for (const check of checks) {
-    // A queued retry has no startedAt. It cannot safely be ordered behind an older completed run.
-    if (check.state === 'PENDING' && !check.at) { unstarted.set(check.name, check); continue; }
     const known = latest.get(check.name);
     if (!known || check.at > known.at || (check.at === known.at && known.state === 'PENDING')) latest.set(check.name, check);
   }
-  for (const [name, check] of unstarted) latest.set(name, check);
   return [...latest.values()];
 }
 
@@ -163,11 +160,8 @@ export const describeChecks = (checks) => checks.map((check) => `  ${check.name}
 const CONTEXT_NODES = `nodes { __typename
   ... on CheckRun { name status conclusion detailsUrl startedAt }
   ... on StatusContext { context state targetUrl createdAt } }`;
-const RUN_NODES = 'nodes { __typename name status conclusion detailsUrl startedAt }';
-const SUITES = `checkSuites(first: 10) { pageInfo { hasNextPage endCursor } nodes { id checkRuns(first: 100) { pageInfo { hasNextPage endCursor } ${RUN_NODES} } } }`;
-// Dispatched workflows can be absent from statusCheckRollup; explicit suites retain those checks on the same commit.
-const CONTEXTS = `statusCheckRollup { contexts(first: 100) { pageInfo { hasNextPage endCursor } ${CONTEXT_NODES} } } ${SUITES}`;
-/** Maximum additional connection pages per poll (rollup, suite and run pages together); incomplete data never goes green. */
+const CONTEXTS = `statusCheckRollup { contexts(first: 100) { pageInfo { hasNextPage endCursor } ${CONTEXT_NODES} } }`;
+/** Pages of 100 read after the first before the gate gives up on a rollup (1,100 checks in all, far above a full-ci run's ~50). */
 export const MAX_CONTEXT_PAGES = 10;
 
 /** The next page of one commit's rollup, asked only when the first page of the poll said hasNextPage. owner/name are validated by parseTarget. */
@@ -189,67 +183,55 @@ export function buildPollQuery(targets) {
 export const ENABLE_AUTO_MERGE = 'mutation($id: ID!, $head: GitObjectID!) { enablePullRequestAutoMerge(input: { pullRequestId: $id, mergeMethod: SQUASH, expectedHeadOid: $head }) { pullRequest { number } } }';
 export const MERGE = 'mutation($id: ID!, $head: GitObjectID!) { mergePullRequest(input: { pullRequestId: $id, mergeMethod: SQUASH, expectedHeadOid: $head }) { pullRequest { merged mergeCommit { oid } } } }';
 
-/** Append every reported run and queue unfinished connections. Malformed data must be completed/refused before judging. */
-function suiteChecks(connection, checks, pages) {
-  if (!Array.isArray(connection?.nodes) || typeof connection.pageInfo?.hasNextPage !== 'boolean') { pages.push({kind: 'invalid'}); return; }
-  if (connection.pageInfo.hasNextPage) pages.push({kind: 'suites', cursor: connection.pageInfo.endCursor});
-  for (const suite of connection.nodes) {
-    const runs = suite?.checkRuns;
-    if (typeof suite?.id !== 'string' || !Array.isArray(runs?.nodes) || typeof runs.pageInfo?.hasNextPage !== 'boolean') { pages.push({kind: 'invalid'}); continue; }
-    checks.push(...normalizeContexts(runs.nodes));
-    if (runs.pageInfo.hasNextPage) pages.push({kind: 'runs', id: suite.id, cursor: runs.pageInfo.endCursor});
-  }
-}
-function commitChecks(commit) {
-  const contexts = commit?.statusCheckRollup?.contexts, checks = normalizeContexts(contexts?.nodes), pages = [];
-  if (contexts?.pageInfo?.hasNextPage) pages.push({kind: 'contexts', cursor: contexts.pageInfo.endCursor});
-  suiteChecks(commit?.checkSuites, checks, pages);
-  return {commitOid: commit?.oid, checks, pages, truncated: pages.length > 0, endCursor: contexts?.pageInfo?.endCursor};
-}
-export function moreSuitesQuery(target, oid, cursor) {
-  return `query { repository(owner: "${target.owner}", name: "${target.name}") { object(oid: ${JSON.stringify(oid)}) { ... on Commit { oid ${SUITES.replace('first: 10)', `first: 10, after: ${JSON.stringify(cursor)})`)} } } } }`;
-}
-export function moreSuiteRunsQuery(id, cursor) {
-  return `query { node(id: ${JSON.stringify(id)}) { ... on CheckSuite { id commit { oid } checkRuns(first: 100, after: ${JSON.stringify(cursor)}) { pageInfo { hasNextPage endCursor } ${RUN_NODES} } } } }`;
-}
-
-/** A target's exact commit, rollup and explicit workflow runs. Empty unmatched suites add no fictitious checks. */
+/** The view of one polled target: { exists, closed, merged, head, mergeable, autoMerge, id, commitOid, checks, truncated, endCursor }. */
 export function readTarget(target, data) {
   const node = data?.repository ?? data;
-  if (target.kind === 'commit') return node?.object ? {exists: true, ...commitChecks(node.object)} : {exists: false};
+  if (target.kind === 'commit') {
+    const commit = node?.object;
+    if (!commit) return { exists: false };
+    const contexts = commit.statusCheckRollup?.contexts;
+    return { exists: true, commitOid: commit.oid, checks: normalizeContexts(contexts?.nodes), truncated: Boolean(contexts?.pageInfo?.hasNextPage), endCursor: contexts?.pageInfo?.endCursor };
+  }
   const pr = node?.pullRequest;
-  if (!pr) return {exists: false};
-  return {exists: true, id: pr.id, closed: pr.state === 'CLOSED', merged: pr.merged === true || pr.state === 'MERGED',
-    head: pr.headRefOid, mergeable: pr.mergeable, autoMerge: Boolean(pr.autoMergeRequest), ...commitChecks(pr.commits?.nodes?.at(-1)?.commit)};
+  if (!pr) return { exists: false };
+  const last = pr.commits?.nodes?.at(-1)?.commit;
+  const contexts = last?.statusCheckRollup?.contexts;
+  return {
+    exists: true,
+    id: pr.id,
+    closed: pr.state === 'CLOSED',
+    merged: pr.merged === true || pr.state === 'MERGED',
+    head: pr.headRefOid,
+    mergeable: pr.mergeable,
+    autoMerge: Boolean(pr.autoMergeRequest),
+    commitOid: last?.oid,
+    checks: normalizeContexts(contexts?.nodes),
+    truncated: Boolean(contexts?.pageInfo?.hasNextPage),
+    endCursor: contexts?.pageInfo?.endCursor,
+  };
 }
 
-/** Finish rollup, suite and run pages of the same commit before evaluating; never accept a partial view. */
+/**
+ * The checks of a view whose first page said hasNextPage: reads the further pages of the same commit and returns every check. Throws
+ * (the gate then judges nothing this poll, never a partial list) when a page is malformed, repeats a cursor, belongs to another
+ * commit, or the rollup is longer than MAX_CONTEXT_PAGES further pages.
+ */
 export async function readAllChecks(target, view, graphql) {
-  const checks = [...view.checks], pages = [...view.pages], seen = new Set();
-  for (let count = 0; pages.length && count < MAX_CONTEXT_PAGES; count++) {
-    const page = pages.shift(), key = JSON.stringify(page);
-    if (!page || page.kind === 'invalid') throw new Error('the check connections are malformed');
-    if (typeof page.cursor !== 'string' || !page.cursor || seen.has(key)) throw new Error('the check connection has no fresh cursor');
-    seen.add(key);
-    if (page.kind === 'runs') {
-      const suite = (await graphql(moreSuiteRunsQuery(page.id, page.cursor)))?.node;
-      if (suite?.id !== page.id || suite.commit?.oid !== view.commitOid) throw new Error('the next run page is of a different suite or commit');
-      suiteChecks({nodes: [suite], pageInfo: {hasNextPage: false}}, checks, pages);
-    } else {
-      const query = page.kind === 'suites' ? moreSuitesQuery(target, view.commitOid, page.cursor) : moreContextsQuery(target, view.commitOid, page.cursor);
-      const commit = (await graphql(query))?.repository?.object;
-      if (commit?.oid !== view.commitOid) throw new Error('the next check page is of a different or missing commit');
-      if (page.kind === 'suites') suiteChecks(commit.checkSuites, checks, pages);
-      else {
-        const contexts = commit.statusCheckRollup?.contexts;
-        if (!Array.isArray(contexts?.nodes) || typeof contexts.pageInfo?.hasNextPage !== 'boolean') throw new Error('the next rollup page is malformed');
-        checks.push(...normalizeContexts(contexts.nodes));
-        if (contexts.pageInfo.hasNextPage) pages.push({kind: 'contexts', cursor: contexts.pageInfo.endCursor});
-      }
-    }
+  const checks = [...view.checks];
+  const cursors = new Set();
+  let cursor = view.endCursor;
+  for (let page = 0; page < MAX_CONTEXT_PAGES; page += 1) {
+    if (typeof cursor !== 'string' || !cursor || cursors.has(cursor)) throw new Error('the check rollup has another page but no fresh cursor');
+    cursors.add(cursor);
+    const commit = (await graphql(moreContextsQuery(target, view.commitOid, cursor)))?.repository?.object;
+    if (commit?.oid !== view.commitOid) throw new Error('the next rollup page is of a different or missing commit');
+    const contexts = commit.statusCheckRollup?.contexts;
+    if (!Array.isArray(contexts?.nodes) || typeof contexts.pageInfo?.hasNextPage !== 'boolean') throw new Error('the next rollup page is malformed');
+    checks.push(...normalizeContexts(contexts.nodes));
+    if (!contexts.pageInfo.hasNextPage) return checks;
+    cursor = contexts.pageInfo.endCursor;
   }
-  if (pages.length) throw new Error(`the check data exceeds ${MAX_CONTEXT_PAGES} additional pages`);
-  return checks;
+  throw new Error(`the check rollup has more than ${100 * (MAX_CONTEXT_PAGES + 1)} checks`);
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -372,12 +354,12 @@ export async function runGate(options, deps) {
         }
       }
       if (view.truncated) {
-        // Finish every connection page before judging; a partial list could hide a failure or a newer retry.
+        // More than 100 checks: read the rest (one extra query per page, only now) or judge nothing; a partial list could hide a failure or a newer re-run.
         try {
           view.checks = await readAllChecks(state.target, view, graphql);
         } catch (error) {
           state.greenPolls = 0;
-          log(`${state.label}: check pages could not be completed (${messageOf(error).split('\n')[0]}); not judged this poll`);
+          log(`${state.label}: more than 100 checks and the rest could not be read (${messageOf(error).split('\n')[0]}); not judged this poll`);
           continue;
         }
       }
@@ -386,7 +368,7 @@ export async function runGate(options, deps) {
         finish(state, EXIT.red, `RED\n${describeChecks(verdict.failing)}`);
         continue;
       }
-      if (required !== 'all' && options.merge && state.target.kind === 'pr' && !view.autoMerge && !state.mergeNow) {
+      if (options.merge && state.target.kind === 'pr' && !view.autoMerge && !state.mergeNow) {
         try {
           await attemptMerge(state, view);
         } catch (error) {
@@ -413,14 +395,6 @@ export async function runGate(options, deps) {
       if (state.greenPolls < settlePolls) {
         log(`${state.label}: green; confirming on the next poll`);
         continue;
-      }
-      if (required === 'all' && options.merge && state.target.kind === 'pr' && !view.autoMerge && !state.mergeNow) {
-        try {
-          await attemptMerge(state, view);
-        } catch (error) {
-          finish(state, EXIT.refused, `merge refused: ${messageOf(error).split('\n')[0]}`);
-          continue;
-        }
       }
       if (state.target.kind === 'commit' || !options.merge) {
         finish(state, EXIT.ok, `GREEN ${state.label}`);

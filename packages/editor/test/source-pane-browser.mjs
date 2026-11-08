@@ -448,8 +448,7 @@ try {
   // An enum value, bare, in a field of the schema: a tone is offered inside quotes.
   await typing.evaluate(() => { demo.pane.editor.api.setSelection(1); demo.pane.editor.api.focus(); });
   await typing.keyboard.type('"tone": "cas');
-  // A visible tooltip can still hold the previous field's completions until CodeMirror updates its result.
-  await popup.locator('.cm-completionLabel').filter({hasText: /^casual$/}).waitFor({timeout: 5000});
+  await popup.waitFor();
   assert.ok((await options().locator('.cm-completionLabel').allInnerTexts()).includes('casual'), 'tone values come from the registered catalog');
   await typing.keyboard.press('Escape');
   // A free text field offers nothing.

@@ -1,8 +1,0 @@
-{
-  "fixedStaleExit": 0,
-  "cpuThrottle": 2,
-  "node": "v24.20.0",
-  "scope": "Existing completion section plus stale-DOM readiness control; catalog assertion retained",
-  "baselineStaleExit": 1,
-  "workerDelayMilliseconds": 100
-}

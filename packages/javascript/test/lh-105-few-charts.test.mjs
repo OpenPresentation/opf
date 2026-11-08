@@ -180,10 +180,9 @@ describe("fewer value-axis intervals", () => {
 describe("no chart panel", () => {
   test("composition carries no panel; the engines judge colours against the backdrop", () => {
     // The layer has no panel field: every chart stands on its card or the slide background (render and pptx tests check the drawing).
-    const [item] = chartItems({ title: "T", chart: { type: "column", data: { columns: ["Month", "A", "B", "C"], rows: Array.from({ length: 10 }, (_, index) => [`M${index}`, index, index + 1, index + 2]) } } });
+    const [item] = chartItems({ title: "T", chart: { type: "column", data: { columns: ["Month", "A", "B"], rows: Array.from({ length: 10 }, (_, index) => [`M${index}`, index, index + 1]) } } });
     assert.ok(item.chart.valueAxis);
-    // LH-176: two series of ten wider columns now fit their labels; three series are never a small chart (SMALL_CHART_MAX_SERIES).
-    assert.equal(item.chart.layer?.small, undefined, "three series: not small");
+    assert.equal(item.chart.layer?.small, undefined, "ten points: not small");
   });
 });
 

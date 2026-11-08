@@ -11,8 +11,6 @@ Files in this folder:
 
 Review sheets (before/after PNGs) for every output-changing PR are on the evidence-only branch `handoff/review-sheets-2026-11-07` (never merged): `git fetch origin handoff/review-sheets-2026-11-07`, or browse it on GitHub.
 
-Latest continuation: [v0.33.0 checkpoint](release-033-resume.md) (goldens reviewed; blocker fixes folded; final combined gate next).
-
 ## State at handoff
 
 - `main` is at `acc222502`, 26 commits after v0.32.1 (published). No release has run since 0.32.1.
@@ -116,5 +114,3 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - D2 is recommended against (it waits for the owner).
 - Whether to promote LibreOffice from "experimental" (RR-106; the results are in `docs/programs/release-readiness/qualification-0.33-libreoffice.md`, on #1084).
 - Every entry in [decisions.md](decisions.md) is vetoable.
-
-- Current033merge hold: [dispatched FullCI gate correction](fullci-gate.md). The macOS completion test and shared gate are being corrected in derived branches before the next integration batch.
