@@ -4906,8 +4906,32 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
  */
 /** SH-04: composeLayout's overlay pass: compose the slide's `shapes` onto this composition (composeSlide's last step) and return it. */
 const OVERLAY_ONTO = Symbol('opf.overlayOnto');
+/** LH-10: a second layout trial retains every settled text size while its overlong body paragraphs wrap to the reading measure. */
+const PROSE_REFLOW = Symbol('opf.proseReflow'), PROSE_COMPACT = Symbol('opf.proseCompact'), PROSE_NO_TITLE_RULE = Symbol('opf.proseNoTitleRule');
+type RetainedProse = ReadonlyMap<string, {size: number; limit?: number}>;
+const overReadingMeasure = (item: ComposedItem): boolean => item.field === 'text' && !!item.text?.lines.some(line => line.trim().length > PROSE_MEASURE_CHARS);
+function readableProse(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
+  if (overflowCount(result) > 0 || (options as Record<symbol, unknown>)[PROSE_REFLOW] !== undefined) return result;
+  const body = result.items.filter(item => !headings.has(item.field) && !item.eyebrow && !item.emphasis);
+  if (!body.length || !body.every(item => item.field === 'text' && item.text && !item.caption && !ownRunSizes(item.value))) return result;
+  const long = body.filter(overReadingMeasure);
+  if (!long.length) return result;
+  const retained: RetainedProse = new Map(result.items.filter(item => item.text).map(item => [item.path, {size: item.text!.fontSize, ...(long.includes(item) ? {limit: PROSE_MEASURE_CHARS} : {})}]));
+  const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
+  for (const compact of [false, true]) {
+    const next = composeVariant(input, {...options, [PROSE_REFLOW]: retained, [PROSE_COMPACT]: compact, [PROSE_NO_TITLE_RULE]: result.titleRule === undefined, [CENTER]: true} as ComposeSlideOptions, before, floor);
+    if (!next || overflowCount(next) > 0 || next.items.some(overReadingMeasure) || shrinks(next, result, options)) continue;
+    const kept = result.items.every(item => {
+      const after = next.items.find(entry => entry.path === item.path);
+      return !item.text || !!after?.text && after.text.fontSize >= item.text.fontSize - FONT_GRID_EPSILON && JSON.stringify(item.textStyle) === JSON.stringify(after.textStyle);
+    });
+    const oldFill = bodyFill(result), newFill = bodyFill(next);
+    if (kept && (!oldFill || !!newFill && newFill.fill >= oldFill.fill - 1e-6)) return next;
+  }
+  return result;
+}
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  const result = composeSlideBody(input, options);
+  const result = readableProse(input, options, composeSlideBody(input, options));
   if (options.messageSurface) result.surface = options.messageSurface;
   // SH-04: the overlay goes on the slide's final composition (every arrangement, growth and recomposition settled), so it never moves
   // content and follows the blocks it is attached to; its text is fitted by the slide's own fitter (composeLayout's overlay pass).
@@ -5457,7 +5481,9 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
   const unruled = (): SlideComposition | undefined => { if (plain === null) plain = compose(NO_RULES); return plain; };
   const portraitsRead = (next: SlideComposition) => { if (!fired.has('portraits')) return true; const base = unruled(); return !PORTRAIT_FALLBACK.has(next) && !(base && picturesShrink(next, base)); };
   const reads = (next: SlideComposition | undefined) => next !== undefined && readsAsWell(before, trackQuality(next, options), floor) && portraitsRead(next);
-  const core = (options as Record<symbol, unknown>)[WITH_PLACED_TILES] === true ? new Set<GuardedRule>([...CORE_RULES, 'placed-tiles']) : CORE_RULES;
+  const available = (options as Record<symbol, unknown>)[WITH_PLACED_TILES] === true ? new Set<GuardedRule>([...CORE_RULES, 'placed-tiles']) : CORE_RULES;
+  // LH-10 only repairs body measure: a retained-type trial cannot enable title decoration the settled slide rejected.
+  const core = (options as Record<symbol, unknown>)[PROSE_NO_TITLE_RULE] === true ? new Set([...available].filter(rule => rule !== 'title-rule')) : available;
   const ruled = compose(core, fired);
   // LH-39: the figure on one line is tried on top of the rules this arrangement keeps, as guardedCompose does.
   const figure = (rules: ReadonlySet<GuardedRule>, current: SlideComposition | undefined): SlideComposition | undefined => {
@@ -5998,7 +6024,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };
   assertComposition(composition);
   const padding = (composition.padding ?? 0.08) * Math.min(width, height);
-  const gap = (composition.gap ?? 1 / 30) * Math.min(width, height);
+  // LH-10: the retained-type reading-measure trial may spend half the default gap on extra lines. An authored gap stays exact.
+  const gap = (composition.gap ?? 1 / 30) * Math.min(width, height) * ((options as Record<symbol, unknown>)[PROSE_COMPACT] === true && composition.gap === undefined ? .5 : 1);
   const minSize = snapFontSizeUp((composition.minFontSize ?? 16) * scale);
   const rasterPadding=(options.textRasterPadding??1)*scale;
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
@@ -7942,7 +7969,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       box = { ...box, x: side === 'center' ? box.x + (box.width - prose.width) / 2 : atEnd ? box.x + box.width - prose.width : box.x, width: prose.width };
     }
     let text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,prose?.size ?? contentNominalSize(node.field)*scale,floorSize,node.path,node.payload.numbering) : undefined;
-    if (prose && box !== wholeBox && text && textValue !== undefined) {
+    if (prose && box !== wholeBox && text && textValue !== undefined && retainedProse?.get(node.path)?.limit === undefined) {
       const wide = fitContent(node.field,node.value,textValue,wholeBox,prose.size,floorSize,node.path,node.payload.numbering);
       if (wide.fontSize > text.fontSize + 1e-9 || (text.overflow && !wide.overflow)) { text = wide; box = wholeBox; }
     }
@@ -8166,7 +8193,28 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-48: a body of paragraphs and lists that fills too little of its height is composed again with every one of them a few steps of the
   // type scale larger (composeSlide, growBody), up to a list's display size; a paragraph in auto mode keeps the reading measure there.
   const bodySteps = Math.max(0, Math.floor(Number((options as Record<symbol, unknown>)[GROW] ?? 0)) || 0);
+  const retainedProse = (options as Record<symbol, unknown>)[PROSE_REFLOW] as RetainedProse | undefined;
+  const retainedWidths = new WeakMap<Pending, Map<number, number>>();
   const proseMeasure = (node: Pending, cellWidth: number): { size: number; width: number } => {
+    const retained = retainedProse?.get(node.path);
+    if (retained && node.field === 'text' && !node.children) {
+      if (retained.limit === undefined) return {size: retained.size, width: cellWidth};
+      const widths = retainedWidths.get(node) ?? new Map<number, number>();
+      retainedWidths.set(node, widths);
+      if (!widths.has(cellWidth)) {
+        let low = 0, high = cellWidth, kept: number | undefined;
+        // Twelve bounded local fitter probes, retaining only an observed whole result within the character measure. The normal
+        // source-aware rich fitter keeps runs, language, citations and word-break rules intact; final guards reject split words.
+        for (let step = 0; step < 12; step++) {
+          const width = step === 0 ? cellWidth : (low + high) / 2;
+          const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', {x: 0, y: 0, width, height: 1e6}, retained.size, retained.size, node.path, node.payload.numbering);
+          if (fit.lines.every(line => line.trim().length <= retained.limit!)) {kept = width; low = width; if (step === 0) break;}
+          else high = width;
+        }
+        widths.set(cellWidth, kept ?? cellWidth);
+      }
+      return {size: retained.size, width: widths.get(cellWidth)!};
+    }
     // LH-70, LH-67: a paragraph of a paragraph grid starts at the size its columns were chosen for, and the lead of a lead plus stack at
     // the lead size; both keep at most a PARAGRAPH_MEASURE_MAX measure, and neither grows with the body (LH-48).
     const set = paragraphStarts.get(node);
@@ -8238,7 +8286,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-42: the floor is the one the placed fit uses, not the trial size: a list's descriptions (0.82 of its size) may reach the
       // floor, so a floor of `size` measured a described list one size step above `size` (24.4 px for a trial of 20).
       const value = contentText(node.field, node.value) ?? '', measured = (width: number) => fitContent(node.field, node.value, value, { x: 0, y: 0, width, height: 1e6 }, size, Math.min(size, floorSize), node.path, node.payload.numbering);
-      const width = paragraphStarts.has(node) ? Math.min(inner, PARAGRAPH_MEASURE_MAX * AVERAGE_CHARACTER_EM * size) : atFloor || sizeOverride !== undefined ? inner : prose.width;
+      const width = paragraphStarts.has(node) ? Math.min(inner, PARAGRAPH_MEASURE_MAX * AVERAGE_CHARACTER_EM * size) : retainedProse?.get(node.path)?.limit !== undefined ? prose.width * size / prose.size : atFloor || sizeOverride !== undefined ? inner : prose.width;
       let fit = measured(width);
       // LH-72: a long text a centered layout start-aligns is set in its measure column, so the row it asks for holds it there.
       if (ruleOn('centered-column') && centeredLong(node, fit, value) && PARAGRAPH_MEASURE_MAX * AVERAGE_CHARACTER_EM * fit.fontSize < width - .5) fit = measured(PARAGRAPH_MEASURE_MAX * AVERAGE_CHARACTER_EM * fit.fontSize);

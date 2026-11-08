@@ -114,7 +114,6 @@ RR105034corpus continuation: [DOT/PlantUML native coverage](rr105-034-diagram-co
 - [Native feature reconciliation](native-feature-reconciliation.md): original516/465/201/264observations, exact script failures/OFF boundaries, current production/live/diagram/SH25 qualification still separated.
 
 
-
 ## Acceptance checkpoint: 2026-11-08,12UTC
 
 Accepted source1184(7e289),1183/1186(441795),1185(71a5) and1187(a51e) is normally folded; branches are permanently frozen. Parent independently accepts the six selected-slide qualification controls, six RTL model/export controls,20circle/26curve controls and nine validation-scope controls. Core4157/4158nowpasses after the real alias correction; sole inherited template keyset waits for pinnedgoldens, and measuredcomposition271236gzip/267675cap awaits causal module audit and maintainedrefresh. Strictassertions remain. One bounded cancellation request for redundant per-item CI42478729682raced with its completion: GitHub reported alreadycompleted, so no run was cancelled. No polling loop or repeated cancellation followed; finalassemblygets the batch.
@@ -133,9 +132,7 @@ Vetoable/native safety clarification: the failed curved doughnut worker remained
 
 [Source correction and immutable before/after proof](rtl-column-series.md) follow actual native series-slot observations without changing source data, colors, category reversal, chart XML or horizontal/stacked/LTR behavior. Five candidate overlay centers now align mathematically with prior independent native bounds; fresh candidate Office lifecycle and final combined gates remain required. Frozen SH25 and earlier source branches are unchanged.
 
-
 - [SH25native area-tip probe](sh25-area-tip-probe.md): actualnative Series.Values signed endpoint,30preserved actual observations/58mock controls; product unchanged, new getter/native negative/current-edit acceptance owed.
-
 
 ## Acceptance checkpoint: 2026-11-08,13UTC
 
@@ -152,3 +149,7 @@ Main1188actually squash-merged fef5d76e06bae126d6cdda0e3f7658e42c49db03; main ow
 A narrow source PR removes existing bump-branch forced updates. Trusted generation still runs on the default branch before any existing PR history is merged. Closed heads are refused before preparation and before push; latest default/open branch histories are normally merged, and conflicts or concurrent remote updates fail without overwriting them. Seven actual local-Git regression cases pass; no GitHub network, deploy or login is part of those tests. D17 advisory failure/issue reporting remains unchanged. The130.8s mapped run passes eight steps, with type checking appropriately skipped; two sparse historical-fixture omissions are preserved, and exact-Git restoration plus only the affected strict text/tracker reruns passes. No generated tracker is edited. [Raw check receipt](site-bump-history/receipt.json). Independent wave2 review accepts09bb7cf19d67ae5dc02122d6df113ef77f7f6611; PR1193 is normally folded and its source branch permanently frozen.
 
 - [SH25current-series edit qualification](sh25-native-series-name.md): literalName action +threephase readback/49mock controls; actualedit blocked by separately identified direct c:tx/c:v importer gap, no edit acceptance claimed.
+
+## LH10 body reading-measure correction
+
+[Retained-size reflow and allocator correction](lh10-retained-reading-measure.md) address immutableE1b13/s32 at original30px with no content change. The former measure-growth waiver is superseded by the latest about70character owner direction. Required evidence/final gates and multi-timeline under-capacity findings remain open.
