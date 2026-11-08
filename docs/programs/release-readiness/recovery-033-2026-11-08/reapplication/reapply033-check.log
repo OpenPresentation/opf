@@ -1,0 +1,64 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\release-033-reapply
+> node scripts/check-changed.mjs "--base" "7c0c3f13e9de77e038b6ec26183043eb7fe90822"
+
+check-changed: 5 changed files since 7c0c3f13e (plus uncommitted and untracked)
+ok  build (12.7 s)
+ok  biome (0.2 s)
+ok  pnpm run check:changes (0.9 s)
+ok  pnpm run check:release-report (0.5 s)
+ok  pnpm run check:gallery-tracker (3.4 s)
+FAILED  pnpm run check:text (0.4 s)
+ok  pnpm run check:skill-commands (22.2 s)
+-  typecheck
+
+--- pnpm run check:text failed (exit 1); last 35 lines of artifacts\check-changed\pnpm_run_check_text.log:
+
+> openpresentation-workspace@ check:text C:\opf-work\release-033-reapply
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (2.1828ms)
+✖ real compressed evidence is scanned as its text, preserving input bytes (3.2092ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (1.6684ms)
+✔ existing recognized binary evidence remains distinct from text (0.1003ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.3192ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.2418ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 88.573
+
+✖ failing tests:
+
+test at scripts\check-text-integrity.test.mjs:17:1
+✖ real compressed evidence is scanned as its text, preserving input bytes (3.2092ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-reapply\docs\evidence\rich-input-and-platform-ci-20260915\painting-Linux.json.gz'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-reapply/scripts/check-text-integrity.test.mjs:18:17)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-reapply\\docs\\evidence\\rich-input-and-platform-ci-20260915\\painting-Linux.json.gz'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+step                            status     time
+build                           passed   12.7 s
+biome                           passed    0.2 s  2 files
+pnpm run check:changes          passed    0.9 s
+pnpm run check:gallery-tracker  passed    3.4 s
+pnpm run check:release-report   passed    0.5 s
+pnpm run check:skill-commands   passed   22.2 s
+pnpm run check:text             FAILED    0.4 s
+typecheck                       skipped       -  no .ts, .mts or tsconfig change
+total                                    36.2 s
+
+check-changed: 1 of 8 steps failed: pnpm run check:text
+ ELIFECYCLE  Command failed with exit code 1.

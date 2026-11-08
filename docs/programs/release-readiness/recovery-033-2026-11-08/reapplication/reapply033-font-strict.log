@@ -1,0 +1,51 @@
+
+> openpresentation-workspace@ check:font-tracker C:\opf-work\release-033-reapply
+> node --test scripts/build-font-tracker.test.mjs && node scripts/build-font-tracker.mjs --check
+
+✔ every policy family has exactly one record (0.938ms)
+✔ no record references a family that is neither in the policy nor a declared shipped dependency (1.0901ms)
+✔ the reviewed families split into the owner's four classes (0.8257ms)
+✔ every record carries the fields the owner asked for, with valid values (27.8357ms)
+✔ records agree with the policy table and the pinned manifest (1.0749ms)
+✔ every proprietary script family and open script face carries its script-corpus qualification (FF-44) (15.6743ms)
+✔ the Aptos family is qualified with Intos bundled and fixtures in every host, and no longer leads the priority queue (0.4921ms)
+✔ a pendingBundle override for a family whose route face is bundled is stale and fails the build (151.3583ms)
+✔ the committed tracker matches a fresh build (123.1672ms)
+✔ --check detects drift in the tracker files and passes after a rebuild (1005.7829ms)
+✔ a policy family without an override, or an override without a policy family, fails the build (157.2137ms)
+✔ a declared shipped dependency that the policy already has must leave overrides.extras (129.4253ms)
+✔ priority counts only values that are not already pass, and discounts verified hosts (0.9313ms)
+✔ gallery cards are recorded separately from the gallery editor, and Node names its default pack (1.5355ms)
+✔ metric routes are qualified only with four-style widths, line breaks and a fixture in every host (0.4139ms)
+✔ a measurement source override reaches the record (Georgia comes from the opf#163 re-run) (0.1056ms)
+✔ per-family acceptance records come from overrides, with fixture, date and evidence (266.3034ms)
+✔ a Latin family is accepted only with a fixture in every host and a measurement against the real font (3.421ms)
+✔ the host fixtures name the same Latin families in every host and the qualification covers every Latin route (2.0845ms)
+✔ the decisions of RR-17 are recorded: Aptos Narrow and Serif route to Intos, Aptos Mono keeps Cousine, Liberation aliases the Croscore faces (0.1411ms)
+✔ the summary answers the owner's four questions from the records (5.074ms)
+✔ a proprietary family without a bundled route counts as no route, not as found (8.1588ms)
+✔ Symbol, Wingdings and Webdings carry the code-table route from the pinned symbol snapshot (5.9754ms)
+✔ a code-table route whose chain has an unbundled face falls back to needs-special-path (178.6004ms)
+✔ the symbol snapshot is reduced from the renderer module and refuses a bad commit (71.0804ms)
+✔ native verification comes from committed comparison output, and only for families the runs name (28.2396ms)
+✔ a deck that fails a gated check marks the families it reads back failed, and a family no deck names stays unverified (348.8361ms)
+✔ a failing FF-46 deck marks failed the families only that deck reads back, and a passing deck elsewhere keeps a family verified (295.0469ms)
+✔ a family whose real font ships one face has no style gap, and the rule rejects a declared list the measurement contradicts (222.5141ms)
+✔ gallery cards are verified for the families pptx-gallery's own preview-font test covers, from a current snapshot (1.3496ms)
+✔ an open script, emoji or math family is qualified only with a passing fixture in every host, and a recorded finding keeps it out (1.8863ms)
+✔ the script host fixtures name the same families in every host, every one of them in the scripts pack, and none is also a Latin fixture (1.846ms)
+✔ the script rule leaves the Latin path alone: without it the Latin records are unchanged, and a family missing from one host is not accepted (286.5771ms)
+✔ the assembler turns the four host reports into the evidence file, with a finding beside the families and never among them (1.9264ms)
+✔ a script, visual or code-table family is documented-visual only with a native visual pass and its own fixture in every host (FF-46) (427.2574ms)
+✔ Yu Gothic's genuine own-host fixtures do not clear its retained native visual finding (355.6686ms)
+✔ a name that passes natively is documented-visual with its own fixture in all four hosts, and stays put with three (384.0606ms)
+✔ the name assembler turns the four host reports into the evidence file, keyed by the name, with a finding beside the names (2.0495ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4663.7694
+Font tracker is up to date.

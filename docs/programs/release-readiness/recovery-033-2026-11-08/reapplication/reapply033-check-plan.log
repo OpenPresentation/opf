@@ -1,0 +1,13 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\release-033-reapply
+> node scripts/check-changed.mjs "--base" "7c0c3f13e9de77e038b6ec26183043eb7fe90822" "--plan"
+
+check-changed: 5 changed files since 7c0c3f13e (plus uncommitted and untracked)
+run   build
+run   biome
+run   pnpm run check:changes
+run   pnpm run check:gallery-tracker
+run   pnpm run check:release-report
+run   pnpm run check:skill-commands
+run   pnpm run check:text
+skip  typecheck  (no .ts, .mts or tsconfig change)
