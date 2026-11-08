@@ -196,6 +196,35 @@ export function nativeWrapBox(item, values, list, limits, textMeasurement) {
   return {x: item.box.x - (alignment === 'center' ? grow / 2 : alignment === 'right' ? grow : 0), width};
 }
 
+// RR-105 (opf#1127): the same two-sided wrap margin for a plain wrapped title. Its heading area is a hard boundary;
+// an automatic heading uses the content frame horizontally when that frame contains it.
+export function nativeTitleWrapBox(item, geometry, textMeasurement, {nativeStyle, report = () => {}} = {}) {
+  const style = {...item.textStyle, ...nativeStyle};
+  // The physical family and style flags the writer serializes are the measurement target. Do not carry metadata for another face.
+  delete style.fontFace;
+  delete style.sourceFontFamily;
+  try {
+    const resolution = textMeasurement?.resolveFont?.(style);
+    // A visual replacement cannot verify native soft breaks. The authored face/size stay editable as measured lines.
+    if (resolution?.substitute && resolution.compatibility === 'visual' || nativeStyle?.fontFamily !== undefined && nativeStyle.fontFamily !== item.textStyle.fontFamily && !resolution) {
+      report('font-metrics'); return undefined;
+    }
+    const heading = geometry.headingAreas?.find(area => area.name === 'title' && !area.collapsed);
+    let area = heading?.box ?? geometry.contentBox;
+    const inside = area && item.box.x >= area.x - 1e-6 && item.box.x + item.box.width <= area.x + area.width + 1e-6;
+    // A placed-picture heading can be wider than the body's frame. Its authored title box is then the conservative boundary.
+    if (!inside) area = item.box;
+    const limits = {left: Math.max(0, area.x), right: Math.min(geometry.width, area.x + area.width)};
+    const wrap = nativeWrapBox({...item, textStyle: style}, [item.value], false, limits, textMeasurement);
+    if (!wrap) report('tight-wrap');
+    return wrap;
+  } catch (error) {
+    // A provider may know the logical family but not the physical native face. Preserve the title rather than assuming shared metrics.
+    if (error?.code !== 'font-unavailable') throw error;
+    report('font-metrics'); return undefined;
+  }
+}
+
 // RR-88: the native auto-number (`a:buAutoNum`) that reproduces core's markers, or undefined when the entries are not one sequence.
 function nativeNumbering(entries) {
   const first = entries[0]?.marker?.number;
