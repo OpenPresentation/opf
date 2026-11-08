@@ -1,0 +1,14 @@
+[
+  {
+    "file": "features-034-native-02.zip",
+    "entries": 151,
+    "bytes": 8353789,
+    "sha256": "65586d55e3009293a9b5a6387393e58fc1b57def083aba9347ac19950ae58748"
+  },
+  {
+    "file": "features-034-cli-native-03.zip",
+    "entries": 119,
+    "bytes": 5016198,
+    "sha256": "0672e988bcedffa7620ee86149685d80629b47eb042646e494d717ee33aafc91"
+  }
+]
