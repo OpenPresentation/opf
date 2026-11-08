@@ -1,0 +1,753 @@
+﻿{
+    "cases":  [
+                  {
+                      "source":  "C:\\opf-work\\sh20-23-review\\artifacts\\sh23-fresh-03\\chevrons.pptx",
+                      "saved":  "C:\\opf-work\\release-033-artifacts\\sh23-chevrons-01\\result\\chevrons-ninth-saved.pptx",
+                      "kind":  "chevrons",
+                      "reopened":  {
+                                       "levels":  [
+                                                      1,
+                                                      1,
+                                                      1,
+                                                      1,
+                                                      1,
+                                                      1,
+                                                      1,
+                                                      1,
+                                                      1
+                                                  ],
+                                       "rects":  [
+                                                     {
+                                                         "left":  43.200000762939453,
+                                                         "width":  189.91267395019531,
+                                                         "top":  218.93243408203125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     },
+                                                     {
+                                                         "left":  214.12196350097656,
+                                                         "width":  189.91267395019531,
+                                                         "top":  218.93243408203125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     },
+                                                     {
+                                                         "left":  385.04324340820313,
+                                                         "width":  189.91267395019531,
+                                                         "top":  218.93243408203125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     },
+                                                     {
+                                                         "left":  555.9652099609375,
+                                                         "width":  189.91267395019531,
+                                                         "top":  218.93243408203125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     },
+                                                     {
+                                                         "left":  726.88726806640625,
+                                                         "width":  189.91267395019531,
+                                                         "top":  218.93243408203125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     },
+                                                     {
+                                                         "left":  43.200000762939453,
+                                                         "width":  236.10818481445313,
+                                                         "top":  312.897705078125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     },
+                                                     {
+                                                         "left":  255.69747924804688,
+                                                         "width":  236.10818481445313,
+                                                         "top":  312.897705078125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     },
+                                                     {
+                                                         "left":  468.19418334960938,
+                                                         "width":  236.10818481445313,
+                                                         "top":  312.897705078125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     },
+                                                     {
+                                                         "left":  680.69171142578125,
+                                                         "width":  236.10818481445313,
+                                                         "top":  312.897705078125,
+                                                         "rotation":  0,
+                                                         "arrow":  false,
+                                                         "height":  75.965194702148438
+                                                     }
+                                                 ],
+                                       "sizes":  [
+                                                     36,
+                                                     36,
+                                                     36,
+                                                     36,
+                                                     36,
+                                                     36,
+                                                     36,
+                                                     36,
+                                                     36
+                                                 ],
+                                       "paragraphs":  [
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  93.031337738037109,
+                                                              "width":  97.8149642944336,
+                                                              "text":  "Edited",
+                                                              "top":  234.00752258300781
+                                                          },
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  279.16330337524414,
+                                                              "width":  67.39495849609375,
+                                                              "text":  "Plan",
+                                                              "top":  234.00752258300781
+                                                          },
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  444.39458084106445,
+                                                              "width":  78.77496337890625,
+                                                              "text":  "Build",
+                                                              "top":  234.00752258300781
+                                                          },
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  620.8790168762207,
+                                                              "width":  67.6500015258789,
+                                                              "text":  "Ship",
+                                                              "top":  234.00752258300781
+                                                          },
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  782.7861213684082,
+                                                              "width":  85.680000305175781,
+                                                              "text":  "Learn",
+                                                              "top":  234.00752258300781
+                                                          },
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  124.98661422729492,
+                                                              "width":  80.0999984741211,
+                                                              "text":  "Grow",
+                                                              "top":  327.97279357910156
+                                                          },
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  337.1215705871582,
+                                                              "width":  80.825042724609375,
+                                                              "text":  "Scale",
+                                                              "top":  327.97279357910156
+                                                          },
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  538.56825637817383,
+                                                              "width":  102.92504119873047,
+                                                              "text":  "Extra 8",
+                                                              "top":  327.17031860351563
+                                                          },
+                                                          {
+                                                              "alignment":  2,
+                                                              "left":  760.7308235168457,
+                                                              "width":  83.594963073730469,
+                                                              "text":  "Ninth",
+                                                              "top":  327.17031860351563
+                                                          }
+                                                      ],
+                                       "nodeCount":  9,
+                                       "layout":  "urn:openpresentation.org/smartart/layout/chevron-rows/43ddb748c6259bc0",
+                                       "maxPointError":  7.5694605E-05,
+                                       "texts":  [
+                                                     "Edited",
+                                                     "Plan",
+                                                     "Build",
+                                                     "Ship",
+                                                     "Learn",
+                                                     "Grow",
+                                                     "Scale",
+                                                     "Extra 8",
+                                                     "Ninth"
+                                                 ],
+                                       "maxRotationError":  0
+                                   },
+                      "eight":  {
+                                    "levels":  [
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1
+                                               ],
+                                    "rects":  [
+                                                  {
+                                                      "left":  43.200000762939453,
+                                                      "width":  236.10818481445313,
+                                                      "top":  200.45472717285156,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  94.4429931640625
+                                                  },
+                                                  {
+                                                      "left":  255.69747924804688,
+                                                      "width":  236.10818481445313,
+                                                      "top":  200.45472717285156,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  94.4429931640625
+                                                  },
+                                                  {
+                                                      "left":  468.19418334960938,
+                                                      "width":  236.10818481445313,
+                                                      "top":  200.45472717285156,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  94.4429931640625
+                                                  },
+                                                  {
+                                                      "left":  680.69171142578125,
+                                                      "width":  236.10818481445313,
+                                                      "top":  200.45472717285156,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  94.4429931640625
+                                                  },
+                                                  {
+                                                      "left":  43.200000762939453,
+                                                      "width":  236.10818481445313,
+                                                      "top":  312.897705078125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  94.4429931640625
+                                                  },
+                                                  {
+                                                      "left":  255.69747924804688,
+                                                      "width":  236.10818481445313,
+                                                      "top":  312.897705078125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  94.4429931640625
+                                                  },
+                                                  {
+                                                      "left":  468.19418334960938,
+                                                      "width":  236.10818481445313,
+                                                      "top":  312.897705078125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  94.4429931640625
+                                                  },
+                                                  {
+                                                      "left":  680.69171142578125,
+                                                      "width":  236.10818481445313,
+                                                      "top":  312.897705078125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  94.4429931640625
+                                                  }
+                                              ],
+                                    "sizes":  [
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36
+                                              ],
+                                    "paragraphs":  [
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  119.7666130065918,
+                                                           "width":  90.540000915527344,
+                                                           "text":  "Vision",
+                                                           "top":  224.76869964599609
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  343.83656692504883,
+                                                           "width":  67.39495849609375,
+                                                           "text":  "Plan",
+                                                           "top":  224.76869964599609
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  550.64326858520508,
+                                                           "width":  78.77496337890625,
+                                                           "text":  "Build",
+                                                           "top":  224.76869964599609
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  768.703296661377,
+                                                           "width":  67.6500015258789,
+                                                           "text":  "Ship",
+                                                           "top":  224.76869964599609
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  122.19661331176758,
+                                                           "width":  85.680000305175781,
+                                                           "text":  "Learn",
+                                                           "top":  337.21170043945313
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  337.48408889770508,
+                                                           "width":  80.0999984741211,
+                                                           "text":  "Grow",
+                                                           "top":  337.21170043945313
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  549.6182746887207,
+                                                           "width":  80.825042724609375,
+                                                           "text":  "Scale",
+                                                           "top":  337.21170043945313
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  751.065845489502,
+                                                           "width":  102.92504119873047,
+                                                           "text":  "Extra 8",
+                                                           "top":  336.40921020507813
+                                                       }
+                                                   ],
+                                    "nodeCount":  8,
+                                    "layout":  "urn:openpresentation.org/smartart/layout/chevron-rows/43ddb748c6259bc0",
+                                    "maxPointError":  6.6621591E-05,
+                                    "texts":  [
+                                                  "Vision",
+                                                  "Plan",
+                                                  "Build",
+                                                  "Ship",
+                                                  "Learn",
+                                                  "Grow",
+                                                  "Scale",
+                                                  "Extra 8"
+                                              ],
+                                    "maxRotationError":  0
+                                },
+                      "ninth":  {
+                                    "levels":  [
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1,
+                                                   1
+                                               ],
+                                    "rects":  [
+                                                  {
+                                                      "left":  43.200000762939453,
+                                                      "width":  189.91267395019531,
+                                                      "top":  218.93243408203125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  },
+                                                  {
+                                                      "left":  214.12196350097656,
+                                                      "width":  189.91267395019531,
+                                                      "top":  218.93243408203125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  },
+                                                  {
+                                                      "left":  385.04324340820313,
+                                                      "width":  189.91267395019531,
+                                                      "top":  218.93243408203125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  },
+                                                  {
+                                                      "left":  555.9652099609375,
+                                                      "width":  189.91267395019531,
+                                                      "top":  218.93243408203125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  },
+                                                  {
+                                                      "left":  726.88726806640625,
+                                                      "width":  189.91267395019531,
+                                                      "top":  218.93243408203125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  },
+                                                  {
+                                                      "left":  43.200000762939453,
+                                                      "width":  236.10818481445313,
+                                                      "top":  312.897705078125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  },
+                                                  {
+                                                      "left":  255.69747924804688,
+                                                      "width":  236.10818481445313,
+                                                      "top":  312.897705078125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  },
+                                                  {
+                                                      "left":  468.19418334960938,
+                                                      "width":  236.10818481445313,
+                                                      "top":  312.897705078125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  },
+                                                  {
+                                                      "left":  680.69171142578125,
+                                                      "width":  236.10818481445313,
+                                                      "top":  312.897705078125,
+                                                      "rotation":  0,
+                                                      "arrow":  false,
+                                                      "height":  75.965194702148438
+                                                  }
+                                              ],
+                                    "sizes":  [
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36,
+                                                  36
+                                              ],
+                                    "paragraphs":  [
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  93.031337738037109,
+                                                           "width":  97.8149642944336,
+                                                           "text":  "Edited",
+                                                           "top":  234.00752258300781
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  279.16330337524414,
+                                                           "width":  67.39495849609375,
+                                                           "text":  "Plan",
+                                                           "top":  234.00752258300781
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  444.39458084106445,
+                                                           "width":  78.77496337890625,
+                                                           "text":  "Build",
+                                                           "top":  234.00752258300781
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  620.8790168762207,
+                                                           "width":  67.6500015258789,
+                                                           "text":  "Ship",
+                                                           "top":  234.00752258300781
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  782.7861213684082,
+                                                           "width":  85.680000305175781,
+                                                           "text":  "Learn",
+                                                           "top":  234.00752258300781
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  124.98661422729492,
+                                                           "width":  80.0999984741211,
+                                                           "text":  "Grow",
+                                                           "top":  327.97279357910156
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  337.1215705871582,
+                                                           "width":  80.825042724609375,
+                                                           "text":  "Scale",
+                                                           "top":  327.97279357910156
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  538.56825637817383,
+                                                           "width":  102.92504119873047,
+                                                           "text":  "Extra 8",
+                                                           "top":  327.17031860351563
+                                                       },
+                                                       {
+                                                           "alignment":  2,
+                                                           "left":  760.7308235168457,
+                                                           "width":  83.594963073730469,
+                                                           "text":  "Ninth",
+                                                           "top":  327.17031860351563
+                                                       }
+                                                   ],
+                                    "nodeCount":  9,
+                                    "layout":  "urn:openpresentation.org/smartart/layout/chevron-rows/43ddb748c6259bc0",
+                                    "maxPointError":  7.5694605E-05,
+                                    "texts":  [
+                                                  "Edited",
+                                                  "Plan",
+                                                  "Build",
+                                                  "Ship",
+                                                  "Learn",
+                                                  "Grow",
+                                                  "Scale",
+                                                  "Extra 8",
+                                                  "Ninth"
+                                              ],
+                                    "maxRotationError":  0
+                                },
+                      "savedSha256":  "f959bad3501bd2deee4f86f6dbf8f678d0d68ba3d0abe3aaa17574cb1eaae7e8"
+                  }
+              ],
+    "inputs":  [
+                   {
+                       "source":  "C:\\opf-work\\sh20-23-review\\artifacts\\sh23-fresh-03\\chevrons.pptx",
+                       "sha256After":  "a868e7aad12834c1bf21b7d632b27726b859a583fb6a9c3f6b7b53e7d7d87771",
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh23-chevrons-01\\result\\inputs\\chevrons.pptx",
+                       "unchanged":  true,
+                       "sha256":  "a868e7aad12834c1bf21b7d632b27726b859a583fb6a9c3f6b7b53e7d7d87771",
+                       "spec":  {
+                                    "kind":  "chevrons",
+                                    "file":  "chevrons.pptx",
+                                    "sha256":  "a868e7aad12834c1bf21b7d632b27726b859a583fb6a9c3f6b7b53e7d7d87771",
+                                    "initialCount":  7,
+                                    "initialTexts":  [
+                                                         "Vision",
+                                                         "Plan",
+                                                         "Build",
+                                                         "Ship",
+                                                         "Learn",
+                                                         "Grow",
+                                                         "Scale"
+                                                     ],
+                                    "fontSize":  36,
+                                    "paragraphAlignment":  "ctr",
+                                    "text9":  [
+                                                  {
+                                                      "left":  92.52262393100645,
+                                                      "right":  191.35012571379352
+                                                  },
+                                                  {
+                                                      "left":  263.4446243438064,
+                                                      "right":  362.27212612659355
+                                                  },
+                                                  {
+                                                      "left":  434.36587433420647,
+                                                      "right":  533.1933761169935
+                                                  },
+                                                  {
+                                                      "left":  605.2878738734065,
+                                                      "right":  704.1153756561937
+                                                  },
+                                                  {
+                                                      "left":  776.2098742862064,
+                                                      "right":  875.0373760689935
+                                                  },
+                                                  {
+                                                      "left":  92.52262393100645,
+                                                      "right":  237.54562633779352
+                                                  },
+                                                  {
+                                                      "left":  305.0201236910064,
+                                                      "right":  450.04312609779356
+                                                  },
+                                                  {
+                                                      "left":  517.5168739022065,
+                                                      "right":  662.5398763089936
+                                                  },
+                                                  {
+                                                      "left":  730.0143736622065,
+                                                      "right":  875.0373760689936
+                                                  }
+                                              ],
+                                    "layoutId":  "urn:openpresentation.org/smartart/layout/chevron-rows/43ddb748c6259bc0",
+                                    "frame":  {
+                                                  "x":  57.6,
+                                                  "y":  147.9940157480315,
+                                                  "width":  1164.8,
+                                                  "height":  514.4059842519684
+                                              },
+                                    "geometry8":  [
+                                                      {
+                                                          "left":  43.2,
+                                                          "top":  200.45475891851459,
+                                                          "width":  236.10825026879996,
+                                                          "height":  94.44299695467235,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  255.69749975999997,
+                                                          "top":  200.45475891851459,
+                                                          "width":  236.10825026879996,
+                                                          "height":  94.44299695467235,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  468.1942499712,
+                                                          "top":  200.45475891851459,
+                                                          "width":  236.10825026879996,
+                                                          "height":  94.44299695467235,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  680.6917497312,
+                                                          "top":  200.45475891851459,
+                                                          "width":  236.10825026879996,
+                                                          "height":  94.44299695467235,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  43.2,
+                                                          "top":  312.8977555520322,
+                                                          "width":  236.10825026879996,
+                                                          "height":  94.44299695467235,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  255.69749975999997,
+                                                          "top":  312.8977555520322,
+                                                          "width":  236.10825026879996,
+                                                          "height":  94.44299695467235,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  468.1942499712,
+                                                          "top":  312.8977555520322,
+                                                          "width":  236.10825026879996,
+                                                          "height":  94.44299695467235,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  680.6917497312,
+                                                          "top":  312.8977555520322,
+                                                          "width":  236.10825026879996,
+                                                          "height":  94.44299695467235,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      }
+                                                  ],
+                                    "geometry9":  [
+                                                      {
+                                                          "left":  43.2,
+                                                          "top":  218.9325083969785,
+                                                          "width":  189.9127496448,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  214.1220004128,
+                                                          "top":  218.9325083969785,
+                                                          "width":  189.9127496448,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  385.0432504032,
+                                                          "top":  218.9325083969785,
+                                                          "width":  189.9127496448,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  555.9652499424001,
+                                                          "top":  218.9325083969785,
+                                                          "width":  189.9127496448,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  726.8872503552,
+                                                          "top":  218.9325083969785,
+                                                          "width":  189.9127496448,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  43.2,
+                                                          "top":  312.8977555520322,
+                                                          "width":  236.10825026879996,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  255.69749975999997,
+                                                          "top":  312.8977555520322,
+                                                          "width":  236.10825026879996,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  468.1942499712,
+                                                          "top":  312.8977555520322,
+                                                          "width":  236.10825026879996,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      },
+                                                      {
+                                                          "left":  680.6917497312,
+                                                          "top":  312.8977555520322,
+                                                          "width":  236.10825026879996,
+                                                          "height":  75.9652478620129,
+                                                          "rotation":  0,
+                                                          "arrow":  false
+                                                      }
+                                                  ]
+                                },
+                       "copySha256After":  "a868e7aad12834c1bf21b7d632b27726b859a583fb6a9c3f6b7b53e7d7d87771"
+                   }
+               ],
+    "stages":  [
+                   "create-app:ok",
+                   "empty-visible-minimized:ok",
+                   "chevrons-open-copy:ok",
+                   "chevrons-prepare-eight:ok",
+                   "chevrons-edit-add-ninth:ok",
+                   "chevrons-save-ninth-copy:ok",
+                   "chevrons-close-owned-input:ok",
+                   "chevrons-reopen-saved-ninth:ok",
+                   "chevrons-verify-saved-ninth:ok",
+                   "chevrons-close-saved:ok",
+                   "quit-empty-owned-app:ok"
+               ],
+    "failure":  null,
+    "passed":  true
+}

@@ -281,7 +281,7 @@ The headless operations the editor runs are in `@openpresentation/opf-editor/lay
 
 ## Live browser canvas
 
-A diagram (`diagram`: Mermaid source, or `{ source, alt }`) is one selectable object on the canvas, like a chart: its source (a multi-line monospace field) and its alt text are edited in the properties form, never inline. Add content, "Replace with" and the Studio's Insert offer Diagram with a small flowchart as its sample, find and replace searches its source and alt text, and the outline shows it as a read-only chip. A source that does not parse still opens in the form; the validator reports it at the diagram's path with a line and column.
+A diagram (`diagram`: Mermaid string shorthand, or `{ source, syntax, alt }` with `syntax` set to `mermaid`, `dot` or `plantuml`) is one selectable object on the canvas, like a chart: its source (a multi-line monospace field) and its alt text are edited in the properties form, never inline. Add content, "Replace with" and the Studio's Insert offer Diagram with a small flowchart as its sample, find and replace searches its source and alt text, and the outline shows it as a read-only chip. A source that does not parse still opens in the form; the validator reports it at the diagram's path with a line and column.
 
 A timeline event's `status` (`done`, `current`, `planned`; core's `TimelineEvent.status`) is a menu in the canvas properties form and in the schema inspector, not free text; "Add" on a timeline adds an event with no status. The canvas draws it as the preview does, and a PPTX export keeps it.
 

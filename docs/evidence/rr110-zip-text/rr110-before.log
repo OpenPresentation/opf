@@ -1,0 +1,40 @@
+✔ compressed reports retain the same text checks and original line/column (1.5729ms)
+✔ real compressed evidence is scanned as its text, preserving input bytes (8.5913ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (1.1765ms)
+✔ existing recognized binary evidence remains distinct from text (0.0895ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.3765ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.2273ms)
+✖ ZIP evidence is binary by signature while plain text under ZIP names stays checked (0.5858ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 72.8283
+
+✖ failing tests:
+
+test at scripts\check-text-integrity.test.mjs:72:1
+✖ ZIP evidence is binary by signature while plain text under ZIP names stays checked (0.5858ms)
+  AssertionError [ERR_ASSERTION]: native-previews.zip
+  + actual - expected
+  
+  + 'text'
+  - 'binaryArchives'
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr110-text/scripts/check-text-integrity.test.mjs:76:83)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'text',
+    expected: 'binaryArchives',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
