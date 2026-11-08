@@ -191,10 +191,16 @@ function blockAtKey(slide, context, key, paths) {
  * and `records[i]` the stored overlay record (ids and anchors) while the slide's native structure is as it was exported.
  */
 export function assembleOverlayShapes(imported, contexts, restored, records = [], contentPaths = []) {
+  // Slide and payload ids are unique in the whole presentation, so a generated id avoids every slide's ids, not only its own slide's
+  // (opf#1103: a copy re-saved by another app keeps no stored ids, and two slides' connected blocks were both named `blocks-0-shape`).
+  const taken = new Set();
+  for (const slide of imported.slides) {
+    if (typeof slide?.id === 'string') taken.add(slide.id);
+    for (const id of usedIds(slide)) taken.add(id);
+  }
   imported.slides.forEach((slide, index) => {
     const state = contexts[index]?.shapeImport;
     if (!state || (!state.overlays.length && !state.connectors.length)) return;
-    const taken = usedIds(slide);
     const unique = name => { let id = slug(name), n = 1; while (taken.has(id)) id = `${slug(name)}-${++n}`; taken.add(id); return id; };
     const rows = new Map(records[index] ?? []);
     // The stored ids come first, so a generated one never takes a stored one's name.
