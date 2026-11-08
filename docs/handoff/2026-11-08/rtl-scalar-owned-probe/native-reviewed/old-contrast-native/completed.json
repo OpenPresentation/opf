@@ -1,0 +1,79 @@
+﻿[
+    {
+        "id":  "rtl-contrast-01-ar-inherited-list",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:55:42.1775147Z"
+    },
+    {
+        "id":  "rtl-contrast-02-he-inherited-list",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:55:52.5050626Z"
+    },
+    {
+        "id":  "rtl-contrast-03-nfd-inherited-body",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:56:02.5684431Z"
+    },
+    {
+        "id":  "rtl-contrast-04-mixed-explicit-french",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:56:12.8121562Z"
+    },
+    {
+        "id":  "rtl-contrast-05-mixed-explicit-arabic",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:56:22.8219658Z"
+    },
+    {
+        "id":  "rtl-contrast-06-whole-explicit-arabic",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:56:32.6677029Z"
+    },
+    {
+        "id":  "rtl-contrast-07-mixed-inherited",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:56:42.4362013Z"
+    },
+    {
+        "id":  "rtl-contrast-08-mixed-explicit-english",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:56:52.3258256Z"
+    },
+    {
+        "id":  "rtl-contrast-09-long-explicit-arabic",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:57:02.5953114Z"
+    },
+    {
+        "id":  "rtl-contrast-10-non-ascii-digits",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:57:15.0397305Z"
+    },
+    {
+        "id":  "rtl-contrast-11-long-explicit-french",
+        "slides":  1,
+        "cleanupConfirmed":  true,
+        "officeProcessCountAfter":  0,
+        "at":  "2026-11-08T19:57:25.2355015Z"
+    }
+]

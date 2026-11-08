@@ -1,0 +1,29 @@
+﻿{
+    "captureTextFonts":  true,
+    "readOnlySurvey":  false,
+    "source":  {
+                   "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-04-mixed-explicit-french\\inputs\\case.pptx",
+                   "sha256":  "a773ff63e6eeb4af8a2a14dcabfc9bee2b075ee8b3ae9827e93f96ea402b493b",
+                   "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-04-mixed-explicit-french\\native\\inputs\\input.pptx",
+                   "snapshotSha256":  "a773ff63e6eeb4af8a2a14dcabfc9bee2b075ee8b3ae9827e93f96ea402b493b"
+               },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-04-mixed-explicit-french\\inputs\\action-plan.json",
+                       "sha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-04-mixed-explicit-french\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "count":  0
+                   },
+    "verifier":  {
+                     "path":  "C:\\opf-work\\rr105-readonly-survey\\packages\\pptx\\test\\native-furniture-control.ps1",
+                     "sha256":  "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943",
+                     "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-04-mixed-explicit-french\\native\\inputs\\native-furniture-control.ps1",
+                     "snapshotSha256":  "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\opf-work\\rr105-readonly-survey\\packages\\pptx\\test\\native-process.ps1",
+                          "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+                          "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-04-mixed-explicit-french\\native\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                      }
+}

@@ -1,0 +1,105 @@
+﻿{
+    "actionPlan":  {
+                       "chartPoints":  [
+
+                                       ],
+                       "currentChartPointProbe":  {
+                                                      "stage":  "action-1-measure-chart-point",
+                                                      "chartName":  "Native chart",
+                                                      "shapeName":  "Native ring",
+                                                      "seriesIndex":  1,
+                                                      "pointIndex":  1,
+                                                      "edge":  "top",
+                                                      "strategy":  "native-point-bounds",
+                                                      "sliceCoordinates":  [
+                                                                               {
+                                                                                   "index":  1,
+                                                                                   "location":  1,
+                                                                                   "rawValue":  "315.806929133858",
+                                                                                   "value":  315.80692913385826
+                                                                               },
+                                                                               {
+                                                                                   "index":  1,
+                                                                                   "location":  2,
+                                                                                   "rawValue":  "96.3074015748032",
+                                                                                   "value":  96.307401574803166
+                                                                               },
+                                                                               {
+                                                                                   "index":  2,
+                                                                                   "location":  1,
+                                                                                   "rawValue":  "280.488346456693",
+                                                                                   "value":  280.48834645669291
+                                                                               },
+                                                                               {
+                                                                                   "index":  2,
+                                                                                   "location":  2,
+                                                                                   "rawValue":  "242.725511811024",
+                                                                                   "value":  242.72551181102361
+                                                                               },
+                                                                               {
+                                                                                   "index":  3,
+                                                                                   "location":  1,
+                                                                                   "rawValue":  "411.463779527559",
+                                                                                   "value":  411.46377952755904
+                                                                               },
+                                                                               {
+                                                                                   "index":  3,
+                                                                                   "location":  2,
+                                                                                   "rawValue":  "317.096850393701",
+                                                                                   "value":  317.09685039370078
+                                                                               },
+                                                                               {
+                                                                                   "index":  7,
+                                                                                   "location":  1,
+                                                                                   "rawValue":  "411.091732283465",
+                                                                                   "value":  411.09173228346458
+                                                                               },
+                                                                               {
+                                                                                   "index":  7,
+                                                                                   "location":  2,
+                                                                                   "rawValue":  "275.718818897638",
+                                                                                   "value":  275.71881889763779
+                                                                               },
+                                                                               {
+                                                                                   "index":  8,
+                                                                                   "location":  1,
+                                                                                   "rawValue":  "318.774803149606",
+                                                                                   "value":  318.77480314960627
+                                                                               },
+                                                                               {
+                                                                                   "index":  8,
+                                                                                   "location":  2,
+                                                                                   "rawValue":  "226.137952755906",
+                                                                                   "value":  226.1379527559055
+                                                                               },
+                                                                               {
+                                                                                   "index":  9,
+                                                                                   "location":  1,
+                                                                                   "rawValue":  "342.320472440945",
+                                                                                   "value":  342.32047244094485
+                                                                               },
+                                                                               {
+                                                                                   "index":  9,
+                                                                                   "location":  2,
+                                                                                   "rawValue":  "128.525905511811",
+                                                                                   "value":  128.52590551181103
+                                                                               }
+                                                                           ],
+                                                      "pieCenterLocalPoints":  null,
+                                                      "curvedBoundsLocalPoints":  null,
+                                                      "plotCenterLocalPoints":  null,
+                                                      "circleCenterLocalPoints":  [
+                                                                                      395.34767569926811,
+                                                                                      192.96278836183922
+                                                                                  ],
+                                                      "circleCenterMethod":  "native-outer123-circumcenter",
+                                                      "areaValueObservation":  null,
+                                                      "pointBoundsLocalPoints":  [
+                                                                                     10,
+                                                                                     20,
+                                                                                     40,
+                                                                                     30
+                                                                                 ]
+                                                  }
+                   }
+}

@@ -1,0 +1,5 @@
+C:\opf-work\qualification034-rtl-scalar-owned-native-01\rtl-scalar-owned-07\harness\process\failure\owned worker with 
+spaces.ps1 : Controlled verifier failure
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,owned worker with spaces.ps1
+ 

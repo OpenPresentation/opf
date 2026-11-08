@@ -1,0 +1,14 @@
+﻿{
+    "started":  "2026-11-08T19:56:20.7349524Z",
+    "observedProcesses":  [
+                              {
+                                  "Id":  37672,
+                                  "StartTime":  "\/Date(1794167778016)\/"
+                              }
+                          ],
+    "maximumSeconds":  30,
+    "officeCalls":  0,
+    "processOwnershipInferred":  false,
+    "finished":  "2026-11-08T19:56:22.8219658Z",
+    "remainingProcessCount":  0
+}

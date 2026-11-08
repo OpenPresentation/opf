@@ -1,0 +1,122 @@
+﻿{
+    "schemaVersion":  1,
+    "case":  "rtl-contrast-09-long-explicit-arabic",
+    "timestamp":  "2026-11-08T19:56:52.7199877Z",
+    "manifestSha256":  "f8b3fb7d9e3809395be7e38eeb08c4a5359e786e1ab3fb5f5db83144ad7a5fd4",
+    "selectedCase":  {
+                         "id":  "rtl-contrast-09-long-explicit-arabic",
+                         "worker":  "furniture",
+                         "automaticControlEligible":  true,
+                         "input":  "inputs/rtl-contrast-09-long-explicit-arabic.pptx",
+                         "actionPlan":  "actions/rtl-contrast-09-long-explicit-arabic.json",
+                         "slideCount":  1,
+                         "archiveSha256":  "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+                         "preview":  "previews/rtl-contrast-09-long-explicit-arabic-1.png",
+                         "declaredTopLevelShapes":  16,
+                         "scope":  "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+                     },
+    "provenance":  {
+                       "scope":  "Eleven complete one-slide RTL language contrasts; all8original controls preserve full deck metadata/per-slide language/Unicode. Three bounded exact-string contrasts. Producer-only; no Office/native/registry acceptance.",
+                       "nativeAcceptance":  false,
+                       "registryAcceptance":  false,
+                       "exportProducer":  {
+                                              "revision":  "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+                                              "dirty":  false,
+                                              "buildSha256":  "8f621fc980ecb7797d2b7622b6e7f99f6b1b031921c0d03abdcaa8ae8d32f4f7",
+                                              "successfulBuild":  {
+                                                                      "bytes":  14859,
+                                                                      "sha256":  "bdc01995fb27420962a9a76014899f192c16bb3cf0670331cdb06321b9109bae"
+                                                                  },
+                                              "sourceRuntimeBeforeSha256":  "5cf011f7ff60c3a2c2d9a8f118d36ca2bfe5e5d9701cdbdb53b64d9b7b0303e7",
+                                              "sourceRuntimeAfterSha256":  "5cf011f7ff60c3a2c2d9a8f118d36ca2bfe5e5d9701cdbdb53b64d9b7b0303e7",
+                                              "oldNativeSuiteSha256":  "1f87dd96814a7c9582d77a28cde3471f30e5868817665b5cb0128cfd12958ce3",
+                                              "sourceControl":  {
+                                                                    "bytes":  1854,
+                                                                    "sha256":  "a48d5e41fe772fc4263b0afd487a1d6f2734710cb579af36a6e433dc37aca667"
+                                                                }
+                                          },
+                       "suiteRepository":  {
+                                               "directory":  "C:/opf-work/rr105-readonly-survey",
+                                               "revision":  "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+                                               "dirty":  false,
+                                               "files":  [
+                                                             {
+                                                                 "path":  "scripts/native-acceptance/run-windows.ps1",
+                                                                 "bytes":  15359,
+                                                                 "sha256":  "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+                                                             }
+                                                         ]
+                                           },
+                       "workerRepository":  {
+                                                "directory":  "C:/opf-work/rr105-readonly-survey/packages/pptx",
+                                                "revision":  "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+                                                "dirty":  false,
+                                                "files":  [
+                                                              {
+                                                                  "path":  "test/native-furniture-control.ps1",
+                                                                  "bytes":  71285,
+                                                                  "sha256":  "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-process.ps1",
+                                                                  "bytes":  2341,
+                                                                  "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-process-check.ps1",
+                                                                  "bytes":  2333,
+                                                                  "sha256":  "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-furniture-harness-check.ps1",
+                                                                  "bytes":  45855,
+                                                                  "sha256":  "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+                                                              }
+                                                          ]
+                                            }
+                   },
+    "executingCode":  {
+                          "suite":  {
+                                        "revision":  "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+                                        "dirty":  false,
+                                        "files":  [
+                                                      {
+                                                          "path":  "scripts/native-acceptance/run-windows.ps1",
+                                                          "bytes":  15359,
+                                                          "sha256":  "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+                                                      }
+                                                  ]
+                                    },
+                          "workers":  {
+                                          "revision":  "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+                                          "dirty":  false,
+                                          "files":  [
+                                                        {
+                                                            "path":  "test/native-furniture-control.ps1",
+                                                            "bytes":  71285,
+                                                            "sha256":  "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-process.ps1",
+                                                            "bytes":  2341,
+                                                            "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-process-check.ps1",
+                                                            "bytes":  2333,
+                                                            "sha256":  "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-furniture-harness-check.ps1",
+                                                            "bytes":  45855,
+                                                            "sha256":  "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+                                                        }
+                                                    ]
+                                      }
+                      },
+    "timeoutSeconds":  60,
+    "status":  "native-observation-completed; acceptance-requires-supervisor-review",
+    "nativeAcceptance":  false,
+    "registryAcceptance":  false,
+    "captureTextFonts":  true
+}

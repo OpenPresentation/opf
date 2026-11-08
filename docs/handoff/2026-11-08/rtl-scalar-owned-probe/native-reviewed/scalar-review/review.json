@@ -1,0 +1,80 @@
+{
+  "scope": "Exact sealed inputs and every authored field/Unicode codepoint; owned original/SaveCopy/reopen. No Unicode/language normalization, no fixture substitution or tolerance changes. Actual glyph judgment is separate and nativeAcceptance remains false. Known visually reversed pages must not be accepted from matching text/API state.",
+  "nativeAcceptance": false,
+  "sourceManifestSha256": "0ce6fb8a1b88d5ed719f6f026ae541fcb3d1d22d2b706b32d58c2d069eeeda80",
+  "reviewProducerSha256": "eb530a427fdeec439b9a52045abd6d244893b8504205ee5e0969f5fb89107a28",
+  "importerRepositoryRevision": "b7536f19e92cdea55384ba40471af700622d798e",
+  "rows": [
+    {
+      "id": "rtl-scalar-owned-07",
+      "inputSha256": "be3ea579b65e24cd0818472304539ee4ef646f962ce7244eb756184196a7b713",
+      "savedSha256": "ee5c34bf76bff946c7adcd4f659cf71efb1a9ebd86484df10518ff76127645b0",
+      "terminal": {
+        "timestamp": "2026-11-08T20:55:46.4383052Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 2,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "a4b2ca3ae5ec1bcce3beadf99eff65b195df577fa65416c73f75557563902ed0",
+            "a4b2ca3ae5ec1bcce3beadf99eff65b195df577fa65416c73f75557563902ed0",
+            "a4b2ca3ae5ec1bcce3beadf99eff65b195df577fa65416c73f75557563902ed0"
+          ],
+          "previewSha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "نص مختلط موروث",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "البند: Release 1 remains available",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1040 @@
+{
+  "scope": "Exact sealed inputs and every authored field/Unicode codepoint; owned original/SaveCopy/reopen. No Unicode/language normalization, no fixture substitution or tolerance changes. Actual glyph judgment is separate and nativeAcceptance remains false. Known visually reversed pages must not be accepted from matching text/API state.",
+  "nativeAcceptance": false,
+  "sourceManifestSha256": "f8b3fb7d9e3809395be7e38eeb08c4a5359e786e1ab3fb5f5db83144ad7a5fd4",
+  "reviewProducerSha256": "eb530a427fdeec439b9a52045abd6d244893b8504205ee5e0969f5fb89107a28",
+  "importerRepositoryRevision": "b7536f19e92cdea55384ba40471af700622d798e",
+  "rows": [
+    {
+      "id": "rtl-contrast-01-ar-inherited-list",
+      "inputSha256": "ff342ed396498781e2c8d4021f13a2f9d1160da57587f7728935ed3025b1545b",
+      "savedSha256": "bc86cee0c3ca9b0d5ace40200f645548b401a8c043478dce2afa8fb89059d7b8",
+      "terminal": {
+        "timestamp": "2026-11-08T19:55:40.8983414Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 5,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "bfa64de867386cbb9e3ed9ee165c9b3a4ffe57135b75e96cfe6a1d5207e0484d",
+            "bfa64de867386cbb9e3ed9ee165c9b3a4ffe57135b75e96cfe6a1d5207e0484d",
+            "bfa64de867386cbb9e3ed9ee165c9b3a4ffe57135b75e96cfe6a1d5207e0484d"
+          ],
+          "previewSha256": "8b93376fab8721b1e72731abc96b418d3eab9ed01306ae362ff93c8c0cef9fb8",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "قائمة عربية",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 1",
+              "text": "around the customer journey.",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 2",
+              "text": "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 3",
+              "text": "around the customer journey.",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-02-he-inherited-list",
+      "inputSha256": "486c8caca8b2ae447e15af202394ad78a161021d4a4ab4487727b80982a92c20",
+      "savedSha256": "73846e15cb8ac1e4e6391437616cdb5a445e98331866e6607e2102e44654d001",
+      "terminal": {
+        "timestamp": "2026-11-08T19:55:50.2187970Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 3,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "126c529d1b90212d66625a205a2f15c0af9325f06e90492dd8bedd55a80b981a",
+            "126c529d1b90212d66625a205a2f15c0af9325f06e90492dd8bedd55a80b981a",
+            "126c529d1b90212d66625a205a2f15c0af9325f06e90492dd8bedd55a80b981a"
+          ],
+          "previewSha256": "4682b861cd07e901b8fe455027be64831cb648fea628a68e167a03cdb681c57f",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "רשימה בעברית",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 1",
+              "text": "around the customer journey.",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-03-nfd-inherited-body",
+      "inputSha256": "ef6533da8927255f579830bc144001343e0dbabb6ee1989548e21b855b8eb5bc",
+      "savedSha256": "b19a8c8ed1981d41ad16682a62aa0eb99c9656561d0546d3da711fd76d3ad9df",
+      "terminal": {
+        "timestamp": "2026-11-08T19:56:00.1312782Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 2,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "bb67f92bfc50031ff621ccf510b87e744ab1ddf74961edc2c72b4a57ae83eb6e",
+            "bb67f92bfc50031ff621ccf510b87e744ab1ddf74961edc2c72b4a57ae83eb6e",
+            "bb67f92bfc50031ff621ccf510b87e744ab1ddf74961edc2c72b4a57ae83eb6e"
+          ],
+          "previewSha256": "244fb3e9164e4209f271e3ab967562adb3f32e1149dfa9824f26d916893a60e6",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "أحرف متكافئة",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF text slides.0.text line 0",
+              "text": "Item 1: Café keeps its original Unicode.",
+              "font": {
+                "status": "mixed-or-unavailable",
+                "name": "Aptos",
+                "sizePoints": 42,
+                "bold": -2,
+                "italic": 0,
+                "unavailableFields": [
+                  "bold"
+                ],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-04-mixed-explicit-french",
+      "inputSha256": "a773ff63e6eeb4af8a2a14dcabfc9bee2b075ee8b3ae9827e93f96ea402b493b",
+      "savedSha256": "4bbe9b2b40e78261a802a66128f1bf4f894382b9c29ff6046e22d8696725c724",
+      "terminal": {
+        "timestamp": "2026-11-08T19:56:10.5282201Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "mixed-run-languages",
+          "path": "language",
+          "message": "Runs use 2 languages (ar-SA x2, fr-FR x1). The presentation uses ar-SA; slides with another predominant language declare it, and individual rich-text runs keep their own lang."
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "mixed-run-languages",
+          "path": "language",
+          "message": "Runs use 2 languages (ar-SA x2, fr-FR x1). The presentation uses ar-SA; slides with another predominant language declare it, and individual rich-text runs keep their own lang."
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 2,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "908473a6946382f136ce954ff3cd0e86a2711005569d55dff2392cbe5c2d589d",
+            "908473a6946382f136ce954ff3cd0e86a2711005569d55dff2392cbe5c2d589d",
+            "908473a6946382f136ce954ff3cd0e86a2711005569d55dff2392cbe5c2d589d"
+          ],
+          "previewSha256": "6475f6b933c982d1c0cccd84d140ded8776c0974bfcdce3a5a22d0398b0892d7",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "لغة فرنسية صريحة",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "البند: Bonjour 1",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "inputSha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+      "savedSha256": "f5457bc6aaab1821289f0c6974e7de5529a824bd2465a439ee062bf9226f1588",
+      "terminal": {
+        "timestamp": "2026-11-08T19:56:20.5255784Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "unsupported-body-font",
+          "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+          "path": "slides.0.shapes.1.paragraphs.0.runs.1"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "unsupported-body-font",
+          "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+          "path": "slides.0.shapes.1.paragraphs.0.runs.1"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 2,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575",
+            "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575",
+            "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575"
+          ],
+          "previewSha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "لغة عربية صريحة",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "البند: Bonjour 1",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-06-whole-explicit-arabic",
+      "inputSha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331",
+      "savedSha256": "ff5c187bcc42d6ee6b68cadb37e80af805df7df73d6dce2cfde801afe91cef72",
+      "terminal": {
+        "timestamp": "2026-11-08T19:56:30.3634850Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "unsupported-body-font",
+          "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+          "path": "slides.0.shapes.1.paragraphs.0.runs.0"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "unsupported-body-font",
+          "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+          "path": "slides.0.shapes.1.paragraphs.0.runs.0"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 2,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa",
+            "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa",
+            "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa"
+          ],
+          "previewSha256": "27cbf4fd66f0bffbbb77f78991525e28a42a89bc750fe98d4ce900633484ab52",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "نص عربي صريح",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "البند: Bonjour 1",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-07-mixed-inherited",
+      "inputSha256": "e6b961eaebe0132faf83db3f9395f8c5d4dd2b710748a6320dc388f149e980e8",
+      "savedSha256": "d58cd176ac43b599af05e1fb5ebc91c74bb266207ef92d556112ebb2c8b5e50a",
+      "terminal": {
+        "timestamp": "2026-11-08T19:56:42.2315676Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": false,
+      "authoredSourceSavedExact": false,
+      "sourceBeforeChanges": [
+        {
+          "path": ".slides.0.items.0",
+          "before": "البند: Release 1 remains available",
+          "after": [
+            "البند: ",
+            "Release 1 remains available"
+          ]
+        }
+      ],
+      "sourceSavedChanges": [
+        {
+          "path": ".slides.0.items.0",
+          "before": "البند: Release 1 remains available",
+          "after": [
+            "البند: ",
+            "Release 1 remains available"
+          ]
+        }
+      ],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 2,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "a4b2ca3ae5ec1bcce3beadf99eff65b195df577fa65416c73f75557563902ed0",
+            "a4b2ca3ae5ec1bcce3beadf99eff65b195df577fa65416c73f75557563902ed0",
+            "a4b2ca3ae5ec1bcce3beadf99eff65b195df577fa65416c73f75557563902ed0"
+          ],
+          "previewSha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "نص مختلط موروث",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "البند: Release 1 remains available",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-08-mixed-explicit-english",
+      "inputSha256": "5d380f17eee6bf4af9fb9825dee65629ef31865290d0e86c6a68ccadef45d38f",
+      "savedSha256": "595368543276c42f087f2b74df187676dc6cd1cef1f5ac6dab1a978acbcef284",
+      "terminal": {
+        "timestamp": "2026-11-08T19:56:49.9339121Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 2,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "25da9cadd443074717f778a697c828d9c72c60edd4e201fc408c4c79ea3f736a",
+            "25da9cadd443074717f778a697c828d9c72c60edd4e201fc408c4c79ea3f736a",
+            "25da9cadd443074717f778a697c828d9c72c60edd4e201fc408c4c79ea3f736a"
+          ],
+          "previewSha256": "21518b37502f9fb0446d6e611471428c9b57bb13f6124a6ce24d56ad2bed459d",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "لغة إنجليزية صريحة",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "البند: Hello 1",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-09-long-explicit-arabic",
+      "inputSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+      "savedSha256": "8b31dc63d8d980d8c0aef26627ddac5c530a956ad581c7314b466f3b82fe83df",
+      "terminal": {
+        "timestamp": "2026-11-08T19:57:00.3013604Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "unsupported-body-font",
+          "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+          "path": "slides.0.shapes.1.paragraphs.0.runs.0"
+        },
+        {
+          "code": "unsupported-body-font",
+          "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+          "path": "slides.0.shapes.2.paragraphs.0.runs.0"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "unsupported-body-font",
+          "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+          "path": "slides.0.shapes.1.paragraphs.0.runs.0"
+        },
+        {
+          "code": "unsupported-body-font",
+          "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+          "path": "slides.0.shapes.2.paragraphs.0.runs.0"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 3,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+            "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+            "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+          ],
+          "previewSha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "نص لاتيني بلغة عربية صريحة",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 1",
+              "text": "around the customer journey.",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-10-non-ascii-digits",
+      "inputSha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2",
+      "savedSha256": "d100ed781e495aa6bff94826ab4699a187a91ac173bc9e0b1e10bb2e63f48a2e",
+      "terminal": {
+        "timestamp": "2026-11-08T19:57:12.7856596Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 8,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017",
+            "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017",
+            "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017"
+          ],
+          "previewSha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "أرقام عربية وفارسية",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF text slides.0.blocks.0.text line 0",
+              "text": "Item ١: Arabic-Indic ",
+              "font": {
+                "status": "mixed-or-unavailable",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": -2,
+                "italic": 0,
+                "unavailableFields": [
+                  "bold"
+                ],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF text slides.0.blocks.0.text line 1",
+              "text": "number",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF text slides.0.blocks.1.text line 0",
+              "text": "Item ۱: Persian number",
+              "font": {
+                "status": "mixed-or-unavailable",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": -2,
+                "italic": 0,
+                "unavailableFields": [
+                  "bold"
+                ],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.2.items line 0",
+              "text": "Item ١: Arabic-Indic ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.2.items line 1",
+              "text": "number",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.2.items line 2",
+              "text": "Item ۱: Persian ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.2.items line 3",
+              "text": "number",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-11-long-explicit-french",
+      "inputSha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "savedSha256": "6d6af8fa300374a7ae1ff1f20883b76d2b65cb45805252310d95bcb6ecef4d91",
+      "terminal": {
+        "timestamp": "2026-11-08T19:57:22.9569436Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "authoredSourceBeforeExact": true,
+      "authoredSourceSavedExact": true,
+      "sourceBeforeChanges": [],
+      "sourceSavedChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "mixed-run-languages",
+          "path": "language",
+          "message": "Runs use 2 languages (fr-FR x2, ar-SA x1). The presentation uses ar-SA; slides with another predominant language declare it, and individual rich-text runs keep their own lang."
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "mixed-run-languages",
+          "path": "language",
+          "message": "Runs use 2 languages (fr-FR x2, ar-SA x1). The presentation uses ar-SA; slides with another predominant language declare it, and individual rich-text runs keep their own lang."
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 3,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "a7a392ee4ee31903e45437d377a3505018241dba1bfb00c4bc0bc90b3a3c8c64",
+            "a7a392ee4ee31903e45437d377a3505018241dba1bfb00c4bc0bc90b3a3c8c64",
+            "a7a392ee4ee31903e45437d377a3505018241dba1bfb00c4bc0bc90b3a3c8c64"
+          ],
+          "previewSha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "نص لاتيني بلغة فرنسية صريحة",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.items line 1",
+              "text": "around the customer journey.",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

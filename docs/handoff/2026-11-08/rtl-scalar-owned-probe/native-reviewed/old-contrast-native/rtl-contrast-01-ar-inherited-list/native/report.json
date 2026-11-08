@@ -1,0 +1,620 @@
+﻿{
+    "schemaVersion":  1,
+    "captureTextFonts":  true,
+    "readOnlySurvey":  false,
+    "source":  {
+                   "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\inputs\\case.pptx",
+                   "sha256":  "ff342ed396498781e2c8d4021f13a2f9d1160da57587f7728935ed3025b1545b",
+                   "openedPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\inputs\\input.pptx",
+                   "openedSha256":  "ff342ed396498781e2c8d4021f13a2f9d1160da57587f7728935ed3025b1545b"
+               },
+    "saved":  {
+                  "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\native-furniture-control.pptx",
+                  "sha256":  "bc86cee0c3ca9b0d5ace40200f645548b401a8c043478dce2afa8fb89059d7b8"
+              },
+    "reopened":  {
+                     "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\native-furniture-control.pptx",
+                     "sha256":  "bc86cee0c3ca9b0d5ace40200f645548b401a8c043478dce2afa8fb89059d7b8"
+                 },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\inputs\\action-plan.json",
+                       "sha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "actions":  [
+
+                                   ],
+                       "completed":  [
+
+                                     ],
+                       "styleEdits":  [
+
+                                      ],
+                       "chartPoints":  [
+
+                                       ],
+                       "currentChartPointProbe":  null,
+                       "chartSeriesEdits":  [
+
+                                            ],
+                       "currentChartSeriesProbe":  null
+                   },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3330382C313136342E382C3139332E395D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32372E37352C22666F6E7446616D696C79223A224170746F73227D7D5D5D2C226E6174697665223A7B22737472756374757265223A223030353633376362626364623864222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223130356263366437313265636162227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  5,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "قائمة عربية",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223130383037313939373563613161227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos Display",
+                                                                                           "sizePoints":  40.5,
+                                                                                           "bold":  -1,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF list slides.0.items line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.2,
+                                                                          "top":  230.984955,
+                                                                          "width":  873.6,
+                                                                          "height":  33.8550377,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                           "value":  "7B2276223A312C226E616D65223A224F5046206C69737420736C696465732E302E6974656D73206C696E652030222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20313A20437573746F6D65727320746F6C64207573206F6E626F617264696E6720746F6F6B20746F6F206C6F6E672C20736F2077652072656275696C7420697420222C2262617365223A2261722D5341227D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  27.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF list slides.0.items line 1",
+                                                                          "type":  17,
+                                                                          "left":  74.275116,
+                                                                          "top":  264.84,
+                                                                          "width":  842.5249,
+                                                                          "height":  33.8550377,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "around the customer journey.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  27.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF list slides.0.items line 2",
+                                                                          "type":  17,
+                                                                          "left":  43.2,
+                                                                          "top":  306.465027,
+                                                                          "width":  873.6,
+                                                                          "height":  33.8550377,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                           "value":  "7B2276223A312C226E616D65223A224F5046206C69737420736C696465732E302E6974656D73206C696E652032222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20323A20437573746F6D65727320746F6C64207573206F6E626F617264696E6720746F6F6B20746F6F206C6F6E672C20736F2077652072656275696C7420697420222C2262617365223A2261722D5341227D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  27.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  5,
+                                                                          "id":  6,
+                                                                          "name":  "OPF list slides.0.items line 3",
+                                                                          "type":  17,
+                                                                          "left":  74.275116,
+                                                                          "top":  340.32,
+                                                                          "width":  842.5249,
+                                                                          "height":  33.8550377,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "around the customer journey.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  27.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\original-slide-01.png",
+                                                        "sha256":  "bfa64de867386cbb9e3ed9ee165c9b3a4ffe57135b75e96cfe6a1d5207e0484d"
+                                                    }
+                                                ],
+                                    "chartSeriesNames":  [
+
+                                                         ]
+                                },
+                   "edited":  {
+                                  "slideCount":  1,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Slide 1",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3330382C313136342E382C3139332E395D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32372E37352C22666F6E7446616D696C79223A224170746F73227D7D5D5D2C226E6174697665223A7B22737472756374757265223A223030353633376362626364623864222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223130356263366437313265636162227D7D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  5,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.0.title line 0",
+                                                                        "type":  14,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "قائمة عربية",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223130383037313939373563613161227D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Aptos Display",
+                                                                                         "sizePoints":  40.5,
+                                                                                         "bold":  -1,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF list slides.0.items line 0",
+                                                                        "type":  17,
+                                                                        "left":  43.2,
+                                                                        "top":  230.984955,
+                                                                        "width":  873.6,
+                                                                        "height":  33.8550377,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                         "value":  "7B2276223A312C226E616D65223A224F5046206C69737420736C696465732E302E6974656D73206C696E652030222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20313A20437573746F6D65727320746F6C64207573206F6E626F617264696E6720746F6F6B20746F6F206C6F6E672C20736F2077652072656275696C7420697420222C2262617365223A2261722D5341227D5D7D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Aptos",
+                                                                                         "sizePoints":  27.75,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  3,
+                                                                        "id":  4,
+                                                                        "name":  "OPF list slides.0.items line 1",
+                                                                        "type":  17,
+                                                                        "left":  74.275116,
+                                                                        "top":  264.84,
+                                                                        "width":  842.5249,
+                                                                        "height":  33.8550377,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "around the customer journey.",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Aptos",
+                                                                                         "sizePoints":  27.75,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  4,
+                                                                        "id":  5,
+                                                                        "name":  "OPF list slides.0.items line 2",
+                                                                        "type":  17,
+                                                                        "left":  43.2,
+                                                                        "top":  306.465027,
+                                                                        "width":  873.6,
+                                                                        "height":  33.8550377,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                         "value":  "7B2276223A312C226E616D65223A224F5046206C69737420736C696465732E302E6974656D73206C696E652032222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20323A20437573746F6D65727320746F6C64207573206F6E626F617264696E6720746F6F6B20746F6F206C6F6E672C20736F2077652072656275696C7420697420222C2262617365223A2261722D5341227D5D7D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Aptos",
+                                                                                         "sizePoints":  27.75,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  5,
+                                                                        "id":  6,
+                                                                        "name":  "OPF list slides.0.items line 3",
+                                                                        "type":  17,
+                                                                        "left":  74.275116,
+                                                                        "top":  340.32,
+                                                                        "width":  842.5249,
+                                                                        "height":  33.8550377,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "around the customer journey.",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Aptos",
+                                                                                         "sizePoints":  27.75,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1,
+                                                      "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\edited-slide-01.png",
+                                                      "sha256":  "bfa64de867386cbb9e3ed9ee165c9b3a4ffe57135b75e96cfe6a1d5207e0484d"
+                                                  }
+                                              ],
+                                  "chartSeriesNames":  [
+
+                                                       ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3330382C313136342E382C3139332E395D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32372E37352C22666F6E7446616D696C79223A224170746F73227D7D5D5D2C226E6174697665223A7B22737472756374757265223A223030353633376362626364623864222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223130356263366437313265636162227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  5,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "قائمة عربية",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223130383037313939373563613161227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos Display",
+                                                                                           "sizePoints":  40.5,
+                                                                                           "bold":  -1,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF list slides.0.items line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.2,
+                                                                          "top":  230.984955,
+                                                                          "width":  873.6,
+                                                                          "height":  33.8550377,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                           "value":  "7B2276223A312C226E616D65223A224F5046206C69737420736C696465732E302E6974656D73206C696E652030222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20313A20437573746F6D65727320746F6C64207573206F6E626F617264696E6720746F6F6B20746F6F206C6F6E672C20736F2077652072656275696C7420697420222C2262617365223A2261722D5341227D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  27.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF list slides.0.items line 1",
+                                                                          "type":  17,
+                                                                          "left":  74.275116,
+                                                                          "top":  264.84,
+                                                                          "width":  842.5249,
+                                                                          "height":  33.8550377,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "around the customer journey.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  27.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF list slides.0.items line 2",
+                                                                          "type":  17,
+                                                                          "left":  43.2,
+                                                                          "top":  306.465027,
+                                                                          "width":  873.6,
+                                                                          "height":  33.8550377,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                           "value":  "7B2276223A312C226E616D65223A224F5046206C69737420736C696465732E302E6974656D73206C696E652032222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20323A20437573746F6D65727320746F6C64207573206F6E626F617264696E6720746F6F6B20746F6F206C6F6E672C20736F2077652072656275696C7420697420222C2262617365223A2261722D5341227D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  27.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  5,
+                                                                          "id":  6,
+                                                                          "name":  "OPF list slides.0.items line 3",
+                                                                          "type":  17,
+                                                                          "left":  74.275116,
+                                                                          "top":  340.32,
+                                                                          "width":  842.5249,
+                                                                          "height":  33.8550377,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "around the customer journey.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  27.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\reopened-slide-01.png",
+                                                        "sha256":  "bfa64de867386cbb9e3ed9ee165c9b3a4ffe57135b75e96cfe6a1d5207e0484d"
+                                                    }
+                                                ],
+                                    "chartSeriesNames":  [
+
+                                                         ]
+                                }
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\opf-work\\rr105-readonly-survey\\packages\\pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943",
+                                    "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\opf-work\\rr105-readonly-survey\\packages\\pptx\\test\\native-process.ps1",
+                                         "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+                                         "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-01-ar-inherited-list\\native\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9711",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9711",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20527.20150",
+                        "powerPointExecutableSha256":  "4305f9e05da8b97357918479c1a9aeff7ff3608e84fafdf70f2e40c471c18370"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations."
+}

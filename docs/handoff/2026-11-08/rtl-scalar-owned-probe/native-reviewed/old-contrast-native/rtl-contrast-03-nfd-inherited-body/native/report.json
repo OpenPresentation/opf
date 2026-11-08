@@ -1,0 +1,371 @@
+﻿{
+    "schemaVersion":  1,
+    "captureTextFonts":  true,
+    "readOnlySurvey":  false,
+    "source":  {
+                   "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\inputs\\case.pptx",
+                   "sha256":  "ef6533da8927255f579830bc144001343e0dbabb6ee1989548e21b855b8eb5bc",
+                   "openedPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\inputs\\input.pptx",
+                   "openedSha256":  "ef6533da8927255f579830bc144001343e0dbabb6ee1989548e21b855b8eb5bc"
+               },
+    "saved":  {
+                  "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\native-furniture-control.pptx",
+                  "sha256":  "b19a8c8ed1981d41ad16682a62aa0eb99c9656561d0546d3da711fd76d3ad9df"
+              },
+    "reopened":  {
+                     "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\native-furniture-control.pptx",
+                     "sha256":  "b19a8c8ed1981d41ad16682a62aa0eb99c9656561d0546d3da711fd76d3ad9df"
+                 },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\inputs\\action-plan.json",
+                       "sha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "actions":  [
+
+                                   ],
+                       "completed":  [
+
+                                     ],
+                       "styleEdits":  [
+
+                                      ],
+                       "chartPoints":  [
+
+                                       ],
+                       "currentChartPointProbe":  null,
+                       "chartSeriesEdits":  [
+
+                                            ],
+                       "currentChartSeriesProbe":  null
+                   },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3336392E332C313136342E382C37312E335D7D2C226E6174697665223A7B22737472756374757265223A223030303330643433313163643366222C226261636B67726F756E64223A223133373432386635373739633133222C227374796C65223A223136373461626364666234373361227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  2,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "أحرف متكافئة",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223037333462303537636631313366227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos Display",
+                                                                                           "sizePoints":  40.5,
+                                                                                           "bold":  -1,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF text slides.0.text line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.2,
+                                                                          "top":  276.96,
+                                                                          "width":  873.6,
+                                                                          "height":  51.24,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Item 1: Café keeps its original Unicode.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TEXT_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223030303561623835386166316463227D"
+                                                                                       },
+                                                                                       {
+                                                                                           "index":  2,
+                                                                                           "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                           "value":  "7B2276223A312C226E616D65223A224F5046207465787420736C696465732E302E74657874206C696E652030222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20313A2043616665CC81206B6565707320697473206F726967696E616C20556E69636F64652E222C2262617365223A2261722D5341227D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "mixed-or-unavailable",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  42,
+                                                                                           "bold":  -2,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+                                                                                                                     "bold"
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\original-slide-01.png",
+                                                        "sha256":  "bb67f92bfc50031ff621ccf510b87e744ab1ddf74961edc2c72b4a57ae83eb6e"
+                                                    }
+                                                ],
+                                    "chartSeriesNames":  [
+
+                                                         ]
+                                },
+                   "edited":  {
+                                  "slideCount":  1,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Slide 1",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3336392E332C313136342E382C37312E335D7D2C226E6174697665223A7B22737472756374757265223A223030303330643433313163643366222C226261636B67726F756E64223A223133373432386635373739633133222C227374796C65223A223136373461626364666234373361227D7D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  2,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.0.title line 0",
+                                                                        "type":  14,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "أحرف متكافئة",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223037333462303537636631313366227D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Aptos Display",
+                                                                                         "sizePoints":  40.5,
+                                                                                         "bold":  -1,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF text slides.0.text line 0",
+                                                                        "type":  17,
+                                                                        "left":  43.2,
+                                                                        "top":  276.96,
+                                                                        "width":  873.6,
+                                                                        "height":  51.24,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Item 1: Café keeps its original Unicode.",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TEXT_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223030303561623835386166316463227D"
+                                                                                     },
+                                                                                     {
+                                                                                         "index":  2,
+                                                                                         "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                         "value":  "7B2276223A312C226E616D65223A224F5046207465787420736C696465732E302E74657874206C696E652030222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20313A2043616665CC81206B6565707320697473206F726967696E616C20556E69636F64652E222C2262617365223A2261722D5341227D5D7D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "mixed-or-unavailable",
+                                                                                         "name":  "Aptos",
+                                                                                         "sizePoints":  42,
+                                                                                         "bold":  -2,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+                                                                                                                   "bold"
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1,
+                                                      "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\edited-slide-01.png",
+                                                      "sha256":  "bb67f92bfc50031ff621ccf510b87e744ab1ddf74961edc2c72b4a57ae83eb6e"
+                                                  }
+                                              ],
+                                  "chartSeriesNames":  [
+
+                                                       ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3336392E332C313136342E382C37312E335D7D2C226E6174697665223A7B22737472756374757265223A223030303330643433313163643366222C226261636B67726F756E64223A223133373432386635373739633133222C227374796C65223A223136373461626364666234373361227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  2,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "أحرف متكافئة",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223037333462303537636631313366227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Aptos Display",
+                                                                                           "sizePoints":  40.5,
+                                                                                           "bold":  -1,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF text slides.0.text line 0",
+                                                                          "type":  17,
+                                                                          "left":  43.2,
+                                                                          "top":  276.96,
+                                                                          "width":  873.6,
+                                                                          "height":  51.24,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Item 1: Café keeps its original Unicode.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TEXT_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22736967223A223030303561623835386166316463227D"
+                                                                                       },
+                                                                                       {
+                                                                                           "index":  2,
+                                                                                           "name":  "OPF_NATIVE_LANGUAGE_V1",
+                                                                                           "value":  "7B2276223A312C226E616D65223A224F5046207465787420736C696465732E302E74657874206C696E652030222C2270617261677261706873223A5B7B22696E646578223A302C2274657874223A224974656D20313A2043616665CC81206B6565707320697473206F726967696E616C20556E69636F64652E222C2262617365223A2261722D5341227D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "mixed-or-unavailable",
+                                                                                           "name":  "Aptos",
+                                                                                           "sizePoints":  42,
+                                                                                           "bold":  -2,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+                                                                                                                     "bold"
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\reopened-slide-01.png",
+                                                        "sha256":  "bb67f92bfc50031ff621ccf510b87e744ab1ddf74961edc2c72b4a57ae83eb6e"
+                                                    }
+                                                ],
+                                    "chartSeriesNames":  [
+
+                                                         ]
+                                }
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\opf-work\\rr105-readonly-survey\\packages\\pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943",
+                                    "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\opf-work\\rr105-readonly-survey\\packages\\pptx\\test\\native-process.ps1",
+                                         "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+                                         "snapshotPath":  "C:\\opf-work\\qualification034-rtl-contrast-native-01\\rtl-contrast-03-nfd-inherited-body\\native\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9711",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9711",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20527.20150",
+                        "powerPointExecutableSha256":  "4305f9e05da8b97357918479c1a9aeff7ff3608e84fafdf70f2e40c471c18370"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations."
+}
