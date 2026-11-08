@@ -60,6 +60,7 @@ const turn = (a, b) => Math.abs((((a - b) % 360) + 540) % 360 - 180) <= .01;
  * composed arrangement from it within 0.1 pt, else {reason}.
  */
 export function opfLayoutDefinition(arrangement, item) {
+  if (arrangement.kind === 'pyramid' && arrangement.pyramidDirection === 'down') return {reason: 'the inverted pyramid has no qualified live SmartArt domain'};
   const recipe = arrangement.layout;
   if (!recipe || !OPF_LAYOUTS[recipe.design]) return {reason: 'its design has no OPF layout definition'};
   const identity = OPF_LAYOUTS[recipe.design], count = arrangement.nodes.length, frame = arrangement.frame, size = arrangement.fontSize;
