@@ -17,7 +17,9 @@ const REGION_RULES = { 'region-unknown': regionUnknownRule, 'region-kind': regio
 const layoutRules: ValidationRule[] = [
 	{
 		info: overflowRule,
-		also: [pointAnchorRule, unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule],
+		// Format validates anchor identities in schema-check without composition. Geometry may add
+		// the same located finding during an enabled layout audit, but must not trigger one.
+		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule],
 		run(context) {
 			// Diagnostics about deck-level settings (header, footer, design) repeat on every slide; report each once.
 			const deckLevel = new Set<string>();
