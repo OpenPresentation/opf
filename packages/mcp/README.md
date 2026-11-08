@@ -8,7 +8,7 @@ example decks and the six agent skills as resources, a `start_here` tool that gi
 the web and desktop); the viewer renders, checks and edits the deck on the user's machine and sends the user's edits back to the model.
 It keeps no state, reads no file but the renderer's fonts, fetches nothing, and needs no API key. Node 22 or later.
 
-Claude Desktop: install `opf-<version>.mcpb` from the matching [GitHub release](https://github.com/OpenPresentation/opf/releases) (from 0.34.0), with its SHA-256 file. `pnpm run build:mcpb` builds it from a checkout; see the docs. Or use the command below.
+Claude Desktop: when the matching [GitHub release](https://github.com/OpenPresentation/opf/releases) lists `opf-<version>.mcpb` and its SHA-256 file, install that bundle. Release-bundle publication is planned from 0.34.0; 0.33.0 has no published bundle asset. `pnpm run build:mcpb` builds it from a checkout; see the docs. Or use the command below.
 
 ```sh
 claude mcp add opf -- npx -y @openpresentation/mcp          # Claude Code
@@ -27,7 +27,7 @@ validators), for a hosted server:
 import { createOpfServer } from "@openpresentation/mcp";           // with the bundled docs, examples, skills and release notes
 import { createOpfMcpServer } from "@openpresentation/mcp/server"; // the same without that data: you pass `sources`
 
-const server = createOpfServer({ version: "0.27.0" });
+const server = createOpfServer({ version: "1.0.0" }); // your hosted server’s version
 await server.connect(transport); // stdio, or Streamable HTTP in a Worker
 ```
 

@@ -93,7 +93,7 @@ A source with a blank first or last line, or an `alt` that holds a backtick or a
 
 ## Supported Mermaid families
 
-OPF draws diagrams with [pele](https://pele.run), which parses Mermaid 12.1 syntax. The first line of the source names the family. All the built-in families are supported; ZenUML is not.
+OPF draws diagrams with [pele](https://pele.run), the shared layout/drawing library pinned as `pele@1.13.0` in this source. It parses Mermaid 12.1 syntax. OPF reads the supported DOT and PlantUML subsets itself and adapts them to the same engine; these are not separate Graphviz or PlantUML renderer installations. The first line of the source names the family. All the built-in families are supported; ZenUML is not.
 
 | Family | First line | Shows |
 | --- | --- | --- |

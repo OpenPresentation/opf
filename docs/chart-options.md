@@ -301,3 +301,27 @@ A chart that sets none of the four fields draws its type's defaults, including t
 Per-series data label overrides (column number formats are RR-54, [chart-table-data.md](chart-table-data.md)), a rotated or rich-text axis title, a chart title, a legend that overlays the plot, manual plot-area layout, secondary axes outside combo charts, and trendlines. Charts from external spreadsheets stay descoped (the `ChartDataSource` form was removed from the schema).
 
 A doughnut hole takes the surface color in both engines even when the chart has an explicit legend position or data labels (LH-182). Core retains the current circular plot after legend space is reserved; the preview fills the hole, and PPTX pins that plot with a surface-colored ellipse under the chart. This surface-only mark is consumed on import without discarding authored legend or label options.
+
+## Data-dependent chart drawings
+
+The preview and PPTX share the draw plan below. These are representation adaptations, with native editing and layout fidelity qualified separately. The source chart stays unchanged. A public type-adaptation warning is not emitted for every family; the diagnostic column states the actual validation behavior.
+
+| Source and data | Shared drawing | Data treatment | Validation diagnostic |
+| --- | --- | --- | --- |
+| World map whose labels are mostly non-places, such as Q1–Q4 | Clustered columns (`map-as-columns`) | Every numeric series and data order retained | No dedicated adaptation warning |
+| Pareto with at least two numeric series | Clustered columns (`pareto-as-columns`), without a cumulative curve | Every series and category retained in data order | `opf/chart-mapping-adapted` |
+| Box-and-whisker with one value per unique category | One distribution per series (`box-per-series`) | All numeric observations retained; categories become a shared group named after the category column | No dedicated adaptation warning |
+| Pie or doughnut with at least two numeric series | One concentric doughnut ring per series (`nested-rings`), first series innermost | Every series/category/value retained | No dedicated adaptation warning |
+| Scatter with a nonnumeric X column | Numeric series against category positions 1, 2, … (`scatter-by-position`) | Numeric series retained; the unusable X column is omitted from the drawing | `opf/chart-series-dropped` names the omitted X column |
+
+Other one-series constructs can leave additional series out and report `opf/chart-series-dropped`; this differs from an all-series-preserving adaptation. A multi-series pie becoming nested rings is not a claim that its second series was lost.
+
+## Multi-series Pareto adaptation
+
+A Pareto chart sorts one numeric series and draws its cumulative share. When the source has two or more numeric series, OPF preserves every series and category in data order as clustered columns in both the preview and PPTX. Validation reports `opf/chart-mapping-adapted` at the chart's `type`. It does not claim that these clustered columns are a Pareto chart, and does not discard a baseline series to produce a cumulative curve. Use one numeric series for the Pareto representation.
+
+### Validation and conversion reports
+
+`opf validate` and `validate` perform semantic chart checks. Drawing conversions through `opf convert` or the Node `convert` API also retain the selected `opf/chart-mapping-adapted` and `opf/chart-series-dropped` warnings for SVG, PNG, PDF and full-slide image-mode PPTX. Warnings follow the actual drawn slide selection, appear once per affected chart, and leave output bytes unchanged. Native PPTX retains its existing `pptx/chart-data-adapted` exporter notices for representation changes or omitted series, without a duplicate core advisory. Converting between deck text formats keeps its format/reference-only reporting contract. Direct renderer/exporter callbacks are separate from the Node conversion report; use semantic validation when reviewing the source data.
+
+The PPTX exporter also owns its adaptation notices with `charts: "picture"`; core forwarding applies to full-slide image-mode PPTX (`as: "images"`), avoiding duplicate warnings in both routes.
