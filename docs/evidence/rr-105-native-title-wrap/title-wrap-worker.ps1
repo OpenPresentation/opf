@@ -9,6 +9,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path $HelperRoot 'packages/editor/test/native-playground-lib.ps1')
+. (Join-Path $PSScriptRoot 'title-wrap-metrics.ps1')
 function Normalize-TitleLine([string]$Text) { return [regex]::Replace($Text.Replace([char]0x00A0,' ').Replace([char]0x202F,' '),'\s+',' ').Trim() }
 $Suite = (Resolve-Path -LiteralPath $Suite).Path
 $OutputDirectory = (Resolve-Path -LiteralPath $OutputDirectory).Path
@@ -70,13 +71,14 @@ try {
       }
       $shapes += @{name=[string]$shape.Name;index=$lineIndex;frame=$frame;rawText=[string]$range.Text;rawLines=$rawLines;fontSizes=$sizes;autoSize=[int]$tf.AutoSize;wordWrap=[int]$tf.WordWrap;overflow=$overflow;characters=$characters;aggregateBound=@([double]$range.BoundLeft,[double]$range.BoundTop,[double]$range.BoundWidth,[double]$range.BoundHeight)}
     }
-    @{width=[double]$presentation.PageSetup.SlideWidth;height=[double]$presentation.PageSetup.SlideHeight;shapes=@($shapes | Sort-Object index)}
+    @{width=[double]$presentation.PageSetup.SlideWidth;height=[double]$presentation.PageSetup.SlideHeight;shapes=@($shapes)}
   }
-  $result.canvas=$measurement; $result.shapes=@($measurement.shapes)
+  $result.canvas=$measurement; $result.rawShapeOrder=@($measurement.shapes | ForEach-Object { @{name=$_.name;index=$_.index} }); $result.shapes=@(Get-OpfOrderedTitleShapes $measurement.shapes)
   $result.actualLines=@($result.shapes | ForEach-Object { $_.rawLines } | ForEach-Object { Normalize-TitleLine $_ } | Where-Object { $_ -ne '' })
   $result.expectedLines=@($case.lines | ForEach-Object { Normalize-TitleLine $_ })
   $result.linesMatch=($result.actualLines.Count -eq $result.expectedLines.Count -and ($result.actualLines -join "`n") -ceq ($result.expectedLines -join "`n"))
-  $result.canvasMatches=([math]::Abs($measurement.width-[double]$case.width*.75) -lt .01 -and [math]::Abs($measurement.height-[double]$case.height*.75) -lt .01)
+  $result.canvasComparison=Get-OpfTitleCanvasComparison $case.width $case.height $measurement.width $measurement.height
+  $result.canvasMatches=$result.canvasComparison.matches
   $expectedSize=[math]::Round([double]$case.fontSize*75)/100
   $allSizes=@($result.shapes | ForEach-Object { $_.fontSizes })
   $result.sizeMatches=$allSizes.Count -gt 0 -and @($allSizes | Where-Object { [math]::Abs($_-$expectedSize) -gt .011 }).Count -eq 0

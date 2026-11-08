@@ -29,14 +29,15 @@ for (const {file, deck} of examples) for (const index of deck.slides.keys()) {
   if (!(slideTemplate(context) || context.slide.layout === undefined || context.slide.layout === 'auto' || geometry.recomposed !== undefined)) continue;
   for (const item of geometry.items.filter(eligible)) {
     const number = manifest.cases.length + 1, name = String(number).padStart(2, '0') + '-' + path.basename(file, '.opf.json') + '-s' + (index + 1);
-    const input = {...deck, slides: [deck.slides[index]]}, diagnostics = [], wrap = nativeTitleWrapBox(item, geometry, fonts.textMeasurement);
+    const input = {...deck, slides: [deck.slides[index]]}, diagnostics = [], nativeFamily = resolveSlideContext(deck, index, {catalogs: [gallery]}).options.fontFamilies.heading;
+    const wrap = nativeTitleWrapBox(item, geometry, fonts.textMeasurement, {nativeFamily});
     // Each file retains its source canvas/design. Only slide-position furniture variables can differ from the full deck.
     const bytes = new Uint8Array(await toPptx(input, {fonts, catalogs: [gallery], bodyText: 'native', seed: 1127, timestamp: '2026-11-08T00:00:00Z', zipDate: '2026-11-08T00:00:00Z', onDiagnostic: value => diagnostics.push(value)}));
     const preview = (await toPng(input, {fonts, catalogs: [gallery], scale: .5}))[0];
     const afterPath = `pptx/${name}.pptx`, previewPath = `preview/${name}.png`;
     await fs.writeFile(path.join(out, afterPath), bytes); await fs.writeFile(path.join(out, previewPath), preview);
     const entry = {name, file, slide: index + 1, width: geometry.width, height: geometry.height, title: item.value, lines: item.text.lines,
-      fontSize: item.text.fontSize, alignment: item.alignment, originalBox: item.box, wrap: wrap ?? null, need: item.box.width * WRAP_MARGIN,
+      fontSize: item.text.fontSize, nativeFamily, alignment: item.alignment, originalBox: item.box, wrap: wrap ?? null, need: item.box.width * WRAP_MARGIN,
       widths: nativeWrapWidths(item, [item.value], false, fonts.textMeasurement), after: {path: afterPath, sha256: hash(bytes)}, preview: {path: previewPath, sha256: hash(preview)}, diagnostics};
     if (wrap) {
       // Archive control: restore only the former exact-width native title frame. This is explicitly a geometry control, not a source-version export.
@@ -56,6 +57,6 @@ for (const {file, deck} of examples) for (const index of deck.slides.keys()) {
     console.log(`${number}: ${name} (${wrap ? 'native' : 'measured fallback'})`);
   }
 }
-assert.equal(manifest.cases.length, 50); assert.equal(manifest.cases.filter(entry => entry.wrap).length, 49);
+assert.equal(manifest.cases.length, 50); assert.equal(manifest.cases.filter(entry => entry.wrap).length, 38);
 await fs.writeFile(path.join(out, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 console.log(`Wrote ${manifest.cases.length} cases to ${out}; native Office line-text acceptance is still owed.`);

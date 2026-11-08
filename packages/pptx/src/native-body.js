@@ -198,14 +198,20 @@ export function nativeWrapBox(item, values, list, limits, textMeasurement) {
 
 // RR-105 (opf#1127): the same two-sided wrap margin for a plain wrapped title. Its heading area is a hard boundary;
 // an automatic heading uses the content frame horizontally when that frame contains it.
-export function nativeTitleWrapBox(item, geometry, textMeasurement) {
+export function nativeTitleWrapBox(item, geometry, textMeasurement, {nativeFamily, report = () => {}} = {}) {
+  const style = item.textStyle;
+  const resolution = textMeasurement?.resolveFont?.({fontFamily: nativeFamily ?? style.fontFamily, fontWeight: style.fontWeight, italic: style.italic});
+  // The preview's visual substitute can move a native soft break by much more than 1%. Keep the authored face and size as measured lines.
+  if (resolution?.substitute && resolution.compatibility === 'visual') { report('font-metrics'); return undefined; }
   const heading = geometry.headingAreas?.find(area => area.name === 'title' && !area.collapsed);
   let area = heading?.box ?? geometry.contentBox;
   const inside = area && item.box.x >= area.x - 1e-6 && item.box.x + item.box.width <= area.x + area.width + 1e-6;
   // A placed-picture heading can be wider than the body's frame. Its authored title box is then the conservative boundary.
   if (!inside) area = item.box;
   const limits = {left: Math.max(0, area.x), right: Math.min(geometry.width, area.x + area.width)};
-  return nativeWrapBox(item, [item.value], false, limits, textMeasurement);
+  const wrap = nativeWrapBox(item, [item.value], false, limits, textMeasurement);
+  if (!wrap) report('tight-wrap');
+  return wrap;
 }
 
 // RR-88: the native auto-number (`a:buAutoNum`) that reproduces core's markers, or undefined when the entries are not one sequence.

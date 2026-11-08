@@ -26,8 +26,9 @@ for (const {file, deck} of examples) {
     const {context, geometry} = compose(deck, index);
     if (!(slideTemplate(context) || context.slide.layout === undefined || context.slide.layout === 'auto' || geometry.recomposed !== undefined)) continue;
     for (const item of geometry.items.filter(eligible)) {
-      const widths = nativeWrapWidths(item, [item.value], false, measurement), wrap = nativeTitleWrapBox(item, geometry, measurement);
-      const where = `${file} slide ${index + 1}`, entry = {file, deck, index, item, geometry, widths, wrap};
+      const nativeFamily = resolveSlideContext(deck, index, {catalogs}).options.fontFamilies.heading, reasons = [];
+      const widths = nativeWrapWidths(item, [item.value], false, measurement), wrap = nativeTitleWrapBox(item, geometry, measurement, {nativeFamily, report: reason => reasons.push(reason)});
+      const where = `${file} slide ${index + 1}`, entry = {file, deck, index, item, geometry, widths, wrap, reasons, nativeFamily};
       assert.ok(widths, `${where}: title lines retain the source words`);
       if (!wrap) { fallbacks.push(entry); continue; }
       const need = WRAP_MARGIN * item.box.width;
@@ -43,15 +44,20 @@ for (const {file, deck} of examples) {
     }
   }
 }
-assert.ok(checked.length >= 49, `${checked.length} native titles checked`);
-assert.ok(unsafeBefore >= 31, `${unsafeBefore} exact-width titles violated the margin before`);
+assert.ok(checked.length >= 38, `${checked.length} native titles checked`);
+assert.ok(unsafeBefore >= 26, `${unsafeBefore} exact-width titles violated the margin before`);
 assert.ok(fallbacks.some(entry => entry.file.endsWith('layout-sampler.opf.json') && entry.index === 0), 'balanced pilot title cannot retain its line breaks at any native width');
 
 // Actual XML for all three alignments and a tight fallback. Retain each example's design, canvas and catalog references.
-const picks = ['employee-town-hall-run-of-show', 'pricing-and-packaging-decision', 'product-roadmap-decision-review']
+const picks = ['engineering-capacity-planning', 'pricing-and-packaging-decision', 'product-roadmap-decision-review']
   .map(name => checked.find(entry => entry.file.endsWith(`${name}.opf.json`) && entry.index === 0));
 assert.deepEqual(picks.map(entry => entry.item.alignment), ['center', 'right', 'left']);
-for (const entry of [...picks, fallbacks.find(entry => entry.file.endsWith('layout-sampler.opf.json') && entry.index === 0)]) {
+const fontFallback = fallbacks.find(entry => entry.file.endsWith('onboarding-experience-redesign.opf.json') && entry.index === 0);
+assert.deepEqual(fontFallback.reasons, ['font-metrics']);
+assert.equal(fontFallback.nativeFamily, 'Bookman Old Style');
+assert.ok(fallbacks.filter(entry => entry.reasons[0] === 'font-metrics').length >= 11, 'known visual substitutions stay measured');
+assert.deepEqual(fallbacks.find(entry => entry.file.endsWith('managed-detection-market-update.opf.json') && entry.index === 0).reasons, ['font-metrics']);
+for (const entry of [...picks, fallbacks.find(entry => entry.file.endsWith('layout-sampler.opf.json') && entry.index === 0), fontFallback]) {
   const deck = {...entry.deck, slides: [entry.deck.slides[entry.index]]}, diagnostics = [];
   const bytes = new Uint8Array(await toPptx(deck, {fonts, bodyText: 'native', onDiagnostic: value => diagnostics.push(value)}));
   const xml = strFromU8(unzipSync(bytes)['ppt/slides/slide1.xml']);
@@ -59,7 +65,8 @@ for (const entry of [...picks, fallbacks.find(entry => entry.file.endsWith('layo
   if (!entry.wrap) {
     assert.equal(titles.length, entry.item.text.lines.length, 'tight wrap keeps the measured title lines');
     assert.ok(!titles.some(shape => /<p:ph\b/.test(shape)), 'a measured line does not bind as the whole title');
-    assert.ok(diagnostics.some(value => value.code === 'native-body-fallback' && value.reason === 'tight-wrap' && value.path === 'slides.0.title'));
+    if (entry === fontFallback) for (const shape of titles) assert.match(shape, /<a:latin typeface="Bookman Old Style"/);
+    assert.ok(diagnostics.some(value => value.code === 'native-body-fallback' && value.reason === entry.reasons[0] && value.path === 'slides.0.title'));
   } else {
     assert.equal(titles.length, 1, 'one coherent native title');
     const [shape] = titles, [, x, , width] = /<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/.exec(shape).map(Number);
