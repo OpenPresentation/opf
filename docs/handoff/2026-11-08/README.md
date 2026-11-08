@@ -132,3 +132,6 @@ Vetoable/native safety clarification: the failed curved doughnut worker remained
 ## RTL clustered-column native blocker
 
 [Source correction and immutable before/after proof](rtl-column-series.md) follow actual native series-slot observations without changing source data, colors, category reversal, chart XML or horizontal/stacked/LTR behavior. Five candidate overlay centers now align mathematically with prior independent native bounds; fresh candidate Office lifecycle and final combined gates remain required. Frozen SH25 and earlier source branches are unchanged.
+
+
+- [SH25native area-tip probe](sh25-area-tip-probe.md): actualnative Series.Values signed endpoint,30preserved actual observations/58mock controls; product unchanged, new getter/native negative/current-edit acceptance owed.

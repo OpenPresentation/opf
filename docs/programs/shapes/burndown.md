@@ -173,3 +173,5 @@ item's state edits its row and appends a log line in the same PR.
 
 
 - 2026-11-08: SH20/22 parentP2review correction preserves sealed inputs and old reports: both audit commands now demand fresh outside output and refuse existing/aliased paths before any metric read, with exclusive creation.14CLI/7pure refusal controls pass; all516valid gate/domain records and3099original input hashes stay exact. No threshold/predicate/geometry changes.
+
+- 2026-11-08: NEWderived SH25area probe corrects a native measurement proxy: Point.Height spans baseline-to-value, so only area1/76/77use actual Series.Values sign to select the observed tip, never product/action geometry. Thirty actual-coordinate fixtures and58signed/scalar/array/unchanged/refusal controls pass without Office; original117.100pxbefore failure retained. Values/chartData/Excel writes prohibited, all raw values/partial bounds and4pxcriterion retained. New native getter/negative/current-chart edit qualification remains owed. [Rationale](../../handoff/2026-11-08/sh25-area-tip-probe.md).
