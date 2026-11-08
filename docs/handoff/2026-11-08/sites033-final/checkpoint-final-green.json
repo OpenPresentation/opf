@@ -1,0 +1,73 @@
+{
+  "scope": "All three exact-head required-all CI gates are confirmed green. Actual org/gallery deployed preview verification and site default merges remain owner-only.",
+  "release": {
+    "version": "0.33.0",
+    "runtime": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+    "orgDocumentation": "9545016583ccfa151077cda4d51043ac6505a140"
+  },
+  "observer": {
+    "session": 67705,
+    "exitCode": 0,
+    "state": "Terminal; consumed; no observer remains",
+    "mode": "One maintained pr-gate batch; exact heads; required all; interval 180; no merge",
+    "log": {
+      "file": "final-three-site-gate.log.gz",
+      "uncompressedBytes": 1040,
+      "sha256": "810b0d9585c31d59d67f6c65d3d1c344c483622d9770d799e8ad284a465217df"
+    }
+  },
+  "sites": [
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "pr": 202,
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/202",
+      "head": "eb16870c6f03148535298c4bd4b0751b6558ec86",
+      "green": [
+        "2026-11-08T15:39:44Z",
+        "2026-11-08T15:42:44Z"
+      ],
+      "deployedPreview": "Not yet supplied or observed; owner must provide/create exact-head preview",
+      "local": "168 Node + 5 fonts; production build/type/font checks; 21 prior production browser cases; current source-readiness regression all 7 pass, original fill-only control fails as expected; 5 local MCP + actual Next frozen-schema control pass",
+      "failuresRetained": "Original geometry CI trace, Checking snapshot and before/after regression are in current-source-readiness/receipt.json; no product or geometry assertions changed"
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "pr": 172,
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/172",
+      "head": "8a476459cd6d9cbba412ef4450401b702d63c8bb",
+      "green": [
+        "2026-11-08T15:24:40Z",
+        "2026-11-08T15:27:41Z"
+      ],
+      "deployedPreview": "Not yet supplied or observed; owner must provide/create exact-head preview",
+      "local": "720 unit tests; types; 997-page production build; published catalog/preview/editor equality and focused browser controls pass"
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "pr": 200,
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/200",
+      "head": "7d7359148eb45c073e002738f378314441094d38",
+      "green": [
+        "2026-11-08T15:24:40Z",
+        "2026-11-08T15:27:41Z"
+      ],
+      "deployedPreview": "https://pr-200-pptx-dev-preview.michael-136.workers.dev",
+      "deployedQualification": "Existing exact-head preview: 12 anonymous inspector/source-pane cases and manifest plus all 13 diagram SVG hashes pass",
+      "local": "1588 Vitest pass/1 existing skip; types/lint/build; actual SDK/CLI bundle contracts; Windows full-ci green"
+    }
+  ],
+  "ownerSteps": [
+    {
+      "action": "Provide or create an exact-head deployed preview for org PR202 and gallery PR172, and send their URLs. Agents will perform read-only preview verification.",
+      "reason": "The user reserves every deploy and login to the owner; no agent deploy is authorized."
+    },
+    {
+      "action": "After the preview checks pass, squash-merge the verified site PRs. Org merges automatically deploy; dev PR200 already has exact-head deployed-preview acceptance.",
+      "reason": "Publication/default-branch merges remain reserved to the owner by the coordinator."
+    }
+  ],
+  "remainingArtifacts": [
+    "Six UI/design screenshots and hosted-MCP artifact 8MFGJNmzZp3NqxDbtPh5Kb after actual hosted viewer availability"
+  ],
+  "history": "Earlier checkpoints remain immutable historical records; this packet supersedes only their pending gate state. No merge, deploy, login or DNS action was performed."
+}
