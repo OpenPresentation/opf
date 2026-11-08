@@ -36,7 +36,7 @@
 // text and run properties, as a list in the `pyramid` or `matrix` layout (SH-19: OPF's own layouts by their uniqueId). Import never stores a
 // layout part. SH-08: any other SmartArt PowerPoint wrote imports through src/smart-art-import.js (an arrangement's or the list or process
 // layout's list, a Mermaid hierarchy, or its drawing as overlay shapes).
-import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, opfSmartArtUnavailable, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
+import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementTree, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, opfSmartArtUnavailable, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
 import {layoutDefinitionXml, opfLayoutDefinition} from './smart-art-layouts.js';
 import {drawingSlide, hierarchyDiagram, layoutStem, outlineItems, outlineText, plainText, readSmartArtModel, smartArtForm} from './smart-art-import.js';
 import {XMLParser} from 'fast-xml-parser';
@@ -60,10 +60,10 @@ const MC = 'http://schemas.openxmlformats.org/markup-compatibility/2006';
 /** SH-16: the alt text of the fallback picture: the kind and size, then each entry on its own line, in entry order. */
 export function smartArtOutline(kind, values) {
   const texts = values.map(plain), count = texts.length;
-  const head = kind === 'pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : kind === 'cycle' ? cycleOutlineHead(count) : kind === 'matrix' ? `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`
+  const head = kind==='org-chart'||kind==='hierarchy'?`${kind==='org-chart'?'Organization chart':'Hierarchy'} of ${count} nodes, root first`:kind==='venn'?`Venn of ${count} sets`:kind === 'pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : kind === 'cycle' ? cycleOutlineHead(count) : kind === 'matrix' ? `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`
     // SH-17: the linear arrangements, in order.
     : `${kind === 'chevrons' ? 'Chevrons' : kind === 'flow' ? 'Flow' : 'Vertical flow'} of ${count} ${kind === 'chevrons' ? 'stage' : 'step'}${count === 1 ? '' : 's'}, ${kind === 'vertical-flow' ? 'top to bottom' : 'in order'}`;
-  return [`${head}:`, ...texts].join('\n');
+  return [`${head}:`, ...texts.map((text,index)=>['org-chart','hierarchy'].includes(kind)?'  '.repeat(Number(values[index]?.level??0))+text:text)].join('\n');
 }
 
 // A tag of the renderer's SVG (quoted attribute values may hold `>`), a comment, CDATA or a processing instruction.
@@ -89,6 +89,7 @@ export function smartArtBleed(arrangement) {
     if (!node.points) {
       const {x, y, width, height} = node.box;
       points.push([x - half, y - half], [x + width + half, y + height + half]);
+      if(node.background){const b=node.background;points.push([b.x-half,b.y-half],[b.x+b.width+half,b.y+b.height+half]);}
       continue;
     }
     node.points.forEach((point, index, all) => {
@@ -197,7 +198,9 @@ const CONTENT_TYPES = Object.freeze({
 /** OPF's own quick style and colors definitions (uniqueId): not Microsoft's, whose content differs. */
 export const OPF_QUICK_STYLE = 'urn:openpresentation.org/opf/smartart/quickstyle/flat';
 export const OPF_COLORS = 'urn:openpresentation.org/opf/smartart/colors/primary';
-const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix', cycle: 'cycle', chevrons: 'process', flow: 'process', 'vertical-flow': 'process'});
+const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix', cycle: 'cycle', chevrons: 'process', flow: 'process', 'vertical-flow': 'process','org-chart':'hierarchy',hierarchy:'hierarchy',venn:'relationship'});
+const measuredKind=kind=>['org-chart','hierarchy','venn'].includes(kind);
+const styleId=(base,kind)=>measuredKind(kind)?base+'/'+kind:base;
 const EMU = 9525; // per canvas pixel (1/96 inch)
 const emu = value => Math.round(value * EMU);
 const escapeXml = value => String(value).replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'}[char]));
@@ -305,9 +308,15 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
       slide.addShape('diamond', {...box(arrangement.background), fill: {color: paint.background.hex.slice(1)}, line: {type: 'none'}, objectName});
       tag(objectName, 'background');
     }
+    for(const edge of arrangement.connectors??[]){
+      for(let segment=1;segment<edge.points.length;segment++){const from=edge.points[segment-1],to=edge.points[segment];if(Math.hypot(to[0]-from[0],to[1]-from[1])<1e-8)continue;const objectName=name('connector '+edge.child+' segment '+segment);slide.addShape('line',{x:inches(Math.min(from[0],to[0])),y:inches(Math.min(from[1],to[1])),w:inches(Math.abs(to[0]-from[0])),h:inches(Math.abs(to[1]-from[1])),flipV:to[1]<from[1],line:{color:paint.fill.hex.slice(1),width:arrangement.lineWidth*.75,beginArrowType:'none',endArrowType:'none'},objectName});tag(objectName,'connector',{parent:edge.parent,child:edge.child});}
+    }
     for (const node of arrangement.nodes) {
       const objectName = name(`node ${node.index}`);
-      slide.addShape(node.preset, {...box(node.box), fill: {color: fill}, line, objectName,
+      if(node.background){const objectName=name('rear '+node.index);slide.addShape('roundRect',{...box(node.background),fill:{color:fill},line,rectRadius:inches(node.radius??0),objectName});tag(objectName,'rear',{index:node.index,adjust:node.adjust,preset:'roundRect'});}
+      const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex.slice(1):fill,nodeLine=arrangement.kind==='hierarchy'?{...line,color:fill}:line;
+      const alpha=arrangement.kind==='venn'?.5:arrangement.kind==='hierarchy'?.9:1;
+      slide.addShape(node.preset, {...box(node.box), fill: {color:nodeFill,...(alpha===1?{}:{transparency:(1-alpha)*100})}, line:nodeLine, objectName,
         ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {})});
       tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {})});
       // SH-18: a cycle's arrow after its node, as PowerPoint stacks them.
@@ -329,7 +338,8 @@ export function writeArrangementAdjustments(entries, tags) {
     const xml = decoder.decode(entries[part]);
     const next = xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
       const record = tags.get(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
-      if (record?.role !== 'node' || (record.preset !== 'trapezoid' && record.preset !== 'chevron')) return shape;
+      if (!['node','rear'].includes(record?.role) || !['trapezoid','chevron','roundRect'].includes(record.preset)) return shape;
+      if(record.preset==='roundRect'&&record.kind!=='hierarchy')return shape;
       return shape.replace(geometry(record.preset), `<a:prstGeom prst="${record.preset}"><a:avLst><a:gd name="adj" fmla="val ${record.adjust}"/></a:avLst></a:prstGeom>`);
     });
     if (next !== xml) entries[part] = encoder.encode(next);
@@ -372,17 +382,20 @@ function nodeParagraph(record, index) {
 /** The data model of one SmartArt: the doc point, one point per entry and the connections in entry order. */
 export function smartArtDataXml(record, number, drawingRelId) {
   const {arrangement, values} = record, doc = modelId(number, ROLE.doc);
+  const hierarchy=['org-chart','hierarchy'].includes(arrangement.kind)?arrangementTree(values):undefined;
+  if(hierarchy&&!hierarchy.ok)throw new Error('Cannot write malformed SmartArt tree: '+hierarchy.reason);
   const loTypeId = record.layout?.uniqueId ?? SMART_ART_LAYOUTS[arrangement.kind], loCatId = record.layout?.category ?? LAYOUT_CATEGORY[arrangement.kind];
   // SH-19: a card's outline is the native card's (the theme's line styles have no such width).
   const spPr = record.card ? `<dgm:spPr><a:ln w="${emu(arrangement.lineWidth)}"><a:solidFill><a:srgbClr val="${record.card.line}"/></a:solidFill></a:ln></dgm:spPr>` : '<dgm:spPr/>';
-  const points = [`<dgm:pt modelId="${doc}" type="doc"><dgm:prSet loTypeId="${escapeXml(loTypeId)}" loCatId="${escapeXml(loCatId)}" qsTypeId="${OPF_QUICK_STYLE}" qsCatId="simple" csTypeId="${OPF_COLORS}" csCatId="accent1"/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`];
+  const points = [`<dgm:pt modelId="${doc}" type="doc"><dgm:prSet loTypeId="${escapeXml(loTypeId)}" loCatId="${escapeXml(loCatId)}" qsTypeId="${styleId(OPF_QUICK_STYLE,arrangement.kind)}" qsCatId="simple" csTypeId="${styleId(OPF_COLORS,arrangement.kind)}" csCatId="accent1"/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`];
   const connections = [];
   values.forEach((_, index) => {
     const id = modelId(number, ROLE.node, index), parent = modelId(number, ROLE.parent, index), sibling = modelId(number, ROLE.sibling, index), cxn = modelId(number, ROLE.connection, index);
     points.push(`<dgm:pt modelId="${id}"><dgm:prSet custT="1"/>${spPr}<dgm:t><a:bodyPr/><a:lstStyle/><a:p>${nodeParagraph(record, index)}</a:p></dgm:t></dgm:pt>`,
       `<dgm:pt modelId="${parent}" type="parTrans" cxnId="${cxn}"><dgm:prSet/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`,
       `<dgm:pt modelId="${sibling}" type="sibTrans" cxnId="${cxn}"><dgm:prSet/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`);
-    connections.push(`<dgm:cxn modelId="${cxn}" srcId="${doc}" destId="${id}" srcOrd="${index}" destOrd="0" parTransId="${parent}" sibTransId="${sibling}"/>`);
+    const ancestor=hierarchy?.nodes[index]?.parent,source=ancestor===undefined?doc:modelId(number,ROLE.node,ancestor),order=hierarchy?(ancestor===undefined?0:hierarchy.nodes[ancestor].children.indexOf(index)):index;
+    connections.push(`<dgm:cxn modelId="${cxn}" srcId="${source}" destId="${id}" srcOrd="${order}" destOrd="0" parTransId="${parent}" sibTransId="${sibling}"/>`);
   });
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:dataModel xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}"><dgm:ptLst>${points.join('')}</dgm:ptLst><dgm:cxnLst>${connections.join('')}</dgm:cxnLst><dgm:bg/><dgm:whole/><dgm:extLst><a:ext uri="http://schemas.microsoft.com/office/drawing/2008/diagram"><dsp:dataModelExt xmlns:dsp="${NS.dsp}" relId="${drawingRelId}" minVer="http://schemas.openxmlformats.org/drawingml/2006/diagram"/></a:ext></dgm:extLst></dgm:dataModel>`;
 }
@@ -393,7 +406,8 @@ export function smartArtDataXml(record, number, drawingRelId) {
 const LABELS = ['node0', 'node1', 'bgShp', 'revTx', 'sibTrans2D1', 'parChTrans1D1', 'trBgShp', 'fgAcc1', 'alignNode1'];
 
 /** OPF's colors definition in the deck's theme: arrangementPaint's slots. Native layouts may use revTx over a filled node; OPF's own layouts reserve it for text beside the node. */
-export function smartArtColorsXml(paint, card, onShapeText = false) {
+export function smartArtColorsXml(paint, card, onShapeText = false,kind) {
+  if(measuredKind(kind))return measuredColorsXml(paint,kind);
   const none = '<a:schemeClr val="bg1"><a:alpha val="0"/></a:schemeClr>';
   const list = (name, fill, line, text) => `<dgm:styleLbl name="${name}"><dgm:fillClrLst meth="repeat">${fill}</dgm:fillClrLst><dgm:linClrLst meth="repeat">${line}</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">${text}</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>`;
   const labels = LABELS.map(name => name === 'bgShp' || name === 'trBgShp' ? list(name, schemeXml(paint.background), schemeXml(paint.line), schemeXml(paint.text))
@@ -407,11 +421,47 @@ export function smartArtColorsXml(paint, card, onShapeText = false) {
 }
 
 /** OPF's quick style: flat (no effects, no 3-D), a node's line the theme's third line style (1.5 pt), the diamond without a line. */
-export function smartArtQuickStyleXml() {
+export function smartArtQuickStyleXml(kind) {
+  if(measuredKind(kind))return measuredQuickStyleXml(kind);
   const scene = '<dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d><dgm:sp3d/><dgm:txPr/>';
   const style = (line, fill) => `<dgm:style><a:lnRef idx="${line}">${srgb}</a:lnRef><a:fillRef idx="${fill}">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dgm:style>`;
   const labels = LABELS.map(name => `<dgm:styleLbl name="${name}">${scene}${name === 'bgShp' || name === 'trBgShp' || name === 'sibTrans2D1' ? style(0, 1) : name === 'revTx' || name === 'fgAcc1' ? style(0, 0) : name === 'alignNode1' ? style(1, 1) : style(3, 1)}</dgm:styleLbl>`);
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:styleDef xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}" uniqueId="${OPF_QUICK_STYLE}"><dgm:title val="OPF flat"/><dgm:desc val="OPF: flat nodes with a 1.5 pt outline"/><dgm:catLst><dgm:cat type="simple" pri="10100"/></dgm:catLst><dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d>${labels.join('')}</dgm:styleDef>`;
+}
+
+// SH21 labels are native layout role names measured from saved defaults; existing six layouts retain their exact style parts.
+const measuredLabels=kind=>kind==='venn'?['vennNode1','revTx']:[...Array.from({length:9},(_,i)=>'node'+i),...Array.from({length:9},(_,i)=>'fgAcc'+i),...Array.from({length:9},(_,i)=>'parChTrans1D'+(i+1)),'revTx'];
+function measuredColorsXml(paint,kind){
+ const none='<a:schemeClr val="bg1"><a:alpha val="0"/></a:schemeClr>',body='<a:schemeClr val="tx1"/>';
+ const labels=measuredLabels(kind).map(name=>{const foreground=kind==='hierarchy'&&/^fgAcc/.test(name),edge=/^parChTrans/.test(name),textOnly=name==='revTx';
+  const fill=textOnly||edge?none:name==='vennNode1'?'<a:schemeClr val="accent1"><a:alpha val="50000"/></a:schemeClr>':foreground?'<a:schemeClr val="bg1"><a:alpha val="90000"/></a:schemeClr>':schemeXml(paint.fill),line=textOnly?none:foreground||edge?schemeXml(paint.fill):schemeXml(paint.line),text=kind==='org-chart'?schemeXml(paint.text):body;
+  return '<dgm:styleLbl name="'+name+'"><dgm:fillClrLst meth="repeat">'+fill+'</dgm:fillClrLst><dgm:linClrLst meth="repeat">'+line+'</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">'+text+'</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>';
+ });
+ return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:colorsDef xmlns:dgm="'+NS.dgm+'" xmlns:a="'+NS.a+'" uniqueId="'+styleId(OPF_COLORS,kind)+'"><dgm:title val="OPF '+kind+'"/><dgm:desc val="OPF measured arrangement paint"/><dgm:catLst><dgm:cat type="accent1" pri="11000"/></dgm:catLst>'+labels.join('')+'</dgm:colorsDef>';
+}
+function measuredQuickStyleXml(kind){
+ const scene='<dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d><dgm:sp3d/><dgm:txPr/>';
+ const labels=measuredLabels(kind).map(name=>{const line=name==='revTx'?0:3,fill=name==='revTx'||/^parChTrans/.test(name)?0:1;return '<dgm:styleLbl name="'+name+'">'+scene+'<dgm:style><a:lnRef idx="'+line+'">'+srgb+'</a:lnRef><a:fillRef idx="'+fill+'">'+srgb+'</a:fillRef><a:effectRef idx="0">'+srgb+'</a:effectRef><a:fontRef idx="minor"/></dgm:style></dgm:styleLbl>';});
+ return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:styleDef xmlns:dgm="'+NS.dgm+'" xmlns:a="'+NS.a+'" uniqueId="'+styleId(OPF_QUICK_STYLE,kind)+'"><dgm:title val="OPF '+kind+'"/><dgm:desc val="OPF flat measured arrangement"/><dgm:catLst><dgm:cat type="simple" pri="10100"/></dgm:catLst>'+scene.slice(0,scene.indexOf('</dgm:scene3d>')+'</dgm:scene3d>'.length)+labels.join('')+'</dgm:styleDef>';
+}
+
+function measuredDrawingXml(record,number,xfrm){
+ const {arrangement,paint}=record,shapes=[],none='<a:noFill/>',solid=color=>'<a:solidFill>'+color+'</a:solidFill>',background='<a:schemeClr val="bg1"/>',body='<a:schemeClr val="tx1"/>';
+ const withAlpha=(color,alpha)=>color.endsWith('/>')?color.slice(0,-2)+'><a:alpha val="'+alpha+'"/></a:schemeClr>':color.replace('</a:schemeClr>','<a:alpha val="'+alpha+'"/></a:schemeClr>');
+ const shape=(index,box,preset,adjust,fill,line,textBox,text,textColor)=>{
+  const geometry='<a:prstGeom prst="'+preset+'"><a:avLst>'+(adjust===undefined?'':'<a:gd name="adj" fmla="val '+adjust+'"/>')+'</a:avLst></a:prstGeom>';
+  const outline=line?'<a:ln w="'+emu(arrangement.lineWidth)+'">'+solid(line)+'</a:ln>':'<a:ln>'+none+'</a:ln>';
+  const margins=emu(arrangement.textMargin),tx=textBox?'<dsp:txBody><a:bodyPr wrap="square" lIns="'+margins+'" tIns="'+margins+'" rIns="'+margins+'" bIns="'+margins+'" anchor="ctr"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p>'+text+'</a:p></dsp:txBody>'+xfrm(textBox,'dsp:txXfrm'):'';
+  return '<dsp:sp modelId="'+modelId(number,ROLE.shape,index)+'"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>'+xfrm(box)+geometry+(fill?solid(fill):none)+outline+'</dsp:spPr><dsp:style><a:lnRef idx="'+(line?3:0)+'">'+srgb+'</a:lnRef><a:fillRef idx="'+(fill?1:0)+'">'+srgb+'</a:fillRef><a:effectRef idx="0">'+srgb+'</a:effectRef><a:fontRef idx="minor">'+(textColor??body)+'</a:fontRef></dsp:style>'+tx+'</dsp:sp>';
+ };
+ for(const edge of arrangement.connectors??[]){const {box,points}=edge,path=points.map(([x,y],i)=>'<a:'+(i?'lnTo':'moveTo')+'><a:pt x="'+emu(x-box.x)+'" y="'+emu(y-box.y)+'"/></a:'+(i?'lnTo':'moveTo')+'>').join('');shapes.push('<dsp:sp modelId="'+modelId(number,ROLE.shape,300+edge.child)+'"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>'+xfrm(box)+'<a:custGeom><a:avLst/><a:gdLst/><a:ahLst/><a:cxnLst/><a:rect l="0" t="0" r="0" b="0"/><a:pathLst><a:path>'+path+'</a:path></a:pathLst></a:custGeom>'+none+'<a:ln w="'+emu(arrangement.lineWidth)+'">'+solid(schemeXml(paint.fill))+'</a:ln></dsp:spPr></dsp:sp>');}
+ for(const node of arrangement.nodes){
+  const text=nodeParagraph(record,node.index),fill=schemeXml(paint.fill),line=schemeXml(paint.line);
+  if(node.background)shapes.push(shape(200+node.index,node.background,'roundRect',10000,fill,line));
+  if(arrangement.kind==='venn'&&node.beside){shapes.push(shape(node.index,node.box,'ellipse',undefined,withAlpha(fill,50000),line),shape(50+node.index,node.textBox,'rect',undefined,undefined,undefined,node.textBox,text,body));continue;}
+  const foreground=arrangement.kind==='hierarchy';shapes.push(shape(node.index,node.box,node.preset,node.preset==='roundRect'?10000:undefined,foreground?withAlpha(background,90000):arrangement.kind==='venn'?withAlpha(fill,50000):fill,foreground?fill:line,node.textBox,text,foreground||arrangement.kind==='venn'?body:schemeXml(paint.text)));
+ }
+ return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dsp:drawing xmlns:dgm="'+NS.dgm+'" xmlns:dsp="'+NS.dsp+'" xmlns:a="'+NS.a+'"><dsp:spTree><dsp:nvGrpSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvGrpSpPr/></dsp:nvGrpSpPr><dsp:grpSpPr/>'+shapes.join('')+'</dsp:spTree></dsp:drawing>';
 }
 
 /** The cached drawing from core's geometry, relative to the frame (EMU). */
@@ -420,6 +470,7 @@ export function smartArtDrawingXml(record, number) {
   // SH-17: a chevron's text margins differ by side.
   const [left, top, right, bottom] = (arrangement.margins ?? [arrangement.textMargin, arrangement.textMargin, arrangement.textMargin, arrangement.textMargin]).map(emu);
   const xfrm = (box, tag = 'a:xfrm', {rotation = 0, flip = false} = {}) => `<${tag}${rotation ? ` rot="${Math.round(rotation * 60000)}"` : ''}${flip ? ' flipH="1"' : ''}><a:off x="${emu(box.x - origin.x)}" y="${emu(box.y - origin.y)}"/><a:ext cx="${emu(box.width)}" cy="${emu(box.height)}"/></${tag}>`;
+  if(measuredKind(arrangement.kind))return measuredDrawingXml(record,number,xfrm);
   const shapes = [];
   if (arrangement.background) shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, 99)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(arrangement.background)}<a:prstGeom prst="diamond"><a:avLst/></a:prstGeom><a:solidFill>${schemeXml(paint.background)}</a:solidFill><a:ln><a:noFill/></a:ln></dsp:spPr><dsp:style><a:lnRef idx="0">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dsp:style></dsp:sp>`);
   for (const node of arrangement.nodes) {
@@ -463,8 +514,8 @@ export function attachSmartArt(entries, records) {
       // SH-19: OPF's own layout definition, when the arrangement is OPF's design.
       if (record.layout) entries[`ppt/diagrams/layout${number}.xml`] = encoder.encode(layoutDefinitionXml(record.layout));
       entries[`ppt/diagrams/data${number}.xml`] = encoder.encode(smartArtDataXml(record, number, ids.drawing));
-      entries[`ppt/diagrams/quickStyle${number}.xml`] = encoder.encode(smartArtQuickStyleXml());
-      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint, record.card, record.layout === undefined));
+      entries[`ppt/diagrams/quickStyle${number}.xml`] = encoder.encode(smartArtQuickStyleXml(record.arrangement.kind));
+      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint, record.card, record.layout === undefined,record.arrangement.kind));
       entries[`ppt/diagrams/drawing${number}.xml`] = encoder.encode(smartArtDrawingXml(record, number));
       for (const kind of ['data', ...(record.layout ? ['layout'] : []), 'quickStyle', 'colors', 'drawing']) {
         overrides.push(`<Override PartName="/ppt/diagrams/${kind}${number}.xml" ContentType="${CONTENT_TYPES[kind]}"/>`);
@@ -604,7 +655,10 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
     if (!dataPart || !entries[dataPart]) continue;
     const model = readSmartArtModel(decoder.decode(entries[dataPart]));
     if (!model) continue;
-    const form = smartArtForm(model.layoutId, model.category), path = `slides.${slideIndex}`, stem = layoutStem(model.layoutId) || 'unnamed';
+    let form = smartArtForm(model.layoutId, model.category);
+    const path = `slides.${slideIndex}`, stem = layoutStem(model.layoutId) || 'unnamed';
+    const walk=roots=>roots.flatMap(entry=>[entry,...walk(entry.children)]);
+    if(['org-chart','hierarchy'].includes(form.arrangement)&&(model.roots.length!==1||walk(model.roots).some(entry=>entry.assistant||entry.edge)))form={hierarchy:'TD'};
     const frameName = scalar(frame?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name) || 'SmartArt';
     const named = `The SmartArt ${JSON.stringify(frameName)} (layout ${stem})`;
     // Never lose text silently: what the OPF form does not keep is named.
@@ -617,7 +671,8 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
     const items = outlineItems(model.roots);
     if (form.arrangement) {
       const kind = form.arrangement;
-      const texts = model.roots.map(entry => plainText(entry.runs)), flat = model.roots.every(entry => !entry.children.length && !entry.detail);
+      const tree=['org-chart','hierarchy'].includes(kind),outline=tree?walk(model.roots):model.roots;
+      const texts = outline.map(entry => plainText(entry.runs)), flat = model.roots.every(entry => !entry.children.length && !entry.detail);
       // The tag (full provenance): the list as written, when the frame's node texts are still the ones OPF wrote.
       let stored;
       for (const link of array(frame?.['p:nvGraphicFramePr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
@@ -631,7 +686,8 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
           }
         } catch { /* an unreadable tag leaves the frame to its data model */ }
       }
-      const unchanged = stored && flat && stored.texts.length === texts.length && stored.texts.every((text, at) => text.replace(/ /g, ' ') === texts[at]);
+      const sameLevels=stored&&stored.items.length===items.length&&stored.items.every((value,index)=>Number(value?.level??0)===Number(items[index]?.level??0));
+      const unchanged = stored && (flat||tree&&sameLevels) && stored.texts.length === texts.length && stored.texts.every((text, at) => text.replace(/ /g, ' ') === texts[at]);
       if (stored && !unchanged) report?.({code: 'smartart-edited', path: stored.path ?? path, message: `The ${kind} was edited in PowerPoint; its list is read from the SmartArt's nodes.`});
       if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${kind} layout with its entries.`});
       out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});

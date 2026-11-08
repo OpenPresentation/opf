@@ -121,3 +121,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - Every entry in [decisions.md](decisions.md) is vetoable.
 
 SH-23 isolated qualification: [source scope, five native ninth-node save/reopen passes and remaining integration gate](sh23-qualified.md). Unfinished SH20–22 work stays on its separate continuation branch.
+
+SH-21 continuation: [measured schema, composition and engine wiring; native qualification and catalog work still owed](sh21-measured-wiring.md).

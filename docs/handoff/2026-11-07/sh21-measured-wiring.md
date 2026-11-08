@@ -1,0 +1,9 @@
+# SH-21 measured arrangement wiring
+
+The shared geometry and single-root level model are wired through schema, composition, SVG and PPTX. The three arrangement values are org-chart, hierarchy and venn. Parent/child links and source order are written into SmartArt data; authored blank parents stay parents, and native reparenting is read from connections. Native-shape exports preserve original list depths. SVG and PPTX use the observed paired Hierarchy rounded cards, 90% foreground opacity, 50% Venn fills, connector paths and measured inside/outside label boxes. Existing six arrangement style parts remain unchanged.
+
+Focused composition, geometry, native-shape round-trip and direct SmartArt-part tests pass. The direct parts have well-formed XML, true tree semantics, distinct style identities and complete caches. SH09 and SH16 legacy tests pass; the SH19 test-only alignment follow-up passes separately.
+
+Still owed: three authored catalog records and their maintained previews, docs/skills/editor/MCP checks, visual review, actual product-export native text/geometry and parent/edit/save/reopen qualification, and full changed-branch checks. No new live SmartArt eligibility is enabled. All native gate thresholds remain unchanged. SH20/SH22 paragraph-marker diagnostic is prepared but still awaits the coordinator's serialized native run.
+
+Verification receipt: eleven focused core geometry/composition/model tests pass; both SH21 PPTX tests pass, including authored blank-root and changed-parent connection controls. Direct Biome invocation processed zero files because these JS paths are ignored by the repository configuration, and also reported the installed CLI/config schema version mismatch (2.6.4/2.5.12); this is not counted as a style pass. The required check:changed remains owed after final catalog/witness wiring.
