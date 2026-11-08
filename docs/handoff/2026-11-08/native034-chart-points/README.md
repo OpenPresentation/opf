@@ -1,0 +1,5 @@
+# Complete classic point native observations
+
+Evidence-only: never merge. All32exact original shipped-CLI inputs completed owned PowerPoint read-only open, five actual point measurements, SaveCopyAs, reopen and cleanup through frozen441795worker. Strict unchanged4px results:125pass/35fail outof160; passing maximum2.1934px. All native PNGs, saved copies, probe/raw getter observations, worker/runner snapshots, plans and source/preview hashes are retained.
+
+Five failures belong to RTL clustered columns: actual source selected-series physical offset differs onebar from shared preview/anchor. NEWproduct correction1190awaits fresh Office acceptance. Thirty belong to six area variants: the nativePoint bounds span baseline-to-tip while the old probe used their midpoint. A NEWactual-Series.Values endpoint probe is being reviewed; no product movement or threshold waiver. These are observations, not completed chart-anchor acceptance, and no measure-only run is counted as a chart edit. Final-source imports/visual review/current-chart edit and corrected-case actual rechecks remain open.
