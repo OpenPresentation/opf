@@ -473,7 +473,8 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
     rtlParagraphs += xml.match(/<a:pPr\b[^>]*?\srtl="1"/g)?.length ?? 0;
   }
   const ranked = [...counts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0));
-  const baseRanked = preferBaseRuns && baseCounts.size ? [...baseCounts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0)) : ranked;
+  // With no unprotected runs, retain the stored base instead of promoting a protected run override.
+  const baseRanked = preferBaseRuns ? [...baseCounts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0)) : ranked;
   const lang = baseRanked[0]?.[0];
   return {lang, language: lang, ranked, rtlParagraphs, theme, themePath, slideThemes, catalogs,
     ...(perSlide ? {slides: slides.map(xml => observeLanguage({slides: [xml], catalogs, perSlide: false, preferBaseRuns}))} : {})};
