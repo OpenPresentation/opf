@@ -1,0 +1,150 @@
+{
+  "valid": true,
+  "scope": "Separate retained genuine registry consumer: source/catalog identity and counts, no duplicate quickstart/native claim",
+  "node": "v24.20.0",
+  "release": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+  "registryVerifiedAt": "2026-11-08T10:00:03.436Z",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.33.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.33.0.tgz",
+      "integrity": "sha512-A67Yv70WY6BbpbnAjY3se8ZKOCghiTUJt20VZdgogvaWfMbBS9XtcAzHPmvBWz+oNLXRsmL13Ovyq32tnRJ0fg==",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "entry": "node_modules/@openpresentation/opf/dist/index.js",
+      "entrySha256": "89cf4adebae7feacbbb81f8c15ee1bc904a6e4c97411fe0e328dc7ffb4a1bd53"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.33.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.33.0.tgz",
+      "integrity": "sha512-IOY+9byTkLLSCkY82vnv5513lfjwtSjZ6JrqWC3bp5aLoH3rIyyGnx9eJRDLYWVnHny1PEr3ggUIKeetENbwDw==",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "entry": "node_modules/@openpresentation/opf-render/dist/index.js",
+      "entrySha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.33.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.33.0.tgz",
+      "integrity": "sha512-r5Rui7ad0sBj46x8s+Kw9HxXfzgMv5w4kX098Vnbhz3H89STeG6FNl0Z1vDBUwcxdpb5ULblfH3n6WbZ58kSBg==",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "entry": "node_modules/@openpresentation/opf-editor/dist/index.js",
+      "entrySha256": "baa7de7ebd0140f845fe6ee015c99c6bbc7313715d5b898c15951b5111f18126"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.33.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.33.0.tgz",
+      "integrity": "sha512-uBCE1GesAD9JyMDB9uU9OzU8ixWZuY26NtYqK+8WrIKMXnH4yO9HOaBpidAqd7MHd7XQKdEeFq1bMwsaZ8RfPQ==",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "entry": "node_modules/@openpresentation/opf-pptx/dist/index.js",
+      "entrySha256": "8afb10ac8f156427ad5859107e21f78d5a4eacc94f96795637eb3b479d786fa4"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.33.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.33.0.tgz",
+      "integrity": "sha512-YQL+Jw9l1LHwarUahHAE+xVliihn0dkW/Ph2j8Rw4bOlP6SMSZPNTxaPWLztQ2WJVQJwznwn9R7vWFJv1BUpRQ==",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "entry": "node_modules/@openpresentation/cli/dist/index.js",
+      "entrySha256": "c208c02f32dc000e7a2f1c9a702a7f5be30fb7ccd7965a596bdce1fb2de437f3"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "0.33.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-0.33.0.tgz",
+      "integrity": "sha512-ZsJSQXG784h5bvzwl3+pBvd1q/3flW1sSW3AnmieQM31EcFEOnHuZX79IDETKWGqMc84lU7Wk2Y4D/0PPlWIkg==",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "entry": "node_modules/@openpresentation/gallery/dist/index.js",
+      "entrySha256": "5437e2a760759ca8ce93a418732e95febf8667f5872b996c632abeb20d1c48f8"
+    }
+  ],
+  "oneCore": true,
+  "registryOnly": true,
+  "loadersOrAliases": false,
+  "examples": {
+    "total": 137,
+    "gallery": 101,
+    "technical": 36,
+    "categories": [
+      "gallery",
+      "technical"
+    ],
+    "exactSourceCanonicalHashes": true
+  },
+  "layouts": {
+    "count": 36,
+    "exactSourceCanonicalHashes": true,
+    "ids": [
+      "cover",
+      "section",
+      "agenda",
+      "agenda-split",
+      "statement",
+      "closing",
+      "text",
+      "list",
+      "quote",
+      "two-column",
+      "three-column",
+      "pillars",
+      "comparison",
+      "process",
+      "timeline",
+      "faq",
+      "pyramid",
+      "matrix",
+      "cycle",
+      "chevrons",
+      "flow",
+      "vertical-flow",
+      "metrics",
+      "scorecard",
+      "image",
+      "image-beside",
+      "gallery",
+      "chart",
+      "chart-beside",
+      "table",
+      "table-beside",
+      "code",
+      "hero",
+      "dashboard",
+      "team",
+      "logos"
+    ]
+  },
+  "files": [
+    {
+      "file": "package.json",
+      "bytes": 495,
+      "sha256": "37b289847d5aec87f8755f13924ddaa998cf88b39787789d7b81feebf9209388"
+    },
+    {
+      "file": "package-lock.json",
+      "bytes": 64703,
+      "sha256": "b045240646e659fea70d5dd5a36bd9e9462f821b23c947f95e9444443f3c2ee8"
+    },
+    {
+      "file": "selection.json",
+      "bytes": 1690,
+      "sha256": "044cad4528dcd846542b5350433d1dddf27ae853dbe1bdc92756d9d95e38157c"
+    },
+    {
+      "file": "expected-source-index.json",
+      "bytes": 31241,
+      "sha256": "814623f92d57c90fb8912eb7e91b18b792810a872823cdbea0b74deb53449cca"
+    },
+    {
+      "file": "verified-publication.json",
+      "bytes": 4739,
+      "sha256": "8c8937875c7a8ff922014e3cff5b231b16ea837a6504b5c7dcfe5b5fcfc7f677"
+    },
+    {
+      "file": "verify-consumer.mjs",
+      "bytes": 3961,
+      "sha256": "756c10738dca97fef5132f0793782def24cd4f7fc0279dbe842b66e5ba198d63"
+    }
+  ]
+}

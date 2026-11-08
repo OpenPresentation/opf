@@ -17,6 +17,8 @@ editor and Gallery at the shared version **0.33.0**. The seventh package,
 [MCP guide](mcp.md) for its server and viewer.
 `node scripts/registry-plan.mjs` prints the six-package consumer set above with
 its registry `gitHead` values; MCP is verified by the release workflow.
+
+The [2026-11-08 published-consumer receipt](handoff/2026-11-08/core-033-currency/post-publication/receipt.json) records a passing run of the maintained workflow below against the genuine 0.33.0 registry set. It is separate from actual Office and site qualification.
 registry identity is separate from the consumer and native checks below. All declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 

@@ -11,7 +11,7 @@ six-package consumer set (core, renderer, PPTX, editor, CLI and Gallery) with
 each registry `gitHead`; it does not query MCP. The [release workflow](release-process.md)
 verifies all seven packages, including MCP, separately from the consumer checks.
 Earlier matrices and native observations retain their historical identities.
-Complete native compatibility remains a separate gate.
+The [2026-11-08 registry and maintained quickstart receipts](handoff/2026-11-08/core-033-currency/post-publication/receipt.json) bind this set to release commit 26fd4de9. Complete native compatibility remains a separate gate.
 
 ## Published layout contract and the 0.20 engines
 
@@ -263,7 +263,7 @@ acceptance are separate claims.
 | [pptx.gallery](https://www.pptx.gallery) `/docs`, `/editor` and gallery pages | Published ColorRef/bundle guidance, Playground and Editor actions, and the canonical docs-to-editor flow are verified. | `f17e9ae5869669d5fbac3720f285652d0c37551c` |
 
 The site uses documentation source `120a770`, whose tree matches accepted core
-PR98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR93/97/98/99/100/102/103 passed
+PR 98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR 93/97/98/99/100/102/103 passed
 pre-merge and post-merge CI. Accepted core102 is
 `578bcc6e0894129b00059258bd4ad1994a414baa`; its reviewed and accepted trees match,
 and all four required pre/post-merge runs passed on their first attempts. The
