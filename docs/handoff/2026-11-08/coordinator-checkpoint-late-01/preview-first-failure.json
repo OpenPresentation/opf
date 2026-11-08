@@ -1,0 +1,53 @@
+{
+  "at": "2026-11-08T19:08:08.501Z",
+  "galleryMain": {
+    "head": "37fcddfce217552564b1ad408e390eed05f8d227",
+    "result": "GREEN at19:00:41UTC; exact observerPID8820 no longer exists",
+    "exitCodeWitness": "Original unified session handle lost; no numeric exit code claimed"
+  },
+  "bumpGate": {
+    "unifiedSession": "9670d0 toolresult; process ended during call",
+    "exit": 1,
+    "required": "all",
+    "targets": [
+      {
+        "repository": "Data-Advantage/openpresentation-site",
+        "pr": 202,
+        "head": "47361c352f9f526c1d8ea6a15f64a61b900a6205",
+        "check": 128829253981
+      },
+      {
+        "repository": "Data-Advantage/pptx-gallery",
+        "pr": 172,
+        "head": "17ed8ed660a4c61291f6ee58444671162a25399f",
+        "check": 128829962894
+      }
+    ],
+    "checkName": "Native Preview",
+    "title": "Native Preview build or upload failed",
+    "acceptedDeployedQualification": false
+  },
+  "next": "sites_delivery has≤6 additional read-only GitHub calls to identify2 trusted native-preview failed runs/jobs/logs. No retry/deploy/source change before concrete diagnosis. No CI observer active.",
+  "handoffDeltaMapped": {
+    "base": "96dde3cd3e6a513eabce936e8cb4fcbb22f1eedb",
+    "passed": 5,
+    "scope": "Initial34handoff-only changed files; subsequent observer metadata requires final check"
+  },
+  "files": [
+    {
+      "file": "gallery-maintenance-main-ci-01.log.gz",
+      "sha256": "8f56c0d68afe3e91fb0ec0ddd51374f5b8fe9945dfcb7443c6a26d76aefbd6b3",
+      "compressedSha256": "f23698c36ad34317c769b66a9a07169f59a1f7b75ca50e491ab85e316d488a5a"
+    },
+    {
+      "file": "sites033-bump-native-gate-01.log.gz",
+      "sha256": "a119024c7e8867a3d0e2ef826bb5cafa52f9c0736f7d45eb3b75b912cc825f38",
+      "compressedSha256": "b071e601e94ceec8f46db5dffb1c68b233f47092864b3c09e134ba4ca6bb423c"
+    },
+    {
+      "file": "coordinator-checkpoint-late-01-check.log.gz",
+      "sha256": "7aed6c8ffdba0806c044c57509503e6713d63bcf3d8076cb89e3532e28553e11",
+      "compressedSha256": "9484871daca720351f997993632eda25e389294dedf0d3298bde72e3bca61262"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "slide": 1,
+    "title": "Shared stacked plots",
+    "svgIdentical": false,
+    "fontSizeSetsIdentical": true,
+    "beforeFontSizes": [
+      "19",
+      "54"
+    ],
+    "afterFontSizes": [
+      "19",
+      "54"
+    ]
+  },
+  {
+    "slide": 2,
+    "title": "Shared percentage plots",
+    "svgIdentical": false,
+    "fontSizeSetsIdentical": true,
+    "beforeFontSizes": [
+      "19",
+      "54"
+    ],
+    "afterFontSizes": [
+      "19",
+      "54"
+    ]
+  },
+  {
+    "slide": 3,
+    "title": "Restore the original legend",
+    "svgIdentical": false,
+    "fontSizeSetsIdentical": true,
+    "beforeFontSizes": [
+      "19",
+      "54"
+    ],
+    "afterFontSizes": [
+      "19",
+      "54"
+    ]
+  },
+  {
+    "slide": 4,
+    "title": "Restore a complete numeric axis",
+    "svgIdentical": false,
+    "fontSizeSetsIdentical": true,
+    "beforeFontSizes": [
+      "19",
+      "54"
+    ],
+    "afterFontSizes": [
+      "19",
+      "54"
+    ]
+  },
+  {
+    "slide": 5,
+    "title": "Negative and missing values",
+    "svgIdentical": false,
+    "fontSizeSetsIdentical": true,
+    "beforeFontSizes": [
+      "19",
+      "54"
+    ],
+    "afterFontSizes": [
+      "19",
+      "54"
+    ]
+  },
+  {
+    "slide": 6,
+    "title": "Explicit options control",
+    "svgIdentical": true,
+    "fontSizeSetsIdentical": true,
+    "beforeFontSizes": [
+      "19",
+      "54"
+    ],
+    "afterFontSizes": [
+      "19",
+      "54"
+    ]
+  },
+  {
+    "slide": 7,
+    "title": "Table row alignment control",
+    "svgIdentical": true,
+    "fontSizeSetsIdentical": true,
+    "beforeFontSizes": [
+      "19",
+      "25",
+      "54"
+    ],
+    "afterFontSizes": [
+      "19",
+      "25",
+      "54"
+    ]
+  }
+]

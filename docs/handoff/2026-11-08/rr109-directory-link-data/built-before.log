@@ -1,0 +1,28 @@
+✔ font route selection is opt-in, bounded and canonical without changing default CLI (1.7101ms)
+✔ five schema-valid route fixtures preserve corpus text, explicit upright styles and unresolved native scope (7.0898ms)
+✔ measurement rows keep point sizes and upright weights through shared rich-text fitting (66.6819ms)
+✖ selected generation seals all files, shares measured handle and refuses reused outputs or mismatched pins (28.2528ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 349.9749
+
+✖ failing tests:
+
+test at scripts\native-acceptance\font-routes.test.mjs:94:1
+✖ selected generation seals all files, shares measured handle and refuses reused outputs or mismatched pins (28.2528ms)
+  Error: EPERM: operation not permitted, symlink 'C:\Users\micha\AppData\Local\Temp\native-font-routes-R54KKz\consumer' -> 'C:\Users\micha\AppData\Local\Temp\native-font-routes-R54KKz\linked\foreign'
+      at async symlink (node:internal/fs/promises:1707:10)
+      at async TestContext.<anonymous> (file:///C:/opf-work/rr109-directory-link/scripts/native-acceptance/font-routes.test.mjs:120:64)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4048,
+    code: 'EPERM',
+    syscall: 'symlink',
+    path: 'C:\\Users\\micha\\AppData\\Local\\Temp\\native-font-routes-R54KKz\\consumer',
+    dest: 'C:\\Users\\micha\\AppData\\Local\\Temp\\native-font-routes-R54KKz\\linked\\foreign'
+  }

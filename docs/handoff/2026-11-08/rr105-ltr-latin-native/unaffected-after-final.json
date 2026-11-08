@@ -1,0 +1,80 @@
+{
+  "count": 15,
+  "rows": [
+    {
+      "id": "english-plain",
+      "bytes": 100507,
+      "sha256": "92e6821c0bc7e64289ca818d7004c7180df41e879efcc17da0a5452b0536875b"
+    },
+    {
+      "id": "english-list",
+      "bytes": 100144,
+      "sha256": "18ef01aab0696be09d8ffea047e9766c6c243fc2a7b5e7c052bb2f0721d500ab"
+    },
+    {
+      "id": "arabic-plain",
+      "bytes": 100644,
+      "sha256": "041db9f8947c6de16b62220c1e665116647503ee1193f49ec5e6e3b1ea91627b"
+    },
+    {
+      "id": "arabic-list",
+      "bytes": 100271,
+      "sha256": "afdb403a075a404f17e42b79136c76fe4c82f37d9c181cc9e8c6653f894ae8a6"
+    },
+    {
+      "id": "mixed-list",
+      "bytes": 100262,
+      "sha256": "eb3fa1dcba8fb8adc89918a9596193184d2b5bdd3ab7b5cb00a5eda8eec98e84"
+    },
+    {
+      "id": "latin-no-digits",
+      "bytes": 100573,
+      "sha256": "de8dc6cda299346c2dea699ce7296ce8c658db8b5c2355204745e2ab9ad6325c"
+    },
+    {
+      "id": "arabic-indic",
+      "bytes": 100611,
+      "sha256": "268e8831e25dee1dd21d7a2362cfa5ea8d9eedf5eb408017969ea2c031026c39"
+    },
+    {
+      "id": "persian-digits",
+      "bytes": 100606,
+      "sha256": "035bff07379515027543ff1d9a649fb48d6f48208d5ab3bc7ea32001b5c21e45"
+    },
+    {
+      "id": "explicit-arabic",
+      "bytes": 100261,
+      "sha256": "2d7b5f599c1138535bef8a6a73d0cfc97d4aff8940434942bf9304d6e1fe2730"
+    },
+    {
+      "id": "explicit-french",
+      "bytes": 100250,
+      "sha256": "667761784a7d1cf1cd4704a7cea67cbd260fcfa5bc2f37f8b803859059654561"
+    },
+    {
+      "id": "explicit-english",
+      "bytes": 100246,
+      "sha256": "b2c87ff723076c56ad4be3eef595d430f8d3f6ab2587ae8cdcb1746d717cde69"
+    },
+    {
+      "id": "rtl-table",
+      "bytes": 101102,
+      "sha256": "729da545e78eb001fb7f6f1784ea5c4f93942381169c0c1a00c59905a4b2b449"
+    },
+    {
+      "id": "rtl-chart",
+      "bytes": 107011,
+      "sha256": "858095300de48e6f02084f03601f0704bf1247fe62bdfd4dc8fec0a415999459"
+    },
+    {
+      "id": "rtl-timeline",
+      "bytes": 100222,
+      "sha256": "e0a67fce506e160c457d63270172c80e72cd252e76a2aed352bba2a5d9b89f17"
+    },
+    {
+      "id": "rtl-arabic-slide",
+      "bytes": 100669,
+      "sha256": "a6206305130aa7ff339e881eda8269c8066ce4db3d418910a1f9e1d6b095ef87"
+    }
+  ]
+}

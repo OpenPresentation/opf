@@ -92,6 +92,7 @@ const GOLDEN = {
   "tight-spacing-margin": ["A block on slide 1 is 0.15 in from the slide edge, closer than 0.5 in.", "raise `composition.padding`, or place a picture meant to reach the edge with `placement`."],
   "layout-monotony": ["Slides 1 to 5 (5 in a row) all use layout `list`, so they look alike.", "give some of them the layout their content asks for (a comparison, a chart, a statement, a picture), or merge or split slides."],
   "chart-dual-axis": ["\"Margin\" is on a second value axis, so two scales share one plot and its crossings mean nothing.", "show the secondary series in a chart of its own beside this one, or drop `secondaryAxis` when the series share a unit."],
+  "variable-group-omitted": ["A group on slide 1 is left out when `quote` has no value, with its pictures, cards and other text.", "give it a value to draw the group, or move what should always show out of the group."],
   "chart-pie-many-slices": ["This chart has 6 slices, more than 5; the small ones are hard to compare and to label.", "compare the parts with bars (`type: \"bar\"`), or group the smallest into one \"Other\" slice."],
   "straight-quotes": ["`They called it \"the easiest setup we’ve done\".` uses straight quotation marks; this deck's language uses “…”.", "apply the quick fix, or type “ and ” instead."],
 };
@@ -103,11 +104,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 96 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 97 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 96);
+	assert.equal(RULE_IDS.length, 97);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

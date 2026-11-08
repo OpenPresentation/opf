@@ -68,3 +68,53 @@ test('qualification: the grader reads a probed slide', () => {
   assert.equal(gradeCheck('slides', {}, { ...probe, slideCount: 2 }, facts).status, 'fail');
   assert.equal(gradeCheck('noOverflow', {}, { opened: false }, facts).status, 'not-run');
 });
+
+
+function nativeSyntaxCoverage(sourceManifest, readDeck) {
+  const covered = new Set();
+  const visit = (value) => {
+    if (!value || typeof value !== 'object') return;
+    if (value.diagram && typeof value.diagram.source === 'string') covered.add(value.diagram.syntax ?? 'mermaid');
+    for (const child of Object.values(value)) visit(child);
+  };
+  for (const feature of sourceManifest.features) {
+    if (!['visual', 'shapes', 'roundtrip'].every((check) => feature.checks.includes(check))) continue;
+    const deck = sourceManifest.decks.find((candidate) => candidate.id === feature.deck);
+    if (!deck.source.endsWith('.json')) continue;
+    const document = readDeck(deck.source);
+    if (feature.slides) {
+      for (const ordinal of feature.slides) {
+        assert.ok(Number.isInteger(ordinal) && ordinal > 0 && ordinal <= document.slides.length, 'selected qualification slide exists');
+        visit(document.slides[ordinal - 1]);
+      }
+    } else visit(document.slides);
+  }
+  return covered;
+}
+
+test('qualification: every schema-supported diagram syntax has native visual and saved-import coverage', () => {
+  const schema = JSON.parse(readFileSync(path.join(root, 'spec/schemas/opf.schema.json'), 'utf8'));
+  const definition = Object.values(schema.$defs ?? schema.definitions).find((value) => value?.properties?.syntax?.enum?.includes('mermaid'));
+  assert.ok(definition, 'authoritative diagram syntax definition exists');
+  const covered = nativeSyntaxCoverage(manifest, (source) => JSON.parse(readFileSync(path.join(root, source), 'utf8')));
+  for (const syntax of definition.properties.syntax.enum) assert.ok(covered.has(syntax), `${syntax}: missing native diagram qualification`);
+});
+
+test('qualification: syntax on an unselected slide cannot certify native coverage', () => {
+  const document = {slides: [{text: 'ordinary'}, {diagram: {syntax: 'dot', source: 'digraph {A -> B}'}}, {diagram: {syntax: 'plantuml', source: '@startuml\nA -> B\n@enduml'}}]};
+  const feature = {deck: 'selection', slides: [1], checks: ['visual', 'shapes', 'roundtrip']};
+  const fixture = {decks: [{id: 'selection', source: 'selection.json'}], features: [feature]};
+  const covered = () => nativeSyntaxCoverage(fixture, () => document);
+  assert.deepEqual([...covered()], [], 'DOT and PlantUML outside selected native slides are not covered');
+  feature.slides = [2];
+  assert.deepEqual([...covered()], ['dot']);
+  feature.slides = [3];
+  assert.deepEqual([...covered()], ['plantuml']);
+  delete feature.slides;
+  assert.deepEqual([...covered()], ['dot', 'plantuml'], 'no selection qualifies the whole deck');
+  feature.checks = ['visual', 'shapes'];
+  assert.deepEqual([...covered()], [], 'a deck without saved-import checks cannot certify coverage');
+  feature.checks.push('roundtrip');
+  feature.slides = [99];
+  assert.throws(covered, /selected qualification slide exists/);
+});

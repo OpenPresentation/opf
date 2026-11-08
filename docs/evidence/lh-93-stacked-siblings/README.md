@@ -1,0 +1,11 @@
+# Stacked horizontal sibling plot review
+
+[Before/after slides 1–4](before-after-1.png), [slides 5–7](before-after-2.png), [all raw PNG/SVG previews](preview-sources.zip), [source](witness.opf.json). Full-size category words remain visible. The font-size sets are unchanged on every slide. Explicit options and table-row alignment are byte-identical SVG controls; the other five cases share final plot geometry and refit names/values at their original type size. [Exact comparison](svg-comparison.json).
+
+Before producer b4c0ae47 includes only language-reference portability beyond 67698; its chart-marks source hash is identical to 67698. After producer 65694b403467aa4b7ee8390b00cbd7d76d8f638d normally merges approved 034 preparation 03368. [Before manifest](before-manifest.json), [after API manifest](after-manifest.json), [initial API before/after PPTX](before.pptx), [initial API after](after.pptx). Those original archives are retained unchanged.
+
+Final native qualification uses [actual shipped CLI output](cli-after.pptx), [native manifest](native-build.json) and [CLI/API comparison](cli-comparison.json). A prepared API export with the exact CLI defaults matches its complete archive byte-for-byte. The first API archive used explicit seed/timestamp/ZIP options and no date argument, so its packaging/default-master/workbook parts differ; all native slide/chart XML and all seven preview PNGs remain byte-identical. Never substitute the initial API input for the final CLI input. The generator passes the same office/visual font handle to preview/PPTX, and the CLI prepares office/visual/scripts:auto fonts. Authored Arial uses its metric-compatible Arimo measurement. Logs and reproducible scripts are retained.
+
+[Candidate bundled-slide scan](affected-examples.json) is empty: no current bundled example has a horizontal stack plus another horizontal chart. No existing example render golden should change from this remainder. All moved synthetic witnesses are shown. Goldens remain workflow-only. Native Office geometry/visual acceptance is coordinator-owned and still pending.
+
+Vetoable choice: restore the full-size existing legend or numeric axis when contracted plots cannot retain every direct name/value label. Preserve source values, type size and option/table precedence; re-share through bounded monotonic transitions. No data/schema changes.

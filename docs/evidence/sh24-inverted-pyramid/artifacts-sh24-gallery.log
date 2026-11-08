@@ -1,0 +1,7 @@
+
+> @openpresentation/gallery@0.32.1 rehash C:\opf-work\sh24-inverted\packages\gallery
+> node scripts/sync-gallery-catalog.mjs --rehash --match-gallery
+
+Rehashed:
+layouts/index.json
+manifest.json (layouts)

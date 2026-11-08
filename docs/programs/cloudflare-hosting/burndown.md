@@ -13,6 +13,15 @@ CF-16, CF-17 CI/CD, CF-18 docs, CF-19 decommission). That plan's content was del
 site's `docs/cloudflare.md` records the findings and measurements) or is carried by CF-04 to CF-08 below; its owner
 decisions are in the README.
 
+## Current CI/CD alignment — 2026-11-08
+
+The owner authorizes deployments, native Wrangler Previews and removal of only the legacy pptx-dev-preview Worker after replacement verification. The current [CI/CD contract](../../ci-cd.md) supersedes older deployment bans. CF-17 below names the current native-Preview pipeline; the earlier numbering paragraph describes the 2026-10 proposal only.
+
+| ID | Item | Repo | Depends on | Status | Evidence / next action |
+| --- | --- | --- | --- | --- | --- |
+| CF-17 | Actions-owned native Previews, same-commit automatic/manual production gates, real deployed qualification, exact owned cleanup and rollback | all three sites | CF-04, CF-06 | in-progress | Existing codex/cf-17-native-previews worktrees are extended together; default refs main/main/master and exact pinned Wrangler4.152.0/4.152.0/4.156.0 verified. No second Workers Builds deployer. Source and actual rollout remain separate; issue1139. |
+| CF-18 | One current CI/CD authority linked from AGENTS and the active programs, with site binding details and verified account limitations | opf and all sites | CF-17 | in-progress | docs/ci-cd.md and root links prepared; private-site branch-protection plan limitation remains explicit. No plan purchase or visibility change authorized. |
+
 ## Now
 
 The work queue: one row per open item, saying who works on it, what blocks it and the next action. Update the row
