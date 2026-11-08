@@ -73,8 +73,8 @@
     },
     {
       "file": "post-evidence-text.log",
-      "bytes": 1103,
-      "sha256": "e0bc65e210f0646b781713a58a8129ecaa58a927582fb9965ed0b11c633f2c3a"
+      "bytes": 1075,
+      "sha256": "37157a846cdca4df09c59a47061c0f649506bde7b7142ff56a5fa886938563e9"
     },
     {
       "file": "preview/timeline/slide-1.png",
@@ -120,6 +120,17 @@
       "file": "source.opf.json",
       "bytes": 3545,
       "sha256": "6d4e84d99377d3c67556848baf11403fd32b47fc122dbea06cf3f1db9202aa5f"
+    },
+    {
+      "file": "post-evidence-text.log.gz",
+      "bytes": 609,
+      "sha256": "0e2fa7667d35157aa741d697f513eaf68a6f396d38735f6217170dabc3b7da5b"
     }
-  ]
+  ],
+  "rawTextReceipt": {
+    "file": "post-evidence-text.log.gz",
+    "uncompressedBytes": 1103,
+    "uncompressedSha256": "e0bc65e210f0646b781713a58a8129ecaa58a927582fb9965ed0b11c633f2c3a",
+    "explanation": "Original PowerShell CRLF receipt preserved in gzip; plain Git text follows repository LF policy."
+  }
 }
