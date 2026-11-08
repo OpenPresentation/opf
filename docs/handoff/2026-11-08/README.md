@@ -86,19 +86,15 @@ LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798
 
 [Core currency handoff](core-033-currency.md) records the narrow current-doc corrections, exact 137-JSON/2-Markdown/36-layout source counts, required post-registry quickstart checks and every E1/E2/E3 comparison/planning artifact obligation. All seven 0.33.0 packages are now genuinely verified at 26fd4de9; the once-only registry plan and maintained quickstart pass, and the retained six-package consumer binds exact counts/content/lock integrity. [Post-publication receipt](core-033-currency/post-publication/receipt.json). E1/E2/E3 comparison/planning artifact refresh and sites remain separately owed. The cited old corpus generator is missing and is not replaced with guessed output.
 
-
 033genuine documentation/registry-consumer PR1170passed allchecks twice and merged through maintainedgate asd00888a0560cb0ad59fc5c887e8bdd9d4fcbf30b at10:40:17UTC after markingthe reviewed draftready. This normal main merge retains034F2diagramwording plus exact137/36published facts and all receipts; no package/site deploy occurs.1179and1180are nowfolded/frozen.
 
 ## Generated timeline status font preparation
 
 [The derived LH121 font correction](lh121-generated-status-fonts.md) addresses genuine default CLI missing-glyph failures when otherwise Latin source generates localized status words. It preserves existing font policies and scans authoritative per-slide generated vocabulary; PR1182f1ea is independently reviewed, folded and frozen. The shared per-slide generated-word analysis fixes the real default CLI Arabic/Traditional Chinese glyph failures; five focused controls and all five clean native witnesses pass. Actual date range Weeks2–5 is correct, saved imports/phase PNGs are exact, and no font policy or authored source workaround is added.
 
-
-
 2026-11-08 final native observation checkpoint: [complete raw30feature observations and two diagnostic circular-chart pilots](https://github.com/OpenPresentation/opf/tree/codex/rr105-final-evidence/docs/handoff/2026-11-08/native034-observations). Parent reviewed11core pairs,9core phase pairs,2negative pairs and3status pairs. Nine core phase rasters differ in311–1665pixels at1280x720; actual named text/geometry/font observations and all active-slide autofit checks are exact/empty. Three current imports add only explicit valid text/table block types. Vetoable: retain bounded native table-cell line wrapping at unchanged type; never claim cross-engine pixel identity. RTL legend order remains a derived compatibility finding; the strict4px circular top-probe failures remain visible.
 
 E1 maintained runner1181at34ae758d71abb77845d6b3feb08d2d53308f3a99 is independently accepted(39controls/all5239original runtime files) and folded/frozen. Actual033 after01 correctly stopped for missing pinned Office font peers, preserved on evidencee10a356c64b679e6fb121fcedc77b5d77771b794. Fresh separate83package registry consumer adds exactly six maintained pinned peers with24verified faces; one after02 invocation completes20decks/936slides, both runtime inventories unchanged. Author is sealing all real after PNGs/sheets; fixed controls stay unchanged, six new overview slides lack historical panels and three corpus slides lack before panels. No public artifact deployment is claimed.
-
 
 RR105034corpus continuation: [DOT/PlantUML native coverage](rr105-034-diagram-corpus.md) adds all13existing example slides to the maintained release corpus and a schema-derived missing-syntax guard. Existing Mermaid/033witnesses stay intact. Before-test fails onmissingdot; actual newnativequalification remains owed, separate from source acceptance.
 
@@ -110,9 +106,7 @@ RR105034corpus continuation: [DOT/PlantUML native coverage](rr105-034-diagram-co
 
 - [LH-93 RTL legend correction](lh93-rtl-legend.md): shared header item order matches native; current native acceptance owed, all data/colors/gutters retained.
 
-
 - [Native feature reconciliation](native-feature-reconciliation.md): original516/465/201/264observations, exact script failures/OFF boundaries, current production/live/diagram/SH25 qualification still separated.
-
 
 ## Acceptance checkpoint: 2026-11-08,12UTC
 
@@ -156,7 +150,6 @@ A narrow source PR removes existing bump-branch forced updates. Trusted generati
 
 - [SH25literal native series names](sh25-literal-native-series-name.md): separate current-native c:tx/c:v importer correction with exact-string/cache/selector controls; actual edit/save/current-import remains owed.
 
-
 ## Acceptance checkpoint: 2026-11-08,13:50UTC
 
 Current integration source normally includes1192d534d61da86009673626d2bf5245704e1e19f3fc,1194ac7d5f9d0d776edb3f2cd4eb5858e3088ea3aadb and1195c914e8456a35a36d013f26e7fb8a3d4e64603577. Parent independently reviews whole source/sheets, allnine retained-measure tests, actualmaintained runner/type/refusal controls,18literal foreign-string/refusal contracts and actualnative savedcache/numeric/stalenamed-selector controls. These are accepted source folds; finalcombined build/CI remains separate.
@@ -170,3 +163,5 @@ Eightnewexactinputs sealed suiteshaa9b3018cb2acd55cd907f3c822ba2fa2ff4390c033cf1
 Preliminary21RR54archive review onactual033baseline26fd reproducesall21strictlocks beforeexportingcandidate; onlybar/pie differ. Ninefallbackreview refusesbeforebaseline onan import-onlycore subpath resolved through requireconditions; separatecorrectivetooltaskqueued, originalfailurepreserved. Noarchivefixture/budget/goldenexpectation edited. Windowsdirectory-linkfixture1196correctsprivilege-onlytest setup withactualjunction whilepreservingrefusalassertions; parentreview/foldpending.
 
 Finite033siteexampleinventory nowcovers org5homepage+1nativeacceptedshowcase+29tutorialpreviews,49unchangedauthoredJSONdownloads and137bundledexamples; gallery36layouts/27charts/14diagrams/45editorassets/410corpusdocs; dev13canonicalSVGs/live033examples. Oldpublicgenerated020/024assets/identities arearchived, regeneratedfromgenuine033withcurrencyguards. Oversizedrelease-note fallback isreconciled fromimmutablechangelogs, not false no-change summaries. Onecombinedorgpush/localfinalbuild/CIbatchremain; gallery/devpreviousheads green, deployeddevpreview accepted. Noobserveractive. Owner-onlyfinalsitepreview/merge/deploy andD2decision remainpending.
+
+- [RR109Windows directory-link fixture](rr109-directory-link-fixture.md): explicit junction/dir type lets the unchanged actual reparse-refusal assertion run without Windows symlink privilege; production/native qualification unchanged.
