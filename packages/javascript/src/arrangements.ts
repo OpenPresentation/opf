@@ -452,11 +452,12 @@ export const CYCLE_DOMAIN_TOTAL_LINES = 16;
  * the SmartArt as it draws OPF's native export of the same slide (SH-07's thresholds). An instance outside it is exported as native shapes
  * (`smartArt: "shapes"`) with the reason.
  */
+// EVIDENCE ONLY: open the three SH21 candidates for product-export diagnosis; never merge this branch.
 export const SMART_ART_DOMAIN = Object.freeze({
   /** Entries: a pyramid of 1 to 5 levels (6 to 8 never fitted the list's role size in the compared frames), a matrix of 1 to 4 quadrants. */
-  count: Object.freeze({ pyramid: 5, matrix: 4, cycle: CYCLE_DOMAIN_COUNT, chevrons: 6, flow: 6, 'vertical-flow': 4 }) as Readonly<Partial<Record<Arrangement, number>>>,
+  count: Object.freeze({ 'org-chart': 8, hierarchy: 8, venn: 7, pyramid: 5, matrix: 4, cycle: CYCLE_DOMAIN_COUNT, chevrons: 6, flow: 6, 'vertical-flow': 4 }) as Readonly<Partial<Record<Arrangement, number>>>,
   /** The frame's width over its height, per arrangement: the range the 16:9, 4:3 and 1:1 slides gave, with a small margin. */
-  aspect: Object.freeze({ pyramid: Object.freeze({ min: 1.1, max: 2.3 }), matrix: Object.freeze({ min: .8, max: 1.2 }), cycle: CYCLE_DOMAIN_ASPECT,
+  aspect: Object.freeze({ 'org-chart': Object.freeze({min:.2,max:5}), hierarchy: Object.freeze({min:.2,max:5}), venn: Object.freeze({min:.2,max:5}), pyramid: Object.freeze({ min: 1.1, max: 2.3 }), matrix: Object.freeze({ min: .8, max: 1.2 }), cycle: CYCLE_DOMAIN_ASPECT,
     chevrons: Object.freeze({ min: 1.1, max: 2.3 }), flow: Object.freeze({ min: 1.1, max: 2.3 }), 'vertical-flow': Object.freeze({ min: .55, max: 1.2 }) }) as Readonly<Partial<Record<Arrangement, { min: number; max: number }>>>,
   /** The most lines one entry may wrap to in its node, and in all its entries (a line drawn by PowerPoint's wrap can sit up to 1 px from core's). */
   lines: 2,
@@ -536,7 +537,7 @@ export function smartArtUnavailable(candidate: SmartArtCandidate): string | unde
     if (!node.stable) return `entry ${index + 1} wraps too close to its node's width for PowerPoint to break the same lines`;
   }
   const total = nodes.reduce((sum, node) => sum + node.lines, 0);
-  const most = kind === 'cycle' ? CYCLE_DOMAIN_TOTAL_LINES : domain.totalLines;
+  const most = ['org-chart','hierarchy','venn'].includes(kind) ? 8 : kind === 'cycle' ? CYCLE_DOMAIN_TOTAL_LINES : domain.totalLines;
   if (total > most) return `its entries wrap to ${total} lines in all (at most ${most} matched PowerPoint)`;
   if (candidate.widest !== undefined && candidate.widest > domain.lineWidth + 1e-6) return `a line ${Math.round(candidate.widest)} px wide is longer than PowerPoint sets within a pixel of OPF's text (at most ${domain.lineWidth} px)`;
   const fill = domain.fill[kind], ink = domain.ink[kind];
