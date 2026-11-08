@@ -293,3 +293,5 @@ A chart that sets none of the four fields draws its type's defaults, including t
 ## Not in this change
 
 Per-series data label overrides (column number formats are RR-54, [chart-table-data.md](chart-table-data.md)), a rotated or rich-text axis title, a chart title, a legend that overlays the plot, manual plot-area layout, secondary axes outside combo charts, and trendlines. Charts from external spreadsheets stay descoped (the `ChartDataSource` form was removed from the schema).
+
+A doughnut hole takes the surface color in both engines even when the chart has an explicit legend position or data labels (LH-182). Core retains the current circular plot after legend space is reserved; the preview fills the hole, and PPTX pins that plot with a surface-colored ellipse under the chart. This surface-only mark is consumed on import without discarding authored legend or label options.
