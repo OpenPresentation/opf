@@ -1,0 +1,55 @@
+{
+  "verified": true,
+  "head": "b1cfb321026f8bbc7e982a3301a110d7e2817b31",
+  "note": "Raw executed producer bytes are separately preserved in the sealed binary archive; authored prose/JS normalize only standard Git CRLF to LF.",
+  "records": [
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-contrasts.md",
+      "bytes": 2967,
+      "gitBlobSha1": "c3800bfed0842c79472454356a260b0674954875",
+      "sha256": "563e5953fda98e219c664f434c05b7bf8d2519f775533c1775d783f0bebfb2b7"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-contrasts/produce.mjs",
+      "bytes": 9516,
+      "gitBlobSha1": "6c7b212e0fd303dd77c0ed3e3b0dc096cc6b0001",
+      "sha256": "a83d2e25726526263cd0f18005ba1cae8c509e243cd84b196a29accc78789df5"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-contrasts/producer-receipt.json",
+      "bytes": 3499,
+      "gitBlobSha1": "5217fb302bb65490359c3350e19cf06ebcc5f5df",
+      "sha256": "b1a523da1ca22c68d85f4671a0172d9adc4c63868b18bf793374e86a9024e384"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-contrasts/sealed-font-slot-probes.files.json",
+      "bytes": 16473,
+      "gitBlobSha1": "efa46f90c459efda94fb4a144122b1679ce68170",
+      "sha256": "f22944612080e14af74e68ae59c02b0d88a9e271ea6afbe68c769e1ec323aab9"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-contrasts/sealed-font-slot-probes.zip",
+      "bytes": 710665,
+      "gitBlobSha1": "e7b36225690614f9984d8754f8c65bffee558ed7",
+      "sha256": "ed54828514108150208a5541293af7b165cc00ec16b6441d37306277979c1037"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-contrasts/sources/font-slot-arabic-control.opf.json",
+      "bytes": 371,
+      "gitBlobSha1": "2723a64ab7ab54b2e094689233059e8d27d2456e",
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-contrasts/sources/font-slot-arabic-cs-aptos.opf.json",
+      "bytes": 534,
+      "gitBlobSha1": "7aaaf7243e77d06ab400b1f01b82a4a991939248",
+      "sha256": "a7adbeeef94446873fa49ba2b8fc78a0eebf7e03e9590ab0fb399da3b3e5b64e"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-contrasts/sources/font-slot-french-cs-arabic.opf.json",
+      "bytes": 549,
+      "gitBlobSha1": "f176d811c756a735b42897852da42fbdf278d1ee",
+      "sha256": "883595fdc2d6e75a4765842c9a1e3ba3495d808f8c988484553c0bb8b98985e3"
+    }
+  ]
+}
