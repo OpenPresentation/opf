@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {embed} from '@openpresentation/opf';
+import {gallery} from '@openpresentation/gallery';
+import {editorialDeck} from '../../../packages/gallery/scripts/editorial-previews.mjs';
+const ids=['org-chart','hierarchy','venn'];
+const slides=ids.map(id=>({...editorialDeck(id,gallery.layouts[id]).slides[0],id:'layout-'+id}));
+const deck={$schema:'https://openpresentation.org/schema/opf/v1',name:'Trees and overlapping sets',description:'Three shared-geometry diagram layouts: reporting lines, a hierarchy, and overlapping sets. All examples are illustrative.',design:{background:'light1',footer:{left:{text:'Illustrative example • fictional data'}}},slides};
+const {document,unresolved}=embed(deck,{catalogs:[gallery]});assert.deepEqual(unresolved,[]);
+const destination=new URL('../../../examples/technical/trees-and-sets.opf.json',import.meta.url),text=JSON.stringify(document,null,2)+'\n';
+if(process.argv.includes('--check'))assert.equal(readFileSync(destination,'utf8'),text,'Run node tools/shapes/sh-21/build-examples.mjs');else writeFileSync(destination,text);
+console.log('SH21 maintained example: three semantic layouts with only their referenced catalog records embedded.');

@@ -887,7 +887,10 @@ function renderImageBlock(item, bound, options) {
   if (!image) throw new OPFRenderError("missing-image-geometry", "Image rendering requires a coordinated core build with image block geometry (ComposedItem.image).", { path: item.path });
   const picture = renderImage(item, image.box, bound, { ...options, imageFit: image.fit, imageFocus: image.focus, imagePicture: image.picture });
   const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
-  if (isImagePlaceholder(picture)) return Object.keys(trace).length ? tag("g", trace, picture) : picture;
+  const labels = (image.callouts ?? []).map(callout => tag('g', options.trace ? {'data-opf-image-callout': callout.path} : {},
+    tag('rect', {x: callout.box.x, y: callout.box.y, width: callout.box.width, height: callout.box.height, fill: bound.design.colors.background}) +
+    renderTextBox(callout.text, callout.textBox, bound, {path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, fill: bound.design.colors.text, align: 'center', diagnosticsHandled: true, options}))).join('');
+  if (isImagePlaceholder(picture)) return labels || Object.keys(trace).length ? tag('g', trace, picture + labels) : picture;
   const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
   // A sketched stroke (core stroke.sketched) clips the picture to its sketched outline, as PowerPoint draws it.
   const sketched = image.stroke?.sketched?.fills[0];
@@ -905,6 +908,7 @@ function renderImageBlock(item, bound, options) {
     children.push(stroke.elements);
   }
   if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
+  if (labels) children.push(labels);
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
   return tag("g", trace, children.filter(Boolean).join(""));
 }
@@ -1013,11 +1017,15 @@ function renderArrangements(bound, options) {
       const {x, y, width, height} = arrangement.background;
       parts.push(tag('path', {...HIDDEN, d: `M${n(x + width / 2)} ${n(y)} L${n(x + width)} ${n(y + height / 2)} L${n(x + width / 2)} ${n(y + height)} L${n(x)} ${n(y + height / 2)} Z`, fill: paint.background.hex}));
     }
+    for(const edge of arrangement.connectors??[])parts.push(tag('path',{...HIDDEN,d:'M'+edge.points.map(([x,y])=>n(x)+' '+n(y)).join(' L'),fill:'none',stroke:paint.fill.hex,'stroke-width':n(arrangement.lineWidth),'stroke-linecap':'butt','stroke-linejoin':'miter'}));
     for (const node of arrangement.nodes) {
       const trace = options.trace && node.path ? {'data-opf-arrangement-path': node.path} : {};
-      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill, ...stroke, ...trace}));
-      else if (node.preset === 'ellipse') parts.push(cycleCircle(node, fill, stroke, trace));
-      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill, ...stroke, ...trace}));
+      if(node.background)parts.push(tag('rect',{...HIDDEN,x:n(node.background.x),y:n(node.background.y),width:n(node.background.width),height:n(node.background.height),rx:n(node.radius??0),fill:paint.fill.hex,...stroke,...trace}));
+      const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex:fill,nodeStroke=arrangement.kind==='hierarchy'?{...stroke,stroke:paint.fill.hex}:stroke,alpha=arrangement.kind==='venn'?.5:arrangement.kind==='hierarchy'?.9:1;
+      const nodePaint=alpha===1?nodeStroke:{...nodeStroke,'fill-opacity':alpha};
+      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill:nodeFill, ...nodePaint, ...trace}));
+      else if (node.preset === 'ellipse') parts.push(cycleCircle(node, nodeFill, nodePaint, trace));
+      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill:nodeFill, ...nodePaint, ...trace}));
       // SH-18: a cycle's arrow after its node, as PowerPoint stacks them (an arrow of two entries runs under the next circle).
       for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) parts.push(cycleArrowPath(arrow, paint.arrow.hex));
     }
@@ -1711,11 +1719,13 @@ function renderTimeline(item, box, bound, options) {
   const layout=item.timelineLayout;
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
+  const background=bound.design.backgroundColor??bound.design.colors.background;
   const children=[tag('line',{...HIDDEN,...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
+  for(const range of layout.ranges??[])children.push(tag('rect',{...HIDDEN,...range.box,fill:bound.design.colors.primary,'fill-opacity':.32,stroke:background,'stroke-width':2*scale,...traceAttrs(options,range.path),...(options.trace?{'data-opf-timeline-range':range.eventIndex}:{})}));
+  for(const link of layout.rangeLinks??[])children.push(tag('line',{...HIDDEN,x1:link.x1,y1:link.y1,x2:link.x2,y2:link.y2,stroke:bound.design.colors.border,'stroke-width':scale,...traceAttrs(options,link.path),...(options.trace?{'data-opf-timeline-range-link':link.eventIndex}:{})}));
   // LH-121: the connector up to the current event in the primary color, over the border-colored rest.
   if(layout.progress)children.push(tag('line',{...HIDDEN,...layout.progress,stroke:bound.design.colors.primary,'stroke-width':3*scale,...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-progress':'true'}:{})}));
   // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.
-  const background=bound.design.backgroundColor??bound.design.colors.background;
   const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
   for(const marker of layout.markers){
     if(!marker.status){

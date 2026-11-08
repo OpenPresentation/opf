@@ -1,0 +1,1678 @@
+{
+  "baselineRoot": "C:/opf-work/rr107-mcpb",
+  "baselineCommit": "cabd3c8a03d02255329edd2352eb1e39df7fb40c",
+  "defaultControls": {
+    "count": 324,
+    "geometry": "deep equal",
+    "geometrySha256": "dc501e06cc528355d25478954e2d76cf97f42e81ae5236106ddd1b770dfbb083",
+    "plainPptx": "byte identical",
+    "plainPptxSha256": "9777bdff0f8bd129696cee521fe846d10616ea0c40d776006a7861fa37b81686"
+  },
+  "compositionSha256": "4ba311679b29aee7b2d36fc946de7f02a0f4822314a58d4d9dda31640bfa760e",
+  "cases": [
+    {
+      "id": "wide",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Four weeks build on one week of discovery",
+            "timeline": {
+              "name": "Six-week delivery",
+              "events": [
+                {
+                  "when": "Week 1",
+                  "what": "Discover",
+                  "description": "Agree the scope.",
+                  "duration": 1,
+                  "status": "done"
+                },
+                {
+                  "when": "Weeks 2–5",
+                  "what": "Build",
+                  "description": "Deliver and test the working product.",
+                  "duration": 4,
+                  "status": "current"
+                },
+                {
+                  "when": "Week 6",
+                  "what": "Launch",
+                  "description": "Release to the team.",
+                  "status": "planned"
+                }
+              ]
+            }
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "timeline": {
+                "name": "Timeline",
+                "summary": "Dated events or a roadmap along one axis, with optional notes.",
+                "tags": [
+                  "Groups of items"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "lead",
+                    "size": "auto",
+                    "accepts": [
+                      "text"
+                    ],
+                    "role": "supporting",
+                    "flow": "none"
+                  },
+                  {
+                    "name": "timeline",
+                    "accepts": [
+                      "timeline",
+                      "diagram"
+                    ],
+                    "role": "primary",
+                    "flow": "column"
+                  },
+                  {
+                    "name": "notes",
+                    "size": "auto",
+                    "accepts": [
+                      "text",
+                      "list",
+                      "metric"
+                    ],
+                    "role": "supporting",
+                    "flow": "auto"
+                  }
+                ],
+                "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "bcac3bf76581944295d04abd09ed9abb8db3a70ee4a795c9bcd5f16f0d164000",
+          "pngSha256": "dd4f34a03fd79b99deb68557de86fb63b3e5fc42229cb050fdbc87032beda793",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "81d5a4dcfdc7218c7dc46e1d46c4322cc2af8ff2b254198dc80b91e3acc8117d",
+          "pngSha256": "d34a35122d3e46a554dc597c3f9f3745c141fa98e415e8e82b43e52fade1d624",
+          "arrangement": "band",
+          "fonts": [
+            43,
+            37,
+            41,
+            37,
+            37,
+            41,
+            37,
+            37,
+            41,
+            37
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 57.6,
+                "y": 379.03169925,
+                "width": 194.13333333333333,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 251.73333333333332,
+                "y": 379.03169925,
+                "width": 776.5333333333333,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 1028.2666666666664,
+                "y": 379.03169925,
+                "width": 194.1333333333334,
+                "height": 10
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "portrait",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto",
+          "dimensions": {
+            "widthInches": 5.625,
+            "heightInches": 10
+          }
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Three consecutive periods",
+            "timeline": {
+              "events": [
+                {
+                  "when": "Week 1",
+                  "what": "Discover",
+                  "duration": 1,
+                  "status": "done"
+                },
+                {
+                  "when": "Weeks 2–5",
+                  "what": "Build",
+                  "duration": 4,
+                  "status": "current"
+                },
+                {
+                  "when": "Week 6",
+                  "what": "Launch",
+                  "status": "planned"
+                }
+              ]
+            }
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "timeline": {
+                "name": "Timeline",
+                "summary": "Dated events or a roadmap along one axis, with optional notes.",
+                "tags": [
+                  "Groups of items"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "lead",
+                    "size": "auto",
+                    "accepts": [
+                      "text"
+                    ],
+                    "role": "supporting",
+                    "flow": "none"
+                  },
+                  {
+                    "name": "timeline",
+                    "accepts": [
+                      "timeline",
+                      "diagram"
+                    ],
+                    "role": "primary",
+                    "flow": "column"
+                  },
+                  {
+                    "name": "notes",
+                    "size": "auto",
+                    "accepts": [
+                      "text",
+                      "list",
+                      "metric"
+                    ],
+                    "role": "supporting",
+                    "flow": "auto"
+                  }
+                ],
+                "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "6fe621bf7ef9eb94d33d4609a78b587b20f6519730aafff747c6c7ec9a14d344",
+          "pngSha256": "575e023760d6600e4a980b3b06f80f785a66623c87a84e9cd665b6811dab33a0",
+          "arrangement": "band",
+          "fonts": [
+            20.986666666666668,
+            23.986666666666668,
+            20.986666666666668,
+            23.986666666666668,
+            20.986666666666668,
+            23.986666666666668
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "66f5181c7dd62b6e05cfae05e9f072f742d445102fc2e2b9dfcb40ae82f2a901",
+          "pngSha256": "69273e14053bd7dc5ddca9db382bb1aebb69d918a9808e0175fd4e4846395439",
+          "arrangement": "vertical",
+          "fonts": [
+            29.24,
+            32.24,
+            29.24,
+            32.24,
+            29.24,
+            32.24
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 43.2,
+                "y": 106.61,
+                "width": 7.5,
+                "height": 135.03166666666667
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 43.2,
+                "y": 241.64166666666665,
+                "width": 7.5,
+                "height": 540.1266666666667
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 43.2,
+                "y": 781.7683333333333,
+                "width": 7.5,
+                "height": 135.03166666666672
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Four weeks build on one week of discovery",
+            "timeline": {
+              "name": "Six-week delivery",
+              "events": [
+                {
+                  "when": "Week 1",
+                  "what": "Discover",
+                  "description": "Agree the scope.",
+                  "duration": 1,
+                  "status": "done"
+                },
+                {
+                  "when": "Weeks 2–5",
+                  "what": "Build",
+                  "description": "Deliver and test the working product.",
+                  "duration": 4,
+                  "status": "current"
+                },
+                {
+                  "when": "Week 6",
+                  "what": "Launch",
+                  "description": "Release to the team.",
+                  "status": "planned"
+                }
+              ]
+            }
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "timeline": {
+                "name": "Timeline",
+                "summary": "Dated events or a roadmap along one axis, with optional notes.",
+                "tags": [
+                  "Groups of items"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "lead",
+                    "size": "auto",
+                    "accepts": [
+                      "text"
+                    ],
+                    "role": "supporting",
+                    "flow": "none"
+                  },
+                  {
+                    "name": "timeline",
+                    "accepts": [
+                      "timeline",
+                      "diagram"
+                    ],
+                    "role": "primary",
+                    "flow": "column"
+                  },
+                  {
+                    "name": "notes",
+                    "size": "auto",
+                    "accepts": [
+                      "text",
+                      "list",
+                      "metric"
+                    ],
+                    "role": "supporting",
+                    "flow": "auto"
+                  }
+                ],
+                "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        },
+        "language": "ar"
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "27c581634abbe26fed9ea6f4c94d43427c13ced071a02b6c667c75594755e8d0",
+          "pngSha256": "cccd19d5b007d45d48c7632577d158889e4113c4aca9f8a8d1115bae918dc707",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "674477fd21d02c8fc55ef3e568a8dcbef26ce6addd16426b8e7c1702e86d8016",
+          "pngSha256": "bf0d28db94eabea17aafddba2ef8deb41de5ad683777146ea39f52a6af960a50",
+          "arrangement": "band",
+          "fonts": [
+            43,
+            37,
+            41,
+            37,
+            37,
+            41,
+            37,
+            37,
+            41,
+            37
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 1028.2666666666667,
+                "y": 402.38169924999994,
+                "width": 194.13333333333333,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 251.7333333333334,
+                "y": 402.38169924999994,
+                "width": 776.5333333333333,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 57.6,
+                "y": 402.38169924999994,
+                "width": 194.1333333333334,
+                "height": 10
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nine-periods",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Nine phases keep their relative lengths",
+            "timeline": {
+              "events": [
+                {
+                  "what": "Phase 1",
+                  "duration": 1
+                },
+                {
+                  "what": "Phase 2",
+                  "duration": 2
+                },
+                {
+                  "what": "Phase 3",
+                  "duration": 3
+                },
+                {
+                  "what": "Phase 4",
+                  "duration": 1
+                },
+                {
+                  "what": "Phase 5",
+                  "duration": 2
+                },
+                {
+                  "what": "Phase 6",
+                  "duration": 3
+                },
+                {
+                  "what": "Phase 7",
+                  "duration": 1
+                },
+                {
+                  "what": "Phase 8",
+                  "duration": 2
+                },
+                {
+                  "what": "Phase 9",
+                  "duration": 3
+                }
+              ]
+            }
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "timeline": {
+                "name": "Timeline",
+                "summary": "Dated events or a roadmap along one axis, with optional notes.",
+                "tags": [
+                  "Groups of items"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "lead",
+                    "size": "auto",
+                    "accepts": [
+                      "text"
+                    ],
+                    "role": "supporting",
+                    "flow": "none"
+                  },
+                  {
+                    "name": "timeline",
+                    "accepts": [
+                      "timeline",
+                      "diagram"
+                    ],
+                    "role": "primary",
+                    "flow": "column"
+                  },
+                  {
+                    "name": "notes",
+                    "size": "auto",
+                    "accepts": [
+                      "text",
+                      "list",
+                      "metric"
+                    ],
+                    "role": "supporting",
+                    "flow": "auto"
+                  }
+                ],
+                "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "b4a7067967b6648cd7e277532ee435d3aa4ba9317ccd76400de383fd588c9701",
+          "pngSha256": "d90b71cb50c5b43d8ac4707971100f146426f61220f39534487bcf734d4ca553",
+          "arrangement": "vertical",
+          "fonts": [
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "8475ea7070a69e94900ce9db472b1a4e5ad7444a7ed57c81b6c178e946e9ab13",
+          "pngSha256": "4f8e9467500a5751e7a3ce7b3fd4a06fe482a2b4f90c61845cc492bbd9d29878",
+          "arrangement": "vertical",
+          "fonts": [
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43,
+            43
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 57.6,
+                "y": 147.832422,
+                "width": 10,
+                "height": 28.587087666666672
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 57.6,
+                "y": 176.41950966666667,
+                "width": 10,
+                "height": 57.174175333333345
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 57.6,
+                "y": 233.59368500000002,
+                "width": 10,
+                "height": 85.76126300000001
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.3",
+              "eventIndex": 3,
+              "box": {
+                "x": 57.6,
+                "y": 319.35494800000004,
+                "width": 10,
+                "height": 28.587087666666672
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.4",
+              "eventIndex": 4,
+              "box": {
+                "x": 57.6,
+                "y": 347.9420356666667,
+                "width": 10,
+                "height": 57.174175333333345
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.5",
+              "eventIndex": 5,
+              "box": {
+                "x": 57.6,
+                "y": 405.116211,
+                "width": 10,
+                "height": 85.76126300000001
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.6",
+              "eventIndex": 6,
+              "box": {
+                "x": 57.6,
+                "y": 490.87747400000006,
+                "width": 10,
+                "height": 28.587087666666672
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.7",
+              "eventIndex": 7,
+              "box": {
+                "x": 57.6,
+                "y": 519.4645616666668,
+                "width": 10,
+                "height": 57.174175333333345
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.8",
+              "eventIndex": 8,
+              "box": {
+                "x": 57.6,
+                "y": 576.6387370000001,
+                "width": 10,
+                "height": 85.76126300000006
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "single-period",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "One continuous delivery period",
+            "timeline": {
+              "events": [
+                {
+                  "when": "Weeks 1–4",
+                  "what": "Deliver the working product",
+                  "duration": 4,
+                  "status": "current"
+                }
+              ]
+            }
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "timeline": {
+                "name": "Timeline",
+                "summary": "Dated events or a roadmap along one axis, with optional notes.",
+                "tags": [
+                  "Groups of items"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "lead",
+                    "size": "auto",
+                    "accepts": [
+                      "text"
+                    ],
+                    "role": "supporting",
+                    "flow": "none"
+                  },
+                  {
+                    "name": "timeline",
+                    "accepts": [
+                      "timeline",
+                      "diagram"
+                    ],
+                    "role": "primary",
+                    "flow": "column"
+                  },
+                  {
+                    "name": "notes",
+                    "size": "auto",
+                    "accepts": [
+                      "text",
+                      "list",
+                      "metric"
+                    ],
+                    "role": "supporting",
+                    "flow": "auto"
+                  }
+                ],
+                "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "a73472d30983cd18e38c961acfa4fd7f5188f11df7eee42b52b7a2716f6bfe94",
+          "pngSha256": "e78d55a545be8577d455ca9afa53e62ad2eb696ea291ffc8d63742a7480c4b90",
+          "arrangement": "band",
+          "fonts": [
+            28,
+            32
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "f9d97db81dd96f98a6505a0bda8ed778188072199089e5ee5136911175750851",
+          "pngSha256": "c367f01583856068197f240478905d300d6cf0e52d6220a7baac0dcf23186683",
+          "arrangement": "band",
+          "fonts": [
+            39,
+            43
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 57.6,
+                "y": 394.40906253124996,
+                "width": 1164.8,
+                "height": 10
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partial-periods",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Omitted durations remain one unit",
+            "timeline": {
+              "name": "Relative periods",
+              "events": [
+                {
+                  "when": "Period A",
+                  "what": "Discover",
+                  "description": "Agree the scope.",
+                  "status": "done"
+                },
+                {
+                  "when": "Half unit",
+                  "what": "Build",
+                  "description": "Deliver and test the working product.",
+                  "duration": 0.5,
+                  "status": "current"
+                },
+                {
+                  "when": "Period C",
+                  "what": "Launch",
+                  "description": "Release to the team.",
+                  "status": "planned"
+                }
+              ]
+            }
+          }
+        ],
+        "catalogs": {
+          "default": {
+            "source": "https://www.pptx.gallery",
+            "themes": {
+              "classic": {
+                "name": "Classic",
+                "background": {
+                  "type": "theme",
+                  "slot": "light1"
+                },
+                "colorScheme": "cool-horizon",
+                "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+                "fontScheme": "tenorite",
+                "dimensions": "widescreen",
+                "variants": [
+                  {
+                    "id": "light",
+                    "name": "Light",
+                    "variant": "light1"
+                  },
+                  {
+                    "id": "light-alt",
+                    "name": "Light alt",
+                    "variant": {
+                      "background": "light1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  },
+                  {
+                    "id": "dark",
+                    "name": "Dark",
+                    "variant": "dark1"
+                  },
+                  {
+                    "id": "dark-alt",
+                    "name": "Dark alt",
+                    "variant": {
+                      "background": "dark1",
+                      "accents": [
+                        "accent6",
+                        "accent5",
+                        "accent4",
+                        "accent1",
+                        "accent3",
+                        "accent2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "fontSchemes": {
+              "roboto": {
+                "name": "Roboto",
+                "app": "google-slides",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Roboto",
+                "minor": "Roboto",
+                "textSample": "Perfect for tech",
+                "type": "sans-serif",
+                "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+              },
+              "tenorite": {
+                "name": "Tenorite",
+                "app": "powerpoint",
+                "languageFamily": "latin",
+                "languages": [],
+                "major": "Tenorite Display",
+                "minor": "Tenorite",
+                "textSample": "Rounded modern tone",
+                "type": "sans-serif",
+                "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+              }
+            },
+            "layouts": {
+              "timeline": {
+                "name": "Timeline",
+                "summary": "Dated events or a roadmap along one axis, with optional notes.",
+                "tags": [
+                  "Groups of items"
+                ],
+                "direction": "column",
+                "regions": [
+                  {
+                    "name": "title"
+                  },
+                  {
+                    "name": "lead",
+                    "size": "auto",
+                    "accepts": [
+                      "text"
+                    ],
+                    "role": "supporting",
+                    "flow": "none"
+                  },
+                  {
+                    "name": "timeline",
+                    "accepts": [
+                      "timeline",
+                      "diagram"
+                    ],
+                    "role": "primary",
+                    "flow": "column"
+                  },
+                  {
+                    "name": "notes",
+                    "size": "auto",
+                    "accepts": [
+                      "text",
+                      "list",
+                      "metric"
+                    ],
+                    "role": "supporting",
+                    "flow": "auto"
+                  }
+                ],
+                "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+                "preview": {
+                  "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+                }
+              }
+            },
+            "colorSchemes": {
+              "cool-horizon": {
+                "name": "Cool Horizon",
+                "accent1": "#2874A6",
+                "accent2": "#1B4F72",
+                "accent3": "#5499C7",
+                "accent4": "#7BDBB2",
+                "accent5": "#3AC67A",
+                "accent6": "#24A89E",
+                "dark1": "#000000",
+                "dark2": "#011842",
+                "followedHyperlink": "#551A8B",
+                "hyperlink": "#0000EE",
+                "light1": "#FFFFFF",
+                "light2": "#F0F0F0",
+                "summary": "Cool blue-green palette tuned for professional business decks.",
+                "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+                "tags": [
+                  "professional",
+                  "trustworthy",
+                  "calm",
+                  "technical",
+                  "versatile"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "9e85ee7e9156026b5509177615192d9e0038f5e165df222e0c76374aeebb7c21",
+          "pngSha256": "fb20576f69c3ddba9ce538568a5c00b27045396962a0da9687855df06aa37163",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "1bc0c9c226a26c986499e06070623159b87deb94d58c827e85831a1be85edb3c",
+          "pngSha256": "4a5af19e827687841e4a06de43fdfadaeed6fd819415328a2e561f7338891f9a",
+          "arrangement": "band",
+          "fonts": [
+            43,
+            37,
+            41,
+            37,
+            37,
+            41,
+            37,
+            37,
+            41,
+            37
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 57.6,
+                "y": 378.4900097656249,
+                "width": 465.92,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 523.52,
+                "y": 378.4900097656249,
+                "width": 232.96,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 756.4800000000001,
+                "y": 378.4900097656249,
+                "width": 465.9199999999999,
+                "height": 10
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

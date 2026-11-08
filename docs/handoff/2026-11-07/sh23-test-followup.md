@@ -1,0 +1,3 @@
+# SH-23 legacy integration assertion follow-up
+
+The accepted SH23 source adds paragraph alignment defaults beside txAnchorVert. The older SH19 export test matched an algorithm containing only txAnchorVert and therefore failed on the newly correct layout. This test-only follow-up requires the top anchor and verifies both explicit LTR and RTL alignment values in every text algorithm, matching the authored data alignment. It changes no production behavior or tolerance. SH09 and SH16 regressions pass; the full SH19 regression passes after the follow-up. The frozen SH23 source remains unchanged; apply this focused commit in034 integration.

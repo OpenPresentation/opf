@@ -4,19 +4,20 @@ import type { ValidationRule } from './rule-context.js';
 import { plainText, pointerOfDotted, runsOf, slidePayloads } from './rule-content.js';
 import { type Rec, rec } from './rule-design.js';
 import { resolveNarrative, unreferencedBeats } from './narrative-plan.js';
-import { MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule, iconDroppedRule, arrangementAdaptedRule } from './validation-rule-info.js';
+import { ruleInfo, MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule, iconDroppedRule, arrangementAdaptedRule } from './validation-rule-info.js';
 
 const PX_TO_PT = 0.75;
 const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 10 ** places;
 
 // ------------------------------------------------------------------ layout
 
+const pointAnchorRule = ruleInfo('opf/shape-anchor-missing');
 const REGION_RULES = { 'region-unknown': regionUnknownRule, 'region-kind': regionKindRule, 'region-full': regionFullRule, 'layout-unplaced': unplacedRule } as const;
 
 const layoutRules: ValidationRule[] = [
 	{
 		info: overflowRule,
-		also: [unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule],
+		also: [pointAnchorRule, unresolvedRule, layoutFailedRule, minFontRule, regionUnknownRule, regionKindRule, regionFullRule, unplacedRule, iconDroppedRule, arrangementAdaptedRule],
 		run(context) {
 			// Diagnostics about deck-level settings (header, footer, design) repeat on every slide; report each once.
 			const deckLevel = new Set<string>();
@@ -33,6 +34,7 @@ const layoutRules: ValidationRule[] = [
 					if (diagnostic.code === 'text-overflow')
 						context.report(overflowRule, { path, slide, message: diagnostic.message, help: 'Shorten the text, give it more space (fewer blocks, a different composition) or split the slide (paginate); raising the readable minimum makes it worse.' });
 					// A cell narrower than composition's comfort threshold is a taste judgment, not a finding.
+					else if (diagnostic.code === 'shape-anchor-missing') context.report(pointAnchorRule, {path, slide, message: diagnostic.message, help: 'Choose a plotted point in a qualified classic chart, or use a whole-block anchor.'});
 					else if (diagnostic.code === 'small-cell') continue;
 					// LH-14: an icon the slide does not draw (no room without setting text smaller, or nothing it can mark).
 					else if (diagnostic.code === 'icon-dropped')

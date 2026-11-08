@@ -1,0 +1,13 @@
+✔ the baseline is rewritten only in GitHub Actions on Linux in the Playwright image (0.5465ms)
+✔ --local writes the review candidate only, anywhere (0.4118ms)
+✔ the steps are scripts of the renderer package, and the workflow runs this script in the pinned image (0.6301ms)
+✔ the pinned read-only job regenerates core and renderer templates with their review artifacts (0.3027ms)
+✔ the actual write-job allowlist accepts generated baselines and refuses source, sibling and traversing patches (418.1472ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 481.1574
