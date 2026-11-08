@@ -43,7 +43,7 @@ import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordOverlays, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -63,7 +63,7 @@ import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
 import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
 import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
-import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
+import {languageDiagnostics, leftToRightPieces, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagramGroups, importDiagrams, tagDiagrams } from './diagram-provenance.js';
@@ -709,7 +709,7 @@ export async function fromPptx(input, options = {}) {
   restoreLogoFallback(imported, furnitureContexts);
   // The overlay joins its slide before the run colors, so the text of its shapes is settled with the rest.
   applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance, options.onDiagnostic);
-  applyRunColors(imported, slideProvenance, restoredGroups, report, options);
+  applyRunColors(imported, slideProvenance, restoredGroups, report, options, furnitureContexts);
   settleShapes(imported, furnitureContexts, options);
   restoreSlotFills(imported, slideProvenance, options);
   dropImpliedVariants(imported, options);
@@ -739,9 +739,9 @@ export async function fromPptx(input, options = {}) {
 
 // RR-08: run colours named by a ColorRef (variable, scheme slot, role) come back as that name where the document's own
 // colour resolution still gives the run's colour; see run-colors.js.
-function applyRunColors(imported, slideProvenance, restoredGroups, report, options) {
+function applyRunColors(imported, slideProvenance, restoredGroups, report, options, contexts) {
   const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
-  const info = slideProvenance.map((entry, index) => entry.structure === "untagged" ? undefined : {record: entry.record, structure: entry.structure === "match", content: restoredContent.has(index)});
+  const info = slideProvenance.map((entry, index) => entry.structure === "untagged" ? undefined : {record: entry.record, structure: entry.structure === "match", content: restoredContent.has(index), scalars: contexts?.[index]?.listScalars});
   restoreRunColors(imported.slides, info, colorResolver(imported, options), report);
 }
 
@@ -1137,7 +1137,8 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
         options.onDiagnostic?.({code: 'mixed-body-paragraphs', path: `slides.${slideIndex}`, message: 'A native body mixes bulleted and plain paragraphs; current text is retained as list entries because OPF has no mixed-paragraph body model.'});
     }
   }
-  const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships);
+  const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  nativeContext.listScalars = listRecord.scalars;
   const content = mergeAdjacentBulletShapes(restoreStepNumbers(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs, listRecord.roles), nativeContext.stepNumbers))
     .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? [], inferredStretch: item.inferredStretch}))
     .filter((entry) => entry.payload);
@@ -2772,13 +2773,21 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       const arrangement = geometry.arrangements.find(entry => entry.path === item.path), text = exportPaint(itemContext).text.hex.slice(1);
       const lineContext = arrangement.text === 'node' ? {...itemContext,colors:{...itemContext.colors,text},textColor:text} : itemContext;
       await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined,['org-chart','hierarchy'].includes(arrangement.kind));
-      if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
+      if(item.textStyle){
+        const look = listRunLook(item.text,item.textStyle,itemContext);
+        recordListRuns(context.documentProvenance,slideIndex,item.path,look);
+        if(look?.text)recordListScalars(context.documentProvenance,slideIndex,item.path,scriptSplitListScalars(item.text,itemContext));
+      }
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
       // LH-168: a list numbered by core's step badges carries its numbers on the badges, not as list markers.
       const badgeNumbered=(geometry.steps??[]).some(step=>step.badges?.some(badge=>badge.list?.path===item.path));
       await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined&&!badgeNumbered);
       // opf-pptx#212: the look every run of the list is written with where its source states none (full provenance only).
-      if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
+      if(item.textStyle){
+        const look = listRunLook(item.text,item.textStyle,itemContext);
+        recordListRuns(context.documentProvenance,slideIndex,item.path,look);
+        if(look?.text)recordListScalars(context.documentProvenance,slideIndex,item.path,scriptSplitListScalars(item.text,itemContext));
+      }
     } else if (["text", "title", "subtitle", "tag"].includes(item.field) && item.text?.richLines) {
       // FA-10: a TextRun[] heading draws and exports like rich body text; its lines are named and tagged as a heading (the body's are not).
       const heading = item.field !== 'text';
@@ -2986,6 +2995,27 @@ function listRunLook(fit,style,context){
   const text=looks('text'),description=looks('description');
   if(text.size!==1||description.size>1)return undefined;
   return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};
+}
+// Follow the same paragraph direction and LTR ranges as native bidi splitting.
+// No source strings or flags for ordinary LTR/rich values enter the record.
+function scriptSplitListScalars(fit, context) {
+  const plan = context.scriptFonts?.slides?.[context.slideIndex ?? 0] ?? context.scriptFonts?.deck;
+  if (!plan?.rtl) return undefined;
+  const result = [];
+  fit.listEntries.forEach((entry, item) => {
+    for (const [role, value] of [['text', entry.value], ['description', entry.descriptionValue]]) {
+      if (typeof value !== 'string' || !entry[role]) continue;
+      const text = entry[role], split = text.richLines.some((line, index) => {
+        if ((text.directions?.[index] ?? entry.direction) !== 'rtl') return false;
+        return line.fragments.some(fragment => {
+          const ranges = leftToRightPieces(fragment.text);
+          return ranges.length > 0 && (line.fragments.length > 1 || ranges.some(([from, to]) => from > 0 || to < fragment.text.length));
+        });
+      });
+      if (split) result.push([item, role]);
+    }
+  });
+  return result.length ? result : undefined;
 }
 function richLineRuns(line,color,native,context,path) {
   const fallback=color.replace(/^#/,'');
