@@ -4,8 +4,8 @@
     244
   ],
   "required": 64,
-  "reviewed": 32,
-  "status": "32 of 64 original sheets reviewed; remaining 32 unreviewed. Explicit design holds and stress/refusal classifications retained.",
+  "reviewed": 40,
+  "status": "40 of 64 original sheets reviewed; remaining 24 unreviewed. Explicit design holds and stress/refusal classifications retained.",
   "records": [
     {
       "ordinal": 181,
@@ -2584,6 +2584,432 @@
           "ordinal": 40,
           "judgment": "usable-with-style-provenance-note",
           "note": "The five-image collage fills the body, retaining all authored images. Edge-filling crops differ from historical treatment without visible overlap.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 213,
+      "deck": "batch-15",
+      "localSheet": 11,
+      "sha256": "7e75e4a021cebf3e8ce0be83dd50b5ea138e07d3a6ce8d140040895409bab407",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s41",
+          "ordinal": 41,
+          "judgment": "needs-table-growth-recheck",
+          "note": "The short table and narrative are centered but remain compact with small type and substantial unused body area.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s42",
+          "ordinal": 42,
+          "judgment": "stress-refusal-control",
+          "note": "The eight visible image tiles do not clear the two layout-unplaced findings. Retain an unaccepted stress/refusal classification.",
+          "findings": [
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/41/blocks/6",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "people"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/41/blocks/7",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "people"
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s43",
+          "ordinal": 43,
+          "judgment": "needs-type-growth-review",
+          "note": "The summary and four short supporting statements remain small amid large unused regions. Current black background also differs from historical navy; no unsupported regression claim.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s44",
+          "ordinal": 44,
+          "judgment": "needs-table-growth-recheck",
+          "note": "The metric, line chart and quote remain clear, but the low-row table has fine cell text. Preserve the compact-table recheck.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 214,
+      "deck": "batch-15",
+      "localSheet": 12,
+      "sha256": "e6a5cb7733b0d26110022b4c1153e5fb01acef20ac3797fbed743f2142e15c94",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s45",
+          "ordinal": 45,
+          "judgment": "usable-with-measure-note",
+          "note": "Both complete paragraph panels grow visibly and avoid collision, though full-width lines approach a long reading measure.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s46",
+          "ordinal": 46,
+          "judgment": "needs-table-growth-recheck",
+          "note": "The low-row table and companion paragraph remain small relative to available body space.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s47",
+          "ordinal": 47,
+          "judgment": "needs-timeline-text-recheck",
+          "note": "Three vertical timelines no longer collide with the lower prose, but names, dates and descriptions remain very small. Keep complete descriptions and the readability hold.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s48",
+          "ordinal": 48,
+          "judgment": "usable",
+          "note": "All three numbered steps and complete descriptions grow substantially into readable columns with no overlap.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 215,
+      "deck": "batch-15",
+      "localSheet": 13,
+      "sha256": "be8dac027543418304ce6182bf5d2ca757c06857c688b0025cfe17d32cacf7a7",
+      "width": 1456,
+      "height": 626,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s49",
+          "ordinal": 49,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "Two authored image regions fill the body consistently. The current edge-filling arrangement differs from the historical small stack without visible collision.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s50",
+          "ordinal": 50,
+          "judgment": "needs-table-growth-recheck",
+          "note": "Three tables are separated from the full narratives, removing visible overlap, but cell text is extremely small. Keep the compact-table legibility hold.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 216,
+      "deck": "batch-16",
+      "localSheet": 1,
+      "sha256": "12c7a3c53f12410b49c18d1d466d5bef587ca11cc174fbecfd22e1de1697f42f",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s01",
+          "ordinal": 1,
+          "judgment": "usable",
+          "note": "The two logo images fill balanced horizontal frames without collision; all authored imagery is retained.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s02",
+          "ordinal": 2,
+          "judgment": "usable-with-measure-note",
+          "note": "The two complete paragraphs grow into readable lines, though full-width measure remains long. Current black versus historical navy treatment remains explicit.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s03",
+          "ordinal": 3,
+          "judgment": "usable-with-chart-legibility-note",
+          "note": "The radar and waterfall occupy balanced body columns; fine tick and legend text remains a legibility caveat.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s04",
+          "ordinal": 4,
+          "judgment": "needs-reading-measure-review",
+          "note": "Five full-width paragraph bands are visible without collision but retain small type and very long measure. Recheck the arrangement and type growth without deleting content.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 217,
+      "deck": "batch-16",
+      "localSheet": 2,
+      "sha256": "6e05e1a91062b711fd010d9497cdd94b01259f24325097836d1472d5f82c9d1c",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s05",
+          "ordinal": 5,
+          "judgment": "needs-heading-preservation-review",
+          "note": "The current quote/photo panel visibly omits the authored Decision Options heading, present in both historical panels. The sealed current input still has that title and no explicit suppression override. Route for intended-layout versus defect review; no new historical regression is asserted.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s06",
+          "ordinal": 6,
+          "judgment": "usable",
+          "note": "The single timeline grows names, dates and complete descriptions into readable columns above the full narrative without collision.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s07",
+          "ordinal": 7,
+          "judgment": "needs-type-growth-review",
+          "note": "The three metrics and takeaway are visible, but values and support remain modest amid large unused body space; retain the type-growth direction.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s08",
+          "ordinal": 8,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "The five-image collage fills the body with all images visible. Current crops and edge-filling treatment differ from the historical small images.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 218,
+      "deck": "batch-16",
+      "localSheet": 3,
+      "sha256": "df1f5d11c7cc3d3f512e85ad91cebdcb002fa97194c50e27a269f7168404ea36",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s09",
+          "ordinal": 9,
+          "judgment": "needs-table-growth-recheck",
+          "note": "The low-row table and narrative are centered but table type remains very small relative to available space.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s10",
+          "ordinal": 10,
+          "judgment": "usable-with-growth-note",
+          "note": "All five logos remain visible in a 3+2 grid. The marks themselves occupy modest strips within a sparse body; further scale review remains possible.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s11",
+          "ordinal": 11,
+          "judgment": "usable-with-growth-note",
+          "note": "All five paragraphs remain visible in a 1+2+2 arrangement, though type is modest and the first paragraph has a long measure. Current black background is a visible historical difference.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s12",
+          "ordinal": 12,
+          "judgment": "usable",
+          "note": "The two large metrics and full-height image occupy coherent separate regions with the complete narrative retained.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 219,
+      "deck": "batch-16",
+      "localSheet": 4,
+      "sha256": "46f15460935e1a4481e081baab2fba4f4f7e8e30569d4d19c513ac276026652a",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s13",
+          "ordinal": 13,
+          "judgment": "usable",
+          "note": "Both complete narrative/identity panels grow to readable type and avoid the historical narrow wrapping.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s14",
+          "ordinal": 14,
+          "judgment": "needs-type-growth-review",
+          "note": "The four text groups remain comparatively small across a sparse 2+2 arrangement; room remains for type growth.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s15",
+          "ordinal": 15,
+          "judgment": "needs-timeline-text-recheck",
+          "note": "Three timelines no longer collide with the lower narratives, but their complete event text remains very small. Retain the nested-timeline readability hold.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s16",
+          "ordinal": 16,
+          "judgment": "needs-type-growth-review",
+          "note": "The image and short paragraph are centered without collision, but paragraph type remains small relative to the available region.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 220,
+      "deck": "batch-16",
+      "localSheet": 5,
+      "sha256": "122cd32b0317dad992298f81a6b4d1a51f90144c380666830232b05b8e1a3074",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s17",
+          "ordinal": 17,
+          "judgment": "needs-type-growth-review",
+          "note": "The image and full narrative fit, but narrative type remains small amid substantial available body space.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s18",
+          "ordinal": 18,
+          "judgment": "stress-refusal-control",
+          "note": "The visible three tables and prose do not clear the two layout-unplaced findings. Retain an unaccepted stress/refusal case and the small-table caveat.",
+          "findings": [
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/17/blocks/2",
+              "scope": "document",
+              "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+              "help": ""
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/17/blocks/4",
+              "scope": "document",
+              "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+              "help": ""
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s19",
+          "ordinal": 19,
+          "judgment": "usable-with-growth-note",
+          "note": "All eight logos remain visible in two rows without collision. The marks still occupy narrow strips in a sparse body, leaving scale review open.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s20",
+          "ordinal": 20,
+          "judgment": "needs-type-growth-review",
+          "note": "The title, full paragraph and short signal cluster near the bottom with very small body text and a large empty upper area. Current black background is recorded, not treated as historical regression proof.",
           "findings": [],
           "missingBefore": false,
           "missingClaude": false
