@@ -2,11 +2,11 @@
 
 This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Unified checklist and team](https://github.com/OpenPresentation/opf/issues/1139). The [2026-11-07 working rules](../2026-11-07/working-rules.md) remain binding; this file supersedes their historical status snapshots, not their safety rules.
 
-## Current status at08:33UTC
+## Current release gate
 
-PR1166 has merged as actual main **afac3f7fc07539667fe9298f8efc08c967aacb0d**. Full Release033 dry run **42462759180** is running with skip-gate=false; prepare passed. Sole maintained commit gate session75218 waits for actual-main verify and rehearse the publish before the real Release. No tag/package/site deploy exists yet. Do not move main during Release.
+Full top-level033 rehearsal42462759180 completed SUCCESS on green actualmainafac3f7fc07539667fe9298f8efc08c967aacb0d. REAL Release42465429345 dispatched09:02:07UTC withdry-run=false/skip-gate=false; allslowgates runagain. One maintained commit watcher92159 nowuses--requiredall onexactafac. Oldnamed30926stoppedonexpectedSKIPPEDjobsfromthecompletedDRYrun, notrealworkflowfailures; actualREALworkflowsuccess andregistry/provenance remainmandatory. Do not move main. No release/tag/site deploy is claimed yet; afterpublishverifysevenregistry/provenance/GHrelease plus allthree bump-site outcomes. Owner-only deploy/login/DNS remainreserved.
 
-034 now normally includes actual033main in e85edd5cf995ba66fe01f6024a57b490e3468c22: actualmain tree is exactly already-included528candidate, and the entire034accepted tree stayed unchanged through this ancestry merge. Reviewed LH73/LH75/LH110 sources are folded and frozen; joint23note/table plus22chart controls pass. [Receipts](integration-fold-checks/note-chart-receipt.json). Parent sealed22CLI files/22slides for native qualification after033publication, manifestSHA4b7190d3ff59bb03736dfc46350c590b243884c25486089386f0c0ce970dfca4; not run yet. Earlier paragraphs below retain historical context.
+034productsource nowincludes reviewed negativecategory1171 and localizedatleast1173. Parentintegrated21parser/geometry controls pass; [receipt](integration-fold-checks/atleast-receipt.json). Allfoldedsources stayfrozen. SH21draft1172/production11shape packet and SH25fresh32caseCLI packet areseparate/unqualifiednative. Parentnative work remainshelduntil033publication. Finalpinnedgoldens, both21+9PPTXarchivefamilies, stricttrackers/budgets and combinedCI remainowed. Earlier snapshots below preservehistory.
 
 ## v0.33 reapplication
 
@@ -56,6 +56,14 @@ Negative-category correction PR1171 at8dc8185efa003f64b23e1d015a9d6d2e15e1f297 i
 
 1171integrated build, negative-category/shared-sibling and authored-option controls pass; [source preservation and raw receipts](integration-fold-checks/negative-label-receipt.json). Follow-up review found LH110at-least word forms rejected for French/Spanish/Portuguese while digits work; a NEWderived correction is assigned, and1169remainsfrozen. It must be fixed before034release acceptance.
 
+LH110positive at-least P2 is corrected in reviewed/folded PR1173 atf2472a4f8db3420cadbf8e6a4834587c9d3e9eb3; source now permanently frozen. Complete au moins/al menos/pelo menos word forms match digit forms while bare-minus/fraction/malformed/larger-scale refusals remain. Three genuine before-failing controls and all41sourcecontrols pass. All seven existing clean-CLI witness PNGs and wholePPTX archives regenerate byte-exact, so preserve the sealed seven-file native packet without duplicate Office work. Parent integrated parser/geometry checks follow.
+
+## RR108 traced SVG lock continuation
+
+[Exact31value migration and pinned printer](rr108-svg-lock.md) preserve every existing reviewed value and strict comparison. Actual pie/doughnut SVGs differ only by one intended surface-fill circle each. Final generated hashes remain for the single reviewed034golden batch; the separate21/9PPTXarchive families are not changed here.
+
 ## SH21 source draft after034 alignment
 
 [SH20–22 current draft](sh21-draft.md) records the normal approved034 merge, final40 sampler correction, exact preservation receipt, focused controls and all remaining native limits. Production editable-shape CLI qualification is separated from the frozen diagnostic live packet; every new live domain remains off.
+
+SH21foundation1172cc6fa905 is folded after independent16focusedcontrols/source/11preview review, with explicitdesignhold: org/hierarchy/Venn1–4 acceptedforintegration; productionVenn5–7circleclusters rejected as too small. A NEWderivedadapterwillfillthebody withlargercircles/unchanged-or-larger outside labels, sharedSVG/PPTXgeometry, reportedadaptation andcompletefallbackwhenunfit. Preserve measurednativegeometry/77cbefrozenpacket; allnewlivedomainsOFF. ActualOffice/finalcombinedchecks remainowed. RR1081174f316isalsofolded/frozen; all31OLDSVGvalues unchanged, independent7writer/printercontrols pass, finalpinnedupdatepending.
