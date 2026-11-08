@@ -1,0 +1,241 @@
+{
+  "source": "C:/opf-work/rr105-run-dir-probes-02",
+  "authority": "Raw complete files, unchanged and losslessly zipped; these are failed/review observations, not native acceptance.",
+  "records": [
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/import.json",
+      "bytes": 945,
+      "sha256": "cd88b8a9f72e7f93fb0c274941c255765555bc93baa1f82ae2baa139e8860f62"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "bytes": 101035,
+      "sha256": "5f1a953a3791cf3ec72429709bcdacc0e421c0c694ac35cdd4c3b7c52e435ccb"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/png.exit.json",
+      "bytes": 476,
+      "sha256": "536ec41a2cf30d0eee29532bcc49f80df15d51d6d50c9bcc348909a6296ab60c"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/png.stdout.json",
+      "bytes": 2066,
+      "sha256": "6f181788fb8c5011345dccb2248ff223ea6796325f28260276805e48c5dd506d"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/pptx.exit.json",
+      "bytes": 479,
+      "sha256": "4ea57d2345396e9b59449afddf2fbeda67214eb8e937fe6d226b03585299c006"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/pptx.stdout.json",
+      "bytes": 2787,
+      "sha256": "6f6efa5ae5db1f90f0ec1fdb3aec8b166e649203416f14ad98cf11f66f48602f"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/import.json",
+      "bytes": 605,
+      "sha256": "b596e9d428e561158509e5c8da50c6c7dda3fd8181b65283aaac83f9856311e1"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "bytes": 102495,
+      "sha256": "60ecff85fd3ed8e48227be6ec4e8c463d16f9e9a8c4e170d36f327e978af34bd"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/png.exit.json",
+      "bytes": 468,
+      "sha256": "7d84f968b519e4751fa4ef5ace974138a4fb6e52c60f4440ec1ec549f51b8da4"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/png.stdout.json",
+      "bytes": 2058,
+      "sha256": "06a59a8fce143754d87db990eb0cfd845f4224fc6bbab113ef8ab4575e929021"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/pptx.exit.json",
+      "bytes": 471,
+      "sha256": "efeb75aa52118b8e23bec0f87242af37de0db5b894657ede4b4e5fed9ab0748e"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/pptx.stdout.json",
+      "bytes": 2779,
+      "sha256": "bd1c116ef225e075c2a8c2a2f255fa20d45e79d709b5651b195a6ce05f42e2e0"
+    },
+    {
+      "path": "cases/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/import.json",
+      "bytes": 714,
+      "sha256": "ac66eb86d6e1480af6ad262b8dab5977107fd5b5374975f075b489d83b82cb43"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/input.pptx",
+      "bytes": 101026,
+      "sha256": "bc76b9b50ab83bbf2f93c80b1e0ff0eb1909a9f83c31c155a2c3ceca9a9352aa"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/png.exit.json",
+      "bytes": 476,
+      "sha256": "3653a825d3316ab9c0df864c3f0845751eacf316e229bc33d9a28f0269bda1ec"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/png.stdout.json",
+      "bytes": 2066,
+      "sha256": "cfedd92610caadc8a6511c603734c52ca101372edaa7e07f67c4b103c5dae3f6"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/pptx.exit.json",
+      "bytes": 479,
+      "sha256": "94b89de267660b12052d6febdc38c9315f25ce7772aadecff1e91cb4b7a7c5c8"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/pptx.stdout.json",
+      "bytes": 2787,
+      "sha256": "44ec47fd772046d4d59b161610e41bdf059841cde0309eb5c7900519b2805b9c"
+    },
+    {
+      "path": "cases/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "previews/rtl-contrast-09-long-explicit-arabic-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "previews/rtl-contrast-10-non-ascii-digits-1.png",
+      "bytes": 31586,
+      "sha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3"
+    },
+    {
+      "path": "previews/rtl-contrast-11-long-explicit-french-1.png",
+      "bytes": 30522,
+      "sha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492"
+    },
+    {
+      "path": "progress.json",
+      "bytes": 1697,
+      "sha256": "17f05e716a530e1244fcea83a43683b1b38cd6867c7e6f86f3752fa370c067a9"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 2372,
+      "sha256": "6118b72206f912d21e8f2f8d575d000ed3822714eb9894bdedb85daa6751de5e"
+    },
+    {
+      "path": "runtime-after.json",
+      "bytes": 120522,
+      "sha256": "e384f45b0b2b8e31cee5e89e7807507d0dd4ae683622eb2cb4cb4567f5a1cc5c"
+    },
+    {
+      "path": "runtime-before.json",
+      "bytes": 120522,
+      "sha256": "e384f45b0b2b8e31cee5e89e7807507d0dd4ae683622eb2cb4cb4567f5a1cc5c"
+    },
+    {
+      "path": "suite/actions/rtl-contrast-09-long-explicit-arabic.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "suite/actions/rtl-contrast-10-non-ascii-digits.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "suite/actions/rtl-contrast-11-long-explicit-french.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "suite/inputs/rtl-contrast-09-long-explicit-arabic.pptx",
+      "bytes": 101035,
+      "sha256": "5f1a953a3791cf3ec72429709bcdacc0e421c0c694ac35cdd4c3b7c52e435ccb"
+    },
+    {
+      "path": "suite/inputs/rtl-contrast-10-non-ascii-digits.pptx",
+      "bytes": 102495,
+      "sha256": "60ecff85fd3ed8e48227be6ec4e8c463d16f9e9a8c4e170d36f327e978af34bd"
+    },
+    {
+      "path": "suite/inputs/rtl-contrast-11-long-explicit-french.pptx",
+      "bytes": 101026,
+      "sha256": "bc76b9b50ab83bbf2f93c80b1e0ff0eb1909a9f83c31c155a2c3ceca9a9352aa"
+    },
+    {
+      "path": "suite/previews/rtl-contrast-09-long-explicit-arabic-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "suite/previews/rtl-contrast-10-non-ascii-digits-1.png",
+      "bytes": 31586,
+      "sha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3"
+    },
+    {
+      "path": "suite/previews/rtl-contrast-11-long-explicit-french-1.png",
+      "bytes": 30522,
+      "sha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492"
+    },
+    {
+      "path": "suite/sources/rtl-contrast-09-long-explicit-arabic.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "suite/sources/rtl-contrast-10-non-ascii-digits.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "suite/sources/rtl-contrast-11-long-explicit-french.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "suite/suite.json",
+      "bytes": 6044,
+      "sha256": "1cc8ff0e9a6869342c6b00d480eb5cfd412b5087dc40395d88319c3216efd8ec"
+    }
+  ]
+}

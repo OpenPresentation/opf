@@ -1,0 +1,31 @@
+{
+  "source": "C:/opf-work/qualification034-rtl-direction-review-01",
+  "authority": "Raw complete files, unchanged and losslessly zipped; these are failed/review observations, not native acceptance.",
+  "records": [
+    {
+      "path": "review.json",
+      "bytes": 16793,
+      "sha256": "052766c3ec0232165b106209cd9a67e07d9b949f76fada2e444f571e162b7038"
+    },
+    {
+      "path": "rtl-contrast-09-long-explicit-arabic-imports.json.gz",
+      "bytes": 497,
+      "sha256": "7c177e5451c3f0966a512060449e21877315eff57043b43df714e139f397eb81"
+    },
+    {
+      "path": "rtl-contrast-10-non-ascii-digits-imports.json.gz",
+      "bytes": 321,
+      "sha256": "75c406957681f9d1604969c0f51846481301142dfc970201049e00a1aba083fc"
+    },
+    {
+      "path": "rtl-contrast-11-long-explicit-french-imports.json.gz",
+      "bytes": 847,
+      "sha256": "6e8942926b83653c5cf44d611de1f00097008c4ca7c9dafb5c9b8655287882bc"
+    },
+    {
+      "path": "sheet-01.png",
+      "bytes": 250440,
+      "sha256": "fd986f47e38492724ca86642fe5bac872054e855d7efd4cae36fafa608e2e47f"
+    }
+  ]
+}

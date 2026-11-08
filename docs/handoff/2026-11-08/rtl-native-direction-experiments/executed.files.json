@@ -1,0 +1,41 @@
+{
+  "source": "C:/opf-work/release-033-artifacts",
+  "scope": "Exact executed wrappers/reviewer and raw terminal logs, preserved inside binary archive to prevent line-ending normalization.",
+  "records": [
+    {
+      "path": "review-rtl-native-contrasts.mjs",
+      "bytes": 6850,
+      "sha256": "16ac1d4f9dc344476ac4fb4630f2c723745d95a0c02de352e58fa6ed31f85755"
+    },
+    {
+      "path": "rtl-contrast-native-01.log",
+      "bytes": 1003,
+      "sha256": "fc5950ceb80be43c6065a25231abcb9459915af9cba96902bf7ed16eaac50a2d"
+    },
+    {
+      "path": "rtl-contrast-native-review-01.log",
+      "bytes": 4698,
+      "sha256": "119802ac012eed0b2e2f1d7c385b1a9617ffca814ed84355913253e34b8d6c3a"
+    },
+    {
+      "path": "rtl-direction-native-01.log",
+      "bytes": 322,
+      "sha256": "54e98db95cc75dc6eadac679d0d082e2c7e4eabe61ca04de18149e0539675b3b"
+    },
+    {
+      "path": "rtl-direction-native-review-01.log",
+      "bytes": 1478,
+      "sha256": "b9ee6323ff0462d4491a393b96b2cddec5e562478e27444e3cf875ae30a4b872"
+    },
+    {
+      "path": "run-rtl-contrast-native-01.ps1",
+      "bytes": 3307,
+      "sha256": "817f79891f6405d15f5fd7ea55fcf20c90bd9cc06184bd57475bf91fb5fe7c1e"
+    },
+    {
+      "path": "run-rtl-direction-native-01.ps1",
+      "bytes": 3302,
+      "sha256": "249aba7caa307f0554d80bf7f7e1d9f4a4adf2afb5cce73f2e7bcd18c7db5c70"
+    }
+  ]
+}

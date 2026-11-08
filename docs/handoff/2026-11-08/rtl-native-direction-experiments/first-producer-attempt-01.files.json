@@ -1,0 +1,56 @@
+{
+  "source": "C:/opf-work/rr105-run-dir-probes-01",
+  "authority": "Raw complete files, unchanged and losslessly zipped; these are failed/review observations, not native acceptance.",
+  "records": [
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "bytes": 100994,
+      "sha256": "6124d7454eb11a3234430b8c61a2f0bf38fcf407004adeb447f7bd1dc5418106"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/png.exit.json",
+      "bytes": 444,
+      "sha256": "3b504123ddd45256c5d3eefce404fea3e2eb210cb4e62bf5a74db0a105b11f5f"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/png.stdout.json",
+      "bytes": 2066,
+      "sha256": "f36dfc923594a5dc4f61fedd2ac3441128a2e5e606c47b7c0851cfa798ee5b04"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/pptx.exit.json",
+      "bytes": 447,
+      "sha256": "68441459858c9283e6e4f1ddf9597563192e34b8b86836e6837d9aea24d92fa0"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/pptx.stdout.json",
+      "bytes": 2787,
+      "sha256": "68e632333200f686209e6bf7fc8e65db46614267fd6a77e32972a353cc07b5f3"
+    },
+    {
+      "path": "cases/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "previews/rtl-contrast-09-long-explicit-arabic-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "runtime-before.json",
+      "bytes": 120522,
+      "sha256": "e384f45b0b2b8e31cee5e89e7807507d0dd4ae683622eb2cb4cb4567f5a1cc5c"
+    }
+  ]
+}

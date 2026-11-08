@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "frozenRejectedSource": "897005388dd4617965b6a0e4f719e1c4051f1b46",
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "archiveLockPromotion": false,
+  "archives": [
+    {
+      "path": "native-contrast-11.zip",
+      "source": "C:/opf-work/qualification034-rtl-contrast-native-01",
+      "files": 1629,
+      "rawBytes": 10939741,
+      "bytes": 3633782,
+      "sha256": "039c3ed8cda544a88298229a2c577fc7a1a41b68f8319b117779278715026505",
+      "fileManifest": "native-contrast-11.files.json",
+      "manifestSha256": "0aa2dfadf313951878eeaee33d25821aa3ec75b58d238aab26f5312c1d6f1327",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "native-direction-3.zip",
+      "source": "C:/opf-work/qualification034-rtl-direction-native-01",
+      "files": 445,
+      "rawBytes": 3277515,
+      "bytes": 1026881,
+      "sha256": "4db5bda9f4a5185270b5e7bae66806f1fc8fa62cf8d371d2032b28d31859394d",
+      "fileManifest": "native-direction-3.files.json",
+      "manifestSha256": "97e10d720317b056a1bbdcc64d2123b5e7e38e17017e48e385221aa25cac5d19",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "review-contrast-11.zip",
+      "source": "C:/opf-work/qualification034-rtl-contrast-review-01",
+      "files": 16,
+      "rawBytes": 871218,
+      "bytes": 425898,
+      "sha256": "51a8518bea69708fe46b59b233214b11cf4483d6abc3164383d56f7b55bb6fd8",
+      "fileManifest": "review-contrast-11.files.json",
+      "manifestSha256": "7672c6cab544a63a26e8a183b55fdea560c4111b3d29b364101473aa2a0c76fb",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "review-direction-3.zip",
+      "source": "C:/opf-work/qualification034-rtl-direction-review-01",
+      "files": 5,
+      "rawBytes": 268898,
+      "bytes": 146754,
+      "sha256": "25216df3eea9dd67ba3c02c4ac543373fa043290de0e6b445617b1ebefd8fdc5",
+      "fileManifest": "review-direction-3.files.json",
+      "manifestSha256": "ffb8e5899ce18aba2afabe6889414df0a40c957b9c0513e7584e371ae6243056",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "candidate-probes-02.zip",
+      "source": "C:/opf-work/rr105-run-dir-probes-02",
+      "files": 47,
+      "rawBytes": 1067232,
+      "bytes": 672394,
+      "sha256": "c3e667c55e72385de6e8bbea7b88e4d0a95d71e3a6993e0057ead66daa4323a4",
+      "fileManifest": "candidate-probes-02.files.json",
+      "manifestSha256": "c56c271c11519aec37463376f29a3245b4e0f24b8be8da572a60f05239fc0b8e",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "first-producer-attempt-01.zip",
+      "source": "C:/opf-work/rr105-run-dir-probes-01",
+      "files": 10,
+      "rawBytes": 257909,
+      "bytes": 132501,
+      "sha256": "30f4796fca991eb6e3911a1f267e0539e34051ec22917e50cacfa838f3158459",
+      "fileManifest": "first-producer-attempt-01.files.json",
+      "manifestSha256": "7e9798b9ea3f581dcfcce10602baae70d9fb76693a1b4812670e4f1325e5224a",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    }
+  ],
+  "executedArchive": "executed.zip",
+  "validationArchive": "validation-and-first-failures.zip",
+  "nativeAssessment": {
+    "overallAccepted": false,
+    "rejectedHypothesis": "Explicit a:rtl0 was retained by PowerPoint but did not prevent native glyph reversal.",
+    "observedDefects": {
+      "05,06": "Explicit Arabic proofing moves the digit in Bonjour 1.",
+      "09,10": "Latin glyph order reverses after numeric text; the candidate fails to correct it."
+    },
+    "reviewCorrection": "The root coordinator initially reported a missing Arabic prefix in downscaled case07; raw1280 inspection shows the prefix present in both native and CLI images. The omission claim is withdrawn; numbering punctuation/order differs. No dropped-glyph or arbitrary font-parity claim.",
+    "machineObservations": "All14 original/save/reopen PNG state pairs and named state/text/geometry/font observations are exact; no shrink. Lifecycle success is not visual acceptance.",
+    "strictReview": "Both reviewer invocations exit1: baseline07 scalar structure drift, and baseline plus candidate11 save-language loss. All original failures are retained."
+  },
+  "validation": {
+    "newSourceControls": {
+      "passed": 7,
+      "substantiveBaselineFailures": 5
+    },
+    "combinedLanguageControls": {
+      "passed": 27
+    },
+    "mapped": {
+      "exitCode": 1,
+      "seconds": 799.6,
+      "selectedSteps": 11,
+      "failed": [
+        "gallery-tracker sparse ENOENT",
+        "text compressed-fixture sparse ENOENT",
+        "PPTX notes-master-theme hardcoded2 versus actual4"
+      ],
+      "pptxReached": 155,
+      "pptxTotal": 278,
+      "pptxUnreached": 123,
+      "strictDeterminismPassed": true,
+      "stabilityPassed": true
+    },
+    "sparseRecovery": {
+      "authority": "Exact1844 current tracked blobs,45356157bytes; index/source unchanged.",
+      "galleryTracker": "18/18 and current863records",
+      "text": "valid9974files,635compressed"
+    },
+    "notesThemeBaseline": "Coordinator independently accepts exact67/c2 byte-identical4-theme baseline proof; this lane does not waive or fix the maintained assertion."
+  },
+  "files": [
+    {
+      "path": "candidate-probes-02.files.json",
+      "bytes": 8910,
+      "sha256": "c56c271c11519aec37463376f29a3245b4e0f24b8be8da572a60f05239fc0b8e"
+    },
+    {
+      "path": "candidate-probes-02.zip",
+      "bytes": 672394,
+      "sha256": "c3e667c55e72385de6e8bbea7b88e4d0a95d71e3a6993e0057ead66daa4323a4"
+    },
+    {
+      "path": "executed.files.json",
+      "bytes": 1367,
+      "sha256": "2f7671effc86bbea7f55d23b7652f968c17c2720e36797028908060b7835558c"
+    },
+    {
+      "path": "executed.zip",
+      "bytes": 7825,
+      "sha256": "433b6cd20cdee49f059bc8b8844f2c6ae1b4d76b1505fb8de61ef7b313102c3f"
+    },
+    {
+      "path": "first-producer-attempt-01.files.json",
+      "bytes": 2077,
+      "sha256": "7e9798b9ea3f581dcfcce10602baae70d9fb76693a1b4812670e4f1325e5224a"
+    },
+    {
+      "path": "first-producer-attempt-01.zip",
+      "bytes": 132501,
+      "sha256": "30f4796fca991eb6e3911a1f267e0539e34051ec22917e50cacfa838f3158459"
+    },
+    {
+      "path": "native-contrast-11.files.json",
+      "bytes": 352468,
+      "sha256": "0aa2dfadf313951878eeaee33d25821aa3ec75b58d238aab26f5312c1d6f1327"
+    },
+    {
+      "path": "native-contrast-11.zip",
+      "bytes": 3633782,
+      "sha256": "039c3ed8cda544a88298229a2c577fc7a1a41b68f8319b117779278715026505"
+    },
+    {
+      "path": "native-direction-3.files.json",
+      "bytes": 96294,
+      "sha256": "97e10d720317b056a1bbdcc64d2123b5e7e38e17017e48e385221aa25cac5d19"
+    },
+    {
+      "path": "native-direction-3.zip",
+      "bytes": 1026881,
+      "sha256": "4db5bda9f4a5185270b5e7bae66806f1fc8fa62cf8d371d2032b28d31859394d"
+    },
+    {
+      "path": "review-contrast-11.files.json",
+      "bytes": 2998,
+      "sha256": "7672c6cab544a63a26e8a183b55fdea560c4111b3d29b364101473aa2a0c76fb"
+    },
+    {
+      "path": "review-contrast-11.zip",
+      "bytes": 425898,
+      "sha256": "51a8518bea69708fe46b59b233214b11cf4483d6abc3164383d56f7b55bb6fd8"
+    },
+    {
+      "path": "review-direction-3.files.json",
+      "bytes": 1072,
+      "sha256": "ffb8e5899ce18aba2afabe6889414df0a40c957b9c0513e7584e371ae6243056"
+    },
+    {
+      "path": "review-direction-3.zip",
+      "bytes": 146754,
+      "sha256": "25216df3eea9dd67ba3c02c4ac543373fa043290de0e6b445617b1ebefd8fdc5"
+    },
+    {
+      "path": "validation-and-first-failures.files.json",
+      "bytes": 4561,
+      "sha256": "b2433450b02913b8616c0c283800689a0181776184870b113493bcbd1c793f76"
+    },
+    {
+      "path": "validation-and-first-failures.zip",
+      "bytes": 184113,
+      "sha256": "9c8fa8724d75ac756eab9e9d668f04d7ca639612e88ebdebc8c5fe8640a7e9f3"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "source": "C:/opf-work/qualification034-rtl-contrast-review-01",
+  "authority": "Raw complete files, unchanged and losslessly zipped; these are failed/review observations, not native acceptance.",
+  "records": [
+    {
+      "path": "review.json",
+      "bytes": 42465,
+      "sha256": "16dec0e7ec0c9664443d2e3ffb427b46022acd2995fb81791ef25a6426721f2e"
+    },
+    {
+      "path": "rtl-contrast-01-ar-inherited-list-imports.json.gz",
+      "bytes": 298,
+      "sha256": "3c90fe12ce1b8873050f1dae53a8e966358fc9ece2179a5fda1a2e1ae4613bb3"
+    },
+    {
+      "path": "rtl-contrast-02-he-inherited-list-imports.json.gz",
+      "bytes": 304,
+      "sha256": "54dd27d82d072d809e9e84b409232d48fb36f5c6aa0523800488d10c4f46f34b"
+    },
+    {
+      "path": "rtl-contrast-03-nfd-inherited-body-imports.json.gz",
+      "bytes": 240,
+      "sha256": "3d4b2c7f90db099cb97e690d6dc32503b314f9be945aff6df59282856aa5815b"
+    },
+    {
+      "path": "rtl-contrast-04-mixed-explicit-french-imports.json.gz",
+      "bytes": 429,
+      "sha256": "5ff755c1d86da2a6a1a7d9b63d3a5825c3df2fca91415dfb19b1eede238423a2"
+    },
+    {
+      "path": "rtl-contrast-05-mixed-explicit-arabic-imports.json.gz",
+      "bytes": 425,
+      "sha256": "538e885ecebc6d6957509dc3a45a8160be36d54c5b5db9b0851601aef436275d"
+    },
+    {
+      "path": "rtl-contrast-06-whole-explicit-arabic-imports.json.gz",
+      "bytes": 415,
+      "sha256": "d28c441b29305e693fe9f216f8ac3f3e6c21ad6fccd435addf00cf0618c28a55"
+    },
+    {
+      "path": "rtl-contrast-07-mixed-inherited-imports.json.gz",
+      "bytes": 317,
+      "sha256": "da9b775f7f1dde42d43e85c99a6259b49e76668b03e21231c529912863ba6416"
+    },
+    {
+      "path": "rtl-contrast-08-mixed-explicit-english-imports.json.gz",
+      "bytes": 283,
+      "sha256": "05cab98a558277cfa4c3d1d25b3dbc6b97bded1c29635be612d5b27c9b89241e"
+    },
+    {
+      "path": "rtl-contrast-09-long-explicit-arabic-imports.json.gz",
+      "bytes": 497,
+      "sha256": "7c177e5451c3f0966a512060449e21877315eff57043b43df714e139f397eb81"
+    },
+    {
+      "path": "rtl-contrast-10-non-ascii-digits-imports.json.gz",
+      "bytes": 321,
+      "sha256": "75c406957681f9d1604969c0f51846481301142dfc970201049e00a1aba083fc"
+    },
+    {
+      "path": "rtl-contrast-11-long-explicit-french-imports.json.gz",
+      "bytes": 847,
+      "sha256": "6e8942926b83653c5cf44d611de1f00097008c4ca7c9dafb5c9b8655287882bc"
+    },
+    {
+      "path": "sheet-01.png",
+      "bytes": 252182,
+      "sha256": "3b0aa3c3c4a99179af5bb05bccd50966cb34cef6b0a5e1b59bc918c33dfc0b95"
+    },
+    {
+      "path": "sheet-02.png",
+      "bytes": 190721,
+      "sha256": "75b8386e357e86a6b7e87854d748526c870800f1b1e4c0018184c2b123ae48f5"
+    },
+    {
+      "path": "sheet-03.png",
+      "bytes": 213031,
+      "sha256": "22a24228d52b6e9c6e0360c50b4780e71de88ba890755eeaa455ae88bede27e2"
+    },
+    {
+      "path": "sheet-04.png",
+      "bytes": 168443,
+      "sha256": "68e4552b535bea31af6ebc58f6b59df8bfa1d8211f8b9a585e440967128f3fca"
+    }
+  ]
+}
