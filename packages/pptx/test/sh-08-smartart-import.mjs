@@ -91,7 +91,7 @@ const N = (t, c = [], extra = {}) => ({t, c, ...extra});
 // 2. Which OPF form: the layouts OPF writes exactly, each family by its id, then by the doc point's category.
 {
   const forms = {
-    [`${L}pyramid1`]: {arrangement: 'pyramid', exact: true}, [`${L}pyramid2`]: {arrangement: 'pyramid'}, [`${L}pyramid3`]: {layout: 'list', inverted: true}, [`${L}matrix1`]: {arrangement: 'matrix'},
+    [`${L}pyramid1`]: {arrangement: 'pyramid', exact: true}, [`${L}pyramid2`]: {arrangement: 'pyramid'}, [`${L}pyramid3`]: {arrangement: 'pyramid', pyramidDirection: 'down'}, [`${L}matrix1`]: {arrangement: 'matrix'},
     [`${L}cycle1`]: {arrangement: 'cycle'}, [`${L}chevron2`]: {arrangement: 'chevrons'}, [`${L}hChevron3`]: {arrangement: 'chevrons'},
     [`${L}process1`]: {arrangement: 'flow', exact: true}, [`${L}process2`]: {arrangement: 'vertical-flow', exact: true},
     [`${L}orgChart1`]: {arrangement: 'org-chart', exact: true}, [`${L}hierarchy1`]: {arrangement: 'hierarchy', exact: true}, [`${L}hierarchy2`]: {hierarchy: 'LR'},
@@ -222,12 +222,12 @@ async function withSmartArt(frames) {
     const blocks = slide.blocks ?? [];
     return blocks.find(block => block.diagram) ? `diagram:${blocks.find(block => block.diagram).diagram.source.split('\n')[0]}` : blocks.find(block => block.items) ? `list:${slide.layout}` : slide.shapes ? `shapes:${slide.shapes.length}` : 'none';
   };
-  assert.deepEqual(imported.slides.map(form), ['list:default:pyramid', 'list:default:list', 'list:default:matrix', 'list:default:cycle', 'list:default:cycle', 'list:default:chevrons',
+  assert.deepEqual(imported.slides.map(form), ['list:default:pyramid', 'list:default:inverted-pyramid', 'list:default:matrix', 'list:default:cycle', 'list:default:cycle', 'list:default:chevrons',
     'list:default:flow', 'list:default:vertical-flow', 'list:default:process', 'list:default:list', 'list:default:list', 'list:default:venn', `shapes:${imported.slides[12].shapes.length}`,
     'diagram:flowchart TD', 'list:default:hierarchy', 'diagram:flowchart LR', 'diagram:flowchart TD']);
   const items = index => imported.slides[index].blocks.find(block => block.items).items;
   assert.deepEqual(items(0)[0], [{text: 'Vision', bold: true}], 'a bold run');
-  assert.deepEqual(items(1), ['Leads', 'Prospects', 'Customers'], 'an inverted pyramid is a list in order, never an upright pyramid');
+  assert.deepEqual(items(1), ['Leads', 'Prospects', 'Customers'], 'an inverted pyramid retains its widest-first authored order on the downward layout');
   assert.match(diagnostics.find(item => item.layout === 'pyramid3').message, /inverted pyramid/);
   assert.equal(items(6)[2], 'Run\nthe pilot', 'a line break');
   assert.deepEqual(items(10), ['Goals', {text: 'Grow revenue 12%', level: 1}, 'Risks', {text: 'Hiring', level: 1}], 'nested entries keep their level');
@@ -240,5 +240,5 @@ async function withSmartArt(frames) {
   assert.match(imported.slides[16].blocks[0].diagram.source, /\["Kai Chen<br\/>Technology"\]/);
   assert.deepEqual(diagnostics.filter(item => item.code === 'smartart-text-dropped'), [], 'no text is dropped');
   assert.deepEqual([...new Set(diagnostics.filter(item => item.code === 'smartart-adapted').map(item => `${item.layout}:${item.form}`))],
-    ['pyramid3:list', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
+    ['pyramid3:pyramid', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
 }

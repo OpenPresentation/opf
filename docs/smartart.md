@@ -595,3 +595,6 @@ SH-23: custom layout text algorithms set their LTR/RTL paragraph alignment defau
 
 SH-23 qualification: five in-domain OPF designs retain an added ninth node and a text edit through SaveCopyAs/reopen, with unchanged font sizes, correct paragraph/first-line alignment and maximum geometry error0.0000876pt. The native text algorithms explicitly preserve start or center alignment for newly added nodes, which have no authored paragraph properties. [Raw qualification and limits](programs/shapes/sh23-2026-11-07/README.md) retain the initial visual failure and all corrected witnesses.
 
+## Inverted pyramids
+
+Use the `inverted-pyramid` layout to narrow from a broad starting pool to a final choice. A custom pyramid region sets `pyramidDirection: "down"`; `"up"` is the existing default. The first entry stays at the top, so a downward pyramid starts wide and ends at the tip. Both the continuous outline and the stepped design use core geometry; neither reverses the text order or reduces the text size. PowerPoint export uses editable native shapes with a located `smartart-unavailable` finding. Live `pyramid3` and downward OPF layout definitions remain unqualified. Import maps an Inverted Pyramid to this layout while reporting its adapted styling. See [the example](../examples/technical/inverted-pyramids.opf.json).

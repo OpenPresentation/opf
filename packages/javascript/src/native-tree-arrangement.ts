@@ -63,5 +63,6 @@ export function nativeTreeGeometry(kind:NativeTreeKind,frame:Box,entries:readonl
   const points:readonly [number,number][]=hanging?[from,[from[0],to[1]],to]:[from,[from[0],middle],[to[0],middle],to];
   connectors.push({parent:parent.index,child:child.index,box,points});
  }
- return{ok:true,nodes,connectors};
+ // Native groups stack parent connectors in reverse source-child order; all420 measured sequences agree.
+ return{ok:true,nodes,connectors:connectors.reverse()};
 }
