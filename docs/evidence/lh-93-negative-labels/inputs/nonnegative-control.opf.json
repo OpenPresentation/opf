@@ -1,0 +1,64 @@
+{
+  "name": "Negative category labels: nonnegative-control",
+  "design": {
+    "fontScheme": {
+      "major": "Arial",
+      "minor": "Arial"
+    }
+  },
+  "slides": [
+    {
+      "title": "Shared stacked plots",
+      "blocks": [
+        {
+          "chart": {
+            "type": "stacked-bar",
+            "data": {
+              "columns": [
+                "Stage",
+                "Current",
+                "Expansion"
+              ],
+              "rows": [
+                [
+                  "Lead",
+                  50,
+                  50
+                ],
+                [
+                  "Won",
+                  50,
+                  50
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "stacked-bar",
+            "data": {
+              "columns": [
+                "Stage",
+                "Current",
+                "Expansion"
+              ],
+              "rows": [
+                [
+                  "PartnerSourcedAccounts",
+                  50,
+                  50
+                ],
+                [
+                  "Won",
+                  50,
+                  50
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
