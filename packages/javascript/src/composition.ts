@@ -7497,7 +7497,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-160: a histogram's bin count, edge decimals and whether its value labels fit (chart-histogram.ts).
       const histogram = chartHistogram(drawn.chart, drawn.data, geometry);
       if (histogram) layer = {...layer, histogram};
-      const numericAxes = chartNumericAxes(drawn.chart, drawn.data, geometry);
+      const numericAxes = chartNumericAxes(drawn.chart, drawn.data, geometry, layer);
       if (numericAxes) layer = {...layer, numericAxes};
       // LH-107 with LH-113: one emphasis per chart. A waterfall in its role colors (totals strong, gains in the accent, losses gray) has
       // that as its emphasis, so it takes no focus from the slide's texts (neither engine would draw one on its bars).
