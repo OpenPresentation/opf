@@ -163,3 +163,6 @@ item's state edits its row and appends a log line in the same PR.
 
 - 2026-11-08: SH25curved-probe final evidence preserves295rawfiles, both original endpoint-proxy failures and independent paint corroboration2.0288px. Single mapped153.0s run passes seven checks and retains inherited fallback archive lock/240unrun;26analytic and all existing guarded mocks pass. Parent reviewed method for actual pilot; new indices/curved native acceptance remain owed. [Raw and verification](sh25-curved-probe-2026-11-08/README.md).
 
+
+- 2026-11-08: NEWderived SH25doughnut probe replaces the empirically offset PlotArea center with independent actual outer1/2/3circumcenter. Sealedrawvalues prove4ptcenter offset and inner9/8/7angular pairing; oldfailedsupervisor and separate owned cleanup retained. Actualmock fails-before/passes-after;20purecenter/26curve/45point plus14lifecycle/15font controls pass, including reopened serialized failure12rawvalues. Pie/product/four-pixel gate unchanged; new native/full32case acceptance owed. [Rationale](../../handoff/2026-11-08/sh25-native-circle.md).
+

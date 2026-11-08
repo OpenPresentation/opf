@@ -92,3 +92,6 @@ LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798
 ## SH25 curved native measurement continuation
 
 [The new tooling-only probe correction](sh25-curved-probe.md) preserves the actual endpoint-box failures and unchanged product rings. Independent native arc bounds replace that proxy only after all required coordinates are observed; new API availability and actual4px acceptance remain parent-owned and pending. The 26analytic controls and all existing guarded mocks pass without Office.
+
+- [SH25actual native circle](sh25-native-circle.md): NEWderived wrongPlotArea-center probe correction, actualrawcircumcenter; no product/tolerance change; nativequalification owed.
+
