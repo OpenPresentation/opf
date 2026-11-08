@@ -181,7 +181,7 @@ describe("the header row (LH-81)", () => {
     assert.ok(item.chart.layer.small, "two series of four points");
     assert.ok(item.chart.valueAxis);
     const plain = composeSlide({ title: "Signal", chart: { type: "scatter", data: quarters(["Current"]) } }, { dimensions: { width: 1280, height: 720 } }).items.find((entry) => entry.field === "chart");
-    assert.equal(plain.chart, undefined);
+    assert.deepEqual(plain.chart, {layer: {numericAxes: {value: {min: 0, max: 30, majorUnit: 5}, category: {min: 0, max: 5, majorUnit: 1}}}});
   });
 
   test("every series column name and every count is handled", () => {

@@ -340,6 +340,7 @@ const neutrals = bound.design.roles.neutrals;
     strongColors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }),
     // RR-92: the value axis core composed for a column, bar, line or area chart ({ min, max, majorUnit }); absent for the other types.
     valueAxis: item.chart?.valueAxis,
+    numericAxes: item.chart?.layer?.numericAxes,
     gridColor: neutrals.gridline.hex,
     axisColor: neutrals.axisLine.hex,
     outlineColor: neutrals.outline.hex,
@@ -1298,15 +1299,15 @@ function renderScatterChart(c) {
   const legendWidth = seriesLegend(c, series, "marker");
   const top = box.y + pad + c.lineHeight / 2, bottom = box.y + box.height - pad - c.lineHeight;
   const height = Math.max(1, bottom - top);
-  const yScale = niceScale(ys.length ? Math.min(...ys) : 0, ys.length ? Math.max(...ys) : 1, chartIntervalsFor(height, c.lineHeight * 1.2, c.u));
+  const yScale = composedScale(c.numericAxes?.value) ?? niceScale(ys.length ? Math.min(...ys) : 0, ys.length ? Math.max(...ys) : 1, chartIntervalsFor(height, c.lineHeight * 1.2, c.u));
   const tickWidth = Math.max(...yScale.ticks.map((tick) => c.width(formatTick(tick, false, yFormat, yGroup)))) + fontPx * 0.5;
   const plot = { x: box.x + pad + tickWidth, y: top, height };
   plot.width = Math.max(1, box.x + box.width - pad - legendWidth - fontPx - plot.x);
   const xLabelWidth = Math.max(c.width(formatTick(xs.length ? Math.max(...xs) : 1, false, xFormat, xGroup)), c.width(formatTick(xs.length ? Math.min(...xs) : 0, false, xFormat, xGroup))) + fontPx;
   const scaleForX = (w) => niceScale(xs.length ? Math.min(...xs) : 0, xs.length ? Math.max(...xs) : 1, chartIntervalsFor(w, xLabelWidth, c.u));
-  let xScale = scaleForX(plot.width);
+  let xScale = composedScale(c.numericAxes?.category) ?? scaleForX(plot.width);
   // RR-54: a formatted X axis keeps its end labels inside the chart.
-  if (xFormat !== undefined) ({ x: plot.x, width: plot.width, scale: xScale } = insetForEndLabels(c, plot.x, plot.width, xFormat, scaleForX));
+  if (xFormat !== undefined) ({ x: plot.x, width: plot.width, scale: xScale } = insetForEndLabels(c, plot.x, plot.width, xFormat, w => composedScale(c.numericAxes?.category) ?? scaleForX(w)));
   c.plotArea = plot;
   const xAt = (v) => plot.x + axisFraction(v, xScale) * plot.width;
   const yAt = (v) => plot.y + axisFraction(v, yScale, true) * plot.height;
@@ -1727,7 +1728,7 @@ function renderBoxWhiskerChart(c) {
   // LH-153: the value axis groups its thousands when the plotted values are whole numbers of four digits (the statistics between them do not decide).
   const tickGroup = dataGroup(c, format, series.flatMap((s) => s.values), { zeroBased: false });
   const { plot, band } = chartexPlot(c, { categories: groups.map((group) => ({ name: group.name, path: lone ? c.path : `${c.path}.data.rows.${group.first}.0` })), legendWidth, tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format, tickGroup)) });
-  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
+  const scale = composedScale(c.numericAxes?.value) ?? niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   const { at } = valueAxis(c, plot, scale, format, tickGroup);
   const group = band / 2, width = group / series.length, offset = (band - group) / 2;
   series.forEach((s, j) => {

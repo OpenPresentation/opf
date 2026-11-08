@@ -9,6 +9,7 @@ import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-l
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
 import {chartDoughnut,restackForRows,chartStack,chartTitleReferences,chartValueList,chartWaterfall,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartHistogram} from './chart-histogram.js';
+import {chartNumericAxes} from './chart-numeric-axes.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
@@ -7496,6 +7497,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-160: a histogram's bin count, edge decimals and whether its value labels fit (chart-histogram.ts).
       const histogram = chartHistogram(drawn.chart, drawn.data, geometry);
       if (histogram) layer = {...layer, histogram};
+      const numericAxes = chartNumericAxes(drawn.chart, drawn.data, geometry);
+      if (numericAxes) layer = {...layer, numericAxes};
       // LH-107 with LH-113: one emphasis per chart. A waterfall in its role colors (totals strong, gains in the accent, losses gray) has
       // that as its emphasis, so it takes no focus from the slide's texts (neither engine would draw one on its bars).
       if (waterfall?.waterfall.colors && layer?.focus) { const {focus: _focus, ...rest} = layer; layer = rest; }
@@ -10879,6 +10882,8 @@ export {horizontalBarPlot} from './chart-marks.js';
 export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
 export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
+export {chartNumericAxes} from './chart-numeric-axes.js';
+export type {ChartNumericAxes} from './chart-numeric-axes.js';
 export {chartHistogram,histogramBins,scottBinCount,histogramEdgeDecimals,histogramEdgeFormat,histogramEdgeText,HISTOGRAM_LABEL_SLOT,HISTOGRAM_MIN_BINS} from './chart-histogram.js';
 export type {ChartLayerHistogram,HistogramBin} from './chart-histogram.js';
 export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND,CHART_HEADER_LEGEND_ROWS,chartValueAxisHidden,chartBarGeometry,CHART_BAR_GAP_WIDTH} from './chart-layer.js';
