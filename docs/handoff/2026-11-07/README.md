@@ -120,3 +120,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - Every entry in [decisions.md](decisions.md) is vetoable.
 
 - Current033merge hold: [dispatched FullCI gate correction](fullci-gate.md). The macOS completion test and shared gate are being corrected in derived branches before the next integration batch.
+
+- 2026-11-08 evidence-only E1 actual visual sheets121–180:60 finite judgments/230 triptychs,165 original findings bound correctly,23 stress slides explicitly unaccepted, b11/s27 missing before retained. Two circle cases require separate current034 comparison. [Scope, decisions and checks](../2026-11-08/e1-review-121-180.md); never merge this evidence branch.

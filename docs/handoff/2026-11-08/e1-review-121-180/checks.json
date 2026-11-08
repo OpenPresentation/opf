@@ -1,0 +1,44 @@
+{
+  "scope": "Evidence-only actual visual review, immutable genuine published0.33 sheets121–180",
+  "sourceBase": "9545016583ccfa151077cda4d51043ac6505a140",
+  "reviewedSheets": 60,
+  "reviewedTriptychs": 230,
+  "imagesRegenerated": 0,
+  "inputMutations": 0,
+  "productEdits": 0,
+  "requiredChangedRun": {
+    "steps": 9,
+    "passed": 6,
+    "failed": 2,
+    "skipped": 1,
+    "seconds": 38.9,
+    "firstFailures": [
+      "tracker missing tracked sparse XML/JSON originals",
+      "text missing tracked gzip original"
+    ]
+  },
+  "exactSparseHydration": {
+    "files": 1808,
+    "bytes": 44625764
+  },
+  "followups": {
+    "galleryTracker": {
+      "tests": 18,
+      "passed": 18,
+      "strictFreshness": true
+    },
+    "text": {
+      "tests": 6,
+      "valid": true,
+      "files": 8596
+    }
+  },
+  "unresolvedCurrent034Comparison": [
+    "batch-11/s13",
+    "batch-12/s19"
+  ],
+  "office": false,
+  "ciObserver": false,
+  "registryCalls": 0,
+  "githubMetadataCalls": 0
+}

@@ -1,0 +1,1716 @@
+{
+  "pass": true,
+  "sourceEvidenceCommit": "29ba0ae536b019ada68623d44850d6cb3b7a6350",
+  "pairedSheetsGitBlobAndSha256": 60,
+  "afterPngSha256": 230,
+  "fixedHistoricalPngSha256": 459,
+  "missingBeforePanels": [
+    "batch-11/s27"
+  ],
+  "sourceFilesSha256": 5,
+  "reviewedFindingOccurrences": {
+    "render/layout-unplaced": 43,
+    "opf/numbering-start-ignored": 12,
+    "render/text-overflow": 110
+  },
+  "findingsBoundByJsonPointer": 153,
+  "unassignedDocumentFindings": 0,
+  "unacceptedStressSlides": 23,
+  "unacceptedStress": [
+    {
+      "deck": "batch-08",
+      "id": "s23",
+      "index": 121,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/22/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pictures' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pictures"
+        }
+      ]
+    },
+    {
+      "deck": "batch-08",
+      "id": "s47",
+      "index": 127,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/46/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pillars' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pillars"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/46/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pillars' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pillars"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/46/blocks/8",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pillars' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pillars"
+        }
+      ]
+    },
+    {
+      "deck": "batch-09",
+      "id": "s01",
+      "index": 129,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/0/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pictures' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pictures"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/0/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pictures' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pictures"
+        }
+      ]
+    },
+    {
+      "deck": "batch-09",
+      "id": "s11",
+      "index": 131,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/10/blocks/2",
+          "scope": "document",
+          "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+          "help": ""
+        }
+      ]
+    },
+    {
+      "deck": "batch-09",
+      "id": "s12",
+      "index": 131,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/11/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'metrics' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "metrics"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/11/blocks/8",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'metrics' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "metrics"
+        }
+      ]
+    },
+    {
+      "deck": "batch-09",
+      "id": "s22",
+      "index": 134,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/21/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "people"
+        }
+      ]
+    },
+    {
+      "deck": "batch-09",
+      "id": "s29",
+      "index": 136,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/28/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pictures' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pictures"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/28/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pictures' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pictures"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/28/blocks/8",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'pictures' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "pictures"
+        }
+      ]
+    },
+    {
+      "deck": "batch-09",
+      "id": "s50",
+      "index": 141,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/49/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "people"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/49/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "people"
+        }
+      ]
+    },
+    {
+      "deck": "batch-10",
+      "id": "s17",
+      "index": 146,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/16/blocks/2",
+          "scope": "document",
+          "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+          "help": ""
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/16/blocks/4",
+          "scope": "document",
+          "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate.",
+          "help": ""
+        }
+      ]
+    },
+    {
+      "deck": "batch-10",
+      "id": "s23",
+      "index": 147,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/22/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'cards' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "cards"
+        }
+      ]
+    },
+    {
+      "deck": "batch-10",
+      "id": "s28",
+      "index": 148,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/27/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "people"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/27/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "people"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/27/blocks/8",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "people"
+        }
+      ]
+    },
+    {
+      "deck": "batch-10",
+      "id": "s40",
+      "index": 151,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/39/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'questions' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "questions"
+        }
+      ]
+    },
+    {
+      "deck": "batch-10",
+      "id": "s50",
+      "index": 154,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/49/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'cards' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "cards"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/49/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'cards' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "cards"
+        }
+      ]
+    },
+    {
+      "deck": "batch-11",
+      "id": "s12",
+      "index": 157,
+      "findings": [
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/11/blocks/0/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/11/blocks/1/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/11/blocks/2/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/11/blocks/3/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/11/blocks/4/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/11/blocks/5/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        }
+      ]
+    },
+    {
+      "deck": "batch-11",
+      "id": "s17",
+      "index": 159,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/16/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'questions' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "questions"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/16/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'questions' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "questions"
+        }
+      ]
+    },
+    {
+      "deck": "batch-11",
+      "id": "s19",
+      "index": 159,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/18/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'body' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "body"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/18/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'body' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "body"
+        }
+      ]
+    },
+    {
+      "deck": "batch-11",
+      "id": "s39",
+      "index": 164,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'steps' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "steps"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/0/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/0/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/0/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/0/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/1/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/1/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/1/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/1/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/2/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/2/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/2/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/2/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/3/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/3/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/3/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/3/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/4/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/4/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/4/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/4/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/5/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/5/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/5/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/5/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/6/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/6/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/6/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/38/blocks/6/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        }
+      ]
+    },
+    {
+      "deck": "batch-11",
+      "id": "s44",
+      "index": 165,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/43/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'questions' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "questions"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/43/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'questions' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "questions"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/43/blocks/8",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'questions' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "questions"
+        }
+      ]
+    },
+    {
+      "deck": "batch-11",
+      "id": "s46",
+      "index": 166,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/45/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'body' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "body"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/45/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'body' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "body"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/45/blocks/8",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'body' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "body"
+        }
+      ]
+    },
+    {
+      "deck": "batch-12",
+      "id": "s08",
+      "index": 169,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/7/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'items' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "items"
+        }
+      ]
+    },
+    {
+      "deck": "batch-12",
+      "id": "s16",
+      "index": 171,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'steps' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "steps"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'steps' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "steps"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/0/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/0/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/0/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/0/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/1/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/1/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/1/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/1/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/2/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/2/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/2/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/2/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/3/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/3/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/3/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/3/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/4/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/4/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/4/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/4/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/5/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/5/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/5/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/5/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/6/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/6/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/6/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/6/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/7/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/7/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/7/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/15/blocks/7/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        }
+      ]
+    },
+    {
+      "deck": "batch-12",
+      "id": "s35",
+      "index": 176,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/34/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'items' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "items"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/34/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'items' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "items"
+        }
+      ]
+    },
+    {
+      "deck": "batch-12",
+      "id": "s43",
+      "index": 178,
+      "findings": [
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/6",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'steps' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "steps"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/7",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'steps' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "steps"
+        },
+        {
+          "ruleId": "render/layout-unplaced",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8",
+          "scope": "document",
+          "message": "No region of the layout has room for this block; it is drawn in 'steps' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+          "help": "",
+          "region": "steps"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/0/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/0/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/0/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/0/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/1/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/1/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/1/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/1/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/2/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/2/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/2/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/2/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/3/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/3/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/3/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/3/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/4/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/4/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/4/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/4/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/5/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/5/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/5/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/5/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/6/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/6/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/6/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/6/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/7/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/7/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/7/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/7/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/0/when",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/0/what",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/0/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/1/when",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/1/what",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/1/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/2/when",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/2/what",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/2/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/3/when",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/3/what",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        },
+        {
+          "ruleId": "render/text-overflow",
+          "severity": "warning",
+          "category": "render",
+          "path": "/slides/42/blocks/8/timeline/events/3/description",
+          "scope": "document",
+          "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+          "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+          "reason": "part-outside-cell"
+        }
+      ]
+    }
+  ],
+  "syntheticWarningBindingChecks": 5,
+  "allCorpusWarnings427PreservedInOriginal": true,
+  "imagesCreated": 0,
+  "inputMutations": 0,
+  "registryCalls": 0,
+  "githubApiCalls": 0,
+  "office": false
+}

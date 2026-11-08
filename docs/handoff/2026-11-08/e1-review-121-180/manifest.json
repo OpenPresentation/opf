@@ -1,0 +1,132 @@
+{
+  "branch": "codex/rr-20-e1-review-121-180",
+  "base": "9545016583ccfa151077cda4d51043ac6505a140",
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "sourceEvidenceCommit": "29ba0ae536b019ada68623d44850d6cb3b7a6350",
+  "hashBasis": "Canonical committed Git blobs; raw logs stored losslessly as gzip",
+  "imagesCreated": 0,
+  "inputMutations": 0,
+  "files": [
+    {
+      "file": "docs/handoff/2026-11-07/README.md",
+      "bytes": 11270,
+      "sha256": "3839906e6ea43a7a5bddd07cccfb0e1678d60e8721e03c41ae17118816ad5769"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180.md",
+      "bytes": 6002,
+      "sha256": "ee99ca6ac3029c802499871091272eb029e3f77e6f2a0ed18ef96434066ec9cb"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/capture-review.mjs",
+      "bytes": 6820,
+      "sha256": "46330ef503f6da3b70b5dc456869144c2d7e0d5e7cb5a123e3a336b7f66584df"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/check-changed.log.gz",
+      "bytes": 1727,
+      "sha256": "345cfef4550c3a25d92198620d063c4bed2b87a93359785ecd7835b3f214acc4"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/checks.json",
+      "bytes": 983,
+      "sha256": "80207575c045a9f906e6f67328e9431188b5b692880899d98435a94f6edf5907"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/exact-fixture-hydration.json",
+      "bytes": 507180,
+      "sha256": "5c83136d990c036a39570e9c86a593faaa32242499b6f252efefef1f27473d96"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/gallery-tracker-rerun.log.gz",
+      "bytes": 1070,
+      "sha256": "e570e05b6e7ff2be6e7a5ad4657b306c82b4e7862ccc25540eb0f77418c25627"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/biome.log.gz",
+      "bytes": 325,
+      "sha256": "db3829837650cb729bf5899345914db5170bbfa140fd4fc3bd77e39634887d4c"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/build.log.gz",
+      "bytes": 3000,
+      "sha256": "eb888bd6c0c4a14c7454e8b4fa219b16bd8a27e7387db82eba36758bbfd0eb43"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/install.log.gz",
+      "bytes": 579,
+      "sha256": "eb496c11c809da7076c24f92c7cc31544ef3de5efa47992444f869be4c9f28ec"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_changes.log.gz",
+      "bytes": 1166,
+      "sha256": "12fc90bddbdfe98eceae6e665d6844ac7ac056041d2da6609c81c2416a8217a5"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_gallery-tracker.log.gz",
+      "bytes": 1754,
+      "sha256": "40c287e0be372a1f2b2d027ab74b4a97a8bb09bc94bea11b05678ae721ee24f4"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_release-report.log.gz",
+      "bytes": 467,
+      "sha256": "b64238c501a09f6456f2546746c41694fffabf1aece5aa8726ac36d1206ae945"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_skill-commands.log.gz",
+      "bytes": 584,
+      "sha256": "3df74eb2331c4756b9ce17a1d3a36d4a1b39b28781133e2a92b8857792ea4faf"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_text.log.gz",
+      "bytes": 838,
+      "sha256": "99338ac037db197adaa878db7a48c3636dde5d29b40bf0829bfb239a4ef75159"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/measure-observations.mjs",
+      "bytes": 2221,
+      "sha256": "6137b13ba7a9e3a3991202da0bb06824ae8ece709d24dcd66f8c227cd4fe3a37"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/measured-observations.json",
+      "bytes": 58417,
+      "sha256": "2fdecbb70afc415546aa0f5d013f12b9bd7f2577385b418e12e40695dc437fb3"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/notes.json",
+      "bytes": 22791,
+      "sha256": "01890cb1aad8d9f61537611301f0e37b9d22118ffe37ba0ca745a78ab10cdd43"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/plan.json",
+      "bytes": 219860,
+      "sha256": "b8e9737bc4b91d93c76960bde976acde07f72820f47d24570e838ed7233a95b8"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/raw-log-storage.json",
+      "bytes": 2580,
+      "sha256": "1177a6d183dc4aa9bdd4373fa4ba9540b482eb2b75ea9fe6204b0940b483dabf"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/review.json",
+      "bytes": 451096,
+      "sha256": "10011d1c14de63b73a4638295ddcfe234bdd7c2b32f98eaa3d71be913d322765"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/text-rerun.log.gz",
+      "bytes": 564,
+      "sha256": "e2681e2a61b8c0612bf55be53b849908a016e5bac584662d74628da25a485cc1"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/verification.json",
+      "bytes": 77782,
+      "sha256": "889cc997dc55ce63722d62beaa4337ff660f1ce986e3062b7c21768ba121b788"
+    },
+    {
+      "file": "docs/programs/release-readiness/burndown.md",
+      "bytes": 345257,
+      "sha256": "7ca1f58fc9fc4a3da519e9a5286a582e6ba743f5edafd6ea8dff1578bd60a461"
+    }
+  ]
+}

@@ -1,0 +1,352 @@
+{
+  "121": {
+    "note": "Mixed body cards use larger readable type; logo and seven-image grid fill their areas. Timeline labels and descriptions are retained and separated, with smaller note sizes mapped to existing LH-41 final 0.34 recheck. s23 explicitly exceeds the pictures region6-block capacity and carries its original layout-unplaced warning; retain as an unaccepted stress/refusal control.",
+    "acceptance": "bounded-no-new-defect; existing-timeline-recheck"
+  },
+  "122": {
+    "note": "s25 repeats the short-code-in-tall-mixed-panel underfill class E1V60-01/LH-101; do not duplicate. Four prose cards, image/quote and chart/list/chart preserve content without a visible collision. F3 owns chart representation, and prose fill needs final 0.34 comparison.",
+    "acceptance": "known-mixed-code-followup",
+    "knownFindingIds": [
+      "E1V60-01",
+      "LH-101"
+    ]
+  },
+  "123": {
+    "note": "Three-part evidence and FAQ/list bodies grow and remain legible. Horizontal bar labels/values fit; quote and image split is clear. No new clipping, missing prose or oversized lines detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "124": {
+    "note": "Table/text and four metric-note pairs fit, with subordinate labels. Cover keeps authored headline/subtitle even though fixed Claude control is image-only; paired quotes grow legibly. Sparse table/metric sizing remains a design observation, not an unmeasured shrink claim.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "125": {
+    "note": "Metric trio, four metric cards and two-row table preserve values/labels without clipping; sparse metric/table sizing remains a design observation. s38 larger prose still runs beyond about 70 characters: existing 1194 reading-measure recheck. Do not infer acceptance of that wide measure.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "126": {
+    "note": "s41 emphasized paragraph grows but retains long lines: existing 1194 reading-measure recheck. Metric/image mixture, three numbered steps and six-image gallery fit without visible omission or collision.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "127": {
+    "note": "Three-image/prose fixture and list/FAQ content retained. s46 sparse two-part text is visibly small amid whitespace, retained for bounded source/pin inspection rather than a claimed size regression. s47 nine prose blocks exceed the six-block pillars region (three original layout-unplaced findings): explicitly unaccepted stress/refusal control, even though all nine remain visible. Source inspection confirms s46 uses authored left and center+right region placements, so it is not an unpinned automatic-body growth case.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "128": {
+    "note": "Six mixed FAQ/person/list bodies grow clearly and preserve all source prose; original numbering-start warnings remain explicit. Two logo panels are clean. No new clipping or omission detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "129": {
+    "note": "Eight pictures remain present but exceed the pictures region6-block capacity (two original layout-unplaced findings): unaccepted stress control. Two timeline sequences keep all descriptions, unlike fixed Claude; existing LH-41 recheck. s03 repeats known LH-101 short mixed-code underfill. Closing prose remains complete.",
+    "acceptance": "contains-unaccepted-stress-control",
+    "knownFindingIds": [
+      "LH-41",
+      "LH-101"
+    ]
+  },
+  "130": {
+    "note": "Image/quote, two chart/prose pairs, four mixed list/FAQ groups and metric/chart/quote/table preserve authored content. Current labels and values are readable without new visible clipping; representation boundaries remain F3 scoped.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "131": {
+    "note": "Four mixed body groups and radar/metric/quote remain readable. s11 includes a second table below its layout grid and retains its original unplaced warning; s12 has nine body blocks against the metrics region6 capacity and retains two unplaced warnings. Both are unaccepted stress/refusal controls; data is not removed to imitate Claude.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "132": {
+    "note": "Section and three quotes grow with readable hierarchy. Metric trio labels remain subordinate without clipping. s16 two paragraph rows retain very long lines: mapped to existing 1194 reading-measure work, with final 0.34 comparison still required.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "133": {
+    "note": "Five metric cards and combo chart/prose retain data and labels. Sparse table/text remains a design observation, no inferred clipping. Two emphasized paragraph rows remain wide: existing 1194 retained-type reading-measure recheck.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "134": {
+    "note": "Five-step list and chart/table source stay visible. Seven images exceed a six-block picture region and carry original layout-unplaced: unaccepted stress control. s23 paragraph grows but still runs wide; existing 1194 recheck. Quarterly table retains all cells and explanatory note.",
+    "acceptance": "contains-unaccepted-stress-control",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "135": {
+    "note": "Single paragraph grows with a readable shorter measure. List/decision/list and numbered three-step layout preserve source and original numbering-start warning; three logos fit. No new clipping or omission detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "136": {
+    "note": "Nine images retain three original beyond-capacity findings: unaccepted stress control. Three timelines keep complete descriptions at small type (existing LH-41), while fixed Claude omits those descriptions. Timeline/metric and dense closing prose preserve content; no shortening is accepted.",
+    "acceptance": "contains-unaccepted-stress-control",
+    "knownFindingIds": [
+      "LH-41"
+    ]
+  },
+  "137": {
+    "note": "s33 repeats known LH-101 mixed short-code underfill. Three-chart dashboard preserves the known one-series waterfall default, whose omitted-series report gap is corrected in PR1202; no new multi-series algorithm inferred. Mixed list/person/FAQ/process and large one-message body remain complete.",
+    "acceptance": "known-mixed-code-followup",
+    "knownFindingIds": [
+      "LH-101",
+      "PR1202"
+    ]
+  },
+  "138": {
+    "note": "Mixed lists and FAQs retain their larger type, chart/metric/quote and two-table/two-prose compositions fit. Lone42pt metric grows strongly to fill its body. No new clipping or omitted authored text detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "139": {
+    "note": "Three steps and four quotes preserve legible hierarchy. Table/text and two-paragraph image split keep all content with no new collision. Smaller table/metadata labels remain observations rather than unmeasured new regressions.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "140": {
+    "note": "Six metric cards retain values/trends. s46 code snippet hugs a short panel rather than occupying the tall mixed dynamic panel; retain as a layout-code control confirmed in source as layout:code with explicit code/notes regions. Three emphasized prose rows remain too wide (existing 1194). Percent-area chart/prose retains both numeric series.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "141": {
+    "note": "Evidence list/person/list body grows and preserves source. Eight-image gallery retains two original over-capacity findings: explicitly unaccepted stress/refusal control, despite a complete visible grid.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "142": {
+    "note": "Portrait and explanatory prose preserve all content. Short code/list panel hugs its snippet (not the known oversized dynamic code panel); paragraph plus short concluding pill grows, and both two-series charts preserve their data. No new clipping detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "143": {
+    "note": "Six numbered steps and four logos remain distinct and readable; two-series percent-bar chart retained. Four timelines keep all original milestone descriptions at visibly small type: existing LH-41 readability recheck, not accepted by comparison with Claude panels that omit descriptions.",
+    "acceptance": "known-timeline-followup",
+    "knownFindingIds": [
+      "LH-41"
+    ]
+  },
+  "144": {
+    "note": "Timeline/large metric retains descriptions; existing LH-41 applies to smaller timeline notes. Closing paragraph remains wide (existing 1194). s11 repeats known LH-101 oversized dynamic mixed-code panel. Three-chart/three-prose dashboard is dense but complete without a new detected collision.",
+    "acceptance": "known-mixed-code-followup",
+    "knownFindingIds": [
+      "LH-41",
+      "PR1194",
+      "LH-101"
+    ]
+  },
+  "145": {
+    "note": "Six mixed list/person/FAQ blocks grow and preserve source. Three bullets, six-part FAQ/list body and three-part prose/statement composition remain readable; original numbering-start warning retained. No new clipping or omission detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "146": {
+    "note": "s17 three-table/prose stress slide retains two original unplaced findings: unaccepted. Large91% metric/prose and three-step layout preserve content; five quotes are denser controls with all attributions retained. No content is removed to match fixed panels.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "147": {
+    "note": "Table/text, three prose paragraphs beside portrait and cover/image body remain complete. Seven metrics on s23 exceed region6 capacity with one original unplaced finding: unaccepted stress control. No new clipping detected in remaining cases.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "148": {
+    "note": "Four prose cards fill their rows and remain readable. Two-series pie is visibly two concentric rings (both numeric series retained), the documented F3 adaptation; no false lost-series defect. Mixed list/person and nine-image grid preserve content; s28 retains three original unplaced warnings and is unaccepted.",
+    "acceptance": "contains-unaccepted-stress-control",
+    "knownFindingIds": [
+      "F3-chart-adaptation"
+    ]
+  },
+  "149": {
+    "note": "Image/two-prose and mixed list/FAQ preserve content. s30 full-width bottom paragraph remains wide (existing 1194 reading-measure recheck). Both chart sequences are visible; no new semantic algorithm or clipping claim inferred from the fixed Claude arrangement.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "150": {
+    "note": "Five logos and chart/prose preserve content. Five timelines keep every milestone description at very small type: existing LH-41 final 0.34 readability recheck, not accepted by views. Treemap/metric/table/quote keeps its documented default-series representation and all prose; F3 report bridge covers owed advisories.",
+    "acceptance": "known-timeline-followup",
+    "knownFindingIds": [
+      "LH-41",
+      "PR1202"
+    ]
+  },
+  "151": {
+    "note": "Closing prose grows clearly. Timeline/large metric retains descriptions (existing LH-41 recheck), lone table grows visibly. Seven mixed list/FAQ body blocks retain one original beyond-layout warning: unaccepted stress/refusal control.",
+    "acceptance": "contains-unaccepted-stress-control",
+    "knownFindingIds": [
+      "LH-41"
+    ]
+  },
+  "152": {
+    "note": "Box/histogram/scatter chart triple follows the documented F3 draw-plan transformations (unique-category box becomes the per-series distribution); no new missing observation inferred. Seven mixed body groups, four prose cards and dense three-table/prose dashboard preserve content without new collision.",
+    "acceptance": "bounded-no-new-defect",
+    "knownFindingIds": [
+      "F3-chart-adaptation"
+    ]
+  },
+  "153": {
+    "note": "Two metric/prose layout, large closing statement, six quotes and quote/image preserve content. Quote/body hierarchy grows; dense quote metadata remains subordinate. No new clipping or missing attribution detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "154": {
+    "note": "Four prose paragraphs beside image remain complete. Eight metrics exceed the region6 capacity and retain two original unplaced findings: unaccepted stress control, with no data removed.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "155": {
+    "note": "Dashboard values and chart labels remain distinct; box chart represents both full numeric distributions as documented by F3. Five emphasized paragraphs preserve content but form long full-width lines (existing 1194); mixed list/FAQ bodies grow. No new content loss detected.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194",
+      "F3-chart-adaptation"
+    ]
+  },
+  "156": {
+    "note": "Full image, two prose/image pairs and metric/image/prose preserve source. Four prose blocks on authored comparison layout look small in one horizontal row; retain for bounded current geometry/source-limit inspection rather than claim an unmeasured regression. No visible clipping. Public033 measurement gives four24 px text blocks in279.2×297.28 cells, with8/3/7/3 lines; no historical numeric font regression or automatic-layout defect is established.",
+    "acceptance": "named-layout-style-observation"
+  },
+  "157": {
+    "note": "Mixed list/FAQ and six logos remain complete; original numbering warning retained. Chart pair plus note fits. s12 six timelines have six original render/text-overflow findings; visibly dense notes are an unaccepted overcapacity control. Fixed Claude omits descriptions, which is not permission to remove authored content.",
+    "acceptance": "contains-unaccepted-overflow-control",
+    "knownFindingIds": [
+      "LH-41"
+    ]
+  },
+  "158": {
+    "note": "Radar/metric/table/quote s13 preserves content but radar plot is visibly small; retain for bounded source/geometry check before any new defect claim. Closing prose and table/note retain all words. Timeline/large metric preserves all descriptions (existing LH-41). No new clipping detected elsewhere.",
+    "acceptance": "current034-circle-comparison-owed",
+    "knownFindingIds": [
+      "LH-41"
+    ]
+  },
+  "159": {
+    "note": "Eight mixed groups on s17 and s19 retain their original beyond-capacity findings: unaccepted stress controls, numbering warning explicit. Waterfall/funnel/treemap triple matches documented source semantics and default-series reporting contract. Image/quote/prose grows and remains complete.",
+    "acceptance": "contains-unaccepted-stress-control",
+    "knownFindingIds": [
+      "F3-chart-adaptation"
+    ]
+  },
+  "160": {
+    "note": "Lone short code hugs its panel, a control separate from LH-101 tall mixed-code case. Metric/prose pairs and closing statement preserve values/words. s24 emphasized paragraph grows but remains wide (existing 1194); final-source recheck owed.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "161": {
+    "note": "Quote/image and four-prose/two-image layout retain every word. b11/s27 explicitly has no historical before panel; current and fixed Claude show all nine metrics, with no historical size claim. Three team cards grow readable body text. Missing control stays missing.",
+    "acceptance": "missing-before-control-explicit",
+    "absentPanels": [
+      "batch-11/s27/before"
+    ]
+  },
+  "162": {
+    "note": "Six paragraph cards become full-width rows with long measures (existing 1194 recheck); all content retained. Vertical metric trio and six mixed groups preserve values and original numbering warning. Portrait/image pair fits.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "163": {
+    "note": "Mixed images/prose and metric/image/prose retain source. Five paragraph/statement body s34 remains wide (existing 1194). Five list groups fit in narrow columns, with long words wrapped; this is not accepted as a before-font comparison and no content deletion is inferred.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "164": {
+    "note": "Seven logos, chart pair plus prose/verdict and three FAQ/list columns preserve content. s39 seven timelines visibly overlap and retain29 original unplaced/overflow findings: explicitly unaccepted overcapacity/refusal control. Fixed Claude deletes descriptions, so it cannot establish completeness or justify shortening.",
+    "acceptance": "contains-unaccepted-overflow-control",
+    "knownFindingIds": [
+      "LH-41"
+    ]
+  },
+  "165": {
+    "note": "Four closing paragraphs s41 look small despite unused height, retained for bounded source/geometry inspection. Metric/chart/table/quote and two-table/prose stay complete. Nine mixed groups s44 retain three unplaced findings plus numbering warning: unaccepted stress control. Measurement confirms named bottom-anchored closing layout with four24 px/four-line bodies; this stays a style observation, not a claimed unpinned automatic-layout regression.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "166": {
+    "note": "Three bullets grow and retain source. s46 nine mixed groups retain original capacity/numbering findings and remain unaccepted. Image/quote grows clearly. s48 code/prose panel hugs its snippet, a control distinct from the tall dynamic LH-101 case.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "167": {
+    "note": "Three metrics plus two prose blocks and three-part action body preserve authored content with readable hierarchy. No new clipping or omission detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "168": {
+    "note": "Large paragraph/pill and treemap/metric/quote retain source; F3 owns default-series representation/reporting. Lone radar fills a visibly substantial frame and is a control for the smaller mixed radar observation. Image fills its frame; fixed Claude remains image-only without fabricated title.",
+    "acceptance": "bounded-no-new-defect",
+    "knownFindingIds": [
+      "F3-chart-adaptation"
+    ]
+  },
+  "169": {
+    "note": "Logo row and emphasized prose preserve content; paragraph remains a retained-type measure recheck under1194. Vertical metric trio readable. Seven mixed body groups keep original layout-unplaced finding: unaccepted stress control.",
+    "acceptance": "contains-unaccepted-stress-control",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "170": {
+    "note": "Three-image row and prose/image grid fill their areas. Mixed prose/statement rows retain all words but run wide (existing 1194). Numeric scatter shows the authored X/Y points, rather than rewriting them into fixed Claude categorical series; no chart data-loss defect inferred.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194",
+      "F3-chart-adaptation"
+    ]
+  },
+  "171": {
+    "note": "Six list groups and eight logos retain source; chart triple retains both numeric series where supported, with small radar tracked for bounded geometry context. s16 eight timelines visibly collide and keep34 original unplaced/overflow findings: unaccepted overcapacity/refusal control; Claude omits descriptions.",
+    "acceptance": "contains-unaccepted-overflow-control",
+    "knownFindingIds": [
+      "LH-41"
+    ]
+  },
+  "172": {
+    "note": "List/FAQ body and dense closing prose remain complete. s19 ring/metric/table/quote preserves both numeric ring series but the ring is visibly small, retained with the mixed-radar geometry question. Two-table/prose/verdict preserves cells and wording without new clipping.",
+    "acceptance": "current034-circle-comparison-owed"
+  },
+  "173": {
+    "note": "Three-line body and three-bullet body grow/read clearly; table preserves all four data rows. s24 is another known LH-101 tall dynamic code/prose panel with small short code; no duplicate new bug.",
+    "acceptance": "known-mixed-code-followup",
+    "knownFindingIds": [
+      "LH-101"
+    ]
+  },
+  "174": {
+    "note": "Two-code/prose layout remains a denser control, distinct from sparse one-code LH-101 case. Metric/prose trio and three list groups remain complete. Two emphasized prose panels plus verdict preserve wording; no new clipping detected.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "175": {
+    "note": "Area/metric/quote retains source. Two-series ring plus metric grows strongly and retains both numeric series, a useful control for the mixed ring/metric/table/quote observation. Image pair and three FAQ bodies remain legible.",
+    "acceptance": "bounded-no-new-defect",
+    "knownFindingIds": [
+      "F3-chart-adaptation"
+    ]
+  },
+  "176": {
+    "note": "Paragraph/pill grows; table plus note retains data and wording. Eight mixed groups s35 retain two original unplaced findings plus numbering warning: unaccepted stress control. Four images fit without omission.",
+    "acceptance": "contains-unaccepted-stress-control"
+  },
+  "177": {
+    "note": "Image fills frame; ordinary paragraph and closing body grow but retain wide measures (existing 1194 recheck). Combo chart/prose retains both series and all words without new clipping.",
+    "acceptance": "existing-reading-measure-recheck",
+    "knownFindingIds": [
+      "PR1194"
+    ]
+  },
+  "178": {
+    "note": "Nine logos and two chart/prose fixtures preserve content. s43 nine timelines visibly collide and retain47 original unplaced/overflow findings: explicitly unaccepted overcapacity/refusal control. Claude omits descriptions, so it does not prove content-complete acceptance.",
+    "acceptance": "contains-unaccepted-overflow-control",
+    "knownFindingIds": [
+      "LH-41"
+    ]
+  },
+  "179": {
+    "note": "Dense six-paragraph closing, three list groups, three-table/prose fixture and two text-action blocks preserve content with no new detected collision. Dense table labels remain subordinate; no speculative size regression asserted.",
+    "acceptance": "bounded-no-new-defect"
+  },
+  "180": {
+    "note": "Signal heading/list and two customer-action lists preserve complete source and readable hierarchy. No new clipping or omission detected; observations do not establish final 0.34 source/native acceptance.",
+    "acceptance": "bounded-no-new-defect"
+  }
+}

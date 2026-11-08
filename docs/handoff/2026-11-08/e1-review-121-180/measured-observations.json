@@ -1,0 +1,2006 @@
+{
+  "scope": "Advisory published033 composition only; actual visual judgments use immutable after02 PNGs. No render or source/runtime mutation.",
+  "consumer": "C:/opf-work/core033-office-consumer-01",
+  "release": "0.33.0",
+  "fontPolicy": "office/visual/auto",
+  "rows": [
+    {
+      "deck": "batch-11",
+      "id": "s07",
+      "ordinal": 7,
+      "sourceSha256": "81b69db2d6e1b01d062150a582fc89fd311c30f2146b74caed2e3aae8edf483f",
+      "authored": {
+        "layout": "comparison",
+        "title": "Operating Model",
+        "blocks": [
+          {
+            "text": "Metro Transit Authority should focus the next cycle on compare bus rapid transit options for the east corridor while making the operating tradeoffs clear to transportation stakeholders."
+          },
+          {
+            "text": "The deck-level language can be a catalog id or BCP-47 tag."
+          },
+          {
+            "text": "Meridian Cloud should focus the next cycle on help regional partners explain the new integration story while making the operating tradeoffs clear to partnerships stakeholders."
+          },
+          {
+            "text": "They want review status, owners, and exceptions in one operating view."
+          }
+        ],
+        "id": "s07"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 604.8
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.6.blocks.0.text",
+          "type": "text",
+          "box": {
+            "x": 57.6,
+            "y": 256.3,
+            "width": 279.2,
+            "height": 297.28
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.6.blocks.0.text",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "text": {
+            "lines": [
+              "Metro Transit Authority ",
+              "should focus the next ",
+              "cycle on compare bus ",
+              "rapid transit options for the ",
+              "east corridor while making ",
+              "the operating tradeoffs ",
+              "clear to transportation ",
+              "stakeholders."
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 24,
+                "nextStart": 24,
+                "boundary": "soft",
+                "width": 237.75,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 24,
+                    "x": 0,
+                    "width": 237.75
+                  }
+                ]
+              },
+              {
+                "start": 24,
+                "end": 46,
+                "nextStart": 46,
+                "boundary": "soft",
+                "width": 225.890625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 24,
+                    "end": 46,
+                    "x": 0,
+                    "width": 225.890625
+                  }
+                ]
+              },
+              {
+                "start": 46,
+                "end": 67,
+                "nextStart": 67,
+                "boundary": "soft",
+                "width": 231.5859375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 46,
+                    "end": 67,
+                    "x": 0,
+                    "width": 231.5859375
+                  }
+                ]
+              },
+              {
+                "start": 67,
+                "end": 97,
+                "nextStart": 97,
+                "boundary": "soft",
+                "width": 278.5078125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 67,
+                    "end": 97,
+                    "x": 0,
+                    "width": 283.3828125
+                  }
+                ]
+              },
+              {
+                "start": 97,
+                "end": 124,
+                "nextStart": 124,
+                "boundary": "soft",
+                "width": 277.16015625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 97,
+                    "end": 124,
+                    "x": 0,
+                    "width": 277.16015625
+                  }
+                ]
+              },
+              {
+                "start": 124,
+                "end": 148,
+                "nextStart": 148,
+                "boundary": "soft",
+                "width": 239.0859375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 124,
+                    "end": 148,
+                    "x": 0,
+                    "width": 239.0859375
+                  }
+                ]
+              },
+              {
+                "start": 148,
+                "end": 172,
+                "nextStart": 172,
+                "boundary": "soft",
+                "width": 235.20703125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 148,
+                    "end": 172,
+                    "x": 0,
+                    "width": 235.20703125
+                  }
+                ]
+              },
+              {
+                "start": 172,
+                "end": 185,
+                "nextStart": 185,
+                "boundary": "end",
+                "width": 140.484375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 172,
+                    "end": 185,
+                    "x": 0,
+                    "width": 140.484375
+                  }
+                ]
+              }
+            ],
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "tabSize": 4,
+            "tabWidth": 19.5,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 57.6,
+                  "y": 256.29999999999995,
+                  "baseline": 280.29999999999995,
+                  "height": 29.28,
+                  "width": 237.75,
+                  "outline": {
+                    "x": 59.6625,
+                    "y": 264.46796874999995,
+                    "width": 230.90625,
+                    "height": 20.109375
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 285.5799999999999,
+                  "baseline": 309.5799999999999,
+                  "height": 29.28,
+                  "width": 225.890625,
+                  "outline": {
+                    "x": 58.7953125,
+                    "y": 293.3143749999999,
+                    "width": 219.19921875,
+                    "height": 16.78125
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 314.85999999999996,
+                  "baseline": 338.85999999999996,
+                  "height": 29.28,
+                  "width": 231.5859375,
+                  "outline": {
+                    "x": 58.7484375,
+                    "y": 323.08656249999996,
+                    "width": 224.42578125,
+                    "height": 20.05078125
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 344.14,
+                  "baseline": 368.14,
+                  "height": 29.28,
+                  "width": 278.5078125,
+                  "outline": {
+                    "x": 59.48671875,
+                    "y": 351.874375,
+                    "width": 275.3671875,
+                    "height": 20.4609375
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 373.41999999999996,
+                  "baseline": 397.41999999999996,
+                  "height": 29.28,
+                  "width": 277.16015625,
+                  "outline": {
+                    "x": 58.8421875,
+                    "y": 381.58796874999996,
+                    "width": 270.73828125,
+                    "height": 20.25
+                  }
+                },
+                {
+                  "x": 58.1546875,
+                  "y": 402.69999999999993,
+                  "baseline": 426.69999999999993,
+                  "height": 29.28,
+                  "width": 239.0859375,
+                  "outline": {
+                    "x": 58.6,
+                    "y": 410.43437499999993,
+                    "width": 232.62890625,
+                    "height": 20.68359375
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 431.97999999999996,
+                  "baseline": 455.97999999999996,
+                  "height": 29.28,
+                  "width": 235.20703125,
+                  "outline": {
+                    "x": 58.7484375,
+                    "y": 440.14796874999996,
+                    "width": 227.40234375,
+                    "height": 20.02734375
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 461.26,
+                  "baseline": 485.26,
+                  "height": 29.28,
+                  "width": 140.484375,
+                  "outline": {
+                    "x": 58.7953125,
+                    "y": 469.4865625,
+                    "width": 137.3671875,
+                    "height": 16.2890625
+                  }
+                }
+              ],
+              "height": 234.24,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "path": "slides.6.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 348.8,
+            "y": 256.3,
+            "width": 279.2,
+            "height": 297.28
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.6.blocks.1.text",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "text": {
+            "lines": [
+              "The deck-level language ",
+              "can be a catalog id or ",
+              "BCP-47 tag."
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 24,
+                "nextStart": 24,
+                "boundary": "soft",
+                "width": 252.97265625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 24,
+                    "x": 0,
+                    "width": 252.97265625
+                  }
+                ]
+              },
+              {
+                "start": 24,
+                "end": 47,
+                "nextStart": 47,
+                "boundary": "soft",
+                "width": 223.5234375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 24,
+                    "end": 47,
+                    "x": 0,
+                    "width": 223.5234375
+                  }
+                ]
+              },
+              {
+                "start": 47,
+                "end": 58,
+                "nextStart": 58,
+                "boundary": "end",
+                "width": 121.81640625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 47,
+                    "end": 58,
+                    "x": 0,
+                    "width": 121.81640625
+                  }
+                ]
+              }
+            ],
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "tabSize": 4,
+            "tabWidth": 19.5,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 349.5890625,
+                  "y": 256.29999999999995,
+                  "baseline": 280.29999999999995,
+                  "height": 29.28,
+                  "width": 252.97265625,
+                  "outline": {
+                    "x": 349.8,
+                    "y": 264.52656249999995,
+                    "width": 246.6328125,
+                    "height": 20.19140625
+                  }
+                },
+                {
+                  "x": 348.8,
+                  "y": 285.5799999999999,
+                  "baseline": 309.5799999999999,
+                  "height": 29.28,
+                  "width": 223.5234375,
+                  "outline": {
+                    "x": 349.9484375,
+                    "y": 293.7479687499999,
+                    "width": 217.06640625,
+                    "height": 20.25
+                  }
+                },
+                {
+                  "x": 348.8,
+                  "y": 314.85999999999996,
+                  "baseline": 338.85999999999996,
+                  "height": 29.28,
+                  "width": 121.81640625,
+                  "outline": {
+                    "x": 350.8625,
+                    "y": 322.87562499999996,
+                    "width": 117.83203125,
+                    "height": 20.40234375
+                  }
+                }
+              ],
+              "height": 87.97796875,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "path": "slides.6.blocks.2.text",
+          "type": "text",
+          "box": {
+            "x": 652,
+            "y": 256.3,
+            "width": 279.2,
+            "height": 297.28
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.6.blocks.2.text",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "text": {
+            "lines": [
+              "Meridian Cloud should ",
+              "focus the next cycle on ",
+              "help regional partners ",
+              "explain the new integration ",
+              "story while making the ",
+              "operating tradeoffs clear to ",
+              "partnerships stakeholders."
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 22,
+                "nextStart": 22,
+                "boundary": "soft",
+                "width": 238.95703125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 22,
+                    "x": 0,
+                    "width": 238.95703125
+                  }
+                ]
+              },
+              {
+                "start": 22,
+                "end": 46,
+                "nextStart": 46,
+                "boundary": "soft",
+                "width": 240.609375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 22,
+                    "end": 46,
+                    "x": 0,
+                    "width": 240.609375
+                  }
+                ]
+              },
+              {
+                "start": 46,
+                "end": 69,
+                "nextStart": 69,
+                "boundary": "soft",
+                "width": 230.49609375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 46,
+                    "end": 69,
+                    "x": 0,
+                    "width": 230.49609375
+                  }
+                ]
+              },
+              {
+                "start": 69,
+                "end": 97,
+                "nextStart": 97,
+                "boundary": "soft",
+                "width": 276.3984375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 69,
+                    "end": 97,
+                    "x": 0,
+                    "width": 281.2734375
+                  }
+                ]
+              },
+              {
+                "start": 97,
+                "end": 120,
+                "nextStart": 120,
+                "boundary": "soft",
+                "width": 235.41796875,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 97,
+                    "end": 120,
+                    "x": 0,
+                    "width": 235.41796875
+                  }
+                ]
+              },
+              {
+                "start": 120,
+                "end": 149,
+                "nextStart": 149,
+                "boundary": "soft",
+                "width": 278.42578125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 120,
+                    "end": 149,
+                    "x": 0,
+                    "width": 283.30078125
+                  }
+                ]
+              },
+              {
+                "start": 149,
+                "end": 175,
+                "nextStart": 175,
+                "boundary": "end",
+                "width": 276.515625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 149,
+                    "end": 175,
+                    "x": 0,
+                    "width": 276.515625
+                  }
+                ]
+              }
+            ],
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "tabSize": 4,
+            "tabWidth": 19.5,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 652,
+                  "y": 256.29999999999995,
+                  "baseline": 280.29999999999995,
+                  "height": 29.28,
+                  "width": 238.95703125,
+                  "outline": {
+                    "x": 654.0625,
+                    "y": 264.31562499999995,
+                    "width": 230.14453125,
+                    "height": 16.5
+                  }
+                },
+                {
+                  "x": 652.625,
+                  "y": 285.5799999999999,
+                  "baseline": 309.5799999999999,
+                  "height": 29.28,
+                  "width": 240.609375,
+                  "outline": {
+                    "x": 653,
+                    "y": 293.3143749999999,
+                    "width": 233.578125,
+                    "height": 20.54296875
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 314.85999999999996,
+                  "baseline": 338.85999999999996,
+                  "height": 29.28,
+                  "width": 230.49609375,
+                  "outline": {
+                    "x": 653.88671875,
+                    "y": 323.02796874999996,
+                    "width": 222.59765625,
+                    "height": 20.25
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 344.14,
+                  "baseline": 368.14,
+                  "height": 29.28,
+                  "width": 276.3984375,
+                  "outline": {
+                    "x": 653.2421875,
+                    "y": 352.30796875,
+                    "width": 273.375,
+                    "height": 20.25
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 373.41999999999996,
+                  "baseline": 397.41999999999996,
+                  "height": 29.28,
+                  "width": 235.41796875,
+                  "outline": {
+                    "x": 653.1953125,
+                    "y": 381.58796874999996,
+                    "width": 228.09375,
+                    "height": 20.25
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 402.69999999999993,
+                  "baseline": 426.69999999999993,
+                  "height": 29.28,
+                  "width": 278.42578125,
+                  "outline": {
+                    "x": 653.171875,
+                    "y": 410.43437499999993,
+                    "width": 276.046875,
+                    "height": 20.68359375
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 431.97999999999996,
+                  "baseline": 455.97999999999996,
+                  "height": 29.28,
+                  "width": 276.515625,
+                  "outline": {
+                    "x": 653.88671875,
+                    "y": 440.14796874999996,
+                    "width": 272.70703125,
+                    "height": 20.02734375
+                  }
+                }
+              ],
+              "height": 204.96000000000004,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "path": "slides.6.blocks.3.text",
+          "type": "text",
+          "box": {
+            "x": 943.2,
+            "y": 256.3,
+            "width": 279.2,
+            "height": 297.28
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.6.blocks.3.text",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "text": {
+            "lines": [
+              "They want review status, ",
+              "owners, and exceptions in ",
+              "one operating view."
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 25,
+                "nextStart": 25,
+                "boundary": "soft",
+                "width": 256.53515625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 25,
+                    "x": 0,
+                    "width": 256.53515625
+                  }
+                ]
+              },
+              {
+                "start": 25,
+                "end": 51,
+                "nextStart": 51,
+                "boundary": "soft",
+                "width": 272.89453125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 25,
+                    "end": 51,
+                    "x": 0,
+                    "width": 272.89453125
+                  }
+                ]
+              },
+              {
+                "start": 51,
+                "end": 70,
+                "nextStart": 70,
+                "boundary": "end",
+                "width": 198.38671875,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 51,
+                    "end": 70,
+                    "x": 0,
+                    "width": 198.38671875
+                  }
+                ]
+              }
+            ],
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "tabSize": 4,
+            "tabWidth": 19.5,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 943.9890625,
+                  "y": 256.29999999999995,
+                  "baseline": 280.29999999999995,
+                  "height": 29.28,
+                  "width": 256.53515625,
+                  "outline": {
+                    "x": 944.2,
+                    "y": 264.46796874999995,
+                    "width": 249.66796875,
+                    "height": 20.109375
+                  }
+                },
+                {
+                  "x": 943.2,
+                  "y": 285.5799999999999,
+                  "baseline": 309.5799999999999,
+                  "height": 29.28,
+                  "width": 272.89453125,
+                  "outline": {
+                    "x": 944.371875,
+                    "y": 293.7479687499999,
+                    "width": 265.06640625,
+                    "height": 20.02734375
+                  }
+                },
+                {
+                  "x": 943.2,
+                  "y": 314.85999999999996,
+                  "baseline": 338.85999999999996,
+                  "height": 29.28,
+                  "width": 198.38671875,
+                  "outline": {
+                    "x": 944.371875,
+                    "y": 323.02796874999996,
+                    "width": 195.29296875,
+                    "height": 20.25
+                  }
+                }
+              ],
+              "height": 87.97796875,
+              "overflow": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "deck": "batch-11",
+      "id": "s13",
+      "ordinal": 13,
+      "sourceSha256": "81b69db2d6e1b01d062150a582fc89fd311c30f2146b74caed2e3aae8edf483f",
+      "authored": {
+        "title": "Decision Options",
+        "composition": {
+          "mode": "grid"
+        },
+        "blocks": [
+          {
+            "metric": {
+              "value": "18%",
+              "label": "Primary signal",
+              "description": "Combine video proof and business case in a compact sales deck",
+              "trend": "up"
+            }
+          },
+          {
+            "chart": {
+              "type": "filled-radar",
+              "data": {
+                "columns": [
+                  "Quarter",
+                  "Current",
+                  "Baseline"
+                ],
+                "rows": [
+                  [
+                    "Q1",
+                    24,
+                    21
+                  ],
+                  [
+                    "Q2",
+                    28,
+                    23
+                  ],
+                  [
+                    "Q3",
+                    31,
+                    25
+                  ],
+                  [
+                    "Q4",
+                    35,
+                    27
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "table": {
+              "columns": [
+                "Workstream",
+                "Owner",
+                "Status",
+                "Decision"
+              ],
+              "rows": [
+                [
+                  "Student affairs",
+                  "Program lead",
+                  "On track",
+                  "Continue"
+                ],
+                [
+                  "Data and reporting",
+                  "Analytics",
+                  "Watch",
+                  "Tighten metric definitions"
+                ],
+                [
+                  "Field adoption",
+                  "Operations",
+                  "At risk",
+                  "Add weekly office hours"
+                ]
+              ]
+            }
+          },
+          {
+            "quote": {
+              "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+              "attribution": "Investor relations working group",
+              "source": "Stakeholder interview"
+            }
+          }
+        ],
+        "id": "s13"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 147.48,
+        "width": 1164.8,
+        "height": 514.92
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.12.blocks.1.chart",
+          "type": "chart",
+          "box": {
+            "x": 652,
+            "y": 147.48,
+            "width": 570.4,
+            "height": 169.39
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.12.blocks.1.chart",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "deck": "batch-11",
+      "id": "s41",
+      "ordinal": 41,
+      "sourceSha256": "81b69db2d6e1b01d062150a582fc89fd311c30f2146b74caed2e3aae8edf483f",
+      "authored": {
+        "layout": "closing",
+        "title": "Claims Triage Operating Model: why this matters",
+        "blocks": [
+          {
+            "text": "Pinnacle Mutual should focus the next cycle on speed low-complexity claims while preserving adjuster judgment while making the operating tradeoffs clear to insurance stakeholders."
+          },
+          {
+            "text": "Department of Revenue Services should focus the next cycle on reduce filing friction and call center demand while making the operating tradeoffs clear to tax administration stakeholders."
+          },
+          {
+            "text": "Civic Data Lab should focus the next cycle on show regional patterns with maps, charts, and concise interpretation while making the operating tradeoffs clear to data storytelling stakeholders."
+          },
+          {
+            "text": "Oaktrail Animal Health should focus the next cycle on balance appointment access with staff retention while making the operating tradeoffs clear to veterinary care stakeholders."
+          }
+        ],
+        "id": "s41"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 604.8
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.40.blocks.0.text",
+          "type": "text",
+          "box": {
+            "x": 57.6,
+            "y": 398.022031,
+            "width": 570.4,
+            "height": 120.12
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.40.blocks.0.text",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "text": {
+            "lines": [
+              "Pinnacle Mutual should focus the next cycle on speed ",
+              "low-complexity claims while preserving adjuster ",
+              "judgment while making the operating tradeoffs clear to ",
+              "insurance stakeholders."
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 53,
+                "nextStart": 53,
+                "boundary": "soft",
+                "width": 557.203125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 53,
+                    "x": 0,
+                    "width": 557.203125
+                  }
+                ]
+              },
+              {
+                "start": 53,
+                "end": 101,
+                "nextStart": 101,
+                "boundary": "soft",
+                "width": 500.14453125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 53,
+                    "end": 101,
+                    "x": 0,
+                    "width": 500.14453125
+                  }
+                ]
+              },
+              {
+                "start": 101,
+                "end": 156,
+                "nextStart": 156,
+                "boundary": "soft",
+                "width": 565.39453125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 101,
+                    "end": 156,
+                    "x": 0,
+                    "width": 565.39453125
+                  }
+                ]
+              },
+              {
+                "start": 156,
+                "end": 179,
+                "nextStart": 179,
+                "boundary": "end",
+                "width": 247.78125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 156,
+                    "end": 179,
+                    "x": 0,
+                    "width": 247.78125
+                  }
+                ]
+              }
+            ],
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "tabSize": 4,
+            "tabWidth": 19.5,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 57.6,
+                  "y": 398.02203124999994,
+                  "baseline": 422.02203124999994,
+                  "height": 29.28,
+                  "width": 557.203125,
+                  "outline": {
+                    "x": 59.6625,
+                    "y": 405.75640624999994,
+                    "width": 548.390625,
+                    "height": 20.54296875
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 427.3020312499999,
+                  "baseline": 451.3020312499999,
+                  "height": 29.28,
+                  "width": 500.14453125,
+                  "outline": {
+                    "x": 59.3578125,
+                    "y": 435.4699999999999,
+                    "width": 493.078125,
+                    "height": 20.25
+                  }
+                },
+                {
+                  "x": 58.928125,
+                  "y": 456.58203124999994,
+                  "baseline": 480.58203124999994,
+                  "height": 29.28,
+                  "width": 565.39453125,
+                  "outline": {
+                    "x": 58.6,
+                    "y": 464.31640624999994,
+                    "width": 559.640625,
+                    "height": 20.68359375
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 485.86203125,
+                  "baseline": 509.86203125,
+                  "height": 29.28,
+                  "width": 247.78125,
+                  "outline": {
+                    "x": 59.240625,
+                    "y": 494.03,
+                    "width": 244.21875,
+                    "height": 16.34765625
+                  }
+                }
+              ],
+              "height": 117.12,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "path": "slides.40.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 652,
+            "y": 398.022031,
+            "width": 570.4,
+            "height": 120.12
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.40.blocks.1.text",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "text": {
+            "lines": [
+              "Department of Revenue Services should focus the next ",
+              "cycle on reduce filing friction and call center demand ",
+              "while making the operating tradeoffs clear to tax ",
+              "administration stakeholders."
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 53,
+                "nextStart": 53,
+                "boundary": "soft",
+                "width": 568.98046875,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 53,
+                    "x": 0,
+                    "width": 568.98046875
+                  }
+                ]
+              },
+              {
+                "start": 53,
+                "end": 108,
+                "nextStart": 108,
+                "boundary": "soft",
+                "width": 550.3125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 53,
+                    "end": 108,
+                    "x": 0,
+                    "width": 550.3125
+                  }
+                ]
+              },
+              {
+                "start": 108,
+                "end": 158,
+                "nextStart": 158,
+                "boundary": "soft",
+                "width": 497.98828125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 108,
+                    "end": 158,
+                    "x": 0,
+                    "width": 497.98828125
+                  }
+                ]
+              },
+              {
+                "start": 158,
+                "end": 186,
+                "nextStart": 186,
+                "boundary": "end",
+                "width": 295.81640625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 158,
+                    "end": 186,
+                    "x": 0,
+                    "width": 295.81640625
+                  }
+                ]
+              }
+            ],
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "tabSize": 4,
+            "tabWidth": 19.5,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 652,
+                  "y": 398.02203124999994,
+                  "baseline": 422.02203124999994,
+                  "height": 29.28,
+                  "width": 568.98046875,
+                  "outline": {
+                    "x": 654.0625,
+                    "y": 405.75640624999994,
+                    "width": 561.421875,
+                    "height": 20.4609375
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 427.3020312499999,
+                  "baseline": 451.3020312499999,
+                  "height": 29.28,
+                  "width": 550.3125,
+                  "outline": {
+                    "x": 653.1484375,
+                    "y": 435.0364062499999,
+                    "width": 542.4140625,
+                    "height": 20.68359375
+                  }
+                },
+                {
+                  "x": 652.87109375,
+                  "y": 456.58203124999994,
+                  "baseline": 480.58203124999994,
+                  "height": 29.28,
+                  "width": 497.98828125,
+                  "outline": {
+                    "x": 653,
+                    "y": 464.31640624999994,
+                    "width": 492.87890625,
+                    "height": 20.68359375
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 485.86203125,
+                  "baseline": 509.86203125,
+                  "height": 29.28,
+                  "width": 295.81640625,
+                  "outline": {
+                    "x": 653.359375,
+                    "y": 494.03,
+                    "width": 292.53515625,
+                    "height": 16.34765625
+                  }
+                }
+              ],
+              "height": 117.12,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "path": "slides.40.blocks.2.text",
+          "type": "text",
+          "box": {
+            "x": 57.6,
+            "y": 542.142031,
+            "width": 570.4,
+            "height": 120.257969
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.40.blocks.2.text",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "text": {
+            "lines": [
+              "Civic Data Lab should focus the next cycle on show ",
+              "regional patterns with maps, charts, and concise ",
+              "interpretation while making the operating tradeoffs ",
+              "clear to data storytelling stakeholders."
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 51,
+                "nextStart": 51,
+                "boundary": "soft",
+                "width": 530.6953125,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 51,
+                    "x": 0,
+                    "width": 530.6953125
+                  }
+                ]
+              },
+              {
+                "start": 51,
+                "end": 100,
+                "nextStart": 100,
+                "boundary": "soft",
+                "width": 506.19140625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 51,
+                    "end": 100,
+                    "x": 0,
+                    "width": 506.19140625
+                  }
+                ]
+              },
+              {
+                "start": 100,
+                "end": 152,
+                "nextStart": 152,
+                "boundary": "soft",
+                "width": 525.59765625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 100,
+                    "end": 152,
+                    "x": 0,
+                    "width": 525.59765625
+                  }
+                ]
+              },
+              {
+                "start": 152,
+                "end": 192,
+                "nextStart": 192,
+                "boundary": "end",
+                "width": 394.27734375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 152,
+                    "end": 192,
+                    "x": 0,
+                    "width": 394.27734375
+                  }
+                ]
+              }
+            ],
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "tabSize": 4,
+            "tabWidth": 19.5,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 57.6,
+                  "y": 542.14203125,
+                  "baseline": 566.14203125,
+                  "height": 29.28,
+                  "width": 530.6953125,
+                  "outline": {
+                    "x": 58.865625,
+                    "y": 549.87640625,
+                    "width": 524.4140625,
+                    "height": 20.54296875
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 571.4220312499999,
+                  "baseline": 595.4220312499999,
+                  "height": 29.28,
+                  "width": 506.19140625,
+                  "outline": {
+                    "x": 59.48671875,
+                    "y": 579.5899999999999,
+                    "width": 498.17578125,
+                    "height": 20.25
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 600.7020312499999,
+                  "baseline": 624.7020312499999,
+                  "height": 29.28,
+                  "width": 525.59765625,
+                  "outline": {
+                    "x": 59.240625,
+                    "y": 608.4364062499999,
+                    "width": 517.9453125,
+                    "height": 20.68359375
+                  }
+                },
+                {
+                  "x": 57.6,
+                  "y": 629.98203125,
+                  "baseline": 653.98203125,
+                  "height": 29.28,
+                  "width": 394.27734375,
+                  "outline": {
+                    "x": 58.7484375,
+                    "y": 638.15,
+                    "width": 391.20703125,
+                    "height": 20.25
+                  }
+                }
+              ],
+              "height": 117.25796875000003,
+              "overflow": false
+            }
+          }
+        },
+        {
+          "path": "slides.40.blocks.3.text",
+          "type": "text",
+          "box": {
+            "x": 652,
+            "y": 542.142031,
+            "width": 570.4,
+            "height": 120.12
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.40.blocks.3.text",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "text": {
+            "lines": [
+              "Oaktrail Animal Health should focus the next cycle on ",
+              "balance appointment access with staff retention while ",
+              "making the operating tradeoffs clear to veterinary care ",
+              "stakeholders."
+            ],
+            "sourceLines": [
+              {
+                "start": 0,
+                "end": 54,
+                "nextStart": 54,
+                "boundary": "soft",
+                "width": 555.03515625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 0,
+                    "end": 54,
+                    "x": 0,
+                    "width": 555.03515625
+                  }
+                ]
+              },
+              {
+                "start": 54,
+                "end": 108,
+                "nextStart": 108,
+                "boundary": "soft",
+                "width": 564.24609375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 54,
+                    "end": 108,
+                    "x": 0,
+                    "width": 564.24609375
+                  }
+                ]
+              },
+              {
+                "start": 108,
+                "end": 164,
+                "nextStart": 164,
+                "boundary": "soft",
+                "width": 560.00390625,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 108,
+                    "end": 164,
+                    "x": 0,
+                    "width": 560.00390625
+                  }
+                ]
+              },
+              {
+                "start": 164,
+                "end": 177,
+                "nextStart": 177,
+                "boundary": "end",
+                "width": 140.484375,
+                "segments": [
+                  {
+                    "kind": "text",
+                    "start": 164,
+                    "end": 177,
+                    "x": 0,
+                    "width": 140.484375
+                  }
+                ]
+              }
+            ],
+            "fontSize": 24,
+            "lineHeight": 29.28,
+            "tabSize": 4,
+            "tabWidth": 19.5,
+            "overflow": false,
+            "placement": {
+              "alignment": "left",
+              "rasterPadding": 1,
+              "lines": [
+                {
+                  "x": 652,
+                  "y": 542.14203125,
+                  "baseline": 566.14203125,
+                  "height": 29.28,
+                  "width": 555.03515625,
+                  "outline": {
+                    "x": 653.265625,
+                    "y": 549.87640625,
+                    "width": 547.11328125,
+                    "height": 20.54296875
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 571.4220312499999,
+                  "baseline": 595.4220312499999,
+                  "height": 29.28,
+                  "width": 564.24609375,
+                  "outline": {
+                    "x": 653.88671875,
+                    "y": 579.1564062499999,
+                    "width": 556.23046875,
+                    "height": 20.4609375
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 600.7020312499999,
+                  "baseline": 624.7020312499999,
+                  "height": 29.28,
+                  "width": 560.00390625,
+                  "outline": {
+                    "x": 653.88671875,
+                    "y": 608.4364062499999,
+                    "width": 551.98828125,
+                    "height": 20.68359375
+                  }
+                },
+                {
+                  "x": 652,
+                  "y": 629.98203125,
+                  "baseline": 653.98203125,
+                  "height": 29.28,
+                  "width": 140.484375,
+                  "outline": {
+                    "x": 653.1953125,
+                    "y": 638.20859375,
+                    "width": 137.3671875,
+                    "height": 16.2890625
+                  }
+                }
+              ],
+              "height": 117.12,
+              "overflow": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "deck": "batch-12",
+      "id": "s03",
+      "ordinal": 3,
+      "sourceSha256": "19673c987216c361b756d5f7c524465706e2aec098df1b89898157d526012b9a",
+      "authored": {
+        "layout": "dashboard",
+        "title": "Signal Trend",
+        "blocks": [
+          {
+            "chart": {
+              "type": "radar",
+              "data": {
+                "columns": [
+                  "Quarter",
+                  "Current",
+                  "Baseline"
+                ],
+                "rows": [
+                  [
+                    "Q1",
+                    28,
+                    25
+                  ],
+                  [
+                    "Q2",
+                    32,
+                    27
+                  ],
+                  [
+                    "Q3",
+                    35,
+                    29
+                  ],
+                  [
+                    "Q4",
+                    39,
+                    31
+                  ]
+                ]
+              }
+            }
+          }
+        ],
+        "id": "s03"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 604.8
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.2.blocks.0.chart",
+          "type": "chart",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.2.blocks.0.chart",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "deck": "batch-12",
+      "id": "s19",
+      "ordinal": 19,
+      "sourceSha256": "19673c987216c361b756d5f7c524465706e2aec098df1b89898157d526012b9a",
+      "authored": {
+        "title": "The Ask",
+        "blocks": [
+          {
+            "metric": {
+              "value": "11 days",
+              "label": "Primary signal",
+              "description": "Shorten recovery time after weather-driven network disruption",
+              "trend": "up"
+            }
+          },
+          {
+            "chart": {
+              "type": "doughnut",
+              "data": {
+                "columns": [
+                  "Quarter",
+                  "Current",
+                  "Baseline"
+                ],
+                "rows": [
+                  [
+                    "Q1",
+                    23,
+                    20
+                  ],
+                  [
+                    "Q2",
+                    27,
+                    22
+                  ],
+                  [
+                    "Q3",
+                    30,
+                    24
+                  ],
+                  [
+                    "Q4",
+                    34,
+                    26
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "table": {
+              "columns": [
+                "Workstream",
+                "Owner",
+                "Status",
+                "Decision"
+              ],
+              "rows": [
+                [
+                  "Advancement",
+                  "Program lead",
+                  "At risk",
+                  "Continue"
+                ],
+                [
+                  "Data and reporting",
+                  "Analytics",
+                  "On track",
+                  "Tighten metric definitions"
+                ],
+                [
+                  "Field adoption",
+                  "Operations",
+                  "Watch",
+                  "Add weekly office hours"
+                ]
+              ]
+            }
+          },
+          {
+            "quote": {
+              "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+              "attribution": "Corporate strategy working group",
+              "source": "Stakeholder interview"
+            }
+          }
+        ],
+        "id": "s19"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 147.48,
+        "width": 1164.8,
+        "height": 399.14
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.18.blocks.1.chart",
+          "type": "chart",
+          "box": {
+            "x": 652,
+            "y": 147.48,
+            "width": 570.4,
+            "height": 187.57
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.18.blocks.1.chart",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "chart": {
+            "layer": {
+              "rings": [
+                {
+                  "series": 0,
+                  "name": "Current",
+                  "row": 3,
+                  "rotation": -53.68
+                },
+                {
+                  "series": 1,
+                  "name": "Baseline",
+                  "row": 3,
+                  "rotation": -50.87
+                }
+              ],
+              "doughnut": {
+                "pie": {
+                  "x": 834.6606875,
+                  "y": 165.8585,
+                  "width": 150.813,
+                  "height": 150.813
+                },
+                "hole": {
+                  "cx": 910.0671875,
+                  "cy": 241.265,
+                  "r": 37.70325
+                }
+              }
+            }
+          },
+          "chartKeys": [
+            "layer"
+          ]
+        }
+      ]
+    },
+    {
+      "deck": "batch-12",
+      "id": "s30",
+      "ordinal": 30,
+      "sourceSha256": "19673c987216c361b756d5f7c524465706e2aec098df1b89898157d526012b9a",
+      "authored": {
+        "layout": "dashboard",
+        "title": "Decision Options",
+        "blocks": [
+          {
+            "chart": {
+              "type": "doughnut",
+              "data": {
+                "columns": [
+                  "Quarter",
+                  "Current",
+                  "Baseline"
+                ],
+                "rows": [
+                  [
+                    "Q1",
+                    20,
+                    17
+                  ],
+                  [
+                    "Q2",
+                    24,
+                    19
+                  ],
+                  [
+                    "Q3",
+                    27,
+                    21
+                  ],
+                  [
+                    "Q4",
+                    31,
+                    23
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "metric": {
+              "value": 11,
+              "unit": "days",
+              "delta": "-3 days",
+              "trend": "down",
+              "label": "Illustrative result"
+            }
+          }
+        ],
+        "id": "s30"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 147.48,
+        "width": 1164.8,
+        "height": 514.92
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.29.blocks.0.chart",
+          "type": "chart",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 764.336,
+            "height": 514.92
+          },
+          "textStyle": {
+            "fontFamily": "Intos",
+            "fontWeight": 400,
+            "path": "slides.29.blocks.0.chart",
+            "italic": false,
+            "fontFace": {
+              "family": "Intos",
+              "bold": false,
+              "italic": false
+            }
+          },
+          "chart": {
+            "layer": {
+              "rings": [
+                {
+                  "series": 0,
+                  "name": "Current",
+                  "row": 3,
+                  "rotation": -54.71
+                },
+                {
+                  "series": 1,
+                  "name": "Baseline",
+                  "row": 3,
+                  "rotation": -51.75
+                }
+              ],
+              "doughnut": {
+                "pie": {
+                  "x": 184.38798437500003,
+                  "y": 182.22599999999994,
+                  "width": 445.428,
+                  "height": 445.428
+                },
+                "hole": {
+                  "cx": 407.10198437500003,
+                  "cy": 404.93999999999994,
+                  "r": 111.357
+                }
+              }
+            }
+          },
+          "chartKeys": [
+            "layer"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "reason": "Preserve exact terminal/log bytes losslessly",
+  "rows": [
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/check-changed.log.gz",
+      "originalBytes": 6785,
+      "originalSha256": "6c8bf7407d94fb830697f0ebfa4dab43920f66113cd2adb4bf2fc14c3c923e7e"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/gallery-tracker-rerun.log.gz",
+      "originalBytes": 2020,
+      "originalSha256": "b18934b30235dc40b598983ee681ca4dbcb521b19ad41d783cc450b6586a1391"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/biome.log.gz",
+      "originalBytes": 681,
+      "originalSha256": "cb00a7b5e6a4e856ad9570e146f5f435c386dbdead06da5a31bf3c90b115f145"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/build.log.gz",
+      "originalBytes": 14441,
+      "originalSha256": "62f26a3b344bbb5cac10820a73f30a295e955053af91c2dd74c78cd619d0f72a"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/install.log.gz",
+      "originalBytes": 4523,
+      "originalSha256": "7dd39d4a015c5e38a040e413c9458043b71b8e92dbcc3b5278c2c5aabfc8068d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_changes.log.gz",
+      "originalBytes": 2637,
+      "originalSha256": "3d3da99ea359615230c7a274e3d9b564e6f73f522a17221374781e31369da285"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_gallery-tracker.log.gz",
+      "originalBytes": 12478,
+      "originalSha256": "51bb523b07cafca96fc44b1ab09b721cca77c4c8b4dbbcd07721f945eaacec44"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_release-report.log.gz",
+      "originalBytes": 813,
+      "originalSha256": "7fd8c25a072567c9e0d81013cf9e50d66bd75a860cffb312a4b8d8f583c0b101"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_skill-commands.log.gz",
+      "originalBytes": 1038,
+      "originalSha256": "9090905cb12675099ad44a998917bb5628de1177593821b5d848ecf7f0d5e582"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/mapped-checks/pnpm_run_check_text.log.gz",
+      "originalBytes": 1752,
+      "originalSha256": "a2f677e6cc8a368456d0d79955081dcca908daebb8ffaa805c3a7a5376d8ae87"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review-121-180/text-rerun.log.gz",
+      "originalBytes": 997,
+      "originalSha256": "4f4179a6c805daac5af672ed21389ecdb435f69e0a972b6088c59eab8d9171a2"
+    }
+  ]
+}
