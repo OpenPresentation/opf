@@ -67,3 +67,17 @@ test("MR-11: an imported package is scanned once its package.json exists, and no
   for (const target of importedPackageTargets) present.add(path.join(root, target, "package.json"));
   assert.deepEqual(activeScanTargets(root, exists), [...base, ...importedPackageTargets]);
 });
+
+// RR-110: valid ZIP evidence contains binary bytes and stored text, not repository source text.
+test("ZIP evidence is binary by signature while plain text under ZIP names stays checked", () => {
+  const bytes = Buffer.from("UEsDBBQAAAAAALy5Z10Lp6DYDgAAAA4AAAAMAAAAZXZpZGVuY2UudHh0QmFkIMOCIG1hcmtlcgpQSwECFAAUAAAAAAC8uWddC6eg2A4AAAAOAAAADAAAAAAAAAAAAAAAAAAAAAAAZXZpZGVuY2UudHh0UEsFBgAAAAABAAEAOgAAADgAAAAAAA==", "base64");
+  const original = Buffer.from(bytes);
+  assert.ok(bytes.toString("utf8").includes("\u00c2"), "stored evidence reproduces the binary-byte false positive");
+  for (const name of ["native-previews.zip", "corpus.ZIP", "archive.bin"]) assert.equal(inspectTextBytes(name, bytes).kind, "binaryArchives", name);
+  assert.deepEqual(bytes, original, "classification preserves exact archive bytes");
+  const empty = Buffer.from("504b0506000000000000000000000000000000000000", "hex");
+  assert.equal(inspectTextBytes("empty.zip", empty).kind, "binaryArchives");
+  assert.equal(inspectTextBytes("spanned.zip", Buffer.from([80, 75, 7, 8])).kind, "binaryArchives");
+  for (const name of ["fake.zip", "fake.ZIP", "fake.bin"]) assert.equal(inspectTextBytes(name, Buffer.from("Bad \u00c2 marker")).failures.length, 1, name);
+  assert.throws(() => inspectTextBytes("report.json.gz", bytes), /Expected a gzip text report/, "ZIP recognition must not bypass required gzip text decoding");
+});

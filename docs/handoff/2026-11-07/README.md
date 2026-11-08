@@ -1,3 +1,5 @@
+Current continuation: [2026-11-08 release recovery and next steps](../2026-11-08/README.md). The original rules and evidence below remain historical context.
+
 # Handoff of 2026-11-07: v0.33.0 and v0.34.0
 
 This is the entry point for whoever continues this work. A supervisor session coordinated about a dozen agents on 2026-11-07 while the owner was away. All of their work is on GitHub: in open PRs, on pushed branches, in the evidence branch `handoff/review-sheets-2026-11-07`, and in this folder. Nothing exists only on the old machine. Start with [KICKOFF.md](KICKOFF.md), which is the one prompt to give the next agent.
@@ -120,7 +122,12 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - Whether to promote LibreOffice from "experimental" (RR-106; the results are in `docs/programs/release-readiness/qualification-0.33-libreoffice.md`, on #1084).
 - Every entry in [decisions.md](decisions.md) is vetoable.
 
+- Golden workflow continuation: [RR-108](rr108-template-goldens.md) covers core composition and renderer templates in the pinned environment; final v0.34 batch and visual review remain owed.
 SH-23 isolated qualification: [source scope, five native ninth-node save/reopen passes and remaining integration gate](sh23-qualified.md). Unfinished SH20–22 work stays on its separate continuation branch.
+- Inverted pyramid continuation: [SH-24](sh24-inverted-pyramid.md), issue #1128; accepted frozen source8bd560e4 is merged into the continuation; native acceptance is recorded, integration gates still owed.
+
+- v0.33 integration #1133 merged at7c0c3f13e9de77e038b6ec26183043eb7fe90822 after exact-head native and required-all CI acceptance. Release dry-run42456530874 and main verification are active; publication and site updates remain owed. [Gate correction](fullci-gate.md).
+
+- Evidence checker continuation: [RR-110](rr110-zip-text.md) recognizes ZIP archive signatures while keeping source text and named gzip reports checked.
 
 SH-21 continuation: [measured geometry, engines, final40 catalog/sampler; native qualification still owed](sh21-measured-wiring.md).
-- Inverted pyramid continuation: [SH-24](sh24-inverted-pyramid.md), issue #1128; accepted frozen source8bd560e4 is merged into the continuation; native acceptance is recorded, integration gates still owed.

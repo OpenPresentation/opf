@@ -887,7 +887,10 @@ function renderImageBlock(item, bound, options) {
   if (!image) throw new OPFRenderError("missing-image-geometry", "Image rendering requires a coordinated core build with image block geometry (ComposedItem.image).", { path: item.path });
   const picture = renderImage(item, image.box, bound, { ...options, imageFit: image.fit, imageFocus: image.focus, imagePicture: image.picture });
   const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
-  if (isImagePlaceholder(picture)) return Object.keys(trace).length ? tag("g", trace, picture) : picture;
+  const labels = (image.callouts ?? []).map(callout => tag('g', options.trace ? {'data-opf-image-callout': callout.path} : {},
+    tag('rect', {x: callout.box.x, y: callout.box.y, width: callout.box.width, height: callout.box.height, fill: bound.design.colors.background}) +
+    renderTextBox(callout.text, callout.textBox, bound, {path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, fill: bound.design.colors.text, align: 'center', diagnosticsHandled: true, options}))).join('');
+  if (isImagePlaceholder(picture)) return labels || Object.keys(trace).length ? tag('g', trace, picture + labels) : picture;
   const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
   // A sketched stroke (core stroke.sketched) clips the picture to its sketched outline, as PowerPoint draws it.
   const sketched = image.stroke?.sketched?.fills[0];
@@ -905,6 +908,7 @@ function renderImageBlock(item, bound, options) {
     children.push(stroke.elements);
   }
   if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
+  if (labels) children.push(labels);
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
   return tag("g", trace, children.filter(Boolean).join(""));
 }

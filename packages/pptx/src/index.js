@@ -1,5 +1,5 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
-import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, planNativeBody} from './native-body.js';
+import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, nativeTitleWrapBox, planNativeBody} from './native-body.js';
 import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './numbered-list.js';
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
@@ -35,6 +35,7 @@ import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
+import {attachImageCalloutTags,importImageCallouts} from './image-callout-provenance.js';
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, staticDateFallback, stampFurnitureImageKeys} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
@@ -333,6 +334,7 @@ export async function toPptx(input, options = {}) {
   // opf-pptx#221: the placeholder panels written as one native group, and the OPF_IMAGE_PLACEHOLDER_V1 records of image blocks.
   context.imagePlaceholderGroups = new Set();
   context.imagePlaceholderTags = new Map();
+  context.imageCalloutTags = new Map();
   context.tableHeaders = new Map();
   context.tableCells = new Map();
   // FA-23: every exported image picture (image blocks, the alt-text form of an image background, timeline pictures) and
@@ -1066,6 +1068,9 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     }
   }
   if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
+  const callouts = importImageCallouts({shapes: nativeContext.shapes, paragraphs: nativeContext.paragraphs, pictures: nativeContext.pictures, relationships, entries, validPictures: images.blocks, report: diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.image.callouts`})});
+  for (const index of callouts.consumed) images.consumedShapes.add(index);
+  nativeContext.imageCallouts = callouts.values;
   nativeContext.imageBlocks = images.blocks;
   nativeContext.imageSources = images.sources;
   nativeContext.imagePictures = images.consumed;
@@ -1404,6 +1409,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item?.payload && treatment) item.payload = {...item.payload, ...structuredClone(treatment), ...(nativeContext.imageSources?.has(index) ? {image: {...item.payload.image, src: nativeContext.imageSources.get(index)}} : {})};
     else if (item?.nativeStretch) { item.payload.fit='stretch'; item.inferredStretch=true; }
     else if (item?.nativeFitUnsupported) report({code:'unsupported-image-fit',message:'Native picture tiling or an offset stretch fill is not represented by the imported image block; review the reflowed image.'});
+    if (item?.payload && nativeContext.imageCallouts?.has(index)) item.payload.image = {...item.payload.image, callouts: nativeContext.imageCallouts.get(index)};
     if (item) items.push({...item, sources: [`pic:${index}`]});
   }
 
@@ -2670,7 +2676,15 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       ? geometry.regions?.find(region => region.name === item.region && region.flow === 'none' && region.content?.length === 1 && !region.overflow?.length) : undefined;
     // RR-88: under bodyText 'native' a plain-string title that wraps is one native text box (native wrap, no autofit) at its measured
     // block, so it can bind to the Title placeholder like a one-line title (Keynote reports `title showing` only for a bound title).
-    const nativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
+    const wantsNativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
+    const titleFace = wantsNativeTitle ? nativeFontOptions(item.textStyle) : undefined;
+    const nativeTitle = wantsNativeTitle ? nativeTitleWrapBox(item, geometry, options.textMeasurement, {
+      nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true},
+      report: reason => options.onDiagnostic?.({
+      code: 'native-body-fallback', path: item.path, reason,
+      message: reason === 'font-metrics' ? 'Native title export uses a visual font substitute for measurement, so native line breaks cannot be verified; the authored font and size were retained as measured lines.'
+        : 'Native title export cannot preserve the measured line breaks with a wrap margin inside its title area; the measured lines were exported.'
+    })}) : undefined;
     if ((template || context.automaticSlides[slideIndex]) && item.field === 'title' && typeof item.value === 'string' && (item.text?.lines?.length === 1 || nativeTitle) && !item.text.overflow && !item.text.richLines)
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
@@ -2711,7 +2725,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
         fill:paint(surface),line:{...paint(itemContext.roles.neutrals?.cardBorder?.hex??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${owner.path}`});
     }
     if (nativeTitle) {
-      addNativeTitle(slide, item, itemContext, options, context);
+      addNativeTitle(slide, item, itemContext, options, context, nativeTitle);
     } else if (nativePlans.some(plan => plan.item === item)) {
       // RR-88: the first native body is the Body placeholder; every further one is an ordinary native text box at its region.
       const plan = nativePlans.find(plan => plan.item === item);
@@ -3276,10 +3290,29 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
       const fields = Object.fromEntries(IMAGE_TREATMENT_KEYS.filter(key => block[key] !== undefined).map(key => [key, structuredClone(block[key])]));
       context.imagePlaceholderTags.set(panel, {v: 1, slide: `slides.${slideIndex}`, path: item.path, image: structuredClone(item.value), ...(Object.keys(fields).length ? {treatment: fields} : {})});
     }
+    // Unavailable pixels have no trustworthy native picture owner. Keep labels as ordinary editable text, without stale source restoration.
+    const recorded = context.imagePlaceholderTags.get(panel);
+    if (recorded?.image && typeof recorded.image === 'object') delete recorded.image.callouts;
+    addImageCalloutItems(slide, item, undefined, context, options);
     return panel;
   }
   if (image.overlay) addImageOverlay(slide, image.overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
+  addImageCalloutItems(slide, item, name, context, options);
   return name;
+}
+
+// Text panels are independent native rectangles and measured line boxes, painted above the picture mask/overlay.
+function addImageCalloutItems(slide, item, owner, context, options) {
+  for (const [index, callout] of (item.image.callouts ?? []).entries()) {
+    const objectName = `OPF image callout ${owner ?? item.path} ${index}`;
+    const box = callout.box;
+    slide.addShape('rect', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, fill: {color: pptxColor(context.colors.background)}, line: {transparency: 100}, objectName});
+    if (owner) {
+      const source = item.value.callouts[index];
+      context.imageCalloutTags.set(objectName, {v: 1, owner, index, total: item.image.callouts.length, role: 'panel', frame: {x: source.x, y: source.y, width: source.width, height: source.height}, lines: callout.fit.lines.length});
+    }
+    addMeasuredPayloadText(slide, callout.text, callout.textBox, context, options, {color: context.colors.text, path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, align: 'center', keepEmpty: true, diagnosticsHandled: true, objectName, ...(owner ? {imageCallout: {owner, index}} : {})});
+  }
 }
 
 // The palette a diagram is painted in: core's diagramPalette from the slide's resolved design, with the inputs opf-render's
@@ -4056,8 +4089,8 @@ function isNativeTitle(item) {
 // RR-88: the wrapped title as one native text box: the whole string, native wrap, no autofit, at the block its measured lines fill
 // (top of the first line to the bottom of the last), with the measured line pitch as exact spacing. Tagged as one heading line,
 // so import reads the current words as the title. The caller binds it to the Title placeholder.
-function addNativeTitle(slide, item, context, options, deckContext) {
-  const fit = item.text, box = item.box, lines = fit.placement?.lines;
+function addNativeTitle(slide, item, context, options, deckContext, wrap) {
+  const fit = item.text, box = {...item.box, x: wrap.x, width: wrap.width}, lines = fit.placement?.lines;
   const tops = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize : box.y + index * fit.lineHeight);
   const bottoms = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize + lines[index].height : box.y + (index + 1) * fit.lineHeight);
   const top = Math.min(...tops), height = Math.max(...bottoms) - top;
@@ -4094,7 +4127,8 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
     const headingLine=(config.headingLines?.offset??0)+index,headingBoundary=config.headingLines?.join&&index===fit.lines.length-1?config.headingLines.join:boundary;
     const objectName=config.heading?`OPF heading ${config.path} line ${headingLine}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
-    if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
+    if(config.imageCallout)context.imageCalloutTags.set(objectName,{v:1,...config.imageCallout,role:'text',line:index,count:fit.lines.length,...boundary});
+    else if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
     else if(config.quote)context.quoteTags.set(objectName,{v:1,role:'text',group:config.quote.group,part:config.quote.part,line:index,count:fit.lines.length,...boundary,...(config.quote.part===0&&index===0?{anchor:config.quote.anchor}:{})});
     else if(config.furniture){
@@ -5373,6 +5407,7 @@ async function normalizePptxZip(raw, context) {
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
+  attachImageCalloutTags(entries,context.imageCalloutTags);
   attachChartMarkTags(entries,context.chartMarkTags);
   attachStepTags(entries,context.stepTags);
   // SH-09: the trapezoids' adjustments, the arrangement shapes' tags, then each tagged SmartArt placeholder becomes its frame and parts.
