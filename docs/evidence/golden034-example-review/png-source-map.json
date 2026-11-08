@@ -1,0 +1,253 @@
+{
+  "authority": "Artifact index.html, not diff.changedSlides array ordering",
+  "rows": [
+    {
+      "png": "0000.png",
+      "source": "gallery/design-and-media/data-story-academy-corporate-programs.opf.json#2"
+    },
+    {
+      "png": "0001.png",
+      "source": "technical/chart-point-overlays.opf.json#0"
+    },
+    {
+      "png": "0002.png",
+      "source": "technical/chart-point-overlays.opf.json#1"
+    },
+    {
+      "png": "0003.png",
+      "source": "technical/chart-point-overlays.opf.json#2"
+    },
+    {
+      "png": "0004.png",
+      "source": "technical/columns.opf.json#0"
+    },
+    {
+      "png": "0005.png",
+      "source": "technical/columns.opf.json#1"
+    },
+    {
+      "png": "0006.png",
+      "source": "technical/dot-diagrams.opf.json#0"
+    },
+    {
+      "png": "0007.png",
+      "source": "technical/dot-diagrams.opf.json#1"
+    },
+    {
+      "png": "0008.png",
+      "source": "technical/dot-diagrams.opf.json#2"
+    },
+    {
+      "png": "0009.png",
+      "source": "technical/dot-diagrams.opf.json#3"
+    },
+    {
+      "png": "0010.png",
+      "source": "technical/dot-diagrams.opf.json#4"
+    },
+    {
+      "png": "0011.png",
+      "source": "technical/duration-timeline.opf.json#0"
+    },
+    {
+      "png": "0012.png",
+      "source": "technical/dynamic-composition.opf.json#2"
+    },
+    {
+      "png": "0013.png",
+      "source": "technical/grid-spans.opf.json#0"
+    },
+    {
+      "png": "0014.png",
+      "source": "technical/grid-spans.opf.json#1"
+    },
+    {
+      "png": "0015.png",
+      "source": "technical/image-callouts.opf.json#0"
+    },
+    {
+      "png": "0016.png",
+      "source": "technical/inverted-pyramids.opf.json#0"
+    },
+    {
+      "png": "0017.png",
+      "source": "technical/inverted-pyramids.opf.json#1"
+    },
+    {
+      "png": "0018.png",
+      "source": "technical/inverted-pyramids.opf.json#2"
+    },
+    {
+      "png": "0019.png",
+      "source": "technical/layout-sampler.opf.json#0"
+    },
+    {
+      "png": "0020.png",
+      "source": "technical/layout-sampler.opf.json#1"
+    },
+    {
+      "png": "0021.png",
+      "source": "technical/layout-sampler.opf.json#2"
+    },
+    {
+      "png": "0022.png",
+      "source": "technical/layout-sampler.opf.json#3"
+    },
+    {
+      "png": "0023.png",
+      "source": "technical/layout-sampler.opf.json#4"
+    },
+    {
+      "png": "0024.png",
+      "source": "technical/layout-sampler.opf.json#5"
+    },
+    {
+      "png": "0025.png",
+      "source": "technical/layout-sampler.opf.json#13"
+    },
+    {
+      "png": "0026.png",
+      "source": "technical/layout-sampler.opf.json#17"
+    },
+    {
+      "png": "0027.png",
+      "source": "technical/layout-sampler.opf.json#36"
+    },
+    {
+      "png": "0028.png",
+      "source": "technical/layout-sampler.opf.json#42"
+    },
+    {
+      "png": "0029.png",
+      "source": "technical/layout-sampler.opf.json#45"
+    },
+    {
+      "png": "0030.png",
+      "source": "technical/layout-sampler.opf.json#47"
+    },
+    {
+      "png": "0031.png",
+      "source": "technical/layout-sampler.opf.json#49"
+    },
+    {
+      "png": "0032.png",
+      "source": "technical/layout-sampler.opf.json#50"
+    },
+    {
+      "png": "0033.png",
+      "source": "technical/layout-sampler.opf.json#51"
+    },
+    {
+      "png": "0034.png",
+      "source": "technical/layout-sampler.opf.json#52"
+    },
+    {
+      "png": "0035.png",
+      "source": "technical/localized-chart-references.opf.json#0"
+    },
+    {
+      "png": "0036.png",
+      "source": "technical/localized-chart-references.opf.json#1"
+    },
+    {
+      "png": "0037.png",
+      "source": "technical/localized-chart-references.opf.json#2"
+    },
+    {
+      "png": "0038.png",
+      "source": "technical/localized-chart-references.opf.json#3"
+    },
+    {
+      "png": "0039.png",
+      "source": "technical/localized-chart-references.opf.json#4"
+    },
+    {
+      "png": "0040.png",
+      "source": "technical/localized-chart-references.opf.json#5"
+    },
+    {
+      "png": "0041.png",
+      "source": "technical/localized-chart-references.opf.json#6"
+    },
+    {
+      "png": "0042.png",
+      "source": "technical/localized-timeline.opf.json#0"
+    },
+    {
+      "png": "0043.png",
+      "source": "technical/multilingual-slides.opf.json#0"
+    },
+    {
+      "png": "0044.png",
+      "source": "technical/multilingual-slides.opf.json#1"
+    },
+    {
+      "png": "0045.png",
+      "source": "technical/multilingual-slides.opf.json#2"
+    },
+    {
+      "png": "0046.png",
+      "source": "technical/multilingual-slides.opf.json#3"
+    },
+    {
+      "png": "0047.png",
+      "source": "technical/plantuml-diagrams.opf.json#0"
+    },
+    {
+      "png": "0048.png",
+      "source": "technical/plantuml-diagrams.opf.json#1"
+    },
+    {
+      "png": "0049.png",
+      "source": "technical/plantuml-diagrams.opf.json#2"
+    },
+    {
+      "png": "0050.png",
+      "source": "technical/plantuml-diagrams.opf.json#3"
+    },
+    {
+      "png": "0051.png",
+      "source": "technical/plantuml-diagrams.opf.json#4"
+    },
+    {
+      "png": "0052.png",
+      "source": "technical/plantuml-diagrams.opf.json#5"
+    },
+    {
+      "png": "0053.png",
+      "source": "technical/plantuml-diagrams.opf.json#6"
+    },
+    {
+      "png": "0054.png",
+      "source": "technical/plantuml-diagrams.opf.json#7"
+    },
+    {
+      "png": "0055.png",
+      "source": "technical/promoted-region-grid.opf.json#0"
+    },
+    {
+      "png": "0056.png",
+      "source": "technical/rows-chart.opf.json#1"
+    },
+    {
+      "png": "0057.png",
+      "source": "technical/shape-overlays.opf.json#4"
+    },
+    {
+      "png": "0058.png",
+      "source": "technical/slide-sections.opf.json#2"
+    },
+    {
+      "png": "0059.png",
+      "source": "technical/trees-and-sets.opf.json#0"
+    },
+    {
+      "png": "0060.png",
+      "source": "technical/trees-and-sets.opf.json#1"
+    },
+    {
+      "png": "0061.png",
+      "source": "technical/trees-and-sets.opf.json#2"
+    }
+  ]
+}

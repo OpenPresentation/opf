@@ -1,0 +1,90 @@
+{
+  "file": "examples/technical/localized-chart-references.opf.json",
+  "rawLanguage": "en-US",
+  "bundledLanguage": "en-US",
+  "rawFrench": {
+    "id": "fr-FR",
+    "title": "Depuis 2023, la ponctualité dépasse quatre-vingt-douze pour cent",
+    "language": "fr-FR",
+    "chart": {
+      "type": "line",
+      "data": {
+        "columns": [
+          "Année",
+          {
+            "name": "Ponctualité",
+            "format": "0.0%"
+          }
+        ],
+        "rows": [
+          [
+            "2021",
+            0.934
+          ],
+          [
+            "2022",
+            0.941
+          ],
+          [
+            "2023",
+            0.928
+          ],
+          [
+            "2024",
+            0.952
+          ],
+          [
+            "2025",
+            0.961
+          ]
+        ]
+      }
+    }
+  },
+  "bundleFrench": {
+    "id": "fr-FR",
+    "title": "Depuis 2023, la ponctualité dépasse quatre-vingt-douze pour cent",
+    "language": "fr-FR",
+    "chart": {
+      "type": "line",
+      "data": {
+        "columns": [
+          "Année",
+          {
+            "name": "Ponctualité",
+            "format": "0.0%"
+          }
+        ],
+        "rows": [
+          [
+            "2021",
+            0.934
+          ],
+          [
+            "2022",
+            0.941
+          ],
+          [
+            "2023",
+            0.928
+          ],
+          [
+            "2024",
+            0.952
+          ],
+          [
+            "2025",
+            0.961
+          ]
+        ]
+      }
+    }
+  }
+}
+{"slide":1,"rawSvgSha":"fae46caad076d6a5ddd046fe4d652b4a5d64b43b854c11a25d208676ebc149b8","bundleSvgSha":"fae46caad076d6a5ddd046fe4d652b4a5d64b43b854c11a25d208676ebc149b8","pngExact":true,"targetLabel":true,"bundleTargetLabel":true}
+{"slide":2,"rawSvgSha":"b7256b9f6872a2b1d7ecbe718740d8fa22ab4f9466a0ae0de3a1af5c2a18b909","bundleSvgSha":"b7256b9f6872a2b1d7ecbe718740d8fa22ab4f9466a0ae0de3a1af5c2a18b909","pngExact":true,"targetLabel":true,"bundleTargetLabel":true}
+{"slide":3,"rawSvgSha":"aaa16953cee4dbdae84d809fb7d36bb3801b5eed8de3929aabe465f57b23fa93","bundleSvgSha":"aaa16953cee4dbdae84d809fb7d36bb3801b5eed8de3929aabe465f57b23fa93","pngExact":true,"targetLabel":true,"bundleTargetLabel":true}
+{"slide":4,"rawSvgSha":"35bb41c2c07a912e54d3a5ee5b8f16a5a404496d379d66623cc32a19c9c3228f","bundleSvgSha":"35bb41c2c07a912e54d3a5ee5b8f16a5a404496d379d66623cc32a19c9c3228f","pngExact":true,"targetLabel":true,"bundleTargetLabel":true}
+{"slide":5,"rawSvgSha":"9279b4cef423e3d0afc91e3c41e45a2115c56bc0fffc635cef9ffd464d5ed29f","bundleSvgSha":"9279b4cef423e3d0afc91e3c41e45a2115c56bc0fffc635cef9ffd464d5ed29f","pngExact":true,"targetLabel":true,"bundleTargetLabel":true}
+{"slide":6,"rawSvgSha":"b3778cbcec6c3729eec2d3354c9e690601c7bb3521b88d2a9be519b12605ab61","bundleSvgSha":"b3778cbcec6c3729eec2d3354c9e690601c7bb3521b88d2a9be519b12605ab61","pngExact":true,"targetLabel":true,"bundleTargetLabel":true}
+{"slide":7,"rawSvgSha":"63ba65b134b20dade50c30325bf9f668eaa9ec21c7e2da4d33c5a80d12631204","bundleSvgSha":"63ba65b134b20dade50c30325bf9f668eaa9ec21c7e2da4d33c5a80d12631204","pngExact":true,"targetLabel":true,"bundleTargetLabel":true}

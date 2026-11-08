@@ -1,0 +1,133 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\integration-034\\examples\\technical\\localized-chart-references.opf.json",
+    "sha256": "87ad9b20fd6e05865a9db4f0482ddf4f2a681bfa74673c50e30e36faad8a2b29",
+    "bytes": 9122
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\golden034-french-probe-01\\slide-1.png",
+      "sha256": "bc99754c913305974c46a1746781f0f2f2ca136be612c4edf8e9030484d25e72",
+      "bytes": 8810,
+      "mediaType": "image/png",
+      "slide": 1,
+      "id": "en-US",
+      "width": 320,
+      "height": 180
+    },
+    {
+      "file": "C:\\opf-work\\golden034-french-probe-01\\slide-2.png",
+      "sha256": "88ba725ebb555c19d191bc8a37dd9f1b2da60fde3a96c6df0941b8741c83389d",
+      "bytes": 9152,
+      "mediaType": "image/png",
+      "slide": 2,
+      "id": "de-DE",
+      "width": 320,
+      "height": 180
+    },
+    {
+      "file": "C:\\opf-work\\golden034-french-probe-01\\slide-3.png",
+      "sha256": "909b86264137a3705f6893832951191befff25acd62887032e59677142eb3588",
+      "bytes": 9268,
+      "mediaType": "image/png",
+      "slide": 3,
+      "id": "fr-FR",
+      "width": 320,
+      "height": 180
+    },
+    {
+      "file": "C:\\opf-work\\golden034-french-probe-01\\slide-4.png",
+      "sha256": "044b0338457c270d1585a835cac349a7d4fa39ca439e71b3c5784d499393c95f",
+      "bytes": 8866,
+      "mediaType": "image/png",
+      "slide": 4,
+      "id": "es-ES",
+      "width": 320,
+      "height": 180
+    },
+    {
+      "file": "C:\\opf-work\\golden034-french-probe-01\\slide-5.png",
+      "sha256": "f0c04e3c50b59127e97b1461bef1abf11296b0097898639dc45dc225c5753834",
+      "bytes": 7531,
+      "mediaType": "image/png",
+      "slide": 5,
+      "id": "it-IT",
+      "width": 320,
+      "height": 180
+    },
+    {
+      "file": "C:\\opf-work\\golden034-french-probe-01\\slide-6.png",
+      "sha256": "921b6ef0a7bab86e0056854362904b715d0b74d593aa9ce25e5a52253e30a633",
+      "bytes": 8941,
+      "mediaType": "image/png",
+      "slide": 6,
+      "id": "pt-PT",
+      "width": 320,
+      "height": 180
+    },
+    {
+      "file": "C:\\opf-work\\golden034-french-probe-01\\slide-7.png",
+      "sha256": "e73ac6db21815a179b9ee8bf888f071885d3f9d499b712daa0f419615ae7dd93",
+      "bytes": 9194,
+      "mediaType": "image/png",
+      "slide": 7,
+      "id": "nl-NL",
+      "width": 320,
+      "height": 180
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.33.0"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Arial Black",
+        "resolved": "Montserrat",
+        "compatibility": "visual"
+      },
+      {
+        "requested": "Arial",
+        "resolved": "Arimo",
+        "compatibility": "metric"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

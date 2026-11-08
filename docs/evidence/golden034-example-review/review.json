@@ -1,0 +1,887 @@
+{
+  "run": 42498350968,
+  "generatedCommit": "348fd323b31302b5a3cdd7af2db8bb8bf6fffa2a",
+  "renderSource": "545067d7be36df86b82be9c38b324ddf1bb2e887",
+  "authority": "PNG/source association from actual index.html captions; diff.changedSlides ordering differs and was rejected before recording these attributions.",
+  "scope": "Quarter-scale actual raster review, not full-size font/native fidelity. Separate template49 reading-measure blockers remain; not a whole-release acceptance.",
+  "recorded": "2026-11-08T17:00:48.510Z",
+  "complete": true,
+  "total": 62,
+  "viewed": 62,
+  "rows": [
+    {
+      "index": 0,
+      "png": "0000.png",
+      "source": "gallery/design-and-media/data-story-academy-corporate-programs.opf.json#2",
+      "sha256": "4960682d9b0faf7e1904452a0f0af896a62bb034402f6de56a2c4221e0b3613e",
+      "bytes": 14235,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Academy chart/callouts retain all labels and current shared scale; native chart correction proof is separate."
+    },
+    {
+      "index": 1,
+      "png": "0001.png",
+      "source": "technical/chart-point-overlays.opf.json#0",
+      "sha256": "29ccce1c97801d827811c07dbe1f43d6f11aea3904d2d39a78db49e0215b3290",
+      "bytes": 5946,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Value-following circle is aligned to the final bar value; no missing chart label or clipping observed."
+    },
+    {
+      "index": 2,
+      "png": "0002.png",
+      "source": "technical/chart-point-overlays.opf.json#1",
+      "sha256": "28de6033dff96ae54d671ab631fb3a873a60bc10c736ecc2a71dd44c0359f142",
+      "bytes": 4192,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Scatter numeric marker and point positions are visible; exact point/native proof remains authoritative."
+    },
+    {
+      "index": 3,
+      "png": "0003.png",
+      "source": "technical/chart-point-overlays.opf.json#2",
+      "sha256": "d1eade529b8555261a19232ece479fabe66d4687c1ff5ddf7df6463a44c732f8",
+      "bytes": 7815,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Pie outer-arc marker and all three categories remain; no clipped circle or lost legend observed."
+    },
+    {
+      "index": 4,
+      "png": "0004.png",
+      "source": "technical/columns.opf.json#0",
+      "sha256": "31b24dc2f944ee176091c467ccadd8aeb2567666453ef8f29acd61b1d9e4e798",
+      "bytes": 7666,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Explicit grid spans retain Signal tile and all three bullets; authored placement constrains the body."
+    },
+    {
+      "index": 5,
+      "png": "0005.png",
+      "source": "technical/columns.opf.json#1",
+      "sha256": "bbe0c517c47b059ff9b3eba2788816c20001086e9b37a121d0da5d319d3c9991",
+      "bytes": 9602,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Explicit grid spans retain the two large readable body roles and complete words; no new automatic layout claim."
+    },
+    {
+      "index": 6,
+      "png": "0006.png",
+      "source": "technical/dot-diagrams.opf.json#0",
+      "sha256": "715cd3e795fe2648d3ac5338cc68d30e9f04cdc556ece0d45b843172bd89af39",
+      "bytes": 8090,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "DOT pipeline topology, loop and decision labels remain; wide chain uses body width while preserving aspect."
+    },
+    {
+      "index": 7,
+      "png": "0007.png",
+      "source": "technical/dot-diagrams.opf.json#1",
+      "sha256": "ed29c6ad05c6bd58cfafab665f24ac8b42465651ea237634f4657026050be675",
+      "bytes": 12707,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "DOT teams/API fan-in and complete left bullet list remain; no missing nodes or labels observed."
+    },
+    {
+      "index": 8,
+      "png": "0008.png",
+      "source": "technical/dot-diagrams.opf.json#2",
+      "sha256": "26f5b2139a2bbaa7dcb7e9c81762f251ae15540179a034bf829f480b2707b71e",
+      "bytes": 9062,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "DOT gateway/auth/validator/store topology and edge labels retained."
+    },
+    {
+      "index": 9,
+      "png": "0009.png",
+      "source": "technical/dot-diagrams.opf.json#3",
+      "sha256": "740764e7820e09eed45cf6454b05ad58ba1f8673c2fc16f2270d8ce386a92c96",
+      "bytes": 10013,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "DOT state graph retains Draft/Review/Published, loop labels and double-circle; authored dark1/forest-green has subdued outlines at quarter scale, a design observation rather than a proven new defect."
+    },
+    {
+      "index": 10,
+      "png": "0010.png",
+      "source": "technical/dot-diagrams.opf.json#4",
+      "sha256": "c0ab78fae59932734f5bd941a5b8c37f57f8736861d66b472e615814acd1ce91",
+      "bytes": 6949,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "DOT decision yes/no edges, diamond and both endpoints remain visible."
+    },
+    {
+      "index": 11,
+      "png": "0011.png",
+      "source": "technical/duration-timeline.opf.json#0",
+      "sha256": "24ffad89d20b9871f28bc2dc00429b7cd25ae12ed8a101a1782dbef1da252cf6",
+      "bytes": 12569,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Duration timeline uses Week1/Weeks2-5/Week6 spans and all notes; actual native date/font evidence is separate."
+    },
+    {
+      "index": 12,
+      "png": "0012.png",
+      "source": "technical/dynamic-composition.opf.json#2",
+      "sha256": "a683d28dca98460760a2e5d8022be0667f4eaca82520808ab36c57249c180d12",
+      "bytes": 9747,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Promoted rows retain First/Then/Finally emphasis, separate positions and full text."
+    },
+    {
+      "index": 13,
+      "png": "0013.png",
+      "source": "technical/grid-spans.opf.json#0",
+      "sha256": "0e0853def7e7e4e9dfe0ed59ad27e885c03e9a7b9b0529a0c40f883383b752ec",
+      "bytes": 6050,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Explicit grid-span Inputs/Processing header roles and three left bullets remain; unused authored slot is not inferred as content loss."
+    },
+    {
+      "index": 14,
+      "png": "0014.png",
+      "source": "technical/grid-spans.opf.json#1",
+      "sha256": "09af98b2acc6c3d15cee8921abcbde6c03288a4a93f2b2e71ca8952c159cc21f",
+      "bytes": 8583,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Explicit three team cards and full-width lower bullet slot remain; original image was viewed before source-caption attribution was corrected."
+    },
+    {
+      "index": 15,
+      "png": "0015.png",
+      "source": "technical/image-callouts.opf.json#0",
+      "sha256": "e0d4f955b55866393984f335091a0b780eb7e9c7b3946cfe4a09fb4f18ea3a2e",
+      "bytes": 10938,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Image callouts retain Red zone/Blue zone/Inspection point labels and filled image; native editable callout proof is separate."
+    },
+    {
+      "index": 16,
+      "png": "0016.png",
+      "source": "technical/inverted-pyramids.opf.json#0",
+      "sha256": "4eb4f47eb974442c057cdb134757e25a45d4dff2c5b4a893b22082f8b36af0bc",
+      "bytes": 7530,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Short inverted pyramid retains four ordered widths and all four labels; actual native inverted-pyramid qualification is separate."
+    },
+    {
+      "index": 17,
+      "png": "0017.png",
+      "source": "technical/inverted-pyramids.opf.json#1",
+      "sha256": "2ac80db893e728a2d75512e1579e716236e2facfe44b172325e1c220d7158db3",
+      "bytes": 11859,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Long inverted-pyramid labels wrap at retained type, all four ordered stages remain and no clipping is visible."
+    },
+    {
+      "index": 18,
+      "png": "0018.png",
+      "source": "technical/inverted-pyramids.opf.json#2",
+      "sha256": "dea05ae3316e7ab5edcf375842aaa658abcaeda956f523ad6e0352df7d523efd",
+      "bytes": 10915,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Described pyramid keeps every stage and all eight paired bullets; no labels are inferred from a truncated view."
+    },
+    {
+      "index": 19,
+      "png": "0019.png",
+      "source": "technical/layout-sampler.opf.json#0",
+      "sha256": "5921c963a04fc467035924dcfbec692f4f4a250a8df652998d71950a49ba5060",
+      "bytes": 5951,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Cover retains full landscape, complete two-line title and subtitle; intentional cover whitespace is distinct from body fallback defects."
+    },
+    {
+      "index": 20,
+      "png": "0020.png",
+      "source": "technical/layout-sampler.opf.json#1",
+      "sha256": "c60f0b654e61e505ac4649f80d7c1bcffdf5eefb5523f9cc7185d2cc798d848c",
+      "bytes": 3805,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Section divider retains bottom title/subtitle and full accent background; native font/geometry proof retained separately."
+    },
+    {
+      "index": 21,
+      "png": "0021.png",
+      "source": "technical/layout-sampler.opf.json#2",
+      "sha256": "3c62f2b579a772e484cf53325ccc285828de7c01d8e0ee9377e2f7c734fcf4c5",
+      "bytes": 8092,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Explicit agenda retains three numbered entries and footer; compact authored layout is not inferred as a new automatic-fill defect."
+    },
+    {
+      "index": 22,
+      "png": "0022.png",
+      "source": "technical/layout-sampler.opf.json#3",
+      "sha256": "facd0a0ee778a78b8eb233311df548cd936455553bc3a96744882f06f3f2a7d3",
+      "bytes": 7328,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Explicit split agenda retains large left title and all three right entries with complete words."
+    },
+    {
+      "index": 23,
+      "png": "0023.png",
+      "source": "technical/layout-sampler.opf.json#4",
+      "sha256": "f2bdac3eabfd4d0425e473e5ec695719a8e97b23d31d18aaf98c9a41531c0e5f",
+      "bytes": 6579,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Statement retains two-line message, supporting line and footer over accent background."
+    },
+    {
+      "index": 24,
+      "png": "0024.png",
+      "source": "technical/layout-sampler.opf.json#5",
+      "sha256": "19f445a39d9bb70b8dbf56ed4e979f6145bc180193c6a06c7e62593e8152dcf1",
+      "bytes": 6775,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Closing retains complete two-line decision and next-step line on dark background."
+    },
+    {
+      "index": 25,
+      "png": "0025.png",
+      "source": "technical/layout-sampler.opf.json#13",
+      "sha256": "bc431fc7b2cb50b0ed308639ec1826a268fb50bf1409ea096a7fc58a1ba221bd",
+      "bytes": 13974,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Three-step timeline retains all numbered stages, descriptions and ordering; no clipped notes observed."
+    },
+    {
+      "index": 26,
+      "png": "0026.png",
+      "source": "technical/layout-sampler.opf.json#17",
+      "sha256": "9e445a1ce5b040cbfdc3f065dd564d857673e9b063955cd7595b5179d77b725e",
+      "bytes": 8726,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Three metric cards keep values, unit, labels and targets; numbers remain the dominant body role."
+    },
+    {
+      "index": 27,
+      "png": "0027.png",
+      "source": "technical/layout-sampler.opf.json#36",
+      "sha256": "61129e15e25cb36c066b779a634032dd8207890503430dc43200b4af861184c0",
+      "bytes": 13949,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Weighted two-column recommendation retains both complete paragraphs with whole-word wrapping."
+    },
+    {
+      "index": 28,
+      "png": "0028.png",
+      "source": "technical/layout-sampler.opf.json#42",
+      "sha256": "fe9b9bdaa50ccc456444f5bf8cdcec99a8b89d367617a63c7eee34317b56351d",
+      "bytes": 10339,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Pilot request keeps left prose and all three right bullets; no content loss or clipping observed."
+    },
+    {
+      "index": 29,
+      "png": "0029.png",
+      "source": "technical/layout-sampler.opf.json#45",
+      "sha256": "214cb1efef42efe4dacdf730905efcc4954583878d59b5ee287a947038828db2",
+      "bytes": 9502,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Table and explanatory note are complete; retained typography/frame acceptance belongs to the existing LH75 native evidence, not these quarter-scale pixels."
+    },
+    {
+      "index": 30,
+      "png": "0030.png",
+      "source": "technical/layout-sampler.opf.json#47",
+      "sha256": "2303fcf557a62e12aa90d330e031c587d6f033e4fbbd738fd2c2d057487c6765",
+      "bytes": 13486,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Mixed reducer code fills its card with retained prose; this exact growth family has separate actual PowerPoint/font/import acceptance."
+    },
+    {
+      "index": 31,
+      "png": "0031.png",
+      "source": "technical/layout-sampler.opf.json#49",
+      "sha256": "2c4685c221c7fc71a05d41d771bec188140a46e97023e5928e8b806df4d6a1b1",
+      "bytes": 7989,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Sampler inverted pyramid repeats complete ordered four-stage form; all labels remain alongside their stages."
+    },
+    {
+      "index": 32,
+      "png": "0032.png",
+      "source": "technical/layout-sampler.opf.json#50",
+      "sha256": "aa9cfadd0ef7276df2c7c0454ad229ae50ee251f30ea0275059239896f3810da",
+      "bytes": 7163,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Actual sampler org-chart: Pilot lead, Delivery and Evidence nodes retain all labels and clear connectors. Native/editability proof is separate."
+    },
+    {
+      "index": 33,
+      "png": "0033.png",
+      "source": "technical/layout-sampler.opf.json#51",
+      "sha256": "f6281a3b1f8b3f0b43f1ff4aa9f402df95108019b91098957d9d5e2b2f6deddf",
+      "bytes": 9971,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Actual sampler hierarchy: Pilot, Delivery, Evidence, Design and Build retain hierarchy and readable node labels. This is an actual-node drawing, outside the long-list fallback defect."
+    },
+    {
+      "index": 34,
+      "png": "0034.png",
+      "source": "technical/layout-sampler.opf.json#52",
+      "sha256": "44eed767b84c794e61c2b083683cf6dafedcf57ee73b5f562433d77e429bec18",
+      "bytes": 11024,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Actual sampler three-circle Venn retains Clear scope, Shared goal and Evidence with intersections visible. Actual-node case remains distinct from long-list fallback."
+    },
+    {
+      "index": 35,
+      "png": "0035.png",
+      "source": "technical/localized-chart-references.opf.json#0",
+      "sha256": "9fca74123f20c751a92a8819e6899bed024c270be1068d5a8473c1781dea29f6",
+      "bytes": 7767,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "English localized chart retains the five point values, explicit 92% visual label and 2023 highlighted band in the current title-inferred implementation. New owner request supersedes inference design; this is not acceptance of that design."
+    },
+    {
+      "index": 36,
+      "png": "0036.png",
+      "source": "technical/localized-chart-references.opf.json#1",
+      "sha256": "0fa3559130b37b221d660f65bff74945005ebc88de123b68106230fa0098d451",
+      "bytes": 8894,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "German localized chart has its complete two-line headline, five values and reference marks. Current inference design remains pending the new explicit-property proposal."
+    },
+    {
+      "index": 37,
+      "png": "0037.png",
+      "source": "technical/localized-chart-references.opf.json#2",
+      "sha256": "e722744eb8fd6ea8bae08eb1dd60b76ba33c1d5238655184e3c963cf8f4f2ea8",
+      "bytes": 9049,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "French suspected missing marks at quarter scale was rejected after bounded exact API reproduction: raw and bundled SVG hashes agree, all seven regenerated quarter PNGs equal this artifact, SVG has92% and full-size French image shows all five values/line/band. Retain false-candidate probe; no product fix made."
+    },
+    {
+      "index": 38,
+      "png": "0038.png",
+      "source": "technical/localized-chart-references.opf.json#3",
+      "sha256": "e99c0d9c914607eab1a77ea908de3ea47ed8113c9833f6bdccb9e9190841e753",
+      "bytes": 8631,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Spanish localized chart retains complete two-line headline and matching chart geometry. Exact raw/bundled API reproduction retains92% label; proposed removal of title inference is separate."
+    },
+    {
+      "index": 39,
+      "png": "0039.png",
+      "source": "technical/localized-chart-references.opf.json#4",
+      "sha256": "b63009c33e8f2a68a97b8f178639e06ac65d99e9fd5c9a69bc8bcc6b9c2ec815",
+      "bytes": 7309,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Italian localized chart retains its complete headline and chart geometry. Exact API probe preserves92% label; no inference redesign accepted yet."
+    },
+    {
+      "index": 40,
+      "png": "0040.png",
+      "source": "technical/localized-chart-references.opf.json#5",
+      "sha256": "90e5a6fa94a25e0676eb6580404367f06346ea865811315286619c80df621759",
+      "bytes": 8699,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Portuguese localized chart retains its complete two-line headline, point labels,92% target and2023band. New explicit-reference proposal remains a separate review gate."
+    },
+    {
+      "index": 41,
+      "png": "0041.png",
+      "source": "technical/localized-chart-references.opf.json#6",
+      "sha256": "737a31e4bffb9f1c62afd217b386bb6c1f72c5eb092209bd8d9afbe72d6a5ac9",
+      "bytes": 8720,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Dutch localized headline is complete. Small-scale text is hard to distinguish in the displayed artifact; exact API reproduction proves original PNG identity and SVG92% label. Do not call this quarter-scale view a font/native fidelity proof."
+    },
+    {
+      "index": 42,
+      "png": "0042.png",
+      "source": "technical/localized-timeline.opf.json#0",
+      "sha256": "4528d8b3411086099267e893fef1f0c0d9084f9ad700e5fda7d59c1ea90f7cd7",
+      "bytes": 6532,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "French timeline retains Janvier/Fevrier/Mars, three milestones and translated state labels without clipping. Actual generated-glyph/native proof is separate."
+    },
+    {
+      "index": 43,
+      "png": "0043.png",
+      "source": "technical/multilingual-slides.opf.json#0",
+      "sha256": "000eda1f55cd5c5f68125da146010d733c19ac2c9be9d0c6cf390d051c999563",
+      "bytes": 8124,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "English multilingual intro body wraps within its frame; full sentence retained and deliberate body allocation visible."
+    },
+    {
+      "index": 44,
+      "png": "0044.png",
+      "source": "technical/multilingual-slides.opf.json#1",
+      "sha256": "a25827e3c5bd04172c973af3f5d34daeef139b09c4b032c4e03cf71c8a3efe0f",
+      "bytes": 4306,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "Known no-font producer limitation; glyph readability not accepted",
+      "note": "Arabic multilingual golden visibly renders missing-glyph boxes. This no-explicit-fonts golden producer cannot establish Arabic glyph/font fidelity. Do not count this image as readable Arabic acceptance; retain actual CLI/native font evidence separately."
+    },
+    {
+      "index": 45,
+      "png": "0045.png",
+      "source": "technical/multilingual-slides.opf.json#2",
+      "sha256": "2984e3f312d6eb9dfa889b1a6cbe2050bf6a7abbf68eb7e9acfd09c875702e4e",
+      "bytes": 3866,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "Known no-font producer limitation; glyph readability not accepted",
+      "note": "Japanese multilingual quote/title golden visibly renders missing-glyph boxes. This no-explicit-fonts producer cannot establish Japanese glyph/font fidelity. Do not count this image as readable Japanese acceptance; retain actual font-enabled evidence separately."
+    },
+    {
+      "index": 46,
+      "png": "0046.png",
+      "source": "technical/multilingual-slides.opf.json#3",
+      "sha256": "c824c862aaea799a514be92f4c77be8fbb6d048fa01c17617f5728e6bf2c4cca",
+      "bytes": 7915,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "French multilingual metric prints150000 with grouped locale formatting, complete title/label/description, and no clipping."
+    },
+    {
+      "index": 47,
+      "png": "0047.png",
+      "source": "technical/plantuml-diagrams.opf.json#0",
+      "sha256": "290c12c823c7077c854ec2b8c70031da157acd1fe60a7540eed00436db1b7fda",
+      "bytes": 8697,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "PlantUML sequence retains Author/Deck API/Store lanes, nested alternative branches, response labels and all endpoints in the chart frame. Native compatibility is separate."
+    },
+    {
+      "index": 48,
+      "png": "0048.png",
+      "source": "technical/plantuml-diagrams.opf.json#1",
+      "sha256": "e2edf4b375459fd76d5c98b3745dd22d48c975e95da50100c9d189c407d998a3",
+      "bytes": 6736,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "PlantUML class diagram retains Deck/Slide/Block relationships, Diagram/Chart/Image classes, attributes and methods without clipping; detailed small text needs full-size/native proof."
+    },
+    {
+      "index": 49,
+      "png": "0049.png",
+      "source": "technical/plantuml-diagrams.opf.json#2",
+      "sha256": "79ae6273acdbf575a71f983938526736dc8f6304da9e94001de9013b9cf8c1f3",
+      "bytes": 6495,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "PlantUML state diagram keeps Draft/In review/Published states, transition labels and initial/final nodes in one clear vertical path."
+    },
+    {
+      "index": 50,
+      "png": "0050.png",
+      "source": "technical/plantuml-diagrams.opf.json#3",
+      "sha256": "62a47ca9ed15b370220105e26cfc54e1751e9bfe411722810ed39ed03bc3f044",
+      "bytes": 7432,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "PlantUML activity retains initial/final nodes, Write a brief, Approved decision, Build the deck/Revise the brief branches and yes/no labels."
+    },
+    {
+      "index": 51,
+      "png": "0051.png",
+      "source": "technical/plantuml-diagrams.opf.json#4",
+      "sha256": "7df90df1623621b8090b94e3f1cd7108f8e628ed4d58820d6db96f82fec7cd72",
+      "bytes": 10876,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "PlantUML use-case keeps Presenter/Reviewer, OPF boundary, Write a deck/Review a deck/Export and include relationship with no frame clipping."
+    },
+    {
+      "index": 52,
+      "png": "0052.png",
+      "source": "technical/plantuml-diagrams.opf.json#5",
+      "sha256": "d244c566789d8229bc74b47ef39d97807cd45baae9b2ac47dee39cf1285286e3",
+      "bytes": 8692,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "PlantUML component keeps Front end/Editor/Site, Server/API, Decks database and REST/SQL connectors; diagram fills available width and all labels remain visible."
+    },
+    {
+      "index": 53,
+      "png": "0053.png",
+      "source": "technical/plantuml-diagrams.opf.json#6",
+      "sha256": "38fb8dee3280e66b032d399916278495ea547e5c0674f96aafcc18ef6ad52fa8",
+      "bytes": 9200,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "PlantUML mindmap retains Strategy, Automation/Efficiency/Hiring/People and Growth/New markets/Partners with visible connections."
+    },
+    {
+      "index": 54,
+      "png": "0054.png",
+      "source": "technical/plantuml-diagrams.opf.json#7",
+      "sha256": "78640a283e1e0589eaece8b2399a9d80332667ede3b1b85cd2d03c2dfe9d7d28",
+      "bytes": 7300,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "PlantUML Gantt retains Design/Build lanes, Draft/Layout/Review intervals, dates and Release marker. Font/editability/native limits remain separate."
+    },
+    {
+      "index": 55,
+      "png": "0055.png",
+      "source": "technical/promoted-region-grid.opf.json#0",
+      "sha256": "5dc67621505f50e6ce4f5d2f53fb17d0dda9bc824d6b3bea8fa74c6e888c5036",
+      "bytes": 6723,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Promoted-grid control retains full Left column and the two spanning bullets, with separated regions and no overlap. Authored empty grid space is intentional."
+    },
+    {
+      "index": 56,
+      "png": "0056.png",
+      "source": "technical/rows-chart.opf.json#1",
+      "sha256": "9e6ac85e9199c55a930be3a9f0e7e1265701c53aa4c69e7af3cb2f16d5b7695d",
+      "bytes": 8337,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Rows-chart continuation retains Reduce long-tail retries banner plus all three next-focus bullets and title within the body frame."
+    },
+    {
+      "index": 57,
+      "png": "0057.png",
+      "source": "technical/shape-overlays.opf.json#4",
+      "sha256": "2838d52ee1271635f664c48f465dc761f26b7190ccf8135288dabebacc19a1f0",
+      "bytes": 6501,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Shape connector routes retain all seven source-target node pairs and distinct route geometry without clipping; no text labels are authored here."
+    },
+    {
+      "index": 58,
+      "png": "0058.png",
+      "source": "technical/slide-sections.opf.json#2",
+      "sha256": "07f220ec8a8f0d8859fa6dddca381e809797afca23b58d214eabadbef2f19700",
+      "bytes": 8653,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Slide-section Buyer Signal retains full left emphasis and right prose. Deliberate authored two-column allocation remains unchanged."
+    },
+    {
+      "index": 59,
+      "png": "0059.png",
+      "source": "technical/trees-and-sets.opf.json#0",
+      "sha256": "b824da5df5a722cf01281b8a6b12168fdc5694e3bd84fb26804d49f2523c2ff5",
+      "bytes": 7133,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Tree org example retains Pilot lead, Delivery and Evidence, clear hierarchy connectors and complete footer. Actual-node case outside long-list fallback."
+    },
+    {
+      "index": 60,
+      "png": "0060.png",
+      "source": "technical/trees-and-sets.opf.json#1",
+      "sha256": "d21329758d19054f313e3834fca3fd1f7370d65bccdf7d6713671efd917296ab",
+      "bytes": 9933,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Tree hierarchy example retains all five nodes and their parent-child edges; all labels visible and readable at this scale."
+    },
+    {
+      "index": 61,
+      "png": "0061.png",
+      "source": "technical/trees-and-sets.opf.json#2",
+      "sha256": "f38a7e7fb9fc492b229558034727d09425641a2799620fd71056da18928a9a92",
+      "bytes": 10994,
+      "viewedOriginal": true,
+      "originalPixels": {
+        "width": 320,
+        "height": 180
+      },
+      "judgment": "No new scoped defect established; limits retained",
+      "note": "Three-set Venn example retains Clear scope, Shared goal, Evidence and visible intersections. Actual-node case outside long-list fallback; native/live claims remain separate."
+    }
+  ],
+  "finalAcceptance": false,
+  "openGates": [
+    "49 template fallback readability cases require corrected source and pinned re-generation",
+    "Explicit chart references require owner representation review before implementation",
+    "Font-dependent Arabic/Japanese previews require actual font-enabled evidence"
+  ]
+}
