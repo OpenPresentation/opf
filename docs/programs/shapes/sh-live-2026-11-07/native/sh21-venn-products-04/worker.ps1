@@ -1,0 +1,2 @@
+$ErrorActionPreference='Stop'
+& 'C:\opf-work\sh21-qualification\tools\shapes\sh-21\verify-product.ps1' -Manifest 'C:\opf-work\sh21-qualification\docs\programs\shapes\sh21-product-candidate-2026-11-07-02\manifest.json' -Out 'C:\opf-work\release-033-artifacts\sh21-venn-products-04\result' -NativeHelpersPath 'C:\opf-work\release-033-final\packages\editor\test\native-playground-lib.ps1' -Only @('venn-1','venn-2','venn-3','venn-4','venn-5','venn-6','venn-7')

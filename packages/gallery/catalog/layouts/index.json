@@ -2,8 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "kind": "layouts",
   "version": "1",
-  "description": "The built-in slide layouts of OPF 0.19: 37 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "25966339cb4e04de879c0cc4fb4782a50e77c014045e4c0010e1bd2e84364d20",
+  "description": "The built-in slide layouts of OPF 0.19: 40 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
+  "contentSha256": "40188cceae8b63ce4022e8183aaff516b552f2a93fae37b10ebc18849760f2bb",
   "records": [
     {
       "id": "cover",
@@ -165,6 +165,27 @@
       "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
       "group": "Groups of items",
       "file": "vertical-flow.json"
+    },
+    {
+      "id": "org-chart",
+      "name": "Organization chart",
+      "summary": "A single-root team structure, with reporting lines and child depths.",
+      "group": "Groups of items",
+      "file": "org-chart.json"
+    },
+    {
+      "id": "hierarchy",
+      "name": "Hierarchy",
+      "summary": "A single-root hierarchy drawn as connected pairs of rounded cards.",
+      "group": "Groups of items",
+      "file": "hierarchy.json"
+    },
+    {
+      "id": "venn",
+      "name": "Venn",
+      "summary": "One to seven overlapping sets, with one short label per set.",
+      "group": "Groups of items",
+      "file": "venn.json"
     },
     {
       "id": "metrics",
