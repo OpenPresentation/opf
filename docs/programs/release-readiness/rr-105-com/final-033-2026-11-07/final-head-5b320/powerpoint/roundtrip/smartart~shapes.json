@@ -1,0 +1,219 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Qualification: SmartArt arrangements",
+  "slides": [
+    {
+      "title": "Our priorities",
+      "id": "pyramid-3-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build"
+      ],
+      "layout": "pyramid"
+    },
+    {
+      "title": "What the plan rests on",
+      "id": "pyramid-6-long",
+      "items": [
+        "Why we exist and who we serve",
+        "The few goals that matter this year",
+        "How teams plan, decide and ship",
+        "The reviews that keep plans honest",
+        "Data everyone can see and trust",
+        "Feedback loops measured in days"
+      ],
+      "layout": "pyramid"
+    },
+    {
+      "title": "Four quadrants",
+      "id": "matrix-4-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship"
+      ],
+      "layout": "matrix"
+    },
+    {
+      "title": "Three operating habits",
+      "id": "matrix-3-medium",
+      "items": [
+        "Clear purpose",
+        "Shared goals",
+        "Team habits"
+      ],
+      "layout": "matrix"
+    },
+    {
+      "title": "The review loop",
+      "id": "cycle-5-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn"
+      ],
+      "layout": "cycle"
+    },
+    {
+      "title": "How the year repeats",
+      "id": "cycle-7-long",
+      "items": [
+        "Why we exist and who we serve",
+        "The few goals that matter this year",
+        "How teams plan, decide and ship",
+        "The reviews that keep plans honest",
+        "Data everyone can see and trust",
+        "Feedback loops measured in days",
+        "Releases that land every single week"
+      ],
+      "layout": "cycle"
+    },
+    {
+      "title": "From idea to release",
+      "id": "chevrons-4-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship"
+      ],
+      "layout": "chevrons"
+    },
+    {
+      "title": "Eight stages of delivery",
+      "id": "chevrons-8-medium",
+      "items": [
+        "Clear purpose",
+        "Shared goals",
+        "Team habits",
+        "Weekly reviews",
+        "Open roadmap",
+        "Fast feedback",
+        "Steady delivery",
+        "Happy customers"
+      ],
+      "layout": "chevrons"
+    },
+    {
+      "title": "How a request moves",
+      "id": "flow-4-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship"
+      ],
+      "layout": "flow"
+    },
+    {
+      "title": "Seven steps to a habit",
+      "id": "flow-7-medium",
+      "items": [
+        "Clear purpose",
+        "Shared goals",
+        "Team habits",
+        "Weekly reviews",
+        "Open roadmap",
+        "Fast feedback",
+        "Steady delivery"
+      ],
+      "layout": "flow"
+    },
+    {
+      "title": "Three steps",
+      "id": "vertical-flow-3-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build"
+      ],
+      "layout": "vertical-flow"
+    },
+    {
+      "title": "Six steps to steady delivery",
+      "id": "vertical-flow-6-medium",
+      "items": [
+        "Clear purpose",
+        "Shared goals",
+        "Team habits",
+        "Weekly reviews",
+        "Open roadmap",
+        "Fast feedback"
+      ],
+      "layout": "vertical-flow"
+    },
+    {
+      "title": "Seven layers",
+      "id": "pyramid-7-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow",
+        "Scale"
+      ],
+      "layout": "pyramid"
+    },
+    {
+      "title": "Three habits",
+      "id": "matrix-3-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build"
+      ],
+      "layout": "matrix"
+    },
+    {
+      "title": "Eight stages",
+      "id": "chevrons-8-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow",
+        "Scale",
+        "Serve"
+      ],
+      "layout": "chevrons"
+    },
+    {
+      "title": "Eight steps",
+      "id": "flow-8-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow",
+        "Scale",
+        "Serve"
+      ],
+      "layout": "flow"
+    },
+    {
+      "title": "Six steps",
+      "id": "vertical-flow-6-short",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow"
+      ],
+      "layout": "vertical-flow"
+    }
+  ],
+  "language": "en-US",
+  "description": "v0.33 qualification: every arrangement (pyramid, matrix, cycle, chevrons, flow, vertical-flow) where PowerPoint's own SmartArt layout holds the entries (live built-in), where OPF's own design draws them as live SmartArt on an OPF layout definition (SH-19), and where OPF's design stays native shapes."
+}

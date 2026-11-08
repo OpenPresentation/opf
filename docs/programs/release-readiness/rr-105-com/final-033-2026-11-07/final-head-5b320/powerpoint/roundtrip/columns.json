@@ -1,0 +1,30 @@
+{
+  "name": "Column Regions Example",
+  "slides": [
+    {
+      "title": "Market Shift",
+      "left": {
+        "text": "Signal"
+      },
+      "center+right": {
+        "items": [
+          "Demand moved upmarket",
+          "Procurement cycles shortened",
+          "Teams asked for operational controls"
+        ]
+      }
+    },
+    {
+      "title": "Operating Choice",
+      "left+center": {
+        "bullets": [
+          "Standardize the intake path",
+          "Keep escalation rules visible"
+        ]
+      },
+      "right": {
+        "text": "Decision owners need one place to see what changed."
+      }
+    }
+  ]
+}

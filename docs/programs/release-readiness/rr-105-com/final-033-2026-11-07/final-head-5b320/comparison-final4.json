@@ -1,0 +1,72 @@
+{
+  "revision": "5b320eda3a8ba2deb085839fdaeb063cc7a8de79",
+  "previewCompared": 171,
+  "previewChanged": [],
+  "nativeCompared": 270,
+  "nativeChanged": [
+    {
+      "file": "layout-harvest",
+      "slide": 10,
+      "changedChannels": 10719,
+      "meanChannelDelta": 0.16873942057291666,
+      "oldSha256": "4668f64c131521f262e0a44410b7dba367a48e3b36aeda7c48b2db8e14dea262",
+      "newSha256": "f2a4c020de840f311acc77e6a3a96428ac93e611802843e4e16a1b5f5cfc701e"
+    },
+    {
+      "file": "layout-harvest",
+      "slide": 13,
+      "changedChannels": 4449,
+      "meanChannelDelta": 0.0672336154513889,
+      "oldSha256": "abd4360ab33adca90849adcc5af2416fc33dd9024094d2da516d60aaeae67df2",
+      "newSha256": "ea12cf7d316f563a7ddfe7bf3db198d05c1b9114f9b1132c4a999f5f10af440d"
+    },
+    {
+      "file": "layout-harvest",
+      "slide": 17,
+      "changedChannels": 3741,
+      "meanChannelDelta": 0.057803819444444446,
+      "oldSha256": "88e76b4fb4c52a41d7d79192c4c6e14dca0ea49f23951d6e20c7fbe0d6cc3c22",
+      "newSha256": "7a1e1bd1a25fe0a9d55c7ed43f0379991a1f98da59fff708e1ddfb4cc2617296"
+    },
+    {
+      "file": "layout-harvest",
+      "slide": 19,
+      "changedChannels": 3267,
+      "meanChannelDelta": 0.05296061197916667,
+      "oldSha256": "7e75662270accdc32b155bf23bbe16f344744a604434c6b0e376a1f007cae7e8",
+      "newSha256": "2b8c15744f0d55d92f082d51763d034de91cea4f505dfa397e19c3d2bb5d4d5a"
+    },
+    {
+      "file": "layout-harvest~native-body",
+      "slide": 10,
+      "changedChannels": 10719,
+      "meanChannelDelta": 0.16873942057291666,
+      "oldSha256": "4668f64c131521f262e0a44410b7dba367a48e3b36aeda7c48b2db8e14dea262",
+      "newSha256": "f2a4c020de840f311acc77e6a3a96428ac93e611802843e4e16a1b5f5cfc701e"
+    },
+    {
+      "file": "layout-harvest~native-body",
+      "slide": 13,
+      "changedChannels": 3492,
+      "meanChannelDelta": 0.043385959201388886,
+      "oldSha256": "ea12cf7d316f563a7ddfe7bf3db198d05c1b9114f9b1132c4a999f5f10af440d",
+      "newSha256": "9dc8b668df22e67da4f4a4057d5e4f57079b561c4394666011b9cbb8e645e5aa"
+    },
+    {
+      "file": "diagrams~picture",
+      "slide": 3,
+      "changedChannels": 15,
+      "meanChannelDelta": 0.000018446180555555556,
+      "oldSha256": "a881349c09fd1f8cdd0608405a268e5fd7757f6a51f42bfe521d7ee317b5594a",
+      "newSha256": "79b501a97ba249fe949258dac12efdc48d13bc27f9a23a302bf211550529e40f"
+    },
+    {
+      "file": "diagrams-markdown",
+      "slide": 2,
+      "changedChannels": 603,
+      "meanChannelDelta": 0.015577799479166666,
+      "oldSha256": "141a064ba656faaf9a4d8c66047bfae770d0f21a87690f8191b94dd6c1919614",
+      "newSha256": "ef80bfe6f2b1fa42c72c8ac9d66baeae59f1003a0e7d360bfbfd085cc671a920"
+    }
+  ]
+}

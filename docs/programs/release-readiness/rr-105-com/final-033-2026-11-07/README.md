@@ -1,3 +1,17 @@
+# Final v0.33 native acceptance: 5b320eda3a8ba2deb085839fdaeb063cc7a8de79
+
+Evidence-only branch; never merge it. This heading supersedes the historical checkpoints below.
+
+The final pass opens all 25 files / 270 slides in owned read-only PowerPoint copies; all 25 saved copies import and no shrink autofit is present. All 25 input PPTX hashes and 171 preview images are identical to the accepted 0e02 corpus. Of 270 native images, 262 are pixel-identical; all eight small raster differences are visually reviewed in final-head-5b320/review-1.png and review-2.png, with the native-body slides also checked at full resolution. There is no new clipping, text loss or geometry change.
+
+The explicit raw-failure dispositions below remain unchanged: the stacked shape aggregate-bound false positive, opt-in body/title work scoped to v0.34, and ChartEx automatic inner margins. UI-only checks remain unrun. All raw inputs, probes, images, saved copies, roundtrips, logs and SHA-256 receipts are preserved in final-head-5b320.
+
+The source also folds #1154's exact completion-row readiness fix and #1156's independently reviewed suite-aware PR gate. The old gate omitted manually dispatched Full CI checks; its replacement includes them in the same bounded batched GraphQL query, fails closed on incomplete data, and cannot enable required-all auto-merge while checks are pending. All 28 offline controls pass, including unstarted retries and the pending-to-green-to-red race. Live negative control rejected the previous macOS failure.
+
+Current Full CI: https://github.com/OpenPresentation/opf/actions/runs/42453633781 . One maintained required-all watcher guards this exact head. Native acceptance is complete with the stated limits; merge still requires all CI green. No release or site deployment has happened.
+
+## Historical checkpoints
+
 # Final033 native acceptance:0e02db5a0aa6a68b7459fe62e3ed5b60f38784ea
 
 Evidence-only branch; never merge it. This is the current final candidate. The historical records below retain the observations and withdrawn decisions that led here.

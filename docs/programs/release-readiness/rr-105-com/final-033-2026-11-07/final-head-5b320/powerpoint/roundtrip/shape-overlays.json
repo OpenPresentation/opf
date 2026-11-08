@@ -1,0 +1,737 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Shape overlays",
+  "slides": [
+    {
+      "title": "Callouts and badges",
+      "blocks": [
+        {
+          "metric": {
+            "value": "$4.2M",
+            "label": "Quarterly revenue"
+          },
+          "id": "revenue"
+        },
+        {
+          "text": "Revenue grew in every region this quarter, led by the new self-serve plan.",
+          "id": "summary"
+        }
+      ],
+      "shapes": [
+        {
+          "x": 0.06,
+          "y": 0.26,
+          "width": 0.2,
+          "height": 0.1,
+          "shape": "wedgeRectCallout",
+          "adjust": {
+            "adj1": 0.35,
+            "adj2": 0.9
+          },
+          "style": "subtle",
+          "text": "Record quarter",
+          "id": "record"
+        },
+        {
+          "x": 0.86,
+          "y": 0.05,
+          "width": 0.1,
+          "height": 0.16,
+          "shape": "star12",
+          "fill": "accent2",
+          "stroke": "none",
+          "text": "New",
+          "id": "new"
+        },
+        {
+          "x": 0.9,
+          "y": 0.84,
+          "width": 0.05,
+          "height": 0.09,
+          "shape": "ellipse",
+          "style": "intense",
+          "alt": "Page badge 1",
+          "text": "1"
+        }
+      ]
+    },
+    {
+      "title": "Shapes attached to blocks",
+      "blocks": [
+        {
+          "image": {
+            "src": "./assets/cover.png",
+            "alt": "Abstract cover artwork"
+          },
+          "id": "photo"
+        },
+        {
+          "text": "The badge and the caption follow the picture wherever composition puts it.",
+          "id": "notes"
+        }
+      ],
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "fill": "accent2",
+          "stroke": {
+            "color": "light1",
+            "width": 3
+          },
+          "text": "4K",
+          "id": "badge",
+          "at": {
+            "block": "photo",
+            "edge": "end",
+            "offset": -96,
+            "width": 72,
+            "height": 72
+          }
+        },
+        {
+          "shape": "roundRect",
+          "style": "subtle",
+          "text": "Shot on location",
+          "at": {
+            "block": "photo",
+            "edge": "bottom",
+            "offset": -56,
+            "width": 0.4,
+            "height": 40
+          }
+        },
+        {
+          "shape": "rightArrow",
+          "at": {
+            "block": "notes",
+            "edge": "start",
+            "offset": 8,
+            "width": 36,
+            "height": 24
+          }
+        },
+        {
+          "x": 0.76,
+          "y": 0.22,
+          "width": 0.16,
+          "height": 0.08,
+          "shape": "roundRect",
+          "style": "subtle",
+          "text": "Sunrise",
+          "id": "sunrise"
+        },
+        {
+          "connector": {
+            "from": "sunrise",
+            "to": "photo",
+            "route": "elbow"
+          },
+          "stroke": {
+            "color": "accent2",
+            "end": {
+              "type": "triangle"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Connectors between blocks",
+      "blocks": [
+        {
+          "shape": "roundRect",
+          "text": "Plan",
+          "aspectRatio": 1.6,
+          "id": "plan"
+        },
+        {
+          "shape": "roundRect",
+          "text": "Build",
+          "aspectRatio": 1.6,
+          "id": "build"
+        },
+        {
+          "shape": "ellipse",
+          "text": "Ship",
+          "id": "ship"
+        }
+      ],
+      "composition": {
+        "gap": 0.1
+      },
+      "shapes": [
+        {
+          "x": 0.4,
+          "y": 0.8,
+          "width": 0.2,
+          "height": 0.14,
+          "shape": "flowChartDecision",
+          "style": "subtle",
+          "text": "Review",
+          "id": "review"
+        },
+        {
+          "connector": {
+            "from": "plan",
+            "to": "build"
+          },
+          "stroke": {
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "build",
+            "to": "ship"
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3,
+            "end": {
+              "type": "stealth",
+              "length": "large"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "build",
+            "to": "review",
+            "route": "elbow"
+          },
+          "stroke": {
+            "dash": "dash",
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "review",
+            "to": "plan",
+            "route": "curved",
+            "fromSite": 1,
+            "toSite": 2
+          },
+          "stroke": {
+            "color": "accent2",
+            "start": {
+              "type": "oval",
+              "width": "small",
+              "length": "small"
+            },
+            "end": {
+              "type": "arrow"
+            }
+          },
+          "alt": "Review sends the work back to planning"
+        }
+      ]
+    },
+    {
+      "title": "Elbow and curved routes",
+      "blocks": [
+        {
+          "shape": "rect",
+          "text": "Source",
+          "id": "source"
+        },
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "blocks": [
+            {
+              "shape": "roundRect",
+              "text": "Upper",
+              "id": "upper"
+            },
+            {
+              "shape": "roundRect",
+              "text": "Lower",
+              "id": "lower"
+            }
+          ]
+        }
+      ],
+      "shapes": [
+        {
+          "connector": {
+            "from": "source",
+            "to": "upper",
+            "route": "elbow"
+          },
+          "stroke": {
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "source",
+            "to": "lower",
+            "route": "curved"
+          },
+          "stroke": {
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "upper",
+            "to": "lower",
+            "route": "elbow",
+            "fromSite": 3,
+            "toSite": 3
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "diamond",
+              "width": "large",
+              "length": "large"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Every route",
+      "shapes": [
+        {
+          "x": 0.04,
+          "y": 0.3,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r0a"
+        },
+        {
+          "x": 0.16,
+          "y": 0.3,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r0b"
+        },
+        {
+          "connector": {
+            "from": "r0a",
+            "to": "r0b",
+            "fromSite": 3,
+            "toSite": 1
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "straight, facing"
+        },
+        {
+          "x": 0.23,
+          "y": 0.26,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r1a"
+        },
+        {
+          "x": 0.33,
+          "y": 0.38,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r1b"
+        },
+        {
+          "connector": {
+            "from": "r1a",
+            "to": "r1b"
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "straight, diagonal"
+        },
+        {
+          "x": 0.42,
+          "y": 0.26,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r2a"
+        },
+        {
+          "x": 0.54,
+          "y": 0.38,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r2b"
+        },
+        {
+          "connector": {
+            "from": "r2a",
+            "to": "r2b",
+            "route": "elbow",
+            "fromSite": 3,
+            "toSite": 1
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "elbow Z"
+        },
+        {
+          "x": 0.62,
+          "y": 0.26,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r3a"
+        },
+        {
+          "x": 0.72,
+          "y": 0.38,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r3b"
+        },
+        {
+          "connector": {
+            "from": "r3a",
+            "to": "r3b",
+            "route": "elbow",
+            "fromSite": 3,
+            "toSite": 3
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "elbow U"
+        },
+        {
+          "x": 0.81,
+          "y": 0.26,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r4a"
+        },
+        {
+          "x": 0.91,
+          "y": 0.4,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r4b"
+        },
+        {
+          "connector": {
+            "from": "r4a",
+            "to": "r4b",
+            "route": "elbow",
+            "fromSite": 3,
+            "toSite": 0
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "elbow L"
+        },
+        {
+          "x": 0.04,
+          "y": 0.62,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r5a"
+        },
+        {
+          "x": 0.16,
+          "y": 0.76,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r5b"
+        },
+        {
+          "connector": {
+            "from": "r5a",
+            "to": "r5b",
+            "route": "curved",
+            "fromSite": 3,
+            "toSite": 1
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "curved Z"
+        },
+        {
+          "x": 0.23,
+          "y": 0.62,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r6a"
+        },
+        {
+          "x": 0.33,
+          "y": 0.76,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r6b"
+        },
+        {
+          "connector": {
+            "from": "r6a",
+            "to": "r6b",
+            "route": "curved",
+            "fromSite": 3,
+            "toSite": 3
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "curved U"
+        },
+        {
+          "x": 0.42,
+          "y": 0.62,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r7a"
+        },
+        {
+          "x": 0.54,
+          "y": 0.78,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r7b"
+        },
+        {
+          "connector": {
+            "from": "r7a",
+            "to": "r7b",
+            "route": "curved",
+            "fromSite": 3,
+            "toSite": 0
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "curved L"
+        },
+        {
+          "x": 0.62,
+          "y": 0.6,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r8a"
+        },
+        {
+          "x": 0.72,
+          "y": 0.8,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r8b"
+        },
+        {
+          "connector": {
+            "from": "r8a",
+            "to": "r8b",
+            "route": "elbow",
+            "fromSite": 2,
+            "toSite": 0
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "elbow down"
+        },
+        {
+          "x": 0.81,
+          "y": 0.8,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r9a"
+        },
+        {
+          "x": 0.91,
+          "y": 0.6,
+          "width": 0.06,
+          "height": 0.08,
+          "shape": "rect",
+          "style": "subtle",
+          "id": "r9b"
+        },
+        {
+          "connector": {
+            "from": "r9a",
+            "to": "r9b",
+            "route": "curved",
+            "fromSite": 0,
+            "toSite": 2
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          },
+          "alt": "curved up"
+        },
+        {
+          "adjust": {
+            "adj1": 0.25
+          },
+          "connector": {
+            "from": "r2a",
+            "to": "r2b",
+            "route": "elbow",
+            "fromSite": 2,
+            "toSite": 0
+          },
+          "stroke": {
+            "dash": "sysDot"
+          },
+          "alt": "elbow with an authored adjust"
+        }
+      ]
+    },
+    {
+      "title": "The back layer",
+      "blocks": [
+        {
+          "text": "The panel behind this text is an overlay shape in the back layer: it is drawn over the background and under the content.",
+          "id": "claim"
+        },
+        {
+          "metric": {
+            "value": "+18%",
+            "label": "Year over year"
+          },
+          "id": "growth"
+        }
+      ],
+      "shapes": [
+        {
+          "x": 0.03,
+          "y": 0.22,
+          "width": 0.94,
+          "height": 0.7,
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.06
+          },
+          "fill": {
+            "color": "accent1",
+            "darken": 0.55
+          },
+          "stroke": "none",
+          "decorative": true,
+          "id": "panel",
+          "layer": "back"
+        },
+        {
+          "x": 0.03,
+          "y": 0.22,
+          "width": 0.012,
+          "height": 0.7,
+          "shape": "rect",
+          "fill": "light1",
+          "stroke": "none",
+          "decorative": true,
+          "id": "stripe",
+          "layer": "back"
+        },
+        {
+          "shape": "ellipse",
+          "fill": "light1",
+          "stroke": "none",
+          "text": "New",
+          "at": {
+            "block": "growth",
+            "edge": "top",
+            "offset": -20,
+            "width": 80,
+            "height": 80
+          }
+        }
+      ]
+    }
+  ],
+  "language": "en-US",
+  "description": "Technical fixture for overlay shapes and connectors (SH-04): callouts and badges placed by fractions of the slide, shapes attached to blocks with at (a picture included), straight, elbow and curved connectors between blocks and overlay shapes with arrowheads, every route between facing, same-facing and perpendicular sites, an authored connector adjust, and the back layer. shape-overlays-rtl.opf.json is the right-to-left slide."
+}

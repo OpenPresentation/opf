@@ -1,0 +1,192 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Shape effects",
+  "slides": [
+    {
+      "title": "Outer shadows",
+      "blocks": [
+        {
+          "shape": "roundRect",
+          "shadow": "soft",
+          "text": "soft"
+        },
+        {
+          "shape": "roundRect",
+          "fill": "accent2",
+          "shadow": "hard",
+          "text": "hard"
+        },
+        {
+          "shape": "roundRect",
+          "fill": "accent3",
+          "shadow": "perspective",
+          "text": "perspective"
+        },
+        {
+          "shape": "roundRect",
+          "fill": "accent4",
+          "shadow": {
+            "color": {
+              "color": "accent4",
+              "darken": 0.5
+            },
+            "opacity": 0.6,
+            "blur": 12,
+            "distance": 10,
+            "angle": 135,
+            "size": 1.05
+          },
+          "text": "object"
+        }
+      ]
+    },
+    {
+      "title": "Inner shadow, glow, soft edges and blur",
+      "blocks": [
+        {
+          "shape": "roundRect",
+          "innerShadow": {
+            "opacity": 0.6,
+            "blur": 10,
+            "distance": 6
+          },
+          "text": "inner shadow"
+        },
+        {
+          "shape": "ellipse",
+          "fill": "accent2",
+          "glow": {
+            "color": {
+              "color": "accent2",
+              "lighten": 0.4
+            },
+            "opacity": 0.6,
+            "radius": 14
+          },
+          "text": "glow"
+        },
+        {
+          "shape": "rect",
+          "fill": "accent3",
+          "softEdge": 10,
+          "text": "soft edge"
+        },
+        {
+          "shape": "ellipse",
+          "fill": "accent4",
+          "blur": 6,
+          "text": "blur"
+        }
+      ]
+    },
+    {
+      "title": "Reflection and effects together",
+      "blocks": [
+        {
+          "shape": "roundRect",
+          "reflection": {
+            "size": 0.4,
+            "distance": 4,
+            "blur": 2
+          },
+          "text": "reflection"
+        },
+        {
+          "shape": "star5",
+          "fill": "accent2",
+          "glow": {
+            "color": "accent2",
+            "radius": 10
+          },
+          "shadow": "soft",
+          "text": "glow and shadow"
+        },
+        {
+          "shape": "rightArrow",
+          "fill": "accent3",
+          "shadow": {
+            "opacity": 0.5,
+            "blur": 8,
+            "distance": 8
+          },
+          "rotate": 20,
+          "text": "rotated"
+        },
+        {
+          "shape": "roundRect",
+          "style": "intense",
+          "text": "intense style"
+        }
+      ]
+    },
+    {
+      "title": "Effects on presets",
+      "blocks": [
+        {
+          "shape": "chevron",
+          "glow": {
+            "color": "accent1",
+            "opacity": 0.35,
+            "radius": 10
+          },
+          "text": "chevron"
+        },
+        {
+          "shape": "wedgeRectCallout",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.6
+          },
+          "innerShadow": {
+            "opacity": 0.4,
+            "blur": 8,
+            "distance": 5,
+            "angle": 270
+          },
+          "text": "callout"
+        },
+        {
+          "shape": "flowChartDecision",
+          "fill": "accent3",
+          "stroke": {
+            "color": {
+              "color": "accent3",
+              "darken": 0.4
+            },
+            "width": 2
+          },
+          "shadow": "hard",
+          "text": "decision"
+        },
+        {
+          "shape": "ellipse",
+          "fill": "none",
+          "stroke": {
+            "color": "accent4",
+            "width": 3
+          },
+          "shadow": "soft",
+          "text": "no fill"
+        },
+        {
+          "shape": "donut",
+          "fill": "accent5",
+          "reflection": {
+            "opacity": 0.4,
+            "size": 0.5
+          },
+          "text": "donut"
+        },
+        {
+          "shape": "can",
+          "fill": "accent6",
+          "shadow": "soft",
+          "softEdge": 6,
+          "text": "can"
+        }
+      ]
+    }
+  ],
+  "language": "en-US",
+  "description": "Technical fixture for shape effects (SH-03 wired into SH-02 shape blocks): the outer shadow presets and object form, inner shadow, glow, soft edges, reflection and blur, alone and together, on several presets, rotated, with lighter and darker theme colors, and the intense style's own shadow. The preview draws them as SVG filters and the PPTX export writes a native a:effectLst."
+}

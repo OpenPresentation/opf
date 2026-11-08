@@ -1,0 +1,217 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Chart Type Sampler",
+  "slides": [
+    {
+      "title": "Distribution And Outliers",
+      "left": {
+        "chart": {
+          "type": "box-and-whisker",
+          "data": {
+            "columns": [
+              "Team",
+              "Cycle Time"
+            ],
+            "rows": [
+              [
+                "Alpha",
+                5
+              ],
+              [
+                "Beta",
+                8
+              ],
+              [
+                "Gamma",
+                12
+              ]
+            ]
+          }
+        }
+      },
+      "center": {
+        "chart": {
+          "type": "histogram",
+          "data": {
+            "columns": [
+              "Bucket",
+              "Count"
+            ],
+            "rows": [
+              [
+                "0-5",
+                8
+              ],
+              [
+                "6-10",
+                12
+              ],
+              [
+                "11-15",
+                4
+              ]
+            ]
+          }
+        }
+      },
+      "right": {
+        "chart": {
+          "type": "scatter",
+          "data": {
+            "columns": [
+              "Point",
+              "Before",
+              "After"
+            ],
+            "rows": [
+              [
+                "1",
+                420,
+                210
+              ],
+              [
+                "2",
+                15,
+                7
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "Composition And Flow",
+      "blocks": [
+        {
+          "chart": {
+            "type": "waterfall",
+            "data": {
+              "columns": [
+                "Step",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Start",
+                  100
+                ],
+                [
+                  "Expansion",
+                  24
+                ],
+                [
+                  "Churn",
+                  -8
+                ],
+                [
+                  "End",
+                  116
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "funnel",
+            "data": {
+              "columns": [
+                "Stage",
+                "Accounts"
+              ],
+              "rows": [
+                [
+                  "Qualified",
+                  120
+                ],
+                [
+                  "Proposal",
+                  72
+                ],
+                [
+                  "Commit",
+                  31
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "treemap",
+            "data": {
+              "columns": [
+                "Area",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Product",
+                  42
+                ],
+                [
+                  "Sales",
+                  31
+                ],
+                [
+                  "Support",
+                  18
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Revenue And Margin",
+      "chart": {
+        "type": "combo",
+        "data": {
+          "columns": [
+            "Quarter",
+            {
+              "name": "Revenue",
+              "format": "$#,##0.0"
+            },
+            {
+              "name": "Margin",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "Q1",
+              12.4,
+              0.31
+            ],
+            [
+              "Q2",
+              18.1,
+              0.34
+            ],
+            [
+              "Q3",
+              21.7,
+              0.29
+            ],
+            [
+              "Q4",
+              26.3,
+              0.37
+            ]
+          ]
+        },
+        "secondaryAxis": [
+          "Margin"
+        ],
+        "axisTitles": {
+          "category": "Quarter",
+          "value": "Revenue ($M)",
+          "secondary": "Margin"
+        }
+      }
+    }
+  ],
+  "description": "Technical fixture sampling specialized chart type ids from the catalog."
+}

@@ -1,0 +1,203 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Diagrams",
+  "slides": [
+    {
+      "title": "Every request is reviewed before it ships",
+      "id": "flowchart",
+      "diagram": "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A\n  C --> E[Test]\n  E --> F{Passes?}\n  F -->|yes| G[Release]\n  F -->|no| C"
+    },
+    {
+      "title": "The client talks to one API",
+      "blocks": [
+        {
+          "bullets": [
+            "The client creates a deck with one call",
+            "The API validates it before it answers",
+            "Rendering happens later, on request"
+          ]
+        },
+        {
+          "diagram": "sequenceDiagram\n  participant Client\n  participant API\n  participant Store\n  Client->>API: POST /decks\n  API->>API: Validate\n  API->>Store: Save deck\n  Store-->>API: Deck id\n  API-->>Client: 201 Created"
+        }
+      ],
+      "id": "sequence"
+    },
+    {
+      "title": "Strategy rests on three themes",
+      "id": "mindmap",
+      "diagram": "mindmap\n  root((Strategy))\n    Growth\n      New markets\n      Partnerships\n    Efficiency\n      Automation\n      Fewer handoffs\n    People\n      Hiring\n      Training"
+    },
+    {
+      "title": "The rollout runs in three phases",
+      "id": "timeline-family",
+      "diagram": "timeline\n  title Regional rollout\n  section Pilot\n    2026 Q1 : One operations team\n    2026 Q2 : Feedback and fixes\n  section Rollout\n    2026 Q3 : All regions\n  section Scale\n    2026 Q4 : Self-service onboarding"
+    },
+    {
+      "title": "Support requests come mostly from two sources",
+      "id": "pie",
+      "diagram": "pie showData\n  title Support requests by channel\n  \"Email\" : 46\n  \"Chat\" : 31\n  \"Phone\" : 14\n  \"Forum\" : 9"
+    },
+    {
+      "title": "A rejected brief returns to its author",
+      "id": "alt",
+      "diagram": {
+        "source": "flowchart LR\n  A[Brief] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| A",
+        "alt": "A brief goes to review. Approved work is built; rejected work returns to the brief."
+      }
+    },
+    {
+      "design": {
+        "variant": "dark1"
+      },
+      "title": "Deploys move through four states",
+      "id": "dark-variant",
+      "diagram": {
+        "source": "stateDiagram-v2\n  direction LR\n  [*] --> Queued\n  Queued --> Building\n  Building --> Live: success\n  Building --> Failed: error\n  Failed --> Queued: retry\n  Live --> [*]",
+        "alt": "A deploy is queued, then built. A successful build goes live; a failed build is retried from the queue."
+      }
+    }
+  ],
+  "language": "en-US",
+  "description": "Technical fixture for the diagram content kind: Mermaid source drawn in the deck's fonts and colors. A full-slide flowchart, a sequence diagram beside text, a mind map, a timeline-family diagram, a pie diagram, a diagram with an alt, and a diagram on a dark variant.",
+  "design": {
+    "colorScheme": "forest-green",
+    "theme": "classic",
+    "fontScheme": "aptos"
+  },
+  "filename": "diagrams",
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen",
+          "variants": [
+            {
+              "id": "light",
+              "name": "Light",
+              "variant": "light1"
+            },
+            {
+              "id": "light-alt",
+              "name": "Light alt",
+              "variant": {
+                "background": "light1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            },
+            {
+              "id": "dark",
+              "name": "Dark",
+              "variant": "dark1"
+            },
+            {
+              "id": "dark-alt",
+              "name": "Dark alt",
+              "variant": {
+                "background": "dark1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "colorSchemes": {
+        "forest-green": {
+          "name": "Forest Green",
+          "accent1": "#4A7C59",
+          "accent2": "#68B0AB",
+          "accent3": "#8FC0A9",
+          "accent4": "#C8D5B9",
+          "accent5": "#DACDA6",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#263F2E",
+          "followedHyperlink": "#68B0AB",
+          "hyperlink": "#4A7C59",
+          "light1": "#FFFFFF",
+          "light2": "#EEF5F0",
+          "summary": "Organic green palette for growth, health, and sustainability stories.",
+          "description": "A green and soft-neutral scheme for decks about growth, renewal, wellness, and environmental impact.",
+          "tags": [
+            "organic",
+            "healthy",
+            "sustainable",
+            "fresh",
+            "balanced"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      }
+    }
+  }
+}
