@@ -7196,6 +7196,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // Words before type: the minimum width when the neighbours keep their fit, if at a smaller size.
     return least > equal[index]!.width + scale && neighbours(least) < baseline + 1000 ? weightsAt(least) : undefined;
   };
+  // LH-73: moved notes can use the same measured, bounded width redistribution as automatic prose rows.
+  const proseRowWeights = (nodes: Pending[], equalWidths: number[], cards: boolean, settings: Composition): number[] | undefined => {
+    const prose = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
+    if (nodes.length !== 2 || !nodes.every(prose)) return undefined;
+    const need = (node: Pending, width: number) => naturalHeight(node, width, cards, undefined, settings);
+    const heights = nodes.map((node, index) => need(node, equalWidths[index]!));
+    const long = heights[0]! >= heights[1]! ? 0 : 1, short = 1 - long;
+    if (heights[long]! < WEIGHTED_DEMAND_RATIO * heights[short]!) return undefined;
+    const total = equalWidths[0]! + equalWidths[1]!, line = contentNominalSize(nodes[short]!.field) * scale * 1.3;
+    let best: { share: number; height: number } | undefined;
+    for (const share of WEIGHTED_SHARES) {
+      const longHeight = need(nodes[long]!, total * share), shortHeight = need(nodes[short]!, total * (1 - share));
+      if (shortHeight > heights[short]! + line || longHeight > heights[long]! - line * .5) continue;
+      if (!best || longHeight < best.height - 1e-6) best = { share, height: longHeight };
+    }
+    return best ? (long === 0 ? [best.share, 1 - best.share] : [1 - best.share, best.share]) : undefined;
+  };
   const autoRowWeights = (nodes: Pending[], count: number, cols: number, area: LayoutBox, rowGap: number, settings: Composition): number[] | undefined => {
     if (!autoComposition() || settings.weights?.length || count < 2 || count > 3 || cols !== count || nodes.length !== count) return undefined;
     const equal = gridGeometry(count, area, cols, rowGap, [], false).boxes;
@@ -7220,20 +7237,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const total = equal.reduce((sum, box) => sum + box.width, 0);
       return nodes.map((_, index) => index === bars[0] ? BAR_CHART_MIN_SHARE * total : (1 - BAR_CHART_MIN_SHARE) * total / 2);
     }
-    const prose = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
-    if (count !== 2 || !nodes.every(prose)) return undefined;
-    const need = (node: Pending, width: number) => naturalHeight(node, width, hasCards, undefined, settings);
-    const heights = nodes.map((node, index) => need(node, equal[index]!.width));
-    const long = heights[0]! >= heights[1]! ? 0 : 1, short = 1 - long;
-    if (heights[long]! < WEIGHTED_DEMAND_RATIO * heights[short]!) return undefined;
-    const total = equal[0]!.width + equal[1]!.width, line = contentNominalSize(nodes[short]!.field) * scale * 1.3;
-    let best: { share: number; height: number } | undefined;
-    for (const share of WEIGHTED_SHARES) {
-      const longHeight = need(nodes[long]!, total * share), shortHeight = need(nodes[short]!, total * (1 - share));
-      if (shortHeight > heights[short]! + line || longHeight > heights[long]! - line * .5) continue;
-      if (!best || longHeight < best.height - 1e-6) best = { share, height: longHeight };
-    }
-    return best ? (long === 0 ? [best.share, 1 - best.share] : [1 - best.share, best.share]) : undefined;
+    return proseRowWeights(nodes, equal.map(box => box.width), hasCards, settings);
   };
   // LH-44: when the grid the scores chose gives a table a cell narrower than its words (the sum of its columns' minimum widths at the
   // starting size, plus a card's insets), the arrangement changes. Two candidates are scored against that grid and the lowest wins:
@@ -8857,9 +8861,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-82: blocks of another kind taken out of a grid sit in one row under it, or stacked when that is shorter, and ask for at
     // most MOVED_SHARE of the content box (down to their height at the floor), so the grid keeps about 60-65% of the body.
     const MOVED_SHARE = .3;
+    const movedWidths = (units: Pending[], width: number, cards: boolean): number[] => {
+      const equal = columnWidths(units.map(() => 1), width, gap);
+      const weights = units.length === 2 && units.every(unit => !unit.children && unit.field === 'text') ? proseRowWeights(units, equal, cards, composition) : undefined;
+      return weights ? columnWidths(weights, width, gap) : equal;
+    };
     const movedHeights = (units: Pending[], width: number, cards: boolean, atFloor = false) => {
-      const share = (width - gap * (units.length - 1)) / units.length;
-      return { across: Math.max(...units.map(unit => naturalHeight(unit, share, cards, undefined, composition, atFloor))), stacked: units.reduce((sum, unit) => sum + naturalHeight(unit, width, cards, undefined, composition, atFloor), 0) + gap * (units.length - 1) };
+      const widths = movedWidths(units, width, cards);
+      return { across: Math.max(...units.map((unit, index) => naturalHeight(unit, widths[index]!, cards, undefined, composition, atFloor))), stacked: units.reduce((sum, unit) => sum + naturalHeight(unit, width, cards, undefined, composition, atFloor), 0) + gap * (units.length - 1) };
     };
     const movedAcross = (units: Pending[], width: number, cards: boolean) => { const heights = movedHeights(units, width, cards); return heights.across <= heights.stacked; };
     const movedNeed = (units: Pending[], width: number, cards: boolean, atFloor = false) => { const heights = movedHeights(units, width, cards, atFloor), across = movedAcross(units, width, cards); return across ? heights.across : heights.stacked; };
@@ -8884,7 +8893,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!hint || units.length < 2 || direction !== undefined) return undefined;
       if (hint === 'row') {
         const across = movedAcross(units, cell.width, cards), shape = flowShape(across ? 'row' : 'column', units.length, true);
-        return { shape, boxes: across ? flowCells(shape, cell, gap).cells : stackedBoxes(units, cell, gap, composition, cards, region.anchor) };
+        return { shape, boxes: across ? gridBoxes(units.length, cell, units.length, gap, movedWidths(units, cell.width, cards), false) : stackedBoxes(units, cell, gap, composition, cards, region.anchor) };
       }
       if (hint === 'mosaic') {
         if (hints.sources.imageFit === undefined || hints.sources.imageFit === 'layout') for (const unit of units) coverPictures.add(unit);
