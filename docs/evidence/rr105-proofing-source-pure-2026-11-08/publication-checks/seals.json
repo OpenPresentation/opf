@@ -1,0 +1,79 @@
+{
+  "scope": "Completed source/pure evidence publication checks only",
+  "sourceHead": "b8461d48b193e32dee4e6e1bb60896823f2303ff",
+  "nativeRun": false,
+  "files": [
+    {
+      "path": "check-changed-01.log.gz",
+      "bytes": 424,
+      "sha256": "801228ff906a5a19da3bbaa6c7817fd6d8eefc3b4ef661be4ff60958c05a0636",
+      "encoding": "gzip",
+      "originalBytes": 930,
+      "originalSha256": "48d0b7e1f58d75078b24115ece73ced6ac0834ac44928fad336e6f3e93611666"
+    },
+    {
+      "path": "execution-01.json.gz",
+      "bytes": 250,
+      "sha256": "18cd8289ca665769e352490a8aaf6f86346edaf29da3ea619b7d766033acfeb6",
+      "encoding": "gzip",
+      "originalBytes": 383,
+      "originalSha256": "834ca167790dce6388093cf297a9daacba7c76d4315c76d165eafd08b80ab333"
+    },
+    {
+      "path": "publication-verifier-node24.json.gz",
+      "bytes": 272,
+      "sha256": "28c0eb51e409ed892ccef57e868b969bf368e81f119bf13ea70793902a0e9da1",
+      "encoding": "gzip",
+      "originalBytes": 384,
+      "originalSha256": "f7afa97180e06a4a64655201e65e4a51268e0d64a5a6804c42c365d535ab1353"
+    },
+    {
+      "path": "initial-publication-verifier-node26.json.gz",
+      "bytes": 272,
+      "sha256": "28c0eb51e409ed892ccef57e868b969bf368e81f119bf13ea70793902a0e9da1",
+      "encoding": "gzip",
+      "originalBytes": 384,
+      "originalSha256": "f7afa97180e06a4a64655201e65e4a51268e0d64a5a6804c42c365d535ab1353"
+    },
+    {
+      "path": "offline-install.log.gz",
+      "bytes": 601,
+      "sha256": "d6ac054e9e2cdcd3f185aa6060369e05c48133dbe07f7a5ba1d50b7139c14d3c",
+      "encoding": "gzip",
+      "originalBytes": 4849,
+      "originalSha256": "af3836e049f04289614b2d3997f896ae6615b0ac3701ea1879772c5d897a94c4"
+    },
+    {
+      "path": "prerequisite-hydration-receipt.json.gz",
+      "bytes": 441562,
+      "sha256": "32e51e6ac239957ce62a65e35e66c8ac8a61a1805973c5c833944cb2ccbb7324",
+      "encoding": "gzip",
+      "originalBytes": 1900544,
+      "originalSha256": "843d9472b3d7f023c0a846f15c73dbe8ad863cec8cc74a94b49d7f43a96dd0c9"
+    },
+    {
+      "path": "prerequisite-hydration-producer.mjs.gz",
+      "bytes": 1983,
+      "sha256": "fef31a9eeffbf2abceb69d9592045c78a48e0e35891c9bc899bc06b58ce910b9",
+      "encoding": "gzip",
+      "originalBytes": 4333,
+      "originalSha256": "3f4f981ab0c6166083c5c94b68eb5aafcc59896c926f625360ce6999481a30c5"
+    },
+    {
+      "path": "step-logs.zip.gz",
+      "bytes": 6446,
+      "sha256": "6c21f8fdd6ce815753933624eef460e4d211d6d40a2df0e2b1bb5457ebbc7232",
+      "encoding": "identity",
+      "originalBytes": 6446,
+      "originalSha256": "6c21f8fdd6ce815753933624eef460e4d211d6d40a2df0e2b1bb5457ebbc7232"
+    },
+    {
+      "path": "executed-check-archiver.mjs.gz",
+      "bytes": 1166,
+      "sha256": "dfd73bc1f7132599144a48bbd5706811df579622dc3c3a6295607c90ce1f2bbc",
+      "encoding": "gzip",
+      "originalBytes": 2779,
+      "originalSha256": "b2f02acec9820a131bb35b8a426455a757c488c544fddc592c7880d851e3428e"
+    }
+  ]
+}
