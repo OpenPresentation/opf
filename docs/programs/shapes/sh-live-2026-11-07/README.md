@@ -85,3 +85,15 @@ The actual font slots match between each live/native pair: Source Sans 3; Aptos 
 The full [acceptance task list](tasks.md) separates completed geometry/model/process controls from schema/render wiring, native editing, source PRs and final gates still owed.
 
 Fresh SH-23 source/expected-table witnesses and the strict modified-state SaveCopyAs/reopen verifier are ready for coordinator review: [SH23-witness.md](SH23-witness.md).
+
+### Single-spacing result: diagnostic rejected as a product change
+
+The coordinator's [spacing attempt](native/sh20-spacing-01/) safely passed its six-control lifecycle and preserved input hashes. [Raw hashes](native/manifest-after-spacing01.json) append to the archive. [witness-gate.mjs](../../../../tools/shapes/sh-20/witness-gate.mjs) bridges sealed input copies and the actual exported PNGs to the original SH-19 gate; no metric or threshold is changed. [Original baseline scores](spacing-comparison/baseline03-gate.json) and [single-spacing scores](spacing-comparison/single-gate.json) retain every check.
+
+| Native control comparison | Original exact pitch MAD / median text offset | Single pitch MAD / median text offset |
+| --- | --- | --- |
+| Latin cycle | 1.37 / 1 px | 3.89 / 8 px |
+| Japanese matrix | 4.48 / 5.92 px | 5.82 / 20 px |
+| Arabic matrix | 1.90 / 4.78 px | 1.90 / 4.78 px |
+
+All three continue to pass shape rectangle, rotation, size and preview-geometry checks and fail the unchanged native pixel/text check. Single spacing moves Latin toward the preview but away from the accepted native control, and worsens Japanese strongly; Arabic's horizontal mismatch persists. Therefore no production change or domain adjustment follows from this experiment. Keep exact pitch and derive the shared first-line placement/font geometry before another targeted diagnostic. Per-locale magic offsets and lower thresholds are not accepted.
