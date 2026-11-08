@@ -38,6 +38,6 @@ The first line gives editors (YAML language server) validation and completion ag
 
 ## Errors and rewriting
 
-A YAML error exits 2 with the line and column (`Invalid YAML in deck.opf.yaml at line 5, column 5: ...`); `opf validate deck.opf.yaml` locates its findings at YAML lines. Commands that rewrite a YAML file (`edit`, `format`, `merge`, `fill`, `to-yaml`...) write canonical YAML and **do not preserve comments**: they print a warning on stderr. Keep notes that must survive in `description`, `notes` or `extensions`, not in comments. Never hand-edit a file that a tool also rewrites without telling the user; use `opf edit --patch` for repeatable changes.
+A YAML error exits 2 with the line and column (`Invalid YAML in deck.opf.yaml at line 5, column 5: ...`); `opf validate deck.opf.yaml` locates its findings at YAML lines. Commands that rewrite a YAML file (`edit`, `format`, `merge`, `fill`, `convert`...) write canonical YAML and **do not preserve comments**: they print a warning on stderr. Keep notes that must survive in `description`, `notes` or `extensions`, not in comments. Never hand-edit a file that a tool also rewrites without telling the user; use `opf edit --patch` for repeatable changes.
 
 Configuration (`--config`) files are JSON. The second positional `fill` data input and the `ingest` source accept CSV, TSV or JSON.
