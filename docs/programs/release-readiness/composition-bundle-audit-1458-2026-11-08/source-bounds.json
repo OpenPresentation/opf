@@ -1,0 +1,30 @@
+{
+  "runtime": "1458d45934d2b5a0d04a191ec13125c5db3faec7",
+  "auditCheckout": "1a100e9fa6ae4041098e9d412268c8f07d87ce82",
+  "baseline": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+  "baselineCheckout": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+  "baselineDirty": "",
+  "currentCoreTree": "2b184028f2691c77ce2362376a1c0e174692bc87",
+  "baselineCoreTree": "788d334f2dfb73a0a243dd8e91b8f89d92b6dde7",
+  "node": "v24.20.0",
+  "platform": "win32",
+  "compilerVersion": "0.28.2",
+  "compilerOptions": {
+    "bundle": true,
+    "format": "esm",
+    "platform": "browser",
+    "target": "es2022",
+    "minify": true,
+    "write": false,
+    "metafile": true,
+    "gzipLevel": 9
+  },
+  "scriptHashes": {
+    "baseline": "17126b620a34761059bdec06875c7306a3e85c0e180a50cc34e58700ec86c151",
+    "current": "f4c794b51c4e8056c7d9c08bb1ad2e8296353070cf44889c91a9c3f1fdbe1e24"
+  },
+  "timelinePending": true,
+  "capUnchanged": true,
+  "noCatalogModules": true,
+  "scope": "Evidence-only branch; NEVER merge. No runtime, budget, golden or tracker edit. Current and baseline source/generated/resolver contexts separated; same current compiler/options. Counterfactual alters only one source file in memory."
+}

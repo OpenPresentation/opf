@@ -1,0 +1,286 @@
+{
+  "runtime": "1458d45934d2b5a0d04a191ec13125c5db3faec7",
+  "baseline": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+  "compiler": "0.28.2",
+  "baselineBytes": {
+    "minified": 680894,
+    "gzip": 246784,
+    "modules": 64,
+    "catalog": 0
+  },
+  "currentBytes": {
+    "minified": 746890,
+    "gzip": 271837,
+    "modules": 73,
+    "catalog": 0
+  },
+  "without1194": {
+    "minified": 745224,
+    "gzip": 271291,
+    "modules": 73,
+    "catalog": 0
+  },
+  "cap": 267675,
+  "excessBefore1194": 3616,
+  "excessCurrent": 4162,
+  "delta1194": {
+    "minified": 1666,
+    "gzip": 546,
+    "addedModules": [],
+    "removedModules": []
+  },
+  "addedModules": [
+    {
+      "path": "packages/javascript/src/chart-point-anchors.ts",
+      "bytesInOutput": 7892,
+      "catalog": false
+    },
+    {
+      "path": "packages/javascript/src/chart-title-numbers.ts",
+      "bytesInOutput": 4428,
+      "catalog": false
+    },
+    {
+      "path": "packages/javascript/src/chart-title-word-numbers.ts",
+      "bytesInOutput": 6916,
+      "catalog": false
+    },
+    {
+      "path": "packages/javascript/src/diagram-dot.ts",
+      "bytesInOutput": 12370,
+      "catalog": false
+    },
+    {
+      "path": "packages/javascript/src/native-tree-arrangement.ts",
+      "bytesInOutput": 2723,
+      "catalog": false
+    },
+    {
+      "path": "packages/javascript/src/timeline-duration.ts",
+      "bytesInOutput": 570,
+      "catalog": false
+    },
+    {
+      "path": "packages/javascript/src/tree-arrangement.ts",
+      "bytesInOutput": 939,
+      "catalog": false
+    },
+    {
+      "path": "packages/javascript/src/venn-arrangement.ts",
+      "bytesInOutput": 2722,
+      "catalog": false
+    },
+    {
+      "path": "packages/javascript/src/venn-editable.ts",
+      "bytesInOutput": 2375,
+      "catalog": false
+    }
+  ],
+  "moduleDeltas": [
+    {
+      "path": "packages/javascript/src/composition.ts",
+      "before": 305533,
+      "after": 320672,
+      "delta": 15139
+    },
+    {
+      "path": "packages/javascript/src/diagram-dot.ts",
+      "before": 0,
+      "after": 12370,
+      "delta": 12370
+    },
+    {
+      "path": "packages/javascript/src/chart-point-anchors.ts",
+      "before": 0,
+      "after": 7892,
+      "delta": 7892
+    },
+    {
+      "path": "packages/javascript/src/chart-title-word-numbers.ts",
+      "before": 0,
+      "after": 6916,
+      "delta": 6916
+    },
+    {
+      "path": "packages/javascript/src/chart-title-numbers.ts",
+      "before": 0,
+      "after": 4428,
+      "delta": 4428
+    },
+    {
+      "path": "packages/javascript/src/generated/engine-data.ts",
+      "before": 17271,
+      "after": 20262,
+      "delta": 2991
+    },
+    {
+      "path": "packages/javascript/src/native-tree-arrangement.ts",
+      "before": 0,
+      "after": 2723,
+      "delta": 2723
+    },
+    {
+      "path": "packages/javascript/src/venn-arrangement.ts",
+      "before": 0,
+      "after": 2722,
+      "delta": 2722
+    },
+    {
+      "path": "packages/javascript/src/venn-editable.ts",
+      "before": 0,
+      "after": 2375,
+      "delta": 2375
+    },
+    {
+      "path": "packages/javascript/src/chart-marks.ts",
+      "before": 16677,
+      "after": 18793,
+      "delta": 2116
+    },
+    {
+      "path": "packages/javascript/src/diagram.ts",
+      "before": 11012,
+      "after": 12825,
+      "delta": 1813
+    },
+    {
+      "path": "packages/javascript/src/arrangements.ts",
+      "before": 11748,
+      "after": 12860,
+      "delta": 1112
+    },
+    {
+      "path": "packages/javascript/src/overlay-shapes.ts",
+      "before": 12824,
+      "after": 13891,
+      "delta": 1067
+    },
+    {
+      "path": "packages/javascript/src/tree-arrangement.ts",
+      "before": 0,
+      "after": 939,
+      "delta": 939
+    },
+    {
+      "path": "packages/javascript/src/timeline-duration.ts",
+      "before": 0,
+      "after": 570,
+      "delta": 570
+    },
+    {
+      "path": "packages/javascript/src/chart-axis.ts",
+      "before": 6241,
+      "after": 6457,
+      "delta": 216
+    },
+    {
+      "path": "packages/javascript/src/diagram-engine-lazy.ts",
+      "before": 0,
+      "after": 118,
+      "delta": 118
+    },
+    {
+      "path": "packages/javascript/src/chart-layer.ts",
+      "before": 6159,
+      "after": 6265,
+      "delta": 106
+    },
+    {
+      "path": "packages/javascript/src/script-fonts.ts",
+      "before": 5316,
+      "after": 5422,
+      "delta": 106
+    },
+    {
+      "path": "packages/javascript/src/chart-data.ts",
+      "before": 14901,
+      "after": 14837,
+      "delta": -64
+    },
+    {
+      "path": "packages/javascript/src/layout-template.ts",
+      "before": 9114,
+      "after": 9051,
+      "delta": -63
+    },
+    {
+      "path": "packages/javascript/src/smart-art-layout.ts",
+      "before": 12228,
+      "after": 12285,
+      "delta": 57
+    },
+    {
+      "path": "packages/javascript/src/catalog-refs.ts",
+      "before": 5604,
+      "after": 5655,
+      "delta": 51
+    },
+    {
+      "path": "packages/javascript/src/chart-numeric-axes.ts",
+      "before": 4640,
+      "after": 4593,
+      "delta": -47
+    },
+    {
+      "path": "packages/javascript/src/icons.ts",
+      "before": 19152,
+      "after": 19123,
+      "delta": -29
+    },
+    {
+      "path": "packages/javascript/src/linear-arrangements.ts",
+      "before": 5314,
+      "after": 5288,
+      "delta": -26
+    },
+    {
+      "path": "packages/javascript/src/quote-marks.ts",
+      "before": 1063,
+      "after": 1042,
+      "delta": -21
+    },
+    {
+      "path": "packages/javascript/src/shape-block.ts",
+      "before": 15768,
+      "after": 15754,
+      "delta": -14
+    },
+    {
+      "path": "packages/javascript/src/color.ts",
+      "before": 19100,
+      "after": 19089,
+      "delta": -11
+    },
+    {
+      "path": "packages/javascript/src/chart-direct-labels.ts",
+      "before": 5649,
+      "after": 5639,
+      "delta": -10
+    },
+    {
+      "path": "packages/javascript/src/block-grouping.ts",
+      "before": 5196,
+      "after": 5193,
+      "delta": -3
+    },
+    {
+      "path": "packages/javascript/src/chart-plot.ts",
+      "before": 5906,
+      "after": 5904,
+      "delta": -2
+    },
+    {
+      "path": "packages/javascript/src/picture-scrim.ts",
+      "before": 6465,
+      "after": 6463,
+      "delta": -2
+    }
+  ],
+  "caveat": "Whole-bundle gzip differences are not additive module costs. Earlier271819measurement differs by18bytes; this clean1458same-maintained-method receipt is271837. Timeline source still pending; no final cap refresh.",
+  "archive": {
+    "path": "raw.zip",
+    "bytes": 1745183,
+    "sha256": "9ebcf13410c29c4606c8c035a9a1433214618a4f40984d8a09b48fca745da5d5",
+    "files": 22
+  }
+}
