@@ -1,7 +1,9 @@
 // Portable tests of the LibreOffice qualification (docs/libreoffice.md): the checks, the PPTX reader, the font profile and the
 // corpus. LibreOffice itself runs only in the nightly leg; nothing here needs it, fontconfig or the built packages.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { prepareOutputDirectory } from "./output.mjs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -136,4 +138,21 @@ test("the corpus covers the issue's areas and the shared native-acceptance decks
   assert.deepEqual(selectCases(cases, ["opf#925"]).map((entry) => entry.id), ids.filter((id) => id.startsWith("issue-925")));
   assert.deepEqual(selectCases(cases, ["shared-feature-*"]).length, 8);
   assert.throws(() => selectCases(cases, ["nothing"]), /no case matches/);
+});
+
+test('output preparation preserves prior qualification evidence and refuses a nonempty directory', () => {
+  const scratch = mkdtempSync(path.join(tmpdir(), 'opf-lo-output-'));
+  try {
+    const empty = path.join(scratch, 'empty'), fresh = path.join(scratch, 'fresh');
+    mkdirSync(empty);
+    assert.equal(prepareOutputDirectory(empty), empty);
+    assert.equal(prepareOutputDirectory(fresh), fresh);
+    const receipt = path.join(fresh, 'results.json');
+    writeFileSync(receipt, '{"passed":false}');
+    assert.throws(() => prepareOutputDirectory(fresh), /earlier files are preserved/);
+    assert.equal(readFileSync(receipt, 'utf8'), '{"passed":false}');
+    assert.throws(() => prepareOutputDirectory(receipt), /fresh or empty directory/);
+    assert.throws(() => prepareOutputDirectory(scratch), /fresh or empty directory/);
+    assert.equal(readFileSync(receipt, 'utf8'), '{"passed":false}');
+  } finally { rmSync(scratch, { recursive: true, force: true }); }
 });

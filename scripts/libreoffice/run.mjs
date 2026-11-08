@@ -15,9 +15,10 @@
 // Playwright image after scripts/libreoffice/install.sh.
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { prepareOutputDirectory } from "./output.mjs";
 import { containment, compareStructure, inkOutside, missingWords, slideStructure, sourceBleeds, verdict } from "./checks.mjs";
 import { corpusCases, qualificationCases, qualificationManifest, selectCases } from "./corpus.mjs";
 import { featuresMarkdown, gradeFeatures } from "./features.mjs";
@@ -253,8 +254,7 @@ function summaryMarkdown(report) {
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const soffice = options.soffice ?? (existsSync(environment.libreoffice.program) ? environment.libreoffice.program : "soffice");
-  rmSync(options.out, { recursive: true, force: true });
-  mkdirSync(options.out, { recursive: true });
+  prepareOutputDirectory(options.out);
   const core = await import("@openpresentation/opf");
   engines.core = core;
   const cases = selectCases([...(await corpusCases()), ...(options.qualification ? qualificationCases(options.qualification) : [])], options.cases);

@@ -169,3 +169,5 @@ reproducible by anyone.
 
 The current results and the claim they support are in
 [the v0.33 qualification note](programs/release-readiness/qualification-0.33-libreoffice.md).
+
+The qualification runner needs a fresh or empty output directory. It refuses existing files and prior result folders, preserving earlier evidence; choose a new path for each attempt.
