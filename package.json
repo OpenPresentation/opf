@@ -134,7 +134,8 @@
     "qualify:libreoffice": "node scripts/libreoffice/run.mjs",
     "native:compare:tables": "node scripts/native-acceptance/compare-tables.mjs",
     "check:preview-packaging": "node --test scripts/ecosystem-preview-plan.test.mjs",
-    "check:workspace-pack": "node --test scripts/workspace-pack.test.mjs"
+    "check:workspace-pack": "node --test scripts/workspace-pack.test.mjs",
+    "check:e1-current-after": "node --test scripts/e1-current-after.test.mjs"
   },
   "engines": {
     "node": ">=22"
