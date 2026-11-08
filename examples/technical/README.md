@@ -34,3 +34,4 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 
 - Localized timeline status words: a French roadmap keeps its authored labels and adds Terminé, En cours and Prévu ([`localized-timeline.opf.json`](./localized-timeline.opf.json)).
 
+- [Inverted pyramids](inverted-pyramids.opf.json): wide-first selections, narrative labels and grouped workstreams, exported as editable native shapes.
