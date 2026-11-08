@@ -1,9 +1,9 @@
-// RR-105: scatter X/Y and box-and-whisker axes, shared by composition, preview and native PPTX.
-import {chartIntervalsFor, chartTextSize, niceScale, type ChartValueAxis} from './chart-axis.js';
+// RR-105: numeric chart axes shared by composition, preview and native PPTX.
+import {CHART_MAX_INTERVALS, chartIntervalsFor, chartTextSize, niceScale, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, type ResolvedChartData} from './chart-data.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {groupsDataRange} from './number-grouping.js';
-import {valueLabel, type ChartLayerGeometry} from './chart-layer.js';
+import {valueLabel, type ChartLayer, type ChartLayerGeometry} from './chart-layer.js';
 
 export interface ChartNumericAxes {
   value: ChartValueAxis;
@@ -18,9 +18,10 @@ const finiteAxis = (value: ChartValueAxis): boolean => [value.min, value.max, va
 const ticks = (value: ChartValueAxis): number[] => Array.from({length: Math.floor((value.max - value.min) / value.majorUnit + 1e-9) + 1}, (_, n) => Number((value.min + n * value.majorUnit).toPrecision(12)));
 
 /** The same chart-text size, padding, legend and axis-title bands the preview reserves. */
-export function chartNumericAxes(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry): ChartNumericAxes | undefined {
+export function chartNumericAxes(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer?: ChartLayer): ChartNumericAxes | undefined {
   if (!chart || typeof chart !== 'object' || !data.ok || data.combo) return undefined;
   const target = chartOptionTarget((chart as {type?: unknown}).type);
+  if (target?.kind === 'waterfall') return waterfallAxis(chart, data, geometry, layer);
   if (target?.kind !== 'scatter' && target?.kind !== 'box') return undefined;
   const {box, scale, language} = geometry;
   const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize}) * scale;
@@ -69,4 +70,50 @@ export function chartNumericAxes(chart: unknown, data: ResolvedChartData, geomet
     if (!finiteAxis(category)) return undefined;
   }
   return {value, category};
+}
+
+// Waterfall category labels reserve the same one/two-line or rotated band as the preview.
+// Only the reserve is needed here; the preview keeps its existing text drawing and source paths.
+function waterfallLabelReserve(names: string[], widthOf: (text: string) => number, plot: {x: number; width: number}, font: number, scale: number, maximum: number): {n: number; reserve: number} {
+  const line=font*1.5, textHeight=font*1.22, gap=font*.1, band=plot.width/Math.max(1,names.length);
+  const minX=plot.x-font*.5, maxX=plot.x+plot.width+font*.5, rotatedMinX=10*scale;
+  const limit=Math.max(1,maxX-minX), allowTwo=maximum>=line+textHeight-.01;
+  const labels=names.map(text=>({text:text.replace(/[\r\n]+/g,' '),width:widthOf(text.replace(/[\r\n]+/g,' '))}));
+  if(!labels.length)return {n:1,reserve:line};
+  const ellipsis=(text:string)=>{const chars=Array.from(text);let low=0,high=chars.length;while(low<high){const mid=Math.ceil((low+high)/2);if(widthOf(chars.slice(0,mid).join('').trimEnd()+'…')<=limit)low=mid;else high=mid-1;}return widthOf(chars.slice(0,low).join('').trimEnd()+'…');};
+  const two=(text:string)=>{const words=text.split(/[^\S  ﻿]+/u).filter(Boolean);let best=Infinity;for(let split=1;split<words.length;split++)best=Math.min(best,Math.max(widthOf(words.slice(0,split).join(' ')),widthOf(words.slice(split).join(' '))));return best;};
+  const horizontal=(n:number)=>{let prev=-Infinity,rows=1;const slot=n*band-gap;for(let i=0;i<labels.length;i+=n){let width=labels[i]!.width,lines=1;if(width>slot&&allowTwo){const split=two(labels[i]!.text);if(split<=slot){width=split;lines=2;}}if(width>limit){width=ellipsis(labels[i]!.text);lines=1;}const cx=plot.x+(i+.5)*band,left=Math.min(Math.max(cx-width/2,minX),maxX-width);if(left<prev+gap-1e-6)return undefined;prev=left+width;rows=Math.max(rows,lines);}return {n,reserve:line+(rows-1)*textHeight};};
+  let plain: {n:number;reserve:number}|undefined;
+  for(let n=1;n<=labels.length&&!plain;n++)plain=horizontal(n);
+  plain??={n:labels.length,reserve:line};
+  const rotated=(angle:number)=>{const sin=angle===90?1:Math.SQRT1_2,cos=angle===90?0:Math.SQRT1_2,n=Math.max(1,Math.ceil(textHeight/sin/band-1e-9));let extent=0;for(let i=0;i<labels.length;i+=n){const width=labels[i]!.width,cx=plot.x+(i+.5)*band;if(cx-width*cos-textHeight*sin/2<rotatedMinX-1e-6)return undefined;extent=Math.max(extent,width*sin+textHeight*cos);}const reserve=Math.max(line,font*.25+extent);return reserve>maximum+1e-6?undefined:{n,reserve};};
+  const options=[plain,rotated(45),rotated(90)].filter((value):value is {n:number;reserve:number}=>value!==undefined);
+  return options.find(option=>option.n===1)??options.reduce((best,option)=>option.n<best.n?option:best);
+}
+function waterfallAxis(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer?: ChartLayer): ChartNumericAxes | undefined {
+  if(!data.ok)return undefined;
+  const {box,scale,language}=geometry;
+  if(![box.width,box.height,scale].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0)return undefined;
+  const target=chartOptionTarget('waterfall')!,options=resolveChartOptions(chart,target);
+  const font=chartTextSize({width:box.width,height:box.height,scale,minFontSize:geometry.minFontSize})*scale,line=font*1.5,pad=10*scale;
+  const column=data.columns.length>1?1:0,values=data.rows.map(row=>chartNumber(row[column]));
+  let extents: number[];
+  try{extents=waterfallSteps(values).flatMap(step=>[step.from,step.to]);}catch{return undefined;}
+  const min=extents.length?Math.min(0,...extents):0,max=extents.length?Math.max(0,...extents):1;
+  const hidden=layer?.waterfall?.valueAxis===false;
+  const width=Math.max(1,box.width-(options.axisTitles.value?line:0)),height=Math.max(1,box.height-(layer?.header?.height??0)-(options.axisTitles.category?line:0));
+  const measure=(text:string)=>geometry.measure(text,font,400),format=data.formats[column];
+  const group=format===undefined&&groupsDataRange(extents,{zeroBased:true});
+  const probes=hidden?[]:[...new Set(Array.from({length:CHART_MAX_INTERVALS},(_,i)=>niceScale(min,max,i+1).ticks).flat())];
+  const tickWidth=Math.max(0,...probes.map(tick=>measure(valueLabel(tick,format,group?{language}:undefined))))+font*.5;
+  const x=pad+tickWidth,right=width-pad-font/2,plot={x,width:Math.max(1,right-x)};
+  const names=data.rows.map((row,i)=>data.columns.length>1?row[0]===null||row[0]===undefined?'':String(row[0]):String(i+1));
+  const cap=Math.max(line+font*1.22,height*.4);
+  let reserve=line,plan=waterfallLabelReserve(names,measure,plot,font,scale,cap);
+  for(let pass=0;pass<3&&plan.reserve>reserve+.5;pass++){reserve=plan.reserve;plan=waterfallLabelReserve(names,measure,plot,font,scale,cap);}
+  if(plan.reserve>reserve+.5)plan=waterfallLabelReserve(names,measure,plot,font,scale,reserve);
+  const length=Math.max(1,height-2*pad-(hidden?line:line/2)-reserve);
+  const fitted=niceScale(min,max,chartIntervalsFor(length,line*1.2,scale));
+  const value={min:fitted.min,max:fitted.max,majorUnit:fitted.step};
+  return finiteAxis(value)?{value}:undefined;
 }
