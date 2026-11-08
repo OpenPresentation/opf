@@ -2,8 +2,9 @@ import fs from 'node:fs';
 const [source,out]=process.argv.slice(2);if(!source||!out||fs.existsSync(out))throw Error('Usage: org-fit-spike.mjs <trees.json> <fresh-report.json>');
 const rows=JSON.parse(fs.readFileSync(source,'utf8').replace(/^\uFEFF/,''));
 const t=(text,children=[])=>({text,children});
-const sets={k1:t('Plan',[t('Build')]),k2:t('Plan',[t('Build'),t('Test')]),k3:t('Plan',[t('Build'),t('Test'),t('Ship')]),k4:t('Plan',[t('Build'),t('Test'),t('Ship'),t('Learn')]),k6:t('Plan',Array.from({length:6},(_,i)=>t('A'+(i+1)))),'2x2':t('Plan',[t('Build',[t('Web'),t('App')]),t('Test',[t('Unit'),t('Load')])]),'3x1':t('Plan',[t('Build',[t('Web')]),t('Test',[t('Unit')]),t('Ship',[t('Docs')])]),uneven:t('Plan',[t('Build',[t('Web'),t('App'),t('API')]),t('Test')]),depth3:t('Plan',[t('Build',[t('Web',[t('CSS')])])]),roots2:t('Plan',[t('Build'),t('Run',[t('Ops')])])};
+const sets={k1:t('Plan',[t('Build')]),k2:t('Plan',[t('Build'),t('Test')]),k3:t('Plan',[t('Build'),t('Test'),t('Ship')]),k4:t('Plan',[t('Build'),t('Test'),t('Ship'),t('Learn')]),k6:t('Plan',Array.from({length:6},(_,i)=>t('A'+(i+1)))),'2x2':t('Plan',[t('Build',[t('Web'),t('App')]),t('Test',[t('Unit'),t('Load')])]),'3x1':t('Plan',[t('Build',[t('Web')]),t('Test',[t('Unit')]),t('Ship',[t('Docs')])]),uneven:t('Plan',[t('Build',[t('Web'),t('App'),t('API')]),t('Test')]),depth3:t('Plan',[t('Build',[t('Web',[t('CSS')])])]),roots2:t('Plan',[t('Build'),t('Run',[t('Ops')])]),asst:{...t('Plan',[t('Build'),t('Test'),t('Ship')]),assistant:'Aide'}};
 function place(node,root=false){
+ if(node.assistant){const own=place({...node,assistant:undefined},true),nodes=own.nodes.map((n,i)=>i?{...n,row:n.row+1}:n);nodes.push({text:node.assistant,x:own.root-1.21,row:1});const min=Math.min(...nodes.map(n=>n.x));return{root:own.root-min,nodes:nodes.map(n=>({...n,x:n.x-min}))};}
  if(!node.children.length)return{root:0,nodes:[{text:node.text,x:0,row:0}]};
  if(!root&&node.children.every(c=>!c.children.length))return{root:0,nodes:[{text:node.text,x:0,row:0},...node.children.map((c,i)=>({text:c.text,x:.5,row:i+1}))]};
  const placed=[];const roots=[];const contour=new Map();
