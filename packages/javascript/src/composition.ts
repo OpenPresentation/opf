@@ -4461,7 +4461,7 @@ export const OVERLAY_BODY_SHARE = 0.2;
  */
 export function overlaysDrawBody(shapes: unknown): boolean {
   if (!Array.isArray(shapes)) return false;
-  const boxes = shapes.filter((shape): shape is Record<string, unknown> => !!shape && typeof shape === 'object' && !('connector' in shape) && !('at' in shape) && (shape as Record<string, unknown>).layer !== 'back'
+  const boxes = shapes.filter((shape): shape is Record<string, unknown> => !!shape && typeof shape === 'object' && !('connector' in shape) && !('at' in shape) && (shape as Record<string, unknown>).layer !== 'back' && (shape as Record<string, unknown>).hidden !== true
     && ['x', 'y', 'width', 'height'].every(key => typeof (shape as Record<string, unknown>)[key] === 'number'));
   if (!boxes.length) return false;
   const left = Math.min(...boxes.map(box => box.x as number)), top = Math.min(...boxes.map(box => box.y as number));
