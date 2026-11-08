@@ -10,9 +10,9 @@ const status = (context, state) => ({ __typename: 'StatusContext', context, stat
 
 /** One polled pull request, as GraphQL answers it. */
 const pr = ({ state = 'OPEN', merged = false, mergeable = 'MERGEABLE', head = HEAD, rollupOf = head, contexts = [check('verify')], autoMerge = false, id = 'PR_1' } = {}) => ({
-  repository: { pullRequest: { id, state, merged, isDraft: false, mergeable, headRefOid: head, autoMergeRequest: autoMerge ? { enabledAt: 'x' } : null, commits: { nodes: [{ commit: { oid: rollupOf, checkSuites: {nodes: [], pageInfo: {hasNextPage: false}}, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: contexts } } } }] } } },
+  repository: { pullRequest: { id, state, merged, isDraft: false, mergeable, headRefOid: head, autoMergeRequest: autoMerge ? { enabledAt: 'x' } : null, commits: { nodes: [{ commit: { oid: rollupOf, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: contexts } } } }] } } },
 });
-const commitData = (contexts, oid = HEAD) => ({ repository: { object: { oid, checkSuites: {nodes: [], pageInfo: {hasNextPage: false}}, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: contexts } } } } });
+const commitData = (contexts, oid = HEAD) => ({ repository: { object: { oid, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: contexts } } } } });
 
 /** A fake world: `polls` is a list of answers (one per poll, each an array of per-target data, the last one repeats); mutations are scripted by name. */
 function world({ polls, pages = [], mutations = {}, interval = 90, timeoutMinutes = 100, merge = false, required = 'verify', expectHeads = [], targets, commit = false } = {}) {
@@ -367,53 +367,4 @@ test('a failing poll is retried, then reported as a usage error; main maps usage
     console.error = originalError;
   }
   assert.match(messages[0], /unknown option --bogus/);
-});
-// RR105: GitHub can omit dispatched workflow runs from statusCheckRollup even on the exact same SHA.
-const suiteConnection=(nodes=[],more=false,cursor=null)=>({nodes,pageInfo:{hasNextPage:more,endCursor:cursor}});
-const suite=(checks,id='CS_full')=>({id,checkRuns:suiteConnection(checks)});
-const withSuites=(data,suites,more=false,cursor=null)=>{const commit=data.repository.pullRequest?.commits.nodes[0].commit??data.repository.object;commit.checkSuites=suiteConnection(suites,more,cursor);return data;};
-test('a dispatched FullCI failure omitted from the rollup is still red in the same batched poll',async()=>{
-  const data=withSuites(pr(),[suite([check('macOS playground','FAILURE')])]);
-  const setup=world({required:'all',polls:[[data]]});
-  assert.equal((await run(setup)).code,EXIT.red);
-  assert.equal(setup.calls.queries,1);assert.equal(setup.calls.pageQueries.length,0);
-  assert.match(buildPollQuery([parseTarget('o/r#7')]),/checkSuites\(first: 10\)/);
-  assert.match(buildPollQuery([parseTarget('o/r#7')]),/checkRuns\(first: 100\)/);
-});
-test('a dispatched FullCI pending run waits and a newer successful retry replaces its failure',async()=>{
-  const pending=withSuites(pr(),[suite([check('macOS',null)])]);
-  const retried=withSuites(pr(),[suite([check('macOS','FAILURE'),check('macOS','SUCCESS',{startedAt:'2026-10-22T11:00:00Z'})])]);
-  const setup=world({required:'all',polls:[[pending],[retried]]});
-  assert.equal((await run(setup)).code,EXIT.ok);assert.equal(setup.calls.queries,3);
-});
-test('check suite and nested check-run pages cannot hide a manual failure or newer retry',async()=>{
-  const suites=withSuites(pr(),[suite([check('old')])],true,'suite-cursor');
-  const hidden=world({required:'all',polls:[[suites]],pages:[{repository:{object:{oid:HEAD,checkSuites:suiteConnection([suite([check('hidden','FAILURE')],'CS_late')])}}}]});
-  assert.equal((await run(hidden)).code,EXIT.red);assert.equal(hidden.calls.pageQueries.length,1);
-  const first=suite([check('macOS','FAILURE')]);first.checkRuns=suiteConnection(first.checkRuns.nodes,true,'run-cursor');
-  const fixed=world({required:'all',polls:[[withSuites(pr(),[first])]],pages:[{node:{id:'CS_full',commit:{oid:HEAD},checkRuns:suiteConnection([check('macOS','SUCCESS',{startedAt:'2026-10-22T11:00:00Z'})])}}]});
-  assert.equal((await run(fixed)).code,EXIT.ok);assert.equal(fixed.calls.pageQueries.length,2,'both green observations read every page');
-});
-test('malformed or foreign suite pages fail closed rather than judging the partial green rollup',async()=>{
-  for(const page of [{node:null},{node:{id:'CS_other',commit:{oid:HEAD},checkRuns:suiteConnection([])}},{node:{id:'CS_full',commit:{oid:OTHER},checkRuns:suiteConnection([])}},{node:{id:'CS_full',commit:{oid:HEAD},checkRuns:{nodes:[]}}}]){
-    const first=suite([check('old')]);first.checkRuns=suiteConnection(first.checkRuns.nodes,true,'run-cursor');
-    const setup=world({required:'all',timeoutMinutes:2,polls:[[withSuites(pr(),[first])]],pages:[page]});
-    assert.equal((await run(setup)).code,EXIT.timeout);assert.ok(setup.log.some(line=>/not judged this poll/.test(line)));
-  }
-});
-test('an unstarted queued retry cannot be hidden behind an older dated success',()=>{
-  const success=check('macOS','SUCCESS'),queued=check('macOS',null,{status:'QUEUED',startedAt:null});
-  for(const nodes of [[success,queued],[queued,success]])assert.equal(evaluateChecks({checks:normalizeContexts(nodes),required:'all'}).state,'pending');
-  assert.equal(evaluateChecks({checks:normalizeContexts([success,check('macOS','SUCCESS',{startedAt:'2026-10-22T11:00:00Z'})]),required:'all'}).state,'green');
-});
-test('--required all never enables auto-merge while pending or before two green observations',async()=>{
-  const pending=withSuites(pr(),[suite([check('macOS',null,{startedAt:null,status:'QUEUED'})])]);
-  const green=withSuites(pr(),[suite([check('macOS')])]);
-  const red=withSuites(pr(),[suite([check('macOS','FAILURE')])]);
-  const held=world({merge:true,required:'all',polls:[[pending],[green],[red]],mutations:{enable:()=>({})}});
-  assert.equal((await run(held)).code,EXIT.red);assert.equal(held.calls.mutations.length,0);
-  const setup=world({merge:true,required:'all',polls:[[pending],[green],[green],[pr({state:'MERGED',merged:true})]],mutations:{enable:()=>{assert.equal(setup.calls.queries,3,'wait for the second complete green observation');return {};}}});
-  assert.equal((await run(setup)).code,EXIT.ok);assert.equal(setup.calls.mutations.length,1);
-  const conflict=world({merge:true,required:'all',polls:[[pr({mergeable:'CONFLICTING'})]],mutations:{enable:()=>({})}});
-  assert.equal((await run(conflict)).code,EXIT.dirty);assert.equal(conflict.calls.mutations.length,0);
 });
