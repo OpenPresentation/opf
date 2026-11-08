@@ -29,17 +29,20 @@ try {
   if (Get-Process -Name POWERPNT -ErrorAction SilentlyContinue) { throw 'PowerPoint already running; worker will not attach.' }
   $app = Invoke-OpfNativeStage $latch 'create-application' { New-Object -ComObject PowerPoint.Application }
   Invoke-OpfNativeStage $latch 'new-application-empty' { if ($app.Presentations.Count -ne 0) { throw 'Application has another presentation; ownership not established.' } } | Out-Null
+  Invoke-OpfNativeStage $latch 'materialize-owned-application' { $app.Visible=-1; $app.WindowState=2 } | Out-Null
   $result.environment = Invoke-OpfNativeStage $latch 'environment' {
     $version = [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $app.Path 'POWERPNT.EXE'))
     @{version=[string]$app.Version;build=[string]$app.Build;fileVersion=$version.FileVersion;culture=[Globalization.CultureInfo]::CurrentCulture.Name}
   }
   Invoke-OpfNativeStage $latch 'disable-alerts' { $app.DisplayAlerts = 1 } | Out-Null
   Invoke-OpfNativeStage $latch 'paths-not-open' { Assert-OpfPathsNotOpen $app @($owned.fixture,$owned.copy) } | Out-Null
-  $presentation = Invoke-OpfNativeStage $latch 'open-owned-read-only' { $app.Presentations.Open($owned.copy,-1,0,0) }
+  $presentation = Invoke-OpfNativeStage $latch 'open-owned-read-only' { $app.Presentations.Open($owned.copy,-1,0,-1) }
   Invoke-OpfNativeStage $latch 'verify-owned' {
     if ((Get-OpfFullPath ([string]$presentation.FullName)).ToLowerInvariant() -ne $owned.copy.ToLowerInvariant()) { throw 'Opened presentation is not the owned copy.' }
     if ($presentation.Slides.Count -ne 1) { throw 'Expected exactly one witness slide.' }
   } | Out-Null
+  $pixelWidth=[int][math]::Round([double]$case.width);$pixelHeight=[int][math]::Round([double]$case.height)
+  Invoke-OpfNativeStage $latch 'export-authored-aspect' { $presentation.Slides.Item(1).Export((Join-Path $OutputDirectory 'native.png'),'PNG',$pixelWidth,$pixelHeight) } | Out-Null
   $measurement = Invoke-OpfNativeStage $latch 'measure-title' {
     $shapes = @(); $slide = $presentation.Slides.Item(1)
     for ($index=1;$index -le $slide.Shapes.Count;$index++) {
@@ -84,8 +87,6 @@ try {
     $frame=if($Mode -ceq 'After'){$case.wrap}else{$case.originalBox}
     $result.frameMatches=$result.shapes.Count -eq 1 -and [math]::Abs($result.shapes[0].frame[0]-[double]$frame.x*.75) -lt .01 -and [math]::Abs($result.shapes[0].frame[2]-[double]$frame.width*.75) -lt .01
   } else { $result.frameMatches=$result.shapes.Count -eq $case.lines.Count }
-  $pixelWidth=[int][math]::Round([double]$case.width);$pixelHeight=[int][math]::Round([double]$case.height)
-  Invoke-OpfNativeStage $latch 'export-authored-aspect' { $presentation.Slides.Item(1).Export((Join-Path $OutputDirectory 'native.png'),'PNG',$pixelWidth,$pixelHeight) } | Out-Null
   Invoke-OpfNativeStage $latch 'close-owned' { [void](Close-OpfOwnedPresentation $presentation $owned.copy) } | Out-Null
   $presentation=$null
   Invoke-OpfNativeStage $latch 'quit-empty-application' { if ($app.Presentations.Count -ne 0) { throw 'Another presentation is open; not quitting.' }; $app.Quit() } | Out-Null
