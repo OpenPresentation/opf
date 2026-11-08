@@ -4,6 +4,7 @@ This is the entry point for whoever continues this work. A supervisor session co
 
 Files in this folder:
 - [wave2-review.md](wave2-review.md): independent code/sheet review of all 17 wave-2 heads, reproduced defects and the assembled preparation branch (not yet CI/native-qualified).
+- [sh13-state-arrow-continuation.md](sh13-state-arrow-continuation.md): isolated syntax refusal and regression after frozen wave-2 review.
 - [working-rules.md](working-rules.md): how to work here (CI batching, goldens, COM, owner rules). Read it before anything else.
 - [com-checks.md](com-checks.md): the PowerPoint checks still owed, deck by deck.
 - [decisions.md](decisions.md): every judgment call made for the owner; each one is vetoable.
