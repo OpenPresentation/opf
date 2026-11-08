@@ -34,6 +34,7 @@ import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations}
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
+import {attachNativeLanguageTags,nativeLanguageReadView,onlyNativeLanguageTags} from './native-language-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
 import {attachImageCalloutTags,importImageCallouts} from './image-callout-provenance.js';
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
@@ -540,9 +541,10 @@ export async function fromPptx(input, options = {}) {
   // opf-pptx#168: each slide's theme, through its layout and master (several masters carry per-slide script fonts).
   const relatedPart = (path, type) => path ? [...parseRelationships(entries, path).values()].find(rel => rel.type?.endsWith(`/${type}`) && rel.path && entries[rel.path])?.path : undefined;
   const hasOpfTags = Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path));
+  const nativeLanguages = nativeLanguageReadView(entries, parseRelationships, options.onDiagnostic);
   const observedLanguage = observeLanguage({
     preferBaseRuns: hasOpfTags,
-    slides: slidePaths.map(path => decodeText(entries[path])),
+    slides: slidePaths.map(path => decodeText(nativeLanguages.get(path) ?? entries[path])),
     theme: languageThemePath && entries[languageThemePath] ? decodeText(entries[languageThemePath]) : null,
     themePath: languageThemePath,
     slideThemes: slidePaths.map(path => {
@@ -633,7 +635,7 @@ export async function fromPptx(input, options = {}) {
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
     const slideLanguage = observedLanguage.slides?.[index] ?? observedLanguage;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: hasOpfTags ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, nativeLanguages, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: hasOpfTags ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
     if (slideLanguage.language !== undefined && slideLanguage.language !== observedLanguage.language) imported.slides[index].language = slideLanguage.language;
   }
   if (datasets) imported.datasets = datasets;
@@ -1207,7 +1209,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const roles = new Map();
   nativeContext.signalRoles = roles;
   const readBody = nativeBodyReader(slidePath, {
-    part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
+    part: (path, parser) => options.nativeLanguages?.has(path) ? parser.parse(decodeText(options.nativeLanguages.get(path))) : parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
   }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily, rtlDeck: options.rtlDeck === true});
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
@@ -1216,7 +1218,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   nativeContext.mediaAssets = media.assets;
   nativeContext.readBody=readBody;
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
-  const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   // LH-108 to LH-110: a chart's value list, stacked names and reference marks are its defaults, not content.
   const chartMarks=importChartMarks(shapes,relationships,entries);
@@ -1310,7 +1312,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       if (imported) items.push({...imported, sources: [`sp:${index}`]});
       continue;
     }
-    const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
+    const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && (!shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'] || onlyNativeLanguageTags(shape, relationships, entries));
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
     if (item && ordinaryBody) item.readNativeBody = () => readBody(index);
     if (item && !item.bounds && nativeContext.layoutBounds) item.bounds = nativeContext.layoutBounds(shape) ?? item.bounds;
@@ -5706,6 +5708,10 @@ async function normalizePptxZip(raw, context) {
         : `${family} is written as ${safe}, an Office-safe family on every Windows and macOS machine; the text was laid out with ${safe}'s widths, so its line breaks can differ from the preview drawn in ${family}.`});
   }
   finalizeFontsUsed(output);
+  // Structural proofing records are needed even without full source provenance.
+  const languageParts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));
+  attachNativeLanguageTags(languageParts);
+  for (const [path, bytes] of Object.entries(languageParts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];
   // Document references record evidence from the final normalized parts.
   if (context.documentProvenance) {
     const parts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));
