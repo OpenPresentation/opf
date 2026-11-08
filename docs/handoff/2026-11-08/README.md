@@ -167,3 +167,5 @@ Finite033siteexampleinventory nowcovers org5homepage+1nativeacceptedshowcase+29t
 - [RR109Windows directory-link fixture](rr109-directory-link-fixture.md): explicit junction/dir type lets the unchanged actual reparse-refusal assertion run without Windows symlink privilege; production/native qualification unchanged.
 
 - [Current033skill-reference correction](033-skill-reference.md): published-schema-backed regions/direction/size guidance plus current YAML convert verb; all six skill entrypoints/eight references audited within format/export-availability scope, historical guidance retained, public sites await gated main SHA.
+
+RR20 nine-archive command correction: [import-only ESM resolution and retained original failure](rr20-archive-esm-resolution/README.md). Exact baseline locks, producer/runtime seals and raw-part review remain required; final actual refresh is still owed.
