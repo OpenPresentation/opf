@@ -21,8 +21,9 @@ import {chartNumber, formatDataNumber, type ResolvedChartData} from './chart-dat
 import {chartCategoriesInTime} from './chart-time-order.js';
 import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
-import type {ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
+import type {ChartLayerDoughnut, ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
 import type {ChartLayerHistogram} from './chart-histogram.js';
+import type {ChartNumericAxes} from './chart-numeric-axes.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
@@ -87,6 +88,8 @@ export interface ChartPlotInset { left: number; top: number; right: number; bott
 
 /** What composition decides for a chart beyond its value axis (LH-03, LH-81, LH-92, LH-93). */
 export interface ChartLayer {
+  /** RR-105: scatter X/Y and box-and-whisker axes, also written into native PPTX. */
+  numericAxes?: ChartNumericAxes;
   small?: ChartLayerSmall;
   header?: ChartLayerHeader;
   /** LH-92: a doughnut of two or more rings names each ring on one of its slices. */
@@ -114,6 +117,8 @@ export interface ChartLayer {
   waterfall?: ChartLayerWaterfall;
   /** LH-108: a pie or one-series doughnut lists its categories and values beside it (chart-marks.ts). */
   valueList?: ChartLayerValueList;
+  /** LH-182: a doughnut's square and its hole, which both engines fill with the surface (chart-marks.ts). */
+  doughnut?: ChartLayerDoughnut;
   /** LH-109: a stacked column or area chart's values inside its segments and series names beside its last column (chart-marks.ts). */
   stack?: ChartLayerStack;
   /** LH-110: the reference line and the period band the slide title names (chart-marks.ts). */
@@ -269,14 +274,14 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
     const pad = 10 * scale;
     const widest = Math.max(0, ...values.flatMap(row => row.flatMap((value, j) => value === null ? [] : [geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx, 400)])));
     if (spec.horizontal) {
-      // A bar's label sits past its end, one line tall: two series' labels sit a bar apart (the clustered slot, PptxGenJS gap width
-      // 150%), one series' a category apart.
+      // A bar's label sits past its end, one line tall: two series' labels sit a bar apart (the clustered slot, chartBarGeometry, LH-176),
+      // one series' a category apart.
       const band = Math.max(1, box.height - 2 * pad - fontPx * 1.5) / count;
-      if (fontPx * 1.22 > (seriesCount > 1 ? band / 2.5 / seriesCount : band)) return undefined;
+      if (fontPx * 1.22 > (seriesCount > 1 ? chartBarGeometry(band, seriesCount, 'clustered').width : band)) return undefined;
     } else {
       // A column label is centred on its column: two series' labels sit a column apart, one series' a category apart.
       const band = Math.max(1, box.width - 2 * pad) / count;
-      const room = seriesCount > 1 && spec.kind === 'bar' ? band / 2.5 / seriesCount : band;
+      const room = seriesCount > 1 && spec.kind === 'bar' ? chartBarGeometry(band, seriesCount, 'clustered').width : band;
       if (widest + fontPx * 0.1 > room) return undefined;
     }
   }
@@ -374,6 +379,38 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
     ...(legend ? {legend: {box: mirror(legend.box), entries: legend.entries.map(entry => ({...entry, box: mirror(entry.box)}))}} : {}),
     height: pad + rows * lineHeight,
   };
+}
+
+/**
+ * LH-176: the gap between two categories' bars, as a percent of one bar's width (DrawingML `c:gapWidth`): 150 for clustered bars and
+ * columns, 50 for stacked and 100% stacked ones. Their series overlap 0 (clustered: side by side) or 100 (stacked: on one another)
+ * (`c:overlap`). The PPTX export writes these values and the preview draws its bars from {@link chartBarGeometry}, so both agree.
+ */
+export const CHART_BAR_GAP_WIDTH = Object.freeze({clustered: 150, stacked: 50});
+
+/** The bars of one category band: each bar's width, the bars together, the offset of the first bar, and whether series sit side by side. */
+export interface ChartBarGeometry {
+  /** The width of one bar (a column's width, a horizontal bar's height). */
+  width: number;
+  /** The width of the category's bars together: the series' bars side by side, or one stacked bar. */
+  group: number;
+  /** From the band's start to its first bar: half the gap. */
+  offset: number;
+  clustered: boolean;
+}
+
+/**
+ * LH-176: where the bars of one category sit in its `band` (the plot length over the category count), as PowerPoint lays out
+ * {@link CHART_BAR_GAP_WIDTH}: a clustered band holds `seriesCount` bars side by side and a gap of 1.5 bar widths
+ * (`width = band / (seriesCount + 1.5)`), a stacked band one bar and a gap of half its width (`width = band / 1.5`). The gap is split
+ * evenly before and after the bars.
+ */
+export function chartBarGeometry(band: number, seriesCount: number, grouping: string | undefined): ChartBarGeometry {
+  const clustered = grouping !== 'stacked' && grouping !== 'percentStacked';
+  const bars = clustered ? Math.max(1, seriesCount) : 1;
+  const width = band / (bars + (clustered ? CHART_BAR_GAP_WIDTH.clustered : CHART_BAR_GAP_WIDTH.stacked) / 100);
+  const group = width * bars;
+  return {width, group, offset: (band - group) / 2, clustered};
 }
 
 /**

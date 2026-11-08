@@ -181,7 +181,15 @@ const axisTitle = (value, text, run) => {
     `<a:p><a:pPr algn="ctr"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(value)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
 };
 
-function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = false, edgeCode) {
+// RR-105: the value axis core composed for a histogram or Pareto chart (layer.histogram.valueAxis), the scale the preview draws. PowerPoint's
+// automatic chartex axis follows its own rule (v0.33 PowerPoint qualification: 0 to 4,500 by 500 where the preview drew 0 to 5,000 by 1,000),
+// so the bounds and the major unit are written (CT_ValScaling max, min, majorUnit); without one PowerPoint keeps its automatic axis.
+function valueScaling(axis) {
+  if (!axis || ![axis.min, axis.max, axis.majorUnit].every(Number.isFinite) || !(axis.majorUnit > 0) || !(axis.max > axis.min)) return '<cx:valScaling/>';
+  return `<cx:valScaling max="${numberText(axis.max)}" min="${numberText(axis.min)}" majorUnit="${numberText(axis.majorUnit)}"/>`;
+}
+
+function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = false, edgeCode, valueAxis, percentUnit) {
   if (!spec.axes) return '';
   const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"/></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
   const gapWidth = {clusteredColumn: '0.06', paretoLine: '0.06', boxWhisker: '1', waterfall: '0.5', funnel: '0.06'}[spec.layoutId] ?? '1';
@@ -193,8 +201,8 @@ function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = 
   // LH-153: `code` is chartexPartXml's `axisCode`: the first series' format, else `#,##0` where the axis groups its thousands (a binned axis counts).
   const numberFormat = code === undefined ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
   // LH-107: a waterfall whose bars carry their values has no value axis and no gridlines (cx:axis hidden, as the funnel's).
-  const value = hiddenValue ? `<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1"><cx:valScaling/>${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
-  const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
+  const value = hiddenValue ? `<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1">${valueScaling(valueAxis)}${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
+  const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"${percentUnit > 0 && percentUnit <= 1 ? ` majorUnit="${numberText(percentUnit)}"` : ''}/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
   return `${category}${value}${percentage}`;
 }
 
@@ -260,7 +268,7 @@ function chartexCaption(caption, {labelColor, font, textSize, rtl}) {
     `<a:p><a:pPr algn="${rtl ? 'r' : 'l'}"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(caption)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
 }
 
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], groups = [], waterfall, rtl = false, histogram}) {
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], groups = [], waterfall, rtl = false, histogram, numericAxes}) {
   // LH-107: core's waterfall layer applies to the native waterfall only.
   if (spec.layoutId !== 'waterfall') waterfall = undefined;
   // LH-153: the number format of each series' value labels and of the value axis, where the author wrote none: `#,##0` for a series that groups
@@ -312,7 +320,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, axisCode, waterfall?.valueAxis === false, counts && histogram?.decimals !== undefined ? histogramEdgeFormat(histogram.decimals) : undefined)}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, axisCode, waterfall?.valueAxis === false, counts && histogram?.decimals !== undefined ? histogramEdgeFormat(histogram.decimals) : undefined, numericAxes?.value ?? (spec.binning ? histogram?.valueAxis : undefined), spec.binning ? histogram?.percentUnit : undefined)}</cx:plotArea>${legend}</cx:chart>` +
     // LH-105: no chart draws a panel; the chart area is unfilled and the chart stands on the card or the slide background.
     `<cx:spPr>${fill.color ? solidFill(fill.color, alpha) : '<a:noFill/>'}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';

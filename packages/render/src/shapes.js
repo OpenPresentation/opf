@@ -283,7 +283,7 @@ export function renderShapeBlock(item, helpers) {
     const area = shape.textArea, tx = area.x + area.width / 2, ty = shape.textBox.y + shape.textBox.height / 2;
     const fill = shapeTextFill(shape, helpers);
     const drawn = helpers.drawText(item, area, fill);
-    const textTurn = [turn, shape.flipV ? `rotate(180 ${number(cx)} ${number(cy)})` : "", shape.textDirection === "vertical" ? `rotate(90 ${number(tx)} ${number(ty)})` : shape.textDirection === "vertical270" ? `rotate(-90 ${number(tx)} ${number(ty)})` : ""].filter(Boolean).join(" ");
+    const textTurn = [turn, shape.flipV ? `rotate(180 ${number(tx)} ${number(shape.textBox.y + shape.textBox.height / 2)})` : "", shape.textDirection === "vertical" ? `rotate(90 ${number(tx)} ${number(ty)})` : shape.textDirection === "vertical270" ? `rotate(-90 ${number(tx)} ${number(ty)})` : ""].filter(Boolean).join(" ");
     text = textTurn ? helpers.tag("g", { transform: textTurn }, drawn) : drawn;
   }
   // A decorative shape is hidden from assistive technology; alt text names the shape; otherwise its text is what is read.

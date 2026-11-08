@@ -391,12 +391,12 @@ export function smartArtDataXml(record, number, drawingRelId) {
 // SH-19: OPF's layouts add text over a shape (fgAcc1, no fill) and a card (alignNode1, the card neutral and its border).
 const LABELS = ['node0', 'node1', 'bgShp', 'revTx', 'sibTrans2D1', 'parChTrans1D1', 'trBgShp', 'fgAcc1', 'alignNode1'];
 
-/** OPF's colors definition in the deck's theme: arrangementPaint's slots. */
-export function smartArtColorsXml(paint, card) {
+/** OPF's colors definition in the deck's theme: arrangementPaint's slots. Native layouts may use revTx over a filled node; OPF's own layouts reserve it for text beside the node. */
+export function smartArtColorsXml(paint, card, onShapeText = false) {
   const none = '<a:schemeClr val="bg1"><a:alpha val="0"/></a:schemeClr>';
   const list = (name, fill, line, text) => `<dgm:styleLbl name="${name}"><dgm:fillClrLst meth="repeat">${fill}</dgm:fillClrLst><dgm:linClrLst meth="repeat">${line}</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">${text}</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>`;
   const labels = LABELS.map(name => name === 'bgShp' || name === 'trBgShp' ? list(name, schemeXml(paint.background), schemeXml(paint.line), schemeXml(paint.text))
-    : name === 'revTx' ? list(name, none, none, '<a:schemeClr val="tx1"/>')
+    : name === 'revTx' ? list(name, none, none, onShapeText ? schemeXml(paint.text) : '<a:schemeClr val="tx1"/>')
       : name === 'fgAcc1' ? list(name, none, none, schemeXml(paint.text))
       : name === 'alignNode1' ? list(name, card ? `<a:srgbClr val="${card.fill}"/>` : schemeXml(paint.fill), card ? `<a:srgbClr val="${card.line}"/>` : schemeXml(paint.line), '<a:schemeClr val="tx1"/>')
       // SH-18 and SH-17: the arrows of a cycle or a flow (sibTrans2D1) in the primary lightened 40%, without an outline.
@@ -463,7 +463,7 @@ export function attachSmartArt(entries, records) {
       if (record.layout) entries[`ppt/diagrams/layout${number}.xml`] = encoder.encode(layoutDefinitionXml(record.layout));
       entries[`ppt/diagrams/data${number}.xml`] = encoder.encode(smartArtDataXml(record, number, ids.drawing));
       entries[`ppt/diagrams/quickStyle${number}.xml`] = encoder.encode(smartArtQuickStyleXml());
-      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint, record.card));
+      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint, record.card, record.layout === undefined));
       entries[`ppt/diagrams/drawing${number}.xml`] = encoder.encode(smartArtDrawingXml(record, number));
       for (const kind of ['data', ...(record.layout ? ['layout'] : []), 'quickStyle', 'colors', 'drawing']) {
         overrides.push(`<Override PartName="/ppt/diagrams/${kind}${number}.xml" ContentType="${CONTENT_TYPES[kind]}"/>`);
