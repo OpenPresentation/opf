@@ -11,3 +11,9 @@ Cached native name edits already override original OPF/workbook headers: values 
 Fresh-main fef5d76e merge retains genuine033skill guidance/macOS readiness and accepted034native-wrap/F2/RR106–110 notes. A local resolution guard initially selected the first duplicate RR20summary row; a following PowerShell native command incorrectly committed markers. This was caught before any push, corrected in ordinary8474cfe68, and git diff --check/product-config identity proved clean against frozen1191. Temporary local marker commit20b8d51 is retained in branch history and corrected by8474cfe68 before the first push; no main or pushed branch HEAD contained markers. No force-push. The current code is derived from this clean merge.
 
 The coordinator owns actual native edit/save/current-import evidence. A single-slide numeric/named-selector witness and mapped/raw receipts follow before final source freeze. No actual Office call by this agent; frozen1191unchanged.
+
+## Sealed pre-Office packet
+
+[Raw receipts](../../programs/shapes/sh25-native-series-name-2026-11-08/README.md) preserve the clean9864a644shipping-CLI producer, source/native/preview/action plan and hashes. C:/opf-work/sh25-name-edit-inputs-01has one slide, one actual column chart, numeric/named selectors and three pure-validated actions. Visual preview is reviewed. Actual rename/save/reopen/current-import is BLOCKED until a separate valid literal c:tx/c:v importer fix; mocks are not native acceptance.
+
+Required check:changed took184.6seconds: six steps passed, typecheck skipped, sparse evidence and inherited nine-deck archive lock failed. Exact tracked painting gzip restoration makes affected text pass;244PPTXtests remained unrun after the unchanged archive lock. Focused49new,45existing point,14lifecycle,15font,58area and cached-name current-import controls pass. No golden or archive expectation was edited.
