@@ -1,0 +1,216 @@
+﻿{
+    "environment":  {
+                        "powerPointVersion":  "16.0",
+                        "powerPointBuild":  "20527",
+                        "productVersion":  "16.0.20527.20112",
+                        "fileVersion":  "16.0.20527.20112",
+                        "windows":  "Windows 10 Home 25H2 build 26200.9711",
+                        "culture":  "en-US",
+                        "startedAt":  "2026-11-07T11:01:21.4025864-08:00",
+                        "revision":  "65b4f2aac8ac4b5be360a1f93355561d10195018",
+                        "opfVersion":  "0.32.1",
+                        "finishedAt":  "2026-11-07T11:02:39.8043642-08:00"
+                    },
+    "files":  [
+                  {
+                      "name":  "smartart",
+                      "opened":  true,
+                      "slides":  17,
+                      "preview":  17,
+                      "error":  null,
+                      "seconds":  10
+                  },
+                  {
+                      "name":  "smartart~shapes",
+                      "opened":  true,
+                      "slides":  17,
+                      "preview":  17,
+                      "error":  null,
+                      "seconds":  5.5
+                  },
+                  {
+                      "name":  "smartart-arabic",
+                      "opened":  true,
+                      "slides":  3,
+                      "preview":  3,
+                      "error":  null,
+                      "seconds":  1
+                  },
+                  {
+                      "name":  "smartart-japanese",
+                      "opened":  true,
+                      "slides":  3,
+                      "preview":  3,
+                      "error":  null,
+                      "seconds":  0.8
+                  },
+                  {
+                      "name":  "layout-harvest",
+                      "opened":  true,
+                      "slides":  20,
+                      "preview":  20,
+                      "error":  null,
+                      "seconds":  5.6
+                  },
+                  {
+                      "name":  "layout-harvest~native-body",
+                      "opened":  true,
+                      "slides":  20,
+                      "preview":  20,
+                      "error":  null,
+                      "seconds":  5.2
+                  },
+                  {
+                      "name":  "footers",
+                      "opened":  true,
+                      "slides":  4,
+                      "preview":  4,
+                      "error":  null,
+                      "seconds":  0.7
+                  },
+                  {
+                      "name":  "footers~static",
+                      "opened":  true,
+                      "slides":  4,
+                      "preview":  4,
+                      "error":  null,
+                      "seconds":  0.7
+                  },
+                  {
+                      "name":  "shapes",
+                      "opened":  true,
+                      "slides":  8,
+                      "preview":  8,
+                      "error":  null,
+                      "seconds":  1.7
+                  },
+                  {
+                      "name":  "shape-effects",
+                      "opened":  true,
+                      "slides":  4,
+                      "preview":  4,
+                      "error":  null,
+                      "seconds":  0.9
+                  },
+                  {
+                      "name":  "shape-overlays",
+                      "opened":  true,
+                      "slides":  6,
+                      "preview":  6,
+                      "error":  null,
+                      "seconds":  1.6
+                  },
+                  {
+                      "name":  "shape-overlays-rtl",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.4
+                  },
+                  {
+                      "name":  "diagrams",
+                      "opened":  true,
+                      "slides":  7,
+                      "preview":  7,
+                      "error":  null,
+                      "seconds":  2.7
+                  },
+                  {
+                      "name":  "diagrams~picture",
+                      "opened":  true,
+                      "slides":  7,
+                      "preview":  7,
+                      "error":  null,
+                      "seconds":  0.8
+                  },
+                  {
+                      "name":  "diagrams-markdown",
+                      "opened":  true,
+                      "slides":  3,
+                      "preview":  3,
+                      "error":  null,
+                      "seconds":  0.8
+                  },
+                  {
+                      "name":  "diagram-connectors",
+                      "opened":  true,
+                      "slides":  2,
+                      "preview":  2,
+                      "error":  null,
+                      "seconds":  0.5
+                  },
+                  {
+                      "name":  "layout-sampler",
+                      "opened":  true,
+                      "slides":  43,
+                      "preview":  43,
+                      "error":  null,
+                      "seconds":  12.2
+                  },
+                  {
+                      "name":  "layout-sampler~native-body",
+                      "opened":  true,
+                      "slides":  43,
+                      "preview":  43,
+                      "error":  null,
+                      "seconds":  10.9
+                  },
+                  {
+                      "name":  "chart-type-sampler",
+                      "opened":  true,
+                      "slides":  3,
+                      "preview":  3,
+                      "error":  null,
+                      "seconds":  0.8
+                  },
+                  {
+                      "name":  "table-and-code",
+                      "opened":  true,
+                      "slides":  2,
+                      "preview":  2,
+                      "error":  null,
+                      "seconds":  0.7
+                  },
+                  {
+                      "name":  "columns",
+                      "opened":  true,
+                      "slides":  2,
+                      "preview":  2,
+                      "error":  null,
+                      "seconds":  0.6
+                  },
+                  {
+                      "name":  "header-footer-logo-set",
+                      "opened":  true,
+                      "slides":  2,
+                      "preview":  2,
+                      "error":  null,
+                      "seconds":  0.7
+                  },
+                  {
+                      "name":  "full-feature-tour",
+                      "opened":  true,
+                      "slides":  11,
+                      "preview":  10,
+                      "error":  null,
+                      "seconds":  2.6
+                  },
+                  {
+                      "name":  "data-story-academy",
+                      "opened":  true,
+                      "slides":  16,
+                      "preview":  16,
+                      "error":  null,
+                      "seconds":  7
+                  },
+                  {
+                      "name":  "compliance-readiness-review",
+                      "opened":  true,
+                      "slides":  10,
+                      "preview":  9,
+                      "error":  null,
+                      "seconds":  3.8
+                  }
+              ]
+}

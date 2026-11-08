@@ -1,0 +1,4457 @@
+{
+  "pyramid-1-short-wide-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-short-wide-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-short-wide-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-short-wide-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-short-wide-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-short-wide-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-7-short-wide-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-8-short-wide-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-1-medium-wide-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-medium-wide-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-medium-wide-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-medium-wide-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-medium-wide-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-medium-wide-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-7-medium-wide-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-8-medium-wide-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-1-long-wide-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-long-wide-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-long-wide-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-long-wide-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-long-wide-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-long-wide-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-7-long-wide-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-8-long-wide-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-1-short-standard-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-short-standard-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-short-standard-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-short-standard-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-short-standard-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-short-standard-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-7-short-standard-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-8-short-standard-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-1-medium-standard-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-medium-standard-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-medium-standard-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-medium-standard-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-medium-standard-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-medium-standard-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-7-medium-standard-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-8-medium-standard-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-1-long-standard-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-long-standard-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-long-standard-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-long-standard-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-long-standard-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-long-standard-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-7-long-standard-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list."
+    ]
+  },
+  "pyramid-8-long-standard-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list."
+    ]
+  },
+  "pyramid-1-short-square-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-short-square-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-short-square-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-short-square-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-short-square-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-short-square-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-7-short-square-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-8-short-square-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-1-medium-square-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-medium-square-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-medium-square-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-medium-square-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-medium-square-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-medium-square-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-7-medium-square-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-8-medium-square-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-1-long-square-1": {
+    "kind": "pyramid",
+    "count": 1,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-2-long-square-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-3-long-square-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-4-long-square-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-5-long-square-1": {
+    "kind": "pyramid",
+    "count": 5,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "pyramid-6-long-square-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list."
+    ]
+  },
+  "pyramid-7-long-square-1": {
+    "kind": "pyramid",
+    "count": 7,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list."
+    ]
+  },
+  "pyramid-8-long-square-1": {
+    "kind": "pyramid",
+    "count": 8,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the pyramid do not fit its levels at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-1-short-wide-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-short-wide-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-short-wide-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-short-wide-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-short-wide-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-6-short-wide-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-7-short-wide-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-8-short-wide-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-1-medium-wide-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-medium-wide-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-medium-wide-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-medium-wide-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-medium-wide-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-6-medium-wide-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-7-medium-wide-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-8-medium-wide-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-1-long-wide-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-long-wide-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-long-wide-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-long-wide-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-long-wide-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-6-long-wide-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-7-long-wide-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-8-long-wide-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-1-short-standard-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-short-standard-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-short-standard-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-short-standard-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-short-standard-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-6-short-standard-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-7-short-standard-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-8-short-standard-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-1-medium-standard-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-medium-standard-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-medium-standard-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-medium-standard-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-medium-standard-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-6-medium-standard-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-7-medium-standard-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-8-medium-standard-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-1-long-standard-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-long-standard-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-long-standard-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-long-standard-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-long-standard-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-6-long-standard-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-7-long-standard-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-8-long-standard-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-1-short-square-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-short-square-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-short-square-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-short-square-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-short-square-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-6-short-square-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-7-short-square-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-8-short-square-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-1-medium-square-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-medium-square-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-medium-square-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-medium-square-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-medium-square-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-6-medium-square-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-7-medium-square-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-8-medium-square-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-1-long-square-1": {
+    "kind": "matrix",
+    "count": 1,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 1 entry is drawn as a card."
+    ]
+  },
+  "matrix-2-long-square-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 2 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-long-square-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-long-square-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "matrix-5-long-square-1": {
+    "kind": "matrix",
+    "count": 5,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 5 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-6-long-square-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-7-long-square-1": {
+    "kind": "matrix",
+    "count": 7,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 7 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "matrix-8-long-square-1": {
+    "kind": "matrix",
+    "count": 8,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 8 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: The entries of the matrix do not fit its quadrants at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-1-short-wide-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-short-wide-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-short-wide-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-short-wide-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-short-wide-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-6-short-wide-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-7-short-wide-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-8-short-wide-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-1-medium-wide-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-medium-wide-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-medium-wide-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-medium-wide-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-medium-wide-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-6-medium-wide-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-7-medium-wide-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-8-medium-wide-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-1-long-wide-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-long-wide-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-long-wide-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-long-wide-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-long-wide-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-6-long-wide-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-7-long-wide-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-8-long-wide-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-1-short-standard-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-short-standard-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-short-standard-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-short-standard-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-short-standard-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-6-short-standard-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-7-short-standard-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-8-short-standard-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-1-medium-standard-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-medium-standard-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-medium-standard-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-medium-standard-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-medium-standard-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-6-medium-standard-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-7-medium-standard-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-8-medium-standard-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-1-long-standard-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-long-standard-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-long-standard-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-long-standard-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-long-standard-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-6-long-standard-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-7-long-standard-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-8-long-standard-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-1-short-square-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-short-square-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-short-square-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-short-square-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-short-square-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-6-short-square-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-7-short-square-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-8-short-square-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-1-medium-square-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-medium-square-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-medium-square-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-medium-square-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-medium-square-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-6-medium-square-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-7-medium-square-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-8-medium-square-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-1-long-square-1": {
+    "kind": "cycle",
+    "count": 1,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-2-long-square-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-3-long-square-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-4-long-square-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "cycle-5-long-square-1": {
+    "kind": "cycle",
+    "count": 5,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-6-long-square-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-7-long-square-1": {
+    "kind": "cycle",
+    "count": 7,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "cycle-8-long-square-1": {
+    "kind": "cycle",
+    "count": 8,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the cycle do not fit its steps at the list's size, so they are drawn as a list."
+    ]
+  },
+  "chevrons-1-short-wide-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-short-wide-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-short-wide-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-short-wide-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-short-wide-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-short-wide-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-short-wide-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-8-short-wide-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-1-medium-wide-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-medium-wide-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-medium-wide-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-medium-wide-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-medium-wide-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-medium-wide-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-medium-wide-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-8-medium-wide-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-1-long-wide-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-long-wide-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-long-wide-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-long-wide-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-long-wide-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-long-wide-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-long-wide-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-8-long-wide-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-1-short-standard-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-short-standard-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-short-standard-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-short-standard-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-short-standard-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-short-standard-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-short-standard-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-8-short-standard-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-1-medium-standard-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-medium-standard-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-medium-standard-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-medium-standard-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-medium-standard-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-medium-standard-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-medium-standard-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-8-medium-standard-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-1-long-standard-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-long-standard-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-long-standard-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-long-standard-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-long-standard-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-long-standard-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-long-standard-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-8-long-standard-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-1-short-square-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-short-square-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-short-square-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-short-square-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-short-square-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-short-square-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-short-square-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-8-short-square-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-1-medium-square-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-medium-square-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-medium-square-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-medium-square-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-medium-square-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-medium-square-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-medium-square-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-8-medium-square-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-1-long-square-1": {
+    "kind": "chevrons",
+    "count": 1,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-2-long-square-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-3-long-square-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-4-long-square-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-5-long-square-1": {
+    "kind": "chevrons",
+    "count": 5,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-6-long-square-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "chevrons-7-long-square-1": {
+    "kind": "chevrons",
+    "count": 7,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the row of chevrons do not fit its chevrons at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the row of chevrons do not fit its chevrons at the list's size, so they are drawn as a list."
+    ]
+  },
+  "chevrons-8-long-square-1": {
+    "kind": "chevrons",
+    "count": 8,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the row of chevrons do not fit its chevrons at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the row of chevrons do not fit its chevrons at the list's size, so they are drawn as a list."
+    ]
+  },
+  "flow-1-short-wide-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-short-wide-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-short-wide-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-short-wide-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-short-wide-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-short-wide-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-short-wide-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-short-wide-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-1-medium-wide-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-medium-wide-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-medium-wide-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-medium-wide-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-medium-wide-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-medium-wide-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-medium-wide-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-medium-wide-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": [
+      "pptx/smartart-unavailable: The flow is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Process at the list's size, so OPF's own flow is drawn; OPF's own layout does not hold it either: the arrow after node 1 of 4 reaches outside the frame."
+    ]
+  },
+  "flow-1-long-wide-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-long-wide-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-long-wide-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-long-wide-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-long-wide-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-long-wide-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-long-wide-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-long-wide-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-1-short-standard-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-short-standard-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-short-standard-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-short-standard-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-short-standard-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-short-standard-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-short-standard-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-short-standard-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-1-medium-standard-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-medium-standard-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-medium-standard-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-medium-standard-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-medium-standard-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-medium-standard-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-medium-standard-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-medium-standard-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-1-long-standard-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-long-standard-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-long-standard-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-long-standard-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-long-standard-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-long-standard-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-long-standard-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-long-standard-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-1-short-square-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-short-square-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-short-square-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-short-square-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-short-square-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-short-square-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-short-square-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-short-square-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-1-medium-square-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-medium-square-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-medium-square-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-medium-square-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-medium-square-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-medium-square-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-medium-square-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-medium-square-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-1-long-square-1": {
+    "kind": "flow",
+    "count": 1,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-2-long-square-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-3-long-square-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-4-long-square-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-5-long-square-1": {
+    "kind": "flow",
+    "count": 5,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-6-long-square-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-7-long-square-1": {
+    "kind": "flow",
+    "count": 7,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "flow-8-long-square-1": {
+    "kind": "flow",
+    "count": 8,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the flow do not fit its boxes at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the flow do not fit its boxes at the list's size, so they are drawn as a list."
+    ]
+  },
+  "vertical-flow-1-short-wide-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-short-wide-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-short-wide-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-short-wide-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-short-wide-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-short-wide-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-7-short-wide-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-8-short-wide-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "short",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-1-medium-wide-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-medium-wide-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-medium-wide-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-medium-wide-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-medium-wide-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-medium-wide-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-7-medium-wide-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-8-medium-wide-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "medium",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-1-long-wide-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-long-wide-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-long-wide-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-long-wide-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-long-wide-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-long-wide-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-7-long-wide-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-8-long-wide-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "long",
+    "aspect": "wide",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-1-short-standard-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-short-standard-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-short-standard-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-short-standard-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-short-standard-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-short-standard-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-7-short-standard-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-8-short-standard-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "short",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-1-medium-standard-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-medium-standard-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-medium-standard-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-medium-standard-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-medium-standard-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-medium-standard-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-7-medium-standard-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-8-medium-standard-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "medium",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-1-long-standard-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-long-standard-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-long-standard-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-long-standard-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-long-standard-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-long-standard-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-7-long-standard-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list."
+    ]
+  },
+  "vertical-flow-8-long-standard-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "long",
+    "aspect": "standard",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list."
+    ]
+  },
+  "vertical-flow-1-short-square-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-short-square-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-short-square-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-short-square-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-short-square-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-short-square-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-7-short-square-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-8-short-square-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "short",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-1-medium-square-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-medium-square-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-medium-square-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-medium-square-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-medium-square-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-medium-square-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-7-medium-square-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-8-medium-square-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "medium",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-1-long-square-1": {
+    "kind": "vertical-flow",
+    "count": 1,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-2-long-square-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-3-long-square-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-4-long-square-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-5-long-square-1": {
+    "kind": "vertical-flow",
+    "count": 5,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": []
+  },
+  "vertical-flow-6-long-square-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list."
+    ]
+  },
+  "vertical-flow-7-long-square-1": {
+    "kind": "vertical-flow",
+    "count": 7,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list."
+    ]
+  },
+  "vertical-flow-8-long-square-1": {
+    "kind": "vertical-flow",
+    "count": 8,
+    "text": "long",
+    "aspect": "square",
+    "script": "latin",
+    "findings": [
+      "render/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list.",
+      "pptx/arrangement-adapted: The entries of the vertical flow do not fit its boxes at the list's size, so they are drawn as a list."
+    ]
+  },
+  "pyramid-3-rtl-wide-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "pyramid-4-rtl-wide-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "pyramid-6-rtl-wide-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "pyramid-3-he-wide-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "pyramid-4-he-wide-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "pyramid-6-he-wide-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "pyramid-3-zh-wide-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "pyramid-4-zh-wide-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "pyramid-6-zh-wide-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "pyramid-3-cjk-wide-1": {
+    "kind": "pyramid",
+    "count": 3,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "pyramid-4-cjk-wide-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "pyramid-6-cjk-wide-1": {
+    "kind": "pyramid",
+    "count": 6,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "matrix-3-rtl-wide-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-rtl-wide-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "matrix-6-rtl-wide-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-he-wide-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-he-wide-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "matrix-6-he-wide-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-zh-wide-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-zh-wide-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "matrix-6-zh-wide-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-3-cjk-wide-1": {
+    "kind": "matrix",
+    "count": 3,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+    ]
+  },
+  "matrix-4-cjk-wide-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "matrix-6-cjk-wide-1": {
+    "kind": "matrix",
+    "count": 6,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": [
+      "render/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards.",
+      "pptx/arrangement-adapted: A matrix needs four entries; its 6 entries are drawn as a grid of cards."
+    ]
+  },
+  "cycle-3-rtl-wide-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "cycle-4-rtl-wide-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "cycle-6-rtl-wide-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "cycle-3-he-wide-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "cycle-4-he-wide-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "cycle-6-he-wide-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "cycle-3-zh-wide-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "cycle-4-zh-wide-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "cycle-6-zh-wide-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "cycle-3-cjk-wide-1": {
+    "kind": "cycle",
+    "count": 3,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "cycle-4-cjk-wide-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "cycle-6-cjk-wide-1": {
+    "kind": "cycle",
+    "count": 6,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "chevrons-3-rtl-wide-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": [
+      "pptx/smartart-unavailable: The row of chevrons is exported as native shapes, not live SmartArt: its text uses a script the PowerPoint comparison did not cover, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: a mirrored shape (a chevron pointing left) has no form in a layout definition."
+    ]
+  },
+  "chevrons-4-rtl-wide-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": [
+      "pptx/smartart-unavailable: The row of chevrons is exported as native shapes, not live SmartArt: its text uses a script the PowerPoint comparison did not cover, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: a mirrored shape (a chevron pointing left) has no form in a layout definition."
+    ]
+  },
+  "chevrons-6-rtl-wide-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": [
+      "pptx/smartart-unavailable: The row of chevrons is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Chevron Process at the list's size, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: a mirrored shape (a chevron pointing left) has no form in a layout definition."
+    ]
+  },
+  "chevrons-3-he-wide-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": [
+      "pptx/smartart-unavailable: The row of chevrons is exported as native shapes, not live SmartArt: its text uses a script the PowerPoint comparison did not cover, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: a mirrored shape (a chevron pointing left) has no form in a layout definition."
+    ]
+  },
+  "chevrons-4-he-wide-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": [
+      "pptx/smartart-unavailable: The row of chevrons is exported as native shapes, not live SmartArt: its text uses a script the PowerPoint comparison did not cover, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: a mirrored shape (a chevron pointing left) has no form in a layout definition."
+    ]
+  },
+  "chevrons-6-he-wide-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": [
+      "pptx/smartart-unavailable: The row of chevrons is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Chevron Process at the list's size, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: a mirrored shape (a chevron pointing left) has no form in a layout definition."
+    ]
+  },
+  "chevrons-3-zh-wide-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "chevrons-4-zh-wide-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "chevrons-6-zh-wide-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "chevrons-3-cjk-wide-1": {
+    "kind": "chevrons",
+    "count": 3,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "chevrons-4-cjk-wide-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "chevrons-6-cjk-wide-1": {
+    "kind": "chevrons",
+    "count": 6,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "flow-3-rtl-wide-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "flow-4-rtl-wide-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "flow-6-rtl-wide-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "flow-3-he-wide-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "flow-4-he-wide-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "flow-6-he-wide-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "flow-3-zh-wide-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "flow-4-zh-wide-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "flow-6-zh-wide-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "flow-3-cjk-wide-1": {
+    "kind": "flow",
+    "count": 3,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "flow-4-cjk-wide-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "flow-6-cjk-wide-1": {
+    "kind": "flow",
+    "count": 6,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "vertical-flow-3-rtl-wide-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "vertical-flow-4-rtl-wide-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "vertical-flow-6-rtl-wide-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "rtl",
+    "aspect": "wide",
+    "script": "rtl",
+    "findings": []
+  },
+  "vertical-flow-3-he-wide-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "vertical-flow-4-he-wide-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "vertical-flow-6-he-wide-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "he",
+    "aspect": "wide",
+    "script": "he",
+    "findings": []
+  },
+  "vertical-flow-3-zh-wide-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "vertical-flow-4-zh-wide-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "vertical-flow-6-zh-wide-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "zh",
+    "aspect": "wide",
+    "script": "zh",
+    "findings": []
+  },
+  "vertical-flow-3-cjk-wide-1": {
+    "kind": "vertical-flow",
+    "count": 3,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "vertical-flow-4-cjk-wide-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "vertical-flow-6-cjk-wide-1": {
+    "kind": "vertical-flow",
+    "count": 6,
+    "text": "cjk",
+    "aspect": "wide",
+    "script": "cjk",
+    "findings": []
+  },
+  "pyramid-2-blocks-wide-1": {
+    "kind": "pyramid",
+    "count": 2,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The pyramid is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "pyramid-4-blocks-wide-1": {
+    "kind": "pyramid",
+    "count": 4,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The pyramid is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "matrix-2-blocks-wide-1": {
+    "kind": "matrix",
+    "count": 2,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The matrix is exported as native shapes, not live SmartArt: OPF's matrix has no live SmartArt: its design has no OPF layout definition."
+    ]
+  },
+  "matrix-4-blocks-wide-1": {
+    "kind": "matrix",
+    "count": 4,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The matrix is exported as native shapes, not live SmartArt: OPF's matrix has no live SmartArt: its design has no OPF layout definition."
+    ]
+  },
+  "cycle-2-blocks-wide-1": {
+    "kind": "cycle",
+    "count": 2,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The cycle is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own cycle is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "cycle-4-blocks-wide-1": {
+    "kind": "cycle",
+    "count": 4,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The cycle is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own cycle is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "chevrons-2-blocks-wide-1": {
+    "kind": "chevrons",
+    "count": 2,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The row of chevrons is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "chevrons-4-blocks-wide-1": {
+    "kind": "chevrons",
+    "count": 4,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The row of chevrons is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "flow-2-blocks-wide-1": {
+    "kind": "flow",
+    "count": 2,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The flow is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own flow is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "flow-4-blocks-wide-1": {
+    "kind": "flow",
+    "count": 4,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The flow is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own flow is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "vertical-flow-2-blocks-wide-1": {
+    "kind": "vertical-flow",
+    "count": 2,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The vertical flow is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own vertical flow is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  },
+  "vertical-flow-4-blocks-wide-1": {
+    "kind": "vertical-flow",
+    "count": 4,
+    "text": "blocks",
+    "aspect": "wide",
+    "script": "blocks",
+    "findings": [
+      "pptx/smartart-unavailable: The vertical flow is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own vertical flow is drawn; OPF's own layout does not hold it either: its design has no OPF layout definition."
+    ]
+  }
+}

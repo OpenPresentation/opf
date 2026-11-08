@@ -1,0 +1,1448 @@
+﻿[
+    {
+        "file":  "chevrons-8-short-square",
+        "hasSmartArt":  true,
+        "layout":  "OPF Chevron Rows",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/chevron-rows/5b71d1f88b9ae1d8",
+        "category":  "process",
+        "description":  "Stages as chevrons in one or more rows, left to right.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,0,238.737,83.047,0",
+                      "214.863,0,238.737,83.047,0",
+                      "0,101.047,238.737,83.047,0",
+                      "214.863,101.047,238.737,83.047,0",
+                      "0,202.095,238.737,83.047,0",
+                      "214.863,202.095,238.737,83.047,0",
+                      "0,303.142,238.737,83.047,0",
+                      "214.863,303.142,238.737,83.047,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Chevron Rows"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Chevron Rows",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  9
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Chevron Rows",
+                       "shapes":  7
+                   },
+        "switchedTo":  "Basic Block List",
+        "switchedBack":  "OPF Chevron Rows | urn:openpresentation.org/smartart/layout/chevron-rows/5b71d1f88b9ae1d8",
+        "reopened":  {
+                         "hasSmartArt":  true,
+                         "layout":  "OPF Chevron Rows | urn:openpresentation.org/smartart/layout/chevron-rows/5b71d1f88b9ae1d8",
+                         "rectsKept":  true
+                     }
+    },
+    {
+        "file":  "chevrons-8-short-standard",
+        "hasSmartArt":  true,
+        "layout":  "OPF Chevron Rows",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/chevron-rows/76d074a496ce6a60",
+        "category":  "process",
+        "description":  "Stages as chevrons in one or more rows, left to right.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,39.323,226.285,90.514,0",
+                      "203.657,39.323,226.285,90.514,0",
+                      "407.314,39.323,226.285,90.514,0",
+                      "0,147.838,226.285,90.514,0",
+                      "203.657,147.838,226.285,90.514,0",
+                      "407.314,147.838,226.285,90.514,0",
+                      "0,256.352,333.474,90.514,0",
+                      "300.126,256.352,333.474,90.514,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Chevron Rows"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Chevron Rows",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  9
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Chevron Rows",
+                       "shapes":  7
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "chevrons-8-short-wide",
+        "hasSmartArt":  true,
+        "layout":  "OPF Chevron Rows",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/chevron-rows/6db7b06896e86bc9",
+        "category":  "process",
+        "description":  "Stages as chevrons in one or more rows, left to right.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,89.652,236.108,94.443,0",
+                      "212.497,89.652,236.108,94.443,0",
+                      "424.994,89.652,236.108,94.443,0",
+                      "637.492,89.652,236.108,94.443,0",
+                      "0,202.095,236.108,94.443,0",
+                      "212.497,202.095,236.108,94.443,0",
+                      "424.994,202.095,236.108,94.443,0",
+                      "637.492,202.095,236.108,94.443,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Chevron Rows"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Chevron Rows",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  9
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Chevron Rows",
+                       "shapes":  7
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "cycle-8-short-square",
+        "hasSmartArt":  true,
+        "layout":  "OPF Cycle Loop",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/cycle-loop/58928bbdc561757d",
+        "category":  "cycle",
+        "description":  "The steps of a loop in two rows, clockwise from the top left, an arrow from each to the next.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      35,
+                      35,
+                      35,
+                      35,
+                      35,
+                      35,
+                      35,
+                      35
+                  ],
+        "rects":  [
+                      "148.68,0,112.68,86.4,0",
+                      "194.22,95.76,21.6,17.28,90",
+                      "148.68,122.4,112.68,86.4,0",
+                      "194.22,218.16,21.6,17.28,90",
+                      "148.68,244.8,112.68,86.4,0",
+                      "194.22,340.56,21.6,17.28,90",
+                      "148.68,367.2,112.68,86.4,0",
+                      "119.88,401.76,21.6,17.28,180",
+                      "0,367.2,112.68,86.4,0",
+                      "45.54,340.56,21.6,17.28,270",
+                      "0,244.8,112.68,86.4,0",
+                      "45.54,218.16,21.6,17.28,270",
+                      "0,122.4,112.68,86.4,0",
+                      "45.54,95.76,21.6,17.28,270",
+                      "0,0,112.68,86.4,0",
+                      "119.88,34.56,21.6,17.28,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   35,
+                                   35,
+                                   35,
+                                   35,
+                                   35,
+                                   35,
+                                   35,
+                                   35
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Cycle Loop"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Cycle Loop",
+                    "sizes":  [
+                                  35,
+                                  35,
+                                  35,
+                                  35,
+                                  35,
+                                  35,
+                                  35,
+                                  35,
+                                  35
+                              ],
+                    "shapes":  18
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Cycle Loop",
+                       "shapes":  14
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "cycle-8-short-standard",
+        "hasSmartArt":  true,
+        "layout":  "OPF Cycle Loop",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/cycle-loop/b51620e8c348b7f6",
+        "category":  "cycle",
+        "description":  "The steps of a loop in two rows, clockwise from the top left, an arrow from each to the next.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "202.68,0,166.68,86.4,0",
+                      "275.22,95.76,21.6,17.28,90",
+                      "202.68,122.4,166.68,86.4,0",
+                      "275.22,218.16,21.6,17.28,90",
+                      "202.68,244.8,166.68,86.4,0",
+                      "275.22,340.56,21.6,17.28,90",
+                      "202.68,367.2,166.68,86.4,0",
+                      "173.88,401.76,21.6,17.28,180",
+                      "0,367.2,166.68,86.4,0",
+                      "72.54,340.56,21.6,17.28,270",
+                      "0,244.8,166.68,86.4,0",
+                      "72.54,218.16,21.6,17.28,270",
+                      "0,122.4,166.68,86.4,0",
+                      "72.54,95.76,21.6,17.28,270",
+                      "0,0,166.68,86.4,0",
+                      "173.88,34.56,21.6,17.28,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Cycle Loop"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Cycle Loop",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  18
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Cycle Loop",
+                       "shapes":  14
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "cycle-8-short-wide",
+        "hasSmartArt":  true,
+        "layout":  "OPF Cycle Loop of Three Rows",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/cycle-loop-3/17dd3b1024ab57e0",
+        "category":  "cycle",
+        "description":  "The steps of a loop in three rows, clockwise from the top left, an arrow from each to the next.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,0,147.12,127.2,0",
+                      "154.32,54.96,21.6,17.28,0",
+                      "183.12,0,147.12,127.2,0",
+                      "337.44,54.96,21.6,17.28,0",
+                      "366.24,0,147.12,127.2,0",
+                      "429,136.56,21.6,17.28,90",
+                      "366.24,163.2,147.12,127.2,0",
+                      "429,299.76,21.6,17.28,90",
+                      "366.24,326.4,147.12,127.2,0",
+                      "337.44,381.36,21.6,17.28,180",
+                      "183.12,326.4,147.12,127.2,0",
+                      "154.32,381.36,21.6,17.28,180",
+                      "0,326.4,147.12,127.2,0",
+                      "62.76,299.76,21.6,17.28,270",
+                      "0,163.2,147.12,127.2,0",
+                      "62.76,136.56,21.6,17.28,270"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Cycle Loop of Three Rows"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Cycle Loop of Three Rows",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  18
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Cycle Loop of Three Rows",
+                       "shapes":  14
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "flow-8-short-square",
+        "hasSmartArt":  true,
+        "layout":  "OPF Snaking Flow",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/flow-rows/785592c12252bfa0",
+        "category":  "process",
+        "description":  "Steps as boxes with arrows between them in rows that snake, the second running back under the first.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,51.357,119.368,71.621,0",
+                      "130.589,72.366,25.306,29.603,0",
+                      "167.116,51.357,119.368,71.621,0",
+                      "297.705,72.366,25.306,29.603,0",
+                      "334.231,51.357,119.368,71.621,0",
+                      "381.262,125.329,25.306,29.603,90",
+                      "334.231,157.285,119.368,71.621,0",
+                      "297.705,178.293,25.306,29.603,180",
+                      "167.116,157.285,119.368,71.621,0",
+                      "130.589,178.293,25.306,29.603,180",
+                      "0,157.285,119.368,71.621,0",
+                      "47.031,231.257,25.306,29.603,90",
+                      "0,263.212,202.926,71.621,0",
+                      "214.147,284.221,25.306,29.603,0",
+                      "250.674,263.212,202.926,71.621,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Snaking Flow"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Snaking Flow",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  17
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Snaking Flow",
+                       "shapes":  13
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "flow-8-short-standard",
+        "hasSmartArt":  true,
+        "layout":  "OPF Snaking Flow",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/flow-rows/ca322a7a7954d585",
+        "category":  "process",
+        "description":  "Steps as boxes with arrows between them in rows that snake, the second running back under the first.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,102.572,121.847,73.108,0",
+                      "133.3,124.016,25.832,30.217,0",
+                      "170.584,102.572,121.847,73.108,0",
+                      "303.884,124.016,25.832,30.217,0",
+                      "341.169,102.572,121.847,73.108,0",
+                      "474.469,124.016,25.832,30.217,0",
+                      "511.753,102.572,121.847,73.108,0",
+                      "559.761,177.986,25.832,30.217,90",
+                      "511.753,210.511,121.847,73.108,0",
+                      "474.469,231.955,25.832,30.217,180",
+                      "341.169,210.511,121.847,73.108,0",
+                      "303.884,231.955,25.832,30.217,180",
+                      "170.584,210.511,121.847,73.108,0",
+                      "133.3,231.955,25.832,30.217,180",
+                      "0,210.511,121.847,73.108,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Snaking Flow"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Snaking Flow",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  17
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Snaking Flow",
+                       "shapes":  13
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "flow-8-short-wide",
+        "hasSmartArt":  true,
+        "layout":  "OPF Snaking Flow",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/flow-rows/6c1c59ec02f1017d",
+        "category":  "process",
+        "description":  "Steps as boxes with arrows between them in rows that snake, the second running back under the first.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,69.987,168,100.8,0",
+                      "183.792,99.555,35.616,41.664,0",
+                      "235.2,69.987,168,100.8,0",
+                      "418.992,99.555,35.616,41.664,0",
+                      "470.4,69.987,168,100.8,0",
+                      "654.192,99.555,35.616,41.664,0",
+                      "705.6,69.987,168,100.8,0",
+                      "771.792,172.263,35.616,41.664,90",
+                      "705.6,215.403,168,100.8,0",
+                      "654.192,244.971,35.616,41.664,180",
+                      "470.4,215.403,168,100.8,0",
+                      "418.992,244.971,35.616,41.664,180",
+                      "235.2,215.403,168,100.8,0",
+                      "183.792,244.971,35.616,41.664,180",
+                      "0,215.403,168,100.8,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Snaking Flow"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Snaking Flow",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  17
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Snaking Flow",
+                       "shapes":  13
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "matrix-8-short-square",
+        "hasSmartArt":  true,
+        "layout":  "OPF Card Grid",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/card-grid/13e0c6dd49990141",
+        "category":  "list",
+        "description":  "Entries on cards in a grid, the last row centered.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      31,
+                      31,
+                      31,
+                      31,
+                      31,
+                      31,
+                      31,
+                      31
+                  ],
+        "rects":  [
+                      "0,0,121.68,99.9,0",
+                      "139.68,0,121.68,99.9,0",
+                      "0,117.9,121.68,99.9,0",
+                      "139.68,117.9,121.68,99.9,0",
+                      "0,235.8,121.68,99.9,0",
+                      "139.68,235.8,121.68,99.9,0",
+                      "0,353.7,121.68,99.9,0",
+                      "139.68,353.7,121.68,99.9,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   31,
+                                   31,
+                                   31,
+                                   31,
+                                   31,
+                                   31,
+                                   31,
+                                   31
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Card Grid"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Card Grid",
+                    "sizes":  [
+                                  31,
+                                  31,
+                                  31,
+                                  31,
+                                  31,
+                                  31,
+                                  31,
+                                  31,
+                                  31
+                              ],
+                    "shapes":  9
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Card Grid",
+                       "shapes":  7
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "matrix-8-short-standard",
+        "hasSmartArt":  true,
+        "layout":  "OPF Card Grid",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/card-grid/cb83d18fdd78be09",
+        "category":  "list",
+        "description":  "Entries on cards in a grid, the last row centered.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,0,175.68,99.9,0",
+                      "193.68,0,175.68,99.9,0",
+                      "0,117.9,175.68,99.9,0",
+                      "193.68,117.9,175.68,99.9,0",
+                      "0,235.8,175.68,99.9,0",
+                      "193.68,235.8,175.68,99.9,0",
+                      "0,353.7,175.68,99.9,0",
+                      "193.68,353.7,175.68,99.9,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Card Grid"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Card Grid",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  9
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Card Grid",
+                       "shapes":  7
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "matrix-8-short-wide",
+        "hasSmartArt":  true,
+        "layout":  "OPF Card Grid",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/card-grid/d4e5b796814a77ff",
+        "category":  "list",
+        "description":  "Entries on cards in a grid, the last row centered.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,0,247.68,99.9,0",
+                      "265.68,0,247.68,99.9,0",
+                      "0,117.9,247.68,99.9,0",
+                      "265.68,117.9,247.68,99.9,0",
+                      "0,235.8,247.68,99.9,0",
+                      "265.68,235.8,247.68,99.9,0",
+                      "0,353.7,247.68,99.9,0",
+                      "265.68,353.7,247.68,99.9,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Card Grid"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Card Grid",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  9
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Card Grid",
+                       "shapes":  7
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "pyramid-8-short-square",
+        "hasSmartArt":  true,
+        "layout":  "OPF Stepped Pyramid",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/pyramid-steps/3e82f68617bc205a",
+        "category":  "pyramid",
+        "description":  "Levels that build on each other as a stepped pyramid of rounded bars, each entry beside its level.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33
+                  ],
+        "rects":  [
+                      "79.38,0,22.68,40.399,0",
+                      "199.44,0,254.16,40.399,0",
+                      "68.04,49.399,45.36,40.399,0",
+                      "199.44,49.399,254.16,40.399,0",
+                      "56.7,98.797,68.04,40.399,0",
+                      "199.44,98.797,254.16,40.399,0",
+                      "45.36,148.196,90.72,40.399,0",
+                      "199.44,148.196,254.16,40.399,0",
+                      "34.02,197.595,113.4,40.399,0",
+                      "199.44,197.595,254.16,40.399,0",
+                      "22.68,246.994,136.08,40.399,0",
+                      "199.44,246.994,254.16,40.399,0",
+                      "11.34,296.392,158.76,40.399,0",
+                      "199.44,296.392,254.16,40.399,0",
+                      "0,345.791,181.44,40.399,0",
+                      "199.44,345.791,254.16,40.399,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Stepped Pyramid"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Stepped Pyramid",
+                    "sizes":  [
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33
+                              ],
+                    "shapes":  18
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Stepped Pyramid",
+                       "shapes":  14
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "pyramid-8-short-standard",
+        "hasSmartArt":  true,
+        "layout":  "OPF Stepped Pyramid",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/pyramid-steps/298289ff21c4ec4a",
+        "category":  "pyramid",
+        "description":  "Levels that build on each other as a stepped pyramid of rounded bars, each entry beside its level.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33
+                  ],
+        "rects":  [
+                      "110.88,0,31.68,40.399,0",
+                      "271.44,0,362.16,40.399,0",
+                      "95.04,49.399,63.36,40.399,0",
+                      "271.44,49.399,362.16,40.399,0",
+                      "79.2,98.797,95.04,40.399,0",
+                      "271.44,98.797,362.16,40.399,0",
+                      "63.36,148.196,126.72,40.399,0",
+                      "271.44,148.196,362.16,40.399,0",
+                      "47.52,197.595,158.4,40.399,0",
+                      "271.44,197.595,362.16,40.399,0",
+                      "31.68,246.994,190.08,40.399,0",
+                      "271.44,246.994,362.16,40.399,0",
+                      "15.84,296.392,221.76,40.399,0",
+                      "271.44,296.392,362.16,40.399,0",
+                      "0,345.791,253.44,40.399,0",
+                      "271.44,345.791,362.16,40.399,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Stepped Pyramid"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Stepped Pyramid",
+                    "sizes":  [
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33
+                              ],
+                    "shapes":  18
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Stepped Pyramid",
+                       "shapes":  14
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "pyramid-8-short-wide",
+        "hasSmartArt":  true,
+        "layout":  "OPF Stepped Pyramid",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/pyramid-steps/1282e9ebd584a7a8",
+        "category":  "pyramid",
+        "description":  "Levels that build on each other as a stepped pyramid of rounded bars, each entry beside its level.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33,
+                      33
+                  ],
+        "rects":  [
+                      "152.88,0,43.68,40.399,0",
+                      "367.44,0,506.16,40.399,0",
+                      "131.04,49.399,87.36,40.399,0",
+                      "367.44,49.399,506.16,40.399,0",
+                      "109.2,98.797,131.04,40.399,0",
+                      "367.44,98.797,506.16,40.399,0",
+                      "87.36,148.196,174.72,40.399,0",
+                      "367.44,148.196,506.16,40.399,0",
+                      "65.52,197.595,218.4,40.399,0",
+                      "367.44,197.595,506.16,40.399,0",
+                      "43.68,246.994,262.08,40.399,0",
+                      "367.44,246.994,506.16,40.399,0",
+                      "21.84,296.392,305.76,40.399,0",
+                      "367.44,296.392,506.16,40.399,0",
+                      "0,345.791,349.44,40.399,0",
+                      "367.44,345.791,506.16,40.399,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33,
+                                   33
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Stepped Pyramid"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Stepped Pyramid",
+                    "sizes":  [
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33,
+                                  33
+                              ],
+                    "shapes":  18
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Stepped Pyramid",
+                       "shapes":  14
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "vertical-flow-8-short-square",
+        "hasSmartArt":  true,
+        "layout":  "OPF Snaking Vertical Flow",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/vertical-flow-columns/0012dd55fbcbf4ad",
+        "category":  "process",
+        "description":  "Steps as boxes with arrows between them in columns that snake, top to bottom then back up.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      34,
+                      34,
+                      34,
+                      34,
+                      34,
+                      34,
+                      34,
+                      34
+                  ],
+        "rects":  [
+                      "0,54.65,112.68,62.6,0",
+                      "44.602,118.815,23.475,28.17,90",
+                      "0,148.55,112.68,62.6,0",
+                      "44.602,212.715,23.475,28.17,90",
+                      "0,242.45,112.68,62.6,0",
+                      "44.602,306.615,23.475,28.17,90",
+                      "0,336.35,112.68,62.6,0",
+                      "118.942,353.565,23.475,28.17,0",
+                      "148.68,336.35,112.68,62.6,0",
+                      "193.282,306.615,23.475,28.17,270",
+                      "148.68,242.45,112.68,62.6,0",
+                      "193.282,212.715,23.475,28.17,270",
+                      "148.68,148.55,112.68,62.6,0",
+                      "193.282,118.815,23.475,28.17,270",
+                      "148.68,54.65,112.68,62.6,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   34,
+                                   34,
+                                   34,
+                                   34,
+                                   34,
+                                   34,
+                                   34,
+                                   34
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Snaking Vertical Flow"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Snaking Vertical Flow",
+                    "sizes":  [
+                                  34,
+                                  34,
+                                  34,
+                                  34,
+                                  34,
+                                  34,
+                                  34,
+                                  34,
+                                  34
+                              ],
+                    "shapes":  17
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Snaking Vertical Flow",
+                       "shapes":  13
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "vertical-flow-8-short-standard",
+        "hasSmartArt":  true,
+        "layout":  "OPF Snaking Vertical Flow",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/vertical-flow-columns/5dadd556503bccad",
+        "category":  "process",
+        "description":  "Steps as boxes with arrows between them in columns that snake, top to bottom then back up.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,0,166.68,82.473,0",
+                      "67.876,84.535,30.927,37.113,90",
+                      "0,123.709,166.68,82.473,0",
+                      "67.876,208.243,30.927,37.113,90",
+                      "0,247.418,166.68,82.473,0",
+                      "67.876,331.953,30.927,37.113,90",
+                      "0,371.127,166.68,82.473,0",
+                      "170.28,393.807,28.8,37.113,0",
+                      "202.68,371.127,166.68,82.473,0",
+                      "270.556,331.953,30.927,37.113,270",
+                      "202.68,247.418,166.68,82.473,0",
+                      "270.556,208.243,30.927,37.113,270",
+                      "202.68,123.709,166.68,82.473,0",
+                      "270.556,84.535,30.927,37.113,270",
+                      "202.68,0,166.68,82.473,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Snaking Vertical Flow"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Snaking Vertical Flow",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  17
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Snaking Vertical Flow",
+                       "shapes":  13
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    },
+    {
+        "file":  "vertical-flow-8-short-wide",
+        "hasSmartArt":  true,
+        "layout":  "OPF Snaking Vertical Flow",
+        "layoutId":  "urn:openpresentation.org/smartart/layout/vertical-flow-columns/3e3e2ab4a290f764",
+        "category":  "process",
+        "description":  "Steps as boxes with arrows between them in columns that snake, top to bottom then back up.",
+        "nodes":  8,
+        "texts":  [
+                      "Vision",
+                      "Plan",
+                      "Build",
+                      "Ship",
+                      "Learn",
+                      "Grow",
+                      "Scale",
+                      "Serve"
+                  ],
+        "sizes":  [
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36,
+                      36
+                  ],
+        "rects":  [
+                      "0,0,238.68,82.473,0",
+                      "103.876,84.535,30.927,37.113,90",
+                      "0,123.709,238.68,82.473,0",
+                      "103.876,208.243,30.927,37.113,90",
+                      "0,247.418,238.68,82.473,0",
+                      "103.876,331.953,30.927,37.113,90",
+                      "0,371.127,238.68,82.473,0",
+                      "242.28,393.807,28.8,37.113,0",
+                      "274.68,371.127,238.68,82.473,0",
+                      "378.556,331.953,30.927,37.113,270",
+                      "274.68,247.418,238.68,82.473,0",
+                      "378.556,208.243,30.927,37.113,270",
+                      "274.68,123.709,238.68,82.473,0",
+                      "378.556,84.535,30.927,37.113,270",
+                      "274.68,0,238.68,82.473,0"
+                  ],
+        "edit":  {
+                     "sizes":  [
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36,
+                                   36
+                               ],
+                     "rectsKept":  true,
+                     "layout":  "OPF Snaking Vertical Flow"
+                 },
+        "add":  {
+                    "nodes":  9,
+                    "layout":  "OPF Snaking Vertical Flow",
+                    "sizes":  [
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36,
+                                  36
+                              ],
+                    "shapes":  17
+                },
+        "delete":  {
+                       "nodes":  7,
+                       "layout":  "OPF Snaking Vertical Flow",
+                       "shapes":  13
+                   },
+        "error":  "layout not found: urn:microsoft.com/office/officeart/2005/8/layout/default line 24"
+    }
+]
