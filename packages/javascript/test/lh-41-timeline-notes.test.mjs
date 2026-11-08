@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import {composeSlide} from '../dist/composition.js';
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/lh-41-timeline-notes.json',import.meta.url),'utf8'));
-const options=(advance=.44,direction='ltr')=>({layout:fixture.layout,themeDesign:fixture.design,direction,textMeasurement:{measure:(text,size)=>[...text].length*size*advance}});
+const options=(advance=.44,direction='ltr')=>({layout:fixture.layout,themeDesign:fixture.design,direction,fontFamilies:{body:'Retained body face',heading:'Retained heading face'},textMeasurement:{measure:(text,size)=>[...text].length*size*advance}});
 const timelines=r=>r.items.filter(i=>i.timelineLayout),notes=r=>r.items.filter(i=>i.field==='text'&&!i.emphasis);
 const bottom=b=>b.y+b.height,words=text=>text.replace(/\s+/gu,' ').trim();
 for(const advance of[.44,.48])for(const direction of['ltr','rtl'])test('observed horizontal timeline row reserves measured note height '+advance+'/'+direction,()=>{
@@ -13,14 +13,14 @@ for(const advance of[.44,.48])for(const direction of['ltr','rtl'])test('observed
  for(const item of timelines(r)){
   assert.equal(item.timelineLayout.arrangement,'alternating');assert.equal(item.timelineLayout.markers.length,4);assert.equal(item.timelineLayout.parts.length,14);
   const authored=slide.blocks[Number(/blocks\.(\d+)/u.exec(item.path)[1])].timeline;assert.deepEqual(item.value,authored);
-  for(const part of item.timelineLayout.parts){assert.ok(part.fit.fontSize>=roles[part.role]-.02,part.path+' retains font size');assert.ok(!part.fit.overflow);assert.ok(bottom(part.box)<=bottom(item.box)+.02);}
+  for(const part of item.timelineLayout.parts){assert.ok(part.fit.fontSize>=roles[part.role]-.02,part.path+' retains font size');assert.ok(!part.fit.overflow);assert.equal(part.style.fontFamily,'Retained body face');assert.ok(bottom(part.box)<=bottom(item.box)+.02);}
  }
  for(const item of notes(r)){
-  assert.equal(item.text.fontSize,18,'notes grow one existing type-scale step from 16px');assert.ok(!item.text.overflow);assert.ok(item.text.lines.every(line=>line.trim().length<=70));
+  assert.equal(item.textStyle.fontFamily,'Retained body face');assert.equal(item.text.fontSize,18,'notes grow one existing type-scale step from 16px');assert.ok(!item.text.overflow);assert.ok(item.text.lines.every(line=>line.trim().length<=70));
   assert.equal(words(item.text.lines.join('')),words(item.value));assert.ok(item.box.y>=Math.max(...timelines(r).map(i=>bottom(i.box))));assert.ok(bottom(item.box)<=bottom(r.contentBox)+.02);
  }
  assert.ok((Math.max(...notes(r).map(i=>bottom(i.box)))-r.contentBox.y)/r.contentBox.height>=.9,'retained content fills the body');
- assert.equal(r.items.find(i=>i.field==='title').text.fontSize,54);assert.equal(r.items.find(i=>i.emphasis).text.fontSize,28);assert.equal(r.titleRule,undefined,'no new title decoration');
+ assert.equal(r.items.find(i=>i.field==='title').text.fontSize,54);assert.equal(r.items.find(i=>i.field==='title').textStyle.fontFamily,'Retained heading face');assert.deepEqual(r.items.find(i=>i.field==='title').box,{x:57.6,y:57.6,width:1164.8,height:65.88});assert.deepEqual(r.items.find(i=>i.field==='title').text.lines,['Why This Matters']);assert.equal(r.items.find(i=>i.emphasis).text.fontSize,28);assert.equal(r.titleRule,undefined,'no new title decoration');
  const xs=timelines(r).map(i=>i.box.x);assert.ok(direction==='rtl'?xs[0]>xs[1]&&xs[1]>xs[2]:xs[0]<xs[1]&&xs[1]<xs[2]);
 });
 test('authored gap remains exact when a retained arrangement fits',()=>{

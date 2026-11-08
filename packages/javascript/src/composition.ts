@@ -4948,9 +4948,11 @@ function readableTimelineNotes(input: unknown, options: ComposeSlideOptions, res
     const retained: RetainedProse = new Map(result.items.filter(item => item.text).map(item => [item.path, {size: grow && notes.includes(item) ? Math.min(contentNominalSize('text') * scale, nextStep(item.text!.fontSize)) : item.text!.fontSize, ...(notes.includes(item) ? {limit: PROSE_MEASURE_CHARS} : {})}]));
     const next = composeVariant(input, {...options, [RECOMPOSE]: true, [TIMELINE_NOTE_REFLOW]: roles, [PROSE_REFLOW]: retained, [PROSE_COMPACT]: compact, [PROSE_NO_TITLE_RULE]: result.titleRule === undefined} as ComposeSlideOptions, before, floor);
     if (!next || overflowCount(next) > 0 || next.items.some(overReadingMeasure) || shrinks(next, result, options) || notes.some(item => (next.items.find(entry => entry.path === item.path)?.text?.fontSize ?? 0) < retained.get(item.path)!.size - FONT_GRID_EPSILON)) continue;
+    if (JSON.stringify(next.titleRule) !== JSON.stringify(result.titleRule)) continue;
     const kept = result.items.every(item => {
       const after = next.items.find(entry => entry.path === item.path);
       if (!after || JSON.stringify(item.value) !== JSON.stringify(after.value) || JSON.stringify(item.textStyle) !== JSON.stringify(after.textStyle)) return false;
+      if (headings.has(item.field) && JSON.stringify({box: item.box, lines: item.text?.lines}) !== JSON.stringify({box: after.box, lines: after.text?.lines})) return false;
       if (item.text && (!after.text || after.text.fontSize < item.text.fontSize - FONT_GRID_EPSILON)) return false;
       return !item.timelineLayout || !!after.timelineLayout && [...item.timelineLayout.parts, ...(item.timelineLayout.statusLabels ?? [])].every(part => {
         const fit = [...after.timelineLayout!.parts, ...(after.timelineLayout!.statusLabels ?? [])].find(entry => entry.path === part.path);
