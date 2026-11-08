@@ -4930,8 +4930,41 @@ function readableProse(input: unknown, options: ComposeSlideOptions, result: Sli
   }
   return result;
 }
+/** LH-41: measure a settled horizontal timeline row in the orientation it actually draws, retaining all role sizes. */
+const TIMELINE_NOTE_REFLOW = Symbol('opf.timelineNoteReflow');
+function readableTimelineNotes(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
+  if (options.recompose === false || !overflowCount(result) || result.regions || (options as Record<symbol, unknown>)[TIMELINE_NOTE_REFLOW] !== undefined) return result;
+  const slide = record(input), own = record(slide.composition), blocks = slide.blocks;
+  if (!Array.isArray(blocks) || ['mode', 'columns', 'weights'].some(key => own[key] !== undefined) || blocks.some(block => ['placement', 'region', 'composition', 'blocks'].some(key => record(block)[key] !== undefined))) return result;
+  const body = result.items.filter(item => !headings.has(item.field) && !item.eyebrow && !item.emphasis), timelines = body.filter(item => item.timelineLayout), notes = body.filter(item => item.field === 'text');
+  if (timelines.length < 2 || !notes.length || timelines.length + notes.length !== body.length || notes.some(item => !item.text || item.caption || ownRunSizes(item.value))) return result;
+  const first = timelines[0]!;
+  if (timelines.some(item => item.caption || item.timelineLayout!.overflow || item.timelineLayout!.arrangement === 'vertical' || Math.abs(item.box.y - first.box.y) > .5 || Math.abs(item.box.height - first.box.height) > .5)) return result;
+  const scale = Math.min(result.width, result.height) / 720;
+  const roles = new Map(timelines.map(item => [item.path, Math.min(...item.timelineLayout!.parts.map(part => (part.fit!.fontSize - part.requestedFontSize) / scale))]));
+  const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale);
+  for (const compact of [false, true]) for (const grow of [true, false]) {
+    const nextStep = (size: number) => typeScaleAbove(typeScaleAbove(size, result.composition.minFontSize ?? 16, scale), result.composition.minFontSize ?? 16, scale);
+    const retained: RetainedProse = new Map(result.items.filter(item => item.text).map(item => [item.path, {size: grow && notes.includes(item) ? Math.min(contentNominalSize('text') * scale, nextStep(item.text!.fontSize)) : item.text!.fontSize, ...(notes.includes(item) ? {limit: PROSE_MEASURE_CHARS} : {})}]));
+    const next = composeVariant(input, {...options, [RECOMPOSE]: true, [TIMELINE_NOTE_REFLOW]: roles, [PROSE_REFLOW]: retained, [PROSE_COMPACT]: compact, [PROSE_NO_TITLE_RULE]: result.titleRule === undefined} as ComposeSlideOptions, before, floor);
+    if (!next || overflowCount(next) > 0 || next.items.some(overReadingMeasure) || shrinks(next, result, options) || notes.some(item => (next.items.find(entry => entry.path === item.path)?.text?.fontSize ?? 0) < retained.get(item.path)!.size - FONT_GRID_EPSILON)) continue;
+    if (JSON.stringify(next.titleRule) !== JSON.stringify(result.titleRule)) continue;
+    const kept = result.items.every(item => {
+      const after = next.items.find(entry => entry.path === item.path);
+      if (!after || JSON.stringify(item.value) !== JSON.stringify(after.value) || JSON.stringify(item.textStyle) !== JSON.stringify(after.textStyle)) return false;
+      if (headings.has(item.field) && JSON.stringify({box: item.box, lines: item.text?.lines}) !== JSON.stringify({box: after.box, lines: after.text?.lines})) return false;
+      if (item.text && (!after.text || after.text.fontSize < item.text.fontSize - FONT_GRID_EPSILON)) return false;
+      return !item.timelineLayout || !!after.timelineLayout && [...item.timelineLayout.parts, ...(item.timelineLayout.statusLabels ?? [])].every(part => {
+        const fit = [...after.timelineLayout!.parts, ...(after.timelineLayout!.statusLabels ?? [])].find(entry => entry.path === part.path);
+        return !!fit && fit.text === part.text && fit.fit!.fontSize >= part.fit!.fontSize - FONT_GRID_EPSILON && JSON.stringify(fit.style) === JSON.stringify(part.style);
+      });
+    });
+    if (kept && next.diagnostics.every(issue => result.diagnostics.some(was => was.code === issue.code && was.path === issue.path))) return next;
+  }
+  return result;
+}
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  const result = readableProse(input, options, composeSlideBody(input, options));
+  const result = readableProse(input, options, readableTimelineNotes(input, options, composeSlideBody(input, options)));
   if (options.messageSurface) result.surface = options.messageSurface;
   // SH-04: the overlay goes on the slide's final composition (every arrangement, growth and recomposition settled), so it never moves
   // content and follows the blocks it is attached to; its text is fitted by the slide's own fitter (composeLayout's overlay pass).
@@ -7115,7 +7148,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // the role sizes, `floor` for the readability floor and `placed` for the size the region chose.
   const timelineHints = new WeakMap<Pending, { horizontal?: true; compact?: true; inlineHeader?: boolean; sizeOffset?: number; grow?: true }>();
   const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition, sizes: 'role' | 'floor' | 'placed' = 'role', sizeOffset?: number, intrinsic = false) => {
-    const hint = timelineHints.get(node);
+    const retained = ((options as Record<symbol, unknown>)[TIMELINE_NOTE_REFLOW] as ReadonlyMap<string, number> | undefined)?.get(node.path);
+    const hint: ReturnType<typeof timelineHints.get> = retained === undefined ? timelineHints.get(node) : {horizontal: true, sizeOffset: retained};
     // LH-121: status words under the labels, a guarded rule (they take height the timeline's text might need).
     const events = Array.isArray(node.value) ? node.value : record(node.value).events, statusWords = ruleOn('timeline-status') && Array.isArray(events) && events.some((event: unknown) => record(event).status !== undefined) && timelineStatusWordsFor(deckLanguage()) !== undefined;
     if (statusWords) fire('timeline-status');
@@ -7123,7 +7157,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       ...(intrinsic?{intrinsic:true}:{}),...(statusWords ? {statusWords:true} : {}),...(deckLanguage() !== undefined ? {language:deckLanguage()!} : {}),
       fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
       ...(hint?.horizontal ? {horizontal:true} : {}),...(hint?.compact ? {compact:true} : {}),...(hint?.inlineHeader ? {inlineHeader:true} : {}),
-      sizeOffset: sizeOffset ?? (sizes === 'floor' ? -TIMELINE_FLOOR_OFFSET : sizes === 'placed' ? hint?.sizeOffset ?? 0 : 0),
+      sizeOffset: sizeOffset ?? (retained !== undefined ? retained : sizes === 'floor' ? -TIMELINE_FLOOR_OFFSET : sizes === 'placed' ? hint?.sizeOffset ?? 0 : 0),
     });
   };
   // LH-41: a lone timeline grows its type by up to TIMELINE_GROWTH reference pixels when it still fits its box in the arrangement
@@ -7638,6 +7672,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const placed = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
       const box = regionBand !== undefined && regionBand < placed.height ? { ...placed, y: placed.y + (placed.height - regionBand) / 2, height: regionBand } : placed;
       const first = items.length;
+      // A retained timeline-note row was allocated its measured text height. As with a template auto row, a fully measured
+      // short note cell is content-sized, rather than an arbitrary small grid cell.
+      if ((options as Record<symbol, unknown>)[TIMELINE_NOTE_REFLOW] !== undefined && !node.children && node.field === 'text' && retainedProse?.has(node.path) && box.height >= naturalHeight(node, box.width, hasCards && !insideTier, undefined, settings) - 1e-6) contentSized.add(node);
       if (filled) placeSplitBlock(node, box, settings); else placeNode(node, box, settings);
       if (!hasRegions && (cols > 1 || stacks) && !node.children) stack.push(...range(first, items.length));
     });
@@ -8468,7 +8505,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!split) return undefined;
     const band = (members: Pending[], composition: Composition): Pending => members.length === 1 ? members[0]! : { field: 'blocks', type: 'group', value: members.map(member => member.payload), path, payload: {}, children: members, composition, synthetic: true, gap };
     const others = split.others.map(index => nodes[index]!);
-    return { nodes: [band(split.majority.map(index => nodes[index]!), {}), band(others, others.length <= 3 ? { mode: 'row' } : {})], settings: { ...rootSettings, mode: 'column' } };
+    const majority = split.majority.map(index => nodes[index]!);
+    // The retained trial observed these timelines side by side. Intrinsic measurement and placement must use that same row,
+    // rather than measuring a 2+1 vertical grid and then drawing three horizontal timelines in its oversized allocation.
+    const retained = (options as Record<symbol, unknown>)[TIMELINE_NOTE_REFLOW] as ReadonlyMap<string, number> | undefined;
+    const timelineRow = retained !== undefined && majority.every(node => !node.children && node.field === 'timeline' && retained.has(node.path));
+    return { nodes: [band(majority, timelineRow ? {mode: 'row'} : {}), band(others, others.length <= 3 ? { mode: 'row' } : {})], settings: { ...rootSettings, mode: 'column' } };
   };
   // LH-43: a block whose size its siblings share: a paragraph or a list, with no caption and no children.
   const proseLeaf = (node: Pending): boolean => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');

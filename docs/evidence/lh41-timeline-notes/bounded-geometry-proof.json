@@ -1,0 +1,25 @@
+{
+  "baselineCompositionSourceMatchesAccepted1458": false,
+  "beforeSource": "ac7d5f9d0d776edb3f2cd4eb5858e3088ea3aadb",
+  "candidateSource": "51059909f18715043cdfe6d5629595fe638e3c05",
+  "unchangedSvgCount": 21,
+  "unchangedGeometryCount": 21,
+  "geometryChanged": [
+    "batch-03/s27"
+  ],
+  "finalGuard": "Subsequent product f094d916e adds only rejection guards for exact settled heading geometry/titleRule; all seven target native/PNG/source/control inputs are byte-identical (final-input-identity.json).",
+  "initialRawPhysicalComparisonWasFalse": true,
+  "gitBlob": {
+    "baseline1458": "fe06cbe6801fc0e5f768db3c11bd00a76ed0f72e",
+    "beforeSource": "68e99899d2cdc539ff27fac8f6aa14a82507bdaa",
+    "identical": false
+  },
+  "explanation": "The earlier LF/CRLF hypothesis was disproved. The complete source diff is exactly one public chartBarSeriesOffset re-export, introduced by the separately accepted RTL-column correction. Removing that export identifier makes the Git blobs byte-identical. None of the 22 selected authored slides contains a chart; the timeline/text composition algorithms are unchanged. The actual before CLI target was exported directly at1458.",
+  "initialHypothesisDisproved": true,
+  "compositionEqualExceptExplicitChartOffsetExport": true,
+  "all22SelectedSlidesHaveNoCharts": true,
+  "firstTwoUnacceptedProofAttemptsRetained": [
+    "bounded-geometry-proof-initial.json",
+    "bounded-geometry-proof-attempt02.json"
+  ]
+}
