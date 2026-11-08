@@ -1,0 +1,223 @@
+{
+  "version": "0.33.0",
+  "layoutId": "https://openpresentation.org/schema/opf-layout/v2",
+  "required": [
+    "$schema",
+    "id",
+    "name",
+    "regions"
+  ],
+  "rootProperties": [
+    "$schema",
+    "id",
+    "name",
+    "summary",
+    "description",
+    "design",
+    "direction",
+    "anchor",
+    "regions",
+    "overflowRegion",
+    "tags",
+    "preview",
+    "composition"
+  ],
+  "regionDefs": [
+    "RegionEntry",
+    "RegionSize",
+    "HeadingRegion",
+    "Split",
+    "Region"
+  ],
+  "twoColumn": {
+    "name": "Two columns",
+    "summary": "Two independent columns of any content.",
+    "tags": [
+      "Text"
+    ],
+    "design": {
+      "imageFit": "contain",
+      "contentBox": true
+    },
+    "direction": "column",
+    "anchor": "bottom",
+    "regions": [
+      {
+        "name": "title"
+      },
+      {
+        "direction": "row",
+        "regions": [
+          {
+            "name": "first",
+            "accepts": [
+              "text",
+              "list",
+              "quote",
+              "code",
+              "image",
+              "shape",
+              "video",
+              "chart",
+              "table",
+              "metric",
+              "timeline",
+              "group",
+              "diagram"
+            ],
+            "role": "primary",
+            "flow": "none"
+          },
+          {
+            "name": "second",
+            "accepts": [
+              "text",
+              "list",
+              "quote",
+              "code",
+              "image",
+              "shape",
+              "video",
+              "chart",
+              "table",
+              "metric",
+              "timeline",
+              "group",
+              "diagram"
+            ],
+            "role": "primary",
+            "flow": "none"
+          }
+        ]
+      }
+    ],
+    "description": "Place two bodies of content beside each other. Use it for paired explanations or an argument with supporting evidence. Pictures remain visible in full unless an explicit fit overrides the layout default.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"
+    }
+  }
+}
+{
+  "actualRecordValid": true,
+  "areasControlValid": false,
+  "areasFindings": [
+    {
+      "ruleId": "opf/schema",
+      "severity": "error",
+      "category": "format",
+      "scope": "document",
+      "path": "",
+      "message": "must have required property 'regions'",
+      "help": "Add the required \"regions\" field in this object, using the intended schema form.",
+      "definition": "https://openpresentation.org/schema/opf-layout/v2#/required",
+      "lookup": [
+        "opf",
+        "schema",
+        "layout",
+        "/required"
+      ],
+      "validation": {
+        "path": "/",
+        "message": "must have required property 'regions'",
+        "keyword": "required",
+        "schemaPath": "#/required",
+        "params": {
+          "missingProperty": "regions"
+        }
+      }
+    },
+    {
+      "ruleId": "opf/schema",
+      "severity": "error",
+      "category": "format",
+      "scope": "document",
+      "path": "/areas",
+      "message": "must NOT have additional properties",
+      "help": "Review \"areas\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.",
+      "definition": "https://openpresentation.org/schema/opf-layout/v2#/additionalProperties",
+      "lookup": [
+        "opf",
+        "schema",
+        "layout",
+        "/additionalProperties"
+      ],
+      "validation": {
+        "path": "/",
+        "message": "must NOT have additional properties",
+        "keyword": "additionalProperties",
+        "schemaPath": "#/additionalProperties",
+        "params": {
+          "additionalProperty": "areas"
+        }
+      }
+    }
+  ]
+}
+{
+  "referenceFiles": [
+    "skills/opf-author/references/content.md",
+    "skills/opf-author/references/markdown.md",
+    "skills/opf-author/references/storyline.md",
+    "skills/opf-author/references/yaml.md",
+    "skills/opf-edit/references/editor.md",
+    "skills/opf-export/references/rendering.md",
+    "skills/opf-layout/references/geometry.md",
+    "skills/opf-presets/references/design.md"
+  ],
+  "deckExampleResults": [
+    {
+      "file": "skills/opf-author/references/content.md",
+      "line": 82,
+      "valid": true,
+      "findings": []
+    },
+    {
+      "file": "skills/opf-author/references/content.md",
+      "line": 114,
+      "valid": true,
+      "findings": []
+    },
+    {
+      "file": "skills/opf-author/references/content.md",
+      "line": 144,
+      "valid": true,
+      "findings": []
+    },
+    {
+      "file": "skills/opf-author/references/storyline.md",
+      "line": 16,
+      "valid": true,
+      "findings": []
+    },
+    {
+      "file": "skills/opf-author/references/storyline.md",
+      "line": 47,
+      "valid": true,
+      "findings": []
+    },
+    {
+      "file": "skills/opf-author/references/storyline.md",
+      "line": 94,
+      "valid": true,
+      "findings": []
+    },
+    {
+      "file": "skills/opf-layout/references/geometry.md",
+      "line": 11,
+      "valid": true,
+      "findings": []
+    },
+    {
+      "file": "skills/opf-presets/references/design.md",
+      "line": 19,
+      "valid": true,
+      "findings": []
+    },
+    {
+      "file": "skills/opf-presets/references/design.md",
+      "line": 38,
+      "valid": true,
+      "findings": []
+    }
+  ]
+}
