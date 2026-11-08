@@ -94,10 +94,10 @@ const N = (t, c = [], extra = {}) => ({t, c, ...extra});
     [`${L}pyramid1`]: {arrangement: 'pyramid', exact: true}, [`${L}pyramid2`]: {arrangement: 'pyramid'}, [`${L}pyramid3`]: {layout: 'list', inverted: true}, [`${L}matrix1`]: {arrangement: 'matrix'},
     [`${L}cycle1`]: {arrangement: 'cycle'}, [`${L}chevron2`]: {arrangement: 'chevrons'}, [`${L}hChevron3`]: {arrangement: 'chevrons'},
     [`${L}process1`]: {arrangement: 'flow', exact: true}, [`${L}process2`]: {arrangement: 'vertical-flow', exact: true},
-    [`${L}orgChart1`]: {hierarchy: 'TD'}, [`${L}hierarchy1`]: {hierarchy: 'TD'}, [`${L}hierarchy2`]: {hierarchy: 'LR'},
+    [`${L}orgChart1`]: {arrangement: 'org-chart', exact: true}, [`${L}hierarchy1`]: {arrangement: 'hierarchy', exact: true}, [`${L}hierarchy2`]: {hierarchy: 'LR'},
     'urn:microsoft.com/office/officeart/2008/layout/NameandTitleOrganizationalChart': {hierarchy: 'TD'},
     'urn:microsoft.com/office/officeart/2009/3/layout/HorizontalOrganizationChart': {hierarchy: 'LR'},
-    [`${L}venn1`]: {drawing: true}, [`${L}radial1`]: {drawing: true}, [`${L}target1`]: {drawing: true},
+    [`${L}venn1`]: {arrangement: 'venn', exact: true}, [`${L}radial1`]: {drawing: true}, [`${L}target1`]: {drawing: true},
   };
   for (const [id, form] of Object.entries(forms)) assert.deepEqual(smartArtForm(id, 'list'), form, id);
   assert.deepEqual(smartArtForm(`${L}vList2`, 'list'), {layout: 'list'});
@@ -183,6 +183,7 @@ async function withSmartArt(frames) {
   assert.equal(venn.shapes[0].opacity, 0.5);
   assert.equal(venn.shapes[0].alt, 'SmartArt (venn1):\nPeople\nProcess');
   assert.ok(venn.shapes[4].padding > 0, 'the text box inset is the padding');
+  assert.match(diagnostics.find(item=>item.layout==='venn1').message,/additional drawing labels/,'the preservation fallback is explicit');
   // A layout with no OPF form and no drawing: its outline as a list.
   assert.deepEqual(listOf(radial), ['Customer', {text: 'Sales', level: 1}, {text: 'Support', level: 1}]);
   assert.equal(chevrons.layout, 'default:chevrons');
@@ -222,23 +223,22 @@ async function withSmartArt(frames) {
     return blocks.find(block => block.diagram) ? `diagram:${blocks.find(block => block.diagram).diagram.source.split('\n')[0]}` : blocks.find(block => block.items) ? `list:${slide.layout}` : slide.shapes ? `shapes:${slide.shapes.length}` : 'none';
   };
   assert.deepEqual(imported.slides.map(form), ['list:default:pyramid', 'list:default:list', 'list:default:matrix', 'list:default:cycle', 'list:default:cycle', 'list:default:chevrons',
-    'list:default:flow', 'list:default:vertical-flow', 'list:default:process', 'list:default:list', 'list:default:list', `shapes:${imported.slides[11].shapes.length}`, `shapes:${imported.slides[12].shapes.length}`,
-    'diagram:flowchart TD', 'diagram:flowchart TD', 'diagram:flowchart LR', 'diagram:flowchart TD']);
+    'list:default:flow', 'list:default:vertical-flow', 'list:default:process', 'list:default:list', 'list:default:list', 'list:default:venn', `shapes:${imported.slides[12].shapes.length}`,
+    'diagram:flowchart TD', 'list:default:hierarchy', 'diagram:flowchart LR', 'diagram:flowchart TD']);
   const items = index => imported.slides[index].blocks.find(block => block.items).items;
   assert.deepEqual(items(0)[0], [{text: 'Vision', bold: true}], 'a bold run');
   assert.deepEqual(items(1), ['Leads', 'Prospects', 'Customers'], 'an inverted pyramid is a list in order, never an upright pyramid');
   assert.match(diagnostics.find(item => item.layout === 'pyramid3').message, /inverted pyramid/);
   assert.equal(items(6)[2], 'Run\nthe pilot', 'a line break');
   assert.deepEqual(items(10), ['Goals', {text: 'Grow revenue 12%', level: 1}, 'Risks', {text: 'Hiring', level: 1}], 'nested entries keep their level');
-  // Basic Venn: three half-transparent circles, each text where PowerPoint set it, the outline as the first shape's alt text.
-  const venn = imported.slides[11].shapes;
-  assert.deepEqual(venn.filter(shape => shape.shape === 'ellipse').map(shape => shape.opacity), [0.5, 0.5, 0.5]);
-  assert.equal(venn[0].alt, 'SmartArt (venn1):\nPeople\nProcess\nTechnology');
+  // Known Basic Venn and Hierarchy use semantic lists; the earlier extra-label Venn still preserves its drawing.
+  assert.deepEqual(items(11), ['People','Process','Technology']);
+  assert.deepEqual(items(14), ['Company',{text:'Sales',level:1},{text:'North',level:2},{text:'South',level:2},{text:'Engineering',level:1},{text:'Web',level:2},{text:'Mobile',level:2}]);
   // Organization chart: the assistant on a dotted edge; Name and Title: each title (PowerPoint's presented sibling transition) on its node.
   assert.match(imported.slides[13].blocks[0].diagram.source, /n1 -\.-> n2\n/);
   assert.match(imported.slides[16].blocks[0].diagram.source, /n1\["Ana Ruiz<br\/>Chief Executive"\]/);
   assert.match(imported.slides[16].blocks[0].diagram.source, /\["Kai Chen<br\/>Technology"\]/);
   assert.deepEqual(diagnostics.filter(item => item.code === 'smartart-text-dropped'), [], 'no text is dropped');
   assert.deepEqual([...new Set(diagnostics.filter(item => item.code === 'smartart-adapted').map(item => `${item.layout}:${item.form}`))],
-    ['pyramid3:list', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'venn1:shapes', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
+    ['pyramid3:list', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
 }

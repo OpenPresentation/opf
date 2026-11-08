@@ -9,7 +9,7 @@ export type NativeTreeGeometryResult=NativeTreeGeometry|{ok:false;reason:string;
 interface Position {index:number;x:number;row:number}
 interface Model {root:number;nodes:Position[]}
 
-/** SH21 rectangle model measured in PowerPoint. This helper does not enable native export or define Hierarchy's freeform paint. */
+/** SH21 geometry measured in PowerPoint, including paired Hierarchy cards and semantic connector paths; eligibility is separate. */
 export function nativeTreeGeometry(kind:NativeTreeKind,frame:Box,entries:readonly unknown[]):NativeTreeGeometryResult{
  if(kind!=='org-chart'&&kind!=='hierarchy')return{ok:false,reason:'Unsupported native tree kind.'};
  if(![frame.x,frame.y,frame.width,frame.height].every(Number.isFinite)||frame.width<=0||frame.height<=0)return{ok:false,reason:'A native tree frame needs finite coordinates and positive dimensions.'};

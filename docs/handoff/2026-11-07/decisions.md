@@ -80,3 +80,10 @@ The owner was away and asked the supervisor to decide and keep going. Each line 
 - Remove every support, gap and "in progress" status statement on pptx.gallery (the owner's no-badge rule).
 - Add a pptx.gallery shapes browser (#171) for 0.34.
 - The pptx.gallery deployed-asset check retries a bounded number of times and never follows a redirect (#170, merged).
+
+## SH-21 continuation (vetoable)
+
+- Add `org-chart`, `hierarchy` and `venn` as region arrangements and same-named gallery records. Trees use the existing list-entry `level` for one root and parent depths; Venn remains flat. Unsupported forests/depth jumps preserve the complete list with a finding, and assistants retain reported diagram adaptation.
+- Preserve the base list size or grow it. When measured native tree/Venn geometry cannot hold the labels, retain every list entry rather than reducing text. Basic Venn uses the measured one-to-seven set count, inside labels through four sets and outside labels after four.
+- For these newly supported native layouts, retain the prior overlay adaptation when a cached drawing contains additional nonempty labels beyond the data entries. This preserves presentation-only text; same-count stale caches do not override authoritative node text. The synthetic extra-label Venn and genuine native fixture are separate regression controls.
+- Keep all new live domains unavailable until product exports, parent/node edits and save/reopen pass the unchanged native gate. Measured rectangles alone do not qualify an editable layout.

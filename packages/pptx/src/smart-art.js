@@ -659,6 +659,11 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
     const path = `slides.${slideIndex}`, stem = layoutStem(model.layoutId) || 'unnamed';
     const walk=roots=>roots.flatMap(entry=>[entry,...walk(entry.children)]);
     if(['org-chart','hierarchy'].includes(form.arrangement)&&(model.roots.length!==1||walk(model.roots).some(entry=>entry.assistant||entry.edge)))form={hierarchy:'TD'};
+    // New semantic mappings must retain cached labels that belong to no data entry, as the previous drawing import did.
+    const knownDrawingPart=measuredKind(form.arrangement)&&model.drawingRelId?relationships.get(model.drawingRelId)?.path:undefined;
+    const knownDrawing=knownDrawingPart&&entries[knownDrawingPart]?drawingSlide(decoder.decode(entries[knownDrawingPart]),{x:0,y:0,cx:1,cy:1},'Label count'):undefined;
+    const extraLabels=knownDrawing&&knownDrawing.bodies.filter(body=>body.paragraphs.flat().some(run=>String(run.text??'').trim())).length>walk(model.roots).length;
+    if(extraLabels)form={drawing:true};
     const frameName = scalar(frame?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name) || 'SmartArt';
     const named = `The SmartArt ${JSON.stringify(frameName)} (layout ${stem})`;
     // Never lose text silently: what the OPF form does not keep is named.
@@ -716,7 +721,7 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
       flipH: xfrm?.flipH === '1' || xfrm?.flipH === 'true', flipV: xfrm?.flipV === '1' || xfrm?.flipV === 'true'};
     const slide = drawingPart && entries[drawingPart] && [place.x, place.y, place.cx, place.cy].every(value => value !== undefined) ? drawingSlide(decoder.decode(entries[drawingPart]), place, frameName) : undefined;
     if (slide) {
-      report?.({code: 'smartart-adapted', path, layout: stem, form: 'shapes', message: `${named} has no OPF arrangement; its drawing is imported as overlay shapes, its outline as the first shape's alt text.`});
+      report?.({code: 'smartart-adapted', path, layout: stem, form: 'shapes', message: extraLabels?`${named} has additional drawing labels outside its data entries; its drawing is imported as overlay shapes, its outline as the first shape's alt text.`:`${named} has no OPF arrangement; its drawing is imported as overlay shapes, its outline as the first shape's alt text.`});
       out.set(index, {type: 'shapes', slide, name: frameName, frame: place, ...(model.roots.length ? {outline: `SmartArt (${stem}):\n${outlineText(model.roots)}`} : {})});
       continue;
     }

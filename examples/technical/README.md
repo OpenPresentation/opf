@@ -34,3 +34,5 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 
 - Localized timeline status words: a French roadmap keeps its authored labels and adds Terminé, En cours and Prévu ([`localized-timeline.opf.json`](./localized-timeline.opf.json)).
 
+
+- Trees and set overlap: single-root reporting lines, a nested hierarchy, and Basic Venn with semantic entry depths and short labels ([`trees-and-sets.opf.json`](./trees-and-sets.opf.json)); regenerate with `node tools/shapes/sh-21/build-examples.mjs`.
