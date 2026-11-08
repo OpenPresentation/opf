@@ -45,13 +45,19 @@ $result=& { 1 | ForEach-Object { Open-OpfWitnessInput -Application $app -OwnedPa
     const runSeed=()=>execFileSync('powershell',seedArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});
     const seedPlan=JSON.parse(runSeed().replace(/^\uFEFF/,''));
     assert.equal(seedPlan.sha256,before);assert.deepEqual(seedPlan.jobs.map(job=>[job.kind,job.slide]),[['orgChart1',14],['hierarchy1',15],['venn1',12]]);assert.equal(existsSync(out),false);
+    const materializeScript=fileURLToPath(new URL('../../../tools/shapes/sh-21/materialize-defaults.ps1',import.meta.url));
+    const materializeArgs=[...seedArgs];materializeArgs[materializeArgs.indexOf(seedScript)]=materializeScript;
+    const runMaterialize=()=>execFileSync('powershell',materializeArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});
+    const materializePlan=JSON.parse(runMaterialize());assert.equal(materializePlan.jobs.length,3);assert.equal(materializePlan.sha256,before);assert.deepEqual(materializePlan.ownership,['owned-seeds.pptx','owned-defaults.pptx']);assert.equal(existsSync(out),false);
     mkdirSync(out);const marker=path.join(out,'prior-evidence');writeFileSync(marker,'preserve');
     assert.throws(run,error=>/Preserve prior evidence/.test(error.stderr));
     assert.throws(runSeed,error=>/Preserve existing evidence/.test(error.stderr));
+    assert.throws(runMaterialize,error=>/Preserve prior evidence/.test(error.stderr));
     assert.equal(readFileSync(marker,'utf8'),'preserve');
     rmSync(out,{recursive:true});rmSync(seed);
     assert.throws(run,error=>/Missing witness input/.test(error.stderr));
     assert.throws(runSeed,error=>/Seed deck does not exist/.test(error.stderr));
+    assert.throws(runMaterialize,error=>/Seed source is missing/.test(error.stderr));
     assert.equal(existsSync(out),false,'a missing input creates no attempt directory');
     console.log('SH20 witness offline controls pass: plan never crosses Office boundary, source hashes unchanged, existing evidence and missing inputs refused.');
   } finally {rmSync(root,{recursive:true,force:true});}
