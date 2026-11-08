@@ -1,0 +1,1 @@
+Table frame and furniture order passed: 12 table frames equal the drawn table extent (2 shorter than their box, 10 filling it); 3 slides paint furniture after content in spTree and SVG.

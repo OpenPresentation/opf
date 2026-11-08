@@ -1,0 +1,23 @@
+{
+  "index": 65,
+  "name": "source-run-styles.mjs",
+  "args": [
+    "test/source-run-styles.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:25.169Z",
+  "seconds": 0.11758030000000144,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "65-source-run-styles.stdout.txt",
+    "bytes": 113,
+    "sha256": "c822f332a2c29e0b6b824b2143ecf065c29f9529873d9f3e1d32bd3f9c654fea"
+  },
+  "stderr": {
+    "file": "65-source-run-styles.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

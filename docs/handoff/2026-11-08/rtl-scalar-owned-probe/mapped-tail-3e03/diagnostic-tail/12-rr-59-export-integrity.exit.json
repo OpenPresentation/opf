@@ -1,0 +1,23 @@
+{
+  "index": 12,
+  "name": "rr-59-export-integrity.mjs",
+  "args": [
+    "test/rr-59-export-integrity.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:21.743Z",
+  "seconds": 1.6117674999999945,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "12-rr-59-export-integrity.stdout.txt",
+    "bytes": 176,
+    "sha256": "7c09aa9e67ef73a2106704854cc3b1d4599686ee5d19dcbd546843607a6b2dee"
+  },
+  "stderr": {
+    "file": "12-rr-59-export-integrity.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

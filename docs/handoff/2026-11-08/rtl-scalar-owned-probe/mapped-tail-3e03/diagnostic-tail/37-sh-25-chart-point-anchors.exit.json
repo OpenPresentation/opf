@@ -1,0 +1,23 @@
+{
+  "index": 37,
+  "name": "sh-25-chart-point-anchors.mjs",
+  "args": [
+    "test/sh-25-chart-point-anchors.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:03.407Z",
+  "seconds": 3.531879700000005,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "37-sh-25-chart-point-anchors.stdout.txt",
+    "bytes": 169,
+    "sha256": "38d361526a808618a0ca6b0096c6a8f2221b44e1844386efaf85215e9414aba2"
+  },
+  "stderr": {
+    "file": "37-sh-25-chart-point-anchors.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

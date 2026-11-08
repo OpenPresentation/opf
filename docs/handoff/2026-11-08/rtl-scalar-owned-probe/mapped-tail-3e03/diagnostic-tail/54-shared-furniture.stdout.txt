@@ -1,0 +1,1 @@
+16 furniture exports match accepted editable text boxes, fonts, source lines and images; explicit disabling and strict overflow controls pass.

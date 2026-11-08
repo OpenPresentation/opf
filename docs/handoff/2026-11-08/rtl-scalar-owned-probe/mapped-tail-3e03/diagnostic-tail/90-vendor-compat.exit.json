@@ -1,0 +1,23 @@
+{
+  "index": 90,
+  "name": "vendor-compat.mjs",
+  "args": [
+    "test/vendor-compat.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:57.151Z",
+  "seconds": 0.5991633000000147,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "90-vendor-compat.stdout.txt",
+    "bytes": 147,
+    "sha256": "e9dad6a5f31b06769e9deedea9750d271e354270efad3a73048d91a795654c8d"
+  },
+  "stderr": {
+    "file": "90-vendor-compat.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

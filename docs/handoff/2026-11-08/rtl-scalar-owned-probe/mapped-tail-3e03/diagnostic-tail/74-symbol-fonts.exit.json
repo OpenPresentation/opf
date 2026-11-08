@@ -1,0 +1,23 @@
+{
+  "index": 74,
+  "name": "symbol-fonts.mjs",
+  "args": [
+    "test/symbol-fonts.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:43.240Z",
+  "seconds": 4.205623200000002,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "74-symbol-fonts.stdout.txt",
+    "bytes": 289,
+    "sha256": "172ade865f5eec3907e64544a6db21848768606f5b95c5c137478057df6277a3"
+  },
+  "stderr": {
+    "file": "74-symbol-fonts.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

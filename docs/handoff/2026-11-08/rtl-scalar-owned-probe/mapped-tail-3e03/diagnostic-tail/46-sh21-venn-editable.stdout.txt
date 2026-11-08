@@ -1,0 +1,12 @@
+✔ SH21: 5 adapted Venn circles export shared editable geometry,48px type and explicit live refusal (365.8628ms)
+✔ SH21: 6 adapted Venn circles export shared editable geometry,48px type and explicit live refusal (125.608ms)
+✔ SH21: 7 adapted Venn circles export shared editable geometry,48px type and explicit live refusal (119.2085ms)
+✔ SH21: readable Venn cards stay opaque, editable and non-live with complete labels (213.8673ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 828.1962

@@ -1,0 +1,23 @@
+{
+  "index": 14,
+  "name": "rr-59-script-measurement.mjs",
+  "args": [
+    "test/rr-59-script-measurement.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:26.308Z",
+  "seconds": 4.587656999999999,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "14-rr-59-script-measurement.stdout.txt",
+    "bytes": 190,
+    "sha256": "1c9e87b4ad6a55fea8b0c295272a575ee6d27c2a254eeb4ade6b14b2f380938f"
+  },
+  "stderr": {
+    "file": "14-rr-59-script-measurement.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

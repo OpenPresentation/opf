@@ -1,0 +1,23 @@
+{
+  "index": 13,
+  "name": "rr-59-picture-diagnostics.mjs",
+  "args": [
+    "test/rr-59-picture-diagnostics.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:23.355Z",
+  "seconds": 2.9528168000000004,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "13-rr-59-picture-diagnostics.stdout.txt",
+    "bytes": 159,
+    "sha256": "0b89f8fafe0fd6308151a27a6781004cf7a6225981981d0d00d2b3df9fde60e8"
+  },
+  "stderr": {
+    "file": "13-rr-59-picture-diagnostics.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

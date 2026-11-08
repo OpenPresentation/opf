@@ -1,0 +1,23 @@
+{
+  "index": 80,
+  "name": "template-layout-review.mjs",
+  "args": [
+    "test/template-layout-review.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:37:08.812Z",
+  "seconds": 1.4863702000000047,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "80-template-layout-review.stdout.txt",
+    "bytes": 163,
+    "sha256": "30946b931de173ef1aabc55caebbf94fde0581193ef361179312e45d1ff513a5"
+  },
+  "stderr": {
+    "file": "80-template-layout-review.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

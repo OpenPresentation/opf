@@ -1,0 +1,23 @@
+{
+  "index": 49,
+  "name": "sh24-inverted-pyramid.mjs",
+  "args": [
+    "test/sh24-inverted-pyramid.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:57.483Z",
+  "seconds": 0.7048919999999925,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "49-sh24-inverted-pyramid.stdout.txt",
+    "bytes": 117,
+    "sha256": "4d7703371cfd49c5b52e3ab8f27630e9b19b1d4408376c18039c366ccb9e1f8f"
+  },
+  "stderr": {
+    "file": "49-sh24-inverted-pyramid.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

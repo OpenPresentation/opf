@@ -1,0 +1,7 @@
+# Frozen ownership qualification and finite tail inventory
+
+NEVER MERGE this evidence branch. Product source stayed frozen3e03bd13d693d91f194769d8d6878adbc27f4146 against integration569811. The official mapped gate is RED: rr-105-native-body-wrap failed at185/279, with94scripts unrun in that original run. All other selected stages, strict determinism and corrected notes-theme147corpus pass. Browser bundles pass separately after terminal.
+
+Root explicitly authorized a diagnostic inventory of exactly those94remaining contract scripts once, derived only from maintained selectTests/nodeArgs plus actual suites.json/readdir. It ran serially under the maintained shared heavy-slot helper.92pass and2fail: sh21-venn-reading-measure and template-layouts. Source and all seven runtime packages before/after remain exact. No builds, source/test edits, realCOM, CI observers or gate replacement occurred. Raw per-script stdout/stderr/exits and the exact collector/discovery bytes are retained.
+
+Read-only causal probes show the sampler/native-body test selects the wrong source identity on both67/current; the intended six-card geometry/native wrap plans are exact. Venn produces the correct generic complete-diagram overflow and strict refusal, but its test requires obsolete Venn-only wording; later assertions remain for QA to exercise. Both baselines have40identical authoritative catalog layouts while template-layouts hardcodes36. All original assertions and first failures remain untouched. Separate QA is required; no green mapped or overall native claim is made.

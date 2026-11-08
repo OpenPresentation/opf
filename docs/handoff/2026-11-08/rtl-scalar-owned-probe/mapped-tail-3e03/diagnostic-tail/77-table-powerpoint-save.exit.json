@@ -1,0 +1,23 @@
+{
+  "index": 77,
+  "name": "table-powerpoint-save.mjs",
+  "args": [
+    "test/table-powerpoint-save.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:50.715Z",
+  "seconds": 1.0924809999999998,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "77-table-powerpoint-save.stdout.txt",
+    "bytes": 50,
+    "sha256": "058dc0e75ac02490f0dd96ff1741bed6c31fce04fee6029f92ee23e0b479e3de"
+  },
+  "stderr": {
+    "file": "77-table-powerpoint-save.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

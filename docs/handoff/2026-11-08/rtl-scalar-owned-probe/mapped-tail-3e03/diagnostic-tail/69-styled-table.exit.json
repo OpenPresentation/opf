@@ -1,0 +1,23 @@
+{
+  "index": 69,
+  "name": "styled-table.mjs",
+  "args": [
+    "test/styled-table.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:27.542Z",
+  "seconds": 0.7386260999999941,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "69-styled-table.stdout.txt",
+    "bytes": 316,
+    "sha256": "919437512384cdb9a14c0b6fed6d460fbd98d20b16a3820deabc511b97df11f6"
+  },
+  "stderr": {
+    "file": "69-styled-table.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

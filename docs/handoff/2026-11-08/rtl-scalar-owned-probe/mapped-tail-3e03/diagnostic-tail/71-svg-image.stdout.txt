@@ -1,0 +1,1 @@
+SVG picture checks passed (24): native svgBlip over a PNG fallback in every image place, determinism, import, sanitizing, sizes, host rasterizer and the no-renderer fallback.

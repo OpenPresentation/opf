@@ -1,0 +1,23 @@
+{
+  "index": 64,
+  "name": "source-run-styles-roundtrip.mjs",
+  "args": [
+    "test/source-run-styles-roundtrip.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:23.914Z",
+  "seconds": 1.2547154000000156,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "64-source-run-styles-roundtrip.stdout.txt",
+    "bytes": 234,
+    "sha256": "794a623c081f8c171bda5e4e3e7715c9ffb085af526a3b8e859ae08e473bbf28"
+  },
+  "stderr": {
+    "file": "64-source-run-styles-roundtrip.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

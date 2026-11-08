@@ -1,0 +1,1112 @@
+{
+  "schema": 1,
+  "sourceHead": "3e03bd13d693d91f194769d8d6878adbc27f4146",
+  "suite": "contract",
+  "authority": "Maintained selectTests/nodeArgs and actual test/suites.json +readdir; no new discovery or CI watcher.",
+  "selectedScripts": 279,
+  "batch": [],
+  "failed": "rr-105-native-body-wrap.mjs",
+  "failedIndex": 185,
+  "originalNotRun": 94,
+  "tail": [
+    {
+      "name": "rr-105-native-title-wrap.mjs",
+      "args": [
+        "test/rr-105-native-title-wrap.mjs"
+      ]
+    },
+    {
+      "name": "rr-105-numeric-axes.mjs",
+      "args": [
+        "test/rr-105-numeric-axes.mjs"
+      ]
+    },
+    {
+      "name": "rr-105-small-run-title.mjs",
+      "args": [
+        "test/rr-105-small-run-title.mjs"
+      ]
+    },
+    {
+      "name": "rr-105-smartart-text-color.mjs",
+      "args": [
+        "test/rr-105-smartart-text-color.mjs"
+      ]
+    },
+    {
+      "name": "rr-105-tag-ownership.mjs",
+      "args": [
+        "test/rr-105-tag-ownership.mjs"
+      ]
+    },
+    {
+      "name": "rr-105-title-font-measurement.mjs",
+      "args": [
+        "test/rr-105-title-font-measurement.mjs"
+      ]
+    },
+    {
+      "name": "rr-105-waterfall-axis.mjs",
+      "args": [
+        "test/rr-105-waterfall-axis.mjs"
+      ]
+    },
+    {
+      "name": "rr-54-chart-table-data.mjs",
+      "args": [
+        "test/rr-54-chart-table-data.mjs"
+      ]
+    },
+    {
+      "name": "rr-54-data-hardening.mjs",
+      "args": [
+        "test/rr-54-data-hardening.mjs"
+      ]
+    },
+    {
+      "name": "rr-54-format-respelling.mjs",
+      "args": [
+        "test/rr-54-format-respelling.mjs"
+      ]
+    },
+    {
+      "name": "rr-59-absent-defaults.mjs",
+      "args": [
+        "test/rr-59-absent-defaults.mjs"
+      ]
+    },
+    {
+      "name": "rr-59-export-integrity.mjs",
+      "args": [
+        "test/rr-59-export-integrity.mjs"
+      ]
+    },
+    {
+      "name": "rr-59-picture-diagnostics.mjs",
+      "args": [
+        "test/rr-59-picture-diagnostics.mjs"
+      ]
+    },
+    {
+      "name": "rr-59-script-measurement.mjs",
+      "args": [
+        "test/rr-59-script-measurement.mjs"
+      ]
+    },
+    {
+      "name": "rr-59-table-alt-provenance.mjs",
+      "args": [
+        "test/rr-59-table-alt-provenance.mjs"
+      ]
+    },
+    {
+      "name": "rr-97-resolver-failure.mjs",
+      "args": [
+        "test/rr-97-resolver-failure.mjs"
+      ]
+    },
+    {
+      "name": "rr54-archive-candidate.mjs",
+      "args": [
+        "test/rr54-archive-candidate.mjs"
+      ]
+    },
+    {
+      "name": "rtl-layout.mjs",
+      "args": [
+        "test/rtl-layout.mjs"
+      ]
+    },
+    {
+      "name": "safe-typefaces.mjs",
+      "args": [
+        "test/safe-typefaces.mjs"
+      ]
+    },
+    {
+      "name": "script-fonts.mjs",
+      "args": [
+        "test/script-fonts.mjs"
+      ]
+    },
+    {
+      "name": "sections.mjs",
+      "args": [
+        "test/sections.mjs"
+      ]
+    },
+    {
+      "name": "sh-02-shape-blocks.mjs",
+      "args": [
+        "test/sh-02-shape-blocks.mjs"
+      ]
+    },
+    {
+      "name": "sh-04-overlays.mjs",
+      "args": [
+        "test/sh-04-overlays.mjs"
+      ]
+    },
+    {
+      "name": "sh-05-powerpoint-shapes.mjs",
+      "args": [
+        "test/sh-05-powerpoint-shapes.mjs"
+      ]
+    },
+    {
+      "name": "sh-05-shape-import.mjs",
+      "args": [
+        "test/sh-05-shape-import.mjs"
+      ]
+    },
+    {
+      "name": "sh-07-native-diagrams.mjs",
+      "args": [
+        "test/sh-07-native-diagrams.mjs"
+      ]
+    },
+    {
+      "name": "sh-08-smartart-import.mjs",
+      "args": [
+        "test/sh-08-smartart-import.mjs"
+      ]
+    },
+    {
+      "name": "sh-09-smartart.mjs",
+      "args": [
+        "test/sh-09-smartart.mjs"
+      ]
+    },
+    {
+      "name": "sh-11-shape-text-rect.mjs",
+      "args": [
+        "test/sh-11-shape-text-rect.mjs"
+      ]
+    },
+    {
+      "name": "sh-12-dot-diagrams.mjs",
+      "args": [
+        "test/sh-12-dot-diagrams.mjs"
+      ]
+    },
+    {
+      "name": "sh-13-plantuml-diagrams.mjs",
+      "args": [
+        "test/sh-13-plantuml-diagrams.mjs"
+      ]
+    },
+    {
+      "name": "sh-16-smartart-fallback.mjs",
+      "args": [
+        "test/sh-16-smartart-fallback.mjs"
+      ]
+    },
+    {
+      "name": "sh-17-smartart.mjs",
+      "args": [
+        "test/sh-17-smartart.mjs"
+      ]
+    },
+    {
+      "name": "sh-18-smartart.mjs",
+      "args": [
+        "test/sh-18-smartart.mjs"
+      ]
+    },
+    {
+      "name": "sh-19-smartart-layouts.mjs",
+      "args": [
+        "test/sh-19-smartart-layouts.mjs"
+      ]
+    },
+    {
+      "name": "sh-23-smartart-more-entries.mjs",
+      "args": [
+        "test/sh-23-smartart-more-entries.mjs"
+      ]
+    },
+    {
+      "name": "sh-25-chart-point-anchors.mjs",
+      "args": [
+        "test/sh-25-chart-point-anchors.mjs"
+      ]
+    },
+    {
+      "name": "sh-phase-2-meeting-points.mjs",
+      "args": [
+        "test/sh-phase-2-meeting-points.mjs"
+      ]
+    },
+    {
+      "name": "sh20-gate-output.mjs",
+      "args": [
+        "test/sh20-gate-output.mjs"
+      ]
+    },
+    {
+      "name": "sh20-live-domain-boundary.mjs",
+      "args": [
+        "test/sh20-live-domain-boundary.mjs"
+      ]
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "args": [
+        "test/sh20-witness-offline.mjs"
+      ]
+    },
+    {
+      "name": "sh21-native-arrangements.mjs",
+      "args": [
+        "test/sh21-native-arrangements.mjs"
+      ]
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "args": [
+        "test/sh21-product-probe-offline.mjs"
+      ]
+    },
+    {
+      "name": "sh21-production-packet-offline.mjs",
+      "args": [
+        "test/sh21-production-packet-offline.mjs"
+      ]
+    },
+    {
+      "name": "sh21-smartart-parts.mjs",
+      "args": [
+        "test/sh21-smartart-parts.mjs"
+      ]
+    },
+    {
+      "name": "sh21-venn-editable.mjs",
+      "args": [
+        "test/sh21-venn-editable.mjs"
+      ]
+    },
+    {
+      "name": "sh21-venn-reading-measure.mjs",
+      "args": [
+        "test/sh21-venn-reading-measure.mjs"
+      ]
+    },
+    {
+      "name": "sh23-witness-offline.mjs",
+      "args": [
+        "test/sh23-witness-offline.mjs"
+      ]
+    },
+    {
+      "name": "sh24-inverted-pyramid.mjs",
+      "args": [
+        "test/sh24-inverted-pyramid.mjs"
+      ]
+    },
+    {
+      "name": "sh25-series-name-current-cache.mjs",
+      "args": [
+        "test/sh25-series-name-current-cache.mjs"
+      ]
+    },
+    {
+      "name": "shape-block-effects.mjs",
+      "args": [
+        "test/shape-block-effects.mjs"
+      ]
+    },
+    {
+      "name": "shape-border-widths.mjs",
+      "args": [
+        "test/shape-border-widths.mjs"
+      ]
+    },
+    {
+      "name": "shape-effects.mjs",
+      "args": [
+        "test/shape-effects.mjs"
+      ]
+    },
+    {
+      "name": "shared-furniture.mjs",
+      "args": [
+        "test/shared-furniture.mjs"
+      ]
+    },
+    {
+      "name": "shared-metric.mjs",
+      "args": [
+        "test/shared-metric.mjs"
+      ]
+    },
+    {
+      "name": "shared-quote.mjs",
+      "args": [
+        "test/shared-quote.mjs"
+      ]
+    },
+    {
+      "name": "shared-timeline.mjs",
+      "args": [
+        "test/shared-timeline.mjs"
+      ]
+    },
+    {
+      "name": "single-column-chart.mjs",
+      "args": [
+        "test/single-column-chart.mjs"
+      ]
+    },
+    {
+      "name": "single-series-colour.mjs",
+      "args": [
+        "test/single-series-colour.mjs"
+      ]
+    },
+    {
+      "name": "slide-context.mjs",
+      "args": [
+        "test/slide-context.mjs"
+      ]
+    },
+    {
+      "name": "slide-number-static.mjs",
+      "args": [
+        "test/slide-number-static.mjs"
+      ]
+    },
+    {
+      "name": "slide-variables.mjs",
+      "args": [
+        "test/slide-variables.mjs"
+      ]
+    },
+    {
+      "name": "socials-furniture.mjs",
+      "args": [
+        "test/socials-furniture.mjs"
+      ]
+    },
+    {
+      "name": "source-run-styles-roundtrip.mjs",
+      "args": [
+        "test/source-run-styles-roundtrip.mjs"
+      ]
+    },
+    {
+      "name": "source-run-styles.mjs",
+      "args": [
+        "test/source-run-styles.mjs"
+      ]
+    },
+    {
+      "name": "step-badge-numbering.mjs",
+      "args": [
+        "test/step-badge-numbering.mjs"
+      ]
+    },
+    {
+      "name": "step-badges.mjs",
+      "args": [
+        "test/step-badges.mjs"
+      ]
+    },
+    {
+      "name": "styled-table-import.mjs",
+      "args": [
+        "test/styled-table-import.mjs"
+      ]
+    },
+    {
+      "name": "styled-table.mjs",
+      "args": [
+        "test/styled-table.mjs"
+      ]
+    },
+    {
+      "name": "svg-image-degrade.mjs",
+      "args": [
+        "test/svg-image-degrade.mjs"
+      ]
+    },
+    {
+      "name": "svg-image.mjs",
+      "args": [
+        "test/svg-image.mjs"
+      ]
+    },
+    {
+      "name": "svg-rasterizer-converter-missing.mjs",
+      "args": [
+        "test/svg-rasterizer-converter-missing.mjs"
+      ]
+    },
+    {
+      "name": "svg-style-sanitization.mjs",
+      "args": [
+        "test/svg-style-sanitization.mjs"
+      ]
+    },
+    {
+      "name": "symbol-fonts.mjs",
+      "args": [
+        "test/symbol-fonts.mjs"
+      ]
+    },
+    {
+      "name": "table-alt.mjs",
+      "args": [
+        "test/table-alt.mjs"
+      ]
+    },
+    {
+      "name": "table-frame-furniture-order.mjs",
+      "args": [
+        "test/table-frame-furniture-order.mjs"
+      ]
+    },
+    {
+      "name": "table-powerpoint-save.mjs",
+      "args": [
+        "test/table-powerpoint-save.mjs"
+      ]
+    },
+    {
+      "name": "table-theme-colors.mjs",
+      "args": [
+        "test/table-theme-colors.mjs"
+      ]
+    },
+    {
+      "name": "tag-colour.mjs",
+      "args": [
+        "test/tag-colour.mjs"
+      ]
+    },
+    {
+      "name": "template-layout-review.mjs",
+      "args": [
+        "test/template-layout-review.mjs"
+      ]
+    },
+    {
+      "name": "template-layouts.mjs",
+      "args": [
+        "test/template-layouts.mjs"
+      ]
+    },
+    {
+      "name": "template-variables.mjs",
+      "args": [
+        "test/template-variables.mjs"
+      ]
+    },
+    {
+      "name": "theme-colors.mjs",
+      "args": [
+        "test/theme-colors.mjs"
+      ]
+    },
+    {
+      "name": "theme-script-slots.mjs",
+      "args": [
+        "test/theme-script-slots.mjs"
+      ]
+    },
+    {
+      "name": "tier-pillar-pptx.mjs",
+      "args": [
+        "test/tier-pillar-pptx.mjs"
+      ]
+    },
+    {
+      "name": "timeline-status.mjs",
+      "args": [
+        "test/timeline-status.mjs"
+      ]
+    },
+    {
+      "name": "title-rule.mjs",
+      "args": [
+        "test/title-rule.mjs"
+      ]
+    },
+    {
+      "name": "title-split.mjs",
+      "args": [
+        "test/title-split.mjs"
+      ]
+    },
+    {
+      "name": "typeface-inventory.mjs",
+      "args": [
+        "test/typeface-inventory.mjs"
+      ]
+    },
+    {
+      "name": "vendor-compat.mjs",
+      "args": [
+        "test/vendor-compat.mjs"
+      ]
+    },
+    {
+      "name": "video-frame.mjs",
+      "args": [
+        "test/video-frame.mjs"
+      ]
+    },
+    {
+      "name": "watermark.mjs",
+      "args": [
+        "test/watermark.mjs"
+      ]
+    },
+    {
+      "name": "wave-6-interactions.mjs",
+      "args": [
+        "test/wave-6-interactions.mjs"
+      ]
+    },
+    {
+      "name": "zip-date.mjs",
+      "args": [
+        "test/zip-date.mjs"
+      ]
+    }
+  ],
+  "possibleExecutionSites": [
+    {
+      "name": "rr-59-export-integrity.mjs",
+      "line": 6,
+      "text": "import {execFileSync} from 'node:child_process';"
+    },
+    {
+      "name": "rr-59-export-integrity.mjs",
+      "line": 121,
+      "text": "  execFileSync(process.execPath, ['--no-warnings', '--loader', pathToFileURL(loader).href, '--input-type=module', '-e', script], {stdio: 'pipe'});"
+    },
+    {
+      "name": "sh20-gate-output.mjs",
+      "line": 2,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh20-gate-output.mjs",
+      "line": 11,
+      "text": "for(const [name,output,message]of cases){assert.throws(()=>gateOutputDirectory(input,output),message,name);for(const [tool,args]of [['gate.mjs',[input,...(output?[output]:[])]],['final-domain-report.mjs',[input,path.join(input,'gate.json'),...(output?[output]:[])]]]){const run=spawnSync(process.execPath,[path.join(root,'tools/shapes/sh-20',tool),...args],{encoding:'utf8',timeout:15000,windowsHide:true});assert.notEqual(run.status,0,name);assert.match(run.stderr,message,name+': refuses before trying to parse the invalid probe');assert.doesNotMatch(run.stderr,/Unexpected token|JSON\\.parse/,name+': did not read score inputs');}}"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 3,
+      "text": "import {execFileSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 23,
+      "text": "    const run=()=>execFileSync('powershell',args,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 39,
+      "text": "@{result=$result;calls=@($log.ToArray());powershell=$PSVersionTable.PSVersion.ToString()} | ConvertTo-Json -Depth 6"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 41,
+      "text": "    const opened=JSON.parse(execFileSync('powershell',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',probe,'-Witness',script,'-Seeds',seed,'-Sweep',sweep,'-Out',out,'-Helpers',helpers],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']}));"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 42,
+      "text": "    assert.equal(opened.result,'owned-fake');assert.equal(opened.calls.length,1);assert.equal(opened.calls[0].path,seed);assert.equal(opened.calls[0].type,'System.String');assert.equal(opened.calls[0].readOnly,-1);assert.equal(opened.calls[0].untitled,0);assert.equal(opened.calls[0].window,-1);assert.match(opened.powershell,/^5\\./);"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 45,
+      "text": "    const runSeed=()=>execFileSync('powershell',seedArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 50,
+      "text": "    const runMaterialize=()=>execFileSync('powershell',materializeArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 54,
+      "text": "    const runVenn=()=>execFileSync('powershell',vennArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 3,
+      "text": "import {execFileSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 18,
+      "text": "  const args=['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',script,'-Manifest',manifest,'-Out',out,'-NativeHelpersPath',helpers,'-PlanOnly'],run=()=>execFileSync('powershell',args,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 25,
+      "text": "@{result=$opened;calls=@($log.ToArray());powershell=$PSVersionTable.PSVersion.ToString()}|ConvertTo-Json -Depth 5"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 27,
+      "text": "  const source=path.join(root,'pptx','org-chart-3.pptx'),opened=JSON.parse(execFileSync('powershell',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',proof,'-Witness',script,'-Manifest',manifest,'-Out',out,'-Helpers',helpers,'-Owned',source],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']}));assert.equal(opened.result,'owned-fake');assert.deepEqual(opened.calls,[{path:source,type:'System.String',readOnly:-1,untitled:0,window:-1}]);assert.match(opened.powershell,/^5\\./);"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 33,
+      "text": "  const messages=JSON.parse(execFileSync('powershell',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',countProof,'-Witness',script],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']}));assert.match(messages[0],/expected 5 data nodes; observed 5 data nodes and 0 group items/);assert.match(messages[1],/expected 5 data nodes; observed 4 data nodes and 14 group items/);"
+    },
+    {
+      "name": "sh21-production-packet-offline.mjs",
+      "line": 5,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh21-production-packet-offline.mjs",
+      "line": 12,
+      "text": "  const result=spawnSync(process.execPath,[script,temporary],{encoding:'utf8'});"
+    },
+    {
+      "name": "sh23-witness-offline.mjs",
+      "line": 3,
+      "text": "import {execFileSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh23-witness-offline.mjs",
+      "line": 17,
+      "text": "  const run=(extra=[])=>execFileSync('powershell',[...args,...extra],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "svg-image.mjs",
+      "line": 9,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "svg-image.mjs",
+      "line": 234,
+      "text": "    const child = spawnSync(process.execPath, ['--input-type=module', '-e', script], {encoding: 'utf8', env: {...process.env, ...env}, maxBuffer: 64 * 1024 * 1024});"
+    },
+    {
+      "name": "svg-image.mjs",
+      "line": 573,
+      "text": "  const child = spawnSync(process.execPath, ['--input-type=module', '-'], {input: script, encoding: 'utf8', cwd: fileURLToPath(new URL('..', import.meta.url))});"
+    },
+    {
+      "name": "svg-rasterizer-converter-missing.mjs",
+      "line": 10,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "svg-rasterizer-converter-missing.mjs",
+      "line": 29,
+      "text": "  const child = spawnSync(process.execPath, ['--input-type=module', '-'], {input: script, encoding: 'utf8', cwd: root});"
+    },
+    {
+      "name": "zip-date.mjs",
+      "line": 2,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "zip-date.mjs",
+      "line": 115,
+      "text": "      const child = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--worker', out], {"
+    },
+    {
+      "name": "zip-date.mjs",
+      "line": 132,
+      "text": "    const hostChild = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--host-tz-worker', hostDirectory], {env: {...process.env, TZ: 'UTC'}, encoding: 'utf8', timeout: 60000});"
+    }
+  ],
+  "environmentNames": [],
+  "node": {
+    "version": "v24.20.0",
+    "path": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+    "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5"
+  },
+  "scriptSha256": "801a00dd8647784bbeb4feb60a5bb0ab608b8b19a11195e4071f6d69fdd29914",
+  "maintainedSelectorSha256": "d612fee0d60877522d37febf41a195c5d88cd3fad14abaadba8eff9846450e93",
+  "suitesSha256": "3ab10736e2f340737e0e56d3b39b68b3aa436bcfa95a865aa1a5c745f80c27de",
+  "testSources": [
+    {
+      "name": "rr-105-native-title-wrap.mjs",
+      "sha256": "dd556806df388476fc9d77176d569bd7ea28f7963338b5a1688f15f4e2e852f1"
+    },
+    {
+      "name": "rr-105-numeric-axes.mjs",
+      "sha256": "dfbc2151e7ed8b2c19e16dc6366ca52bd2a268322fb100e9f70bb4937d5f03e9"
+    },
+    {
+      "name": "rr-105-small-run-title.mjs",
+      "sha256": "ef68c7fefa37206b174f334671d83ba4cf2988c37f6a661aa96f10cd1f2662ef"
+    },
+    {
+      "name": "rr-105-smartart-text-color.mjs",
+      "sha256": "86075d23e0321dd60e9a62fa58ab546ea4e56f350c9d23a6b7b215a2cce2d575"
+    },
+    {
+      "name": "rr-105-tag-ownership.mjs",
+      "sha256": "c3755f863aae398c2db2b3d593a592f86bd22ee867dd0bc4302ffed8849b2826"
+    },
+    {
+      "name": "rr-105-title-font-measurement.mjs",
+      "sha256": "ecc87b0a85500682f700820d8c044f374bb0f12213161fdacbf0c2ec660ae57d"
+    },
+    {
+      "name": "rr-105-waterfall-axis.mjs",
+      "sha256": "f5e38b02c3199fd3d71c8283d4f152d6a7a7e7a23c5d381ae234e2bbfe57556e"
+    },
+    {
+      "name": "rr-54-chart-table-data.mjs",
+      "sha256": "81c64913772a4bf0e9425e9e71e8af0beefd10ec8f08167a26c8cd8655fbc4c7"
+    },
+    {
+      "name": "rr-54-data-hardening.mjs",
+      "sha256": "2ec642e1fb2bdc0f633f0738ae5a1f23c497c98711574c16cb7c1dac16852ec1"
+    },
+    {
+      "name": "rr-54-format-respelling.mjs",
+      "sha256": "8e05e7c6cfc8cf2b05c7de915925a9c82402d705ed2de2dc0a57cd4815561e11"
+    },
+    {
+      "name": "rr-59-absent-defaults.mjs",
+      "sha256": "e663292d50848e18cd3081f3dc3d73239bd94610ad947d1ae51926f20dcc581d"
+    },
+    {
+      "name": "rr-59-export-integrity.mjs",
+      "sha256": "b5f1d011c5f4630048d91fbce747e827c7fd7496275a296b2a3b2dd8133a76d4"
+    },
+    {
+      "name": "rr-59-picture-diagnostics.mjs",
+      "sha256": "29421846f5558eccf8ec9c1fd349940011230f39dc1f3cdac827d4e5123dcece"
+    },
+    {
+      "name": "rr-59-script-measurement.mjs",
+      "sha256": "377d9468a9386779ed5a971495a889248725d6576157e33162e6d9ef3729c513"
+    },
+    {
+      "name": "rr-59-table-alt-provenance.mjs",
+      "sha256": "8d72984823595874eac145161a383e2439a3c1aea2eabebad240d75addc45ae9"
+    },
+    {
+      "name": "rr-97-resolver-failure.mjs",
+      "sha256": "7cef749f8af5b340c2a335fba0100dd77b09a896b31edc1249b2df9700c2a566"
+    },
+    {
+      "name": "rr54-archive-candidate.mjs",
+      "sha256": "ad531f08b6a452d65599b1c3e57b82b35296d03467561948c0ec17f32b2a75bb"
+    },
+    {
+      "name": "rtl-layout.mjs",
+      "sha256": "d79ac2c2eab34494fe7a30dc05dd7df9d6ead0c3ab32c5a9a6a14f81ab01d10f"
+    },
+    {
+      "name": "safe-typefaces.mjs",
+      "sha256": "340d48e32d105ca724460d63ad6b477d6b5ad458f6bcf88d555247a94fed44ce"
+    },
+    {
+      "name": "script-fonts.mjs",
+      "sha256": "e1739859ea28304af730d575b8c0027d9af57c88d2944fdd9d0714044f711499"
+    },
+    {
+      "name": "sections.mjs",
+      "sha256": "fa228e8e79b4517832eec34114bb0bf27b83310d176b0c7bfbf56e942483edce"
+    },
+    {
+      "name": "sh-02-shape-blocks.mjs",
+      "sha256": "8aa6bcb2afee9cff032a675045a141afdaa5cd08bac5a246a5fcf9fc86e01e30"
+    },
+    {
+      "name": "sh-04-overlays.mjs",
+      "sha256": "4898d69cb566387b9d28b7b1ec305142b0f50fcaf36171a3538d8c1b2de24664"
+    },
+    {
+      "name": "sh-05-powerpoint-shapes.mjs",
+      "sha256": "9599c5de45a8c511c978080a40d079f8cd63b19ad9bebf351b550ca1f1aac2f7"
+    },
+    {
+      "name": "sh-05-shape-import.mjs",
+      "sha256": "617b591809a695a0978e8917b06d07f83b00de34eeb88535588601e1fd456ceb"
+    },
+    {
+      "name": "sh-07-native-diagrams.mjs",
+      "sha256": "2f958b62a2dff4f3a19710049b33f138f76018b033e86839c4cfa261e0eb0247"
+    },
+    {
+      "name": "sh-08-smartart-import.mjs",
+      "sha256": "b0669d722f7e86caeaf4235e4b9a389352724f7192600f987ab94d2ad10d8adb"
+    },
+    {
+      "name": "sh-09-smartart.mjs",
+      "sha256": "ea9e168b5eb43127e38bf8c6e6396b3e62f14c93bb07c8789510e96a2dd97fd3"
+    },
+    {
+      "name": "sh-11-shape-text-rect.mjs",
+      "sha256": "06c5d27422a73d866f437ec03da066cfa67d4f536baf7382b4b4bac27342b0d1"
+    },
+    {
+      "name": "sh-12-dot-diagrams.mjs",
+      "sha256": "9c496e5379dc4e00aa40c10b5e30dfa291e72922b367eb975821004fba076d11"
+    },
+    {
+      "name": "sh-13-plantuml-diagrams.mjs",
+      "sha256": "566ed4f223c7bfc80b41da0096030599e9fb067229fa2770ccd0340e9104eb6c"
+    },
+    {
+      "name": "sh-16-smartart-fallback.mjs",
+      "sha256": "82f932c1a36fc1da4e24abda949b397a04d1b5d4d17216c763dd29c4fa01217a"
+    },
+    {
+      "name": "sh-17-smartart.mjs",
+      "sha256": "89eb0d52d29f15cc4598d5aa2c2b8aac6c2971ee52d3b59cce42c8c9c93f5b9b"
+    },
+    {
+      "name": "sh-18-smartart.mjs",
+      "sha256": "7761077b6aea90283888d045d24a737965858292d1fd20367b2ac70127eae055"
+    },
+    {
+      "name": "sh-19-smartart-layouts.mjs",
+      "sha256": "60198cce61e5a79b9b33534b59c08691ebff4722ec591c875020fb0181bf4259"
+    },
+    {
+      "name": "sh-23-smartart-more-entries.mjs",
+      "sha256": "3ef930c640caad80b44d1dfa0c01b5f19058d8e4b95d36d299a5819831c024ef"
+    },
+    {
+      "name": "sh-25-chart-point-anchors.mjs",
+      "sha256": "82a2e6e4df0896a9661a688a20e0f4e82a27f8014eb9a92660a872d298a0b19a"
+    },
+    {
+      "name": "sh-phase-2-meeting-points.mjs",
+      "sha256": "63a4c8289884c519104e3d24745d7cc036f8d79b7fb296d7059bdd094b400535"
+    },
+    {
+      "name": "sh20-gate-output.mjs",
+      "sha256": "3022627cadb0f556d1925d44ef7a23ad227387c041702bd2de71e6b0e0df3ef2"
+    },
+    {
+      "name": "sh20-live-domain-boundary.mjs",
+      "sha256": "e8fd93a09df0a98a299db3cc3eb7f07445194abb83e9b246a6b5588d132ab86c"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "sha256": "c4941718e3c140b78a3164e522dc6b5a1b3508839388cc9a14aa729f7c4160f3"
+    },
+    {
+      "name": "sh21-native-arrangements.mjs",
+      "sha256": "10581dcdfce91cf34ef8baacf2485dda16663066b484e976ac436bd3cef3a723"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "sha256": "3dbe43bac2661dcc9d1fc821affbbe2965b63bfa162594c16105f48d75031d85"
+    },
+    {
+      "name": "sh21-production-packet-offline.mjs",
+      "sha256": "d8c857760ef91ebb95ceeb23c5d6e5186bd68736e187615ee156f5adb5d69454"
+    },
+    {
+      "name": "sh21-smartart-parts.mjs",
+      "sha256": "26d951376c54f91f28872c1e3044e31915fb3447a5265b96286c359283d73edc"
+    },
+    {
+      "name": "sh21-venn-editable.mjs",
+      "sha256": "a7b93802d64e4e8cf45e3752b184aaea9ab86821db2712da7059801aff296ccb"
+    },
+    {
+      "name": "sh21-venn-reading-measure.mjs",
+      "sha256": "a7d17382683c681a6fd70e88680d68914169fd5a9d3905b68d61c188c8838fea"
+    },
+    {
+      "name": "sh23-witness-offline.mjs",
+      "sha256": "afaf78e52c08b78c2c868ea15902a08879bab835935d9f33a07ed0c71d679f6b"
+    },
+    {
+      "name": "sh24-inverted-pyramid.mjs",
+      "sha256": "9d134472763b09fd721784218ebd338330df1c0bdcfd27b4f982c3f1edfb7102"
+    },
+    {
+      "name": "sh25-series-name-current-cache.mjs",
+      "sha256": "58006148ffeff0f740ad1dc8387a593e5f65cda5078f7eff2fd423b2450b471c"
+    },
+    {
+      "name": "shape-block-effects.mjs",
+      "sha256": "fc4e61a9a4564dd33ad2392237d10115de01e353455a4b75e8f1b6d32af480e6"
+    },
+    {
+      "name": "shape-border-widths.mjs",
+      "sha256": "e4c74db83b525cfcb55c28c7094a9fe197b8d9f0491f25bcdf8233a83553d4bc"
+    },
+    {
+      "name": "shape-effects.mjs",
+      "sha256": "f6dcadba8868eca71ebe525e2bd5f0c232a33e4d874b69cfaa6a0a8617400703"
+    },
+    {
+      "name": "shared-furniture.mjs",
+      "sha256": "17115ddf235a1b5222aa8527f645c798487ddad3158249b4b99ec433eb544b64"
+    },
+    {
+      "name": "shared-metric.mjs",
+      "sha256": "eaa35759d97cad8065f72ff0da3f76e6d229d626b72c63501935f3757586bcea"
+    },
+    {
+      "name": "shared-quote.mjs",
+      "sha256": "5b787760990c6f11acadf45cbf29422503a75b249b6e16d4d764f3dd1745f357"
+    },
+    {
+      "name": "shared-timeline.mjs",
+      "sha256": "169cc7eb3d937538293914a41641983fc4c397b9ee41693abf8c025dee40cf21"
+    },
+    {
+      "name": "single-column-chart.mjs",
+      "sha256": "918fa7428410ddd9a308ca40909f019301c8f49a522d643d9681d14d5277c995"
+    },
+    {
+      "name": "single-series-colour.mjs",
+      "sha256": "82aba15faadd64a04b417ba4a0d6d81007170c86e780a8070f2c5469bcd7f628"
+    },
+    {
+      "name": "slide-context.mjs",
+      "sha256": "00effa10ee9dd073305e9d9626503d2c23945225515f0c706c169361a1f8fb8e"
+    },
+    {
+      "name": "slide-number-static.mjs",
+      "sha256": "1f34586d8421f51ee944e8df276a99421286ba64780799f0f33b822de7f2c750"
+    },
+    {
+      "name": "slide-variables.mjs",
+      "sha256": "2dd504bc1c062617fa9a0b363b5e786d8b42555194280e41aa2212077cc737ac"
+    },
+    {
+      "name": "socials-furniture.mjs",
+      "sha256": "16efb9e553678d9ad1bfde6ab74798d91c2620c25681dc0dede5d20a65a17e91"
+    },
+    {
+      "name": "source-run-styles-roundtrip.mjs",
+      "sha256": "b72006a2b3686ee0711f745fccc98a6d2042a9ba8bf0f03eaace9890a9f50fd3"
+    },
+    {
+      "name": "source-run-styles.mjs",
+      "sha256": "969f445f8423c1e9b0e12b35780ff39735a7be888b45c9ab6657795084d6ea5f"
+    },
+    {
+      "name": "step-badge-numbering.mjs",
+      "sha256": "5311fede7d04718749ac06c048d4d9cc78838b2455e5d473694f6b62c79d9836"
+    },
+    {
+      "name": "step-badges.mjs",
+      "sha256": "f4b936bb42997f3378bcb8ee440965e2987f057eeb603c94b8c75a34b0d459c6"
+    },
+    {
+      "name": "styled-table-import.mjs",
+      "sha256": "9325adf5d4fc9b7bcfb699897dc5cf4f7488978c0361955ca6ae5abe32e1a807"
+    },
+    {
+      "name": "styled-table.mjs",
+      "sha256": "8e1bfb17918e45bbc76cb19eaddd80f819be7df0cf304b34bdf605487f23d86d"
+    },
+    {
+      "name": "svg-image-degrade.mjs",
+      "sha256": "891b12d84c41b3b1f559f304af2d80cb2600784ee77b726f46848f9dc929a4fa"
+    },
+    {
+      "name": "svg-image.mjs",
+      "sha256": "3296eba0f67970094b8c2733abb0746ed00fe40c6cb7b224bb529fcd3f1dbadc"
+    },
+    {
+      "name": "svg-rasterizer-converter-missing.mjs",
+      "sha256": "906f09e326664b3fa06c5781b36df01b71bfebe1f95a08468e30419d802c1524"
+    },
+    {
+      "name": "svg-style-sanitization.mjs",
+      "sha256": "481b5446ef7d172d19ef170a37163c40bb74d52a06e073cda27d84226815c9bb"
+    },
+    {
+      "name": "symbol-fonts.mjs",
+      "sha256": "1f0187bfbf9ef94c687b93b8f48459c20ed3dae261682c31f9010b5f80d2343a"
+    },
+    {
+      "name": "table-alt.mjs",
+      "sha256": "b5bc3a0fa676da7b43c50eedfaf852b8e1a01223733aa03f9082ddf0151f13c7"
+    },
+    {
+      "name": "table-frame-furniture-order.mjs",
+      "sha256": "54dfea14f964d1af97a8f9434766424858cf1a71412da0fb904cd60d6ad335e6"
+    },
+    {
+      "name": "table-powerpoint-save.mjs",
+      "sha256": "80cadb73769d482dee1dae20fea991ad89377e35ac8d6afe96e120fc20be29dd"
+    },
+    {
+      "name": "table-theme-colors.mjs",
+      "sha256": "9b00bf09bbd905ef3df5fd1372ef7980ad768b3cc13ace2985bb4774cdefa290"
+    },
+    {
+      "name": "tag-colour.mjs",
+      "sha256": "fecd5d2066f18e9ffd8d9cf86842f820fa8cc7182ba076cd6497856be2060322"
+    },
+    {
+      "name": "template-layout-review.mjs",
+      "sha256": "c5f2cf11dac5eb56af98bb0fb3e7ba37f7e15d2c4f473489928986b6ec155a9d"
+    },
+    {
+      "name": "template-layouts.mjs",
+      "sha256": "6e493b69445b495100fec400f0be07e8aa61d887cf1ba766f2905ccf45d5d6c5"
+    },
+    {
+      "name": "template-variables.mjs",
+      "sha256": "47ef5c7df08d27dd73783ee675ca5d7525e2ecc4efee7ccc3aa7f914c6563e38"
+    },
+    {
+      "name": "theme-colors.mjs",
+      "sha256": "37e5f1933245aa5c633b7ebc8603dfcc7a263d04c90326e0e2ec18020a7a1fbd"
+    },
+    {
+      "name": "theme-script-slots.mjs",
+      "sha256": "637c64f2c5af0eede107c4126e1067d84761746ae354b5f1343fd788e33efa42"
+    },
+    {
+      "name": "tier-pillar-pptx.mjs",
+      "sha256": "1562b95789b90fc7c1773e0d10cfafce895cdbae960469af5fe846c7f4204dbb"
+    },
+    {
+      "name": "timeline-status.mjs",
+      "sha256": "c4953500a834d50ef33ad7178f57fc1729e19e7d6c851e6d22bf2feaf65442ec"
+    },
+    {
+      "name": "title-rule.mjs",
+      "sha256": "635cef793fda8b93a8841739479526ae4702b7075fcf1db193176c091290ab2e"
+    },
+    {
+      "name": "title-split.mjs",
+      "sha256": "5d2866f73e181cdb789fefeec24ba0336b0be9b02acccfb823a9865abf8f68f8"
+    },
+    {
+      "name": "typeface-inventory.mjs",
+      "sha256": "0a2fe77831746bfddb8325ec86ae7196a7ee4ceb7fe6a71cc63fb4081776c60d"
+    },
+    {
+      "name": "vendor-compat.mjs",
+      "sha256": "7e73fd2779621cf794607f424ad04b2cd16e5fcc416f68426c64a2e13685ad7a"
+    },
+    {
+      "name": "video-frame.mjs",
+      "sha256": "78d98ede3356854c02d5ab1fae89233ce171661460b6436a2d21326f7fd5cc39"
+    },
+    {
+      "name": "watermark.mjs",
+      "sha256": "e68a226803b8f0c306f80bd30745d85a63657ac22d97f23f65e2e07a2e0d3a95"
+    },
+    {
+      "name": "wave-6-interactions.mjs",
+      "sha256": "e8413996e3d6218123af287392e21410a8c22a6b65eafe50a98e7eb87bc33009"
+    },
+    {
+      "name": "zip-date.mjs",
+      "sha256": "ab0d0f73a0cc3cd3b615fe3751434736ced324dacb3a7765bf861888c3680035"
+    }
+  ],
+  "offlineReview": "All process sites inspected. Node-only children or PlanOnly PowerShell with fake app/helper sentinel; no actual COM/Office, no package build, no provider/CI actions."
+}

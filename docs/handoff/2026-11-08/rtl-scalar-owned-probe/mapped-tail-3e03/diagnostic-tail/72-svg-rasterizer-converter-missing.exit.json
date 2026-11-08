@@ -1,0 +1,23 @@
+{
+  "index": 72,
+  "name": "svg-rasterizer-converter-missing.mjs",
+  "args": [
+    "test/svg-rasterizer-converter-missing.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:35.569Z",
+  "seconds": 6.12685189999998,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "72-svg-rasterizer-converter-missing.stdout.txt",
+    "bytes": 113,
+    "sha256": "b2f1e0da2555d5a9b67a891846adbbf74d61083b31ea5390ee6948cf686db488"
+  },
+  "stderr": {
+    "file": "72-svg-rasterizer-converter-missing.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

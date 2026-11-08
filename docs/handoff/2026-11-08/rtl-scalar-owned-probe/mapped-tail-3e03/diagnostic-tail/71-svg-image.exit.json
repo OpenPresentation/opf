@@ -1,0 +1,23 @@
+{
+  "index": 71,
+  "name": "svg-image.mjs",
+  "args": [
+    "test/svg-image.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:29.152Z",
+  "seconds": 6.417112300000008,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "71-svg-image.stdout.txt",
+    "bytes": 175,
+    "sha256": "d02179b40bd60af850e84217727540ce4d927ac7348caa82ab6c00f6d92cf4e8"
+  },
+  "stderr": {
+    "file": "71-svg-image.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

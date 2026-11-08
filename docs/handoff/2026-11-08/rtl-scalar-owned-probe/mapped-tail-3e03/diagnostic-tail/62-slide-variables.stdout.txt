@@ -1,0 +1,1 @@
+Slide variables passed: native {{slide.number}} fields with fixed words, fixed {{deck.slideCount}} and {{slide.section}}, body tokens as text, pagination numbers, tokens through the round trip and third-party footers.

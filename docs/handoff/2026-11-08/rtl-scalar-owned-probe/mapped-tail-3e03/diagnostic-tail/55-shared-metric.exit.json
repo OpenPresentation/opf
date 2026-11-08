@@ -1,0 +1,23 @@
+{
+  "index": 55,
+  "name": "shared-metric.mjs",
+  "args": [
+    "test/shared-metric.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:03.124Z",
+  "seconds": 5.447440899999987,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "55-shared-metric.stdout.txt",
+    "bytes": 143,
+    "sha256": "07752c686911561cb16005b18954a1f3cdedc360204cc2a11932240a179e8435"
+  },
+  "stderr": {
+    "file": "55-shared-metric.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

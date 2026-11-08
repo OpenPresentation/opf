@@ -1,0 +1,23 @@
+{
+  "index": 46,
+  "name": "sh21-venn-editable.mjs",
+  "args": [
+    "test/sh21-venn-editable.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:19.404Z",
+  "seconds": 1.2149723000000086,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "46-sh21-venn-editable.stdout.txt",
+    "bytes": 553,
+    "sha256": "d1ce40872e97aa15aa9b518f3faef5b9a6c4af62d72a28dd07c4e481fc493a27"
+  },
+  "stderr": {
+    "file": "46-sh21-venn-editable.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,1 @@
+Shared metric PPTX: 36 exact aligned geometry/source/type round trips with editable native lines, strict rejection and 198 XML boundary cases.

@@ -1,0 +1,2 @@
+Symbol fonts: measured export (opf-render FF-45) names the chosen families and keeps the codes.
+Symbol fonts: 5 families; a:latin names the chosen family, characters byte for byte in private-use and Windows-1252 form, re-import round-trips; no a:sym written (native verification pending).

@@ -1,0 +1,23 @@
+{
+  "index": 43,
+  "name": "sh21-product-probe-offline.mjs",
+  "args": [
+    "test/sh21-product-probe-offline.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:16.507Z",
+  "seconds": 2.1827598,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "43-sh21-product-probe-offline.stdout.txt",
+    "bytes": 144,
+    "sha256": "7d41f01a8a63f22d14886ff4d762cb4e6204f95fe3c5fec81ed7a663120865c5"
+  },
+  "stderr": {
+    "file": "43-sh21-product-probe-offline.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

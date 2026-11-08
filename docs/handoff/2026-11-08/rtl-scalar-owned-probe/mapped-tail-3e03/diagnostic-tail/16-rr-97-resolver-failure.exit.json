@@ -1,0 +1,23 @@
+{
+  "index": 16,
+  "name": "rr-97-resolver-failure.mjs",
+  "args": [
+    "test/rr-97-resolver-failure.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:31.543Z",
+  "seconds": 1.863718399999998,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "16-rr-97-resolver-failure.stdout.txt",
+    "bytes": 122,
+    "sha256": "3ac1a297ec7d971bd9daf2098015e38ad29fd050ca3468153f80b7a8990ed6ff"
+  },
+  "stderr": {
+    "file": "16-rr-97-resolver-failure.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,1 @@
+Single-series colour passed: 18 charts, single-series column and bar charts write one series colour and no c:dPt; multi-series and pie/doughnut unchanged.

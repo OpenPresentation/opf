@@ -1,0 +1,1 @@
+SH-18 SmartArt passed: live Basic Cycle (data model, arrow label, drawing with turned arrows, fallback picture, no layout part), the round trip from the choice and the fallback alone, a PowerPoint-style data model, native shapes and the domain fallback.

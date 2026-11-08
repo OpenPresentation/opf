@@ -1,0 +1,23 @@
+{
+  "index": 92,
+  "name": "watermark.mjs",
+  "args": [
+    "test/watermark.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:58.433Z",
+  "seconds": 1.5577783000000054,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "92-watermark.stdout.txt",
+    "bytes": 37,
+    "sha256": "f31bad5615015860efb70f0912411a1c8a82e573e2f074f6b5c00b616ad0cff0"
+  },
+  "stderr": {
+    "file": "92-watermark.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

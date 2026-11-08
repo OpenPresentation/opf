@@ -1,0 +1,23 @@
+{
+  "index": 79,
+  "name": "tag-colour.mjs",
+  "args": [
+    "test/tag-colour.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:37:06.436Z",
+  "seconds": 2.37572589999999,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "79-tag-colour.stdout.txt",
+    "bytes": 81,
+    "sha256": "87d0930491a93a4d35ba93a51b4f0d440494ecca90ab3d38fd8203aa86f3ef75"
+  },
+  "stderr": {
+    "file": "79-tag-colour.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

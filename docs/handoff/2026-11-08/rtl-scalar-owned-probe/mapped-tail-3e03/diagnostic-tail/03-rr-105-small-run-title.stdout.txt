@@ -1,0 +1,1 @@
+RR-105: a title of runs smaller than its role size is written with the exact pitch that puts PowerPoint's baseline on the preview's.

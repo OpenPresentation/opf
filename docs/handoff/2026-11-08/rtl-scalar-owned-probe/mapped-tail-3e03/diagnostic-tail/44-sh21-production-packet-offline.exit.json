@@ -1,0 +1,23 @@
+{
+  "index": 44,
+  "name": "sh21-production-packet-offline.mjs",
+  "args": [
+    "test/sh21-production-packet-offline.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:18.690Z",
+  "seconds": 0.42235940000000116,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "44-sh21-production-packet-offline.stdout.txt",
+    "bytes": 94,
+    "sha256": "5c79c0c80a4a21de053097f8dc7084164be6a66b3dbe2ee745d5693c4e886775"
+  },
+  "stderr": {
+    "file": "44-sh21-production-packet-offline.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

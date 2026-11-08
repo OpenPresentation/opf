@@ -1,0 +1,1 @@
+Template variables: template plus values exports the same bytes as the hand-written deck; examples, unfilled and invalid inputs behave.

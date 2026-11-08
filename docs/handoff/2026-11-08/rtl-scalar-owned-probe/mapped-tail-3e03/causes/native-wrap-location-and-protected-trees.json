@@ -1,0 +1,71 @@
+{
+  "file": "examples/technical/layout-sampler.opf.json",
+  "sourceSha256": "4f1527e22d0f8c861530a4ba9df03be67fc5287ab4e6b24b94e427076828303e",
+  "picked": [
+    {
+      "index": 40,
+      "title": "What the first four weeks show"
+    },
+    {
+      "index": 21,
+      "title": "Completion rose through the pilot"
+    },
+    {
+      "index": 19,
+      "title": "Explain what the audience should notice"
+    }
+  ],
+  "wanted": [
+    {
+      "index": 46,
+      "title": "Six lessons from the pilot",
+      "blocks": [
+        {
+          "text": "Start with a baseline."
+        },
+        {
+          "text": "Keep the scope to one workflow."
+        },
+        {
+          "text": "Review feedback every week."
+        },
+        {
+          "text": "Name one owner per decision."
+        },
+        {
+          "text": "Share results with both teams."
+        },
+        {
+          "text": "Decide with the evidence, not the calendar."
+        }
+      ]
+    }
+  ],
+  "protectedTrees": {
+    "packages/javascript": {
+      "baseline": "25ecc33f83c5072e2d6f2b03be416a222ae88c1a",
+      "current": "25ecc33f83c5072e2d6f2b03be416a222ae88c1a",
+      "equal": true
+    },
+    "packages/gallery": {
+      "baseline": "0299af51fc1866552ba6d6022e7caddeb0f2bf4f",
+      "current": "0299af51fc1866552ba6d6022e7caddeb0f2bf4f",
+      "equal": true
+    },
+    "packages/render": {
+      "baseline": "617ce325992987878b37858cb27b0a09d00409d6",
+      "current": "617ce325992987878b37858cb27b0a09d00409d6",
+      "equal": true
+    },
+    "spec": {
+      "baseline": "eead5477c84895367abc9d909866b23ba77e35ac",
+      "current": "eead5477c84895367abc9d909866b23ba77e35ac",
+      "equal": true
+    },
+    "examples": {
+      "baseline": "72225a836ede0efb9015b95b047ebbd6d715c72e",
+      "current": "72225a836ede0efb9015b95b047ebbd6d715c72e",
+      "equal": true
+    }
+  }
+}

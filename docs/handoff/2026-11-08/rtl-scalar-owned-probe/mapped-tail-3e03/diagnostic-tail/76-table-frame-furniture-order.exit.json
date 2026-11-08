@@ -1,0 +1,23 @@
+{
+  "index": 76,
+  "name": "table-frame-furniture-order.mjs",
+  "args": [
+    "test/table-frame-furniture-order.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:48.644Z",
+  "seconds": 2.070068100000004,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "76-table-frame-furniture-order.stdout.txt",
+    "bytes": 186,
+    "sha256": "bf6994931680c619330fe06499407d70d3114fa57ac4d3bbe789bb87bcc24cae"
+  },
+  "stderr": {
+    "file": "76-table-frame-furniture-order.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,1 @@
+RTL layout export passed: logical alignment, hanging bullets at the right, per-paragraph line direction, mirrored regions and tables, reversed column charts, en-US Latin runs, notes and master defaults.

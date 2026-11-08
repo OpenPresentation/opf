@@ -1,0 +1,23 @@
+{
+  "index": 87,
+  "name": "title-rule.mjs",
+  "args": [
+    "test/title-rule.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:19.764Z",
+  "seconds": 0.791819300000032,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "87-title-rule.stdout.txt",
+    "bytes": 15,
+    "sha256": "7f62d4a8b1bb4d844b17c8d88f142d5d6d408128fc74e6062b4dfb50c57947af"
+  },
+  "stderr": {
+    "file": "87-title-rule.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

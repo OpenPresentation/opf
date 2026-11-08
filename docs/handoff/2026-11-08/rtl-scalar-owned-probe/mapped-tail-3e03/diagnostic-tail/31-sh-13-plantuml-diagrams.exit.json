@@ -1,0 +1,23 @@
+{
+  "index": 31,
+  "name": "sh-13-plantuml-diagrams.mjs",
+  "args": [
+    "test/sh-13-plantuml-diagrams.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:51.373Z",
+  "seconds": 0.9012293999999965,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "31-sh-13-plantuml-diagrams.stdout.txt",
+    "bytes": 153,
+    "sha256": "5f8f4e5206b76d6258fe43f506c725a1f764791769a58a8f49fbf392e34a504c"
+  },
+  "stderr": {
+    "file": "31-sh-13-plantuml-diagrams.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

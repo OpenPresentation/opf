@@ -1,0 +1,2 @@
+default dark2 slide: 11 of 14 catalog schemes take the text colour
+tag colour ok

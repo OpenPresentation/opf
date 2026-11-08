@@ -1,0 +1,23 @@
+{
+  "index": 81,
+  "name": "template-layouts.mjs",
+  "args": [
+    "test/template-layouts.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:37:10.299Z",
+  "seconds": 0.33778680000000166,
+  "status": 1,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "81-template-layouts.stdout.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "file": "81-template-layouts.stderr.txt",
+    "bytes": 618,
+    "sha256": "185c3cce8983da79c84b519e85e156ac8a558ce2a35f20416742cf06a21b04c9"
+  }
+}

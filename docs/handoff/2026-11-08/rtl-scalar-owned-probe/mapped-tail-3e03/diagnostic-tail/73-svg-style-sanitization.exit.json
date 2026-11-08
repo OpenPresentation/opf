@@ -1,0 +1,23 @@
+{
+  "index": 73,
+  "name": "svg-style-sanitization.mjs",
+  "args": [
+    "test/svg-style-sanitization.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:41.697Z",
+  "seconds": 1.543163899999985,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "73-svg-style-sanitization.stdout.txt",
+    "bytes": 117,
+    "sha256": "2eb87dd9bd282305a521b180c59044c730313d04accdec63329a3c0766eac192"
+  },
+  "stderr": {
+    "file": "73-svg-style-sanitization.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

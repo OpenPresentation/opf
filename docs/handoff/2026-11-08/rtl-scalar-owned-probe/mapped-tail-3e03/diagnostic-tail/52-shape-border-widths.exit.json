@@ -1,0 +1,23 @@
+{
+  "index": 52,
+  "name": "shape-border-widths.mjs",
+  "args": [
+    "test/shape-border-widths.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:59.560Z",
+  "seconds": 0.8959569999999949,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "52-shape-border-widths.stdout.txt",
+    "bytes": 58,
+    "sha256": "af72ee39c0313e6aa4e8109730b5e80665385d60c55f0910b3d680842844fc61"
+  },
+  "stderr": {
+    "file": "52-shape-border-widths.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

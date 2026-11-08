@@ -1,0 +1,23 @@
+{
+  "index": 7,
+  "name": "rr-105-waterfall-axis.mjs",
+  "args": [
+    "test/rr-105-waterfall-axis.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:13.587Z",
+  "seconds": 1.0110292000000045,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "07-rr-105-waterfall-axis.stdout.txt",
+    "bytes": 88,
+    "sha256": "03b6736af51d6563690f768e606804ffba38872619a6738fd5141c13fe687e63"
+  },
+  "stderr": {
+    "file": "07-rr-105-waterfall-axis.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

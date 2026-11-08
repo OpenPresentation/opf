@@ -1,0 +1,23 @@
+{
+  "index": 86,
+  "name": "timeline-status.mjs",
+  "args": [
+    "test/timeline-status.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:17.398Z",
+  "seconds": 2.3654985999999916,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "86-timeline-status.stdout.txt",
+    "bytes": 151,
+    "sha256": "d533e629fc73a4cf405592288d657535f11f30f3a3d081b2d44cb53d4e359a36"
+  },
+  "stderr": {
+    "file": "86-timeline-status.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

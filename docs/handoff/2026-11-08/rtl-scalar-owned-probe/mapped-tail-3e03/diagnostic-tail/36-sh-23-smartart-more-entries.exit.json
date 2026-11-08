@@ -1,0 +1,23 @@
+{
+  "index": 36,
+  "name": "sh-23-smartart-more-entries.mjs",
+  "args": [
+    "test/sh-23-smartart-more-entries.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:02.219Z",
+  "seconds": 1.1881081000000122,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "36-sh-23-smartart-more-entries.stdout.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "file": "36-sh-23-smartart-more-entries.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

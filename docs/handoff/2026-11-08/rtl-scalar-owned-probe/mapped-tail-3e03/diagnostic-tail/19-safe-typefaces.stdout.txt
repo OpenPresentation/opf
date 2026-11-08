@@ -1,0 +1,1 @@
+Safe typeface checks passed (6): the policy's safe set, the mapping, the XML pass, measured line breaks and the report.

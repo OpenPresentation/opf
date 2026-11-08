@@ -1,0 +1,1 @@
+shapes phase 2 meeting points passed (4): diagram groups import as diagrams beside overlays, edited groups as SH-05 shapes, one connector writer.

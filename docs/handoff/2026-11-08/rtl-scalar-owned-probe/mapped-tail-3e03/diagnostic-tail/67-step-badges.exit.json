@@ -1,0 +1,23 @@
+{
+  "index": 67,
+  "name": "step-badges.mjs",
+  "args": [
+    "test/step-badges.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:25.961Z",
+  "seconds": 0.7867395999999717,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "67-step-badges.stdout.txt",
+    "bytes": 81,
+    "sha256": "fa860d28bb512b8050953d2a2d8d173f37f33cb77607d9604b4efac0acb017f8"
+  },
+  "stderr": {
+    "file": "67-step-badges.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

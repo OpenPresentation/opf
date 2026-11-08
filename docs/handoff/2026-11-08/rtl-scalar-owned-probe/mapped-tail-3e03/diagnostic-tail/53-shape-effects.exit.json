@@ -1,0 +1,23 @@
+{
+  "index": 53,
+  "name": "shape-effects.mjs",
+  "args": [
+    "test/shape-effects.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:00.457Z",
+  "seconds": 0.07961429999998654,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "53-shape-effects.stdout.txt",
+    "bytes": 32,
+    "sha256": "3bdd6eca79e432be29d57aebb2ed403f1e3e8e9db7a65c1730b923fc8ea089eb"
+  },
+  "stderr": {
+    "file": "53-shape-effects.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

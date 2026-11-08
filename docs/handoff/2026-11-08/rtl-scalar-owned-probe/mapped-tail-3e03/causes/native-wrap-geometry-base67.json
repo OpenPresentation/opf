@@ -1,0 +1,300 @@
+{
+  "repo": "C:/opf-work/rr105-theme67",
+  "head": "67dd9ec10b7019cb95807f59c75186482c800f10",
+  "node": "v24.20.0",
+  "samplerSha256": "4f1527e22d0f8c861530a4ba9df03be67fc5287ab4e6b24b94e427076828303e",
+  "originalTestSha256": "40e58b00d3c8d1358d9f58cd56e208c35062ac8b70eb313e58497becd3f32de2",
+  "picked": [
+    {
+      "originalIndex": 40,
+      "title": "What the first four weeks show",
+      "fieldCounts": {
+        "title": 1,
+        "chart": 1,
+        "bullets": 1
+      },
+      "text": [],
+      "nativePlans": [
+        {
+          "path": "slides.0.blocks.1.bullets",
+          "value": [
+            "Completion rose 16 points",
+            "The largest gain came in week four",
+            "Team B needs targeted support"
+          ],
+          "box": {
+            "x": 652,
+            "y": 333.921563,
+            "width": 570.4,
+            "height": 138.04
+          },
+          "wrap": {
+            "x": 652,
+            "width": 585.8344951923077
+          }
+        }
+      ],
+      "reasons": []
+    },
+    {
+      "originalIndex": 21,
+      "title": "Completion rose through the pilot",
+      "layout": "chart",
+      "fieldCounts": {
+        "title": 1,
+        "subtitle": 1,
+        "chart": 1,
+        "text": 1
+      },
+      "text": [
+        {
+          "path": "slides.1.blocks.1.text",
+          "value": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale.",
+          "box": {
+            "x": 57.6,
+            "y": 590.083125,
+            "width": 980,
+            "height": 68.32
+          },
+          "lines": [
+            "Test with two teams for six weeks. Measure task completion and time before ",
+            "deciding what to scale."
+          ]
+        }
+      ],
+      "nativePlans": [
+        {
+          "path": "slides.1.blocks.1.text",
+          "value": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale.",
+          "box": {
+            "x": 57.6,
+            "y": 590.083125,
+            "width": 980,
+            "height": 68.32
+          },
+          "wrap": {
+            "x": 57.6,
+            "width": 993.5051832932693
+          }
+        }
+      ],
+      "reasons": []
+    },
+    {
+      "originalIndex": 19,
+      "title": "Explain what the audience should notice",
+      "layout": "image-beside",
+      "fieldCounts": {
+        "title": 1,
+        "image": 1,
+        "text": 1
+      },
+      "text": [
+        {
+          "path": "slides.2.blocks.1.text",
+          "value": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale.",
+          "box": {
+            "x": 652,
+            "y": 350.201563,
+            "width": 570.4,
+            "height": 105.48
+          },
+          "lines": [
+            "Test with two teams for six weeks. Measure ",
+            "task completion and time before deciding what ",
+            "to scale."
+          ]
+        }
+      ],
+      "nativePlans": [],
+      "reasons": [
+        {
+          "code": "native-body-fallback",
+          "path": "slides.2.blocks.1.text",
+          "reason": "tight-wrap",
+          "message": "Native body export cannot represent this tight wrap; the current measured shapes were exported."
+        }
+      ]
+    }
+  ],
+  "intended": [
+    {
+      "originalIndex": 46,
+      "title": "Six lessons from the pilot",
+      "fieldCounts": {
+        "title": 1,
+        "text": 6
+      },
+      "text": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Start with a baseline.",
+          "box": {
+            "x": 120.45,
+            "y": 212.063854,
+            "width": 483.55,
+            "height": 46.14
+          },
+          "lines": [
+            "Start with a baseline."
+          ]
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Keep the scope to one workflow.",
+          "box": {
+            "x": 714.85,
+            "y": 189.493854,
+            "width": 483.55,
+            "height": 91.28
+          },
+          "lines": [
+            "Keep the scope to one ",
+            "workflow."
+          ]
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Review feedback every week.",
+          "box": {
+            "x": 120.45,
+            "y": 386.371563,
+            "width": 483.55,
+            "height": 46.14
+          },
+          "lines": [
+            "Review feedback every week."
+          ]
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Name one owner per decision.",
+          "box": {
+            "x": 714.85,
+            "y": 363.801563,
+            "width": 483.55,
+            "height": 91.28
+          },
+          "lines": [
+            "Name one owner per ",
+            "decision."
+          ]
+        },
+        {
+          "path": "slides.0.blocks.4.text",
+          "value": "Share results with both teams.",
+          "box": {
+            "x": 120.45,
+            "y": 560.679271,
+            "width": 483.55,
+            "height": 46.14
+          },
+          "lines": [
+            "Share results with both teams."
+          ]
+        },
+        {
+          "path": "slides.0.blocks.5.text",
+          "value": "Decide with the evidence, not the calendar.",
+          "box": {
+            "x": 714.85,
+            "y": 538.109271,
+            "width": 483.55,
+            "height": 91.28
+          },
+          "lines": [
+            "Decide with the evidence, not ",
+            "the calendar."
+          ]
+        }
+      ],
+      "nativePlans": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Start with a baseline.",
+          "box": {
+            "x": 120.45,
+            "y": 212.063854,
+            "width": 483.55,
+            "height": 46.14
+          },
+          "wrap": {
+            "x": 120.45,
+            "width": 501.3961350661058
+          }
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Keep the scope to one workflow.",
+          "box": {
+            "x": 714.85,
+            "y": 189.493854,
+            "width": 483.55,
+            "height": 91.28
+          },
+          "wrap": {
+            "x": 714.85,
+            "width": 501.3961350661058
+          }
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Review feedback every week.",
+          "box": {
+            "x": 120.45,
+            "y": 386.371563,
+            "width": 483.55,
+            "height": 46.14
+          },
+          "wrap": {
+            "x": 120.45,
+            "width": 501.3961350661058
+          }
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Name one owner per decision.",
+          "box": {
+            "x": 714.85,
+            "y": 363.801563,
+            "width": 483.55,
+            "height": 91.28
+          },
+          "wrap": {
+            "x": 714.85,
+            "width": 480.66303515625
+          }
+        },
+        {
+          "path": "slides.0.blocks.4.text",
+          "value": "Share results with both teams.",
+          "box": {
+            "x": 120.45,
+            "y": 560.679271,
+            "width": 483.55,
+            "height": 46.14
+          },
+          "wrap": {
+            "x": 120.45,
+            "width": 501.3961350661058
+          }
+        },
+        {
+          "path": "slides.0.blocks.5.text",
+          "value": "Decide with the evidence, not the calendar.",
+          "box": {
+            "x": 714.85,
+            "y": 538.109271,
+            "width": 483.55,
+            "height": 91.28
+          },
+          "wrap": {
+            "x": 714.85,
+            "width": 501.3961350661058
+          }
+        }
+      ],
+      "reasons": []
+    }
+  ]
+}

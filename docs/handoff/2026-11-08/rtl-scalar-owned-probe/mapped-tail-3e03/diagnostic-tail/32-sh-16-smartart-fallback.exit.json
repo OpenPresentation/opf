@@ -1,0 +1,23 @@
+{
+  "index": 32,
+  "name": "sh-16-smartart-fallback.mjs",
+  "args": [
+    "test/sh-16-smartart-fallback.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:52.275Z",
+  "seconds": 4.927891700000007,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "32-sh-16-smartart-fallback.stdout.txt",
+    "bytes": 438,
+    "sha256": "b8bd85fc2914b8d53f5a490574c76938f36cd342fa797644ce942f68208a57f2"
+  },
+  "stderr": {
+    "file": "32-sh-16-smartart-fallback.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

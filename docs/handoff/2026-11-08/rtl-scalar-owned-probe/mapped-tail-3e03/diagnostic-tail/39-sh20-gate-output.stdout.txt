@@ -1,0 +1,1 @@
+SH20 gate outputs:14CLI/7pure refusals preserve input/previous receipts; fresh outside preflight writes nothing.

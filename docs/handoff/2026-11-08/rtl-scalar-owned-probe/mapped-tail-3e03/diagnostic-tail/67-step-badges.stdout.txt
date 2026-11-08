@@ -1,0 +1,1 @@
+LH-07 step badges: native badges, connectors, chips and arrows export and import

@@ -1,0 +1,23 @@
+{
+  "index": 62,
+  "name": "slide-variables.mjs",
+  "args": [
+    "test/slide-variables.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:18.805Z",
+  "seconds": 3.446832399999985,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "62-slide-variables.stdout.txt",
+    "bytes": 218,
+    "sha256": "cb4b9c38fe373a7cd1dfdd5fa7f11ee6c3bd0b9ed78232cd210bd1b7af82eb9e"
+  },
+  "stderr": {
+    "file": "62-slide-variables.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

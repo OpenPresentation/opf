@@ -1,0 +1,23 @@
+{
+  "index": 61,
+  "name": "slide-number-static.mjs",
+  "args": [
+    "test/slide-number-static.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:18.047Z",
+  "seconds": 0.7578540999999969,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "61-slide-number-static.stdout.txt",
+    "bytes": 182,
+    "sha256": "57a4f9f348cde8e602bb2acd83bb280aa6028f01e8d14a6ad18cdb4bad044f89"
+  },
+  "stderr": {
+    "file": "61-slide-number-static.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

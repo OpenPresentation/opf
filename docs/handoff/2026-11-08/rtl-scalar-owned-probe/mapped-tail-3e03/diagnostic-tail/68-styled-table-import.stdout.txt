@@ -1,0 +1,1 @@
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.

@@ -1,0 +1,23 @@
+{
+  "index": 39,
+  "name": "sh20-gate-output.mjs",
+  "args": [
+    "test/sh20-gate-output.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:08.010Z",
+  "seconds": 3.4538760999999942,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "39-sh20-gate-output.stdout.txt",
+    "bytes": 113,
+    "sha256": "d0f0e6a181ad1766c66e743843b6e33bcff019bd9d2188c3d92052437e69c023"
+  },
+  "stderr": {
+    "file": "39-sh20-gate-output.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,1 @@
+Sections passed: native p14:sectionLst with Default Section runs and deterministic ids, schema order with provenance customer data, import from the list (own export, stripped tags, renamed and moved slides), stored fallback without a list, footer agreement and section-reference-changed, malformed lists and the unit contract.

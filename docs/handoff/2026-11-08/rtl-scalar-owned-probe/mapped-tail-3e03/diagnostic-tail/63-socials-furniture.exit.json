@@ -1,0 +1,23 @@
+{
+  "index": 63,
+  "name": "socials-furniture.mjs",
+  "args": [
+    "test/socials-furniture.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:22.252Z",
+  "seconds": 1.6611498000000138,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "63-socials-furniture.stdout.txt",
+    "bytes": 132,
+    "sha256": "4656c997992995e36e396396223722ec1e79920c6f804c30d88d05eb0a05b6b3"
+  },
+  "stderr": {
+    "file": "63-socials-furniture.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

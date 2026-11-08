@@ -1,0 +1,23 @@
+{
+  "index": 26,
+  "name": "sh-07-native-diagrams.mjs",
+  "args": [
+    "test/sh-07-native-diagrams.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:45.676Z",
+  "seconds": 1.284780899999998,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "26-sh-07-native-diagrams.stdout.txt",
+    "bytes": 236,
+    "sha256": "4d1ee6014af5db1ad2dced3b557fa45c51808946f0cee63ee098eb1714e7cc95"
+  },
+  "stderr": {
+    "file": "26-sh-07-native-diagrams.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

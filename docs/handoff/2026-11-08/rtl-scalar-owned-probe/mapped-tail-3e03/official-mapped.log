@@ -1,0 +1,95 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\rr105-tag-ownership
+> node scripts/check-changed.mjs "--base" "56981114388f2d23444270abac13b6568ee363f6"
+
+check-changed: 37 changed files since 569811143 (plus uncommitted and untracked)
+ok  build (9.6 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.7 s)
+ok  pnpm run check:gallery-tracker (2.7 s)
+ok  pnpm run check:release-report (0.4 s)
+ok  pnpm run check:font-hotlinks (9.9 s)
+ok  pnpm run check:skill-commands (19.3 s)
+ok  pnpm run check:text (3.2 s)
+ok  pnpm run check:stability (47.5 s)
+-  typecheck
+FAILED  tests pptx (761.3 s)
+
+--- tests pptx failed (exit 1); last 60 lines of artifacts\check-changed\tests_pptx.log:
+
+step                            status      time
+build                           passed     9.6 s
+biome                           passed     0.1 s  13 files
+pnpm run check:changes          passed     0.7 s
+pnpm run check:font-hotlinks    passed     9.9 s
+pnpm run check:gallery-tracker  passed     2.7 s
+pnpm run check:release-report   passed     0.4 s
+pnpm run check:skill-commands   passed    19.3 s
+pnpm run check:stability        passed    47.5 s
+pnpm run check:text             passed     3.2 s
+typecheck                       skipped        -  no .ts, .mts or tsconfig change
+tests pptx                      FAILED   761.3 s
+✔ unowned alternate retains current native language beside named color slots (223.4319ms)
+✔ predominant foreign and no-base-vote proofing remain observed rather than replaced by scalar intent (243.4953ms)
+ℹ tests 12
+total                                    828.4 s
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5391.9374
+[184/279] node test/rr-105-ltr-latin-native.mjs
+✔ inherited Latin numbered list with ASCII digits is protected on deck ar-SA (344.702ms)
+✔ inherited Latin numbered list with ASCII digits is protected on slide ar-SA (106.6186ms)
+✔ inherited Latin numbered list with ASCII digits is protected on deck he-IL (114.0245ms)
+✔ inherited Latin numbered list with ASCII digits is protected on slide he-IL (107.4912ms)
+✔ plain and styled Latin paragraph fragments share protected numeric shaping on an RTL slide (154.3372ms)
+✔ explicit run proofing languages win, including an override equal to the Arabic base (286.37ms)
+✔ Arabic and mixed-script content retain their native direction and Arabic runs (120.0781ms)
+✔ unqualified non-ASCII digits and Latin text without digits retain their existing proofing route (176.9402ms)
+✔ ordinary LTR source keeps its default native language without an automatic override (52.2598ms)
+✔ automatic proofing ownership is available in full, references-only and provenance-disabled exports (261.8192ms)
+✔ stripped and foreign untagged proofing pairs preserve observed English instead of guessing author intent (139.4749ms)
+✔ changed native words or a changed primary proofing language invalidate automatic ownership (169.2995ms)
+✔ language observation/import reads leave every input ZIP byte untouched (87.6712ms)
+✔ automatic language and source-boundary tags share one native custom-data list (164.3578ms)
+✔ canonical explicit list-language fixtures preserve complete authored rich items (247.6391ms)
+✔ canonically equivalent Latin accents have equal numeric-shaping eligibility without changing source text (159.6329ms)
+✔ mixed RTL paragraphs retain explicit French, English and same-base Arabic run languages (368.2608ms)
+✔ plain source-boundary tags cannot erase current language after automatic-language ownership is stripped or stale (241.052ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3310.4743
+[185/279] node test/rr-105-native-body-wrap.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 6
+
+    at file:///C:/opf-work/rr105-tag-ownership/packages/pptx/test/rr-105-native-body-wrap.mjs:54:10 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 6,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
+run-tests: test/rr-105-native-body-wrap.mjs failed (exit 1); 94 test(s) not run
+C:\opf-work\rr105-tag-ownership\packages\pptx:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf-pptx@0.33.0 test:contract: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check`
+Exit status 1
+
+check-changed: 1 of 11 steps failed: tests pptx
+ ELIFECYCLE  Command failed with exit code 1.

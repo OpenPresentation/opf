@@ -1,0 +1,1 @@
+wave 6 interactions passed: 16 checks (numerals beside ruled rows are en-US runs in a right-to-left deck).

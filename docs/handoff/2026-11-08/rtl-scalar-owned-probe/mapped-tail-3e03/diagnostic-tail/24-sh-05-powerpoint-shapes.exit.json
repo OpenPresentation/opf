@@ -1,0 +1,23 @@
+{
+  "index": 24,
+  "name": "sh-05-powerpoint-shapes.mjs",
+  "args": [
+    "test/sh-05-powerpoint-shapes.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:43.359Z",
+  "seconds": 0.8989305999999997,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "24-sh-05-powerpoint-shapes.stdout.txt",
+    "bytes": 28,
+    "sha256": "f4e87e61f6cc60eee9cfecb22ba18573e809c8d2e1e3103ea831c33cfcae7539"
+  },
+  "stderr": {
+    "file": "24-sh-05-powerpoint-shapes.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

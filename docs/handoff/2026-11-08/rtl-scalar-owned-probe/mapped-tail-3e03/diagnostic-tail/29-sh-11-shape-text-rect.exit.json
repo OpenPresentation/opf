@@ -1,0 +1,23 @@
+{
+  "index": 29,
+  "name": "sh-11-shape-text-rect.mjs",
+  "args": [
+    "test/sh-11-shape-text-rect.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:49.665Z",
+  "seconds": 0.7195605999999971,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "29-sh-11-shape-text-rect.stdout.txt",
+    "bytes": 84,
+    "sha256": "c79b8336b4f4d056406fc1f5597e66e6c0de156b474802877bfa4919eb3f7368"
+  },
+  "stderr": {
+    "file": "29-sh-11-shape-text-rect.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

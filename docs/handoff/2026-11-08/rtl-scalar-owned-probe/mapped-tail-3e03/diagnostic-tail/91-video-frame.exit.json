@@ -1,0 +1,23 @@
+{
+  "index": 91,
+  "name": "video-frame.mjs",
+  "args": [
+    "test/video-frame.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:57.751Z",
+  "seconds": 0.6818020000000251,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "91-video-frame.stdout.txt",
+    "bytes": 16,
+    "sha256": "eacc46cc5fb7e88bcf4c17058e5c45c3675542b8f86e9230918c643b0137e622"
+  },
+  "stderr": {
+    "file": "91-video-frame.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

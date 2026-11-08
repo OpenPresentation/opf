@@ -1,0 +1,23 @@
+{
+  "index": 93,
+  "name": "wave-6-interactions.mjs",
+  "args": [
+    "test/wave-6-interactions.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:59.991Z",
+  "seconds": 0.7164634000000079,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "93-wave-6-interactions.stdout.txt",
+    "bytes": 107,
+    "sha256": "94bf67ebc2b3e15ab747d2c9d1986682b3747d92739f538ac8b80c47f2a18e71"
+  },
+  "stderr": {
+    "file": "93-wave-6-interactions.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

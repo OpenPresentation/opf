@@ -1,0 +1,74 @@
+✖ SH21: actual-font medium Venn fallback refuses long measures and paginates losslessly without smaller type (537.2522ms)
+✖ SH21: actual-font long Venn fallback refuses long measures and paginates losslessly without smaller type (3366.7958ms)
+✖ SH21: an unbreakable Venn label is explicitly refused instead of silently splitting a word (30954.4302ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34863.1639
+
+✖ failing tests:
+
+test at test\sh21-venn-reading-measure.mjs:15:76
+✖ SH21: actual-font medium Venn fallback refuses long measures and paginates losslessly without smaller type (537.2522ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(g.diagnostics.some(d=>d.code==='text-overflow'&&/Venn fallback/.test(d.message)))
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr105-tag-ownership/packages/pptx/test/sh21-venn-reading-measure.mjs:16:192)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test\sh21-venn-reading-measure.mjs:15:76
+✖ SH21: actual-font long Venn fallback refuses long measures and paginates losslessly without smaller type (3366.7958ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(g.diagnostics.some(d=>d.code==='text-overflow'&&/Venn fallback/.test(d.message)))
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr105-tag-ownership/packages/pptx/test/sh21-venn-reading-measure.mjs:16:192)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test\sh21-venn-reading-measure.mjs:29:1
+✖ SH21: an unbreakable Venn label is explicitly refused instead of silently splitting a word (30954.4302ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(g.diagnostics.some(d=>d.code==='text-overflow'&&/Venn fallback/.test(d.message)))
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr105-tag-ownership/packages/pptx/test/sh21-venn-reading-measure.mjs:30:87)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

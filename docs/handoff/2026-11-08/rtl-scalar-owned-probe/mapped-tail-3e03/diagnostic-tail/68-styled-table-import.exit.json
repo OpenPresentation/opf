@@ -1,0 +1,23 @@
+{
+  "index": 68,
+  "name": "styled-table-import.mjs",
+  "args": [
+    "test/styled-table-import.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:26.748Z",
+  "seconds": 0.793273199999996,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "68-styled-table-import.stdout.txt",
+    "bytes": 184,
+    "sha256": "d76c5a58bdbc0ea624e3cb7cd33fcb4d75aba354f2671417bc02f43c65c1f493"
+  },
+  "stderr": {
+    "file": "68-styled-table-import.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

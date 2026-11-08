@@ -1,0 +1,1 @@
+Script fonts passed: 13 languages across Latin, Cyrillic, Greek, CJK (ja/zh-Hans/zh-Hant/ko), Arabic/Hebrew RTL, Indic and Thai; lang, rtl, theme and run ea/cs, supplements, import and diagnostics.

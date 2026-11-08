@@ -1,0 +1,1 @@
+Native SmartArt label colors match on light and dark slides; beside-shape text retains tx1.

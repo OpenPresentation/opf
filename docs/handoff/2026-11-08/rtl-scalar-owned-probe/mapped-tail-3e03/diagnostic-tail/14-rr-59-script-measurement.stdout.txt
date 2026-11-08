@@ -1,0 +1,1 @@
+RR-59 script measurement: ar-SA, mixed Arabic/Latin, rich run language and slide scheme overrides export with strict pinned fonts and shared line geometry. Native raster parity is separate.

@@ -1,0 +1,23 @@
+{
+  "index": 59,
+  "name": "single-series-colour.mjs",
+  "args": [
+    "test/single-series-colour.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:15.799Z",
+  "seconds": 1.162425900000002,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "59-single-series-colour.stdout.txt",
+    "bytes": 155,
+    "sha256": "a09544d84a1d5683b7d44e68b103e9f5f43711d9981a68a3c0ae58167f14b69f"
+  },
+  "stderr": {
+    "file": "59-single-series-colour.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

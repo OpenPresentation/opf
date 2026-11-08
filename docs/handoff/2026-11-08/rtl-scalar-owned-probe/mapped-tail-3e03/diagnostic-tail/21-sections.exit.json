@@ -1,0 +1,23 @@
+{
+  "index": 21,
+  "name": "sections.mjs",
+  "args": [
+    "test/sections.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:41.104Z",
+  "seconds": 0.9704967000000033,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "21-sections.stdout.txt",
+    "bytes": 327,
+    "sha256": "ce5d17efd1f613882c11029e0446716c7fc93b4ad3ac51d06ce5c3b527749aa3"
+  },
+  "stderr": {
+    "file": "21-sections.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

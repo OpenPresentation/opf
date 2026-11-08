@@ -1,0 +1,1 @@
+SVG style sanitization passed: text and CDATA cleaned in actual native media and raster input, safe bytes preserved.

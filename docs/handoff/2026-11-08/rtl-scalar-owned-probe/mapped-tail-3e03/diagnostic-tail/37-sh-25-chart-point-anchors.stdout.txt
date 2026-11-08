@@ -1,0 +1,1 @@
+SH-25:16 classic native plot pins, exact overlay EMU, current-data roundtrips and stale-anchor refusal pass; native application centers remain a separate qualification.

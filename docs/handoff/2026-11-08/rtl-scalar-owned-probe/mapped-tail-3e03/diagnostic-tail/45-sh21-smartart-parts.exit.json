@@ -1,0 +1,23 @@
+{
+  "index": 45,
+  "name": "sh21-smartart-parts.mjs",
+  "args": [
+    "test/sh21-smartart-parts.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:19.113Z",
+  "seconds": 0.29041419999999923,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "45-sh21-smartart-parts.stdout.txt",
+    "bytes": 122,
+    "sha256": "6125122ac2c4613e10f40ae96868ef0054abd5567b5700b22eb96608325ed0bd"
+  },
+  "stderr": {
+    "file": "45-sh21-smartart-parts.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

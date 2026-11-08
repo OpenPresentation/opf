@@ -1,0 +1,23 @@
+{
+  "index": 35,
+  "name": "sh-19-smartart-layouts.mjs",
+  "args": [
+    "test/sh-19-smartart-layouts.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:00.310Z",
+  "seconds": 1.9083703000000096,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "35-sh-19-smartart-layouts.stdout.txt",
+    "bytes": 27,
+    "sha256": "c5e31068905f795ee223eae14bdf6f22df2df5d5a0af88cd96697467dd6d14bd"
+  },
+  "stderr": {
+    "file": "35-sh-19-smartart-layouts.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

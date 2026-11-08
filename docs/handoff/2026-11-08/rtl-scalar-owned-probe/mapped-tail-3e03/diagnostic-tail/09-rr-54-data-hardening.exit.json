@@ -1,0 +1,23 @@
+{
+  "index": 9,
+  "name": "rr-54-data-hardening.mjs",
+  "args": [
+    "test/rr-54-data-hardening.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:17.209Z",
+  "seconds": 1.681066700000003,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "09-rr-54-data-hardening.stdout.txt",
+    "bytes": 212,
+    "sha256": "406b8890131a187e5a3d7975747d2cc17cd05a1efbbb652d395afa37d6ec67ef"
+  },
+  "stderr": {
+    "file": "09-rr-54-data-hardening.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

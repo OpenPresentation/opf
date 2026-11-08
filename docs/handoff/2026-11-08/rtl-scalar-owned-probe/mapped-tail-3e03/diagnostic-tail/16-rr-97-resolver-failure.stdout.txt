@@ -1,0 +1,1 @@
+RR-97 resolver failure passed: 15 checks (9 picture uses, background fallback, unchanged resolvable image, strictAssets).

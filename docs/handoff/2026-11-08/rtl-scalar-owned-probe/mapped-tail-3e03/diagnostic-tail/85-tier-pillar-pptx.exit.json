@@ -1,0 +1,23 @@
+{
+  "index": 85,
+  "name": "tier-pillar-pptx.mjs",
+  "args": [
+    "test/tier-pillar-pptx.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:16.630Z",
+  "seconds": 0.7682801000000327,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "85-tier-pillar-pptx.stdout.txt",
+    "bytes": 89,
+    "sha256": "e3ea9cc2b3f3e3d686be453e409c22c69942a26021dc644aa8d186bca63f99df"
+  },
+  "stderr": {
+    "file": "85-tier-pillar-pptx.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

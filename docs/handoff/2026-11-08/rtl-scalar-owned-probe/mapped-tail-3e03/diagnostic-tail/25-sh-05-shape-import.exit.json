@@ -1,0 +1,23 @@
+{
+  "index": 25,
+  "name": "sh-05-shape-import.mjs",
+  "args": [
+    "test/sh-05-shape-import.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:44.258Z",
+  "seconds": 1.4175041999999958,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "25-sh-05-shape-import.stdout.txt",
+    "bytes": 23,
+    "sha256": "e4f9213a84e2c69f2b336a8c2b3a9596ac1a01c3c37ceb79ede0f5fedf7a0836"
+  },
+  "stderr": {
+    "file": "25-sh-05-shape-import.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,1 @@
+Timeline status passed: native ellipses for done, current (ring) and planned, bold and muted text, restored on import and three damaged-ring controls.

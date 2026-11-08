@@ -1,0 +1,1 @@
+SH-09 SmartArt passed: live Basic Pyramid and Basic Matrix (data model, OPF colors and quick style, drawing, no layout part), the round trip, an edited node, untagged and PowerPoint-style data models, native shapes, the domain fallback and the option check.

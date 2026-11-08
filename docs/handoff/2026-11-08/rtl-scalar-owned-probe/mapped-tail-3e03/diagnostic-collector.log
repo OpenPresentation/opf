@@ -1,0 +1,117 @@
+{"index":1,"of":94,"name":"rr-105-native-title-wrap.mjs","status":0,"seconds":24.3}
+{"index":2,"of":94,"name":"rr-105-numeric-axes.mjs","status":0,"seconds":0.8}
+{"index":3,"of":94,"name":"rr-105-small-run-title.mjs","status":0,"seconds":1.1}
+{"index":4,"of":94,"name":"rr-105-smartart-text-color.mjs","status":0,"seconds":0.9}
+{"index":5,"of":94,"name":"rr-105-tag-ownership.mjs","status":0,"seconds":5.9}
+{"index":6,"of":94,"name":"rr-105-title-font-measurement.mjs","status":0,"seconds":1.7}
+{"index":7,"of":94,"name":"rr-105-waterfall-axis.mjs","status":0,"seconds":1}
+{"index":8,"of":94,"name":"rr-54-chart-table-data.mjs","status":0,"seconds":2.6}
+{"index":9,"of":94,"name":"rr-54-data-hardening.mjs","status":0,"seconds":1.7}
+{"index":10,"of":94,"name":"rr-54-format-respelling.mjs","status":0,"seconds":1}
+{"index":11,"of":94,"name":"rr-59-absent-defaults.mjs","status":0,"seconds":1.9}
+{"index":12,"of":94,"name":"rr-59-export-integrity.mjs","status":0,"seconds":1.6}
+{"index":13,"of":94,"name":"rr-59-picture-diagnostics.mjs","status":0,"seconds":3}
+{"index":14,"of":94,"name":"rr-59-script-measurement.mjs","status":0,"seconds":4.6}
+{"index":15,"of":94,"name":"rr-59-table-alt-provenance.mjs","status":0,"seconds":0.6}
+{"index":16,"of":94,"name":"rr-97-resolver-failure.mjs","status":0,"seconds":1.9}
+{"index":17,"of":94,"name":"rr54-archive-candidate.mjs","status":0,"seconds":0.1}
+{"index":18,"of":94,"name":"rtl-layout.mjs","status":0,"seconds":1.2}
+{"index":19,"of":94,"name":"safe-typefaces.mjs","status":0,"seconds":1.4}
+{"index":20,"of":94,"name":"script-fonts.mjs","status":0,"seconds":5}
+{"index":21,"of":94,"name":"sections.mjs","status":0,"seconds":1}
+{"index":22,"of":94,"name":"sh-02-shape-blocks.mjs","status":0,"seconds":0.6}
+{"index":23,"of":94,"name":"sh-04-overlays.mjs","status":0,"seconds":0.7}
+{"index":24,"of":94,"name":"sh-05-powerpoint-shapes.mjs","status":0,"seconds":0.9}
+{"index":25,"of":94,"name":"sh-05-shape-import.mjs","status":0,"seconds":1.4}
+{"index":26,"of":94,"name":"sh-07-native-diagrams.mjs","status":0,"seconds":1.3}
+{"index":27,"of":94,"name":"sh-08-smartart-import.mjs","status":0,"seconds":1}
+{"index":28,"of":94,"name":"sh-09-smartart.mjs","status":0,"seconds":1.7}
+{"index":29,"of":94,"name":"sh-11-shape-text-rect.mjs","status":0,"seconds":0.7}
+{"index":30,"of":94,"name":"sh-12-dot-diagrams.mjs","status":0,"seconds":1}
+{"index":31,"of":94,"name":"sh-13-plantuml-diagrams.mjs","status":0,"seconds":0.9}
+{"index":32,"of":94,"name":"sh-16-smartart-fallback.mjs","status":0,"seconds":4.9}
+{"index":33,"of":94,"name":"sh-17-smartart.mjs","status":0,"seconds":1.6}
+{"index":34,"of":94,"name":"sh-18-smartart.mjs","status":0,"seconds":1.5}
+{"index":35,"of":94,"name":"sh-19-smartart-layouts.mjs","status":0,"seconds":1.9}
+{"index":36,"of":94,"name":"sh-23-smartart-more-entries.mjs","status":0,"seconds":1.2}
+{"index":37,"of":94,"name":"sh-25-chart-point-anchors.mjs","status":0,"seconds":3.5}
+{"index":38,"of":94,"name":"sh-phase-2-meeting-points.mjs","status":0,"seconds":1.1}
+{"index":39,"of":94,"name":"sh20-gate-output.mjs","status":0,"seconds":3.5}
+{"index":40,"of":94,"name":"sh20-live-domain-boundary.mjs","status":0,"seconds":0.1}
+{"index":41,"of":94,"name":"sh20-witness-offline.mjs","status":0,"seconds":4.1}
+{"index":42,"of":94,"name":"sh21-native-arrangements.mjs","status":0,"seconds":0.8}
+{"index":43,"of":94,"name":"sh21-product-probe-offline.mjs","status":0,"seconds":2.2}
+{"index":44,"of":94,"name":"sh21-production-packet-offline.mjs","status":0,"seconds":0.4}
+{"index":45,"of":94,"name":"sh21-smartart-parts.mjs","status":0,"seconds":0.3}
+{"index":46,"of":94,"name":"sh21-venn-editable.mjs","status":0,"seconds":1.2}
+{"index":47,"of":94,"name":"sh21-venn-reading-measure.mjs","status":1,"seconds":35.4}
+{"index":48,"of":94,"name":"sh23-witness-offline.mjs","status":0,"seconds":1.5}
+{"index":49,"of":94,"name":"sh24-inverted-pyramid.mjs","status":0,"seconds":0.7}
+{"index":50,"of":94,"name":"sh25-series-name-current-cache.mjs","status":0,"seconds":0.8}
+{"index":51,"of":94,"name":"shape-block-effects.mjs","status":0,"seconds":0.6}
+{"index":52,"of":94,"name":"shape-border-widths.mjs","status":0,"seconds":0.9}
+{"index":53,"of":94,"name":"shape-effects.mjs","status":0,"seconds":0.1}
+{"index":54,"of":94,"name":"shared-furniture.mjs","status":0,"seconds":2.6}
+{"index":55,"of":94,"name":"shared-metric.mjs","status":0,"seconds":5.4}
+{"index":56,"of":94,"name":"shared-quote.mjs","status":0,"seconds":1.8}
+{"index":57,"of":94,"name":"shared-timeline.mjs","status":0,"seconds":3.4}
+{"index":58,"of":94,"name":"single-column-chart.mjs","status":0,"seconds":2}
+{"index":59,"of":94,"name":"single-series-colour.mjs","status":0,"seconds":1.2}
+{"index":60,"of":94,"name":"slide-context.mjs","status":0,"seconds":1.1}
+{"index":61,"of":94,"name":"slide-number-static.mjs","status":0,"seconds":0.8}
+{"index":62,"of":94,"name":"slide-variables.mjs","status":0,"seconds":3.4}
+{"index":63,"of":94,"name":"socials-furniture.mjs","status":0,"seconds":1.7}
+{"index":64,"of":94,"name":"source-run-styles-roundtrip.mjs","status":0,"seconds":1.3}
+{"index":65,"of":94,"name":"source-run-styles.mjs","status":0,"seconds":0.1}
+{"index":66,"of":94,"name":"step-badge-numbering.mjs","status":0,"seconds":0.7}
+{"index":67,"of":94,"name":"step-badges.mjs","status":0,"seconds":0.8}
+{"index":68,"of":94,"name":"styled-table-import.mjs","status":0,"seconds":0.8}
+{"index":69,"of":94,"name":"styled-table.mjs","status":0,"seconds":0.7}
+{"index":70,"of":94,"name":"svg-image-degrade.mjs","status":0,"seconds":0.9}
+{"index":71,"of":94,"name":"svg-image.mjs","status":0,"seconds":6.4}
+{"index":72,"of":94,"name":"svg-rasterizer-converter-missing.mjs","status":0,"seconds":6.1}
+{"index":73,"of":94,"name":"svg-style-sanitization.mjs","status":0,"seconds":1.5}
+{"index":74,"of":94,"name":"symbol-fonts.mjs","status":0,"seconds":4.2}
+{"index":75,"of":94,"name":"table-alt.mjs","status":0,"seconds":1.2}
+{"index":76,"of":94,"name":"table-frame-furniture-order.mjs","status":0,"seconds":2.1}
+{"index":77,"of":94,"name":"table-powerpoint-save.mjs","status":0,"seconds":1.1}
+{"index":78,"of":94,"name":"table-theme-colors.mjs","status":0,"seconds":14.6}
+{"index":79,"of":94,"name":"tag-colour.mjs","status":0,"seconds":2.4}
+{"index":80,"of":94,"name":"template-layout-review.mjs","status":0,"seconds":1.5}
+{"index":81,"of":94,"name":"template-layouts.mjs","status":1,"seconds":0.3}
+{"index":82,"of":94,"name":"template-variables.mjs","status":0,"seconds":0.9}
+{"index":83,"of":94,"name":"theme-colors.mjs","status":0,"seconds":4.5}
+{"index":84,"of":94,"name":"theme-script-slots.mjs","status":0,"seconds":60.6}
+{"index":85,"of":94,"name":"tier-pillar-pptx.mjs","status":0,"seconds":0.8}
+{"index":86,"of":94,"name":"timeline-status.mjs","status":0,"seconds":2.4}
+{"index":87,"of":94,"name":"title-rule.mjs","status":0,"seconds":0.8}
+{"index":88,"of":94,"name":"title-split.mjs","status":0,"seconds":2.3}
+{"index":89,"of":94,"name":"typeface-inventory.mjs","status":0,"seconds":34.3}
+{"index":90,"of":94,"name":"vendor-compat.mjs","status":0,"seconds":0.6}
+{"index":91,"of":94,"name":"video-frame.mjs","status":0,"seconds":0.7}
+{"index":92,"of":94,"name":"watermark.mjs","status":0,"seconds":1.6}
+{"index":93,"of":94,"name":"wave-6-interactions.mjs","status":0,"seconds":0.7}
+{"index":94,"of":94,"name":"zip-date.mjs","status":0,"seconds":5.2}
+{
+  "summary": {
+    "scripts": 94,
+    "passed": 92,
+    "failed": 2,
+    "failures": [
+      {
+        "name": "sh21-venn-reading-measure.mjs",
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      {
+        "name": "template-layouts.mjs",
+        "status": 1,
+        "signal": null,
+        "error": null
+      }
+    ]
+  },
+  "sourceRuntimeUnchanged": true,
+  "officialMappedGreen": false
+}

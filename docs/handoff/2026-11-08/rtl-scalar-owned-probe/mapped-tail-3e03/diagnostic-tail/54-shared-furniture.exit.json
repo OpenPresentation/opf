@@ -1,0 +1,23 @@
+{
+  "index": 54,
+  "name": "shared-furniture.mjs",
+  "args": [
+    "test/shared-furniture.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:00.537Z",
+  "seconds": 2.587161400000012,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "54-shared-furniture.stdout.txt",
+    "bytes": 143,
+    "sha256": "0a03f59b244952abeeb47ffc6fc2ff5a1f7d13b4f3b0a58f7fcf8281fb26c808"
+  },
+  "stderr": {
+    "file": "54-shared-furniture.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

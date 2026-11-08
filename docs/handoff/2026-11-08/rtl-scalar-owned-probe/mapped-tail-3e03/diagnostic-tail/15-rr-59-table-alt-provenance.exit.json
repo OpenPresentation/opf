@@ -1,0 +1,23 @@
+{
+  "index": 15,
+  "name": "rr-59-table-alt-provenance.mjs",
+  "args": [
+    "test/rr-59-table-alt-provenance.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:30.896Z",
+  "seconds": 0.6454528999999966,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "15-rr-59-table-alt-provenance.stdout.txt",
+    "bytes": 101,
+    "sha256": "c1167e6a755df16a20b206dc0ed906da0eba4a3d3c58f42edb70ef4887254d8e"
+  },
+  "stderr": {
+    "file": "15-rr-59-table-alt-provenance.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

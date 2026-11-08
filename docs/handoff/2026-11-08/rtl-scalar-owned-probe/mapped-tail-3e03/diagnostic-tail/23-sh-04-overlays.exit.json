@@ -1,0 +1,23 @@
+{
+  "index": 23,
+  "name": "sh-04-overlays.mjs",
+  "args": [
+    "test/sh-04-overlays.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:42.683Z",
+  "seconds": 0.6752536000000037,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "23-sh-04-overlays.stdout.txt",
+    "bytes": 58,
+    "sha256": "33e89cb2198306189e63ef34bf92cc7254269fe4b9c1491cc343f729114338bd"
+  },
+  "stderr": {
+    "file": "23-sh-04-overlays.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

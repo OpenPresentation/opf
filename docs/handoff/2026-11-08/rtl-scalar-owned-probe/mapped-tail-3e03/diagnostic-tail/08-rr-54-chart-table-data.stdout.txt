@@ -1,0 +1,1 @@
+RR-54 chart and table data passed: 42 checks (strict numbers, chart and workbook number formats, dataset/mapping/scatter X equivalence, dataset and formatted tables, full round trip, edits and missing datasets, third-party format codes and chartex, provenance modes, reviewed archive bytes).

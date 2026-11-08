@@ -1,0 +1,23 @@
+{
+  "index": 75,
+  "name": "table-alt.mjs",
+  "args": [
+    "test/table-alt.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:47.447Z",
+  "seconds": 1.1970601000000025,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "75-table-alt.stdout.txt",
+    "bytes": 63,
+    "sha256": "edd9a6d5de50706621e8e5448985615ed020be982769b752e289ea6c39dc8256"
+  },
+  "stderr": {
+    "file": "75-table-alt.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "index": 18,
+  "name": "rtl-layout.mjs",
+  "args": [
+    "test/rtl-layout.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:33.471Z",
+  "seconds": 1.2437099999999992,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "18-rtl-layout.stdout.txt",
+    "bytes": 203,
+    "sha256": "7ea1aac94bc53a9610ea8c5182c9da399d8554c8c114c1ef1f30de068f2403fd"
+  },
+  "stderr": {
+    "file": "18-rtl-layout.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

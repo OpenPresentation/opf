@@ -1,0 +1,23 @@
+{
+  "index": 41,
+  "name": "sh20-witness-offline.mjs",
+  "args": [
+    "test/sh20-witness-offline.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:11.578Z",
+  "seconds": 4.111411399999997,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "41-sh20-witness-offline.stdout.txt",
+    "bytes": 143,
+    "sha256": "a0ec6f759842e4e0fd4cd4dea390bb6e7c3f3514308cc26a3429fc387ae64c05"
+  },
+  "stderr": {
+    "file": "41-sh20-witness-offline.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

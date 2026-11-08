@@ -1,0 +1,23 @@
+{
+  "index": 78,
+  "name": "table-theme-colors.mjs",
+  "args": [
+    "test/table-theme-colors.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:51.808Z",
+  "seconds": 14.625112699999997,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "78-table-theme-colors.stdout.txt",
+    "bytes": 103,
+    "sha256": "0bb64cf1bd1f402aad4c70a205694dd2ab90e2ec98d9556bcbd4e3dffe9726b2"
+  },
+  "stderr": {
+    "file": "78-table-theme-colors.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

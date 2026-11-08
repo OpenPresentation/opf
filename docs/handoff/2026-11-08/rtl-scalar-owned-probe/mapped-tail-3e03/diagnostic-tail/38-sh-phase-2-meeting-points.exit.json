@@ -1,0 +1,23 @@
+{
+  "index": 38,
+  "name": "sh-phase-2-meeting-points.mjs",
+  "args": [
+    "test/sh-phase-2-meeting-points.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:06.940Z",
+  "seconds": 1.0697308000000048,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "38-sh-phase-2-meeting-points.stdout.txt",
+    "bytes": 146,
+    "sha256": "77a9475b102c604214eeddb64e2a1a06a9eb32d3a58d79de9ebb0296b6a2222c"
+  },
+  "stderr": {
+    "file": "38-sh-phase-2-meeting-points.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

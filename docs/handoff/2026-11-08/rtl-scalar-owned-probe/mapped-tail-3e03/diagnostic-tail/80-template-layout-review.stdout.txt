@@ -1,0 +1,1 @@
+Template layout review: 144 region identities, native plain titles, prompt typography and foreign layout mapping passed. Native Office acceptance remains pending.

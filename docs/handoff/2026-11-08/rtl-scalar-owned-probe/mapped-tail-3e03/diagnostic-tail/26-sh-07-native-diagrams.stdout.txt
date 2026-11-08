@@ -1,0 +1,1 @@
+SH-07 checks passed (8): presets and custom geometry, flattened transforms, paint, text at pele's baselines, node labels, glued straight connectors, gradients, the picture fallback with its finding, the tagged group and its round trip.

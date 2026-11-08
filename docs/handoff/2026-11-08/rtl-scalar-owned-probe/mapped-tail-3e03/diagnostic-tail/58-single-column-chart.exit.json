@@ -1,0 +1,23 @@
+{
+  "index": 58,
+  "name": "single-column-chart.mjs",
+  "args": [
+    "test/single-column-chart.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:13.792Z",
+  "seconds": 2.0070516000000063,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "58-single-column-chart.stdout.txt",
+    "bytes": 247,
+    "sha256": "b5ec222eb553805c55437291aeb0144e89b7b8882ddfc2cbc7bd64e6b2239f2d"
+  },
+  "stderr": {
+    "file": "58-single-column-chart.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

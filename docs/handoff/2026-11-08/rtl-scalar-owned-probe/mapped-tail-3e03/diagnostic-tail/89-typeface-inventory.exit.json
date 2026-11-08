@@ -1,0 +1,23 @@
+{
+  "index": 89,
+  "name": "typeface-inventory.mjs",
+  "args": [
+    "test/typeface-inventory.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:22.831Z",
+  "seconds": 34.31963770000002,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "89-typeface-inventory.stdout.txt",
+    "bytes": 135,
+    "sha256": "05a33a1fdc024caab5301b2c6b5d7db4d5a471041d5a7b31c479018c11650846"
+  },
+  "stderr": {
+    "file": "89-typeface-inventory.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

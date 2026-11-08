@@ -1,0 +1,1 @@
+Single-column charts passed: native histogram bins (4 values, constant, single, 1000 values and extremes), 27 chart types exported (row numbers reported, histogram and pareto binned natively), unplottable data reported, ordinary charts unchanged.

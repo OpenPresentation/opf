@@ -1,0 +1,23 @@
+{
+  "index": 82,
+  "name": "template-variables.mjs",
+  "args": [
+    "test/template-variables.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:37:10.637Z",
+  "seconds": 0.8787319000000134,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "82-template-variables.stdout.txt",
+    "bytes": 136,
+    "sha256": "0284fa5b88a25a36a119b718651c69bdc60c6119967df736da19bb1e4eafa8c8"
+  },
+  "stderr": {
+    "file": "82-template-variables.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

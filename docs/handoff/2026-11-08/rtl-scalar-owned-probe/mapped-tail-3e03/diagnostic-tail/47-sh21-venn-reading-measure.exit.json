@@ -1,0 +1,23 @@
+{
+  "index": 47,
+  "name": "sh21-venn-reading-measure.mjs",
+  "args": [
+    "test/sh21-venn-reading-measure.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:20.619Z",
+  "seconds": 35.37911639999999,
+  "status": 1,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "47-sh21-venn-reading-measure.stdout.txt",
+    "bytes": 3393,
+    "sha256": "46244c0c843bda44642572bf3a2930d298e3d5d45d17bf3d328495d05b3bedde"
+  },
+  "stderr": {
+    "file": "47-sh21-venn-reading-measure.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

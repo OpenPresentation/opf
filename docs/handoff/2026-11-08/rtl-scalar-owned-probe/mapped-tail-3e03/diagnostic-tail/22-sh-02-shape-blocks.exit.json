@@ -1,0 +1,23 @@
+{
+  "index": 22,
+  "name": "sh-02-shape-blocks.mjs",
+  "args": [
+    "test/sh-02-shape-blocks.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:42.075Z",
+  "seconds": 0.6078174,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "22-sh-02-shape-blocks.stdout.txt",
+    "bytes": 23,
+    "sha256": "d96850f22f31d427a21b995f9f66d2ec0131202fe197963a38619db0e198976e"
+  },
+  "stderr": {
+    "file": "22-sh-02-shape-blocks.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

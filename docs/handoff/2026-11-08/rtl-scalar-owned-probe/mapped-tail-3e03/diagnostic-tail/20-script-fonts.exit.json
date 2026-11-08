@@ -1,0 +1,23 @@
+{
+  "index": 20,
+  "name": "script-fonts.mjs",
+  "args": [
+    "test/script-fonts.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:36.094Z",
+  "seconds": 5.010831899999998,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "20-script-fonts.stdout.txt",
+    "bytes": 198,
+    "sha256": "83031e172a2f27912777bca2910bc961789ed58cfaaabf29ade317edb80c683b"
+  },
+  "stderr": {
+    "file": "20-script-fonts.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

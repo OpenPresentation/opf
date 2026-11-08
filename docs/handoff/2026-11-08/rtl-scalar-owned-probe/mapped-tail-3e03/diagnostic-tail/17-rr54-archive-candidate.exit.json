@@ -1,0 +1,23 @@
+{
+  "index": 17,
+  "name": "rr54-archive-candidate.mjs",
+  "args": [
+    "test/rr54-archive-candidate.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:33.407Z",
+  "seconds": 0.06310160000000178,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "17-rr54-archive-candidate.stdout.txt",
+    "bytes": 194,
+    "sha256": "2f07d58190265152e492200fa5530cf50bf518a9d191200a1dee896c941993ef"
+  },
+  "stderr": {
+    "file": "17-rr54-archive-candidate.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

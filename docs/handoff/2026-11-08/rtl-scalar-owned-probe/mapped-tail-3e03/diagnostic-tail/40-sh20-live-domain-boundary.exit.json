@@ -1,0 +1,23 @@
+{
+  "index": 40,
+  "name": "sh20-live-domain-boundary.mjs",
+  "args": [
+    "test/sh20-live-domain-boundary.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:11.464Z",
+  "seconds": 0.11389999999999417,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "40-sh20-live-domain-boundary.stdout.txt",
+    "bytes": 151,
+    "sha256": "b837f6e27333491a6160ac18bbbf48d62f86336df6876abe7b320d6f4260156c"
+  },
+  "stderr": {
+    "file": "40-sh20-live-domain-boundary.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

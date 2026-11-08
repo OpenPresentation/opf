@@ -1,0 +1,23 @@
+{
+  "index": 56,
+  "name": "shared-quote.mjs",
+  "args": [
+    "test/shared-quote.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:08.572Z",
+  "seconds": 1.813816200000001,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "56-shared-quote.stdout.txt",
+    "bytes": 162,
+    "sha256": "a6aed7f4b5013b862b5daa63f28948f17543b9b33b934030eeaf95761cd54e75"
+  },
+  "stderr": {
+    "file": "56-shared-quote.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

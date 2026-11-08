@@ -1,0 +1,1 @@
+SH21 production packet refuses an existing output directory and preserves its original bytes.

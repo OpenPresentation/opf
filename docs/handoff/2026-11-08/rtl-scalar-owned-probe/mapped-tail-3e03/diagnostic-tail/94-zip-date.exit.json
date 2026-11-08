@@ -1,0 +1,23 @@
+{
+  "index": 94,
+  "name": "zip-date.mjs",
+  "args": [
+    "test/zip-date.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:39:00.708Z",
+  "seconds": 5.150875400000019,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "94-zip-date.stdout.txt",
+    "bytes": 424,
+    "sha256": "43e3557d3c971ef0d9e9bde49dd37f8359d7e1e14c56d5a0b90d32bf92551d8e"
+  },
+  "stderr": {
+    "file": "94-zip-date.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

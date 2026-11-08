@@ -1,0 +1,1 @@
+SH-11 shape text rectangle: 194 shapes (187 presets) export core's textBox and size

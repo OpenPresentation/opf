@@ -1,0 +1,1 @@
+SH21 native-shape export: three arrangements, paired rounded cards, alpha, editable edges and original text/levels all pass; no live-domain acceptance.

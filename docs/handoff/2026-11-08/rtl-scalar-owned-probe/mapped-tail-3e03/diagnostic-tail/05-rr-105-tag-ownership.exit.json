@@ -1,0 +1,23 @@
+{
+  "index": 5,
+  "name": "rr-105-tag-ownership.mjs",
+  "args": [
+    "test/rr-105-tag-ownership.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:05.936Z",
+  "seconds": 5.9499897000000015,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "05-rr-105-tag-ownership.stdout.txt",
+    "bytes": 2077,
+    "sha256": "9862af920a9e691dea1956b7bdb9dc90da1986db6537cbbbc59a9dfdc5b43e20"
+  },
+  "stderr": {
+    "file": "05-rr-105-tag-ownership.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

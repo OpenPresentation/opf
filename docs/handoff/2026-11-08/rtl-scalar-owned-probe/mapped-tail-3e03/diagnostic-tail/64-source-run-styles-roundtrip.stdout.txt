@@ -1,0 +1,3 @@
+Actual unchanged rich text roundtrip + native size/font/color edits PASS
+Reported catalog timeline measured source blocks restore exactly, including nominal24
+Missing/tampered/malformed provenance retains valid native formatting PASS

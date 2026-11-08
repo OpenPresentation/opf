@@ -1,0 +1,23 @@
+{
+  "index": 10,
+  "name": "rr-54-format-respelling.mjs",
+  "args": [
+    "test/rr-54-format-respelling.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:18.890Z",
+  "seconds": 0.9765715000000055,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "10-rr-54-format-respelling.stdout.txt",
+    "bytes": 42,
+    "sha256": "fe56f413946d2c60434bc6fe3319558d236efa901979b2cdeda1bfff2f87892a"
+  },
+  "stderr": {
+    "file": "10-rr-54-format-respelling.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "index": 57,
+  "name": "shared-timeline.mjs",
+  "args": [
+    "test/shared-timeline.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:10.386Z",
+  "seconds": 3.4047770999999774,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "57-shared-timeline.stdout.txt",
+    "bytes": 193,
+    "sha256": "80bc97139c147a5324a7d8527b375810c77910abc53f0a53d0cabc8873e55eac"
+  },
+  "stderr": {
+    "file": "57-shared-timeline.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

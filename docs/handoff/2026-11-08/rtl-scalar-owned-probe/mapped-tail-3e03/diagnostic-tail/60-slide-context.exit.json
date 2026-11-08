@@ -1,0 +1,23 @@
+{
+  "index": 60,
+  "name": "slide-context.mjs",
+  "args": [
+    "test/slide-context.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:36:16.962Z",
+  "seconds": 1.0843838000000106,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "60-slide-context.stdout.txt",
+    "bytes": 39,
+    "sha256": "1ba05970b6cd1b115e59ee5067f6c56c9689a97071e9b0f2905ca3fa415875b5"
+  },
+  "stderr": {
+    "file": "60-slide-context.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

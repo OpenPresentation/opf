@@ -1,0 +1,23 @@
+{
+  "index": 84,
+  "name": "theme-script-slots.mjs",
+  "args": [
+    "test/theme-script-slots.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:37:16.052Z",
+  "seconds": 60.577449500000014,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "84-theme-script-slots.stdout.txt",
+    "bytes": 122,
+    "sha256": "5d610acba6498f67f25679282f49c2da5e2e16fc5ef7f3fe8629ea2b9c2c9798"
+  },
+  "stderr": {
+    "file": "84-theme-script-slots.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

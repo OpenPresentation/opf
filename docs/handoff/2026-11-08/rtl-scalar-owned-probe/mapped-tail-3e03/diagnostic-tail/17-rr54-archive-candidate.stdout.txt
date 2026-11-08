@@ -1,0 +1,1 @@
+RR54 candidate metadata: actual21 fixture histories preserved, changed-only append, repeat-review continuity and malformed-report/history refusal controls pass; no archives serialized/promoted.

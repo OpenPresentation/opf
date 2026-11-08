@@ -1,0 +1,30 @@
+✔ retained Office inputs and saved archives are exact immutable fixtures (2.8391ms)
+✔ actual saved11 retains authored deck base, scalar title and explicit French list language (253.7843ms)
+✔ actual old07 scalar split remains strict observed import before and after native save (83.6348ms)
+✔ renaming every OPF tag part and relationship preserves explicit body and list languages (775.9152ms)
+✔ unowned foreign and misleading unreferenced tags do not suppress actual override votes (482.218ms)
+✔ foreign-name slide tag cannot authorize base-vote protection (244.8651ms)
+✔ unreferenced slide tag cannot authorize base-vote protection (246.8877ms)
+✔ malformed slide tag cannot authorize base-vote protection (218.8839ms)
+✔ stale slide tag cannot authorize base-vote protection (216.4777ms)
+✔ moved slide tag cannot authorize base-vote protection (206.0428ms)
+✔ duplicate slide tag cannot authorize base-vote protection (213.1004ms)
+✔ external slide tag cannot authorize base-vote protection (208.0843ms)
+✔ a genuine foreign alternate proofing pair remains current even beside valid OPF structure (462.6234ms)
+✔ pasted unowned slide uses its own actual vote while owned slide keeps its base (237.4024ms)
+✔ per-slide vote ownership never changes diagnostic all-run counts or global boolean compatibility (0.4305ms)
+✔ current native base-language edits remain authoritative after tag parts are renamed (239.9255ms)
+✔ full missing slide tag keeps the legacy inline-code fallback (208.4395ms)
+✔ full stale slide tag keeps the legacy inline-code fallback (216.1665ms)
+✔ references-only missing slide tag keeps the legacy inline-code fallback (244.6554ms)
+✔ references-only stale slide tag keeps the legacy inline-code fallback (213.8448ms)
+✔ intact full and reference-only inline-code roles retain current behavior (362.0694ms)
+✔ unowned inline monospace remains the observed family without inferred code semantics (182.4674ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5533.79

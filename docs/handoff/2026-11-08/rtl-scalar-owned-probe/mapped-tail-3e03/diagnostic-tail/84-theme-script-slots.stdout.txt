@@ -1,0 +1,1 @@
+{"test":"theme-script-slots","passed":true,"fontSchemes":89,"combinations":120,"corpusDecks":147,"corpusWrittenSlots":10}

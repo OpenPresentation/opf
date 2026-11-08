@@ -1,0 +1,1 @@
+SH-13 checks passed (3): PlantUML diagrams of every kind as native shapes, the refused diagram's placeholder, and the round trip of the PlantUML source.

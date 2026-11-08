@@ -1,0 +1,23 @@
+{
+  "index": 4,
+  "name": "rr-105-smartart-text-color.mjs",
+  "args": [
+    "test/rr-105-smartart-text-color.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:05.073Z",
+  "seconds": 0.8621496000000006,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "04-rr-105-smartart-text-color.stdout.txt",
+    "bytes": 92,
+    "sha256": "9af454bc17d109e3452c2a51a6906a35bb7a9359def4dce472586c604dc853f1"
+  },
+  "stderr": {
+    "file": "04-rr-105-smartart-text-color.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,1 @@
+SH20/22 boundary: all516observations,465live,201pass/264fail,132eligible/0fail(30OPF), no safe additional domain; script/dense-wrap refusals retained.

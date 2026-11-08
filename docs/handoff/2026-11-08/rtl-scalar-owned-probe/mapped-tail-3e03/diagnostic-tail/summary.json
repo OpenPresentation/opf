@@ -1,0 +1,2197 @@
+{
+  "diagnosticOnly": true,
+  "officialMappedGreen": false,
+  "originalMappedFailure": {
+    "name": "rr-105-native-body-wrap.mjs",
+    "index": 185,
+    "of": 279,
+    "notRun": 94
+  },
+  "inventory": {
+    "scripts": 94,
+    "passed": 92,
+    "failed": 2,
+    "failures": [
+      {
+        "name": "sh21-venn-reading-measure.mjs",
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      {
+        "name": "template-layouts.mjs",
+        "status": 1,
+        "signal": null,
+        "error": null
+      }
+    ]
+  },
+  "sourceRuntimeUnchanged": true,
+  "rebuilt": false,
+  "officeStarted": false,
+  "node": "v24.20.0",
+  "rows": [
+    {
+      "index": 1,
+      "name": "rr-105-native-title-wrap.mjs",
+      "args": [
+        "test/rr-105-native-title-wrap.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:33:38.833Z",
+      "seconds": 24.3483467,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "01-rr-105-native-title-wrap.stdout.txt",
+        "bytes": 185,
+        "sha256": "2cdd6375d2b18d514e7970a4108953795fd04e4153ebe5ea35f63b45f7e84d3c"
+      },
+      "stderr": {
+        "file": "01-rr-105-native-title-wrap.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 2,
+      "name": "rr-105-numeric-axes.mjs",
+      "args": [
+        "test/rr-105-numeric-axes.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:03.184Z",
+      "seconds": 0.8047072000000007,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "02-rr-105-numeric-axes.stdout.txt",
+        "bytes": 60,
+        "sha256": "b3758ca9d29c3e1fce9a3a6da11b03d2a9b42bc7dd35f392ba8b449a19108a4b"
+      },
+      "stderr": {
+        "file": "02-rr-105-numeric-axes.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 3,
+      "name": "rr-105-small-run-title.mjs",
+      "args": [
+        "test/rr-105-small-run-title.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:03.989Z",
+      "seconds": 1.0599312000000027,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "03-rr-105-small-run-title.stdout.txt",
+        "bytes": 133,
+        "sha256": "ebf930c4810d1d8540fc30e0d5509a813af16a3b0f80f5c7c2ddcade456fc365"
+      },
+      "stderr": {
+        "file": "03-rr-105-small-run-title.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 4,
+      "name": "rr-105-smartart-text-color.mjs",
+      "args": [
+        "test/rr-105-smartart-text-color.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:05.073Z",
+      "seconds": 0.8621496000000006,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "04-rr-105-smartart-text-color.stdout.txt",
+        "bytes": 92,
+        "sha256": "9af454bc17d109e3452c2a51a6906a35bb7a9359def4dce472586c604dc853f1"
+      },
+      "stderr": {
+        "file": "04-rr-105-smartart-text-color.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 5,
+      "name": "rr-105-tag-ownership.mjs",
+      "args": [
+        "test/rr-105-tag-ownership.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:05.936Z",
+      "seconds": 5.9499897000000015,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "05-rr-105-tag-ownership.stdout.txt",
+        "bytes": 2077,
+        "sha256": "9862af920a9e691dea1956b7bdb9dc90da1986db6537cbbbc59a9dfdc5b43e20"
+      },
+      "stderr": {
+        "file": "05-rr-105-tag-ownership.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 6,
+      "name": "rr-105-title-font-measurement.mjs",
+      "args": [
+        "test/rr-105-title-font-measurement.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:11.886Z",
+      "seconds": 1.7004658999999955,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "06-rr-105-title-font-measurement.stdout.txt",
+        "bytes": 130,
+        "sha256": "7ac53aacf9abaec7d7ba23ad065f74330abedcbd47dcd3bc8184e6fd9193c0c1"
+      },
+      "stderr": {
+        "file": "06-rr-105-title-font-measurement.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 7,
+      "name": "rr-105-waterfall-axis.mjs",
+      "args": [
+        "test/rr-105-waterfall-axis.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:13.587Z",
+      "seconds": 1.0110292000000045,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "07-rr-105-waterfall-axis.stdout.txt",
+        "bytes": 88,
+        "sha256": "03b6736af51d6563690f768e606804ffba38872619a6738fd5141c13fe687e63"
+      },
+      "stderr": {
+        "file": "07-rr-105-waterfall-axis.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 8,
+      "name": "rr-54-chart-table-data.mjs",
+      "args": [
+        "test/rr-54-chart-table-data.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:14.599Z",
+      "seconds": 2.609237500000003,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "08-rr-54-chart-table-data.stdout.txt",
+        "bytes": 292,
+        "sha256": "76e336c5e36fdd6c3905c5e40501e61c6f4a7beda3e284f3ea6516900a42187c"
+      },
+      "stderr": {
+        "file": "08-rr-54-chart-table-data.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 9,
+      "name": "rr-54-data-hardening.mjs",
+      "args": [
+        "test/rr-54-data-hardening.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:17.209Z",
+      "seconds": 1.681066700000003,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "09-rr-54-data-hardening.stdout.txt",
+        "bytes": 212,
+        "sha256": "406b8890131a187e5a3d7975747d2cc17cd05a1efbbb652d395afa37d6ec67ef"
+      },
+      "stderr": {
+        "file": "09-rr-54-data-hardening.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 10,
+      "name": "rr-54-format-respelling.mjs",
+      "args": [
+        "test/rr-54-format-respelling.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:18.890Z",
+      "seconds": 0.9765715000000055,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "10-rr-54-format-respelling.stdout.txt",
+        "bytes": 42,
+        "sha256": "fe56f413946d2c60434bc6fe3319558d236efa901979b2cdeda1bfff2f87892a"
+      },
+      "stderr": {
+        "file": "10-rr-54-format-respelling.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 11,
+      "name": "rr-59-absent-defaults.mjs",
+      "args": [
+        "test/rr-59-absent-defaults.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:19.867Z",
+      "seconds": 1.8750032999999966,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "11-rr-59-absent-defaults.stdout.txt",
+        "bytes": 229,
+        "sha256": "018c999d6b2d84563279baf4d496a61e1608d6be4cb9a26f3b9cbb9c708f881a"
+      },
+      "stderr": {
+        "file": "11-rr-59-absent-defaults.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 12,
+      "name": "rr-59-export-integrity.mjs",
+      "args": [
+        "test/rr-59-export-integrity.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:21.743Z",
+      "seconds": 1.6117674999999945,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "12-rr-59-export-integrity.stdout.txt",
+        "bytes": 176,
+        "sha256": "7c09aa9e67ef73a2106704854cc3b1d4599686ee5d19dcbd546843607a6b2dee"
+      },
+      "stderr": {
+        "file": "12-rr-59-export-integrity.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 13,
+      "name": "rr-59-picture-diagnostics.mjs",
+      "args": [
+        "test/rr-59-picture-diagnostics.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:23.355Z",
+      "seconds": 2.9528168000000004,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "13-rr-59-picture-diagnostics.stdout.txt",
+        "bytes": 159,
+        "sha256": "0b89f8fafe0fd6308151a27a6781004cf7a6225981981d0d00d2b3df9fde60e8"
+      },
+      "stderr": {
+        "file": "13-rr-59-picture-diagnostics.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 14,
+      "name": "rr-59-script-measurement.mjs",
+      "args": [
+        "test/rr-59-script-measurement.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:26.308Z",
+      "seconds": 4.587656999999999,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "14-rr-59-script-measurement.stdout.txt",
+        "bytes": 190,
+        "sha256": "1c9e87b4ad6a55fea8b0c295272a575ee6d27c2a254eeb4ade6b14b2f380938f"
+      },
+      "stderr": {
+        "file": "14-rr-59-script-measurement.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 15,
+      "name": "rr-59-table-alt-provenance.mjs",
+      "args": [
+        "test/rr-59-table-alt-provenance.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:30.896Z",
+      "seconds": 0.6454528999999966,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "15-rr-59-table-alt-provenance.stdout.txt",
+        "bytes": 101,
+        "sha256": "c1167e6a755df16a20b206dc0ed906da0eba4a3d3c58f42edb70ef4887254d8e"
+      },
+      "stderr": {
+        "file": "15-rr-59-table-alt-provenance.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 16,
+      "name": "rr-97-resolver-failure.mjs",
+      "args": [
+        "test/rr-97-resolver-failure.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:31.543Z",
+      "seconds": 1.863718399999998,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "16-rr-97-resolver-failure.stdout.txt",
+        "bytes": 122,
+        "sha256": "3ac1a297ec7d971bd9daf2098015e38ad29fd050ca3468153f80b7a8990ed6ff"
+      },
+      "stderr": {
+        "file": "16-rr-97-resolver-failure.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 17,
+      "name": "rr54-archive-candidate.mjs",
+      "args": [
+        "test/rr54-archive-candidate.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:33.407Z",
+      "seconds": 0.06310160000000178,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "17-rr54-archive-candidate.stdout.txt",
+        "bytes": 194,
+        "sha256": "2f07d58190265152e492200fa5530cf50bf518a9d191200a1dee896c941993ef"
+      },
+      "stderr": {
+        "file": "17-rr54-archive-candidate.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 18,
+      "name": "rtl-layout.mjs",
+      "args": [
+        "test/rtl-layout.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:33.471Z",
+      "seconds": 1.2437099999999992,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "18-rtl-layout.stdout.txt",
+        "bytes": 203,
+        "sha256": "7ea1aac94bc53a9610ea8c5182c9da399d8554c8c114c1ef1f30de068f2403fd"
+      },
+      "stderr": {
+        "file": "18-rtl-layout.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 19,
+      "name": "safe-typefaces.mjs",
+      "args": [
+        "test/safe-typefaces.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:34.715Z",
+      "seconds": 1.3777747000000018,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "19-safe-typefaces.stdout.txt",
+        "bytes": 120,
+        "sha256": "0654607f2d35c5c6c01dd5299f0dab12704e550dbee65ceac11eb76365fd3747"
+      },
+      "stderr": {
+        "file": "19-safe-typefaces.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 20,
+      "name": "script-fonts.mjs",
+      "args": [
+        "test/script-fonts.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:36.094Z",
+      "seconds": 5.010831899999998,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "20-script-fonts.stdout.txt",
+        "bytes": 198,
+        "sha256": "83031e172a2f27912777bca2910bc961789ed58cfaaabf29ade317edb80c683b"
+      },
+      "stderr": {
+        "file": "20-script-fonts.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 21,
+      "name": "sections.mjs",
+      "args": [
+        "test/sections.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:41.104Z",
+      "seconds": 0.9704967000000033,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "21-sections.stdout.txt",
+        "bytes": 327,
+        "sha256": "ce5d17efd1f613882c11029e0446716c7fc93b4ad3ac51d06ce5c3b527749aa3"
+      },
+      "stderr": {
+        "file": "21-sections.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 22,
+      "name": "sh-02-shape-blocks.mjs",
+      "args": [
+        "test/sh-02-shape-blocks.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:42.075Z",
+      "seconds": 0.6078174,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "22-sh-02-shape-blocks.stdout.txt",
+        "bytes": 23,
+        "sha256": "d96850f22f31d427a21b995f9f66d2ec0131202fe197963a38619db0e198976e"
+      },
+      "stderr": {
+        "file": "22-sh-02-shape-blocks.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 23,
+      "name": "sh-04-overlays.mjs",
+      "args": [
+        "test/sh-04-overlays.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:42.683Z",
+      "seconds": 0.6752536000000037,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "23-sh-04-overlays.stdout.txt",
+        "bytes": 58,
+        "sha256": "33e89cb2198306189e63ef34bf92cc7254269fe4b9c1491cc343f729114338bd"
+      },
+      "stderr": {
+        "file": "23-sh-04-overlays.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 24,
+      "name": "sh-05-powerpoint-shapes.mjs",
+      "args": [
+        "test/sh-05-powerpoint-shapes.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:43.359Z",
+      "seconds": 0.8989305999999997,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "24-sh-05-powerpoint-shapes.stdout.txt",
+        "bytes": 28,
+        "sha256": "f4e87e61f6cc60eee9cfecb22ba18573e809c8d2e1e3103ea831c33cfcae7539"
+      },
+      "stderr": {
+        "file": "24-sh-05-powerpoint-shapes.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 25,
+      "name": "sh-05-shape-import.mjs",
+      "args": [
+        "test/sh-05-shape-import.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:44.258Z",
+      "seconds": 1.4175041999999958,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "25-sh-05-shape-import.stdout.txt",
+        "bytes": 23,
+        "sha256": "e4f9213a84e2c69f2b336a8c2b3a9596ac1a01c3c37ceb79ede0f5fedf7a0836"
+      },
+      "stderr": {
+        "file": "25-sh-05-shape-import.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 26,
+      "name": "sh-07-native-diagrams.mjs",
+      "args": [
+        "test/sh-07-native-diagrams.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:45.676Z",
+      "seconds": 1.284780899999998,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "26-sh-07-native-diagrams.stdout.txt",
+        "bytes": 236,
+        "sha256": "4d1ee6014af5db1ad2dced3b557fa45c51808946f0cee63ee098eb1714e7cc95"
+      },
+      "stderr": {
+        "file": "26-sh-07-native-diagrams.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 27,
+      "name": "sh-08-smartart-import.mjs",
+      "args": [
+        "test/sh-08-smartart-import.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:46.962Z",
+      "seconds": 0.9630092000000005,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "27-sh-08-smartart-import.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "27-sh-08-smartart-import.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 28,
+      "name": "sh-09-smartart.mjs",
+      "args": [
+        "test/sh-09-smartart.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:47.925Z",
+      "seconds": 1.7400401999999886,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "28-sh-09-smartart.stdout.txt",
+        "bytes": 258,
+        "sha256": "a479e20821839b05a58dee84af89b88402a61eee18941dbbe0da04e87ee13991"
+      },
+      "stderr": {
+        "file": "28-sh-09-smartart.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 29,
+      "name": "sh-11-shape-text-rect.mjs",
+      "args": [
+        "test/sh-11-shape-text-rect.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:49.665Z",
+      "seconds": 0.7195605999999971,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "29-sh-11-shape-text-rect.stdout.txt",
+        "bytes": 84,
+        "sha256": "c79b8336b4f4d056406fc1f5597e66e6c0de156b474802877bfa4919eb3f7368"
+      },
+      "stderr": {
+        "file": "29-sh-11-shape-text-rect.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 30,
+      "name": "sh-12-dot-diagrams.mjs",
+      "args": [
+        "test/sh-12-dot-diagrams.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:50.385Z",
+      "seconds": 0.9876809999999968,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "30-sh-12-dot-diagrams.stdout.txt",
+        "bytes": 152,
+        "sha256": "a6e04c7a3e203c0720b47fff85d5d94bf2922f36ae7f9afd1da2e676d136129a"
+      },
+      "stderr": {
+        "file": "30-sh-12-dot-diagrams.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 31,
+      "name": "sh-13-plantuml-diagrams.mjs",
+      "args": [
+        "test/sh-13-plantuml-diagrams.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:51.373Z",
+      "seconds": 0.9012293999999965,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "31-sh-13-plantuml-diagrams.stdout.txt",
+        "bytes": 153,
+        "sha256": "5f8f4e5206b76d6258fe43f506c725a1f764791769a58a8f49fbf392e34a504c"
+      },
+      "stderr": {
+        "file": "31-sh-13-plantuml-diagrams.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 32,
+      "name": "sh-16-smartart-fallback.mjs",
+      "args": [
+        "test/sh-16-smartart-fallback.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:52.275Z",
+      "seconds": 4.927891700000007,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "32-sh-16-smartart-fallback.stdout.txt",
+        "bytes": 438,
+        "sha256": "b8bd85fc2914b8d53f5a490574c76938f36cd342fa797644ce942f68208a57f2"
+      },
+      "stderr": {
+        "file": "32-sh-16-smartart-fallback.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 33,
+      "name": "sh-17-smartart.mjs",
+      "args": [
+        "test/sh-17-smartart.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:57.203Z",
+      "seconds": 1.5931882999999945,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "33-sh-17-smartart.stdout.txt",
+        "bytes": 363,
+        "sha256": "92aac87e43dbd0db7e048cac2bc8e78e33e735ccd5fd82db7e2abfcd8841f1d0"
+      },
+      "stderr": {
+        "file": "33-sh-17-smartart.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 34,
+      "name": "sh-18-smartart.mjs",
+      "args": [
+        "test/sh-18-smartart.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:34:58.797Z",
+      "seconds": 1.512773199999996,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "34-sh-18-smartart.stdout.txt",
+        "bytes": 254,
+        "sha256": "29dc62b2a5a20109207be582995b8169fe8cff3a180d31b0ec80645cdb52d24c"
+      },
+      "stderr": {
+        "file": "34-sh-18-smartart.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 35,
+      "name": "sh-19-smartart-layouts.mjs",
+      "args": [
+        "test/sh-19-smartart-layouts.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:00.310Z",
+      "seconds": 1.9083703000000096,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "35-sh-19-smartart-layouts.stdout.txt",
+        "bytes": 27,
+        "sha256": "c5e31068905f795ee223eae14bdf6f22df2df5d5a0af88cd96697467dd6d14bd"
+      },
+      "stderr": {
+        "file": "35-sh-19-smartart-layouts.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 36,
+      "name": "sh-23-smartart-more-entries.mjs",
+      "args": [
+        "test/sh-23-smartart-more-entries.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:02.219Z",
+      "seconds": 1.1881081000000122,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "36-sh-23-smartart-more-entries.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "36-sh-23-smartart-more-entries.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 37,
+      "name": "sh-25-chart-point-anchors.mjs",
+      "args": [
+        "test/sh-25-chart-point-anchors.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:03.407Z",
+      "seconds": 3.531879700000005,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "37-sh-25-chart-point-anchors.stdout.txt",
+        "bytes": 169,
+        "sha256": "38d361526a808618a0ca6b0096c6a8f2221b44e1844386efaf85215e9414aba2"
+      },
+      "stderr": {
+        "file": "37-sh-25-chart-point-anchors.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 38,
+      "name": "sh-phase-2-meeting-points.mjs",
+      "args": [
+        "test/sh-phase-2-meeting-points.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:06.940Z",
+      "seconds": 1.0697308000000048,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "38-sh-phase-2-meeting-points.stdout.txt",
+        "bytes": 146,
+        "sha256": "77a9475b102c604214eeddb64e2a1a06a9eb32d3a58d79de9ebb0296b6a2222c"
+      },
+      "stderr": {
+        "file": "38-sh-phase-2-meeting-points.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 39,
+      "name": "sh20-gate-output.mjs",
+      "args": [
+        "test/sh20-gate-output.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:08.010Z",
+      "seconds": 3.4538760999999942,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "39-sh20-gate-output.stdout.txt",
+        "bytes": 113,
+        "sha256": "d0f0e6a181ad1766c66e743843b6e33bcff019bd9d2188c3d92052437e69c023"
+      },
+      "stderr": {
+        "file": "39-sh20-gate-output.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 40,
+      "name": "sh20-live-domain-boundary.mjs",
+      "args": [
+        "test/sh20-live-domain-boundary.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:11.464Z",
+      "seconds": 0.11389999999999417,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "40-sh20-live-domain-boundary.stdout.txt",
+        "bytes": 151,
+        "sha256": "b837f6e27333491a6160ac18bbbf48d62f86336df6876abe7b320d6f4260156c"
+      },
+      "stderr": {
+        "file": "40-sh20-live-domain-boundary.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 41,
+      "name": "sh20-witness-offline.mjs",
+      "args": [
+        "test/sh20-witness-offline.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:11.578Z",
+      "seconds": 4.111411399999997,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "41-sh20-witness-offline.stdout.txt",
+        "bytes": 143,
+        "sha256": "a0ec6f759842e4e0fd4cd4dea390bb6e7c3f3514308cc26a3429fc387ae64c05"
+      },
+      "stderr": {
+        "file": "41-sh20-witness-offline.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 42,
+      "name": "sh21-native-arrangements.mjs",
+      "args": [
+        "test/sh21-native-arrangements.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:15.690Z",
+      "seconds": 0.8166293000000006,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "42-sh21-native-arrangements.stdout.txt",
+        "bytes": 152,
+        "sha256": "30ef8df0ec71420f0d62c8f3cc64613b058c635c97656a528eeaccacb5a0f8b2"
+      },
+      "stderr": {
+        "file": "42-sh21-native-arrangements.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 43,
+      "name": "sh21-product-probe-offline.mjs",
+      "args": [
+        "test/sh21-product-probe-offline.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:16.507Z",
+      "seconds": 2.1827598,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "43-sh21-product-probe-offline.stdout.txt",
+        "bytes": 144,
+        "sha256": "7d41f01a8a63f22d14886ff4d762cb4e6204f95fe3c5fec81ed7a663120865c5"
+      },
+      "stderr": {
+        "file": "43-sh21-product-probe-offline.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 44,
+      "name": "sh21-production-packet-offline.mjs",
+      "args": [
+        "test/sh21-production-packet-offline.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:18.690Z",
+      "seconds": 0.42235940000000116,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "44-sh21-production-packet-offline.stdout.txt",
+        "bytes": 94,
+        "sha256": "5c79c0c80a4a21de053097f8dc7084164be6a66b3dbe2ee745d5693c4e886775"
+      },
+      "stderr": {
+        "file": "44-sh21-production-packet-offline.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 45,
+      "name": "sh21-smartart-parts.mjs",
+      "args": [
+        "test/sh21-smartart-parts.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:19.113Z",
+      "seconds": 0.29041419999999923,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "45-sh21-smartart-parts.stdout.txt",
+        "bytes": 122,
+        "sha256": "6125122ac2c4613e10f40ae96868ef0054abd5567b5700b22eb96608325ed0bd"
+      },
+      "stderr": {
+        "file": "45-sh21-smartart-parts.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 46,
+      "name": "sh21-venn-editable.mjs",
+      "args": [
+        "test/sh21-venn-editable.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:19.404Z",
+      "seconds": 1.2149723000000086,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "46-sh21-venn-editable.stdout.txt",
+        "bytes": 553,
+        "sha256": "d1ce40872e97aa15aa9b518f3faef5b9a6c4af62d72a28dd07c4e481fc493a27"
+      },
+      "stderr": {
+        "file": "46-sh21-venn-editable.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 47,
+      "name": "sh21-venn-reading-measure.mjs",
+      "args": [
+        "test/sh21-venn-reading-measure.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:20.619Z",
+      "seconds": 35.37911639999999,
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "47-sh21-venn-reading-measure.stdout.txt",
+        "bytes": 3393,
+        "sha256": "46244c0c843bda44642572bf3a2930d298e3d5d45d17bf3d328495d05b3bedde"
+      },
+      "stderr": {
+        "file": "47-sh21-venn-reading-measure.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 48,
+      "name": "sh23-witness-offline.mjs",
+      "args": [
+        "test/sh23-witness-offline.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:55.997Z",
+      "seconds": 1.4855773000000045,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "48-sh23-witness-offline.stdout.txt",
+        "bytes": 131,
+        "sha256": "7b1e1a49eb516b1905fbadacb881752141eb17f5f65e743495d70ce55ac93770"
+      },
+      "stderr": {
+        "file": "48-sh23-witness-offline.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 49,
+      "name": "sh24-inverted-pyramid.mjs",
+      "args": [
+        "test/sh24-inverted-pyramid.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:57.483Z",
+      "seconds": 0.7048919999999925,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "49-sh24-inverted-pyramid.stdout.txt",
+        "bytes": 117,
+        "sha256": "4d7703371cfd49c5b52e3ab8f27630e9b19b1d4408376c18039c366ccb9e1f8f"
+      },
+      "stderr": {
+        "file": "49-sh24-inverted-pyramid.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 50,
+      "name": "sh25-series-name-current-cache.mjs",
+      "args": [
+        "test/sh25-series-name-current-cache.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:58.189Z",
+      "seconds": 0.8064887999999919,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "50-sh25-series-name-current-cache.stdout.txt",
+        "bytes": 148,
+        "sha256": "e87365b471ec6a64f53f1294e8bce7a3d0b0a97f741d95217e40da32bc2d938b"
+      },
+      "stderr": {
+        "file": "50-sh25-series-name-current-cache.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 51,
+      "name": "shape-block-effects.mjs",
+      "args": [
+        "test/shape-block-effects.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:58.995Z",
+      "seconds": 0.5642288999999874,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "51-shape-block-effects.stdout.txt",
+        "bytes": 24,
+        "sha256": "79f6220b054c4acf64797df70b84b2030bd75a1338a9b84a75aa5d89ac31a71e"
+      },
+      "stderr": {
+        "file": "51-shape-block-effects.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 52,
+      "name": "shape-border-widths.mjs",
+      "args": [
+        "test/shape-border-widths.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:35:59.560Z",
+      "seconds": 0.8959569999999949,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "52-shape-border-widths.stdout.txt",
+        "bytes": 58,
+        "sha256": "af72ee39c0313e6aa4e8109730b5e80665385d60c55f0910b3d680842844fc61"
+      },
+      "stderr": {
+        "file": "52-shape-border-widths.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 53,
+      "name": "shape-effects.mjs",
+      "args": [
+        "test/shape-effects.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:00.457Z",
+      "seconds": 0.07961429999998654,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "53-shape-effects.stdout.txt",
+        "bytes": 32,
+        "sha256": "3bdd6eca79e432be29d57aebb2ed403f1e3e8e9db7a65c1730b923fc8ea089eb"
+      },
+      "stderr": {
+        "file": "53-shape-effects.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 54,
+      "name": "shared-furniture.mjs",
+      "args": [
+        "test/shared-furniture.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:00.537Z",
+      "seconds": 2.587161400000012,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "54-shared-furniture.stdout.txt",
+        "bytes": 143,
+        "sha256": "0a03f59b244952abeeb47ffc6fc2ff5a1f7d13b4f3b0a58f7fcf8281fb26c808"
+      },
+      "stderr": {
+        "file": "54-shared-furniture.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 55,
+      "name": "shared-metric.mjs",
+      "args": [
+        "test/shared-metric.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:03.124Z",
+      "seconds": 5.447440899999987,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "55-shared-metric.stdout.txt",
+        "bytes": 143,
+        "sha256": "07752c686911561cb16005b18954a1f3cdedc360204cc2a11932240a179e8435"
+      },
+      "stderr": {
+        "file": "55-shared-metric.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 56,
+      "name": "shared-quote.mjs",
+      "args": [
+        "test/shared-quote.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:08.572Z",
+      "seconds": 1.813816200000001,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "56-shared-quote.stdout.txt",
+        "bytes": 162,
+        "sha256": "a6aed7f4b5013b862b5daa63f28948f17543b9b33b934030eeaf95761cd54e75"
+      },
+      "stderr": {
+        "file": "56-shared-quote.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 57,
+      "name": "shared-timeline.mjs",
+      "args": [
+        "test/shared-timeline.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:10.386Z",
+      "seconds": 3.4047770999999774,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "57-shared-timeline.stdout.txt",
+        "bytes": 193,
+        "sha256": "80bc97139c147a5324a7d8527b375810c77910abc53f0a53d0cabc8873e55eac"
+      },
+      "stderr": {
+        "file": "57-shared-timeline.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 58,
+      "name": "single-column-chart.mjs",
+      "args": [
+        "test/single-column-chart.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:13.792Z",
+      "seconds": 2.0070516000000063,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "58-single-column-chart.stdout.txt",
+        "bytes": 247,
+        "sha256": "b5ec222eb553805c55437291aeb0144e89b7b8882ddfc2cbc7bd64e6b2239f2d"
+      },
+      "stderr": {
+        "file": "58-single-column-chart.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 59,
+      "name": "single-series-colour.mjs",
+      "args": [
+        "test/single-series-colour.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:15.799Z",
+      "seconds": 1.162425900000002,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "59-single-series-colour.stdout.txt",
+        "bytes": 155,
+        "sha256": "a09544d84a1d5683b7d44e68b103e9f5f43711d9981a68a3c0ae58167f14b69f"
+      },
+      "stderr": {
+        "file": "59-single-series-colour.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 60,
+      "name": "slide-context.mjs",
+      "args": [
+        "test/slide-context.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:16.962Z",
+      "seconds": 1.0843838000000106,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "60-slide-context.stdout.txt",
+        "bytes": 39,
+        "sha256": "1ba05970b6cd1b115e59ee5067f6c56c9689a97071e9b0f2905ca3fa415875b5"
+      },
+      "stderr": {
+        "file": "60-slide-context.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 61,
+      "name": "slide-number-static.mjs",
+      "args": [
+        "test/slide-number-static.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:18.047Z",
+      "seconds": 0.7578540999999969,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "61-slide-number-static.stdout.txt",
+        "bytes": 182,
+        "sha256": "57a4f9f348cde8e602bb2acd83bb280aa6028f01e8d14a6ad18cdb4bad044f89"
+      },
+      "stderr": {
+        "file": "61-slide-number-static.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 62,
+      "name": "slide-variables.mjs",
+      "args": [
+        "test/slide-variables.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:18.805Z",
+      "seconds": 3.446832399999985,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "62-slide-variables.stdout.txt",
+        "bytes": 218,
+        "sha256": "cb4b9c38fe373a7cd1dfdd5fa7f11ee6c3bd0b9ed78232cd210bd1b7af82eb9e"
+      },
+      "stderr": {
+        "file": "62-slide-variables.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 63,
+      "name": "socials-furniture.mjs",
+      "args": [
+        "test/socials-furniture.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:22.252Z",
+      "seconds": 1.6611498000000138,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "63-socials-furniture.stdout.txt",
+        "bytes": 132,
+        "sha256": "4656c997992995e36e396396223722ec1e79920c6f804c30d88d05eb0a05b6b3"
+      },
+      "stderr": {
+        "file": "63-socials-furniture.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 64,
+      "name": "source-run-styles-roundtrip.mjs",
+      "args": [
+        "test/source-run-styles-roundtrip.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:23.914Z",
+      "seconds": 1.2547154000000156,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "64-source-run-styles-roundtrip.stdout.txt",
+        "bytes": 234,
+        "sha256": "794a623c081f8c171bda5e4e3e7715c9ffb085af526a3b8e859ae08e473bbf28"
+      },
+      "stderr": {
+        "file": "64-source-run-styles-roundtrip.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 65,
+      "name": "source-run-styles.mjs",
+      "args": [
+        "test/source-run-styles.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:25.169Z",
+      "seconds": 0.11758030000000144,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "65-source-run-styles.stdout.txt",
+        "bytes": 113,
+        "sha256": "c822f332a2c29e0b6b824b2143ecf065c29f9529873d9f3e1d32bd3f9c654fea"
+      },
+      "stderr": {
+        "file": "65-source-run-styles.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 66,
+      "name": "step-badge-numbering.mjs",
+      "args": [
+        "test/step-badge-numbering.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:25.287Z",
+      "seconds": 0.6737870999999869,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "66-step-badge-numbering.stdout.txt",
+        "bytes": 25,
+        "sha256": "c2483bca0f85ef9f0da7fe4a4b4d13410540001b0ceff9418ef410149d791b46"
+      },
+      "stderr": {
+        "file": "66-step-badge-numbering.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 67,
+      "name": "step-badges.mjs",
+      "args": [
+        "test/step-badges.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:25.961Z",
+      "seconds": 0.7867395999999717,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "67-step-badges.stdout.txt",
+        "bytes": 81,
+        "sha256": "fa860d28bb512b8050953d2a2d8d173f37f33cb77607d9604b4efac0acb017f8"
+      },
+      "stderr": {
+        "file": "67-step-badges.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 68,
+      "name": "styled-table-import.mjs",
+      "args": [
+        "test/styled-table-import.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:26.748Z",
+      "seconds": 0.793273199999996,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "68-styled-table-import.stdout.txt",
+        "bytes": 184,
+        "sha256": "d76c5a58bdbc0ea624e3cb7cd33fcb4d75aba354f2671417bc02f43c65c1f493"
+      },
+      "stderr": {
+        "file": "68-styled-table-import.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 69,
+      "name": "styled-table.mjs",
+      "args": [
+        "test/styled-table.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:27.542Z",
+      "seconds": 0.7386260999999941,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "69-styled-table.stdout.txt",
+        "bytes": 316,
+        "sha256": "919437512384cdb9a14c0b6fed6d460fbd98d20b16a3820deabc511b97df11f6"
+      },
+      "stderr": {
+        "file": "69-styled-table.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 70,
+      "name": "svg-image-degrade.mjs",
+      "args": [
+        "test/svg-image-degrade.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:28.281Z",
+      "seconds": 0.8700213999999978,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "70-svg-image-degrade.stdout.txt",
+        "bytes": 39,
+        "sha256": "7f4c0c917b094717615fcdafbcbe53db12a7a9288247c99cb36982306e1d11e7"
+      },
+      "stderr": {
+        "file": "70-svg-image-degrade.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 71,
+      "name": "svg-image.mjs",
+      "args": [
+        "test/svg-image.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:29.152Z",
+      "seconds": 6.417112300000008,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "71-svg-image.stdout.txt",
+        "bytes": 175,
+        "sha256": "d02179b40bd60af850e84217727540ce4d927ac7348caa82ab6c00f6d92cf4e8"
+      },
+      "stderr": {
+        "file": "71-svg-image.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 72,
+      "name": "svg-rasterizer-converter-missing.mjs",
+      "args": [
+        "test/svg-rasterizer-converter-missing.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:35.569Z",
+      "seconds": 6.12685189999998,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "72-svg-rasterizer-converter-missing.stdout.txt",
+        "bytes": 113,
+        "sha256": "b2f1e0da2555d5a9b67a891846adbbf74d61083b31ea5390ee6948cf686db488"
+      },
+      "stderr": {
+        "file": "72-svg-rasterizer-converter-missing.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 73,
+      "name": "svg-style-sanitization.mjs",
+      "args": [
+        "test/svg-style-sanitization.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:41.697Z",
+      "seconds": 1.543163899999985,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "73-svg-style-sanitization.stdout.txt",
+        "bytes": 117,
+        "sha256": "2eb87dd9bd282305a521b180c59044c730313d04accdec63329a3c0766eac192"
+      },
+      "stderr": {
+        "file": "73-svg-style-sanitization.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 74,
+      "name": "symbol-fonts.mjs",
+      "args": [
+        "test/symbol-fonts.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:43.240Z",
+      "seconds": 4.205623200000002,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "74-symbol-fonts.stdout.txt",
+        "bytes": 289,
+        "sha256": "172ade865f5eec3907e64544a6db21848768606f5b95c5c137478057df6277a3"
+      },
+      "stderr": {
+        "file": "74-symbol-fonts.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 75,
+      "name": "table-alt.mjs",
+      "args": [
+        "test/table-alt.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:47.447Z",
+      "seconds": 1.1970601000000025,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "75-table-alt.stdout.txt",
+        "bytes": 63,
+        "sha256": "edd9a6d5de50706621e8e5448985615ed020be982769b752e289ea6c39dc8256"
+      },
+      "stderr": {
+        "file": "75-table-alt.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 76,
+      "name": "table-frame-furniture-order.mjs",
+      "args": [
+        "test/table-frame-furniture-order.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:48.644Z",
+      "seconds": 2.070068100000004,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "76-table-frame-furniture-order.stdout.txt",
+        "bytes": 186,
+        "sha256": "bf6994931680c619330fe06499407d70d3114fa57ac4d3bbe789bb87bcc24cae"
+      },
+      "stderr": {
+        "file": "76-table-frame-furniture-order.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 77,
+      "name": "table-powerpoint-save.mjs",
+      "args": [
+        "test/table-powerpoint-save.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:50.715Z",
+      "seconds": 1.0924809999999998,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "77-table-powerpoint-save.stdout.txt",
+        "bytes": 50,
+        "sha256": "058dc0e75ac02490f0dd96ff1741bed6c31fce04fee6029f92ee23e0b479e3de"
+      },
+      "stderr": {
+        "file": "77-table-powerpoint-save.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 78,
+      "name": "table-theme-colors.mjs",
+      "args": [
+        "test/table-theme-colors.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:36:51.808Z",
+      "seconds": 14.625112699999997,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "78-table-theme-colors.stdout.txt",
+        "bytes": 103,
+        "sha256": "0bb64cf1bd1f402aad4c70a205694dd2ab90e2ec98d9556bcbd4e3dffe9726b2"
+      },
+      "stderr": {
+        "file": "78-table-theme-colors.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 79,
+      "name": "tag-colour.mjs",
+      "args": [
+        "test/tag-colour.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:37:06.436Z",
+      "seconds": 2.37572589999999,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "79-tag-colour.stdout.txt",
+        "bytes": 81,
+        "sha256": "87d0930491a93a4d35ba93a51b4f0d440494ecca90ab3d38fd8203aa86f3ef75"
+      },
+      "stderr": {
+        "file": "79-tag-colour.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 80,
+      "name": "template-layout-review.mjs",
+      "args": [
+        "test/template-layout-review.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:37:08.812Z",
+      "seconds": 1.4863702000000047,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "80-template-layout-review.stdout.txt",
+        "bytes": 163,
+        "sha256": "30946b931de173ef1aabc55caebbf94fde0581193ef361179312e45d1ff513a5"
+      },
+      "stderr": {
+        "file": "80-template-layout-review.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 81,
+      "name": "template-layouts.mjs",
+      "args": [
+        "test/template-layouts.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:37:10.299Z",
+      "seconds": 0.33778680000000166,
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "81-template-layouts.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "81-template-layouts.stderr.txt",
+        "bytes": 618,
+        "sha256": "185c3cce8983da79c84b519e85e156ac8a558ce2a35f20416742cf06a21b04c9"
+      }
+    },
+    {
+      "index": 82,
+      "name": "template-variables.mjs",
+      "args": [
+        "test/template-variables.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:37:10.637Z",
+      "seconds": 0.8787319000000134,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "82-template-variables.stdout.txt",
+        "bytes": 136,
+        "sha256": "0284fa5b88a25a36a119b718651c69bdc60c6119967df736da19bb1e4eafa8c8"
+      },
+      "stderr": {
+        "file": "82-template-variables.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 83,
+      "name": "theme-colors.mjs",
+      "args": [
+        "test/theme-colors.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:37:11.516Z",
+      "seconds": 4.535116299999994,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "83-theme-colors.stdout.txt",
+        "bytes": 67,
+        "sha256": "2f891b14bec118663704adef89d8b68e03876d285f7cfe88c2dd9086a933e954"
+      },
+      "stderr": {
+        "file": "83-theme-colors.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 84,
+      "name": "theme-script-slots.mjs",
+      "args": [
+        "test/theme-script-slots.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:37:16.052Z",
+      "seconds": 60.577449500000014,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "84-theme-script-slots.stdout.txt",
+        "bytes": 122,
+        "sha256": "5d610acba6498f67f25679282f49c2da5e2e16fc5ef7f3fe8629ea2b9c2c9798"
+      },
+      "stderr": {
+        "file": "84-theme-script-slots.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 85,
+      "name": "tier-pillar-pptx.mjs",
+      "args": [
+        "test/tier-pillar-pptx.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:16.630Z",
+      "seconds": 0.7682801000000327,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "85-tier-pillar-pptx.stdout.txt",
+        "bytes": 89,
+        "sha256": "e3ea9cc2b3f3e3d686be453e409c22c69942a26021dc644aa8d186bca63f99df"
+      },
+      "stderr": {
+        "file": "85-tier-pillar-pptx.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 86,
+      "name": "timeline-status.mjs",
+      "args": [
+        "test/timeline-status.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:17.398Z",
+      "seconds": 2.3654985999999916,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "86-timeline-status.stdout.txt",
+        "bytes": 151,
+        "sha256": "d533e629fc73a4cf405592288d657535f11f30f3a3d081b2d44cb53d4e359a36"
+      },
+      "stderr": {
+        "file": "86-timeline-status.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 87,
+      "name": "title-rule.mjs",
+      "args": [
+        "test/title-rule.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:19.764Z",
+      "seconds": 0.791819300000032,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "87-title-rule.stdout.txt",
+        "bytes": 15,
+        "sha256": "7f62d4a8b1bb4d844b17c8d88f142d5d6d408128fc74e6062b4dfb50c57947af"
+      },
+      "stderr": {
+        "file": "87-title-rule.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 88,
+      "name": "title-split.mjs",
+      "args": [
+        "test/title-split.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:20.556Z",
+      "seconds": 2.2748561999999803,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "88-title-split.stdout.txt",
+        "bytes": 104,
+        "sha256": "e5ac4956cc4298303164b187c06a931c987d58d0980329dbd23195a63e311a97"
+      },
+      "stderr": {
+        "file": "88-title-split.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 89,
+      "name": "typeface-inventory.mjs",
+      "args": [
+        "test/typeface-inventory.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:22.831Z",
+      "seconds": 34.31963770000002,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "89-typeface-inventory.stdout.txt",
+        "bytes": 135,
+        "sha256": "05a33a1fdc024caab5301b2c6b5d7db4d5a471041d5a7b31c479018c11650846"
+      },
+      "stderr": {
+        "file": "89-typeface-inventory.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 90,
+      "name": "vendor-compat.mjs",
+      "args": [
+        "test/vendor-compat.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:57.151Z",
+      "seconds": 0.5991633000000147,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "90-vendor-compat.stdout.txt",
+        "bytes": 147,
+        "sha256": "e9dad6a5f31b06769e9deedea9750d271e354270efad3a73048d91a795654c8d"
+      },
+      "stderr": {
+        "file": "90-vendor-compat.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 91,
+      "name": "video-frame.mjs",
+      "args": [
+        "test/video-frame.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:57.751Z",
+      "seconds": 0.6818020000000251,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "91-video-frame.stdout.txt",
+        "bytes": 16,
+        "sha256": "eacc46cc5fb7e88bcf4c17058e5c45c3675542b8f86e9230918c643b0137e622"
+      },
+      "stderr": {
+        "file": "91-video-frame.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 92,
+      "name": "watermark.mjs",
+      "args": [
+        "test/watermark.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:58.433Z",
+      "seconds": 1.5577783000000054,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "92-watermark.stdout.txt",
+        "bytes": 37,
+        "sha256": "f31bad5615015860efb70f0912411a1c8a82e573e2f074f6b5c00b616ad0cff0"
+      },
+      "stderr": {
+        "file": "92-watermark.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 93,
+      "name": "wave-6-interactions.mjs",
+      "args": [
+        "test/wave-6-interactions.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:38:59.991Z",
+      "seconds": 0.7164634000000079,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "93-wave-6-interactions.stdout.txt",
+        "bytes": 107,
+        "sha256": "94bf67ebc2b3e15ab747d2c9d1986682b3747d92739f538ac8b80c47f2a18e71"
+      },
+      "stderr": {
+        "file": "93-wave-6-interactions.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "index": 94,
+      "name": "zip-date.mjs",
+      "args": [
+        "test/zip-date.mjs"
+      ],
+      "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+      "started": "2026-11-08T21:39:00.708Z",
+      "seconds": 5.150875400000019,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "file": "94-zip-date.stdout.txt",
+        "bytes": 424,
+        "sha256": "43e3557d3c971ef0d9e9bde49dd37f8359d7e1e14c56d5a0b90d32bf92551d8e"
+      },
+      "stderr": {
+        "file": "94-zip-date.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

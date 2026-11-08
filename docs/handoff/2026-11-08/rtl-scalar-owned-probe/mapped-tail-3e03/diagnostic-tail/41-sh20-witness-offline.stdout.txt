@@ -1,0 +1,1 @@
+SH20 witness offline controls pass: plan never crosses Office boundary, source hashes unchanged, existing evidence and missing inputs refused.

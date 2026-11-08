@@ -1,0 +1,23 @@
+{
+  "index": 51,
+  "name": "shape-block-effects.mjs",
+  "args": [
+    "test/shape-block-effects.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:58.995Z",
+  "seconds": 0.5642288999999874,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "51-shape-block-effects.stdout.txt",
+    "bytes": 24,
+    "sha256": "79f6220b054c4acf64797df70b84b2030bd75a1338a9b84a75aa5d89ac31a71e"
+  },
+  "stderr": {
+    "file": "51-shape-block-effects.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

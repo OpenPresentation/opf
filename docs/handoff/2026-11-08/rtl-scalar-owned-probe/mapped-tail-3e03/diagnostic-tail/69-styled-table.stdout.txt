@@ -1,0 +1,2 @@
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.

@@ -1,0 +1,1 @@
+RR-59 absent defaults passed: 21 checks (untouched round trips with and without the defaulted keys, the absent record per mode, tag-only package difference, native edits win, older tags and the schema option, untrusted records).

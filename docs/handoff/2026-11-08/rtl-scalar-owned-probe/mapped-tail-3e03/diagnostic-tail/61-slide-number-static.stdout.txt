@@ -1,0 +1,1 @@
+Static slide numbers passed: live mode (the default) keeps the placeholder field, three number-with-words forms fixed text, bare number and header, round trip and option validation.

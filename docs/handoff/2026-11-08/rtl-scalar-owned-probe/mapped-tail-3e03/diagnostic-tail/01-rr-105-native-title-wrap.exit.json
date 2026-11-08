@@ -1,0 +1,23 @@
+{
+  "index": 1,
+  "name": "rr-105-native-title-wrap.mjs",
+  "args": [
+    "test/rr-105-native-title-wrap.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:33:38.833Z",
+  "seconds": 24.3483467,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "01-rr-105-native-title-wrap.stdout.txt",
+    "bytes": 185,
+    "sha256": "2cdd6375d2b18d514e7970a4108953795fd04e4153ebe5ea35f63b45f7e84d3c"
+  },
+  "stderr": {
+    "file": "01-rr-105-native-title-wrap.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

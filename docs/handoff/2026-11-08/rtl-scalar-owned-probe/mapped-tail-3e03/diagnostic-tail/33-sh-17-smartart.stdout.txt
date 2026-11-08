@@ -1,0 +1,1 @@
+SH-17 SmartArt passed: live Basic Chevron Process, Basic Process and Vertical Process with fallback pictures (data model, OPF colors with the arrows, drawing, no layout part), the round trip from the frame and from the picture alone, PowerPoint-style data models and an edited node, native shapes, the domain fallback, mirrored chevrons and list blocks as cards.

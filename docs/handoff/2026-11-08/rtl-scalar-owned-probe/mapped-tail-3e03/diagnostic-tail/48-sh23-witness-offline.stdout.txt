@@ -1,0 +1,1 @@
+SH23 offline checks pass: complete plan, one-case selection, no output/Office boundary, prior evidence and changed inputs refused.

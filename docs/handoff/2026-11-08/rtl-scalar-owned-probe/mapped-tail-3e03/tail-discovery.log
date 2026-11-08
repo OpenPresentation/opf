@@ -1,0 +1,153 @@
+{
+  "scripts": 279,
+  "failedIndex": 185,
+  "tail": 94,
+  "executionSites": [
+    {
+      "name": "rr-59-export-integrity.mjs",
+      "line": 6,
+      "text": "import {execFileSync} from 'node:child_process';"
+    },
+    {
+      "name": "rr-59-export-integrity.mjs",
+      "line": 121,
+      "text": "  execFileSync(process.execPath, ['--no-warnings', '--loader', pathToFileURL(loader).href, '--input-type=module', '-e', script], {stdio: 'pipe'});"
+    },
+    {
+      "name": "sh20-gate-output.mjs",
+      "line": 2,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh20-gate-output.mjs",
+      "line": 11,
+      "text": "for(const [name,output,message]of cases){assert.throws(()=>gateOutputDirectory(input,output),message,name);for(const [tool,args]of [['gate.mjs',[input,...(output?[output]:[])]],['final-domain-report.mjs',[input,path.join(input,'gate.json'),...(output?[output]:[])]]]){const run=spawnSync(process.execPath,[path.join(root,'tools/shapes/sh-20',tool),...args],{encoding:'utf8',timeout:15000,windowsHide:true});assert.notEqual(run.status,0,name);assert.match(run.stderr,message,name+': refuses before trying to parse the invalid probe');assert.doesNotMatch(run.stderr,/Unexpected token|JSON\\.parse/,name+': did not read score inputs');}}"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 3,
+      "text": "import {execFileSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 23,
+      "text": "    const run=()=>execFileSync('powershell',args,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 39,
+      "text": "@{result=$result;calls=@($log.ToArray());powershell=$PSVersionTable.PSVersion.ToString()} | ConvertTo-Json -Depth 6"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 41,
+      "text": "    const opened=JSON.parse(execFileSync('powershell',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',probe,'-Witness',script,'-Seeds',seed,'-Sweep',sweep,'-Out',out,'-Helpers',helpers],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']}));"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 42,
+      "text": "    assert.equal(opened.result,'owned-fake');assert.equal(opened.calls.length,1);assert.equal(opened.calls[0].path,seed);assert.equal(opened.calls[0].type,'System.String');assert.equal(opened.calls[0].readOnly,-1);assert.equal(opened.calls[0].untitled,0);assert.equal(opened.calls[0].window,-1);assert.match(opened.powershell,/^5\\./);"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 45,
+      "text": "    const runSeed=()=>execFileSync('powershell',seedArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 50,
+      "text": "    const runMaterialize=()=>execFileSync('powershell',materializeArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh20-witness-offline.mjs",
+      "line": 54,
+      "text": "    const runVenn=()=>execFileSync('powershell',vennArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 3,
+      "text": "import {execFileSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 18,
+      "text": "  const args=['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',script,'-Manifest',manifest,'-Out',out,'-NativeHelpersPath',helpers,'-PlanOnly'],run=()=>execFileSync('powershell',args,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 25,
+      "text": "@{result=$opened;calls=@($log.ToArray());powershell=$PSVersionTable.PSVersion.ToString()}|ConvertTo-Json -Depth 5"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 27,
+      "text": "  const source=path.join(root,'pptx','org-chart-3.pptx'),opened=JSON.parse(execFileSync('powershell',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',proof,'-Witness',script,'-Manifest',manifest,'-Out',out,'-Helpers',helpers,'-Owned',source],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']}));assert.equal(opened.result,'owned-fake');assert.deepEqual(opened.calls,[{path:source,type:'System.String',readOnly:-1,untitled:0,window:-1}]);assert.match(opened.powershell,/^5\\./);"
+    },
+    {
+      "name": "sh21-product-probe-offline.mjs",
+      "line": 33,
+      "text": "  const messages=JSON.parse(execFileSync('powershell',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',countProof,'-Witness',script],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']}));assert.match(messages[0],/expected 5 data nodes; observed 5 data nodes and 0 group items/);assert.match(messages[1],/expected 5 data nodes; observed 4 data nodes and 14 group items/);"
+    },
+    {
+      "name": "sh21-production-packet-offline.mjs",
+      "line": 5,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh21-production-packet-offline.mjs",
+      "line": 12,
+      "text": "  const result=spawnSync(process.execPath,[script,temporary],{encoding:'utf8'});"
+    },
+    {
+      "name": "sh23-witness-offline.mjs",
+      "line": 3,
+      "text": "import {execFileSync} from 'node:child_process';"
+    },
+    {
+      "name": "sh23-witness-offline.mjs",
+      "line": 17,
+      "text": "  const run=(extra=[])=>execFileSync('powershell',[...args,...extra],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});"
+    },
+    {
+      "name": "svg-image.mjs",
+      "line": 9,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "svg-image.mjs",
+      "line": 234,
+      "text": "    const child = spawnSync(process.execPath, ['--input-type=module', '-e', script], {encoding: 'utf8', env: {...process.env, ...env}, maxBuffer: 64 * 1024 * 1024});"
+    },
+    {
+      "name": "svg-image.mjs",
+      "line": 573,
+      "text": "  const child = spawnSync(process.execPath, ['--input-type=module', '-'], {input: script, encoding: 'utf8', cwd: fileURLToPath(new URL('..', import.meta.url))});"
+    },
+    {
+      "name": "svg-rasterizer-converter-missing.mjs",
+      "line": 10,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "svg-rasterizer-converter-missing.mjs",
+      "line": 29,
+      "text": "  const child = spawnSync(process.execPath, ['--input-type=module', '-'], {input: script, encoding: 'utf8', cwd: root});"
+    },
+    {
+      "name": "zip-date.mjs",
+      "line": 2,
+      "text": "import {spawnSync} from 'node:child_process';"
+    },
+    {
+      "name": "zip-date.mjs",
+      "line": 115,
+      "text": "      const child = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--worker', out], {"
+    },
+    {
+      "name": "zip-date.mjs",
+      "line": 132,
+      "text": "    const hostChild = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--host-tz-worker', hostDirectory], {env: {...process.env, TZ: 'UTC'}, encoding: 'utf8', timeout: 60000});"
+    }
+  ],
+  "environmentNames": []
+}

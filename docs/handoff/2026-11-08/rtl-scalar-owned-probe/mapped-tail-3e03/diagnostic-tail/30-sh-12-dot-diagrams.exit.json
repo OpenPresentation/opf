@@ -1,0 +1,23 @@
+{
+  "index": 30,
+  "name": "sh-12-dot-diagrams.mjs",
+  "args": [
+    "test/sh-12-dot-diagrams.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:34:50.385Z",
+  "seconds": 0.9876809999999968,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "30-sh-12-dot-diagrams.stdout.txt",
+    "bytes": 152,
+    "sha256": "a6e04c7a3e203c0720b47fff85d5d94bf2922f36ae7f9afd1da2e676d136129a"
+  },
+  "stderr": {
+    "file": "30-sh-12-dot-diagrams.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

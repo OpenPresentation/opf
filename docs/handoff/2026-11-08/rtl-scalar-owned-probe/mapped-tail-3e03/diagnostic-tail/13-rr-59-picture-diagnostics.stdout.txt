@@ -1,0 +1,1 @@
+RR-59 picture diagnostics passed: 46 checks (10 picture paths x 5 unresolved source kinds, one unresolved-asset each, the fallback drawn, strictAssets fails).

@@ -1,0 +1,23 @@
+{
+  "index": 42,
+  "name": "sh21-native-arrangements.mjs",
+  "args": [
+    "test/sh21-native-arrangements.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:35:15.690Z",
+  "seconds": 0.8166293000000006,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "42-sh21-native-arrangements.stdout.txt",
+    "bytes": 152,
+    "sha256": "30ef8df0ec71420f0d62c8f3cc64613b058c635c97656a528eeaccacb5a0f8b2"
+  },
+  "stderr": {
+    "file": "42-sh21-native-arrangements.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "index": 88,
+  "name": "title-split.mjs",
+  "args": [
+    "test/title-split.mjs"
+  ],
+  "cwd": "C:\\opf-work\\rr105-tag-ownership/packages/pptx",
+  "started": "2026-11-08T21:38:20.556Z",
+  "seconds": 2.2748561999999803,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": {
+    "file": "88-title-split.stdout.txt",
+    "bytes": 104,
+    "sha256": "e5ac4956cc4298303164b187c06a931c987d58d0980329dbd23195a63e311a97"
+  },
+  "stderr": {
+    "file": "88-title-split.stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

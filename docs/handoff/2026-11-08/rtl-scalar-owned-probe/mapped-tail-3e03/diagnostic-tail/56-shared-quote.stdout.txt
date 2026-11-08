@@ -1,0 +1,1 @@
+Shared quote PPTX: 4 wide/portrait decks and 7 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.

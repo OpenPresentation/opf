@@ -1,0 +1,1 @@
+SH25current native series names: cache/literal edits override source, values/numeric selector retained, stale named selector explicitly falls back.
