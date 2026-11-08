@@ -129,6 +129,21 @@ test('npm-publish.yml: verify checks the registry against this commit and waits 
   assert.match(entry, /release\.mjs notes "\$VERSION"/u);
 });
 
+test('npm-publish.yml: builds and checks a full MCP bundle, retains exactly its versioned assets, and attaches after registry verification', () => {
+  const build = job(publish, 'build').text;
+  const releaseJob = job(publish, 'release').text;
+  assert.ok(build.indexOf('run: pnpm build') < build.indexOf('run build:mcpb --check'));
+  assert.match(build, /pnpm --filter @openpresentation\/mcp run build:mcpb --check/u);
+  assert.doesNotMatch(build, /--no-script-fonts/u, 'the public bundle carries all pinned script fonts');
+  assert.match(build, /release-mcpb\.mjs checksum "\$VERSION" --dir packages\/mcp\/artifacts/u);
+  assert.match(build, /name: mcpb\n {10}path: \|\n {12}packages\/mcp\/artifacts\/opf-\$\{\{ needs\.plan\.outputs\.version \}\}\.mcpb\n {12}packages\/mcp\/artifacts\/opf-\$\{\{ needs\.plan\.outputs\.version \}\}\.mcpb\.sha256/u);
+  assert.ok(needsOf(job(publish, 'release')).includes('verify'));
+  assert.match(releaseJob, /name: mcpb\n {10}path: \$\{\{ runner\.temp \}\}\/mcpb/u);
+  assert.match(releaseJob, /release-mcpb\.mjs attach "\$VERSION" --dir "\$RUNNER_TEMP\/mcpb"/u);
+  assert.doesNotMatch(releaseJob, /exit 0|release edit|--clobber/u, 'existing notes survive and a retry still repairs missing assets');
+  assert.ok(releaseJob.indexOf('gh release create') < releaseJob.indexOf('release-mcpb.mjs attach'));
+});
+
 test('every action is pinned to a full commit SHA', () => {
   for (const [name, text] of [['npm-publish.yml', publish], ['release.yml', release]]) {
     for (const [, spec] of text.matchAll(/^\s+(?:- )?uses: (\S+)/gmu)) {

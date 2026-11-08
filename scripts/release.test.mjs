@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
+import { attachBundle, bundleNames, writeChecksum } from './release-mcpb.mjs';
 import path from 'node:path';
 import test from 'node:test';
 import { checkPeerRanges, checkVersions } from './check-versions.mjs';
@@ -144,7 +145,7 @@ test('prepare plans a release: one version everywhere, peers, seven changelogs, 
     assert.equal(plan.previous, '0.25.3');
     assert.equal(plan.tag, 'v0.26.0');
     assert.equal(plan.distTag, 'latest');
-    const byFile = Object.fromEntries(plan.writes.map(({ file, text }) => [file, text]));
+    const byFile = Object.fromEntries(plan.writes.map(({ file, text }) => [file.split(path.sep).join("/"), text]));
     for (const { dir } of PACKAGES) assert.equal(JSON.parse(byFile[`packages/${dir}/package.json`]).version, '0.26.0');
     assert.deepEqual(JSON.parse(byFile['packages/javascript/package.json']).peerDependencies, { '@openpresentation/opf-pptx': '^0.26.0', '@openpresentation/opf-render': '^0.26.0' });
     assert.ok(byFile['packages/javascript/src/node/peers.ts'].includes('"^0.26.0"'));
@@ -156,7 +157,7 @@ test('prepare plans a release: one version everywhere, peers, seven changelogs, 
     assert.match(byFile['packages/render/CHANGELOG.md'], /- Core and render change\./);
     assert.match(byFile['packages/gallery/CHANGELOG.md'], /- A new layout\./);
     for (const file of ['packages/cli/CHANGELOG.md', 'packages/pptx/CHANGELOG.md', 'packages/editor/CHANGELOG.md', 'packages/mcp/CHANGELOG.md']) assert.match(byFile[file], new RegExp(`## 0\\.26\\.0 \\(2026-10-23\\)\\n\\n${NO_CHANGES}\\n`), file);
-    assert.deepEqual(plan.removes.sort(), ['changes/a-core.md', 'changes/b-gallery.md']);
+    assert.deepEqual(plan.removes.sort(), [path.join('changes', 'a-core.md'), path.join('changes', 'b-gallery.md')]);
   } finally {
     cleanup();
   }
@@ -236,7 +237,7 @@ test('prepare refuses a patch when a drawing change is declared, a record id was
     const plan = await planPrepare({ root, input: 'minor', stability: noStability, registry });
     assert.equal(plan.version, '0.27.0');
     assert.equal(plan.bump, 'minor');
-    const gallery = plan.writes.find(({ file }) => file === 'packages/gallery/CHANGELOG.md').text;
+    const gallery = plan.writes.find(({ file }) => file === path.join('packages', 'gallery', 'CHANGELOG.md')).text;
     assert.match(gallery, /Drawing change.*`layouts:hero`/);
     // The release commit has no fragments, so check:stability reads the declarations from this record.
     const record = plan.writes.find(({ file }) => file === 'packages/gallery/release-drawing.json');
@@ -711,7 +712,7 @@ test('smoke installs the seven tarballs together with overrides to themselves, t
     assert.equal(log.length, 4);
     assert.deepEqual(seen.map((step) => step.args[0]), ['install', 'smoke.mjs', path.join('node_modules', '@openpresentation', 'cli', 'dist', 'index.js'), path.join('node_modules', '@openpresentation', 'mcp', 'dist', 'bin.js')]);
     assert.deepEqual(Object.keys(seen[0].dependencies), NAMES);
-    assert.ok(Object.values(seen[0].dependencies).every((spec) => spec.startsWith('file:/')));
+    assert.deepEqual(seen[0].dependencies, Object.fromEntries(readReleaseManifest(dir, '0.26.0').packages.map(({ name, filename }) => [name, `file:${path.resolve(dir, filename)}`])));
     assert.deepEqual(seen[0].overrides, Object.fromEntries(NAMES.map((name) => [name, `$${name}`])));
     assert.deepEqual(seen[1].files, ['deck.opf.json', 'package.json', 'smoke.mjs']);
     assert.throws(() => smoke(dir, '0.26.0', { deck, exec: (_command, args) => ({ status: 0, stdout: args.at(-1) === '--version' ? (args[0].includes('mcp') ? '0.26.0' : '{"cli":"0.25.0","opf":"0.26.0"}') : 'ok', stderr: '' }) }), /CLI reports cli 0\.25\.0/);
@@ -814,4 +815,86 @@ test('run starts pnpm and npm by their bare names on every platform', () => {
     assert.equal(result.status, 0, `${command}: ${result.stderr}`);
     assert.match(result.stdout.trim(), /^\d+\.\d+\.\d+/);
   }
+});
+
+// RR-107: fake GitHub release assets, real local checksums. No network or GitHub mutation is performed by these tests.
+function bundleFixture(t, remote = {}, local = 'new checked bundle') {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'release-mcpb-test-'));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const version = '0.34.0';
+  const names = bundleNames(version);
+  writeFileSync(path.join(directory, names.bundle), local);
+  writeChecksum(version, directory);
+  const commands = [];
+  const uploaded = new Map();
+  const gh = (args) => {
+    commands.push(args);
+    if (args[1] === 'view') return JSON.stringify({assets: Object.keys(remote).map(name => ({name}))});
+    if (args[1] === 'download') {
+      const name = args[args.indexOf('--pattern') + 1];
+      writeFileSync(path.join(args[args.indexOf('--dir') + 1], name), remote[name]);
+    } else if (args[1] === 'upload') {
+      for (const file of args.slice(3)) uploaded.set(path.basename(file), readFileSync(file, 'utf8'));
+    } else assert.fail(`Unexpected gh operation: ${args.join(' ')}`);
+    return '';
+  };
+  return {directory, version, names, commands, uploaded, deps: {gh, log() {}}};
+}
+const bundleSum = (bytes, name) => `${createHash('sha256').update(bytes).digest('hex')}  ${name}\n`;
+
+test('MCP bundle release assets have exact versioned names and standard SHA-256 files', t => {
+  assert.deepEqual(bundleNames('0.34.0-rc.1'), {bundle: 'opf-0.34.0-rc.1.mcpb', checksum: 'opf-0.34.0-rc.1.mcpb.sha256'});
+  for (const invalid of ['latest', '../0.34.0', '0.34.0/elsewhere', undefined]) assert.throws(() => bundleNames(invalid), /exact release version/);
+  const f = bundleFixture(t);
+  assert.equal(readFileSync(path.join(f.directory, f.names.checksum), 'utf8'), bundleSum('new checked bundle', f.names.bundle));
+});
+
+test('MCP bundle attachment uploads both missing files and never edits notes or clobbers assets', t => {
+  const f = bundleFixture(t);
+  assert.deepEqual(attachBundle(f.version, f.directory, f.deps), Object.values(f.names));
+  assert.equal(f.uploaded.get(f.names.bundle), 'new checked bundle');
+  assert.equal(f.uploaded.get(f.names.checksum), bundleSum('new checked bundle', f.names.bundle));
+  assert.equal(f.commands.filter(args => args[1] === 'upload').length, 1);
+  assert.ok(f.commands.every(args => !args.includes('--clobber') && !['edit','create','delete'].includes(args[1])));
+});
+
+test('MCP bundle attachment preserves and verifies an existing pair even when the rebuild bytes differ', t => {
+  const names = bundleNames('0.34.0');
+  const f = bundleFixture(t, {[names.bundle]: 'original zip bytes', [names.checksum]: bundleSum('original zip bytes', names.bundle)});
+  assert.deepEqual(attachBundle(f.version, f.directory, f.deps), []);
+  assert.equal(f.uploaded.size, 0);
+  assert.equal(f.commands.filter(args => args[1] === 'download').length, 2);
+});
+
+test('MCP bundle partial retry hashes the existing bundle when only its checksum is missing', t => {
+  const names = bundleNames('0.34.0');
+  const f = bundleFixture(t, {[names.bundle]: 'original uploaded zip'});
+  assert.deepEqual(attachBundle(f.version, f.directory, f.deps), [names.checksum]);
+  assert.deepEqual([...f.uploaded], [[names.checksum, bundleSum('original uploaded zip', names.bundle)]]);
+});
+
+test('MCP bundle partial retry adds a missing bundle only when the existing checksum matches it', t => {
+  const names = bundleNames('0.34.0');
+  const f = bundleFixture(t, {[names.checksum]: bundleSum('new checked bundle', names.bundle)});
+  assert.deepEqual(attachBundle(f.version, f.directory, f.deps), [names.bundle]);
+  assert.deepEqual([...f.uploaded], [[names.bundle, 'new checked bundle']]);
+});
+
+test('MCP bundle retry refuses remote checksum mismatches without overwriting anything', t => {
+  const names = bundleNames('0.34.0');
+  for (const remote of [
+    {[names.checksum]: bundleSum('different bytes', names.bundle)},
+    {[names.bundle]: 'original bytes', [names.checksum]: bundleSum('different bytes', names.bundle)},
+  ]) {
+    const f = bundleFixture(t, remote);
+    assert.throws(() => attachBundle(f.version, f.directory, f.deps), /inconsistent|does not describe/);
+    assert.equal(f.uploaded.size, 0);
+  }
+});
+
+test('MCP bundle attachment checks artifact integrity before any GitHub request', t => {
+  const f = bundleFixture(t);
+  writeFileSync(path.join(f.directory, f.names.bundle), 'tampered after checksum');
+  assert.throws(() => attachBundle(f.version, f.directory, f.deps), /SHA-256 does not match/);
+  assert.equal(f.commands.length, 0);
 });
