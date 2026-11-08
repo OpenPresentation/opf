@@ -29,7 +29,7 @@ The published CLI bundles all six complete skill folders. Use Node 24 for the cu
 npx @openpresentation/cli skills install
 ```
 
-The default installs copies into `.agents/skills` in the current project, suitable for agents including Codex. It does not change AGENTS.md or any agent configuration. No symlink privileges, paid service, API key or AI provider is required. npm downloads the CLI on first use; the installed CLI then installs its bundled skills without network access. Pin a version, for example `@openpresentation/cli@0.33.0`, when you need a repeatable installation; see the [current package train](compatibility-matrix.md). For CLI source development, use `node packages/cli/dist/index.js skills install` after building.
+The default installs copies into `.agents/skills` in the current project, suitable for agents including Codex. It does not change AGENTS.md or any agent configuration. No symlink privileges, paid service, API key or AI provider is required. npm downloads the CLI on first use; the installed CLI then installs its bundled skills without network access. Pin a version, for example `@openpresentation/cli@0.33.0`, when you need a repeatable installation; see the [current package train](compatibility-matrix.md). Use the same CLI version for `skills install`, `skills status` and `skills update` when checking a pinned skill set. For CLI source development, use `node packages/cli/dist/index.js skills install` after building.
 
 | Target | Project directory | Personal directory with `--global` |
 | --- | --- | --- |
