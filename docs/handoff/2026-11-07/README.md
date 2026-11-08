@@ -119,5 +119,6 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - Whether to promote LibreOffice from "experimental" (RR-106; the results are in `docs/programs/release-readiness/qualification-0.33-libreoffice.md`, on #1084).
 - Every entry in [decisions.md](decisions.md) is vetoable.
 
+- Golden workflow continuation: [RR-108](rr108-template-goldens.md) covers core composition and renderer templates in the pinned environment; final v0.34 batch and visual review remain owed.
 SH-23 isolated qualification: [source scope, five native ninth-node save/reopen passes and remaining integration gate](sh23-qualified.md). Unfinished SH20–22 work stays on its separate continuation branch.
 - Inverted pyramid continuation: [SH-24](sh24-inverted-pyramid.md), issue #1128; source implementation is isolated, with review/native/integration gates still owed.
