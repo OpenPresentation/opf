@@ -25,3 +25,6 @@ node tools/shapes/sh-20/final-domain-report.mjs <sealed-sweep> <fresh-gate-outpu
 ```
 
 No export output, renderer baseline, live predicate or gate tolerance changes. This replay is not a new Office run; final assembled release-corpus identity/native qualification remains with the coordinator.
+
+Clean source62995c88c6a177d93183368aedbb5d108e38d9d0 reproduces every candidate row and the generated compressed boundary fixture byte-exactly. [Final verification](final-verification.json) and [raw mapped/recovery logs](final-checks.zip) preserve the single151.8srequired run: build/Biome/fragment/fonts/skills/stability pass; typecheck correctly skips; sparse gzip omission recovers with exact tracked bytes/textPASS, and inherited fallback PPTX archive lock leaves240tests unrun. No expected hash or limit was changed.
+
