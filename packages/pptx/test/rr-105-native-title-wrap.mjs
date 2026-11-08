@@ -31,7 +31,7 @@ for (const {file, deck} of examples) {
     if (!(slideTemplate(context) || context.slide.layout === undefined || context.slide.layout === 'auto' || geometry.recomposed !== undefined)) continue;
     for (const item of geometry.items.filter(eligible)) {
       const nativeFamily = resolveSlideContext(deck, index, {catalogs}).options.fontFamilies.heading, reasons = [];
-      const widths = nativeWrapWidths(item, [item.value], false, measurement), wrap = nativeTitleWrapBox(item, geometry, measurement, {nativeFamily, report: reason => reasons.push(reason)});
+      const widths = nativeWrapWidths(item, [item.value], false, measurement), wrap = nativeTitleWrapBox(item, geometry, measurement, {nativeStyle: {fontFamily: nativeFamily, fontWeight: 700, italic: false}, report: reason => reasons.push(reason)});
       const where = `${file} slide ${index + 1}`, entry = {file, deck, index, item, geometry, widths, wrap, reasons, nativeFamily};
       assert.ok(widths, `${where}: title lines retain the source words`);
       if (!wrap) { fallbacks.push(entry); continue; }

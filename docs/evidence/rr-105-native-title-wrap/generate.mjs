@@ -34,7 +34,7 @@ for (const {file, deck} of examples) {
   for (const item of geometry.items.filter(eligible)) {
     const number = manifest.cases.length + 1, name = String(number).padStart(2, '0') + '-' + path.basename(file, '.opf.json') + '-s' + (index + 1);
     const input = {...deck, slides: [deck.slides[index]]}, diagnostics = [], nativeFamily = resolveSlideContext(deck, index, {catalogs: [gallery]}).options.fontFamilies.heading;
-    const wrap = nativeTitleWrapBox(item, geometry, fonts.textMeasurement, {nativeFamily});
+    const wrap = nativeTitleWrapBox(item, geometry, fonts.textMeasurement, {nativeStyle: {fontFamily: nativeFamily, fontWeight: 700, italic: false}});
     // Each file retains its source canvas/design. Only slide-position furniture variables can differ from the full deck.
     const bytes = new Uint8Array(await toPptx(input, {fonts, catalogs: [gallery], bodyText: 'native', seed: 1127, timestamp: '2026-11-08T00:00:00Z', zipDate: '2026-11-08T00:00:00Z', onDiagnostic: value => diagnostics.push(value)}));
     const preview = (await toPng(input, {fonts, catalogs: [gallery], scale: .5}))[0];

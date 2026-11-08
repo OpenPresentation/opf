@@ -2671,7 +2671,10 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     // RR-88: under bodyText 'native' a plain-string title that wraps is one native text box (native wrap, no autofit) at its measured
     // block, so it can bind to the Title placeholder like a one-line title (Keynote reports `title showing` only for a bound title).
     const wantsNativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
-    const nativeTitle = wantsNativeTitle ? nativeTitleWrapBox(item, geometry, options.textMeasurement, {report: reason => options.onDiagnostic?.({
+    const titleFace = wantsNativeTitle ? nativeFontOptions(item.textStyle) : undefined;
+    const nativeTitle = wantsNativeTitle ? nativeTitleWrapBox(item, geometry, options.textMeasurement, {
+      nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true},
+      report: reason => options.onDiagnostic?.({
       code: 'native-body-fallback', path: item.path, reason,
       message: reason === 'font-metrics' ? 'Native title export uses a visual font substitute for measurement, so native line breaks cannot be verified; the authored font and size were retained as measured lines.'
         : 'Native title export cannot preserve the measured line breaks with a wrap margin inside its title area; the measured lines were exported.'
