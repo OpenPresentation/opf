@@ -12,7 +12,8 @@ function Get-FurnitureSha256([string]$Path) { return (Get-FileHash -LiteralPath 
 function Test-Integer($Value) { return $Value -is [int] -or $Value -is [long] }
 function Require-Property($Action,[string]$Name,[string]$Context) {
     if($null -eq $Action.PSObject.Properties[$Name]) { throw "$Context requires property '$Name'" }
-    return $Action.$Name
+    # Preserve the JSON property value itself: a singleton array must remain an array.
+    return ,($Action.$Name)
 }
 function Assert-String($Value,[string]$Name,[string]$Context,[int]$Maximum=65535,[bool]$AllowEmpty=$true) {
     if(-not ($Value -is [string])) { throw "$Context property '$Name' must be a string" }
@@ -49,11 +50,13 @@ function Read-AndValidateActionPlan([string]$Path) {
                 $chartName=Require-Property $action 'chartName' $context; Assert-String $chartName 'chartName' $context 255 $false
                 foreach($key in @('seriesIndex','pointIndex')) {
                     $number=Require-Property $action $key $context
-                    if(-not (Test-Integer $number) -or $number -lt 1 -or $number -gt 256) { throw "$context $key must be an integer from1through256" }
+                    if(-not (Test-Integer $number) -or $number -lt 1 -or $number -gt 256) { throw "$context $key must be an integer from 1 through 256" }
                 }
-                $kind=Require-Property $action 'chartKind' $context; if($kind -notin @('horizontal-bar','vertical-bar','marker','slice')) {throw "$context chartKind is not a bounded classic mark"}
-                $edge=Require-Property $action 'edge' $context; if($edge -notin @('start','end','top','bottom','center')) {throw "$context edge is not a point edge"}
-                $sign=Require-Property $action 'valueSign' $context; if(-not (Test-Integer $sign) -or $sign -notin @(-1,0,1)) {throw "$context valueSign must be -1,0or1"}
+                $kind=Require-Property $action 'chartKind' $context; Assert-String $kind 'chartKind' $context 40 $false
+                if($kind -cnotin @('horizontal-bar','vertical-bar','marker','slice')) {throw "$context chartKind is not a bounded classic mark"}
+                $edge=Require-Property $action 'edge' $context; Assert-String $edge 'edge' $context 20 $false
+                if($edge -cnotin @('start','end','top','bottom','center')) {throw "$context edge is not a point edge"}
+                $sign=Require-Property $action 'valueSign' $context; if(-not (Test-Integer $sign) -or $sign -notin @(-1,0,1)) {throw "$context valueSign must be -1, 0 or 1"}
                 $allowed+=@('chartName','seriesIndex','pointIndex','chartKind','edge','valueSign')
             }
 

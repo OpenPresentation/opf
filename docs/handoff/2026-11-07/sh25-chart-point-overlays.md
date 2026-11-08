@@ -1,5 +1,7 @@
 # SH-25 / #1113: chart data-point anchors
 
+Current continuation: [2026-11-08 deterministic acceptance](../2026-11-08/sh25-deterministic.md). The original checkpoints below are historical; the current candidate normally contains the approved 40-layout d987 foundation, accepted doughnut options, stacked siblings and negative-axis fixes. Native qualification remains owed.
+
 Work is on codex/sh-25-chart-point-overlays in the isolated short-path worktree C:/opf-work/sh25-chart-points. Fresh main d19c4bb6172b703d132ebba3fd006e4ec5cdf845 was normally merged forward to the coordinator-reviewed preparation67698fadd1b729526718e3d9e4f74909dd2e465e (codex/integration-034). Its exact SH20–23 rows are preserved. SH24 remains reserved by source #1153, not yet accepted; no status is invented here.
 
 The optioned-doughnut source #1152 at e44c91d9612dbe1b89ec5497becb0bf141a449b6 is unreviewed and has not been merged. Its planned geometry contract is the existing layer.doughnut.pie square and .hole center/radius. The stacked horizontal sibling follow-up is still owned by remaining_core. This item must compose with those reviewed plots rather than independently estimate them.

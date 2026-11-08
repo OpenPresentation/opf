@@ -76,6 +76,54 @@ Reject-Plan 'move-index-four' '[{"op":"move-slide","slideIndex":1,"toIndex":4}]'
 $twentyOne=@(); for($index=0;$index -lt 21;$index++) { $twentyOne+=@([ordered]@{op='move-slide';slideIndex=1;toIndex=1}) }
 Reject-Plan 'twenty-one-actions' (ConvertTo-Json -InputObject $twentyOne -Depth 5)
 
+# SH25: parse the actual bounded measurement action before any application exists.
+$pointPlan=[ordered]@{op='measure-chart-point';slideIndex=1;shapeName='Exact ring';chartName='Exact chart';seriesIndex=1;pointIndex=1;chartKind='marker';edge='center';valueSign=1}
+function Copy-PointPlan {
+    $copy=[ordered]@{};foreach($key in $pointPlan.Keys) {$copy[$key]=$pointPlan[$key]};return $copy
+}
+foreach($kind in @('horizontal-bar','vertical-bar','marker','slice')) {
+    $valid=(Copy-PointPlan);$valid.chartKind=$kind
+    Accept-Plan ('point-kind-'+$kind) (ConvertTo-Json -InputObject @($valid) -Compress) 1
+}
+$valid=(Copy-PointPlan);$valid.seriesIndex=256;$valid.pointIndex=256;$valid.valueSign=-1;$valid.edge='start'
+Accept-Plan 'point-index-upper-bound' (ConvertTo-Json -InputObject @($valid) -Compress) 1
+$valid=(Copy-PointPlan);$valid.valueSign=0;$valid.edge='bottom'
+Accept-Plan 'point-zero-sign' (ConvertTo-Json -InputObject @($valid) -Compress) 1
+foreach($field in @('chartName','seriesIndex','pointIndex','chartKind','edge','valueSign')) {
+    $invalid=(Copy-PointPlan);$invalid.Remove($field)
+    Reject-Plan ('point-missing-'+$field) (ConvertTo-Json -InputObject @($invalid) -Compress)
+}
+foreach($field in @('seriesIndex','pointIndex')) {
+    foreach($bad in @(@('zero',0),@('negative',-1),@('too-high',257),@('fraction',1.5),@('string','1'),@('boolean',$true),@('null',$null),@('array',@(1)))) {
+        $invalid=(Copy-PointPlan);$invalid[$field]=$bad[1]
+        Reject-Plan ('point-'+$field+'-'+$bad[0]) (ConvertTo-Json -InputObject @($invalid) -Compress -Depth 5)
+    }
+}
+foreach($spec in @(
+    @('chartName-empty','chartName',''),@('chartName-number','chartName',7),@('chartName-too-long','chartName',('x'*256)),
+    @('chartName-array','chartName',@('Exact chart')),@('shapeName-array','shapeName',@('Exact ring')),@('sign-array','valueSign',@(1)),
+    @('shapeName-empty','shapeName',''),@('kind-unsupported','chartKind','radar'),@('kind-case','chartKind','Marker'),@('kind-array','chartKind',@('marker')),
+    @('edge-unsupported','edge','left'),@('edge-case','edge','Center'),@('edge-array','edge',@('center')),
+    @('sign-too-high','valueSign',2),@('sign-too-low','valueSign',-2),@('sign-fraction','valueSign',0.5),@('sign-string','valueSign','1'),@('sign-boolean','valueSign',$true),
+    @('unknown-field','sourceX',123)
+)) {
+    $invalid=(Copy-PointPlan);$invalid[$spec[1]]=$spec[2]
+    Reject-Plan ('point-'+$spec[0]) (ConvertTo-Json -InputObject @($invalid) -Compress -Depth 5)
+}
+
+# The same function-output unwrapping affected shared fields and legacy actions.
+foreach($scope in @('point','legacy')) {
+    foreach($bad in @(@('op-array','op',@('unused')),@('op-null','op',$null),@('op-number','op',7),@('slide-array','slideIndex',@(1)),@('slide-null','slideIndex',$null),@('shape-array','shapeName',@('Exact ring')),@('shape-null','shapeName',$null),@('shape-number','shapeName',7))) {
+        $invalid=if($scope -eq 'point') {Copy-PointPlan} else {[ordered]@{op='set-text';slideIndex=1;shapeName='Exact ring';text='Words'}}
+        # Assign the property itself so no helper output can collapse test arrays.
+        if($bad[0] -eq 'op-array') {$invalid[$bad[1]]=@($invalid.op)}
+        elseif($bad[0] -in @('slide-array','shape-array')) {$invalid[$bad[1]]=@($bad[2])}
+        else {$invalid[$bad[1]]=$bad[2]}
+        Reject-Plan ($scope+'-common-'+$bad[0]) (ConvertTo-Json -InputObject @($invalid) -Compress -Depth 5)
+    }
+}
+Reject-Plan 'legacy-text-array' '[{"op":"set-text","slideIndex":1,"shapeName":"Exact ring","text":["Words"]}]'
+
 $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true
 $script:events=New-Object 'System.Collections.Generic.List[string]'
 function Write-FurnitureStage([string]$Name,[string]$Status,[string]$ErrorMessage=$null) { $script:events.Add($Name+':'+$Status) }
@@ -373,8 +421,8 @@ foreach($failure in @('wrong-native-kind','mixed-series-type','unsupported-nativ
     powershell=$PSVersionTable.PSVersion.ToString()
     verifierSha256=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()
     checkerSha256=(Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash.ToLowerInvariant()
-    accepted=6
-    rejected=23
+    accepted=@($cases.ToArray() | Where-Object {$_.expected -eq 'accept'}).Count
+    rejected=@($cases.ToArray() | Where-Object {$_.expected -eq 'reject'}).Count
     cases=@($cases.ToArray())
     events=@($script:events.ToArray())
 } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $reportFull -Encoding UTF8

@@ -9,7 +9,10 @@ import {toPng} from '../packages/render/dist/png.js';
 import {loadFonts} from '../packages/render/dist/fonts-node.js';
 import {toPptx} from '../packages/pptx/test/helpers/default-catalog.mjs';
 const out=path.resolve(process.argv[2]??'artifacts/sh25-native'),evidence=path.resolve(process.argv[3]??'docs/evidence/sh25-chart-points');
-const baseline=JSON.parse(await readFile('artifacts/baseline-67698/baseline.json','utf8')),hash=value=>createHash('sha256').update(value).digest('hex');
+assert.ok(process.argv[4], 'Pass an explicit current baseline JSON as argument 4; do not substitute the historical 67698 baseline');
+const baselinePath=path.resolve(process.argv[4]);
+const baseline=JSON.parse(await readFile(baselinePath,'utf8')),hash=value=>createHash('sha256').update(value).digest('hex');
+assert.match(baseline.source,/^[a-f0-9]{40}$/);assert.equal(baseline.dirty,false);assert.equal(baseline.cases.length,32);
 const fonts=await loadFonts(),require=createRequire(new URL('../packages/render/package.json',import.meta.url)),sharp=require('sharp'),records=[],decks=[],panels=[];
 await mkdir(out+'/pptx',{recursive:true});await mkdir(out+'/preview',{recursive:true});await mkdir(evidence,{recursive:true});
 for(const [index,control]of baseline.cases.entries()){
@@ -44,5 +47,5 @@ for(let offset=0;offset<records.length;offset+=4){
 const revision=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),build={manifestVersion:1,revision,dirty:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim(),opfVersion:JSON.parse(await readFile('packages/javascript/package.json','utf8')).version,node:process.version,platform:process.platform+'-'+process.arch,builtAt:new Date().toISOString(),decks};
 await writeFile(out+'/build.json',JSON.stringify(build,null,2)+'\n');
 await writeFile(out+'/point-probes.json',JSON.stringify({revision,dirty:build.dirty,scope:'Candidate geometry; actual native point centers within4px still required for every enabled domain.',cases:records},null,2)+'\n');
-await writeFile(evidence+'/review.json',JSON.stringify({baseline:baseline.source,ordinaryControls:32,ordinarySvg:'byte-identical',ordinaryPptx:'byte-identical',cases:records},null,2)+'\n');
+await writeFile(evidence+'/review.json',JSON.stringify({baseline:baseline.source,baselineManifestSha256:hash(await readFile(baselinePath)),ordinaryControls:32,ordinarySvg:'byte-identical',ordinaryPptx:'byte-identical',cases:records},null,2)+'\n');
 console.log('Saved32 complete pairs/eight sheets and160 candidate native point probes in '+out);
