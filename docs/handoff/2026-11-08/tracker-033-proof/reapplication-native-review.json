@@ -1,0 +1,11 @@
+{
+  "head": "5282536c863ec586b88720a16d0e3075022c7f4f",
+  "reference": "7c0c3f13e9de77e038b6ec26183043eb7fe90822",
+  "raw": "C:/opf-work/release-033-artifacts/qualification-final5",
+  "manifestSha256": "852051a90326d04904b31f652754c4f4f9bbfcfbf303d976a3fc73f2a936b046",
+  "source": "5b320eda3a8ba2deb085839fdaeb063cc7a8de79",
+  "files": 25,
+  "all25FileHashesExact": true,
+  "declaredSlides": 270,
+  "scope": "Read-only identity comparison of accepted existing qualification inputs; no new rendering/Office or native acceptance."
+}

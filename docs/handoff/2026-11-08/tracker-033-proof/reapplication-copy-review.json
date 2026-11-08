@@ -1,0 +1,75 @@
+{
+  "head": "5282536c863ec586b88720a16d0e3075022c7f4f",
+  "reference": "7c0c3f13e9de77e038b6ec26183043eb7fe90822",
+  "reviewedObjects": [
+    {
+      "path": "packages",
+      "object": "e6d7019e786f61905b8775e0056bba2742009602",
+      "equal": true
+    },
+    {
+      "path": "spec",
+      "object": "d7107be1cf1e020d9e17769dec09c7c4bf2a808d",
+      "equal": true
+    },
+    {
+      "path": "examples",
+      "object": "5f1457fb7d61cbf185b9476466540963a4129faf",
+      "equal": true
+    },
+    {
+      "path": "skills",
+      "object": "3cb2725f2b318f7dcfeea4244d5695512f77136d",
+      "equal": true
+    },
+    {
+      "path": "scripts",
+      "object": "902d74ad453e1127ac5124757cd8849d780de2c4",
+      "equal": true
+    },
+    {
+      "path": ".github",
+      "object": "5a4a74222b1a29b70a1f3f5ccacf003eb525a8ed",
+      "equal": true
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "object": "3432ab613e493c84d6eea74cb68d30be08720102",
+      "equal": true
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "object": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+      "equal": true
+    },
+    {
+      "path": "package.json",
+      "object": "88d10438bf85e0131f824c5ec2b9787b97ef39cb",
+      "equal": true
+    },
+    {
+      "path": ".nvmrc",
+      "object": "a45fd52cc5891570d6299fab38643103c3955474",
+      "equal": true
+    }
+  ],
+  "actualReversalTreeExact": true,
+  "trackerBlobsExactBot": true,
+  "perManifest": [
+    {
+      "name": "restored-inputs.json",
+      "files": 1807,
+      "bytes": 44609662
+    },
+    {
+      "name": "font-restored-inputs.json",
+      "files": 37,
+      "bytes": 8052263
+    }
+  ],
+  "uniqueFiles": 1832,
+  "copied": 1820,
+  "alreadyExact": 12,
+  "allHashesEqual": true,
+  "trackedDiffUnchanged": true
+}
