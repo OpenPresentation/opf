@@ -10,6 +10,7 @@ const json=p=>JSON.parse(fs.readFileSync(p,'utf8').replace(/^\uFEFF/,''));
 const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
 const write=(p,v)=>{fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,JSON.stringify(v,null,2)+'\n');};
 const gitHead=repo=>execFileSync('git',['rev-parse','HEAD'],{cwd:repo,encoding:'utf8'}).trim();
+const outputTag=args['output-tag']??'corrected';assert.match(outputTag,/^[a-z0-9-]+$/);
 const verified=[];
 for(const [id,short] of [['lh16-duration','lh16'],['lh34-callouts','lh34']]) {
  const feature=args[short+'-source'],importer=args[short+'-importer']??feature,worker=args.worker;
@@ -50,8 +51,8 @@ for(const [id,short] of [['lh16-duration','lh16'],['lh34-callouts','lh34']]) {
    assert.ok(!diagnostics.some(d=>d.code==='invalid-image-callout-provenance'));semantic={callouts,exactAuthoredFractions:true};
  }
  const proof={featureSourceRevision:gitHead(feature),importerRevision:gitHead(importer),importerCodeSha256:hash(path.join(importer,'packages/pptx/src',short==='lh34'?'image-callout-provenance.js':'index.js')),savedSha256:hash(saved),requestFiles:controls,sourceAndWorkerCode:code,suiteAndCliHashesUnchanged:true,cleanupConfirmed:true,completedNativeActions:report.actionPlan.completed,semantic,diagnostics,nativeSemanticsAccepted:true,visualFontAcceptance:'held; not implied by semantic text edit'};
- write(path.join(attempt,'opf-reimport-corrected.opf.json'),deck);write(path.join(attempt,'opf-reimport-corrected-verification.json'),proof);
+ write(path.join(attempt,'opf-reimport-'+outputTag+'.opf.json'),deck);write(path.join(attempt,'opf-reimport-'+outputTag+'-verification.json'),proof);
  verified.push({id,sourceRevision:proof.featureSourceRevision,importerRevision:proof.importerRevision,sourceAndSnapshotCount:controls.length,codeFiles:code.length,savedSha256:proof.savedSha256,nativeSemanticsAccepted:true});
 }
-write(path.join(root,'independent-verification.json'),{verified,scope:'No Office calls. Independent original/snapshot, sealed suite, frozen source/worker code and saved-file import verification.'});
+write(path.join(root,outputTag==='corrected'?'independent-verification.json':'independent-verification-'+outputTag+'.json'),{verified,scope:'No Office calls. Independent original/snapshot, sealed suite, frozen source/worker code and saved-file import verification.'});
 console.log(JSON.stringify(verified,null,2));

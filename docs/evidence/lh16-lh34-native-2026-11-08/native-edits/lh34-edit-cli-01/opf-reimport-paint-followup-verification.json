@@ -1,0 +1,150 @@
+{
+  "featureSourceRevision": "0a4a909688850637b955664df6d20b5ac2744bd1",
+  "importerRevision": "8a03dfe1f4fa8d60a9869e2553bf023849e36aaf",
+  "importerCodeSha256": "e861652d2073e2ef0460d8c5d26860dbaa56eab76a43899061b6581bdaf419ab",
+  "savedSha256": "e1f8de266a4bec04c54d8b09c32dc46dada8ed1ad0cf5292bbda54b4a38032a8",
+  "requestFiles": [
+    {
+      "name": "source",
+      "path": "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\inputs\\case.pptx",
+      "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\native\\inputs\\input.pptx",
+      "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622",
+      "originalAndSnapshotUnchanged": true
+    },
+    {
+      "name": "actionPlan",
+      "path": "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\inputs\\action-plan.json",
+      "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\native\\inputs\\action-plan.json",
+      "sha256": "88d4418331aa588632775728348833c70ac768d1c0be4dfd950e4541d78876ba",
+      "originalAndSnapshotUnchanged": true
+    },
+    {
+      "name": "verifier",
+      "path": "C:\\opf-work\\rr109-readonly\\packages\\pptx\\test\\native-furniture-control.ps1",
+      "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\native\\inputs\\native-furniture-control.ps1",
+      "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593",
+      "originalAndSnapshotUnchanged": true
+    },
+    {
+      "name": "processHelper",
+      "path": "C:\\opf-work\\rr109-readonly\\packages\\pptx\\test\\native-process.ps1",
+      "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\native\\inputs\\native-process.ps1",
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "originalAndSnapshotUnchanged": true
+    }
+  ],
+  "sourceAndWorkerCode": [
+    {
+      "kind": "feature",
+      "path": "scripts/native-acceptance/run-windows.ps1",
+      "bytes": 14306,
+      "sha256": "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5",
+      "unchanged": true
+    },
+    {
+      "kind": "feature",
+      "path": "spec/schemas/opf.schema.json",
+      "bytes": 286450,
+      "sha256": "04e7d13e192e6b877872118e4557683ce415029b8fb15fac7139f87f73f91871",
+      "unchanged": true
+    },
+    {
+      "kind": "feature",
+      "path": "packages/javascript/src/composition.ts",
+      "bytes": 967040,
+      "sha256": "7a2663638da1efc6c6af91adcea94deef46b5c64fa27e9173ca53a52eda843c3",
+      "unchanged": true
+    },
+    {
+      "kind": "feature",
+      "path": "packages/pptx/src/index.js",
+      "bytes": 462992,
+      "sha256": "13947a40145ef6b02d6987ade61d4fb3a7c4faa5a2b56570f6f36ef71b5b2b78",
+      "unchanged": true
+    },
+    {
+      "kind": "feature",
+      "path": "packages/pptx/src/image-callout-provenance.js",
+      "bytes": 4673,
+      "sha256": "85c5709de287d10f97f4c612b644f69a6aceab8331b9b78b139eb3f65659a463",
+      "unchanged": true
+    },
+    {
+      "kind": "worker",
+      "path": "test/native-furniture-control.ps1",
+      "bytes": 36494,
+      "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593",
+      "unchanged": true
+    },
+    {
+      "kind": "worker",
+      "path": "test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "unchanged": true
+    },
+    {
+      "kind": "worker",
+      "path": "test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027",
+      "unchanged": true
+    },
+    {
+      "kind": "worker",
+      "path": "test/native-furniture-harness-check.ps1",
+      "bytes": 24181,
+      "sha256": "8c060252ecaf8a3c275bc55df9ffe0b5ae3e27b3b8732c7cb5283dd2603d6da8",
+      "unchanged": true
+    }
+  ],
+  "suiteAndCliHashesUnchanged": true,
+  "cleanupConfirmed": true,
+  "completedNativeActions": [
+    {
+      "index": 1,
+      "op": "set-text",
+      "status": "success"
+    },
+    {
+      "index": 2,
+      "op": "set-text",
+      "status": "success"
+    }
+  ],
+  "semantic": {
+    "callouts": [
+      {
+        "x": 0.04,
+        "y": 0.06,
+        "width": 0.38,
+        "height": 0.3,
+        "text": "Native edit\nSecond line"
+      },
+      {
+        "x": 0.58,
+        "y": 0.06,
+        "width": 0.38,
+        "height": 0.3,
+        "text": ""
+      },
+      {
+        "x": 0.2,
+        "y": 0.57,
+        "width": 0.6,
+        "height": 0.34,
+        "text": "Inspection point"
+      }
+    ],
+    "exactAuthoredFractions": true
+  },
+  "diagnostics": [
+    {
+      "code": "image-callout-import-reflow",
+      "message": "Current native callout words and authored fractional frames were recovered. Native text formatting, panel fill/line styling and positions reflow from OPF; review the labels.",
+      "path": "slides.0.image.callouts"
+    }
+  ],
+  "nativeSemanticsAccepted": true,
+  "visualFontAcceptance": "held; not implied by semantic text edit"
+}

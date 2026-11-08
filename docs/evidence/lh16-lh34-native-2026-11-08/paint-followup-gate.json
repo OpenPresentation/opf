@@ -1,0 +1,20 @@
+{
+  "sourceRevision": "8a03dfe1f4fa8d60a9869e2553bf023849e36aaf",
+  "sourceGate": {
+    "passed": true,
+    "seconds": 99.4,
+    "tests": "Original callout suite, actual saved archive, unchanged-text and paint-only blank bodies, seven exact tamper refusals"
+  },
+  "evidenceGate": {
+    "passed": true,
+    "seconds": 66.3,
+    "steps": [
+      "workspace build",
+      "changes",
+      "skill commands",
+      "text"
+    ]
+  },
+  "officeRuns": 0,
+  "scope": "Conservative formatting/paint diagnostic and versioned semantic proof; original failures and earlier proofs preserved."
+}

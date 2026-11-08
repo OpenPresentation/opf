@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "scope": "Evidence only; visual acceptance remains held",
-  "bytePreservation": "Scoped .gitattributes disables line-ending normalization so raw native receipts, sealed code and hash manifests retain exact source bytes.",
+  "bytePreservation": "Scoped .gitattributes preserves all exact source/receipt bytes.",
   "files": [
     {
       "path": ".gitattributes",
@@ -10,8 +10,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 2902,
-      "sha256": "d1fd560dd2e1163186c54a4cc37f8e5a652e699433302b6c19d174ca0d90a7ba"
+      "bytes": 3588,
+      "sha256": "cf1e59de51e8396639bef359b5bd419d71cb3f222283535915222731bc09f2b8"
     },
     {
       "path": "archive-gate.json",
@@ -20,8 +20,8 @@
     },
     {
       "path": "check-native-edits.mjs",
-      "bytes": 5675,
-      "sha256": "f37bea76e2821a47ad43cb6d368955d40dfa6ed61e154eaeb113dfdb4b382d9f"
+      "bytes": 5841,
+      "sha256": "f20cbaaccd763c205a4f8824e40e72a87ea845d8b014705ca980557145d8f351"
     },
     {
       "path": "clean-cli-inputs/lh16-duration/build.json",
@@ -317,6 +317,11 @@
       "path": "font-profile/suite.json",
       "bytes": 6544,
       "sha256": "1d26699d87944071f80baed8ec77687acebbfe30044081b43865174a4b110f3f"
+    },
+    {
+      "path": "independent-verification-paint-followup.json",
+      "bytes": 889,
+      "sha256": "c18baec92afff4ae41b62e84e3be720132de528f982eb12ae75a44dd4dcc26b5"
     },
     {
       "path": "independent-verification.json",
@@ -735,6 +740,16 @@
     },
     {
       "path": "native-edits/lh16-edit-cli-01/opf-reimport-corrected.opf.json",
+      "bytes": 5829,
+      "sha256": "914a34c8519a3c319d9e5bc3b37e13c13c0f64eec1ea9795bbe9e81db2fe6533"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/opf-reimport-paint-followup-verification.json",
+      "bytes": 4840,
+      "sha256": "8d1a86e4826cb01ef98f98104d3f3de2c236050530ffb9211da96daec6d6e9fe"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/opf-reimport-paint-followup.opf.json",
       "bytes": 5829,
       "sha256": "914a34c8519a3c319d9e5bc3b37e13c13c0f64eec1ea9795bbe9e81db2fe6533"
     },
@@ -1164,6 +1179,16 @@
       "sha256": "ff1cdf787991067270f553a3c6f8f7c1f21e5853c667d8c2f4d42e5e4ac8cb48"
     },
     {
+      "path": "native-edits/lh34-edit-cli-01/opf-reimport-paint-followup-verification.json",
+      "bytes": 5006,
+      "sha256": "169857063e269775ecfd67d37354b7053710b8f9dc8500c5843040ebd05c5643"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/opf-reimport-paint-followup.opf.json",
+      "bytes": 6500,
+      "sha256": "ff1cdf787991067270f553a3c6f8f7c1f21e5853c667d8c2f4d42e5e4ac8cb48"
+    },
+    {
       "path": "native-edits/lh34-edit-cli-01/opf-reimport.opf.json",
       "bytes": 6571,
       "sha256": "3c922d637b3d3a841831db851e00c00204915c0c21e102cd28b1e85fcb8c5bc3"
@@ -1309,6 +1334,11 @@
       "sha256": "e9b533d0781dfee9a733741d095a3468e1493e75ee0629752d42eeee052a145a"
     },
     {
+      "path": "paint-followup-gate.json",
+      "bytes": 582,
+      "sha256": "23e33be1c15e3f0c39788d9fc65cf49ff4e1cc008ab0df8de96ebc62062b9989"
+    },
+    {
       "path": "sealed-code/lh16-duration/feature/packages/javascript/src/composition.ts",
       "bytes": 968456,
       "sha256": "4ba311679b29aee7b2d36fc946de7f02a0f4822314a58d4d9dda31640bfa760e"
@@ -1402,6 +1432,11 @@
       "path": "sealed-code/lh34-correction/image-callout-provenance.js",
       "bytes": 5182,
       "sha256": "a01f871335541b7b604751bd629318da2633d06af012a6caf2a2e0c4d98e73ac"
+    },
+    {
+      "path": "sealed-code/lh34-paint-followup/image-callout-provenance.js",
+      "bytes": 5204,
+      "sha256": "e861652d2073e2ef0460d8c5d26860dbaa56eab76a43899061b6581bdaf419ab"
     }
   ]
 }

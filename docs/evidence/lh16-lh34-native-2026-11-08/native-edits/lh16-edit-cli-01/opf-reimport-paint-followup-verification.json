@@ -1,0 +1,140 @@
+{
+  "featureSourceRevision": "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+  "importerRevision": "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+  "importerCodeSha256": "720052921e32371ff3c35e2f8de6e3b27666f121e334e50a7e8b60b07f475ad0",
+  "savedSha256": "32f11c0a738d89620501af39e7b6e73c46d291f661db614bb05678b27ec1c593",
+  "requestFiles": [
+    {
+      "name": "source",
+      "path": "C:\\opf-work\\release-033-artifacts\\lh16-edit-cli-01\\inputs\\case.pptx",
+      "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh16-edit-cli-01\\native\\inputs\\input.pptx",
+      "sha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a",
+      "originalAndSnapshotUnchanged": true
+    },
+    {
+      "name": "actionPlan",
+      "path": "C:\\opf-work\\release-033-artifacts\\lh16-edit-cli-01\\inputs\\action-plan.json",
+      "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh16-edit-cli-01\\native\\inputs\\action-plan.json",
+      "sha256": "08f66acc9405a80ba1bab5040e04fdcbdbf4c67946a3db4052afc18318f1d970",
+      "originalAndSnapshotUnchanged": true
+    },
+    {
+      "name": "verifier",
+      "path": "C:\\opf-work\\rr109-readonly\\packages\\pptx\\test\\native-furniture-control.ps1",
+      "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh16-edit-cli-01\\native\\inputs\\native-furniture-control.ps1",
+      "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593",
+      "originalAndSnapshotUnchanged": true
+    },
+    {
+      "name": "processHelper",
+      "path": "C:\\opf-work\\rr109-readonly\\packages\\pptx\\test\\native-process.ps1",
+      "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh16-edit-cli-01\\native\\inputs\\native-process.ps1",
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "originalAndSnapshotUnchanged": true
+    }
+  ],
+  "sourceAndWorkerCode": [
+    {
+      "kind": "feature",
+      "path": "scripts/native-acceptance/run-windows.ps1",
+      "bytes": 14306,
+      "sha256": "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5",
+      "unchanged": true
+    },
+    {
+      "kind": "feature",
+      "path": "spec/schemas/opf.schema.json",
+      "bytes": 282942,
+      "sha256": "e89dc87eacca8c4bbfc80ae16c61900d7c2ee1b64d91d0d534ffeafbd9511b0e",
+      "unchanged": true
+    },
+    {
+      "kind": "feature",
+      "path": "packages/javascript/src/composition.ts",
+      "bytes": 968456,
+      "sha256": "4ba311679b29aee7b2d36fc946de7f02a0f4822314a58d4d9dda31640bfa760e",
+      "unchanged": true
+    },
+    {
+      "kind": "feature",
+      "path": "packages/pptx/src/index.js",
+      "bytes": 461335,
+      "sha256": "720052921e32371ff3c35e2f8de6e3b27666f121e334e50a7e8b60b07f475ad0",
+      "unchanged": true
+    },
+    {
+      "kind": "feature",
+      "path": "packages/javascript/src/timeline-duration.ts",
+      "bytes": 1201,
+      "sha256": "018e421fd95481b932aa40d2b6b4730e2f332f089d59132cd549a2b0416c35d4",
+      "unchanged": true
+    },
+    {
+      "kind": "worker",
+      "path": "test/native-furniture-control.ps1",
+      "bytes": 36494,
+      "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593",
+      "unchanged": true
+    },
+    {
+      "kind": "worker",
+      "path": "test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "unchanged": true
+    },
+    {
+      "kind": "worker",
+      "path": "test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027",
+      "unchanged": true
+    },
+    {
+      "kind": "worker",
+      "path": "test/native-furniture-harness-check.ps1",
+      "bytes": 24181,
+      "sha256": "8c060252ecaf8a3c275bc55df9ffe0b5ae3e27b3b8732c7cb5283dd2603d6da8",
+      "unchanged": true
+    }
+  ],
+  "suiteAndCliHashesUnchanged": true,
+  "cleanupConfirmed": true,
+  "completedNativeActions": [
+    {
+      "index": 1,
+      "op": "set-text",
+      "status": "success"
+    }
+  ],
+  "semantic": {
+    "events": [
+      {
+        "when": "Week 1",
+        "what": "Discover",
+        "status": "done",
+        "duration": 1
+      },
+      {
+        "when": "Weeks 2–5",
+        "what": "Build in PowerPoint",
+        "status": "current",
+        "duration": 4
+      },
+      {
+        "when": "Week 6",
+        "what": "Launch",
+        "status": "planned"
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "timeline-import-reflow",
+      "message": "Timeline field order, source boundaries and current native text were recovered. Native formatting, positions, marker styling and font theme are not reconstructed; review the reflowed timeline.",
+      "path": "slides.0"
+    }
+  ],
+  "nativeSemanticsAccepted": true,
+  "visualFontAcceptance": "held; not implied by semantic text edit"
+}
