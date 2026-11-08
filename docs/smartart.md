@@ -78,7 +78,7 @@ A tree is one list of up to eight short entries in preorder. The first entry has
 ] }
 ```
 
-Use `venn` with one flat list of one to seven set labels. One to four circles hold their labels inside; five to seven place the labels outside, at the measured native text rectangles. Entry order identifies the sets; the diagram implies no numeric overlap values.
+Use `venn` with one flat list of one to seven set labels. One to four circles hold their labels inside. Five to seven sets use enlarged editable circles with outside labels fitted from the actual font measurements. This OPF adaptation preserves circle overlaps and set order while filling more of the body at the previous type size or larger. Basic Venn native measurements remain a separate, unqualified live reference. When the overlap cannot keep every label readable, the complete set labels use opaque cards or a list with `opf/arrangement-adapted`. Entry order identifies the sets; the diagram implies no numeric overlap values.
 
 ```json
 { "layout": "venn", "title": "Three conditions for a useful pilot", "items": ["Clear scope", "Evidence", "Shared goal"] }

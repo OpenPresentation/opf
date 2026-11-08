@@ -317,7 +317,7 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
       const objectName = name(`node ${node.index}`);
       if(node.background){const objectName=name('rear '+node.index);slide.addShape('roundRect',{...box(node.background),fill:{color:fill},line,rectRadius:inches(node.radius??0),objectName});tag(objectName,'rear',{index:node.index,adjust:node.adjust,preset:'roundRect'});}
       const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex.slice(1):fill,nodeLine=arrangement.kind==='hierarchy'?{...line,color:fill}:line;
-      const alpha=arrangement.kind==='venn'?.5:arrangement.kind==='hierarchy'?.9:1;
+      const alpha=arrangement.kind==='venn'&&node.preset==='ellipse'?.5:arrangement.kind==='hierarchy'?.9:1;
       slide.addShape(node.preset, {...box(node.box), fill: {color:nodeFill,...(alpha===1?{}:{transparency:(1-alpha)*100})}, line:nodeLine, objectName,
         ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {}), ...(node.flipV ? {flipV: true} : {})});
       tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {})});

@@ -67,3 +67,7 @@ LH110positive at-least P2 is corrected in reviewed/folded PR1173 atf2472a4f8db34
 [SH20–22 current draft](sh21-draft.md) records the normal approved034 merge, final40 sampler correction, exact preservation receipt, focused controls and all remaining native limits. Production editable-shape CLI qualification is separated from the frozen diagnostic live packet; every new live domain remains off.
 
 SH21foundation1172cc6fa905 is folded after independent16focusedcontrols/source/11preview review, with explicitdesignhold: org/hierarchy/Venn1–4 acceptedforintegration; productionVenn5–7circleclusters rejected as too small. A NEWderivedadapterwillfillthebody withlargercircles/unchanged-or-larger outside labels, sharedSVG/PPTXgeometry, reportedadaptation andcompletefallbackwhenunfit. Preserve measurednativegeometry/77cbefrozenpacket; allnewlivedomainsOFF. ActualOffice/finalcombinedchecks remainowed. RR1081174f316isalsofolded/frozen; all31OLDSVGvalues unchanged, independent7writer/printercontrols pass, finalpinnedupdatepending.
+
+## Derived Venn5–7 readability
+
+[Separate editable-body adaptation](sh21-venn-readability.md) follows the explicit rejection of the compact5–7production witnesses. Measured native models and old packets stay unchanged; outside labels keep their prior type size or grow. After sheets and actual Office remain separate acceptance gates, with every new live domain off.
