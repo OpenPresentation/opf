@@ -33,3 +33,7 @@ Every new feature still needs its final source/sheet/native acceptance, assemble
 D2; LibreOffice promotion; adding the hosted connector in Claude; uninstalling the local .mcpb; any deploy, DNS change or login. Prepare concrete verified PRs before requesting these actions, and continue independent authorized work. Site main merges can deploy and remain reserved for the owner step.
 
 Never force-push, push folded source branches, merge evidence-only branches, rewrite raster goldens locally, terminate Office, attach to the owner's Office instance, or introduce a new CI polling loop.
+
+## Core 0.33 documentation and artifact preflight
+
+[Core currency handoff](core-033-currency.md) records the narrow current-doc corrections, exact 137-JSON/2-Markdown/36-layout source counts, required post-registry quickstart checks and every E1/E2/E3 comparison/planning artifact obligation. Existing pins already name 0.33; publication and all artifact refresh receipts remain separately owed. The cited old corpus generator is missing and is not replaced with guessed output.

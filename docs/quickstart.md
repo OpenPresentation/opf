@@ -11,8 +11,12 @@ shipped versus deferred.
 
 ## Versions
 
-**Published set (0.33.0):** core, CLI, renderer, PPTX, editor and Gallery, all at
-the shared version **0.33.0**. `node scripts/registry-plan.mjs` prints these releases with their registry `gitHead`;
+**Published set (0.33.0):** the local workflow uses core, CLI, renderer, PPTX,
+editor and Gallery at the shared version **0.33.0**. The seventh package,
+`@openpresentation/mcp@0.33.0`, is optional for this workflow; see the
+[MCP guide](mcp.md) for its server and viewer.
+`node scripts/registry-plan.mjs` prints the six-package consumer set above with
+its registry `gitHead` values; MCP is verified by the release workflow.
 registry identity is separate from the consumer and native checks below. All declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
@@ -24,7 +28,7 @@ npm install @openpresentation/opf@0.33.0 \
   @openpresentation/opf-pptx@0.33.0 \
   @openpresentation/cli@0.33.0 \
   @openpresentation/gallery@0.33.0
-# opf-render 0.26 keeps its converters and font packages as optional peers: install the ones you use
+# Converters and font packages are optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)
 npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 \
   @resvg/resvg-js@^2.6.2 pdf-lib@^1.17.1 sharp@^0.35.5
@@ -35,14 +39,15 @@ names the `npm install` command, so a host that only previews SVG in a browser i
 
 Copy [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json)
 into that project as `deck.opf.json`. That file is a docs fixture, not one of
-the 127 decks in `@openpresentation/opf/examples`. Verify the install came from the registry
+the 137 JSON decks in `@openpresentation/opf/examples` (101 gallery and 36 technical
+decks; the two Markdown decks are outside that catalog). Verify the install came from the registry
 (`package-lock.json` `resolved` URLs start with `https://registry.npmjs.org/`)
 and that you did not add `file:` dependencies on this repository.
 
 The [format card](format-card.md) describes ColorRef, named variables and the
 current source contract. `opf embed` embeds the catalog records a deck uses for
 portable offline authoring; it does not download remote assets. Keep the
-ColorRef docs fixture outside the 127-deck example/golden corpus in this update.
+ColorRef docs fixture outside the bundled examples and renderer golden corpus.
 
 ## The short path
 
@@ -225,4 +230,6 @@ It fails if any package is a `file:` or workspace link.
   links, and Header & footer playground example are already live on
   production; the issue stays open)
 - Archived font-shaping prototypes (not in the published runtime)
-- PDF/UA or PDF/A conformance, general SVG diagrams, and Mermaid
+- PDF/UA or PDF/A conformance. Arbitrary SVG input and Mermaid diagrams are
+  outside this example's checks; see the [diagram guide](diagrams.md) for the
+  supported Mermaid preview and native PowerPoint export.

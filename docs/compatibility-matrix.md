@@ -6,8 +6,10 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 **Published set (0.33.0):** core, renderer, PPTX, editor, CLI, Gallery and MCP,
-all at the shared version 0.33.0. `node scripts/registry-plan.mjs` prints each
-version with the registry `gitHead` of its publisher commit.
+all at the shared version 0.33.0. `node scripts/registry-plan.mjs` prints the
+six-package consumer set (core, renderer, PPTX, editor, CLI and Gallery) with
+each registry `gitHead`; it does not query MCP. The [release workflow](release-process.md)
+verifies all seven packages, including MCP, separately from the consumer checks.
 Earlier matrices and native observations retain their historical identities.
 Complete native compatibility remains a separate gate.
 
@@ -223,7 +225,7 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
-| Bundled examples catalog | `@openpresentation/opf/examples` | **137** decks; the quickstart JSON is a separate docs fixture |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **137 JSON** decks (101 gallery, 36 technical); the two Markdown decks and quickstart JSON are outside this catalog |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Supported theme-slot colors write native `schemeClr` references; arbitrary native Office recoloring and full visual fidelity remain separately scoped. |
 | Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |
