@@ -89,7 +89,7 @@ A deck without front matter starts with its first slide, so a file never begins 
 
 | Part | Syntax | OPF |
 | --- | --- | --- |
-| Options | `<!-- slide: id=cover layout=cover section="Part 1" tag=NEW hidden beat=a beat=b type=chart -->` | `id`, `layout`, `section`, `tag`, `hidden` (`hidden=false` too), `beat` (repeat for several), `type`. Values are bare words or JSON strings. At most one per slide, anywhere in it; written first |
+| Options | `<!-- slide: id=cover layout=cover section="Part 1" tag=NEW hidden beat=a beat=b type=chart -->` | `id`, `layout`, `section`, `tag`, `hidden` (`hidden=false` too), `beat` (repeat for several), `type`, `language` (a BCP-47 tag overriding the deck on this slide). Values are bare words or JSON strings. At most one per slide, anywhere in it; written first |
 | Title | `# Title` | `title`: a string, or `TextRun[]` when the line has [inline formatting](#inline-text). One per slide; closing `#` characters are dropped |
 | Subtitle | `## Subtitle` | `subtitle`, a string or `TextRun[]` like the title. One per slide |
 | Deeper headings | `### Text` | A bold paragraph, with a `heading-demoted` warning |

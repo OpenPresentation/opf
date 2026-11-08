@@ -120,7 +120,7 @@ const storesOnlyWithOrganization = (key, value) => key === 'logo' && typeof valu
 const STYLE_REFERENCES = ['theme', 'colorScheme', 'fontScheme'];
 const SLIDE_STRUCTURE = ['layout', 'type', 'composition'];
 // Slide fields with no native counterpart, restored from the stored value.
-const SLIDE_METADATA = ['section', 'extensions'];
+const SLIDE_METADATA = ['section', 'extensions', 'metadata'];
 const DESIGN_FIELDS = [...DESIGN_REFERENCES, ...COMPOSITION_HINTS, ...BRAND_ASSETS];
 const SLIDE_DESIGN_FIELDS = [...STYLE_REFERENCES, 'background', ...COMPOSITION_HINTS, ...BRAND_ASSETS];
 // Importers up to 0.11.6 reject a document tag whose `design` or `metadata`
@@ -129,7 +129,7 @@ const SLIDE_DESIGN_FIELDS = [...STYLE_REFERENCES, 'background', ...COMPOSITION_H
 // top-level container those importers ignore, and merged back on read. Add
 // every new design or metadata key here, never to the legacy sections.
 const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions'])});
-const SLIDE_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS});
+const SLIDE_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['language'])});
 // RR-59: document-level values the import reads back although export only baked them in from engine defaults: the
 // canonical `$schema`, the package title (`name`), the language the runs carry, and the theme, colour scheme, font scheme
 // and slide size of the generated theme. In `full` mode OPF_DOCUMENT_V1.absent lists the ones the source did not state
@@ -514,6 +514,7 @@ export function documentProvenance(presentation, {mode = 'full', layoutOf = () =
   }
   const slides = presentation.slides.map((slide, index) => {
     const record = {v: 1, slide: index};
+    if (!referencesOnly) record.metadata = {language: own(slide, 'language') ? clone(slide.language) : null};
     for (const key of [...(referencesOnly ? [] : ['id', ...SLIDE_METADATA]), 'beat', ...SLIDE_STRUCTURE]) if (own(slide, key)) record[key] = clone(slide[key]);
     // The record the document embeds for the slide's layout reference, with the group it resolved in: core's provenance of
     // the slide's resolved layout (resolveSlideContext().resolved.provenance.layout), passed in by the exporter.
@@ -1213,6 +1214,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     if (record.beat !== undefined) group(`slides.${index}.beat`, [set(at('beat'), clone(record.beat))]);
     reconcileSection(index, record.section);
     if (record.extensions !== undefined) group(`slides.${index}.extensions`, [set(at('extensions'), clone(record.extensions))]);
+    if (record.metadata && own(record.metadata, 'language')) group(`slides.${index}.language`, [record.metadata.language === null ? remove(at('language')) : set(at('language'), clone(record.metadata.language))]);
     const recordDesign = record.design ?? {};
     for (const key of BRAND_ASSETS) {
       if (recordDesign[key] === undefined) continue;

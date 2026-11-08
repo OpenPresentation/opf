@@ -26,3 +26,5 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides (including `design.listBullet: "none"` for a label with its description, [`slide-design-overrides.opf.json`](./slide-design-overrides.opf.json)).
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.
+
+- `multilingual-slides.opf.json`: English, Arabic, Japanese and French slides in one deck, with a selected Arabic script font and locale-aware numbers.

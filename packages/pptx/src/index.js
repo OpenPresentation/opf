@@ -70,7 +70,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -626,7 +626,9 @@ export async function fromPptx(input, options = {}) {
   if (slidePaths.some(path => /<a:prstGeom\s+prst="(?!rect")|<a:custGeom\b/.test(decodeText(entries[path])))) await loadShapeGeometry();
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage), deckLang: observedLanguage.lang, codeFamily: Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path)) ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    const slideLanguage = observedLanguage.slides?.[index] ?? observedLanguage;
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path)) ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    if (slideLanguage.language !== undefined && slideLanguage.language !== observedLanguage.language) imported.slides[index].language = slideLanguage.language;
   }
   if (datasets) imported.datasets = datasets;
   // A watermark carried identically by every slide is the deck's design.watermark.
@@ -2642,7 +2644,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // SH-09: core's pyramids and matrices, under their entries: live SmartArt (the entries are its nodes) or native shapes (src/smart-art.js).
   // SH-16: each live frame's fallback picture is cut from this slide's preview, drawn once.
   let preview;
-  const liveArrangements = await addArrangements(slide, geometry.arrangements, {context: {...slideContext, direction: geometry.direction, deckLang: context.deckLang}, mode: context.smartArtMode, items: geometry.items, slideIndex,
+  const liveArrangements = await addArrangements(slide, geometry.arrangements, {context: {...slideContext, direction: geometry.direction, deckLang: context.scriptFonts?.slides?.[slideIndex]?.lang ?? context.deckLang}, mode: context.smartArtMode, items: geometry.items, slideIndex,
     records: context.smartArt, tags: context.arrangementTags, smartArtTags: context.smartArtTags, provenance: context.provenanceMode, report: options.onDiagnostic, fontOf: nativeFontOptions,
     fallback: (arrangement, picture) => smartArtFallback(slide, arrangement, picture, () => (preview ??= smartArtSlideSvg(presentation, slideIndex + 1, options)), context, options)});
   const arranged = new Set((geometry.arrangements ?? []).map(arrangement => arrangement.path));
@@ -4871,7 +4873,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   if (!resolvedData.ok) return unplottable(resolvedData.reason, "The chart data cannot be drawn here.", resolvedData.message);
   // LH-60: core's draw plan: the construct both engines draw (a map over categories that are not places as columns, a pie of several
   // series as a doughnut of rings, a box per series, a scatter by position) and the data as drawn.
-  const plan = chartDrawPlan(source, resolvedData, {language: typeof presentation?.language === 'string' ? presentation.language : undefined});
+  const slideIndex = /^slides\.(\d+)\./.exec(path)?.[1];
+  const plan = chartDrawPlan(source, resolvedData, {language: quoteLanguage(presentation, slideIndex === undefined ? undefined : Number(slideIndex))});
   const data = {columns: plan.columns, rows: plan.rows};
   const columnCodes = (plan.formats ?? []).map(excelCode);
   const diagnostics = resolvedData.diagnostics.filter((entry) => entry.severity === 'warning' && entry.code !== 'chart-value-not-numeric');

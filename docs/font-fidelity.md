@@ -23,6 +23,12 @@ The policy below is current. Version-specific measurements and implementation hi
 checkpoints, not transfer-size budgets for every release. The [font roadmap](plans/font-roadmap.md) records historical
 planning; use installed package APIs and measured output when choosing a deployment strategy.
 
+## A different language on one slide
+
+Set `language` on a slide when its language differs from the deck. It accepts the same BCP-47 tag or inline Language object as the deck; omission inherits the deck value. Direction, script fonts, quotation marks and number formatting follow the slide, while an individual text run's `lang` still wins.
+
+For example, an English deck can contain `{ "language": "ar-SA", "design": { "fontScheme": "noto-sans-arabic" }, "text": "اختر خط الشريحة" }`. The Arabic slide reads right to left, measures Noto Naskh Arabic and writes that selected face in PowerPoint's complex-script slot. The deck's other slides retain their own language and font selection. Markdown writes a tag as `<!-- slide: language=ar-SA -->`; an inline Language object uses an `opf-slide` block.
+
 ## Pass `fonts`, otherwise the estimate
 
 Text measurement comes from one place: the `fonts` handle that opf-render's `loadFonts()` returns. Since RR-55 the same

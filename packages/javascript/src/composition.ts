@@ -5658,6 +5658,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
   const scale = Math.min(width, height) / 720;
+  // A directly composed slide has no presentation context; its own language still controls every language-aware rule.
+  if (options.presentation === undefined && slide.language !== undefined) options = { ...options, presentation: { language: slide.language } };
   const deckDirection: TextDirection = options.direction ?? resolveSlideDirection(options.presentation, options.slideIndex);
   const rtl = deckDirection === 'rtl', textDirection = rtl ? 'rtl' as const : undefined;
   // OPF 0.19: a template record (areas and regions) composes through its regions; it is checked first, so an invalid

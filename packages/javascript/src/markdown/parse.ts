@@ -757,6 +757,7 @@ class SlideParser {
     set("layout", options.layout);
     set("section", options.section);
     set("tag", options.tag);
+    set("language", options.language);
     set("title", this.title);
     set("subtitle", this.subtitle);
     // A block with region=<promoted key> (top, left, top:left, ...) is a promoted region of the slide. Any other region

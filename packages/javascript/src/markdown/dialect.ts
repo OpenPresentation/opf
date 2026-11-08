@@ -2,7 +2,7 @@
 // `@openpresentation/opf/source` re-exports it as `markdownDialect`.
 
 /** Keys of `<!-- slide: ... -->`. */
-export const SLIDE_OPTION_KEYS = ["id", "type", "layout", "section", "tag", "hidden", "beat"] as const;
+export const SLIDE_OPTION_KEYS = ["id", "type", "layout", "section", "tag", "hidden", "beat", "language"] as const;
 /** Keys of `<!-- block: ... -->`. */
 export const BLOCK_OPTION_KEYS = ["id", "type", "as", "region"] as const;
 /** Values of `as=` in a block options comment. */
