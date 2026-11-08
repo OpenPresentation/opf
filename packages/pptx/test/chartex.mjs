@@ -171,7 +171,10 @@ for (const id of chartexIds) {
     assert.deepEqual(axes.map(([, axisId]) => axisId), ['0', '1', '2'].slice(0, want.axes));
     // CT_Axis order: scaling, gridlines, tickLabels, then the axis's own txPr (PowerPoint does not inherit the chartSpace txPr for axis labels).
     assert.match(axes[0][2], /^<cx:catScaling gapWidth="[0-9.]+"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: category axis`);
-    assert.match(axes[1][2], id === 'funnel' || id === 'waterfall' ? /^<cx:valScaling\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:valScaling\/><cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
+    const scaling = id === 'histogram' || id === 'pareto' ? '<cx:valScaling max="50" min="-20" majorUnit="20"/>' : '<cx:valScaling/>';
+    assert.ok(axes[1][2].startsWith(scaling), `${id}: exact value scale`);
+    const axisContent = axes[1][2].slice(scaling.length);
+    assert.match(axisContent, id === 'funnel' || id === 'waterfall' ? /^<cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
     for (const [, axisId, body] of axes) assert.equal([...body.matchAll(/<cx:txPr>/g)].length, 1, `${id}: axis ${axisId} carries one txPr`);
     if (id === 'funnel' || id === 'waterfall') assert.match(axes[1][0], /<cx:axis id="1" hidden="1">/, `${id} value axis is hidden (LH-107: a labeled waterfall)`);
     assert.match(owner[2], /<cx:axisId val="0"\/><cx:axisId val="1"\/>$/, `${id}: the series names its axes`);
@@ -183,7 +186,7 @@ for (const id of chartexIds) {
     assert.equal(attribute(attrs, 'ownerIdx'), '0', 'the Pareto line is owned by the columns');
     assert.doesNotMatch(body, /<cx:dataId|<cx:tx>/, 'the owned line has no data of its own');
     assert.match(body, /<cx:spPr><a:ln w="19050"><a:solidFill><a:srgbClr val="[0-9A-F]{6}"\/><\/a:solidFill><\/a:ln><\/cx:spPr><cx:axisId val="0"\/><cx:axisId val="2"\/>$/, 'the line uses the percentage axis');
-    assert.match(axes[2][2], /^<cx:valScaling max="1" min="0"\/><cx:units unit="percentage"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, 'percentage axis');
+    assert.match(axes[2][2], /^<cx:valScaling max="1" min="0" majorUnit="0.2"\/><cx:units unit="percentage"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, 'percentage axis');
   }
   // Colours and text follow the classic chart: series fill, per-point fills for treemap tiles and waterfall signs, label colour and font.
   // RR-96: a colour that is a scheme colour is a schemeClr in both parts (accent for a series, tx1 with a luminance transform for a label), so the
