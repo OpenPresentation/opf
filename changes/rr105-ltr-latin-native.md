@@ -6,3 +6,5 @@ Preserve Latin words and ASCII digit order in measured body text and numbered li
 Import also retains explicit native run languages when every run is an override and no base-language vote exists, including an explicit choice equal to the slide language. Curated language aliases keep their existing native BCP-47 normalization.
 
 Canonically equivalent Latin accents share shaping eligibility without normalizing document text. Mixed RTL paragraphs retain explicitly authored French, English and same-base Arabic proofing languages.
+
+Plain text source-boundary recovery also preserves current native run languages when automatic-proofing ownership is missing, stale or partly edited, retaining exact current text and line boundaries without turning the generated body appearance into authored style.

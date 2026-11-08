@@ -164,3 +164,21 @@ test('mixed RTL paragraphs retain explicit French, English and same-base Arabic 
   const restored=await fromPptx(result.bytes,{catalogs:[gallery]});assert.deepEqual(restored.slides[0].items,document.slides[0].items,'all mixed-run source identities and characters survive');assert.equal(restored.language,'ar-SA');
  }
 });
+
+test('plain source-boundary tags cannot erase current language after automatic-language ownership is stripped or stale',async()=>{
+ const text='Item 1: English.\nهذا سطر عربي يحتفظ بحدود النص.',document={language:'ar-SA',slides:[{title:'عنوان عربي يحافظ على لغة الشريحة',subtitle:'هذا الوصف العربي واضح ويحافظ على اللغة',text}]};
+ const original=unzipSync((await native(document)).bytes);
+ for(const edit of ['strip-only-language','stale-text','stale-alternate','partial-alternate']){
+  const parts={...original};
+  if(edit==='strip-only-language'){for(const [file,bytes]of Object.entries(parts))if(/^ppt\/tags\//.test(file))parts[file]=strToU8(strFromU8(bytes).replace(/<p:tag name="OPF_NATIVE_LANGUAGE_V1" val="[^"]*"\/>/g,''));}
+  else {const xml=strFromU8(parts['ppt/slides/slide1.xml']);parts['ppt/slides/slide1.xml']=strToU8(edit==='stale-text'?xml.replace('English.','Current English.'):edit==='partial-alternate'?xml.replace('altLang="ar-SA"','altLang="he-IL"'):xml.replaceAll('altLang="ar-SA"','altLang="he-IL"'));}
+  assert.ok(Object.entries(parts).some(([file,bytes])=>/^ppt\/tags\//.test(file)&&strFromU8(bytes).includes('OPF_TEXT_V1')),'valid source-boundary ownership is retained');
+  const findings=[],restored=await fromPptx(zipSync(parts),{catalogs:[gallery],onDiagnostic:x=>findings.push(x)});
+  assert.equal(restored.language,'ar-SA');
+  const current=restored.slides[0].text,characters=Array.isArray(current)?current.map(run=>typeof run==='string'?run:run.text).join(''):current;
+  assert.equal(characters,edit==='stale-text'?text.replace('English.','Current English.'):text,'current characters and hard line boundaries stay exact');
+  assert.ok(everyRun(current).some(run=>run.lang==='en-US'&&run.text.includes(edit==='partial-alternate'?'Item 1:':'English.')),'observed current native English is retained while the Arabic slide base remains');
+  assert.ok(everyRun(current).every(run=>Object.keys(run).every(key=>['text','lang'].includes(key))),'plain-boundary recovery does not leak the generated body look as authored style');
+  if(edit!=='partial-alternate')assert.ok(findings.some(x=>x.code===(edit==='strip-only-language'?'native-language-unowned':'native-language-reference-changed')));
+ }
+});

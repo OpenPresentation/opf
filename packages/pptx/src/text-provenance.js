@@ -1,6 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {NATIVE_LANGUAGE_TAG} from './native-language-provenance.js';
+import {joinRichLines} from './rich-heading.js';
 const TAG='OPF_TEXT_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -24,7 +25,25 @@ export function sourceLineParagraphs(ordered,paragraphs,{legacy=false}={}) {
  return [{text,maxFontSize,bullet:false,level:0}];
 }
 
-export function importPlainTextGroups(shapes,paragraphs,relationships,entries,report) {
+// Boundaries own only line joins, never native proofing language. Keep current
+// language without importing the generated body look as authored run styling.
+function currentLanguages(ordered, readBody, expected) {
+ if(!readBody)return undefined;
+ const parts=joinRichLines(ordered,index=>readBody(index,{languageOnly:true}),item=>item.data.separator??'');
+ if(!parts?.some(part=>typeof part==='object'&&typeof part.lang==='string'))return undefined;
+ const text=parts.map(part=>typeof part==='string'?part:part.text).join('');
+ if(text!==expected)throw Error('Current native language text disagrees with source boundaries.');
+ const runs=[];
+ for(const part of parts){
+  const current=typeof part==='object'&&typeof part.lang==='string'?{text:part.text,lang:part.lang}:typeof part==='string'?part:part.text,previous=runs.at(-1);
+  if(typeof current==='string'&&typeof previous==='string')runs[runs.length-1]+=current;
+  else if(typeof current==='object'&&typeof previous==='object'&&current.lang===previous.lang)previous.text+=current.text;
+  else runs.push(current);
+ }
+ return runs;
+}
+
+export function importPlainTextGroups(shapes,paragraphs,relationships,entries,report,readBody) {
  const groups=new Map(),consumed=new Set(),items=[];
  for(const [index,shape]of shapes.entries()) {
   const tags=[];let unreadable=false;
@@ -48,6 +67,8 @@ export function importPlainTextGroups(shapes,paragraphs,relationships,entries,re
    ordered[data.line]=item;
   }
   const restored=sourceLineParagraphs(ordered,paragraphs);
+  const languages=currentLanguages(ordered,readBody,restored[0].text);
+  if(languages)restored[0].richText=languages;
   for(const item of ordered)consumed.add(item.shape);
   items.push({shapes:ordered.map(item=>item.shape),paragraphs:restored});
   if(!groupUnchanged(ordered,paragraphs))report({code:'text-import-reflow',message:'Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.'});

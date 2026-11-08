@@ -1218,7 +1218,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   nativeContext.mediaAssets = media.assets;
   nativeContext.readBody=readBody;
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
-  const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   // LH-108 to LH-110: a chart's value list, stacked names and reference marks are its defaults, not content.
   const chartMarks=importChartMarks(shapes,relationships,entries);
