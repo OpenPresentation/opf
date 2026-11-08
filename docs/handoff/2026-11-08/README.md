@@ -113,3 +113,7 @@ RR105034corpus continuation: [DOT/PlantUML native coverage](rr105-034-diagram-co
 
 - [Native feature reconciliation](native-feature-reconciliation.md): original516/465/201/264observations, exact script failures/OFF boundaries, current production/live/diagram/SH25 qualification still separated.
 
+
+## LH10 body reading-measure correction
+
+[Retained-size reflow and allocator correction](lh10-retained-reading-measure.md) address immutableE1b13/s32 at original30px with no content change. The former measure-growth waiver is superseded by the latest about70character owner direction. Required evidence/final gates and multi-timeline under-capacity findings remain open.
