@@ -1,0 +1,8 @@
+{
+  "status": "cancelled",
+  "acceptance": false,
+  "acceptedResults": 0,
+  "reason": "Coordinator requested bounded shipping-first verification; stopped only owned exec session with Ctrl-C.",
+  "replacement": "bounded-scan.json",
+  "scope": "Structural eligibility scan of all available inputs, real-font comparison of 24 eligible slides."
+}

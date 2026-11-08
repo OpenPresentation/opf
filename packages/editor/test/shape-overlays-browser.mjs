@@ -327,6 +327,14 @@ try {
   await step('deleting a shape deletes the connectors on it', async () => { await selection.locator('[data-role="overlay-remove"]').click(); }, current => !current.slides[0].shapes.some(entry => entry.id === 'bubble' || entry.connector?.to === 'bubble'), { single: true });
   mark('deleting an overlay deletes the connectors on it');
 
+  // SH-25: chart point controls are complete validated transactions, with one-step Undo/Redo.
+  await page.evaluate(() => globalThis.host.session.applyPatch([{op: 'replace', path: '/slides', value: [{title: 'Follow a point', blocks: [{id: 'costs', chart: {type: 'column', data: {columns: ['Country', 'Cost', 'Other'], rows: [['US',20,15],['France',8,12]]}}}], shapes: [{shape: 'ellipse', fill: 'none', stroke: {color: 'accent2', width: 3}, x: .4, y: .2, width: .08, height: .1}]}]}]));
+  await settle(); await select('slides.0.shapes.0');
+  await step('attach to a chart point', async () => {await field('Follow a chart point').selectOption('costs');}, current => current.slides[0].shapes[0].at?.point === 0 && current.slides[0].shapes[0].x === undefined, {single: true});
+  await step('select another chart point', async () => {await field('Chart point').selectOption('1');}, current => current.slides[0].shapes[0].at?.point === 1, {single: true});
+  await step('select another chart series', async () => {await field('Chart series').selectOption('1');}, current => current.slides[0].shapes[0].at?.series === 1, {single: true});
+  await step('select a point edge', async () => {await field('Point edge').selectOption('center');}, current => current.slides[0].shapes[0].at?.edge === 'center', {single: true});
+  await shot('chart-point-controls');
   assert.deepEqual(errors, [], 'no page errors');
   console.log(`shape overlays browser test ok: ${checks.length} checks`);
   for (const name of checks) console.log(`  - ${name}`);

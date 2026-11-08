@@ -1,0 +1,32 @@
+[
+  {
+    "id": "negative-rtl",
+    "inputIdentical": true,
+    "wholePptxIdentical": true,
+    "previewIdentical": false
+  },
+  {
+    "id": "negative-missing",
+    "inputIdentical": true,
+    "wholePptxIdentical": true,
+    "previewIdentical": true
+  },
+  {
+    "id": "negative-authored-options",
+    "inputIdentical": true,
+    "wholePptxIdentical": true,
+    "previewIdentical": true
+  },
+  {
+    "id": "negative-column-control",
+    "inputIdentical": true,
+    "wholePptxIdentical": true,
+    "previewIdentical": true
+  },
+  {
+    "id": "nonnegative-control",
+    "inputIdentical": true,
+    "wholePptxIdentical": true,
+    "previewIdentical": true
+  }
+]

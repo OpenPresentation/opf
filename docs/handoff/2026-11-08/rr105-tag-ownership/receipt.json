@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "freshMain": "9545016583ccfa151077cda4d51043ac6505a140",
+  "integrationBase": "adb727473ef4670314da44b324e852687ef1b38d",
+  "frozenScalarDependency": "e7a5e29c25b33a3718e35767d0d3bec23937e7ed",
+  "assembly": "aad37e99496215466bb718ca16ba044db294556f",
+  "beforeControlCommit": "fccf62cbcb9bfdcb442880b64486bc5fa99828c8",
+  "sourceAndControlCommit": "7195bcc439b3d2d56e8d66172782eb4730f9c992",
+  "runtime": {
+    "node": "v24.20.0",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "focusedPassed": 16,
+  "combinedPassed": 47,
+  "before": {
+    "tests": 15,
+    "passed": 2,
+    "failed": 13,
+    "genuineOwnershipAndSourceFailures": 11,
+    "testConstructionCorrections": [
+      "A redundant explicit en-US run.lang was initially required after current native base became en-US; coordinator approved exact current-text/effective-base/finding assertion plus separate Arabic-surrounding explicit override control.",
+      "Initial moved selector changed root spTree group origin rather than actual p:sp. Failed run retained; selector tightened to actual shape geometry."
+    ]
+  },
+  "nativeFixtures": "packages/pptx/test/fixtures/rr105-tag-ownership/receipt.json",
+  "nativeCase11": "Both immutable original and actual saved archive deep-equal complete authored source.",
+  "nativeCase07": "Both old archives retain exact existing observed two-string form; no scalar intent was present.",
+  "exportArchives": {
+    "cases": 7,
+    "completeByteIdentity": true,
+    "hashes": {
+      "case11": "475d1de07b59559ff5ebd5c6cc79c4a0beed08afd4d884cbafe4127dde503ab1",
+      "case07-scalar": "d6d4a28ab17acf5040efaf03f0d46574e45b31d7b4d29ce0a2daceff4acd891b",
+      "case07-array": "9ff9124f7371cfdf861798671d9eb56545fb54212e7f2cab73b7316d3f737157",
+      "ltr": "f7bcc3bd61bb1a38bc68aba53f1a41ac43416d84a18b67653467c011bfa1dfca",
+      "rtl-explicit-ar": "0861d80d2b438cfdabf75e40c1455cc2702976296090b1c5f869d01a513160b4",
+      "body-fr": "6facc9880600d88c32389a89b348a14e08c928a296b6b44186672622e6e8837b",
+      "two-slides": "df7ace668f7757b935c39ad5546b4ea018c80bbfcbacd4a2988a01e6098b0a0b"
+    }
+  },
+  "nativeAcceptance": false,
+  "nativeLimit": "Read-only import closure only. No Office run or new display/metadata output; native09/10 glyph order and07 Arabic-prefix visibility remain coordinator-owned blockers.",
+  "productionAndTestSha256": {
+    "packages/pptx/src/document-provenance.js": "c7fbed43fcd0acd162867f75c6635cda799ce9fd7c32494871528f0b3d6a3c33",
+    "packages/pptx/src/index.js": "5884dde54559e452610f9772b15192b4dc2f7acf9f07110abe9f18e09463cffd",
+    "packages/pptx/src/script-fonts.js": "fb8ec017faa680a4c24e19308da0fad7e2cc594d5e6e81889de09be87b3b99aa",
+    "packages/pptx/test/rr-105-tag-ownership.mjs": "281923aafcdf438ce73ccb6aa14bdb43aa2f839be6608a2b5f38e64a7f22eae6"
+  },
+  "files": {
+    "before.log.gz": {
+      "sha256": "12809ce546edf62c4e46d6e425eebc3dc929c3c9349d78db396db6c84e929f3c",
+      "bytes": 1658,
+      "rawSha256": "a26f705c0c6c76e68eef37ff2f2fb696483ae724621e8aaf8ee680c47a37e985",
+      "rawBytes": 11810
+    },
+    "moved-selector-first-failure.log.gz": {
+      "sha256": "ff850ed3a5929fe0da0ed0952306f75d8158d42b4f41f184eece550e1a53f5e2",
+      "bytes": 2180,
+      "rawSha256": "04177b0824c8166d9f857c46fe69b5a2a3d37f8bc1bfb5033b311bf3d68e9e9c",
+      "rawBytes": 5316
+    },
+    "focused-final.log.gz": {
+      "sha256": "0769dfad4568c2e70ac0fd888b3ee30a3f5b24368b5e4a64321f6e412a735e1d",
+      "bytes": 1896,
+      "rawSha256": "85b47a30d10b5a722272d3c7e1518ee6f28be031291ba6feab1a1fb8244a5d32",
+      "rawBytes": 4720
+    },
+    "exports-before.json": {
+      "sha256": "d5d2eb61966e54321582a3b9585fc7d075f85785a48e580c659625acdc4187da",
+      "bytes": 587
+    },
+    "exports-after.json": {
+      "sha256": "d5d2eb61966e54321582a3b9585fc7d075f85785a48e580c659625acdc4187da",
+      "bytes": 587
+    },
+    "identity-producer.mjs": {
+      "sha256": "27e65455e95be38a8524e2636f4f9e0140854a58e75cf59c47de2e7267095ffd",
+      "bytes": 1829
+    },
+    "identity-producer-executed.mjs.gz": {
+      "sha256": "19aefee04f305b7f630051dfec4f0df6bdda4fdc89c5155ed6c6ad5d4904efb3",
+      "bytes": 937,
+      "rawSha256": "92bff1f750a1e6b95b24ed8b1ddbb58ef3b880fe887858b4bd97455131541351",
+      "rawBytes": 1830
+    },
+    "exact-input-hydration.json.gz": {
+      "sha256": "8726bf554ea5997f05e27e2baa662ed619f721988077b17e33a9dcf674921c10",
+      "bytes": 140182,
+      "rawSha256": "5ed3cec4b8b44a924dffd8764c9a3a4f1ab27feff4b7d70cf87ace99085b753b",
+      "rawBytes": 821002
+    }
+  }
+}

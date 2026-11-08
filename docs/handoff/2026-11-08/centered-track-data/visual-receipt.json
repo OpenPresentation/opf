@@ -1,0 +1,420 @@
+{
+  "scope": "Four actual measured before/after allowed-drag cases; no native equivalence or glyph-position identity during deliberate reflow; no Claude panel for synthetic fixture",
+  "node": "v24.20.0",
+  "execPath": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+  "sheetSha256": "9e033947cdcab7a53937e83954d1e2aa2a6df15d982135e4a2efecb9256262f0",
+  "records": [
+    {
+      "id": "en-first-up",
+      "language": "en",
+      "boundary": 0,
+      "delta": -0.1,
+      "fonts": "actual pinned Office visual replacement pack + per-document automatic scripts; no system font discovery",
+      "atRestExact": true,
+      "weights": [
+        5.5,
+        2.334,
+        5.834
+      ],
+      "before": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line",
+          "box": {
+            "x": 57.6,
+            "y": 278.46,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Another short line",
+          "box": {
+            "x": 57.6,
+            "y": 370.78,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Third",
+          "box": {
+            "x": 57.6,
+            "y": 463.1,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "after": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 187.888499
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Another short line",
+          "box": {
+            "x": 57.6,
+            "y": 359.368499,
+            "width": 1164.8,
+            "height": 79.733047
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Third",
+          "box": {
+            "x": 57.6,
+            "y": 463.101545,
+            "width": 1164.8,
+            "height": 199.298455
+          },
+          "fontSize": 56
+        }
+      ],
+      "beforeDividers": [
+        0.48163888888888884,
+        0.6098611111111111
+      ],
+      "afterDividers": [
+        0.4657895815042435,
+        0.6098632572431958
+      ],
+      "images": [
+        {
+          "side": "before",
+          "svgSha256": "c8edafad3d3cc86016f5b2941772ff2f42f8f161622d1dc64f64043ab1bf36e3",
+          "pngSha256": "a814e2fd24f8496f04ef5e07b02bd661b42db95fdc55fe66bccfb741b4ee36ef"
+        },
+        {
+          "side": "after",
+          "svgSha256": "db669007bcf367b0ec9848615b74d899aac04ce216c0558abfd834be76016b31",
+          "pngSha256": "9f4d300ebdab5dd920d3d5af2902810f5f21ed038e2f28f10e1d9c7b47f19ba2"
+        }
+      ]
+    },
+    {
+      "id": "en-last-down",
+      "language": "en",
+      "boundary": 1,
+      "delta": 0.1,
+      "fonts": "actual pinned Office visual replacement pack + per-document automatic scripts; no system font discovery",
+      "atRestExact": true,
+      "weights": [
+        5.834,
+        2.5,
+        5.334
+      ],
+      "before": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line",
+          "box": {
+            "x": 57.6,
+            "y": 278.46,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Another short line",
+          "box": {
+            "x": 57.6,
+            "y": 370.78,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Third",
+          "box": {
+            "x": 57.6,
+            "y": 463.1,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "after": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 199.298455
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Another short line",
+          "box": {
+            "x": 57.6,
+            "y": 370.778455,
+            "width": 1164.8,
+            "height": 85.403863
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Third",
+          "box": {
+            "x": 57.6,
+            "y": 480.182318,
+            "width": 1164.8,
+            "height": 182.217682
+          },
+          "fontSize": 56
+        }
+      ],
+      "beforeDividers": [
+        0.48163888888888884,
+        0.6098611111111111
+      ],
+      "afterDividers": [
+        0.4816367427568042,
+        0.6335865525314603
+      ],
+      "images": [
+        {
+          "side": "before",
+          "svgSha256": "c8edafad3d3cc86016f5b2941772ff2f42f8f161622d1dc64f64043ab1bf36e3",
+          "pngSha256": "a814e2fd24f8496f04ef5e07b02bd661b42db95fdc55fe66bccfb741b4ee36ef"
+        },
+        {
+          "side": "after",
+          "svgSha256": "4c9609974c886be97133890f4f8e032a65dd0509194ca6a490c41c6df0d79b32",
+          "pngSha256": "fcbaae7ec2e23978c0b9589ec1deab0a2704d72500ca67621dac4aaf1816f887"
+        }
+      ]
+    },
+    {
+      "id": "ar-first-up",
+      "language": "ar",
+      "boundary": 0,
+      "delta": -0.1,
+      "fonts": "actual pinned Office visual replacement pack + per-document automatic scripts; no system font discovery",
+      "atRestExact": true,
+      "weights": [
+        5.5,
+        2.334,
+        5.834
+      ],
+      "before": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "نص قصير 1",
+          "box": {
+            "x": 57.6,
+            "y": 278.46,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "نص قصير 2",
+          "box": {
+            "x": 57.6,
+            "y": 370.78,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "نص قصير 3",
+          "box": {
+            "x": 57.6,
+            "y": 463.1,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "after": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "نص قصير 1",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 187.888499
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "نص قصير 2",
+          "box": {
+            "x": 57.6,
+            "y": 359.368499,
+            "width": 1164.8,
+            "height": 79.733047
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "نص قصير 3",
+          "box": {
+            "x": 57.6,
+            "y": 463.101545,
+            "width": 1164.8,
+            "height": 199.298455
+          },
+          "fontSize": 56
+        }
+      ],
+      "beforeDividers": [
+        0.48163888888888884,
+        0.6098611111111111
+      ],
+      "afterDividers": [
+        0.4657895815042435,
+        0.6098632572431958
+      ],
+      "images": [
+        {
+          "side": "before",
+          "svgSha256": "e800c2f71929c3090ab02f8ca2f605fca96d647ffc0a781db754dd2558237acc",
+          "pngSha256": "87ea51a57ce1dca8303560f16079c2a6c242491ad09dff0e28f8b55c5aca2326"
+        },
+        {
+          "side": "after",
+          "svgSha256": "9f3df5beba0982ef0875db63ee790d537628a4a076994907a3f02f33b6b241d8",
+          "pngSha256": "e4ccff3c6e021842caf1a6dc8b7c1c2672690787557faec6bbde1a3394c2af81"
+        }
+      ]
+    },
+    {
+      "id": "ja-last-down",
+      "language": "ja",
+      "boundary": 1,
+      "delta": 0.1,
+      "fonts": "actual pinned Office visual replacement pack + per-document automatic scripts; no system font discovery",
+      "atRestExact": true,
+      "weights": [
+        5.834,
+        2.5,
+        5.334
+      ],
+      "before": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "短い文章 1",
+          "box": {
+            "x": 57.6,
+            "y": 278.46,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "短い文章 2",
+          "box": {
+            "x": 57.6,
+            "y": 370.78,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "短い文章 3",
+          "box": {
+            "x": 57.6,
+            "y": 463.1,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "after": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "短い文章 1",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 199.298455
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "短い文章 2",
+          "box": {
+            "x": 57.6,
+            "y": 370.778455,
+            "width": 1164.8,
+            "height": 85.403863
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "短い文章 3",
+          "box": {
+            "x": 57.6,
+            "y": 480.182318,
+            "width": 1164.8,
+            "height": 182.217682
+          },
+          "fontSize": 56
+        }
+      ],
+      "beforeDividers": [
+        0.48163888888888884,
+        0.6098611111111111
+      ],
+      "afterDividers": [
+        0.4816367427568042,
+        0.6335865525314603
+      ],
+      "images": [
+        {
+          "side": "before",
+          "svgSha256": "49e4d550f07d64f157b76467e7580dcf22ec912d72e393a8f75b66c89c1e063f",
+          "pngSha256": "159e6c7e252994e24ffdc277f3e23cd9b0b45d2fde926cdaef80e6ec17c79bab"
+        },
+        {
+          "side": "after",
+          "svgSha256": "8d0840739e058cc149d3f6493d0f1b87704718703bf11c473dff6473a6c0b9b8",
+          "pngSha256": "e9bb47a5169b74121251f64b1da7d312148128b6a095a4d95e34527db67170af"
+        }
+      ]
+    }
+  ]
+}

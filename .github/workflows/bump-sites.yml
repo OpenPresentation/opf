@@ -13,11 +13,11 @@ name: Bump sites
 #          --opf opf`, scripts/opf-bump.mjs of the site: its pins, its lockfile, every file it generates from the release, and the
 #          checks of its own CI that read them, so the pull request needs no human edit to be green), the branch bot/opf-vX.Y.Z and the
 #          pull request. A patch bump (the same major and minor) is labeled `auto-merge`, a minor or major bump `needs-review` (D19).
-#          An existing branch and pull request are updated, an older open bump pull request is closed as superseded. Release facts
+#          An existing open branch is updated through normal merges, closed heads are refused, and an older open bump pull request is closed as superseded. Release facts
 #          (publication times, summaries) come from the registry and from the GitHub release of the tag; the pptx-gallery editor bundle
 #          (public/opf-editor, data/opf-spec.json) from scripts/vendor-gallery-editor.mjs of the release tag in the `opf` checkout.
 #          The App token is not in the environment of the site's script (the site is checked out without credentials, the script runs
-#          its dependencies' install without lifecycle scripts) and is used only to push and to open the pull request.
+#          its dependencies' install without lifecycle scripts) and is used only for history fetches, a normal push and the pull request.
 #
 # This workflow only opens and labels the pull requests. It never merges one and never calls `gh pr merge --auto`: the sites are
 # private repositories in a Free-plan organization (no rulesets, no required checks), so the merge is the site's own workflow
@@ -211,16 +211,36 @@ jobs:
             git diff -- . ':!pnpm-lock.yaml' ':!package-lock.json' | head -200 || true  # head closes the pipe early on a long diff (SIGPIPE, exit 141 under pipefail)
             exit 0
           fi
+          # BEGIN history-preserving publication
+          closed="$(gh pr list --repo "$SITE" --head "$branch" --state all --limit 100 --json state --jq '[.[] | select(.state != "OPEN")] | length')"
+          [ "$closed" = 0 ] || { echo '::error::Refusing to update a closed or merged bump head; use a fresh reviewed branch.'; exit 1; }
           git config user.name "opf-release[bot]"
           git config user.email "opf-release[bot]@users.noreply.github.com"
-          git checkout -B "$branch"
+          git checkout -b "$branch"
           git add -A
           git commit -m "$title"
-          # The token authenticates this fetch and this push only (the site was checked out without credentials).
+          # The site generator already ran on the trusted default branch. Merge reviewed branch history only after that execution.
           auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           echo "::add-mask::$auth"
-          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch origin "$branch" 2>/dev/null || true
-          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push --force-with-lease="$branch" origin "$branch"
+          existing=false
+          if git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" ls-remote --exit-code --heads origin "refs/heads/$branch" >/dev/null; then
+            existing=true
+          else
+            status=$?
+            [ "$status" -eq 2 ] || exit "$status"
+          fi
+          depth=()
+          [ "$(git rev-parse --is-shallow-repository)" = false ] || depth=(--unshallow)
+          refs=("refs/heads/$BASE:refs/remotes/origin/$BASE")
+          [ "$existing" = false ] || refs+=("refs/heads/$branch:refs/remotes/origin/$branch")
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch "${depth[@]}" origin "${refs[@]}"
+          git merge --no-edit "origin/$BASE"
+          [ "$existing" = false ] || git merge --no-edit "origin/$branch"
+          # Recheck just before pushing; neither a folded head nor a concurrent non-fast-forward update may be overwritten.
+          closed="$(gh pr list --repo "$SITE" --head "$branch" --state all --limit 100 --json state --jq '[.[] | select(.state != "OPEN")] | length')"
+          [ "$closed" = 0 ] || { echo '::error::Bump head closed during preparation; nothing is pushed.'; exit 1; }
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$branch"
+          # END history-preserving publication
           # The labels must exist before a pull request can carry them.
           gh label create auto-merge --repo "$SITE" --force --color 0E8A16 --description "A patch bump of the OPF packages: merged by the site's CI once build-and-smoke passed" >/dev/null
           gh label create needs-review --repo "$SITE" --force --color D93F0B --description "A minor or major bump of the OPF packages: review it, then merge by hand" >/dev/null

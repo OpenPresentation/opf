@@ -1,0 +1,200 @@
+[
+  {
+    "PR": 1204,
+    "Ancestor": true,
+    "Head": "203879c982ddc7cc5886b78329643cab7049d5f2",
+    "Title": "RR-105: qualify a separately owned pinned Roboto Mono profile"
+  },
+  {
+    "PR": 1201,
+    "Ancestor": true,
+    "Head": "58cc9cdc27d0f6a3180f35a65b203b80ade803dd",
+    "Title": "RR-20: use Windows directory junctions in the CodeMirror fixture"
+  },
+  {
+    "PR": 1200,
+    "Ancestor": true,
+    "Head": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+    "Title": "RR-105: Add bounded read-only whole-slide native survey"
+  },
+  {
+    "PR": 1198,
+    "Ancestor": true,
+    "Head": "fcb18d4afb9ba85cfc904c9ca9196abff83ce647",
+    "Title": "RR-20: resolve archive reviewer runtimes through Node ESM"
+  },
+  {
+    "PR": 1193,
+    "Ancestor": true,
+    "Head": "09bb7cf19d67ae5dc02122d6df113ef77f7f6611",
+    "Title": "RR-20: preserve reviewed site bump history without force pushes"
+  },
+  {
+    "PR": 1181,
+    "Ancestor": true,
+    "Head": "34ae758d71abb77845d6b3feb08d2d53308f3a99",
+    "Title": "RR-20: add verified registry E1 comparison refresh route"
+  },
+  {
+    "PR": 1165,
+    "Ancestor": true,
+    "Head": "8a03dfe1f4fa8d60a9869e2553bf023849e36aaf",
+    "Title": "LH-34: retain callouts after native empty-panel normalization"
+  },
+  {
+    "PR": 1155,
+    "Ancestor": true,
+    "Head": "0a4a909688850637b955664df6d20b5ac2744bd1",
+    "Title": "LH-34: readable image callouts as real SVG and native editable text"
+  },
+  {
+    "PR": 1151,
+    "Ancestor": false,
+    "Head": "dc3d2b682c8cac10d28752f61861b94932a4d1b3",
+    "Title": "RR-105: archive light-font and localized-status native acceptance"
+  },
+  {
+    "PR": 1150,
+    "Ancestor": true,
+    "Head": "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+    "Title": "LH-16: proportional timeline periods with readable native labels"
+  },
+  {
+    "PR": 1148,
+    "Ancestor": true,
+    "Head": "3e20cd6e8f47629e4f5d55ee4534f863d7903f6b",
+    "Title": "SH-23: qualify added SmartArt nodes after save/reopen"
+  },
+  {
+    "PR": 1147,
+    "Ancestor": false,
+    "Head": "e1f8a0921640f2b4100d6807fc3590dbe26abeed",
+    "Title": "RR-105: retain mixed-language native save witnesses"
+  },
+  {
+    "PR": 1144,
+    "Ancestor": true,
+    "Head": "b9642636e297a1d2dfbf65cb77bea133841beee1",
+    "Title": "LH-121: localize generated timeline status words"
+  },
+  {
+    "PR": 1143,
+    "Ancestor": true,
+    "Head": "cabd3c8a03d02255329edd2352eb1e39df7fb40c",
+    "Title": "RR-107: Attach checked MCP bundles to releases"
+  },
+  {
+    "PR": 1142,
+    "Ancestor": true,
+    "Head": "6f46dd2255b27abb4af7ecbfaf2e07ec5fba34a6",
+    "Title": "LH-177: preserve lightweight named font emphasis and record Yu Gothic gap"
+  },
+  {
+    "PR": 1141,
+    "Ancestor": true,
+    "Head": "dde3809913e9d2e38d9c199f67ece8741426067e",
+    "Title": "LH-106, LH-178: resolve and preserve each slide language"
+  },
+  {
+    "PR": 1136,
+    "Ancestor": true,
+    "Head": "5ba72b90d1fbf9919550e066da0ce6e474826539",
+    "Title": "Docs: the never-shrink audit, its evidence and the LH-186 review"
+  },
+  {
+    "PR": 1135,
+    "Ancestor": true,
+    "Head": "91c07d230e0ccab6c568ad3c5c975ac56be2c95f",
+    "Title": "LH-80: a table beside a picture track may wrap a cell onto two lines when no track keeps every cell on one"
+  },
+  {
+    "PR": 1134,
+    "Ancestor": true,
+    "Head": "f00b59a90b42d54ec4e5116f89f09d2a831c2bee",
+    "Title": "RR-105/SH-20..23: COM evidence and qualification results (handoff)"
+  },
+  {
+    "PR": 1132,
+    "Ancestor": true,
+    "Head": "21b747c2f2676ecb9c7f94a5e9d5e0d62c88b9a8",
+    "Title": "RR-106: opf-preview-fonts --fontconfig writes the font-policy aliases; charts: picture for LibreOffice"
+  },
+  {
+    "PR": 1131,
+    "Ancestor": true,
+    "Head": "aa680dcfabcce0f34495d0c820b484d10c40adcd",
+    "Title": "LH-69: a placed region's short text draws as a tile"
+  },
+  {
+    "PR": 1130,
+    "Ancestor": true,
+    "Head": "0b661cad609bdde72d4a17f6780337fcfc8e91fd",
+    "Title": "LH-30: an optional template group whose variables are all unfilled collapses whole"
+  },
+  {
+    "PR": 1129,
+    "Ancestor": true,
+    "Head": "3e64e6a86583940f55a33ceb0e81ca3d0ae95b64",
+    "Title": "LH-61, LH-73: close LH-61 (nothing left); LH-73's caption form decided, not built"
+  },
+  {
+    "PR": 1126,
+    "Ancestor": true,
+    "Head": "9570ebea55036ec3bca8687e6f0e21f74b8d1f44",
+    "Title": "SH-08: SmartArt PowerPoint users made imports into OPF"
+  },
+  {
+    "PR": 1124,
+    "Ancestor": true,
+    "Head": "84d309869cce3df112ee45be820dd663368cf65d",
+    "Title": "LH-102: under-filled automatic stacks and promoted-region bodies center"
+  },
+  {
+    "PR": 1123,
+    "Ancestor": true,
+    "Head": "67490486efa29af76b45d060526642dd53aabd15",
+    "Title": "LH-46: a closing's details draw as a lead plus cards"
+  },
+  {
+    "PR": 1119,
+    "Ancestor": true,
+    "Head": "4d5905db4bb515f79ef5beeca6d8946cec7cb166",
+    "Title": "SH-13: PlantUML diagrams, read by OPF and drawn by pele"
+  },
+  {
+    "PR": 1118,
+    "Ancestor": true,
+    "Head": "c4b0227f58bd934499ca5a85271f982fd3f847b0",
+    "Title": "LH-110: reference lines from English number words and German, French, Spanish, Italian, Portuguese and Dutch titles"
+  },
+  {
+    "PR": 1117,
+    "Ancestor": true,
+    "Head": "6e6102af6e099e352d155166ffe57fd674b23fe5",
+    "Title": "RR-106: unique ids across the presentation when import binds connectors (fixes #1103)"
+  },
+  {
+    "PR": 1114,
+    "Ancestor": true,
+    "Head": "b7aff87f8b9e65d9acd526dd90fd94f3d1e38511",
+    "Title": "RR-105: native body wrap margin (#1089) and small-run title baseline (#1091)"
+  },
+  {
+    "PR": 1109,
+    "Ancestor": true,
+    "Head": "36979baa67540ce35ad340af31d85b53365a6378",
+    "Title": "SH-12: Graphviz DOT diagrams, read by OPF and laid out by pele"
+  },
+  {
+    "PR": 1098,
+    "Ancestor": true,
+    "Head": "b425ae984ccd96f76e99c563c737ba3ad91977e1",
+    "Title": "LH-179: the editor browser suites run on Windows, with a nightly Windows leg"
+  },
+  {
+    "PR": 1084,
+    "Ancestor": true,
+    "Head": "3ba3dee92eeac29cbb5b7aa10733960e15d7fba0",
+    "Title": "RR-106: LibreOffice qualification of the PPTX export (opf#926)"
+  }
+]

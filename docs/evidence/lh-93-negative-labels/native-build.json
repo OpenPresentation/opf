@@ -1,0 +1,88 @@
+{
+  "revision": "6965182a94c1f943f1dccc2763b97bab9db035d2",
+  "opfVersion": "0.34.0-preparation",
+  "route": "maintained CLI convert; date2026-11-08; PNG scale0.5; matching prepared office/visual/scripts:auto fonts",
+  "decks": [
+    {
+      "id": "negative-missing",
+      "source": "C:\\opf-work\\lh-93-negative-labels\\docs\\evidence\\lh-93-negative-labels\\after\\negative-missing.pptx",
+      "sourceCommit": "6965182a94c1f943f1dccc2763b97bab9db035d2",
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/negative-missing",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/negative-missing/slide-1.png",
+          "sha256": "03a6a32c1fc468c1bdcc8879d6af48539815d70f3ff7080d303807d310081608",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/negative-missing.pptx",
+          "ok": true,
+          "sha256": "a7328699bdc8d29cd1abca1deed92cc847465487bc14fda560aafbf1bcc3619f"
+        }
+      ]
+    },
+    {
+      "id": "negative-authored-options",
+      "source": "C:\\opf-work\\lh-93-negative-labels\\docs\\evidence\\lh-93-negative-labels\\after\\negative-authored-options.pptx",
+      "sourceCommit": "6965182a94c1f943f1dccc2763b97bab9db035d2",
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/negative-authored-options",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/negative-authored-options/slide-1.png",
+          "sha256": "9aa76cb7bc988e6298afa141b43e2dab28deb38a3fe0a3c00829c897114329ec",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/negative-authored-options.pptx",
+          "ok": true,
+          "sha256": "27ef72cbd7ba9c12bc8cafcb7850146d53407345cc1319c9cc77c0a5328ab614"
+        }
+      ]
+    },
+    {
+      "id": "negative-rtl",
+      "source": "C:\\opf-work\\lh-93-negative-labels\\docs\\evidence\\lh-93-negative-labels\\after\\negative-rtl.pptx",
+      "sourceCommit": "6965182a94c1f943f1dccc2763b97bab9db035d2",
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/negative-rtl",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/negative-rtl/slide-1.png",
+          "sha256": "2759c642899da9260909a4ad7fe838ab6e9aebd38ffa14d1f555f7ae18fe8d84",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/negative-rtl.pptx",
+          "ok": true,
+          "sha256": "cc4b4edb0c6c16f252b3d67d573bee299419ba3125c64981c3259d90d81c1998"
+        }
+      ]
+    }
+  ]
+}

@@ -13,8 +13,8 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `text` | `text` | Plain string or `TextRun[]`. |
 | `bullets` | `text` | Prose bullets: plain talking points, usually `string[]`. |
 | `items` | `list` | Structured list: entries that share a shape or carry a `description`; `string[]` or `ListItem[]`. See [items versus bullets](#items-versus-bullets). |
-| `image` | `image` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
-| `video` | `video` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
+| `image` | `image` | Asset string shorthand or an image object with `src`, optional metadata and `callouts` (plain text panels over the picture). |
+| `video` | `video` | Asset reference shown as a media placeholder; an HTTP(S) source links from the PPTX. No embedded playback. See [Video references](#video-references). |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, `filename`, and `highlight`. |
@@ -22,6 +22,10 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `quote` | `quote` | String shorthand or `Quote` object with `text` (string or `TextRun[]`), `attribution`, `role`, `photo`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 | `diagram` | `diagram` | Mermaid source string shorthand or `Diagram` object with `source`, `syntax` and `alt`. See [Diagram](#diagram). |
+
+## Video references
+
+A `video` accepts an asset string or an `Asset` object with `src` and optional metadata. The preview draws a media placeholder with a play badge and a caption, not a player. PPTX export writes the same editable shapes and caption, with a hyperlink when the resolved source is HTTP(S); local references remain captions. It does not fetch or embed a video file or create a YouTube/Vimeo player. MP4/WebM sources are references, not playable media inside the exported deck. Keep that limitation beside any video example.
 
 ## Items versus bullets
 
@@ -344,7 +348,7 @@ A testimonial with room draws the photo as a tall portrait beside the quote inst
 
 ## Timeline
 
-Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, `description` and `status`. `status` is `done`, `current` or `planned` and marks progress: `done` is a filled marker with normal text, `current` ("we are here") is a ringed marker with a bold label, and `planned` is a hollow outlined marker with muted text. An event without a status draws as a plain filled marker. The connector is drawn in the primary color up to the current event (to the last done one when none is current), and an English deck adds a status word (Done, Current, Planned) under each label when the timeline keeps its size with them. Schedule health (at risk, blocked) is not a status; say it in the event text. See [Dynamic composition](dynamic-composition.md#timeline-internals) for the exact drawing.
+Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, `description` and `status`. `status` is `done`, `current` or `planned` and marks progress: `done` is a filled marker with normal text, `current` ("we are here") is a ringed marker with a bold label, and `planned` is a hollow outlined marker with muted text. An event without a status draws as a plain filled marker. The connector is drawn in the primary color up to the current event (to the last done one when none is current), and a deck with a supported localized vocabulary adds a status word under each label when the timeline keeps its size with them. English uses Done, Current and Planned. Regional variants share their language vocabulary; Chinese scripts have distinct words. Unsupported generated translations keep the status markers and progress without inserting English, and authored event text stays intact. See [localized status words](dynamic-composition.md#localized-timeline-status-words). Schedule health (at risk, blocked) is not a status; say it in the event text. See [Dynamic composition](dynamic-composition.md#timeline-internals) for the exact drawing.
 
 ```json
 {
@@ -385,7 +389,7 @@ A roadmap with progress states:
 
 The [diagrams guide](diagrams.md) covers when to use one, the supported Mermaid families, styling, sizing and export in full; this section is the field reference.
 
-A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) source (Mermaid 12.1 syntax), drawn by the engines in the deck's own fonts and colors. A string is shorthand for `{ "source": value }`; the object form takes `source`, `syntax` (`"mermaid"`, the default and the only one today) and `alt`. It is a root payload, a block or a promoted region, and a region of a layout template that accepts `diagram` takes it. The first line of the source names the diagram type; the built-in families are flowchart, sequence, class, state, ER, gantt, pie, quadrant, mindmap, timeline, journey, xychart, sankey, gitGraph, C4, block, architecture, kanban, packet, radar, treemap, venn, ishikawa, requirement, railroad, wardley, cynefin, treeView, eventmodeling, usecase, swimlane, agentflow and info. ZenUML is not supported. The drawing is done by [pele](https://pele.run) (MIT, no runtime dependencies, synchronous and DOM-free), so the preview, the PDF and the PPTX export need no browser.
+A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) source (Mermaid 12.1 syntax) , a [Graphviz DOT](diagrams.md#graphviz-dot) graph or a [PlantUML](diagrams.md#plantuml) diagram, drawn by the engines in the deck's own fonts and colors. A string is shorthand for `{ "source": value }` (Mermaid); the object form takes `source`, `syntax` (`"mermaid"`, the default, `"dot"` or `"plantuml"`) and `alt`. It is a root payload, a block or a promoted region, and a region of a layout template that accepts `diagram` takes it. The first line of the source names the diagram type; the built-in families are flowchart, sequence, class, state, ER, gantt, pie, quadrant, mindmap, timeline, journey, xychart, sankey, gitGraph, C4, block, architecture, kanban, packet, radar, treemap, venn, ishikawa, requirement, railroad, wardley, cynefin, treeView, eventmodeling, usecase, swimlane, agentflow and info. ZenUML is not supported. The drawing is done by [pele](https://pele.run) (MIT, no runtime dependencies, synchronous and DOM-free), so the preview, the PDF and the PPTX export need no browser. A DOT graph is read by OPF itself and laid out in layers by pele; a `layout` other than `dot` (neato, fdp, circo, twopi, ...) is refused with a finding. A PlantUML diagram is read by OPF too and drawn as the Mermaid family of its kind (sequence, class, state, activity, use case, component, mind map, gantt); other kinds and the preprocessor are refused with a finding.
 
 ```json
 {
@@ -401,7 +405,7 @@ A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) sour
 - **Engines.** Core lays the diagram out with the deck's measured fonts at the largest size that fits its block (never under the readability floor, else a `text-overflow` finding) and paints it in the slide's colors and fonts; see [sizing](diagrams.md#sizing) and [how the deck styles a diagram](diagrams.md#how-the-deck-styles-a-diagram).
 - **`alt`.** The text alternative; without it engines derive one from the diagram type and its labels ([accessibility](diagrams.md#accessibility)). A diagram takes a `caption` like an image, chart, table or video.
 - **Errors.** A source that cannot be parsed is a finding with its line and column, and draws a "Diagram unavailable" placeholder ([errors and limits](diagrams.md#errors-and-limits)).
-- **PPTX and Markdown.** A native SVG picture over a PNG fallback that re-imports as the diagram ([exports](diagrams.md#exports)); a ```` ```mermaid ```` fence in [Markdown](markdown.md).
+- **PPTX and Markdown.** A native SVG picture over a PNG fallback that re-imports as the diagram ([exports](diagrams.md#exports)); a ```` ```mermaid ````, ```` ```dot ```` or ```` ```plantuml ```` fence in [Markdown](markdown.md).
 
 Choose the payload by what the content is: `chart` for numbers plotted on axes, `timeline` for dated or ordered events with a status, `diagram` for structure and flow (steps, systems, relationships, states, hierarchies) that Mermaid can draw. A Mermaid `pie` or `timeline` diagram is a quick picture; a `chart` or `timeline` payload keeps the data editable and gets the engines' chart and timeline design.
 

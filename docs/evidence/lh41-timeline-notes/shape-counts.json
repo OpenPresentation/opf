@@ -1,0 +1,24 @@
+[
+  {
+    "name": "before.pptx",
+    "counts": {
+      "p:sp": 86,
+      "p:grpSp": 0,
+      "p:graphicFrame": 0,
+      "p:cxnSp": 0,
+      "p:pic": 0
+    },
+    "topLevelShapeCount": 86
+  },
+  {
+    "name": "after.pptx",
+    "counts": {
+      "p:sp": 92,
+      "p:grpSp": 0,
+      "p:graphicFrame": 0,
+      "p:cxnSp": 0,
+      "p:pic": 0
+    },
+    "topLevelShapeCount": 92
+  }
+]

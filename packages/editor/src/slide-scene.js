@@ -68,7 +68,7 @@ function contentSnippet(kind, content) {
     case "quote": return isObject(content) ? plain(content.text) : plain(content);
     case "code": return isObject(content) ? plain(content.filename) || plain(content.language) || plain(String(content.source ?? "").split("\n")[0]) : "";
     case "timeline": return Array.isArray(content) && content.length ? plain(content[0]?.what ?? content[0]?.when) : "";
-    // A diagram is one object: its alt text, else the first line of its Mermaid source (the diagram type).
+    // A diagram is one object: its alt text, else the first line of its source (a Mermaid diagram's type, a DOT graph's header, PlantUML's @start line).
     case "diagram": return isObject(content) ? plain(content.alt) || plain(String(content.source ?? "").split("\n")[0]) : typeof content === "string" ? plain(content.split("\n")[0]) : "";
     case "image":
     case "video": return isObject(content) ? plain(content.alt ?? content.caption) : "";
