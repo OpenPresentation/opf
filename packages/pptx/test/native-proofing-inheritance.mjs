@@ -18,6 +18,7 @@ const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const baseline = gunzipSync(readFileSync(path.join(lane, 'reference-worker.ps1.gz')));
 assert.equal(sha(baseline), 'de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943');
 assert.equal(sha(readFileSync(helper)), 'b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c');
+assert.equal(sha(readFileSync(path.join(lane, 'worker-package/test/fixtures/sh25-native-circle-observations.json'))), 'e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0', 'exact unchanged ce92 harness data dependency');
 for (const file of [worker, checker, helper]) assert.deepEqual(scanPowerShellSource(readFileSync(file, 'utf8')).issues, [], file);
 const modeled = scanPowerShellSource(readFileSync(worker, 'utf8')).code;
 assert.equal([...modeled.matchAll(/\$Range\.LanguageID\b/g)].length, 1, 'one legacy primary-language getter');

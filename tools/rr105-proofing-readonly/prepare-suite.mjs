@@ -35,11 +35,12 @@ const records = async (root, names) => Promise.all(names.map(async name => {
   const bytes = await fs.readFile(path.join(root, name));
   return {path: name, bytes: bytes.length, sha256: sha(bytes)};
 }));
-const workerNames = ['test/native-furniture-control.ps1', 'test/native-process.ps1', 'test/native-process-check.ps1', 'test/native-furniture-harness-check.ps1'];
+const workerNames = ['test/native-furniture-control.ps1', 'test/native-process.ps1', 'test/native-process-check.ps1', 'test/native-furniture-harness-check.ps1', 'test/fixtures/sh25-native-circle-observations.json'];
 const workerRecords = await records(workerRoot, workerNames);
 assert.equal(workerRecords[1].sha256, 'b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c');
 assert.equal(workerRecords[2].sha256, '50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027');
 assert.equal(workerRecords[3].sha256, '06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d');
+assert.equal(workerRecords[4].sha256, 'e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0');
 const suiteRecords = await records(suiteRoot, ['scripts/native-acceptance/run-windows.ps1']);
 await fs.mkdir(target);
 const files = [];
