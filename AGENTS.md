@@ -57,6 +57,10 @@ A PR merges (squash) when `verify` is green. Watch or merge it only with `node s
 
 GitHub API: every agent on the account shares one REST quota (5000 an hour), and it ran out three times on 2026-10-06. Watch CI with at most one batched GraphQL `statusCheckRollup` query every 3 to 5 minutes; never loop per-run or per-job REST calls (`gh pr checks`, `gh run view`). Give any data-collection job an explicit call budget.
 
+## Current handoff
+
+**Start here when resuming:** [docs/handoff/2026-11-07/README.md](docs/handoff/2026-11-07/README.md) has the state, the exact next steps toward v0.33.0 and v0.34.0, the binding working rules and the open PRs. [KICKOFF.md](docs/handoff/2026-11-07/KICKOFF.md) in the same folder is the one prompt to give a new agent.
+
 ## Active programs
 
 Cross-repository work is tracked in `docs/programs/`. Before starting program work, read the program's `README.md` (goal, definition of done, invariants, resume protocol) and `burndown.md` (item IDs, acceptance criteria, status, progress log). Name branches `codex/ff-<nn>-<slug>` (for example `codex/ff-07-script-slots`), start PR titles with the item ID (`FF-07: `), and update the burndown row and progress log when an item changes state. Release readiness uses `codex/rr-<nn>-<slug>` branches and `RR-<nn>: ` PR titles.
