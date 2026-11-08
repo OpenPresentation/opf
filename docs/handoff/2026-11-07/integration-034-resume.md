@@ -37,3 +37,7 @@ v0.33 exact head5b320eda3a8ba2deb085839fdaeb063cc7a8de79 has all normal/full CI 
 ## Main alignment after v0.33 squash merge
 
 Normally merged main7c0c3f13e9de77e038b6ec26183043eb7fe90822 into this preparation branch. Vetoable decision: align ancestry now so new isolated worktrees can merge the preparation cleanly; merge the actual release commit again after publication. Conflicts retain the newer v0.34 runtime rules (measured table-note/picture tracks, placed tiles, closing lead, optioned doughnut holes), all unique program progress entries, current source/native status rows and the merged v0.33 suite-aware gate/completion correction. The two newly noticed stale LH182/LH183 duplicate rows are consolidated into their newer implementation rows. No feature or evidence-only branch is dropped or merged by this alignment.
+
+## Recovery ancestry alignment
+
+Normally merged reviewed033 candidate5282536c after actual main revert502eb42d. All package/schema/example/skill/script/workflow/runtime trees are identical to preparation64725585; only the exact tracker refresh and new recovery handoff are added. Fresh worktrees from temporary main502 can now merge this preparation without losing unchanged033 source. The actual published release/main must still be merged again before final034 integration. Tracker metadata is105 from the033 correction while this preparation already has later RR rows; strict final034 generated refresh remains mandatory. No new source/golden/native acceptance or publication is claimed.
