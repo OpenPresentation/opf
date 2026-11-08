@@ -1151,6 +1151,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `when` | no | `string` | Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones. |
+| `duration` | no | `number` | Relative length of this consecutive event period. Use the same unit for every event (for example 1 for Week 1 and 4 for Weeks 2 5). Omitted means one unit. When any event supplies duration, both engines draw proportio... |
 | `what` | yes | `string` | Short event label. |
 | `description` | no | `string` | Optional event detail. |
 | `status` | no | `enum:done \| current \| planned` | Progress of the event, drawn from the deck's own colors by both the SVG renderer and the PPTX exporter. Absent means no status and the event is drawn as a plain filled marker with normal text, which is also how 'done'... |

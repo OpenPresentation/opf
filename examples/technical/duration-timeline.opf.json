@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "A delivery timeline with proportional periods",
+  "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+  "design": {
+    "theme": "classic",
+    "variant": "light1",
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "id": "six-week-delivery",
+      "layout": "timeline",
+      "title": "Four weeks build on one week of discovery",
+      "timeline": {
+        "name": "Six-week delivery",
+        "events": [
+          {
+            "when": "Week 1",
+            "what": "Discover",
+            "description": "Agree the scope.",
+            "duration": 1,
+            "status": "done"
+          },
+          {
+            "when": "Weeks 2–5",
+            "what": "Build",
+            "description": "Deliver and test the working product.",
+            "duration": 4,
+            "status": "current"
+          },
+          {
+            "when": "Week 6",
+            "what": "Launch",
+            "description": "Release to the team.",
+            "status": "planned"
+          }
+        ]
+      }
+    }
+  ]
+}

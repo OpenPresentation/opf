@@ -9,14 +9,16 @@ const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseT
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
 export const attachTimelineTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfTimeline','timeline',{signed:true});
 
-// Only topology and line boundaries are retained. Every field value comes from
+// Only topology, relative durations and line boundaries are retained. Every field value comes from
 // current native text; clearing or editing a field cannot restore old words.
 export function timelineManifest(value,layout) {
-  return {shorthand:Array.isArray(value),eventCount:(Array.isArray(value)?value:value.events).length,
+  const events=Array.isArray(value)?value:value.events;
+  return {shorthand:Array.isArray(value),eventCount:events.length,...(layout.ranges?.length?{durations:events.map(event=>event.duration??null)}:{}),
     parts:layout.parts.map(part=>({eventIndex:part.eventIndex,field:part.role==='event-description'?'description':part.role,lines:part.fit.sourceLines.length}))};
 }
 function validateManifest(manifest) {
   if(!manifest||typeof manifest.shorthand!=='boolean'||!Number.isSafeInteger(manifest.eventCount)||manifest.eventCount<1||manifest.eventCount>10000||!Array.isArray(manifest.parts)||manifest.parts.length>10000)throw Error('Invalid timeline topology.');
+  if(manifest.durations!==undefined&&(!Array.isArray(manifest.durations)||manifest.durations.length!==manifest.eventCount||manifest.durations.some(value=>value!==null&&(!Number.isFinite(value)||value<=0))||manifest.durations.every(value=>value===null)))throw Error('Invalid timeline durations.');
   const keys=[],fields=new Set();let count=0;
   for(const part of manifest.parts){
     if(!part||!Number.isSafeInteger(part.lines)||part.lines<1||part.lines>10000)throw Error('Invalid timeline line count.');
@@ -52,14 +54,19 @@ export function importTimelineGroups(shapes,paragraphs,relationships,entries,rep
     const anchor=anchors[0],manifest=anchor.data.anchor,count=validateManifest(manifest);
     // A current event's ring is a second native ellipse with its own tag, so the group has one more shape per ring. LH-121: the
     // progress line and the generated status words are shapes of the group too.
-    const extra=group.filter(item=>item.data.role==='ring'||item.data.role==='progress'||item.data.role==='status').length;
+    const extra=group.filter(item=>item.data.role==='ring'||item.data.role==='progress'||item.data.role==='status'||item.data.role==='range').length;
     const total=count+manifest.eventCount+1+extra;
     if(anchor.data.role!=='text'||anchor.data.part!==0||anchor.data.line!==0||group.length!==total||new Set(group.map(item=>item.shape)).size!==total)throw Error('Incomplete or duplicated timeline elements.');
-    const ordered=manifest.parts.map(part=>Array(part.lines)),markers=new Set(),rings=new Set(),statuses=new Map();let connectors=0,progress=0;
+    const ordered=manifest.parts.map(part=>Array(part.lines)),markers=new Set(),rings=new Set(),ranges=new Set(),statuses=new Map();let connectors=0,progress=0;
     for(const item of group){
       if(item.ambiguous)throw Error('Multiple source identities on one timeline shape.');
       // LH-121: a status word is generated text, not a source field: import reads the status from its marker and skips the word.
       if(item.data.role==='status'){if(!Number.isSafeInteger(item.data.eventIndex)||item.data.eventIndex<0||item.data.eventIndex>=manifest.eventCount)throw Error('Ambiguous timeline status word.');continue;}
+      if(item.data.role==='range'){
+        const index=item.data.eventIndex;
+        if(!manifest.durations||!Number.isSafeInteger(index)||index<0||index>=manifest.eventCount||ranges.has(index)||item.shape['p:spPr']?.['a:prstGeom']?.prst!=='rect'||(paragraphs[item.index]??[]).some(paragraph=>paragraph.text||paragraph.bullet))throw Error('Invalid timeline duration range.');
+        ranges.add(index);continue;
+      }
       if(item.data.role==='progress'){if(++progress>1||item.shape['p:spPr']?.['a:prstGeom']?.prst!=='line'||(paragraphs[item.index]??[]).some(paragraph=>paragraph.text||paragraph.bullet))throw Error('Invalid timeline progress line.');continue;}
       if(item.data.role==='connector'||item.data.role==='marker'||item.data.role==='ring'){
         const expected=item.data.role==='connector'?'line':'ellipse';
@@ -77,7 +84,7 @@ export function importTimelineGroups(shapes,paragraphs,relationships,entries,rep
       if(item.data.role!=='text'||!Number.isSafeInteger(part)||!Number.isSafeInteger(line)||part<0||line<0||!manifest.parts[part]||line>=manifest.parts[part].lines||item.data.count!==manifest.parts[part].lines||ordered[part][line])throw Error('Ambiguous timeline source line.');
       ordered[part][line]=item;
     }
-    if(connectors!==1||markers.size!==manifest.eventCount)throw Error('Incomplete timeline graphics.');
+    if((manifest.durations&&ranges.size!==manifest.eventCount)||connectors!==1||markers.size!==manifest.eventCount)throw Error('Incomplete timeline graphics.');
     // Only a current event has a ring, and every current event has one.
     for(const index of rings)if(statuses.get(index)!=='current')throw Error('Timeline ring without a current event.');
     for(const [index,status] of statuses)if(status==='current'&&!rings.has(index))throw Error('Current timeline event without its ring.');
@@ -87,6 +94,7 @@ export function importTimelineGroups(shapes,paragraphs,relationships,entries,rep
       if(part.eventIndex===undefined)result[part.field]=text;else result.events[part.eventIndex][part.field]=text;
     }
     for(const [index,status] of statuses)result.events[index].status=status;
+    for(const [index,duration] of (manifest.durations??[]).entries())if(duration!==null)result.events[index].duration=duration;
     const timeline=manifest.shorthand?result.events:result;
     if(!isValidFormat({slides:[{timeline}]}))throw Error('Current native text does not form a valid timeline.');
     for(const item of group)consumed.add(item.shape);

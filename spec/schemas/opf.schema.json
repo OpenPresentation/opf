@@ -3827,6 +3827,13 @@
           "description": "Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones.",
           "examples": ["2026-01", "Q2 2026", "Launch week"]
         },
+        "duration": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1.7976931348623157e308,
+          "description": "Relative length of this consecutive event period. Use the same unit for every event (for example 1 for Week 1 and 4 for Weeks 2–5). Omitted means one unit. When any event supplies duration, both engines draw proportional ranges; when supplies the authored display label and is never parsed to guess a duration.",
+          "examples": [1, 4, 0.5]
+        },
         "what": {
           "type": "string",
           "description": "Short event label.",

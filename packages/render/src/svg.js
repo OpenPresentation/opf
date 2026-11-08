@@ -1711,11 +1711,12 @@ function renderTimeline(item, box, bound, options) {
   const layout=item.timelineLayout;
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
+  const background=bound.design.backgroundColor??bound.design.colors.background;
   const children=[tag('line',{...HIDDEN,...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
+  for(const range of layout.ranges??[])children.push(tag('rect',{...HIDDEN,...range.box,fill:bound.design.colors.primary,'fill-opacity':.18,stroke:background,'stroke-width':scale,...traceAttrs(options,range.path),...(options.trace?{'data-opf-timeline-range':range.eventIndex}:{})}));
   // LH-121: the connector up to the current event in the primary color, over the border-colored rest.
   if(layout.progress)children.push(tag('line',{...HIDDEN,...layout.progress,stroke:bound.design.colors.primary,'stroke-width':3*scale,...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-progress':'true'}:{})}));
   // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.
-  const background=bound.design.backgroundColor??bound.design.colors.background;
   const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
   for(const marker of layout.markers){
     if(!marker.status){

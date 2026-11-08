@@ -4483,6 +4483,11 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   const {x1,y1,x2,y2}=layout.connector;
   slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,width:3*scale*.75}});
   context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
+  for(const range of layout.ranges??[]){
+    const name=`OPF timeline ${group} range ${range.eventIndex}`,box=range.box;
+    slide.addShape('rect',{objectName:name,x:box.x/96,y:box.y/96,w:box.width/96,h:box.height/96,fill:{color:context.colors.accent,transparency:82},line:{color:normalizeHex(context.colors.background),width:scale*.75}});
+    context.timelineTags.set(name,{v:1,group,role:'range',eventIndex:range.eventIndex});
+  }
   // LH-121: the connector up to the current event, a second native line in the primary color over the first.
   if(layout.progress){
     const progressName=`OPF timeline ${group} progress`,{x1,y1,x2,y2}=layout.progress;
