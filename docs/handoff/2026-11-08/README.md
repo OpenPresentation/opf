@@ -2,6 +2,12 @@
 
 This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Unified checklist and team](https://github.com/OpenPresentation/opf/issues/1139). The [2026-11-07 working rules](../2026-11-07/working-rules.md) remain binding; this file supersedes their historical status snapshots, not their safety rules.
 
+## Current status at08:33UTC
+
+PR1166 has merged as actual main **afac3f7fc07539667fe9298f8efc08c967aacb0d**. Full Release033 dry run **42462759180** is running with skip-gate=false; prepare passed. Sole maintained commit gate session75218 waits for actual-main verify and rehearse the publish before the real Release. No tag/package/site deploy exists yet. Do not move main during Release.
+
+034 now normally includes actual033main in e85edd5cf995ba66fe01f6024a57b490e3468c22: actualmain tree is exactly already-included528candidate, and the entire034accepted tree stayed unchanged through this ancestry merge. Reviewed LH73/LH75/LH110 sources are folded and frozen; joint23note/table plus22chart controls pass. [Receipts](integration-fold-checks/note-chart-receipt.json). Parent sealed22CLI files/22slides for native qualification after033publication, manifestSHA4b7190d3ff59bb03736dfc46350c590b243884c25486089386f0c0ce970dfca4; not run yet. Earlier paragraphs below retain historical context.
+
 ## v0.33 reapplication
 
 PR #1133 passed exact-head normal/full CI and final Windows PowerPoint qualification, then squash-merged as `7c0c3f13e9de77e038b6ec26183043eb7fe90822`. Main failed strict gallery-tracker freshness: generated metadata counted 103 RR items instead of 105. The automatic Tracker refresh succeeded but could not open its PR. The queued release dry run was cancelled; no tag, npm publication or site deployment happened.
