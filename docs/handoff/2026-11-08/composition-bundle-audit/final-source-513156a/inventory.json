@@ -1,0 +1,697 @@
+{
+  "entries": 138,
+  "rawBytes": 29363311,
+  "archiveSha256": "a8b6329c3eaa2cbbdbbbe6e949e2a97e37f700de1c326ee1c6bd7a44383a1fb9",
+  "files": [
+    {
+      "path": "actual033/browser.bundle.js.gz",
+      "bytes": 555447,
+      "sha256": "226d6338b6a447d4ce3dde96d679c5736ca1687cbd2a7c2e1a4796b3a0d8b3eb"
+    },
+    {
+      "path": "actual033/browser.metafile.json",
+      "bytes": 312643,
+      "sha256": "8ebeae209f10222f57fe56aee412e78dce39ea8d3972b30b3fa10f620dc955f7"
+    },
+    {
+      "path": "actual033/composition.bundle.js.gz",
+      "bytes": 246784,
+      "sha256": "fe9891ecda065efaec7e3ce6cb65c0a7f83ddc8b86d6ee4ba9f4fc937dbcf90c"
+    },
+    {
+      "path": "actual033/composition.metafile.json",
+      "bytes": 82186,
+      "sha256": "e1c14df69d3152566ea1e17675e092686bdceccb7810b97c832c17d044efc7e3"
+    },
+    {
+      "path": "actual033/convert.bundle.js.gz",
+      "bytes": 452150,
+      "sha256": "3519297ef811e5012dd067e52ad5c7ccf256e15d57b537e29c7949f2c75b05b7"
+    },
+    {
+      "path": "actual033/convert.metafile.json",
+      "bytes": 196304,
+      "sha256": "4d60543764a73532b60bf264a8fe726b0908b8558184adf824eaf8cb3dbd3b58"
+    },
+    {
+      "path": "actual033/data.bundle.js.gz",
+      "bytes": 8708,
+      "sha256": "18dbdee73ae3291677eee267ab68153f680c3c777aa8af895a1b5ca59a80d2c2"
+    },
+    {
+      "path": "actual033/data.metafile.json",
+      "bytes": 51970,
+      "sha256": "bcf6cba01e7bd99dde990a9e57df4ca08c212adfe9357d1f49d1d5fdc8c9aafc"
+    },
+    {
+      "path": "actual033/deck.bundle.js.gz",
+      "bytes": 490789,
+      "sha256": "67da9fd906e53f967e3c3aea695143e250206bc4682849b1a59d44b424c888d0"
+    },
+    {
+      "path": "actual033/deck.metafile.json",
+      "bytes": 280268,
+      "sha256": "5b18ac1b85311ec3f3decadd808d495a017c56981b261068fb998ce82809e201"
+    },
+    {
+      "path": "actual033/diagram-engine-eager.bundle.js.gz",
+      "bytes": 270303,
+      "sha256": "712f7b8dcb64d8dfd1517ea5fde48a308006a444bdd1776ab61c7f69f0a2426a"
+    },
+    {
+      "path": "actual033/diagram-engine-eager.metafile.json",
+      "bytes": 1182,
+      "sha256": "13722c8aad0fa6bc7aafd891cf9274360990ffca1bc9e9e4d7e6183dc4ef0f16"
+    },
+    {
+      "path": "actual033/diagram-engine-lazy.bundle.js.gz",
+      "bytes": 11260,
+      "sha256": "646c327312b8551147d17fe193e16440547ba0f5d3179f8f6f7719c92ec68ed6"
+    },
+    {
+      "path": "actual033/diagram-engine-lazy.metafile.json",
+      "bytes": 10866,
+      "sha256": "d917a32789064403ad01903ecc86df8b5802b53b2ea81b0cd7f05b520f624941"
+    },
+    {
+      "path": "actual033/diff.bundle.js.gz",
+      "bytes": 6097,
+      "sha256": "9011bf1053f01414a75f3dfe6df4cde5f8c308910abe89d44baa8464a698c10f"
+    },
+    {
+      "path": "actual033/diff.metafile.json",
+      "bytes": 161886,
+      "sha256": "e8238d027e1795eeadcccee102c3f52e477ac27d229a97faee6678102c9d2d20"
+    },
+    {
+      "path": "actual033/docs.bundle.js.gz",
+      "bytes": 605094,
+      "sha256": "0cdb7eb4ee8f13715b9f7bab82783165c3180709402b3165fb0e35b91fd483e7"
+    },
+    {
+      "path": "actual033/docs.metafile.json",
+      "bytes": 983,
+      "sha256": "0155854b68b3a14da82a65fb2087bc841a82fc5fc802a2820fff64858e0e0bcb"
+    },
+    {
+      "path": "actual033/examples.bundle.js.gz",
+      "bytes": 4471293,
+      "sha256": "8dde51c6322674c7569c360b570b56db19c60cab5df4e57f9e0abd023ddde7cf"
+    },
+    {
+      "path": "actual033/examples.metafile.json",
+      "bytes": 1162,
+      "sha256": "ad83b2249f3f9eebe716194af9893c2933aa436d8c85b401a6ac28d7044fe184"
+    },
+    {
+      "path": "actual033/font-policy.bundle.js.gz",
+      "bytes": 15552,
+      "sha256": "babb7a1aab74fd341287c5f51577aefd6b9d9ce4a4df7c3721cc5e5d7e66b405"
+    },
+    {
+      "path": "actual033/font-policy.metafile.json",
+      "bytes": 1128,
+      "sha256": "cc19ba4990fbeca045f706528ba8ede36e8233348ca9b1ce68fe92f38f1ec59c"
+    },
+    {
+      "path": "actual033/format.bundle.js.gz",
+      "bytes": 61051,
+      "sha256": "1408773ab4cc6385dab3316d7e3ef1ae355a4684a2f5393bca04e843618fdfa2"
+    },
+    {
+      "path": "actual033/format.metafile.json",
+      "bytes": 1497,
+      "sha256": "02799957528a5c992d63ddeac14fcb21d1adff061d2296800c28c19030cc5981"
+    },
+    {
+      "path": "actual033/ids.bundle.js.gz",
+      "bytes": 438332,
+      "sha256": "c7aa94d5c82f044cbed29da6716c031ce1dabbb2b3593ed088fd5080be566160"
+    },
+    {
+      "path": "actual033/ids.metafile.json",
+      "bytes": 188344,
+      "sha256": "8810d625f7ce8bd9661ce1aeb42f323799f657a09b932e8840f011ee16313279"
+    },
+    {
+      "path": "actual033/markdown.bundle.js.gz",
+      "bytes": 486624,
+      "sha256": "9563c39f7b0e253f299fabf7427d4f878beebe4387922f36e1351ea9cd4cc5a3"
+    },
+    {
+      "path": "actual033/markdown.metafile.json",
+      "bytes": 274180,
+      "sha256": "ab9d6f5d8348e38da883870dfd87e0584c919441e8b4c6ada51e937cf9c314ea"
+    },
+    {
+      "path": "actual033/pagination.bundle.js.gz",
+      "bytes": 437988,
+      "sha256": "4e5aab26243cb2490cb9d60884a6d81d859e72aff2724f568b20e142a9223ada"
+    },
+    {
+      "path": "actual033/pagination.metafile.json",
+      "bytes": 190228,
+      "sha256": "40a509904165ca7e7c1759d93da9369dfa88bb7042d7a8b6a242150fb4cebdb0"
+    },
+    {
+      "path": "actual033/patch.bundle.js.gz",
+      "bytes": 436368,
+      "sha256": "4ba7b4488813d96ea1a903a05fb873a930c6d02be5dab51585a4ae12124ae9b2"
+    },
+    {
+      "path": "actual033/patch.metafile.json",
+      "bytes": 187945,
+      "sha256": "f0db8b453aa346918ff9b1e82e298715563873b945af64d4dc61566dc8c0caa6"
+    },
+    {
+      "path": "actual033/precompiled.bundle.js.gz",
+      "bytes": 229402,
+      "sha256": "25e86e1826bf6cc01dd073c7ba5e95ba18aa2e508a2cf14081f4c7d3521cb325"
+    },
+    {
+      "path": "actual033/precompiled.metafile.json",
+      "bytes": 4711,
+      "sha256": "4d7013b87c9643bbbbd64ce7325d5a3b3267ff37ab175eff98004a75d9e9e836"
+    },
+    {
+      "path": "actual033/repo-readme.bundle.js.gz",
+      "bytes": 6991,
+      "sha256": "048d72687ea16a1994db64ac5ed3e444e24a73efe0cba9e948cb19ecfe275d0a"
+    },
+    {
+      "path": "actual033/repo-readme.metafile.json",
+      "bytes": 1020,
+      "sha256": "64f06ed3c01360e2bfc125301032499745cb6df0c3a2bb6066f33bae978b57ac"
+    },
+    {
+      "path": "actual033/schema-engine-ajv.bundle.js.gz",
+      "bytes": 127347,
+      "sha256": "a40f63be402cb73098d3019b0208bacb1e1f53fb2e7df010b6ceea2b7019788e"
+    },
+    {
+      "path": "actual033/schema-engine-ajv.metafile.json",
+      "bytes": 87769,
+      "sha256": "adc7ba5fbd0622d6ecf5969172623c95a29f05c4233741f132f4949363772ced"
+    },
+    {
+      "path": "actual033/schema-engine-precompiled.bundle.js.gz",
+      "bytes": 229435,
+      "sha256": "3c9556af4a143e21abd7b197c9fda7a1345e1cad240c542e9b01981ea1e91f6f"
+    },
+    {
+      "path": "actual033/schema-engine-precompiled.metafile.json",
+      "bytes": 3876,
+      "sha256": "383fc7381200aff3b410fdf32c1266a71c7dfbd41c6f67f072edadf1a72684a8"
+    },
+    {
+      "path": "actual033/schema.bundle.js.gz",
+      "bytes": 88012,
+      "sha256": "1f2b7aacd00ca0c228a9fac72b24173dd56896dbd98213329713f582a2fdc80f"
+    },
+    {
+      "path": "actual033/schema.metafile.json",
+      "bytes": 160452,
+      "sha256": "60f8a170eaf91014d3407420a956a1930fc66addc5ee4fcb02ff8342a0abfdfd"
+    },
+    {
+      "path": "actual033/schemas.bundle.js.gz",
+      "bytes": 83346,
+      "sha256": "b32a7fca5fce97232d82496e0f23e6915de3de7b454ca59e5abaf1736ce45cd1"
+    },
+    {
+      "path": "actual033/schemas.metafile.json",
+      "bytes": 1302,
+      "sha256": "0b916fc152aa6c7c9e5afcb295e6420cd8e2a5f2a2aefb7b47285fa14e318fc3"
+    },
+    {
+      "path": "actual033/shape-catalog.bundle.js.gz",
+      "bytes": 3673,
+      "sha256": "474e7a1b88d778ed73b2e9f3b410437f4d7d83996624febc9ddd9be76dcb3ec4"
+    },
+    {
+      "path": "actual033/shape-catalog.metafile.json",
+      "bytes": 716,
+      "sha256": "322ea7640557152ddcad7769608b823ab6cd7b0502e0cb142db14789c1cb1263"
+    },
+    {
+      "path": "actual033/shape-engine-eager.bundle.js.gz",
+      "bytes": 37957,
+      "sha256": "532c6e7e8e77676da89b6e75b78c3abd78a44105a09c9c7ee14d3e04d4841b70"
+    },
+    {
+      "path": "actual033/shape-engine-eager.metafile.json",
+      "bytes": 2944,
+      "sha256": "d3edc65495a914184d955409a5419ad201e29fba1be64c9044d665a90a2f1f66"
+    },
+    {
+      "path": "actual033/shape-engine-lazy.bundle.js.gz",
+      "bytes": 136,
+      "sha256": "c4e1c93bd8b05d0d22bd34f847b0d76b2ab2d8333f7b3b973ae5ce6ff8c3f5e8"
+    },
+    {
+      "path": "actual033/shape-engine-lazy.metafile.json",
+      "bytes": 857,
+      "sha256": "b97e01beb65cdde518c17b794be0254d0a416dd862bb45c6ce70b4fe72c08fc7"
+    },
+    {
+      "path": "actual033/shape-geometry.bundle.js.gz",
+      "bytes": 35494,
+      "sha256": "00d2ae3101fec686fc0a8ea5cf571bac9208e7b624f31b01777737b9c2629315"
+    },
+    {
+      "path": "actual033/shape-geometry.metafile.json",
+      "bytes": 1286,
+      "sha256": "7449f42998bc832b265fcefa03f14d5cbc5d02a687dd8549e3cbb3aa5a6de251"
+    },
+    {
+      "path": "actual033/source.bundle.js.gz",
+      "bytes": 204246,
+      "sha256": "c577cd9e2e7db7b453406c0fcaf85f6da6b9758e5068fdf1b3a4dad51ae16a8a"
+    },
+    {
+      "path": "actual033/source.metafile.json",
+      "bytes": 255753,
+      "sha256": "e23cf4a77bd20741f064553e60bfc72db25960ee4207425bb61e4c285a1e380b"
+    },
+    {
+      "path": "actual033/spec-files.bundle.js.gz",
+      "bytes": 606,
+      "sha256": "d6db698099abfc9531dd8d6223513e87e37deed4316423db8dce51a0e16124a5"
+    },
+    {
+      "path": "actual033/spec-files.metafile.json",
+      "bytes": 1064,
+      "sha256": "893004586346b7dda35e4f7d4996910aa2e9c6815979b61101d1cc4f61054763"
+    },
+    {
+      "path": "actual033/symbol-font-encodings.bundle.js.gz",
+      "bytes": 35033,
+      "sha256": "2a58246bfce379d9f9fac04a5912fcd77fcd32e36dd68a23ed29fe952d460871"
+    },
+    {
+      "path": "actual033/symbol-font-encodings.metafile.json",
+      "bytes": 1325,
+      "sha256": "7b11bc1b6504dedc58a3be1dedac819b81fa1ce987c93158cd7309e90caa0c93"
+    },
+    {
+      "path": "actual033/types.bundle.js.gz",
+      "bytes": 20,
+      "sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+    },
+    {
+      "path": "actual033/types.metafile.json",
+      "bytes": 474,
+      "sha256": "823e88e67c1bb16b5652524bd33459273cd9aa1a55a4cebe15a426cf2516e545"
+    },
+    {
+      "path": "actual033/validator.bundle.js.gz",
+      "bytes": 432230,
+      "sha256": "87a41e6bceebcd77f96763d7e06579185b4874b60af5171feeb945d347436b24"
+    },
+    {
+      "path": "actual033/validator.metafile.json",
+      "bytes": 187506,
+      "sha256": "2697c0696440ea662c5969a011b47f2a865568ed35b2d66f9e02bb286d32254e"
+    },
+    {
+      "path": "actual033/yaml.bundle.js.gz",
+      "bytes": 470711,
+      "sha256": "b8b6f05498cdd7c19d2dc3a933421414266428b8fe1fae227009df02986afaf3"
+    },
+    {
+      "path": "actual033/yaml.metafile.json",
+      "bytes": 270767,
+      "sha256": "58899b1ce41212f4b9396bc9e513e6b174d31797e54e8a71b3094ff83d6b469f"
+    },
+    {
+      "path": "audit.json",
+      "bytes": 371658,
+      "sha256": "fb54d72b52c6f43e8c2eb497609bf53eae114e39a0317fb0c36e40ea68819cd2"
+    },
+    {
+      "path": "current/browser.bundle.js.gz",
+      "bytes": 585934,
+      "sha256": "70faddc40848a1503a824526e7812ecf6dd60b859455e0007c23ff57b0de7643"
+    },
+    {
+      "path": "current/browser.metafile.json",
+      "bytes": 282365,
+      "sha256": "6dd09147849d03c5fa4f841ae43b1b0504032f3cc7b1843216bb21746920de6a"
+    },
+    {
+      "path": "current/composition.bundle.js.gz",
+      "bytes": 273272,
+      "sha256": "d94925763a9cf1e9d33e129a11554c8e77fcc248670f493da2a3935ebfaf04b0"
+    },
+    {
+      "path": "current/composition.metafile.json",
+      "bytes": 82127,
+      "sha256": "7f0c9bd93bbefb08e9e876ca4e999205190eed500e2d577ab24442e34c719cd1"
+    },
+    {
+      "path": "current/convert.bundle.js.gz",
+      "bytes": 481633,
+      "sha256": "422681d0e28786717850d9f13a09830df50a1d5b27b03749d18c011201fd5562"
+    },
+    {
+      "path": "current/convert.metafile.json",
+      "bytes": 178801,
+      "sha256": "9912cbf111b6a3b1c172439bd1aace5df43ff8f8ed1dfc52928ab76cbb3e66b6"
+    },
+    {
+      "path": "current/data.bundle.js.gz",
+      "bytes": 8709,
+      "sha256": "1844aa0a0ebffe4cc77651c707d9c13198d15e7cedec57e8c20d9a9c6019f369"
+    },
+    {
+      "path": "current/data.metafile.json",
+      "bytes": 51624,
+      "sha256": "1c1396475c71651679d12ef4a65a919a0c1957a959bb7e7b51619e955a0005f9"
+    },
+    {
+      "path": "current/deck.bundle.js.gz",
+      "bytes": 520604,
+      "sha256": "167e7e90ec5cdc3d6eed19204275d06efab67a07d8951fa1f89fa08c8500e60d"
+    },
+    {
+      "path": "current/deck.metafile.json",
+      "bytes": 253197,
+      "sha256": "696282a09620434fc59095a630bf257a3e1c85379a5d518924140885ed03595c"
+    },
+    {
+      "path": "current/diagram-engine-eager.bundle.js.gz",
+      "bytes": 284012,
+      "sha256": "eefa3b38fa5e45e9e0b8e0f75536048455820284f8d6c874f5d52b8defdcfe2d"
+    },
+    {
+      "path": "current/diagram-engine-eager.metafile.json",
+      "bytes": 1496,
+      "sha256": "001b2d823777931162f9993c5b6afc3bdf751b0b26612c509e7aa4eec002c951"
+    },
+    {
+      "path": "current/diagram-engine-lazy.bundle.js.gz",
+      "bytes": 11329,
+      "sha256": "9e24cb5f3d114811fbb63022a69f4dab5ebbf067027f934412981409e5f7a766"
+    },
+    {
+      "path": "current/diagram-engine-lazy.metafile.json",
+      "bytes": 10880,
+      "sha256": "1bfb7f9fc3ba22114ba8ea87ae4b84aec8fbb40a1ebf7033c2f38785b07ea650"
+    },
+    {
+      "path": "current/diff.bundle.js.gz",
+      "bytes": 6097,
+      "sha256": "9011bf1053f01414a75f3dfe6df4cde5f8c308910abe89d44baa8464a698c10f"
+    },
+    {
+      "path": "current/diff.metafile.json",
+      "bytes": 148706,
+      "sha256": "35a9ad43a25f9136bfe8223713e613ed222e2bfdce7e07e51d1e0ed8878000be"
+    },
+    {
+      "path": "current/docs.bundle.js.gz",
+      "bytes": 632816,
+      "sha256": "4e2c66b1f7be217643043f37ee65f199bcbd960112684f4784001239e44fd10e"
+    },
+    {
+      "path": "current/docs.metafile.json",
+      "bytes": 845,
+      "sha256": "5d699fd34bdd552014a381e71495f5593e36c0c4613d4a1d1ebb091275a6260d"
+    },
+    {
+      "path": "current/examples.bundle.js.gz",
+      "bytes": 4479085,
+      "sha256": "58b9e5e7ff9a152062d8d1b23ac5b74abe5b1d597fd604abd9757f2ee23f4fdf"
+    },
+    {
+      "path": "current/examples.metafile.json",
+      "bytes": 1024,
+      "sha256": "da907c5d2fe6ea3d3c33d3f7126a4ea692241620b6f94098c0ee112b8cfc63fa"
+    },
+    {
+      "path": "current/font-policy.bundle.js.gz",
+      "bytes": 15522,
+      "sha256": "04bb2adad4bb509cd3eb40cc55f003814295c3cdaada203705792255f7419e30"
+    },
+    {
+      "path": "current/font-policy.metafile.json",
+      "bytes": 990,
+      "sha256": "04b8eee273462fe4438198da40eec8acc5966f3043a490f932ac72f67501e68f"
+    },
+    {
+      "path": "current/format.bundle.js.gz",
+      "bytes": 62645,
+      "sha256": "a8924f2a0ee3f731542a872d7dbf89a1c0f8ca77f3e31c87c19708c822023d2d"
+    },
+    {
+      "path": "current/format.metafile.json",
+      "bytes": 1290,
+      "sha256": "e18091e09aa69fe1143b8757a0568ce3e3b386fce9542c6e6ef60e1be055c350"
+    },
+    {
+      "path": "current/ids.bundle.js.gz",
+      "bytes": 467896,
+      "sha256": "6d7d820a1b14695bd0b9fac004cae00adb20f352afd9bf1a896a111accca1aae"
+    },
+    {
+      "path": "current/ids.metafile.json",
+      "bytes": 171876,
+      "sha256": "d15627801d46aad0e442ec56c863ffaa8cb1affd9c1600f9518e9a70cd2ad97f"
+    },
+    {
+      "path": "current/markdown.bundle.js.gz",
+      "bytes": 516338,
+      "sha256": "c11798100f5c58c4e9eeb97fd6f7a10551eea49538cc6b968061526c6cb033b7"
+    },
+    {
+      "path": "current/markdown.metafile.json",
+      "bytes": 247960,
+      "sha256": "7733b3c2721acb4e627b09e783093d9b695fc962f2cdd1770043ba3861bca74f"
+    },
+    {
+      "path": "current/pagination.bundle.js.gz",
+      "bytes": 467829,
+      "sha256": "00a84e904caff8346a155958a9950f60b2fa4a1c9117af5f023b848626664172"
+    },
+    {
+      "path": "current/pagination.metafile.json",
+      "bytes": 173530,
+      "sha256": "a84db8655f0a3f5f5a3e8867bb0da006c191948a0d123f9be497e2f6cc227264"
+    },
+    {
+      "path": "current/patch.bundle.js.gz",
+      "bytes": 465915,
+      "sha256": "a2e090ae1dd418226897645432d1355d7b18bc520558cc42ce8a71ddd70bce8e"
+    },
+    {
+      "path": "current/patch.metafile.json",
+      "bytes": 171592,
+      "sha256": "49ca10df814ec72e867da2fb4f0a4f61839cb1e8f725ea9a390061ea1f7148b2"
+    },
+    {
+      "path": "current/precompiled.bundle.js.gz",
+      "bytes": 235554,
+      "sha256": "23e203183b829c3117f24fed5841da78dda1502f3676802ea6c195bdb56c5a2e"
+    },
+    {
+      "path": "current/precompiled.metafile.json",
+      "bytes": 4090,
+      "sha256": "dfe3e42ea7cca7c20e3ab0921a0b51d1ac81f0b01a4734c063b6ad940d17c6cc"
+    },
+    {
+      "path": "current/repo-readme.bundle.js.gz",
+      "bytes": 7159,
+      "sha256": "c4831a08122878f8f8cf4bcc4ab165ed20e96e46c1a649b47661fd231fcc86a2"
+    },
+    {
+      "path": "current/repo-readme.metafile.json",
+      "bytes": 882,
+      "sha256": "3d643822f7a9a62413635946d8ec8f781263f5243772f467eed78156ae87a81b"
+    },
+    {
+      "path": "current/schema-engine-ajv.bundle.js.gz",
+      "bytes": 129286,
+      "sha256": "46660bb5d062c0145d1146e1794e6f9991df94e81d970aa5d9ee8f30eea63a76"
+    },
+    {
+      "path": "current/schema-engine-ajv.metafile.json",
+      "bytes": 77534,
+      "sha256": "5243e29e618379d874af362b9feb8199e84c1fae51164e69008a932e7b0107d5"
+    },
+    {
+      "path": "current/schema-engine-precompiled.bundle.js.gz",
+      "bytes": 235589,
+      "sha256": "dcdea5128155f35294c36a2d861324dc38dbb86217f92265ea50c14b291cb7db"
+    },
+    {
+      "path": "current/schema-engine-precompiled.metafile.json",
+      "bytes": 3393,
+      "sha256": "48fb69bf57b02883c3f6bcae40509551934d6a1611347be181973d005121ba81"
+    },
+    {
+      "path": "current/schema.bundle.js.gz",
+      "bytes": 89987,
+      "sha256": "5b56857c060f22e85cfda41f0313512c5c2054e5ed3323e4f95fdc917256fd44"
+    },
+    {
+      "path": "current/schema.metafile.json",
+      "bytes": 147502,
+      "sha256": "208b72179ae5e80d2460d8e2884c6ec4c1eee99537c46d153bbfe728929077be"
+    },
+    {
+      "path": "current/schemas.bundle.js.gz",
+      "bytes": 85285,
+      "sha256": "7e16cffd82690d9e7121f4e60968cd5c7ea4bfd0913c11126382cc558068ccf3"
+    },
+    {
+      "path": "current/schemas.metafile.json",
+      "bytes": 1164,
+      "sha256": "4aac82eac9e475ed0f46902b3a43c0613018d4acbe7a6ba66c09d765eb6c7334"
+    },
+    {
+      "path": "current/shape-catalog.bundle.js.gz",
+      "bytes": 3673,
+      "sha256": "474e7a1b88d778ed73b2e9f3b410437f4d7d83996624febc9ddd9be76dcb3ec4"
+    },
+    {
+      "path": "current/shape-catalog.metafile.json",
+      "bytes": 647,
+      "sha256": "d932ebda63d130543adec2ba0258ee9a5b99f7ba0514325dae08678ae7d93e4c"
+    },
+    {
+      "path": "current/shape-engine-eager.bundle.js.gz",
+      "bytes": 37957,
+      "sha256": "532c6e7e8e77676da89b6e75b78c3abd78a44105a09c9c7ee14d3e04d4841b70"
+    },
+    {
+      "path": "current/shape-engine-eager.metafile.json",
+      "bytes": 2530,
+      "sha256": "6b6ef4dcb37d55d51895c22f275c0fe6c3aa3c35322d7e5713c114d9c6cf754e"
+    },
+    {
+      "path": "current/shape-engine-lazy.bundle.js.gz",
+      "bytes": 136,
+      "sha256": "c4e1c93bd8b05d0d22bd34f847b0d76b2ab2d8333f7b3b973ae5ce6ff8c3f5e8"
+    },
+    {
+      "path": "current/shape-engine-lazy.metafile.json",
+      "bytes": 788,
+      "sha256": "4dc48600164099b66b5173b2a9913c11fd8aa14df0050c074884f4e869977ad1"
+    },
+    {
+      "path": "current/shape-geometry.bundle.js.gz",
+      "bytes": 35494,
+      "sha256": "00d2ae3101fec686fc0a8ea5cf571bac9208e7b624f31b01777737b9c2629315"
+    },
+    {
+      "path": "current/shape-geometry.metafile.json",
+      "bytes": 1148,
+      "sha256": "32e0efc5cdc161aedfc68763b9fc1064c679cf755b14564f1d5cc924d5efe218"
+    },
+    {
+      "path": "current/source.bundle.js.gz",
+      "bytes": 207072,
+      "sha256": "844e95f83aedf9749e592b2611b494ce86d122ef0522312ad479ed6236289931"
+    },
+    {
+      "path": "current/source.metafile.json",
+      "bytes": 231740,
+      "sha256": "acd8da12ed88730ae1bf20233e6618384498818f32403b9ef6246ee95f2ae96f"
+    },
+    {
+      "path": "current/spec-files.bundle.js.gz",
+      "bytes": 606,
+      "sha256": "d6db698099abfc9531dd8d6223513e87e37deed4316423db8dce51a0e16124a5"
+    },
+    {
+      "path": "current/spec-files.metafile.json",
+      "bytes": 926,
+      "sha256": "2d0259c83ffee90256071a51c814e7fae6118e11312af45dcc0566eff5ffd57f"
+    },
+    {
+      "path": "current/symbol-font-encodings.bundle.js.gz",
+      "bytes": 35033,
+      "sha256": "2a58246bfce379d9f9fac04a5912fcd77fcd32e36dd68a23ed29fe952d460871"
+    },
+    {
+      "path": "current/symbol-font-encodings.metafile.json",
+      "bytes": 1187,
+      "sha256": "1e4405db7bfd87d4fa37b665267c4ec8ebb034c49ddb1f8bbc73e1ddb0f1849e"
+    },
+    {
+      "path": "current/types.bundle.js.gz",
+      "bytes": 20,
+      "sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+    },
+    {
+      "path": "current/types.metafile.json",
+      "bytes": 405,
+      "sha256": "703dfb3e10d1bc23258c3eec5be25e55d3283de1c5e0bb0067684cd1a6cbdddc"
+    },
+    {
+      "path": "current/validator.bundle.js.gz",
+      "bytes": 461694,
+      "sha256": "df9a82012699fbe36c6c12efa0ddbded6ab9466008bb6bb493d1d084cd20a8b2"
+    },
+    {
+      "path": "current/validator.metafile.json",
+      "bytes": 171176,
+      "sha256": "d466c6ede73e56b3cffc6651c54c91c86e3248ffcf7416470638941eddaeff88"
+    },
+    {
+      "path": "current/yaml.bundle.js.gz",
+      "bytes": 500159,
+      "sha256": "68a551d527d4d84a2d6e9ead790072ceb6d5d969a842f82753d787f2e8732619"
+    },
+    {
+      "path": "current/yaml.metafile.json",
+      "bytes": 245007,
+      "sha256": "68510fe815ba315ff50258b2653562beb83305c122b19a52cbbb4b8fbdd788a5"
+    },
+    {
+      "path": "mixedOnly/composition.bundle.js.gz",
+      "bytes": 272589,
+      "sha256": "316210ffbc690927e91a4d25fa1567d0c3f466d7d47ba735c7a181a64214c4f6"
+    },
+    {
+      "path": "mixedOnly/composition.metafile.json",
+      "bytes": 82127,
+      "sha256": "aafad8f2bf66633fb3d0b84f80db9c83a9f4b63453d30fc148a32c57352fbf09"
+    },
+    {
+      "path": "original-budget.json",
+      "bytes": 3554,
+      "sha256": "c56f800f285b353c74df3257e7b1b010b343d7b2119dd82a2d2b2f55b884ba5b"
+    },
+    {
+      "path": "timelineOnly/composition.bundle.js.gz",
+      "bytes": 272663,
+      "sha256": "326064e5435c4b32678e5346e1ec62193e292a049fd933c2445ad8105dc41843"
+    },
+    {
+      "path": "timelineOnly/composition.metafile.json",
+      "bytes": 82127,
+      "sha256": "acd06fd5ff2603a7fd69339ab37e3ff0734eb1fd2e2b5bad892e7fa43c5877b8"
+    },
+    {
+      "path": "withoutBoth/composition.bundle.js.gz",
+      "bytes": 271942,
+      "sha256": "9684a860918483a40fd6fb4577e6af9b3a6cd01657365fbc8877bf897773a066"
+    },
+    {
+      "path": "withoutBoth/composition.metafile.json",
+      "bytes": 82127,
+      "sha256": "7efb6f7552205a2aa65dd78b5bd355fb20f40cfe9e8aa702aa984ad9797c91db"
+    },
+    {
+      "path": "parent/audit-final-browser-entries.mjs",
+      "bytes": 6750,
+      "sha256": "e04c638e73d27d9155f3848282e9b86b0cb1d6e6e6960dac4867bca7c87a8697"
+    },
+    {
+      "path": "parent/final034-browser-audit01.log",
+      "bytes": 1939,
+      "sha256": "75101ce4e4d235137ae2f1285e36ec3d9954c85c47622bfee11eda1c6461a037"
+    }
+  ]
+}

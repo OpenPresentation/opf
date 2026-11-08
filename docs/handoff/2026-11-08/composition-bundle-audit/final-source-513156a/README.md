@@ -1,0 +1,5 @@
+# Final browser-entry audit
+
+Evidence only; never merge. All32 maintained browser entries use identical esbuild0.28.2/browser ESM/es2022/minify/gzip9 options against actual033 source26fd and combined034 source513156a, each with its own generated/resolver context. Every current measured byte equals the maintained measurement. No catalog modules occur. Source metadata remains separate from rule implementations.
+
+Composition grows246784to273272gzip bytes (actual033 to combined034);9new modules are chart anchors/numeric and word titles/DOT/native tree/Venn/duration support. Existing composition growth includes readability, RTL/legend and point corrections. Same-context composition counterfactuals are271942without either final timeline/code fix,272663timeline-only,272589code-only,273272both; combined increment1330bytes. Seven entries exceed old caps, all by at most5597bytes. The maintained updater retains the existing3percent headroom; no custom ceiling or new dependency is proposed. All metafiles, bundles, original budgets, tool and literal reports are losslessly packed and per-file verified.
