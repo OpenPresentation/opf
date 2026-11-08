@@ -1,0 +1,310 @@
+{
+  "source": "C:/opf-work/rr105-num-bounds-candidate-01",
+  "records": [
+    {
+      "path": "cases/numeric-arabic-indic-persian/import.json",
+      "bytes": 605,
+      "sha256": "b596e9d428e561158509e5c8da50c6c7dda3fd8181b65283aaac83f9856311e1"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/input.pptx",
+      "bytes": 102508,
+      "sha256": "1f02b7f02feead910065ab9a600bdd709de673f62974e97386a0f0c552430d57"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/original-sources/rtl-contrast-10-non-ascii-digits.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/png.exit.json",
+      "bytes": 468,
+      "sha256": "78f314b3d82cd6b647e8651889195d62dba3fab38d06e17299ada779ad3dd71e"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/png.stdout.json",
+      "bytes": 2057,
+      "sha256": "18af10a62c01893ba6d0dafc226d495a53272512f157baa4b16405bdc846ce02"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/pptx.exit.json",
+      "bytes": 457,
+      "sha256": "c529dbbbd8f03703742ccf3faea522ec6643c1282cf2f15dab005bd20ff1b08c"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/pptx.stdout.json",
+      "bytes": 2765,
+      "sha256": "25145b33f75037e36c1dd1bd638f8fa8f2dc278570df01ed6f271de4c03e3f1d"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/preview/slide-1.png",
+      "bytes": 31586,
+      "sha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "cases/numeric-arabic-indic-persian/strict-source-import.json",
+      "bytes": 1355,
+      "sha256": "fb3d6c438ce759412630818d824eee574691a7b24f1d34ce4c8893c86c5200b5"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/import.json",
+      "bytes": 3484,
+      "sha256": "e6e9d27aec4ed2f42ba94be8d06a53818db89d2e82f3f48755cb8379e897bada"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/input.pptx",
+      "bytes": 108478,
+      "sha256": "52aab647785fd33b05d21f4b6ac6f9cb639fd3da926fa7021f2eef2d8505487e"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/original-sources/rtl-contrast-05-mixed-explicit-arabic.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/original-sources/rtl-contrast-06-whole-explicit-arabic.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/original-sources/rtl-contrast-09-long-explicit-arabic.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/png.exit.json",
+      "bytes": 458,
+      "sha256": "4c8327305a7a74d087ba02e75aededc677af7add9daaeb8198a12be9c5757a06"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/png.stdout.json",
+      "bytes": 2697,
+      "sha256": "5643b728ad7a1e6f3760e55c01adde8a4205705bf617ffa2c706a2a5f15aec3d"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/pptx.exit.json",
+      "bytes": 447,
+      "sha256": "2eb94e20e97a3bf6568ef3b2c2f72c81b84c10d26ec26b3327ca60a4770fb1e6"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/pptx.stdout.json",
+      "bytes": 2755,
+      "sha256": "750941a2bee73ae22af0e9b1f68a3fdce4298c6db6cc7285505ab3dc00c1f852"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/preview/slide-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/preview/slide-2.png",
+      "bytes": 12169,
+      "sha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/preview/slide-3.png",
+      "bytes": 11680,
+      "sha256": "27cbf4fd66f0bffbbb77f78991525e28a42a89bc750fe98d4ce900633484ab52"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/source.opf.json",
+      "bytes": 841,
+      "sha256": "e01b20ca6cd491b7fc52a2350ac9bf5e817ba429b442c1af5c256c2e7d6506ee"
+    },
+    {
+      "path": "cases/numeric-explicit-arabic/strict-source-import.json",
+      "bytes": 4043,
+      "sha256": "9a1b3f275347d0655fb54b342bb3306188e8b5820316112733775eae3e09e932"
+    },
+    {
+      "path": "cases/numeric-french-negative/import.json",
+      "bytes": 714,
+      "sha256": "ac66eb86d6e1480af6ad262b8dab5977107fd5b5374975f075b489d83b82cb43"
+    },
+    {
+      "path": "cases/numeric-french-negative/input.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "cases/numeric-french-negative/original-sources/rtl-contrast-11-long-explicit-french.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "cases/numeric-french-negative/png.exit.json",
+      "bytes": 458,
+      "sha256": "1624c44157091363a6e93fdcbbc26ebeb5a2be1804ab324a81b572678aebc02b"
+    },
+    {
+      "path": "cases/numeric-french-negative/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/numeric-french-negative/png.stdout.json",
+      "bytes": 2047,
+      "sha256": "e13fd3e6122e3e06387e6dd6ecb681a08d8fad48cd54fbe614a46017f8b64d30"
+    },
+    {
+      "path": "cases/numeric-french-negative/pptx.exit.json",
+      "bytes": 447,
+      "sha256": "cc7d7b31ae9b0041529480d7ed97ed16ef663f6ee856e737b056be66e33744b5"
+    },
+    {
+      "path": "cases/numeric-french-negative/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cases/numeric-french-negative/pptx.stdout.json",
+      "bytes": 2755,
+      "sha256": "5a4089066cf40fc8bc96bff52668717152f6b87c6d50e274940b303cdc8d9046"
+    },
+    {
+      "path": "cases/numeric-french-negative/preview/slide-1.png",
+      "bytes": 30522,
+      "sha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492"
+    },
+    {
+      "path": "cases/numeric-french-negative/source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "cases/numeric-french-negative/strict-source-import.json",
+      "bytes": 996,
+      "sha256": "a6903ed8404aae6869d6d41719c1b6bf69a7d9dc94b72d2180ade285d0aee925"
+    },
+    {
+      "path": "progress.json",
+      "bytes": 1818,
+      "sha256": "e53b00b72eca08d1dde6a04f0b6304f89afff2517eb1cc2130150f4f6647a939"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 2437,
+      "sha256": "8469371874dd22bb405773df58b39ae802f77bddc3f8ecfa5830dc9a4b67511f"
+    },
+    {
+      "path": "runtime-after.json",
+      "bytes": 120522,
+      "sha256": "5a6b83272bf182edb365946a74795a186c774ca2da8e14f28f0ef49fefa76f35"
+    },
+    {
+      "path": "runtime-before.json",
+      "bytes": 120522,
+      "sha256": "5a6b83272bf182edb365946a74795a186c774ca2da8e14f28f0ef49fefa76f35"
+    },
+    {
+      "path": "strict-import-failures.json",
+      "bytes": 1747,
+      "sha256": "df507c2453aecdc28d1e14a03d2d4c7fd926cf459c0f58069c1e726b2650cd7f"
+    },
+    {
+      "path": "suite-identity.json",
+      "bytes": 303,
+      "sha256": "bf6b6963317e4bbc32d096fe21a9c9a3135c72cd52059f5e84a53cfff6ea753e"
+    },
+    {
+      "path": "suite/actions/numeric-arabic-indic-persian.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "suite/actions/numeric-explicit-arabic.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "suite/actions/numeric-french-negative.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "suite/inputs/numeric-arabic-indic-persian.pptx",
+      "bytes": 102508,
+      "sha256": "1f02b7f02feead910065ab9a600bdd709de673f62974e97386a0f0c552430d57"
+    },
+    {
+      "path": "suite/inputs/numeric-explicit-arabic.pptx",
+      "bytes": 108478,
+      "sha256": "52aab647785fd33b05d21f4b6ac6f9cb639fd3da926fa7021f2eef2d8505487e"
+    },
+    {
+      "path": "suite/inputs/numeric-french-negative.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "suite/previews/numeric-arabic-indic-persian-1.png",
+      "bytes": 31586,
+      "sha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3"
+    },
+    {
+      "path": "suite/previews/numeric-explicit-arabic-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "suite/previews/numeric-explicit-arabic-2.png",
+      "bytes": 12169,
+      "sha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e"
+    },
+    {
+      "path": "suite/previews/numeric-explicit-arabic-3.png",
+      "bytes": 11680,
+      "sha256": "27cbf4fd66f0bffbbb77f78991525e28a42a89bc750fe98d4ce900633484ab52"
+    },
+    {
+      "path": "suite/previews/numeric-french-negative-1.png",
+      "bytes": 30522,
+      "sha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492"
+    },
+    {
+      "path": "suite/sources/numeric-arabic-indic-persian.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "suite/sources/numeric-explicit-arabic.opf.json",
+      "bytes": 841,
+      "sha256": "e01b20ca6cd491b7fc52a2350ac9bf5e817ba429b442c1af5c256c2e7d6506ee"
+    },
+    {
+      "path": "suite/sources/numeric-french-negative.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "suite/suite.json",
+      "bytes": 7530,
+      "sha256": "23288447a4461ec4dd14058cdb22a9a48ec17578730fd1fe3c14029511cf8988"
+    }
+  ]
+}

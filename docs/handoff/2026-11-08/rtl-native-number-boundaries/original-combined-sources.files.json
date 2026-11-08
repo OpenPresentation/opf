@@ -1,0 +1,20 @@
+{
+  "source": "C:/opf-work/rr105-num-bounds-source-01",
+  "records": [
+    {
+      "path": "numeric-arabic-indic-persian.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "numeric-explicit-arabic.opf.json",
+      "bytes": 841,
+      "sha256": "e01b20ca6cd491b7fc52a2350ac9bf5e817ba429b442c1af5c256c2e7d6506ee"
+    },
+    {
+      "path": "numeric-french-negative.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    }
+  ]
+}

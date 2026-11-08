@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "frozenSource": "cc587ac337d92f645360aecf469039b4d297d0ec",
+  "baseIntegration": "adb727473ef4670314da44b324e852687ef1b38d",
+  "ownFrozenBase": "08245f85402b6c62b0c6dbaac29fb30681b854b8",
+  "sourceRuntimeSha256": "cece88da9dd93778ddeaaee33daa4eca5195d99743556e673bfca2f78305304e",
+  "suiteSha256": "23288447a4461ec4dd14058cdb22a9a48ec17578730fd1fe3c14029511cf8988",
+  "nativeAcceptance": false,
+  "overallAccepted": false,
+  "strictImportPassed": false,
+  "strictImportFailureCount": 2,
+  "focusedTests": {
+    "total": 29,
+    "passed": 26,
+    "failed": 3,
+    "scope": "All strict failures retained, no waiver; native glyph behavior unqualified."
+  },
+  "candidateResults": [
+    {
+      "id": "numeric-explicit-arabic",
+      "changedParts": [
+        "ppt/slides/slide1.xml",
+        "ppt/slides/slide2.xml",
+        "ppt/slides/slide3.xml"
+      ],
+      "exactNativeSamePropertyPartition": true,
+      "allNonSlidePartsByteExact": true,
+      "strictImportPassed": false,
+      "sources": [
+        "rtl-contrast-09-long-explicit-arabic",
+        "rtl-contrast-05-mixed-explicit-arabic",
+        "rtl-contrast-06-whole-explicit-arabic"
+      ],
+      "sourceSha256": "e01b20ca6cd491b7fc52a2350ac9bf5e817ba429b442c1af5c256c2e7d6506ee",
+      "archiveSha256": "52aab647785fd33b05d21f4b6ac6f9cb639fd3da926fa7021f2eef2d8505487e",
+      "slideCount": 3,
+      "shapes": [
+        3,
+        2,
+        2
+      ],
+      "originalPreviewsByteExact": true
+    },
+    {
+      "id": "numeric-arabic-indic-persian",
+      "changedParts": [
+        "ppt/slides/slide1.xml"
+      ],
+      "exactNativeSamePropertyPartition": true,
+      "allNonSlidePartsByteExact": true,
+      "strictImportPassed": true,
+      "sources": [
+        "rtl-contrast-10-non-ascii-digits"
+      ],
+      "sourceSha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+      "archiveSha256": "1f02b7f02feead910065ab9a600bdd709de673f62974e97386a0f0c552430d57",
+      "slideCount": 1,
+      "shapes": [
+        8
+      ],
+      "originalPreviewsByteExact": true
+    },
+    {
+      "id": "numeric-french-negative",
+      "changedParts": [],
+      "exactNativeSamePropertyPartition": true,
+      "allNonSlidePartsByteExact": true,
+      "strictImportPassed": true,
+      "sources": [
+        "rtl-contrast-11-long-explicit-french"
+      ],
+      "sourceSha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303",
+      "archiveSha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "slideCount": 1,
+      "shapes": [
+        3
+      ],
+      "originalPreviewsByteExact": true
+    }
+  ],
+  "archives": [
+    {
+      "path": "frozen-base-probes.zip",
+      "files": 41,
+      "rawBytes": 697092,
+      "bytes": 393758,
+      "sha256": "a187eda1431f837ac4460a6b86a9114c59563bb2a7e55545918d1703f71ff0a8",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "failed-import-candidate.zip",
+      "files": 61,
+      "rawBytes": 1145657,
+      "bytes": 715082,
+      "sha256": "506c9ea475d17b31439fa6f9ddaa2e102344b9371c4ad27280d655beeacd7d4e",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "original-combined-sources.zip",
+      "files": 3,
+      "rawBytes": 1733,
+      "bytes": 1192,
+      "sha256": "b0ac091a7dc5c7245aae456aaed131769a562ddb01115d6ff74df68a02c99e73",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "producer-validation-first-failures.zip",
+      "files": 20,
+      "rawBytes": 95995,
+      "bytes": 25890,
+      "sha256": "d245c48c09b02a49b8e1ba2ab8b0f06a2f8d4e6694b8ae6bf7ee2db164efb25e",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    }
+  ]
+}

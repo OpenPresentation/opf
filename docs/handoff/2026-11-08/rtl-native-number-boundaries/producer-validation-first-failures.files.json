@@ -1,0 +1,105 @@
+{
+  "source": "C:/opf-work/rr105-num-bounds-evidence",
+  "records": [
+    {
+      "path": "after-unit-exact-paragraph.log",
+      "bytes": 15591,
+      "sha256": "09ec660efc10b7ce662c5bc390789683aece5697a745299e83ab6ede9dbd6f82"
+    },
+    {
+      "path": "after-unit-final.log",
+      "bytes": 869,
+      "sha256": "8c3473b39d06402817eb6fe386baaceccb7b47af75f4d8283fac8210f6e56039"
+    },
+    {
+      "path": "after-unit.log",
+      "bytes": 5548,
+      "sha256": "8034447ea41b7f0baef4a3920d4035f4529639d94f0420c6fae27065ad5b58cb"
+    },
+    {
+      "path": "baseline-probes.log",
+      "bytes": 1608,
+      "sha256": "a460326ac28bb86b755757ffe0d162cc5845a363804d1225cf42b20a493af40a"
+    },
+    {
+      "path": "before-unit-exact-inherited.log",
+      "bytes": 8607,
+      "sha256": "61660a3f2409c590aef751ea00ecb82b8aa7dc9889523d95aaf953117647422b"
+    },
+    {
+      "path": "before-unit.log",
+      "bytes": 8609,
+      "sha256": "7632155fad2121f880831a3ee85e0b8812e6bb218408aec74019b779052262aa"
+    },
+    {
+      "path": "candidate-pptx-build.log",
+      "bytes": 67,
+      "sha256": "6daabdf6de1dd64c7139fd1e77a909d87df061e382b7db5d0a63ca41c9e83474"
+    },
+    {
+      "path": "candidate-probes.log",
+      "bytes": 2171,
+      "sha256": "ffa10666c72c69b93753578aff67f3ec2b1f69322d94b09bda8fc714043390b9"
+    },
+    {
+      "path": "candidate-producer-first-syntax.log",
+      "bytes": 983,
+      "sha256": "dd96bd99acae51e17c3a29fe2bca711f455662b1c99f09398dd40987fbbcadd0"
+    },
+    {
+      "path": "combined-focused.log",
+      "bytes": 6558,
+      "sha256": "eae0c1a5c5bfec46c1a324bb1b4dd98a2aefd213e192407d14cd770912a398e9"
+    },
+    {
+      "path": "number-base-build.log",
+      "bytes": 14773,
+      "sha256": "a8ad69e1fdfe1524e55d046a5d8befebff93222c63e72db463928ca2a87389aa"
+    },
+    {
+      "path": "number-base-install.log",
+      "bytes": 4409,
+      "sha256": "5f7bed2e29fdca21a70d987b87c5e7e763fb0915080940236df24c9328367258"
+    },
+    {
+      "path": "number-base-merge.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "package-experiment.mjs",
+      "bytes": 2843,
+      "sha256": "1137c2c130eb9ccc2046e6050e2ba7d609554f1de2eb7144a48ca26726951eec"
+    },
+    {
+      "path": "package-publication.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prepare-candidate-producer.mjs",
+      "bytes": 4133,
+      "sha256": "5137886ce5ae7bb715af51d870ecabf643b3ba8296d8bfc38844b606c90272ce"
+    },
+    {
+      "path": "prepare-suite.mjs",
+      "bytes": 2984,
+      "sha256": "c7356bed1ba696071e17da577ada5ba6a96da32813d75c1d3d3f527fa27875cc"
+    },
+    {
+      "path": "produce-failed-import-experiment.mjs",
+      "bytes": 8267,
+      "sha256": "bc1afe49314e92f092bdb53aef5db6f1a652cf78c3ebdd424b6763b5f13187d1"
+    },
+    {
+      "path": "produce-probes.mjs",
+      "bytes": 5819,
+      "sha256": "fdcbe0f65c6dd0ee1aa8a375498abe29ada4419be7d3bf333ee5c0bddaefe4a8"
+    },
+    {
+      "path": "source-and-import-focused.log",
+      "bytes": 2156,
+      "sha256": "286095514d6676cc63b36dc3a2350c8968258f565c41f36ef51bb4635d4dd833"
+    }
+  ]
+}
