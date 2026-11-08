@@ -2,8 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "kind": "layouts",
   "version": "1",
-  "description": "The built-in slide layouts of OPF 0.19: 39 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "e1f723fdcf7434b8ca50e5c12532ddeb680a4848afd1a1bef91d48cd1cd87574",
+  "description": "The built-in slide layouts of OPF 0.19: 40 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
+  "contentSha256": "40188cceae8b63ce4022e8183aaff516b552f2a93fae37b10ebc18849760f2bb",
   "records": [
     {
       "id": "cover",
@@ -123,6 +123,13 @@
       "summary": "Levels that build on each other, as a pyramid, the first at the top.",
       "group": "Groups of items",
       "file": "pyramid.json"
+    },
+    {
+      "id": "inverted-pyramid",
+      "name": "Inverted pyramid",
+      "summary": "Levels that narrow to a point, with the widest first.",
+      "group": "Groups of items",
+      "file": "inverted-pyramid.json"
     },
     {
       "id": "matrix",

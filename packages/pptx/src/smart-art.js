@@ -222,6 +222,7 @@ const plain = value => runsOf(value).map(run => run?.text ?? '').join('');
  * list's entries as authored.
  */
 export function smartArtReason(arrangement, values, rtl) {
+  if (arrangement.kind === 'pyramid' && arrangement.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
   if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
     return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
   if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
@@ -234,6 +235,7 @@ export function smartArtReason(arrangement, values, rtl) {
 
 /** SH-19: whether OPF's own design can be live SmartArt on OPF's layout definition: undefined when it can, else the reason. */
 export function opfLayoutReason(arrangement, values, rtl) {
+  if (arrangement.kind === 'pyramid' && arrangement.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
   if (!arrangement.layout) return 'its design has no OPF layout definition';
   if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
     return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
@@ -317,7 +319,7 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
       const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex.slice(1):fill,nodeLine=arrangement.kind==='hierarchy'?{...line,color:fill}:line;
       const alpha=arrangement.kind==='venn'?.5:arrangement.kind==='hierarchy'?.9:1;
       slide.addShape(node.preset, {...box(node.box), fill: {color:nodeFill,...(alpha===1?{}:{transparency:(1-alpha)*100})}, line:nodeLine, objectName,
-        ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {})});
+        ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {}), ...(node.flipV ? {flipV: true} : {})});
       tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {})});
       // SH-18: a cycle's arrow after its node, as PowerPoint stacks them.
       for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) addCycleArrow(slide, arrow, {box, name, tag, color: paint.arrow.hex.slice(1)});
@@ -694,8 +696,8 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
       const sameLevels=stored&&stored.items.length===items.length&&stored.items.every((value,index)=>Number(value?.level??0)===Number(items[index]?.level??0));
       const unchanged = stored && (flat||tree&&sameLevels) && stored.texts.length === texts.length && stored.texts.every((text, at) => text.replace(/ /g, ' ') === texts[at]);
       if (stored && !unchanged) report?.({code: 'smartart-edited', path: stored.path ?? path, message: `The ${kind} was edited in PowerPoint; its list is read from the SmartArt's nodes.`});
-      if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${kind} layout with its entries.`});
-      out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});
+      if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${form.pyramidDirection === 'down' ? 'inverted pyramid' : kind} layout with its entries.`});
+      out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${form.pyramidDirection === 'down' ? 'inverted-pyramid' : kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});
       continue;
     }
     if (form.layout) {

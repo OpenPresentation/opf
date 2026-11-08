@@ -36,3 +36,6 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 
 
 - Trees and set overlap: single-root reporting lines, a nested hierarchy, and Basic Venn with semantic entry depths and short labels ([`trees-and-sets.opf.json`](./trees-and-sets.opf.json)); regenerate with `node tools/shapes/sh-21/build-examples.mjs`.
+- [Inverted pyramids](inverted-pyramids.opf.json): wide-first selections, narrative labels and grouped workstreams, exported as editable native shapes.
+
+The exhaustive [layout sampler](./layout-sampler.opf.json) has all40 default layouts and13 dynamic compositions (53 slides). Regenerate its referenced current records and append new layouts with `node scripts/update-layout-sampler.mjs`; existing slide identities, words and ordinals remain unchanged.

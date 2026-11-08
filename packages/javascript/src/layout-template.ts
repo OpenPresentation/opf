@@ -64,6 +64,8 @@ export interface LayoutRegion {
    * boxes with arrows between them) or `vertical-flow` (a column of them). Absent: a list.
    */
   arrangement?: Arrangement;
+  /** Narrow tip at the top (up, default) or bottom (down); authored entry order stays top to bottom. */
+  pyramidDirection?: 'up' | 'down';
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -162,6 +164,7 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
     ...(isArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
+    ...(entry.arrangement === 'pyramid' && entry.pyramidDirection === 'down' ? {pyramidDirection: 'down' as const} : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

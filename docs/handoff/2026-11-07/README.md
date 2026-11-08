@@ -122,4 +122,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 
 SH-23 isolated qualification: [source scope, five native ninth-node save/reopen passes and remaining integration gate](sh23-qualified.md). Unfinished SH20–22 work stays on its separate continuation branch.
 
-SH-21 continuation: [measured schema, composition and engine wiring; native qualification and catalog work still owed](sh21-measured-wiring.md).
+SH-21 continuation: [measured geometry, engines, final40 catalog/sampler; native qualification still owed](sh21-measured-wiring.md).
+- Inverted pyramid continuation: [SH-24](sh24-inverted-pyramid.md), issue #1128; accepted frozen source8bd560e4 is merged into the continuation; native acceptance is recorded, integration gates still owed.
