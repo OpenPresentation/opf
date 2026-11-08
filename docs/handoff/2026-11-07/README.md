@@ -11,7 +11,7 @@ Files in this folder:
 
 Review sheets (before/after PNGs) for every output-changing PR are on the evidence-only branch `handoff/review-sheets-2026-11-07` (never merged): `git fetch origin handoff/review-sheets-2026-11-07`, or browse it on GitHub.
 
-Latest continuation: [v0.33.0 checkpoint](release-033-resume.md) (goldens reviewed; final qualification in progress).
+Latest continuation: [v0.33.0 checkpoint](release-033-resume.md) (goldens reviewed; blocker fixes folded; final combined gate next).
 
 ## State at handoff
 
