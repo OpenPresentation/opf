@@ -562,3 +562,7 @@ A slide whose SmartArt became overlay shapes has only its title besides them. Ov
 slide (core `overlaysDrawBody`, `OVERLAY_BODY_SHARE`; front layer, placed by fractions) are the slide's body, so its title is a content
 slide's, on top, not a cover's centered over the shapes; a badge on a cover leaves the cover as it was. This holds for any slide, authored
 or imported (`examples/technical/shape-overlays.opf.json` slide 5's title moves to the top).
+
+## Inverted pyramids
+
+Use the `inverted-pyramid` layout to narrow from a broad starting pool to a final choice. A custom pyramid region sets `pyramidDirection: "down"`; `"up"` is the existing default. The first entry stays at the top, so a downward pyramid starts wide and ends at the tip. Both the continuous outline and the stepped design use core geometry; neither reverses the text order or reduces the text size. PowerPoint export uses editable native shapes with a located `smartart-unavailable` finding. Live `pyramid3` and downward OPF layout definitions remain unqualified. Import maps an Inverted Pyramid to this layout while reporting its adapted styling. See [the example](../examples/technical/inverted-pyramids.opf.json).

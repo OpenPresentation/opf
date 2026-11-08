@@ -1,0 +1,7 @@
+# SH-24 continuation
+
+Issue #1128 has an isolated implementation on `codex/sh-24-inverted-pyramid`, based on reviewed v0.34 preparation e8064d1e3. Geometry, schema, compiled region/composition, editable-shapes export and foreign SmartArt import are implemented. The new catalog layout and maintained generated preview are included; the other 36 previews remain unchanged. New regressions fail before the geometry fix and pass after; native review, full changed-file checks and final integration acceptance are still owed.
+
+Vetoable decisions and status are in the shapes burndown. Downward live SmartArt is refused in both core and exporter; no domain threshold is changed. Source branches must be frozen once folded. No release or deployment is claimed.
+
+The required changed-scope run finished in389.5seconds. Build, Biome, typecheck, stability and most root checks pass. It exposed stale exact catalog-count controls (now37, with all old equivalence fixtures preserved and the new ID added to the existing ADDED set); focused core/gallery controls pass after that correction. Generated schema docs are now refreshed and their check passes. Remaining literal failures: omitted sparse compressed evidence; an inherited unembedded multilingual example (being fixed in the derived034integration); and core/template/archive goldens that require the one reviewed034integration refresh. The first full core run has4003passes. PPTX stops at the inherited034chartex archive lock after22files;219remain unrun, with no archive assertion relaxed. No local baseline is changed.

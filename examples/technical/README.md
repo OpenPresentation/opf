@@ -31,3 +31,5 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Custom narrative records, slide beat links and catalog override surfaces.
 
 - `multilingual-slides.opf.json`: English, Arabic, Japanese and French slides in one deck, with a selected Arabic script font and locale-aware numbers.
+
+- [Inverted pyramids](inverted-pyramids.opf.json): wide-first selections, narrative labels and grouped workstreams, exported as editable native shapes.

@@ -118,3 +118,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - D2 is recommended against (it waits for the owner).
 - Whether to promote LibreOffice from "experimental" (RR-106; the results are in `docs/programs/release-readiness/qualification-0.33-libreoffice.md`, on #1084).
 - Every entry in [decisions.md](decisions.md) is vetoable.
+
+- Inverted pyramid continuation: [SH-24](sh24-inverted-pyramid.md), issue #1128; source implementation is isolated, with review/native/integration gates still owed.
