@@ -1,0 +1,5 @@
+Exception: C:\opf-work\release-033-artifacts\sh21-seed-readonly-01\seed-readonly.ps1:28
+Line |
+  28 |  . ms.Count -lt 1){throw 'Seed SmartArt not materialized after Export.'}
+     |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Seed SmartArt not materialized after Export.

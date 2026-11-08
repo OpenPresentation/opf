@@ -1,0 +1,7 @@
+﻿{
+    "scope":  "Cleanup only of exact process3384 and its one owned read-only seed copy after a failed observation; no Office process termination",
+    "inputSha256":  "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+    "inputSha256After":  "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+    "quitEmpty":  true,
+    "closed":  true
+}
