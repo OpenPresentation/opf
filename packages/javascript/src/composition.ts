@@ -9812,16 +9812,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-33: sibling charts of one unit share their value axis (chart-axis.ts); LH-93: and one plot height (chart-plot.ts).
   const chartMeasure = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 400, italic: false, path}, options.textMeasurement), options.textMeasurement);
   const plotGeometry = (item: unknown) => ({scale, minFontSize: (item as ComposedItem).composition.minFontSize, measure: chartMeasure, direction: rtl ? 'rtl' as const : 'ltr' as const, language: deckLanguage()});
-  shareSiblingPlots(shareSiblingChartAxes(items, options.presentation), plotGeometry, options.presentation);
-  // LH-105: a shared plot moves the line ends, so their names are placed again.
-  refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
+  const siblingCharts = shareSiblingChartAxes(items, options.presentation);
+  shareSiblingPlots(siblingCharts, plotGeometry, options.presentation);
   // LH-109, LH-110: and so do a stacked chart's names and the reference marks. The bold face is resolved only for a slide that has them
   // (a deck without a bold body face must not fail on a slide that never draws one).
-  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends || item.chart?.layer?.references);
+  const marked = items.filter(item => item.chart?.layer?.stack || item.chart?.layer?.references);
   if (marked.length) {
-    const chartBold = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement);
-    refreshChartMarks(marked, item => ({...plotGeometry(item), bold: chartBold}), options.presentation);
+    const needsBold = marked.some(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends || item.chart?.layer?.references);
+    const chartBold = needsBold ? textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement) : undefined;
+    // Each horizontal chart can only lose its names row and restore its axis once, so at most two monotonic transitions per chart.
+    for (let pass = 0; pass <= marked.length * 2; pass++) {
+      if (!refreshChartMarks(marked, item => ({...plotGeometry(item), ...(chartBold ? {bold: chartBold} : {})}), options.presentation)) break;
+      shareSiblingPlots(siblingCharts, plotGeometry, options.presentation);
+    }
   }
+  // LH-105: after all shared plot changes, line-end names follow their final points.
+  refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
   // LH-113: a table draws the rows its `highlight` names, else the rows the slide's texts name (chart-focus.ts), on the highlight tint.
   for (const item of items) {
     if (item.field !== 'table') continue;

@@ -345,3 +345,5 @@ Independent items (PPTX, validator, skills, gallery tooling) can land at any tim
 
 - 2026-11-08: LH-121 localizes generated status words in the shared language vocabulary. Core tests cover every advertised entry, regional/script aliases, explicit-text/status preservation and the no-shrink guard; SVG/PPTX tests cover Latin, RTL, Japanese and Traditional Chinese.
 
+
+- 2026-11-08: LH-93 stacked-horizontal remainder implemented for review on `codex/lh-93-stacked-siblings`. Final plots share width/height/top; names and values refit against that geometry at unchanged font size. Vetoable decision: restore the existing full-size legend when name starts would collide, restore numeric ticks when direct values no longer label every segment, and re-share after at most two monotonic transitions per chart. Options and table-aligned rows keep precedence. Core and native XML/import regressions cover default/percent, negative/null, name/axis fallback and unchanged values; review sheets/native acceptance follow before integration.
