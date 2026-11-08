@@ -1,0 +1,167 @@
+[
+  {
+    "id": "org-chart-3",
+    "mode": "style-ids",
+    "beforeSha256": "bad3c538dd138e80aa4adfb4579fff9d897cf22df8c75d92281f0c0c1915098d",
+    "afterSha256": "3e6421a20e750af57a132463d81a3d0c950dd4221a00837da5e171352106a48a",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "org-chart-5",
+    "mode": "style-ids",
+    "beforeSha256": "ab9f0a71a1b54fe728fd844e4cd91d8a33c4ba7a6fb2b7e846c0ea7e2c43926e",
+    "afterSha256": "0eaa31b87f555f2b6c03e2a50f6d8a3fec2e82c409e89b33034459fc397afcf6",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "hierarchy-3",
+    "mode": "style-ids",
+    "beforeSha256": "0212f0cfa315006ef378e1fb33a28907eaa1c27ae70c0318ef8144403bf5069d",
+    "afterSha256": "11a91d60b5162a7eca33e1a2f3762beab9d0a9240d5e0d0cb5d80e65061b976e",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "hierarchy-5",
+    "mode": "style-ids",
+    "beforeSha256": "57fd639895bf72fc6adbf72eb4c3a15f4a247f17b05c0a52edaa8c1b70a06ca9",
+    "afterSha256": "9293c7fcfd45e8f6de438e0d4a0d3e1b8380910eab07c9325bc3b3a519e9db12",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "venn-1",
+    "mode": "style-ids",
+    "beforeSha256": "bcf90fc7447075b8938bb0c51d27d458ec185a262f95a8febcf756ccb9f3cbad",
+    "afterSha256": "f801fd156e4d6eceb9420aebb31676408490daa713ccf882a6379c406453fdec",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "venn-2",
+    "mode": "style-ids",
+    "beforeSha256": "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87",
+    "afterSha256": "f5d3e389bbf5230414cd1c7121f9a55c864111cd5a83d4a7391b1e24a9198216",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "venn-3",
+    "mode": "style-ids",
+    "beforeSha256": "a18ea1c52e19ad3ede3ffb65859d1e38a3e209226babe711689baa2e031bbaa0",
+    "afterSha256": "eb8fa4c1360893a20904e5aa0599250c4b82e20fd303e8df1f523fb14e93b754",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "venn-4",
+    "mode": "style-ids",
+    "beforeSha256": "e0af058ed6adcb57b7dc711ab76a0e9cdb349c57a7a551d0d762d36a837ead9e",
+    "afterSha256": "e8c980592a1f080cda31d40b08a85f38e6c6b68507572a601e90cda18f4df865",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "venn-5",
+    "mode": "style-ids",
+    "beforeSha256": "43656d0acbbf87fdd192178b325610afe074ae1aad87df7e6494e600de1b409f",
+    "afterSha256": "113337e357474c6bcf43a54f8643952ee838b38ba6a544b7d4a1b43ebba7a858",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "venn-6",
+    "mode": "style-ids",
+    "beforeSha256": "5543c7473a2f854ddb7414900f1a200ac62339d8900c89a85d3a6012a896e9dd",
+    "afterSha256": "65ca121b567292c78b76c15395345f33279f1e1864469ef3af1ba3c239ba308f",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  },
+  {
+    "id": "venn-7",
+    "mode": "style-ids",
+    "beforeSha256": "57c276c8db2f5afe769537800544ce436231fb81859c6556903cf264a776779b",
+    "afterSha256": "8cf75be24df33aa85bfea185874b269664bc65c99f26973dd4a54746f82187de",
+    "changedParts": [
+      "ppt/diagrams/colors1.xml",
+      "ppt/diagrams/data1.xml",
+      "ppt/diagrams/quickStyle1.xml"
+    ],
+    "unchangedParts": 149,
+    "nativeControlByteExact": true,
+    "previewByteExact": true,
+    "semanticsUnchanged": true
+  }
+]
