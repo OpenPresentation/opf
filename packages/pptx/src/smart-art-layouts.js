@@ -47,6 +47,9 @@ export function opfLayoutKind(uniqueId) {
   return OPF_LAYOUT_KIND[uniqueId.slice(OPF_LAYOUT_NAMESPACE.length).split('/')[0].replace(/-compact$/, '')];
 }
 
+/** SH-23: the entry counts OPF's layout definitions carry a table for (OPF draws at most OPF_LAYOUT_MAX; PowerPoint users add more). */
+export const OPF_LAYOUT_TABLES = 12;
+
 const PT = .75, TOLERANCE = .1 / PT; // 0.1 pt in canvas pixels
 const near = (a, b) => Math.abs(a.x - b.x) <= TOLERANCE && Math.abs(a.y - b.y) <= TOLERANCE && Math.abs(a.width - b.width) <= TOLERANCE && Math.abs(a.height - b.height) <= TOLERANCE;
 const turn = (a, b) => Math.abs((((a - b) % 360) + 540) % 360 - 180) <= .01;
@@ -65,8 +68,12 @@ export function opfLayoutDefinition(arrangement, item) {
   const own = {nodes: arrangement.nodes, arrows: arrangement.arrows ?? [], ...(textTops.every(top => top !== undefined) ? {textTops} : {})};
   const margins = (arrangement.margins ?? [arrangement.textMargin, arrangement.textMargin, arrangement.textMargin, arrangement.textMargin]).map(value => value / size);
   const card = arrangement.paint === 'card';
-  const definition = compositeLayoutDefinition({uniqueId: opfLayoutId(recipe), title: identity.title + (recipe.compact ? COMPACT.title : ''), description: identity.description + (recipe.compact ? COMPACT.description : ''), category: identity.category},
-    frame, OPF_LAYOUT_MAX, k => k === count ? own : opfLayoutGeometry(recipe, k), {node: card ? 'alignNode1' : 'node1', text: arrangement.text, margins, fontSize: size * PT});
+  // SH-23: tables up to OPF_LAYOUT_TABLES entries, so entries a user adds in PowerPoint past OPF's 8 keep OPF's design (where every larger
+  // table holds; else the tables stop at 8 and a ninth entry takes the 8-entry table, as before).
+  const build = max => compositeLayoutDefinition({uniqueId: opfLayoutId(recipe), title: identity.title + (recipe.compact ? COMPACT.title : ''), description: identity.description + (recipe.compact ? COMPACT.description : ''), category: identity.category},
+    frame, max, k => k === count ? own : opfLayoutGeometry(recipe, k), {node: card ? 'alignNode1' : 'node1', text: arrangement.text, margins, fontSize: size * PT});
+  let definition = build(OPF_LAYOUT_TABLES);
+  if (definition.reason) definition = build(OPF_LAYOUT_MAX);
   if (definition.reason) return definition;
   let drawn;
   try { drawn = layoutArrangement(evaluateLayoutDefinition(definition, frame, count)); }
