@@ -475,3 +475,5 @@ Node, Bun and Deno load every diagram type with core and draw any diagram at onc
 Pele reads Mermaid 12.1 syntax but has its own layout and drawing, so a diagram does not match the pixels of mermaid.js, and an unusual construct may parse in one and not in the other. Write for the OPF drawing: check a diagram in the preview (`opf convert deck.opf.json slide-{n}.png`), not in Mermaid's live editor.
 
 PlantUML Gantt schedules refuse durations, offsets or task spans over 36,600 days and more than 366,000 calendar-day checks per diagram. These limits produce a located diagnostic where a source location is available; shorten the schedule or split it into separate diagrams. A calendar with every weekday closed, an invalid date, or a task ending before it starts is refused instead of normalized.
+
+PlantUML state transitions use one arrowhead. Write two separate transitions for both directions; a two-headed state arrow is a source-positioned syntax finding.

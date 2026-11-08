@@ -201,7 +201,7 @@ function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = 
   // LH-153: `code` is chartexPartXml's `axisCode`: the first series' format, else `#,##0` where the axis groups its thousands (a binned axis counts).
   const numberFormat = code === undefined ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
   // LH-107: a waterfall whose bars carry their values has no value axis and no gridlines (cx:axis hidden, as the funnel's).
-  const value = hiddenValue ? `<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1">${valueScaling(valueAxis)}${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
+  const value = hiddenValue ? `<cx:axis id="1" hidden="1">${valueScaling(valueAxis)}<cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1">${valueScaling(valueAxis)}${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
   const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"${percentUnit > 0 && percentUnit <= 1 ? ` majorUnit="${numberText(percentUnit)}"` : ''}/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
   return `${category}${value}${percentage}`;
 }
