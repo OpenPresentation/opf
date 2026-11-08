@@ -114,3 +114,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - D2 is recommended against (it waits for the owner).
 - Whether to promote LibreOffice from "experimental" (RR-106; the results are in `docs/programs/release-readiness/qualification-0.33-libreoffice.md`, on #1084).
 - Every entry in [decisions.md](decisions.md) is vetoable.
+
+- Golden workflow continuation: [RR-108](rr108-template-goldens.md) covers core composition and renderer templates in the pinned environment; final v0.34 batch and visual review remain owed.
