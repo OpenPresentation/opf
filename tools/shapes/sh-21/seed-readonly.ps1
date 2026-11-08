@@ -37,6 +37,7 @@ try{
    for($k=1;$k -le $shape.GroupItems.Count;$k++){
     $g=$shape.GroupItems.Item($k);$record=@{index=$k;shapeType=[int]$g.Type;preset=[int]$g.AutoShapeType;left=[double]$g.Left;top=[double]$g.Top;width=[double]$g.Width;height=[double]$g.Height;rotation=[double]$g.Rotation;fillType=[int]$g.Fill.Type;transparency=[double]$g.Fill.Transparency}
     if($g.HasTextFrame -eq -1 -and $g.TextFrame2.HasText -eq -1){$record.text=[string]$g.TextFrame2.TextRange.Text;$record.size=$g.TextFrame2.TextRange.Font.Size}
+    if($g.Type -eq 5){$record.points=@(for($j=1;$j -le $g.Nodes.Count;$j++){$vertex=$g.Nodes.Item($j);@{index=$j;editingType=[int]$vertex.EditingType;segmentType=[int]$vertex.SegmentType;points=@($vertex.Points)}})}
     $items+=,$record
    }
    $rows.Add(@{kind=$job.kind;slide=$job.slide;layout=[string]$sa.Layout.Id;frame=@{left=$shape.Left;top=$shape.Top;width=$shape.Width;height=$shape.Height};nodes=$nodes;items=$items})
