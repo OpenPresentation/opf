@@ -4,8 +4,8 @@
     244
   ],
   "required": 64,
-  "reviewed": 24,
-  "status": "24 of 64 original sheets reviewed; remaining 40 unreviewed. Explicit design holds and stress/refusal classifications retained.",
+  "reviewed": 32,
+  "status": "32 of 64 original sheets reviewed; remaining 32 unreviewed. Explicit design holds and stress/refusal classifications retained.",
   "records": [
     {
       "ordinal": 181,
@@ -1763,6 +1763,827 @@
           "ordinal": 8,
           "judgment": "usable-with-style-provenance-note",
           "note": "The quote remains readable beside a much larger full-height image. Preserve the visible change in image treatment without treating the alternate historical crop as authoritative.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 205,
+      "deck": "batch-15",
+      "localSheet": 3,
+      "sha256": "6393f783fb84b3d08e6916cd16af7d469212195f495d79e19ae1c424fcfbae56",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s09",
+          "ordinal": 9,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "The two complete quotations are readable and centered. Preserve the current black versus historical navy background distinction without an unsupported regression claim.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s10",
+          "ordinal": 10,
+          "judgment": "needs-type-growth-review",
+          "note": "The two short bullet groups and decision summary remain small in the upper half with ample unused body space.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s11",
+          "ordinal": 11,
+          "judgment": "needs-timeline-text-recheck",
+          "note": "Both timelines keep descriptions, dates and names but generated event type remains very small. Keep the nested-timeline hold; do not remove descriptions to match the alternate.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s12",
+          "ordinal": 12,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "The section break has a clear larger title and subtitle with no collision. Its current blue background and lower-left alignment differ visibly from historical treatment.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 206,
+      "deck": "batch-15",
+      "localSheet": 4,
+      "sha256": "6fd5fd5ad882b4b53ade932b64245c7fbcb0dc1906893d6d4b0476c198bb3f55",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s13",
+          "ordinal": 13,
+          "judgment": "usable-with-growth-note",
+          "note": "Five metrics use a balanced 3+2 grid and larger values; supporting descriptions remain fine relative to available card space.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s14",
+          "ordinal": 14,
+          "judgment": "usable-with-chart-legibility-note",
+          "note": "Three charts plus two narratives fit cleanly. Fine axes and legends remain a legibility caveat.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s15",
+          "ordinal": 15,
+          "judgment": "stress-refusal-control",
+          "note": "All eight image tiles appear on the sheet, but two layout-unplaced findings remain. This is an unaccepted stress/refusal control, not a cleared layout.",
+          "findings": [
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/14/blocks/6",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "people"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/14/blocks/7",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'people' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "people"
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s16",
+          "ordinal": 16,
+          "judgment": "usable-with-growth-note",
+          "note": "The six numbered actions are readable in the right-side column with preserved wording; additional type growth remains possible in the sparse body.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 207,
+      "deck": "batch-15",
+      "localSheet": 5,
+      "sha256": "f4d4b9e7cf7a4a78ffdd9463a59788c710118da549700430380041503cc17a74",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s17",
+          "ordinal": 17,
+          "judgment": "usable",
+          "note": "The complete paragraph, signal and cost grow into readable separate regions with no overlap.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s18",
+          "ordinal": 18,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "Five quotations remain visible in a 3+2 arrangement, with fine attribution text. Current black background differs visibly from the historical navy treatment.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s19",
+          "ordinal": 19,
+          "judgment": "usable-with-chart-legibility-note",
+          "note": "Both stacked chart bands fill the slide width without collision. Fine category and legend text remains a legibility caveat.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s20",
+          "ordinal": 20,
+          "judgment": "needs-timeline-text-recheck",
+          "note": "Five nested timelines retain all descriptions but remain very small. Preserve the readability hold rather than deleting prose to copy the alternate.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 208,
+      "deck": "batch-15",
+      "localSheet": 6,
+      "sha256": "115988a7ff519d6d9e1077dba7f2efe5f169e6e91d6d174bda729fcc754a7a64",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s21",
+          "ordinal": 21,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "The section title and subtitle grow and remain within the slide. Current black background and left alignment are visible style changes from the historical panel.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s22",
+          "ordinal": 22,
+          "judgment": "stress-refusal-control",
+          "note": "The eight metric cards look complete, but two layout-unplaced findings remain. This is not an accepted layout.",
+          "findings": [
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/21/blocks/6",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'cards' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "cards"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/21/blocks/7",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'cards' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "cards"
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s23",
+          "ordinal": 23,
+          "judgment": "needs-table-growth-recheck",
+          "note": "The centered low-row table and narrative remain compact with small table text and much unused space. Keep the table readability hold.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s24",
+          "ordinal": 24,
+          "judgment": "usable",
+          "note": "Both authored image frames fill the body consistently without visible collision; crop differences remain authored-treatment evidence.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 209,
+      "deck": "batch-15",
+      "localSheet": 7,
+      "sha256": "c7ebf0fa48871f2a2dd8c7de13a259fb4d50fff63cfbe315814eba4fe397a365",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s25",
+          "ordinal": 25,
+          "judgment": "needs-column-width-review",
+          "note": "Five narrow columns produce one-word lines and break long words despite remaining body space. Type is larger but the arrangement needs review; preserve all actions and avoid shrinking.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s26",
+          "ordinal": 26,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "The large image and complete paragraph/quote fill separate halves without collision. Preserve the visible crop and region changes as style evidence.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s27",
+          "ordinal": 27,
+          "judgment": "usable",
+          "note": "The paragraph grows into a large readable panel with the short signal clearly below; no overlap observed.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s28",
+          "ordinal": 28,
+          "judgment": "usable-with-chart-legibility-note",
+          "note": "The narrative and scatter plot fit in separate columns. Fine point/axis labeling remains a caveat; no unsupported historical/native-series equivalence is claimed.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 210,
+      "deck": "batch-15",
+      "localSheet": 8,
+      "sha256": "9c1899ac9678e33277da94c1f3fdda5ef4ba14082f95936694beb12c47070dac",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s29",
+          "ordinal": 29,
+          "judgment": "stress-refusal-control",
+          "note": "Eight dense timelines visibly collide and have two unplaced plus many description-overflow findings. Preserve every bound finding; this is an unaccepted stress/refusal case.",
+          "findings": [
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/6",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'steps' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "steps"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/7",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'steps' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "steps"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/0/timeline/events/0/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/0/timeline/events/1/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/0/timeline/events/2/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/0/timeline/events/3/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/1/timeline/events/0/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/1/timeline/events/1/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/1/timeline/events/2/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/1/timeline/events/3/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/2/timeline/events/0/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/2/timeline/events/1/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/2/timeline/events/2/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/2/timeline/events/3/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/3/timeline/events/0/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/3/timeline/events/1/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/3/timeline/events/2/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/3/timeline/events/3/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/4/timeline/events/0/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/4/timeline/events/1/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/4/timeline/events/2/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/4/timeline/events/3/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/5/timeline/events/0/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/5/timeline/events/1/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/5/timeline/events/2/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/5/timeline/events/3/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/6/timeline/events/0/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/6/timeline/events/1/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/6/timeline/events/2/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/6/timeline/events/3/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/7/timeline/events/0/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/7/timeline/events/1/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/7/timeline/events/2/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/28/blocks/7/timeline/events/3/description",
+              "scope": "document",
+              "message": "Timeline field extends outside its cell; increase the cell or paginate events.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "part-outside-cell"
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s30",
+          "ordinal": 30,
+          "judgment": "usable-with-growth-note",
+          "note": "Three parallel action lists are readable and centered with complete wording, while further type growth is possible in the sparse body.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s31",
+          "ordinal": 31,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "Both image regions fill the body without overlap. Current edge-filling treatment differs from the historical small stacked images.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s32",
+          "ordinal": 32,
+          "judgment": "needs-table-growth-recheck",
+          "note": "Three compact tables have very small cell text above two narratives. This remains a table legibility hold even without a render warning.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 211,
+      "deck": "batch-15",
+      "localSheet": 9,
+      "sha256": "936ff44ae88c56776a583b29b7efe7f2d443b73341dc6383a2b22450ea4f1bee",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s33",
+          "ordinal": 33,
+          "judgment": "usable",
+          "note": "Five image frames use a balanced 3+2 grid with consistent spacing and no collisions.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s34",
+          "ordinal": 34,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "The complete narrative and takeaway grow into readable left-aligned text. Current black background differs from historical navy; no unsupported regression is claimed.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s35",
+          "ordinal": 35,
+          "judgment": "needs-timeline-text-recheck",
+          "note": "The metric grows, but the vertical timeline descriptions remain tiny. Keep the event-text readability hold and complete prose.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s36",
+          "ordinal": 36,
+          "judgment": "needs-reading-measure-review",
+          "note": "All four narrative/signal bands remain visible without overlap, but full-width paragraphs retain fine type and long measure. Recheck type growth and line length.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 212,
+      "deck": "batch-15",
+      "localSheet": 10,
+      "sha256": "ee3b9dfeb39e80b667ccfa1ad99938d57621aeca7def2567889479ecd1613b2b",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s37",
+          "ordinal": 37,
+          "judgment": "usable-with-chart-legibility-note",
+          "note": "The radar and action list occupy balanced columns; small radar ticks/legend remain a legibility caveat.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s38",
+          "ordinal": 38,
+          "judgment": "usable",
+          "note": "The single timeline visibly grows dates, names and descriptions, with the full narrative below and no collision. Descriptions remain intact.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s39",
+          "ordinal": 39,
+          "judgment": "usable",
+          "note": "Three complete short paragraph panels grow into clear two-line groups without collisions or excessive measure.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s40",
+          "ordinal": 40,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "The five-image collage fills the body, retaining all authored images. Edge-filling crops differ from historical treatment without visible overlap.",
           "findings": [],
           "missingBefore": false,
           "missingClaude": false
