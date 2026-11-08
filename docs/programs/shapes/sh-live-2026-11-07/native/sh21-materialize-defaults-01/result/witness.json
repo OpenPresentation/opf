@@ -1,0 +1,541 @@
+{
+  "cases": [
+    {
+      "kind": "orgChart1",
+      "measurement": {
+        "layout": "urn:microsoft.com/office/officeart/2005/8/layout/orgChart1",
+        "nodes": [
+          {
+            "parent": null,
+            "children": 4,
+            "level": 1,
+            "type": 1,
+            "text": "",
+            "index": 1,
+            "orgChartLayout": 5
+          },
+          {
+            "parent": "",
+            "children": 0,
+            "level": 2,
+            "type": 2,
+            "text": "",
+            "index": 2,
+            "orgChartLayout": 5
+          },
+          {
+            "parent": "",
+            "children": 0,
+            "level": 2,
+            "type": 1,
+            "text": "",
+            "index": 3,
+            "orgChartLayout": 5
+          },
+          {
+            "parent": "",
+            "children": 0,
+            "level": 2,
+            "type": 1,
+            "text": "",
+            "index": 4,
+            "orgChartLayout": 5
+          },
+          {
+            "parent": "",
+            "children": 0,
+            "level": 2,
+            "type": 1,
+            "text": "",
+            "index": 5,
+            "orgChartLayout": 5
+          }
+        ],
+        "items": [
+          {
+            "transparency": 1.0,
+            "left": 301.5814208984375,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 1,
+            "height": 80.69086456298828,
+            "top": 139.30905151367188,
+            "fillType": -2,
+            "width": 18.41850471496582,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 1.0,
+            "left": 320.0,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 2,
+            "height": 161.38180541992188,
+            "top": 139.30905151367188,
+            "fillType": -2,
+            "width": 212.2521209716797,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 1.0,
+            "left": 316.3999328613281,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 3,
+            "height": 161.38180541992188,
+            "top": 139.30905151367188,
+            "fillType": -2,
+            "width": 7.199999809265137,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 1.0,
+            "left": 107.74779510498047,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 4,
+            "height": 161.38180541992188,
+            "top": 139.30905151367188,
+            "fillType": -2,
+            "width": 212.2521209716797,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 232.2924346923828,
+            "preset": 1,
+            "shapeType": 1,
+            "index": 5,
+            "height": 87.70748138427734,
+            "top": 51.601497650146484,
+            "fillType": 1,
+            "width": 175.4149627685547,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 20.04023551940918,
+            "preset": 1,
+            "shapeType": 1,
+            "index": 6,
+            "height": 87.70748138427734,
+            "top": 300.69085693359375,
+            "fillType": 1,
+            "width": 175.4149627685547,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 232.2924346923828,
+            "preset": 1,
+            "shapeType": 1,
+            "index": 7,
+            "height": 87.70748138427734,
+            "top": 300.69085693359375,
+            "fillType": 1,
+            "width": 175.4149627685547,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 444.5446472167969,
+            "preset": 1,
+            "shapeType": 1,
+            "index": 8,
+            "height": 87.70748138427734,
+            "top": 300.69085693359375,
+            "fillType": 1,
+            "width": 175.4149627685547,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 126.16637420654297,
+            "preset": 1,
+            "shapeType": 1,
+            "index": 9,
+            "height": 87.70748138427734,
+            "top": 176.14622497558594,
+            "fillType": 1,
+            "width": 175.4149627685547,
+            "rotation": 0.0
+          }
+        ],
+        "rawGroupItems": 9,
+        "frame": {
+          "width": 600.0,
+          "height": 400.0,
+          "top": 20.0,
+          "left": 20.0
+        }
+      }
+    },
+    {
+      "kind": "hierarchy1",
+      "measurement": {
+        "layout": "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1",
+        "nodes": [
+          {
+            "parent": null,
+            "children": 2,
+            "level": 1,
+            "type": 1,
+            "text": "",
+            "index": 1
+          },
+          {
+            "parent": "",
+            "children": 2,
+            "level": 2,
+            "type": 1,
+            "text": "",
+            "index": 2
+          },
+          {
+            "parent": "",
+            "children": 0,
+            "level": 3,
+            "type": 1,
+            "text": "",
+            "index": 3
+          },
+          {
+            "parent": "",
+            "children": 0,
+            "level": 3,
+            "type": 1,
+            "text": "",
+            "index": 4
+          },
+          {
+            "parent": "",
+            "children": 1,
+            "level": 2,
+            "type": 1,
+            "text": "",
+            "index": 5
+          },
+          {
+            "parent": "",
+            "children": 0,
+            "level": 3,
+            "type": 1,
+            "text": "",
+            "index": 6
+          }
+        ],
+        "items": [
+          {
+            "transparency": 1.0,
+            "left": 496.3559875488281,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 1,
+            "height": 44.8604736328125,
+            "top": 260.83282470703125,
+            "fillType": -2,
+            "width": 7.199999809265137,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 1.0,
+            "left": 358.5619812011719,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 2,
+            "height": 44.8604736328125,
+            "top": 118.0248794555664,
+            "fillType": -2,
+            "width": 141.39401245117188,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 1.0,
+            "left": 217.16795349121094,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 3,
+            "height": 44.8604736328125,
+            "top": 260.83282470703125,
+            "fillType": -2,
+            "width": 94.26268005371094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 1.0,
+            "left": 122.90519714355469,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 4,
+            "height": 44.8604736328125,
+            "top": 260.83282470703125,
+            "fillType": -2,
+            "width": 94.26268005371094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 1.0,
+            "left": 217.16795349121094,
+            "preset": -2,
+            "shapeType": 9,
+            "index": 5,
+            "height": 44.8604736328125,
+            "top": 118.0248794555664,
+            "fillType": -2,
+            "width": 141.39401245117188,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 281.4379577636719,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 6,
+            "height": 97.94747924804688,
+            "top": 20.077322006225586,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.10000002384185791,
+            "left": 298.57659912109375,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 7,
+            "height": 97.94747924804688,
+            "top": 36.35905456542969,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 140.04393005371094,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 8,
+            "height": 97.94747924804688,
+            "top": 162.88536071777344,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.10000002384185791,
+            "left": 157.18260192871094,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 9,
+            "height": 97.94747924804688,
+            "top": 179.16708374023438,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 45.78118133544922,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 10,
+            "height": 97.94747924804688,
+            "top": 305.69329833984375,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.10000002384185791,
+            "left": 62.919921875,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 11,
+            "height": 97.94747924804688,
+            "top": 321.97503662109375,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 234.30661010742188,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 12,
+            "height": 97.94747924804688,
+            "top": 305.69329833984375,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.10000002384185791,
+            "left": 251.44528198242188,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 13,
+            "height": 97.94747924804688,
+            "top": 321.97503662109375,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 422.83197021484375,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 14,
+            "height": 97.94747924804688,
+            "top": 162.88536071777344,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.10000002384185791,
+            "left": 439.97064208984375,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 15,
+            "height": 97.94747924804688,
+            "top": 179.16708374023438,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.0,
+            "left": 422.83197021484375,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 16,
+            "height": 97.94747924804688,
+            "top": 305.69329833984375,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.10000002384185791,
+            "left": 439.97064208984375,
+            "preset": 5,
+            "shapeType": 1,
+            "index": 17,
+            "height": 97.94747924804688,
+            "top": 321.97503662109375,
+            "fillType": 1,
+            "width": 154.24803161621094,
+            "rotation": 0.0
+          }
+        ],
+        "rawGroupItems": 17,
+        "frame": {
+          "width": 600.0,
+          "height": 400.0,
+          "top": 20.0,
+          "left": 20.0
+        }
+      }
+    },
+    {
+      "kind": "venn1",
+      "measurement": {
+        "layout": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+        "nodes": [
+          {
+            "parent": null,
+            "children": 0,
+            "level": 1,
+            "type": 1,
+            "text": "",
+            "index": 1
+          },
+          {
+            "parent": null,
+            "children": 0,
+            "level": 1,
+            "type": 1,
+            "text": "",
+            "index": 2
+          },
+          {
+            "parent": null,
+            "children": 0,
+            "level": 1,
+            "type": 1,
+            "text": "",
+            "index": 3
+          }
+        ],
+        "items": [
+          {
+            "transparency": 0.5,
+            "left": 199.9999237060547,
+            "preset": 9,
+            "shapeType": 1,
+            "index": 1,
+            "height": 240.0,
+            "top": 24.999921798706055,
+            "fillType": 1,
+            "width": 240.0,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.5,
+            "left": 286.6000061035156,
+            "preset": 9,
+            "shapeType": 1,
+            "index": 2,
+            "height": 240.0,
+            "top": 174.9999237060547,
+            "fillType": 1,
+            "width": 240.0,
+            "rotation": 0.0
+          },
+          {
+            "transparency": 0.5,
+            "left": 113.39991760253906,
+            "preset": 9,
+            "shapeType": 1,
+            "index": 3,
+            "height": 240.0,
+            "top": 174.9999237060547,
+            "fillType": 1,
+            "width": 240.0,
+            "rotation": 0.0
+          }
+        ],
+        "rawGroupItems": 3,
+        "frame": {
+          "width": 600.0,
+          "height": 400.0,
+          "top": 20.0,
+          "left": 20.0
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "savedSha256": "24f879760bb12b4c577e00bf0495c73702a84bf5dcbca6a832bdd8358c504161",
+  "copySha256After": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+  "failure": null,
+  "source": "C:\\opf-work\\_supervisor\\com-jobs\\sh-08\\smartart-seeds.pptx",
+  "saved": "C:\\opf-work\\release-033-artifacts\\sh21-materialize-defaults-01\\result\\native-defaults-saved.pptx",
+  "stages": [
+    "create-app:ok",
+    "empty-visible-minimized:ok",
+    "open-owned-seed-copy:ok",
+    "create-visible-owned-presentation:ok",
+    "save-owned-identity-first:ok",
+    "orgChart1-create-export-read-defaults:ok",
+    "hierarchy1-create-export-read-defaults:ok",
+    "venn1-create-export-read-defaults:ok",
+    "save-measured-derivative:ok",
+    "close-only-owned-presentations:ok",
+    "quit-empty-owned-app:ok"
+  ],
+  "sha256After": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+  "sha256": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a"
+}

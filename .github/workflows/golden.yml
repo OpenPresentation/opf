@@ -77,6 +77,11 @@ jobs:
           OPF_UPDATE_GOLDENS=1 node --test packages/javascript/test/template-goldens.test.mjs
           OPF_TEMPLATE_GOLDEN_OUT=packages/render/artifacts/golden/templates node packages/render/test/layout-template-goldens.mjs --update --promote
 
+      # RR-108: preserve the strict traced-SVG lock alongside the other generated renderer goldens.
+      - name: Regenerate reviewed chart and table SVG digests
+        run: |
+          RR54_PRINT_DIGESTS=1 node packages/render/test/chart-table-data.mjs > packages/render/test/golden/chart-table-data/reviewed-svg-digests.json
+
       - name: Summarize and write the patch
         id: patch
         shell: bash

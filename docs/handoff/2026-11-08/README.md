@@ -4,7 +4,7 @@ This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Un
 
 ## Current release gate
 
-Full top-level033 rehearsal42462759180 completed SUCCESS on green actualmainafac3f7fc07539667fe9298f8efc08c967aacb0d. REAL Release42465429345 dispatched09:02:07UTC withdry-run=false/skip-gate=false; allslowgates runagain. One maintained commit watcher30926 followsverify/prepare/commit-and-tag/publish. Do not move main. No release/tag/site deploy is claimed yet; afterpublishverifysevenregistry/provenance/GHrelease plus allthree bump-site outcomes. Owner-only deploy/login/DNS remainreserved.
+Full top-level033 rehearsal42462759180 completed SUCCESS on green actualmainafac3f7fc07539667fe9298f8efc08c967aacb0d. REAL Release42465429345 dispatched09:02:07UTC withdry-run=false/skip-gate=false; allslowgates runagain. One maintained commit watcher92159 nowuses--requiredall onexactafac. Oldnamed30926stoppedonexpectedSKIPPEDjobsfromthecompletedDRYrun, notrealworkflowfailures; actualREALworkflowsuccess andregistry/provenance remainmandatory. Do not move main. No release/tag/site deploy is claimed yet; afterpublishverifysevenregistry/provenance/GHrelease plus allthree bump-site outcomes. Owner-only deploy/login/DNS remainreserved.
 
 034productsource nowincludes reviewed negativecategory1171 and localizedatleast1173. Parentintegrated21parser/geometry controls pass; [receipt](integration-fold-checks/atleast-receipt.json). Allfoldedsources stayfrozen. SH21draft1172/production11shape packet and SH25fresh32caseCLI packet areseparate/unqualifiednative. Parentnative work remainshelduntil033publication. Finalpinnedgoldens, both21+9PPTXarchivefamilies, stricttrackers/budgets and combinedCI remainowed. Earlier snapshots below preservehistory.
 
@@ -57,3 +57,13 @@ Negative-category correction PR1171 at8dc8185efa003f64b23e1d015a9d6d2e15e1f297 i
 1171integrated build, negative-category/shared-sibling and authored-option controls pass; [source preservation and raw receipts](integration-fold-checks/negative-label-receipt.json). Follow-up review found LH110at-least word forms rejected for French/Spanish/Portuguese while digits work; a NEWderived correction is assigned, and1169remainsfrozen. It must be fixed before034release acceptance.
 
 LH110positive at-least P2 is corrected in reviewed/folded PR1173 atf2472a4f8db3420cadbf8e6a4834587c9d3e9eb3; source now permanently frozen. Complete au moins/al menos/pelo menos word forms match digit forms while bare-minus/fraction/malformed/larger-scale refusals remain. Three genuine before-failing controls and all41sourcecontrols pass. All seven existing clean-CLI witness PNGs and wholePPTX archives regenerate byte-exact, so preserve the sealed seven-file native packet without duplicate Office work. Parent integrated parser/geometry checks follow.
+
+## RR108 traced SVG lock continuation
+
+[Exact31value migration and pinned printer](rr108-svg-lock.md) preserve every existing reviewed value and strict comparison. Actual pie/doughnut SVGs differ only by one intended surface-fill circle each. Final generated hashes remain for the single reviewed034golden batch; the separate21/9PPTXarchive families are not changed here.
+
+## SH21 source draft after034 alignment
+
+[SH20–22 current draft](sh21-draft.md) records the normal approved034 merge, final40 sampler correction, exact preservation receipt, focused controls and all remaining native limits. Production editable-shape CLI qualification is separated from the frozen diagnostic live packet; every new live domain remains off.
+
+SH21foundation1172cc6fa905 is folded after independent16focusedcontrols/source/11preview review, with explicitdesignhold: org/hierarchy/Venn1–4 acceptedforintegration; productionVenn5–7circleclusters rejected as too small. A NEWderivedadapterwillfillthebody withlargercircles/unchanged-or-larger outside labels, sharedSVG/PPTXgeometry, reportedadaptation andcompletefallbackwhenunfit. Preserve measurednativegeometry/77cbefrozenpacket; allnewlivedomainsOFF. ActualOffice/finalcombinedchecks remainowed. RR1081174f316isalsofolded/frozen; all31OLDSVGvalues unchanged, independent7writer/printercontrols pass, finalpinnedupdatepending.

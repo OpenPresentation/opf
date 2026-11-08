@@ -62,6 +62,8 @@ test('the actual write-job allowlist accepts generated baselines and refuses sou
   const cases = [
     ['packages/render/test/golden/example/_baseline.json', true],
     ['packages/render/test/golden/layout-templates-rr96-color-variants.json', true],
+    ['packages/render/test/golden/chart-table-data/reviewed-svg-digests.json', true],
+    ['packages/render/test/chart-table-data.mjs', false],
     ['packages/javascript/test/fixtures/template-goldens-0.19.json', true],
     ['packages/javascript/test/fixtures/template-goldens-0.19.json.extra', false],
     ['packages/javascript/test/fixtures/other.json', false],
@@ -79,4 +81,34 @@ test('the actual write-job allowlist accepts generated baselines and refuses sou
     const accepted = result.status === 0 && paths.length > 0 && paths.every(value => allowed.test(value) && !traversal.test(value));
     assert.equal(accepted, expected, file);
   }
+});
+
+
+test('the existing SVG printer generates the exact locked keyset/format without changing the reviewed fixture', () => {
+  const fixture = path.join(root, 'packages/render/test/golden/chart-table-data/reviewed-svg-digests.json');
+  const before = readFileSync(fixture);
+  const expected = JSON.parse(before);
+  const result = spawnSync(process.execPath, ['packages/render/test/chart-table-data.mjs'], {
+    cwd: root,
+    encoding: 'utf8',
+    env: {...process.env, RR54_PRINT_DIGESTS: '1'},
+  });
+  assert.ifError(result.error);
+  assert.equal(result.status, 0, result.stderr);
+  const actual = JSON.parse(result.stdout);
+  assert.deepEqual(Object.keys(actual), Object.keys(expected), 'no added or missing chart/table case');
+  assert.equal(Object.keys(expected).length, 31);
+  for (const map of [actual, expected]) for (const value of Object.values(map)) assert.match(value, /^[a-f0-9]{24}$/);
+  assert.deepEqual(readFileSync(fixture), before, 'the printer does not promote or rewrite the reviewed lock');
+});
+
+test('the pinned read-only job generates the SVG lock while the write job only applies the existing allowlisted patch', () => {
+  const {workflow, push} = workflowPatchRules();
+  const regenerate = workflow.slice(workflow.indexOf('\n  regenerate:'), workflow.indexOf('\n  push:'));
+  assert.match(regenerate, /RR54_PRINT_DIGESTS=1 node packages\/render\/test\/chart-table-data\.mjs > packages\/render\/test\/golden\/chart-table-data\/reviewed-svg-digests\.json/);
+  assert.doesNotMatch(push, /RR54_PRINT_DIGESTS|chart-table-data\.mjs/);
+  const source = readFileSync(path.join(root, 'packages/render/test/chart-table-data.mjs'), 'utf8');
+  assert.match(source, /readFileSync\(new URL\('\.\/golden\/chart-table-data\/reviewed-svg-digests\.json', import\.meta\.url\), 'utf8'\)/);
+  assert.match(source, /assert\.deepEqual\(digests, REVIEWED_SVG_DIGESTS,/);
+  assert.ok(source.indexOf('process.exit(0);') < source.indexOf('const REVIEWED_SVG_DIGESTS ='), 'print-only generation remains independent of the old lock read');
 });

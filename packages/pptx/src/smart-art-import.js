@@ -128,7 +128,7 @@ export function readSmartArtModel(xml) {
     reached.add(point.id);
     const children = build(point.id, new Set([...seen, point.id]));
     const edge = byId.get(cxn.parTransId);
-    if (!plainText(point.runs).trim()) return children;
+    if (!plainText(point.runs).trim()&&point.set.custT!=='1'&&point.set.phldr!=='0') return children;
     if (edge && plainText(edge.runs).trim()) usedTransitions.add(edge.id);
     return [{runs: point.runs, paragraphs: point.paragraphs, assistant: point.type === 'asst', ...(detailOf.has(point.id) ? {detail: detailOf.get(point.id)} : {}),
       ...(edge && plainText(edge.runs).trim() ? {edge: edge.runs, edgeId: edge.id} : {}), picture: point.picture, children}];

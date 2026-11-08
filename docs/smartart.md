@@ -1,6 +1,6 @@
 # Pyramids, matrices and live SmartArt
 
-Six layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
+Several layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
 `matrix` (four parts of a whole, or the four cases of two choices, as quadrants), `cycle` (steps that repeat, as a loop; see
 [Cycles](#cycles-sh-18)) and [`chevrons`, `flow` and `vertical-flow`](#chevrons-and-flows) (stages or steps in order). The PowerPoint export writes them as **live
 SmartArt** where PowerPoint lays the SmartArt out exactly as the preview draws it (PowerPoint's designs on its built-in layouts, OPF's
@@ -61,6 +61,32 @@ role size (24 pt) at which every entry fits its rectangle without breaking a wor
 outline (the top of a pyramid level is narrower than its base). The list's own size counts when it is smaller (a crowded slide), never a
 size below it. The arrangement fills its region, so the growth a lone list takes when it fills too little of the body (LH-48) is not the
 size it keeps. Centered lines are centered without the space they broke at, as PowerPoint wraps them.
+
+## Trees and set overlap (SH-21)
+
+Use `org-chart` for reporting lines, `hierarchy` for a classification or work breakdown, and `venn` for overlapping sets. Their geometry is shared between the preview and editable native PowerPoint shapes. Tree connectors follow the authored parents. Hierarchy uses paired rounded cards with a 90% opaque foreground; Venn uses 50% opaque circles so overlaps remain visible.
+
+A tree is one list of up to eight short entries in preorder. The first entry has level zero (explicitly or by default); each child supplies its zero-based `level`. A node may return to any earlier parent depth, but may not skip a depth or introduce another level-zero root. For example:
+
+```json
+{ "layout": "org-chart", "title": "Give each team a clear owner", "items": [
+  { "text": "Lead", "level": 0 },
+  { "text": "Build", "level": 1 },
+  { "text": "Web", "level": 2 },
+  { "text": "App", "level": 2 },
+  { "text": "Ship", "level": 1 }
+] }
+```
+
+Use `venn` with one flat list of one to seven set labels. One to four circles hold their labels inside; five to seven place the labels outside, at the measured native text rectangles. Entry order identifies the sets; the diagram implies no numeric overlap values.
+
+```json
+{ "layout": "venn", "title": "Three conditions for a useful pilot", "items": ["Clear scope", "Evidence", "Shared goal"] }
+```
+
+Every label stays at the list's role size or grows. A malformed tree, unsupported forest, nested Venn, descriptions, icons, numbering, too many entries or labels that do not fit keeps the complete list with `opf/arrangement-adapted`; no entry is dropped or silently reparented. Use a diagram for assistants or relationships outside the single-root model. These three layouts currently export as editable native shapes; live SmartArt remains outside their qualified domain. Import recognizes native Organization Chart (orgChart1), Hierarchy (hierarchy1) and Basic Venn (venn1), preserving tree depths. Native assistants, forests or labelled edges use the reported Mermaid hierarchy adaptation instead. A drawing with additional labels beyond the data entries keeps its overlay drawing and reports the adaptation, preserving that extra text.
+
+[The trees and sets example](../examples/technical/trees-and-sets.opf.json) contains the three layouts.
 
 ## Chevrons and flows
 
@@ -509,7 +535,7 @@ Any SmartArt PowerPoint wrote imports with its text (`src/smart-art-import.js` i
 layout part:
 
 - **The outline**: the `parOf` connections from the doc point, in `srcOrd` order, as a tree of entries (nodes and an organization
-  chart's assistants, `type="asst"`). An entry left as a placeholder (no text) gives its place to its children. A run's bold, italic,
+  chart's assistants, `type="asst"`). An entry left as a placeholder (no text and no explicit authored-text marker) gives its place to its children; an explicitly authored blank parent retains its children and level. A run's bold, italic,
   underline and strike are kept, a line break (`a:br`) is a newline and a field is its text. The paragraphs of one node are one entry,
   except on the `list` and `process` layouts, where each is an item of its own at the node's level: PowerPoint holds a Vertical Bullet
   List's or an Accent Process's bullets as the paragraphs of one child node (its object model adds no second child there).
@@ -521,15 +547,15 @@ Then the first form that fits:
 
 | Layout | OPF |
 | --- | --- |
-| The six OPF writes (`pyramid1`, `matrix3`, `cycle2`, `chevron1`, `process1`, `process2`) and OPF's own layouts | The list on that arrangement's layout, as above |
+| The known arrangement IDs (`pyramid1`, `matrix3`, `cycle2`, `chevron1`, `process1`, `process2`, `orgChart1`, `hierarchy1`, `venn1`) and OPF's own layouts | The list on that arrangement's layout, as above |
 | Inverted Pyramid (`pyramid3`), which widens downward | The list on the `list` layout, in order (the widest first), with `smartart-adapted`: OPF's pyramid puts its first entry at the narrow top, so drawing it upright would reverse its meaning (an inverted arrangement is [opf#1128](https://github.com/OpenPresentation/opf/issues/1128)) |
 | Another layout of those families: `pyramidN`, `matrixN`, `cycleN` (Text Cycle, Block Cycle...), any chevron layout (`chevron2`, `hChevron3`...); a layout of category `pyramid`, `matrix` or `cycle` | The list on the `pyramid`, `matrix`, `cycle` or `chevrons` layout, with `smartart-adapted` (info) |
 | The list family (category `list`: Basic Block List `default`, Vertical Bullet List `vList2`...) | The list on the `list` layout, with `smartart-adapted` |
 | The process family (category `process`, other than the arrangements above: Accent Process, Step Up Process...) | The list on the `process` layout, with `smartart-adapted` |
-| Hierarchies and organization charts (`orgChartN`, `hierarchyN`, the 2008 and 2009 organization charts; category `hierarchy`) | A Mermaid flowchart (`flowchart TD`, `flowchart LR` for a horizontal hierarchy): a node per entry, its description on a second line, an edge from each parent, dotted (`-.->`) to an assistant, the connection's own text as the edge's label; the outline as the diagram's `alt`; `smartart-adapted` |
-| Every other layout (Venn, radial, target, funnel, gear, picture layouts...) | The drawing (`dsp:drawing`, which PowerPoint saves with every SmartArt) as overlay shapes, with `smartart-adapted`; without a drawing, the list on the `list` layout |
+| Other hierarchies and organization charts, or the known trees with assistants, separate roots or labelled edges (`orgChartN`, `hierarchyN`, the 2008 and 2009 organization charts; category `hierarchy`) | A Mermaid flowchart (`flowchart TD`, `flowchart LR` for a horizontal hierarchy): a node per entry, its description on a second line, an edge from each parent, dotted (`-.->`) to an assistant, the connection's own text as the edge's label; the outline as the diagram's `alt`; `smartart-adapted` |
+| Every other layout (other Venn, radial, target, funnel, gear, picture layouts...) | The drawing (`dsp:drawing`, which PowerPoint saves with every SmartArt) as overlay shapes, with `smartart-adapted`; without a drawing, the list on the `list` layout |
 
-Nested entries keep their `level` in every list. An arrangement draws one level, so a pyramid of nested entries draws as a list
+Nested entries keep their `level` in every list. Organization charts and hierarchies use those depths as parent links; the other arrangements draw one level, so a pyramid of nested entries draws as a list
 (`opf/arrangement-adapted` says so) with all of its text.
 
 **The drawing as overlay shapes.** The drawing's shapes are read by SH-05's reader ([shapes](shapes.md)), in a group that places the
@@ -565,7 +591,7 @@ slide (core `overlaysDrawBody`, `OVERLAY_BODY_SHARE`; front layer, placed by fra
 slide's, on top, not a cover's centered over the shapes; a badge on a cover leaves the cover as it was. This holds for any slide, authored
 or imported (`examples/technical/shape-overlays.opf.json` slide 5's title moves to the top).
 
-drawing: import consumes them and reads the measured lines as the list. Other SmartArt layouts are SH-08.
+SH-23: custom layout text algorithms set their LTR/RTL paragraph alignment defaults, so newly added nodes keep the design's alignment without a script changing their formatting after the edit.
 
 SH-23 qualification: five in-domain OPF designs retain an added ninth node and a text edit through SaveCopyAs/reopen, with unchanged font sizes, correct paragraph/first-line alignment and maximum geometry error0.0000876pt. The native text algorithms explicitly preserve start or center alignment for newly added nodes, which have no authored paragraph properties. [Raw qualification and limits](programs/shapes/sh23-2026-11-07/README.md) retain the initial visual failure and all corrected witnesses.
 

@@ -42,7 +42,7 @@
     },
     "summary": {
       "type": "string",
-      "description": "One-sentence positioning of the layout \u2014 when to reach for it.",
+      "description": "One-sentence positioning of the layout — when to reach for it.",
       "examples": [
         "Two to six ideas of equal weight, as cards.",
         "A chart with the takeaway beside it."
@@ -425,9 +425,12 @@
             "cycle",
             "chevrons",
             "flow",
-            "vertical-flow"
+            "vertical-flow",
+            "org-chart",
+            "hierarchy",
+            "venn"
           ],
-          "description": "SH-09: the region draws its lone list of one level as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's own geometry (Basic Pyramid: 1 to 8 entries as stacked levels, the first at the apex; Basic Matrix: exactly four entries as the quadrants of a centered square over a diamond; SH-18, Basic Cycle: 1 to 8 entries as circles on a ring, the first at the top and the rest clockwise, with an arrow from each to the next, in a frame of the cycle's own proportion centered in the region), which the PPTX export writes as live SmartArt where PowerPoint lays it out as the preview draws it; else OPF's own design (a stepped pyramid with each entry beside its level, four quadrants filling the region, or rounded rectangles on a ring filling the region with an arrow from each to the next). A matrix of other than four entries draws a grid of cards. SH-17: 'chevrons' (Basic Chevron Process: 1 to 8 entries as a row of chevrons), 'flow' (Basic Process: a row of boxes with arrows between them) and 'vertical-flow' (Vertical Process: a column of boxes with arrows between them), in PowerPoint's geometry where it holds the entries, else OPF's own row or column filling the region. Nodes are filled in the primary color with a 1.5 pt outline in the background color (cards in the card neutral). A cycle's arrows are the primary lightened 40%. A list with nested entries, descriptions, icons or numbering, more than 8 levels or steps, or one no design holds, draws as a list; opf/arrangement-adapted (info) reports the cards and the lists. Absent: the region's content draws as any other."
+          "description": "SH-09: the region draws its lone list of one level as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's own geometry (Basic Pyramid: 1 to 8 entries as stacked levels, the first at the apex; Basic Matrix: exactly four entries as the quadrants of a centered square over a diamond; SH-18, Basic Cycle: 1 to 8 entries as circles on a ring, the first at the top and the rest clockwise, with an arrow from each to the next, in a frame of the cycle's own proportion centered in the region), which the PPTX export writes as live SmartArt where PowerPoint lays it out as the preview draws it; else OPF's own design (a stepped pyramid with each entry beside its level, four quadrants filling the region, or rounded rectangles on a ring filling the region with an arrow from each to the next). A matrix of other than four entries draws a grid of cards. SH-17: 'chevrons' (Basic Chevron Process: 1 to 8 entries as a row of chevrons), 'flow' (Basic Process: a row of boxes with arrows between them) and 'vertical-flow' (Vertical Process: a column of boxes with arrows between them), in PowerPoint's geometry where it holds the entries, else OPF's own row or column filling the region. Nodes are filled in the primary color with a 1.5 pt outline in the background color (cards in the card neutral). A cycle's arrows are the primary lightened 40%. A list with nested entries, descriptions, icons or numbering, more than 8 levels or steps, or one no design holds, draws as a list; opf/arrangement-adapted (info) reports the cards and the lists. Absent: the region's content draws as any other. SH-21: org-chart and hierarchy preserve a single-root list-entry level tree; malformed depth jumps and forests retain the authored list with arrangement-adapted. venn draws1–7 flat sets. These arrangements never shrink the original list size; native edit/text eligibility is measured separately."
         },
         "pyramidDirection": {
           "type": "string",
@@ -545,7 +548,10 @@
         },
         "listStyle": {
           "type": "string",
-          "enum": ["stack", "rows"],
+          "enum": [
+            "stack",
+            "rows"
+          ],
           "description": "As design.listStyle of a deck: 'stack' or 'rows' (ruled rows) for the lists of slides using this layout."
         },
         "mirror": {
@@ -554,18 +560,31 @@
         },
         "variant": {
           "oneOf": [
-            { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariantSlot" },
-            { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariant" },
-            { "$ref": "#/$defs/LayoutVariantRole" }
+            {
+              "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariantSlot"
+            },
+            {
+              "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariant"
+            },
+            {
+              "$ref": "#/$defs/LayoutVariantRole"
+            }
           ],
           "description": "The color variant slides on this layout draw on (LH-01): a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'surface', 'brand'), so the layout keeps the deck's tone. Unlike the other keys it outranks the deck's design and the theme: the slide's own design.variant or design.background wins, then this, then the deck's variant or background, then the theme's. It hides a background of the deck or theme (the slide is the variant's bg1), and without an accent order of its own it keeps the deck's.",
-          "examples": ["accent1", "surface", "brand"]
+          "examples": [
+            "accent1",
+            "surface",
+            "brand"
+          ]
         }
       }
     },
     "LayoutVariantRole": {
       "type": "string",
-      "enum": ["surface", "brand"],
+      "enum": [
+        "surface",
+        "brand"
+      ],
       "description": "A layout variant relative to the deck's own variant (LH-01). 'surface' is the deck's secondary surface on its own side: light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck is already on light2 or dark2), so a statement stands off the deck without changing its tone. 'brand' is the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), with light text: a closing slide's strong surface on a light or a dark deck."
     },
     "Composition": {
