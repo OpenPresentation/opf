@@ -502,3 +502,5 @@ SmartArt saved it) imports the same way in `full` provenance: the picture carrie
 SVG and PNG, so a picture still named for its list whose SVG or PNG is the one written is that list on its layout again; a replaced
 picture reports `invalid-smartart-provenance` and imports as a picture, as does any fallback without the record. Native-shape arrangements (`OPF_ARRANGEMENT_V1` on every node) are the layout's
 drawing: import consumes them and reads the measured lines as the list. Other SmartArt layouts are SH-08.
+
+SH-23 qualification: five in-domain OPF designs retain an added ninth node and a text edit through SaveCopyAs/reopen, with unchanged font sizes, correct paragraph/first-line alignment and maximum geometry error0.0000876pt. The native text algorithms explicitly preserve start or center alignment for newly added nodes, which have no authored paragraph properties. [Raw qualification and limits](programs/shapes/sh23-2026-11-07/README.md) retain the initial visual failure and all corrected witnesses.

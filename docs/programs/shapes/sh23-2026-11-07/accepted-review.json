@@ -1,0 +1,64 @@
+{
+  "sourceTableCommit": "aee3d430f3dd4b0509e0b3851d8b1078f12d2b1f",
+  "sharedParagraphFix": "4c0ddc15b1387830ebef01a5572d98e0a7eadfdf",
+  "verifierSha256": "ad920a299877b29bfdac65d9bfc10ab2ebb439e5261195cbedbcd865ba07f6f1",
+  "review": "Independently inspected all five reopened PNGs: ninth labels visible, same paragraph alignment, no clipped or misplaced label, no unexpected shape/connector change. Pyramid01 visual failure retained.",
+  "scope": "Five original in-domain designs; native ninth-node save/reopen qualification. Ten-to-twelve tables are interpreter/part-tested, not a new native text domain.",
+  "cases": [
+    {
+      "kind": "pyramid",
+      "attempt": "sh23-pyramid-02",
+      "passed": true,
+      "nodes": 9,
+      "maxPointError": 0.00008754502494,
+      "maxRotationError": 0,
+      "maxFirstLineAlignmentErrorPt": 0.0000028587456881723483,
+      "savedSha256": "340361b8825737008b121ebda6b17ab878066e8feba91a8438250da00fee029c",
+      "reopenedImageSha256": "fefb77fb422e3431ea9347df30116eca6eaa9a019117be0e9245c9ff9e14faf7"
+    },
+    {
+      "kind": "matrix",
+      "attempt": "sh23-matrix-01",
+      "passed": true,
+      "nodes": 9,
+      "maxPointError": 0.000085394019,
+      "maxRotationError": 0,
+      "maxFirstLineAlignmentErrorPt": 0.00003649729080734687,
+      "savedSha256": "c78e295094eb9df98956a831e32725dd54ee7246d684b5c0862d870b19326910",
+      "reopenedImageSha256": "5e130143076493330321fe4bd77aa790d86daaf1d1ad93252be8c4b623b5cde8"
+    },
+    {
+      "kind": "flow",
+      "attempt": "sh23-flow-01",
+      "passed": true,
+      "nodes": 9,
+      "maxPointError": 0.000079186644,
+      "maxRotationError": 0,
+      "maxFirstLineAlignmentErrorPt": 0.0024956262330135814,
+      "savedSha256": "9ce9fd501f2b2520afaf5f528b7c667179bb7e3bc158fe05bf3573d2599736c6",
+      "reopenedImageSha256": "0acacbcf044e12982fae289cf6cc32dcbfb1fc066809aecfc5cb31baf57a8cbd"
+    },
+    {
+      "kind": "chevrons",
+      "attempt": "sh23-chevrons-01",
+      "passed": true,
+      "nodes": 9,
+      "maxPointError": 0.000075694605,
+      "maxRotationError": 0,
+      "maxFirstLineAlignmentErrorPt": 0.0024963433961602277,
+      "savedSha256": "f959bad3501bd2deee4f86f6dbf8f678d0d68ba3d0abe3aaa17574cb1eaae7e8",
+      "reopenedImageSha256": "60e71e498332b9720f9b52307500cc20d2f24cc64f620031ed2424e8e54ad454"
+    },
+    {
+      "kind": "vertical-flow",
+      "attempt": "sh23-vertical-flow-01",
+      "passed": true,
+      "nodes": 9,
+      "maxPointError": 0.00007741975903,
+      "maxRotationError": 0,
+      "maxFirstLineAlignmentErrorPt": 0.0025242614746048275,
+      "savedSha256": "c2250182d3ac2162589062d2ba7a4fdeace4e1d7c1f6225e0cf00c45268ec209",
+      "reopenedImageSha256": "69fb987e9a3162b66514d30e37256bbde2396371b61e3f9f883b8784de4bf989"
+    }
+  ]
+}

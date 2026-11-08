@@ -1,0 +1,365 @@
+{
+  "scope": "Coordinator-owned attempts preserved byte-for-byte; pyramid01 is a visual failure, corrected five cases are accepted.",
+  "files": [
+    {
+      "file": "sh23-chevrons-01/result/chevrons-eight.png",
+      "sha256": "ea7dd8b7d81bd871ec913c2199818348c129b49ced297db62f2a7ec0d686969b",
+      "bytes": 15420
+    },
+    {
+      "file": "sh23-chevrons-01/result/chevrons-initial.png",
+      "sha256": "4c64e3243f3ffe6e633de3d7d3d9e11a09a8ed8c4a381c413ad9ee7d2f2cf30f",
+      "bytes": 13809
+    },
+    {
+      "file": "sh23-chevrons-01/result/chevrons-ninth-saved.pptx",
+      "sha256": "f959bad3501bd2deee4f86f6dbf8f678d0d68ba3d0abe3aaa17574cb1eaae7e8",
+      "bytes": 104708
+    },
+    {
+      "file": "sh23-chevrons-01/result/chevrons-ninth.png",
+      "sha256": "60e71e498332b9720f9b52307500cc20d2f24cc64f620031ed2424e8e54ad454",
+      "bytes": 15222
+    },
+    {
+      "file": "sh23-chevrons-01/result/chevrons-reopened.png",
+      "sha256": "60e71e498332b9720f9b52307500cc20d2f24cc64f620031ed2424e8e54ad454",
+      "bytes": 15222
+    },
+    {
+      "file": "sh23-chevrons-01/result/inputs/chevrons.pptx",
+      "sha256": "a868e7aad12834c1bf21b7d632b27726b859a583fb6a9c3f6b7b53e7d7d87771",
+      "bytes": 136581
+    },
+    {
+      "file": "sh23-chevrons-01/result/witness.json",
+      "sha256": "08d02fd1dd724be7ac0215300cca1fa31f24f058d938893f7656e66e01538eb2",
+      "bytes": 53242
+    },
+    {
+      "file": "sh23-chevrons-01/run.ps1",
+      "sha256": "970368cc6ad3a26d70d8046ea7fbc286cef07b1cf7d764d7601638ff5c5ed00b",
+      "bytes": 882
+    },
+    {
+      "file": "sh23-chevrons-01/verify-ninth.ps1",
+      "sha256": "ad920a299877b29bfdac65d9bfc10ab2ebb439e5261195cbedbcd865ba07f6f1",
+      "bytes": 10643
+    },
+    {
+      "file": "sh23-chevrons-01/worker.json",
+      "sha256": "b61eec6dc27ce3f03c103c611ed3652d9f60ca083cffdebcfc8bcce615a8dc98",
+      "bytes": 341
+    },
+    {
+      "file": "sh23-chevrons-01/worker.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-chevrons-01/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-flow-01/result/flow-eight.png",
+      "sha256": "033d4a5e101c2da5ea5e7447f2cdd7ba49b2a469d1a76fcd2bd809e808eb6bba",
+      "bytes": 18618
+    },
+    {
+      "file": "sh23-flow-01/result/flow-initial.png",
+      "sha256": "e1eedefb7f7afb3fc0ec38df5acc51037d27bf2b77dbd1b04f6749de16af8185",
+      "bytes": 16706
+    },
+    {
+      "file": "sh23-flow-01/result/flow-ninth-saved.pptx",
+      "sha256": "9ce9fd501f2b2520afaf5f528b7c667179bb7e3bc158fe05bf3573d2599736c6",
+      "bytes": 108717
+    },
+    {
+      "file": "sh23-flow-01/result/flow-ninth.png",
+      "sha256": "0acacbcf044e12982fae289cf6cc32dcbfb1fc066809aecfc5cb31baf57a8cbd",
+      "bytes": 17454
+    },
+    {
+      "file": "sh23-flow-01/result/flow-reopened.png",
+      "sha256": "0acacbcf044e12982fae289cf6cc32dcbfb1fc066809aecfc5cb31baf57a8cbd",
+      "bytes": 17454
+    },
+    {
+      "file": "sh23-flow-01/result/inputs/flow.pptx",
+      "sha256": "381cabd6deb615b2a7e6043bd49aeb038127c1f14ff6b523b0538435669f3d52",
+      "bytes": 155471
+    },
+    {
+      "file": "sh23-flow-01/result/witness.json",
+      "sha256": "ed8977ee33dc72ac80eb4288fa7a353c9242d94217262cd12a50129f1b5aad76",
+      "bytes": 75901
+    },
+    {
+      "file": "sh23-flow-01/run.ps1",
+      "sha256": "78f9dcd1efab9890a78a9ae0b9b55d03c368a21a1804c913f004b4b08651498f",
+      "bytes": 866
+    },
+    {
+      "file": "sh23-flow-01/verify-ninth.ps1",
+      "sha256": "ad920a299877b29bfdac65d9bfc10ab2ebb439e5261195cbedbcd865ba07f6f1",
+      "bytes": 10643
+    },
+    {
+      "file": "sh23-flow-01/worker.json",
+      "sha256": "a8c0c992459fa2dd4bc04c70eeeb5c4e6ef74e17b5bce917950ef8501a2b6b3a",
+      "bytes": 341
+    },
+    {
+      "file": "sh23-flow-01/worker.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-flow-01/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-matrix-01/result/inputs/matrix.pptx",
+      "sha256": "3b61d063bf7f153727100d57d5153f259bee48b0d49e3b42833cef2c5fbfbbb9",
+      "bytes": 119380
+    },
+    {
+      "file": "sh23-matrix-01/result/matrix-eight.png",
+      "sha256": "19bd6c22f51a05435530e74c93120b0b1fd22c673727d8b5814de55b412f7c0e",
+      "bytes": 15146
+    },
+    {
+      "file": "sh23-matrix-01/result/matrix-initial.png",
+      "sha256": "3a32db7534ede3da11670b132ce1461ce77e4e60ebfa241f3221a13f346b7ffd",
+      "bytes": 9808
+    },
+    {
+      "file": "sh23-matrix-01/result/matrix-ninth-saved.pptx",
+      "sha256": "c78e295094eb9df98956a831e32725dd54ee7246d684b5c0862d870b19326910",
+      "bytes": 105263
+    },
+    {
+      "file": "sh23-matrix-01/result/matrix-ninth.png",
+      "sha256": "5e130143076493330321fe4bd77aa790d86daaf1d1ad93252be8c4b623b5cde8",
+      "bytes": 15554
+    },
+    {
+      "file": "sh23-matrix-01/result/matrix-reopened.png",
+      "sha256": "5e130143076493330321fe4bd77aa790d86daaf1d1ad93252be8c4b623b5cde8",
+      "bytes": 15554
+    },
+    {
+      "file": "sh23-matrix-01/result/witness.json",
+      "sha256": "7596f134450e69ca3242993b5679f833287b4f92bebb5a1c96c1a667aeaea7c5",
+      "bytes": 52774
+    },
+    {
+      "file": "sh23-matrix-01/run.ps1",
+      "sha256": "8b643cc11b7850d50eb4cc973548d5f780a36b42c241b9767a19bde97f78533d",
+      "bytes": 874
+    },
+    {
+      "file": "sh23-matrix-01/verify-ninth.ps1",
+      "sha256": "ad920a299877b29bfdac65d9bfc10ab2ebb439e5261195cbedbcd865ba07f6f1",
+      "bytes": 10643
+    },
+    {
+      "file": "sh23-matrix-01/worker.json",
+      "sha256": "3cae08f24be056135cd5f488e0e09b8035eb4fafb7bfbe4f59244910f496b20b",
+      "bytes": 341
+    },
+    {
+      "file": "sh23-matrix-01/worker.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-matrix-01/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-pyramid-01/result/inputs/pyramid.pptx",
+      "sha256": "c95660c09f7d4737537231e55bcded97250e68be7c9658877a3973a2608b4ca2",
+      "bytes": 152127
+    },
+    {
+      "file": "sh23-pyramid-01/result/pyramid-eight.png",
+      "sha256": "4ebb6e9aead45707bb6feb06ea5e7db024a9da1fce4cf7d86ea8c79d75bc14b9",
+      "bytes": 13736
+    },
+    {
+      "file": "sh23-pyramid-01/result/pyramid-initial.png",
+      "sha256": "4ebb6e9aead45707bb6feb06ea5e7db024a9da1fce4cf7d86ea8c79d75bc14b9",
+      "bytes": 13736
+    },
+    {
+      "file": "sh23-pyramid-01/result/pyramid-ninth-saved.pptx",
+      "sha256": "66c254e1e188bbca5eda7ab85a50cd6aa3e4b78bfafa3ffa49d809643cd79664",
+      "bytes": 108189
+    },
+    {
+      "file": "sh23-pyramid-01/result/pyramid-ninth.png",
+      "sha256": "8285ab5809170c85a3bc6ec2c1492191260295b4718563cb57331f2d728acd3a",
+      "bytes": 14198
+    },
+    {
+      "file": "sh23-pyramid-01/result/pyramid-reopened.png",
+      "sha256": "8285ab5809170c85a3bc6ec2c1492191260295b4718563cb57331f2d728acd3a",
+      "bytes": 14198
+    },
+    {
+      "file": "sh23-pyramid-01/result/witness.json",
+      "sha256": "054a4f6ebf1066ac594e39b41ec2d882a2df3635ab6b61796b89d182b9778bad",
+      "bytes": 61950
+    },
+    {
+      "file": "sh23-pyramid-01/run.ps1",
+      "sha256": "88fc367befed7e2d26c186b2cfa042ff08bb5aa50b79cb91175e1d678d1a14cd",
+      "bytes": 874
+    },
+    {
+      "file": "sh23-pyramid-01/verify-ninth.ps1",
+      "sha256": "a41de35989dd5d87a34afa1e45a0191575dcfb36c916dae2f3479016974713f9",
+      "bytes": 9497
+    },
+    {
+      "file": "sh23-pyramid-01/worker.json",
+      "sha256": "d4be512795682e6b940748e72929b7acff0d17c068c7816cf0ff1434117b19e8",
+      "bytes": 340
+    },
+    {
+      "file": "sh23-pyramid-01/worker.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-pyramid-01/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-pyramid-02/result/inputs/pyramid.pptx",
+      "sha256": "e2acbeb79cc46ae09929276d2009a218841c67b86a0591c5cc79d3d6ce654750",
+      "bytes": 152222
+    },
+    {
+      "file": "sh23-pyramid-02/result/pyramid-eight.png",
+      "sha256": "4ebb6e9aead45707bb6feb06ea5e7db024a9da1fce4cf7d86ea8c79d75bc14b9",
+      "bytes": 13736
+    },
+    {
+      "file": "sh23-pyramid-02/result/pyramid-initial.png",
+      "sha256": "4ebb6e9aead45707bb6feb06ea5e7db024a9da1fce4cf7d86ea8c79d75bc14b9",
+      "bytes": 13736
+    },
+    {
+      "file": "sh23-pyramid-02/result/pyramid-ninth-saved.pptx",
+      "sha256": "340361b8825737008b121ebda6b17ab878066e8feba91a8438250da00fee029c",
+      "bytes": 108214
+    },
+    {
+      "file": "sh23-pyramid-02/result/pyramid-ninth.png",
+      "sha256": "fefb77fb422e3431ea9347df30116eca6eaa9a019117be0e9245c9ff9e14faf7",
+      "bytes": 14197
+    },
+    {
+      "file": "sh23-pyramid-02/result/pyramid-reopened.png",
+      "sha256": "fefb77fb422e3431ea9347df30116eca6eaa9a019117be0e9245c9ff9e14faf7",
+      "bytes": 14197
+    },
+    {
+      "file": "sh23-pyramid-02/result/witness.json",
+      "sha256": "a6350fc5fa688608d84443f41f6fffe8be793ddd5c5ade4f33b2d8cb5807d319",
+      "bytes": 78986
+    },
+    {
+      "file": "sh23-pyramid-02/run.ps1",
+      "sha256": "984beb247efc5700d28b81852008a1d0c20c51623998f72d28ac8e6363a9b3dc",
+      "bytes": 876
+    },
+    {
+      "file": "sh23-pyramid-02/verify-ninth.ps1",
+      "sha256": "ad920a299877b29bfdac65d9bfc10ab2ebb439e5261195cbedbcd865ba07f6f1",
+      "bytes": 10643
+    },
+    {
+      "file": "sh23-pyramid-02/worker.json",
+      "sha256": "779a0a08160a9f4b77b56f818180530caa71a7f9f8aac25bd4dc1a1d847339fe",
+      "bytes": 341
+    },
+    {
+      "file": "sh23-pyramid-02/worker.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-pyramid-02/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-vertical-flow-01/result/inputs/vertical-flow.pptx",
+      "sha256": "3ec779618cd91230785cb2623428439787c0658ca00ab73f0bcc0ab942e6b781",
+      "bytes": 135823
+    },
+    {
+      "file": "sh23-vertical-flow-01/result/vertical-flow-eight.png",
+      "sha256": "b5ef14d79276965981b9e87ddaa3dbb799b78ce4806463d3a4afc43dcc56ad03",
+      "bytes": 15405
+    },
+    {
+      "file": "sh23-vertical-flow-01/result/vertical-flow-initial.png",
+      "sha256": "6a7bad0af7edea957cb7342f4901d3c609a7c6b7b478c3bc0f30f0228291cdc7",
+      "bytes": 12359
+    },
+    {
+      "file": "sh23-vertical-flow-01/result/vertical-flow-ninth-saved.pptx",
+      "sha256": "c2250182d3ac2162589062d2ba7a4fdeace4e1d7c1f6225e0cf00c45268ec209",
+      "bytes": 109084
+    },
+    {
+      "file": "sh23-vertical-flow-01/result/vertical-flow-ninth.png",
+      "sha256": "69fb987e9a3162b66514d30e37256bbde2396371b61e3f9f883b8784de4bf989",
+      "bytes": 16022
+    },
+    {
+      "file": "sh23-vertical-flow-01/result/vertical-flow-reopened.png",
+      "sha256": "69fb987e9a3162b66514d30e37256bbde2396371b61e3f9f883b8784de4bf989",
+      "bytes": 16022
+    },
+    {
+      "file": "sh23-vertical-flow-01/result/witness.json",
+      "sha256": "2f461707c7792fae352b0921b6cb061c50ca039da917b73db2739a292e6cf412",
+      "bytes": 75839
+    },
+    {
+      "file": "sh23-vertical-flow-01/run.ps1",
+      "sha256": "aaa216f0e4b0a14b327c9f73bafcfe831fbf0e540fe3257ddecfd22e3a8e8397",
+      "bytes": 902
+    },
+    {
+      "file": "sh23-vertical-flow-01/verify-ninth.ps1",
+      "sha256": "ad920a299877b29bfdac65d9bfc10ab2ebb439e5261195cbedbcd865ba07f6f1",
+      "bytes": 10643
+    },
+    {
+      "file": "sh23-vertical-flow-01/worker.json",
+      "sha256": "6c9ef15e423c8cdc86d1ee5f9a55a362ae86bfcc439ff9a8fcf8416251ff165f",
+      "bytes": 341
+    },
+    {
+      "file": "sh23-vertical-flow-01/worker.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh23-vertical-flow-01/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ]
+}
