@@ -1,5 +1,7 @@
 # OPF Release Process
 
+For the four-repository event/gate/target matrix and current agent deployment authority, see [CI/CD contract](ci-cd.md). Package publication still uses only the Release and tag-triggered trusted-publisher workflows described here.
+
 Use Node 24 (`24.x`) for all future source, candidate and registry verification.
 The packages declare the open-ended `engines.node` `>=22` (RR-20, tested on Node 22, 24 and 26 by the `node-range`
 CI legs, which run in the nightly workflow, before every release and on pull requests labelled `full-ci`); a closed range such as `24.x` makes npm on any other Node silently install an older release, and
