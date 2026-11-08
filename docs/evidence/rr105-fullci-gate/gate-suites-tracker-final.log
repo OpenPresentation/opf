@@ -1,0 +1,32 @@
+
+> openpresentation-workspace@ check:gallery-tracker C:\opf-work\fullci-gate
+> node --test scripts/build-gallery-tracker.test.mjs scripts/tracker-staleness.test.mjs && node scripts/build-gallery-tracker.mjs --check
+
+::warning title=Generated tracker is stale::Gallery tracker is stale: docs/programs/release-readiness/gallery-tracker.json, docs/programs/release-readiness/gallery-tracker.md It is regenerated after merge; a pull request need not commit it (CONTRIBUTING.md, Generated trackers).
+✔ every catalog record and every gallery item is exactly one record (11.6404ms)
+✔ statuses, gaps and the addressed flag are consistent (1.6949ms)
+✔ columns use their documented values and unknown where nothing measured (1.8634ms)
+✔ the committed tracker follows the configured freshness policy (63.9835ms)
+✔ rules match by gap, type, id and detail; links resolve against the burndown (0.4161ms)
+✔ native evidence counts only native or PowerPoint folders (4.5747ms)
+✔ the gallery and editor snapshots read pages, previews, published ids, teasers and switch dimensions (7.3962ms)
+✔ a stale tracker, an unused rule and an unknown RR link fail the build (240.0874ms)
+✔ Pareto limitation preserves measured verdicts and remains an open data-preservation gap (112.6544ms)
+✔ input limitations reject unknown records, duplicate scopes and missing evidence (155.6945ms)
+✔ offline catalog snapshot rejects missing and modified evidence (41.8948ms)
+✔ v2 layout identity never inherits historical same-name measurements (37.9193ms)
+✔ offline snapshot rejects wrong integrity, version and gitHead (115.8559ms)
+✔ old passing and failing audit/native channels cannot certify any schema2 layout (215.9104ms)
+✔ slide-size fallback retains the general gap without requiring a dedicated preset result (97.1978ms)
+✔ a stale tracker fails by default, so main, the merge queue, releases and a local pnpm test stay strict (0.7179ms)
+✔ OPF_TRACKER_STALE=warn turns the failure into a warning annotation (0.1483ms)
+✔ any other value is an error rather than a silent pass (0.2033ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1190.0174
+::warning title=Generated tracker is stale::Gallery tracker is stale: docs/programs/release-readiness/gallery-tracker.json, docs/programs/release-readiness/gallery-tracker.md. Run pnpm build:gallery-tracker and commit the result. It is regenerated after merge; a pull request need not commit it (CONTRIBUTING.md, Generated trackers).

@@ -1,0 +1,11 @@
+{
+  "source": "Exact HEAD blobs; no tracker regeneration",
+  "restored": [
+    "docs/evidence/rr-42-native-20261002/values.json",
+    "docs/evidence/rr-17-viet-supplement-native-20261002/values.json",
+    "docs/evidence/rr-20-pareto-series-scope/limitations.json",
+    "docs/evidence/rr-20-pareto-series-scope/reproduction.json",
+    "docs/evidence/rr20-gallery2-published/registry-verification.json",
+    "docs/evidence/rr20-gallery2-published/package-content-comparison.json"
+  ]
+}
