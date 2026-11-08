@@ -1,0 +1,26 @@
+{
+  "language": "ar-SA",
+  "slides": [
+    {
+      "title": "نص لاتيني بلغة عربية صريحة",
+      "items": [
+        [
+          {
+            "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it around the customer journey.",
+            "lang": "ar-SA"
+          }
+        ]
+      ],
+      "numbering": "arabic"
+    }
+  ],
+  "design": {
+    "fontScheme": {
+      "id": "aptos",
+      "complexScript": {
+        "major": "Arabic Typesetting",
+        "minor": "Aptos"
+      }
+    }
+  }
+}
