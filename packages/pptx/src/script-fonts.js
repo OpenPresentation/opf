@@ -7,7 +7,7 @@
 // When the resolver throws for a deck, the exporter writes what it wrote before FF-07 (lang="en-US", empty theme ea/cs, no
 // rtl) and reports `language-export-unavailable`.
 import {numberRanges, paragraphDirection, physicalAlignment, resolveScriptFonts as coreResolveScriptFonts} from "@openpresentation/opf/composition";
-import {latinNumericText,protectNativeLatinText} from "./native-language-provenance.js";
+import {protectNativeLatinText} from "./native-language-provenance.js";
 
 // OPF 0.15 (FA-23): core resolves the font-scheme references a deck or a language object names against the document's
 // catalogs and the host's registered `catalogs` (Catalog[]), the same option the slide context takes. `catalogs` is passed
@@ -47,9 +47,9 @@ export function planScriptFonts(presentation, report, {catalogs} = {}) {
 
 /**
  * FA-13: the OOXML tag a run's own `lang` (TextRun.lang) is written with: core's curated tag for the language (fr becomes
- * fr-FR), or undefined when it is the effective slide language. Without a plan the tag is written as given.
+ * fr-FR). Explicit RTL base-language choices remain marked; other choices equal to the effective slide language are elided. Without a plan the tag is written as given.
  */
-export function runLanguageTag(plan, tag, slideIndex = 0, nativeText) {
+export function runLanguageTag(plan, tag, slideIndex = 0) {
   if (typeof tag !== "string" || !tag) return undefined;
   if (!plan) return tag.toLowerCase() === "en-us" ? undefined : tag;
   const cache = plan.runLanguages ??= new Map(), key = `${slideIndex}|${tag}`;
@@ -62,9 +62,9 @@ export function runLanguageTag(plan, tag, slideIndex = 0, nativeText) {
     cache.set(key, lang.toLowerCase() === String(plan.slides?.[slideIndex]?.lang ?? plan.lang).toLowerCase() ? undefined : lang);
   }
   // Preserve an explicit base-language choice before the inherited Latin-digit
-  // adapter runs. Its existing altLang marker distinguishes it from a default.
+  // adapters run, including mixed-script paragraphs. Its existing altLang marker distinguishes it from a default.
   const slide = plan.slides?.[slideIndex] ?? plan.deck;
-  return cache.get(key) ?? (slide?.rtl && latinNumericText(nativeText) ? slide.lang : undefined);
+  return cache.get(key) ?? (slide?.rtl ? slide.lang : undefined);
 }
 
 /**
@@ -371,6 +371,7 @@ export function leftToRightPieces(text) {
 /** Split the runs of a right-to-left paragraph so each Latin phrase and each number is its own en-US run. */
 function splitLatinRuns(body) {
   return body.replace(RUN, (run, properties, escaped) => {
+    if (/\saltLang="en-US"/.test(properties) && !/\slang="en-US"/.test(properties)) return run; // Keep authored proofing; existing English segmentation remains unchanged.
     const text = decodeText(escaped), phrases = leftToRightPieces(text);
     if (!phrases.length) return run;
     const make = (value, lang) => `<a:r>${lang ? properties.replace(/\slang="[^"]*"/, ` lang="${lang}"`) : properties}<a:t>${encodeText(value)}</a:t></a:r>`;

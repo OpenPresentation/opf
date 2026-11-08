@@ -139,3 +139,28 @@ test('canonical explicit list-language fixtures preserve complete authored rich 
   assert.equal(restored.language,'ar-SA');
  }
 });
+
+test('canonically equivalent Latin accents have equal numeric-shaping eligibility without changing source text',async()=>{
+ for(const word of ['Café','Cafe\u0301']){
+  const text='Item 1: '+word+' keeps its original Unicode.',document={language:'ar-SA',slides:[{text}]},result=await native(document);
+  const selected=runsOf(result).filter(run=>run.text.includes('Item ')||run.text.includes(word));
+  assert.ok(selected.length);for(const run of selected)assert.equal(run.properties['@lang'],'en-US','NFC and NFD Latin text use the same shaping protection');
+  const restored=await fromPptx(result.bytes,{catalogs:[gallery]});assert.equal(restored.slides[0].text,text,'eligibility never normalizes or rewrites the authored characters');
+ }
+});
+
+test('mixed RTL paragraphs retain explicit French, English and same-base Arabic run languages',async()=>{
+ const examples=[
+  ['fr-FR',['البند: ',{text:'Bonjour 1',lang:'fr-FR'}]],
+  ['fr-FR',['البند: ',{text:'Bonjour',lang:'fr-FR'}]],
+  ['en-US',['البند: ',{text:'Hello 1',lang:'en-US'}]],
+  ['ar-SA',['البند: ',{text:'Bonjour 1',lang:'ar-SA'}]],
+  ['ar-SA',[{text:'البند: Bonjour 1',lang:'ar-SA'}]],
+ ];
+ for(const [lang,text]of examples){
+  const document={language:'ar-SA',slides:[{items:[text],numbering:'arabic'}]},result=await native(document);
+  const explicit=runsOf(result).find(run=>/Bonjour|Hello/.test(run.text));assert.ok(explicit);assert.equal(explicit.properties['@lang'],lang,'the generic bidi splitter never replaces an authored proofing language');
+  assert.equal(explicit.properties['@altLang'],'en-US','authored override stays distinct from inherited shaping');
+  const restored=await fromPptx(result.bytes,{catalogs:[gallery]});assert.deepEqual(restored.slides[0].items,document.slides[0].items,'all mixed-run source identities and characters survive');assert.equal(restored.language,'ar-SA');
+ }
+});

@@ -2988,11 +2988,11 @@ function listRunLook(fit,style,context){
   return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};
 }
 function richLineRuns(line,color,native,context,path) {
-  const fallback=color.replace(/^#/,''),nativeText=line.fragments.map(fragment=>fragment.text).join('');
+  const fallback=color.replace(/^#/,'');
   return line.fragments.map(fragment=>{
     assertXmlText(fragment.run.text ?? fragment.text, path);
     const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context,native);
-    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:|tel:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined,...langOptions(context,fragment.style.lang,nativeText)}};
+    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:|tel:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined,...langOptions(context,fragment.style.lang)}};
   });
 }
 // Every native line of a list, marker paragraph or not, is named for the list's
@@ -4044,11 +4044,10 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
   const count = fit.richLines.length;
   let cursor = 0;
   for (const [index, line] of fit.richLines.entries()) {
-    const nativeText = line.fragments.map(fragment => fragment.text).join('');
     const runs = line.fragments.map(fragment => {
       const runColor = exportColor(fragment.run.color, context, context.colors.text);
       const color = nativeColor(fragment.run.color, runColor, context, fallback);
-      return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang, nativeText)}};
+      return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
     });
     // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
     const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
@@ -4162,7 +4161,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const lineColor = pptxColor(config.color ?? context.textColor);
     slide.addText(link?.href && line ? [{text: line, options: {hyperlink: {url: link.href}, color: lineColor, underline: {style: 'none'}}}] : line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
-      ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, config.lang, line),
+      ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, config.lang),
       color: lineColor, align: alignment,
       ...(fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),
       // Reuse the frame's existing relationship to cover blank caption boxes.
@@ -4861,8 +4860,8 @@ function chosenFamilyMeasurement(measurement) {
 }
 
 // FA-13: TextRun.lang as the run's own proofing language (a:rPr lang), when it differs from the deck language.
-function langOptions(context, tag, nativeText) {
-  const lang = runLanguageTag(context.scriptFonts, tag, context.slideIndex ?? 0, nativeText);
+function langOptions(context, tag) {
+  const lang = runLanguageTag(context.scriptFonts, tag, context.slideIndex ?? 0);
   return lang ? {lang} : {};
 }
 

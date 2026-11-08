@@ -16,7 +16,12 @@ const rtlLanguage=value=>{
  if(!rtlTags.has(value)){let rtl=false;try{rtl=resolveScriptFonts({language:value}).rtl===true;}catch{/* Unknown native tags remain observed. */}rtlTags.set(value,rtl);}
  return rtlTags.get(value);
 };
-export const latinNumericText=value=>typeof value==='string'&&/\p{Script=Latin}/u.test(value)&&/[0-9]/.test(value)&&/^[\p{Script=Latin}0-9\p{P}\p{S}\p{Z}]*$/u.test(value);
+export const latinNumericText=value=>{
+ if(typeof value!=='string')return false;
+ // Normalize only the eligibility probe; native/source characters stay exact.
+ const normalized=value.normalize('NFC');
+ return /\p{Script=Latin}/u.test(normalized)&&/[0-9]/.test(normalized)&&/^[\p{Script=Latin}0-9\p{P}\p{S}\p{Z}]*$/u.test(normalized);
+};
 const pairBase=properties=>attribute(properties,'lang')==='en-US'&&attribute(properties,'altLang')!=='en-US'&&rtlLanguage(attribute(properties,'altLang'))?attribute(properties,'altLang'):undefined;
 
 // Only inherited proofing on measured body/list shapes is adapted. Explicit
