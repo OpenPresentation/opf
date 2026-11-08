@@ -1,0 +1,1300 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+  "sourceDirty": false,
+  "node": "v24.20.0",
+  "engineVersion": "0.32.1",
+  "registryAcceptance": false,
+  "nativeAcceptance": false,
+  "sourceTemplate": {
+    "path": "C:\\opf-work\\sh25-chart-points\\artifacts\\sh25-native\\point-probes.json",
+    "sha256": "ba8968b81e51044d4f98402dd94ee7c1857e0c60229bee4abaaef5b4bebc407c",
+    "revision": "ac95fce94a3e2c76a656aa6b97ae25389059e78e",
+    "dirty": true,
+    "scope": "Authored decks and selectors only reused; no old rendered/PPTX geometry or qualification reused"
+  },
+  "cli": {
+    "path": "C:\\opf-work\\sh25-chart-points\\packages\\cli\\dist\\index.js",
+    "distFiles": [
+      {
+        "path": "packages/cli/dist/index.js",
+        "bytes": 354222,
+        "sha256": "06a41a82db997bd1382a540e33825b1bcdb42b1de5c5f8a3ea42ab78d6dce0c9"
+      },
+      {
+        "path": "packages/javascript/dist/composition.js",
+        "bytes": 13134,
+        "sha256": "d55e74e1fd48eda2cec6319dae351cdef3cd2c0a8f76c7b2f1c8a182d4248f5d"
+      },
+      {
+        "path": "packages/pptx/dist/index.js",
+        "bytes": 464484,
+        "sha256": "13efda27a6c31963b1a5f42e5fa1bf30bda9135aa86000484851f9e32f771c87"
+      },
+      {
+        "path": "packages/render/dist/svg.js",
+        "bytes": 178651,
+        "sha256": "d4a0ba3ac0437f50ed90ae80114e22954f29d8a8d64c1a7db8832aea4767f962"
+      },
+      {
+        "path": "packages/gallery/dist/index.js",
+        "bytes": 342260,
+        "sha256": "67c41f198d9302e77b914d242f3a9f24bbe922564800784854ba845c0122a9e0"
+      }
+    ],
+    "fontRoute": "Maintained CLI office/visual/script-auto route for both PNG and PPTX; native host font presence remains separate"
+  },
+  "suiteRepository": {
+    "directory": "C:\\opf-work\\sh25-chart-points",
+    "revision": "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+    "dirty": false,
+    "files": [
+      {
+        "path": "scripts/native-acceptance/run-windows.ps1",
+        "bytes": 14306,
+        "sha256": "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+      },
+      {
+        "path": "spec/schemas/opf.schema.json",
+        "bytes": 286160,
+        "sha256": "b219f73ace45cfb7b00ab5531420d33c13510c4ab68190f970e6ec0bfd92fa17"
+      },
+      {
+        "path": "packages/javascript/src/chart-point-anchors.ts",
+        "bytes": 16823,
+        "sha256": "7e2464f8a592dce306a9651d9025373e873f8d5aafd30fd8da23fc16da6783b8"
+      },
+      {
+        "path": "packages/javascript/src/composition.ts",
+        "bytes": 1013154,
+        "sha256": "c48ffa53765a9e557d945c02527bc3b713b224c710762ec81dfa9d97d96843b1"
+      },
+      {
+        "path": "packages/javascript/src/chart-axis.ts",
+        "bytes": 25988,
+        "sha256": "f76f8c6a677bce4c0468574fcb0b29e93a8c089305a219cce9e5db4a669c2ca1"
+      },
+      {
+        "path": "packages/javascript/src/chart-plot.ts",
+        "bytes": 19464,
+        "sha256": "6f8b11c435b0b5b7e551dbe6c42ef0033060797170a649ebbaf507eb47354374"
+      },
+      {
+        "path": "packages/pptx/src/index.js",
+        "bytes": 464484,
+        "sha256": "13efda27a6c31963b1a5f42e5fa1bf30bda9135aa86000484851f9e32f771c87"
+      },
+      {
+        "path": "packages/render/src/svg.js",
+        "bytes": 178651,
+        "sha256": "d4a0ba3ac0437f50ed90ae80114e22954f29d8a8d64c1a7db8832aea4767f962"
+      },
+      {
+        "path": "packages/cli/src/convert-command.ts",
+        "bytes": 28811,
+        "sha256": "273b23ee38e9e0f7e1da05e6336fd0da5d9ecb4605acaa3bff15666fcb35be76"
+      }
+    ]
+  },
+  "workerRepository": {
+    "directory": "C:\\opf-work\\sh25-chart-points\\packages\\pptx",
+    "revision": "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+    "dirty": false,
+    "files": [
+      {
+        "path": "test/native-furniture-control.ps1",
+        "bytes": 44005,
+        "sha256": "a2e8947593c4e981996c4a6d613fd7550616cd9a8b151cec23b3c2e49956751d"
+      },
+      {
+        "path": "test/native-furniture-harness-check.ps1",
+        "bytes": 32157,
+        "sha256": "31c802e8b2c95c5486d5240106133b5554ae8d8ec0e241059e3be18bd1b0d462"
+      },
+      {
+        "path": "test/native-process.ps1",
+        "bytes": 2341,
+        "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+      },
+      {
+        "path": "test/native-process-check.ps1",
+        "bytes": 2333,
+        "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "column-en-us",
+      "sourceCaseId": "column-en-US",
+      "type": "column",
+      "language": "en-US",
+      "source": {
+        "path": "cases/column-en-us/source.opf.json",
+        "bytes": 7653,
+        "sha256": "96febfa80faa4dea6265c3ab388988005ad49da1a12ee64317608f33664ffe29"
+      },
+      "archiveSha256": "3af7769a7a00827b776318f0a7fb896360e1accb2859fda7aa7d505ade74da6f",
+      "previewSha256": "bf01500e9b2b993af449b09ca04da5c67a1b3b35677e3f30bd4fba6eb0bc2ccc",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "column-ar",
+      "sourceCaseId": "column-ar",
+      "type": "column",
+      "language": "ar",
+      "source": {
+        "path": "cases/column-ar/source.opf.json",
+        "bytes": 7650,
+        "sha256": "cee35ac4d6a2749c103aac9109b954e8eedb918c6fa557d86fcd8985ca597bf7"
+      },
+      "archiveSha256": "cbf5024bc0fdf2b011ec0cc5823d8f7746b8bdfcf4aacc9ac55ccb6b7ebda70d",
+      "previewSha256": "acd23be9f09694e70702f5401ed2907a4a738c5c0525cec20fa9dcf7ed172cc9",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-column-en-us",
+      "sourceCaseId": "stacked-column-en-US",
+      "type": "stacked-column",
+      "language": "en-US",
+      "source": {
+        "path": "cases/stacked-column-en-us/source.opf.json",
+        "bytes": 7669,
+        "sha256": "8cda9054701b6d35a95996fc7f77b78d12cfa3aedd2ee3c610bf7317374e1f12"
+      },
+      "archiveSha256": "0a73cdb1d7a983129a811b4739a1039fcc8fd5c9269ecfccbc99aaa8b78f6cd8",
+      "previewSha256": "611f7f7cfc12199ef69b79c7a49fcd72b91ec9d6ba16c977cfb166ce81909529",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-column-ar",
+      "sourceCaseId": "stacked-column-ar",
+      "type": "stacked-column",
+      "language": "ar",
+      "source": {
+        "path": "cases/stacked-column-ar/source.opf.json",
+        "bytes": 7666,
+        "sha256": "67a6c23b2933e93b85657c9a4df85a7d351d48613728f729bc1bed94beebd0d5"
+      },
+      "archiveSha256": "f512264f013197c0c7fda16452d158c252827c5707ca27780aac89a46fd266b8",
+      "previewSha256": "216eda395939bfa6b87213e59a49cc9c8541575206386e8284d2e175079bf61e",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "100pct-stacked-column-en-us",
+      "sourceCaseId": "100pct-stacked-column-en-US",
+      "type": "100pct-stacked-column",
+      "language": "en-US",
+      "source": {
+        "path": "cases/100pct-stacked-column-en-us/source.opf.json",
+        "bytes": 7683,
+        "sha256": "52b5455a4cfbbcd5adc1e2f96d9e6f712598222f04250f226a070332d8be165f"
+      },
+      "archiveSha256": "8396a0656ac61ddaa3735bf7d66b15a222c2ba31160eb9406fcb0ae276c7af42",
+      "previewSha256": "d805d17578b94a55d38a9524ca0a94d5b6d74f3604d098b4e7ce3854c4c4324a",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "100pct-stacked-column-ar",
+      "sourceCaseId": "100pct-stacked-column-ar",
+      "type": "100pct-stacked-column",
+      "language": "ar",
+      "source": {
+        "path": "cases/100pct-stacked-column-ar/source.opf.json",
+        "bytes": 7680,
+        "sha256": "5acceb2ee1ae220d06eb3cff1527650a0ae16b2220ce2be288e75d3954b29778"
+      },
+      "archiveSha256": "dc22f1393696cd0527cf08d802d0f4d23fc9ae9e1cb90d767f5d754e552b6c50",
+      "previewSha256": "dc5f38a843696aa56870955d686226d3c7b64d1eef9bc5f48c805151b3c051eb",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "bar-en-us",
+      "sourceCaseId": "bar-en-US",
+      "type": "bar",
+      "language": "en-US",
+      "source": {
+        "path": "cases/bar-en-us/source.opf.json",
+        "bytes": 7647,
+        "sha256": "63bfd11306e463c55140bcb984bbb2eca49e12bef3616f6158f99abb5c721586"
+      },
+      "archiveSha256": "f76eca0f2562155ae7df264aef6f8fa4de9baba7051f9c8ab32d564b7d80f6d0",
+      "previewSha256": "883f9b4b36433d8bcdb886d071d70578518643e3511b94a68f9cf3139e8a48e3",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "bar-ar",
+      "sourceCaseId": "bar-ar",
+      "type": "bar",
+      "language": "ar",
+      "source": {
+        "path": "cases/bar-ar/source.opf.json",
+        "bytes": 7644,
+        "sha256": "79a9f14ec272d296b59acfb849765d1a5312593346f77b38e8f80e266e333497"
+      },
+      "archiveSha256": "ba803034b240d17ad5ff15af7ec7cfb849d61e3481bdac58e39054c3517ccc3b",
+      "previewSha256": "9b8ad3a099ad4b725c56c69de25cc537c1a1e6bb97f65784eaa5e2ddcdd87eaf",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-bar-en-us",
+      "sourceCaseId": "stacked-bar-en-US",
+      "type": "stacked-bar",
+      "language": "en-US",
+      "source": {
+        "path": "cases/stacked-bar-en-us/source.opf.json",
+        "bytes": 7663,
+        "sha256": "836ca441ee46c0f358675b35adce2eb23cf1b0436cdc29e3d4008a10c952b83b"
+      },
+      "archiveSha256": "07fd0e75bb97164c8a2ff7cc5ca6cd83f2af0beec2bfba8a34bf78c5c61274fc",
+      "previewSha256": "510846a0b07ae63091fc4abe238f592d499c186d4607c0e1187ec534af5710a8",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-bar-ar",
+      "sourceCaseId": "stacked-bar-ar",
+      "type": "stacked-bar",
+      "language": "ar",
+      "source": {
+        "path": "cases/stacked-bar-ar/source.opf.json",
+        "bytes": 7660,
+        "sha256": "7bb68c9680e8e8f94e931395551ba7a1947d81f5b876fd5813fee53e2bb7e840"
+      },
+      "archiveSha256": "cb94ae8fb7a6ec1351dfd38ed226007604acf5950f692177734cbe0889f7e234",
+      "previewSha256": "d05cd145bf6609c4d281a19d4d36fefc84e59feca79f465424c25b35d1868b88",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "100pct-stacked-bar-en-us",
+      "sourceCaseId": "100pct-stacked-bar-en-US",
+      "type": "100pct-stacked-bar",
+      "language": "en-US",
+      "source": {
+        "path": "cases/100pct-stacked-bar-en-us/source.opf.json",
+        "bytes": 7677,
+        "sha256": "1f7864ab90c8d6c0526441ca186d88f910514a19e7128d223586edf449b91eec"
+      },
+      "archiveSha256": "b08a1586c52d37e9ea67dc79c99f54ab12d3107f9d75ef48e035c731568e8766",
+      "previewSha256": "195346034bd8ae6fb8a20c814dc47e6c2450159e582a38b5c57d1fbee5569452",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "100pct-stacked-bar-ar",
+      "sourceCaseId": "100pct-stacked-bar-ar",
+      "type": "100pct-stacked-bar",
+      "language": "ar",
+      "source": {
+        "path": "cases/100pct-stacked-bar-ar/source.opf.json",
+        "bytes": 7674,
+        "sha256": "798790d99fa71212b89373e9389fca54aff7443295d01697b8e3d4b1d33e5d0e"
+      },
+      "archiveSha256": "71244006b28008200fa9baf16b0495132b3cbf4085d0d724c0c62ec40e31788e",
+      "previewSha256": "d7da1851a2e4777662a336fc06bff2efdc67f19094fef40547159966f9e1020b",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "line-en-us",
+      "sourceCaseId": "line-en-US",
+      "type": "line",
+      "language": "en-US",
+      "source": {
+        "path": "cases/line-en-us/source.opf.json",
+        "bytes": 7649,
+        "sha256": "9bd18b5bee47721a230be47cea3498be09e42b3ca00bfddfb5e1a82c956294e9"
+      },
+      "archiveSha256": "c7caf3ca1762b64ba130425eb5a287844147153cedc5189679007ad2c7ddbc2b",
+      "previewSha256": "49109ace879a30f365a57969cf74bb04eecfc912b2f508903af5aa8a8f8eb8a3",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "line-ar",
+      "sourceCaseId": "line-ar",
+      "type": "line",
+      "language": "ar",
+      "source": {
+        "path": "cases/line-ar/source.opf.json",
+        "bytes": 7646,
+        "sha256": "2a7f4c129d2b9e64ab1f4ee6f47b1184dde0fff44c45d8f3fdcf191b7fba275a"
+      },
+      "archiveSha256": "47dc9034e0a67d02fd02c6b5fbb9de372cbaf63f3ab6b2ac165dd2e2c8005187",
+      "previewSha256": "adb10e6fc3154f44e5c8565c23b6e24588793af2da3cb75f572965c8e05a5348",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "line-with-markers-en-us",
+      "sourceCaseId": "line-with-markers-en-US",
+      "type": "line-with-markers",
+      "language": "en-US",
+      "source": {
+        "path": "cases/line-with-markers-en-us/source.opf.json",
+        "bytes": 7675,
+        "sha256": "198f3ac163b26dbe9acd1210998153ce9d258a3717f0c75ef60ad484aba545b4"
+      },
+      "archiveSha256": "a0a342842fa889376d8379c9831ba2c39d39d21e3f6d9fa6b4caab5a160dfd1d",
+      "previewSha256": "88dcacc79883ed94ff458492b416974f5dd356f14854cd6668013163794bea84",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "line-with-markers-ar",
+      "sourceCaseId": "line-with-markers-ar",
+      "type": "line-with-markers",
+      "language": "ar",
+      "source": {
+        "path": "cases/line-with-markers-ar/source.opf.json",
+        "bytes": 7672,
+        "sha256": "44b83e413617be1e90758db73bff682f5edddba7c24ca51e02ddbced66287981"
+      },
+      "archiveSha256": "72995c41569b82fc19e72084ec4576448349f0fb0147b0d699d54098ba3f35bc",
+      "previewSha256": "72158e9eaa5ad79bf0f1ef24679a0e6b70f0413d1908af70353db61d6ef3345b",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-line-en-us",
+      "sourceCaseId": "stacked-line-en-US",
+      "type": "stacked-line",
+      "language": "en-US",
+      "source": {
+        "path": "cases/stacked-line-en-us/source.opf.json",
+        "bytes": 7665,
+        "sha256": "6f5edbe98621bad0acbf8f86cf6b889cc90aa9e9a91e4dcbb4bd9a5cd5335a43"
+      },
+      "archiveSha256": "e1456edd842165b60989d65ee720d0d744eb6804fa0507184de79cd6ed03d1a1",
+      "previewSha256": "af35eb02e1d21aacc5189b247ce485e01d86c0d01af05ac90b0b43f76d1273f6",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-line-ar",
+      "sourceCaseId": "stacked-line-ar",
+      "type": "stacked-line",
+      "language": "ar",
+      "source": {
+        "path": "cases/stacked-line-ar/source.opf.json",
+        "bytes": 7662,
+        "sha256": "97b63826bcd4ac46c54482091298d4b00215cfe813081e02707826343546d97c"
+      },
+      "archiveSha256": "ef46b511131c770824f95a0574aebad16b7fd6ed8693394e867ddbc01c231858",
+      "previewSha256": "beb8f6a60c729ebfce3694ad39db91850c55c3f002b4429db8f739abe92f7af2",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-line-with-markers-en-us",
+      "sourceCaseId": "stacked-line-with-markers-en-US",
+      "type": "stacked-line-with-markers",
+      "language": "en-US",
+      "source": {
+        "path": "cases/stacked-line-with-markers-en-us/source.opf.json",
+        "bytes": 7691,
+        "sha256": "744c20f4c6e06587d334b030b39a1569fbef32952b302836b0dff162a24e7e46"
+      },
+      "archiveSha256": "bdb9b65bbdf04e29c50fdd54e3e43c8d5ee3ca3d9647d022d098bed59df53d2e",
+      "previewSha256": "a984072751181c8cb2e15df925a7371543bea959a5c3c353165019cfcfbcc6b3",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-line-with-markers-ar",
+      "sourceCaseId": "stacked-line-with-markers-ar",
+      "type": "stacked-line-with-markers",
+      "language": "ar",
+      "source": {
+        "path": "cases/stacked-line-with-markers-ar/source.opf.json",
+        "bytes": 7688,
+        "sha256": "333a21d3a30ea11266d7936e8dd8a60810708e4877b3ce142286c175f321abb3"
+      },
+      "archiveSha256": "78a72ee2091cc9a532f252c99762d94c97cb649e8b11a6e6f968062d2e64fdef",
+      "previewSha256": "e4d17778eaf82548e7829226b6d58579e10f1442562d26357eb7e163e82233c9",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "area-en-us",
+      "sourceCaseId": "area-en-US",
+      "type": "area",
+      "language": "en-US",
+      "source": {
+        "path": "cases/area-en-us/source.opf.json",
+        "bytes": 7649,
+        "sha256": "c4430712e15e8f828f8f48f6825bccb384135c443ea2f127a541da2593a485ab"
+      },
+      "archiveSha256": "6aca7d8f3369a055112256da47b815515cce151ebc3345506cdb84bba22926bb",
+      "previewSha256": "0602c6d38e9ac4b74c82a30a8c971c44d5b3f506c72af7bef48345dffbe59106",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "area-ar",
+      "sourceCaseId": "area-ar",
+      "type": "area",
+      "language": "ar",
+      "source": {
+        "path": "cases/area-ar/source.opf.json",
+        "bytes": 7646,
+        "sha256": "92edef132136f6fb85c694ae8d55e04a580839fe23d6b08590052e05f00343e4"
+      },
+      "archiveSha256": "d06141bb2af7241c54e6df45ad9a9286af470ed5389d7513bec71316c581d8fe",
+      "previewSha256": "35b124660cc4932c2915c8c463b14ddd73dc0b8fc76dbcb9b1c6ee023a1d1f3b",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-area-en-us",
+      "sourceCaseId": "stacked-area-en-US",
+      "type": "stacked-area",
+      "language": "en-US",
+      "source": {
+        "path": "cases/stacked-area-en-us/source.opf.json",
+        "bytes": 7665,
+        "sha256": "f441e8adb15bc35c581e3472b5c7bf135983f70e302cdca71102abbf7b21ea75"
+      },
+      "archiveSha256": "0b455bf7be3694270c7c4b75890a5243d997450021d729b4e0f133385e7ca429",
+      "previewSha256": "d4efd75bfcb27b9817e5f64ff3fbe9d849ed319ab9b9c01e3c7d10ad9a3f1b20",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 15,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "stacked-area-ar",
+      "sourceCaseId": "stacked-area-ar",
+      "type": "stacked-area",
+      "language": "ar",
+      "source": {
+        "path": "cases/stacked-area-ar/source.opf.json",
+        "bytes": 7662,
+        "sha256": "8cf6a7d56cff1a467f9112615e4e13f3d21bcf4dee9d89bf4e6afa107ccb76ab"
+      },
+      "archiveSha256": "6622d364ae3963d3e546e86df5b8b354bb9ec712ca376c10ee299b8fcc383e19",
+      "previewSha256": "d18dd97dd2a409da3eb799cdb7558bdb1d9fb15fb10bcfecd731dcd1b3462aa8",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 15,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "100pct-stacked-area-en-us",
+      "sourceCaseId": "100pct-stacked-area-en-US",
+      "type": "100pct-stacked-area",
+      "language": "en-US",
+      "source": {
+        "path": "cases/100pct-stacked-area-en-us/source.opf.json",
+        "bytes": 7679,
+        "sha256": "6b32e48953cdd1e41c50a9c4d8fd7f430671752d991790b50f0e53317d144262"
+      },
+      "archiveSha256": "ea96e91b36f9481ddf4113ca27e5853aa0563be965a01f093054ea1bbbf2345c",
+      "previewSha256": "b1a6dfc7d756ced40654d0f769d84f0575f48e83513cb5ce3bc025aeec7f6ad8",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "100pct-stacked-area-ar",
+      "sourceCaseId": "100pct-stacked-area-ar",
+      "type": "100pct-stacked-area",
+      "language": "ar",
+      "source": {
+        "path": "cases/100pct-stacked-area-ar/source.opf.json",
+        "bytes": 7676,
+        "sha256": "9c2800667ae627cc6baec74abe96abf8c13e6d9c0069557e7e82dbc03ea13c91"
+      },
+      "archiveSha256": "f1944cc050c8d029629f5f4ad01a72d5761ab392c0f0f6eb3995068f68b60333",
+      "previewSha256": "f3347607b02f2fb8d3658925b941a5ef6ab4df307020979f7549d2c517143a99",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 11,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "scatter-en-us",
+      "sourceCaseId": "scatter-en-US",
+      "type": "scatter",
+      "language": "en-US",
+      "source": {
+        "path": "cases/scatter-en-us/source.opf.json",
+        "bytes": 7655,
+        "sha256": "fed52291374ddd8c723f969879fbb1f85157136b9df395dddd18a9a0a709977f"
+      },
+      "archiveSha256": "d5922e70590720c626e919a4a1e16d813094cfd1780e74a37470ab66998ab4f6",
+      "previewSha256": "c08bcc14e48c7ece9b1d6153dce812ff11f58659bbf1a4c6389e63d3a9a6bc87",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "scatter-ar",
+      "sourceCaseId": "scatter-ar",
+      "type": "scatter",
+      "language": "ar",
+      "source": {
+        "path": "cases/scatter-ar/source.opf.json",
+        "bytes": 7652,
+        "sha256": "d0c32155f7858e45df6b1a3eb17ce5ac0b169a456b481b757b9ff766febb4994"
+      },
+      "archiveSha256": "2d3be49e5458c18d231d8b5858808b4c56d2de1825e6f728ec9562a4d11743fe",
+      "previewSha256": "c08bcc14e48c7ece9b1d6153dce812ff11f58659bbf1a4c6389e63d3a9a6bc87",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 7,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "pie-en-us",
+      "sourceCaseId": "pie-en-US",
+      "type": "pie",
+      "language": "en-US",
+      "source": {
+        "path": "cases/pie-en-us/source.opf.json",
+        "bytes": 7533,
+        "sha256": "5af1597f78a6257e3ec3f8960492527b347683f14cb9b36c8ff91fb188cb8933"
+      },
+      "archiveSha256": "ab05f31fad0548524f0cd44dda3b532937d20fb98a9619b6e84cffbef0d6a8d3",
+      "previewSha256": "70b266f61720f9e7843b98bf0382f1d6962e1d681e203199c505e61d94d50a7c",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 23,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "pie-ar",
+      "sourceCaseId": "pie-ar",
+      "type": "pie",
+      "language": "ar",
+      "source": {
+        "path": "cases/pie-ar/source.opf.json",
+        "bytes": 7530,
+        "sha256": "4a8a853a2d584b32f243c63be05f53d22a351dd6550f616d8ed2eb593736b74f"
+      },
+      "archiveSha256": "9e5932c4dfb10b52b4c31c3545542e58b8a87266007b35bcceb4864b3afccf24",
+      "previewSha256": "3edab3369a8915913f043155ca5f47e53367b36df53ac0e944cef7ef26424569",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 23,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "doughnut-en-us",
+      "sourceCaseId": "doughnut-en-US",
+      "type": "doughnut",
+      "language": "en-US",
+      "source": {
+        "path": "cases/doughnut-en-us/source.opf.json",
+        "bytes": 7657,
+        "sha256": "181cd774eeb03af91864c0940c5c04ce1df2a13383c6d719914e98d23f1ada88"
+      },
+      "archiveSha256": "31fe6963c7a027d9897da3da3371c9ab70e85850f57ef786b357e42077a4b18d",
+      "previewSha256": "cfef8eb6e73b37449ae6192a3dadcb26a7f2d3566d91cc4c7aaacb8cab173296",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 8,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/chart-data-adapted",
+          "severity": "warning",
+          "category": "pptx",
+          "path": "/slides/0/blocks/0/chart",
+          "scope": "document",
+          "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it.",
+          "help": "The chart data was reshaped to export a native chart; see the message.",
+          "adaptation": "chart-fallback"
+        },
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    },
+    {
+      "id": "doughnut-ar",
+      "sourceCaseId": "doughnut-ar",
+      "type": "doughnut",
+      "language": "ar",
+      "source": {
+        "path": "cases/doughnut-ar/source.opf.json",
+        "bytes": 7654,
+        "sha256": "3022d5f88cd9dc51326b1167bfb95ab20c7e930c4b4564ffee74baf609ef4fdd"
+      },
+      "archiveSha256": "d4634b7b43c553e930e6787478774bb920000376ee99c64204f69732fe6e505a",
+      "previewSha256": "cfef8eb6e73b37449ae6192a3dadcb26a7f2d3566d91cc4c7aaacb8cab173296",
+      "previewPixels": [
+        1280,
+        720
+      ],
+      "nativeChartName": "OPF chart 1",
+      "nativeShapeCount": 8,
+      "pointMeasurements": 5,
+      "pptxFindings": [
+        {
+          "ruleId": "pptx/chart-data-adapted",
+          "severity": "warning",
+          "category": "pptx",
+          "path": "/slides/0/blocks/0/chart",
+          "scope": "document",
+          "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it.",
+          "help": "The chart data was reshaped to export a native chart; see the message.",
+          "adaptation": "chart-fallback"
+        },
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Roboto"
+          ]
+        }
+      ],
+      "pngFindings": [],
+      "nativeQualified": false
+    }
+  ]
+}

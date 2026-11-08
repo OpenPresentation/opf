@@ -1,0 +1,61 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\sh25-safety-review-01\\sealed-cli-02\\cases\\area-ar\\source.opf.json",
+    "sha256": "92edef132136f6fb85c694ae8d55e04a580839fe23d6b08590052e05f00343e4",
+    "bytes": 7646
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\sh25-safety-review-01\\sealed-cli-02\\cases\\area-ar\\preview.png",
+      "sha256": "35b124660cc4932c2915c8c463b14ddd73dc0b8fc76dbcb9b1c6ee023a1d1f3b",
+      "bytes": 37462,
+      "mediaType": "image/png",
+      "slide": 1,
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

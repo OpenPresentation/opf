@@ -1,0 +1,10 @@
+✔ Windows PowerShell child environment removes inherited module paths without changing its parent (0.8002ms)
+✔ Windows runner parses and exercises pure refusal/identity controls without Office (2632.342ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2706.698

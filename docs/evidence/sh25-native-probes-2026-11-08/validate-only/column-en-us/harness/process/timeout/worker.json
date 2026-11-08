@@ -1,0 +1,9 @@
+﻿{
+    "exitCode":  -1,
+    "scope":  "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+    "timedOut":  true,
+    "processId":  6016,
+    "timeoutSeconds":  1,
+    "startedAt":  "2026-11-08T08:57:12.6010365Z",
+    "finishedAt":  "2026-11-08T08:57:13.6271917Z"
+}

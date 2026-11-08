@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+  "sourceDirty": false,
+  "sealedSuite": {
+    "ok": true,
+    "suiteSha256": "35967d566daaa805dfed897afa8a80ad4a92ede18070fe9919113a43a5450416",
+    "files": 208,
+    "cases": 32,
+    "officeCalls": 0
+  },
+  "runnerSelfTests": {
+    "passed": 2,
+    "officeCalls": 0
+  },
+  "fakeControls": {
+    "passed": true,
+    "lifecycle": 14,
+    "pointAndType": 28,
+    "officeCalls": 0
+  },
+  "validateOnly": [
+    {
+      "case": "column-en-us",
+      "manifestSha256": "35967d566daaa805dfed897afa8a80ad4a92ede18070fe9919113a43a5450416",
+      "mode": "ValidateOnly",
+      "nativeRun": false
+    },
+    {
+      "case": "pie-en-us",
+      "manifestSha256": "35967d566daaa805dfed897afa8a80ad4a92ede18070fe9919113a43a5450416",
+      "mode": "ValidateOnly",
+      "nativeRun": false
+    },
+    {
+      "case": "doughnut-en-us",
+      "manifestSha256": "35967d566daaa805dfed897afa8a80ad4a92ede18070fe9919113a43a5450416",
+      "mode": "ValidateOnly",
+      "nativeRun": false
+    }
+  ],
+  "reproduction": [
+    {
+      "ok": true,
+      "sourceRevision": "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+      "suiteSha256": "35967d566daaa805dfed897afa8a80ad4a92ede18070fe9919113a43a5450416",
+      "case": "pie-en-us",
+      "node": "v24.20.0",
+      "officeCalls": 0,
+      "outputs": [
+        {
+          "name": "input.pptx",
+          "bytes": 109804,
+          "sha256": "ab05f31fad0548524f0cd44dda3b532937d20fb98a9619b6e84cffbef0d6a8d3",
+          "expectedSha256": "ab05f31fad0548524f0cd44dda3b532937d20fb98a9619b6e84cffbef0d6a8d3",
+          "matches": true
+        },
+        {
+          "name": "preview.png",
+          "bytes": 46735,
+          "sha256": "70b266f61720f9e7843b98bf0382f1d6962e1d681e203199c505e61d94d50a7c",
+          "expectedSha256": "70b266f61720f9e7843b98bf0382f1d6962e1d681e203199c505e61d94d50a7c",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "ok": true,
+      "sourceRevision": "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+      "suiteSha256": "35967d566daaa805dfed897afa8a80ad4a92ede18070fe9919113a43a5450416",
+      "case": "doughnut-en-us",
+      "node": "v24.20.0",
+      "officeCalls": 0,
+      "outputs": [
+        {
+          "name": "input.pptx",
+          "bytes": 104513,
+          "sha256": "31fe6963c7a027d9897da3da3371c9ab70e85850f57ef786b357e42077a4b18d",
+          "expectedSha256": "31fe6963c7a027d9897da3da3371c9ab70e85850f57ef786b357e42077a4b18d",
+          "matches": true
+        },
+        {
+          "name": "preview.png",
+          "bytes": 62089,
+          "sha256": "cfef8eb6e73b37449ae6192a3dadcb26a7f2d3566d91cc4c7aaacb8cab173296",
+          "expectedSha256": "cfef8eb6e73b37449ae6192a3dadcb26a7f2d3566d91cc4c7aaacb8cab173296",
+          "matches": true
+        }
+      ]
+    }
+  ],
+  "documentationGate": {
+    "passed": true,
+    "seconds": 43.1
+  },
+  "actualNativeRuns": 0,
+  "actualNativeMeasurements": 0,
+  "registryAcceptance": false,
+  "nativeAcceptance": false,
+  "remainingAcceptance": "See README.md and dated handoff; source/API controls and generated geometry do not qualify actual native coordinates."
+}

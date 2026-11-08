@@ -1,0 +1,26 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\sh25-chart-points
+> node scripts/check-changed.mjs "--files" "packages/pptx/test/native-furniture-style-controls.mjs" "docs/handoff/2026-11-07/sh25-chart-point-overlays.md" "docs/programs/shapes/burndown.md"
+
+check-changed: 3 changed files since (given) (plus uncommitted and untracked)
+ok  build (13.7 s)
+ok  biome (0.2 s)
+ok  pnpm run check:changes (0.9 s)
+ok  pnpm run check:font-hotlinks (8.6 s)
+ok  pnpm run check:text (2.6 s)
+ok  pnpm run check:skill-commands (24.5 s)
+-  typecheck
+ok  tests pptx (2.7 s)
+
+step                           status     time
+build                          passed   13.7 s
+biome                          passed    0.2 s  1 files
+pnpm run check:changes         passed    0.9 s
+pnpm run check:font-hotlinks   passed    8.6 s
+pnpm run check:skill-commands  passed   24.5 s
+pnpm run check:text            passed    2.6 s
+typecheck                      skipped       -  no .ts, .mts or tsconfig change
+tests pptx                     passed    2.7 s
+total                                   41.9 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.

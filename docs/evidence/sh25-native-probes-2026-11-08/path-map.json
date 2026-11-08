@@ -1,0 +1,147 @@
+{
+  "scope": "Absolute paths in immutable receipts retain original execution identities. These mappings identify their portable archived bytes or exact source-checkout equivalents. The sealed suite is not rewritten. Source-checkout mappings apply to the clean sealed CLI packet and its clean receipts. Old dirty API producer identities remain historical and are not claimed reproducible from the clean source snapshots.",
+  "mappings": [
+    {
+      "original": "C:/opf-work/sh25-safety-review-01/sealed-cli-02",
+      "packet": "sealed-cli",
+      "kind": "sealed input prefix"
+    },
+    {
+      "original": "C:/opf-work/sh25-safety-validate-column-en-us-01",
+      "packet": "validate-only/column-en-us",
+      "kind": "pure runner receipt prefix"
+    },
+    {
+      "original": "C:/opf-work/sh25-safety-validate-pie-en-us-01",
+      "packet": "validate-only/pie-en-us",
+      "kind": "pure runner receipt prefix"
+    },
+    {
+      "original": "C:/opf-work/sh25-safety-validate-doughnut-en-us-01",
+      "packet": "validate-only/doughnut-en-us",
+      "kind": "pure runner receipt prefix"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/artifacts/sh25-native",
+      "packet": "old-api-inputs",
+      "kind": "preserved dirty API source template; not native qualification"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points",
+      "replacement": "--repository exact clean checkout at 6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+      "packetSnapshots": "sealed-cli/provenance/source",
+      "kind": "source prefix; dependencies/dist built separately and hash-bound in build.json"
+    },
+    {
+      "original": "C:/opf-work/sh25-seal-cli.mjs",
+      "packet": "sealed-cli/provenance/build-packet.mjs",
+      "kind": "original builder snapshot"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/scripts/native-acceptance/run-windows.ps1",
+      "packet": "sealed-cli/provenance/source/scripts/native-acceptance/run-windows.ps1",
+      "repositoryRelative": "scripts/native-acceptance/run-windows.ps1",
+      "sha256": "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/spec/schemas/opf.schema.json",
+      "packet": "sealed-cli/provenance/source/spec/schemas/opf.schema.json",
+      "repositoryRelative": "spec/schemas/opf.schema.json",
+      "sha256": "b219f73ace45cfb7b00ab5531420d33c13510c4ab68190f970e6ec0bfd92fa17",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/javascript/src/chart-point-anchors.ts",
+      "packet": "sealed-cli/provenance/source/packages/javascript/src/chart-point-anchors.ts",
+      "repositoryRelative": "packages/javascript/src/chart-point-anchors.ts",
+      "sha256": "7e2464f8a592dce306a9651d9025373e873f8d5aafd30fd8da23fc16da6783b8",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/javascript/src/composition.ts",
+      "packet": "sealed-cli/provenance/source/packages/javascript/src/composition.ts",
+      "repositoryRelative": "packages/javascript/src/composition.ts",
+      "sha256": "c48ffa53765a9e557d945c02527bc3b713b224c710762ec81dfa9d97d96843b1",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/javascript/src/chart-axis.ts",
+      "packet": "sealed-cli/provenance/source/packages/javascript/src/chart-axis.ts",
+      "repositoryRelative": "packages/javascript/src/chart-axis.ts",
+      "sha256": "f76f8c6a677bce4c0468574fcb0b29e93a8c089305a219cce9e5db4a669c2ca1",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/javascript/src/chart-plot.ts",
+      "packet": "sealed-cli/provenance/source/packages/javascript/src/chart-plot.ts",
+      "repositoryRelative": "packages/javascript/src/chart-plot.ts",
+      "sha256": "6f8b11c435b0b5b7e551dbe6c42ef0033060797170a649ebbaf507eb47354374",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/pptx/src/index.js",
+      "packet": "sealed-cli/provenance/source/packages/pptx/src/index.js",
+      "repositoryRelative": "packages/pptx/src/index.js",
+      "sha256": "13efda27a6c31963b1a5f42e5fa1bf30bda9135aa86000484851f9e32f771c87",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/render/src/svg.js",
+      "packet": "sealed-cli/provenance/source/packages/render/src/svg.js",
+      "repositoryRelative": "packages/render/src/svg.js",
+      "sha256": "d4a0ba3ac0437f50ed90ae80114e22954f29d8a8d64c1a7db8832aea4767f962",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/cli/src/convert-command.ts",
+      "packet": "sealed-cli/provenance/source/packages/cli/src/convert-command.ts",
+      "repositoryRelative": "packages/cli/src/convert-command.ts",
+      "sha256": "273b23ee38e9e0f7e1da05e6336fd0da5d9ecb4605acaa3bff15666fcb35be76",
+      "kind": "exact source file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/pptx/test/native-furniture-control.ps1",
+      "packet": "sealed-cli/provenance/worker/test/native-furniture-control.ps1",
+      "repositoryRelative": "packages/pptx/test/native-furniture-control.ps1",
+      "sha256": "a2e8947593c4e981996c4a6d613fd7550616cd9a8b151cec23b3c2e49956751d",
+      "kind": "exact worker file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/pptx/test/native-furniture-harness-check.ps1",
+      "packet": "sealed-cli/provenance/worker/test/native-furniture-harness-check.ps1",
+      "repositoryRelative": "packages/pptx/test/native-furniture-harness-check.ps1",
+      "sha256": "31c802e8b2c95c5486d5240106133b5554ae8d8ec0e241059e3be18bd1b0d462",
+      "kind": "exact worker file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/pptx/test/native-process.ps1",
+      "packet": "sealed-cli/provenance/worker/test/native-process.ps1",
+      "repositoryRelative": "packages/pptx/test/native-process.ps1",
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "kind": "exact worker file"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points/packages/pptx/test/native-process-check.ps1",
+      "packet": "sealed-cli/provenance/worker/test/native-process-check.ps1",
+      "repositoryRelative": "packages/pptx/test/native-process-check.ps1",
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027",
+      "kind": "exact worker file"
+    },
+    {
+      "original": "C:/opf-work/sh25-reproduce-pie-01",
+      "packet": "reproduction/pie-en-us",
+      "kind": "Office-free byte-identical maintained CLI reproduction"
+    },
+    {
+      "original": "C:/opf-work/sh25-reproduce-doughnut-01",
+      "packet": "reproduction/doughnut-en-us",
+      "kind": "Office-free byte-identical maintained CLI reproduction"
+    },
+    {
+      "original": "C:/opf-work/sh25-safety-review-01",
+      "packet": "controls",
+      "kind": "Original safety logs and fake-control receipts; sealed-cli-02 is separately mapped. Ephemeral mocked paths in fake reports are not native inputs."
+    }
+  ]
+}

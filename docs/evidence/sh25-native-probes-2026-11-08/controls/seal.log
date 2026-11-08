@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /^[a-z0-9-]+$/. Input:
+
+'column-en-US'
+
+    at file:///C:/opf-work/sh25-seal-cli.mjs:34:9 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'column-en-US',
+  expected: /^[a-z0-9-]+$/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.20.0

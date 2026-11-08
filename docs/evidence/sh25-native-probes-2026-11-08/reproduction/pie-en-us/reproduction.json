@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "sourceRevision": "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+  "suiteSha256": "35967d566daaa805dfed897afa8a80ad4a92ede18070fe9919113a43a5450416",
+  "case": "pie-en-us",
+  "node": "v24.20.0",
+  "officeCalls": 0,
+  "outputs": [
+    {
+      "name": "input.pptx",
+      "bytes": 109804,
+      "sha256": "ab05f31fad0548524f0cd44dda3b532937d20fb98a9619b6e84cffbef0d6a8d3",
+      "expectedSha256": "ab05f31fad0548524f0cd44dda3b532937d20fb98a9619b6e84cffbef0d6a8d3",
+      "matches": true
+    },
+    {
+      "name": "preview.png",
+      "bytes": 46735,
+      "sha256": "70b266f61720f9e7843b98bf0382f1d6962e1d681e203199c505e61d94d50a7c",
+      "expectedSha256": "70b266f61720f9e7843b98bf0382f1d6962e1d681e203199c505e61d94d50a7c",
+      "matches": true
+    }
+  ]
+}

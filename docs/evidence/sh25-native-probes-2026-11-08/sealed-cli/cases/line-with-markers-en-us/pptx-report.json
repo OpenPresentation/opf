@@ -1,0 +1,74 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\sh25-safety-review-01\\sealed-cli-02\\cases\\line-with-markers-en-us\\source.opf.json",
+    "sha256": "198f3ac163b26dbe9acd1210998153ce9d258a3717f0c75ef60ad484aba545b4",
+    "bytes": 7675
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\sh25-safety-review-01\\sealed-cli-02\\cases\\line-with-markers-en-us\\input.pptx",
+      "sha256": "a0a342842fa889376d8379c9831ba2c39d39d21e3f6d9fa6b4caab5a160dfd1d",
+      "bytes": 104039,
+      "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "pptx/typeface-not-office-safe",
+      "severity": "info",
+      "category": "pptx",
+      "path": "",
+      "scope": "document",
+      "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+      "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+      "families": [
+        "Roboto"
+      ]
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 1
+  },
+  "format": "pptx",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "checked",
+    "fonts": "checked"
+  },
+  "written": true
+}
