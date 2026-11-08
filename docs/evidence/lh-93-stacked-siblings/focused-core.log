@@ -1,0 +1,28 @@
+▶ LH-125: horizontal stacked bars
+  ✔ values sit inside the segments that hold them, and the series are named in a row above the plot at their first segments (34.2234ms)
+  ✔ the chart's plot is pinned for both engines, and a 100% chart has names but no raw values (1.7715ms)
+  ✔ names that would meet keep the header legend; options keep the chart as authored (2.4179ms)
+✔ LH-125: horizontal stacked bars (39.0956ms)
+▶ LH-125: a stacked area runs edge to edge
+  ✔ it stands on its tick marks, with the first and last values inside the band at the plot's edges (2.8094ms)
+  ✔ a 100% area runs edge to edge too, with no values; a single point has no edges (1.7062ms)
+  ✔ the plot keeps half of the end labels' width beyond its edges (2.0815ms)
+✔ LH-125: a stacked area runs edge to edge (6.7632ms)
+▶ LH-125: a doughnut's hole
+  ✔ the value of the one slice the title names is printed in the hole, with its category under it when that fits (1.9463ms)
+  ✔ no focus, two focused slices, a pie or an unfitting value print nothing in the hole (3.3911ms)
+✔ LH-125: a doughnut's hole (5.4874ms)
+✔ two horizontal bar charts side by side share one plot height and width (35.2835ms)
+✔ a chart with options keeps its own plot, and so does its sibling (1.4361ms)
+✔ stacked and percent horizontal siblings share dimensions and refit names at segment starts (37.57ms)
+✔ contraction restores the original legend when series names would meet (3.157ms)
+✔ a segment that loses its value label restores the numeric axis and tick band (3.1514ms)
+✔ negative/null data and authored chart options retain their contracts (3.9508ms)
+ℹ tests 14
+ℹ suites 3
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 191.3102

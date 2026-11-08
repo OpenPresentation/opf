@@ -42,6 +42,8 @@ export interface LanguageVocabulary {
   readonly direction: 'ltr' | 'rtl';
   /** Curated OOXML culture tag (`ja-JP` for `ja`). */
   readonly ooxmlLang: string;
+  /** Generated timeline labels; absent when this locale has no localized status vocabulary. */
+  readonly timelineStatusWords?: Readonly<Record<'done' | 'current' | 'planned', string>>;
   /** Default script fonts (major/minor) per target application. */
   readonly fonts: {
     readonly powerpoint: { readonly major: string; readonly minor: string };

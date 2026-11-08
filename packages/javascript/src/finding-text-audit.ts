@@ -518,6 +518,18 @@ const codeHighlightRangeReversed: RuleText = (finding) => {
   };
 };
 
+const variableGroupOmitted: RuleText = (finding) => {
+  const ids = [...finding.message.matchAll(/'([a-z][a-z0-9-]*)'/g)].map((found) => found[1] as string);
+  const idParam = isRecord(finding.validation?.params) ? finding.validation.params.id : undefined;
+  const names = [...new Set(ids.length ? ids : typeof idParam === "string" ? [idParam] : [])];
+  if (!names.length) return undefined;
+  const list = names.length === 1 ? code(names[0] as string) : `${names.slice(0, -1).map((id) => code(id)).join(", ")} and ${code(names.at(-1) as string)}`;
+  return {
+    message: `A group${onSlide(finding)} is left out when ${list} ${names.length === 1 ? "has" : "have"} no value, with its pictures, cards and other text.`,
+    next: `give ${names.length === 1 ? "it" : "one of them"} a value to draw the group, or move what should always show out of the group.`,
+  };
+};
+
 const variableBuiltinMissing: RuleText = (finding, _context, helpers) => {
   const idParam = isRecord(finding.validation?.params) ? finding.validation.params.id : undefined;
   const id = (typeof idParam === "string" ? idParam : undefined) ?? match(finding.message, /^Built-in '(.+?)' has no value/)?.[1] ?? match(finding.message, /'\{\{(.+?)\}\}'/)?.[1];
@@ -644,6 +656,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,
+  "opf/variable-group-omitted": variableGroupOmitted,
   "opf/duration-outside-narrative": durationOutsideNarrative,
   "opf/narrative-duration-range": narrativeDurationRange,
   "opf/placeholder-text": placeholderText,

@@ -1,0 +1,8 @@
+{
+  "source": "8bfdf6debf1f07d92bd6c13b9c924e4d004446c3",
+  "sourcePR": 1175,
+  "sourceFrozen": "f842e303f50b907d11556db122fdebd7b78d7d1b",
+  "result": "Independent authoritative-deck, exact-baseline, producer-seal, actual-command, ZIP/workbook-difference and immutability controls pass",
+  "unchanged": "All runtime/schema/example/golden/locked fixture trees unchanged by tooling merge",
+  "gate": "Final baseline/candidate generation and reviewed promotion remain held until final40-layout producer is selected"
+}

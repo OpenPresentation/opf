@@ -117,7 +117,9 @@ describe("LH-110: reference marks the title names", () => {
   test("conservative matching: a data value, a number without a comparison, another language or a percent on a plain column draw nothing", () => {
     assert.equal(layerOf({ title: "On-time delivery peaked at 97.9%", chart: delivery }).references, undefined, "a value the data holds");
     assert.equal(layerOf({ title: "On-time delivery was 92% or better", chart: delivery }).references, undefined, "no comparison word");
-    assert.equal(layerOf({ title: "La ponctualité est restée au-dessus de 92 %", chart: delivery }, { language: "fr" }).references, undefined);
+    // LH-110 remainder: French, German, Spanish, Italian, Portuguese and Dutch titles are read (lh-110-title-numbers.test.mjs); others are not.
+    assert.equal(layerOf({ title: "La ponctualité est restée au-dessus de 92 %", chart: delivery }, { presentation: { language: "fr", slides: [] } }).references?.lines[0]?.value, 0.92);
+    assert.equal(layerOf({ title: "定時配達率は92%を上回った", chart: delivery }, { presentation: { language: "ja", slides: [] } }).references, undefined);
     assert.equal(layerOf({ title: "Tickets stayed below 9000", chart: delivery }).references, undefined, "far outside the data and not a percent");
   });
 

@@ -419,3 +419,12 @@ export function shareSiblingChartAxes<T extends SiblingChart>(charts: readonly T
   }
   return out;
 }
+
+/** A value's stable fraction of a numeric axis; preview marks and data-point anchors share this arithmetic. */
+export function chartAxisFraction(value: number, axis: {min: number; max: number}, reverse = false): number {
+  const range = axis.max - axis.min, distance = reverse ? axis.max - value : value - axis.min;
+  if (Number.isFinite(range) && Number.isFinite(distance)) return distance / (range || 1);
+  const unit = Math.max(Math.abs(axis.min), Math.abs(axis.max));
+  const min = axis.min / unit, max = axis.max / unit, position = value / unit;
+  return (reverse ? max - position : position - min) / (max - min);
+}

@@ -1,0 +1,64 @@
+[
+  {
+    "id": "org-chart-3-1",
+    "kind": "org-chart",
+    "count": 3,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": [],
+    "live": true,
+    "drew": "SmartArt (built-in)",
+    "layout": "Organization Chart",
+    "turn": 0,
+    "nodes": 3,
+    "rect": 192.585,
+    "sizes": "36",
+    "pptSizes": "36",
+    "sizeEqual": true,
+    "itemsMatch": true,
+    "preview": {
+      "mad": 1.27,
+      "hot": 0,
+      "mad1280": 1.27,
+      "hot1280": 0.41,
+      "geometry": 0.23,
+      "geometryHot": 0,
+      "text": 6.2,
+      "textMax": 7.26,
+      "dx": -1.62,
+      "dy": -6
+    },
+    "native": {
+      "mad": 0.15,
+      "hot": 0,
+      "mad1280": 0.19,
+      "hot1280": 0,
+      "geometry": 0.3,
+      "geometryHot": 0,
+      "text": 0.34,
+      "textMax": 0.43,
+      "dx": 0.15,
+      "dy": -0.25
+    },
+    "nativePreview": {
+      "mad": 1.24,
+      "hot": 0,
+      "mad1280": 1.23,
+      "hot1280": 0.41,
+      "geometry": 0.13,
+      "geometryHot": 0,
+      "text": 5.91,
+      "textMax": 7.21,
+      "dx": -1.38,
+      "dy": -5.75
+    },
+    "checks": {
+      "layout": false,
+      "size": true,
+      "geometry": true,
+      "native": true
+    },
+    "result": "FAIL (layout)"
+  }
+]

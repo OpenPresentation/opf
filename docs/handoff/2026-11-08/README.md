@@ -2,6 +2,12 @@
 
 This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Unified checklist and team](https://github.com/OpenPresentation/opf/issues/1139). The [2026-11-07 working rules](../2026-11-07/working-rules.md) remain binding; this file supersedes their historical status snapshots, not their safety rules.
 
+## Current release gate
+
+v0.33.0 is PUBLISHED AND VERIFIED. Real Release42465429345 completed SUCCESS, including all slow gates, commit/tag, trusted publish follow and all three site-bump jobs. Release commit26fd4de9cee7e57f9e0620eddcad2dcef04e00e3; public GitHub release published2026-11-08T09:56:21Z. Independent fresh registry check at10:00:03UTC confirms all seven latest versions0.33.0, exact gitHead, integrity and provenance metadata. Final maintained publish observer91249 exited0; no release watcher remains. Source033 is frozen. Genuine site/consumer updates are now active; owner-only deployment stays reserved. Parent native qualification hold is lifted with fresh process preflight and owned pinned-font setup.
+
+034 reviewed integration includes frozen1178readable Venn bodies/pagination,1179native Latin-ASCII date/base-language correction,1180independent pie-probe correction and1182generated localized-status font preparation, plus accepted SH21foundation/SH25overlays and all earlier waves. All25core/negative and five status/date Office lifecycles complete; parent reviewed every paired sheet and all nine differing core phase sheets. Strict native geometry/text/font comparisons remain unchanged with zero shrink tags; three saved imports only add valid explicit block types. Actual RTL negative-chart legend order differs from preview and remains open. Corrected pie/doughnut radial pilots pass, but two top endpoint-box probes fail and require curved-outline qualification. Final source Office,465live gates/newdomainsOFF,21+9archives/pinnedgoldens/stricttrackers/budgets/combinedCI and sites/E1-E3 remain open.
+
 ## v0.33 reapplication
 
 PR #1133 passed exact-head normal/full CI and final Windows PowerPoint qualification, then squash-merged as `7c0c3f13e9de77e038b6ec26183043eb7fe90822`. Main failed strict gallery-tracker freshness: generated metadata counted 103 RR items instead of 105. The automatic Tracker refresh succeeded but could not open its PR. The queued release dry run was cancelled; no tag, npm publication or site deployment happened.
@@ -34,6 +40,61 @@ D2; LibreOffice promotion; adding the hosted connector in Claude; uninstalling t
 
 Never force-push, push folded source branches, merge evidence-only branches, rewrite raster goldens locally, terminate Office, attach to the owner's Office instance, or introduce a new CI polling loop.
 
+Core documentation continuation: [RR-20 / inventory F2 corrections and complete remaining F1/F3/E1-E3 checklist](core-f2-docs.md). This narrow source does not change pins, counts, layouts or native eligibility; release/registry/site gates remain owed.
+
+V0.34 reviewed folds on 2026-11-08: F2 core documentation PR1168 at4a82f93f695dcda2545e5ec9a0a2d74410ecaeba, plus original image-callout PR1155 and corrective PR1165 at8a03dfe1f4fa8d60a9869e2553bf023849e36aaf. Independent review closes the blank-body/paint-only import finding: successful restoration always reports unprovable paint/format reflow, while exact geometry/ownership refusals remain. All three source branches are frozen. Parent inspected all six clean-CLI/native callout pairs and actual edit/save-copy/reopen evidence; final pinned-font profile review and integrated CI/goldens remain owed. Merge conflicts retain both F2 video wording and image callouts, both inverted-pyramid and callout guidance, current completed LH33/LH35 rows and both progress histories.
+
+LH93 PR1160 at49edd06819280c6f03c5a442aaa1d4599c373b0d is independently code-reviewed, all seven clean-CLI/native pages parent-reviewed, and folded as c5df81cd1e7e78ec928b8f0828f71a5aaf624acb. The source is frozen. Intended shared stacked/percentage plots and legend/axis restoration are accepted; inherited negative-axis category labels at zero instead of the preview left edge are a confirmed034 bug assigned to a new derived PR. Explicit-options chart automatic inner margins are byte-identical to baseline and remain a documented limitation. [Integrated build and twelve focused controls](integration-fold-checks/receipt.json) pass. No final release/native parity claim follows from these scoped checks.
+
+LH73PR1164 at39b243e7858c13e2505b032bebdada9b55689ede and LH75PR1167 atafd1f881d145d89d77e55fdb7b6ac4806085ca74 are folded after independent code/sheet review plus parent review of all2unequal-note and13table-growth before/after/Claude panels. Notes retain28px in LH73; LH75 notes grow28 to32px with about15%larger cells and bounded three-line/75% growth only after valid initial placement. Sources are permanently frozen. Fifteen clean CLI native witnesses are sealed but actual Office acceptance remains owed after033 publication; final integrated CI/goldens/trackers remain open.
+
+LH110PR1169 at aee237aaad5740afb731d88cc44b6c1160947a65 is folded after independent source/two-sheet review and17focused parser/period controls. The source is permanently frozen; six localized92%references/2023bands change, English/ordinary cases remain exact. Seven clean CLI native files remain owed. LH73/LH75 joint integrated build and23controls pass; raw receipts accompany the next checkpoint.
+
+Focused integrated metadata checks now pass: text, fragments, release-report integrity and skill commands. The initial text run missed a sparse gzip fixture after the normal main merge; its failed log and exact restored Git-blob/hash receipt are preserved beside the final passes. [Receipt](integration-fold-checks/focused-metadata-receipt.json). No new source assertion or budget/golden threshold changed.
+
+Negative-category correction PR1171 at8dc8185efa003f64b23e1d015a9d6d2e15e1f297 is parent source/two-sheet reviewed and folded; source permanently frozen. Only negative horizontal native category labels move to the reserved left gutter, including RTL; all5previewPNGs, unaffected whole archives and all9fallback baseline/candidate archives remain exact. The inherited strict fallback lock differs only because034added catalog templates; do not change those fixtures in this narrow fix. Final maintained archive refresh remains owed. Three clean CLI inputs are sealed at manifestSHA6d13af589c2cd3f32c3e68b8f087a61505cca72dfa638879a22c4ab182028930; actual Office recheck remains required. Merge retains accepted LH75three-line/75%growth and all newer note/chart source.
+
+1171integrated build, negative-category/shared-sibling and authored-option controls pass; [source preservation and raw receipts](integration-fold-checks/negative-label-receipt.json). Follow-up review found LH110at-least word forms rejected for French/Spanish/Portuguese while digits work; a NEWderived correction is assigned, and1169remainsfrozen. It must be fixed before034release acceptance.
+
+LH110positive at-least P2 is corrected in reviewed/folded PR1173 atf2472a4f8db3420cadbf8e6a4834587c9d3e9eb3; source now permanently frozen. Complete au moins/al menos/pelo menos word forms match digit forms while bare-minus/fraction/malformed/larger-scale refusals remain. Three genuine before-failing controls and all41sourcecontrols pass. All seven existing clean-CLI witness PNGs and wholePPTX archives regenerate byte-exact, so preserve the sealed seven-file native packet without duplicate Office work. Parent integrated parser/geometry checks follow.
+
+## RR108 traced SVG lock continuation
+
+[Exact31value migration and pinned printer](rr108-svg-lock.md) preserve every existing reviewed value and strict comparison. Actual pie/doughnut SVGs differ only by one intended surface-fill circle each. Final generated hashes remain for the single reviewed034golden batch; the separate21/9PPTXarchive families are not changed here.
+
+## SH21 source draft after034 alignment
+
+[SH20–22 current draft](sh21-draft.md) records the normal approved034 merge, final40 sampler correction, exact preservation receipt, focused controls and all remaining native limits. Production editable-shape CLI qualification is separated from the frozen diagnostic live packet; every new live domain remains off.
+
+SH21foundation1172cc6fa905 is folded after independent16focusedcontrols/source/11preview review, with explicitdesignhold: org/hierarchy/Venn1–4 acceptedforintegration; productionVenn5–7circleclusters rejected as too small. A NEWderivedadapterwillfillthebody withlargercircles/unchanged-or-larger outside labels, sharedSVG/PPTXgeometry, reportedadaptation andcompletefallbackwhenunfit. Preserve measurednativegeometry/77cbefrozenpacket; allnewlivedomainsOFF. ActualOffice/finalcombinedchecks remainowed. RR1081174f316isalsofolded/frozen; all31OLDSVGvalues unchanged, independent7writer/printercontrols pass, finalpinnedupdatepending.
+
+
+2026-11-08 publication/native continuation: reviewed1176one-line Bash advisory repair is folded/frozen, parent20/20workflow controls pass. Verified release26fd normally merged without conflicts; only released metadata/fragments change. Parent current-user7faceRoboto Setup+Check pass with maintained ownership journal at LocalAppData/OPFNativeFonts/qualification034-20261108-01; cleanup is owed after qualification. Controlled RTL firsttwo empty-plan native lifecycles complete with SaveCopyAs/reopen; second-run raster is byte-exact to control; the earlier blank-looking display was a tool-display issue. The range remains reversed in the firstthree diagnostics. A fourth language-only diagnostic fixes actual native Weeks2–5 without changing text/font/geometry. A safety preflight stopped the batch while Office exited normally; no retry/termination occurred. Third distinct diagnostic runs only after absent-process confirmation.
+
+## Derived Venn5–7 readability
+
+[Separate editable-body adaptation](sh21-venn-readability.md) follows the explicit rejection of the compact5–7production witnesses. Measured native models and old packets stay unchanged; outside labels keep their prior type size or grow. After sheets and actual Office remain separate acceptance gates, with every new live domain off.
+
+
+SH21derived1178d52c99 is parent source/all9sheet reviewed and independently21focused-control green. It is folded/frozen; measured native geometry/live gates unchanged. Main11cleanpacket2533477d preserves8unaffectedwholearchives and enlarges5–7circles; full long lists must wrap at retained type or explicitly paginate/refuse. Both paginatedguards grow type and retain all7entries/order. Actual Office remains owed.
+
+LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798cf0 fixes nativeLatin/ASCII date proofing and all-protected base-language observation after independentreview. A separate real integration font bug was found: scripts:auto misses generated localizedstatusglyphs forotherwiseLatin RTLtimeline source; a new derived regression/fix is assigned. Do not accept that olddurationtest failure or weaken it. Core25nativewitnesses runserialized now; finalsourceOffice remainsseparate.
+
+033sitebumpworkflowjobs report success, but gallery swallowed an actual oldshape:circle schema failure and opened1177. Sites agent is preparing a genuine normal-push registry bump fromapproved169 rather than rerunning the force-with-lease path. Org202/dev200 genuine registry builds and source continuations are active; no site deploy claimed.
+
 ## Core 0.33 documentation and artifact preflight
 
 [Core currency handoff](core-033-currency.md) records the narrow current-doc corrections, exact 137-JSON/2-Markdown/36-layout source counts, required post-registry quickstart checks and every E1/E2/E3 comparison/planning artifact obligation. All seven 0.33.0 packages are now genuinely verified at 26fd4de9; the once-only registry plan and maintained quickstart pass, and the retained six-package consumer binds exact counts/content/lock integrity. [Post-publication receipt](core-033-currency/post-publication/receipt.json). E1/E2/E3 comparison/planning artifact refresh and sites remain separately owed. The cited old corpus generator is missing and is not replaced with guessed output.
+
+
+033genuine documentation/registry-consumer PR1170passed allchecks twice and merged through maintainedgate asd00888a0560cb0ad59fc5c887e8bdd9d4fcbf30b at10:40:17UTC after markingthe reviewed draftready. This normal main merge retains034F2diagramwording plus exact137/36published facts and all receipts; no package/site deploy occurs.1179and1180are nowfolded/frozen.
+
+## Generated timeline status font preparation
+
+[The derived LH121 font correction](lh121-generated-status-fonts.md) addresses genuine default CLI missing-glyph failures when otherwise Latin source generates localized status words. It preserves existing font policies and scans authoritative per-slide generated vocabulary; PR1182f1ea is independently reviewed, folded and frozen. The shared per-slide generated-word analysis fixes the real default CLI Arabic/Traditional Chinese glyph failures; five focused controls and all five clean native witnesses pass. Actual date range Weeks2–5 is correct, saved imports/phase PNGs are exact, and no font policy or authored source workaround is added.
+
+
+
+2026-11-08 final native observation checkpoint: [complete raw30feature observations and two diagnostic circular-chart pilots](https://github.com/OpenPresentation/opf/tree/codex/rr105-final-evidence/docs/handoff/2026-11-08/native034-observations). Parent reviewed11core pairs,9core phase pairs,2negative pairs and3status pairs. Nine core phase rasters differ in311–1665pixels at1280x720; actual named text/geometry/font observations and all active-slide autofit checks are exact/empty. Three current imports add only explicit valid text/table block types. Vetoable: retain bounded native table-cell line wrapping at unchanged type; never claim cross-engine pixel identity. RTL legend order remains a derived compatibility finding; the strict4px circular top-probe failures remain visible.
+
+E1 maintained runner1181at34ae758d71abb77845d6b3feb08d2d53308f3a99 is independently accepted(39controls/all5239original runtime files) and folded/frozen. Actual033 after01 correctly stopped for missing pinned Office font peers, preserved on evidencee10a356c64b679e6fb121fcedc77b5d77771b794. Fresh separate83package registry consumer adds exactly six maintained pinned peers with24verified faces; one after02 invocation completes20decks/936slides, both runtime inventories unchanged. Author is sealing all real after PNGs/sheets; fixed controls stay unchanged, six new overview slides lack historical panels and three corpus slides lack before panels. No public artifact deployment is claimed.
