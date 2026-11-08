@@ -1,0 +1,41 @@
+﻿[
+    {
+        "case":  "success",
+        "result":  {
+                       "exitCode":  0,
+                       "scope":  "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+                       "timedOut":  false,
+                       "processId":  14776,
+                       "timeoutSeconds":  10,
+                       "startedAt":  "2026-11-08T09:42:38.4751490Z",
+                       "finishedAt":  "2026-11-08T09:42:38.7715845Z"
+                   },
+        "passed":  true
+    },
+    {
+        "case":  "failure",
+        "result":  {
+                       "exitCode":  17,
+                       "scope":  "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+                       "timedOut":  false,
+                       "processId":  52228,
+                       "timeoutSeconds":  10,
+                       "startedAt":  "2026-11-08T09:42:38.8052426Z",
+                       "finishedAt":  "2026-11-08T09:42:39.1752327Z"
+                   },
+        "passed":  true
+    },
+    {
+        "case":  "timeout",
+        "result":  {
+                       "exitCode":  -1,
+                       "scope":  "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+                       "timedOut":  true,
+                       "processId":  14100,
+                       "timeoutSeconds":  1,
+                       "startedAt":  "2026-11-08T09:42:39.2000018Z",
+                       "finishedAt":  "2026-11-08T09:42:40.2310127Z"
+                   },
+        "passed":  true
+    }
+]

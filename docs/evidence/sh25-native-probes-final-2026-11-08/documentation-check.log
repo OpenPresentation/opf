@@ -1,0 +1,22 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\sh25-probe-evidence
+> node scripts/check-changed.mjs "--files" "docs/handoff/2026-11-08/sh25-final-cli-probe.md" "docs/evidence/sh25-native-probes-final-2026-11-08/README.md"
+
+check-changed: 2 changed files since (given) (plus uncommitted and untracked)
+ok  build (10.6 s)
+ok  pnpm run check:changes (0.7 s)
+ok  pnpm run check:text (3.0 s)
+ok  pnpm run check:skill-commands (18.3 s)
+-  biome
+-  typecheck
+
+step                           status     time
+build                          passed   10.6 s
+biome                          skipped       -  no changed file Biome checks
+pnpm run check:changes         passed    0.7 s
+pnpm run check:skill-commands  passed   18.3 s
+pnpm run check:text            passed    3.0 s
+typecheck                      skipped       -  no .ts, .mts or tsconfig change
+total                                   29.0 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.

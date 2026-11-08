@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "sourceRevision": "df24cd2a480e580d9f987ad1ce4772c03453773f",
+  "suiteSha256": "92ba749bd37f156e3b197567c5adcb85e9a00af8adeb41937ca21cda01c70f17",
+  "case": "doughnut-en-us",
+  "node": "v24.20.0",
+  "officeCalls": 0,
+  "outputs": [
+    {
+      "name": "input.pptx",
+      "bytes": 110475,
+      "sha256": "23eb5091b4971f91c4a5294eacf6106ad6331c95958bec296d9e31360146a364",
+      "expectedSha256": "23eb5091b4971f91c4a5294eacf6106ad6331c95958bec296d9e31360146a364",
+      "matches": true
+    },
+    {
+      "name": "preview.png",
+      "bytes": 62089,
+      "sha256": "cfef8eb6e73b37449ae6192a3dadcb26a7f2d3566d91cc4c7aaacb8cab173296",
+      "expectedSha256": "cfef8eb6e73b37449ae6192a3dadcb26a7f2d3566d91cc4c7aaacb8cab173296",
+      "matches": true
+    }
+  ]
+}

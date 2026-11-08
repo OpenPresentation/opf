@@ -1,0 +1,84 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\sh25-final-reproduce-doughnut-01\\source.opf.json",
+    "sha256": "181cd774eeb03af91864c0940c5c04ce1df2a13383c6d719914e98d23f1ada88",
+    "bytes": 7657
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\sh25-final-reproduce-doughnut-01\\input.pptx",
+      "sha256": "23eb5091b4971f91c4a5294eacf6106ad6331c95958bec296d9e31360146a364",
+      "bytes": 110475,
+      "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "pptx/chart-data-adapted",
+      "severity": "warning",
+      "category": "pptx",
+      "path": "/slides/0/blocks/0/chart",
+      "scope": "document",
+      "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it.",
+      "help": "The chart data was reshaped to export a native chart; see the message.",
+      "adaptation": "chart-fallback"
+    },
+    {
+      "ruleId": "pptx/typeface-not-office-safe",
+      "severity": "info",
+      "category": "pptx",
+      "path": "",
+      "scope": "document",
+      "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+      "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+      "families": [
+        "Roboto"
+      ]
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 1,
+    "info": 1
+  },
+  "format": "pptx",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

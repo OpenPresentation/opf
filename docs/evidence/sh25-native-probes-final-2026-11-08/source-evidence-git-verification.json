@@ -1,0 +1,7 @@
+{
+  "sourceCommit": "df24cd2a480e580d9f987ad1ce4772c03453773f",
+  "verifiedBlobs": 168,
+  "verifiedBytes": 10280739,
+  "method": "Exact git cat-file --batch bytes and SHA-256 for every deterministic evidence inventory entry",
+  "passed": true
+}

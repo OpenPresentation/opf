@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "df24cd2a480e580d9f987ad1ce4772c03453773f",
+  "sourceDirty": false,
+  "suiteSha256": "92ba749bd37f156e3b197567c5adcb85e9a00af8adeb41937ca21cda01c70f17",
+  "sealedFiles": 212,
+  "cases": 32,
+  "unqualifiedMeasurements": 160,
+  "distFiles": 596,
+  "distBytes": 48449549,
+  "exports": {
+    "png": 32,
+    "pptx": 32,
+    "error": 0,
+    "warnings": [
+      {
+        "case": "doughnut-en-us",
+        "format": "pptx",
+        "ruleId": "pptx/chart-data-adapted",
+        "adaptation": "chart-fallback",
+        "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it."
+      },
+      {
+        "case": "doughnut-ar",
+        "format": "pptx",
+        "ruleId": "pptx/chart-data-adapted",
+        "adaptation": "chart-fallback",
+        "message": "The 'doughnut' chart is drawn as core's nested-rings fallback: it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost), as the preview draws it."
+      }
+    ],
+    "infoRules": {
+      "pptx/typeface-not-office-safe": 32
+    },
+    "scope": "Two deliberate multi-series doughnut native nested-ring adaptation witnesses preserve their warnings; no public-deck warning-free acceptance is claimed."
+  },
+  "runnerSelfTests": 2,
+  "validateOnlyCases": [
+    "column-en-us",
+    "pie-en-us",
+    "doughnut-en-us"
+  ],
+  "reproduction": [
+    {
+      "ok": true,
+      "sourceRevision": "df24cd2a480e580d9f987ad1ce4772c03453773f",
+      "suiteSha256": "92ba749bd37f156e3b197567c5adcb85e9a00af8adeb41937ca21cda01c70f17",
+      "case": "pie-en-us",
+      "node": "v24.20.0",
+      "officeCalls": 0,
+      "outputs": [
+        {
+          "name": "input.pptx",
+          "bytes": 115765,
+          "sha256": "30b55067a65b746906817e99ada7e190936df1596a03f5d360d99959b820e2b0",
+          "expectedSha256": "30b55067a65b746906817e99ada7e190936df1596a03f5d360d99959b820e2b0",
+          "matches": true
+        },
+        {
+          "name": "preview.png",
+          "bytes": 46735,
+          "sha256": "70b266f61720f9e7843b98bf0382f1d6962e1d681e203199c505e61d94d50a7c",
+          "expectedSha256": "70b266f61720f9e7843b98bf0382f1d6962e1d681e203199c505e61d94d50a7c",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "ok": true,
+      "sourceRevision": "df24cd2a480e580d9f987ad1ce4772c03453773f",
+      "suiteSha256": "92ba749bd37f156e3b197567c5adcb85e9a00af8adeb41937ca21cda01c70f17",
+      "case": "doughnut-en-us",
+      "node": "v24.20.0",
+      "officeCalls": 0,
+      "outputs": [
+        {
+          "name": "input.pptx",
+          "bytes": 110475,
+          "sha256": "23eb5091b4971f91c4a5294eacf6106ad6331c95958bec296d9e31360146a364",
+          "expectedSha256": "23eb5091b4971f91c4a5294eacf6106ad6331c95958bec296d9e31360146a364",
+          "matches": true
+        },
+        {
+          "name": "preview.png",
+          "bytes": 62089,
+          "sha256": "cfef8eb6e73b37449ae6192a3dadcb26a7f2d3566d91cc4c7aaacb8cab173296",
+          "expectedSha256": "cfef8eb6e73b37449ae6192a3dadcb26a7f2d3566d91cc4c7aaacb8cab173296",
+          "matches": true
+        }
+      ]
+    }
+  ],
+  "producerIndependentReview": "pending",
+  "actualOfficeRuns": 0,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "documentationGate": {
+    "passed": true,
+    "seconds": 29
+  }
+}

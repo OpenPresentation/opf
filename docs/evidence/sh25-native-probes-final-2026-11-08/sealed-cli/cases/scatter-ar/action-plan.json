@@ -1,0 +1,57 @@
+[
+  {
+    "op": "measure-chart-point",
+    "slideIndex": 1,
+    "shapeName": "OPF shape slides.0.shapes.0",
+    "chartName": "OPF chart 1",
+    "seriesIndex": 1,
+    "pointIndex": 1,
+    "chartKind": "marker",
+    "edge": "start",
+    "valueSign": 1
+  },
+  {
+    "op": "measure-chart-point",
+    "slideIndex": 1,
+    "shapeName": "OPF shape slides.0.shapes.1",
+    "chartName": "OPF chart 1",
+    "seriesIndex": 1,
+    "pointIndex": 2,
+    "chartKind": "marker",
+    "edge": "end",
+    "valueSign": 1
+  },
+  {
+    "op": "measure-chart-point",
+    "slideIndex": 1,
+    "shapeName": "OPF shape slides.0.shapes.2",
+    "chartName": "OPF chart 1",
+    "seriesIndex": 1,
+    "pointIndex": 3,
+    "chartKind": "marker",
+    "edge": "top",
+    "valueSign": 1
+  },
+  {
+    "op": "measure-chart-point",
+    "slideIndex": 1,
+    "shapeName": "OPF shape slides.0.shapes.3",
+    "chartName": "OPF chart 1",
+    "seriesIndex": 1,
+    "pointIndex": 4,
+    "chartKind": "marker",
+    "edge": "bottom",
+    "valueSign": 1
+  },
+  {
+    "op": "measure-chart-point",
+    "slideIndex": 1,
+    "shapeName": "OPF shape slides.0.shapes.4",
+    "chartName": "OPF chart 1",
+    "seriesIndex": 1,
+    "pointIndex": 1,
+    "chartKind": "marker",
+    "edge": "center",
+    "valueSign": 1
+  }
+]

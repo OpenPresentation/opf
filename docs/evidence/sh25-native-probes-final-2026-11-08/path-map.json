@@ -1,0 +1,42 @@
+{
+  "scope": "Immutable manifests retain original absolute execution paths. These mappings locate archived inputs or exact clean producer equivalents; nothing is rewritten inside the sealed suite.",
+  "sourceRevision": "df24cd2a480e580d9f987ad1ce4772c03453773f",
+  "mappings": [
+    {
+      "original": "C:/opf-work/sh25-final-cli-01",
+      "packet": "sealed-cli",
+      "kind": "sealed input prefix"
+    },
+    {
+      "original": "C:/opf-work/sh25-chart-points",
+      "replacement": "Exact clean checkout df24cd2a480e580d9f987ad1ce4772c03453773f; recorded raw source/worker files and all596 built dist files must match",
+      "snapshots": "sealed-cli/provenance/source and sealed-cli/provenance/worker",
+      "kind": "producer root"
+    },
+    {
+      "original": "C:/opf-work/sh25-seal-final-cli.mjs",
+      "packet": "sealed-cli/provenance/build-packet.mjs",
+      "kind": "builder snapshot"
+    },
+    {
+      "original": "C:/opf-work/sh25-probe-evidence/docs/evidence/sh25-native-probes-2026-11-08",
+      "packet": "../sh25-native-probes-2026-11-08",
+      "kind": "immutable historical6a07 comparison inputs, never requalified"
+    },
+    {
+      "original": "C:/opf-work/sh25-final-validate-column-01",
+      "packet": "validate-only/column-en-us",
+      "kind": "Office-free safety receipt prefix"
+    },
+    {
+      "original": "C:/opf-work/sh25-final-validate-pie-01",
+      "packet": "validate-only/pie-en-us",
+      "kind": "Office-free safety receipt prefix"
+    },
+    {
+      "original": "C:/opf-work/sh25-final-validate-doughnut-01",
+      "packet": "validate-only/doughnut-en-us",
+      "kind": "Office-free safety receipt prefix"
+    }
+  ]
+}
