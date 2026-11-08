@@ -278,6 +278,7 @@ function releaseRosterErrors(text, count) {
 }
 const currentReleaseInstructions = [
   ['AGENTS.md', '## Releases'],
+  ['packages/render/AGENTS.md', null],
   ['docs/release-process.md', null],
   ['packages/render/README.md', '## Release Lane'],
   ['packages/pptx/README.md', '## Release Lane'],
