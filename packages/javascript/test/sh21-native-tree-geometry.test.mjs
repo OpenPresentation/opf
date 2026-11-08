@@ -32,3 +32,6 @@ test('SH21: Hierarchy connector crossbars match genuine native paths around the 
  for(const edge of result.connectors){const box=[edge.box.x,edge.box.y,edge.box.width,edge.box.height].map(n=>n*PT),index=unused.findIndex(e=>e.box.every((n,k)=>Math.abs(n-box[k])<.1));assert.ok(index>=0);const expected=normalize(unused.splice(index,1)[0].points),actual=normalize(edge.points.map(point=>point.map(n=>n*PT)));assert.equal(actual.length,expected.length);for(const[k,point]of actual.entries())for(let axis=0;axis<2;axis++)assert.ok(Math.abs(point[axis]-expected[k][axis])<.00015,'every independent native path point matches');}
  assert.equal(unused.length,0);
 });
+test('SH21: connector stacking order matches all420 independent native group sequences',()=>{
+ for(const item of fixture.cases){const [width,height]=item.frame.split('x').map(n=>Number(n)/PT),actual=nativeTreeGeometry(item.kind,{x:0,y:0,width,height},item.entries);assert.equal(actual.ok,true);assert.equal(actual.connectors.length,item.connectors.length);for(const [index,edge]of actual.connectors.entries()){const box=[edge.box.x,edge.box.y,edge.box.width,edge.box.height].map(n=>n*PT);assert.ok(item.connectors[index].every((n,k)=>Math.abs(n-box[k])<=.1),item.kind+'/'+item.set+'/'+item.frame+'/'+index+': connector order is native drawing order');}}
+});
