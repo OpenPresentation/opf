@@ -1,0 +1,288 @@
+{
+  "branch": "codex/rr-20-f1-f3-currency",
+  "base": "c38560d08a330b276e0631eb7451d039c06be723",
+  "hashBasis": "Canonical committed Git blob bytes; gzipped raw logs retain original bytes",
+  "sourceImagesRegenerated": 0,
+  "sourceInventory": {
+    "json": 147,
+    "layouts": 40,
+    "samplerSlides": 53
+  },
+  "files": [
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency.md",
+      "bytes": 8365,
+      "sha256": "a7c1a7030fb19d825921ed3ab81d2cee8100a3603d42b488de9a6f2f896cb5b2"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/adaptation-controls-final.log.gz",
+      "bytes": 903,
+      "sha256": "2195c723b96a88d3f57a099997433362cc6744d5a83e221cf43812c6a8e86358"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/adaptation-report-matrix.json",
+      "bytes": 10761,
+      "sha256": "89c8d3ff99c6bc07777e7668f773a69289f264f3ec85617f9d585c1ed0482fdc"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/biome-final.log.gz",
+      "bytes": 723,
+      "sha256": "b262aeb28e0e9ced355744bad7460d8af6c36433fd34c393690d851630c13448"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/biome-focused.log.gz",
+      "bytes": 1029,
+      "sha256": "e524540bde0addfd78868c737c8013e20e513734e0aa1e89ffbcc2406f58e0f2"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/biome-source-final.log.gz",
+      "bytes": 2984,
+      "sha256": "5673ba65a68f91576c53cff2047553e39bf670003b85abc653b7c052ff2447bc"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/build-before.log.gz",
+      "bytes": 3048,
+      "sha256": "99b1a584d6cbf20c6940dad37b7c932a8e65adc3ebde54e891fea9bb406c9d6b"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/check-changed-plan.log.gz",
+      "bytes": 223,
+      "sha256": "31890c10fcbf782efde14c2375841965489a33d2f6fd6aaec38b14e54ce190ed"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/check-changed.log.gz",
+      "bytes": 3015,
+      "sha256": "e9b1ef4a36e38068f3d42fac4ce88a2848abd4d26e4c44e7f7ef285ca3f7c859"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/core-build-after.log.gz",
+      "bytes": 2325,
+      "sha256": "a9adeeeb000587b874970c4d2649306273d0e74adfbc657789768807f81c76ee"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/e1-b02-validation-after.json",
+      "bytes": 32403,
+      "sha256": "b58cbfc3fc0ae922f8096a8f23b7fa4c4815675ea212be33cc65d0e39593153f"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/e1-b02-validation-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/e1-b02-validation-before.json",
+      "bytes": 28395,
+      "sha256": "4c86ba325391d36724e5cd8182c4bde2a3f26920e70371af4baa37a792936e5b"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/e1-b02-validation-before.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/e1-b02-validation-first-after.json",
+      "bytes": 32232,
+      "sha256": "447f961c972cf2e67a319bc42379f260cf6f6cfbfc335343e6265bdbb3254cc8"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/e1-b02-validation-first-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/edit-source.mjs",
+      "bytes": 11017,
+      "sha256": "e20c236cc763ec408ddecf6d3a5a89a77b4e5028d3b7544a4290138b949bb2bc"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/edited-files.json",
+      "bytes": 320,
+      "sha256": "26b611815f99bb317fc44f7c562d60aadce9b8edce5d673160a0b322616fdd68"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/exact-fixture-hydration.json",
+      "bytes": 515709,
+      "sha256": "b9b74632ebe6995190bc9c0d34e5db217bcbf89d93da0f5221c5e6d9ada558a3"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/focused-after.log.gz",
+      "bytes": 1107,
+      "sha256": "93f89028510e0627e94f17a869a50372193946fd49f1aa8a3e048182d6850e60"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/focused-final.log.gz",
+      "bytes": 3579,
+      "sha256": "259d07774780c0985debd63d28d04c349ecf2f0338873fa50f0ab6b7b23076ce"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/gallery-tracker-check.log.gz",
+      "bytes": 125,
+      "sha256": "049a146883c1888c2c5c24a5d25b8c7105b98f151df3aab8dcb2c620720d6c06"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/gallery-tracker-rerun.log.gz",
+      "bytes": 1460,
+      "sha256": "74a4caebac0f7a407427d6a134a745e33a1611c1f3dc6c57391ef6c7c8d6debc"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/install.log.gz",
+      "bytes": 577,
+      "sha256": "cdc4ef47e8ab2f6370c1826390ec8588c2f6f2f3ae6843521ce52bb278a0676d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/biome.log.gz",
+      "bytes": 2647,
+      "sha256": "4ccb47397fabf614c7c2fa7302a37d2df279b81447f953602715ac3474c401cc"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/build.log.gz",
+      "bytes": 3044,
+      "sha256": "e844ec543c19112ecc50e1ad839dd16536312e7664d723a85192eb2659132716"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_browser-safe.log.gz",
+      "bytes": 601,
+      "sha256": "ca4c618fcc346e1cf9fb6961022a6ffac212fd47cc4cb42d58833e8479cf485b"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_catalog-free.log.gz",
+      "bytes": 251,
+      "sha256": "8222c0eb8febb9fe14096645dfce5ad9a6474ef794e6af0aeb1df19c619d5540"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_changes.log.gz",
+      "bytes": 1170,
+      "sha256": "23711863882501e0b630f3b0e9dfbe534db0256dad39e49e0c5efd893e17b01d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_diagram-doc-images.log.gz",
+      "bytes": 147,
+      "sha256": "a9c09a912ff48bc1d5b8df19859cb2a42c07d87a7fe4a9679a9b736646b0ccbc"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_font-hotlinks.log.gz",
+      "bytes": 532,
+      "sha256": "b0bdba75335ce5ff2323ca94cb515af1091a6a4da0299c7ae46c70e4313ba8f8"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_gallery-tracker.log.gz",
+      "bytes": 1751,
+      "sha256": "01922da246c90d3de52d3ceea9c33fb7b819f2315cd44ce5973d8d2ef8756c67"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_release-report.log.gz",
+      "bytes": 466,
+      "sha256": "52e242020b039f3a038f68a71f7bd85f7fbe0987771968fa3442e387dc9c2847"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_skill-commands.log.gz",
+      "bytes": 583,
+      "sha256": "5acbd9454204c9bb6d512d9c65083f8c5ce33232b173bae2bd673b369c59116f"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_skill-glossary.log.gz",
+      "bytes": 292,
+      "sha256": "c616351d5dcfb50f7aecdb991270be51fe6e00aad5a72198151c2e8e1d57f4e6"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_stability.log.gz",
+      "bytes": 1370,
+      "sha256": "8ed2627bc029de3287a073e720585ba288ecba04e1ddc450a57dee84e4123403"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/pnpm_run_check_text.log.gz",
+      "bytes": 877,
+      "sha256": "eed6f3481b44c01039632d5bba223599564922f8893cd17abd73120b6d906e27"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/tests_opf.log.gz",
+      "bytes": 121674,
+      "sha256": "18019fe8361e28a793b38def93454f5d8b14422dd63720fe2817170c5d5f3b04"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/mapped-checks/typecheck.log.gz",
+      "bytes": 921,
+      "sha256": "fb69595d05fcbdc41cc3abdcab38d88fcdcf57ece3eaeb393a8cfeb4c19c8886"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/pareto-before.log.gz",
+      "bytes": 653,
+      "sha256": "3b0148eb5033f31cbfda886d08c66e8c9846847e5ebc975287fd43b890222846"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/pareto-existing-fixture-warnings.json",
+      "bytes": 2195,
+      "sha256": "ee5b93755045cef492ca1b00f8c9edf2ae7f905eb8d670a0dc31c623bda9394e"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/pareto-first-proof.json",
+      "bytes": 4313,
+      "sha256": "2572e5979f1fa8cad54d103b9c7e4cf2ec9fd24c13fad95e8027c9ab044174d1"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/pareto-help-before.log.gz",
+      "bytes": 692,
+      "sha256": "8a7b92e567b67c591c6acea1bf20f6f73b6fce31943e7c1ad0480481cf63b8b3"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/pareto-proof.json",
+      "bytes": 4596,
+      "sha256": "f93884eb743418514bab7f7d3475cf673962ae12bd60c4031d698d717090d789"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/raw-log-storage.json",
+      "bytes": 4773,
+      "sha256": "c984a90eee0bfed1e6e6c37bdd11ecf46a51b7fd45a0bfbe808e31ee37dad0de"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/receipt.json",
+      "bytes": 6127,
+      "sha256": "d04158ead79a061c450b08cc3757e9fa0eadaf19cb0cdaa97e90fc383f00d5ee"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/skill-commands-final.log.gz",
+      "bytes": 592,
+      "sha256": "cc8896af6651896043ce6717a860ca5ac2d26504e74cc0b15ed19aa42d9e9afc"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/skill-glossary-final.log.gz",
+      "bytes": 300,
+      "sha256": "e32151a0f3ee5646fbb13bd60fd705798a064a41553fe7ddae8a1c1283a3dfab"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/source-audit.json",
+      "bytes": 3248,
+      "sha256": "210217502fb2fb2f55184e5bcbe21ebdd73fe786bf31bebe6186e0204cf2247a"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/source-docs-final.log.gz",
+      "bytes": 247,
+      "sha256": "5c5ba3a2e62b86869ed68e295483f1264a3c2fadecf6fcdd3a5de523990b6657"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/source-docs-sealed.log.gz",
+      "bytes": 249,
+      "sha256": "bdb0fa528a8d900ab01eb1e02ae988ddb3d7a1d5f0bfd69e44a82a7450be1a7b"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/text-final.log.gz",
+      "bytes": 612,
+      "sha256": "89eb12c8587ef4d3430538fe48b60fa39fe9623af0d3329b1b31d1db3a9cb35c"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/text-rerun.log.gz",
+      "bytes": 613,
+      "sha256": "ff182efb1cb25ed4d5c500c07864fe00e55783ae65f0ac20e66439875f14c569"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/text-sealed.log.gz",
+      "bytes": 612,
+      "sha256": "03967680c98fb096d3ea49268293d77bd83bd31c867c542ee710cb122b87672f"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/unified1139.json",
+      "bytes": 13856,
+      "sha256": "a306a7e951880c9d12ff795aa82efb82f00b6bc03166e2b89bebcda7b0767385"
+    }
+  ]
+}
