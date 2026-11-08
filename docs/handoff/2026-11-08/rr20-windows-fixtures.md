@@ -28,6 +28,20 @@ alias independently fails `EPERM`. Both corrected aliases then pass the entire
 existing registry/archive/graph/evidence/no-import fixture. The original editor
 launcher fails `Get-FileHash` under the inherited PowerShell 7 module path; the
 corrected launcher passes all seven fake-Office controls under the same parent
-environment. Parent `PSModulePath` is exact before/after. Required mapped checks
-and final receipts will be recorded before the push. Final Windows CI remains
-required; these are offline guard controls, not native acceptance.
+environment. Parent `PSModulePath` is exact before/after. The existing shared
+child-environment/refusal controls also pass (two tests).
+
+The mandatory Node 24 changed check is green in 68.5 seconds: 11 selected steps
+passed and typecheck correctly skipped. It selected the two changed existing
+fixtures, both passing (Keynote 0.7 seconds, editor 1.8 seconds), rather than
+starting an additional full 235-test PPTX suite. Build, Biome, changes, tracker,
+release report, font hotlinks, skills, stability and text checks also pass.
+No extra broad test run was added.
+
+The [sealed packet](../../../evidence/rr20-windows-fixtures/receipt.json) preserves
+all three first failures, exact successful affected fixtures, shared controls,
+the original coordinator combined editor failure, parent environment and raw
+mapped/build logs. Five production/control/shared helper files are hash-identical
+to fresh main. Final Windows CI remains required; these are offline guard
+controls, not native acceptance. The coordinator owns integration and the full
+combined release gate.
