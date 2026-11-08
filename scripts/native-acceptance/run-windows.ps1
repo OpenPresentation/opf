@@ -97,7 +97,7 @@ function Import-NativePlanValidation([string]$Worker) {
     $tokens=$null;$parseErrors=$null
     $ast=[System.Management.Automation.Language.Parser]::ParseFile($Worker,[ref]$tokens,[ref]$parseErrors)
     if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-    foreach($name in @('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan')) {
+    foreach($name in @('Test-Integer','Require-Property','Assert-String','Assert-LiteralSeriesName','Read-AndValidateActionPlan')) {
         $function=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
         if($null -eq $function) { throw "Missing pure plan validator: $name" }
         # Only these pure definitions are loaded; no worker entrypoint or Office operation is evaluated.

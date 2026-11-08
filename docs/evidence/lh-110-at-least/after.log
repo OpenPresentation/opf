@@ -1,0 +1,53 @@
+✔ fr: complete at-least phrase keeps word/digit meaning and reference line (54.1762ms)
+✔ es: complete at-least phrase keeps word/digit meaning and reference line (9.1883ms)
+✔ pt: complete at-least phrase keeps word/digit meaning and reference line (10.8153ms)
+✔ de: complete cardinal references and percentages, with locale-family tags (11.4959ms)
+✔ fr: complete cardinal references and percentages, with locale-family tags (6.7325ms)
+✔ es: complete cardinal references and percentages, with locale-family tags (5.3701ms)
+✔ it: complete cardinal references and percentages, with locale-family tags (2.6249ms)
+✔ pt: complete cardinal references and percentages, with locale-family tags (6.5041ms)
+✔ nl: complete cardinal references and percentages, with locale-family tags (4.0155ms)
+✔ cardinal orthography, genders, regional forms, compound boundaries and the integer upper bound (1.0064ms)
+✔ a malformed phrase, spoken fraction, negative or unsupported scale never becomes a shorter positive reference (1.1206ms)
+✔ en: local multiword/contraction time phrases name one year or localized month (37.4727ms)
+✔ de: local multiword/contraction time phrases name one year or localized month (4.6464ms)
+✔ fr: local multiword/contraction time phrases name one year or localized month (6.8336ms)
+✔ es: local multiword/contraction time phrases name one year or localized month (3.7884ms)
+✔ it: local multiword/contraction time phrases name one year or localized month (3.9297ms)
+✔ pt: local multiword/contraction time phrases name one year or localized month (4.2917ms)
+✔ nl: local multiword/contraction time phrases name one year or localized month (3.2783ms)
+✔ period bands remain conservative and preserve authored highlight and effective slide language (7.7406ms)
+✔ explicit localized year/month phrases match the complete suffix, without requiring English words (3.3657ms)
+▶ English number words
+  ✔ values (0.797ms)
+  ✔ only after a comparison word, labeled in digits (5.2902ms)
+  ✔ draws the line (39.744ms)
+✔ English number words (46.611ms)
+▶ European titles
+  ✔ de: Die Pünktlichkeit lag das ganze Jahr über 92 % (6.1327ms)
+  ✔ de: Mindestens 92,5 Prozent pünktlich (0.1914ms)
+  ✔ de: Tickets blieben unter dem Zielwert von 30 (0.3616ms)
+  ✔ fr: La ponctualité est restée au-dessus de 92 % (7.2838ms)
+  ✔ fr: Moins de 30 tickets par semaine (0.4049ms)
+  ✔ fr: L'équipe a dépassé l'objectif de 30 (0.2212ms)
+  ✔ es: La puntualidad se mantuvo por encima del 92 % (5.3855ms)
+  ✔ es: Superó la meta de 30 tickets (0.2823ms)
+  ✔ it: La puntualità è rimasta sopra il 92% (3.4005ms)
+  ✔ it: Meno di 30 ticket a settimana (0.2333ms)
+  ✔ pt: A pontualidade ficou acima de 92 % (5.9897ms)
+  ✔ pt: Superou a meta de 30 chamados (0.1271ms)
+  ✔ nl: De stiptheid bleef boven 92 % (3.9844ms)
+  ✔ nl: Minder dan 30 tickets per week (0.1539ms)
+  ✔ a number without a comparison word is not a reference (0.1565ms)
+  ✔ a decimal comma and thousands separators (0.0885ms)
+  ✔ languages: the six European ones and English; others are not read (0.1691ms)
+  ✔ German and French titles draw the line (8.3089ms)
+✔ European titles (43.5487ms)
+ℹ tests 41
+ℹ suites 2
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 377.8718

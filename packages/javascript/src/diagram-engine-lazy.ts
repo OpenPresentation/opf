@@ -5,3 +5,20 @@
 // `ensureDiagrams` loads the types a deck uses; the renderer's browser fonts handle calls it from `ensure` and opf-pptx's `toPptx` before
 // it composes.
 export { PeleError, detectType, parse, registered, render, load as loadDiagramType } from 'pele/lazy';
+
+// SH-13: OPF's PlantUML reader (about 10 KB gzipped) is a module of its own that a bundler splits into a chunk, loaded the first time a
+// deck draws a PlantUML diagram: `ensureDiagrams` loads it, then the pele type the diagram is drawn as. Until then such a diagram is
+// loading, as an unloaded pele type is.
+import type { plantumlToMermaid } from './diagram-plantuml.js';
+
+let reader: typeof plantumlToMermaid | undefined;
+let loading: Promise<boolean> | undefined;
+
+/** The PlantUML reader, or undefined until `loadPlantumlReader` has resolved. */
+export const plantumlReader = (): typeof plantumlToMermaid | undefined => reader;
+
+/** Load the PlantUML reader once; later calls return the same promise. */
+export function loadPlantumlReader(): Promise<boolean> {
+  loading ??= import('./diagram-plantuml.js').then((module) => { reader = module.plantumlToMermaid; return true; });
+  return loading;
+}

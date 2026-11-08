@@ -9,7 +9,7 @@ import { createOpfServer } from "../dist/index.js";
 
 // The Claude Desktop bundle (scripts/build-mcpb.mjs builds it from mcpb/manifest.json): the manifest is valid and names the tools
 // the server offers the model, so the extension's listing in Claude Desktop says what it does. The build itself needs the npm
-// registry and runs by hand (pnpm run build:mcpb).
+// registry; the trusted publish workflow also builds and checks it before uploading the release assets.
 const manifestFile = fileURLToPath(new URL("../mcpb/manifest.json", import.meta.url));
 const manifest = JSON.parse(readFileSync(manifestFile, "utf8"));
 

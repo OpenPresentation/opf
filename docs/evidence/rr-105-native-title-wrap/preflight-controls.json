@@ -1,0 +1,9 @@
+{
+  "cases": 50,
+  "xmlRestoredControlHashes": 49,
+  "artifactHashTamperRejected": true,
+  "candidateHashes": 50,
+  "scope": "Syntax and path/hash preflight only; no Office or worker calls",
+  "refusedAttemptCreatedOutput": false,
+  "pathEscapeRejected": true
+}

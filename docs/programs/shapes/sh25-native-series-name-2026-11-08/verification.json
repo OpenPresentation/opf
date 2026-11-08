@@ -1,0 +1,31 @@
+{
+  "producer": "9864a64431af142c9e05bbc927e8ddac5b006393",
+  "workerSha256": "06a5f242988913f0afe76841afba47730dbe92dca83276259fa1472d8a0f4ad4",
+  "node": "v24.20.0",
+  "controls": {
+    "nativeName": 49,
+    "existingPoint": 45,
+    "lifecycle": 14,
+    "fonts": 15,
+    "area": 58,
+    "cachedNameContract": "pass"
+  },
+  "mapped": {
+    "seconds": 184.6,
+    "passed": 6,
+    "skipped": 1,
+    "failed": [
+      "Sparse exact painting gzip omitted; restored tracked bytes and text rerun PASS",
+      "Inherited nine-deck fallback archive lock; 244later tests unrun"
+    ]
+  },
+  "native": "Not run. Actual rename/save/reopen/current-import witness BLOCKED by independently reproduced valid literal c:tx/c:v importer default-name defect. New separate product fix required.",
+  "packet": "C:/opf-work/sh25-name-edit-inputs-01",
+  "planValidation": "Three actions pure-validated without constructing Office",
+  "archiveFiles": 145,
+  "history": {
+    "markerCommit": "20b8d51ee51e7bcb5779a5cdc9417030144302aa",
+    "cleanCorrection": "8474cfe689ea9b1007bc892d193d3a81780addf6",
+    "scope": "Both commits retained; corrected before first push. No main or pushed branch HEAD contained markers."
+  }
+}

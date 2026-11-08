@@ -1,0 +1,56 @@
+{
+  "scope": "Only explicit end-paragraph language/size markers added; exact line pitch and all other XML and native-control archives unchanged. Source hashes verified after generation.",
+  "records": [
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\cycle-4-short-square.pptx",
+      "output": "pptx/cycle-4-short-square.pptx",
+      "beforeSha256": "a18d5448d38bdad8f5dad59a5d930c3a9e18091740a254f3509d31c43c8985f7",
+      "afterSha256": "58432d6c1e8a2e716a36a88ffa41b5cdb516b38c34d615f47400de9d28c2be76",
+      "changedParts": [
+        "ppt/diagrams/data1.xml",
+        "ppt/diagrams/drawing1.xml"
+      ]
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-cjk-wide.pptx",
+      "output": "pptx/matrix-4-cjk-wide.pptx",
+      "beforeSha256": "68d95fde367e84303392894c9601bf8e8d107a89ff9748fb39b232263e0683c2",
+      "afterSha256": "1bca4b1962020c4ea815b53a1b7ce24acedba4a90fa51eab91d04150f41c41ab",
+      "changedParts": [
+        "ppt/diagrams/data1.xml",
+        "ppt/diagrams/drawing1.xml"
+      ]
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-rtl-wide.pptx",
+      "output": "pptx/matrix-4-rtl-wide.pptx",
+      "beforeSha256": "2a35e78da09b3e77a351a2e3bd5fce618762418aec4de7d08e60eabdced47071",
+      "afterSha256": "0f7b5867a11111098b3516cc14e6f493af54209e0a4e7182167252ce9897f2c9",
+      "changedParts": [
+        "ppt/diagrams/data1.xml",
+        "ppt/diagrams/drawing1.xml"
+      ]
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\cycle-4-short-square.pptx",
+      "output": "pptx-shapes/cycle-4-short-square.pptx",
+      "beforeSha256": "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8",
+      "afterSha256": "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8",
+      "changedParts": []
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-cjk-wide.pptx",
+      "output": "pptx-shapes/matrix-4-cjk-wide.pptx",
+      "beforeSha256": "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9",
+      "afterSha256": "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9",
+      "changedParts": []
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-rtl-wide.pptx",
+      "output": "pptx-shapes/matrix-4-rtl-wide.pptx",
+      "beforeSha256": "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2",
+      "afterSha256": "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2",
+      "changedParts": []
+    }
+  ]
+}

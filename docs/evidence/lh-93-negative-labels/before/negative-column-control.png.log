@@ -1,0 +1,67 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\lh93-negative-baseline-rtl\\inputs\\negative-column-control.opf.json",
+    "sha256": "cd38540dfb797012ba3f91d45e9561eb09f2017d36e57cf784b0cbf617fc7ec4",
+    "bytes": 576
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\lh93-negative-baseline-rtl\\negative-column-control.png",
+      "sha256": "d7124f2c9fb41a6638ace8d50ef4113309f5d48db0a49b075d6bab9e0a323136",
+      "bytes": 11908,
+      "mediaType": "image/png",
+      "slide": 1,
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Arial",
+        "resolved": "Arimo",
+        "compatibility": "metric"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}
