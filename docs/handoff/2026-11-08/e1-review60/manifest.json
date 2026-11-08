@@ -13,8 +13,8 @@
   "files": [
     {
       "file": "docs/handoff/2026-11-08/e1-review60/capture-review.mjs",
-      "bytes": 12680,
-      "sha256": "abb047c7e4bda67d062440e0a192cb633e7422064ff34f0e107deb4fbd5aeaae"
+      "bytes": 12679,
+      "sha256": "fa84985c0c21df001c19a57a88fd70ff584cd681bbab1c1bf5a1a68991b6dbb4"
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/check-changed-plan.log",
@@ -23,8 +23,8 @@
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/check-changed.log",
-      "bytes": 6946,
-      "sha256": "3bae7ac838b41a30c06f47dd717825295f4f7cef58d6339057cc977f7293eec4"
+      "bytes": 6818,
+      "sha256": "7388fa9ffb1b3896a50227f0681681027bcec49a2282de8ac3a3a69289681ed2"
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/checks.json",
@@ -48,18 +48,18 @@
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/gallery-tracker-final.log",
-      "bytes": 2020,
-      "sha256": "6688cf01c474e199ad0267c03c4621f2aef9d592b72b5f3b1d8c5188b6dac36a"
+      "bytes": 1989,
+      "sha256": "df1a0922006e29533ebfe073064cd2de34a2abda83bf3d0c9daf688148c3760c"
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/gallery-tracker-rerun.log",
-      "bytes": 12859,
-      "sha256": "34a420b966dc748ad7da4931d5cd91d955180a99a44e38016d134ec0386edad0"
+      "bytes": 12655,
+      "sha256": "201a9789ac990ee3bcde755e9ecf8d727eb431f7af28b8014fe2d1f12174cc2f"
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/measure-code.mjs",
-      "bytes": 2665,
-      "sha256": "7965ade1a28523c1799213699fd3cefd48c81d92f75daa469ce0ca14caf2d7b3"
+      "bytes": 2664,
+      "sha256": "79817b4d7111ecb10f489b796abc8163d1270e7ef29f001fcecd8e95f5448cb0"
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/measured-code.json",
@@ -73,13 +73,13 @@
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/text-final.log",
-      "bytes": 997,
-      "sha256": "41ba19e29ec5633b6be5d6d87f9960fd01c8d0db60e5a28a7d9335a305288478"
+      "bytes": 970,
+      "sha256": "e8a60959cb7106e015d8d9878d9278844eb8912013f4bd9fb6fb6d84fd89f9ff"
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/text-rerun.log",
-      "bytes": 995,
-      "sha256": "868ef082d24360094ed25873f33e5842312c3fe09bb2e2a92e4711379a86daab"
+      "bytes": 968,
+      "sha256": "ea5d61e764ba49f68b9b965c186be41a5a39698c4013c43302c2e7b11931fed6"
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60/verification.json",
@@ -88,8 +88,9 @@
     },
     {
       "file": "docs/handoff/2026-11-08/e1-review60.md",
-      "bytes": 7895,
-      "sha256": "161db0d25417a8f32b3c1e5f2d8a14a5e758320e5bb7d89f9e1fc36b1104a763"
+      "bytes": 7893,
+      "sha256": "84ab59b4db97585bacc3289e65e89fb5ce44273bb90ff2d05f35fd7ce2189d07"
     }
-  ]
+  ],
+  "hashBasis": "Canonical Git text bytes (LF); source PNG/source receipt hashes retain their original immutable byte basis"
 }
