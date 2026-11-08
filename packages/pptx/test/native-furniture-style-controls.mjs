@@ -93,8 +93,12 @@ if (process.platform === "win32") {
 		),
 	);
 	assert.equal(report.passed, true);
-	assert.equal(report.accepted, 6);
-	assert.equal(report.rejected, 23);
+	assert.equal(report.accepted, 12);
+	assert.equal(report.rejected, 81);
+	assert.equal(report.cases.filter(item => item.name.startsWith("point-") && item.expected === "reject").length, 49);
+	assert.equal(report.chartPointControls.length, 28);
+	assert.deepEqual(report.chartPointControls.slice(-4).map(item => item.name), ["wrong-native-kind", "mixed-series-type", "unsupported-native-type", "doughnut-api-unavailable"]);
+	assert.ok(report.chartPointControls.every(item => item.passed));
 	assert.equal(report.lifecycleControls.length, 14);
 	assert.ok(report.lifecycleControls.every(item => item.passed));
 	assert.deepEqual(report.lifecycleControls.map(item => item.name), ["readonly-copy-edit-reopen", "wrong-open-path", "writable-open", "copy-failure", "copy-identity-change", "refuse-input-overwrite", "refuse-existing-output", "refuse-unowned-close", "close-failure", "refuse-nonempty-application-adoption", "refuse-nonempty-application-quit", "quit-failure", "refuse-unowned-application-quit", "refuse-running-office"]);

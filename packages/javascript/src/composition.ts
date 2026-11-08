@@ -92,6 +92,7 @@ import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_
 export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,RUN_IN_HEADING_CHARS,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,runInHeading,slideCitations,walkCitationRuns} from './annotations.js';
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
 import {composeShape,composeStroke,isPresetShape,isShapeBlock,presetAspect,presetMask,sketchStroke,stackedText,PICTURE_STROKE_WIDTH,SHAPE_BLOCK_KEYS,type ComposedShape,type ComposedStroke} from './shape-block.js';
+import {chartPointGeometry} from './chart-point-anchors.js';
 import {composeOverlayShapes,hasOverlayShapes,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
 import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
@@ -123,7 +124,7 @@ export interface LayoutDiagnostic {
    * SH-09: `arrangement-adapted` for a pyramid or matrix drawn another way: a matrix of other than four entries as cards, or a list the
    * arrangement's designs cannot hold at the list's size (or of a shape it does not draw) as a list.
    */
-  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted";
   path: string;
   message: string;
   /**
@@ -6325,7 +6326,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // SH-04: composeSlide's overlay pass: the slide's `shapes` on its final composition, their text fitted as a shape block's.
   const overlayOnto = (options as Record<symbol, unknown>)[OVERLAY_ONTO] as SlideComposition | undefined;
   if (overlayOnto) {
-    const overlayShapes = composeOverlayShapes(slide, overlayOnto, { path, scale, rtl, item: (host, shape, itemPath) => {
+    const overlayShapes = composeOverlayShapes(slide, overlayOnto, { path, scale, rtl, point: (item, reference) => {
+      const measure = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 400, italic: false, path: item.path}, options.textMeasurement), options.textMeasurement);
+      const language = quoteLanguage(options.presentation, options.slideIndex);
+      return chartPointGeometry(item.value, item.chart!, reference, {box: item.box, scale, minFontSize: item.composition.minFontSize, measure, direction: rtl ? 'rtl' : 'ltr', ...(language !== undefined ? {language} : {})}, options.presentation);
+    }, item: (host, shape, itemPath) => {
       const textPath = `${itemPath}.text`, text = fitShapeText(shape, host.text, textPath, composition.minFontSize, overlayOnto.diagnostics);
       shapeTexts.set(itemPath, { value: host.text, textPath });
       return { ...(text ? { text } : {}), textStyle: { ...styleFor('text', textPath), ...(shape.textBold ? { fontWeight: 700 } : {}) }, composition };
@@ -11097,7 +11102,7 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
   return { width, height };
 }
 // RR-92: the value axis (scale, intervals and the axis of a category chart), shared by the preview and the PPTX export.
-export {niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_MAX_OVERSHOOT,CHART_LABELED_ZERO_SHARE,chartValueAxis,shareSiblingChartAxes,chartTextSize,chartIntervalsFor,CHART_TEXT_PX,CHART_TEXT_FLOOR_PX,CHART_MIN_TICK_SPACING_PX,CHART_MAX_INTERVALS} from './chart-axis.js';
+export {chartAxisFraction,niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_MAX_OVERSHOOT,CHART_LABELED_ZERO_SHARE,chartValueAxis,shareSiblingChartAxes,chartTextSize,chartIntervalsFor,CHART_TEXT_PX,CHART_TEXT_FLOOR_PX,CHART_MIN_TICK_SPACING_PX,CHART_MAX_INTERVALS} from './chart-axis.js';
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {groupNumber,groupsThousands,groupsAxisTicks,groupsDataRange,NUMBER_GROUPING_MIN,GROUPED_LABEL_CODE} from './number-grouping.js';

@@ -12,7 +12,8 @@ function Get-FurnitureSha256([string]$Path) { return (Get-FileHash -LiteralPath 
 function Test-Integer($Value) { return $Value -is [int] -or $Value -is [long] }
 function Require-Property($Action,[string]$Name,[string]$Context) {
     if($null -eq $Action.PSObject.Properties[$Name]) { throw "$Context requires property '$Name'" }
-    return $Action.$Name
+    # Preserve the JSON property value itself: a singleton array must remain an array.
+    return ,($Action.$Name)
 }
 function Assert-String($Value,[string]$Name,[string]$Context,[int]$Maximum=65535,[bool]$AllowEmpty=$true) {
     if(-not ($Value -is [string])) { throw "$Context property '$Name' must be a string" }
@@ -30,7 +31,7 @@ function Read-AndValidateActionPlan([string]$Path) {
     $parsed=$raw | ConvertFrom-Json
     $items=@($parsed)
     if($items.Count -gt 20) { throw 'ActionPlan cannot contain more than 20 actions' }
-    $operations=@('set-text-style','set-text','set-alt','delete-shape','duplicate-shape','set-tag','delete-tag','move-slide')
+    $operations=@('set-text-style','set-text','set-alt','delete-shape','duplicate-shape','set-tag','delete-tag','move-slide','measure-chart-point')
     for($index=0;$index -lt $items.Count;$index++) {
         $action=$items[$index]; $context="Action $($index+1)"
         if($null -eq $action -or $action -isnot [pscustomobject]) { throw "$context must be an object" }
@@ -45,6 +46,20 @@ function Read-AndValidateActionPlan([string]$Path) {
             }
         }
         switch($op) {
+            'measure-chart-point' {
+                $chartName=Require-Property $action 'chartName' $context; Assert-String $chartName 'chartName' $context 255 $false
+                foreach($key in @('seriesIndex','pointIndex')) {
+                    $number=Require-Property $action $key $context
+                    if(-not (Test-Integer $number) -or $number -lt 1 -or $number -gt 256) { throw "$context $key must be an integer from 1 through 256" }
+                }
+                $kind=Require-Property $action 'chartKind' $context; Assert-String $kind 'chartKind' $context 40 $false
+                if($kind -cnotin @('horizontal-bar','vertical-bar','marker','slice')) {throw "$context chartKind is not a bounded classic mark"}
+                $edge=Require-Property $action 'edge' $context; Assert-String $edge 'edge' $context 20 $false
+                if($edge -cnotin @('start','end','top','bottom','center')) {throw "$context edge is not a point edge"}
+                $sign=Require-Property $action 'valueSign' $context; if(-not (Test-Integer $sign) -or $sign -notin @(-1,0,1)) {throw "$context valueSign must be -1, 0 or 1"}
+                $allowed+=@('chartName','seriesIndex','pointIndex','chartKind','edge','valueSign')
+            }
+
             'set-text' { $text=Require-Property $action 'text' $context; Assert-String $text 'text' $context; $allowed+='text' }
             'set-text-style' {
                 $hasSize=$null -ne $action.PSObject.Properties['fontSize']; $hasColor=$null -ne $action.PSObject.Properties['color']
@@ -154,7 +169,7 @@ $report=[ordered]@{
     source=[ordered]@{path=$sourcePath;sha256=$sourceHash;openedPath=$sourceSnapshot;openedSha256=(Get-FurnitureSha256 $sourceSnapshot)}
     saved=[ordered]@{path=$savedPath;sha256=$null}
     reopened=[ordered]@{path=$savedPath;sha256=$null}
-    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@()}
+    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@();chartPoints=@()}
     phases=[ordered]@{original=$null;edited=$null;reopened=$null}
     inputs=[ordered]@{verifier=$request.verifier;processHelper=$request.processHelper}
     environment=[ordered]@{hostVersion=$PSVersionTable.PSVersion.ToString();windowsProductName=$os.ProductName;windowsDisplayVersion=$os.DisplayVersion;windowsBuild="$($os.CurrentBuild).$($os.UBR)";powerPointVersion=$null;powerPointExecutable=$null;powerPointBuild=$null;powerPointExecutableSha256=$null}
@@ -301,6 +316,73 @@ function Set-FurnitureTextStyle($Shape,$Action,[string]$Prefix) {
     $evidence.textAfter=$after
     return $evidence
 }
+# SH-25 independent object-model measurement. Never activates ChartData, Excel or Edit Data.
+function Read-FurnitureFiniteNumber($Object,[string]$Property,[string]$Stage) {
+    $value=Invoke-FurnitureCom $Stage { $Object.$Property }
+    if($null -eq $value) {Stop-FurnitureLifecycle "$Stage is unavailable"}
+    try {$number=[double]$value} catch {Stop-FurnitureLifecycle "$Stage is not numeric"}
+    if([double]::IsNaN($number) -or [double]::IsInfinity($number)) {Stop-FurnitureLifecycle "$Stage is not finite"}
+    return $number
+}
+function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix) {
+    $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
+    $overlay=Get-ExactShape $slide $Action.shapeName "$Prefix.overlay"
+    $chartShape=Get-ExactShape $slide $Action.chartName "$Prefix.chart"
+    $hasChart=Invoke-FurnitureCom "$Prefix.chart.hasChart" {$chartShape.HasChart}
+    if($hasChart -ne -1) {Stop-FurnitureLifecycle 'The exact chart shape has no native chart'}
+    $chart=Invoke-FurnitureCom "$Prefix.chart.get" {$chartShape.Chart}
+    $chartType=Invoke-FurnitureCom "$Prefix.chart.type" {$chart.ChartType}
+    # Only the sixteen source-supported homogeneous classic types; never guess a combo/3-D/ChartEx formula.
+    # Microsoft XlChartType: https://learn.microsoft.com/en-us/office/vba/api/excel.xlcharttype
+    $nativeKinds=@{51='vertical-bar';52='vertical-bar';53='vertical-bar';57='horizontal-bar';58='horizontal-bar';59='horizontal-bar';4='marker';65='marker';63='marker';66='marker';1='marker';76='marker';77='marker';-4169='marker';5='slice';-4120='slice'}
+    if(-not (Test-Integer $chartType) -or -not $nativeKinds.ContainsKey([int]$chartType)) {Stop-FurnitureLifecycle 'Native chart type is not a supported classic point domain'}
+    if($nativeKinds[[int]$chartType] -cne $Action.chartKind) {Stop-FurnitureLifecycle 'Action chartKind differs from the actual native chart type'}
+    $seriesCollection=Invoke-FurnitureCom "$Prefix.series.get" {return ,$chart.SeriesCollection()}
+    $seriesCount=Invoke-FurnitureCom "$Prefix.series.count" {$seriesCollection.Count}
+    if($Action.seriesIndex -gt $seriesCount) {Stop-FurnitureLifecycle 'Native series index is no longer present'}
+    $series=Invoke-FurnitureCom "$Prefix.series.item" {$seriesCollection.Item([int]$Action.seriesIndex)}
+    $seriesType=Invoke-FurnitureCom "$Prefix.series.type" {$series.ChartType}
+    if(-not (Test-Integer $seriesType) -or $seriesType -ne $chartType) {Stop-FurnitureLifecycle 'Selected native series type differs from the homogeneous chart type'}
+    $seriesName=Invoke-FurnitureCom "$Prefix.series.name" {$series.Name}
+    $points=Invoke-FurnitureCom "$Prefix.points.get" {return ,$series.Points()}
+    $pointCount=Invoke-FurnitureCom "$Prefix.points.count" {$points.Count}
+    if($Action.pointIndex -gt $pointCount) {Stop-FurnitureLifecycle 'Native point index is no longer present'}
+    $point=Invoke-FurnitureCom "$Prefix.points.item" {$points.Item([int]$Action.pointIndex)}
+    $chartLeft=Read-FurnitureFiniteNumber $chartShape 'Left' "$Prefix.chart.left"
+    $chartTop=Read-FurnitureFiniteNumber $chartShape 'Top' "$Prefix.chart.top"
+    $left=Read-FurnitureFiniteNumber $point 'Left' "$Prefix.point.left"
+    $top=Read-FurnitureFiniteNumber $point 'Top' "$Prefix.point.top"
+    $width=Read-FurnitureFiniteNumber $point 'Width' "$Prefix.point.width"
+    $height=Read-FurnitureFiniteNumber $point 'Height' "$Prefix.point.height"
+    if($width -lt 0 -or $height -lt 0) {Stop-FurnitureLifecycle 'Native point bounds are negative'}
+    $x=$left+$width/2; $y=$top+$height/2
+    if($Action.chartKind -eq 'slice' -and $Action.edge -in @('start','end','center')) {
+        # Microsoft documents PieSliceLocation for pie only. Doughnut availability is unqualified;
+        # its first owned probe must be separate and a getter failure latches without fallback.
+        # XlPieSliceLocation x=1/y=2; XlPieSliceIndex outer=2, center=5, inner=8.
+        $sliceIndex=switch($Action.edge){'start'{8};'center'{5};default{2}}
+        $x=Invoke-FurnitureCom "$Prefix.point.slice.x" {$point.PieSliceLocation(1,$sliceIndex)}
+        $y=Invoke-FurnitureCom "$Prefix.point.slice.y" {$point.PieSliceLocation(2,$sliceIndex)}
+        if($null -eq $x -or $null -eq $y -or [double]::IsNaN([double]$x) -or [double]::IsInfinity([double]$x) -or [double]::IsNaN([double]$y) -or [double]::IsInfinity([double]$y)) {Stop-FurnitureLifecycle 'Native slice coordinate is unavailable/nonfinite'}
+    } elseif($Action.chartKind -ne 'marker') {
+        if($Action.edge -eq 'top') {$y=$top}
+        elseif($Action.edge -eq 'bottom') {$y=$top+$height}
+        elseif($Action.edge -in @('start','end')) {
+            $positive=$Action.valueSign -ge 0; $end=$Action.edge -eq 'end'
+            if($Action.chartKind -eq 'horizontal-bar') {$x=if($positive -eq $end){$left+$width}else{$left}}
+            elseif($Action.chartKind -eq 'vertical-bar') {$y=if($positive -eq $end){$top}else{$top+$height}}
+        }
+    }
+    $overlayLeft=Read-FurnitureFiniteNumber $overlay 'Left' "$Prefix.overlay.left"
+    $overlayTop=Read-FurnitureFiniteNumber $overlay 'Top' "$Prefix.overlay.top"
+    $overlayWidth=Read-FurnitureFiniteNumber $overlay 'Width' "$Prefix.overlay.width"
+    $overlayHeight=Read-FurnitureFiniteNumber $overlay 'Height' "$Prefix.overlay.height"
+    $nativeX=$chartLeft+[double]$x; $nativeY=$chartTop+[double]$y
+    $overlayX=$overlayLeft+$overlayWidth/2; $overlayY=$overlayTop+$overlayHeight/2
+    $distance=[math]::Sqrt([math]::Pow($overlayX-$nativeX,2)+[math]::Pow($overlayY-$nativeY,2))*4/3
+    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
+}
+
 function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
     $prefix="action-$Number-$($Action.op)"
     if($Action.op -eq 'move-slide') { $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $prefix; Invoke-FurnitureCom "$prefix.moveTo" { $slide.MoveTo([int]$Action.toIndex) }; return }
@@ -311,6 +393,7 @@ function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
         $existing=Read-NativeTags $tags "$prefix.tags.precondition"; if(@($existing | Where-Object { $_.name -ieq $Action.tagName }).Count -ne 1) { throw "$prefix expected one existing tag '$($Action.tagName)'" }
         Invoke-FurnitureCom "$prefix.tags.delete" { $tags.Delete($Action.tagName) }; return
     }
+    if($Action.op -eq 'measure-chart-point') {$report.actionPlan.chartPoints+=@(Read-FurnitureChartPoint $Presentation $Action $prefix);return}
     $shape=Get-ExactShape $slide $Action.shapeName $prefix
     switch($Action.op) {
         'set-text-style' { $evidence=Set-FurnitureTextStyle $shape $Action $prefix; $report.actionPlan.styleEdits+=@([ordered]@{index=$Number;slideIndex=$Action.slideIndex;shapeName=$Action.shapeName;observed=$evidence}) }

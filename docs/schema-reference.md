@@ -920,7 +920,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `block`, `edge`
-- Purpose: Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn.
+- Purpose: Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn. With point, block must carry a supported classic...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -929,6 +929,8 @@ _No named properties._
 | `offset` | no | `number` | The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'. |
 | `width` | no | `number` | The shape's width: up to 1 a fraction of the block's width, above 1 reference pixels at a 720-pixel short edge. Default the preset's natural proportions with the shape's shorter side at 15% of the block's shorter side. |
 | `height` | no | `number` | The shape's height: up to 1 a fraction of the block's height, above 1 reference pixels at a 720-pixel short edge. Default as for width. |
+| `point` | no | `oneOf:string / integer` | Exact unique category label or zero-based data row index of the chart. Numeric strings name labels; numbers index rows. Empty/duplicate labels can be selected by index. Requires a supported classic chart block. |
+| `series` | no | `oneOf:string / integer` | Exact unique plotted value-column name or zero-based plotted-series index; omission selects the first plotted series. Requires point. Scatter X is not a value series. |
 
 
 ### Connector

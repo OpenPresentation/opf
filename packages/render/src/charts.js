@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartBarGeometry, chartDrawPlan, chartBandColor, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartBarGeometry, chartDrawPlan, chartBandColor, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -399,14 +399,7 @@ export function formatChartValue(value, format) {
 
 // Keep ordinary arithmetic unchanged. A range spanning both finite endpoints
 // can overflow even though every value/bound is finite; divide before subtracting.
-function axisFraction(value, scale, reverse = false) {
-  const range = scale.max - scale.min;
-  const distance = reverse ? scale.max - value : value - scale.min;
-  if (Number.isFinite(range) && Number.isFinite(distance)) return distance / (range || 1);
-  const unit = Math.max(Math.abs(scale.min), Math.abs(scale.max));
-  const min = scale.min / unit, max = scale.max / unit, position = value / unit;
-  return (reverse ? max - position : position - min) / (max - min);
-}
+
 
 // LH-59: ticks run from min in steps of step up to max, which a tightened axis (core's niceScale) need not land on.
 function scaleFrom(min, max, step) {
@@ -1188,7 +1181,7 @@ function renderCircularChart(c, spec) {
   // LH-108: with a value list, the pie fills the square core gave it.
   const list = c.valueList;
   // LH-182: a doughnut in core's square (the PPTX export pins its plot there too).
-  const area = list ? list.pie : spec.kind === "doughnut" && c.doughnut ? c.doughnut.pie : { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
+  const area = c.plotBox ?? (list ? list.pie : spec.kind === "doughnut" && c.doughnut ? c.doughnut.pie : { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) });
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
   const ringTexts = c.dataLabels ? rings.map((ring) => ring.values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][ring.column]) ?? 0, share: ring.total ? value / ring.total : 0, format: c.formats[ring.column], group: c.group(ring.column) }))) : null;
@@ -1197,7 +1190,7 @@ function renderCircularChart(c, spec) {
   const outsideTexts = !ringTexts || spec.kind !== "pie" ? [] : c.sliceLabels ? ringTexts[0].filter((_, i) => c.sliceLabels.get(i) === "outside") : (c.dataLabels.position ?? "outside-end") === "outside-end" ? ringTexts[0] : [];
   const outside = outsideTexts.length > 0;
   const reserve = outside ? outsideLabelReserve(c, outsideTexts) : { x: 0, y: 0 };
-  const r = list || (spec.kind === "doughnut" && c.doughnut) ? Math.max(1, Math.min(area.width, area.height) / 2) : outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
+  const r = c.plotBox || list || (spec.kind === "doughnut" && c.doughnut) ? Math.max(1, Math.min(area.width, area.height) / 2) : outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
   const hole = spec.kind === "doughnut" ? r * 0.5 : 0;
   if (rings.every((ring) => !ring.total)) {
     c.text("No positive chart values", area, c.path);
@@ -1308,6 +1301,7 @@ function renderScatterChart(c) {
   let xScale = composedScale(c.numericAxes?.category) ?? scaleForX(plot.width);
   // RR-54: a formatted X axis keeps its end labels inside the chart.
   if (xFormat !== undefined) ({ x: plot.x, width: plot.width, scale: xScale } = insetForEndLabels(c, plot.x, plot.width, xFormat, w => composedScale(c.numericAxes?.category) ?? scaleForX(w)));
+  if (c.plotBox) Object.assign(plot, c.plotBox);
   c.plotArea = plot;
   const xAt = (v) => plot.x + axisFraction(v, xScale) * plot.width;
   const yAt = (v) => plot.y + axisFraction(v, yScale, true) * plot.height;

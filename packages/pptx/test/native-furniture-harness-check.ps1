@@ -11,7 +11,7 @@ if(Test-Path -LiteralPath $planRoot) { throw 'Preserve the existing plan control
 $tokens=$null; $parseErrors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$tokens,[ref]$parseErrors)
 if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication')
+$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication','Get-ExactSlide','Read-FurnitureFiniteNumber','Read-FurnitureChartPoint')
 foreach($name in $names) {
     $functionAst=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $functionAst) { throw "Missing reviewed function: $name" }
@@ -75,6 +75,54 @@ Reject-Plan 'slide-index-four' '[{"op":"delete-shape","slideIndex":4,"shapeName"
 Reject-Plan 'move-index-four' '[{"op":"move-slide","slideIndex":1,"toIndex":4}]'
 $twentyOne=@(); for($index=0;$index -lt 21;$index++) { $twentyOne+=@([ordered]@{op='move-slide';slideIndex=1;toIndex=1}) }
 Reject-Plan 'twenty-one-actions' (ConvertTo-Json -InputObject $twentyOne -Depth 5)
+
+# SH25: parse the actual bounded measurement action before any application exists.
+$pointPlan=[ordered]@{op='measure-chart-point';slideIndex=1;shapeName='Exact ring';chartName='Exact chart';seriesIndex=1;pointIndex=1;chartKind='marker';edge='center';valueSign=1}
+function Copy-PointPlan {
+    $copy=[ordered]@{};foreach($key in $pointPlan.Keys) {$copy[$key]=$pointPlan[$key]};return $copy
+}
+foreach($kind in @('horizontal-bar','vertical-bar','marker','slice')) {
+    $valid=(Copy-PointPlan);$valid.chartKind=$kind
+    Accept-Plan ('point-kind-'+$kind) (ConvertTo-Json -InputObject @($valid) -Compress) 1
+}
+$valid=(Copy-PointPlan);$valid.seriesIndex=256;$valid.pointIndex=256;$valid.valueSign=-1;$valid.edge='start'
+Accept-Plan 'point-index-upper-bound' (ConvertTo-Json -InputObject @($valid) -Compress) 1
+$valid=(Copy-PointPlan);$valid.valueSign=0;$valid.edge='bottom'
+Accept-Plan 'point-zero-sign' (ConvertTo-Json -InputObject @($valid) -Compress) 1
+foreach($field in @('chartName','seriesIndex','pointIndex','chartKind','edge','valueSign')) {
+    $invalid=(Copy-PointPlan);$invalid.Remove($field)
+    Reject-Plan ('point-missing-'+$field) (ConvertTo-Json -InputObject @($invalid) -Compress)
+}
+foreach($field in @('seriesIndex','pointIndex')) {
+    foreach($bad in @(@('zero',0),@('negative',-1),@('too-high',257),@('fraction',1.5),@('string','1'),@('boolean',$true),@('null',$null),@('array',@(1)))) {
+        $invalid=(Copy-PointPlan);$invalid[$field]=$bad[1]
+        Reject-Plan ('point-'+$field+'-'+$bad[0]) (ConvertTo-Json -InputObject @($invalid) -Compress -Depth 5)
+    }
+}
+foreach($spec in @(
+    @('chartName-empty','chartName',''),@('chartName-number','chartName',7),@('chartName-too-long','chartName',('x'*256)),
+    @('chartName-array','chartName',@('Exact chart')),@('shapeName-array','shapeName',@('Exact ring')),@('sign-array','valueSign',@(1)),
+    @('shapeName-empty','shapeName',''),@('kind-unsupported','chartKind','radar'),@('kind-case','chartKind','Marker'),@('kind-array','chartKind',@('marker')),
+    @('edge-unsupported','edge','left'),@('edge-case','edge','Center'),@('edge-array','edge',@('center')),
+    @('sign-too-high','valueSign',2),@('sign-too-low','valueSign',-2),@('sign-fraction','valueSign',0.5),@('sign-string','valueSign','1'),@('sign-boolean','valueSign',$true),
+    @('unknown-field','sourceX',123)
+)) {
+    $invalid=(Copy-PointPlan);$invalid[$spec[1]]=$spec[2]
+    Reject-Plan ('point-'+$spec[0]) (ConvertTo-Json -InputObject @($invalid) -Compress -Depth 5)
+}
+
+# The same function-output unwrapping affected shared fields and legacy actions.
+foreach($scope in @('point','legacy')) {
+    foreach($bad in @(@('op-array','op',@('unused')),@('op-null','op',$null),@('op-number','op',7),@('slide-array','slideIndex',@(1)),@('slide-null','slideIndex',$null),@('shape-array','shapeName',@('Exact ring')),@('shape-null','shapeName',$null),@('shape-number','shapeName',7))) {
+        $invalid=if($scope -eq 'point') {Copy-PointPlan} else {[ordered]@{op='set-text';slideIndex=1;shapeName='Exact ring';text='Words'}}
+        # Assign the property itself so no helper output can collapse test arrays.
+        if($bad[0] -eq 'op-array') {$invalid[$bad[1]]=@($invalid.op)}
+        elseif($bad[0] -in @('slide-array','shape-array')) {$invalid[$bad[1]]=@($bad[2])}
+        else {$invalid[$bad[1]]=$bad[2]}
+        Reject-Plan ($scope+'-common-'+$bad[0]) (ConvertTo-Json -InputObject @($invalid) -Compress -Depth 5)
+    }
+}
+Reject-Plan 'legacy-text-array' '[{"op":"set-text","slideIndex":1,"shapeName":"Exact ring","text":["Words"]}]'
 
 $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true
 $script:events=New-Object 'System.Collections.Generic.List[string]'
@@ -277,16 +325,104 @@ $script:mockPowerPointRunning=$false; Assert-FurnitureOfficeIdle
 Remove-Item Function:Get-Process
 $lifecycleCases.Add([ordered]@{name='refuse-running-office';passed=$true})
 
+# SH-25: tabled independent actual-property probes. No expected source coordinates enter the action.
+$chartPointCases=New-Object 'System.Collections.Generic.List[object]'
+function New-ChartPointFixture([string]$Kind='horizontal-bar') {
+    $fixtureType=switch($Kind){'horizontal-bar'{57};'vertical-bar'{51};'marker'{65};'slice'{5};default{throw 'Unknown fake native kind'}}
+    # Slice success is a pie (type5) fixture, never evidence of doughnut API availability.
+    $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true; $script:forbiddenChartData=$false
+    $point=[pscustomobject]@{Left=10;Top=20;Width=40;Height=30}
+    $point | Add-Member -MemberType ScriptMethod -Name PieSliceLocation -Value {
+        param($location,$index)
+        $values=switch($index){2{@(60,70)};5{@(30,40)};8{@(10,20)};default{throw 'Unexpected slice index'}}
+        return $values[$location-1]
+    }
+    $points=[pscustomobject]@{Count=1;Values=@($point)}
+    $points | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    $series=[pscustomobject]@{Name='Native value';ChartType=$fixtureType;PointCollection=$points}
+    $series | Add-Member -MemberType ScriptMethod -Name Points -Value {return ,$this.PointCollection}
+    $seriesCollection=[pscustomobject]@{Count=1;Values=@($series)}
+    $seriesCollection | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    $chart=[pscustomobject]@{ChartType=$fixtureType;Series=$seriesCollection}
+    $chart | Add-Member -MemberType ScriptMethod -Name SeriesCollection -Value {return ,$this.Series}
+    $chart | Add-Member -MemberType ScriptProperty -Name ChartData -Value {$script:forbiddenChartData=$true;throw 'ChartData must not be activated or read'}
+    $chartShape=[pscustomobject]@{Name='Native chart';Left=100;Top=200;HasChart=-1;Chart=$chart}
+    $overlay=[pscustomobject]@{Name='Native ring';Left=0;Top=0;Width=10;Height=10}
+    $shapes=[pscustomobject]@{Count=2;Values=@($chartShape,$overlay)}
+    $shapes | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    $slides=[pscustomobject]@{Count=1;Values=@([pscustomobject]@{Shapes=$shapes})}
+    $slides | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    return [ordered]@{presentation=[pscustomobject]@{Slides=$slides};point=$point;points=$points;overlay=$overlay;chart=$chart;series=$seriesCollection}
+}
+$coordinateCases=@(
+    @('horizontal-bar','end',1,150,235),@('horizontal-bar','start',1,110,235),
+    @('horizontal-bar','end',-1,110,235),@('horizontal-bar','start',-1,150,235),
+    @('horizontal-bar','top',1,130,220),@('horizontal-bar','bottom',1,130,250),@('horizontal-bar','center',1,130,235),
+    @('vertical-bar','end',1,130,220),@('vertical-bar','start',1,130,250),
+    @('vertical-bar','end',-1,130,250),@('vertical-bar','start',-1,130,220),
+    @('marker','end',1,130,235),@('marker','top',1,130,235),@('marker','center',1,130,235),
+    @('slice','end',1,160,270),@('slice','start',1,110,220),@('slice','center',1,130,240),
+    @('slice','top',1,130,220),@('slice','bottom',1,130,250)
+)
+foreach($spec in $coordinateCases) {
+    $nativeFixture=New-ChartPointFixture $spec[0]
+    $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind=$spec[0];edge=$spec[1];valueSign=$spec[2]}
+    $nativeFixture.overlay.Left=$spec[3]-5; $nativeFixture.overlay.Top=$spec[4]-5
+    $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'chart-probe'
+    if($observed.nativePointSlidePoints[0] -ne $spec[3] -or $observed.nativePointSlidePoints[1] -ne $spec[4] -or $observed.distancePixels -ne 0 -or -not $observed.withinFourPixels -or $script:forbiddenChartData) {throw 'Native point probe changed coordinate systems or accessed data workbook'}
+    $chartPointCases.Add([ordered]@{kind=$spec[0];edge=$spec[1];sign=$spec[2];nativeSlidePoints=@($spec[3],$spec[4]);passed=$true})
+}
+$nativeFixture=New-ChartPointFixture 'marker'
+$action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='marker';edge='center';valueSign=1}
+foreach($delta in @(3,3.01)) {
+    $nativeFixture.overlay.Left=125+$delta; $nativeFixture.overlay.Top=230
+    $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'distance-bound'
+    if($observed.withinFourPixels -ne ($delta -eq 3)) {throw 'Actual4px measurement threshold changed'}
+}
+$chartPointCases.Add([ordered]@{name='exact-four-pixel-bound';passed=$true})
+foreach($failure in @('missing-series','missing-point','nonfinite-point','slice-getter')) {
+    $nativeFixture=New-ChartPointFixture 'marker';$action.chartKind='marker';$action.edge='center'
+    switch($failure) {
+        'missing-series' {$nativeFixture.series.Count=0}
+        'missing-point' {$nativeFixture.points.Count=0}
+        'nonfinite-point' {$nativeFixture.point.Left=[double]::NaN}
+        'slice-getter' {$nativeFixture=New-ChartPointFixture 'slice';$action.chartKind='slice';$action.edge='end';$nativeFixture.point | Add-Member -Force -MemberType ScriptMethod -Name PieSliceLocation -Value {throw 'Injected native slice getter failure'}}
+    }
+    $rejected=$false;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'refusal'} catch {$rejected=$true}
+    if(-not $rejected -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed) {throw 'Missing/nonfinite/failed native point was not latched'}
+    $eventCount=$script:events.Count;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'forbidden-followup'} catch {}
+    if($script:events.Count -ne $eventCount -or $script:forbiddenChartData) {throw 'A later native measurement ran after failure'}
+    $chartPointCases.Add([ordered]@{name=$failure;passed=$true})
+}
+
+foreach($failure in @('wrong-native-kind','mixed-series-type','unsupported-native-type','doughnut-api-unavailable')) {
+    $nativeFixture=New-ChartPointFixture 'vertical-bar'
+    $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='vertical-bar';edge='end';valueSign=1}
+    $wanted=switch($failure){
+        'wrong-native-kind' {$action.chartKind='marker';'chartKind differs'}
+        'mixed-series-type' {$nativeFixture.series.Values[0].ChartType=65;'series type differs'}
+        'unsupported-native-type' {$nativeFixture.chart.ChartType=-4152;'not a supported classic'}
+        'doughnut-api-unavailable' {$nativeFixture=New-ChartPointFixture 'slice';$nativeFixture.chart.ChartType=-4120;$nativeFixture.series.Values[0].ChartType=-4120;$action.chartKind='slice';$nativeFixture.point | Add-Member -Force -MemberType ScriptMethod -Name PieSliceLocation -Value {throw 'Doughnut API availability is unqualified'};'Doughnut API availability is unqualified'}
+    }
+    $errorText=$null;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'type-refusal'} catch {$errorText=$_.Exception.Message}
+    if($null -eq $errorText -or -not $errorText.Contains($wanted) -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed -or $script:forbiddenChartData) {throw ('Native type/availability refusal failed: '+$failure)}
+    if($failure -ne 'doughnut-api-unavailable' -and @($script:events | Where-Object {$_ -like 'type-refusal.point.*'}).Count -ne 0) {throw 'Wrong native type reached point geometry'}
+    $eventCount=$script:events.Count;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'forbidden-type-followup'} catch {}
+    if($script:events.Count -ne $eventCount) {throw 'A native type failure allowed later calls'}
+    $chartPointCases.Add([ordered]@{name=$failure;passed=$true})
+}
+
 [ordered]@{
     passed=$true
     textFontControls=$fontCases
     lifecycleControls=@($lifecycleCases.ToArray())
+    chartPointControls=@($chartPointCases.ToArray())
     scope='Read-only owned-copy lifecycle, SaveCopyAs identity, overwrite/unowned-close/running-Office refusals, error latch; Windows PowerShell 5.1 parse; pure uniform/mixed/unavailable whole-range font descriptors and error latch; size/color edit and exact-target mocks; readback/text-change refusal;  AST-only action-plan validation; empty/single/multi list behavior; invalid-plan rejection; collection identity and fail-closed wrapper. No Office object was constructed.'
     powershell=$PSVersionTable.PSVersion.ToString()
     verifierSha256=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()
     checkerSha256=(Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash.ToLowerInvariant()
-    accepted=6
-    rejected=23
+    accepted=@($cases.ToArray() | Where-Object {$_.expected -eq 'accept'}).Count
+    rejected=@($cases.ToArray() | Where-Object {$_.expected -eq 'reject'}).Count
     cases=@($cases.ToArray())
     events=@($script:events.ToArray())
 } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $reportFull -Encoding UTF8

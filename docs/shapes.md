@@ -185,6 +185,24 @@ A picture's box is its frame; a block on a card is its card. A shape with both p
 
 The PPTX export writes an overlay shape as a shape block, a native `p:sp` named `OPF shape slides.N.shapes.I`.
 
+### Chart point anchors
+
+Add `point` to `at` to follow a chart mark instead of the whole block. For example:
+
+```json
+{"shape":"ellipse","fill":"none","stroke":{"color":"accent2","width":3},"at":{"block":"costs","series":"Cost ($B)","point":"United States","edge":"end","width":80,"height":80}}
+```
+
+`point` is an exact unique category name or a zero-based plotted-row index. `series` is an exact unique value-column name or a zero-based plotted-series index; omission selects the first series. Indexes disambiguate repeated or empty labels. Scatter X columns are not series. References resolve against the data the chart draws, including its maintained draw plan.
+
+The **center** of the shape sits on the chosen point. For bars and columns, `start` and `end` mean the segment baseline and value end, including signed and stacked values; `top`, `bottom` and `center` use the mark bounds. Line/area/scatter anchors use the plotted marker; their edge supplies the offset direction. On a slice, `end` is the outer arc midpoint, `start` the inner arc midpoint (the pie center), `center` the middle of its radial band, and `top`/`bottom` the sector bounds. Slice offsets are radial, and other mark offsets follow the chosen edge's outward direction. A zero offset centers the ring exactly on its target.
+
+Explicit dimensions up to 1 are fractions of the mark bounds; larger numbers are reference pixels. The default retains the preset's proportions and uses 15% of the mark's shorter side, with a 12 reference-pixel floor. Whole-block anchor sizing and outside-edge placement are unchanged. Physical bar value ends do not reverse in RTL; vertical category positions follow the chart's category order.
+
+The classic two-dimensional category, scatter, pie and doughnut planners share a pinned native inner plot with SVG. Unsupported 3-D, combo, radar, chartex and table-aligned-row plots are explicit `opf/shape-anchor-missing` findings and draw no attached shape. Missing/ambiguous series or categories and null/unplotted values produce the same located finding. Qualification against actual native point coordinates is required before release; source agreement alone does not prove native placement. See [the portable example](../examples/technical/chart-point-overlays.opf.json).
+
+The editor's `setOverlayAnchor(editor, path, at)` and `prepareOverlayAnchor(presentation, path, at)` replace the placement atomically. `listChartPointTargets` supplies indexed choices. The selected-shape controls expose chart, point, series and edge; every change supports Undo/Redo. A native scatter chart does not carry source category names: use a numeric point index when that attachment must survive native import. Native import restores an attachment only when its current chart point still resolves; otherwise it keeps the current native shape position and reports the lost attachment.
+
 ### Layers
 
 `layer` puts an overlay shape in front of the slide (the default) or behind it:
@@ -335,7 +353,7 @@ The `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` and `vertical-flow` layouts
 | `opf/text-overflow` | The text does not fit inside the shape at the readable minimum size. |
 | `opf/shape-link-hidden` | A hidden shape has a link nobody can click. |
 | `opf/shape-option-unsupported-payload` | A shape-only property (`fill`, `style`, `rotate` and the others) is on a block that is not a shape. |
-| `opf/shape-anchor-missing` | An overlay shape's `at.block` names no block on the slide; the shape is not drawn. |
+| `opf/shape-anchor-missing` | An overlay's block, chart point or series does not resolve, or its native plot is unqualified; the shape is not drawn. |
 | `opf/connector-end-missing` | A connector's `from` or `to` names no block or overlay shape on the slide (or names a connector); the connector is not drawn. |
 | `opf/schema` | An overlay shape has both placements or none, or only some of `x`, `y`, `width` and `height`; a connector has a shape-only key; a `fromSite` or `toSite` is an index the shape does not have. |
 
