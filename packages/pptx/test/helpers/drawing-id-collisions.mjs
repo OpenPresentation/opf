@@ -42,7 +42,8 @@ export function drawingIdCollisions(xml) {
         continue;
       }
       if (namespace === PML && local === 'cNvPr' && attributes.id !== undefined) {
-        const id = String(attributes.id), previous = occurrences.get(id) ?? [];
+        const rawId = String(attributes.id), id = /^\d+$/.test(rawId) ? BigInt(rawId).toString() : rawId;
+        const previous = occurrences.get(id) ?? [];
         if (previous.some(prior => ![...prior].some(([scope, branch]) => guards.has(scope) && guards.get(scope) !== branch))) collisions.add(id);
         previous.push(guards);
         occurrences.set(id, previous);

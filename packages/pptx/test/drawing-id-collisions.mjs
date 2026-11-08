@@ -17,4 +17,5 @@ assert.deepEqual(duplicates(alternate(alternate(shape(2), shape(2)), shape(2))),
 assert.deepEqual(duplicates('<mc:AlternateContent><mc:Choice Requires="a">' + shape(2) + '</mc:Choice><mc:Choice Requires="b">' + shape(2) + '</mc:Choice><mc:Fallback>' + shape(2) + '</mc:Fallback></mc:AlternateContent>'), [], 'all direct alternatives are exclusive');
 assert.deepEqual(drawingIdCollisions('<s xmlns="http://schemas.openxmlformats.org/presentationml/2006/main"><cNvPr id="2"/><cNvPr id="2"/></s>'), ['2'], 'namespace aliases and default namespace');
 assert.deepEqual(duplicates(shape(1) + '<x:AlternateContent xmlns:x="urn:other"><x:Choice>' + shape(2) + '</x:Choice><x:Fallback>' + shape(2) + '</x:Fallback></x:AlternateContent>'), ['2'], 'unrelated names are not MCE');
-console.log('Drawing IDs: 13 MCE feasible-branch collision controls pass.');
+assert.deepEqual(duplicates(shape('02') + shape('2')), ['2'], 'unsigned integer IDs compare by value');
+console.log('Drawing IDs: 14 MCE feasible-branch collision controls pass.');
