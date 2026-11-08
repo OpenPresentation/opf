@@ -116,3 +116,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - D2 is recommended against (it waits for the owner).
 - Whether to promote LibreOffice from "experimental" (RR-106; the results are in `docs/programs/release-readiness/qualification-0.33-libreoffice.md`, on #1084).
 - Every entry in [decisions.md](decisions.md) is vetoable.
+
+- Current033merge hold: [dispatched FullCI gate correction](fullci-gate.md). The macOS completion test and shared gate are being corrected in derived branches before the next integration batch.
