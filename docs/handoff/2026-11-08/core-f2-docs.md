@@ -1,0 +1,26 @@
+# Core F2 docs and remaining release inventory
+
+Authority: [original sites/docs inventory](../2026-11-07/sites-docs-inventory.md), especially F1-F3 and E1-E3. Read-only assessment compared approved03464725585d39fd5371afef05982959f5e340fa02f with the separately reviewed40-layout continuation; this implementation uses only fresh main plus approved0335282536c863ec586b88720a16d0e3075022c7f4f, then approved03464725585. It does not merge unfinished40-layout/native-domain work. The coordinator owns033 failure review and the one CI gate; no exploratory native work is restarted.
+
+## F2 implemented scope
+
+README/llms summaries, format card, LLM authoring, author/layout/inspect/export skills, author content reference and core/CLI/editor/PPTX pages now describe Mermaid, Graphviz DOT and PlantUML against the schema's syntax enum. Mermaid remains the string shorthand/default; DOT/PlantUML use explicit syntax. The old reference claim that mermaid is the only value is removed. Existing diagram source/group import and conditional native-shape versus picture tiers remain; no new parser support, canvas node editing or native fidelity is claimed.
+
+Video docs describe the actual media placeholder, play badge/caption and HTTP(S) hyperlink. No file fetch, embedded MP4/WebM or YouTube/Vimeo player is promised. The renderer's fontconfig paragraph states font-resolution behavior and keeps LibreOffice experimental; matching font resolution does not certify line breaks/layout.
+
+Vetoable: remove obsolete0.33 feature-section labels from the two current package-page summaries rather than backdate034 syntax support. Release pins, current counts, historical evidence, fonts, defaults and production source remain unchanged. The [single mapped-check receipt](core-f2-checks/README.md) retains two inherited hard failures (composition budget and generated gallery freshness), with text/skills/diagram-doc/stability and other mapped controls passing. The docs join the single034 integration gate.
+
+## Remaining core checklist (not closed by F2)
+
+- F1: fold/review the final accepted layout source before advertising its count. Approved647 has37records; the separate continuation has40. Its maintained sampler has53slides with all49prior slide objects/ordinals retained, but the initial technical README sentence still says30 and contradicts its appended40 paragraph. Fix that first sentence, regenerate/embed only with maintained tooling, and complete pinned-workflow goldens/native qualification. Do not hand-edit baselines or merge an unfinished source branch for docs alone.
+- F3: after real034 publication/registry evidence, update current pins/contracts in root README, developer quickstart, compatibility matrix and agent-skills. Keep historical versions/evidence unchanged. Reconcile current layout counts in the compatibility matrix/editor page.
+- Examples: approved647 has142bundled JSON decks; the separate40-layout source has143. Two Markdown decks are outside the bundled catalog count. llms and compatibility matrix still say137. Count the final assembled catalog, not these provisional totals; refresh its map and all published examples after each release.
+- Semantic SmartArt imports: fold the accepted matching docs/catalog map before advertising Organization Chart/Hierarchy/Basic Venn semantic layout mapping. Until qualified source is integrated, keep current import adaptation descriptions. All new live domains remain off; inverted pyramids export as editable native shapes. Assistants/unsupported forests must remain explicit refusals/reported adaptations.
+- MCP core guide: reconcile its hosted URL 'coming' text with the current verified site/server state and llms entry. Distinguish the hosted server from the not-yet-deployed hosted viewer. The034 .mcpb download prose requires real versioned bundle/checksum assets after registry verification; do not imply033 already has that release asset. Hosted connector/local extension changes are owner-only.
+- E1/E3: refresh the published comparison artifacts after033 and again after034 with reviewed sheets and exact source identities; preserve original before/design controls. E2: refresh stale published planning/walkthrough pages or mark them superseded; no deletion without the owner. If another lane already holds a receipt, link it rather than duplicate work.
+
+## Existing owners and boundaries
+
+Sites_delivery owns all three site's034 branch copy (DOT/PlantUML, SmartArt/export tiers, language, duration and image-callout prose), real registry/build/PR-preview checks, the LH16/LH34 docs/examples and future site .mcpb links. The actual-native blank-panel import correction remains separate. SH25's draft chart-point example/native proof is paused and unqualified; do not call it shipped. Those tasks are excluded from duplicate core work.
+
+Preserve measured PPTX text as the default and native body re-wrap as opt-in. Live SmartArt is restricted to measured eligible instances; otherwise use editable shapes or the documented picture fallback (SVG with PNG). Diagram native shapes remain conditional on supported drawing features; edited groups import as shapes. Keep linked video limitations, LibreOffice experimental, UI checks not run and exact native scope visible. No support/progress badges, deploy/DNS/login or owner-only promotions are introduced.

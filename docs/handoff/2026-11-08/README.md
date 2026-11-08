@@ -33,3 +33,5 @@ Every new feature still needs its final source/sheet/native acceptance, assemble
 D2; LibreOffice promotion; adding the hosted connector in Claude; uninstalling the local .mcpb; any deploy, DNS change or login. Prepare concrete verified PRs before requesting these actions, and continue independent authorized work. Site main merges can deploy and remain reserved for the owner step.
 
 Never force-push, push folded source branches, merge evidence-only branches, rewrite raster goldens locally, terminate Office, attach to the owner's Office instance, or introduce a new CI polling loop.
+
+Core documentation continuation: [RR-20 / inventory F2 corrections and complete remaining F1/F3/E1-E3 checklist](core-f2-docs.md). This narrow source does not change pins, counts, layouts or native eligibility; release/registry/site gates remain owed.
