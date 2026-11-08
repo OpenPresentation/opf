@@ -1,0 +1,1092 @@
+{
+  "source": {
+    "repository": "OpenPresentation/opf-pptx",
+    "commit": "b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1",
+    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating). Regenerated again for RR-11 always-on header/footer placeholders (codex/rr-11-hf-always): a deck with no footer now carries the dt/ftr/sldNum placeholders and p:hf flags on its slide master, layout and notes master; only ppt/slideMasters/slideMaster1.xml, ppt/slideLayouts/slideLayout1.xml and ppt/notesMasters/notesMaster1.xml changed (verified part by part against the previous entries); slides, charts, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-29 (chartPaletteForFill, opf#270): the exported series colours come from the shared palette function, so the srgbClr values in the chart parts changed (the default light card now writes a darker fourth, fifth and later series colours where the old per-colour clamp left them within a few lightness points of their neighbours); only ppt/charts/chart*.xml differ, and with srgbClr values masked those parts are identical, verified part by part against the previous entries; slides, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-36 (codex/rr-36-single-series-colour, owner-approved 2026-10-01): a single-series bar chart no longer writes a c:dPt per point, so the single-series clustered-column fallback chart parts lose their c:dPt elements; verified part by part against a build of main 4ed11db (after RR-29) with the CI-pinned core 395e4c1 (which reproduces the previous entries exactly): pareto-multi and box-multi are byte-identical, and every other deck differs only in ppt/charts/chartN.xml, which is byte-identical once the c:dPt elements are removed. Regenerated again for FF-05 (codex/ff-05-notes-theme): PowerPoint listed fonts that no part names, so the exporter now writes presentation.xml children in schema order (p:notesMasterIdLst before p:sldIdLst), gives the notes master its own theme part (ppt/theme/theme2.xml, a copy of the deck theme, with its relationship, content-type override and a second Theme name in docProps/app.xml), writes no run-level a:ea/a:cs typeface in slides (PowerPoint lists such a run font as an empty-name font), and names a font in the theme ea slot (the latin family, or the script font when one is selected; cs is unchanged). Verified part by part against a build of main 1f50912 (which reproduces the previous entries exactly): in every deck only [Content_Types].xml, docProps/app.xml, ppt/presentation.xml, ppt/notesMasters/_rels/notesMaster1.xml.rels, ppt/slides/slideN.xml, ppt/tags/opfDocument.xml (the recorded theme slots) and ppt/theme/theme1.xml (ea slot) changed, plus the added ppt/theme/theme2.xml; world-category (ja-JP, whose theme ea is already Calibri) changed no theme1 and no opfDocument, only ppt/tags/opfSlideN.xml; chart parts, embedded workbooks, slide masters of these decks and diagnostics are byte-identical. Entries are toPptx(deck, {chartex: 'fallback'}) output, as test/chartex.mjs checks. Regenerated again for RR-17 (codex/rr-17-keynote-charts, opf-pptx#162): the embedded chart workbook's table ref loses the stray apostrophe PptxGenJS 4.0.1 writes (A1:B5' -> A1:B5), which made Keynote drop the chart. Verified part by part against a build of main 2686d1e: in every deck the only changed part is ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx, and inside it only xl/tables/table1.xml, whose only difference is the table ref attribute; chart parts, slides, theme, tags, every other workbook part and diagnostics are byte-identical. Regenerated again for RR-17 (codex/rr-17-pptxgenjs-plus, owner decision 2026-10-05: the vendored engine is pptxgenjs-plus 4.3.4 instead of PptxGenJS 4.0.1). Verified part by part against a build of main bc97949 (which reproduces the previous entries exactly), with canonical XML (attributes sorted, namespace declarations and whitespace between elements ignored): the packages lose their ZIP directory entries (also inside the embedded workbooks, whose parts are otherwise byte-identical); [Content_Types].xml writes the jpg default as image/jpeg; ppt/presentation.xml carries firstSlideNum=\"1\"; ppt/presProps.xml and docProps/core.xml change whitespace only; docProps/app.xml counts Paragraphs and Notes; slides declare the m, a14 and mc namespaces, write self-closing elements and drop the chart frame descr=\"\"; slide relationships to charts are relative; chart parts use a flat c:strRef for categories, drop the third (orphan) c:axId and write the category axis numFmt with sourceLinked=\"0\"; notes slides drop an empty run. After masking those classes every slide equals main; theme, tags, notes master, slide masters, layouts, embedded workbook parts and diagnostics are byte-identical (docs/pptxgenjs-plus-migration.md rows 1, 2, 4 to 7, 11, 12, 16 and 18 to 20). Regenerated again for FA-03 (clean chart type ids): only the all-seven entry changed, because its deck no longer carries the two retired alias slides (treemap-2x and australia, which are not chart types any more); the other eight entries are byte-identical. Regenerated again for the FA 0.14 integration (layout record design applied, FA-01 and FA-17): only the world-category entry changed, because its layout chart-1x now supplies design.contentAlignment 'center' (the layout record's own design), so the chart heading paragraph in ppt/slides/slide1.xml is algn=\"ctr\" instead of \"l\"; verified part by part against a build of main 673dbba: that paragraph attribute is the only difference in the package, and the other eight entries are byte-identical. Regenerated for FA-23 (OPF 0.15, owner-approved breaking spec): with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"); the world-category deck registers the default catalog for its gallery ids. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59 (AUTO-18, round trip restores absent document defaults): full provenance now records the document-level defaults a document leaves to the engine (OPF_DOCUMENT_V1.absent), so every full-mode export carries the document tag and its slide tags, also when the document states nothing else. Verified part by part against a build of main 3d2698f: with the OPF_DOCUMENT_V1 and OPF_SLIDE_V1 tag parts, their relationships, content-type overrides and custDataLst references removed, every package is byte-identical to main; only the tag parts changed. RR-81 intentional OPF 0.19 default-export contract: eight automatic fixtures explicitly regenerated after owner-authorized design section 8 and coordinator archive review. Baseline converter 991023c, core fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5, renderer 9fbddcb78dbebcb87355922ca92af7d26c24c48d, Node 24.21.0. Every changed slide XML differs only by title placeholder and noGrp locks; chart parts, chart relationships, embedded workbooks, themes, existing tags and diagnostics are identical. Added only OPF auto titleOnly layout, its relationship and tag, and corresponding content types/master layout registration/slide relationships. The ninth world-category fixture is unchanged and its historical hash passes with the test helper’s registered default catalog. Final gallery 2 integration explicitly rebaselined all nine archives after independent coordinator review: 28 reachable v2 layouts add 84 layout/relationship/tag parts. Charts, chart relationships, embedded workbooks and themes remain byte-identical. World-category changes chart-1x to chart with explicit contentAlignment:center: the primary chart becomes full-width above the supporting note, with unchanged title geometry and exact source text. This is the accepted v2 chart intent, not geometry equivalence or native visual evidence. Strict archive/diagnostic/mode checks remain. RR-20 row-data provenance: independently reviewed and approved update of only waterfall-single against baseline converter e673f106c2fd38fcb5d51db190649c3855cc1885. Adds OPF_DATA_V1 for an authored single column actually plotted against synthetic row numbers. Only that tag, its content-type override, slide relationship and customer-data link change; every native part and all other archives remain byte-identical. Prior hash and size are retained; evidence: docs/evidence/rr20-row-data-provenance/archive-review.json. Native raster acceptance remains separate. Regenerated for RR-94: each tagged text shape records a fingerprint (sig) and every image block carries an OPF_IMAGE_V1 tag, so only tag parts changed. Regenerated for RR-90 (opf-pptx 0.22.1): chart text is core chartTextSize (20 px, 15 pt on the default slide) instead of 14 px floored at 16 px, so only chart part text sizes (sz) changed. Regenerated for RR-96 (color variants): scheme-derived colors in the classic chart parts and slides are schemeClr (with lumMod/lumOff for the derived neutrals) instead of sRGB, and every master carries its color map, so only color elements and the master color map changed. Regenerated for FA-33 (layout records are one ordered list of regions): the 28 default layouts' OPF_LAYOUT_V1 tags (ppt/tags/opfLayoutN.xml) carry a hash of the record, which hashes the new record form, so only that hash field of those tag parts changed (252 tag parts compared across the nine archives; every slide, layout, master, theme, chart and other part, and every diagnostic, is byte-identical). The previous hash of every entry is kept as fa33PreviousSha256. Regenerated for WI-6 (design.listBullet none; the pillars, team and faq layouts set it, and team also accepts list): the OPF_LAYOUT_V1 tags of those three default layouts (ppt/tags/opfLayout10.xml, opfLayout14.xml and opfLayout27.xml) carry a hash of the record, which hashes the new record, so only that hash field of those three tag parts changed (verified part by part against a build of main with the previous gallery, which reproduces every previous entry exactly: in each of the nine archives exactly those three parts differ, and every slide, layout, master, theme, chart, workbook and other tag part, and every diagnostic, is byte-identical). The previous hash of every entry is kept as wi6PreviousSha256. Regenerated for LH-12 (native conformance): every OPF text shape that is not a placeholder is a text box (txBox=\"1\"). Only the world-category entry changed, and in it only ppt/slides/slide1.xml, whose one difference is that flag on its text lines (verified part by part against a build of main); the other eight entries are byte-identical. The previous hash is kept as lh12PreviousSha256. Regenerated for layout-harvest wave 5: every entry moves only in the four slide layouts of the section, statement, quote and closing records (LH-96: each carries its layout variant as a clrMapOvr and a bg1 background) and in the layout tags of the process, agenda and agenda-split records (LH-07: their regions gain a sequence), checked part by part against an export of main 23cc70d45; every slide, master, theme, chart, workbook and other part is byte-identical. The previous hash and size are kept as lhWave5PreviousSha256 and lhWave5PreviousBytes. Regenerated for layout-harvest wave 6: every entry moves only in its slide layouts and two layout tags, checked part by part against an export of main 581ef9838: 22 layouts write marL=\"0\" indent=\"0\" and a:buNone on every level of their subtitle and non-list body placeholders (LH-140), and nothing else in them changes; the Cover and Section layouts set their title placeholder start-aligned and taller, anchored at the foot (LH-130); ppt/tags/opfLayout1.xml and opfLayout2.xml carry the new hash of the cover and section records. Every slide, master, theme, chart, workbook and other part is byte-identical. The previous hash and size are kept as lhWave6PreviousSha256 and lhWave6PreviousBytes. Regenerated for LH-175 (a Pareto chart of several series is core's pareto-as-columns fallback in every chartex mode, as the preview draws it): only the pareto-multi entry changed; its chart is written through the column construct with every series and reports chart-fallback instead of chartex-fallback. The previous hash and size are kept as lh175PreviousSha256 and lh175PreviousBytes.",
+    "rr81Review": {
+      "baselineCommit": "991023c",
+      "coreCommit": "fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5",
+      "rendererCommit": "9fbddcb78dbebcb87355922ca92af7d26c24c48d",
+      "runtime": "Node 24.21.0"
+    },
+    "finalGalleryReview": {
+      "baselineConverter": "b954ddd0333b2d59a0080f9e76f63bfe32bcefa3",
+      "core": "e21c472d88057d9d90cfa507fe91b89063f3f29a",
+      "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99",
+      "renderer": "9fbddcb78dbebcb87355922ca92af7d26c24c48d",
+      "runtime": "Node 24.21.0",
+      "evidence": "docs/evidence/rr-81-layout-review/final-gallery-comparison.json",
+      "archives": "/private/tmp/rr81-final-gallery-review/",
+      "candidateConverter": "b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1"
+    },
+    "historicalCommit": "438ce8801701f2fa2531ac56537234d274e36aa7",
+    "rr20Review": {
+      "candidateConverter": "477c101abd38dde05d5a1c3d91b90173e5d88358",
+      "core": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+      "gallery": "146e477196405fe7d2283008f6fad34c12742599",
+      "renderer": "013f39025d0cc63cc149228efb992dfad06838e5",
+      "runtime": "Node 24.21.0",
+      "evidence": "docs/evidence/rr20-array-areas/chartex-archive-review.json",
+      "note": "Reviewed all nine coherent fallback archives against published converter and dependency graph. The 28 layout tags change only record hashes; comparison layout adjusts two content heights and footer geometry for the 32pt list default. Candidate chart XML changes only the neutral gridline color and value-axis zero minimum for five constructs. All slide XML, chart data, diagnostic codes, and ZIP part sets remain unchanged."
+    },
+    "rr20RowDataReview": {
+      "baselineConverter": "e673f106c2fd38fcb5d51db190649c3855cc1885",
+      "runtime": "Node 24.21.0",
+      "changedEntry": "waterfall-single",
+      "evidence": "docs/evidence/rr20-row-data-provenance/archive-review.json"
+    },
+    "galleryMasterNameReview": {
+      "baselineConverter": "0e2ea4982c4bb1280f22763411e681fe0786f4fc",
+      "evidence": "docs/evidence/rr81-gallery-master-name/archive-review.json",
+      "note": "Owner-requested generated master display name pptx.gallery, reviewed 2026-10-14. Existing source.commit, notes and earlier review identities above are historical. All nine old hashes/sizes reproduced exactly on the published baseline. Only master name attributes change: 20 XML bytes and 14 compressed archive bytes per deck; every other part, inventory and diagnostic is exact. Authored theme identity and individual layout names stay unchanged. Native menu display was not observed."
+    },
+    "defaultThemeCategoryReview": {
+      "baselineVersion": "0.20.1",
+      "baselinePublisher": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+      "candidateBase": "373715ad62bd679ad39ba5b8783ec8f11df50065",
+      "evidence": "docs/evidence/rr68-default-theme-category/archive-review.json",
+      "scope": "All nine same-input candidate fallback archives differ only in default theme display identity: theme1/theme2 a:theme and thm15:themeFamily names, and app.xml theme-name entries. Every other part, inventory and diagnostic remains byte-identical. Previous master-only review and original archive identities remain historical. Explicit authored themes remain unchanged. Native Home > Layout verification is pending; this is source evidence, not a publication or native acceptance claim."
+    },
+    "wi2LayoutCatalogReview": {
+      "baseline": "origin/main 533a030e7 (WI-4 merged, 0.27.0) with @openpresentation/gallery 0.27.0",
+      "candidate": "codex/wi-2-group-placement (WI-2: whole-group placement)",
+      "evidence": "Exported all nine fallback decks with the same converter on both sides (chartex: fallback, default catalog registered). The baseline reproduced every entry hash and size above before this change. Diagnostics are identical. The new gallery layout agenda-split adds one slide layout part (with its relationships) and one opfLayout tag part, and the slide-layout numbering after the fourth layout shifts by one; closing, statement, quote and comparison are redrawn records, so their layout parts and tags change. Changed parts in every deck: [Content_Types].xml, ppt/slideLayouts/*, ppt/slideMasters/slideMaster1.xml and its rels, ppt/tags/opfLayout*.xml and the slide rels that name a layout. Charts, workbooks, themes, presentation.xml, notes masters and slides are byte-identical."
+    },
+    "lhWave2Review": "LH wave 2 (opf#968 to opf#975), verified part by part against a build of codex/lh-wave-1: every entry moves in the four ppt/tags/opfLayoutN.xml tags of the section, statement, quote and closing records (LH-01 adds design.variant to them); box-multi and all-seven also move in their box and world charts (LH-60: one box per series, a world over categories that are not places drawn as columns), with the chart-fallback diagnostic. Prior hashes and sizes are kept as lhWave2PreviousSha256 and lhWave2PreviousBytes.",
+    "rr20FallbackArchiveReviews": [
+      {
+        "baseline": {
+          "head": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+          "catalogSha256": "94523217d5a391df0216d0605ca18c37cf9d766667a042b9c295b57e9c308281",
+          "distManifestSha256": "785af9dbd18cf646e7fff187f59829c329488f42f49d16c7494f5bea5cdb9fd4"
+        },
+        "candidate": {
+          "head": "513156a982397eaa0033808215fbb86dd284745b",
+          "catalogSha256": "c2abb53fe57dd30bdb8bfe9c63b8aa73499afb6ec6bcaa1a53b3af3a627d1232",
+          "distManifestSha256": "6e1797fe71a978aee0fff037318788b17858bc4ae7a303afa310dbf0a3c2e427"
+        },
+        "evidence": {
+          "file": "review.json",
+          "sha256": "3c04c23eea605234760b03d1c279f000c9e6eb67579c789964ddbdd26ab6f9b7"
+        },
+        "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance."
+      }
+    ]
+  },
+  "decks": {
+    "treemap-category": {
+      "slides": [
+        {
+          "title": "treemap",
+          "chart": {
+            "type": "treemap",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "histogram-single": {
+      "slides": [
+        {
+          "title": "histogram",
+          "chart": {
+            "type": "histogram",
+            "data": {
+              "columns": [
+                "Sample"
+              ],
+              "rows": [
+                [
+                  3
+                ],
+                [
+                  5
+                ],
+                [
+                  8
+                ],
+                [
+                  13
+                ],
+                [
+                  5.5
+                ],
+                [
+                  9
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "histogram-category": {
+      "slides": [
+        {
+          "title": "histogram",
+          "chart": {
+            "type": "histogram",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "pareto-multi": {
+      "slides": [
+        {
+          "title": "pareto",
+          "chart": {
+            "type": "pareto",
+            "data": {
+              "columns": [
+                "Quarter",
+                "North",
+                "South",
+                "West"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4,
+                  3,
+                  2
+                ],
+                [
+                  "Q2",
+                  5,
+                  2,
+                  3
+                ],
+                [
+                  "Q3",
+                  6,
+                  4,
+                  1
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "box-multi": {
+      "slides": [
+        {
+          "title": "box",
+          "chart": {
+            "type": "box-and-whisker",
+            "data": {
+              "columns": [
+                "Quarter",
+                "North",
+                "South",
+                "West"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4,
+                  3,
+                  2
+                ],
+                [
+                  "Q2",
+                  5,
+                  2,
+                  3
+                ],
+                [
+                  "Q3",
+                  6,
+                  4,
+                  1
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "waterfall-single": {
+      "slides": [
+        {
+          "title": "waterfall",
+          "chart": {
+            "type": "waterfall",
+            "data": {
+              "columns": [
+                "Sample"
+              ],
+              "rows": [
+                [
+                  3
+                ],
+                [
+                  5
+                ],
+                [
+                  8
+                ],
+                [
+                  13
+                ],
+                [
+                  5.5
+                ],
+                [
+                  9
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "funnel-category": {
+      "slides": [
+        {
+          "title": "funnel",
+          "chart": {
+            "type": "funnel",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "world-category": {
+      "name": "Map deck",
+      "language": "ja-JP",
+      "design": {
+        "fontScheme": "calibri",
+        "contentAlignment": "center"
+      },
+      "slides": [
+        {
+          "id": "a",
+          "layout": "chart",
+          "title": "地図",
+          "chart": {
+            "type": "world",
+            "data": {
+              "columns": [
+                "国",
+                "値"
+              ],
+              "rows": [
+                [
+                  "日本",
+                  4
+                ],
+                [
+                  "ドイツ",
+                  3
+                ]
+              ]
+            }
+          },
+          "text": "Body"
+        }
+      ]
+    },
+    "all-seven": {
+      "slides": [
+        {
+          "title": "treemap",
+          "chart": {
+            "type": "treemap",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "histogram",
+          "chart": {
+            "type": "histogram",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "pareto",
+          "chart": {
+            "type": "pareto",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "box-and-whisker",
+          "chart": {
+            "type": "box-and-whisker",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "waterfall",
+          "chart": {
+            "type": "waterfall",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "funnel",
+          "chart": {
+            "type": "funnel",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "world",
+          "chart": {
+            "type": "world",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "entries": {
+    "treemap-category": {
+      "sha256": "d1e56048a3953d90d9f81232afd6f8f6ba79e66a286eb9c28873e065cbb21394",
+      "bytes": 107595,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ],
+      "layoutParts": 42,
+      "layoutTagParts": 41,
+      "rr90PreviousSha256": "45db7dbf2f889c338b872b4a4ffc9a5bca4ad1d09bf115190b269b432202743d",
+      "rr90PreviousBytes": 81392,
+      "fa33PreviousSha256": "4f739a5d5a89b7b58817e5b8b095f1ef1a018ac41fa3a1db37974320c379eca2",
+      "wi5PreviousSha256": "5b0fa36e6002f6777517d5c8fcc69f8d4f179591ecc2d2b76dcc0cc287d0a4db",
+      "wi5PreviousBytes": 82349,
+      "wi6PreviousSha256": "0d0f7614e7f68ec28fe85a3a5ce81ec8c1352a13531261d518a1ba18e69676ba",
+      "wi3PreviousSha256": "9e54773a2d82f1dc4544434225ca9de79253618d571938a197c0742fe9c3a9a1",
+      "wi3PreviousBytes": 82355,
+      "wi4PreviousSha256": "33f1d27c7f0330d3acfbfe14c6680bafefb7dd0b8e2c82abe239b7cfcb9296af",
+      "wi4PreviousBytes": 84455,
+      "wi2PreviousSha256": "499b15ca2a1053d35d39e6c296d35f73d8a75d5d02c52df25af514fef0a495ad",
+      "wi2PreviousBytes": 84517,
+      "layoutHarvestPreviousSha256": "697a0727787eb9380c6efeff054d47db304ccb1517f92ce1b71b32ecab388036",
+      "lh41PreviousSha256": "5cc36e38fb1e0ddc625dd96061a275d75f9ff6ee8ffeab5c2cb629b30d5b7edb",
+      "lhWave2PreviousSha256": "4942d7ba8b415a5759d57f1e327b80bbdef3c538be1d52444b4be73a695a2009",
+      "lhWave2PreviousBytes": 86512,
+      "lhWave3PreviousSha256": "c0dfe2f5db004b74a090f80c741a5cb5cbe7153f4f750c5bba849e02c1ee4c3d",
+      "lhWave3PreviousBytes": 86512,
+      "lhWave4PreviousSha256": "daddaad4f72251cd38ebf117d05c3f429fd3fad7ac3a38ba20d4589ef95b4365",
+      "lhWave4PreviousBytes": 86495,
+      "lhWave5PreviousSha256": "b3f50e25358d4b2f0cd49407af2284c1f522eb55e48b825a2e4bbd7debbc9d05",
+      "lhWave5PreviousBytes": 86561,
+      "lhWave6PreviousSha256": "125f023b6f8d277c18e0b68105837306d717017777c25d43a8bfa85131cad661",
+      "lhWave6PreviousBytes": 86979,
+      "lhWave7PreviousSha256": "4dcd0d1c87bed205be7a40577638c52828ef7ec701e5d8aab67e9e2ced073ca8",
+      "lhWave7PreviousBytes": 87692,
+      "lhWave8PreviousSha256": "c366779babbf02bc1340ab63536f3cfaecd6bbcd3485349ac1b841c9932ab305",
+      "lhWave8PreviousBytes": 87692,
+      "sh09PreviousSha256": "0c528340e1be60af2e127df730403821eebab8ca1f3154931acdaff5386d3327",
+      "sh09PreviousBytes": 87695,
+      "sh18PreviousSha256": "c03b0713cbf2d647e5ff71fd31537558c8a8ed96af24ea95d85d852a859f10da",
+      "sh18PreviousBytes": 91675,
+      "sh17PreviousSha256": "3f079d361beafcb2b854f5b4a07a6d5c4f455414d74ce2f96b07c08f52f41c3b",
+      "sh17PreviousBytes": 93657,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "8434325bbaf1c97c4efc4fe2977a679b72023a986e807f8e5b02f63998c0b125",
+          "bytes": 99629,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 38,
+          "layoutTagParts": 37
+        }
+      ]
+    },
+    "histogram-single": {
+      "sha256": "6894a1c38f64c455b58674c72f5d2ba46abda046b7f74ba774721a23c6b76763",
+      "bytes": 107610,
+      "diagnostics": [
+        "chart-data-adapted/histogram-binned"
+      ],
+      "layoutParts": 42,
+      "layoutTagParts": 41,
+      "rr90PreviousSha256": "6f22643ee02fac09477f2c5e8538e8a7214a7894e0cf28fa9f5677643d8e3a40",
+      "rr90PreviousBytes": 81408,
+      "fa33PreviousSha256": "2ba1b43836187f6d0603256df4502594513eecf8f34069749fec5c6b48ad477c",
+      "wi5PreviousSha256": "1f76d87d8afedada556b721d5b5bce9bd11dfa4e96a5f7c57dffda3b0e7eca6b",
+      "wi5PreviousBytes": 82364,
+      "wi6PreviousSha256": "a9e1ffb4ea39a5a633fa2e245647e193c730ba71ed0b05fdbb7969495731ded8",
+      "wi3PreviousSha256": "a42f1aa42eb2c66601ca96fe26318d1c78f3aea2111b4521f3f85e76910c25d9",
+      "wi3PreviousBytes": 82370,
+      "wi4PreviousSha256": "591906094b18fb9d1a7d911dd38bd8ad280c8e0901f8a8ac5bf088b0be37182d",
+      "wi4PreviousBytes": 84470,
+      "wi2PreviousSha256": "d53902b30edc5ac6a3b4dbc6ece2f320b93c14fc7e0dd4742307e5ab2891ba12",
+      "wi2PreviousBytes": 84532,
+      "layoutHarvestPreviousSha256": "200a8b95af7d3d54a04b46be29c0e320ddb9b5d75f7588054d1ea7d8ca31739b",
+      "lh41PreviousSha256": "94e637c78c422ebfa3e557d6ac0ae445e920a320b45563add4263cab182782d8",
+      "lhWave2PreviousSha256": "854fe7efe2fb2c623ef9c0690f459127be463a741f377def6c6250da6272acc0",
+      "lhWave2PreviousBytes": 86527,
+      "lhWave3PreviousSha256": "74a5d2b67cf9928dc36d91a91fee2c4e151b2a57b95b3f81e7bb3d06f7ca1d68",
+      "lhWave3PreviousBytes": 86527,
+      "lhWave4PreviousSha256": "9bd085e9ecb96525a16e70d120e831d4a6e7663aac02f15c0dcf291849795197",
+      "lhWave4PreviousBytes": 86510,
+      "lhWave5PreviousSha256": "237423b3c3b9ec4edea6872cb48e97db8683e9afb555efdf445c6bbb88a8794f",
+      "lhWave5PreviousBytes": 86576,
+      "lhWave6PreviousSha256": "a1f7fa0db027e9d316003587e7efa21411d25c2ad6efa4d7067067a735c26c74",
+      "lhWave6PreviousBytes": 86994,
+      "lhWave7PreviousSha256": "03a2295d495d795d72948602351df53cdb377c1813bc1abb6bd9b55b4d5dd5cf",
+      "lhWave7PreviousBytes": 87707,
+      "lhWave8PreviousSha256": "73eae3bae4d0eeea4866bf72314b4edaa55b72b78b1c68aab19c3569ecbad884",
+      "lhWave8PreviousBytes": 87707,
+      "sh09PreviousSha256": "ce50a93dc7064a34c0d7a9750a53807107c0a14fc65914e9af00edb1efdd7c09",
+      "sh09PreviousBytes": 87710,
+      "sh18PreviousSha256": "496f456a8f2b4938e94bf299075aae4cc6310b2a325df5303543a4ebc1d6cca2",
+      "sh18PreviousBytes": 91690,
+      "sh17PreviousSha256": "478a9caf5d4451b06cc41e91880cb03770035087461a4dbc4b7b684ac8fbc655",
+      "sh17PreviousBytes": 93672,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "4699556380ff37e6a977bbb719d4959004cee0fdaf62f8c3d83116640cc9d21a",
+          "bytes": 99644,
+          "diagnostics": [
+            "chart-data-adapted/histogram-binned"
+          ],
+          "layoutParts": 38,
+          "layoutTagParts": 37
+        }
+      ]
+    },
+    "histogram-category": {
+      "sha256": "37c6432853b7491d9822ea82426c82ad8b6817da0de99dff37ec857805edcf47",
+      "bytes": 107596,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ],
+      "layoutParts": 42,
+      "layoutTagParts": 41,
+      "rr90PreviousSha256": "a9269976baa2f998262113602a8f932cd9917f630e5ff9cc946e63586fe31074",
+      "rr90PreviousBytes": 81393,
+      "fa33PreviousSha256": "4a37428115b9d58a15022e479b59e4b72723c12b60c92a96cd0637faa6712373",
+      "wi5PreviousSha256": "5558c14ae51ca14ccf966f22bd05a866645d731526ccdde0c05ad3cb76dc6d7c",
+      "wi5PreviousBytes": 82350,
+      "wi6PreviousSha256": "84cda0fd84044c6cf41ef730f98a4050c572f9c1efe98806728f316f846a83a7",
+      "wi3PreviousSha256": "7c88506dd18ad45edd4f890e0530b23d3cf0f91545369037b46e30e4fd4b671f",
+      "wi3PreviousBytes": 82356,
+      "wi4PreviousSha256": "ddb5b75a0b5e9bca6b2213fbbcb0b1d8477ea71dea38d5718addd7d03900b25c",
+      "wi4PreviousBytes": 84456,
+      "wi2PreviousSha256": "7b80a429e6c92d523bd4869e2148e6b8baecc3407c977acab3936654af5e727e",
+      "wi2PreviousBytes": 84518,
+      "layoutHarvestPreviousSha256": "83e6f78c379e625a899005cd4baa1a35111759ce4351caccd193ebecb4125c9b",
+      "lh41PreviousSha256": "eb0006ec87c3fea719bb244d532bda503150a6bf43283540558ea9166bfbf391",
+      "lhWave2PreviousSha256": "1d9328285370933e998949ed93eda17b9923578dac056ed706f06a8c749ba9e6",
+      "lhWave2PreviousBytes": 86513,
+      "lhWave3PreviousSha256": "d6ab863129ab671462c9c00cbaa4972719e22c0b5b39406edafa8fbd5bae4b51",
+      "lhWave3PreviousBytes": 86513,
+      "lhWave4PreviousSha256": "b4afc5c73e540b717c683eec3b74b88b3380563430e995f2e90d2167669f3f13",
+      "lhWave4PreviousBytes": 86496,
+      "lhWave5PreviousSha256": "d8f78ed2c81ae06b704bfabd0b7e20c57a733c4b561aaeb9d8b2845a4f438c6a",
+      "lhWave5PreviousBytes": 86562,
+      "lhWave6PreviousSha256": "fbb1fbb0fe09b4b054fa037884e20c855c140fd243ce8d8e7ffce11cb9b56298",
+      "lhWave6PreviousBytes": 86980,
+      "lhWave7PreviousSha256": "5bea2186ffa655933b426706b6241a6596d4a0cfaa783768f20351a0e1cfdd42",
+      "lhWave7PreviousBytes": 87693,
+      "lhWave8PreviousSha256": "ad33586162508b4963400d7d4f4e5a76a70f6576f7af8a49842e9b19d8f5b3bb",
+      "lhWave8PreviousBytes": 87693,
+      "sh09PreviousSha256": "86fbd6306bc4732e39034d73fdd2557f557a9d0600bf7108dafd524e9d31716a",
+      "sh09PreviousBytes": 87696,
+      "sh18PreviousSha256": "2bf728c63ddc509a01f681f23a6e9f15f0631d6c59e041bdb9a6c5822f02428f",
+      "sh18PreviousBytes": 91676,
+      "sh17PreviousSha256": "0eeef3c4ec507baee0b8437114573cadd73f8c69bc36dd43e8fdb6dd6199a0b6",
+      "sh17PreviousBytes": 93658,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "721bceedd31b4780ffd2d4dda2803be99c3db232b01849d3926eb86d8b3647b1",
+          "bytes": 99630,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 38,
+          "layoutTagParts": 37
+        }
+      ]
+    },
+    "pareto-multi": {
+      "sha256": "9e54d856b5bc9f0d1d86bda6363a70e3ee9f844727434bace27475939000e949",
+      "bytes": 108357,
+      "diagnostics": [
+        "chart-data-adapted/chart-fallback"
+      ],
+      "layoutParts": 42,
+      "layoutTagParts": 41,
+      "rr90PreviousSha256": "56f1e577252f0c96e7f1e7a86cf1b7480850266cd757ea72297182d5185dc2e6",
+      "rr90PreviousBytes": 81563,
+      "fa33PreviousSha256": "abb28415239375fa01ae06ddccac9163ef5c03748cc41575283043f51e055bfa",
+      "wi5PreviousSha256": "b3df78bf4060b0ab2066c16264bf93f38f09cebdb175d94c007ddc4fb5233f96",
+      "wi5PreviousBytes": 82522,
+      "wi6PreviousSha256": "79773a6a148d5bc5538905f639b9302bd453905e24072d5b05c6af654cf6bfe7",
+      "wi3PreviousSha256": "2cee749e3efd1819fd1d287638372707b7ac35dd115d608099da1d96c24a802b",
+      "wi3PreviousBytes": 82528,
+      "wi4PreviousSha256": "ef7060267d8df6c4ac2913c3021b5e42736471dd95b6cb89813bd9c56028838c",
+      "wi4PreviousBytes": 84628,
+      "wi2PreviousSha256": "f7272a50af16a8dbc2c5548c828661a44f1df4ecea691b45f967af53326819d8",
+      "wi2PreviousBytes": 84690,
+      "layoutHarvestPreviousSha256": "b52075943c9daa2ca63bd4a931a6b773c5e87d4e6b5bacfb31dfd98ef82b808d",
+      "lh41PreviousSha256": "9fddad58062304053051ec56b14cab42fffd20e4419d3edf0f75ce4af6ed3c5c",
+      "lhWave2PreviousSha256": "aa9bbc083ae91fb276ddc1f8e8e2b7aed077b652ce7f002bb6836dccf171e159",
+      "lhWave2PreviousBytes": 86684,
+      "lhWave3PreviousSha256": "b23d61a7aec92d526e2ec030d91fd268e37a37f68948eefd7b342712f96ffb46",
+      "lhWave3PreviousBytes": 86684,
+      "lhWave4PreviousSha256": "8dcb4e7c998cc7bd715750bd4c8c723ba6852eeef36a54fcbcd30c0d8d141348",
+      "lhWave4PreviousBytes": 86691,
+      "lhWave5PreviousSha256": "312d620643cdc618cae05b8642364656461823514cf9f3697c593f17d60b420e",
+      "lhWave5PreviousBytes": 86757,
+      "lhWave6PreviousSha256": "d827edfddc4446c4e86eae74b737c24b783bfcbf370dd888029b1c6eb9f6d417",
+      "lhWave6PreviousBytes": 87175,
+      "lhWave7PreviousSha256": "7198eae0c9b4a5a90f08973e7630cf584744eac7d4c3d588be913a1f2344f1b2",
+      "lhWave7PreviousBytes": 87888,
+      "lhWave8PreviousSha256": "0316e26e2c95000fec788e479b36da55e4ebdcddc974ad52b0f97a47195dd5d5",
+      "lhWave8PreviousBytes": 87888,
+      "sh09PreviousSha256": "cb1311187722a0a7cab4de522b64b7dbc77f343f0442eddce3dcb67ca224f81a",
+      "sh09PreviousBytes": 87891,
+      "sh18PreviousSha256": "f59ce2b51a83794638d4d062dd8fcfef39d17987ecef3a24454850b45e21da7e",
+      "sh18PreviousBytes": 91871,
+      "sh17PreviousSha256": "a9cfb6a7ace1f14a145efbe9bddea5be811c6740f70dc9c71abda8358d4f32d5",
+      "sh17PreviousBytes": 93853,
+      "lh175PreviousSha256": "c3ae6e74e2273858d100ecfe4c172e58cf3dc538d03c0dd50f96d181f1f5fbaf",
+      "lh175PreviousBytes": 99825,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "5992e5f2ca2de0465b8289c061ec390d7c3ffdb47812aea6e70a3afd5767e474",
+          "bytes": 100392,
+          "diagnostics": [
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 38,
+          "layoutTagParts": 37
+        }
+      ]
+    },
+    "box-multi": {
+      "sha256": "c406c6f51dc841b2fcd15d11675891b095c93493549006461a53fa84858f2ccf",
+      "bytes": 108230,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chart-fallback"
+      ],
+      "layoutParts": 42,
+      "layoutTagParts": 41,
+      "rr90PreviousSha256": "d65816fc12593c821170f944fdcf4c06871fa06610c4c703bb874571569eb468",
+      "rr90PreviousBytes": 81563,
+      "fa33PreviousSha256": "a0831b13081459a68236be5c58fb19167b0dad7158eea565bb94d90896d3b2ce",
+      "wi5PreviousSha256": "1a561145be421231871170c6d1ca1c8b73d42916bbd48549c3f3629cb43274d8",
+      "wi5PreviousBytes": 82522,
+      "wi6PreviousSha256": "2cb93d1854f0821ef2db254f58ad6e31ce74266c5f693a24cb30659b8d46c834",
+      "wi3PreviousSha256": "cfb15f3edcca9867524b14b924f8fb5404f0572b89fa8baeaf327de13f2d51e2",
+      "wi3PreviousBytes": 82528,
+      "wi4PreviousSha256": "a811cc61694f6d0cbd2908d5bfc49acedcad082c7f324196fd998f6040950d88",
+      "wi4PreviousBytes": 84628,
+      "wi2PreviousSha256": "dc6e97bd96fedf5e5942ee452908da2fb0d041a8883ac3fa8f6dacad2140272a",
+      "wi2PreviousBytes": 84690,
+      "layoutHarvestPreviousSha256": "18974855669f2341486763ceb2860b7069c9d7f48cf5c869fcc71440d286f2bb",
+      "lh41PreviousSha256": "c8ee52e0690d145a1894b3b935a2074e4e70127634f67a980c7b6a26a6461b38",
+      "lhWave2PreviousSha256": "06be438d875e37c11858a253a9409c517affaeb2e471e19c4da1fbf78f6692ed",
+      "lhWave2PreviousBytes": 86684,
+      "lhWave3PreviousSha256": "9c953feae2ff40c2290c06492662a566ade466b766e62421c19afc533052d994",
+      "lhWave3PreviousBytes": 87124,
+      "lhWave4PreviousSha256": "0a2b9122c58c62a182c7aaba7957d1dab831941617f6ba5d310f0c15de46e0a1",
+      "lhWave4PreviousBytes": 87130,
+      "lhWave5PreviousSha256": "6ff89537996027f98cddd05766bdbcdb315a24e8f2ea0bdf79a6b046aac9c20b",
+      "lhWave5PreviousBytes": 87196,
+      "lhWave6PreviousSha256": "85a39e043cc91d88a413c9b3a9b33781765a3850a4fc3ecf9527c8026d008a59",
+      "lhWave6PreviousBytes": 87614,
+      "lhWave7PreviousSha256": "af5e17ffaf1c5bac0780594a3609c080d41697607bea0058077ef3e941cbe478",
+      "lhWave7PreviousBytes": 88327,
+      "lhWave8PreviousSha256": "7d8fbf0df5802aac0a00a2d9a28aa5e52a87a0ac6e850dc643251b2dae3cd021",
+      "lhWave8PreviousBytes": 88327,
+      "sh09PreviousSha256": "fafac1662bc1b8d1ca096c9e791bffa3204ff936c6ffc9db7bd6c9e349f6d119",
+      "sh09PreviousBytes": 88330,
+      "sh18PreviousSha256": "82f1c24b5643513514fa0602419821a4600399dda684c5aff69c09995a6d6c39",
+      "sh18PreviousBytes": 92311,
+      "sh17PreviousSha256": "e51120816b1d83b2b3798c7bed77fb2d843349d0883501d31cd6e4b9886f24b9",
+      "sh17PreviousBytes": 94294,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "43d6f63e291d9e95dbdc0493e2d2b9c4e547c13dbdecb2003849d07ea96734a0",
+          "bytes": 100265,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 38,
+          "layoutTagParts": 37
+        }
+      ]
+    },
+    "waterfall-single": {
+      "sha256": "34a9dc9ae95010256aba4b650f0b7c81d21a848739f319b6121e91ccb2384aab",
+      "bytes": 108037,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/row-numbers"
+      ],
+      "layoutParts": 42,
+      "layoutTagParts": 41,
+      "rr20RowDataPreviousSha256": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142",
+      "rr20RowDataPreviousBytes": 81372,
+      "rr90PreviousSha256": "03f3038c04642a1309d0c12db4bbbab44663a7f94f73355a9cdd2433e158ad3f",
+      "rr90PreviousBytes": 81835,
+      "fa33PreviousSha256": "9c43955638a21ae6406c3a0be48f201ca0136c8991263782f56ca98eae295c11",
+      "wi5PreviousSha256": "889a85f4e732fc46eddc93339388e9d1ea08c79225d95d12c728addc1b5f380a",
+      "wi5PreviousBytes": 82791,
+      "wi6PreviousSha256": "c9d5cd14f29b57cee87ec80834a36ed6bb72dd188386df268c332d8c396efafc",
+      "wi3PreviousSha256": "c4276454648298629ba4413e13bd3f1a464525de892c00c933d325443873ff9b",
+      "wi3PreviousBytes": 82797,
+      "wi4PreviousSha256": "6fb8a977007453dc95c2adbf70c5d8d9387ee22f28d71c14b8cd7585fa7ebf9f",
+      "wi4PreviousBytes": 84897,
+      "wi2PreviousSha256": "d3934e04c967d2472c3906eaebaed3cec50f4debd41aa43189077770309f4b18",
+      "wi2PreviousBytes": 84959,
+      "layoutHarvestPreviousSha256": "8edb7e905f2bf597cd3520e7ab042c9b971f72557bbf29a674a67f323827e921",
+      "lh41PreviousSha256": "ea201308ebaefabe7dc52a7ac13333dd5e8fd51a306a4a7a5bdbbf8cca78fb5b",
+      "lhWave2PreviousSha256": "65d0533146f15f8bb4ca46e33a410c8bed921b751692e681b4827d260812d3ab",
+      "lhWave2PreviousBytes": 86955,
+      "lhWave3PreviousSha256": "5442368f0a5210b76a56a221652e05b9595f13b14a284b44ceff5b16f21b55c4",
+      "lhWave3PreviousBytes": 86955,
+      "lhWave4PreviousSha256": "7b73ecd6de7763792d8bd9f76c915f9d26f3bc14acc066c39ecd28406af1c0f4",
+      "lhWave4PreviousBytes": 86937,
+      "lhWave5PreviousSha256": "eed9eb4dfe4121ad51fbfc50f48c219633f235a34096ebebe55554a4c2a106e4",
+      "lhWave5PreviousBytes": 87003,
+      "lhWave6PreviousSha256": "d8df9266127ab5cfb567f69eca49610ae3ca9bb87b8bec0f5f6b574fc13f1925",
+      "lhWave6PreviousBytes": 87421,
+      "lhWave7PreviousSha256": "4ecc33f91114e7d2110daa9ead1009e19e6ecb64127820fda9d20f4fb017e440",
+      "lhWave7PreviousBytes": 88134,
+      "lhWave8PreviousSha256": "567ef5e32431bbbbafbe88b8e4837ec9944133efc147132e557c7f35962b7bab",
+      "lhWave8PreviousBytes": 88134,
+      "sh09PreviousSha256": "c5be30c5ae9a692e30287130dcb8462e12c0868fee7dd668e6b27db7c289c773",
+      "sh09PreviousBytes": 88137,
+      "sh18PreviousSha256": "7a58dd4452a970e32695f05591f6bc67cf0151334ad72dffabd3ea4963992fe1",
+      "sh18PreviousBytes": 92118,
+      "sh17PreviousSha256": "34a21d176eea7fe8c964fb408a602fbc16ac35d6c5b7a34b4e48398c0fc36965",
+      "sh17PreviousBytes": 94101,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "aa059483ca207d60586bc580f5a1bd995da6c34bf7edcf143e5142911b27235a",
+          "bytes": 100072,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/row-numbers"
+          ],
+          "layoutParts": 38,
+          "layoutTagParts": 37
+        }
+      ]
+    },
+    "funnel-category": {
+      "sha256": "d2e2f960214c173caf7eaad15c9fbf7f4d609eb0a36feff16300dbebd1a99396",
+      "bytes": 107595,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ],
+      "layoutParts": 42,
+      "layoutTagParts": 41,
+      "rr90PreviousSha256": "340ce2a509a143e1ced9d888c93f263c0e89cc7d1b509cb6c258770f553c3875",
+      "rr90PreviousBytes": 81394,
+      "fa33PreviousSha256": "f91147de1be086b17bfa0572e3d8d5d33b521af7c8943f3a475f3e3b6668c4fe",
+      "wi5PreviousSha256": "08f4799492d3193c67f38e29cac9a98a820aad918fd105a8f5a8d5e62353a3d1",
+      "wi5PreviousBytes": 82349,
+      "wi6PreviousSha256": "bfe096a56cf8b82ba1f900f02d24a6940cf31b4489eb239fee949a8f5a6bf38b",
+      "wi3PreviousSha256": "823da10630505d3a4bd9ef9c0b539e012b77287fc0e21b1c5a30a2d7e1a26f8e",
+      "wi3PreviousBytes": 82355,
+      "wi4PreviousSha256": "97aa99c1cbc9462d5d92a12e385363aceaf94139f3e05d2e402fe5d23215e2e2",
+      "wi4PreviousBytes": 84455,
+      "wi2PreviousSha256": "c281ab6051e921d31aaa0f58cf83ef392e970a5551144cc56a68bfde62d79d5f",
+      "wi2PreviousBytes": 84517,
+      "layoutHarvestPreviousSha256": "a32dcc7be98f5b277d6c5726d57a0e2e1ee1cc3eb8470bfe564623b5c3c3d1cf",
+      "lh41PreviousSha256": "d7a0ebb58fed391ed7ce70b54083d5d149db745201503a32a68e8f857bee1b63",
+      "lhWave2PreviousSha256": "94150dab5a4036021a5c512ec5827258e5efcc61f26c4b7e062f7f00f7120c48",
+      "lhWave2PreviousBytes": 86512,
+      "lhWave3PreviousSha256": "bf82c49973564c16be5db40b74a58993561ff7100281ba7e33686de714287b90",
+      "lhWave3PreviousBytes": 86512,
+      "lhWave4PreviousSha256": "18e4992535f85f88b832b7f0ebc7b7c55093472497a1daad5d489bad9fa154fb",
+      "lhWave4PreviousBytes": 86495,
+      "lhWave5PreviousSha256": "be90af3ee3e8106c4fe17e67036af9af5b6a62b92eaa4cb0d662c499e56641c0",
+      "lhWave5PreviousBytes": 86561,
+      "lhWave6PreviousSha256": "efcff0f80359dc7c24f08371e67b6e6ea36405b1d7f08d376cd322be242920e9",
+      "lhWave6PreviousBytes": 86979,
+      "lhWave7PreviousSha256": "992991fe8447db71c810ea0aedfd2be3fd334e4b215cf1aabc0bb24119b369f2",
+      "lhWave7PreviousBytes": 87692,
+      "lhWave8PreviousSha256": "67c3120e77ecd36dfeaf4b1d57eaa945582174c2651fc5d44c449e5f164dd6e8",
+      "lhWave8PreviousBytes": 87692,
+      "sh09PreviousSha256": "870801cb92e9a361101ae3d4bac0d03d988e35919d9445ba7328030f2fba46ff",
+      "sh09PreviousBytes": 87695,
+      "sh18PreviousSha256": "4555676b6f21a2b7a533040ad4d1e689fea4ad4e46ce9d5930fd9b11279873c7",
+      "sh18PreviousBytes": 91675,
+      "sh17PreviousSha256": "b102ef439799cfd749a80956f9fd914178b086cff6a222dc456f96df43ebc386",
+      "sh17PreviousBytes": 93657,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "362148a2483566eb40bcd025820153703a5733e1e0ab22383dcf99ec66bcffb3",
+          "bytes": 99629,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 38,
+          "layoutTagParts": 37
+        }
+      ]
+    },
+    "world-category": {
+      "sha256": "01d08e76269021bbafe0db710d7bcab14a03bd39d8a29b44c02d3a41747472da",
+      "bytes": 106518,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ],
+      "layoutParts": 41,
+      "layoutTagParts": 40,
+      "rr90PreviousSha256": "ae108971fb62d7933acfb54d0a8c19acc0711bbb6ba8630f6693651429f038cb",
+      "rr90PreviousBytes": 80235,
+      "fa33PreviousSha256": "a8df440234c4cdef957c75ce7f93bc3b0f176246fe7d9b79a3ff2e1695f91091",
+      "wi5PreviousSha256": "ff73619457be7e1c72cf58a802d99b3031cde755c465594aec5ce219325ce035",
+      "wi5PreviousBytes": 81162,
+      "wi6PreviousSha256": "d02246b3499fd0005fc6f5addbc94f2f07e7c5f87bab5d958856d8505cfd5258",
+      "wi3PreviousSha256": "fa2655a2a707752fc3099db257b3b97d418eca80f1bc08679c1d7efc96f87fed",
+      "wi3PreviousBytes": 81168,
+      "wi4PreviousSha256": "6f18674bc882a524b2ba5e953df3b82cd69a79bea4bcfca1e6fcb009a4ee9d9f",
+      "wi4PreviousBytes": 83274,
+      "wi2PreviousSha256": "301a6fc2311daad1b2746fed1cd76f6b81b15ef6fa384d342f506d79380d4262",
+      "wi2PreviousBytes": 83332,
+      "lh12PreviousSha256": "0011431031c1bfef0d6af6aea7931117f7016ab5c9bcc003693ec619e0cce2b6",
+      "lh12PreviousBytes": 85320,
+      "layoutHarvestPreviousSha256": "a4ace47bf39a573341e2afcab62d16cfbe9fbf500530abc728b08bfd9a537b96",
+      "lh41PreviousSha256": "e83089a64b33cdebb35bb79af73b82d84e543434b02b69243c3fa59e1ed95d08",
+      "lhWave2PreviousSha256": "c5658a98751ce7bb568c4b93b25b4de399241116fafdb258992920e471559601",
+      "lhWave2PreviousBytes": 85340,
+      "lhWave3PreviousSha256": "d5be817e3a54760e8e9581fcca9568e1a30a7c0e162a83e4f1bc40e7e81d5243",
+      "lhWave3PreviousBytes": 85340,
+      "lhWave4PreviousSha256": "b6f4c7c3e54f14e0873b033ee52a95bf07c547b1b6124be116ed643290f7dfdd",
+      "lhWave4PreviousBytes": 85323,
+      "lhWave5PreviousSha256": "97b69ddf36e61f32933aee2534fa455692cce0d79e835a350cfb4aa6feb30b96",
+      "lhWave5PreviousBytes": 85391,
+      "lhWave6PreviousSha256": "270c8c943f1b1564b92c91c5bb5d30d028845eea29ffc197557f8a1805b29d77",
+      "lhWave6PreviousBytes": 85804,
+      "lhWave7PreviousSha256": "014bc0838c5ab879394ac27bffa4daf891acdc2e48b2fd0695ca4c06a87ba75d",
+      "lhWave7PreviousBytes": 86553,
+      "lhWave8PreviousSha256": "afb1ebc643837f74f16168771858d794f7f96377d3409cedab0ad1eff8f90d68",
+      "lhWave8PreviousBytes": 86562,
+      "sh09PreviousSha256": "e0525f39a3e9bc23390410d63c134fa80958ebe31d1ee2331242fb22e28edb33",
+      "sh09PreviousBytes": 86565,
+      "sh18PreviousSha256": "487db88a93eeba54d39c7e0f303693ae8b6ed499f60d761dd27f12c70dd9a658",
+      "sh18PreviousBytes": 90553,
+      "sh17PreviousSha256": "61049a06b3a80cf2357d29766b4675b0b0264d648b80ea17df0a3f8ac0d9d608",
+      "sh17PreviousBytes": 92546,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "0bb74bed56659ac3afa3019897d8129b0d39d3b05f2a42f50a927b4d99c514de",
+          "bytes": 98532,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback"
+          ],
+          "layoutParts": 37,
+          "layoutTagParts": 36
+        }
+      ]
+    },
+    "all-seven": {
+      "sha256": "1c4c58e0e1274c7821c2508604ac2d0a0fd57d7af2a17767f187861b31658453",
+      "bytes": 171766,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chart-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chart-fallback"
+      ],
+      "layoutParts": 42,
+      "layoutTagParts": 41,
+      "rr90PreviousSha256": "4e8aff728339290d366c0502f8584013d7deece0fb483427fdd5ad729a5e4dbc",
+      "rr90PreviousBytes": 144497,
+      "fa33PreviousSha256": "a78b3ed9913c8596a9355cb314519d1e83b1f64803905c7b60ba5359db932a5c",
+      "wi5PreviousSha256": "477c36525cbc34884a6a2a1cecce2c3f609afc108b09b5443515f96f022e29b3",
+      "wi5PreviousBytes": 145554,
+      "wi6PreviousSha256": "a4acdc0cc4390eed1539f7305e11125e6cc0ba3b21328c7885e81d1fae4e2b38",
+      "wi3PreviousSha256": "4780c83301692ca3b9d626fed36885409e554cd633c34fca0c031198e10c884c",
+      "wi3PreviousBytes": 145614,
+      "wi4PreviousSha256": "3e857307f052b1ceceeb2b4d0fd3fda2a0a6c235398d4240458000c2d1311be1",
+      "wi4PreviousBytes": 147715,
+      "wi2PreviousSha256": "736acc0d1209ae08bf1c9d7458b8e7934fb57bf23e89d48d9b1304b191b8bbda",
+      "wi2PreviousBytes": 147777,
+      "layoutHarvestPreviousSha256": "1099c03a186ccfa993df21f5752638c3bb52119c9684f0522b345690118af102",
+      "lh41PreviousSha256": "bff7196dfa332ff104296e804e964d02071313ab883a6acd5b12cb76b8f18060",
+      "lhWave2PreviousSha256": "f72a7abffad4dadb843b6bc027e4cdacde231dbb3ba2a55b4d83b29008f99438",
+      "lhWave2PreviousBytes": 149770,
+      "lhWave3PreviousSha256": "b3bd93573770c3b48697cd97809eb48148404a1d931847a31ef5180480f2142b",
+      "lhWave3PreviousBytes": 150765,
+      "lhWave4PreviousSha256": "6594d97e02c0a403febf29f3134262aac8b559257c79bbdf1026f2de891af565",
+      "lhWave4PreviousBytes": 150665,
+      "lhWave5PreviousSha256": "9fec6eec1ef28b09a9db8772e6e3eee8b3b9c1d4c0c7630780c9ff3de7af4e2e",
+      "lhWave5PreviousBytes": 150731,
+      "lhWave6PreviousSha256": "dc8722f7b68dfe1fc7ff36bf016032de76a6f012d0c544bccb9dca77033199dc",
+      "lhWave6PreviousBytes": 151149,
+      "lhWave7PreviousSha256": "e17390c07e7250662a84f3c0b4ee1a7ea32cfdb0f2641c26a989f39ae3af9618",
+      "lhWave7PreviousBytes": 151862,
+      "lhWave8PreviousSha256": "704342a265a73d04d86d555841b814e0a0cef501570eb71c3a69883ba2b52ef4",
+      "lhWave8PreviousBytes": 151862,
+      "sh09PreviousSha256": "5e8d30d4caa3dafff9ba21e4bff78d12df033cc39203eb9da702571fa9916bd7",
+      "sh09PreviousBytes": 151865,
+      "sh18PreviousSha256": "b72071fac19cb0718e9099079576fab949b48bc4e2d0e8bc06b80d95b44beebf",
+      "sh18PreviousBytes": 155847,
+      "sh17PreviousSha256": "84e830249efb3475905a3606bd920cc4ca86c0f2b250c322743c907a1f5301f8",
+      "sh17PreviousBytes": 157827,
+      "rr20ArchivePrevious": [
+        {
+          "sha256": "2ff3289ab700f034f582ca4978706b93c28943709761746c5c7473c365f43cc2",
+          "bytes": 163802,
+          "diagnostics": [
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chartex-fallback",
+            "chart-data-adapted/chart-fallback"
+          ],
+          "layoutParts": 38,
+          "layoutTagParts": 37
+        }
+      ]
+    }
+  },
+  "rr90FirstUseLayoutReview": {
+    "baselineCore": "origin/main 387dadfc (opf RR-93 diagnostics merged)",
+    "candidateCore": "codex/rr-90-first-use-layout (opf#717: RR-90 table type size, RR-91 footer zones, RR-93a tag and rich cells)",
+    "evidence": "Compared every archive part by part against a build of the same converter (main b62bf23, RR-94) with core main. The 27 chart-only archives change only ppt/slideMasters/slideMaster1.xml: the unused date, footer and slide-number placeholders take core's new footer-zone geometry (content inset, three columns with a 2% gutter). The table, styled-table and mixed-blocks archives also change ppt/slides/slide1.xml (table cell text at the 25 px body size and its row heights) and the ppt/tags/opfData1.xml part that records them. Charts, workbooks, themes, layouts, notes masters and diagnostics are byte-identical."
+  }
+}

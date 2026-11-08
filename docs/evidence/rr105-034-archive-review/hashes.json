@@ -1,0 +1,199 @@
+{
+  "files": [
+    {
+      "file": "maintained-originals-and-provenance.zip",
+      "bytes": 482059,
+      "sha256": "1b2fa679c62c86144b53512d1a9817a1d9fc50d1e060cbc5db0965a60c2c9b28"
+    },
+    {
+      "file": "nine/all-seven.zip",
+      "bytes": 279718,
+      "sha256": "4ad30709c9054066777386c98ed10ab825a746d1fb8519a52b9e0cdf39ef5cf6"
+    },
+    {
+      "file": "nine/box-multi.zip",
+      "bytes": 232962,
+      "sha256": "e735b7f62cd231a39b064e8c348b68d825863f201394f2a0f45a43480110e323"
+    },
+    {
+      "file": "nine/funnel-category.zip",
+      "bytes": 231869,
+      "sha256": "65ac46c938f0707d0aab30bd9ccc43aac550ec03b2cbab188017294b90773291"
+    },
+    {
+      "file": "nine/histogram-category.zip",
+      "bytes": 231862,
+      "sha256": "a17632d0cd304d76ebc49de6a8dc96ccc3c0ce9dba665bcb084931f86e908f45"
+    },
+    {
+      "file": "nine/histogram-single.zip",
+      "bytes": 231894,
+      "sha256": "7a316154b64b49c510af7c1c8c3d2605673c96c765969cea08323bfac69f9d66"
+    },
+    {
+      "file": "nine/pareto-multi.zip",
+      "bytes": 233207,
+      "sha256": "93be96b2a12bc1836df0e2b8dd344e20b569b94e18503933de76142ae6b77eb8"
+    },
+    {
+      "file": "nine/treemap-category.zip",
+      "bytes": 231860,
+      "sha256": "33611d6be8310b553ab01cda1c1867b264d19df579d0ff926a07408ba42027b0"
+    },
+    {
+      "file": "nine/waterfall-single.zip",
+      "bytes": 232656,
+      "sha256": "4e914e6daff5545bd6bdcf364473c067ade0501166853f64d3159002d01e2449"
+    },
+    {
+      "file": "nine/world-category.zip",
+      "bytes": 228862,
+      "sha256": "6f5d2502bf502e3f809e5d43704d270c040bce21fd90f314d373c15a292744e0"
+    },
+    {
+      "file": "nine-candidate-fixture.json",
+      "bytes": 58279,
+      "sha256": "73cea56b226a75d785c2d00d980776743bc412e18f723717ee7e61cab5549d68"
+    },
+    {
+      "file": "original-builds-failures-and-tools.zip",
+      "bytes": 61596,
+      "sha256": "6098eb7414196a357383ce8f4f5cccec7ec35655474c218b206b6d5b42fb7451"
+    },
+    {
+      "file": "part-disposition.json",
+      "bytes": 329541,
+      "sha256": "2182f22b0a0a620e1caed281749fdd9d2232ab49adfb46b5bbf1cbb85290a4a7"
+    },
+    {
+      "file": "README.md",
+      "bytes": 1031,
+      "sha256": "9fe042ecf62aab8a6da9df3ee13afab3b6137219e865c8dce3013e1a75141b3b"
+    },
+    {
+      "file": "receipt.json",
+      "bytes": 191317,
+      "sha256": "55431d25e100873d45abf2e2c13076acd76a845dc1d25b95b2843a56676d0e2f"
+    },
+    {
+      "file": "review-capture.mjs",
+      "bytes": 6828,
+      "sha256": "f6d9219890ff7309d680871152c62b3976967682ce7d9679fe5334ef45e4c3be"
+    },
+    {
+      "file": "review-parts.mjs",
+      "bytes": 11376,
+      "sha256": "73f2ddbfab64bb99b2c25b912cf42df642f4bc1b94457c6d01ffb288256c3513"
+    },
+    {
+      "file": "twenty-one-candidate-fixture.json",
+      "bytes": 52280,
+      "sha256": "4591f010f7555bb79cab3b2f7044f3b0a93013df9e59fad2a3f9fe7db3e267c7"
+    },
+    {
+      "file": "twenty-one-complete/area.zip",
+      "bytes": 46598,
+      "sha256": "554470f34fce7476cd7605d95a5cf0c781833a5dc2b5fe3876666a65c5543a0f"
+    },
+    {
+      "file": "twenty-one-complete/bar.zip",
+      "bytes": 49566,
+      "sha256": "097010681f491a1f96528b11c4a8d0dc275e52a3ac32785cad10dce54a2bf85d"
+    },
+    {
+      "file": "twenty-one-complete/chartex-native-map.zip",
+      "bytes": 45999,
+      "sha256": "cd8ff9c14a744711cbfa3fdd8309ad4e10b0f2474fbc7adf9989e3d7e8d4afac"
+    },
+    {
+      "file": "twenty-one-complete/column-labels.zip",
+      "bytes": 47038,
+      "sha256": "5f19e3fa2bb9f3f30f3e74aab7ff61692c0257e569c7727feb0f1d135d92cf4b"
+    },
+    {
+      "file": "twenty-one-complete/column.zip",
+      "bytes": 46703,
+      "sha256": "e88002be34c0f7ebc4e049b379a0376e8c141973a463dd0824b8ef58cf293f3d"
+    },
+    {
+      "file": "twenty-one-complete/doughnut.zip",
+      "bytes": 47644,
+      "sha256": "c3efbc7b3108f6e8511cc18318e2eea53ea5f8f96f191a656418890516ccd604"
+    },
+    {
+      "file": "twenty-one-complete/histogram.zip",
+      "bytes": 51739,
+      "sha256": "41e1ffaec34654d903079c0da478dd2cd55e384276bceb46dae111bf293329ff"
+    },
+    {
+      "file": "twenty-one-complete/line.zip",
+      "bytes": 46846,
+      "sha256": "22f63ddc49e2e8acf9243722b33ffb6a82ce30543ca5efe9d863be65941879a0"
+    },
+    {
+      "file": "twenty-one-complete/mixed-blocks.zip",
+      "bytes": 48372,
+      "sha256": "dea144e73627c6f4e9dd24449964ba6365380980ef50f0123bf3b8a211d9e0a7"
+    },
+    {
+      "file": "twenty-one-complete/percent-stacked.zip",
+      "bytes": 48556,
+      "sha256": "eb6429a1578a795dcde32e13f0591b76084d3f2b9b8b47c3f9f32e051832b335"
+    },
+    {
+      "file": "twenty-one-complete/pie.zip",
+      "bytes": 57792,
+      "sha256": "e40e989be5407f758358316eb671179f5a68d9b42f48004529b0656f4aa7e005"
+    },
+    {
+      "file": "twenty-one-complete/radar.zip",
+      "bytes": 46342,
+      "sha256": "c5c21ec2f7107d62fa2c90dd94bb3fcb9392a1a21c9080d6a853db9259994e8b"
+    },
+    {
+      "file": "twenty-one-complete/scatter-labels.zip",
+      "bytes": 45735,
+      "sha256": "741e1d7972e0f64a874df6c225d12e2fd7133f58394cece72196dede847eb056"
+    },
+    {
+      "file": "twenty-one-complete/scatter-two-columns.zip",
+      "bytes": 45710,
+      "sha256": "f50e554cc423a225dcdbedfb4386bd661ded2a4691bf38c2baebfb2a9edac2a4"
+    },
+    {
+      "file": "twenty-one-complete/scatter.zip",
+      "bytes": 46046,
+      "sha256": "88d001e9a3744d70176e991a3d6ad7502b03d72e82e3a5598b52ed2a6a8fb19b"
+    },
+    {
+      "file": "twenty-one-complete/single-column.zip",
+      "bytes": 46826,
+      "sha256": "ad4d412449fc36411757b7e9c20d87db7e3e2cad5217d5c5922869dd92da1768"
+    },
+    {
+      "file": "twenty-one-complete/stacked-column.zip",
+      "bytes": 48529,
+      "sha256": "349969be94a9aec1051ba2eaee20418a2e2af150d42fabcbc385e321ee773578"
+    },
+    {
+      "file": "twenty-one-complete/styled-table.zip",
+      "bytes": 33895,
+      "sha256": "6f5cd95bc41eeefe056a4821264eeb2d13c272e736f1dc4a899a24720932185e"
+    },
+    {
+      "file": "twenty-one-complete/table.zip",
+      "bytes": 34180,
+      "sha256": "28fab27962c28e52bdf061674b1907d2b4748ccebe0ad4984fdd6856b28f76b7"
+    },
+    {
+      "file": "twenty-one-complete/treemap.zip",
+      "bytes": 51557,
+      "sha256": "5d9f48339b25536b6b285fba17b500d41d1991e90b284e2423c07f3574285cf1"
+    },
+    {
+      "file": "twenty-one-complete/waterfall.zip",
+      "bytes": 51574,
+      "sha256": "6d8cecee78af3a9d5083ef571bbef7309a033c3bc3a281b5fa348fe9a18c03d5"
+    }
+  ]
+}
