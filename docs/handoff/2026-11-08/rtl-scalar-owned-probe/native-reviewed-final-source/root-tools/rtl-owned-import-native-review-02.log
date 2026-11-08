@@ -1,0 +1,211 @@
+[
+  {
+    "id": "rtl-contrast-01-ar-inherited-list",
+    "slides": 1,
+    "shapes": [
+      5
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [],
+    "afterWarnings": []
+  },
+  {
+    "id": "rtl-contrast-02-he-inherited-list",
+    "slides": 1,
+    "shapes": [
+      3
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [],
+    "afterWarnings": []
+  },
+  {
+    "id": "rtl-contrast-03-nfd-inherited-body",
+    "slides": 1,
+    "shapes": [
+      2
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [],
+    "afterWarnings": []
+  },
+  {
+    "id": "rtl-contrast-04-mixed-explicit-french",
+    "slides": 1,
+    "shapes": [
+      2
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [
+      "mixed-run-languages"
+    ],
+    "afterWarnings": [
+      "mixed-run-languages"
+    ]
+  },
+  {
+    "id": "rtl-contrast-05-mixed-explicit-arabic",
+    "slides": 1,
+    "shapes": [
+      2
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [
+      "unsupported-body-font"
+    ],
+    "afterWarnings": [
+      "unsupported-body-font"
+    ]
+  },
+  {
+    "id": "rtl-contrast-06-whole-explicit-arabic",
+    "slides": 1,
+    "shapes": [
+      2
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [
+      "unsupported-body-font"
+    ],
+    "afterWarnings": [
+      "unsupported-body-font"
+    ]
+  },
+  {
+    "id": "rtl-contrast-07-mixed-inherited",
+    "slides": 1,
+    "shapes": [
+      2
+    ],
+    "imports": true,
+    "authoredBefore": false,
+    "authoredSaved": false,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 1,
+    "beforeWarnings": [],
+    "afterWarnings": []
+  },
+  {
+    "id": "rtl-contrast-08-mixed-explicit-english",
+    "slides": 1,
+    "shapes": [
+      2
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [],
+    "afterWarnings": []
+  },
+  {
+    "id": "rtl-contrast-09-long-explicit-arabic",
+    "slides": 1,
+    "shapes": [
+      3
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [
+      "unsupported-body-font",
+      "unsupported-body-font"
+    ],
+    "afterWarnings": [
+      "unsupported-body-font",
+      "unsupported-body-font"
+    ]
+  },
+  {
+    "id": "rtl-contrast-10-non-ascii-digits",
+    "slides": 1,
+    "shapes": [
+      8
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [],
+    "afterWarnings": []
+  },
+  {
+    "id": "rtl-contrast-11-long-explicit-french",
+    "slides": 1,
+    "shapes": [
+      3
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [
+      "mixed-run-languages"
+    ],
+    "afterWarnings": [
+      "mixed-run-languages"
+    ]
+  }
+]

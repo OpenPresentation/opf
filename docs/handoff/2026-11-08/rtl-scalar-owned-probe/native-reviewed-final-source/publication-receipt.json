@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "sourceHead": "3e03bd13d693d91f194769d8d6878adbc27f4146",
+  "readOnlyImportReview": true,
+  "officeRepeated": false,
+  "earlierActualNativeEvidenceCommit": "f4363a8c747b97b7810d9c892353dc9c088a5826",
+  "freshScalar07AuthoredBeforeSavedExact": true,
+  "allElevenOldCanonicalBeforeSavedExact": true,
+  "savedFrench11AuthoredSourceExact": true,
+  "old07SourceFormDifferenceExpected": true,
+  "rootSourceReview": "Exact legacy codeFamily restoration and four before-failing mode controls accepted; genuinely untagged negative preserves native family.",
+  "nativeAcceptance": false,
+  "preservedGlyphFailures": [
+    "05",
+    "06",
+    "09",
+    "10"
+  ],
+  "files": [
+    {
+      "path": "scalar-review/review.json",
+      "bytes": 3292,
+      "sha256": "0859ecc6c9e1cbd02915fe472df48e3e64e944044b3be7749b5c7656a138cf2d"
+    },
+    {
+      "path": "scalar-review/rtl-scalar-owned-07-imports.json.gz",
+      "bytes": 255,
+      "sha256": "17edf7da6e2febe0716397643fe8e8dac8657b649e0290f307884c6dd8d88d4e"
+    },
+    {
+      "path": "scalar-review/sheet-01.png",
+      "bytes": 65840,
+      "sha256": "f1fb25b8d09859e02434c563cbc06d8b7fa9f68f6acb2a61f3528fd690c4a381"
+    },
+    {
+      "path": "old-contrast-review/review.json",
+      "bytes": 40529,
+      "sha256": "5ca80937e8a84e06050dbdf1e6b9ca84bf43e6fc90ca0fab06a4e9348caa1450"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-01-ar-inherited-list-imports.json.gz",
+      "bytes": 298,
+      "sha256": "3c90fe12ce1b8873050f1dae53a8e966358fc9ece2179a5fda1a2e1ae4613bb3"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-02-he-inherited-list-imports.json.gz",
+      "bytes": 304,
+      "sha256": "54dd27d82d072d809e9e84b409232d48fb36f5c6aa0523800488d10c4f46f34b"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-03-nfd-inherited-body-imports.json.gz",
+      "bytes": 240,
+      "sha256": "3d4b2c7f90db099cb97e690d6dc32503b314f9be945aff6df59282856aa5815b"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-04-mixed-explicit-french-imports.json.gz",
+      "bytes": 429,
+      "sha256": "5ff755c1d86da2a6a1a7d9b63d3a5825c3df2fca91415dfb19b1eede238423a2"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-05-mixed-explicit-arabic-imports.json.gz",
+      "bytes": 425,
+      "sha256": "538e885ecebc6d6957509dc3a45a8160be36d54c5b5db9b0851601aef436275d"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-06-whole-explicit-arabic-imports.json.gz",
+      "bytes": 415,
+      "sha256": "d28c441b29305e693fe9f216f8ac3f3e6c21ad6fccd435addf00cf0618c28a55"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-07-mixed-inherited-imports.json.gz",
+      "bytes": 317,
+      "sha256": "da9b775f7f1dde42d43e85c99a6259b49e76668b03e21231c529912863ba6416"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-08-mixed-explicit-english-imports.json.gz",
+      "bytes": 283,
+      "sha256": "05cab98a558277cfa4c3d1d25b3dbc6b97bded1c29635be612d5b27c9b89241e"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-09-long-explicit-arabic-imports.json.gz",
+      "bytes": 497,
+      "sha256": "7c177e5451c3f0966a512060449e21877315eff57043b43df714e139f397eb81"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-10-non-ascii-digits-imports.json.gz",
+      "bytes": 321,
+      "sha256": "75c406957681f9d1604969c0f51846481301142dfc970201049e00a1aba083fc"
+    },
+    {
+      "path": "old-contrast-review/rtl-contrast-11-long-explicit-french-imports.json.gz",
+      "bytes": 487,
+      "sha256": "66257a088147a556722540aec2cedaff0bc7fea493395bc349d1cb20c4e66951"
+    },
+    {
+      "path": "old-contrast-review/sheet-01.png",
+      "bytes": 252182,
+      "sha256": "3b0aa3c3c4a99179af5bb05bccd50966cb34cef6b0a5e1b59bc918c33dfc0b95"
+    },
+    {
+      "path": "old-contrast-review/sheet-02.png",
+      "bytes": 190721,
+      "sha256": "75b8386e357e86a6b7e87854d748526c870800f1b1e4c0018184c2b123ae48f5"
+    },
+    {
+      "path": "old-contrast-review/sheet-03.png",
+      "bytes": 213031,
+      "sha256": "22a24228d52b6e9c6e0360c50b4780e71de88ba890755eeaa455ae88bede27e2"
+    },
+    {
+      "path": "old-contrast-review/sheet-04.png",
+      "bytes": 168443,
+      "sha256": "68e4552b535bea31af6ebc58f6b59df8bfa1d8211f8b9a585e440967128f3fca"
+    },
+    {
+      "path": "root-tools/review-rtl-owned-import-native-02.mjs",
+      "bytes": 6855,
+      "sha256": "0129c4beb44e7db918c271842437b13189370a8f64a9034e2eba5b110c33a896"
+    },
+    {
+      "path": "root-tools/rtl-scalar-owned-native-review-02.log",
+      "bytes": 364,
+      "sha256": "64c05332662b29250a10ffea3f023eb9e4ecbe432f375c552b146d3726a77b76"
+    },
+    {
+      "path": "root-tools/rtl-owned-import-native-review-02.log",
+      "bytes": 4557,
+      "sha256": "e52fbe422271015ee700d86269dfe114771e5f62eee095b81f93691ed2bdd561"
+    }
+  ],
+  "credentialScan": {
+    "files": 22,
+    "hits": 0
+  }
+}

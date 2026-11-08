@@ -1,0 +1,19 @@
+[
+  {
+    "id": "rtl-scalar-owned-07",
+    "slides": 1,
+    "shapes": [
+      2
+    ],
+    "imports": true,
+    "authoredBefore": true,
+    "authoredSaved": true,
+    "namedStates": true,
+    "images": true,
+    "shrink": 0,
+    "importDifferenceCount": 0,
+    "sourceDifferenceCount": 0,
+    "beforeWarnings": [],
+    "afterWarnings": []
+  }
+]
