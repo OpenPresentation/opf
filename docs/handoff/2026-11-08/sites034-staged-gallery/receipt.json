@@ -436,14 +436,14 @@
       "status": "??",
       "bytes": 14820,
       "sha256": "3bb2ea5c1663a04631f3fcff80b7f752e1bcf435956243141f752eedb9f0388d",
-      "archive": "files/artifacts/layout-examples/generation-proof.json.gz"
+      "archive": "generated-proof/layout-examples/generation-proof.json.gz"
     },
     {
       "file": "artifacts/layout-examples/portable.mjs",
       "status": "??",
       "bytes": 2846267,
       "sha256": "92f2fe3c0176d2d723a86263ba1f137edf7e17b08900f71afe5c4bd71a53ac0e",
-      "archive": "files/artifacts/layout-examples/portable.mjs.gz"
+      "archive": "generated-proof/layout-examples/portable.mjs.gz"
     },
     {
       "file": "public/diagram-previews/dot-review-flow.svg",
@@ -543,5 +543,6 @@
       "sha256": "5e9a31c213cf028c927916bef9cef458c46f75e0b46dad9dbd79c1323dd2dccb",
       "archive": "files/public/layouts/vertical-flow.json.gz"
     }
-  ]
+  ],
+  "archiveNote": "Initial commit omitted two ignored nested artifacts aliases. This normal correction includes their exact gzip payloads under generated-proof; original source worktree remains unchanged."
 }
