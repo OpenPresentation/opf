@@ -1,0 +1,311 @@
+{
+  "scope": "Evidence-only SH21 product-export baseline. All live eligibility is diagnostic; no native domain acceptance.",
+  "sourceHead": "0b65c0a52084ef7a8e39cd8fae649ea59084a8fa",
+  "sources": [
+    {
+      "file": "packages/javascript/src/arrangements.ts",
+      "sha256": "a8eef813ac518e0d196b6ed3fda7272f543f5495600e220364bbf60ae9695b86"
+    },
+    {
+      "file": "packages/javascript/src/native-tree-arrangement.ts",
+      "sha256": "e6a8564a9c791865d73156efe54fa52ebc0c9349b11c90d7707fa57029da792f"
+    },
+    {
+      "file": "packages/javascript/src/venn-arrangement.ts",
+      "sha256": "d9fa7a9ffbf80ce1062fd8a1b3e153a134f3d7efabd875045d5f228dee43c2fc"
+    },
+    {
+      "file": "packages/javascript/src/composition.ts",
+      "sha256": "64282d803729143d1e88e6c53ae15263286aec86be8578d587c0313140584bad"
+    },
+    {
+      "file": "packages/pptx/src/smart-art.js",
+      "sha256": "1eb556908b37b1d1d46cd8b1757e85a924576758006412beb248ef903c946233"
+    },
+    {
+      "file": "packages/render/src/svg.js",
+      "sha256": "758767eee8055dae66f645c058343e298ef2b233c0ecf8b846304bd3c81fe2ef"
+    }
+  ],
+  "cases": [
+    {
+      "id": "org-chart-3",
+      "kind": "org-chart",
+      "count": 3,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/orgChart1",
+      "items": [
+        {
+          "text": "Lead",
+          "level": 0
+        },
+        {
+          "text": "Build",
+          "level": 1
+        },
+        {
+          "text": "Ship",
+          "level": 1
+        }
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/org-chart-3.pptx",
+        "sha256": "098581b8ddf53f8fc035cd3fb7164e7605977e702a79db494c5160e98c761c7b"
+      },
+      "native": {
+        "file": "pptx-shapes/org-chart-3.pptx",
+        "sha256": "66a924594b9ff0f69aae0696ca5785497b5974cbb1c17264cdc6587051d6a6fe"
+      }
+    },
+    {
+      "id": "org-chart-5",
+      "kind": "org-chart",
+      "count": 5,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/orgChart1",
+      "items": [
+        {
+          "text": "Root",
+          "level": 0
+        },
+        {
+          "text": "Build",
+          "level": 1
+        },
+        {
+          "text": "Web",
+          "level": 2
+        },
+        {
+          "text": "App",
+          "level": 2
+        },
+        {
+          "text": "Ship",
+          "level": 1
+        }
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/org-chart-5.pptx",
+        "sha256": "374c017fa0d876a6a00e8568c3a87ee25eda178b41dccfea2f0fe0bb0cfa8be4"
+      },
+      "native": {
+        "file": "pptx-shapes/org-chart-5.pptx",
+        "sha256": "a9863ba8788997360835bcefb0653dabd32c04f7b16c584149650a6b9c74d06d"
+      }
+    },
+    {
+      "id": "hierarchy-3",
+      "kind": "hierarchy",
+      "count": 3,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1",
+      "items": [
+        {
+          "text": "Lead",
+          "level": 0
+        },
+        {
+          "text": "Build",
+          "level": 1
+        },
+        {
+          "text": "Ship",
+          "level": 1
+        }
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/hierarchy-3.pptx",
+        "sha256": "7f8130b1251ba803d26055f7b4f779ad14c7ee42117fd6e35227e352997f88ca"
+      },
+      "native": {
+        "file": "pptx-shapes/hierarchy-3.pptx",
+        "sha256": "dc0d07286e4c5b4ade75d97a0ee66d8d1d3516a1560efa438c210e553a800fea"
+      }
+    },
+    {
+      "id": "hierarchy-5",
+      "kind": "hierarchy",
+      "count": 5,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1",
+      "items": [
+        {
+          "text": "Root",
+          "level": 0
+        },
+        {
+          "text": "Build",
+          "level": 1
+        },
+        {
+          "text": "Web",
+          "level": 2
+        },
+        {
+          "text": "App",
+          "level": 2
+        },
+        {
+          "text": "Ship",
+          "level": 1
+        }
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/hierarchy-5.pptx",
+        "sha256": "3da420b495a68e0870e5629b31fb011b744383b45281740a263cbe1695e62291"
+      },
+      "native": {
+        "file": "pptx-shapes/hierarchy-5.pptx",
+        "sha256": "76d9b6abd17c087d05aa441af4791b2ef24de43156e9dd72606c49ced8d5a670"
+      }
+    },
+    {
+      "id": "venn-1",
+      "kind": "venn",
+      "count": 1,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-1.pptx",
+        "sha256": "0fec395cf8d7e9a221d84a267fa2493ca596d1f0f064b10d137edee664d3295f"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-1.pptx",
+        "sha256": "5bf369c464bbcaa804661885b108627bb77b4f57fa6c593d0c866296ad0cb698"
+      }
+    },
+    {
+      "id": "venn-2",
+      "kind": "venn",
+      "count": 2,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1",
+        "N2"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-2.pptx",
+        "sha256": "77f3908381dbd0420a094d6188538efa675e5dc0752a8166bba97870064a9968"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-2.pptx",
+        "sha256": "fd6ef1ac07012663cbcb3cc0c528758ffe155e343dcda5566e66ec78f5a49029"
+      }
+    },
+    {
+      "id": "venn-3",
+      "kind": "venn",
+      "count": 3,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1",
+        "N2",
+        "N3"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-3.pptx",
+        "sha256": "d5c3996d89c1ac7b442b65cc6fe81b5985813d36d3df17f5e7f85355e5450db8"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-3.pptx",
+        "sha256": "4bb48a84c5f1a8675d6f1ba7a884ddee94a22e77b78d1d29ba9472a780ef7b65"
+      }
+    },
+    {
+      "id": "venn-4",
+      "kind": "venn",
+      "count": 4,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1",
+        "N2",
+        "N3",
+        "N4"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-4.pptx",
+        "sha256": "8a6d3c7b6427c67ad1b9e6ebb56f9defccb8ca191106cdf509b68b5873692b2e"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-4.pptx",
+        "sha256": "9e542b87612a49053c0320518e581a5fe335a45d8a8b744abfd139f65bfca1dc"
+      }
+    },
+    {
+      "id": "venn-5",
+      "kind": "venn",
+      "count": 5,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-5.pptx",
+        "sha256": "b85aa7e24cadf75e9ccaca5c4add1ea00bdd9b0a8110930a86c3db4421c33d06"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-5.pptx",
+        "sha256": "7c5f8f6742d6111adea818a5c81b7e14c57ba21938b676274e1335716c10def8"
+      }
+    },
+    {
+      "id": "venn-6",
+      "kind": "venn",
+      "count": 6,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-6.pptx",
+        "sha256": "3c46d7ecbde51111edd7b33c4c32bec26dd73ff611a04c37c4c86539f7b29b41"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-6.pptx",
+        "sha256": "42ac6ffe5daa76f2c4f80da3221fc93b669169b6e5550d138d8e8b4fa11a9c20"
+      }
+    },
+    {
+      "id": "venn-7",
+      "kind": "venn",
+      "count": 7,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6",
+        "N7"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-7.pptx",
+        "sha256": "37b76a0f3450a28ef1c6038159d416729ba09d1f8c2eeada1db134a18a3d3164"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-7.pptx",
+        "sha256": "b3bae9f3b0626bc516eff02253fa3adc3bcc8a892f33dd8992306de522befd75"
+      }
+    }
+  ]
+}
