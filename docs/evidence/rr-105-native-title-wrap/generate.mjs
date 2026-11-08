@@ -17,6 +17,7 @@ const [{resolveSlideContext}, {composeSlide}, {examples}, {loadFonts}, {gallery}
   load('packages/pptx/src/template-layouts.js'), load('packages/pptx/src/native-body.js'), load('packages/pptx/node_modules/fflate/esm/index.mjs')
 ]);
 const {resolvePresentation} = await load('packages/render/dist/svg.js');
+const needsScripts = value => /[^\p{Script=Latin}\p{Script=Common}\p{Script=Inherited}]/u.test(JSON.stringify(value));
 await fs.mkdir(out);
 await fs.mkdir(path.join(out, 'pptx')); await fs.mkdir(path.join(out, 'preview')); await fs.mkdir(path.join(out, 'before'));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex'), fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual'});
@@ -26,9 +27,9 @@ const eligible = item => item.field === 'title' && typeof item.value === 'string
   && item.text?.lines?.length > 1 && !item.text.overflow && !item.text.richLines && !item.text.directions?.includes('rtl')
   && !item.text.sourceLines?.some(line => line.boundary === 'hard' || line.segments?.some(segment => segment.kind === 'tab'));
 for (const {file, deck} of examples) {
-  await fonts.ensure(deck);
+  if (needsScripts(deck.slides)) await fonts.ensure(deck);
   for (const index of deck.slides.keys()) {
-  const context = resolveSlideContext(deck, index, {catalogs: [gallery], fonts}), geometry = resolvePresentation(deck, {fonts, catalogs: [gallery], validate: false}, {slides: [index]}).slides[index].geometry;
+  const context = resolveSlideContext(deck, index, {catalogs: [gallery], fonts}), geometry = needsScripts(context.slide) ? resolvePresentation(deck, {fonts, catalogs: [gallery], validate: false}, {slides: [index]}).slides[index].geometry : composeSlide(context.slide, context.options);
   if (!(slideTemplate(context) || context.slide.layout === undefined || context.slide.layout === 'auto' || geometry.recomposed !== undefined)) continue;
   for (const item of geometry.items.filter(eligible)) {
     const number = manifest.cases.length + 1, name = String(number).padStart(2, '0') + '-' + path.basename(file, '.opf.json') + '-s' + (index + 1);
