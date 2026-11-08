@@ -60,6 +60,20 @@ records with `$schema`/`id` fields instead of maintained `gallery.layouts`.
 Building the actual dependency and using the same normalized records as the
 real golden fixture fixed those test setups without weakening schema checks.
 
+The first real office/visual CLI export exposed a different measured capacity:
+the source settles at 32 px Intos in a 330.133 px inner body (377.295 px card).
+Seven complete labels cannot satisfy the reading measure in that owned frame.
+The new truthful refusal is correct; no frame expansion or type reduction is
+permitted. Explicit maintained `opf paginate` splits whole items 2+2+2+1, all at
+37 px, with no overflow and lines at most 65 characters. Four genuine renderer
+font regressions pass. The original failed after invocation is retained intact;
+estimated 26 px fits are not claimed as measured office-font acceptance.
+
+`opf convert` normally continues sibling blocks of one kind; it does not promise
+to split every overflowing list. These cases require explicit `opf paginate`
+then `opf convert`, or `opf convert --paginate`. `--keep-slides` intentionally
+retains an unfit authored slide and its finding for diagnostic comparison.
+
 Source is still under review. Next are shipped-CLI whole-case before/after
 witnesses with the same font route, unaffected output invariance, the mandatory
 changed check, and a coordinator-owned new pinned golden batch. No local golden
