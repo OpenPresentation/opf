@@ -6,7 +6,7 @@ This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Un
 
 v0.33.0 is PUBLISHED AND VERIFIED. Real Release42465429345 completed SUCCESS, including all slow gates, commit/tag, trusted publish follow and all three site-bump jobs. Release commit26fd4de9cee7e57f9e0620eddcad2dcef04e00e3; public GitHub release published2026-11-08T09:56:21Z. Independent fresh registry check at10:00:03UTC confirms all seven latest versions0.33.0, exact gitHead, integrity and provenance metadata. Final maintained publish observer91249 exited0; no release watcher remains. Source033 is frozen. Genuine site/consumer updates are now active; owner-only deployment stays reserved. Parent native qualification hold is lifted with fresh process preflight and owned pinned-font setup.
 
-034 current reviewed assembly783c0feaa0158fd59cfae4517bda6b5251e9c249 includes reviewed SH21 foundation (Venn5–7 design hold), RR10831-value pinned SVG migration and maintained nine-archive review tooling. SH25df24 source is independently reviewed and normally folded/frozen, but native160points remain unqualified. The first actual pie probe failed because the helper requested doughnut-only inner index8 for a pie start; failure latch stopped every later call. Exact owned PID/path/hash cleanup succeeded; a NEWderived probe correction is assigned. Derived Venn readability513d has genuine before/after panels; actual Office pending. LH16RTL date order, core22+negative3 native inputs, final pinned goldens/21+9archive promotion/strict trackers/budgets/combinedCI remain open. Earlier snapshots below preserve chronology.
+034 reviewed integration now includes frozen1178readable Venn bodies/pagination,1179nativeLatin-ASCII date/base-language correction and1180independentpie-probe correction, plus the accepted SH21foundation, SH25chart overlays, duration/callouts/localized references and all earlier wave2work. Parent21Venncontrols,43newradial/lifecyclecontrols and4date/language suites pass. All25core/negative witnesses complete owned Office lifecycles;22current saved-import/paired-sheet reviews are underway. First correctedpie pilot is running separately. Generated localizedstatus auto-font bug remains assigned. Final exact-source Office, full465live gates/newdomainsOFF, 21+9archives/pinnedgoldens/stricttrackers/budgets/combinedCI and sites/E1–E3 remain open.
 
 ## v0.33 reapplication
 
@@ -82,6 +82,14 @@ LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798
 
 033sitebumpworkflowjobs report success, but gallery swallowed an actual oldshape:circle schema failure and opened1177. Sites agent is preparing a genuine normal-push registry bump fromapproved169 rather than rerunning the force-with-lease path. Org202/dev200 genuine registry builds and source continuations are active; no site deploy claimed.
 
+## Core 0.33 documentation and artifact preflight
+
+[Core currency handoff](core-033-currency.md) records the narrow current-doc corrections, exact 137-JSON/2-Markdown/36-layout source counts, required post-registry quickstart checks and every E1/E2/E3 comparison/planning artifact obligation. All seven 0.33.0 packages are now genuinely verified at 26fd4de9; the once-only registry plan and maintained quickstart pass, and the retained six-package consumer binds exact counts/content/lock integrity. [Post-publication receipt](core-033-currency/post-publication/receipt.json). E1/E2/E3 comparison/planning artifact refresh and sites remain separately owed. The cited old corpus generator is missing and is not replaced with guessed output.
+
+
+033genuine documentation/registry-consumer PR1170passed allchecks twice and merged through maintainedgate asd00888a0560cb0ad59fc5c887e8bdd9d4fcbf30b at10:40:17UTC after markingthe reviewed draftready. This normal main merge retains034F2diagramwording plus exact137/36published facts and all receipts; no package/site deploy occurs.1179and1180are nowfolded/frozen.
+
 ## Generated timeline status font preparation
 
 [The derived LH121 font correction](lh121-generated-status-fonts.md) addresses genuine default CLI missing-glyph failures when otherwise Latin source generates localized status words. It preserves existing font policies and scans authoritative per-slide generated vocabulary; validation and final item PR remain in progress.
+

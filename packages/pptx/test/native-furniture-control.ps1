@@ -169,7 +169,7 @@ $report=[ordered]@{
     source=[ordered]@{path=$sourcePath;sha256=$sourceHash;openedPath=$sourceSnapshot;openedSha256=(Get-FurnitureSha256 $sourceSnapshot)}
     saved=[ordered]@{path=$savedPath;sha256=$null}
     reopened=[ordered]@{path=$savedPath;sha256=$null}
-    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@();chartPoints=@()}
+    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@();chartPoints=@();currentChartPointProbe=$null}
     phases=[ordered]@{original=$null;edited=$null;reopened=$null}
     inputs=[ordered]@{verifier=$request.verifier;processHelper=$request.processHelper}
     environment=[ordered]@{hostVersion=$PSVersionTable.PSVersion.ToString();windowsProductName=$os.ProductName;windowsDisplayVersion=$os.DisplayVersion;windowsBuild="$($os.CurrentBuild).$($os.UBR)";powerPointVersion=$null;powerPointExecutable=$null;powerPointBuild=$null;powerPointExecutableSha256=$null}
@@ -324,7 +324,26 @@ function Read-FurnitureFiniteNumber($Object,[string]$Property,[string]$Stage) {
     if([double]::IsNaN($number) -or [double]::IsInfinity($number)) {Stop-FurnitureLifecycle "$Stage is not finite"}
     return $number
 }
-function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix) {
+function New-FurniturePointProbe($Action,[string]$Prefix) {
+    return [ordered]@{stage=$Prefix;chartName=$Action.chartName;shapeName=$Action.shapeName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;edge=$Action.edge;strategy='native-point-bounds';sliceCoordinates=(New-Object 'System.Collections.Generic.List[object]');pieCenterLocalPoints=$null}
+}
+function Read-FurnitureSlicePoint($Point,[int]$Index,[string]$Prefix,$Probe) {
+    $coordinates=New-Object 'System.Collections.Generic.List[double]'
+    foreach($location in @(1,2)) {
+        $stage="$Prefix.point.slice.$Index.$location"
+        $value=Invoke-FurnitureCom $stage {$Point.PieSliceLocation($location,$Index)}
+        $observation=[ordered]@{index=$Index;location=$location;rawValue=if($null -eq $value){$null}else{[Convert]::ToString($value,[Globalization.CultureInfo]::InvariantCulture)}}
+        $Probe.sliceCoordinates.Add($observation)
+        if($null -eq $value) {Stop-FurnitureLifecycle "$stage is unavailable"}
+        try {$number=[double]$value} catch {Stop-FurnitureLifecycle "$stage is not numeric"}
+        if([double]::IsNaN($number) -or [double]::IsInfinity($number)) {Stop-FurnitureLifecycle "$stage is not finite"}
+        $observation['value']=$number
+        $coordinates.Add($number)
+    }
+    return [pscustomobject]@{x=$coordinates[0];y=$coordinates[1]}
+}
+function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$null) {
+    if($null -eq $Probe) {$Probe=New-FurniturePointProbe $Action $Prefix}
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
     $overlay=Get-ExactShape $slide $Action.shapeName "$Prefix.overlay"
     $chartShape=Get-ExactShape $slide $Action.chartName "$Prefix.chart"
@@ -357,13 +376,34 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix) {
     if($width -lt 0 -or $height -lt 0) {Stop-FurnitureLifecycle 'Native point bounds are negative'}
     $x=$left+$width/2; $y=$top+$height/2
     if($Action.chartKind -eq 'slice' -and $Action.edge -in @('start','end','center')) {
-        # Microsoft documents PieSliceLocation for pie only. Doughnut availability is unqualified;
-        # its first owned probe must be separate and a getter failure latches without fallback.
-        # XlPieSliceLocation x=1/y=2; XlPieSliceIndex outer=2, center=5, inner=8.
-        $sliceIndex=switch($Action.edge){'start'{8};'center'{5};default{2}}
-        $x=Invoke-FurnitureCom "$Prefix.point.slice.x" {$point.PieSliceLocation(1,$sliceIndex)}
-        $y=Invoke-FurnitureCom "$Prefix.point.slice.y" {$point.PieSliceLocation(2,$sliceIndex)}
-        if($null -eq $x -or $null -eq $y -or [double]::IsNaN([double]$x) -or [double]::IsInfinity([double]$x) -or [double]::IsNaN([double]$y) -or [double]::IsInfinity([double]$y)) {Stop-FurnitureLifecycle 'Native slice coordinate is unavailable/nonfinite'}
+        # Native XlPieSliceIndex: outer-center2, outer-clockwise3, mid-clockwise-radius4,
+        # inner-center8 (doughnut only). Index5 does not establish a radial midpoint.
+        # https://learn.microsoft.com/en-us/office/vba/api/excel.xlpiesliceindex
+        # PowerPoint documents this API for pie only; doughnut getter availability stays unqualified.
+        # https://learn.microsoft.com/en-us/office/vba/api/powerpoint.point.pieslicelocation
+        if($Action.edge -eq 'end') {
+            $outer=Read-FurnitureSlicePoint $point 2 $Prefix $Probe
+            $x=$outer.x; $y=$outer.y; $Probe.strategy='native-outer-center2'
+        } else {
+            if($chartType -eq 5) {
+                $clockwise=Read-FurnitureSlicePoint $point 3 $Prefix $Probe
+                $midRadius=Read-FurnitureSlicePoint $point 4 $Prefix $Probe
+                # Two independently observed native radial positions recover the actual center,
+                # including a full-circle slice: C = M + (M - O) = 2*M - O. No serialized plot/overlay.
+                $inner=[pscustomobject]@{x=$midRadius.x+($midRadius.x-$clockwise.x);y=$midRadius.y+($midRadius.y-$clockwise.y)}
+                if([double]::IsNaN($inner.x) -or [double]::IsInfinity($inner.x) -or [double]::IsNaN($inner.y) -or [double]::IsInfinity($inner.y)) {Stop-FurnitureLifecycle 'Reconstructed native pie center is not finite'}
+                $Probe.pieCenterLocalPoints=@($inner.x,$inner.y); $Probe.strategy='pie-center-from-native-radius3/4'
+            } else {
+                $inner=Read-FurnitureSlicePoint $point 8 $Prefix $Probe
+                $Probe.strategy='native-doughnut-inner8'
+            }
+            $x=$inner.x; $y=$inner.y
+            if($Action.edge -eq 'center') {
+                $outer=Read-FurnitureSlicePoint $point 2 $Prefix $Probe
+                $x=$inner.x/2+$outer.x/2; $y=$inner.y/2+$outer.y/2
+                $Probe.strategy+='-midpoint-to-outer2'
+            }
+        }
     } elseif($Action.chartKind -ne 'marker') {
         if($Action.edge -eq 'top') {$y=$top}
         elseif($Action.edge -eq 'bottom') {$y=$top+$height}
@@ -373,14 +413,15 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix) {
             elseif($Action.chartKind -eq 'vertical-bar') {$y=if($positive -eq $end){$top}else{$top+$height}}
         }
     }
+    $nativeX=$chartLeft+[double]$x; $nativeY=$chartTop+[double]$y
+    if([double]::IsNaN($nativeX) -or [double]::IsInfinity($nativeX) -or [double]::IsNaN($nativeY) -or [double]::IsInfinity($nativeY)) {Stop-FurnitureLifecycle 'Native chart point coordinate is not finite'}
     $overlayLeft=Read-FurnitureFiniteNumber $overlay 'Left' "$Prefix.overlay.left"
     $overlayTop=Read-FurnitureFiniteNumber $overlay 'Top' "$Prefix.overlay.top"
     $overlayWidth=Read-FurnitureFiniteNumber $overlay 'Width' "$Prefix.overlay.width"
     $overlayHeight=Read-FurnitureFiniteNumber $overlay 'Height' "$Prefix.overlay.height"
-    $nativeX=$chartLeft+[double]$x; $nativeY=$chartTop+[double]$y
     $overlayX=$overlayLeft+$overlayWidth/2; $overlayY=$overlayTop+$overlayHeight/2
     $distance=[math]::Sqrt([math]::Pow($overlayX-$nativeX,2)+[math]::Pow($overlayY-$nativeY,2))*4/3
-    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
+    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativeSliceObservations=@($Probe.sliceCoordinates.ToArray());nativePieCenterLocalPoints=$Probe.pieCenterLocalPoints;coordinateStrategy=$Probe.strategy;nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
 }
 
 function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
@@ -393,7 +434,7 @@ function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
         $existing=Read-NativeTags $tags "$prefix.tags.precondition"; if(@($existing | Where-Object { $_.name -ieq $Action.tagName }).Count -ne 1) { throw "$prefix expected one existing tag '$($Action.tagName)'" }
         Invoke-FurnitureCom "$prefix.tags.delete" { $tags.Delete($Action.tagName) }; return
     }
-    if($Action.op -eq 'measure-chart-point') {$report.actionPlan.chartPoints+=@(Read-FurnitureChartPoint $Presentation $Action $prefix);return}
+    if($Action.op -eq 'measure-chart-point') {$probe=New-FurniturePointProbe $Action $prefix;$report.actionPlan.currentChartPointProbe=$probe;$report.actionPlan.chartPoints+=@(Read-FurnitureChartPoint $Presentation $Action $prefix $probe);return}
     $shape=Get-ExactShape $slide $Action.shapeName $prefix
     switch($Action.op) {
         'set-text-style' { $evidence=Set-FurnitureTextStyle $shape $Action $prefix; $report.actionPlan.styleEdits+=@([ordered]@{index=$Number;slideIndex=$Action.slideIndex;shapeName=$Action.shapeName;observed=$evidence}) }

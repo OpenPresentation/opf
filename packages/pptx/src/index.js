@@ -4145,7 +4145,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const lineColor = pptxColor(config.color ?? context.textColor);
     slide.addText(link?.href && line ? [{text: line, options: {hyperlink: {url: link.href}, color: lineColor, underline: {style: 'none'}}}] : line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
-      ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize),
+      ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, config.lang),
       color: lineColor, align: alignment,
       ...(fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),
       // Reuse the frame's existing relationship to cover blank caption boxes.
@@ -4586,7 +4586,11 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   }
   for(const [index,part]of layout.parts.entries()){
     const statusColor=part.status==='planned'?normalizeHex(timelineTextColor(part,statusColors)):undefined;
-    addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor},...(statusColor?{color:statusColor}:{})});
+    // Native RTL proofing reorders Latin date digits even when the paragraph is LTR.
+    // Keep a wholly Latin date as one English run, as the existing bidi writer does
+    // for Latin phrases, without parsing dates or changing any text or geometry.
+    const latinDate=context.direction==='rtl'&&part.role==='when'&&/\p{Script=Latin}/u.test(part.text)&&/^[\p{Script=Latin}0-9\p{P}\p{S}\p{Z}]*$/u.test(part.text);
+    addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor},...(latinDate?{lang:'en-US'}:{}),...(statusColor?{color:statusColor}:{})});
   }
   // LH-121: the generated status words, tagged into the group as `status` so import consumes them (the status comes from the markers).
   for(const label of layout.statusLabels??[]){
