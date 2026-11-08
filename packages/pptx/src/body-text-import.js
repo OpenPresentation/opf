@@ -59,6 +59,10 @@ export const joinNativeParagraphs = paragraphs => value(paragraphs.flatMap((para
 // FA-13: a run language that differs from the deck language comes back as TextRun.lang; a run in the design's code family
 // comes back as an inline code run. `extras` is {deckLang, codeFamily} (either may be absent).
 const RUN_LANG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
+function nativeRunLanguage(properties, extras) {
+  const lang = properties.lang;
+  return typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang) && (properties.altLang === 'en-US' || extras.deckLang && lang.toLowerCase() !== extras.deckLang.toLowerCase()) ? {lang} : {};
+}
 function bodyRunStyle(properties, context, relationships, report, extras = {}) {
   const supported = {...properties};
   for (const key of ['b', 'i']) if (properties[key] !== undefined && !['1','0','true','false','on','off'].includes(properties[key])) {
@@ -98,8 +102,8 @@ function bodyRunStyle(properties, context, relationships, report, extras = {}) {
     report('unsupported-body-text-style', 'Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.');
   }
   const style = nativeRunStyle(supported, context, relationships, report, 'body');
-  const lang = properties.lang;
-  if (extras.deckLang && typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang) && lang.toLowerCase() !== extras.deckLang.toLowerCase()) style.lang = lang;
+  // A native explicit override remains authored even when no unprotected base run votes, or when it equals the base.
+  Object.assign(style, nativeRunLanguage(properties, extras));
   const family = typeof style.fontFamily === 'string' ? style.fontFamily.trim().toLowerCase() : undefined;
   if (family && extras.codeFamily && family === extras.codeFamily.trim().toLowerCase()
     && !['a:majorFont', 'a:minorFont'].some(key => context.fonts?.[key]?.['a:latin']?.typeface?.trim().toLowerCase() === family)) {
@@ -111,7 +115,7 @@ function bodyRunStyle(properties, context, relationships, report, extras = {}) {
 
 export function nativeBodyReader(slidePath, archive, relationships, report, extras = {}) {
   let bodies, context, inheritedStyles;
-  return index => {
+  return (index, {languageOnly = false} = {}) => {
     if (!bodies) {
       const tree = archive.part(slidePath, parser);
       const currentShapes = shapes(child(child(child(tree, 'p:sld'), 'p:cSld'), 'p:spTree'));
@@ -149,11 +153,12 @@ export function nativeBodyReader(slidePath, archive, relationships, report, extr
         // RR-05: a Latin phrase of a right-to-left paragraph is its own en-US run; its East Asian/complex-script slots can render nothing in it, so the face loss is not reported.
         // LH-118: so is a number (core numberRanges), in a right-to-left paragraph or a letterless one.
         const phrase = (nodes(content, 'a:pPr')[0]?.[':@']?.rtl === '1' || letterless) && properties.lang === 'en-US' && properties.altLang !== 'en-US' && LATIN_ONLY.test(current);
-        const style = bodyRunStyle(properties, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); }, {...extras, inheritedBody, ...(phrase ? {deckLang: undefined} : {})});
+        const runExtras = {...extras, inheritedBody, ...(phrase ? {deckLang: undefined} : {})};
+        const style = languageOnly ? nativeRunLanguage(properties, runExtras) : bodyRunStyle(properties, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); }, runExtras);
         // Supported canonical forms may intentionally omit a resolved family
         // (code:true) or the resolved theme hyperlink color (link without color).
         const resolvedFill = style.color !== undefined || style.link && properties['a:solidFill'] && readBackgroundColor(properties['a:solidFill'], context);
-        if (current && inheritedBody && (!(style.fontFamily || style.code) || style.fontSize === undefined || !resolvedFill)) report({code: 'unsupported-body-inherited-style', path,
+        if (!languageOnly && current && inheritedBody && (!(style.fontFamily || style.code) || style.fontSize === undefined || !resolvedFill)) report({code: 'unsupported-body-inherited-style', path,
           message: 'The current Body font family, point size or fill could not be fully resolved from its explicit styles and unambiguous layout/master cascade; current text was retained.'});
         if (current) runs.push(Object.keys(style).length ? {text:current,...style} : current);
       }
