@@ -27,6 +27,8 @@ item's state edits its row and appends a log line in the same PR.
 | SH-22 | Non-Latin and right-to-left text in live SmartArt: the cause of the Japanese 11 px and Arabic 6 px offsets, then a fix and a re-sweep | pptx, core | Japanese, Chinese, Arabic and Hebrew decks pass SH-19's gate, or the domain keeps them native with the measured reason | todo: script decks of every arrangement in the open-domain sweep, waiting for COM |
 | SH-23 | An entry added in PowerPoint past OPF's 8: OPF's layout definitions carry tables for 1 to 12 entries | pptx | A ninth node added through COM is drawn where OPF's 9-entry table puts it, inside the frame | in-review: five ninth-node edits survive save/reopen; geometry, sizes, paragraphs and visual review pass ([evidence](sh23-2026-11-07/README.md)) |
 
+| SH-25 | Overlay shapes anchored to an authored chart data point (#1113), with one shared mark/inner-plot geometry | core, schema, render, pptx, editor | The academy United States ring and every enabled classic point anchor center within 4 px of the actual native point; per-engine geometry tests and sheets | in-progress: reserved after reviewed preparation67698; schema/mark/native/editor implementation and qualification next |
+
 ## Decisions
 
 - **Own render only (owner).** OPF ships only what its own engines draw at high fidelity: the preview and the PPTX export draw one
@@ -116,3 +118,5 @@ item's state edits its row and appends a log line in the same PR.
 
 - 2026-11-07: SH-23 five fresh production designs qualify a ninth node and text edit through SaveCopyAs/reopen, including sizes, geometry, levels, paragraph and first-line alignment. Original pyramid visual failure is preserved; shared native paragraph defaults fix added-node alignment. Eight focused core tests, five-design PPTX part test and isolated byte-exact witness reproduction pass. [Native evidence](sh23-2026-11-07/README.md); integration gate still owed. Existing SH20–22 tracking rows remain, while their unfinished source helpers stay on the separate continuation branch.
 
+
+- 2026-11-07 — SH-25 reserved for #1113 by the coordinator (SH20–23 remain as recorded, SH24 belongs to #1153). Vetoable contract: exact unique names or numeric indexes; chart edge selects a data anchor and centers the overlay with outward offset; existing block anchors retain outside-edge behavior. Share actual plots/scales/mark geometry and pin native classic inner plots. Unsupported chartex/3D anchors are explicit findings, no shape. Native4px evidence is required before qualification; source agreement alone does not earn it. See handoff/sh25-chart-point-overlays.
