@@ -124,3 +124,5 @@ SH-23 isolated qualification: [source scope, five native ninth-node save/reopen 
 - Inverted pyramid continuation: [SH-24](sh24-inverted-pyramid.md), issue #1128; source implementation is isolated, with review/native/integration gates still owed.
 
 - v0.33 integration #1133 merged at7c0c3f13e9de77e038b6ec26183043eb7fe90822 after exact-head native and required-all CI acceptance. Release dry-run42456530874 and main verification are active; publication and site updates remain owed. [Gate correction](fullci-gate.md).
+
+- Evidence checker continuation: [RR-110](rr110-zip-text.md) recognizes ZIP archive signatures while keeping source text and named gzip reports checked.
