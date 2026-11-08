@@ -196,6 +196,18 @@ export function nativeWrapBox(item, values, list, limits, textMeasurement) {
   return {x: item.box.x - (alignment === 'center' ? grow / 2 : alignment === 'right' ? grow : 0), width};
 }
 
+// RR-105 (opf#1127): the same two-sided wrap margin for a plain wrapped title. Its heading area is a hard boundary;
+// an automatic heading uses the content frame horizontally when that frame contains it.
+export function nativeTitleWrapBox(item, geometry, textMeasurement) {
+  const heading = geometry.headingAreas?.find(area => area.name === 'title' && !area.collapsed);
+  let area = heading?.box ?? geometry.contentBox;
+  const inside = area && item.box.x >= area.x - 1e-6 && item.box.x + item.box.width <= area.x + area.width + 1e-6;
+  // A placed-picture heading can be wider than the body's frame. Its authored title box is then the conservative boundary.
+  if (!inside) area = item.box;
+  const limits = {left: Math.max(0, area.x), right: Math.min(geometry.width, area.x + area.width)};
+  return nativeWrapBox(item, [item.value], false, limits, textMeasurement);
+}
+
 // RR-88: the native auto-number (`a:buAutoNum`) that reproduces core's markers, or undefined when the entries are not one sequence.
 function nativeNumbering(entries) {
   const first = entries[0]?.marker?.number;

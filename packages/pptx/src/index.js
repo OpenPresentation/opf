@@ -1,5 +1,5 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
-import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, planNativeBody} from './native-body.js';
+import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, nativeTitleWrapBox, planNativeBody} from './native-body.js';
 import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './numbered-list.js';
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
@@ -2666,7 +2666,10 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       ? geometry.regions?.find(region => region.name === item.region && region.flow === 'none' && region.content?.length === 1 && !region.overflow?.length) : undefined;
     // RR-88: under bodyText 'native' a plain-string title that wraps is one native text box (native wrap, no autofit) at its measured
     // block, so it can bind to the Title placeholder like a one-line title (Keynote reports `title showing` only for a bound title).
-    const nativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
+    const wantsNativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
+    const nativeTitle = wantsNativeTitle ? nativeTitleWrapBox(item, geometry, options.textMeasurement) : undefined;
+    if (wantsNativeTitle && !nativeTitle) options.onDiagnostic?.({code: 'native-body-fallback', path: item.path, reason: 'tight-wrap',
+      message: 'Native title export cannot preserve the measured line breaks with a wrap margin inside its title area; the measured lines were exported.'});
     if ((template || context.automaticSlides[slideIndex]) && item.field === 'title' && typeof item.value === 'string' && (item.text?.lines?.length === 1 || nativeTitle) && !item.text.overflow && !item.text.richLines)
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
@@ -2707,7 +2710,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
         fill:paint(surface),line:{...paint(itemContext.roles.neutrals?.cardBorder?.hex??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${owner.path}`});
     }
     if (nativeTitle) {
-      addNativeTitle(slide, item, itemContext, options, context);
+      addNativeTitle(slide, item, itemContext, options, context, nativeTitle);
     } else if (nativePlans.some(plan => plan.item === item)) {
       // RR-88: the first native body is the Body placeholder; every further one is an ordinary native text box at its region.
       const plan = nativePlans.find(plan => plan.item === item);
@@ -4052,8 +4055,8 @@ function isNativeTitle(item) {
 // RR-88: the wrapped title as one native text box: the whole string, native wrap, no autofit, at the block its measured lines fill
 // (top of the first line to the bottom of the last), with the measured line pitch as exact spacing. Tagged as one heading line,
 // so import reads the current words as the title. The caller binds it to the Title placeholder.
-function addNativeTitle(slide, item, context, options, deckContext) {
-  const fit = item.text, box = item.box, lines = fit.placement?.lines;
+function addNativeTitle(slide, item, context, options, deckContext, wrap) {
+  const fit = item.text, box = {...item.box, x: wrap.x, width: wrap.width}, lines = fit.placement?.lines;
   const tops = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize : box.y + index * fit.lineHeight);
   const bottoms = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize + lines[index].height : box.y + (index + 1) * fit.lineHeight);
   const top = Math.min(...tops), height = Math.max(...bottoms) - top;
