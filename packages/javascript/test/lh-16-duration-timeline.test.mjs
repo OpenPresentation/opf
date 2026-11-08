@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {layoutTimeline, OPFCompositionError} from '../dist/composition.js';
 import {fromMarkdown, toMarkdown} from '../dist/markdown.js';
+import {convertContent} from '../dist/convert.js';
 import {check} from './support/validation.mjs';
 
 const events=[{when:'Week 1',what:'Scope',duration:1,status:'done'},{when:'Weeks 2–5',what:'Build',duration:4,status:'current'},{when:'Week 6',what:'Launch',status:'planned'}];
@@ -61,7 +62,17 @@ test('an unreadable proportional interval reports overflow instead of dropping c
   assert.throws(()=>layoutTimeline(value,box,{overflow:'error'}),OPFCompositionError);
 });
 
+test('placed ranged labels never shrink even when a compacting hint requests a negative offset',()=>{
+  const out=layoutTimeline(events,{x:0,y:0,width:1200,height:500},{sizeOffset:-1000});
+  for(const part of out.parts)assert.ok(part.fit.fontSize>=part.requestedFontSize);
+});
+
 test('Markdown uses a lossless embedded block for numeric periods',()=>{
   const deck={slides:[{timeline:events}]},text=toMarkdown(deck).markdown;
   assert.deepEqual(fromMarkdown(text).presentation.slides[0].timeline,events);
+});
+
+test('conversions without numeric periods report their loss explicitly',()=>{
+  for(const kind of ['list','text','table'])assert.ok(convertContent({timeline:events},kind).loss.includes('timeline event duration'),kind);
+  for(const kind of ['list','text','table'])assert.ok(!convertContent({timeline:[{what:'A'}]},kind).loss.includes('timeline event duration'),kind);
 });

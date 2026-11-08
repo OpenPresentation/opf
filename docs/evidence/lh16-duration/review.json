@@ -1,0 +1,730 @@
+{
+  "baselineRoot": "C:/opf-work/rr107-mcpb",
+  "baselineCommit": "cabd3c8a03d02255329edd2352eb1e39df7fb40c",
+  "defaultControls": {
+    "count": 324,
+    "geometry": "deep equal",
+    "geometrySha256": "dc501e06cc528355d25478954e2d76cf97f42e81ae5236106ddd1b770dfbb083",
+    "plainPptx": "byte identical",
+    "plainPptxSha256": "9777bdff0f8bd129696cee521fe846d10616ea0c40d776006a7861fa37b81686"
+  },
+  "compositionSha256": "c179abb80056356620cfa6985d03055012c85f9ec016709347265cddb39e8e91",
+  "cases": [
+    {
+      "id": "wide",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Four weeks build on one week of discovery",
+            "timeline": {
+              "name": "Six-week delivery",
+              "events": [
+                {
+                  "when": "Week 1",
+                  "what": "Discover",
+                  "description": "Agree the scope.",
+                  "duration": 1,
+                  "status": "done"
+                },
+                {
+                  "when": "Weeks 2–5",
+                  "what": "Build",
+                  "description": "Deliver and test the working product.",
+                  "duration": 4,
+                  "status": "current"
+                },
+                {
+                  "when": "Week 6",
+                  "what": "Launch",
+                  "description": "Release to the team.",
+                  "status": "planned"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "bcac3bf76581944295d04abd09ed9abb8db3a70ee4a795c9bcd5f16f0d164000",
+          "pngSha256": "dd4f34a03fd79b99deb68557de86fb63b3e5fc42229cb050fdbc87032beda793",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "8f76fef0baae174bf1efc9b7d3581f86f81ee6764bcd8d9290158199de215a9f",
+          "pngSha256": "fc2b9b57c93d958234d4f8f71975d22dd9b02f8fa35d17dbbd0a07f65d86f8b5",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 57.6,
+                "y": 390.06492190625,
+                "width": 194.13333333333333,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 251.73333333333332,
+                "y": 390.06492190625,
+                "width": 776.5333333333333,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 1028.2666666666664,
+                "y": 390.06492190625,
+                "width": 194.1333333333334,
+                "height": 10
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "portrait",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto",
+          "dimensions": {
+            "widthInches": 5.625,
+            "heightInches": 10
+          }
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Three consecutive periods",
+            "timeline": {
+              "events": [
+                {
+                  "when": "Week 1",
+                  "what": "Discover",
+                  "duration": 1,
+                  "status": "done"
+                },
+                {
+                  "when": "Weeks 2–5",
+                  "what": "Build",
+                  "duration": 4,
+                  "status": "current"
+                },
+                {
+                  "when": "Week 6",
+                  "what": "Launch",
+                  "status": "planned"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "6fe621bf7ef9eb94d33d4609a78b587b20f6519730aafff747c6c7ec9a14d344",
+          "pngSha256": "575e023760d6600e4a980b3b06f80f785a66623c87a84e9cd665b6811dab33a0",
+          "arrangement": "band",
+          "fonts": [
+            20.986666666666668,
+            23.986666666666668,
+            20.986666666666668,
+            23.986666666666668,
+            20.986666666666668,
+            23.986666666666668
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "d3bdfb864daafa416f8e8eff19a6cc0f004487faeaad7db4ec0443e5bdf81eef",
+          "pngSha256": "b133680d9fa662257e2b7e3442a0a3c9f91cac82d7a4fdc5266746c895494918",
+          "arrangement": "vertical",
+          "fonts": [
+            20.986666666666668,
+            23.986666666666668,
+            20.986666666666668,
+            23.986666666666668,
+            20.986666666666668,
+            23.986666666666668
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 43.2,
+                "y": 106.61,
+                "width": 7.5,
+                "height": 135.03166666666667
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 43.2,
+                "y": 241.64166666666665,
+                "width": 7.5,
+                "height": 540.1266666666667
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 43.2,
+                "y": 781.7683333333333,
+                "width": 7.5,
+                "height": 135.03166666666672
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rtl",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Four weeks build on one week of discovery",
+            "timeline": {
+              "name": "Six-week delivery",
+              "events": [
+                {
+                  "when": "Week 1",
+                  "what": "Discover",
+                  "description": "Agree the scope.",
+                  "duration": 1,
+                  "status": "done"
+                },
+                {
+                  "when": "Weeks 2–5",
+                  "what": "Build",
+                  "description": "Deliver and test the working product.",
+                  "duration": 4,
+                  "status": "current"
+                },
+                {
+                  "when": "Week 6",
+                  "what": "Launch",
+                  "description": "Release to the team.",
+                  "status": "planned"
+                }
+              ]
+            }
+          }
+        ],
+        "language": "ar"
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "27c581634abbe26fed9ea6f4c94d43427c13ced071a02b6c667c75594755e8d0",
+          "pngSha256": "cccd19d5b007d45d48c7632577d158889e4113c4aca9f8a8d1115bae918dc707",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "cea59c279231be4925961e31fcfee96c92628da66a8ad262911ffb4f811003e5",
+          "pngSha256": "af94ab5425cc6bd0c068f02ece19725ce475026ddbb68d3bd3fed86f1dc4138d",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 1028.2666666666667,
+                "y": 407.92492190625,
+                "width": 194.13333333333333,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 251.7333333333334,
+                "y": 407.92492190625,
+                "width": 776.5333333333333,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 57.6,
+                "y": 407.92492190625,
+                "width": 194.1333333333334,
+                "height": 10
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nine-periods",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Nine phases keep their relative lengths",
+            "timeline": {
+              "events": [
+                {
+                  "what": "Phase 1",
+                  "duration": 1
+                },
+                {
+                  "what": "Phase 2",
+                  "duration": 2
+                },
+                {
+                  "what": "Phase 3",
+                  "duration": 3
+                },
+                {
+                  "what": "Phase 4",
+                  "duration": 1
+                },
+                {
+                  "what": "Phase 5",
+                  "duration": 2
+                },
+                {
+                  "what": "Phase 6",
+                  "duration": 3
+                },
+                {
+                  "what": "Phase 7",
+                  "duration": 1
+                },
+                {
+                  "what": "Phase 8",
+                  "duration": 2
+                },
+                {
+                  "what": "Phase 9",
+                  "duration": 3
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "b4a7067967b6648cd7e277532ee435d3aa4ba9317ccd76400de383fd588c9701",
+          "pngSha256": "d90b71cb50c5b43d8ac4707971100f146426f61220f39534487bcf734d4ca553",
+          "arrangement": "vertical",
+          "fonts": [
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "08ed2287c7080a0309261429436d67d8bbf71c89f77be5ec7e2acf02a8d1622b",
+          "pngSha256": "445b6c1397360064f7ffc04b2cd9082c3e42be01edd6c0914ca86904c24513c5",
+          "arrangement": "vertical",
+          "fonts": [
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 57.6,
+                "y": 147.832422,
+                "width": 10,
+                "height": 28.587087666666672
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 57.6,
+                "y": 176.41950966666667,
+                "width": 10,
+                "height": 57.174175333333345
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 57.6,
+                "y": 233.59368500000002,
+                "width": 10,
+                "height": 85.76126300000001
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.3",
+              "eventIndex": 3,
+              "box": {
+                "x": 57.6,
+                "y": 319.35494800000004,
+                "width": 10,
+                "height": 28.587087666666672
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.4",
+              "eventIndex": 4,
+              "box": {
+                "x": 57.6,
+                "y": 347.9420356666667,
+                "width": 10,
+                "height": 57.174175333333345
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.5",
+              "eventIndex": 5,
+              "box": {
+                "x": 57.6,
+                "y": 405.116211,
+                "width": 10,
+                "height": 85.76126300000001
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.6",
+              "eventIndex": 6,
+              "box": {
+                "x": 57.6,
+                "y": 490.87747400000006,
+                "width": 10,
+                "height": 28.587087666666672
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.7",
+              "eventIndex": 7,
+              "box": {
+                "x": 57.6,
+                "y": 519.4645616666668,
+                "width": 10,
+                "height": 57.174175333333345
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.8",
+              "eventIndex": 8,
+              "box": {
+                "x": 57.6,
+                "y": 576.6387370000001,
+                "width": 10,
+                "height": 85.76126300000006
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "single-period",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "One continuous delivery period",
+            "timeline": {
+              "events": [
+                {
+                  "when": "Weeks 1–4",
+                  "what": "Deliver the working product",
+                  "duration": 4,
+                  "status": "current"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "a73472d30983cd18e38c961acfa4fd7f5188f11df7eee42b52b7a2716f6bfe94",
+          "pngSha256": "e78d55a545be8577d455ca9afa53e62ad2eb696ea291ffc8d63742a7480c4b90",
+          "arrangement": "band",
+          "fonts": [
+            28,
+            32
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "910ef2a489d7a6604a43c6eb494042253ade59e1f0cef986472100e79a91ba08",
+          "pngSha256": "86b8c3b67f333cef93346583f1a5494ed7680949ae706c8ca8605c9475102367",
+          "arrangement": "band",
+          "fonts": [
+            28,
+            32
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 57.6,
+                "y": 401.0531054999999,
+                "width": 1164.8,
+                "height": 10
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partial-periods",
+      "deck": {
+        "$schema": "https://openpresentation.org/schema/opf/v1",
+        "name": "A delivery timeline with proportional periods",
+        "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+        "design": {
+          "theme": "classic",
+          "variant": "light1",
+          "fontScheme": "roboto"
+        },
+        "slides": [
+          {
+            "id": "six-week-delivery",
+            "layout": "timeline",
+            "title": "Omitted durations remain one unit",
+            "timeline": {
+              "name": "Relative periods",
+              "events": [
+                {
+                  "when": "Period A",
+                  "what": "Discover",
+                  "description": "Agree the scope.",
+                  "status": "done"
+                },
+                {
+                  "when": "Half unit",
+                  "what": "Build",
+                  "description": "Deliver and test the working product.",
+                  "duration": 0.5,
+                  "status": "current"
+                },
+                {
+                  "when": "Period C",
+                  "what": "Launch",
+                  "description": "Release to the team.",
+                  "status": "planned"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "beforeSource": "Same words/statuses, duration fields removed for the older schema.",
+      "renders": [
+        {
+          "side": "before",
+          "svgSha256": "9e85ee7e9156026b5509177615192d9e0038f5e165df222e0c76374aeebb7c21",
+          "pngSha256": "fb20576f69c3ddba9ce538568a5c00b27045396962a0da9687855df06aa37163",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": []
+        },
+        {
+          "side": "after",
+          "svgSha256": "ea500308bd2716ca97aca6bd5bd5e4dc0e4f29d0e038082bf463b472ed48724b",
+          "pngSha256": "7a62f9aea49788813eec80da6b586697beab5b7e59a1d8f6824555f3867d61a5",
+          "arrangement": "band",
+          "fonts": [
+            34,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28,
+            28,
+            32,
+            28
+          ],
+          "ranges": [
+            {
+              "path": "slides.0.timeline.events.0",
+              "eventIndex": 0,
+              "box": {
+                "x": 57.6,
+                "y": 389.5693749999999,
+                "width": 465.92,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.1",
+              "eventIndex": 1,
+              "box": {
+                "x": 523.52,
+                "y": 389.5693749999999,
+                "width": 232.96,
+                "height": 10
+              }
+            },
+            {
+              "path": "slides.0.timeline.events.2",
+              "eventIndex": 2,
+              "box": {
+                "x": 756.4800000000001,
+                "y": 389.5693749999999,
+                "width": 465.9199999999999,
+                "height": 10
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

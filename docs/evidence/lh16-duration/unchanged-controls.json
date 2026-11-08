@@ -1,0 +1,8 @@
+{
+  "baseline": "d19c4bb6172b703d132ebba3fd006e4ec5cdf845",
+  "controls": 324,
+  "geometry": "deep equal for all default milestone controls",
+  "geometrySha256": "dc501e06cc528355d25478954e2d76cf97f42e81ae5236106ddd1b770dfbb083",
+  "plainPptx": "byte identical",
+  "plainPptxSha256": "9777bdff0f8bd129696cee521fe846d10616ea0c40d776006a7861fa37b81686"
+}

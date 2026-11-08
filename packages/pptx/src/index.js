@@ -4485,8 +4485,13 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
   for(const range of layout.ranges??[]){
     const name=`OPF timeline ${group} range ${range.eventIndex}`,box=range.box;
-    slide.addShape('rect',{objectName:name,x:box.x/96,y:box.y/96,w:box.width/96,h:box.height/96,fill:{color:context.colors.accent,transparency:82},line:{color:normalizeHex(context.colors.background),width:scale*.75}});
+    slide.addShape('rect',{objectName:name,x:box.x/96,y:box.y/96,w:box.width/96,h:box.height/96,fill:{color:context.colors.accent,transparency:68},line:{color:normalizeHex(context.colors.background),width:scale*1.5}});
     context.timelineTags.set(name,{v:1,group,role:'range',eventIndex:range.eventIndex});
+  }
+  for(const link of layout.rangeLinks??[]){
+    const name=`OPF timeline ${group} range link ${link.eventIndex}`,dx=link.x2-link.x1,dy=link.y2-link.y1;
+    slide.addShape('line',{objectName:name,x:Math.min(link.x1,link.x2)/96,y:Math.min(link.y1,link.y2)/96,w:Math.abs(dx)/96,h:Math.abs(dy)/96,flipV:dx*dy<0,line:{color:context.colors.border,width:scale*.75}});
+    context.timelineTags.set(name,{v:1,group,role:'range-link',eventIndex:link.eventIndex});
   }
   // LH-121: the connector up to the current event, a second native line in the primary color over the first.
   if(layout.progress){

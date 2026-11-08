@@ -4,7 +4,8 @@ import {loadFonts} from '../dist/fonts-node.js';
 const fonts=await loadFonts();
 for(const direction of ['ltr','rtl'])for(const dimensions of [{width:1280,height:720},{width:540,height:960}]){
   const document={language:direction==='rtl'?'ar':'en',design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{layout:'timeline',title:'Six-week delivery',timeline:[{when:'Week 1',what:'Scope',duration:1},{when:'Weeks 2–5',what:'Build',duration:4},{when:'Week 6',what:'Launch'}]}]};
-  const options={fonts,trace:true},layout=resolvePresentation(document,options).slides[0].geometry.items.find(item=>item.timelineLayout).timelineLayout;
+  const options={fonts,trace:true},bound=resolvePresentation(document,options).slides[0],layout=bound.geometry.items.find(item=>item.timelineLayout).timelineLayout;
+  assert.ok(Math.abs(bound.design.dimensions.width-dimensions.width)<1e-6);assert.ok(Math.abs(bound.design.dimensions.height-dimensions.height)<1e-6);
   assert.equal(layout.overflow,false);
   const svg=toSvg(document,1,options),ranges=[...svg.matchAll(/<rect\b([^>]*data-opf-timeline-range="\d+"[^>]*)/g)];
   assert.equal(ranges.length,3);

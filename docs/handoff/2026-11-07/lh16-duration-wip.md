@@ -1,11 +1,3 @@
-# LH-16 duration timeline — WIP checkpoint, 2026-11-07
+# LH-16 WIP checkpoint superseded
 
-Source branch `codex/lh-16-duration-timeline` is pushed so the 0.33 MCP release blocker can take priority. This item is not approved or folded. LH-34 remains an untouched isolated checkout at `C:/opf-work/lh34-callouts`.
-
-Implemented: explicit positive finite relative `TimelineEvent.duration` (omitted=1), shared horizontal/vertical ranges, native SVG/PPTX rectangles, preserved numeric durations and current native text on import, lossless Markdown embedding, intrinsic measurement, schema/docs/skill/example and tests. Existing milestones retain their geometry.
-
-Vetoable decisions are in the layout burndown: never infer numeric durations from date prose; preserve exact ratios and reject unrepresentable arithmetic; native rectangle edits report reflow rather than infer schedule changes. Ranged timelines now refuse text reduction: they try readable arrangements and report overflow when none fits, while existing milestones retain their current policy.
-
-Evidence so far: locked build passed; seven new core tests, 36 existing timeline tests, shared SVG/native tests and old timeline/status exporters passed. Review tooling and six before/after cases exist, but the first portrait review accidentally used composition pixel fields in the document's dimensions. The source tests/tool are now corrected to schema-owned widthInches/heightInches; the true portrait tests and sheets need rerunning. No incorrect sheet is committed or claimed as acceptance. The last no-shrink guard and dimension test correction also need the final rebuild/check.
-
-Resume: rebuild; run focused core, render/native duration tests and existing timeline controls; regenerate the six before/after pairs with `node scripts/review-lh16-duration.mjs <built unchanged baseline> docs/evidence/lh16-duration`; inspect actual portrait and wide/full images. Add exact canvas-size assertions. Verify default milestones against the unchanged baseline, run `pnpm check:changed`, then publish the item PR for the single 0.34 integration/golden/full-CI batch. Add a dated outcome and push evidence with `git add --sparse`. Never edit goldens manually. Preserve LH-121 localized status logic from PR #1144 when combining the composition changes.
+The implementation continued after the v0.33 MCP blocker was handled. Current contract, reviewed sheets and validation are in [lh16-duration.md](lh16-duration.md). This file preserves the original pushed checkpoint link; it is not release or integration acceptance.

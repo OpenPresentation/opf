@@ -43,7 +43,7 @@ One idea per slide. Pick the layout from what the content is, then check it fits
 - Without a layout, one picture among other blocks takes a full-height, cover-cropped side track, and one chart whose plot would be too short takes a 3:2 track beside the other blocks (`geometry.track`). Give a screenshot or diagram that must stay whole `fit: "contain"`; it then flows in the grid.
 - When the budget is exceeded, split the slide where the story breaks (two ideas, two slides), or run `opf paginate deck.opf.json --check` and then `opf paginate deck.opf.json -i` to let the engine split what does not fit. Do not lower `minFontSize` or shorten the content to make it pass.
 
-A timeline can give each event a positive numeric `duration` in one shared unit: 1 for Week 1 and 4 for Weeks 2–5. Omission is one unit. OPF draws proportional ranges, keeps `when` as written and tries readable horizontal or vertical labels. It never guesses durations from date prose. A very short period with too much text reports overflow; enlarge the timeline or split its events rather than alter its duration or shrink the text.
+A timeline can give each event a positive numeric `duration` in one shared unit: 1 for Week 1 and 4 for Weeks 2–5. Omission is one unit. OPF draws proportional ranges and links them to a balanced, readable label track, keeping `when` as written. It never guesses durations from date prose or shrinks labels to match a short period. A range too short to draw visibly, or labels that cannot fit, reports overflow; enlarge the timeline or split its events rather than alter its duration or shrink the text.
 
 ## Headers and footers
 

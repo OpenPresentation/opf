@@ -1,0 +1,32 @@
+{
+  "node": "24.20.0",
+  "scope": "LH-16 final review",
+  "changedScope": {
+    "seconds": 776.5,
+    "build": "pass",
+    "typecheck": "pass",
+    "rootMappings": "17 pass; Windows browser-safe maintained path test failed",
+    "opf": "initial example portability defect fixed; missing corpus restored; two unchanged subprocess spawn UNKNOWN failures",
+    "render": "initial example portability defect fixed",
+    "pptx": "77 files passed; Keynote symlink EPERM halted suite"
+  },
+  "finalFocused": {
+    "exampleAndNewTimelineTests": 247,
+    "pass": true,
+    "restoredCorpus": "pass",
+    "portableExamples": {
+      "decks": 137,
+      "slides": 905,
+      "pass": true
+    },
+    "productionBrowserSafe": "pass",
+    "svg": "pass",
+    "nativePptx": "pass"
+  },
+  "controls": "unchanged-controls.json",
+  "review": "review.json",
+  "remaining": [
+    "0.34 integration golden workflow and full CI",
+    "final native application qualification"
+  ]
+}
