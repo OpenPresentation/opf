@@ -44,7 +44,8 @@ function Read-OpfSH21Shape($Shape){
 }
 function Read-OpfSH21SmartArt($Shape,$Expected){
  $sa=$Shape.SmartArt;if([string]$sa.Layout.Id -ne [string]$Expected.layoutId){throw 'Native layout identity changed.'}
- if($sa.AllNodes.Count -ne $Expected.count -or $Shape.GroupItems.Count -lt 1){throw 'Native data count or materialized groups missing.'}
+ $rawDataCount=[int]$sa.AllNodes.Count;$rawGroupCount=[int]$Shape.GroupItems.Count
+ if($rawDataCount -ne $Expected.count -or $rawGroupCount -lt 1){throw "Native count/materialization mismatch: expected $($Expected.count) data nodes; observed $rawDataCount data nodes and $rawGroupCount group items."}
  $nodes=@();$wantedParents=@{};$stack=@();$tree=@('org-chart','hierarchy') -contains [string]$Expected.kind
  foreach($entry in $Expected.items){$text=if($entry -is [string]){[string]$entry}else{[string]$entry.text};$level=if($tree){[int]$entry.level}else{0};$parent=if($level -gt 0){[string]$stack[$level-1]}else{$null};$wantedParents[$text]=@{level=$level+1;parent=$parent};if($stack.Count -le $level){$stack+=,$text}else{$stack[$level]=$text}}
  for($nodeIndex=1;$nodeIndex -le $sa.AllNodes.Count;$nodeIndex++){
