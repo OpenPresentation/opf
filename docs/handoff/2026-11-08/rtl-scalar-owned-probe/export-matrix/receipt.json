@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "sourceHeads": {
+    "before": "fccf62cbcb9bfdcb442880b64486bc5fa99828c8",
+    "after": "a97faa217a6ef178497acb25b754f87cc05926bc",
+    "commonIntegration": "39bdda35f5513e7afb47537e64f346bbdcbfa1dc"
+  },
+  "scope": "Seven deterministic API export archives, before/after import-only ownership correction and current569 integration; whole archive identity, separate from official CLI/native packet.",
+  "allSevenCompleteArchivesByteIdentical": true,
+  "files": [
+    {
+      "path": "before/body-fr.pptx",
+      "bytes": 101017,
+      "sha256": "6facc9880600d88c32389a89b348a14e08c928a296b6b44186672622e6e8837b"
+    },
+    {
+      "path": "before/case07-array.pptx",
+      "bytes": 100892,
+      "sha256": "9ff9124f7371cfdf861798671d9eb56545fb54212e7f2cab73b7316d3f737157"
+    },
+    {
+      "path": "before/case07-scalar.pptx",
+      "bytes": 100943,
+      "sha256": "d6d4a28ab17acf5040efaf03f0d46574e45b31d7b4d29ce0a2daceff4acd891b"
+    },
+    {
+      "path": "before/case11.pptx",
+      "bytes": 101016,
+      "sha256": "475d1de07b59559ff5ebd5c6cc79c4a0beed08afd4d884cbafe4127dde503ab1"
+    },
+    {
+      "path": "before/hashes.json",
+      "bytes": 587,
+      "sha256": "d5d2eb61966e54321582a3b9585fc7d075f85785a48e580c659625acdc4187da"
+    },
+    {
+      "path": "before/ltr.pptx",
+      "bytes": 101040,
+      "sha256": "f7bcc3bd61bb1a38bc68aba53f1a41ac43416d84a18b67653467c011bfa1dfca"
+    },
+    {
+      "path": "before/rtl-explicit-ar.pptx",
+      "bytes": 100900,
+      "sha256": "0861d80d2b438cfdabf75e40c1455cc2702976296090b1c5f869d01a513160b4"
+    },
+    {
+      "path": "before/two-slides.pptx",
+      "bytes": 104847,
+      "sha256": "df7ace668f7757b935c39ad5546b4ea018c80bbfcbacd4a2988a01e6098b0a0b"
+    },
+    {
+      "path": "after/body-fr.pptx",
+      "bytes": 101017,
+      "sha256": "6facc9880600d88c32389a89b348a14e08c928a296b6b44186672622e6e8837b"
+    },
+    {
+      "path": "after/case07-array.pptx",
+      "bytes": 100892,
+      "sha256": "9ff9124f7371cfdf861798671d9eb56545fb54212e7f2cab73b7316d3f737157"
+    },
+    {
+      "path": "after/case07-scalar.pptx",
+      "bytes": 100943,
+      "sha256": "d6d4a28ab17acf5040efaf03f0d46574e45b31d7b4d29ce0a2daceff4acd891b"
+    },
+    {
+      "path": "after/case11.pptx",
+      "bytes": 101016,
+      "sha256": "475d1de07b59559ff5ebd5c6cc79c4a0beed08afd4d884cbafe4127dde503ab1"
+    },
+    {
+      "path": "after/hashes.json",
+      "bytes": 587,
+      "sha256": "d5d2eb61966e54321582a3b9585fc7d075f85785a48e580c659625acdc4187da"
+    },
+    {
+      "path": "after/ltr.pptx",
+      "bytes": 101040,
+      "sha256": "f7bcc3bd61bb1a38bc68aba53f1a41ac43416d84a18b67653467c011bfa1dfca"
+    },
+    {
+      "path": "after/rtl-explicit-ar.pptx",
+      "bytes": 100900,
+      "sha256": "0861d80d2b438cfdabf75e40c1455cc2702976296090b1c5f869d01a513160b4"
+    },
+    {
+      "path": "after/two-slides.pptx",
+      "bytes": 104847,
+      "sha256": "df7ace668f7757b935c39ad5546b4ea018c80bbfcbacd4a2988a01e6098b0a0b"
+    },
+    {
+      "path": "common569/body-fr.pptx",
+      "bytes": 101017,
+      "sha256": "6facc9880600d88c32389a89b348a14e08c928a296b6b44186672622e6e8837b"
+    },
+    {
+      "path": "common569/case07-array.pptx",
+      "bytes": 100892,
+      "sha256": "9ff9124f7371cfdf861798671d9eb56545fb54212e7f2cab73b7316d3f737157"
+    },
+    {
+      "path": "common569/case07-scalar.pptx",
+      "bytes": 100943,
+      "sha256": "d6d4a28ab17acf5040efaf03f0d46574e45b31d7b4d29ce0a2daceff4acd891b"
+    },
+    {
+      "path": "common569/case11.pptx",
+      "bytes": 101016,
+      "sha256": "475d1de07b59559ff5ebd5c6cc79c4a0beed08afd4d884cbafe4127dde503ab1"
+    },
+    {
+      "path": "common569/hashes.json",
+      "bytes": 587,
+      "sha256": "d5d2eb61966e54321582a3b9585fc7d075f85785a48e580c659625acdc4187da"
+    },
+    {
+      "path": "common569/ltr.pptx",
+      "bytes": 101040,
+      "sha256": "f7bcc3bd61bb1a38bc68aba53f1a41ac43416d84a18b67653467c011bfa1dfca"
+    },
+    {
+      "path": "common569/rtl-explicit-ar.pptx",
+      "bytes": 100900,
+      "sha256": "0861d80d2b438cfdabf75e40c1455cc2702976296090b1c5f869d01a513160b4"
+    },
+    {
+      "path": "common569/two-slides.pptx",
+      "bytes": 104847,
+      "sha256": "df7ace668f7757b935c39ad5546b4ea018c80bbfcbacd4a2988a01e6098b0a0b"
+    },
+    {
+      "path": "producer.mjs",
+      "bytes": 1830,
+      "sha256": "92bff1f750a1e6b95b24ed8b1ddbb58ef3b880fe887858b4bd97455131541351"
+    }
+  ],
+  "credentialScan": {
+    "files": 25,
+    "archiveXmlParts": 3108,
+    "hits": 0
+  },
+  "nativeAcceptance": false
+}
