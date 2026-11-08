@@ -4,8 +4,8 @@
     244
   ],
   "required": 64,
-  "reviewed": 48,
-  "status": "48 of 64 original sheets reviewed; remaining 16 unreviewed. Explicit design holds and stress/refusal classifications retained.",
+  "reviewed": 56,
+  "status": "56 of 64 original sheets reviewed; remaining 8 unreviewed. Explicit design holds and stress/refusal classifications retained.",
   "records": [
     {
       "ordinal": 181,
@@ -3470,6 +3470,541 @@
           "ordinal": 50,
           "judgment": "usable-with-chart-legibility-note",
           "note": "The two charts occupy balanced columns with readable direct series labels. Fine category/axis type remains a caveat.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 229,
+      "deck": "batch-17",
+      "localSheet": 1,
+      "sha256": "f55c3ccede1c6982b6364be2bf24de1785fa9f1be3da958d992692f5fb5ab944",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s01",
+          "ordinal": 1,
+          "judgment": "usable-with-growth-note",
+          "note": "Both complete action groups grow into centered columns with no collision; additional body/type growth remains possible.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s02",
+          "ordinal": 2,
+          "judgment": "needs-type-growth-review",
+          "note": "Four metric groups remain small despite large gaps and available body space. Preserve all notes and grow type rather than accepting the sparse scale.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s03",
+          "ordinal": 3,
+          "judgment": "usable",
+          "note": "Both authored images fill balanced body frames without collision.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s04",
+          "ordinal": 4,
+          "judgment": "needs-code-legibility-review",
+          "note": "The before panel is missing and remains explicit. All three current code panels and both narratives are visible, but code is very small; no historical improvement claim can be made.",
+          "findings": [],
+          "missingBefore": true,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 230,
+      "deck": "batch-17",
+      "localSheet": 2,
+      "sha256": "86f0db2aa5f31040c1c68a0f3687df650448d288242e15f828fbedcae7992133",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s05",
+          "ordinal": 5,
+          "judgment": "usable",
+          "note": "The full authored heading is retained and grows beside the edge-filling image. The alternate missing heading is not a reason to delete source content.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s06",
+          "ordinal": 6,
+          "judgment": "usable-with-growth-note",
+          "note": "The labeled line chart and complete narrative occupy separate columns, though narrative type remains modest.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s07",
+          "ordinal": 7,
+          "judgment": "usable",
+          "note": "Both complete paragraphs grow into readable columns with no collision or excessive narrow wrapping.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s08",
+          "ordinal": 8,
+          "judgment": "usable-with-growth-note",
+          "note": "The image, complete narrative and quote panel are retained in three regions without collision; the narrative remains comparatively small.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 231,
+      "deck": "batch-17",
+      "localSheet": 3,
+      "sha256": "6bd1c3432b81f4798c7a7cbe5c69f232e0ea21c94b08e02d8a0249f92a2a3873",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s09",
+          "ordinal": 9,
+          "judgment": "usable-with-growth-note",
+          "note": "All five narrative/signal panels remain visible in a 3+2 arrangement; supporting type is still modest in the larger panels.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s10",
+          "ordinal": 10,
+          "judgment": "usable",
+          "note": "The two metric values grow substantially beside the full narrative and image without collision.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s11",
+          "ordinal": 11,
+          "judgment": "needs-column-width-review",
+          "note": "Five narrow action columns produce many one-word lines and split a long word. Preserve all actions, grow width through arrangement, and avoid shrinking text.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s12",
+          "ordinal": 12,
+          "judgment": "usable",
+          "note": "The chart and large +8 pts metric fill balanced columns with the complete supporting sentence retained.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 232,
+      "deck": "batch-17",
+      "localSheet": 4,
+      "sha256": "4472550ee7ec7a194a61b2e657c65c89d4615d3669057fa2dc89e22de9ee3159",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s13",
+          "ordinal": 13,
+          "judgment": "usable",
+          "note": "Five image frames use a balanced 3+2 arrangement with consistent spacing and no collision.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s14",
+          "ordinal": 14,
+          "judgment": "needs-code-legibility-review",
+          "note": "The complete code and narrative are visible but code remains very small in a sparse body. Keep the code type-growth hold.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s15",
+          "ordinal": 15,
+          "judgment": "usable-with-style-provenance-note",
+          "note": "The section heading is retained and enlarged alongside all four images. The current edge-filling collage differs from the historical image grid without visible overlap.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s16",
+          "ordinal": 16,
+          "judgment": "needs-type-growth-review",
+          "note": "Three metric groups remain small near the center despite extensive unused body space; keep labels and notes while reviewing larger type.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 233,
+      "deck": "batch-17",
+      "localSheet": 5,
+      "sha256": "d5c6b5c5a8407b8e15cb2a65ad841a39c76fc5ae80fe043f7f3f8b12216fcb8d",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s17",
+          "ordinal": 17,
+          "judgment": "needs-type-growth-review",
+          "note": "Five complete statements remain small in the upper-left body with substantial unused area; retain type-growth review.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s18",
+          "ordinal": 18,
+          "judgment": "needs-code-legibility-review",
+          "note": "The code frame is much taller but its short code remains tiny, with large empty interior. No type-growth acceptance from frame growth alone.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s19",
+          "ordinal": 19,
+          "judgment": "stress-refusal-control",
+          "note": "The eight narrative/signal panels appear visible but retain a layout-unplaced finding. Preserve an unaccepted stress/refusal classification.",
+          "findings": [
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/18/blocks/7",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'pillars' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "pillars"
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s20",
+          "ordinal": 20,
+          "judgment": "usable-with-chart-legibility-note",
+          "note": "The full-width stacked chart fills the body and directly labels both series. Fine axes/legend remain a legibility caveat.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 234,
+      "deck": "batch-17",
+      "localSheet": 6,
+      "sha256": "895c889023980870a46b3bf0ac647491a66fd6f48d0adfe5db159b006d63030b",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s21",
+          "ordinal": 21,
+          "judgment": "stress-refusal-control",
+          "note": "The eight dense groups appear visible but retain two layout-unplaced findings and a numbering warning. No semantic/layout acceptance is claimed.",
+          "findings": [
+            {
+              "binding": "explicit-slideId",
+              "ruleId": "opf/numbering-start-ignored",
+              "severity": "warning",
+              "category": "format",
+              "scope": "document",
+              "path": "/slides/20/blocks/1/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+              "definition": "packages/javascript/src/schema-check.ts",
+              "lookup": [
+                "opf",
+                "schema",
+                "presentation",
+                ""
+              ],
+              "validation": {
+                "path": "/slides/20/blocks/1/items",
+                "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+                "keyword": "opf",
+                "schemaPath": "#/x-opf-semantics",
+                "params": {
+                  "code": "numbering-start-ignored"
+                }
+              },
+              "slide": 20,
+              "slideId": "s21",
+              "location": {
+                "offset": 22240,
+                "length": 204,
+                "line": 607,
+                "column": 20
+              }
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/20/blocks/6",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'questions' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "questions"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/20/blocks/7",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'questions' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "questions"
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s22",
+          "ordinal": 22,
+          "judgment": "needs-table-growth-recheck",
+          "note": "The two-row table and callout are centered but small relative to the body. Keep the low-row table growth hold.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s23",
+          "ordinal": 23,
+          "judgment": "stress-refusal-control",
+          "note": "The eight-image grid remains an unaccepted stress/refusal control because two layout-unplaced findings persist, regardless of visible tiles.",
+          "findings": [
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/22/blocks/6",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'pictures' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "pictures"
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/layout-unplaced",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/22/blocks/7",
+              "scope": "document",
+              "message": "No region of the layout has room for this block; it is drawn in 'pictures' beyond its 6 blocks. Paginate to move it to a continuation slide, choose another layout, or remove a block.",
+              "help": "",
+              "region": "pictures"
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s24",
+          "ordinal": 24,
+          "judgment": "stress-refusal-control",
+          "note": "All three code blocks have text-overflow findings and source text extends beyond panel bounds. Preserve each pointer-bound overflow and keep the complete source; no acceptance or shrink.",
+          "findings": [
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/23/blocks/0/code/source",
+              "scope": "document",
+              "message": "Code body exceeds its space at the readability floor; increase its space or change the arrangement.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "text-fit",
+              "parts": [
+                "body"
+              ]
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/23/blocks/2/code/source",
+              "scope": "document",
+              "message": "Code body exceeds its space at the readability floor; increase its space or change the arrangement.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "text-fit",
+              "parts": [
+                "body"
+              ]
+            },
+            {
+              "binding": "zero-based-json-pointer",
+              "ruleId": "render/text-overflow",
+              "severity": "warning",
+              "category": "render",
+              "path": "/slides/23/blocks/4/code/source",
+              "scope": "document",
+              "message": "Code body exceeds its space at the readability floor; increase its space or change the arrangement.",
+              "help": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
+              "reason": "text-fit",
+              "parts": [
+                "body"
+              ]
+            }
+          ],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 235,
+      "deck": "batch-17",
+      "localSheet": 7,
+      "sha256": "6a5988ff8f8fbac65e95de102faffb2163915641aa963923fdc57d0fdd1ac426",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s25",
+          "ordinal": 25,
+          "judgment": "usable",
+          "note": "The section heading grows and remains fully visible beside the full-height image without collision.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s26",
+          "ordinal": 26,
+          "judgment": "needs-table-growth-recheck",
+          "note": "The low-row table and complete narrative remain compact in the middle of a sparse slide; cell type needs growth review.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s27",
+          "ordinal": 27,
+          "judgment": "usable",
+          "note": "Both complete paragraphs grow into readable balanced columns with no collision.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s28",
+          "ordinal": 28,
+          "judgment": "needs-table-chart-width-review",
+          "note": "The low-row table is wider than the historical version, but the chart is very narrow and quote wraps into many short lines. Preserve all four groups and recheck arrangement/readability at unchanged or larger type.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        }
+      ],
+      "confirmedNewDefects": [],
+      "scope": "Visual judgment only; historical producer unknown, no native acceptance or numerical old/new type comparison."
+    },
+    {
+      "ordinal": 236,
+      "deck": "batch-17",
+      "localSheet": 8,
+      "sha256": "c968bde260830c2c6e04518ddb6631f652fab527d9a1ff0ec9608bb2b3d04c7a",
+      "width": 1456,
+      "height": 1218,
+      "viewed": "Actual view_image original detail; complete sheet examined",
+      "vetoable": true,
+      "slides": [
+        {
+          "id": "s29",
+          "ordinal": 29,
+          "judgment": "usable-with-measure-note",
+          "note": "Both complete paragraph panels grow clearly, though full-width reading measure remains long.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s30",
+          "ordinal": 30,
+          "judgment": "needs-table-growth-recheck",
+          "note": "The complete metric, narrative and quote are visible, but the low-row table retains fine cell text. Keep the table legibility hold.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s31",
+          "ordinal": 31,
+          "judgment": "usable-with-growth-note",
+          "note": "The primary value grows dramatically; the complete bottom narrative remains very small relative to available space and needs further growth.",
+          "findings": [],
+          "missingBefore": false,
+          "missingClaude": false
+        },
+        {
+          "id": "s32",
+          "ordinal": 32,
+          "judgment": "usable",
+          "note": "The directly labeled chart and complete quote panel fill balanced columns without collision.",
           "findings": [],
           "missingBefore": false,
           "missingClaude": false
