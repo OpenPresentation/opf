@@ -25,7 +25,8 @@
     "focusedAfter": {
       "pass": 25,
       "fail": 0,
-      "skipped": 0
+      "skipped": 0,
+      "scope": "Initial focused regression after doc correction; final strengthened enumeration/format is covered again by mapped-after check:ci-workflows."
     },
     "mappedFirst": {
       "pass": 12,
@@ -139,12 +140,6 @@
       "rawBytes": 14584,
       "rawSha256": "ff23a607d7ed5d6b4b523fc33e54683460fc77694855c737f424485d385a9a5c",
       "gzipSha256": "3cc5c18860b2d90efccf04f04e2a65d2732270f0baf66a74de8557d43e9c771a"
-    },
-    {
-      "file": "after-install.log.gz",
-      "rawBytes": 4467,
-      "rawSha256": "b95f787379ab82fd4d729e8488157e3b9b64f829e8612536f08323e286990dfe",
-      "gzipSha256": "d39bb716323fa06de69e6e0c3c6868d8f24038ff98989df4ebcc629a6d8a3941"
     },
     {
       "file": "after-pnpm_run_check_changes.log.gz",
@@ -326,5 +321,6 @@
       "rawSha256": "15d5fcad4a9c5d02c06ce77408b5234a71c0dc3514e59f65361b4dc5bc87084c",
       "gzipSha256": "997a2ca21525685530ad17e981a71ac3a3ebd20e4485a9e4abb50475641441b5"
     }
-  ]
+  ],
+  "logProvenanceNote": "The mapped runner retains old per-step files; duplicated after-install was first-run install, not rerun. First-install preserves it; the second run correctly has no install step."
 }
