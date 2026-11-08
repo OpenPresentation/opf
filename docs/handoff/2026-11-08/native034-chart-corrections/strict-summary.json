@@ -1,0 +1,149 @@
+{
+  "scope": "Nativepoint/currentinput/import qualification only; no complete034release or whole-slideposteditparity claim",
+  "cases": 33,
+  "slides": 35,
+  "points": 172,
+  "passing": 172,
+  "maximumPixels": 2.1933997475511906,
+  "canonicalSavedImportsExact": 33,
+  "currentWholeNativeInputsExact": 33,
+  "namedGeometryTextFontsExact": 33,
+  "phasePngExact": 29,
+  "phaseDifferences": "Sixnative line/end-label raster regions285–1146pixels; exact namedgeometry/text/font snapshots and currentimports unchanged; allsixphase triptychs parentreviewed, no clipping/contentloss seen. Inner-chartfontfile/parity notcertified.",
+  "vetoableDecision": "Accept bounded actualpoint/currentdata semantics, retain native end-label raster variance and native edited-name manuallegend fit limitation explicitly. No thresholds, goldens or unsupported domain changed.",
+  "original160PointFailuresRetainedAt": "1406890f9e88bf8b5ff35faf20d9454b5f6b48f3",
+  "currentSource": "a0e5d1ad6f8c3a8169f1d0d68495f3f11ddb40f7",
+  "importerBuiltSource": "dcfb92990; product runtime trees unchanged by09bbworkflowonly fold",
+  "nativeName": {
+    "savedSha256": "eaa03f837aad1e13e53d9fc7afe5d5f9c4098b8992dff200b35798253ffbc2e3",
+    "actualLiteral": "<c:tx><c:v>Native renamed</c:v></c:tx>",
+    "phaseReadback": "Current then Native renamed/Native renamed",
+    "pointPixels": [
+      0.054100622195613096,
+      0.0753659266047627
+    ],
+    "cleanup": true,
+    "acceptance": "Actualmemoryedit/save/reopen succeeded; literal-import fix/reflow review separate, native widername hides Expansion from fixedmanuallegend, no whole-slideeditedparity claim"
+  },
+  "showcase033": {
+    "scope": "Exact genuine published033 publicshowcase input; owned no-edit native open/SaveCopyAs/reopen/cleanup; actual033registry importer; visual parent review separate",
+    "inputSha256": "283fc05ca036877c9f42f51faf3a2e32a4fda6a6e124e5d1d3366f70142b712c",
+    "savedSha256": "f269a8a5ce5003094e5601fe33cad55099031592cd324478f6abe0049bfebabc",
+    "importer": "C:/opf-work/site033-showcase/artifacts/npm/registry-consumer/node_modules/@openpresentation/opf-pptx/dist/index.js",
+    "canonicalExact": true,
+    "shapeGeometryTextFontsExact": true,
+    "nativePhasesExact": true,
+    "shrinkTags": [],
+    "diagnosticsBefore": [],
+    "diagnosticsAfter": [],
+    "nativeTextFonts": [
+      {
+        "name": "OPF heading slides.0.title line 0",
+        "text": "One format. Open tools.",
+        "font": {
+          "status": "uniform",
+          "name": "Roboto",
+          "sizePoints": 40.5,
+          "bold": -1,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        }
+      },
+      {
+        "name": "OPF text slides.0.blocks.0.text line 0",
+        "text": "Write plain JSON. Keep every word editable.",
+        "font": {
+          "status": "mixed-or-unavailable",
+          "name": "Roboto",
+          "sizePoints": 27.75,
+          "bold": -2,
+          "italic": 0,
+          "unavailableFields": [
+            "bold"
+          ],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        }
+      },
+      {
+        "name": "OPF text slides.0.blocks.0.text line 1",
+        "text": "Validate, preview, and export with the same ",
+        "font": {
+          "status": "uniform",
+          "name": "Roboto",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        }
+      },
+      {
+        "name": "OPF text slides.0.blocks.0.text line 2",
+        "text": "free libraries.",
+        "font": {
+          "status": "uniform",
+          "name": "Roboto",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        }
+      },
+      {
+        "name": "OPF list slides.0.blocks.1.items line 0",
+        "text": "Portable agent skills",
+        "font": {
+          "status": "uniform",
+          "name": "Roboto",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        }
+      },
+      {
+        "name": "OPF list slides.0.blocks.1.items line 1",
+        "text": "Local CLI and editor",
+        "font": {
+          "status": "uniform",
+          "name": "Roboto",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        }
+      },
+      {
+        "name": "OPF list slides.0.blocks.1.items line 2",
+        "text": "Editable PPTX ",
+        "font": {
+          "status": "uniform",
+          "name": "Roboto",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        }
+      },
+      {
+        "name": "OPF list slides.0.blocks.1.items line 3",
+        "text": "export",
+        "font": {
+          "status": "uniform",
+          "name": "Roboto",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0,
+          "unavailableFields": [],
+          "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+        }
+      }
+    ],
+    "parentVisualReview": "Accepted exact paired whole-slide PNG: complete authored words and intended bold emphasis retained; no clipping, same geometry/type; mixed-bold whole-range status retained honestly rather than claiming uniform face for that line."
+  }
+}
