@@ -81,3 +81,7 @@ SH21derived1178d52c99 is parent source/all9sheet reviewed and independently21foc
 LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798cf0 fixes nativeLatin/ASCII date proofing and all-protected base-language observation after independentreview. A separate real integration font bug was found: scripts:auto misses generated localizedstatusglyphs forotherwiseLatin RTLtimeline source; a new derived regression/fix is assigned. Do not accept that olddurationtest failure or weaken it. Core25nativewitnesses runserialized now; finalsourceOffice remainsseparate.
 
 033sitebumpworkflowjobs report success, but gallery swallowed an actual oldshape:circle schema failure and opened1177. Sites agent is preparing a genuine normal-push registry bump fromapproved169 rather than rerunning the force-with-lease path. Org202/dev200 genuine registry builds and source continuations are active; no site deploy claimed.
+
+## Generated timeline status font preparation
+
+[The derived LH121 font correction](lh121-generated-status-fonts.md) addresses genuine default CLI missing-glyph failures when otherwise Latin source generates localized status words. It preserves existing font policies and scans authoritative per-slide generated vocabulary; validation and final item PR remain in progress.
