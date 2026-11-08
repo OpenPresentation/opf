@@ -1,0 +1,7 @@
+# E1 0.33 visual review: sheets 181–244
+
+Evidence-only branch; never merge. This disjoint tranche follows the immutable execution order in the genuine0.33 after02 receipt, source29ba0ae536b019ada68623d44850d6cb3b7a6350. It covers batch13 sheet1 through batch18 sheet3. All64 original PNG bytes match the execution receipt and committed source, with authored source hashes, font-route substitutions and every panel bound in bindings.json. Images are never regenerated, cropped or rewritten here.
+
+Review direction: bodies fill their space, type grows, no shrink, readable measure about70characters. Every sheet must actually be viewed at original detail before its record is marked reviewed. Original producers are unknown where the source says null; no invented numeric old/new font-size claim. Missing before/Claude slots remain explicit. Warnings bind by explicit slideId, otherwise actual zero-based /slides/index JSON pointer; unassigned document findings remain separately recorded. Overflow/unplaced cases are stress/refusal controls and are not accepted layouts even if the sheet shows all words. No descriptions are removed to imitate Claude.
+
+Current progress: inputs sealed; 0/64 sheets visually reviewed. The earlier first60, coordinator61–120 and e1_review121–180 are untouched. Sole site observer67705 remains outside this evidence task; no second observer, Office or publication is started.
