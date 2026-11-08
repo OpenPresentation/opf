@@ -71,7 +71,7 @@ export function opfLayoutDefinition(arrangement, item) {
   // SH-23: tables up to OPF_LAYOUT_TABLES entries, so entries a user adds in PowerPoint past OPF's 8 keep OPF's design (where every larger
   // table holds; else the tables stop at 8 and a ninth entry takes the 8-entry table, as before).
   const build = max => compositeLayoutDefinition({uniqueId: opfLayoutId(recipe), title: identity.title + (recipe.compact ? COMPACT.title : ''), description: identity.description + (recipe.compact ? COMPACT.description : ''), category: identity.category},
-    frame, max, k => k === count ? own : opfLayoutGeometry(recipe, k), {node: card ? 'alignNode1' : 'node1', text: arrangement.text, margins, fontSize: size * PT});
+    frame, max, k => k === count ? own : opfLayoutGeometry(recipe, k), {node: card ? 'alignNode1' : 'node1', text: arrangement.text, align: arrangement.align, margins, fontSize: size * PT});
   let definition = build(OPF_LAYOUT_TABLES);
   if (definition.reason) definition = build(OPF_LAYOUT_MAX);
   if (definition.reason) return definition;

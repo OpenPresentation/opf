@@ -29,5 +29,9 @@ for (const slide of slides) {
   const entries = unzipSync(new Uint8Array(await toPptx({slides: [slide]}, {seed: 2323, timestamp: '2026-11-07T00:00:00Z', zipDate: '2026-11-07T00:00:00Z'})));
   const part = entries['ppt/diagrams/layout1.xml'];
   assert.ok(part, `${slide.layout}: live on OPF's layout`);
+  const data=strFromU8(entries['ppt/diagrams/data1.xml']),alignment=/<a:pPr[^>]*\balgn="([^"]+)"/.exec(data)?.[1];
+  const algorithms=[...strFromU8(part).matchAll(/<dgm:alg type="tx"(?:\/>|>[\s\S]*?<\/dgm:alg>)/g)].map(match=>match[0]);
+  assert.equal(algorithms.length,90,'every count plus fallback has a native paragraph default');
+  for(const algorithm of algorithms){assert.ok(algorithm.includes(`<dgm:param type="parTxLTRAlign" val="${alignment}"/>`));assert.ok(algorithm.includes(`<dgm:param type="parTxRTLAlign" val="${alignment==='l'?'r':alignment}"/>`));}
   assert.deepEqual([...strFromU8(part).matchAll(/<dgm:if name="[^"]+" func="cnt" axis="ch" ptType="node" op="equ" val="(\d+)">/g)].map(match => Number(match[1])), Array.from({length: 12}, (_, index) => index + 1), slide.layout);
 }

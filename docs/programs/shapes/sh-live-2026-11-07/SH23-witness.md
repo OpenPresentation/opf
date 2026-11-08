@@ -16,3 +16,11 @@ Example arguments for the reviewed worker envelope:
 ```
 
 Do not run while any PowerPoint process exists. The coordinator reviews the exact script hash before invoking the bounded worker. No native run is claimed at this checkpoint.
+
+## First native result and shared alignment correction
+
+[Raw pyramid01](native/sh23-pyramid-01/) is a structural pass and visual fail: its ninth node and edit survive SaveCopyAs/reopen, with maximum point error0.0000875pt and unchanged sources/owned inputs, but the added label centered while the existing labels start at the label track. It is not an accepted SH23 result. [Raw hashes](native/manifest-after-sh23pyramid01.json) retain the complete attempt.
+
+Cause: source nodes had explicit data paragraphs with `algn="l"`; new nodes had none, and the layout's text algorithm omitted paragraph defaults. Microsoft documents the default as center and prescribes [parTxLTRAlign=l / parTxRTLAlign=r](https://learn.microsoft.com/ja-jp/archive/msdn-magazine/2007/february/create-custom-smartart-graphics-for-use-in-the-2007-office-system) for start-aligned custom SmartArt text. Shared LayoutStyle now carries alignment and every tx algorithm writes those native defaults (or ctr for centered designs), through all12 tables and the fallback. No post-edit script formats the new node.
+
+Source regressions fail before the correction and pass afterward; eight focused core tests plus the existing five-design PPTX table test pass. The verifier now rejects a paragraph alignment mismatch and records/checks first-line positions from the interpreted text rectangles, with the existing SH07 1.5px text bound. The [fresh03 packet](sh23-fresh-03/) includes those expected text positions and new layout identity digests. It supersedes fresh02 only as the next qualification input; old evidence remains immutable. Coordinator review/native run remains owed.

@@ -17,6 +17,7 @@ $knownKinds=@('pyramid','matrix','flow','chevrons','vertical-flow')
 $inputs=@(foreach($witnessCase in $definition.cases){
  if($knownKinds -notcontains [string]$witnessCase.kind){throw 'Unknown witness kind; output filename refused.'}
  if([IO.Path]::GetFileName([string]$witnessCase.file) -ne $witnessCase.file){throw 'Witness filename must be a leaf.'}
+ if(@('l','ctr','r') -notcontains [string]$witnessCase.paragraphAlignment -or $witnessCase.text9.Count -ne 9){throw 'Manifest lacks nine-node text alignment expectations.'}
  if($witnessCase.initialCount -lt 1 -or $witnessCase.initialCount -gt 8){throw 'Witness starts with 1 to 8 nodes.'}
  $source=Join-Path $root $witnessCase.file
  if(-not(Test-Path -LiteralPath $source -PathType Leaf)){throw "Missing witness input: $source"}
@@ -52,13 +53,25 @@ function Measure-OpfSH23($Presentation,$Expected,[int]$Count,[string]$Raster){
  $texts=@();$levels=@()
  for($n=1;$n -le $sa.AllNodes.Count;$n++){$node=$sa.AllNodes.Item($n);$texts+=,[string]$node.TextFrame2.TextRange.Text;$levels+=,[int]$node.Level}
  if(@($levels|Where-Object {$_ -ne 1}).Count -ne 0){throw 'A flat list node was reparented.'}
- $rects=@();$sizes=@()
+ $rects=@();$sizes=@();$paragraphs=@()
  for($k=1;$k -le $shape.GroupItems.Count;$k++){
   $g=$shape.GroupItems.Item($k)
   $rects+=@{left=[double]$g.Left;top=[double]$g.Top;width=[double]$g.Width;height=[double]$g.Height;rotation=[double]$g.Rotation;arrow=($g.AutoShapeType -eq 33)}
-  if($g.HasTextFrame -eq -1 -and $g.TextFrame2.HasText -eq -1){$sizes+=,[double]$g.TextFrame2.TextRange.Font.Size}
+  if($g.HasTextFrame -eq -1 -and $g.TextFrame2.HasText -eq -1){
+   $text=$g.TextFrame2.TextRange;$sizes+=,[double]$text.Font.Size
+   $paragraphs+=@{text=[string]$text.Text;alignment=[int]$text.ParagraphFormat.Alignment;left=[double]$text.Lines(1,1).BoundLeft+[double]$shape.Left;width=[double]$text.Lines(1,1).BoundWidth;top=[double]$text.Lines(1,1).BoundTop+[double]$shape.Top}
+  }
  }
  if($sizes.Count -ne $Count -or @($sizes|Where-Object {[Math]::Abs($_-$Expected.fontSize) -gt .01}).Count -ne 0){throw 'A node font changed or a node has no visible text shape.'}
+ $wantedAlignment=@{l=1;ctr=2;r=3}[[string]$Expected.paragraphAlignment]
+ if(@($paragraphs|Where-Object {$_.alignment -ne $wantedAlignment}).Count -ne 0){throw 'A node paragraph differs from the layout alignment, even though its rectangle matches.'}
+ if($Count -eq 9){
+  for($k=0;$k -lt $paragraphs.Count;$k++){
+   $p=$paragraphs[$k];$e=$Expected.text9[$k]
+   $delta=if($wantedAlignment -eq 1){[Math]::Abs($p.left-$e.left)}elseif($wantedAlignment -eq 3){[Math]::Abs($p.left+$p.width-$e.right)}else{[Math]::Abs($p.left+$p.width/2-($e.left+$e.right)/2)}
+   if($delta -gt 1.125){throw "Node first-line alignment differs by $delta pt (SH07's 1.5px text bound)."}
+  }
+ }
  $actual=@($rects|Where-Object {-not $_.arrow})+@($rects|Where-Object {$_.arrow})
  $expectedShapes=if($Count -eq 8){$Expected.geometry8}else{$Expected.geometry9}
  $expectedShapes=@($expectedShapes|Where-Object {-not $_.arrow})+@($expectedShapes|Where-Object {$_.arrow})
@@ -69,7 +82,7 @@ function Measure-OpfSH23($Presentation,$Expected,[int]$Count,[string]$Raster){
   $turn=[Math]::Abs(((($actual[$k].rotation-$expectedShapes[$k].rotation)%360+540)%360)-180);$maxTurn=[Math]::Max($maxTurn,$turn)
  }
  if($maxRect -gt .1 -or $maxTurn -gt .01){throw "Table geometry differs: $maxRect pt, $maxTurn degrees."}
- return @{nodeCount=$Count;texts=$texts;levels=$levels;sizes=$sizes;layout=[string]$sa.Layout.Id;maxPointError=$maxRect;maxRotationError=$maxTurn;rects=$rects}
+ return @{nodeCount=$Count;texts=$texts;levels=$levels;sizes=$sizes;layout=[string]$sa.Layout.Id;maxPointError=$maxRect;maxRotationError=$maxTurn;rects=$rects;paragraphs=$paragraphs}
 }
 $latch=New-OpfNativeLatch;$rows=New-Object 'System.Collections.Generic.List[object]';$app=$null
 try{

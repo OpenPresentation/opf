@@ -283,7 +283,7 @@ function nodeOf(shape: LayoutShape, index: number): ArrangementNode {
  */
 export interface LayoutTable { nodes: readonly ArrangementNode[]; arrows?: readonly ArrangementArrow[]; background?: Box; textTops?: readonly (number | undefined)[] }
 /** How a definition paints and sets its text: style labels, the text insets as shares of the font size, the font size in points. */
-export interface LayoutStyle { node: string; text: 'node' | 'slide'; arrow?: string; margins: readonly [number, number, number, number]; fontSize: number }
+export interface LayoutStyle { node: string; text: 'node' | 'slide'; align?: 'start' | 'center'; arrow?: string; margins: readonly [number, number, number, number]; fontSize: number }
 
 const share = (value: number, of: number) => Number((value / of).toFixed(9));
 const mm = (px: number) => Number((px * MM_PER_PX).toFixed(6));
@@ -324,7 +324,8 @@ export function compositeLayoutDefinition(identity: Omit<LayoutDefinition, 'root
       const inner: LayoutChild[] = [];
       const font = [{ type: 'primFontSz' as const, val: primFontSz, op: 'equ' as const }], top = t.textTops?.[i];
       const own1 = top === undefined ? margins : margins.map(margin => margin.type === 'tMarg' ? { ...margin, fact: Number(top.toFixed(6)) } : margin);
-      const tx: LayoutAlgorithm = top === undefined ? { type: 'tx' } : { type: 'tx', params: { txAnchorVert: 't' } };
+      // SH-23: added nodes have no authored a:pPr. Office otherwise centers them, even beside a pyramid or on a start-aligned card.
+      const tx: LayoutAlgorithm = { type: 'tx', params: { parTxLTRAlign: style.align === 'start' ? 'l' : 'ctr', parTxRTLAlign: style.align === 'start' ? 'r' : 'ctr', ...(top === undefined ? {} : { txAnchorVert: 't' }) } };
       if (text) {
         inner.push({ kind: 'layoutNode', name, styleLbl: style.node, alg: tx, shape: { type: node.preset, adj: adjust }, presOf: { axis: 'desOrSelf', ptType: 'node' }, constraints: [...font, ...own1] });
         constraints.push(...place(name, node.box, frame));

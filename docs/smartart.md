@@ -502,3 +502,5 @@ SmartArt saved it) imports the same way in `full` provenance: the picture carrie
 SVG and PNG, so a picture still named for its list whose SVG or PNG is the one written is that list on its layout again; a replaced
 picture reports `invalid-smartart-provenance` and imports as a picture, as does any fallback without the record. Native-shape arrangements (`OPF_ARRANGEMENT_V1` on every node) are the layout's
 drawing: import consumes them and reads the measured lines as the list. Other SmartArt layouts are SH-08.
+
+SH-23: custom layout text algorithms set their LTR/RTL paragraph alignment defaults, so newly added nodes keep the design's alignment without a script changing their formatting after the edit.
