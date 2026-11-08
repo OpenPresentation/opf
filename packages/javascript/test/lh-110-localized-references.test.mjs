@@ -24,10 +24,10 @@ for(const [lang,comparison,n92,n123,n2500,n3m,percent]of cases){
 }
 test('cardinal orthography, genders, regional forms, compound boundaries and the integer upper bound',()=>{
  for(const [lang,title,n]of [
-  ['de','über einundzwanzig',21],['de','über hunderttausend',100000],['de','über eine Million zweihunderttausend',1200000],
+  ['de','über einundzwanzig',21],['de','über hunderttausend',100000],['de','über eine Million zweihunderttausend',1200000],['de','über dreihunderteintausend',301000],['de','über dreihunderteine Millionen',301000000],
   ['fr','plus de soixante et onze',71],['fr','plus de quatre-vingts',80],['fr','plus de quatre-vingt-une',81],['fr','plus de septante-deux',72],['fr','plus de huitante',80],['fr','plus de nonante-neuf',99],['fr','plus de deux cent mille',200000],
   ['es','más de veintiún',21],['es','más de doscientas treinta y una',231],['es','más de setecientos ochenta y seis',786],['es','más de quinientas',500],
-  ['it','oltre ventuno',21],['it','oltre ventotto',28],['it','oltre centotto',108],['it','oltre centottantotto',188],['it','oltre duemilacentoventitré',2123],
+  ['it','oltre ventuno',21],['it','oltre ventotto',28],['it','oltre centotto',108],['it','oltre centottantotto',188],['it','oltre duemilacentoventitré',2123],['it','oltre ventitremila',23000],['it','oltre un milione',1000000],['it','oltre ventun milioni',21000000],
   ['pt','mais de dezasseis',16],['pt','mais de dezassete',17],['pt','mais de dezanove',19],['pt','mais de quatorze',14],['pt','mais de duzentas e duas',202],['pt','mais de duzentas e dezasseis',216],
   ['nl','boven één',1],['nl','boven drieëntwintig',23],['nl','boven honderd en één',101],
   ['de','über neunhundertneunundneunzig Millionen neunhundertneunundneunzigtausendneunhundertneunundneunzig',999999999],

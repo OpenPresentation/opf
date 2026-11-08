@@ -68,6 +68,8 @@ function vocabulary(language: Language): Vocabulary {
   };
   for (let n = 0; n < 1000; n++) {
     const word = groupWords(language, n); add(word, n);
+    if (language === 'de') {add(word.replace(/eins$/u, 'ein'), n); add(word.replace(/eins$/u, 'eine'), n);}
+    if (language === 'it') {add(word.replace(/tré$/u, 'tre'), n); add(word.replace(/uno$/u, 'un'), n);}
     if (language === 'de' && n >= 100 && n < 200) add(word.replace(/^ein/u, ''), n);
     if (language === 'de' && n === 1) for (const alias of ['ein','eine','einen','einem','einer','eines']) add(alias, n);
     if (language === 'fr') {
