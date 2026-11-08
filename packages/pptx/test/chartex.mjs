@@ -171,7 +171,7 @@ for (const id of chartexIds) {
     assert.deepEqual(axes.map(([, axisId]) => axisId), ['0', '1', '2'].slice(0, want.axes));
     // CT_Axis order: scaling, gridlines, tickLabels, then the axis's own txPr (PowerPoint does not inherit the chartSpace txPr for axis labels).
     assert.match(axes[0][2], /^<cx:catScaling gapWidth="[0-9.]+"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: category axis`);
-    const scaling = id === 'histogram' || id === 'pareto' ? '<cx:valScaling max="50" min="-20" majorUnit="20"/>' : '<cx:valScaling/>';
+    const scaling = id === 'histogram' || id === 'pareto' ? '<cx:valScaling max="50" min="-20" majorUnit="20"/>' : id === 'box-and-whisker' ? '<cx:valScaling max="15" min="0" majorUnit="5"/>' : '<cx:valScaling/>';
     assert.ok(axes[1][2].startsWith(scaling), `${id}: exact value scale`);
     const axisContent = axes[1][2].slice(scaling.length);
     assert.match(axisContent, id === 'funnel' || id === 'waterfall' ? /^<cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
