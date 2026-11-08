@@ -1,5 +1,5 @@
 {
-  "scope": "F1/F3 source-currency and multi-series Pareto reporting; built candidate source, not registry/native/site qualification",
+  "scope": "F1/F3 source currency, shared draw-plan boundaries and genuine selected chart conversion reporting; built candidate source, not registry/native/site qualification",
   "node": "v24.20.0",
   "base": "c38560d08a330b276e0631eb7451d039c06be723",
   "sourceInventory": {
@@ -164,5 +164,72 @@
       "focusedTests": 15
     }
   },
-  "losslessLogStorage": "raw-log-storage.json"
+  "losslessLogStorage": "raw-log-storage.json",
+  "chartConversion": {
+    "formats": 5,
+    "outputFiles": 9,
+    "exactBytes": true,
+    "acceptedWitness": "chart-convert-witness/after-corrected/receipt.json",
+    "comparison": "chart-convert-witness/exact-byte-comparison.json",
+    "retainedFailedAttempts": [
+      "before",
+      "after",
+      "after-final"
+    ],
+    "cliDefect": "located pre-check merge discarded all opf/yaml/markdown engine advisories; now replaces matching pre-check entries only",
+    "apiFocusedTests": 3,
+    "actualCliRegressionTests": 1,
+    "nativePptxChartNotices": 3,
+    "semanticChartWarningsPerRendererBasedConversion": 3,
+    "deckSerializationWarnings": 0,
+    "sourceMutation": false,
+    "requiredRun": {
+      "command": "pnpm check:changed --base f06820df5d495c13993074b05ef060f443eb5e4c",
+      "seconds": 321.3,
+      "steps": 15,
+      "passed": 12,
+      "failed": 3,
+      "core": {
+        "tests": 4187,
+        "passed": 4186,
+        "failed": 1,
+        "remaining": "inherited section1long golden width999.3 vs1164.8 at unchanged28px"
+      },
+      "cli": {
+        "tests": 235,
+        "passed": 234,
+        "failed": 1,
+        "firstFailure": "two exact tracked XMLs omitted by sparse checkout",
+        "restoredTrackedOriginals": 2,
+        "failedFixtureFocusedFollowup": "3/3 pass"
+      },
+      "catalogFree": {
+        "actual": 271942,
+        "unchangedCap": 267675
+      },
+      "finalFocused": {
+        "tests": 7,
+        "passed": 7
+      },
+      "independentCoordinator": {
+        "tests": 4,
+        "passed": 4,
+        "log": "chart-convert-witness/independent-chart-conversion-report.log.gz"
+      },
+      "summary": "chart-convert-witness/changed-corrected.log.gz",
+      "rawLogs": "chart-convert-witness/mapped-checks/"
+    },
+    "outputStorage": "chart-convert-witness/output-storage.json",
+    "finalMetadataText": {
+      "tests": 7,
+      "passed": 7,
+      "files": 9688,
+      "valid": true
+    },
+    "canonicalGitStorage": {
+      "checkedOutputFiles": 36,
+      "rawOutputHashesMatchAllPhases": true,
+      "fixtureHashMatchesRealCliInput": true
+    }
+  }
 }

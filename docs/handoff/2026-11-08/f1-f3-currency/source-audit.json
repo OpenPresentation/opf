@@ -89,6 +89,34 @@
     {
       "file": "skills/opf-presets/SKILL.md",
       "sha256": "6c335ffa97a6346dfb4d484f9dfdfee18f32579f5ae5ef2a40f8b31fd9295224"
+    },
+    {
+      "file": "docs/chart-options.md",
+      "sha256": "f757aae4852484c96f655af6782b722e3cb9689841f2e394fb1d6daffae5483d"
+    },
+    {
+      "file": "packages/javascript/src/node/export.ts",
+      "sha256": "8ee39e2eeebee51ef5744192e0b387346d5959b0291ad7bb24165c1dea45ecc2"
+    },
+    {
+      "file": "packages/javascript/src/node/conversion.ts",
+      "sha256": "fbc4bdbc9c08a9752250eafe71d17736eee2d2e5eda634546ef3559de3277a9c"
+    },
+    {
+      "file": "packages/cli/src/convert-command.ts",
+      "sha256": "76bf3f2c9ee8e968128946f7a8e6fd00e85d4a10724608f1425ea8e1ce215718"
+    },
+    {
+      "file": "packages/javascript/test/node-chart-conversion-report.test.mjs",
+      "sha256": "953dc66d60a5e2de9c3f0030ac2e711a7c593c15ace3e7223dfdc7e03b47068b"
+    },
+    {
+      "file": "packages/cli/test/chart-conversion-report.test.mjs",
+      "sha256": "db79c9fcf8f15e2ff0c477a7618ad3600e5c70d220074ea37a303b977561f062"
+    },
+    {
+      "file": "packages/javascript/test/fixtures/chart-report-boundaries.opf.json",
+      "sha256": "e75564aa805c14f1be86ff8a8260743c8d6120b0551508d9e764c6069b034eac"
     }
   ],
   "additionalCurrentDocs": [
@@ -97,5 +125,6 @@
     "packages/editor/README.md",
     "docs/agent-skills.md"
   ],
-  "hashBasis": "Canonical staged Git text bytes"
+  "hashBasis": "Canonical staged Git text bytes",
+  "chartReporting": "shared Node drawing pipeline and actual CLI retain only owed selected chart semantic warnings; native PPTX remains authoritative;9 output bytes unchanged"
 }

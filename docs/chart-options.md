@@ -319,3 +319,9 @@ Other one-series constructs can leave additional series out and report `opf/char
 ## Multi-series Pareto adaptation
 
 A Pareto chart sorts one numeric series and draws its cumulative share. When the source has two or more numeric series, OPF preserves every series and category in data order as clustered columns in both the preview and PPTX. Validation reports `opf/chart-mapping-adapted` at the chart's `type`. It does not claim that these clustered columns are a Pareto chart, and does not discard a baseline series to produce a cumulative curve. Use one numeric series for the Pareto representation.
+
+### Validation and conversion reports
+
+`opf validate` and `validate` perform semantic chart checks. Drawing conversions through `opf convert` or the Node `convert` API also retain the selected `opf/chart-mapping-adapted` and `opf/chart-series-dropped` warnings for SVG, PNG, PDF and full-slide image-mode PPTX. Warnings follow the actual drawn slide selection, appear once per affected chart, and leave output bytes unchanged. Native PPTX retains its existing `pptx/chart-data-adapted` exporter notices for representation changes or omitted series, without a duplicate core advisory. Converting between deck text formats keeps its format/reference-only reporting contract. Direct renderer/exporter callbacks are separate from the Node conversion report; use semantic validation when reviewing the source data.
+
+The PPTX exporter also owns its adaptation notices with `charts: "picture"`; core forwarding applies to full-slide image-mode PPTX (`as: "images"`), avoiding duplicate warnings in both routes.

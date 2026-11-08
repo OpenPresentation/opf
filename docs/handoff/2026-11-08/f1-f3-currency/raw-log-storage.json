@@ -110,6 +110,151 @@
       "file": "docs/handoff/2026-11-08/f1-f3-currency/text-sealed.log.gz",
       "originalBytes": 1101,
       "originalSha256": "0e29b36bcbb82345c978c5f13ce0c65e3dd96358e47d731a28b058ce24fa5de1"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/biome-corrected.log.gz",
+      "originalBytes": 1360,
+      "originalSha256": "14c81e7382603a391fe13e6b84b17adb11dde4b12ff7ec623f91abed415b4e88"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/biome.log.gz",
+      "originalBytes": 1360,
+      "originalSha256": "40158314a3a1ed606020df69c32e8ca3ead9261e02f6ab05dad9b758e914bb45"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/changed-corrected.log.gz",
+      "originalBytes": 9220,
+      "originalSha256": "2e11c3345afa69481f1032c89ae210fa4bf3abeb3c40f984c0996c20f44c29d8"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/cli-corrected-build.log.gz",
+      "originalBytes": 534,
+      "originalSha256": "8284ee4f6b3a2daea7ed4f85c446d1af7d3a253a4071529d5f6c8a3a0986a24b"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/cli-corrected-test.log.gz",
+      "originalBytes": 214,
+      "originalSha256": "9171f8ece87769b7d4d20e9900822590d1bcc2a816eb6773acf2af0a3b0cd768"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/complete-candidate-build.log.gz",
+      "originalBytes": 14793,
+      "originalSha256": "b331d946d069d131710b11469ebd83d6f52e26d243a385908432666732eb31f1"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/core-build.log.gz",
+      "originalBytes": 8239,
+      "originalSha256": "e194c951fb4df024b12686e9657b32aeec95c8ceb1d59d90c138c04ecdc8afa4"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/final-focused.log.gz",
+      "originalBytes": 847,
+      "originalSha256": "10b12e74a20aaef5fe389107e89ba1867e8ba5a7933d3b641fc8e89bae7cf3d5"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/independent-chart-conversion-report.log.gz",
+      "originalBytes": 571,
+      "originalSha256": "348e17ff709d477733eee1a09c0b24429180739b1a3109dce0f48513f9b92acf"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/biome.log.gz",
+      "originalBytes": 1331,
+      "originalSha256": "8383323ccc09ccac7ffd986b61500334e8f8d541757d48d672a82679f084150d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/build.log.gz",
+      "originalBytes": 14609,
+      "originalSha256": "5f1b18d148c4ac17c4a21170837b821d8f6bea10e511afc37a34e36c65425181"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_browser-safe.log.gz",
+      "originalBytes": 1154,
+      "originalSha256": "6bc2835021265e4420a901a39eed776fe95f1045c19a8692df002f0e860c9cde"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_catalog-free.log.gz",
+      "originalBytes": 316,
+      "originalSha256": "ea8d3946d03aae0ea6bfa6daf201611d5f107a072a96b37f19dbf771f2423d76"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_changes.log.gz",
+      "originalBytes": 2640,
+      "originalSha256": "608b98b80313d705e532be40c15a3316ca05020aa459bdfd844a771543feea3f"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_diagram-doc-images.log.gz",
+      "originalBytes": 176,
+      "originalSha256": "ab2653369cb139623cea3563f53282601fb52d22a2f75d0f8402ddd238375965"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_examples-convert.log.gz",
+      "originalBytes": 990,
+      "originalSha256": "92dc6277110b0027549301ede92e750b8d73f2f873a1bc82729c51e4b9d82b6b"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_first-deck.log.gz",
+      "originalBytes": 398,
+      "originalSha256": "50b041d683a633b573c1fa134ca101f60e47c3059e6417def921847bb8a54a70"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_font-hotlinks.log.gz",
+      "originalBytes": 890,
+      "originalSha256": "845db0bea50a8bfa2f7013c2a2a2c35c16e3a22aaf7d979e5d6d74403cf79a45"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_skill-commands.log.gz",
+      "originalBytes": 1044,
+      "originalSha256": "69de137e50f7f08342a7316526a7f9ede4961fcedb8b5d9c5e0a25500f7106e0"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_stability.log.gz",
+      "originalBytes": 3971,
+      "originalSha256": "c11dc292cd8d5a9879544959f69576d9a73ec63f4d6f0b58cefc84753f42065d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/pnpm_run_check_text.log.gz",
+      "originalBytes": 1075,
+      "originalSha256": "98898371574ba7db51fa1109ed2771229cddad0e8997c20729afe622bcb62e32"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/tests_cli.log.gz",
+      "originalBytes": 26427,
+      "originalSha256": "260ff03bc47b897fb226ed7602374360f5e27283383bc0924375e29171454d2c"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/tests_opf.log.gz",
+      "originalBytes": 394450,
+      "originalSha256": "aa0f09fb35ac520c58d83bb086e2d8aeeda9ed6eb425de621357149372c1ae1d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/mapped-checks/typecheck.log.gz",
+      "originalBytes": 5328,
+      "originalSha256": "fbfc535bcfcd72b53421724dec4cf54b9cf9c3691f7dd848c3137bab4bd49bc2"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/test-after.log.gz",
+      "originalBytes": 476,
+      "originalSha256": "55e88db51ef2bb39c473ad1ba7225921b616b4d9f75ca11a7204644b5fa0776c"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/test-before.log.gz",
+      "originalBytes": 4091,
+      "originalSha256": "abd822399cda217a024a624cbdcdbd1a116e991171b658a64b740e2da8d50359"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/test-candidate-final.log.gz",
+      "originalBytes": 478,
+      "originalSha256": "1371288cfa41b5690dc7b6db44a1879041df942a1941371f02d8f2a8caf59340"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/test-final.log.gz",
+      "originalBytes": 1233,
+      "originalSha256": "80431546c8ac593b8378c784868c4841d7ef7735a8a472e1baa8206c36b7e9d6"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/f1-f3-currency/chart-convert-witness/final-text.log.gz",
+      "originalBytes": 1101,
+      "originalSha256": "4747f9bf2ec68da7eae7debc71de51230d91cd8992c244056a2f50f0cb9d9f25"
     }
   ]
 }
