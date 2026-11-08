@@ -4923,7 +4923,7 @@ function readableProse(input: unknown, options: ComposeSlideOptions, result: Sli
     if (!next || overflowCount(next) > 0 || next.items.some(overReadingMeasure) || shrinks(next, result, options)) continue;
     const kept = result.items.every(item => {
       const after = next.items.find(entry => entry.path === item.path);
-      return !item.text || !!after?.text && after.text.fontSize >= item.text.fontSize - FONT_GRID_EPSILON && item.textStyle?.fontFamily === after.textStyle?.fontFamily;
+      return !item.text || !!after?.text && after.text.fontSize >= item.text.fontSize - FONT_GRID_EPSILON && JSON.stringify(item.textStyle) === JSON.stringify(after.textStyle);
     });
     const oldFill = bodyFill(result), newFill = bodyFill(next);
     if (kept && (!oldFill || !!newFill && newFill.fill >= oldFill.fill - 1e-6)) return next;
