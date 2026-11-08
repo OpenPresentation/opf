@@ -177,3 +177,7 @@ Finite033siteexampleinventory nowcovers org5homepage+1nativeacceptedshowcase+29t
 - [Current033skill-reference correction](033-skill-reference.md): published-schema-backed regions/direction/size guidance plus current YAML convert verb; all six skill entrypoints/eight references audited within format/export-availability scope, historical guidance retained, public sites await gated main SHA.
 
 RR20 nine-archive command correction: [import-only ESM resolution and retained original failure](rr20-archive-esm-resolution/README.md). Exact baseline locks, producer/runtime seals and raw-part review remain required; final actual refresh is still owed.
+
+- [RR105 bounded read-only survey](rr105-readonly-survey.md): the 92-shape timeline witness requires a separate explicit one-slide/100-shape/zero-action mode, preserving the default30-shape editing guard and unchanged60-second maximum. Actual pure functions/runner controls precede independent review and any native observation; no native acceptance yet.
+
+Bounded-survey independent review and actual92-shape timeline acceptance now complete; all namedstates/fonts/canonical saved imports/phaseimages exact, no shrink, owned cleanup confirmed. [Full evidence19aa30bf and retained import limitations](https://github.com/OpenPresentation/opf/tree/19aa30bfdb06779b7b3fb7e67c5e5ea4db61bd9c/docs/handoff/2026-11-08/native034-timeline-survey). Mapped full run still retains final budgets/goldens/archive/stricttracker and separateWindows CodeMirror test-fixture gates; no release readiness claim.
