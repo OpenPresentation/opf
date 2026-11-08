@@ -23,6 +23,30 @@ normalization or runtime drawing change.
 Actual 21-fixture controls cover legacy 0.33 preservation, all unrelated fields,
 changed-only history, a subsequent review appending its actual latest lock,
 native digest continuity, malformed report/history refusal and actual command
-routing. Initial controls pass. The required mapped check and a corrected 0.34
-candidate constructed from already sealed reports/bytes will be archived before
-the final push. No archive serialization rerun is needed for that construction.
+routing. Local controls and the coordinator's independent Node 24 controls pass.
+
+The once-only mapped check took 572.3 seconds: nine build/root steps passed,
+typecheck correctly skipped, and the PPTX leg stopped on unchanged
+`keynote-registry-runtime.mjs:44` with Windows symlink `EPERM`. Its first 78 tests
+passed, including the 45-child/43-case determinism matrix (280 seconds); 156
+later tests were not run. The new pure test passed directly and independently
+before that inherited earlier suite failure. No assertion was weakened or broad
+test run repeated. All raw logs, including the independent coordinator log,
+are preserved in the [construction/check packet](../../../evidence/rr20-archive-history/checks.json).
+
+The corrected 0.34 candidate was constructed from the sealed 513 report and
+original fixture, with zero archive serialization. All 21 current hash, size,
+part-count and native-digest fields equal the accepted raw candidate. All
+original source fields and all seven legacy 0.33 entry histories are preserved;
+only `bar` and `pie` append their actual current previous lock. The new source
+review distinguishes the original export-reviewer identity from the new pure
+construction helper and binds evidence commit `5e89a184` and exact report hash.
+
+The [corrected candidate](../../../evidence/rr20-archive-history/corrected-034-candidate-fixture.json)
+has SHA-256
+`d62b991a3772856d812296cf12582be2ede6850e39d644d3414ab39a89a06e27`.
+The packet includes exact original fixture/report/evidence inputs and a portable
+`reconstruct-candidate.mjs` that reproduces those JSON bytes without importing
+an exporter. The original wrong-metadata candidate remains immutable on the
+previous evidence branch. The coordinator owns source integration, fixture
+promotion and final combined checks; this PR claims none of those outcomes.
