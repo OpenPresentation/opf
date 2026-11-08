@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Layout sampler",
   "language": "en",
-  "description": "One slide for each of the 30 default layouts, then 13 dynamic compositions (no layout record), all on one fictional six-week pilot story. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
+  "description": "One slide for each of the 36 default layouts, then 13 dynamic compositions (no layout record), all on one fictional six-week pilot story. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
   "design": {
     "background": "light1",
     "footer": {
@@ -872,6 +872,100 @@
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgNjAwIDI0MCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIyNDAiIGZpbGw9IiNmMGYwZjAiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSIxMjAiIHI9IjcyIiBmaWxsPSJub25lIiBzdHJva2U9IiMyNjM0NDUiIHN0cm9rZS13aWR0aD0iMjAiLz48cGF0aCBkPSJNMjYwIDEyMGg4ME0zMDAgODB2ODAiIHN0cm9rZT0iIzI2MzQ0NSIgc3Ryb2tlLXdpZHRoPSIxOCIvPjwvc3ZnPg==",
             "alt": "STUDIO, fictional geometric mark"
           }
+        }
+      ]
+    },
+    {
+      "id": "layout-pyramid",
+      "layout": "pyramid",
+      "title": "What the pilot builds on",
+      "blocks": [
+        {
+          "region": "levels",
+          "items": [
+            "Goal",
+            "Evidence",
+            "Pilot teams",
+            "Shared baseline"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-matrix",
+      "layout": "matrix",
+      "title": "Four ways to run the pilot",
+      "blocks": [
+        {
+          "region": "quadrants",
+          "items": [
+            "Small, fast",
+            "Small, slow",
+            "Broad, fast",
+            "Broad, slow"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-cycle",
+      "layout": "cycle",
+      "title": "How each pilot round feeds the next",
+      "blocks": [
+        {
+          "region": "stages",
+          "items": [
+            "Plan",
+            "Pilot",
+            "Measure",
+            "Adjust"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-chevrons",
+      "layout": "chevrons",
+      "title": "Four stages of the pilot",
+      "blocks": [
+        {
+          "region": "stages",
+          "items": [
+            "Baseline",
+            "Pilot",
+            "Review",
+            "Decide"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-flow",
+      "layout": "flow",
+      "title": "From evidence to decision",
+      "blocks": [
+        {
+          "region": "stages",
+          "items": [
+            "Gather evidence",
+            "Run the pilot",
+            "Decide"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-vertical-flow",
+      "layout": "vertical-flow",
+      "title": "How a team joins the pilot",
+      "blocks": [
+        {
+          "region": "stages",
+          "items": [
+            "Nominate",
+            "Train",
+            "Start"
+          ]
         }
       ]
     },
@@ -2486,6 +2580,168 @@
           },
           "design": {
             "imageFit": "contain"
+          }
+        },
+        "pyramid": {
+          "name": "Pyramid",
+          "summary": "Levels that build on each other, as a pyramid, the first at the top.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "levels",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "pyramid"
+            }
+          ],
+          "description": "Show a hierarchy of 1 to 8 levels, from the narrow top (the peak, the few, the goal) to the broad base (the foundation, the many). Write one short list entry per level, the top level first.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/pyramid.svg"
+          }
+        },
+        "matrix": {
+          "name": "Matrix",
+          "summary": "Four parts of a whole, as the quadrants of a square beside the title.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title",
+              "size": 2
+            },
+            {
+              "name": "quadrants",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "matrix",
+              "size": 3
+            }
+          ],
+          "description": "Show four parts that together make a whole, or the four cases of two choices, as a 2 x 2 matrix. Write four short list entries, in the order top left, top right, bottom left, bottom right; another count is drawn as a grid of cards.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/matrix.svg"
+          }
+        },
+        "cycle": {
+          "name": "Cycle",
+          "summary": "Steps that repeat, as a loop of nodes with arrows beside the title.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title",
+              "size": 2
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "cycle",
+              "size": 3
+            }
+          ],
+          "description": "Show 2 to 8 steps that repeat, where the last leads back to the first (a review loop, a product lifecycle, a feedback cycle). Write one short list entry per step, in order; the first is drawn at the top and the rest clockwise, with an arrow from each to the next.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cycle.svg"
+          }
+        },
+        "chevrons": {
+          "name": "Chevrons",
+          "summary": "Stages in order, as a row of chevrons.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "chevrons"
+            }
+          ],
+          "description": "Show 1 to 8 stages that follow one another, each leading into the next. Write one short list entry per stage, in order; a word or two reads best inside a chevron.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chevrons.svg"
+          }
+        },
+        "flow": {
+          "name": "Flow",
+          "summary": "Steps in order, as boxes joined by arrows in one row.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "flow"
+            }
+          ],
+          "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/flow.svg"
+          }
+        },
+        "vertical-flow": {
+          "name": "Vertical flow",
+          "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title",
+              "size": 2
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "vertical-flow",
+              "size": 3
+            }
+          ],
+          "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-flow.svg"
           }
         }
       }

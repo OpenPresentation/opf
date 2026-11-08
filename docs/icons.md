@@ -18,7 +18,7 @@ author gave one. OPF never invents an icon.
 
 | Field | Drawn |
 | --- | --- |
-| `items[].icon` (a `ListItem` object) | On a chip in the marker column, in place of the bullet, centered on the entry's first line. Every entry of the list keeps the column, so the texts start at one edge. First-level entries of an unnumbered list only. A ruled list (`listStyle: "rows"`) sets the chips at the start of its labels. A short list that is the whole body draws as icon cards (below), numbered or not. |
+| `items[].icon` (a `ListItem` object) | On a chip in the marker column, in place of the bullet, centered on the entry's first line. Every entry of the list keeps the column, so the texts start at one edge; an entry without an icon keeps its bullet there, centered in the column (LH-174), unless `design.listBullet` is `none`. First-level entries of an unnumbered list only. A ruled list (`listStyle: "rows"`) sets the chips at the start of its labels. A short list that is the whole body draws as icon cards (below), numbered or not. |
 | `metric.icon` | On a chip above the metric, at its alignment (centered, or at the start of a start-aligned metric). |
 | `icon` on a group (a block with `blocks`) | On a chip at the top start edge of the group, above its heading (its eyebrow), inside a group drawn on a card. A person drawn as a portrait card (LH-132) draws no chip; the icon is reported `icon-dropped`. |
 

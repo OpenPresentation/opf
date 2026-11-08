@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, chartBandColor, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartBarGeometry, chartDrawPlan, chartBandColor, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -203,6 +203,8 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   c.waterfall = layer?.waterfall;
   c.histogram = layer?.histogram;
   c.valueList = layer?.valueList;
+  // LH-182: a doughnut's square and its hole (core), the hole filled with the surface.
+  c.doughnut = layer?.doughnut;
   c.stack = layer?.stack;
   if (layer?.valueList || layer?.stack?.names) c.legendManaged = true;
   // LH-93: sibling charts sharing one value axis share one plot height; core gives each its inner plot as an inset from the chart box.
@@ -255,7 +257,7 @@ export function chartData(item, bound) {
   const resolved = resolveChartData(chart, bound?.presentation, { path: item.path });
   if (!resolved.ok) return null;
   // LH-60: core's draw plan (the fallback construct and the data as drawn), shared with the PPTX export.
-  const language = bound?.presentation?.language;
+  const language = bound?.scriptFonts?.profile?.bcp47;
   const plan = chartDrawPlan(chart, resolved, { language: typeof language === "string" ? language : undefined });
   const formats = plan.formats.map((format) => typeof format === "string" && format !== "" && !numberFormatError(format) ? format : undefined);
   return { type: plan.type, fallback: plan.fallback, columns: plan.columns, hasX: plan.hasX, rows: plan.rows, formats, trace: tracePaths(item, bound, { ...resolved, columns: plan.columns, regrouped: plan.columns.length !== resolved.columns.length }), ...(resolved.combo ? { combo: resolved.combo } : {}) };
@@ -338,6 +340,7 @@ const neutrals = bound.design.roles.neutrals;
     strongColors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }),
     // RR-92: the value axis core composed for a column, bar, line or area chart ({ min, max, majorUnit }); absent for the other types.
     valueAxis: item.chart?.valueAxis,
+    numericAxes: item.chart?.layer?.numericAxes,
     gridColor: neutrals.gridline.hex,
     axisColor: neutrals.axisLine.hex,
     outlineColor: neutrals.outline.hex,
@@ -363,7 +366,7 @@ const neutrals = bound.design.roles.neutrals;
     },
     // LH-141: whether the default value labels of column `column` group their thousands (no format of its own, whole numbers, one of four digits).
     group: (column) => (formats[column] === undefined || formats[column] === "") && groupsThousands(rows.map((row) => chartNumber(row[column]))),
-    language: bound.presentation?.language,
+    language: bound.scriptFonts?.profile?.bcp47,
     series(first = 1) {
       return columns.slice(first).map((name, offset) => ({
         name: c.label(name), column: first + offset, index: offset,
@@ -772,12 +775,14 @@ function chartAggregateError(path, aggregate) {
 // A range so wide that min + n x majorUnit leaves Number's range (finite data up to Number.MAX_VALUE) has no ticks to rebuild from the
 // three numbers; it takes the saturating scale `niceScale` computes.
 function categoryScale(c, dataMin, dataMax, length, labelExtent, percent) {
-  const axis = c.valueAxis;
-  if (axis && Number.isFinite(axis.max - axis.min) && (axis.max - axis.min) / axis.majorUnit <= 1000) {
-    const scale = scaleFrom(axis.min, axis.max, axis.majorUnit);
-    if (scale.ticks.every(Number.isFinite)) return scale;
-  }
-  return niceScale(dataMin, dataMax, chartIntervalsFor(length, labelExtent, c.u), { percent });
+  return composedScale(c.valueAxis) ?? niceScale(dataMin, dataMax, chartIntervalsFor(length, labelExtent, c.u), { percent });
+}
+
+// The scale of an axis core composed ({min, max, majorUnit}), or undefined when there is none or its ticks leave Number's range.
+function composedScale(axis) {
+  if (!axis || !Number.isFinite(axis.max - axis.min) || !(axis.majorUnit > 0) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
+  const scale = scaleFrom(axis.min, axis.max, axis.majorUnit);
+  return scale.ticks.every(Number.isFinite) ? scale : undefined;
 }
 
 function renderCategoryChart(c, spec) {
@@ -892,20 +897,11 @@ function renderCategoryChart(c, spec) {
   }
 }
 
-// PptxGenJS gap widths: clustered 150%, stacked 50% (overlap 100).
-export function barGeometry(band, seriesCount, grouping) {
-  if (grouping === "clustered") {
-    const group = band / 2.5;
-    return { group, width: group / seriesCount, offset: (band - group) / 2, clustered: true };
-  }
-  const width = band / 1.5;
-  return { group: width, width, offset: (band - width) / 2, clustered: false };
-}
-
 function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot = (i) => i, rowTop = (i) => plot.y + i * band }) {
   // Bars grow from zero, or from the axis minimum (maximum, for all-negative data) when zero is off the axis.
   const base = (value) => Math.min(scale.max, Math.max(scale.min, value));
-  const geometry = barGeometry(band, series.length, spec.grouping);
+  // LH-176: core's bar geometry, PowerPoint's gap width (clustered 150%, stacked 50%) and overlap, as the PPTX export writes them.
+  const geometry = chartBarGeometry(band, series.length, spec.grouping);
   const labels = [];
   series.forEach((s, j) => {
     stacks[j].forEach((point, i) => {
@@ -1191,7 +1187,8 @@ function renderCircularChart(c, spec) {
   })));
   // LH-108: with a value list, the pie fills the square core gave it.
   const list = c.valueList;
-  const area = list ? list.pie : { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
+  // LH-182: a doughnut in core's square (the PPTX export pins its plot there too).
+  const area = list ? list.pie : spec.kind === "doughnut" && c.doughnut ? c.doughnut.pie : { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
   const ringTexts = c.dataLabels ? rings.map((ring) => ring.values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][ring.column]) ?? 0, share: ring.total ? value / ring.total : 0, format: c.formats[ring.column], group: c.group(ring.column) }))) : null;
@@ -1200,7 +1197,7 @@ function renderCircularChart(c, spec) {
   const outsideTexts = !ringTexts || spec.kind !== "pie" ? [] : c.sliceLabels ? ringTexts[0].filter((_, i) => c.sliceLabels.get(i) === "outside") : (c.dataLabels.position ?? "outside-end") === "outside-end" ? ringTexts[0] : [];
   const outside = outsideTexts.length > 0;
   const reserve = outside ? outsideLabelReserve(c, outsideTexts) : { x: 0, y: 0 };
-  const r = list ? Math.max(1, Math.min(area.width, area.height) / 2) : outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
+  const r = list || (spec.kind === "doughnut" && c.doughnut) ? Math.max(1, Math.min(area.width, area.height) / 2) : outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
   const hole = spec.kind === "doughnut" ? r * 0.5 : 0;
   if (rings.every((ring) => !ring.total)) {
     c.text("No positive chart values", area, c.path);
@@ -1209,6 +1206,8 @@ function renderCircularChart(c, spec) {
   // LH-161: a bordered pie separates its slices (the last from the first) by a surface-colored line.
   const border = c.sliceBordered ? { stroke: c.surface, "stroke-width": CHART_SLICE_SEPARATOR_PX * c.u } : { stroke: c.outlineColor, "stroke-width": 0.75 * c.pt };
   const thickness = (r - hole) / rings.length;
+  // LH-182: the hole takes the surface the chart stands on, so a watermark or motif behind the chart does not show through it.
+  if (hole && c.doughnut) c.mark("circle", { cx, cy, r: hole, fill: c.surface });
   rings.forEach((ring, j) => {
     const inner = hole + j * thickness, outer = inner + thickness;
     let angle = -Math.PI / 2;
@@ -1300,15 +1299,15 @@ function renderScatterChart(c) {
   const legendWidth = seriesLegend(c, series, "marker");
   const top = box.y + pad + c.lineHeight / 2, bottom = box.y + box.height - pad - c.lineHeight;
   const height = Math.max(1, bottom - top);
-  const yScale = niceScale(ys.length ? Math.min(...ys) : 0, ys.length ? Math.max(...ys) : 1, chartIntervalsFor(height, c.lineHeight * 1.2, c.u));
+  const yScale = composedScale(c.numericAxes?.value) ?? niceScale(ys.length ? Math.min(...ys) : 0, ys.length ? Math.max(...ys) : 1, chartIntervalsFor(height, c.lineHeight * 1.2, c.u));
   const tickWidth = Math.max(...yScale.ticks.map((tick) => c.width(formatTick(tick, false, yFormat, yGroup)))) + fontPx * 0.5;
   const plot = { x: box.x + pad + tickWidth, y: top, height };
   plot.width = Math.max(1, box.x + box.width - pad - legendWidth - fontPx - plot.x);
   const xLabelWidth = Math.max(c.width(formatTick(xs.length ? Math.max(...xs) : 1, false, xFormat, xGroup)), c.width(formatTick(xs.length ? Math.min(...xs) : 0, false, xFormat, xGroup))) + fontPx;
   const scaleForX = (w) => niceScale(xs.length ? Math.min(...xs) : 0, xs.length ? Math.max(...xs) : 1, chartIntervalsFor(w, xLabelWidth, c.u));
-  let xScale = scaleForX(plot.width);
+  let xScale = composedScale(c.numericAxes?.category) ?? scaleForX(plot.width);
   // RR-54: a formatted X axis keeps its end labels inside the chart.
-  if (xFormat !== undefined) ({ x: plot.x, width: plot.width, scale: xScale } = insetForEndLabels(c, plot.x, plot.width, xFormat, scaleForX));
+  if (xFormat !== undefined) ({ x: plot.x, width: plot.width, scale: xScale } = insetForEndLabels(c, plot.x, plot.width, xFormat, w => composedScale(c.numericAxes?.category) ?? scaleForX(w)));
   c.plotArea = plot;
   const xAt = (v) => plot.x + axisFraction(v, xScale) * plot.width;
   const yAt = (v) => plot.y + axisFraction(v, yScale, true) * plot.height;
@@ -1502,11 +1501,13 @@ function renderHistogramChart(c, spec) {
   const total = bars.reduce((sum, bar) => sum + Math.max(0, bar.value), 0);
   if (!Number.isFinite(total)) throw chartAggregateError(c.path, "cumulative total");
   const dataMax = bars.length ? Math.max(...bars.map((bar) => bar.value)) : 1, dataMin = bars.length ? Math.min(0, ...bars.map((bar) => bar.value)) : 0;
-  const probe = { ticks: probeTicks(dataMin, dataMax) };
+  // RR-105: the value axis core composed (layer.histogram.valueAxis), which the PPTX export writes as the chartex cx:valScaling.
+  const composed = composedScale(c.histogram?.valueAxis);
+  const probe = { ticks: composed ? composed.ticks : probeTicks(dataMin, dataMax) };
   // LH-153: the labels and the value axis group their thousands (a histogram's bin counts too) unless the column has a format.
   const labelGroup = format === undefined && groupsThousands(bars.map((bar) => bar.value)), tickGroup = dataGroup(c, format, bars.map((bar) => bar.value), { zeroBased: true });
   const { plot, band } = chartexPlot(c, { categories: bars.map((bar) => ({ name: bar.name, path: bar.labelPath })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format, tickGroup)), percentAxis: pareto });
-  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
+  const scale = composed ?? niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   const { at, crossing } = valueAxis(c, plot, scale, format, tickGroup);
   const width = band / 1.06, offset = (band - width) / 2;
   bars.forEach((bar, i) => {
@@ -1520,7 +1521,8 @@ function renderHistogramChart(c, spec) {
   });
   if (pareto && bars.length) {
     // Percentage axis on the right, 0-100%, and the cumulative line through the bar centres.
-    const percent = niceScale(0, 1, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u), { percent: true });
+    // RR-105: the percentage step core composed (layer.histogram.percentUnit), which the PPTX export writes on the secondary axis.
+    const percent = (c.histogram?.percentUnit > 0 ? composedScale({ min: 0, max: 1, majorUnit: c.histogram.percentUnit }) : undefined) ?? niceScale(0, 1, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u), { percent: true });
     const right = plot.x + plot.width;
     axisLine(c, right, plot.y, right, plot.y + plot.height);
     for (const tick of percent.ticks) {
@@ -1557,7 +1559,7 @@ function renderWaterfallChart(c) {
   // LH-153: the labels group their thousands by the deck language (no format, whole numbers, one of four digits), and so does the axis.
   const labelGroup = c.group(column), tickGroup = dataGroup(c, format, extents, { zeroBased: true });
   const { plot, band } = chartexPlot(c, { categories: categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format, tickGroup)), labelRoom: hidden });
-  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
+  const scale = composedScale(c.numericAxes?.value) ?? niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   let at;
   if (hidden) {
     // The category axis line stays, at zero; the labels carry the values.
@@ -1726,7 +1728,7 @@ function renderBoxWhiskerChart(c) {
   // LH-153: the value axis groups its thousands when the plotted values are whole numbers of four digits (the statistics between them do not decide).
   const tickGroup = dataGroup(c, format, series.flatMap((s) => s.values), { zeroBased: false });
   const { plot, band } = chartexPlot(c, { categories: groups.map((group) => ({ name: group.name, path: lone ? c.path : `${c.path}.data.rows.${group.first}.0` })), legendWidth, tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format, tickGroup)) });
-  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
+  const scale = composedScale(c.numericAxes?.value) ?? niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   const { at } = valueAxis(c, plot, scale, format, tickGroup);
   const group = band / 2, width = group / series.length, offset = (band - group) / 2;
   series.forEach((s, j) => {

@@ -21,7 +21,7 @@ This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **
 
 For AI agents, use the [OPF skill set](docs/agent-skills.md) for authoring, layout, presets, editing, export, and schema inspection.
 
-Published CLI 0.18.0 installs all six skills into your project with `npx @openpresentation/cli@0.18.0 skills install`. It uses local copies, preserves existing instructions and refuses to overwrite customized skills. See the [installation and update guide](docs/agent-skills.md) for personal or agent-specific targets and source development.
+The published CLI installs all six skills into your project with `npx @openpresentation/cli skills install`. It uses local copies, preserves existing instructions and refuses to overwrite customized skills. See the [installation and update guide](docs/agent-skills.md) for personal or agent-specific targets and source development.
 
 For a fresh Node 24 project that installs **published** packages (not this
 checkout), follow the [developer quickstart](docs/quickstart.md) and the
@@ -51,7 +51,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## Start in three steps
 
-1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the currently recorded registry pin set: core, renderer, PPTX, editor, CLI and Gallery, all at the shared version 0.26.1. The default catalog is supplied by `@openpresentation/gallery@0.26.1`; see the [compatibility matrix](docs/compatibility-matrix.md) for feature and native limits.
+1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the currently recorded registry pin set: core, renderer, PPTX, editor, CLI and Gallery, all at the shared version 0.33.0. The default catalog is supplied by `@openpresentation/gallery@0.33.0`; see the [compatibility matrix](docs/compatibility-matrix.md) for feature and native limits.
 2. **Author, validate, paginate, preview and export.** New to OPF? Run the [first deck](docs/first-deck/README.md) end to end first. Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. From code, `convert("deck.opf.md", "deck.pdf")` of `@openpresentation/opf` is the simple path to a PDF, PNG, SVG or PPTX file. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
 3. **Know the limits.** PPTX export writes one text box per wrapped line, so text edited in PowerPoint or Keynote does not reflow (see [rich text](docs/rich-text.md)) unless you opt in to `--body-text native` (opf-pptx and CLI 0.22.0 or later), and fonts are named, not embedded. The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
@@ -71,7 +71,7 @@ In Node (and Bun and Deno) its root also reads and writes files (`convert`, `ope
 
 ## Toolkit libraries
 
-OPF is seven packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and in Node reads and writes files, through the same import. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery catalog of layouts, themes, colour and font schemes and the other records, released with the other packages; core depends on it and registers it in Node. **The CLI** (`@openpresentation/cli`) is the `opf` command. **The MCP server** (`@openpresentation/mcp`, `npx -y @openpresentation/mcp`) lets an MCP-native agent learn OPF (docs, schemas, catalog, examples and skills as resources) and validate and convert decks. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. All seven live in this repository (`packages/`) and are released together at one version. See [ecosystem development](docs/ecosystem-development.md) for local builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
+OPF is seven packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and in Node reads and writes files, through the same import. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery catalog of layouts, themes, color and font schemes and the other records, released with the other packages; core depends on it and registers it in Node. **The CLI** (`@openpresentation/cli`) is the `opf` command. **The MCP server** (`@openpresentation/mcp`, `npx -y @openpresentation/mcp`) lets an MCP-native agent learn OPF (docs, schemas, catalog, examples and skills as resources) and validate and convert decks. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. All seven live in this repository (`packages/`) and are released together at one version. See [ecosystem development](docs/ecosystem-development.md) for local builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
 
 | Package | Role | Boundary |
 |---|---|---|
@@ -177,7 +177,12 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/slide-sizes.md`](./docs/slide-sizes.md) | OPF's slide-size presets in inches, points and EMU, how they compare with PowerPoint's presets, and what PPTX export and import do with them. |
 | [`docs/catalog-schema-reference.md`](./docs/catalog-schema-reference.md) | Author-facing reference for every companion catalog schema. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |
-| [`docs/diagrams.md`](./docs/diagrams.md) | Mermaid diagrams as a content kind: when to use one, the supported families, how the deck styles and sizes them, accessibility, export and limits. |
+| [`docs/diagrams.md`](./docs/diagrams.md) | Mermaid diagrams as a content kind: when to use one, the supported families, how the deck styles and sizes them, accessibility, export (native PowerPoint shapes by default) and limits. |
+| [`docs/shapes.md`](./docs/shapes.md) | Shapes: the 187 DrawingML presets as blocks, custom outlines, slide overlays and connectors, and how PowerPoint export and import carry them. |
+| [`docs/shape-effects.md`](./docs/shape-effects.md) | The six shape effects (shadow, glow, reflection, soft edge, blur, 3-D) and how each engine draws them. |
+| [`docs/smartart.md`](./docs/smartart.md) | The pyramid, matrix, cycle, chevrons, flow and vertical-flow layouts: live SmartArt in PowerPoint where it holds the text, native shapes elsewhere. |
+| [`docs/icons.md`](./docs/icons.md) | Icons on list entries, metrics and groups, icon cards, and the Lucide and Tabler icon sets in `@openpresentation/gallery/icon-sets`. |
+| [`docs/mcp.md`](./docs/mcp.md) | The MCP server (`npx -y @openpresentation/mcp`): tools, resources, and `show_deck`, which opens the OPF viewer in clients such as Claude. |
 | [`docs/footnotes-citations-captions.md`](./docs/footnotes-citations-captions.md) | Citations (`cite`), inline footnotes, the deck `references` list, captions on images, charts, tables and videos, and how every engine draws them. |
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
 | [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |

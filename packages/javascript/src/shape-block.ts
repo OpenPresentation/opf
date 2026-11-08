@@ -531,7 +531,11 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
     const union = preset && UNION_SHAPE_GRADIENTS.has(preset) ? star(filledRings) : undefined;
     geometry.paths.forEach((path, index) => { if (path.fill !== 'none') paths[index]!.gradientOutline = union ?? star(flat[index]!); });
   }
-  const textRect = { x: round(box.x + geometry.textRect.x), y: round(box.y + geometry.textRect.y), width: round(geometry.textRect.width), height: round(geometry.textRect.height) };
+  // PowerPoint flips a shape's text rectangle with its geometry (flipH mirrors it left to right, flipV top to bottom; the glyphs are not
+  // mirrored), so the text sits in the mirrored rectangle. The PPTX export writes the flip on the frame and leaves the placement to PowerPoint.
+  const flipH = host.flip === 'horizontal' || host.flip === 'both', flipV = host.flip === 'vertical' || host.flip === 'both';
+  const own = geometry.textRect;
+  const textRect = { x: round(box.x + (flipH ? w - own.x - own.width : own.x)), y: round(box.y + (flipV ? h - own.y - own.height : own.y)), width: round(own.width), height: round(own.height) };
   const padding = paddingOf(host.padding, scale);
   const inner = { x: textRect.x + padding.left, y: textRect.y + padding.top, width: Math.max(scale, textRect.width - padding.left - padding.right), height: Math.max(scale, textRect.height - padding.top - padding.bottom) };
   const textDirection = pick(host.textDirection, ['horizontal', 'vertical', 'vertical270', 'stacked'] as const, 'horizontal');

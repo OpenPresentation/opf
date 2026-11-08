@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "One deck, several languages",
+  "description": "Slide-level language controls direction, script fonts, quotations and number formatting while the deck keeps its shared design.",
+  "language": "en-US",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "aptos"
+  },
+  "slides": [
+    {
+      "title": "One design, several languages",
+      "text": "Each slide can choose its language. Slides that omit it inherit the deck language."
+    },
+    {
+      "language": {
+        "bcp47": "ar-SA",
+        "fontScheme": "noto-sans-arabic"
+      },
+      "title": "لغة الشريحة تحدد اتجاهها",
+      "items": [
+        "تقرأ هذه الشريحة من اليمين إلى اليسار",
+        "يكتب التصدير خط العربية المختار",
+        "تحتفظ الشرائح الأخرى بلغتها"
+      ]
+    },
+    {
+      "language": "ja",
+      "title": "スライドごとに言語を選ぶ",
+      "quote": "同じ資料でも、それぞれの言語に合う文字と引用符を使う。"
+    },
+    {
+      "language": "fr-FR",
+      "title": "Chaque langue garde ses conventions",
+      "metric": {
+        "value": 150000,
+        "label": "Personnes accompagnées",
+        "description": "Les nombres suivent la langue de cette diapositive."
+      }
+    }
+  ]
+}

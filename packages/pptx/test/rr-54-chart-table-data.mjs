@@ -4,7 +4,7 @@
 // formats; dataset references and chart.mapping export exactly like their inline equivalent; dataset tables and formatted
 // cells export their display text; export -> import restores every new field from OPF_DATA_V1/OPF_DATASETS_V1 while the
 // native evidence is unchanged; a deck without provenance maps the format codes core can map back, and reports the rest;
-// and a deck that uses none of the new fields keeps its bytes (test/fixtures/rr-54-unchanged.json, from main).
+// and default exports keep the exact reviewed snapshot bytes (test/fixtures/rr-54-unchanged.json; approved default changes are recorded there).
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
@@ -257,7 +257,7 @@ const roundTripDeck = {
   const fixture = JSON.parse(readFileSync(new URL('./fixtures/rr-54-unchanged.json', import.meta.url), 'utf8'));
   for (const [name, {deck, sha256, nativeSlideSha256, rr20PartCount, rr20Bytes}] of Object.entries(fixture.entries)) {
     const bytes = await toPptx(structuredClone(deck));
-    assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, `${name}: locked ZIP bytes (reviewed table and single-column provenance updates)`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, `${name}: locked ZIP bytes (reviewed default-output and provenance updates)`);
     assert.equal(bytes.length, rr20Bytes, `${name}: reviewed RR-20 archive size`);
     assert.equal(Object.keys(unzipSync(bytes)).length, rr20PartCount, `${name}: reviewed RR-20 ZIP part count`);
     if (nativeSlideSha256) {
@@ -268,4 +268,4 @@ const roundTripDeck = {
   checks += Object.keys(fixture.entries).length;
 }
 
-console.log(`RR-54 chart and table data passed: ${checks} checks (strict numbers, chart and workbook number formats, dataset/mapping/scatter X equivalence, dataset and formatted tables, full round trip, edits and missing datasets, third-party format codes and chartex, provenance modes, unchanged bytes).`);
+console.log(`RR-54 chart and table data passed: ${checks} checks (strict numbers, chart and workbook number formats, dataset/mapping/scatter X equivalence, dataset and formatted tables, full round trip, edits and missing datasets, third-party format codes and chartex, provenance modes, reviewed archive bytes).`);

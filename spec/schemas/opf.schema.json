@@ -2703,6 +2703,11 @@
           "description": "Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the slides array, so simple decks may omit this.",
           "examples": ["s1", "cover", "problem-1", "ask"]
         },
+        "language": {
+          "oneOf": [{ "$ref": "#/$defs/LanguageTag" }, { "$ref": "#/$defs/Language" }],
+          "description": "Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, line breaking and number formatting follow the effective slide language; TextRun.lang still overrides an individual run.",
+          "examples": ["ar-SA", "ja", "fr-FR"]
+        },
         "type": {
           "type": "string",
           "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline", "diagram"],
@@ -3097,7 +3102,7 @@
               "maximum": 3
             }
           ],
-          "description": "Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a quarter of the slide wide; when none fits, the largest allowed count shrinks towards minFontSize. A list of 6 or fewer entries is never split by 'auto'; it shrinks in one column. 1, 2 or 3 fixes the count. Column breaks fall between items (a nested item stays with its parent) and keep the columns as even as possible; numbering continues and reading order runs column by column. A lone list in a layout region with listColumns: 'auto' behaves as 'auto'.",
+          "description": "Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a quarter of the slide wide; when none fits, 'auto' takes the count (1, 2 or 3) whose fitted size is largest, preferring fewer columns on a tie, and sets the list in one column only when its lines stay within the prose measure (or it is a type-scale step larger). A list of 6 or fewer entries is never split by 'auto'; it shrinks in one column. 1, 2 or 3 fixes the count. Column breaks fall between items (a nested item stays with its parent) and keep the columns as even as possible; numbering continues and reading order runs column by column. A lone list in a layout region with listColumns: 'auto' behaves as 'auto'.",
           "examples": ["auto", 2]
         },
         "image": {
@@ -3760,21 +3765,21 @@
     },
     "Diagram": {
       "type": "object",
-      "description": "A diagram written as text. Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { \"source\": value }.",
+      "description": "A diagram written as text (Mermaid, Graphviz DOT or PlantUML). Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { \"source\": value }.",
       "additionalProperties": false,
       "required": ["source"],
       "properties": {
         "source": {
           "type": "string",
           "minLength": 1,
-          "description": "The diagram source. With syntax 'mermaid' (the default) it is Mermaid 12.1 text whose first line names the diagram type (flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timeline, journey, quadrantChart, xychart, sankey, gitGraph, C4Context, block, architecture-beta, kanban, packet, radar-beta, treemap, venn-beta, ishikawa, requirementDiagram and the other built-in families; ZenUML is not supported). Mermaid themes, colors in themeVariables and click callbacks are ignored: the deck's design decides the colors and fonts.",
-          "examples": ["flowchart LR\n  A[Idea] --> B[Prototype] --> C[Launch]", "mindmap\n  root((Strategy))\n    Growth\n    Efficiency\n    People"]
+          "description": "The diagram source. With syntax 'mermaid' (the default) it is Mermaid 12.1 text whose first line names the diagram type (flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timeline, journey, quadrantChart, xychart, sankey, gitGraph, C4Context, block, architecture-beta, kanban, packet, radar-beta, treemap, venn-beta, ishikawa, requirementDiagram and the other built-in families; ZenUML is not supported). Mermaid themes, colors in themeVariables and click callbacks are ignored: the deck's design decides the colors and fonts. With syntax 'dot' it is one Graphviz DOT graph (graph or digraph), laid out in layers as Graphviz's dot engine does: rankdir, node shapes, edge styles, arrowheads, labels and subgraph cluster_* groups are drawn; colors, fonts, sizes and positions are the deck's; a graph whose layout attribute names another engine (neato, fdp, sfdp, circo, twopi, osage, patchwork) is not drawn. With syntax 'plantuml' it is one PlantUML diagram from @startuml (or @startmindmap, @startgantt) to its @end line: sequence, class, state, activity (the current syntax), use case, component and deployment diagrams, mind maps and gantt charts are drawn as the Mermaid family of the same kind; other PlantUML diagrams, the legacy activity syntax and the preprocessor are not drawn, and skinparam, themes and colors are ignored.",
+          "examples": ["flowchart LR\n  A[Idea] --> B[Prototype] --> C[Launch]", "mindmap\n  root((Strategy))\n    Growth\n    Efficiency\n    People", "digraph {\n  rankdir=LR\n  Idea -> Prototype -> Launch\n}", "@startuml\nAlice -> Bob : hello\n@enduml"]
         },
         "syntax": {
           "type": "string",
-          "enum": ["mermaid"],
+          "enum": ["mermaid", "dot", "plantuml"],
           "default": "mermaid",
-          "description": "The language of 'source'. Mermaid is the only syntax today."
+          "description": "The language of 'source': 'mermaid' (Mermaid 12.1, the default), 'dot' (Graphviz DOT, drawn with the layered layout) or 'plantuml' (PlantUML, drawn as the Mermaid family of the same kind). OPF reads all three itself; no Graphviz or PlantUML code runs."
         },
         "alt": {
           "type": "string",

@@ -51,10 +51,10 @@ rehearsal. The jobs:
    `npm-publish.yml` (a tag pushed with `GITHUB_TOKEN` would not).
 5. **npm-publish.yml** on the tag: `plan` (the tag is on `main`), `build` (one install and build, `pnpm pack` of the seven,
    `scripts/stamp-githead.mjs` adds `gitHead` to each tarball because `pnpm pack` omits it, a smoke test installs the seven
-   tarballs together, renders the quickstart deck and runs the CLI), `publish` (the only job with `id-token: write`; the
+   tarballs together, renders the quickstart deck and runs the CLI; builds and checks the full Claude Desktop MCP bundle with all script fonts and retains it with its SHA-256), `publish` (the only job with `id-token: write`; the
    pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` seven times, printing npm's own output; a version already on npm is
    skipped. Once npm accepted an upload the package is published: if the registry does not serve it yet it is logged as
-   **pending**, which is not a failure, and the job goes on), `verify` (below: it first waits for the registry), `release` (the GitHub release, notes grouped by package) and `report` (a failure opens the issue
+   **pending**, which is not a failure, and the job goes on), `verify` (below: it first waits for the registry), `release` (the GitHub release, notes grouped by package, the checked versioned `.mcpb` and its `.sha256` file) and `report` (a failure opens the issue
    "Release vX.Y.Z failed", labeled `release-failed`).
 6. **follow the publish run** (the Release run waits for it, so it is green only when the whole release is).
 
@@ -124,6 +124,17 @@ node scripts/release.mjs verify X.Y.Z --tag latest            # exit 0 when all 
 npm view @openpresentation/opf@X.Y.Z gitHead dist.attestations.url
 npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z; 5.0.0 stays published
 ```
+
+### Claude Desktop release assets
+
+The build job runs `pnpm --filter @openpresentation/mcp run build:mcpb --check` and retains only
+`opf-X.Y.Z.mcpb` and `opf-X.Y.Z.mcpb.sha256` as the `mcpb` workflow artifact. This is the full bundle, including all pinned
+script fonts. A rehearsal builds and checks it too, without creating a release or uploading public assets.
+
+After registry and provenance verification, the release job downloads that exact artifact and attaches the two files.
+Reruns preserve release notes and existing assets. They verify an existing bundle/checksum pair, add a missing checksum from
+the already uploaded bundle's bytes, or add a missing bundle only if its bytes match the existing checksum. A mismatch fails
+instead of replacing a public asset. Retry through the existing trusted workflow; never repair a release with `--clobber`.
 
 ### `scripts/release.mjs`
 

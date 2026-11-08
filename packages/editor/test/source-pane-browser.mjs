@@ -13,12 +13,14 @@ import { prepareSave } from '../dist/index.js';
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };
 const server = createServer(async (req, res) => {
+  if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
   try {
     const url = new URL(req.url, 'http://localhost');
     const target = path.resolve(root, '.' + decodeURIComponent(url.pathname));
     const relative = path.relative(root, target);
     if (relative.startsWith('..') || path.isAbsolute(relative)) { res.writeHead(403).end(); return; }
-    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(await readFile(target));
+    const body = await readFile(target);
+    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(body);
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -222,7 +224,7 @@ try {
   // 7. Copy and Download (default behavior).
   await page.getByRole('button', { name: 'Copy source' }).click();
   await page.getByRole('status').filter({ hasText: 'Copied' }).waitFor();
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), original);
+  assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n"), original);
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download source' }).click()]);
   assert.equal(download.suggestedFilename(), 'deck.opf.json');
   assert.equal(await readFile(await download.path(), 'utf8'), original);
@@ -230,7 +232,7 @@ try {
   const [yamlDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download source' }).click()]);
   assert.equal(yamlDownload.suggestedFilename(), 'deck.opf.yaml');
   await page.getByRole('button', { name: 'Copy source' }).click();
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), await text(page));
+  assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n"), await text(page));
   // Format (fix indentation) lays the YAML out and keeps its comments: nothing is dropped, so nothing is reported.
   await selectIn(page, 'name: Minimal OPF Deck');
   await page.keyboard.type('# a comment\nname:   Minimal OPF Deck   # kept');

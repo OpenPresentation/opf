@@ -10,13 +10,17 @@
 //                 `cx:binCount`, so PowerPoint draws the bins the preview does.
 //   edge labels   A bin reads "(8333, 11250]", not "(8333.33333, 11250]": the edges are rounded to the decimals the bin width needs
 //                 (`histogramEdgeDecimals`, within a tenth of a bin of the true edge), written as the category axis number format
-//                 (`cx:numFmt`), which PowerPoint applies to the bin labels. Short labels stay on one line.
+//                 (`cx:numFmt`), which PowerPoint applies to the bin labels. Short labels stay on one line. An edge is rounded the way
+//                 PowerPoint rounds it (`histogramEdgeText`: its decimal value, half away from zero), so 3.05 reads 3.1 in both engines.
+//   value axis    RR-105: the value axis is decided here too (`valueAxis`, core `niceScale` over the bars) and written as the chartex
+//                 `cx:valScaling` min, max and majorUnit, because PowerPoint's automatic chartex axis follows its own rule (0 to 4,500
+//                 by 500 where the preview drew 0 to 5,000 by 1,000).
 //   value labels  Per-bar value labels are dropped when they do not fit beside each other (a label wider than its bar's slot), the
 //                 rule of the small chart's labels (LH-111): about a dozen bars of a half-width chart, more on a wide one.
 //
 // A histogram or Pareto chart over a category column (one bar per row) keeps its rows; only its value labels follow the fit rule.
 import {chartNumber, type ResolvedChartData} from './chart-data.js';
-import {chartTextSize} from './chart-axis.js';
+import {chartIntervalsFor, chartTextSize, niceScale, type ChartValueAxis} from './chart-axis.js';
 import {chartLabelText, chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {columnGroups, valueLabel, type ChartLayerGeometry} from './chart-layer.js';
 
@@ -36,6 +40,10 @@ export interface ChartLayerHistogram {
   decimals?: number;
   /** False when the chart's data labels do not fit beside each other: neither engine draws them. */
   valueLabels?: false;
+  /** RR-105: the value axis both engines draw (the preview's scale; the chartex `cx:valScaling` min, max and majorUnit). */
+  valueAxis?: ChartValueAxis;
+  /** RR-105: a Pareto chart's percentage axis step (0 to 100%), the preview's ticks and the chartex secondary axis `majorUnit`. */
+  percentUnit?: number;
 }
 
 /**
@@ -66,8 +74,23 @@ export function histogramEdgeDecimals(width: number, edges?: readonly number[]):
   const bound = Math.min(10, Math.max(0, Math.ceil(0.7 - Math.log10(width) - 1e-9)));
   if (!edges) return bound;
   const tolerance = width / 10 + 1e-12;
-  for (let decimals = 0; decimals < bound; decimals++) if (edges.every(edge => Math.abs(edge - Number(edge.toFixed(decimals))) <= tolerance)) return decimals;
+  for (let decimals = 0; decimals < bound; decimals++) if (edges.every(edge => Math.abs(edge - Number(histogramEdgeText(edge, decimals))) <= tolerance)) return decimals;
   return bound;
+}
+
+/**
+ * RR-105: an edge written with `decimals` decimals as PowerPoint writes it under the format `0.0...`: the number's decimal value (15
+ * significant digits, so 1.2 + 1.85 is 3.05 and not 3.0499999999999998) rounded half away from zero. `toFixed` rounds the binary value
+ * and wrote 3.0 where PowerPoint shows 3.1 (v0.33 PowerPoint qualification).
+ */
+export function histogramEdgeText(value: number, decimals: number): string {
+  const places = Math.min(20, Math.max(0, Math.floor(decimals)));
+  if (!Number.isFinite(value)) return value.toFixed(places);
+  const scaled = Number((Number(Math.abs(value).toPrecision(15)) * 10 ** places).toPrecision(15));
+  const whole = Math.round(scaled);
+  if (!Number.isSafeInteger(whole)) return value.toFixed(places);
+  const rounded = whole / 10 ** places;
+  return (value < 0 && whole !== 0 ? -rounded : rounded).toFixed(places);
 }
 
 /** The Excel number format of edges written with `decimals` decimals (the category axis format PowerPoint applies to its bin labels). */
@@ -92,7 +115,8 @@ export function histogramBins(values: readonly (number | null)[], options: {coun
   }
   const labelsWith = (format: (value: number) => string) => bins.map((bin, index) => count === 1 && min === max ? format(min) : `${index === 0 ? '[' : '('}${format(bin.low)}, ${format(bin.high)}]`);
   if (options.decimals !== undefined) {
-    const labels = labelsWith(value => value.toFixed(options.decimals));
+    const decimals = options.decimals;
+    const labels = labelsWith(value => histogramEdgeText(value, decimals));
     return bins.map((bin, index) => ({...bin, label: labels[index]!}));
   }
   for (let precision = 6; ; precision++) {
@@ -151,6 +175,19 @@ export function chartHistogram(chart: unknown, data: ResolvedChartData, geometry
     out.decimals = histogramEdgeDecimals(width, [...bins.map(bin => bin.low), bins.at(-1)!.high]);
     counts = bins.map(bin => bin.count);
     names = histogramBins(finite, {count, decimals: out.decimals}).map(bin => bin.label);
+  }
+  // RR-105: the value axis, niceScale over the bars (zero-based) with as many intervals as the plot's height holds, estimated from the box
+  // as core's column axis is (chartValueAxis): the padding, the top margin and one line of category labels, less a category axis title.
+  if (counts.length) {
+    const lineHeight = fontPx * 1.5;
+    const titleBand = typeof titles.category === 'string' && titles.category.trim() !== '' ? lineHeight : 0;
+    const length = Math.max(1, box.height - 2 * pad - lineHeight * 1.5 - titleBand);
+    const fitted = niceScale(Math.min(0, ...counts), Math.max(...counts), chartIntervalsFor(length, lineHeight * 1.2, scale));
+    if ([fitted.min, fitted.max, fitted.step].every(Number.isFinite) && fitted.step > 0 && (fitted.max - fitted.min) / fitted.step <= 1000) out.valueAxis = {min: fitted.min, max: fitted.max, majorUnit: fitted.step};
+    if (target.kind === 'pareto') {
+      const percent = niceScale(0, 1, chartIntervalsFor(length, lineHeight * 1.2, scale), {percent: true});
+      if (Number.isFinite(percent.step) && percent.step > 0) out.percentUnit = percent.step;
+    }
   }
   // The data labels the author chose are drawn only where they fit beside each other (a label and half a text size of air per bar).
   const labels = resolveChartOptions(chart, target).dataLabels;
