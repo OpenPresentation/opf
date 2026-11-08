@@ -1,6 +1,7 @@
 import {nativeTreeGeometry,type NativeTreeConnector} from './native-tree-arrangement.js';
 import {arrangementTree} from './tree-arrangement.js';
 import {vennNodes} from './venn-arrangement.js';
+import {fitVennShapes} from './venn-editable.js';
 import {presetTextRect} from './smart-art-layout.js';
 export {nativeTreeGeometry,type NativeTreeKind,type NativeTreeNode,type NativeTreeConnector,type NativeTreeGeometry,type NativeTreeGeometryResult} from './native-tree-arrangement.js';
 export {arrangementTree,type ArrangementTreeNode,type ArrangementTreeResult} from './tree-arrangement.js';
@@ -5508,6 +5509,9 @@ function wholeStepSmallest(result: SlideComposition, options: ComposeSlideOption
   return sizes.length ? Math.min(...sizes) : Infinity;
 }
 function recomposeAtFloor(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
+  // A Venn refusal is a reading-measure constraint too; an unconstrained automatic list cannot erase it. Explicit pagination resolves it.
+  const authored=record(options.layout).regions,vennRegions=new Set((Array.isArray(authored)?authored:[]).filter(region=>record(region).arrangement==='venn').map(region=>record(region).name));
+  if(result.regions?.some(region=>vennRegions.has(region.name)&&result.diagnostics.some(issue=>issue.code==='text-overflow'&&region.content.includes(issue.path))))return result;
   const before = bodyReadability(result, options);
   if (!before.sizes.some(entry => entry.atFloor)) return layoutFirstRecompose(input, options, result);
   let automatic: SlideComposition;
@@ -10094,7 +10098,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   //   each entry beside its level (start-aligned), or four quadrants filling the region (centered);
   // - `cards`: a matrix of other than four entries is a grid of cards (cardGridColumns), start-aligned, reported `arrangement-adapted`.
   // When none holds the entries at the floor, the list stays as it was and `arrangement-adapted` says so. Each entry is a list column.
-  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; connectors?: NativeTreeConnector[]; largest?: true; last?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined; layout?: OpfLayoutRecipe };
+  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; connectors?: NativeTreeConnector[]; largest?: true; last?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined; layout?: OpfLayoutRecipe; fitNodes?: (size:number)=>ArrangementNode[]|undefined; minimumSize?:number; adaptation?:string; instead?:string };
   const arrangedList = (item: ComposedItem, kind: Arrangement, area: LayoutBox, pyramidDirection: 'up' | 'down' = 'up'): ComposedArrangement | undefined => {
     const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
     const tree=kind==='org-chart'||kind==='hierarchy',measured=tree||kind==='venn';
@@ -10131,6 +10135,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const box = { x: inner.x, y: inner.y + (inner.height - entry.text.height) / 2, width: inner.width, height: entry.text.height };
         const text = single(index, box, size), placed = text.listEntries[0];
         if (!placed || text.overflow || cutsWord(placed)) return undefined;
+        if(kind==='venn'&&count>=5&&design.design!=='smartart'&&placed.text.richLines.some(line=>line.fragments.map(fragment=>fragment.text).join('').trim().length>70))return undefined;
         // A centered line is centered without the space it broke at (PowerPoint's wrap drops it): the space is left out of its last
         // fragment and width.
         if (design.align === 'center') placed.text.richLines = placed.text.richLines.map(line => {
@@ -10161,12 +10166,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // The largest size at which a design holds every entry; for the SmartArt design one whose line breaks all hold (PowerPoint breaks them
     // alike) when there is one.
     const sized = (design: ArrangementDesign) => {
-      let fallback: { placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined;
-      for (let candidate = top; ; candidate = snapFontSizeDown(candidate - step)) {
-        const at = Math.max(candidate, floor), attempt = place(design, at);
-        if (attempt && (design.design !== 'smartart' || attempt.stable.every(Boolean))) return { placed: attempt, size: at };
-        if (attempt && !fallback) fallback = { placed: attempt, size: at };
-        if (at <= floor + 1e-6) return fallback;
+      let fallback: {design:ArrangementDesign; placed:NonNullable<ReturnType<typeof place>>; size:number}|undefined;
+      const minimum=design.minimumSize??floor;
+      for(let candidate=top;;candidate=snapFontSizeDown(candidate-step)){
+        const at=Math.max(candidate,minimum),nodes=design.fitNodes?design.fitNodes(at):design.nodes;
+        const current=nodes?{...design,nodes}:undefined,attempt=current?place(current,at):undefined;
+        if(attempt&&(design.design!=='smartart'||attempt.stable.every(Boolean)))return{design:current!,placed:attempt,size:at};
+        if(attempt&&!fallback)fallback={design:current!,placed:attempt,size:at};
+        if(at<=minimum+1e-6)return fallback;
       }
     };
     const primaryLine = ARRANGEMENT_LINE_POINTS / .75 * scale, radius = CARD_RADIUS * scale;
@@ -10181,7 +10188,34 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const nodes:ArrangementNode[]=geometry.nodes.map(node=>{const preset=kind==='hierarchy'?'roundRect' as const:'rect' as const,adjust=kind==='hierarchy'?10000:0;return{index:node.index,box:node.box,preset,adjust,textBox:presetTextRect(preset,node.box,adjust),...(kind==='hierarchy'?{radius:.1*Math.min(node.box.width,node.box.height),background:node.background}: {})};});
       designs.push({design:'smartart',frame:area,nodes,connectors:geometry.connectors,margin:ARRANGEMENT_TEXT_MARGIN[kind],align:'center',paint:'primary',text:kind==='hierarchy'?'slide':'node',lineWidth:primaryLine});
     } else if(kind==='venn'){
-      designs.push({design:'smartart',frame:area,nodes:vennNodes(area,count),margin:ARRANGEMENT_TEXT_MARGIN.venn,align:'center',paint:'primary',text:'slide',lineWidth:primaryLine});
+      const nativeNodes=vennNodes(area,count);
+      const measuredDesign:ArrangementDesign={design:'smartart',frame:area,nodes:nativeNodes,margin:ARRANGEMENT_TEXT_MARGIN.venn,align:'center',paint:'primary',text:'slide',lineWidth:primaryLine};
+      if(count<=4)designs.push(measuredDesign);
+      else{
+        // Keep the previous measured design's actual type size as an additional floor. Reclaim unused native label slots, not type.
+        const previous=sized(measuredDesign),previousList={...item};
+        if(!previous)fillRegionWithList(previousList,area,top);
+        const minimumSize=previous?.size??Math.max(base,(previousList.text as ListFit).fontSize);
+        const fitNodes=(size:number):ArrangementNode[]|undefined=>{
+          let best:ReturnType<typeof fitVennShapes>;const seen=new Set<string>(),margin=ARRANGEMENT_TEXT_MARGIN.venn*size;
+          for(const share of[.18,.24,.32,.4,.5]){
+            const labels=[];let complete=true;
+            for(let index=0;index<count;index++){
+              const probe=single(index,{x:0,y:0,width:area.width*share,height:1e5},size),entry=probe.listEntries[0];
+              if(!entry||probe.overflow||cutsWord(entry)||entry.text.richLines.some(line=>line.fragments.map(fragment=>fragment.text).join('').trim().length>70)){complete=false;break;}
+              labels.push({width:Math.max(1,...entry.text.richLines.map(line=>line.width))+2*margin+size*.02,height:Math.max(size*.25,entry.text.height)+2*margin+.01});
+            }
+            if(!complete)continue;const key=JSON.stringify(labels);if(seen.has(key))continue;seen.add(key);
+            const fit=fitVennShapes(area,nativeNodes,labels,Math.max(4*scale,size*.12));
+            // Smaller overlaps should become complete readable cards, not a tiny central diagram surrounded by empty native slots.
+            if(fit&&fit.circleHeight>=area.height*.65&&(!best||fit.circleHeight>best.circleHeight))best=fit;
+          }
+          return best?.nodes;
+        };
+        designs.push({...measuredDesign,design:'opf',minimumSize,fitNodes,instead:'the measured Basic Venn circle group leaves too much unused slide body',adaptation:'Venn sets use enlarged editable shapes with measured outside labels; this adapted geometry is not a qualified live SmartArt layout.'});
+        const columns=[...new Set([...cardGridColumns(count),2,1])].filter(column=>column<=count);
+        for(const column of columns)designs.push({design:'cards',frame:area,nodes:cardNodes(area,count,column,gap,radius),margin:CARD_TEXT_MARGIN,align:'center',paint:'card',text:'slide',lineWidth:scale,minimumSize,adaptation:'The Venn overlap cannot keep every outside label readable at the original type size, so all sets are shown as editable cards.'});
+      }
     } else if (kind === 'cycle') {
       // SH-18: PowerPoint's Basic Cycle in a frame of its own proportion (cycleFrame), then OPF's two designs filling the region (rounded
       // rectangles on a ring, and a loop of two rows), of which the one that holds the entries larger is kept (the ring when they tie).
@@ -10221,17 +10255,35 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!result) { if (design.design === 'smartart') skipped = `its entries do not fit PowerPoint's ${SMART_ART_NAMES[kind].layout} at the list's size`; continue; }
       const unavailable = design.design !== 'smartart' ? undefined : smartArtUnavailable({ kind, pyramidDirection, count, frame: design.frame, rtl: rtl || script.rtl, ...(script.script ? { script: script.script } : {}),
         nodes: result.placed.lines.map((lines, index) => ({ lines, stable: result.placed.stable[index]! })), ...(isLinearArrangement(kind) ? { fill: result.placed.fill, ink: result.placed.ink } : {}), widest: result.placed.widest });
-      if (unavailable !== undefined) { outside ??= { design, ...result }; skipped = unavailable; continue; }
+      if (unavailable !== undefined) { outside ??= result; skipped = unavailable; continue; }
       // Of the card grids, of a cycle's designs and of OPF's rows or columns of a linear arrangement (SH-17, `largest`), the one that holds the largest text.
       const largest = design.design === 'cards' || kind === 'cycle' || design.largest === true;
       if (largest && chosen && chosen.design.design === design.design && chosen.size >= result.size) continue;
-      chosen = { design, ...result };
+      chosen = result;
       if (design.design === 'smartart' || !largest) break;
     }
     if (!chosen && outside) { chosen = outside; skipped = undefined; }
     if (!chosen) {
       diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The entries of the ${kind === 'chevrons' ? 'row of chevrons' : kind.replace('-', ' ')} do not fit its ${SMART_ART_NAMES[kind].nodes} at the list's size, so they are drawn as a list.` });
       fillRegionWithList(item, area, top);
+      if(kind==='venn'){
+        // Keep the existing complete-list type. A Venn fallback caps its own reading measure without changing generic lists.
+        const current=item.text as ListFit,options=listOptionsFor(item.field,item.path,item.payload.numbering,values);
+        const readable=(text:ListFit)=>text.listEntries.every(entry=>!cutsWord(entry)&&entry.text.richLines.every(line=>line.fragments.map(fragment=>fragment.text).join('').trim().length<=70));
+        if(!readable(current)){
+          let wrapped:ListFit|undefined,box:LayoutBox|undefined;
+          // Widest first on a bounded 64-step width grid. A failed height fit never lowers the retained type or clips the complete list.
+          for(let step=1;step<64;step++){
+            const width=area.width*(1-step/64),trial={...area,x:area.x+(area.width-width)/2,width};
+            const probe=fitList(values,trial,current.fontSize,current.fontSize,options);
+            if(!readable(probe))continue;
+            if(!probe.overflow&&probe.height<=area.height+1e-6){box={...trial,y:area.y+(area.height-probe.height)/2,height:probe.height};wrapped=fitList(values,box,current.fontSize,current.fontSize,options);}
+            break;
+          }
+          if(wrapped&&!wrapped.overflow&&box){item.text=wrapped;item.box=box;}
+          else diagnostics.push({code:'text-overflow',path:item.path,message:'The complete Venn fallback cannot wrap whole words to 70 characters per line at its retained type size within this body. Paginate the slide or shorten the labels; strict composition refuses this unfit fallback.'});
+        }
+      }
       return undefined;
     }
     let { design, placed } = chosen;
@@ -10244,6 +10296,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (next && again) { design = next; placed = again; }
     }
     if (design.layout) placed = place(design, size, true) ?? placed;
+    if(design.adaptation)diagnostics.push({code:'arrangement-adapted',path:item.path,message:design.adaptation});
     item.listColumns = placed.columns;
     item.text = mergeListColumns(placed.columns);
     item.alignment = design.align === 'center' ? 'center' : rtl ? 'right' : 'left';
@@ -10252,7 +10305,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return { kind, ...(kind === 'pyramid' && pyramidDirection === 'down' ? {pyramidDirection} : {}), design: design.design, region: item.region ?? '', path: item.path, frame: { ...design.frame }, ...(design.background ? { background: design.background } : {}),
       nodes: design.nodes.map((node, index) => ({ ...node, ...(textPaths[index] !== undefined ? { path: textPaths[index] } : {}) })), fontSize: size, textMargin: placed.margin,
       ...(design.margins ? { margins: placed.margins } : {}), ...(design.arrows ? { arrows: design.arrows } : {}), ...(design.connectors?{connectors:design.connectors}:{}),
-      align: design.align, paint: design.paint, text: design.text, lineWidth: design.lineWidth, ...(design.layout ? { layout: design.layout } : {}), smartArt: { lines: placed.lines, stable: placed.stable, ...(isLinearArrangement(kind) || design.layout ? { fill: +placed.fill.toFixed(4), ink: +placed.ink.toFixed(4) } : {}), widest: +placed.widest.toFixed(2) }, ...(design.design === 'opf' && skipped ? { instead: skipped } : {}) };
+      align: design.align, paint: design.paint, text: design.text, lineWidth: design.lineWidth, ...(design.layout ? { layout: design.layout } : {}), smartArt: { lines: placed.lines, stable: placed.stable, ...(isLinearArrangement(kind) || design.layout ? { fill: +placed.fill.toFixed(4), ink: +placed.ink.toFixed(4) } : {}), widest: +placed.widest.toFixed(2) }, ...(design.design === 'opf' && (design.instead || skipped) ? { instead: design.instead ?? skipped } : {}) };
   };
   // SH-18 review: a region whose arrangement holds two or more list blocks (each block an entry of its own, a list inside it) draws the
   // blocks as the arrangement's entries, the same way for every count and for the three arrangements: a cycle's blocks on cards on OPF's
