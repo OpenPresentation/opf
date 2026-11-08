@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "archiveCommit": "9c9b6543bf009ee21efd627a895105bf8c4e2621",
+  "inventoryPath": "docs/evidence/sh25-native-probes-2026-11-08/inventory.json",
+  "verifiedGitBlobs": 526,
+  "verifiedBytes": 14471108,
+  "method": "One git cat-file --batch; exact blob length and SHA-256 for every inventory entry; scoped * -text prevents normalization.",
+  "passed": true,
+  "officeCalls": 0
+}

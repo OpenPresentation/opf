@@ -26,3 +26,5 @@ Every enabled placement must agree with independent actual native mark coordinat
 ## Remaining native acceptance
 
 Actual API availability, every required four-pixel proof, adequate signed/scale/option witnesses, and actual SaveCopyAs/reopen/reimport of current chart and annotation semantics remain owed. Source and archived inputs must remain immutable; a later producer requires new provenance and byte-identity or explicit newly qualified evidence. Font and exploratory native runs remain paused while 0.33 publishes.
+
+Git-object verification of archive commit 9c9b6543bf009ee21efd627a895105bf8c4e2621 passed: all 526 inventory entries match committed blob bytes and SHA-256 (14471108 bytes). See [verification receipt](sh25-native-probe-git-verification.json). The sealed packet is unchanged by this attestation.
