@@ -1,6 +1,6 @@
 # Pyramids, matrices and live SmartArt
 
-Six layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
+Several layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
 `matrix` (four parts of a whole, or the four cases of two choices, as quadrants), `cycle` (steps that repeat, as a loop; see
 [Cycles](#cycles-sh-18)) and [`chevrons`, `flow` and `vertical-flow`](#chevrons-and-flows) (stages or steps in order). The PowerPoint export writes them as **live
 SmartArt** where PowerPoint lays the SmartArt out exactly as the preview draws it (PowerPoint's designs on its built-in layouts, OPF's
@@ -61,6 +61,32 @@ role size (24 pt) at which every entry fits its rectangle without breaking a wor
 outline (the top of a pyramid level is narrower than its base). The list's own size counts when it is smaller (a crowded slide), never a
 size below it. The arrangement fills its region, so the growth a lone list takes when it fills too little of the body (LH-48) is not the
 size it keeps. Centered lines are centered without the space they broke at, as PowerPoint wraps them.
+
+## Trees and set overlap (SH-21)
+
+Use `org-chart` for reporting lines, `hierarchy` for a classification or work breakdown, and `venn` for overlapping sets. Their geometry is shared between the preview and editable native PowerPoint shapes. Tree connectors follow the authored parents. Hierarchy uses paired rounded cards with a 90% opaque foreground; Venn uses 50% opaque circles so overlaps remain visible.
+
+A tree is one list of up to eight short entries in preorder. The first entry has level zero (explicitly or by default); each child supplies its zero-based `level`. A node may return to any earlier parent depth, but may not skip a depth or introduce another level-zero root. For example:
+
+```json
+{ "layout": "org-chart", "title": "Give each team a clear owner", "items": [
+  { "text": "Lead", "level": 0 },
+  { "text": "Build", "level": 1 },
+  { "text": "Web", "level": 2 },
+  { "text": "App", "level": 2 },
+  { "text": "Ship", "level": 1 }
+] }
+```
+
+Use `venn` with one flat list of one to seven set labels. One to four circles hold their labels inside. Five to seven sets use enlarged editable circles with outside labels fitted from the actual font measurements. This OPF adaptation preserves circle overlaps and set order while filling more of the body at the previous type size or larger. Basic Venn native measurements remain a separate, unqualified live reference. When the overlap cannot keep every label readable, the complete set labels use opaque cards or a list with `opf/arrangement-adapted`. Venn fallback lists try a bounded whole-word reading measure of70characters at the retained type size. If the complete list cannot fit that measure in the body, `opf/text-overflow` reports the refusal; strict composition rejects it. Explicit pagination or shorter labels resolves that limit. Entry order identifies the sets; the diagram implies no numeric overlap values.
+
+```json
+{ "layout": "venn", "title": "Three conditions for a useful pilot", "items": ["Clear scope", "Evidence", "Shared goal"] }
+```
+
+The arrangement keeps the previous fitted list size or grows. A malformed tree, unsupported forest, nested Venn, descriptions, icons, numbering, too many entries or labels that do not fit keeps the complete list with `opf/arrangement-adapted`; no entry is dropped or silently reparented. Use a diagram for assistants or relationships outside the single-root model. These three layouts currently export as editable native shapes; live SmartArt remains outside their qualified domain. Import recognizes native Organization Chart (orgChart1), Hierarchy (hierarchy1) and Basic Venn (venn1), preserving tree depths. Native assistants, forests or labelled edges use the reported Mermaid hierarchy adaptation instead. A drawing with additional labels beyond the data entries keeps its overlay drawing and reports the adaptation, preserving that extra text.
+
+[The trees and sets example](../examples/technical/trees-and-sets.opf.json) contains the three layouts.
 
 ## Chevrons and flows
 
@@ -381,7 +407,7 @@ A design inside a built-in layout's domain keeps PowerPoint's built-in layout, w
 The definition is a table of explicit constraints, the one form PowerPoint lays out with no algorithm of its own (the SH-19 spike,
 through COM):
 
-- a `composite` root with one `if` branch per entry count, 1 to 8 (`func="cnt"`); each branch places every node with `l`, `t`, `w` and `h`
+- a `composite` root with one `if` branch per entry count, 1 to 12 (`func="cnt"`; SH-23); each branch places every node with `l`, `t`, `w` and `h`
   constraints as shares of the frame's width and height, so the design scales with the frame when it is resized in PowerPoint;
 - a hidden full-frame child (`shape type="rect" hideGeom="1"`) in every branch: without one, PowerPoint moves a drawing whose shapes do
   not reach the frame's edges to the frame's center;
@@ -397,8 +423,10 @@ through COM):
   composition starts the entry's first line, so PowerPoint sets the lines where OPF's native text export does (centering the block,
   PowerPoint's line metrics put it up to a pixel off);
 - the tables of every other count, from the same design at the same frame (core `opfLayoutGeometry`), so a node added or deleted in
-  PowerPoint keeps OPF's design; more than 8 entries take the 8-entry table under names of their own (`x...`; the ninth entry is then not
-  drawn until one is removed).
+  PowerPoint keeps OPF's design. OPF draws at most 8 entries, but the definition carries tables up to 12 (`OPF_LAYOUT_TABLES`, SH-23),
+  so a ninth to twelfth entry a PowerPoint user adds is drawn in OPF's design at the same frame; more than 12 take the 12-entry table under
+  names of their own (`x...`, the entries past 12 not drawn until one is removed). A design whose larger tables do not hold (a node outside
+  the frame) keeps tables up to 8.
 
 Every name of a layout node or `forEach` is unique in the definition: PowerPoint rejects a definition that repeats one (it opens the
 SmartArt on Basic Block List instead). The identity is OPF's: the `uniqueId` is `urn:openpresentation.org/smartart/layout/<design>/<digest>`
@@ -490,8 +518,8 @@ the design and the layout that drew it, and the COM records) is in the SH-19 fol
 
 A SmartArt OPF wrote (in `full` provenance it carries `OPF_SMARTART_V1`: the slide, the list path, the arrangement, the authored list
 and the text of every node) imports as its list on its layout again when its node texts are unchanged. An edited one, and a Basic
-Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (the top level only; nested
-entries are reported as `smartart-flattened`), their text and run properties (bold, italic, underline, strike), as a list on the
+Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (nested
+entries keep their `level`, SH-08), their text and run properties (bold, italic, underline, strike), as a list on the
 `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` layout (the one of the same arrangement; SH-19: a SmartArt on one of
 OPF's own layouts by its `uniqueId`, `urn:openpresentation.org/smartart/layout/<design>/...`, also after PowerPoint saved it again), with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
 the nodes' geometry is the layout's again, as OPF draws it, so nothing of PowerPoint's layout is kept. Import never reads or stores a
@@ -499,4 +527,74 @@ SmartArt layout part. A wrapped frame is read from its `mc:Choice`. A file in wh
 SmartArt saved it) imports the same way in `full` provenance: the picture carries `OPF_SMARTART_V1` too, with the media keys of its
 SVG and PNG, so a picture still named for its list whose SVG or PNG is the one written is that list on its layout again; a replaced
 picture reports `invalid-smartart-provenance` and imports as a picture, as does any fallback without the record. Native-shape arrangements (`OPF_ARRANGEMENT_V1` on every node) are the layout's
-drawing: import consumes them and reads the measured lines as the list. Other SmartArt layouts are SH-08.
+drawing: import consumes them and reads the measured lines as the list. Every other SmartArt imports as the next section says.
+
+### SmartArt PowerPoint users made (SH-08)
+
+Any SmartArt PowerPoint wrote imports with its text (`src/smart-art-import.js` in opf-pptx). Import reads the data model, not the
+layout part:
+
+- **The outline**: the `parOf` connections from the doc point, in `srcOrd` order, as a tree of entries (nodes and an organization
+  chart's assistants, `type="asst"`). An entry left as a placeholder (no text and no explicit authored-text marker) gives its place to its children; an explicitly authored blank parent retains its children and level. A run's bold, italic,
+  underline and strike are kept, a line break (`a:br`) is a newline and a field is its text. The paragraphs of one node are one entry,
+  except on the `list` and `process` layouts, where each is an item of its own at the node's level: PowerPoint holds a Vertical Bullet
+  List's or an Accent Process's bullets as the paragraphs of one child node (its object model adds no second child there).
+  A node's title box is its entry's `description`: in a Name and Title Organization Chart PowerPoint stores the title on the sibling
+  transition of the node's connection and presents it (`presOf`); a presentation point with text of its own (`custT`) is read the same way.
+- **The layout**: the doc point's `loTypeId`, then its category (`loCatId`).
+
+Then the first form that fits:
+
+| Layout | OPF |
+| --- | --- |
+| The known arrangement IDs (`pyramid1`, `matrix3`, `cycle2`, `chevron1`, `process1`, `process2`, `orgChart1`, `hierarchy1`, `venn1`) and OPF's own layouts | The list on that arrangement's layout, as above |
+| Inverted Pyramid (`pyramid3`), which widens downward | The list on the `list` layout, in order (the widest first), with `smartart-adapted`: OPF's pyramid puts its first entry at the narrow top, so drawing it upright would reverse its meaning (an inverted arrangement is [opf#1128](https://github.com/OpenPresentation/opf/issues/1128)) |
+| Another layout of those families: `pyramidN`, `matrixN`, `cycleN` (Text Cycle, Block Cycle...), any chevron layout (`chevron2`, `hChevron3`...); a layout of category `pyramid`, `matrix` or `cycle` | The list on the `pyramid`, `matrix`, `cycle` or `chevrons` layout, with `smartart-adapted` (info) |
+| The list family (category `list`: Basic Block List `default`, Vertical Bullet List `vList2`...) | The list on the `list` layout, with `smartart-adapted` |
+| The process family (category `process`, other than the arrangements above: Accent Process, Step Up Process...) | The list on the `process` layout, with `smartart-adapted` |
+| Other hierarchies and organization charts, or the known trees with assistants, separate roots or labelled edges (`orgChartN`, `hierarchyN`, the 2008 and 2009 organization charts; category `hierarchy`) | A Mermaid flowchart (`flowchart TD`, `flowchart LR` for a horizontal hierarchy): a node per entry, its description on a second line, an edge from each parent, dotted (`-.->`) to an assistant, the connection's own text as the edge's label; the outline as the diagram's `alt`; `smartart-adapted` |
+| Every other layout (other Venn, radial, target, funnel, gear, picture layouts...) | The drawing (`dsp:drawing`, which PowerPoint saves with every SmartArt) as overlay shapes, with `smartart-adapted`; without a drawing, the list on the `list` layout |
+
+Nested entries keep their `level` in every list. Organization charts and hierarchies use those depths as parent links; the other arrangements draw one level, so a pyramid of nested entries draws as a list
+(`opf/arrangement-adapted` says so) with all of its text.
+
+**The drawing as overlay shapes.** The drawing's shapes are read by SH-05's reader ([shapes](shapes.md)), in a group that places the
+drawing's space on the SmartArt's frame, so each is an overlay shape with its preset, fill, line, effects and text, in PowerPoint's
+z order at the frame's place. PowerPoint sets a SmartArt shape's text in a rectangle of its own (`dsp:txXfrm`): where it lies inside
+the shape's own text rectangle, the difference is the shape's `padding`; where it does not (a Venn circle's text across the overlap,
+text beside a shape), the shape is drawn without text and a text-only overlay (no fill, no line, style `none`) holds the text at
+PowerPoint's rectangle. Text in another color than the slide's text color keeps it (the style's `fontRef`). The first shape carries the
+outline as its alt text (`SmartArt (venn1):` and an entry a line, indented a level by two spaces). The no-op color transforms and empty
+3-D element PowerPoint writes on every SmartArt shape are not reported as dropped properties; anything else SH-05 does not keep is
+(`shape-property-dropped`).
+
+**Nothing dropped silently.** What the OPF form does not keep is a finding naming it:
+
+| Finding | When |
+| --- | --- |
+| `smartart-text-dropped` (with `text`) | Text on a transition (a connection's own text, other than an organization chart's edge label or a presented title box), text on a presentation point that belongs to no entry, or an entry no connection reaches |
+| `smartart-picture-dropped` | An entry's picture fill (a picture layout), in every form but the drawing |
+| `smartart-formatting-dropped` | Bold, italic, underlined or struck-through text in a hierarchy (Mermaid labels carry none); the text is kept |
+| `smartart-adapted` (with `form`: an arrangement, `list`, `process`, `diagram` or `shapes`) | A layout imported as anything other than the arrangement OPF writes for it |
+
+Every finding has the layout (`layout`, the last segment of `loTypeId`) and the slide's path. A SmartArt with no text and no drawing
+(only placeholders) imports as nothing.
+
+**Evidence.** `packages/pptx/test/fixtures/powerpoint-smartart.pptx` is PowerPoint-made (COM, PowerPoint for Microsoft 365 on Windows 11,
+2026-11-07): 17 layouts (Basic and Inverted Pyramid, Basic Matrix, Basic and Text Cycle, Basic Chevron Process, Basic, Vertical and
+Accent Process, Basic Block List, Vertical Bullet List, Basic Venn, Basic Radial, Organization Chart, Hierarchy, Horizontal Hierarchy and
+Name and Title Organization Chart), each added from a seed deck OPF writes (`make-smartart-seeds.mjs`: this PowerPoint build gives
+scripts no `SmartArtLayouts` list, so each layout is a seed graphic's `SmartArt.Layout`) and filled through `SmartArt.Nodes`;
+`powerpoint-smartart.json` is PowerPoint's own reading of every node. Every node's text imports, with no `smartart-text-dropped`.
+A slide whose SmartArt became overlay shapes has only its title besides them. Overlay shapes whose bounds cover at least a fifth of the
+slide (core `overlaysDrawBody`, `OVERLAY_BODY_SHARE`; front layer, placed by fractions) are the slide's body, so its title is a content
+slide's, on top, not a cover's centered over the shapes; a badge on a cover leaves the cover as it was. This holds for any slide, authored
+or imported (`examples/technical/shape-overlays.opf.json` slide 5's title moves to the top).
+
+SH-23: custom layout text algorithms set their LTR/RTL paragraph alignment defaults, so newly added nodes keep the design's alignment without a script changing their formatting after the edit.
+
+SH-23 qualification: five in-domain OPF designs retain an added ninth node and a text edit through SaveCopyAs/reopen, with unchanged font sizes, correct paragraph/first-line alignment and maximum geometry error0.0000876pt. The native text algorithms explicitly preserve start or center alignment for newly added nodes, which have no authored paragraph properties. [Raw qualification and limits](programs/shapes/sh23-2026-11-07/README.md) retain the initial visual failure and all corrected witnesses.
+
+## Inverted pyramids
+
+Use the `inverted-pyramid` layout to narrow from a broad starting pool to a final choice. A custom pyramid region sets `pyramidDirection: "down"`; `"up"` is the existing default. The first entry stays at the top, so a downward pyramid starts wide and ends at the tip. Both the continuous outline and the stepped design use core geometry; neither reverses the text order or reduces the text size. PowerPoint export uses editable native shapes with a located `smartart-unavailable` finding. Live `pyramid3` and downward OPF layout definitions remain unqualified. Import maps an Inverted Pyramid to this layout while reporting its adapted styling. See [the example](../examples/technical/inverted-pyramids.opf.json).

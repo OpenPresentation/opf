@@ -1,0 +1,135 @@
+{
+  "passed": true,
+  "files": 1,
+  "slides": 3,
+  "editableShapeCount": 12,
+  "wideFirst": true,
+  "noShrink": true,
+  "noOverflow": true,
+  "savedImportOrderedContent": true,
+  "rows": [
+    {
+      "nodes": [
+        {
+          "name": "OPF arrangement slides.0.items node 0",
+          "box": [
+            43.2,
+            110.61,
+            349.44,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.0.items node 1",
+          "box": [
+            86.88,
+            209.41,
+            262.08,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.0.items node 2",
+          "box": [
+            130.56,
+            308.2,
+            174.72,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.0.items node 3",
+          "box": [
+            174.24,
+            407,
+            87.36,
+            89.8
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "nodes": [
+        {
+          "name": "OPF arrangement slides.1.items node 0",
+          "box": [
+            43.2,
+            110.61,
+            349.44,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.1.items node 1",
+          "box": [
+            86.88,
+            209.41,
+            262.08,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.1.items node 2",
+          "box": [
+            130.56,
+            308.2,
+            174.72,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.1.items node 3",
+          "box": [
+            174.24,
+            407,
+            87.36,
+            89.8
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "nodes": [
+        {
+          "name": "OPF arrangement slides.2.blocks.0.items node 0",
+          "box": [
+            43.2,
+            110.61,
+            349.44,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.2.blocks.0.items node 1",
+          "box": [
+            86.88,
+            209.41,
+            262.08,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.2.blocks.0.items node 2",
+          "box": [
+            130.56,
+            308.2,
+            174.72,
+            89.8
+          ]
+        },
+        {
+          "name": "OPF arrangement slides.2.blocks.0.items node 3",
+          "box": [
+            174.24,
+            407,
+            87.36,
+            89.8
+          ]
+        }
+      ],
+      "passed": true
+    }
+  ]
+}

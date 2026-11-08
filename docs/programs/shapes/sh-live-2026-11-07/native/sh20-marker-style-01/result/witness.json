@@ -1,0 +1,1497 @@
+{
+  "inputs": [
+    {
+      "source": "C:\\opf-work\\_supervisor\\com-jobs\\sh-08\\smartart-seeds.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\sh20-marker-style-01\\result\\inputs\\0-smartart-seeds.pptx",
+      "sha256After": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+      "sha256": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+      "unchanged": true
+    },
+    {
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx\\cycle-4-short-square.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\sh20-marker-style-01\\result\\inputs\\1-cycle-4-short-square.pptx",
+      "sha256After": "58432d6c1e8a2e716a36a88ffa41b5cdb516b38c34d615f47400de9d28c2be76",
+      "sha256": "58432d6c1e8a2e716a36a88ffa41b5cdb516b38c34d615f47400de9d28c2be76",
+      "unchanged": true
+    },
+    {
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx\\matrix-4-cjk-wide.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\sh20-marker-style-01\\result\\inputs\\2-matrix-4-cjk-wide.pptx",
+      "sha256After": "1bca4b1962020c4ea815b53a1b7ce24acedba4a90fa51eab91d04150f41c41ab",
+      "sha256": "1bca4b1962020c4ea815b53a1b7ce24acedba4a90fa51eab91d04150f41c41ab",
+      "unchanged": true
+    },
+    {
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx\\matrix-4-rtl-wide.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\sh20-marker-style-01\\result\\inputs\\3-matrix-4-rtl-wide.pptx",
+      "sha256After": "0f7b5867a11111098b3516cc14e6f493af54209e0a4e7182167252ce9897f2c9",
+      "sha256": "0f7b5867a11111098b3516cc14e6f493af54209e0a4e7182167252ce9897f2c9",
+      "unchanged": true
+    },
+    {
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx-shapes\\cycle-4-short-square.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\sh20-marker-style-01\\result\\inputs\\4-cycle-4-short-square.pptx",
+      "sha256After": "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8",
+      "sha256": "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8",
+      "unchanged": true
+    },
+    {
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx-shapes\\matrix-4-cjk-wide.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\sh20-marker-style-01\\result\\inputs\\5-matrix-4-cjk-wide.pptx",
+      "sha256After": "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9",
+      "sha256": "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9",
+      "unchanged": true
+    },
+    {
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx-shapes\\matrix-4-rtl-wide.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\sh20-marker-style-01\\result\\inputs\\6-matrix-4-rtl-wide.pptx",
+      "sha256After": "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2",
+      "sha256": "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2",
+      "unchanged": true
+    }
+  ],
+  "stages": [
+    "create-app:ok",
+    "empty-app:ok",
+    "visible-minimized-window:ok",
+    "open-control-1:ok",
+    "control-1:ok",
+    "close-control-1:ok",
+    "open-control-2:ok",
+    "control-2:ok",
+    "close-control-2:ok",
+    "open-control-3:ok",
+    "control-3:ok",
+    "close-control-3:ok",
+    "open-control-4:ok",
+    "control-4:ok",
+    "close-control-4:ok",
+    "open-control-5:ok",
+    "control-5:ok",
+    "close-control-5:ok",
+    "open-control-6:ok",
+    "control-6:ok",
+    "close-control-6:ok",
+    "quit-empty-owned-app:ok"
+  ],
+  "controls": [
+    {
+      "shapes": [
+        {
+          "layout": "urn:openpresentation.org/smartart/layout/cycle-ring/2a9c3e78a7ddd720",
+          "nodes": [
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 1,
+              "level": 1,
+              "text": "Vision"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 2,
+              "level": 1,
+              "text": "Plan"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 3,
+              "level": 1,
+              "text": "Build"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 4,
+              "level": 1,
+              "text": "Ship"
+            }
+          ],
+          "items": [
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Source Sans 3",
+              "width": 120.22574615478516,
+              "lines": [
+                {
+                  "height": 45.81504,
+                  "width": 90.54,
+                  "left": 85.412834,
+                  "top": 29.478426,
+                  "text": "Vision"
+                }
+              ],
+              "text": "Vision",
+              "margins": [
+                7.2,
+                24.456377,
+                7.2,
+                7.2
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Source Sans 3",
+              "top": 43.20000076293945,
+              "left": 306.0074768066406,
+              "anchor": 1,
+              "complexScript": "+mn-cs",
+              "height": 102.87669372558594,
+              "size": 36.0
+            },
+            {
+              "shapeType": 1,
+              "left": 377.963623046875,
+              "width": 46.8802375793457,
+              "height": 34.292205810546875,
+              "preset": 33,
+              "top": 165.17330932617188,
+              "rotation": 68.07984924316406,
+              "name": ""
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Source Sans 3",
+              "width": 120.22574615478516,
+              "lines": [
+                {
+                  "height": 45.81504,
+                  "width": 67.39496,
+                  "left": 167.55205,
+                  "top": 204.8404,
+                  "text": "Plan"
+                }
+              ],
+              "text": "Plan",
+              "margins": [
+                7.2,
+                24.456377,
+                7.2,
+                7.2
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Source Sans 3",
+              "top": 218.5619659423828,
+              "left": 376.5741882324219,
+              "anchor": 1,
+              "complexScript": "+mn-cs",
+              "height": 102.87669372558594,
+              "size": 36.0
+            },
+            {
+              "shapeType": 1,
+              "left": 377.9635314941406,
+              "width": 46.8802375793457,
+              "height": 34.292205810546875,
+              "preset": 33,
+              "top": 340.5350341796875,
+              "rotation": 111.92024993896484,
+              "name": ""
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Source Sans 3",
+              "width": 120.22574615478516,
+              "lines": [
+                {
+                  "height": 45.81504,
+                  "width": 78.77496,
+                  "left": 91.29536,
+                  "top": 380.20166,
+                  "text": "Build"
+                }
+              ],
+              "text": "Build",
+              "margins": [
+                7.2,
+                24.456377,
+                7.2,
+                7.2
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Source Sans 3",
+              "top": 393.9232177734375,
+              "left": 306.0074768066406,
+              "anchor": 1,
+              "complexScript": "+mn-cs",
+              "height": 102.87669372558594,
+              "size": 36.0
+            },
+            {
+              "shapeType": 1,
+              "left": 307.3966064453125,
+              "width": 46.8802375793457,
+              "height": 34.292205810546875,
+              "preset": 33,
+              "top": 340.5351257324219,
+              "rotation": 248.0795440673828,
+              "name": ""
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Source Sans 3",
+              "width": 120.22574615478516,
+              "lines": [
+                {
+                  "height": 45.81504,
+                  "width": 67.65,
+                  "left": 26.290394,
+                  "top": 204.8404,
+                  "text": "Ship"
+                }
+              ],
+              "text": "Ship",
+              "margins": [
+                7.2,
+                24.456377,
+                7.2,
+                7.2
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Source Sans 3",
+              "top": 218.5619659423828,
+              "left": 235.44000244140625,
+              "anchor": 1,
+              "complexScript": "+mn-cs",
+              "height": 102.87669372558594,
+              "size": 36.0
+            },
+            {
+              "shapeType": 1,
+              "left": 307.3964538574219,
+              "width": 46.8802375793457,
+              "height": 34.292205810546875,
+              "preset": 33,
+              "top": 165.17323303222656,
+              "rotation": 291.9203796386719,
+              "name": ""
+            }
+          ]
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF heading slides.0.title line 0",
+          "shapeType": 17,
+          "latin": "Source Sans 3",
+          "width": 174.24000549316406,
+          "lines": [
+            {
+              "height": 48.6,
+              "width": 143.13,
+              "left": 43.2,
+              "top": 220.59,
+              "text": "How we "
+            }
+          ],
+          "text": "How we ",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Source Sans 3",
+          "top": 220.58999633789062,
+          "left": 43.20000076293945,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 49.40999984741211,
+          "size": 40.5
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF heading slides.0.title line 1",
+          "shapeType": 17,
+          "latin": "Source Sans 3",
+          "width": 174.24000549316406,
+          "lines": [
+            {
+              "height": 48.6,
+              "width": 85.38,
+              "left": 43.2,
+              "top": 270.0,
+              "text": "work"
+            }
+          ],
+          "text": "work",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Source Sans 3",
+          "top": 270.0,
+          "left": 43.20000076293945,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 49.40999984741211,
+          "size": 40.5
+        }
+      ],
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx\\cycle-4-short-square.pptx"
+    },
+    {
+      "shapes": [
+        {
+          "layout": "urn:openpresentation.org/smartart/layout/matrix-quadrants/735a6dfb02ce92fe",
+          "nodes": [
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 1,
+              "level": 1,
+              "text": "ビジョン"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 2,
+              "level": 1,
+              "text": "目標と計画"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 3,
+              "level": 1,
+              "text": "プログラム"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 4,
+              "level": 1,
+              "text": "チームと基盤"
+            }
+          ],
+          "items": [
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Aptos",
+              "width": 247.67991638183594,
+              "lines": [
+                {
+                  "height": 50.55,
+                  "width": 144.00496,
+                  "left": 51.839962,
+                  "top": 86.940155,
+                  "text": "ビジョン"
+                }
+              ],
+              "text": "ビジョン",
+              "margins": [
+                10.8,
+                76.30803,
+                10.8,
+                10.8
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Meiryo",
+              "top": 43.20000076293945,
+              "left": 403.44000244140625,
+              "anchor": 1,
+              "complexScript": "+mn-cs",
+              "height": 217.7999267578125,
+              "size": 36.0
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Aptos",
+              "width": 247.67991638183594,
+              "lines": [
+                {
+                  "height": 50.55,
+                  "width": 180.00496,
+                  "left": 299.51996,
+                  "top": 86.940155,
+                  "text": "目標と計画"
+                }
+              ],
+              "text": "目標と計画",
+              "margins": [
+                10.8,
+                76.30803,
+                10.8,
+                10.8
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Meiryo",
+              "top": 43.20000076293945,
+              "left": 669.1199951171875,
+              "anchor": 1,
+              "complexScript": "+mn-cs",
+              "height": 217.7999267578125,
+              "size": 36.0
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Aptos",
+              "width": 247.67991638183594,
+              "lines": [
+                {
+                  "height": 50.55,
+                  "width": 180.00496,
+                  "left": 33.839962,
+                  "top": 322.74014,
+                  "text": "プログラム"
+                }
+              ],
+              "text": "プログラム",
+              "margins": [
+                10.8,
+                76.30803,
+                10.8,
+                10.8
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Meiryo",
+              "top": 279.0,
+              "left": 403.44000244140625,
+              "anchor": 1,
+              "complexScript": "+mn-cs",
+              "height": 217.7999267578125,
+              "size": 36.0
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Aptos",
+              "width": 247.67991638183594,
+              "lines": [
+                {
+                  "height": 44.0,
+                  "width": 180.0,
+                  "left": 299.51996,
+                  "top": 300.78015,
+                  "text": "チームと基"
+                },
+                {
+                  "height": 50.55,
+                  "width": 36.00496,
+                  "left": 371.51996,
+                  "top": 344.78015,
+                  "text": "盤"
+                }
+              ],
+              "text": "チームと基盤",
+              "margins": [
+                10.8,
+                54.34803,
+                10.8,
+                10.8
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Meiryo",
+              "top": 279.0,
+              "left": 669.1199951171875,
+              "anchor": 1,
+              "complexScript": "+mn-cs",
+              "height": 217.7999267578125,
+              "size": 36.0
+            }
+          ]
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF heading slides.0.title line 0",
+          "shapeType": 14,
+          "latin": "Aptos Display",
+          "width": 342.239990234375,
+          "lines": [
+            {
+              "height": 48.6,
+              "width": 243.00504,
+              "left": 43.2,
+              "top": 245.29497,
+              "text": "私たちの戦略"
+            }
+          ],
+          "text": "私たちの戦略",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Meiryo",
+          "top": 245.2949676513672,
+          "left": 43.20000076293945,
+          "anchor": 1,
+          "complexScript": "+mj-cs",
+          "height": 49.40999984741211,
+          "size": 40.5
+        }
+      ],
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx\\matrix-4-cjk-wide.pptx"
+    },
+    {
+      "shapes": [
+        {
+          "layout": "urn:openpresentation.org/smartart/layout/matrix-quadrants/41bce624c1a098de",
+          "nodes": [
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 1,
+              "level": 1,
+              "text": "الرؤية"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 2,
+              "level": 1,
+              "text": "الأهداف"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 3,
+              "level": 1,
+              "text": "البرامج"
+            },
+            {
+              "type": 1,
+              "parent": null,
+              "children": 0,
+              "index": 4,
+              "level": 1,
+              "text": "الفرق والمنصة"
+            }
+          ],
+          "items": [
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Aptos",
+              "width": 247.67991638183594,
+              "lines": [
+                {
+                  "height": 42.67,
+                  "width": 66.56,
+                  "left": 90.56248,
+                  "top": 86.940155,
+                  "text": "الرؤية"
+                }
+              ],
+              "text": "الرؤية",
+              "margins": [
+                10.8,
+                76.30803,
+                10.8,
+                10.8
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Aptos",
+              "top": 43.20000076293945,
+              "left": 43.20000076293945,
+              "anchor": 1,
+              "complexScript": "Noto Naskh Arabic",
+              "height": 217.7999267578125,
+              "size": 36.0
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Aptos",
+              "width": 247.67991638183594,
+              "lines": [
+                {
+                  "height": 42.67,
+                  "width": 99.22,
+                  "left": 339.91248,
+                  "top": 86.940155,
+                  "text": "الأهداف"
+                }
+              ],
+              "text": "الأهداف",
+              "margins": [
+                10.8,
+                76.30803,
+                10.8,
+                10.8
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Aptos",
+              "top": 43.20000076293945,
+              "left": 308.8800048828125,
+              "anchor": 1,
+              "complexScript": "Noto Naskh Arabic",
+              "height": 217.7999267578125,
+              "size": 36.0
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Aptos",
+              "width": 247.67991638183594,
+              "lines": [
+                {
+                  "height": 42.67,
+                  "width": 75.65,
+                  "left": 86.01744,
+                  "top": 322.74014,
+                  "text": "البرامج"
+                }
+              ],
+              "text": "البرامج",
+              "margins": [
+                10.8,
+                76.30803,
+                10.8,
+                10.8
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Aptos",
+              "top": 279.0,
+              "left": 43.20000076293945,
+              "anchor": 1,
+              "complexScript": "Noto Naskh Arabic",
+              "height": 217.7999267578125,
+              "size": 36.0
+            },
+            {
+              "spacing": {
+                "within": 43.92,
+                "rule": 0,
+                "before": 0.0,
+                "after": 0.0
+              },
+              "name": "",
+              "shapeType": 1,
+              "latin": "Aptos",
+              "width": 247.67991638183594,
+              "lines": [
+                {
+                  "height": 42.67,
+                  "width": 171.26,
+                  "left": 303.8925,
+                  "top": 322.74014,
+                  "text": "الفرق والمنصة"
+                }
+              ],
+              "text": "الفرق والمنصة",
+              "margins": [
+                10.8,
+                76.30803,
+                10.8,
+                10.8
+              ],
+              "preset": 5,
+              "rotation": 0.0,
+              "eastAsian": "Aptos",
+              "top": 279.0,
+              "left": 308.8800048828125,
+              "anchor": 1,
+              "complexScript": "Noto Naskh Arabic",
+              "height": 217.7999267578125,
+              "size": 36.0
+            }
+          ]
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF heading slides.0.title line 0",
+          "shapeType": 14,
+          "latin": "Aptos Display",
+          "width": 342.239990234375,
+          "lines": [
+            {
+              "height": 48.6,
+              "width": 161.38,
+              "left": 755.30505,
+              "top": 245.18323,
+              "text": "استراتيجيتنا"
+            }
+          ],
+          "text": "استراتيجيتنا",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Aptos Display",
+          "top": 245.1832275390625,
+          "left": 574.5599975585938,
+          "anchor": 1,
+          "complexScript": "Noto Naskh Arabic",
+          "height": 49.40999984741211,
+          "size": 40.5
+        }
+      ],
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx\\matrix-4-rtl-wide.pptx"
+    },
+    {
+      "shapes": [
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF heading slides.0.title line 0",
+          "shapeType": 17,
+          "latin": "Source Sans 3",
+          "width": 174.24000549316406,
+          "lines": [
+            {
+              "height": 48.6,
+              "width": 143.13,
+              "left": 43.2,
+              "top": 220.59,
+              "text": "How we "
+            }
+          ],
+          "text": "How we ",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Source Sans 3",
+          "top": 220.58999633789062,
+          "left": 43.20000076293945,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 49.40999984741211,
+          "size": 40.5
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF heading slides.0.title line 1",
+          "shapeType": 17,
+          "latin": "Source Sans 3",
+          "width": 174.24000549316406,
+          "lines": [
+            {
+              "height": 48.6,
+              "width": 85.38,
+              "left": 43.2,
+              "top": 270.0,
+              "text": "work"
+            }
+          ],
+          "text": "work",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Source Sans 3",
+          "top": 270.0,
+          "left": 43.20000076293945,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 49.40999984741211,
+          "size": 40.5
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 0",
+          "shapeType": 17,
+          "latin": "Source Sans 3",
+          "width": 90.54000091552734,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 90.63,
+              "left": 320.8504,
+              "top": 72.678345,
+              "text": "Vision"
+            }
+          ],
+          "text": "Vision",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Source Sans 3",
+          "top": 72.6783447265625,
+          "left": 320.85040283203125,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 1",
+          "shapeType": 17,
+          "latin": "Source Sans 3",
+          "width": 67.3919677734375,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 67.38,
+              "left": 402.9911,
+              "top": 248.04039,
+              "text": "Plan"
+            }
+          ],
+          "text": "Plan",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Source Sans 3",
+          "top": 248.04039001464844,
+          "left": 402.9910888671875,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 2",
+          "shapeType": 17,
+          "latin": "Source Sans 3",
+          "width": 78.76802825927734,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 78.75504,
+              "left": 326.7364,
+              "top": 423.40164,
+              "text": "Build"
+            }
+          ],
+          "text": "Build",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Source Sans 3",
+          "top": 423.4016418457031,
+          "left": 326.73638916015625,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 3",
+          "shapeType": 17,
+          "latin": "Source Sans 3",
+          "width": 67.64401245117188,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 67.75504,
+              "left": 261.73087,
+              "top": 248.04039,
+              "text": "Ship"
+            }
+          ],
+          "text": "Ship",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Source Sans 3",
+          "top": 248.04039001464844,
+          "left": 261.7308654785156,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        }
+      ],
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx-shapes\\cycle-4-short-square.pptx"
+    },
+    {
+      "shapes": [
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF heading slides.0.title line 0",
+          "shapeType": 14,
+          "latin": "Aptos Display",
+          "width": 342.239990234375,
+          "lines": [
+            {
+              "height": 48.6,
+              "width": 243.00504,
+              "left": 43.2,
+              "top": 245.29497,
+              "text": "私たちの戦略"
+            }
+          ],
+          "text": "私たちの戦略",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Meiryo",
+          "top": 245.2949676513672,
+          "left": 43.20000076293945,
+          "anchor": 1,
+          "complexScript": "+mj-cs",
+          "height": 49.40999984741211,
+          "size": 40.5
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 0",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 144.0,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 144.00504,
+              "left": 455.28,
+              "top": 130.14,
+              "text": "ビジョン"
+            }
+          ],
+          "text": "ビジョン",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Meiryo",
+          "top": 130.13999938964844,
+          "left": 455.2799987792969,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 1",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 180.0,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 180.00504,
+              "left": 702.96,
+              "top": 130.14,
+              "text": "目標と計画"
+            }
+          ],
+          "text": "目標と計画",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Meiryo",
+          "top": 130.13999938964844,
+          "left": 702.9600219726562,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 2",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 178.9199981689453,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 180.00504,
+              "left": 437.82,
+              "top": 365.94,
+              "text": "プログラム"
+            }
+          ],
+          "text": "プログラム",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Meiryo",
+          "top": 365.94000244140625,
+          "left": 437.82000732421875,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 3",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 178.9199981689453,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 180.00504,
+              "left": 703.5,
+              "top": 343.98,
+              "text": "チームと基"
+            }
+          ],
+          "text": "チームと基",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Meiryo",
+          "top": 343.9800109863281,
+          "left": 703.5,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 4",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 36.0,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 36.00504,
+              "left": 774.96,
+              "top": 387.9,
+              "text": "盤"
+            }
+          ],
+          "text": "盤",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Meiryo",
+          "top": 387.8999938964844,
+          "left": 774.9600219726562,
+          "anchor": 1,
+          "complexScript": "+mn-cs",
+          "height": 43.91999816894531,
+          "size": 36.0
+        }
+      ],
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx-shapes\\matrix-4-cjk-wide.pptx"
+    },
+    {
+      "shapes": [
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF heading slides.0.title line 0",
+          "shapeType": 14,
+          "latin": "Aptos Display",
+          "width": 342.239990234375,
+          "lines": [
+            {
+              "height": 48.6,
+              "width": 161.38,
+              "left": 755.30505,
+              "top": 245.18323,
+              "text": "استراتيجيتنا"
+            }
+          ],
+          "text": "استراتيجيتنا",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Aptos Display",
+          "top": 245.1832275390625,
+          "left": 574.5599975585938,
+          "anchor": 1,
+          "complexScript": "Noto Naskh Arabic",
+          "height": 49.40999984741211,
+          "size": 40.5
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 0",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 76.21196746826172,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 66.75504,
+              "left": 138.30402,
+              "top": 130.14,
+              "text": "الرؤية"
+            }
+          ],
+          "text": "الرؤية",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Aptos",
+          "top": 130.13999938964844,
+          "left": 128.93402099609375,
+          "anchor": 1,
+          "complexScript": "Noto Naskh Arabic",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 1",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 101.66401672363281,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 99.25504,
+              "left": 384.25803,
+              "top": 130.14,
+              "text": "الأهداف"
+            }
+          ],
+          "text": "الأهداف",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Aptos",
+          "top": 130.13999938964844,
+          "left": 381.8880310058594,
+          "anchor": 1,
+          "complexScript": "Noto Naskh Arabic",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 2",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 90.21598052978516,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 75.75504,
+              "left": 136.30197,
+              "top": 365.94,
+              "text": "البرامج"
+            }
+          ],
+          "text": "البرامج",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Aptos",
+          "top": 365.94000244140625,
+          "left": 121.93196868896484,
+          "anchor": 1,
+          "complexScript": "Noto Naskh Arabic",
+          "height": 43.91999816894531,
+          "size": 36.0
+        },
+        {
+          "spacing": {
+            "within": 1.0,
+            "rule": -1,
+            "before": 0.0,
+            "after": 0.0
+          },
+          "name": "OPF list slides.0.items line 3",
+          "shapeType": 17,
+          "latin": "Aptos",
+          "width": 178.63197326660156,
+          "lines": [
+            {
+              "height": 43.2,
+              "width": 171.38,
+              "left": 350.64905,
+              "top": 365.94,
+              "text": "الفرق والمنصة"
+            }
+          ],
+          "text": "الفرق والمنصة",
+          "margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "preset": 1,
+          "rotation": 0.0,
+          "eastAsian": "Aptos",
+          "top": 365.94000244140625,
+          "left": 343.4040222167969,
+          "anchor": 1,
+          "complexScript": "Noto Naskh Arabic",
+          "height": 43.91999816894531,
+          "size": 36.0
+        }
+      ],
+      "source": "C:\\opf-work\\sh20-23-review\\docs\\programs\\shapes\\sh-live-2026-11-07\\marker-style-01\\pptx-shapes\\matrix-4-rtl-wide.pptx"
+    }
+  ],
+  "trees": [],
+  "failure": null,
+  "passed": true
+}
