@@ -88,3 +88,8 @@ LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798
 
 
 033genuine documentation/registry-consumer PR1170passed allchecks twice and merged through maintainedgate asd00888a0560cb0ad59fc5c887e8bdd9d4fcbf30b at10:40:17UTC after markingthe reviewed draftready. This normal main merge retains034F2diagramwording plus exact137/36published facts and all receipts; no package/site deploy occurs.1179and1180are nowfolded/frozen.
+
+## Generated timeline status font preparation
+
+[The derived LH121 font correction](lh121-generated-status-fonts.md) addresses genuine default CLI missing-glyph failures when otherwise Latin source generates localized status words. It preserves existing font policies and scans authoritative per-slide generated vocabulary; validation and final item PR remain in progress.
+

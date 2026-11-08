@@ -5,9 +5,9 @@ import {XMLParser} from 'fast-xml-parser';
 import {toPptx,fromPptx,resolvePresentation} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),encode=text=>new TextEncoder().encode(text),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
-const events=[{when:'Week 1',what:'Scope',duration:1,status:'done'},{when:'Weeks 2–5',what:'Build',duration:4,status:'current'},{when:'Week 6',what:'Launch',status:'planned'}],fonts=await loadFonts();
+const events=[{when:'Week 1',what:'Scope',duration:1,status:'done'},{when:'Weeks 2–5',what:'Build',duration:4,status:'current'},{when:'Week 6',what:'Launch',status:'planned'}];
 for(const language of ['en','ar'])for(const dimensions of [{width:1280,height:720},{width:540,height:960}]){
-  const document={language,design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{layout:'timeline',title:'Six-week delivery',timeline:events}]},options={fonts};
+  const document={language,design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{layout:'timeline',title:'Six-week delivery',timeline:events}]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:document}),options={fonts};
   const bound=resolvePresentation(document,options).slides[0],layout=bound.geometry.items.find(item=>item.timelineLayout).timelineLayout;
   assert.ok(Math.abs(bound.design.dimensions.width-dimensions.width)<1e-6);assert.ok(Math.abs(bound.design.dimensions.height-dimensions.height)<1e-6);
   const bytes=await toPptx(document,options),entries=unzipSync(bytes),xml=decode(entries['ppt/slides/slide1.xml']),shapes=array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']);
@@ -36,4 +36,5 @@ for(const language of ['en','ar'])for(const dimensions of [{width:1280,height:72
 console.log('native proportional timeline ranges, duration roundtrip and current text edits passed');
 
 const example=JSON.parse(readFileSync(new URL('../../../examples/technical/duration-timeline.opf.json',import.meta.url),'utf8'));
+const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:example});
 assert.deepEqual((await fromPptx(await toPptx(example,{fonts}))).slides[0].timeline,example.slides[0].timeline);
