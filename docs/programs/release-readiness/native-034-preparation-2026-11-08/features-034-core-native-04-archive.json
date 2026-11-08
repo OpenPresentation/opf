@@ -1,0 +1,15 @@
+{
+  "file": "features-034-core-native-04.zip",
+  "entries": 46,
+  "bytes": 2244553,
+  "sha256": "1162799c2c1c809955b6868b07d1b95159e6d97a5906cbf50962df0ed07385fd",
+  "status": "SEALED_NOT_RUN",
+  "sourceIntegration": "fddc0991e4f154a7e2c0969a2c2a5509c5dcf953",
+  "contents": "22cleanCLI PPTX and22matching previews plus original producer/source hashes; LH73two,LH75thirteen,LH110seven",
+  "heldUntil": "033publication; noOffice/fontprofilechange yet",
+  "sealScript": {
+    "file": "seal-core-feature-batch.mjs.gz",
+    "originalSha256": "c057bf69fefe83f2a5d0f5c3b774e7542e3c8e55cf460bd22e83495f04ac21e9",
+    "note": "Exact executed CRLF bytes compressed losslessly; no newline conversion."
+  }
+}
