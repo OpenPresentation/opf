@@ -39,7 +39,7 @@ The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare
 - Changelog: add a fragment `changes/<slug>.md` (front matter `type: added|changed|fixed`, `packages: [opf, cli, render, pptx, editor, gallery, mcp]`; see `changes/README.md`) in the PR that makes the change; never edit a `CHANGELOG.md` or `## Unreleased` by hand. The release workflow assembles the fragments. CI warns when package code changes without a fragment.
 - Tests: a package test is one new `test/*.mjs` (a package's `scripts/run-tests.mjs` run discovers it; `test/suites.json` lists only helpers and separately-run files) and a root check is one new `check:*` script (`scripts/run-checks.mjs`; `scripts/checks.json`). Do not add test lists to `package.json`.
 - Generated trackers (gallery and font): do not regenerate them in an unrelated PR. CI only warns about a stale tracker on a PR; the "Tracker refresh" workflow regenerates them after merge into `bot/tracker-refresh`. Regenerate in your PR only when it changes a tracker generator, overrides or tests. Details: `CONTRIBUTING.md`.
-- Goldens (`packages/render/test/golden/`) are exact hashes. Regenerate them only with the `golden.yml` workflow (or the `regenerate-goldens` label) in the pinned Playwright image, never by hand and never with a changed tolerance; see `docs/ecosystem-development.md`.
+- Goldens (`packages/render/test/golden/`) are exact hashes. Regenerate them only by dispatching the `golden.yml` workflow on your branch (`gh workflow run golden.yml --ref <branch>`) in the pinned Playwright image, never by hand and never with a changed tolerance; see `docs/ecosystem-development.md`.
 
 ## Checks for agents
 

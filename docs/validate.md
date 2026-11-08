@@ -892,7 +892,7 @@ Default severity: **warning**. Cost: structure. A chart option cannot be shown b
 
 Default severity: **warning**. Cost: composition. Text or a table does not fit its space at the smallest allowed size.
 
-**Why.** Core composition shrinks text to the readable minimum and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.
+**Why.** Core composition changes the arrangement (columns, the automatic grid, another design) before it sets text smaller, fits dense content that no arrangement holds down the type scale to the readable minimum, never below it, and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.
 
 **Approximations.** Uses composeSlide at the deck's slide size with the fonts of the resolved font scheme. Without a host-supplied text measurement (ValidateOptions.fonts.textMeasurement) widths are core's portable estimate, which can differ from the real font by a few percent; pass the renderer's measurement for font-exact results. A composition that sets overflow: "error" is reported as a warning here, so that `valid` never depends on font metrics; rendering and export still refuse such a slide when it does not fit.
 
@@ -1055,11 +1055,11 @@ Default severity: **warning**. Cost: structure. A chart highlight is adapted by 
 
 Default severity: **warning**. Cost: structure. A chart series is not drawn by the chart type.
 
-**Why.** A treemap, histogram, Pareto, waterfall, funnel, map or single-series pie plots one value series, and a scatter plots no X column without numbers. Every engine leaves the same columns out (LH-60), so the warning names them instead of losing them silently.
+**Why.** A treemap, histogram, one-series Pareto, waterfall, funnel, map or single-series pie plots one value series, and a scatter plots no X column without numbers. Every engine leaves the same columns out (LH-60), so the warning names them instead of losing them silently.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-**Approximations.** Read from the drawn chart (chartDrawPlan): a world chart over categories that are mostly not places is drawn as columns, a box-and-whisker chart with one value per category as one box per series and a pie or doughnut of several series as nested rings, and none of those drops a series.
+**Approximations.** Read from the drawn chart (chartDrawPlan): a world chart over categories that are mostly not places and a Pareto chart of several series are drawn as columns, a box-and-whisker chart with one value per category as one box per series and a pie or doughnut of several series as nested rings, and none of those drops a series.
 
 ### `opf/code-highlight-out-of-range`
 

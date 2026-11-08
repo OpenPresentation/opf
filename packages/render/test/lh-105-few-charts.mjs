@@ -15,7 +15,7 @@ let checks = 0;
 
 // 1. No panel on any chart; the series are the scheme accents softened towards the backdrop.
 for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {
-  const input = deck({ title: 'Two regions', chart: { type: 'column', data: { columns: ['Month', 'North', 'South'], rows: months.slice(0, 10).map((month, i) => [month, 20 + i, 10 + i]) } } }, design);
+  const input = deck({ title: 'Two regions', chart: { type: 'column', dataLabels: false, data: { columns: ['Month', 'North', 'South'], rows: months.slice(0, 10).map((month, i) => [month, 20 + i, 10 + i]) } } }, design);
   const svg = toSvg(input, 1, { trace: true });
   assert.equal(tags(svg, 'rect').find((rect) => rect['data-opf-path'] === 'slides.0.chart'), undefined, 'no chart panel');
   const backdrop = backdropOf(input), scheme = designOf(input);

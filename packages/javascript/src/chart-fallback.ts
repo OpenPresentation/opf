@@ -11,7 +11,7 @@ import { colorContrast, textColorForFill } from './color.js';
 import type { DataCellValue, DataDiagnostic, ResolvedChartData } from './chart-data.js';
 
 /** Why a chart is drawn as another construct (or with its data regrouped). */
-export type ChartFallback = 'map-as-columns' | 'box-per-series' | 'nested-rings' | 'scatter-by-position';
+export type ChartFallback = 'map-as-columns' | 'pareto-as-columns' | 'box-per-series' | 'nested-rings' | 'scatter-by-position';
 
 /** How the engines draw a chart: the construct and the data they plot. */
 export interface ChartDrawPlan {
@@ -127,6 +127,9 @@ const label = (cell: unknown): string => cell === null || cell === undefined ? '
  *
  * - **Map over categories that are not places** (`map-as-columns`): a `world` chart whose category labels are fewer than half places
  *   ({@link isPlaceLabel}) is drawn as clustered columns, every series kept. A map needs places to plot; Q1 to Q4 would be empty tiles.
+ * - **Several series on a Pareto chart** (`pareto-as-columns`, LH-175): a Pareto chart sorts one series and draws its cumulative share,
+ *   so two or more series that hold numbers (Current and Baseline by quarter) are drawn as clustered columns in data order, every series
+ *   kept, in the preview and in PowerPoint.
  * - **One value per box-and-whisker category** (`box-per-series`): when no category label repeats (two rows or more), each box would be a
  *   single value. The rows are one group named after the category column, so each series is one box of its values across the categories.
  * - **Several series on a pie or doughnut** (`nested-rings`): two or more series that hold numbers are drawn as a doughnut of one ring per
@@ -134,8 +137,8 @@ const label = (cell: unknown): string => cell === null || cell === undefined ? '
  * - **Scatter whose X column holds no number** (`scatter-by-position`): the text column cannot be an X axis, so it is left out and every
  *   series is plotted against the category position (1, 2, 3, ...), like a scatter of one value column.
  *
- * A construct that plots one series (treemap, histogram and Pareto with categories, waterfall, funnel, map, and pie) still draws only the
- * first; the others are listed in `dropped`.
+ * A construct that plots one series (treemap, histogram with categories, a Pareto chart of one numeric series, waterfall, funnel, map,
+ * and pie) still draws only the first; the others are listed in `dropped`.
  */
 export function chartDrawPlan(chart: unknown, resolved: Extract<ResolvedChartData, { ok: true }>, options: { language?: string } = {}): ChartDrawPlan {
   const authored = typeId(chart);
@@ -153,6 +156,8 @@ export function chartDrawPlan(chart: unknown, resolved: Extract<ResolvedChartDat
     const labels = rows.map(row => label(row[0]).trim()).filter(Boolean);
     const places = labels.filter(entry => isPlaceLabel(entry, options.language)).length;
     if (places * 2 < labels.length) ({ type, kind, fallback } = { type: 'column', kind: 'bar', fallback: 'map-as-columns' });
+  } else if (kind === 'pareto' && seriesCount >= 2) {
+    ({ type, kind, fallback } = { type: 'column', kind: 'bar', fallback: 'pareto-as-columns' });
   } else if (kind === 'box' && categorized && rows.length >= 2) {
     const labels = rows.map(row => label(row[0]));
     if (new Set(labels).size === labels.length) {
