@@ -704,7 +704,7 @@ export async function fromPptx(input, options = {}) {
   restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
   restoreLogoFallback(imported, furnitureContexts);
   // The overlay joins its slide before the run colors, so the text of its shapes is settled with the rest.
-  applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance);
+  applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance, options.onDiagnostic);
   applyRunColors(imported, slideProvenance, restoredGroups, report, options);
   settleShapes(imported, furnitureContexts, options);
   restoreSlotFills(imported, slideProvenance, options);
@@ -756,12 +756,12 @@ function colorResolver(imported, options) {
 }
 
 // SH-05: the overlay shapes and connectors of each slide join it, in the order they were drawn.
-function applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance) {
+function applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance, report) {
   const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
   // The stored ids and anchors of the overlay count while the slide's native structure is as it was exported (an edited slide keeps what PowerPoint now shows).
   const paths = imported.slides.map(() => null);
   for (const group of restoredGroups) if (group.applied && group.contentPaths?.paths) paths[group.contentPaths.slide] = group.contentPaths.paths;
-  assembleOverlayShapes(imported, furnitureContexts, imported.slides.map((_, index) => restoredContent.has(index)), slideProvenance.map(entry => entry.structure === 'match' ? entry.record?.overlays : undefined), paths);
+  assembleOverlayShapes(imported, furnitureContexts, imported.slides.map((_, index) => restoredContent.has(index)), slideProvenance.map(entry => entry.structure === 'match' ? entry.record?.overlays : undefined), paths, report);
 }
 
 // SH-05: what only the theme style gave a shape (its fill, line, shadow and text color) is not the shape's own.
