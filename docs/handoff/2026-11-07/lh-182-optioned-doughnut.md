@@ -1,0 +1,7 @@
+# Optioned doughnut hole remainder, 2026-11-08
+
+`codex/lh-182-doughnut-options` implements the open LH-182 remainder. Core preserves the existing optioned preview plot after explicit legend reservation (including multirow top/bottom legends). The existing renderer and PPTX layer consume the square and fill only its hole. A surface-only hole tag is consumed on import but no longer implies default direct labels, so authored legend/data-label choices survive.
+
+Decision (vetoable): preserve every slice/text path and all chart options; fill the hole rather than moving the decorative motif. The thirteen-slide witness covers one/nested rings, all legend positions, percentage labels and the unchanged no-option default. Twelve optioned SVGs differ only by one added surface circle; all slice/text/legend paths remain byte-identical. The default control is wholly byte-identical. No existing example carries an active optioned doughnut, per the full corpus scan; combined integration golden workflow owns any fixture update.
+
+Focused legacy and new core tests and twelve preview/native XML/import cases pass. Native PowerPoint remains owed; coordinator input `C:/opf-work/lh-182-doughnut-options/artifacts/lh-182-options/after.pptx` retains its authored A4 aspect. Evidence is published with the PR before folding; source branches freeze once folded. LH-93 stacked siblings, LH-73 unequal notes, LH-75 growth and LH-110 localized period bands remain in this lane. #1113 belongs to sites_delivery; #1128 to the coordinator.

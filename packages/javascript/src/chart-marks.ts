@@ -231,10 +231,9 @@ export interface ChartLayerDoughnut {
 /**
  * LH-182: where a doughnut (the drawn type: a doughnut, or nested rings of a pie or doughnut of several series) is drawn, so its hole can
  * be filled with the surface the chart stands on (`surface`): a deck watermark or a background motif behind the chart otherwise shows
- * through the hole, and only in the hole. With a value list (LH-108) the doughnut fills the list's square. Without one, and without chart
- * options (`legend`, `axisTitles`, `dataLabels`, which carve the box themselves), the square is the preview's: the box less its padding
- * and the category legend at the end (none when the slices carry their names, LH-105), 90% of half the shorter side. A chart with options
- * has no square (its hole stays open in both engines).
+ * through the hole, and only in the hole. With a value list (LH-108) the doughnut fills the list's square. Otherwise the square is the
+ * preview's: the box less its padding, header and category legend (at its explicit position, otherwise the end; none when the slices
+ * carry their names, LH-105), 90% of half the shorter side. Explicit inside-ring labels keep the same plot and a filled hole.
  */
 export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined): ChartLayerDoughnut | undefined {
   if (!record(chart) || !data.ok || data.columns.length < 2 || !data.rows.length) return undefined;
@@ -243,8 +242,39 @@ export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry:
   if (!usable(box, scale)) return undefined;
   const of = (pie: Box): ChartLayerDoughnut => ({pie, hole: {cx: pie.x + pie.width / 2, cy: pie.y + pie.height / 2, r: pie.width / 4}});
   if (layer?.valueList) return of(layer.valueList.pie);
-  if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active || layer?.header) return undefined;
-  const {fontPx, pad} = metrics(box, scale, geometry.minFontSize);
+  const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
+  const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSize);
+  if (options.active || layer?.header) {
+    // RR-35's explicit legend is carved from the chart before the circular plot. Keep the preview's existing geometry;
+    // data labels on a doughnut are inside its rings and require no outside reserve. Axis titles are unsupported and already adapted.
+    let outer = layer?.header ? {...box, y: box.y + layer.header.height, height: Math.max(1, box.height - layer.header.height)} : box;
+    const names = data.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]));
+    const measure = (name: string) => geometry.measure(name, fontPx, 400);
+    const sideWidth = () => Math.min(outer.width * 0.45, fontPx + Math.max(0, ...names.map(measure)) + fontPx * 0.5);
+    let managed = Boolean(layer?.header?.legend || layer?.slices);
+    const position = options.legend;
+    if (position !== undefined) {
+      managed = true;
+      if (position === 'left' || position === 'right') {
+        const reserve = sideWidth() + pad;
+        outer = {...outer, x: position === 'left' ? outer.x + reserve : outer.x, width: Math.max(1, outer.width - reserve)};
+      } else if (position === 'top' || position === 'bottom') {
+        const available = Math.max(1, outer.width - 2 * pad), spacing = fontPx * 0.8;
+        const rows: number[] = [];
+        for (const name of names) {
+          const width = Math.min(available, fontPx + measure(name) + spacing), last = rows.length - 1;
+          if (last >= 0 && rows[last]! + width <= available + 0.01) rows[last]! += width;
+          else rows.push(width);
+        }
+        const reserve = rows.length * lineHeight + pad;
+        outer = {...outer, y: position === 'top' ? outer.y + reserve : outer.y, height: Math.max(1, outer.height - reserve)};
+      }
+    }
+    const legend = managed ? 0 : sideWidth() + pad;
+    const area = {x: outer.x + pad, y: outer.y + pad, width: Math.max(1, outer.width - 2 * pad - legend), height: Math.max(1, outer.height - 2 * pad)};
+    const radius = Math.max(1, Math.min(area.width, area.height) / 2 * 0.9), cx = area.x + area.width / 2, cy = area.y + area.height / 2;
+    return of({x: cx - radius, y: cy - radius, width: 2 * radius, height: 2 * radius});
+  }
   // The preview's side legend (charts.js legendEntries): one entry per category, a swatch, a gap and the longest name, at most 45% of the box.
   const names = data.rows.map(row => label(row[0]));
   const legend = layer?.slices ? 0 : Math.min(box.width * 0.45, fontPx * 0.6 + fontPx * 0.4 + Math.max(0, ...names.map(name => geometry.measure(name, fontPx, 400))) + fontPx * 0.5) + pad;
