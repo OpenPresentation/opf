@@ -268,7 +268,7 @@ function chartexCaption(caption, {labelColor, font, textSize, rtl}) {
     `<a:p><a:pPr algn="${rtl ? 'r' : 'l'}"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(caption)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
 }
 
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], groups = [], waterfall, rtl = false, histogram}) {
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], groups = [], waterfall, rtl = false, histogram, numericAxes}) {
   // LH-107: core's waterfall layer applies to the native waterfall only.
   if (spec.layoutId !== 'waterfall') waterfall = undefined;
   // LH-153: the number format of each series' value labels and of the value axis, where the author wrote none: `#,##0` for a series that groups
@@ -320,7 +320,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, axisCode, waterfall?.valueAxis === false, counts && histogram?.decimals !== undefined ? histogramEdgeFormat(histogram.decimals) : undefined, spec.binning ? histogram?.valueAxis : undefined, spec.binning ? histogram?.percentUnit : undefined)}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, axisCode, waterfall?.valueAxis === false, counts && histogram?.decimals !== undefined ? histogramEdgeFormat(histogram.decimals) : undefined, numericAxes?.value ?? (spec.binning ? histogram?.valueAxis : undefined), spec.binning ? histogram?.percentUnit : undefined)}</cx:plotArea>${legend}</cx:chart>` +
     // LH-105: no chart draws a panel; the chart area is unfilled and the chart stands on the card or the slide background.
     `<cx:spPr>${fill.color ? solidFill(fill.color, alpha) : '<a:noFill/>'}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';

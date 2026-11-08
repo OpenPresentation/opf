@@ -3705,7 +3705,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const waterfall = chartLayout?.layer?.waterfall;
     const waterfallInfo = waterfall ? {...waterfall, connector: axisLineColor, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
       ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(histogram ? {histogram} : {}), ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(histogram ? {histogram} : {}), ...(chartLayout?.layer?.numericAxes ? {numericAxes: chartLayout.layer.numericAxes} : {}), ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -3777,7 +3777,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
     // ScatterWithMarkers: markers only, no connecting line.
-    ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle' } : {}),
+    ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle', catGridLine: {style: 'none'},
+      ...(chartLayout?.layer?.numericAxes ? {valAxisMinVal: chartLayout.layer.numericAxes.value.min, valAxisMaxVal: chartLayout.layer.numericAxes.value.max, valAxisMajorUnit: chartLayout.layer.numericAxes.value.majorUnit,
+        catAxisMinVal: chartLayout.layer.numericAxes.category.min, catAxisMaxVal: chartLayout.layer.numericAxes.category.max, catAxisMajorUnit: chartLayout.layer.numericAxes.category.majorUnit} : {})} : {}),
     // LH-03, LH-81: no chart area fill, no value axis or gridlines, the caption and the header legend (their positions are written below).
     ...layerXml.options
   };

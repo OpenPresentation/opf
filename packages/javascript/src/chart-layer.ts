@@ -23,6 +23,7 @@ import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
 import type {ChartLayerDoughnut, ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
 import type {ChartLayerHistogram} from './chart-histogram.js';
+import type {ChartNumericAxes} from './chart-numeric-axes.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
@@ -87,6 +88,8 @@ export interface ChartPlotInset { left: number; top: number; right: number; bott
 
 /** What composition decides for a chart beyond its value axis (LH-03, LH-81, LH-92, LH-93). */
 export interface ChartLayer {
+  /** RR-105: scatter X/Y and box-and-whisker axes, also written into native PPTX. */
+  numericAxes?: ChartNumericAxes;
   small?: ChartLayerSmall;
   header?: ChartLayerHeader;
   /** LH-92: a doughnut of two or more rings names each ring on one of its slices. */
