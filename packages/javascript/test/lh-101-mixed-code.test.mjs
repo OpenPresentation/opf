@@ -46,3 +46,9 @@ test('public layoutCode and the lone-code display ceiling remain 32px',()=>{
 test('a measurement failure during a growth trial propagates instead of hiding the failure',()=>{
  const o=options('ltr'),measure=o.textMeasurement.measure;o.textMeasurement.measure=(text,size,style)=>{if(style.fontFamily==='Original code'&&size>30)throw new Error('deliberate growth measurement failure');return measure(text,size,style);};assert.throws(()=>composeSlide(fixtures[0].slide,o),/deliberate growth measurement failure/u);
 });
+
+test('recompose:false keeps plain-row geometry while fill:false independently disables code growth',()=>{
+ const o=options('ltr'),plain=composeSlide(fixtures[0].slide,o),fixed=composeSlide(fixtures[0].slide,{...o,recompose:false}),off=composeSlide(fixtures[0].slide,{...o,recompose:false,fill:false});
+ assert.equal(body(fixed).fit.fontSize,56);assert.equal(body(off).fit.fontSize,22);
+ for(const key of['items','flows','composition','contentBox','titleRule'])assert.deepEqual(fixed[key],plain[key],key+' is not recomposed');
+});
