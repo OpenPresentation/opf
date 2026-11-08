@@ -5,7 +5,7 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-**Published set (0.33.0):** core, renderer, PPTX, editor, CLI and Gallery,
+**Published set (0.33.0):** core, renderer, PPTX, editor, CLI, Gallery and MCP,
 all at the shared version 0.33.0. `node scripts/registry-plan.mjs` prints each
 version with the registry `gitHead` of its publisher commit.
 Earlier matrices and native observations retain their historical identities.
@@ -38,7 +38,8 @@ imply universal Office or full-catalog visual parity.
 | Renderer | 0.33.0 | Core ^0.33.0; optional pinned font/converter peers |
 | PPTX | 0.33.0 | Core ^0.33.0, Gallery ^0.33.0; optional renderer ^0.33.0 |
 | Editor | 0.33.0 | Core ^0.33.0; optional renderer ^0.33.0 |
-| Gallery | 0.33.0 | Owner of every default catalog record; 36 intent layouts; same records as 5.0.0 |
+| Gallery | 0.33.0 | Owner of every default catalog record; 36 intent layouts |
+| MCP | 0.33.0 | Core ^0.33.0, Gallery ^0.33.0; bundled deck viewer |
 
 ## Runtime
 
@@ -206,11 +207,11 @@ acceptance remain open; no new package train or broad native pass is inferred.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/gallery` | 0.33.0 (the shared version, with records identical to 5.0.0, the last number of its own line; 4.0.0 (2026-10-19), 3.0.0, 2.0.0 and 1.0.0 remain historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
+| `@openpresentation/gallery` | 1.0.0 to 5.0.0 (historical independent releases; current shared versions are listed above) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
 
-Gallery 4.0.0 (published and independently verified 2026-10-19) adds theme `variants` and removes the `dark` theme; core 0.24 and its siblings depended on `^4.0.0`. It declares catalog compatibility generation 3. Gallery 5.0.0 (published and independently verified; layouts as one list of regions, catalog generation 4) is the range core 0.25.0 and this checkout depend on (`^5.0.0`); the published set depends on it from core 0.25.0, and so does CLI 0.25.0 (CLI 0.24.1 and earlier, on Gallery `^4.0.0`, cannot read it).
+Gallery 4.0.0 (published and independently verified 2026-10-19) adds theme `variants` and removes the `dark` theme; core 0.24 and its siblings depended on `^4.0.0`. It declares catalog compatibility generation 3. Gallery 5.0.0 (published and independently verified; layouts as one list of regions, catalog generation 4) was the range core 0.25.0 and CLI 0.25.0 depended on (`^5.0.0`) (CLI 0.24.1 and earlier, on Gallery `^4.0.0`, cannot read it).
 
-The gallery (RR-78) is the package `packages/gallery` of this repository. Since 0.26.0 it is released with the other five at one
+The gallery (RR-78) is the package `packages/gallery` of this repository. Since 0.26.0 it is released with the OPF packages at one
 shared version (`vX.Y.Z` tags, `npm-publish.yml`); until 0.25.0 it was released from its own repository on its own line, which
 ended at 5.0.0 (Gallery 1.0.0 to 5.0.0 stay on npm). New catalog records go in any release; a removed id or a changed drawing needs a
 minor release ([release process](release-process.md)). From OPF 0.19 core and the
@@ -222,7 +223,7 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
-| Bundled examples catalog | `@openpresentation/opf/examples` | **127** decks; the quickstart JSON is a docs fixture, not a 128th catalog entry |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **137** decks; the quickstart JSON is a separate docs fixture |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Supported theme-slot colors write native `schemeClr` references; arbitrary native Office recoloring and full visual fidelity remain separately scoped. |
 | Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |
