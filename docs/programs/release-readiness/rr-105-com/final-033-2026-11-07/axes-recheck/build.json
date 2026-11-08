@@ -1,0 +1,23 @@
+{
+  "manifestVersion": 1,
+  "revision": "788a04a45124ab837799855d7a6f361f3ad9ca5a",
+  "opfVersion": "0.32.1",
+  "node": "v24.20.0",
+  "decks": [
+    {
+      "id": "chart-type-sampler",
+      "source": "C:/opf-work/release-033-final/examples/technical/chart-type-sampler.opf.json",
+      "sourceSha256": "bc402b123834f2a82dd92fb1e18b5361ad545635b61f8cc853cfa929c8cb6172",
+      "previewOk": true,
+      "previewSlides": 3,
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/chart-type-sampler.pptx",
+          "ok": true,
+          "sha256": "68dfed46b97f344eb5c1cedc78b310012d418d9de0b7bd864d12d5bc2e9050cd"
+        }
+      ]
+    }
+  ]
+}

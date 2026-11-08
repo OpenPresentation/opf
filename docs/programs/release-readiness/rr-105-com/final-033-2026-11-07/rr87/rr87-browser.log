@@ -1,0 +1,2926 @@
+
+> @openpresentation/opf-editor@0.32.1 build:playground C:\opf-work\release-033-final\packages\editor
+> node scripts/build-playground.mjs
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/composition.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-CBU23EIG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:9:7:
+      9 │ import './chunk-CBU23EIG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:11:7:
+      11 │ import './chunk-RYZPBJLB.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:13:7:
+      13 │ import './chunk-GKWGGXJE.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:14:7:
+      14 │ import './chunk-KEHG25E6.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:16:7:
+      16 │ import './chunk-SEYGFXWO.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:20:7:
+      20 │ import './chunk-JBARNYFR.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:23:7:
+      23 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:2:7:
+      2 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:3:7:
+      3 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:4:7:
+      4 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:5:7:
+      5 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/data.js:3:7:
+      3 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-catalog.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:6:7:
+      6 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:2:7:
+      2 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:3:7:
+      3 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:4:7:
+      4 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:5:7:
+      5 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:3:7:
+      3 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:4:7:
+      4 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:5:7:
+      5 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:6:7:
+      6 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-geometry.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-R6C6BQOG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:2:7:
+      2 │ import './chunk-R6C6BQOG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:3:7:
+      3 │ import './chunk-RYZPBJLB.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-AFLEES3E.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:4:7:
+      4 │ import './chunk-AFLEES3E.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:5:7:
+      5 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:6:7:
+      6 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:7:7:
+      7 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:8:7:
+      8 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:9:7:
+      9 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:10:7:
+      10 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:2:7:
+      2 │ import './chunk-RYZPBJLB.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:3:7:
+      3 │ import './chunk-GKWGGXJE.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:4:7:
+      4 │ import './chunk-KEHG25E6.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:6:7:
+      6 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:7:7:
+      7 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:8:7:
+      8 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:9:7:
+      9 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:10:7:
+      10 │ import './chunk-36MPQXXK.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:11:7:
+      11 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:5:7:
+      5 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:6:7:
+      6 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:7:7:
+      7 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:9:7:
+      9 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/font-policy.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/symbol-font-encodings.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:3:7:
+      3 │ import './chunk-KEHG25E6.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:6:7:
+      6 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:9:7:
+      9 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:10:7:
+      10 │ import './chunk-QF5RSRXU.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:11:7:
+      11 │ import './chunk-36MPQXXK.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:12:7:
+      12 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema-engine-ajv.js:4:7:
+      4 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/diagram-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-module-BK7JNEUV.js:3:7:
+      3 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:6:7:
+      6 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:2:7:
+      2 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:3:7:
+      3 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:4:7:
+      4 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:5:7:
+      5 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:3:7:
+      3 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:4:7:
+      4 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:5:7:
+      5 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:6:7:
+      6 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/composition.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-CBU23EIG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:9:7:
+      9 │ import './chunk-CBU23EIG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:11:7:
+      11 │ import './chunk-RYZPBJLB.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:13:7:
+      13 │ import './chunk-GKWGGXJE.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:14:7:
+      14 │ import './chunk-KEHG25E6.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:16:7:
+      16 │ import './chunk-SEYGFXWO.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:20:7:
+      20 │ import './chunk-JBARNYFR.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:23:7:
+      23 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-R6C6BQOG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:2:7:
+      2 │ import './chunk-R6C6BQOG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:3:7:
+      3 │ import './chunk-RYZPBJLB.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-AFLEES3E.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:4:7:
+      4 │ import './chunk-AFLEES3E.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:5:7:
+      5 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:6:7:
+      6 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:7:7:
+      7 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:8:7:
+      8 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:9:7:
+      9 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:10:7:
+      10 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:2:7:
+      2 │ import './chunk-RYZPBJLB.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:3:7:
+      3 │ import './chunk-GKWGGXJE.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:4:7:
+      4 │ import './chunk-KEHG25E6.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:6:7:
+      6 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:7:7:
+      7 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:8:7:
+      8 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:9:7:
+      9 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:10:7:
+      10 │ import './chunk-36MPQXXK.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:11:7:
+      11 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:3:7:
+      3 │ import './chunk-KEHG25E6.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:6:7:
+      6 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:9:7:
+      9 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:10:7:
+      10 │ import './chunk-QF5RSRXU.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:11:7:
+      11 │ import './chunk-36MPQXXK.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:12:7:
+      12 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:2:7:
+      2 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:3:7:
+      3 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:4:7:
+      4 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:5:7:
+      5 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema-engine-ajv.js:4:7:
+      4 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/diagram-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-module-BK7JNEUV.js:3:7:
+      3 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-R6C6BQOG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:2:7:
+      2 │ import './chunk-R6C6BQOG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:3:7:
+      3 │ import './chunk-RYZPBJLB.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-AFLEES3E.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:4:7:
+      4 │ import './chunk-AFLEES3E.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:5:7:
+      5 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:6:7:
+      6 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:7:7:
+      7 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:8:7:
+      8 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:9:7:
+      9 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:10:7:
+      10 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:2:7:
+      2 │ import './chunk-RYZPBJLB.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:3:7:
+      3 │ import './chunk-GKWGGXJE.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:4:7:
+      4 │ import './chunk-KEHG25E6.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:6:7:
+      6 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:7:7:
+      7 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:8:7:
+      8 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:9:7:
+      9 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:10:7:
+      10 │ import './chunk-36MPQXXK.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:11:7:
+      11 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-CBU23EIG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:9:7:
+      9 │ import './chunk-CBU23EIG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:11:7:
+      11 │ import './chunk-RYZPBJLB.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:13:7:
+      13 │ import './chunk-GKWGGXJE.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:14:7:
+      14 │ import './chunk-KEHG25E6.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:16:7:
+      16 │ import './chunk-SEYGFXWO.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:20:7:
+      20 │ import './chunk-JBARNYFR.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:23:7:
+      23 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:3:7:
+      3 │ import './chunk-KEHG25E6.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:6:7:
+      6 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:9:7:
+      9 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:10:7:
+      10 │ import './chunk-QF5RSRXU.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:11:7:
+      11 │ import './chunk-36MPQXXK.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:12:7:
+      12 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema-engine-ajv.js:4:7:
+      4 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/diagram-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-module-BK7JNEUV.js:3:7:
+      3 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-CBU23EIG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:9:7:
+      9 │ import './chunk-CBU23EIG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:11:7:
+      11 │ import './chunk-RYZPBJLB.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:13:7:
+      13 │ import './chunk-GKWGGXJE.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:14:7:
+      14 │ import './chunk-KEHG25E6.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:16:7:
+      16 │ import './chunk-SEYGFXWO.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:20:7:
+      20 │ import './chunk-JBARNYFR.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:23:7:
+      23 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/composition.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:6:7:
+      6 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:2:7:
+      2 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:3:7:
+      3 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:4:7:
+      4 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:5:7:
+      5 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:3:7:
+      3 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:4:7:
+      4 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:5:7:
+      5 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:6:7:
+      6 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:5:7:
+      5 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:6:7:
+      6 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:7:7:
+      7 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:9:7:
+      9 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/font-policy.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/symbol-font-encodings.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema-engine-ajv.js:4:7:
+      4 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/diagram-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-module-BK7JNEUV.js:3:7:
+      3 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/composition.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/symbol-font-encodings.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/pagination.js:6:7:
+      6 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:2:7:
+      2 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:3:7:
+      3 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:4:7:
+      4 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/patch.js:5:7:
+      5 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:3:7:
+      3 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:4:7:
+      4 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:5:7:
+      5 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/ids.js:6:7:
+      6 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-CBU23EIG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:9:7:
+      9 │ import './chunk-CBU23EIG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:11:7:
+      11 │ import './chunk-RYZPBJLB.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:13:7:
+      13 │ import './chunk-GKWGGXJE.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:14:7:
+      14 │ import './chunk-KEHG25E6.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:16:7:
+      16 │ import './chunk-SEYGFXWO.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:20:7:
+      20 │ import './chunk-JBARNYFR.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/browser.js:23:7:
+      23 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/font-policy.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-R6C6BQOG.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:2:7:
+      2 │ import './chunk-R6C6BQOG.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:3:7:
+      3 │ import './chunk-RYZPBJLB.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-AFLEES3E.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:4:7:
+      4 │ import './chunk-AFLEES3E.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:5:7:
+      5 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:6:7:
+      6 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:7:7:
+      7 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:8:7:
+      8 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:9:7:
+      9 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/yaml.js:10:7:
+      10 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-RYZPBJLB.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:2:7:
+      2 │ import './chunk-RYZPBJLB.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-GKWGGXJE.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:3:7:
+      3 │ import './chunk-GKWGGXJE.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:4:7:
+      4 │ import './chunk-KEHG25E6.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:6:7:
+      6 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:7:7:
+      7 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:8:7:
+      8 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:9:7:
+      9 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:10:7:
+      10 │ import './chunk-36MPQXXK.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/markdown.js:11:7:
+      11 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-geometry.js:2:7:
+      2 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-catalog.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-MU57EZRR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:5:7:
+      5 │ import './chunk-MU57EZRR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:6:7:
+      6 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:7:7:
+      7 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/convert.js:9:7:
+      9 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-KEHG25E6.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:3:7:
+      3 │ import './chunk-KEHG25E6.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-SEYGFXWO.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:6:7:
+      6 │ import './chunk-SEYGFXWO.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:9:7:
+      9 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:10:7:
+      10 │ import './chunk-QF5RSRXU.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:11:7:
+      11 │ import './chunk-36MPQXXK.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/source.js:12:7:
+      12 │ import './chunk-PRXZD2II.js';
+         ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema-engine-ajv.js:4:7:
+      4 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-JBARNYFR.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:2:7:
+      2 │ import './chunk-JBARNYFR.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-QF5RSRXU.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:3:7:
+      3 │ import './chunk-QF5RSRXU.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-36MPQXXK.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:4:7:
+      4 │ import './chunk-36MPQXXK.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/schema.js:5:7:
+      5 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/diagram-engine-lazy.js:1:7:
+      1 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../javascript/dist/chunk-PRXZD2II.js" was marked as having no side effects [ignored-bare-import]
+
+    ../javascript/dist/shape-engine-module-BK7JNEUV.js:3:7:
+      3 │ import './chunk-PRXZD2II.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  It was excluded from the "sideEffects" array in the enclosing "package.json" file:
+
+    ../javascript/package.json:29:2:
+      29 │   "sideEffects": [
+         ╵   ~~~~~~~~~~~~~
+
+Browser editor built in C:\opf-work\release-033-final\packages\editor\artifacts\playground\ (70 lazy script faces, 94 lazy preview faces)
+{
+  "passed": true,
+  "browser": "156.0.4314.50",
+  "offlineAfterLoad": true,
+  "pptxBytes": 94385,
+  "nativeTable": true,
+  "mergedCells": true,
+  "exportCommitsDraft": true,
+  "importUndoRedo": true,
+  "expandedImageImport": true,
+  "quoteSourceEditingUndo": true,
+  "onePageReadabilityUndo": true,
+  "quoteTextReimportUndo": true,
+  "quoteSemanticsRestored": false,
+  "malformedInputPreservesDocument": true,
+  "networkWrites": 0
+}

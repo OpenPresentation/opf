@@ -1,0 +1,31 @@
+{
+    "tables":  1,
+    "powerpointVersion":  "16.0",
+    "editedAndReopened":  true,
+    "stages":  [
+                   "not-open:ok",
+                   "open-copy:ok",
+                   "owned-identity:ok",
+                   "edit:ok",
+                   "save-copy:ok",
+                   "close-copy:ok",
+                   "open-saved:ok",
+                   "verify-saved:ok",
+                   "export-png:ok",
+                   "close-saved:ok"
+               ],
+    "closed":  [
+                   "C:\\opf-work\\release-033-artifacts\\rr87-native\\owned-input.pptx",
+                   "C:\\opf-work\\release-033-artifacts\\rr87-native\\native-saved.pptx"
+               ],
+    "fixtureSha256After":  "6af5f26fa5eb2f8097fac2a29ebcd03394e0a71fdd50d137d4aac0b84ef62782",
+    "raster":  "native-slide.png",
+    "attempt":  "rr87-native",
+    "fixtureSha256":  "6af5f26fa5eb2f8097fac2a29ebcd03394e0a71fdd50d137d4aac0b84ef62782",
+    "sourceSha256":  "6af5f26fa5eb2f8097fac2a29ebcd03394e0a71fdd50d137d4aac0b84ef62782",
+    "passed":  true,
+    "savedSha256":  "47ab2ce242ca1c7b62f1a7955aff3c25396abd4109bf768811397de56304fc28",
+    "copySha256":  "6af5f26fa5eb2f8097fac2a29ebcd03394e0a71fdd50d137d4aac0b84ef62782"
+}
+
+Exception calling "GetActiveObject" with "1" argument(s): "Operation unavailable (Exception from HRESULT: 0x800401E3 (MK_E_UNAVAILABLE))"
