@@ -3,40 +3,34 @@
   "files": [
     {
       "path": "docs/handoff/2026-11-08/rr105-native-ltr-oracle.md",
-      "workingBytes": 5370,
-      "gitBytes": 5369,
-      "gitBlobSha256": "61e4e59d4ca05107cce194f786b983173866d51ac0195e6d716235f9e1c9d489"
+      "workingBytes": 7240,
+      "gitBytes": 7238,
+      "gitBlobSha256": "88a7ca68fe0912d43c3a91d0f1fa0e508e5944654d1047b23c9c7f270c6c6d80"
     },
     {
-      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/README.md",
-      "workingBytes": 484,
-      "gitBytes": 483,
-      "gitBlobSha256": "ffbe7b970a64b54b144242188b5ee853254a776a31967839651ebfddde233692"
+      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/mapped-terminal-receipt.json",
+      "workingBytes": 683,
+      "gitBytes": 683,
+      "gitBlobSha256": "aacc90e3547d9450d2f1f8a4348e031495b28e14c6bacd55d95586fda3677e14"
     },
     {
-      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/qualified-source-and-suite.files.json",
-      "workingBytes": 158216,
-      "gitBytes": 158216,
-      "gitBlobSha256": "8f250b5b150c3c8cba3f4c5c7b0db053540305f7d3cf61764ba0069e69cc0e96"
+      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/mapped-terminal.files.json",
+      "workingBytes": 3227,
+      "gitBytes": 3227,
+      "gitBlobSha256": "c59192091c979572987b6f52a266842cfb333fc29f6794252baa73c7e919babd"
     },
     {
-      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/qualified-source-and-suite.zip",
-      "workingBytes": 650645,
-      "gitBytes": 650645,
-      "gitBlobSha256": "685d9ff2854203293615d5131cff1f49b52740c5b6b4a68b2a5bc4e14cd88a58",
+      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/mapped-terminal.zip",
+      "workingBytes": 31173,
+      "gitBytes": 31173,
+      "gitBlobSha256": "c519acbb7d2155cf34531a9c04629add8fd0eb84bb9cd5b9c4dd36c18aa964fd",
       "binaryBytesExact": true
     },
     {
-      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/receipt.json",
-      "workingBytes": 1453,
-      "gitBytes": 1453,
-      "gitBlobSha256": "b6ba841202018a442524dfc08ecbb0cd554351a36106df97bd61efccadaa1ea6"
-    },
-    {
-      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/seal-source-and-suite.mjs",
-      "workingBytes": 5413,
-      "gitBytes": 5412,
-      "gitBlobSha256": "82dc9acfabf949d59261c51a8c3cebbd277d0771bc74ab103dbb67ce9096c3a3"
+      "path": "docs/handoff/2026-11-08/rtl-ltr-run-oracle/seal-mapped-terminal.mjs",
+      "workingBytes": 3413,
+      "gitBytes": 3412,
+      "gitBlobSha256": "5d6baad9625cc61a809a49c0da2d858aa3680a0010f0dffd1fbac4e5f0426a60"
     }
   ],
   "verified": true,

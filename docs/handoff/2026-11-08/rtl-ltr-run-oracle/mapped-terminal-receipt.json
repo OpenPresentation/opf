@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "d7ba4e11cc1a7369e63c20924593e5dbefba5357",
+  "command": "node scripts/check-changed.mjs --base 56981114388f2d23444270abac13b6568ee363f6",
+  "exitCode": 1,
+  "mappedCheckPass": false,
+  "archive": {
+    "path": "mapped-terminal.zip",
+    "bytes": 31173,
+    "sha256": "c519acbb7d2155cf34531a9c04629add8fd0eb84bb9cd5b9c4dd36c18aa964fd",
+    "files": 12,
+    "losslessRoundTripVerified": true
+  },
+  "credentialSignatureScan": {
+    "matches": []
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "overallAcceptance": false,
+  "scope": "Terminal local mapped qualification only; no Office, release or accepted product fix."
+}

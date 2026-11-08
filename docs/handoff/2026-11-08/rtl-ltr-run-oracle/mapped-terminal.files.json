@@ -1,0 +1,76 @@
+{
+  "files": [
+    {
+      "path": "check-changed.log",
+      "source": "C:/opf-work/rr105-ltr-oracle-evidence/check-changed.log",
+      "bytes": 4493,
+      "sha256": "b8840714721712b86818ac670f99c7287698c998f719a1da0c73bb1fdf844772"
+    },
+    {
+      "path": "mapped-logs/biome.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\biome.log",
+      "bytes": 687,
+      "sha256": "a4afa60ed04b1adf8382e3de788e2decdc2e54c55bf6947dc86ec75109f2b891"
+    },
+    {
+      "path": "mapped-logs/build.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\build.log",
+      "bytes": 14590,
+      "sha256": "8e87dbda2ad0e7085e68935363425946007f2171f77775465dc9da4f82357ebb"
+    },
+    {
+      "path": "mapped-logs/pnpm_run_check_changes.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\pnpm_run_check_changes.log",
+      "bytes": 2637,
+      "sha256": "c08cf9f1c00431eeaba646e2a5e89f2ee190f6c6677ffc2c34b9b5e534eaf2fe"
+    },
+    {
+      "path": "mapped-logs/pnpm_run_check_font-hotlinks.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\pnpm_run_check_font-hotlinks.log",
+      "bytes": 885,
+      "sha256": "1648d93c74c5ff38c445a60cc3fa121a3d47f5fd696b740df8ca217c4467e3c9"
+    },
+    {
+      "path": "mapped-logs/pnpm_run_check_gallery-tracker.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\pnpm_run_check_gallery-tracker.log",
+      "bytes": 1993,
+      "sha256": "79cdb67d73611acf9406fdc3562ca5f4d208884953a89e0459eba763a26d61d3"
+    },
+    {
+      "path": "mapped-logs/pnpm_run_check_release-report.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\pnpm_run_check_release-report.log",
+      "bytes": 813,
+      "sha256": "2f686ab5e3e756c633a5a482051086550497be37b6a5adeb97005733f5b84b4e"
+    },
+    {
+      "path": "mapped-logs/pnpm_run_check_skill-commands.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\pnpm_run_check_skill-commands.log",
+      "bytes": 1040,
+      "sha256": "3a86ce154e8b8652953fe9710991a10c8e6cb1cdaf487402e8a4a7c149db8eec"
+    },
+    {
+      "path": "mapped-logs/pnpm_run_check_stability.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\pnpm_run_check_stability.log",
+      "bytes": 3967,
+      "sha256": "8baf90ee4de22d38e664a02b8585f967c24d20d39a1ab81e0623d7c311d1bf19"
+    },
+    {
+      "path": "mapped-logs/pnpm_run_check_text.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\pnpm_run_check_text.log",
+      "bytes": 1072,
+      "sha256": "1b77719da88c0919c5dedd1e91ecacf956d6ede039bf4a7ac32229f86f50a96b"
+    },
+    {
+      "path": "mapped-logs/tests_pptx.log",
+      "source": "C:\\opf-work\\rr105-ltr-oracle\\artifacts\\check-changed\\tests_pptx.log",
+      "bytes": 47505,
+      "sha256": "445c18fd7a33c80543cbea452497b98ca722f431c84b5ec56793c2ab0c82eed4"
+    },
+    {
+      "path": "terminal-sealing-producer.mjs",
+      "source": "C:\\opf-work\\rr105-ltr-oracle-evidence\\seal-mapped-terminal.mjs",
+      "bytes": 3413,
+      "sha256": "bfacd26b8fdc1d9a3dc78a4355a28a28838bba4ab97e062c91701500feb0dbd6"
+    }
+  ]
+}
