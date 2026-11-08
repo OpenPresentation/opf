@@ -39,3 +39,9 @@ A pre-existing waterfall scaling gap is now explicit v0.34 scope: layout-harvest
 The CI corpus false positive is corrected at this head, with14 branch-coexistence ID controls. Direct verification passes137 example decks /920 slides and unchanged SH16 fallback/native-identity/pixel/import/determinism checks. check:changed's build/Biome/checks completed with only missing sparse historical evidence; its overly broad test selection (helper/excluded corpus files select the full package) was cancelled and replaced by those exact direct tests after the earlier full contract had already hit its documented Windows symlink stop. Production bytes and goldens were not changed by the MCE test correction.
 
 Full CI42446303551 and one required-all pr-gate watcher are active on this exact source head. Native acceptance for the existing v0.33 scope is complete with the explicit v0.34 remainders above. Merge still requires all CI checks green. No registry release or site deployment has been performed.
+
+## Binding release gate supersedes the waterfall deferral
+
+The earlier decision to leave the newly identified waterfall scale gap for0.34 is withdrawn. The original handoff says a defect in a supported feature blocks0.33; the waterfall is a supported default chart. Remaining_core is preparing a minimal derived033 fix from d26031b98, including shared running-total scale planning, hidden-axis serialization, exact regression cases and SVG invariance proof. The coordinator will requalify the native waterfall before merge. Other final native results remain valid; overall release acceptance is held for this fix and required-all CI.
+
+CI capacity was queued. Duplicate CI runs on our034sourcePRs1141/1142/1143/1144 were cancelled to prioritize the033integration; their source commits remain pushed/frozen and will be checked together in the034integration. No source PR is individually merge-approved by those cancelled runs.
