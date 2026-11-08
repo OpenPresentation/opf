@@ -23,7 +23,8 @@ const server = createServer(async (req, res) => {
       scriptRequests.push(url.pathname.slice('/script-fonts/'.length));
       if (failHebrew && /hebrew/.test(url.pathname)) { res.writeHead(404).end(); return; }
     }
-    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(await readFile(target));
+    const body = await readFile(target);
+    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(body);
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));

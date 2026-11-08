@@ -28,7 +28,7 @@ const server = createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
     if (url.pathname === '/' || url.pathname === '/index.html') { res.writeHead(200, { 'Content-Type': 'text/html' }).end(page); return; }
-    if (url.pathname === '/harness.js') { res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(await readFile(path.join(output, 'harness.js'))); return; }
+    if (url.pathname === '/harness.js') { const body = await readFile(path.join(output, 'harness.js')); res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(body); return; }
     if (url.pathname === '/favicon.ico') { res.writeHead(204).end(); return; }
     res.writeHead(404).end();
   } catch { res.writeHead(500).end(); }
