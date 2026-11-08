@@ -153,3 +153,5 @@ A narrow source PR removes existing bump-branch forced updates. Trusted generati
 ## LH10 body reading-measure correction
 
 [Retained-size reflow and allocator correction](lh10-retained-reading-measure.md) address immutableE1b13/s32 at original30px with no content change. The former measure-growth waiver is superseded by the latest about70character owner direction. Required evidence/final gates and multi-timeline under-capacity findings remain open.
+
+- [SH25literal native series names](sh25-literal-native-series-name.md): separate current-native c:tx/c:v importer correction with exact-string/cache/selector controls; actual edit/save/current-import remains owed.

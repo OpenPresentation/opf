@@ -155,6 +155,8 @@ Status: LH-03 and LH-81 (layout harvest). Two defaults make a plain chart read l
 
 **Import.** `fromPptx` does not write these defaults back: value labels on a chart the small-chart rule covers (by type and counts) and a header legend (`legendPos t` with a manual layout) import as no option, so an exported deck imports with the options it was authored with. LH-105: every chart area is unfilled now, so a small chart is recognized by its deleted value axis; a small chart whose value axis has a title (its axis is kept) imports its default labels as `dataLabels: true`, which draws the same chart.
 
+Native chart-series name edits import from the current native cached reference or direct text value. Numeric point selectors keep their series index; a name selector that no longer exists reports a finding and keeps the actual overlay position. The native header legend uses a manual box sized for the exported names. A longer rename in PowerPoint can omit another legend entry while its data and bars remain intact. Import the edited file, review its findings and export the current OPF again to recompose the header at the retained text size. Longer names can require this reflow; native editing keeps the authored box size.
+
 ## Defaults follow Few
 
 Status: LH-105 (layout harvest). The defaults follow Stephen Few (*Show Me the Numbers*; *Information Dashboard Design*): every pixel of ink shows data, color is for what matters, labels sit at the data. Composition decides them with the rest of the [chart layer](#chart-layer-small-charts-and-the-header-row) (`chart.layer`), and the preview and the PPTX export draw the same. Every explicit option still wins, and `fromPptx` does not write a default back as an option.
