@@ -1,0 +1,5 @@
+# SH-21 corrected product baseline packet — never merge
+
+This fresh packet derives from production preparation076725b5bb47249a2dbe113ef065890cf2c21f82 plus the unchanged diagnostic-only live gate. It includes the accepted final40 catalog and the connector stacking correction proven against all420 independent native sequences. Earlier packet/pilot remain unchanged as a layout failure.
+
+The manifest seals11 live/native-shape product pairs with Source Sans3 and original source/record hashes; every generated file imports with the same semantic texts/parent depths. The coordinator-only read-only probe is unchanged, reviewed local SHA256 d5ffda081eec029f529b2feb762e3d14715b1f9865a34857af41b3e0febb3030. No Office was run during generation. Run all11 cases under the maintained owned worker/deadline, then inspect all input/copy hashes and nonempty native groups before the unchanged SH19 gate. Native edits/save-reopen and measured-frame/domain qualification remain owed; no production domain is accepted.
