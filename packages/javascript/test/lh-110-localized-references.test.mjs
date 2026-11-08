@@ -46,7 +46,7 @@ const chart = (labels=['2022','2023','2024'])=>({type:'line',data:{columns:['Yea
 const refs=(title,language,value=chart())=>composeSlide({title,chart:value},{width:1280,height:720,presentation:{language,slides:[]}}).items.find(item=>item.field==='chart').chart.layer?.references;
 const bands=[
  ['en','Growth accelerated in 2023','Growth accelerated since March'],
- ['de','Das Wachstum stieg im 2023','Das Wachstum stieg seit März'],
+ ['de','Das Wachstum stieg im Jahr 2023','Das Wachstum stieg seit März'],
  ['fr','La croissance a accéléré à partir de 2023','La croissance a accéléré jusqu’en mars'],
  ['es','El crecimiento aumentó después de 2023','El crecimiento aumentó desde marzo'],
  ['it','La crescita è aumentata fino a 2023','La crescita è aumentata nel marzo'],
@@ -68,4 +68,8 @@ test('period bands remain conservative and preserve authored highlight and effec
  const deck={language:'en',slides:[{language:{bcp47:'fr-FR'},title:'La croissance en 2023',chart:chart()}]};
  const context=resolveSlideContext(deck,0);const geometry=composeSlide(context.slide,context.options);
  assert.deepEqual(geometry.items.find(item=>item.field==='chart').chart.layer.references.bands.map(b=>b.row),[1]);
+});
+
+test('explicit localized year/month phrases match the complete suffix, without requiring English words',()=>{
+ for(const[lang,title]of [['fr','La croissance en l’année 2023'],['es','El crecimiento en el año 2023'],['it','La crescita a partire dal 2023'],['pt','O crescimento no ano de 2023'],['nl','De groei in het jaar 2023']])assert.deepEqual(refs(title,lang)?.bands.map(b=>b.row),[1],title);
 });

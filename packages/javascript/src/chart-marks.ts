@@ -669,12 +669,12 @@ const BAND_TYPES = new Set(['line', 'line-with-markers', 'stacked-line', 'stacke
 // Explicit suffix phrases only: article/contraction forms and multiword prepositions are matched as whole title tokens.
 const PERIOD_PREPOSITIONS: Readonly<Record<string, readonly string[]>> = {
   en: ['in', 'since', 'during', 'after', 'from', 'until', 'before', 'by', 'around'],
-  de: ['in', 'im', 'seit', 'während', 'nach', 'ab', 'bis', 'vor', 'um'],
-  fr: ['en', 'depuis', 'pendant', 'durant', 'après', 'à partir de', 'jusqu’en', 'jusqu’à', 'avant', 'd’ici', 'vers'],
-  es: ['en', 'desde', 'durante', 'después de', 'a partir de', 'hasta', 'antes de', 'para', 'alrededor de'],
-  it: ['in', 'nel', 'nello', 'nella', 'nei', 'nelle', 'da', 'dal', 'dalla', 'dallo', 'dai', 'dalle', 'durante', 'dopo', 'fino a', 'prima di', 'entro', 'intorno a'],
-  pt: ['em', 'no', 'na', 'nos', 'nas', 'desde', 'durante', 'após', 'depois de', 'a partir de', 'até', 'antes de', 'por volta de'],
-  nl: ['in', 'sinds', 'tijdens', 'na', 'vanaf', 'tot', 'voor', 'vóór', 'rond', 'tegen'],
+  de: ['in', 'im', 'im Jahr', 'im Monat', 'seit', 'während', 'nach', 'ab', 'bis', 'vor', 'um'],
+  fr: ['en', 'en l’année', 'au cours de', 'depuis', 'pendant', 'durant', 'après', 'à partir de', 'jusqu’en', 'jusqu’à', 'avant', 'd’ici', 'vers'],
+  es: ['en', 'en el año', 'desde', 'durante', 'después de', 'a partir de', 'hasta', 'antes de', 'para', 'alrededor de'],
+  it: ['in', 'nel', 'nel mese di', 'a partire da', 'a partire dal', 'nello', 'nella', 'nei', 'nelle', 'da', 'dal', 'dalla', 'dallo', 'dai', 'dalle', 'durante', 'dopo', 'fino a', 'prima di', 'entro', 'intorno a'],
+  pt: ['em', 'no', 'no ano de', 'no mês de', 'na', 'nos', 'nas', 'desde', 'durante', 'após', 'depois de', 'a partir de', 'até', 'antes de', 'por volta de'],
+  nl: ['in', 'in het jaar', 'in de maand', 'sinds', 'tijdens', 'na', 'vanaf', 'tot', 'voor', 'vóór', 'rond', 'tegen'],
 };
 
 /**
