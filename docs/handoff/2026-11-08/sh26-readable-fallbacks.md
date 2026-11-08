@@ -120,3 +120,8 @@ preserved. All five primary whole PPTX archives remain byte-identical after the
 API correction. Only root runs Office; actual native acceptance and a new pinned
 golden/integration gate remain owed. The RTL deck contains Latin paragraphs;
 its exact continued numbering does not qualify Arabic glyphs or RTL paragraphs.
+
+Review PR: [SH-26 #1207](https://github.com/OpenPresentation/opf/pull/1207),
+a draft against the 0.34 integration branch. Evidence commit is
+`b312bf042b50a41f360ff7a38a6d466a7e308ebe`; production remains `975ced9f2`.
+No watcher or Office process was started by this lane.
