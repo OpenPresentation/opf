@@ -21,9 +21,10 @@
 // a waterfall's palette positions. PPTX import does not write these defaults back as options.
 import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
-import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
+import {words, type ChartLayerFocus} from './chart-focus.js';
+import {titleReferenceNumbers} from './chart-title-numbers.js';
 import type {ChartLayerRows} from './chart-rows.js';
-import {columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
+import {chartBarGeometry, chartValueAxisHidden, columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 import {chartCategoriesInTime, monthOf} from './chart-time-order.js';
@@ -219,6 +220,40 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
   };
 }
 
+/** LH-182: a doughnut's square and its hole, in slide pixels. */
+export interface ChartLayerDoughnut {
+  /** The square the doughnut fills (its outer diameter): the preview draws it there and the PPTX export pins the plot area to it. */
+  pie: Box;
+  /** The hole, half the doughnut's radius (`c:holeSize` 50), which both engines fill with the surface the chart stands on. */
+  hole: {cx: number; cy: number; r: number};
+}
+
+/**
+ * LH-182: where a doughnut (the drawn type: a doughnut, or nested rings of a pie or doughnut of several series) is drawn, so its hole can
+ * be filled with the surface the chart stands on (`surface`): a deck watermark or a background motif behind the chart otherwise shows
+ * through the hole, and only in the hole. With a value list (LH-108) the doughnut fills the list's square. Without one, and without chart
+ * options (`legend`, `axisTitles`, `dataLabels`, which carve the box themselves), the square is the preview's: the box less its padding
+ * and the category legend at the end (none when the slices carry their names, LH-105), 90% of half the shorter side. A chart with options
+ * has no square (its hole stays open in both engines).
+ */
+export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined): ChartLayerDoughnut | undefined {
+  if (!record(chart) || !data.ok || data.columns.length < 2 || !data.rows.length) return undefined;
+  if (typeOf(chart) !== 'doughnut') return undefined;
+  const {box, scale} = geometry;
+  if (!usable(box, scale)) return undefined;
+  const of = (pie: Box): ChartLayerDoughnut => ({pie, hole: {cx: pie.x + pie.width / 2, cy: pie.y + pie.height / 2, r: pie.width / 4}});
+  if (layer?.valueList) return of(layer.valueList.pie);
+  if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active || layer?.header) return undefined;
+  const {fontPx, pad} = metrics(box, scale, geometry.minFontSize);
+  // The preview's side legend (charts.js legendEntries): one entry per category, a swatch, a gap and the longest name, at most 45% of the box.
+  const names = data.rows.map(row => label(row[0]));
+  const legend = layer?.slices ? 0 : Math.min(box.width * 0.45, fontPx * 0.6 + fontPx * 0.4 + Math.max(0, ...names.map(name => geometry.measure(name, fontPx, 400))) + fontPx * 0.5) + pad;
+  const area = {x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legend), height: Math.max(1, box.height - 2 * pad)};
+  const r = Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
+  const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
+  return of({x: cx - r, y: cy - r, width: 2 * r, height: 2 * r});
+}
+
 /**
  * LH-125: the value of the one slice the title names, in the hole of a doughnut (the hole is half the doughnut's radius, as both engines
  * draw it): twice the chart text size, bold, or smaller until its text fits 84% of the hole's width (a chord at the text's height), but not
@@ -366,14 +401,14 @@ function stackMarks(chart: Record<string, unknown>, data: ResolvedChartData, axi
     const point = shape.stacks[j]![i];
     if (percent || value === null || !point || value === 0) return false;
     const text = columnValueLabel(data, j + 1, value, geometry.language), wide = geometry.measure(text, fontPx) + fontPx * 0.25;
-    if (shape.horizontal) return wide <= Math.abs(shape.at(point.to) - shape.at(point.from)) && textHeight <= shape.band / 1.5;
+    if (shape.horizontal) return wide <= Math.abs(shape.at(point.to) - shape.at(point.from)) && textHeight <= chartBarGeometry(shape.band, 1, 'stacked').width;
     // An area starts and ends at its first and last points: a value centered there would hang half outside the band.
     if (shape.kind === 'area' && (i === 0 || i === last)) {
       const end = shape.spaced ? areaEnd(shape, j, i, text, m, geometry) : undefined;
       if (end) ends.push(end);
       return false;
     }
-    const room = shape.kind === 'bar' ? shape.band / 1.5 : shape.band * 0.9;
+    const room = shape.kind === 'bar' ? chartBarGeometry(shape.band, 1, 'stacked').width : shape.band * 0.9;
     return wide <= room && textHeight <= Math.abs(shape.at(point.to) - shape.at(point.from));
   }));
   return {values, ends};
@@ -431,7 +466,7 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
  * LH-154: an axis title is a band the preview carves off the chart's edge (a value axis title under the tick row, a category axis title at
  * the start; one text line each), so the plot leaves both: the title no longer overlaps the tick labels or the row names.
  */
-function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false): ChartPlotInset | undefined {
+function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false, extra: {legend?: boolean; labelRoom?: number} = {}): ChartPlotInset | undefined {
   if (!data.ok || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const width = (text: string) => geometry.measure(text, fontPx);
@@ -442,8 +477,8 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
   const gutter = Math.min(Math.max(span * 0.3, Math.min(span * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
   // A chart whose legend is neither in the header nor replaced by names keeps the side legend (up to 45% of the chart), which the plot leaves room for.
-  const side = namesRow || header?.legend ? 0 : Math.min(span * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
-  let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx);
+  const side = namesRow || header?.legend || extra.legend === false ? 0 : Math.min(span * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
+  let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx - (extra.labelRoom ?? 0));
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   if (!hidden && format !== undefined && !typeOf(chart).startsWith('100pct')) {
     const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axis.min + Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9) * axis.majorUnit;
@@ -455,6 +490,24 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   const top = namesRow ? below + (header ? 0 : pad) + lineHeight + fontPx * 0.1 : below + pad + lineHeight / 2, bottom = box.y + box.height - titleBand - pad - (hidden ? 0 : lineHeight);
   if (!(bottom - top > 1)) return undefined;
   return {left: x - box.x, top: top - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
+}
+
+const HORIZONTAL_BARS = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
+
+/**
+ * LH-93: the inner plot of a horizontal bar chart (clustered, stacked or 100% stacked) without chart options, as an inset from its chart
+ * box, laid out as the preview lays it out (horizontalStackPlot): a side legend only for two series or more without a header legend, and
+ * a small chart's value labels (LH-03, no value axis) keep the widest label's room beyond the longest bar. Undefined for a chart with
+ * options, a stacked chart with its marks (LH-109, LH-125: values inside the segments and names above the plot are fitted to its own plot)
+ * or a chart drawn on a table's rows (LH-115): those keep their own plot.
+ */
+export function horizontalBarPlot(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, axis: ChartValueAxis, box: Box, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
+  if (!record(chart) || !data.ok || data.combo || data.hasX || !HORIZONTAL_BARS.has(typeOf(chart)) || layer?.stack || layer?.rows) return undefined;
+  if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active) return undefined;
+  const hidden = chartValueAxisHidden(layer), {fontPx} = metrics(box, geometry.scale, geometry.minFontSize);
+  const labeled = hidden && layer?.small?.labels === true;
+  const labelRoom = labeled ? Math.max(0, ...data.rows.flatMap(row => row.slice(1).map((cell, j) => { const value = chartNumber(cell); return value === null ? 0 : geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx) + fontPx * 0.5; }))) : 0;
+  return horizontalStackPlot(chart, data, axis, box, layer?.header, false, geometry, hidden, {legend: data.columns.length > 2, labelRoom});
 }
 
 /**
@@ -560,7 +613,8 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
  * gutter and value labels the preview leaves). Any other layer is returned with its `rows`.
  */
 export function restackForRows(chart: unknown, data: ResolvedChartData, layer: ChartLayer, rows: ChartLayerRows, box: Box, axis: ChartValueAxis | undefined, geometry: Omit<ChartPlotGeometry, 'box'>): ChartLayer {
-  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) return {...layer, rows};
+  // LH-93: a plot shared with sibling charts gives way to the table's rows (rows take precedence in both engines).
+  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) { const {plot: _shared, ...rest} = layer; return {...rest, rows}; }
   const {plot: _plot, header: _header, stack, ...rest} = layer;
   const header = stack.legend ?? layer.header;
   const plot: Box = {x: box.x + rows.left, y: box.y + rows.top, width: box.width - rows.left - rows.right, height: rows.bottom - rows.top};
@@ -580,23 +634,25 @@ export interface ChartLayerReferences { lines: ChartReferenceLine[]; bands: Char
 
 const LINE_TYPES = new Set(['column', 'line', 'line-with-markers', 'area']);
 const BAND_TYPES = new Set(['line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area']);
-// English comparisons that name a threshold, right before the number (articles and "of" may stand between): "stayed above 92%",
-// "beat the target of 30", "at least 1,000". Conservative on purpose: a number after any other word is a data value or not a reference.
-const COMPARISON = /\b(?:above|below|over|under|exceed(?:s|ed|ing)?|surpass(?:es|ed|ing)?|beat(?:s|ing)?|top(?:s|ped)?|cross(?:es|ed|ing)?|reach(?:es|ed|ing)?|at least|at most|more than|less than|fewer than|within|beyond|target|goal|threshold|limit|cap|benchmark)(?:\s+(?:the|a|an|its|our|their|of|target|goal|threshold|limit|benchmark))*\s+$/i;
+// The comparisons that name a threshold right before the number are chart-title-numbers.ts' (TITLE_REFERENCE_LANGUAGES: English, German,
+// French, Spanish, Italian, Portuguese, Dutch): "stayed above 92%", "beat the target of 30", "über 92 %", "above ninety percent".
 const PERIOD_PREPOSITIONS = new Set(['in', 'since', 'during', 'after', 'from', 'until', 'before', 'by', 'around']);
 
 /**
  * LH-110: what the slide title (and subtitle) `text` names for reference marks, or undefined: `lines`, the numbers it compares the data
- * with (an English comparison right before the number, as `COMPARISON` lists) that no plotted value equals at the precision written, of
- * the value axis' kind (a percent only on a percent column) and within the data's range widened by its span on each side; `rows`, the one
- * category it names after a time preposition ("in 2023", "since March") on a line or area chart whose categories run in time. Column,
- * line and area charts (not stacked) take lines; line and area charts take bands. English titles only; `highlight` keeps the chart as
+ * with (a comparison right before the number in the deck language, `titleReferenceNumbers`: digits, and in English number words) that no
+ * plotted value equals at the precision written, of the value axis' kind (a percent only on a percent column) and within the data's range
+ * widened by its span on each side; `rows`, the one category it names after a time preposition ("in 2023", "since March") on a line or
+ * area chart whose categories run in time. Column, line and area charts (not stacked) take lines; line and area charts take bands. Lines
+ * in English, German, French, Spanish, Italian, Portuguese and Dutch titles, bands in English titles; `highlight` keeps the chart as
  * authored.
  */
 export function chartTitleReferences(chart: unknown, data: ResolvedChartData, options: {text?: string; language?: string} = {}): {lines: {value: number; text: string}[]; rows: number[]} | undefined {
   if (!record(chart) || !data.ok || data.combo || chart.highlight !== undefined || !options.text?.trim()) return undefined;
   const language = options.language || 'en';
-  if (!/^en(?:-|$)/i.test(language)) return undefined;
+  const english = /^en(?:-|$)/i.test(language);
+  const numbers = titleReferenceNumbers(options.text, language);
+  if (!english && !numbers.length) return undefined;
   const type = typeOf(chart);
   if (!LINE_TYPES.has(type) && !BAND_TYPES.has(type)) return undefined;
   if (data.columns.length < 2 || !data.rows.length) return undefined;
@@ -606,8 +662,8 @@ export function chartTitleReferences(chart: unknown, data: ResolvedChartData, op
     const values = data.rows.flatMap(row => row.slice(1).map(chartNumber)).filter((value): value is number => value !== null);
     if (values.length) {
       const lo = Math.min(...values), hi = Math.max(...values), span = Math.max(hi - lo, Math.abs(hi) * 0.05);
-      for (const number of titleNumbers(options.text)) {
-        if (!COMPARISON.test(number.before) || number.percent !== format.includes('%')) continue;
+      for (const number of numbers) {
+        if (number.percent !== format.includes('%')) continue;
         const target = number.percent ? number.value / 100 : number.value, decimals = number.percent ? number.decimals + 2 : number.decimals;
         if (values.some(value => Math.abs(Number(value.toFixed(decimals)) - target) < 10 ** -(decimals + 6))) continue;
         if (target < lo - span || target > hi + span || lines.some(line => line.value === target)) continue;
@@ -617,7 +673,8 @@ export function chartTitleReferences(chart: unknown, data: ResolvedChartData, op
   }
   const rows: number[] = [];
   const categories = data.rows.map(row => label(row[0]));
-  if (BAND_TYPES.has(type) && chartCategoriesInTime(data.rows.map(row => row[0]), {title: label(data.columns[0]), language})) {
+  // The period a title names stays English (its time prepositions).
+  if (english && BAND_TYPES.has(type) && chartCategoriesInTime(data.rows.map(row => row[0]), {title: label(data.columns[0]), language})) {
     const title = words(options.text, language);
     const after = (at: number) => at > 0 && PERIOD_PREPOSITIONS.has(title[at - 1]!);
     categories.forEach((category, row) => {

@@ -23,7 +23,8 @@ describe('LH-42: a list of 6 or fewer entries is never dealt across columns', ()
     const [list] = lists(compose({ title: 'Six', items }, layouts.list));
     assert.equal(list.listColumns, undefined);
     assert.ok(list.text.fontSize < 32 && !list.text.overflow, 'it does not fit one column at the starting size, so it shrinks');
-    const [longer] = lists(compose({ title: 'Seven', items: [...items, ...items].slice(0, 9) }, layouts.list));
+    // LH-184: columns are used where they keep larger text than one column (14 short entries: 28 px in 3 columns, 24 px in one).
+    const [longer] = lists(compose({ title: 'Fourteen', items: Array.from({ length: 14 }, (_, index) => `Item ${index + 1}: growth revenue customers market`) }, layouts.list));
     assert.ok(longer.listColumns?.length >= 2, 'a longer list still flows into columns');
   });
 
@@ -44,7 +45,8 @@ describe('LH-42: several lists in a region are one list per cell', () => {
   for (const id of ['list', 'agenda', 'faq']) {
     test(`${id}: 7 lists (one nested, one a heading) are 4 + 3 cells at one size, and nothing draws over another list`, () => {
       const blocks = [...['finance', 'human resources', 'operations', 'food security', 'government'].map((topic) => ({ items: three(topic) })), { items: nested }, { items: [described] }];
-      const result = compose({ title: 'FY27 Budget Tradeoff', blocks }, layouts[id]);
+      // LH-186: recompose: false keeps the layout's grid (the faq layout's lists read larger as the automatic grid).
+      const result = compose({ title: 'FY27 Budget Tradeoff', blocks }, layouts[id], { recompose: false });
       const items = lists(result);
       assert.equal(items.length, 7);
       assert.ok(items.every((item) => item.listColumns === undefined), 'no list is dealt across columns');

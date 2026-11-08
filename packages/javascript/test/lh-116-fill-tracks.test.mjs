@@ -37,10 +37,12 @@ test('LH-116: a title that fits one line beside the track keeps the full-height 
   assert.ok(item(result, 'title').box.x + item(result, 'title').box.width <= picture.image.box.x);
 });
 
-test('LH-80 widened: a picture track never wraps a table cell the slide set on one line', () => {
+// LH-80 with LH-75's allowance (2026-11-07): where no track keeps every cell on one line, a cell may wrap onto two lines with its words whole,
+// so this table (m17) takes its track with estimated widths; lh-80-table-track.test.mjs checks the two lines and the table's size.
+test('LH-80 widened: a picture track wraps a table cell only when no track keeps every cell on one line', () => {
   const table = { table: { columns: ['Store', 'City', 'Opening', 'Square feet'], rows: [['Harbor Point', 'Baltimore', 'Feb', '14,500'], ['Lakeshore', 'Chicago', 'Mar', '18,200'], ['Old Mill', 'Providence', 'Apr', '11,800'], ['Sunset Plaza', 'San Diego', 'May', '16,400'], ['Riverside', 'Sacramento', 'Jul', '13,900'], ['Peachtree', 'Atlanta', 'Aug', '17,300'], ['Bayou', 'New Orleans', 'Oct', '12,600'], ['Summit', 'Denver', 'Nov', '15,100']] } };
   const result = composeSlide({ title: 'Store openings planned for 2027', blocks: [table, { image: svg(1600, 1000) }] });
-  assert.equal(result.track, undefined);
+  assert.equal(result.track?.kind, 'picture');
   assert.deepEqual(findings(result), []);
 });
 

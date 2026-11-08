@@ -34,9 +34,11 @@
 // text of every node as written. On import an unchanged tagged SmartArt is that list again; an edited one (a node's text changed, a
 // node added or removed) imports its data model's nodes, as any PowerPoint pyramid1 or matrix3 does: the points in `cxn` order, their
 // text and run properties, as a list in the `pyramid` or `matrix` layout (SH-19: OPF's own layouts by their uniqueId). Import never stores a
-// layout part.
+// layout part. SH-08: any other SmartArt PowerPoint wrote imports through src/smart-art-import.js (an arrangement's or the list or process
+// layout's list, a Mermaid hierarchy, or its drawing as overlay shapes).
 import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, opfSmartArtUnavailable, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
-import {layoutDefinitionXml, opfLayoutDefinition, opfLayoutKind} from './smart-art-layouts.js';
+import {layoutDefinitionXml, opfLayoutDefinition} from './smart-art-layouts.js';
+import {drawingSlide, hierarchyDiagram, layoutStem, outlineItems, outlineText, plainText, readSmartArtModel, smartArtForm} from './smart-art-import.js';
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {mediaKey} from './media-dedupe.js';
@@ -196,7 +198,6 @@ const CONTENT_TYPES = Object.freeze({
 export const OPF_QUICK_STYLE = 'urn:openpresentation.org/opf/smartart/quickstyle/flat';
 export const OPF_COLORS = 'urn:openpresentation.org/opf/smartart/colors/primary';
 const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix', cycle: 'cycle', chevrons: 'process', flow: 'process', 'vertical-flow': 'process'});
-const KIND_OF_LAYOUT = new Map(Object.entries(SMART_ART_LAYOUTS).map(([kind, id]) => [id, kind]));
 const EMU = 9525; // per canvas pixel (1/96 inch)
 const emu = value => Math.round(value * EMU);
 const escapeXml = value => String(value).replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'}[char]));
@@ -391,12 +392,12 @@ export function smartArtDataXml(record, number, drawingRelId) {
 // SH-19: OPF's layouts add text over a shape (fgAcc1, no fill) and a card (alignNode1, the card neutral and its border).
 const LABELS = ['node0', 'node1', 'bgShp', 'revTx', 'sibTrans2D1', 'parChTrans1D1', 'trBgShp', 'fgAcc1', 'alignNode1'];
 
-/** OPF's colors definition in the deck's theme: arrangementPaint's slots. */
-export function smartArtColorsXml(paint, card) {
+/** OPF's colors definition in the deck's theme: arrangementPaint's slots. Native layouts may use revTx over a filled node; OPF's own layouts reserve it for text beside the node. */
+export function smartArtColorsXml(paint, card, onShapeText = false) {
   const none = '<a:schemeClr val="bg1"><a:alpha val="0"/></a:schemeClr>';
   const list = (name, fill, line, text) => `<dgm:styleLbl name="${name}"><dgm:fillClrLst meth="repeat">${fill}</dgm:fillClrLst><dgm:linClrLst meth="repeat">${line}</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">${text}</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>`;
   const labels = LABELS.map(name => name === 'bgShp' || name === 'trBgShp' ? list(name, schemeXml(paint.background), schemeXml(paint.line), schemeXml(paint.text))
-    : name === 'revTx' ? list(name, none, none, '<a:schemeClr val="tx1"/>')
+    : name === 'revTx' ? list(name, none, none, onShapeText ? schemeXml(paint.text) : '<a:schemeClr val="tx1"/>')
       : name === 'fgAcc1' ? list(name, none, none, schemeXml(paint.text))
       : name === 'alignNode1' ? list(name, card ? `<a:srgbClr val="${card.fill}"/>` : schemeXml(paint.fill), card ? `<a:srgbClr val="${card.line}"/>` : schemeXml(paint.line), '<a:schemeClr val="tx1"/>')
       // SH-18 and SH-17: the arrows of a cycle or a flow (sibTrans2D1) in the primary lightened 40%, without an outline.
@@ -463,7 +464,7 @@ export function attachSmartArt(entries, records) {
       if (record.layout) entries[`ppt/diagrams/layout${number}.xml`] = encoder.encode(layoutDefinitionXml(record.layout));
       entries[`ppt/diagrams/data${number}.xml`] = encoder.encode(smartArtDataXml(record, number, ids.drawing));
       entries[`ppt/diagrams/quickStyle${number}.xml`] = encoder.encode(smartArtQuickStyleXml());
-      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint, record.card));
+      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint, record.card, record.layout === undefined));
       entries[`ppt/diagrams/drawing${number}.xml`] = encoder.encode(smartArtDrawingXml(record, number));
       for (const kind of ['data', ...(record.layout ? ['layout'] : []), 'quickStyle', 'colors', 'drawing']) {
         overrides.push(`<Override PartName="/ppt/diagrams/${kind}${number}.xml" ContentType="${CONTENT_TYPES[kind]}"/>`);
@@ -583,23 +584,16 @@ const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', 
 const TAG_REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const scalar = value => typeof value === 'string' ? value : typeof value === 'number' ? String(value) : value && typeof value === 'object' ? String(value['#text'] ?? '') : '';
 
-/** The text runs of a data-model point (`dgm:t`): each run's text and the properties OPF keeps (bold, italic, underline, strike, lang). */
-function pointRuns(point) {
-  return array(point?.['dgm:t']?.['a:p']).flatMap((paragraph, index) => {
-    const runs = array(paragraph?.['a:r']).map(run => {
-      const properties = run?.['a:rPr'] ?? {}, text = scalar(run?.['a:t']).replace(/ /g, ' ');
-      return {text, ...(properties.b === '1' || properties.b === 'true' ? {bold: true} : {}), ...(properties.i === '1' || properties.i === 'true' ? {italic: true} : {}),
-        ...(properties.u && properties.u !== 'none' ? {underline: true} : {}), ...(properties.strike && properties.strike !== 'noStrike' ? {strikethrough: true} : {})};
-    }).filter(run => run.text.length);
-    return index && runs.length ? [{text: ' '}, ...runs] : runs;
-  });
-}
-const entryOf = runs => runs.length === 1 && Object.keys(runs[0]).length === 1 ? runs[0].text : runs.length ? runs : '';
-
 /**
- * Import: a slide's SmartArt frames that are a pyramid1 or matrix3 (by the data model's loTypeId), as lists. `frames` are the slide's
- * p:graphicFrame nodes; returns Map<frame index, {kind, payload, layout, tagged}>. An unchanged frame OPF wrote (OPF_SMARTART_V1, whose
- * node texts equal the data model's) gives back the authored list; any other reads the data model's nodes in `cxn` order.
+ * Import: a slide's SmartArt frames, as OPF (`frames` are the slide's p:graphicFrame nodes). Returns Map<frame index, result>, the result's
+ * `type` saying what the frame became (src/smart-art-import.js, SH-08):
+ *   - `list`: `{kind, layout, tagged, payload}`, a list on an arrangement's layout (a pyramid1, matrix3, cycle2, chevron1, process1 or
+ *     process2 OPF or PowerPoint wrote, OPF's own layouts by their uniqueId, and SH-08 every layout of those families) or on the `list` or
+ *     `process` layout (the list and process families). An unchanged frame OPF wrote (OPF_SMARTART_V1, whose node texts equal the data
+ *     model's) gives back the authored list; any other reads the data model's outline, nested entries with their level;
+ *   - `diagram`: `{payload}`, a hierarchy or organization chart as a Mermaid flowchart;
+ *   - `shapes`: `{slide, name, frame, outline}`, another layout's drawing (importSmartArtShapes reads it as overlay shapes);
+ *   - `empty`: a SmartArt with no text to import.
  */
 export function importSmartArt({frames, relationships, entries, slideIndex, report}) {
   const out = new Map();
@@ -608,34 +602,70 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
     if (data?.uri !== SMART_ART_URI) continue;
     const ids = data['dgm:relIds'] ?? {}, dataPart = relationships.get(ids['r:dm'])?.path;
     if (!dataPart || !entries[dataPart]) continue;
-    let model;
-    try { model = parser.parse(decoder.decode(entries[dataPart]))['dgm:dataModel']; } catch { continue; }
-    const points = array(model?.['dgm:ptLst']?.['dgm:pt']), doc = points.find(point => point.type === 'doc');
-    const kind = KIND_OF_LAYOUT.get(doc?.['dgm:prSet']?.loTypeId) ?? opfLayoutKind(doc?.['dgm:prSet']?.loTypeId);
-    if (!kind) continue;
-    const byId = new Map(points.map(point => [point.modelId, point]));
-    const children = array(model?.['dgm:cxnLst']?.['dgm:cxn']).filter(cxn => (cxn.type ?? 'parOf') === 'parOf' && cxn.srcId === doc.modelId)
-      .sort((a, b) => Number(a.srcOrd ?? 0) - Number(b.srcOrd ?? 0)).map(cxn => byId.get(cxn.destId)).filter(point => point && (point.type ?? 'node') === 'node');
-    const nested = array(model?.['dgm:cxnLst']?.['dgm:cxn']).some(cxn => (cxn.type ?? 'parOf') === 'parOf' && children.some(point => point.modelId === cxn.srcId));
-    if (nested) report?.({code: 'smartart-flattened', path: `slides.${slideIndex}`, message: `A ${kind} SmartArt has nested entries; only its top level is imported as the list.`});
-    const items = children.map(point => entryOf(pointRuns(point)));
-    const texts = items.map(item => typeof item === 'string' ? item : item.map(run => run.text).join(''));
-    // The tag (full provenance): the list as written, when the frame's node texts are still the ones OPF wrote.
-    let stored;
-    for (const link of array(frame?.['p:nvGraphicFramePr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
-      const rel = relationships.get(link['r:id']);
-      if (rel?.type !== TAG_REL || rel.targetMode === 'External' || !entries[rel.path]) continue;
-      try {
-        for (const tag of array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag'])) {
-          if (String(tag.name ?? '').toUpperCase() !== SMART_ART_TAG) continue;
-          const record = decodeTextTag(tag.val);
-          if (record?.v === 1 && record.kind === kind && Array.isArray(record.items) && Array.isArray(record.texts)) stored = record;
-        }
-      } catch { /* an unreadable tag leaves the frame to its data model */ }
+    const model = readSmartArtModel(decoder.decode(entries[dataPart]));
+    if (!model) continue;
+    const form = smartArtForm(model.layoutId, model.category), path = `slides.${slideIndex}`, stem = layoutStem(model.layoutId) || 'unnamed';
+    const frameName = scalar(frame?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name) || 'SmartArt';
+    const named = `The SmartArt ${JSON.stringify(frameName)} (layout ${stem})`;
+    // Never lose text silently: what the OPF form does not keep is named.
+    for (const item of model.dropped) {
+      if (item.role === 'transition' && item.used && form.hierarchy) continue;
+      const what = item.role === 'transition' ? 'text on a connection between entries' : item.role === 'presentation' ? 'text that belongs to no entry' : 'an entry no connection reaches';
+      report?.({code: 'smartart-text-dropped', path, layout: stem, text: item.text, message: `${named} has ${what}, ${JSON.stringify(item.text)}, which the import does not keep.`});
     }
-    const unchanged = stored && stored.texts.length === texts.length && stored.texts.every((text, at) => text.replace(/ /g, ' ') === texts[at]);
-    if (stored && !unchanged) report?.({code: 'smartart-edited', path: stored.path ?? `slides.${slideIndex}`, message: `The ${kind} was edited in PowerPoint; its list is read from the SmartArt's nodes.`});
-    out.set(index, {kind, layout: `default:${kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}});
+    if (model.pictures && !form.drawing) report?.({code: 'smartart-picture-dropped', path, layout: stem, message: `${named} has ${model.pictures} ${model.pictures === 1 ? 'entry' : 'entries'} with a picture, which the import does not keep; the text is kept.`});
+    const items = outlineItems(model.roots);
+    if (form.arrangement) {
+      const kind = form.arrangement;
+      const texts = model.roots.map(entry => plainText(entry.runs)), flat = model.roots.every(entry => !entry.children.length && !entry.detail);
+      // The tag (full provenance): the list as written, when the frame's node texts are still the ones OPF wrote.
+      let stored;
+      for (const link of array(frame?.['p:nvGraphicFramePr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
+        const rel = relationships.get(link['r:id']);
+        if (rel?.type !== TAG_REL || rel.targetMode === 'External' || !entries[rel.path]) continue;
+        try {
+          for (const tag of array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag'])) {
+            if (String(tag.name ?? '').toUpperCase() !== SMART_ART_TAG) continue;
+            const record = decodeTextTag(tag.val);
+            if (record?.v === 1 && record.kind === kind && Array.isArray(record.items) && Array.isArray(record.texts)) stored = record;
+          }
+        } catch { /* an unreadable tag leaves the frame to its data model */ }
+      }
+      const unchanged = stored && flat && stored.texts.length === texts.length && stored.texts.every((text, at) => text.replace(/ /g, ' ') === texts[at]);
+      if (stored && !unchanged) report?.({code: 'smartart-edited', path: stored.path ?? path, message: `The ${kind} was edited in PowerPoint; its list is read from the SmartArt's nodes.`});
+      if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${kind} layout with its entries.`});
+      out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});
+      continue;
+    }
+    if (form.layout) {
+      report?.({code: 'smartart-adapted', path, layout: stem, form: form.layout, message: form.inverted
+        ? `${named} is an inverted pyramid, which OPF's pyramid does not draw (its first entry is the narrow top); its entries are imported as a list in order, the widest first.`
+        : `${named} is imported as a list on OPF's ${form.layout} layout.`});
+      // SH-08: the list and process families hold their bullets as one node's paragraphs, each an item of its own.
+      out.set(index, items.length ? {type: 'list', kind: form.layout, layout: `default:${form.layout}`, tagged: false, payload: {type: 'list', items: outlineItems(model.roots, {split: true})}} : {type: 'empty'});
+      continue;
+    }
+    if (form.hierarchy) {
+      if (!items.length) { out.set(index, {type: 'empty'}); continue; }
+      const noun = /org/i.test(stem) ? 'Organization chart' : 'Hierarchy', diagram = hierarchyDiagram(model.roots, form.hierarchy, noun);
+      report?.({code: 'smartart-adapted', path, layout: stem, form: 'diagram', message: `${named} is imported as a Mermaid flowchart with its entries.`});
+      if (diagram.formatted) report?.({code: 'smartart-formatting-dropped', path, layout: stem, message: `${named} has bold, italic, underlined or struck-through text, which a diagram's labels do not carry; the text is kept.`});
+      out.set(index, {type: 'diagram', payload: {type: 'diagram', diagram: {source: diagram.source, alt: diagram.alt}}});
+      continue;
+    }
+    // Any other layout: its drawing as overlay shapes, the outline kept as the alt text of the first; without a drawing, the outline as a list.
+    const drawingPart = model.drawingRelId ? relationships.get(model.drawingRelId)?.path : undefined;
+    const xfrm = frame?.['p:xfrm'], number = value => value !== undefined && value !== '' && Number.isFinite(Number(value)) ? Number(value) : undefined;
+    const place = {x: number(xfrm?.['a:off']?.x), y: number(xfrm?.['a:off']?.y), cx: number(xfrm?.['a:ext']?.cx), cy: number(xfrm?.['a:ext']?.cy), rot: number(xfrm?.rot) ?? 0,
+      flipH: xfrm?.flipH === '1' || xfrm?.flipH === 'true', flipV: xfrm?.flipV === '1' || xfrm?.flipV === 'true'};
+    const slide = drawingPart && entries[drawingPart] && [place.x, place.y, place.cx, place.cy].every(value => value !== undefined) ? drawingSlide(decoder.decode(entries[drawingPart]), place, frameName) : undefined;
+    if (slide) {
+      report?.({code: 'smartart-adapted', path, layout: stem, form: 'shapes', message: `${named} has no OPF arrangement; its drawing is imported as overlay shapes, its outline as the first shape's alt text.`});
+      out.set(index, {type: 'shapes', slide, name: frameName, frame: place, ...(model.roots.length ? {outline: `SmartArt (${stem}):\n${outlineText(model.roots)}`} : {})});
+      continue;
+    }
+    report?.({code: 'smartart-adapted', path, layout: stem, form: 'list', message: `${named} has no OPF arrangement and no drawing; its entries are imported as a list.`});
+    out.set(index, items.length ? {type: 'list', kind: 'list', layout: 'default:list', tagged: false, payload: {type: 'list', items: outlineItems(model.roots, {split: true})}} : {type: 'empty'});
   }
   return out;
 }

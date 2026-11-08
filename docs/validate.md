@@ -311,6 +311,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/code-highlight-out-of-range`](#opfcode-highlight-out-of-range) | Content | warning | structure | A code highlight marks a line the code does not have. |
 | [`opf/code-highlight-range-reversed`](#opfcode-highlight-range-reversed) | Content | warning | structure | A code highlight range ends before it starts. |
 | [`opf/variable-builtin-missing`](#opfvariable-builtin-missing) | Content | warning | structure | A built-in variable has no value in this document. |
+| [`opf/variable-group-omitted`](#opfvariable-group-omitted) | Content | info | structure | A group is drawn only when one of its optional variables has a value. |
 | [`opf/duration-outside-narrative`](#opfduration-outside-narrative) | Content | warning | structure | The target duration is outside the range the narrative suits. |
 | [`opf/narrative-duration-range`](#opfnarrative-duration-range) | Content | warning | structure | An inline narrative duration range has min greater than max. |
 | [`opf/placeholder-text`](#opfplaceholder-text) | Content | warning | structure | Placeholder text was left in the deck. |
@@ -892,7 +893,7 @@ Default severity: **warning**. Cost: structure. A chart option cannot be shown b
 
 Default severity: **warning**. Cost: composition. Text or a table does not fit its space at the smallest allowed size.
 
-**Why.** Core composition shrinks text to the readable minimum and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.
+**Why.** Core composition changes the arrangement (columns, the automatic grid, another design) before it sets text smaller, fits dense content that no arrangement holds down the type scale to the readable minimum, never below it, and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.
 
 **Approximations.** Uses composeSlide at the deck's slide size with the fonts of the resolved font scheme. Without a host-supplied text measurement (ValidateOptions.fonts.textMeasurement) widths are core's portable estimate, which can differ from the real font by a few percent; pass the renderer's measurement for font-exact results. A composition that sets overflow: "error" is reported as a warning here, so that `valid` never depends on font metrics; rendering and export still refuse such a slide when it does not fit.
 
@@ -1055,11 +1056,11 @@ Default severity: **warning**. Cost: structure. A chart highlight is adapted by 
 
 Default severity: **warning**. Cost: structure. A chart series is not drawn by the chart type.
 
-**Why.** A treemap, histogram, Pareto, waterfall, funnel, map or single-series pie plots one value series, and a scatter plots no X column without numbers. Every engine leaves the same columns out (LH-60), so the warning names them instead of losing them silently.
+**Why.** A treemap, histogram, one-series Pareto, waterfall, funnel, map or single-series pie plots one value series, and a scatter plots no X column without numbers. Every engine leaves the same columns out (LH-60), so the warning names them instead of losing them silently.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-**Approximations.** Read from the drawn chart (chartDrawPlan): a world chart over categories that are mostly not places is drawn as columns, a box-and-whisker chart with one value per category as one box per series and a pie or doughnut of several series as nested rings, and none of those drops a series.
+**Approximations.** Read from the drawn chart (chartDrawPlan): a world chart over categories that are mostly not places and a Pareto chart of several series are drawn as columns, a box-and-whisker chart with one value per category as one box per series and a pie or doughnut of several series as nested rings, and none of those drops a series.
 
 ### `opf/code-highlight-out-of-range`
 
@@ -1084,6 +1085,16 @@ Default severity: **warning**. Cost: structure. A built-in variable has no value
 **Why.** A `{{deck.*}}`, `{{speaker.*}}` or `{{organization.*}}` token whose field the document does not set resolves to nothing, so the text shows a gap; a `var:organization.logo` reference to an organization without a logo draws no image. `{{slide.section}}` is checked per slide: a slide without a `section` that uses it, in its own text or in the header or footer it inherits, is reported at that slide.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/variable-group-omitted`
+
+Default severity: **info**. Cost: structure. A group is drawn only when one of its optional variables has a value.
+
+**Why.** A group (a block or promoted region with `blocks`) whose content variables are all optional (`required: false`) and all unfilled is left out whole when the deck is filled: its pictures, cards and other text go with the fields the variables would fill, so a slide never draws a card around a picture with no text. Validation fills every variable with its example or a sample, so it reports the group here instead.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Counts the declared text, number, date, image, url and list variables the group uses as `{{id}}` or `var:id`, at any depth; color variables and built-ins do not count. A group that uses none, or any required or filled one, is kept and not reported.
 
 ### `opf/duration-outside-narrative`
 
@@ -1133,11 +1144,11 @@ Default severity: **warning**. Cost: structure. A slide has no content at all.
 
 Default severity: **warning**. Cost: structure. A language tag is malformed, uses an unassigned region or is not in canonical case.
 
-**Why.** Engines read the deck language and each run's `lang` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.
+**Why.** Engines read the deck and slide language and each run's `lang` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.
 
 **Basis.** BCP 47 (RFC 5646, section 2.1) and the platform locale data (Intl.getCanonicalLocales, Intl.DisplayNames)
 
-**Approximations.** Checks the root `language` (a tag string, or the `bcp47` of an inline Language object) and `lang` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime's CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.
+**Approximations.** Checks the root and slide `language` (a tag string, or the `bcp47` of an inline Language object) and `lang` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime's CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.
 
 ### `opf/straight-quotes`
 

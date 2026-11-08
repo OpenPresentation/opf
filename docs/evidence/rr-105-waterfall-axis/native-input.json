@@ -1,0 +1,16 @@
+{
+  "sourcePreparation": "d26031b98ff9316d479f8db7a383511371cab4a6",
+  "expectedValueAxis": {
+    "min": 0,
+    "max": 10000000,
+    "majorUnit": 2000000
+  },
+  "pptxSha256": "d88cf1f7cb75b3d2106c85779d60fa0189adc5d1dcb5a9300b4f1cbf52263669",
+  "previewSha256": "18955616f8053bd4ad1348a5b707686a2aaede2c178139148a9f5724f82c8b7b",
+  "sourceFiles": {
+    "packages/javascript/src/chart-numeric-axes.ts": "d7db81c8a76a90fe8bca33d496d5a8e0ed8ff8cbb2d76f3c7cd2da02d35508f9",
+    "packages/javascript/src/composition.ts": "fe01112cb8237b9b3f407a37fe58ec2b349c946d2062e7df206a4ad1b5006226",
+    "packages/render/src/charts.js": "3851b7d3cead3d81fb63b0d4d49f5f6ba17ce1412f857bf33b3c6608ccece6a9",
+    "packages/pptx/src/chartex.js": "3afcc3a81ba1418cd42955301711d6b6e5075085c32685f4a8e1bc47d67f12fd"
+  }
+}

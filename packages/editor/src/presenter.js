@@ -45,12 +45,16 @@ function noteExit(doc) {
     settle: (done) => { if (!done || exit.seen) exits.delete(exit); else exit.settled = true; },
   };
 }
+function forgetSettledExits(doc) {
+  const { exits } = stateOf(doc);
+  for (const exit of exits) if (exit.settled) exits.delete(exit);
+}
 function answersAnExit(doc, event) {
   if (attributedEvents.has(event)) return attributedEvents.get(event);
   const { exits } = stateOf(doc);
   let ours = false;
   if (doc.fullscreenElement) {
-    for (const exit of exits) if (exit.settled) exits.delete(exit);
+    forgetSettledExits(doc);
   } else {
     const exit = [...exits].find((candidate) => !candidate.seen);
     if (exit) { ours = true; if (exit.settled) exits.delete(exit); else exit.seen = true; }
@@ -308,16 +312,22 @@ export function createPresenter(container, options = {}) {
     const exit = noteExit(doc);
     Promise.resolve(doc.exitFullscreen?.()).then(() => { exit.settle(true); restoreFocus(); }, () => { exit.settle(false); restoreFocus(); });
   }
-  // Only when nobody took focus since: the host may move it in `onExit`. While the screen is still full screen the page behind takes no focus, and
+  // Only when nobody took focus since (focus still inside the hidden presenter, on the exit button after a click, counts as nobody: the browser
+  // moves it to the body only at its next render, which can come after the `fullscreenchange` that ends the exit): the host may move it in `onExit`. While the screen is still full screen the page behind takes no focus, and
   // a browser reports the end of an exit's promise before the end of full screen; so the element is kept until the `fullscreenchange` that ends it (and while a request of this presenter is unanswered: it may still take the screen).
   function restoreFocus() {
     const now = doc.activeElement;
-    if (returnTo?.isConnected && typeof returnTo.focus === "function" && (!now || now === doc.body || now === root)) returnTo.focus({ preventScroll: true });
+    if (returnTo?.isConnected && typeof returnTo.focus === "function" && (!now || now === doc.body || root.contains(now))) returnTo.focus({ preventScroll: true });
     if (!doc.fullscreenElement && !pendingRequests) returnTo = null;
   }
   // The browser takes full screen away with Esc (that key never reaches the page) or the host exits it: the presentation ends with it.
   function onFullscreenChange(event) {
-    if (doc.fullscreenElement === root) return;
+    if (doc.fullscreenElement === root) {
+      // Our own full screen. An exit that settled without an event of its own (a browser merges an exit and the next request into one change) will
+      // never be answered: events come in the order of the changes, so a later exit event is the user's and must not be read as that exit.
+      forgetSettledExits(doc);
+      return;
+    }
     if (!active && !doc.fullscreenElement) restoreFocus();
     if (answersAnExit(doc, event)) {
       // An exit that a presenter asked for finished: ours from stop(), or an earlier presenter's that ran after this one took full screen. A

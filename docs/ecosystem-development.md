@@ -44,7 +44,7 @@ Seven suites exercise canvas, rich text, lists, creation, layout, block moves an
 The raster golden of the examples corpus lives in one place, `packages/render/test/golden/` (a directory per baseline, one file per deck; `packages/render/test/golden/README.md` has the layout and `notes/` the review notes). The corpus is this repository's `examples/` and the renderer, core and the gallery are the checkout's own, so there is no lock selection, no core fixture and no sibling renderer to pin. A pull request that changes `examples/`, the core code that composes them, the gallery's records or the renderer's drawing moves slide hashes (or only the corpus digest, as FA-33 did: `notes/MR-31.md`); `pnpm test` and the `goldens` job of `ci.yml` fail until the baseline follows.
 
 ```sh
-gh workflow run golden.yml --ref <branch>             # or add the `regenerate-goldens` label to the pull request
+gh workflow run golden.yml --ref <branch>
 pnpm golden:update --local                           # a review candidate under packages/render/artifacts/golden/, never the baseline
 ```
 

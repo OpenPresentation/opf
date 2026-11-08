@@ -50,7 +50,7 @@ for(const name of ['opf','opf-render','opf-editor']){
   if(modules)assert.ok(within(modules,file),'No linked source packages');
   const manifest=JSON.parse(await readFile(file,'utf8'));packages[manifest.name]={version:manifest.version,manifestSha256:hash(await readFile(file))};
 }
-const browser=await chromium.launch();
+const browser=await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
 const report={node:process.version,browser:browser.version(),platform:process.platform,mode,status:'running',
   bundleSha256:hash(bundle),verifierSha256:hash(await readFile(new URL(import.meta.url))),inputs,
   runtime:consumer?'installed':'checkout',packages,fontModuleSha256:hash(await readFile(fontModule)),...(lockBytes?{lockSha256:hash(lockBytes)}:{}),

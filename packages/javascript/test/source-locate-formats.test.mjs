@@ -277,7 +277,7 @@ describe("scanMarkdown", () => {
     assert.equal(scanMarkdown(text, { split: "rules" }).slides.length, 1);
   });
   test("the dialect vocabulary is exported", () => {
-    assert.deepEqual([...SLIDE_OPTION_KEYS], ["id", "type", "layout", "section", "tag", "hidden", "beat"]);
+    assert.deepEqual([...SLIDE_OPTION_KEYS], ["id", "type", "layout", "section", "tag", "hidden", "beat", "language"]);
     assert.deepEqual([...BLOCK_OPTION_KEYS], ["id", "type", "as", "region"]);
     assert.ok(FENCE_KINDS.includes("opf-slide") && METRIC_KEYS.includes("sentiment"));
     assert.deepEqual([...SPAN_VALUES], ["color", "size", "font", "lang"]);

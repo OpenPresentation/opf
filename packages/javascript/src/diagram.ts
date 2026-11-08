@@ -6,11 +6,17 @@
 import type { TextMeasurer } from 'pele';
 // The engine is chosen by export condition (package.json "imports"): every type registered at load in Node and edge runtimes, pele's
 // core with each type loaded on demand in browsers (diagram-engine-eager.ts, diagram-engine-lazy.ts).
-import { PeleError, detectType, loadDiagramType, parse as parseMermaid, registered, render as renderMermaid } from '#diagram-engine';
+import { PeleError, detectType, loadDiagramType, loadPlantumlReader, parse as parseMermaid, plantumlReader, registered, render as renderMermaid } from '#diagram-engine';
+import { dotToMermaid } from './diagram-dot.js';
+import type { PlantumlIssue, PlantumlTranslation } from './diagram-plantuml.js';
 import { chartColorForFill, chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, textColorForFill, type ChartColorContext } from './color.js';
 
-/** The syntaxes a diagram's `source` can be written in. */
-export const DIAGRAM_SYNTAXES = ['mermaid'] as const;
+/**
+ * The syntaxes a diagram's `source` can be written in: Mermaid; Graphviz DOT (SH-12), which OPF reads itself and pele lays out with its
+ * layered layout as a flowchart (diagram-dot.ts); and PlantUML (SH-13), which OPF reads itself and pele draws as the Mermaid family of the
+ * same kind (diagram-plantuml.ts).
+ */
+export const DIAGRAM_SYNTAXES = ['mermaid', 'dot', 'plantuml'] as const;
 export type DiagramSyntax = typeof DIAGRAM_SYNTAXES[number];
 
 /** A diagram payload in its object form: the string shorthand is `{ source }`. */
@@ -35,7 +41,55 @@ export function diagramPayload(value: unknown): DiagramPayload | undefined {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
   const record = value as Record<string, unknown>;
   if (typeof record.source !== 'string') return undefined;
-  return { source: record.source, syntax: 'mermaid', ...(typeof record.alt === 'string' && record.alt.trim() ? { alt: record.alt } : {}) };
+  const syntax = record.syntax === undefined ? 'mermaid' : (DIAGRAM_SYNTAXES as readonly unknown[]).includes(record.syntax) ? record.syntax as DiagramSyntax : undefined;
+  if (!syntax) return undefined;
+  return { source: record.source, syntax, ...(typeof record.alt === 'string' && record.alt.trim() ? { alt: record.alt } : {}) };
+}
+
+/**
+ * The Mermaid source pele draws for a diagram payload: a Mermaid source as written, a DOT or PlantUML source as the Mermaid OPF's reader
+ * makes of it, with the name of the kind for the derived alt text. A DOT or PlantUML source's issue keeps its position in that source.
+ */
+function peleSource(payload: DiagramPayload): { ok: true; source: string; translated: boolean; name?: string } | { ok: false; issue: DiagramIssue } {
+  if (payload.syntax === 'mermaid') return { ok: true, source: payload.source, translated: false };
+  if (payload.source.length > DIAGRAM_SOURCE_LIMIT) return { ok: false, issue: { code: 'diagram-limit', message: `The diagram source is longer than ${DIAGRAM_SOURCE_LIMIT} characters.` } };
+  if (payload.syntax === 'plantuml') {
+    // In a browser the reader loads on demand (ensureDiagrams), like a pele type.
+    if (!plantumlReader()) return { ok: false, issue: { code: 'diagram-unloaded', message: 'The PlantUML reader is still loading.' } };
+    const result = plantumlToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
+    return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, name: PLANTUML_NAMES[result.translation.diagram] } : { ok: false, issue: result.issue };
+  }
+  const result = dotToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
+  return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, name: 'graph' } : { ok: false, issue: result.issue };
+}
+
+/**
+ * SH-13: the PlantUML diagram types OPF draws, and the pele family each is drawn as (diagram-plantuml.ts writes the source of that family).
+ */
+export const PLANTUML_DIAGRAMS: Readonly<Record<string, string>> = Object.freeze({
+  sequence: 'sequence', class: 'class', state: 'state', activity: 'flowchart', usecase: 'usecase', component: 'flowchart', mindmap: 'mindmap', gantt: 'gantt',
+});
+
+/**
+ * SH-13: a PlantUML source as the pele source that draws it, or the issue that stops it (with its line and column in the PlantUML source);
+ * `diagram-unloaded` in a browser until ensureDiagrams has loaded the reader.
+ */
+export function plantumlToMermaid(source: string, options: { maxEdges: number }): { ok: true; translation: PlantumlTranslation } | { ok: false; issue: PlantumlIssue | DiagramIssue } {
+  const reader = plantumlReader();
+  return reader ? reader(source, options) : { ok: false, issue: { code: 'diagram-unloaded', message: 'The PlantUML reader is still loading.' } };
+}
+
+/** The derived alt text's name of the PlantUML kinds pele draws as a family of another name. */
+const PLANTUML_NAMES: Readonly<Record<string, string>> = { activity: 'activity', component: 'component' };
+
+/** The source limit pele checks: the authored source's for Mermaid; a translated source was checked before it was translated. */
+const peleLimit = (translated: boolean) => translated ? DIAGRAM_SOURCE_LIMIT * 16 : DIAGRAM_SOURCE_LIMIT;
+
+/** A diagram value's syntax when it names one OPF does not read. */
+function unknownSyntax(value: unknown): string | undefined {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const syntax = (value as Record<string, unknown>).syntax;
+  return syntax !== undefined && !(DIAGRAM_SYNTAXES as readonly unknown[]).includes(syntax) ? String(syntax) : undefined;
 }
 
 /** The share of the readability floor the smallest secondary label of a diagram keeps (its node labels keep the whole floor). */
@@ -52,14 +106,15 @@ export const DIAGRAM_SHAPE_FAMILIES: readonly string[] = Object.freeze(['agentfl
 export const DIAGRAM_SOURCE_LIMIT = 20000;
 export const DIAGRAM_MAX_EDGES = 500;
 
-function issueOf(error: unknown): DiagramIssue {
+function issueOf(error: unknown, translated = false): DiagramIssue {
   if (error instanceof PeleError) {
     const code = error.code === 'syntax' || error.code === 'semantic' ? 'diagram-syntax' : error.code === 'limit' ? 'diagram-limit' : 'diagram-unsupported';
     // A parse error's message is "Parse error on line N:", the source line, a caret under it and what was expected. The finding
     // gives the position separately, so it keeps what was expected.
     const lines = error.message.split('\n').map(line => line.trim()).filter(Boolean);
     const message = (lines.length > 1 && /^Parse error on line \d+:?$/.test(lines[0]!) ? lines.at(-1)! : lines[0]) || 'The diagram source cannot be read.';
-    return { code, message, ...(error.line > 0 ? { line: error.line, column: error.column } : {}) };
+    // A translated source's position is in the generated flowchart, not in what the author wrote, so it is not given.
+    return { code, message, ...(error.line > 0 && !translated ? { line: error.line, column: error.column } : {}) };
   }
   return { code: 'diagram-syntax', message: error instanceof Error ? error.message : String(error) };
 }
@@ -71,19 +126,23 @@ const checked = new Map<string, { type: string } | DiagramIssue>();
  * it. Parsing only: no text is measured. Results are cached by source.
  */
 export function checkDiagram(value: unknown): { ok: true; type: string } | { ok: false; issue: DiagramIssue } {
+  const unknown = unknownSyntax(value);
+  if (unknown !== undefined) return { ok: false, issue: { code: 'diagram-unsupported', message: `OPF does not read ${JSON.stringify(unknown)} diagrams; write the source in ${DIAGRAM_SYNTAXES.join(' or ')}.` } };
   const payload = diagramPayload(value);
   if (!payload || !payload.source.trim()) return { ok: false, issue: { code: 'diagram-empty', message: 'The diagram has no source.' } };
-  const unloaded = unloadedType(payload.source);
+  const pele = peleSource(payload);
+  if (!pele.ok) return pele;
+  const unloaded = unloadedType(pele.source);
   if (unloaded) return { ok: false, issue: { code: 'diagram-unloaded', message: `The ${unloaded} diagram type is still loading.` } };
-  let result = checked.get(payload.source);
+  let result = checked.get(pele.source);
   if (!result) {
     try {
-      result = { type: String(parseMermaid(payload.source, { limit: DIAGRAM_SOURCE_LIMIT, maxEdges: DIAGRAM_MAX_EDGES }).type) };
+      result = { type: String(parseMermaid(pele.source, { limit: peleLimit(pele.translated), maxEdges: DIAGRAM_MAX_EDGES }).type) };
     } catch (error) {
-      result = issueOf(error);
+      result = issueOf(error, pele.translated);
     }
     if (checked.size >= 2000) checked.clear();
-    checked.set(payload.source, result);
+    checked.set(pele.source, result);
   }
   return 'type' in result ? { ok: true, type: result.type } : { ok: false, issue: result };
 }
@@ -104,8 +163,10 @@ function diagramSources(input: unknown, found: string[] = [], depth = 0): string
   if (Array.isArray(input)) { for (const entry of input) diagramSources(entry, found, depth + 1); return found; }
   for (const [key, value] of Object.entries(input)) {
     const payload = key === 'diagram' ? diagramPayload(value) : undefined;
-    if (payload) found.push(payload.source);
-    else diagramSources(value, found, depth + 1);
+    const pele = payload ? peleSource(payload) : undefined;
+    if (pele?.ok) found.push(pele.source);
+    else if (pele?.issue.code === 'diagram-unloaded') found.push(PLANTUML_PENDING);
+    else if (!payload) diagramSources(value, found, depth + 1);
   }
   return found;
 }
@@ -117,6 +178,7 @@ function diagramSources(input: unknown, found: string[] = [], depth = 0): string
 export function diagramsPending(input: unknown): string[] {
   const pending = new Set<string>();
   for (const source of diagramSources(input)) {
+    if (source === PLANTUML_PENDING) { pending.add('plantuml'); continue; }
     const type = unloadedType(source);
     if (type) pending.add(type);
   }
@@ -130,9 +192,15 @@ export function diagramsPending(input: unknown): string[] {
  */
 export async function ensureDiagrams(input: unknown): Promise<string[]> {
   const pending = diagramsPending(input);
-  await Promise.all(pending.map(type => loadDiagramType(type)));
-  return pending;
+  // The PlantUML reader first: only then is the pele type of each PlantUML diagram known.
+  if (pending.includes('plantuml')) await loadPlantumlReader();
+  const types = pending.includes('plantuml') ? diagramsPending(input) : pending;
+  await Promise.all(types.map(type => loadDiagramType(type)));
+  return [...new Set([...pending, ...types])];
 }
+
+/** The pending marker diagramSources gives a PlantUML diagram while its reader loads (no Mermaid source starts with NUL). */
+const PLANTUML_PENDING = '\u0000plantuml';
 
 /** How the host measures diagram text: `mono` is the code family, the rest the body family. */
 export type DiagramMeasure = (text: string, fontSize: number, style: { bold: boolean; italic: boolean; mono: boolean }) => number;
@@ -225,7 +293,7 @@ function decodeXml(text: string): string {
 }
 
 // pele's diagram types (its registry), as a reader would name them.
-const TYPE_NAMES: Readonly<Record<string, string>> = { agentflow: 'Agent flow', architecture: 'Architecture diagram', block: 'Block diagram', c4: 'C4 diagram', class: 'Class diagram', cynefin: 'Cynefin diagram', er: 'Entity relationship diagram', eventmodeling: 'Event model', flowchart: 'Flowchart', gantt: 'Gantt chart', gitGraph: 'Git graph', info: 'Diagram', ishikawa: 'Ishikawa diagram', journey: 'User journey', kanban: 'Kanban board', mindmap: 'Mind map', packet: 'Packet diagram', pie: 'Pie chart', quadrantChart: 'Quadrant chart', radar: 'Radar chart', railroad: 'Railroad diagram', requirement: 'Requirement diagram', sankey: 'Sankey diagram', sequence: 'Sequence diagram', state: 'State diagram', swimlane: 'Swimlane diagram', timeline: 'Timeline', treeView: 'Tree view', treemap: 'Treemap', usecase: 'Use case diagram', venn: 'Venn diagram', wardley: 'Wardley map', xychart: 'XY chart' };
+const TYPE_NAMES: Readonly<Record<string, string>> = { graph: 'Graph', activity: 'Activity diagram', component: 'Component diagram', agentflow: 'Agent flow', architecture: 'Architecture diagram', block: 'Block diagram', c4: 'C4 diagram', class: 'Class diagram', cynefin: 'Cynefin diagram', er: 'Entity relationship diagram', eventmodeling: 'Event model', flowchart: 'Flowchart', gantt: 'Gantt chart', gitGraph: 'Git graph', info: 'Diagram', ishikawa: 'Ishikawa diagram', journey: 'User journey', kanban: 'Kanban board', mindmap: 'Mind map', packet: 'Packet diagram', pie: 'Pie chart', quadrantChart: 'Quadrant chart', radar: 'Radar chart', railroad: 'Railroad diagram', requirement: 'Requirement diagram', sankey: 'Sankey diagram', sequence: 'Sequence diagram', state: 'State diagram', swimlane: 'Swimlane diagram', timeline: 'Timeline', treeView: 'Tree view', treemap: 'Treemap', usecase: 'Use case diagram', venn: 'Venn diagram', wardley: 'Wardley map', xychart: 'XY chart' };
 
 /** The default text alternative of a drawing: its kind, then its labels, at most 400 characters. */
 function derivedAlt(type: string, svg: string): string {
@@ -240,7 +308,7 @@ function derivedAlt(type: string, svg: string): string {
 interface Drawn { svg: string; width: number; height: number; type: string }
 const drawings = new WeakMap<DiagramMeasure, Map<string, Drawn>>();
 
-function draw(source: string, maxWidth: number, options: Pick<DiagramLayoutOptions, 'measure' | 'idPrefix'>): Drawn {
+function draw(source: string, maxWidth: number, options: Pick<DiagramLayoutOptions, 'measure' | 'idPrefix'>, limit: number): Drawn {
   let cache = drawings.get(options.measure);
   if (!cache) {
     cache = new Map();
@@ -258,7 +326,7 @@ function draw(source: string, maxWidth: number, options: Pick<DiagramLayoutOptio
   };
   const rendered = renderMermaid(source, {
     measurer, fontSize: BASE, maxWidth: Math.max(160, maxWidth), responsive: false, links: false, images: false, idPrefix: options.idPrefix,
-    limit: DIAGRAM_SOURCE_LIMIT, maxEdges: DIAGRAM_MAX_EDGES, now: NOW,
+    limit, maxEdges: DIAGRAM_MAX_EDGES, now: NOW,
   });
   const drawn = { svg: rendered.svg, width: rendered.width, height: rendered.height, type: String(rendered.type) };
   if (cache.size >= 500) cache.clear();
@@ -277,14 +345,18 @@ export function layoutDiagram(value: unknown, options: DiagramLayoutOptions): Co
   const checkedValue = checkDiagram(value);
   if (!checkedValue.ok) throw Object.assign(new Error(checkedValue.issue.message), { diagramIssue: checkedValue.issue });
   const payload = diagramPayload(value)!;
-  const written = fitSource(payload.source, payload.alt, options);
+  const pele = peleSource(payload) as { ok: true; source: string; translated: boolean; name?: string };
+  // A DOT graph is drawn as the flowchart OPF reads it as, and a PlantUML diagram as its Mermaid family; the derived alt text names the
+  // kind the author wrote (a graph, an activity or component diagram).
+  const limit = peleLimit(pele.translated), name = pele.name;
+  const written = fitSource(pele.source, limit, payload.alt, name, options);
   if (!written.overflow) return written;
   // LH-185: not even the floor fits, so the other main direction is tried before the drawing is scaled. The source keeps its text;
   // only the drawing turns, and the result says so (`direction`).
-  const turned = turnedSource(payload.source);
+  const turned = turnedSource(pele.source);
   if (!turned) return written;
   let other: ComposedDiagram | undefined;
-  try { other = checkDiagram({ source: turned.source }).ok ? fitSource(turned.source, payload.alt, options) : undefined; } catch { other = undefined; }
+  try { other = pele.translated || checkDiagram({ source: turned.source }).ok ? fitSource(turned.source, limit, payload.alt, name, options) : undefined; } catch { other = undefined; }
   if (other && !other.overflow) return { ...other, direction: { from: turned.from, to: turned.to, turned: true } };
   return { ...written, direction: { from: turned.from, to: turned.to, turned: false } };
 }
@@ -321,10 +393,10 @@ function turnedSource(source: string): { source: string; from: string; to: strin
 }
 
 /** The fitting search for one source (layoutDiagram's body): the largest size that fits, else the floor's layout scaled and marked `overflow`. */
-function fitSource(source: string, alt: string | undefined, options: DiagramLayoutOptions): ComposedDiagram {
+function fitSource(source: string, limit: number, alt: string | undefined, name: string | undefined, options: DiagramLayoutOptions): ComposedDiagram {
   const width = Math.max(1, options.width), height = Math.max(1, options.height);
   const down = options.grid?.down ?? ((size: number) => size), up = options.grid?.up ?? ((size: number) => size);
-  const at = (requested: number) => { const size = down(requested), scale = size / BASE; return { size, scale, drawn: draw(source, width / scale, options) }; };
+  const at = (requested: number) => { const size = down(requested), scale = size / BASE; return { size, scale, drawn: draw(source, width / scale, options, limit) }; };
   const fits = (candidate: ReturnType<typeof at>) => candidate.drawn.width * candidate.scale <= width + .5 && candidate.drawn.height * candidate.scale <= height + .5;
   // The smallest label's share of the base size is the diagram type's; it bounds the base size from below.
   const probe = at(Math.max(options.floor, options.nominal));
@@ -344,12 +416,12 @@ function fitSource(source: string, alt: string | undefined, options: DiagramLayo
     }
   }
   if (chosen) {
-    return { type: chosen.drawn.type, svg: chosen.drawn.svg, width: chosen.drawn.width, height: chosen.drawn.height, scale: chosen.scale, fontSize: chosen.size, smallestText: chosen.size * share, alt: alt ?? derivedAlt(chosen.drawn.type, chosen.drawn.svg) };
+    return { type: chosen.drawn.type, svg: chosen.drawn.svg, width: chosen.drawn.width, height: chosen.drawn.height, scale: chosen.scale, fontSize: chosen.size, smallestText: chosen.size * share, alt: alt ?? derivedAlt(name ?? chosen.drawn.type, chosen.drawn.svg) };
   }
   // Not even the floor fits: the floor's layout, scaled down into the area.
   const floor = at(lowest);
   const scale = down(BASE * Math.min(width / floor.drawn.width, height / floor.drawn.height, floor.scale)) / BASE;
-  return { type: floor.drawn.type, svg: floor.drawn.svg, width: floor.drawn.width, height: floor.drawn.height, scale, fontSize: BASE * scale, smallestText: BASE * scale * share, alt: alt ?? derivedAlt(floor.drawn.type, floor.drawn.svg), overflow: true };
+  return { type: floor.drawn.type, svg: floor.drawn.svg, width: floor.drawn.width, height: floor.drawn.height, scale, fontSize: BASE * scale, smallestText: BASE * scale * share, alt: alt ?? derivedAlt(name ?? floor.drawn.type, floor.drawn.svg), overflow: true };
 }
 
 /** The colors and fonts a diagram is painted in, all opaque #RRGGBB colors except the families. */

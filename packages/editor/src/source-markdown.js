@@ -332,8 +332,8 @@ export function markdownOptions(context, { catalogs, text, explicit, makers, sco
   if (context.region === "fence-info") {
     if (context.mode === "kind") {
       let order = 0;
-      for (const kind of ["chart", "mermaid", "metric", "timeline", "opf-block", "opf-slide"]) {
-        const doc = { chart: "A chart: the type, then CSV with a header row", mermaid: "A diagram: Mermaid source, starting with its type (flowchart LR, sequenceDiagram, ...)", metric: "One big number: value, label, unit, delta", timeline: "Events, one per line", "opf-block": "A content block written as YAML", "opf-slide": "Slide fields written as YAML" }[kind];
+      for (const kind of ["chart", "mermaid", "dot", "plantuml", "metric", "timeline", "opf-block", "opf-slide"]) {
+        const doc = { chart: "A chart: the type, then CSV with a header row", mermaid: "A diagram: Mermaid source, starting with its type (flowchart LR, sequenceDiagram, ...)", dot: "A diagram: one Graphviz DOT graph (digraph { a -> b }), laid out in layers", plantuml: "A diagram: PlantUML from @startuml to @enduml (sequence, class, state, activity, use case, component, mind map, gantt)", metric: "One big number: value, label, unit, delta", timeline: "Events, one per line", "opf-block": "A content block written as YAML", "opf-slide": "Slide fields written as YAML" }[kind];
         options.push(kindOption(kind, "keyword", "fence", doc, boostAt(order++), "fence", { word: kind }));
       }
       for (const language of LANGUAGES) options.push(kindOption(language, "text", "code", `Code in ${language}`, boostAt(order++), "fence", { word: language }));
@@ -504,6 +504,8 @@ export const SYNTAX_FIELDS = {
   chart: { key: "chart", written: "```chart column, then CSV" },
   metric: { key: "metric", written: "```metric, then key: value lines" },
   mermaid: { key: "diagram", written: "```mermaid, then the Mermaid source" },
+  dot: { key: "diagram", written: "```dot, then one DOT graph" },
+  plantuml: { key: "diagram", written: "```plantuml, then @startuml ... @enduml" },
   timeline: { key: "timeline", written: "```timeline, then one event per line" },
   code: { key: "code", written: "```js title=\"file\"" },
   image: { key: "image", written: "![alt](src)" },

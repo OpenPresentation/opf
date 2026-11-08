@@ -64,28 +64,7 @@ writeFileSync(path.join(stage, "package.json"), `${JSON.stringify({ name: "opf-m
 run("npm", ["install", "--omit=dev", "--omit=optional", "--no-audit", "--no-fund", "--no-package-lock", "--loglevel=error"], { cwd: stage });
 
 // 3. Keep only the font files the renderer names, then drop what a running server never reads (source maps, type declarations).
-const prune = spawnSync(
-	process.execPath,
-	[
-		"--input-type=module",
-		"-e",
-		`
-		import { createRequire } from "node:module";
-		import path from "node:path";
-		const require = createRequire(path.join(process.cwd(), "package.json"));
-		const fonts = await import(require.resolve("@openpresentation/opf-render/fonts-node"));
-		const keep = new Set((await fonts.loadFonts({ pack: "office" })).fontFiles.map((file) => path.resolve(file)));
-		const renderRequire = createRequire(require.resolve("@openpresentation/opf-render/package.json"));
-		for (const pkg of fonts.scriptFontPackages("all")) {
-			let directory;
-			try { directory = path.dirname(renderRequire.resolve(pkg.name + "/package.json")); } catch { continue; }
-			for (const face of pkg.faces) keep.add(path.resolve(directory, face.file));
-		}
-		process.stdout.write(JSON.stringify([...keep]));
-		`,
-	],
-	{ cwd: stage, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
-);
+const prune = spawnSync(process.execPath, [path.join(here, "scripts", "mcpb-font-files.mjs")], { cwd: stage, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 if (prune.status !== 0) throw new Error(`Could not list the renderer's font files:\n${prune.stderr}`);
 const keep = new Set(JSON.parse(prune.stdout));
 let removed = 0;

@@ -46,21 +46,21 @@ export function planScriptFonts(presentation, report, {catalogs} = {}) {
 
 /**
  * FA-13: the OOXML tag a run's own `lang` (TextRun.lang) is written with: core's curated tag for the language (fr becomes
- * fr-FR), or undefined when it is the deck language (the run then follows the deck). Without a plan the tag is written as given.
+ * fr-FR), or undefined when it is the effective slide language. Without a plan the tag is written as given.
  */
-export function runLanguageTag(plan, tag) {
+export function runLanguageTag(plan, tag, slideIndex = 0) {
   if (typeof tag !== "string" || !tag) return undefined;
   if (!plan) return tag.toLowerCase() === "en-us" ? undefined : tag;
-  const cache = plan.runLanguages ??= new Map();
-  if (!cache.has(tag)) {
+  const cache = plan.runLanguages ??= new Map(), key = `${slideIndex}|${tag}`;
+  if (!cache.has(key)) {
     let lang = tag;
     try {
-      const resolved = resolver(plan.presentation, {language: tag}, plan.catalogs);
+      const resolved = resolver(plan.presentation, {slideIndex, language: tag}, plan.catalogs);
       if (resolved.languageSource !== "default") lang = resolved.lang;
     } catch { /* an unresolvable tag is written as given */ }
-    cache.set(tag, lang.toLowerCase() === String(plan.lang).toLowerCase() ? undefined : lang);
+    cache.set(key, lang.toLowerCase() === String(plan.slides?.[slideIndex]?.lang ?? plan.lang).toLowerCase() ? undefined : lang);
   }
-  return cache.get(tag);
+  return cache.get(key);
 }
 
 /**
@@ -428,14 +428,14 @@ export function partScriptFonts(path, xml, plan, slideIndex) {
   if (/^ppt\/theme\/theme\d+\.xml$/.test(path)) return themeScriptFonts(xml, plan);
   if (!path.startsWith("ppt/") || !path.endsWith(".xml")) return xml;
   const resolved = plan.slides[slideIndex] ?? plan.deck;
-  if (plan.lang !== "en-US") xml = xml.replace(RUN_LANGUAGE, `$1${escapeAttribute(plan.lang)}$2`);
+  if (resolved.lang !== "en-US") xml = xml.replace(RUN_LANGUAGE, `$1${escapeAttribute(resolved.lang)}$2`);
   if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
     xml = xml.replace(/<p:(sp|graphicFrame)>[\s\S]*?<\/p:\1>/g, shape =>
       runScriptFonts(shape, resolved, /<p:cNvPr\b[^>]*\bname="OPF heading /.test(shape)));
-    if (plan.rtl) xml = tableRtl(paragraphRtl(xml, plan.deck.direction));
+    if (resolved.rtl) xml = tableRtl(paragraphRtl(xml, resolved.direction));
   } else if (/^ppt\/(?:charts\/chart(?:Ex)?|notesSlides\/notesSlide)\d+\.xml$/.test(path)) {
     xml = runScriptFonts(xml, resolved, false);
-    if (plan.rtl && path.startsWith("ppt/notesSlides/")) xml = paragraphRtl(xml, plan.deck.direction, {notes: true});
+    if (resolved.rtl && path.startsWith("ppt/notesSlides/")) xml = paragraphRtl(xml, resolved.direction, {notes: true});
   } else if (plan.rtl && /^ppt\/(?:slideMasters\/slideMaster\d+|slideLayouts\/slideLayout\d+|notesMasters\/notesMaster\d+|presentation)\.xml$/.test(path)) {
     xml = levelRtl(xml);
   }
@@ -457,20 +457,26 @@ const attribute = (xml, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(xml)?.[
  * resolves. Nothing is reported here: languageDiagnostics() reports against
  * the final imported document, after FF-32 provenance.
  */
-export function observeLanguage({slides, theme, themePath, slideThemes, catalogs}) {
-  const counts = new Map();
+export function observeLanguage({slides, theme, themePath, slideThemes, catalogs, perSlide = true, preferBaseRuns = false}) {
+  const counts = new Map(), baseCounts = new Map();
   let rtlParagraphs = 0;
   for (const xml of slides) {
-    for (const [, lang] of xml.matchAll(/<a:rPr\b[^>]*?\slang="([^"]+)"/g)) {
+    for (const [run] of xml.matchAll(/<a:rPr\b[^>]*>/g)) {
+      const lang = attribute(run, 'lang');
       // Values that name no language are not counted: malformed tags, x-none, und and zxx.
-      if (!LANGUAGE_TAG.test(lang) || /^(?:und|zxx)(?:-|$)/i.test(lang)) continue;
+      if (!lang || !LANGUAGE_TAG.test(lang) || /^(?:und|zxx)(?:-|$)/i.test(lang)) continue;
       counts.set(lang, (counts.get(lang) ?? 0) + 1);
+      // OPF marks a run's authored language override with altLang=en-US. A wrapped override
+      // may produce more native fragments than the slide's base language; it must not replace it.
+      if (String(attribute(run, 'altLang')).toLowerCase() !== 'en-us') baseCounts.set(lang, (baseCounts.get(lang) ?? 0) + 1);
     }
     rtlParagraphs += xml.match(/<a:pPr\b[^>]*?\srtl="1"/g)?.length ?? 0;
   }
   const ranked = [...counts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0));
-  const lang = ranked[0]?.[0];
-  return {lang, language: lang, ranked, rtlParagraphs, theme, themePath, slideThemes, catalogs};
+  const baseRanked = preferBaseRuns && baseCounts.size ? [...baseCounts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0)) : ranked;
+  const lang = baseRanked[0]?.[0];
+  return {lang, language: lang, ranked, rtlParagraphs, theme, themePath, slideThemes, catalogs,
+    ...(perSlide ? {slides: slides.map(xml => observeLanguage({slides: [xml], catalogs, perSlide: false, preferBaseRuns}))} : {})};
 }
 
 /**
@@ -481,7 +487,28 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
  * provenance groups to apply.
  */
 export function reconcileLanguage(groups, observed, report) {
-  const index = groups.findIndex(item => item.field === "language");
+  const slideGroups = groups.filter(item => /^slides\.\d+\.language$/.test(item.field));
+  let index = groups.findIndex(item => item.field === "language");
+  if (slideGroups.length && observed.slides?.length && index >= 0) {
+    const root = groups[index].ops.find(op => op.path?.length === 1 && op.path[0] === 'language' && !op.remove)?.value;
+    const rootTag = resolver({language: root}, {}, observed.catalogs).lang.toLowerCase();
+    const wholeDeckEdit = slideGroups.length === observed.slides.length && slideGroups.every(item => item.ops[0]?.remove)
+      && observed.slides.every(slide => slide.lang && slide.lang.toLowerCase() !== rootTag)
+      && new Set(observed.slides.map(slide => slide.lang.toLowerCase())).size === 1;
+    if (wholeDeckEdit) {
+      report?.({code: 'metadata-reference-changed', path: 'language', message: `Runs now use ${observed.lang}, not ${rootTag} of the stored language, so the imported document follows its runs.`});
+      return groups.filter(item => item.field !== 'language' && !/^slides\.\d+\.language$/.test(item.field));
+    }
+    return groups.map(item => {
+      const match = /^slides\.(\d+)\.language$/.exec(item.field);
+      if (!match) return item;
+      const native = observed.slides[Number(match[1])], op = item.ops[0], value = op.remove ? root : op.value;
+      const expected = resolver({language: value}, {}, observed.catalogs);
+      if (!native?.lang || expected.lang.toLowerCase() === native.lang.toLowerCase()) return item;
+      report?.({code: 'metadata-reference-changed', path: item.field, message: `Runs now use ${native.lang}, not ${expected.lang} of the stored slide language, so the imported slide follows its runs.`});
+      return {...item, ops: [{path: ['slides', Number(match[1]), 'language'], value: native.language}]};
+    });
+  }
   if (index < 0 || observed.lang === undefined) return groups;
   // RR-59: a language the source left absent stays absent while the runs carry the engine default the export wrote them in;
   // a language set in PowerPoint is imported as observed.
@@ -521,11 +548,12 @@ export function languageDiagnostics(imported, observed, report) {
   const languages = observedRtl(observed) ? ranked.filter(([tag]) => tag === lang || tag !== "en-US") : ranked;
   if (languages.length > 1) {
     report({code: "mixed-run-languages", path: "language",
-      message: `Runs use ${languages.length} languages (${languages.map(([tag, count]) => `${tag} x${count}`).join(", ")}). OPF has one presentation language, so ${lang} was imported; a run in another language keeps it as its own lang where the text imports as rich text.`});
+      message: `Runs use ${languages.length} languages (${languages.map(([tag, count]) => `${tag} x${count}`).join(", ")}). The presentation uses ${lang}; slides with another predominant language declare it, and individual rich-text runs keep their own lang.`});
   }
   const resolved = resolver(imported, {}, catalogs);
-  if (rtlParagraphs && !resolved.rtl) {
-    report({code: "rtl-language-mismatch", path: "language", message: `${rtlParagraphs} right-to-left paragraph(s) do not match the left-to-right language ${typeof imported.language === "string" ? imported.language : lang}; paragraph direction is not imported separately.`});
+  const mismatchedRtl = observed.slides?.reduce((count, slide, slideIndex) => count + (resolver(imported, {slideIndex}, catalogs).rtl ? 0 : slide.rtlParagraphs), 0) ?? (resolved.rtl ? 0 : rtlParagraphs);
+  if (mismatchedRtl) {
+    report({code: "rtl-language-mismatch", path: "language", message: `${mismatchedRtl} right-to-left paragraph(s) do not match the left-to-right language ${typeof imported.language === "string" ? imported.language : lang}; paragraph direction is not imported separately.`});
   }
   // The presentation theme carries the first slide's script fonts (planScriptFonts), so it is compared with that slide.
   let themeResolved = resolved;

@@ -98,11 +98,12 @@ Some data does not fit the chart type it is written for. Core's `chartDrawPlan(c
 | Data | Drawn as | PPTX |
 | --- | --- | --- |
 | `world` over category labels of which fewer than half are places (`isPlaceLabel`: CLDR region names in English and the deck language, upper-case region codes, US states, Canadian provinces, Australian states, common aliases) | clustered columns of every series (`map-as-columns`) | a `c:barChart`, in every `chartex` mode |
+| `pareto` of two or more numeric series (a Pareto chart sorts one series and draws its cumulative share; LH-175) | clustered columns of every series in data order (`pareto-as-columns`) | a `c:barChart`, in every `chartex` mode |
 | `box-and-whisker` with one value per category (no label repeats, two rows or more) | one box per series: the rows form one group named after the category column (`box-per-series`) | the chartex box-and-whisker with that one category |
 | `pie` or `doughnut` of several series | a doughnut of nested rings, the first series innermost, each ring colored by category and named on its largest slice (`nested-rings`; LH-92, see chart-options.md) | one `c:doughnutChart` with a `c:ser` per series, each naming its series in one `c:dLbl` |
 | `scatter` whose X column holds no number | every series against the category position 1, 2, 3, ...; the X column is not drawn (`scatter-by-position`) | X values 1 to n |
 
-The PPTX export reports a fallback as `chart-data-adapted` with `adaptation: 'chart-fallback'` and records the authored data, so `fromPptx` restores it (a pie of several series imports as a doughnut). A construct that plots one series (treemap, histogram and Pareto with categories, waterfall, funnel, a map of places, a one-series pie) still draws the first; `validate` names the others, and a scatter X column without numbers, in the warning `opf/chart-series-dropped` (`chartDrawDiagnostics`).
+The PPTX export reports a fallback as `chart-data-adapted` with `adaptation: 'chart-fallback'` and records the authored data, so `fromPptx` restores it (a pie of several series imports as a doughnut). A construct that plots one series (treemap, histogram with categories, a Pareto chart of one numeric series, waterfall, funnel, a map of places, a one-series pie) still draws the first; `validate` names the others, and a scatter X column without numbers, in the warning `opf/chart-series-dropped` (`chartDrawDiagnostics`).
 
 ## Core runtime API
 

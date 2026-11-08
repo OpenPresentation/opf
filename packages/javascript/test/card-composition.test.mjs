@@ -26,7 +26,11 @@ test('cards preserve outer tracks, regions and headings while measuring a rounde
     assert.deepEqual(metric.metricLayout,layoutMetric(metric.value,metric.box,{scale:Math.min(dimensions.width,dimensions.height)/720,path:metric.path,align:'left',display:{...METRIC_DISPLAY_SIZES.one,height:boxed.contentBox.height},...band}));
     assert.ok(boxed.items[2].text.listEntries.every(entry=>entry.marker.x>=boxed.items[2].box.x&&entry.textBox.x>entry.marker.x));
     const regions={'top:left':{text:'A'},'bottom:right':{text:'B'}};
-    assert.deepEqual(composeSlide(regions,{...dimensions,contentBox:true}).items.map(i=>i.frameBox),composeSlide(regions,dimensions).items.map(i=>i.box));
+    // LH-69: without cards the two short texts draw as tiles, whose cards are the regions the card frames take.
+    const unboxed=composeSlide(regions,dimensions),tileOf=path=>unboxed.steps?.find(step=>step.form==='tiles')?.chips.find(chip=>chip.path===path)?.box;
+    assert.ok(tileOf(unboxed.items[0].path),'the short texts draw as tiles without cards');
+    const near=box=>box&&Object.fromEntries(Object.entries(box).map(([key,value])=>[key,Math.round(value*1e4)/1e4]));
+    assert.deepEqual(composeSlide(regions,{...dimensions,contentBox:true}).items.map(i=>near(i.frameBox)),unboxed.items.map(i=>near(tileOf(i.path)??i.box)));
   }
 });
 

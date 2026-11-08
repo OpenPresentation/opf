@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { gzipSync } from "node:zlib";
 import { after, before, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -17,13 +18,34 @@ const examples = path.resolve(here, "../../../examples");
 const available = workerd() !== undefined;
 if (!available && process.env.OPF_REQUIRE_WORKERD) throw new Error("OPF_REQUIRE_WORKERD is set, but the workerd package has no binary for this platform.");
 
-let bundle;
+let bundle, lean;
 before(async () => {
 	bundle = await bundleWorker();
+	lean = await bundleWorker("mcp-worker-lean.mjs");
 });
 
 test("bundles for a Worker: esbuild, platform neutral, fails on a Node builtin anywhere in the graph", () => {
 	assert.ok(bundle.bytes > 1_000_000, `${bundle.bytes} bytes`);
+});
+
+test("lean Worker preserves data exclusions and production size budgets", async () => {
+	assert.ok(lean.bytes < bundle.bytes - 7_000_000, `${lean.bytes} bytes against ${bundle.bytes} with the data`);
+	const dataSource = source => /(?:^|\/)(?:src\/generated\/(?:docs|examples)\.ts|src\/data\.ts|app-dist\/deck-app\.html)$/.test(source);
+	const retainedData = candidate => candidate.sourceInputs.filter(input => input.sources.some(dataSource));
+	assert.deepEqual(retainedData(lean), [], "the host-supplied entry retains no docs, examples, skills/defaultSources or viewer HTML");
+	const fullSources = retainedData(bundle).flatMap(input => input.sources);
+	for (const source of ["src/generated/docs.ts", "src/generated/examples.ts", "src/data.ts", "app-dist/deck-app.html"]) {
+		assert.ok(fullSources.some(name => name === source || name.endsWith("/" + source)), source + " is a positive audit control in the full entry");
+	}
+	// Reviewed v0.33 refresh: SH-19 8,075,721; d260 8,110,959; with the waterfall fix 8,116,787, no retained data.
+	// The added composition features explain the growth. See docs/handoff/2026-11-07/mcp-size-budget-033.md.
+	assert.ok(lean.bytes < 8_150_000, `${lean.bytes} unminified bytes`);
+	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
+	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
+	const compressed = gzipSync(production.text, { level: 9 }).length;
+	// Combined waterfall candidate: 5,300,992 minified / 1,199,308 gzip bytes; ceilings leave under 1% headroom.
+	assert.ok(production.bytes < 5_350_000, `${production.bytes} minified bytes`);
+	assert.ok(compressed < 1_210_000, `${compressed} gzip bytes`);
 });
 
 describe("the MCP server in workerd", { skip: !available && "the workerd package has no binary for this platform" }, () => {
@@ -124,23 +146,12 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 });
 
 describe("the server without the bundled data (@openpresentation/mcp/server)", () => {
-	let lean;
 	let leanWorker;
 	before(async () => {
-		lean = await bundleWorker("mcp-worker-lean.mjs");
 		if (available) leanWorker = await startWorker(lean.text);
 	});
 	after(async () => leanWorker?.stop());
 
-	test("leaves out the examples and the documentation, which are most of the bundle", () => {
-		assert.ok(lean.bytes < bundle.bytes - 7_000_000, `${lean.bytes} bytes against ${bundle.bytes} with the data`);
-		// About 7.1 MB unminified, 1.1 MB of it the diagram types validate_deck loads to check a deck's diagrams. SH-02: composition evaluates
-		// the 187 preset shapes (SH-01's geometry table, about 0.3 MB), so a deck's shape blocks validate: 7,785,356 bytes.
-		// SH-04: overlay shapes and connectors (their composition, routing and validation, and the overlay form of the schema): 7,974,844 bytes. Shapes phase 2 together (SH-04, SH-05, SH-06's shape catalog and search_shapes, SH-07): 7,994,440 bytes.
-		// SH-18 (the cycle arrangement and its SmartArt model): 8,052,585 bytes; the budget leaves room for SH-17's linear arrangements.
-		// SH-19 (OPF's own SmartArt layout definitions: the interpreter, the definition builder and the domain): 8,075,721 bytes.
-		assert.ok(lean.bytes < 8_100_000, `${lean.bytes} bytes`);
-	});
 
 	test("serves the sources it is given", { skip: !available && "the workerd package has no binary for this platform" }, async () => {
 		const post = async (method, params) => {

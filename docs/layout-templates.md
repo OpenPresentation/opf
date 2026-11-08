@@ -303,6 +303,12 @@ slide that pins any block with `region` keeps the binding above as written.
      3 to 6. Mosaic pictures are cropped to fill (`cover`) unless the block, slide, deck or theme sets `imageFit` (the
      layout's own `contain` gives way). A lead plus cards is the first block across the region (a short one at the lead
      size) over the others in the balanced grid below, each row at the height it needs, placed by the region's anchor.
+   - The closing's `details` region already flows, so its blocks join nothing; it takes the same lead plus cards (the
+     guarded rule `closing-lead`). A layout whose one body region is a flowing `supporting` region, holding 3 to 6 plain
+     texts that its `auto` flow would stack (a text too long for a cell of the balanced grid) and that read as neither
+     paragraph columns (LH-70) nor a lead plus stack (LH-67), and whose other texts fill whole rows of the balanced grid (2, 3 or 4 of them, never a short last row), sets the first text, its call to action, across the region
+     over the others in the balanced grid, as Claude Design draws a closing's details under its call to action. It is
+     kept only when no text reads smaller and nothing more is found (the size guard).
    - The join is kept unless it overflows more than leaving the extra blocks below the grid (counting `text-overflow` and
      `small-cell`): measured blocks such as tables or timelines that need more room than the joined cells give stay below
      the grid with `opf/layout-unplaced`, where they read whole (three tables in `table-beside`'s narrow region broke their
@@ -466,7 +472,7 @@ A region with `sequence` lists the steps of a sequence, and composition draws th
 Steps keep their text size: the badges are a guarded rule (`step-badges`, and `numerals` for numbered rows), so a slide whose blocks
 would get smaller under them draws as before (LH-168: the comparison is also of the smallest size each block draws, a list's label and description
 sizes, not of the list's base size, which is the label's in columns and the description's beside a badge; steps whose descriptions wrap
-draw as a stepper in every language, and a row of steps is centered under the title as the columns are), and a flow that does not fit one line at the list's size stays a list. A lone badge list
+draw as a stepper in every language, and a row of steps is centered under the title as the columns are). A step's label never splits a word (LH-173): a label whose widest word does not fit its column at 1.25 times the list size steps down to the size the word fits at, never under the list size, and the labels of the row take that size too; LH-48's growth stops at the step before one that breaks a word of any label or description. A flow that does not fit one line at the list's size stays a list. A lone badge list
 grows (LH-48) as the plain list would, as long as it fits with its badges (or numerals). The preview draws the badges, numerals,
 connector, chips and arrows from `steps`, and the PPTX export writes them as native shapes (an ellipse holding its numeral, a text box
 holding a numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets), tagged so that import consumes them and gives a
@@ -513,7 +519,8 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   text under a title of at most 4 words, is the message: the stack gives way, the title is the running head and the block fills the
   body (LH-48, LH-101). A lone text of at most 25 words (`messageWords`, any script) grows on to 56 px (75 px at 4 words or fewer)
   on at most 4 balanced lines; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
-  label draws it as a display word over a short rule; a placed region's short text is a bold heading. Guarded rules
+  label draws it as a display word over a short rule; a placed region's short text is a bold heading, drawn as a tile when it is no
+  sentence (see [Placed tiles](dynamic-composition.md), `placed-tiles`). Guarded rules
   `statement-message` and `display-message`.
   LH-163: where the primary does not read 4.5:1 on a dark or accent surface, a display message's bold words draw in a lighter tint of
   the primary that does (hue and saturation kept, lightness raised), never in a color the author did not mark. LH-164: a slide whose
@@ -554,6 +561,14 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   region, such as hero's media) that covers under 60% of the body height after its regions take their need sits in the middle
   of the space under the headings, as a body of paragraphs does, when it moves as one (a region the layout holds at the foot keeps
   the body where it is) and no block reads smaller. Pictures, charts and videos in other regions keep the layout's cells.
+  Without a layout, a short body of paragraphs and lists that still covers under half of the body after LH-48's three steps
+  grows on past a list's display size, as LH-05's compact grid does: step by step up to 56 px, each step larger, nothing
+  overflowing, at most 60% of the body covered, the body keeping its rows and columns (a body that may draw step badges or
+  cards keeps the three steps, so those drawings are held to the same body). The stack then sits in the middle of the body under the headings, rather than
+  at its top over an empty foot. Promoted regions that
+  each run the body's full height (`left`, `center+right`) and hold only paragraphs and lists set them as one band in the
+  middle of the body, each block starting at the band's top. Both are composed with LH-48's centering and kept only when
+  no block reads smaller and nothing overflows.
 - **Mixed cards (LH-64).** A row of middle- or bottom-anchored cards with a table, code panel or timeline among other measured
   kinds starts at the card top (or hugs and centers in an under-filled body) instead of each kind at its own anchor.
 - **Reading measure (LH-10).** A paragraph in a region wider than about 70 average characters of its size is set on that
@@ -566,6 +581,16 @@ composition sets a body role at the floor, `composeSlide` composes the same bloc
 ([dynamic composition](dynamic-composition.md)) and keeps that result when its smallest body size is larger (or as large and it reports less overflow), it reports no
 more overflow (`text-overflow`, `small-cell`) and no more of its fits break a line inside a word; otherwise the layout's
 result stands. Both compositions are pure, so the choice is deterministic, and both engines read it from core.
+
+**Before the floor (LH-186).** A template's composition that sets a paragraph, list or table more than one step of the type scale
+(16, 17, 18, 20, 21, 23, 24, 26, 28, 30, 32 px) under its role size (28 px prose, 32 px lists, 25 px table cells, each held to
+`composition.maxFontSize`), but above the floor, is composed as the automatic grid too, under the guarded rule `layout-first`. That
+result is kept (`recomposed`) only when it adds no finding, sets no block smaller, reads as well (no more split words, no prose
+under the minimum measure) and sets the most shrunk block at least one step larger: an agenda's two lists that the agenda-split
+layout sets at 18 px beside its title read at 32 px across the slide. A text run with its own `fontSize`, a block pinned to a
+region, `recompose: false` and `fill: false` keep the layout. So composition grows short content to fill, changes the arrangement
+(columns, the automatic grid, another design) before it sets text smaller, and fits dense content that no arrangement holds down
+the type scale to the readability floor, never below it, flagging what still does not fit.
 
 - **Body roles.** Text, lists and table cells, and the main part of the other payloads: a quote's and a code panel's body, a
   metric's value and label, and a timeline event's `what`. The other parts (attribution, filename, language, unit, delta,

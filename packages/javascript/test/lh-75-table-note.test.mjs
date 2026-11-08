@@ -26,9 +26,11 @@ describe('LH-75: a short table beside its note', () => {
         assert.ok(text.frameBox, 'the note is on a plain card');
         // Reading order: the table is first, so it sits at the start edge (the right in a right-to-left deck).
         if (direction === 'rtl') assert.ok(table.box.x > text.box.x); else assert.ok(table.box.x < text.box.x);
-        // The table takes between 60% and 70% of the width: the widest share at which the note keeps LH-66's measure.
-        const share = table.box.width / (table.box.width + text.frameBox.width);
-        assert.ok(share >= .59 && share <= .71, `share ${share}`);
+        // The table takes between 60% and 70% of the width at the role sizes (the widest share at which the note keeps LH-66's measure);
+        // the LH-75 follow-up grows the pair by LH-48's steps, the note's column widening to keep its measure, to at most half the row.
+        const share = table.box.width / (table.box.width + text.frameBox.width), roleSize = composeSlide(slide([plans(3), { text: note }]), { ...options, direction, fill: false });
+        assert.ok(share >= .49 && share <= .71, `share ${share}`);
+        if (share < .59) assert.ok(text.text.fontSize > itemOf(roleSize, 'text').text.fontSize, 'a narrower share only for a grown note');
         // The card is as tall as the row, which is centered in the body under the headings.
         const body = result.contentBox, top = text.frameBox.y - body.y, bottom = body.y + body.height - (text.frameBox.y + text.frameBox.height);
         if (!result.regions) assert.ok(Math.abs(top - bottom) < .02 * body.height + 1, 'centered');
@@ -53,17 +55,21 @@ describe('LH-75: a short table beside its note', () => {
     assert.equal(result.diagnostics.filter((entry) => entry.code === 'text-overflow').length, 0);
   });
 
-  test('stays stacked: a tall table, a one-line note, a table whose cells would wrap, and a layout that already puts the note beside', () => {
+  test('stays stacked: a tall table, a one-line note, a table whose cells would take three lines, and a layout that already puts the note beside', () => {
     for (const [label, input, options] of [
-      ['a tall table', slide([plans(9), { text: note }]), { layout: layouts.table }],
+      ['a tall table', slide([plans(9), { text: note }]), { layout: layouts.table, recompose: false }],
       ['a one-line note', slide([plans(3), { text: 'One line only.' }]), { layout: layouts.table }],
-      ['a table whose cells would wrap beside the note', slide([wide, { text: note }]), { layout: layouts.table }],
+      ['a table too tall stacked (its cells would take three lines beside the note)', slide([wide, { text: note }]), { layout: layouts.table }],
       ['recompose: false', slide([plans(3), { text: note }]), { layout: layouts.table, recompose: false }],
     ]) {
       const result = composeSlide(input, options);
       assert.ok(!beside(itemOf(result, 'table').box, itemOf(result, 'text').box), label);
       assert.equal(result.recomposed?.table, undefined, label);
     }
+    // LH-186: the table layout sets the tall table's cells more than one step under their role size, so the slide is composed as the
+    // automatic grid, where they read larger; that is LH-186's recomposition, not LH-75's.
+    const tall = composeSlide(slide([plans(9), { text: note }]), { layout: layouts.table });
+    assert.ok(tall.recomposed && tall.recomposed.table === undefined && tall.recomposed.size > tall.recomposed.layoutSize, JSON.stringify(tall.recomposed));
     const kept = composeSlide(slide([plans(3), { text: note }]), { layout: layouts['table-beside'] });
     assert.equal(kept.recomposed?.table, undefined);
     assert.ok(beside(itemOf(kept, 'table').box, itemOf(kept, 'text').box));

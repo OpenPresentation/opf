@@ -204,10 +204,11 @@ test('nightly.yml: schedule, dispatch and call; never a pull request or push; ev
   assert.doesNotMatch(triggers, /pull_request|push:|merge_group/u);
   assert.match(nightly, /os: \[windows-latest, macos-latest\]/u);
   assert.match(nightly, /node: \[22, 26\]/u);
-  for (const id of ['cli-portability', 'installed', 'pptx-windows', 'editor-macos', 'node-range', 'packed-linux', 'registry', 'npm12-consumer', 'audit', 'platform-residual', 'flake', 'report']) assert.ok(jobsOf(nightly).some((entry) => entry.id === id), `nightly.yml has ${id}`);
+  for (const id of ['cli-portability', 'installed', 'pptx-windows', 'editor-macos', 'editor-windows', 'node-range', 'packed-linux', 'registry', 'npm12-consumer', 'audit', 'platform-residual', 'libreoffice', 'flake', 'report']) assert.ok(jobsOf(nightly).some((entry) => entry.id === id), `nightly.yml has ${id}`);
   assert.match(nightly, /name: Installed candidates \(\$\{\{ matrix\.os \}\}\)/u, 'the old check name is kept');
   assert.match(job(nightly, 'pptx-windows').text, /native-tab-control-v2\.ps1 -PureRegression/u);
   assert.match(job(nightly, 'editor-macos').text, /runs-on: macos-15/u);
+  assert.match(job(nightly, 'editor-windows').text, /runs-on: windows-latest/u);
   // MR-30: npm 12's install-time defaults (no install scripts, no git or remote dependencies) are checked on the packed packages, at an exact npm 12.
   assert.match(job(nightly, 'npm12-consumer').text, /NPM12_VERSION: 12\.\d+\.\d+\n/u, 'npm 12 is pinned to an exact version');
   assert.match(job(nightly, 'npm12-consumer').text, /pnpm test:npm12-consumer/u);
@@ -218,7 +219,7 @@ test('nightly.yml reports only a scheduled run or one that asked for it, ignores
   const report = job(nightly, 'report');
   assert.match(report.text, /if: \$\{\{ always\(\) && \(github\.event_name == 'schedule' \|\| inputs\.report == true\) \}\}/u);
   assert.match(report.text, /--label nightly-red/u);
-  assert.match(report.text, /--ignore platform-residual,flake/u);
+  assert.match(report.text, /--ignore platform-residual,libreoffice,flake$/mu, 'the advisory jobs, LibreOffice until its baseline is promoted (docs/libreoffice.md)');
   const legs = jobsOf(nightly).map((entry) => entry.id).filter((id) => !['plan', 'report'].includes(id));
   assert.deepEqual(needsOf(report).sort(), legs.sort(), 'the report waits for every leg');
   assert.match(nightly, /report:\n {8}description: [^\n]*\n {8}type: boolean\n {8}default: false/u, 'a call reports nothing by default (a release gate stops the release, it opens no issue)');

@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "program": "RR-107",
+  "releaseTarget": "0.34.0",
+  "baseline": "d19c4bb6172b703d132ebba3fd006e4ec5cdf845",
+  "platform": "win32",
+  "node": "v26.4.0",
+  "pnpm": "10.33.2",
+  "diagnosticBundle": {
+    "version": "0.32.1",
+    "published": false,
+    "file": "opf-0.32.1.mcpb",
+    "bytes": 85161816,
+    "sha256": "e712c6cea71c105796bbb9b910dee06b7cb0527c34ad44925d2e79521fd1207b",
+    "files": 4362,
+    "scriptFonts": true,
+    "modelTools": 11,
+    "protocolCheck": "passed"
+  },
+  "checks": [
+    {
+      "command": "pnpm --filter @openpresentation/mcp run build:mcpb --check",
+      "result": "passed"
+    },
+    {
+      "command": "node --test packages/mcp/test/mcpb-font-files.test.mjs",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "command": "node --test scripts/release.test.mjs scripts/release-workflows.test.mjs",
+      "passed": 66,
+      "failed": 0
+    },
+    {
+      "command": "node --test docs/programs/release-readiness/report.test.mjs",
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "command": "pnpm check:text",
+      "result": "passed after exact sparse evidence materialization"
+    },
+    {
+      "command": "OPF_TRACKER_STALE=warn pnpm check:changed",
+      "result": "all root checks and build passed; sole nonzero step was the MCP suite",
+      "mcp": {
+        "passed": 48,
+        "failedAssertions": 0,
+        "cancelled": 7,
+        "skipped": 1,
+        "setupHookErrors": 3,
+        "error": "spawn UNKNOWN from the unchanged native workerd.exe",
+        "independentProbe": "Direct workerd.exe --version also fails spawnSync UNKNOWN on this host; no OPF code is invoked."
+      }
+    }
+  ],
+  "baselineReleaseTests": {
+    "passed": 38,
+    "failed": 3,
+    "diagnosis": "Native separator assumptions in changelog/fragment paths; POSIX-only file:/ prefix. Fixed with native target paths and an exact tarball-spec comparison."
+  },
+  "notPerformed": [
+    "npm publication",
+    "GitHub release or asset mutation",
+    "deployment",
+    "owner connector installation"
+  ],
+  "remaining": [
+    "Linux PR CI",
+    "full CI on v0.34 integration",
+    "trusted 0.34 release rehearsal and actual assets",
+    "workerd runtime execution on a working Windows host"
+  ]
+}

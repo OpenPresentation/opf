@@ -33,7 +33,7 @@ export function quoteMarksFor(tag?: string): QuoteMarks {
 
 /** The deck language a slide's quotes are marked for: the presentation's `language` tag, `undefined` when it names none. */
 export function quoteLanguage(presentation: unknown, slideIndex?: number): string | undefined {
-  if (presentation === null || typeof presentation !== 'object' || (presentation as { language?: unknown }).language === undefined) return undefined;
+  if (presentation === null || typeof presentation !== 'object') return undefined;
   try {
     const resolved = resolveScriptFonts(presentation, Number.isInteger(slideIndex) ? { slideIndex } : {});
     return resolved.languageSource === 'document' ? resolved.bcp47 : undefined;

@@ -687,11 +687,11 @@ describe("presentation shapes that must be rejected", () => {
     }, "must NOT have additional properties");
   });
 
-  test("Removed Loose Code Language Field", () => {
+  test("A code language is not a BCP-47 slide language", () => {
     assertPresentationInvalid({
       name: "Removed Loose Code Language Field",
       slides: [{ title: "Old Code", code: "print('hello')", language: "python" }],
-    }, "must NOT have additional properties");
+    }, "must match pattern");
   });
 
   test("Missing Code Source", () => {

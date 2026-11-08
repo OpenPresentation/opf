@@ -1,0 +1,703 @@
+﻿[
+    {
+        "slide":  1,
+        "name":  "Basic Pyramid",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/pyramid1",
+        "layoutName":  "Basic Pyramid",
+        "category":  "pyramid",
+        "groupItems":  4,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Vision",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Strategy",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Programs",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Teams",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  2,
+        "name":  "Inverted Pyramid",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/pyramid3",
+        "layoutName":  "Inverted Pyramid",
+        "category":  "pyramid",
+        "groupItems":  3,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Leads",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Prospects",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Customers",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  3,
+        "name":  "Basic Matrix",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/matrix3",
+        "layoutName":  "Basic Matrix",
+        "category":  "matrix",
+        "groupItems":  5,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Enterprise",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Mid-market",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Consumer",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Public sector",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  4,
+        "name":  "Basic Cycle",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/cycle2",
+        "layoutName":  "Basic Cycle",
+        "category":  "cycle",
+        "groupItems":  10,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Plan",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Pilot",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Measure",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Adjust",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Scale",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  5,
+        "name":  "Text Cycle",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/cycle1",
+        "layoutName":  "Text Cycle",
+        "category":  "cycle",
+        "groupItems":  6,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Listen",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Learn",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Improve 改善",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  6,
+        "name":  "Basic Chevron Process",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/chevron1",
+        "layoutName":  "Basic Chevron Process",
+        "category":  "process",
+        "groupItems":  4,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Plan",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Build",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Test",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Ship",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  7,
+        "name":  "Basic Process",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/process1",
+        "layoutName":  "Basic Process",
+        "category":  "process",
+        "groupItems":  7,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Research",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Design",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Run\u000bthe pilot",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Review",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  8,
+        "name":  "Vertical Process",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/process2",
+        "layoutName":  "Vertical Process",
+        "category":  "process",
+        "groupItems":  5,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Sign up",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Set up",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Launch",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  9,
+        "name":  "Accent Process",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/process3",
+        "layoutName":  "Accent Process",
+        "category":  "process",
+        "groupItems":  8,
+        "titles":  "",
+        "issues":  [
+                       "Field visits: Unable to add node to graphic"
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Discover",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Interviews",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Define",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Problem statement",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Deliver",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Pilot",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  10,
+        "name":  "Basic Block List",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/default",
+        "layoutName":  "Basic Block List",
+        "category":  "list",
+        "groupItems":  5,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Speed",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Quality",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Cost",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Reach",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Trust",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  11,
+        "name":  "Vertical Bullet List",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/vList2",
+        "layoutName":  "Vertical Bullet List",
+        "category":  "list",
+        "groupItems":  4,
+        "titles":  "",
+        "issues":  [
+                       "Enter two markets: Unable to add node to graphic",
+                       "Supply chain: Unable to add node to graphic"
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Goals",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Grow revenue 12%",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Risks",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Hiring",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  12,
+        "name":  "Basic Venn",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+        "layoutName":  "Basic Venn",
+        "category":  "relationship",
+        "groupItems":  3,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "People",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Process",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Technology",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  13,
+        "name":  "Basic Radial",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/radial1",
+        "layoutName":  "Basic Radial",
+        "category":  "relationship",
+        "groupItems":  9,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Customer",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Sales",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Support",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Product",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Marketing",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  14,
+        "name":  "Organization Chart",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/orgChart1",
+        "layoutName":  "Organization Chart",
+        "category":  "hierarchy",
+        "groupItems":  13,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Ana Ruiz, CEO",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  2,
+                          "text":  "Sam Lee, Assistant",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Kai Chen, CTO",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "Platform",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "Apps",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Lea Park, CFO",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Omar Haddad, COO",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  15,
+        "name":  "Hierarchy",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1",
+        "layoutName":  "Hierarchy",
+        "category":  "hierarchy",
+        "groupItems":  20,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Company",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Sales",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "North",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "South",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Engineering",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "Web",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "Mobile",
+                          "shapes":  2
+                      }
+                  ]
+    },
+    {
+        "slide":  16,
+        "name":  "Horizontal Hierarchy",
+        "id":  "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy2",
+        "layoutName":  "Horizontal Hierarchy",
+        "category":  "hierarchy",
+        "groupItems":  13,
+        "titles":  "",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Company",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Sales",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "North",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "South",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Engineering",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "Web",
+                          "shapes":  1
+                      },
+                      {
+                          "level":  3,
+                          "type":  1,
+                          "text":  "Mobile",
+                          "shapes":  1
+                      }
+                  ]
+    },
+    {
+        "slide":  17,
+        "name":  "Name and Title Organization Chart",
+        "id":  "urn:microsoft.com/office/officeart/2008/layout/NameandTitleOrganizationalChart",
+        "layoutName":  "Name and Title Organization Chart",
+        "category":  "hierarchy",
+        "groupItems":  8,
+        "titles":  "Ana Ruiz=set;Kai Chen=set;",
+        "issues":  [
+
+                   ],
+        "nodes":  [
+                      {
+                          "level":  1,
+                          "type":  1,
+                          "text":  "Ana Ruiz",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Kai Chen",
+                          "shapes":  2
+                      },
+                      {
+                          "level":  2,
+                          "type":  1,
+                          "text":  "Lea Park",
+                          "shapes":  2
+                      }
+                  ]
+    }
+]

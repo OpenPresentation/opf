@@ -33,6 +33,8 @@ Check it with the official inspector: `npx @modelcontextprotocol/inspector npx -
 
 The server also comes as an MCP Bundle, a one-file Claude Desktop extension: open `opf-<version>.mcpb` (double-click it, or drag it into Claude Desktop's Settings, Extensions) and Claude Desktop installs and starts it. It needs no Node install, no `npx` and no configuration, and it carries the renderer and its fonts, so the OPF viewer draws decks with the exact faces and validation measures layout with them.
 
+Download the versioned bundle and its SHA-256 file from the matching [GitHub release](https://github.com/OpenPresentation/opf/releases) (from 0.34.0). The trusted publish workflow builds and checks the full bundle before attaching it after registry verification. Verify it with `sha256sum --check opf-<version>.mcpb.sha256` on Linux, or compare `Get-FileHash opf-<version>.mcpb -Algorithm SHA256` to the file on Windows.
+
 Build it from a checkout: `pnpm --filter "@openpresentation/mcp..." run build`, then `pnpm --filter @openpresentation/mcp run build:mcpb`. It writes `packages/mcp/artifacts/opf-<version>.mcpb` (about 81 MB, every font the renderer draws with); `node scripts/build-mcpb.mjs --no-script-fonts` writes `opf-<version>-lite.mcpb` (about 33 MB) without the script faces (Japanese, Chinese, Korean, Arabic, Devanagari and the other scripts), whose text then draws with fallbacks. `--check` also unpacks the bundle and drives its server the way Claude Desktop starts it. The build packs this checkout's `@openpresentation/opf`, `gallery`, `opf-render` and `mcp`, and installs their third-party dependencies and the renderer's font packages from the npm registry, keeping only the font files the renderer's manifests name. The manifest is `packages/mcp/mcpb/manifest.json`; `test/mcpb-manifest.test.mjs` keeps its tool list in step with the server.
 
 `opf mcp` of the CLI is a convenience: it runs this server when `@openpresentation/mcp` is installed beside the CLI or in the working directory, and otherwise prints `npx -y @openpresentation/mcp` and exits with 2. The CLI itself carries no MCP code.
@@ -70,7 +72,7 @@ Resources have stable URIs. The server lists them (`resources/list`) and also of
 | `opf://catalog/<kind>/<id>` | A record of the default catalog (`@openpresentation/gallery`): `opf://catalog/layouts/two-column` |
 | `opf://skills/<name>` | A skill entrypoint (`opf-author`, `opf-layout`, `opf-presets`, `opf-edit`, `opf-export`, `opf-inspect`) |
 | `opf://skills/<name>/<path>` | A reference or asset of a skill: `opf://skills/opf-author/references/content.md` |
-| `ui://opf/deck` | The OPF viewer (`text/html;profile=mcp-app`): one HTML page, about 8.3 MB (2.1 MB compressed), that `show_deck` opens |
+| `ui://opf/deck` | The OPF viewer (`text/html;profile=mcp-app`): one HTML page, about 8.5 MB (2.3 MB compressed), that `show_deck` opens |
 
 Skill scripts and agent manifests are not served; the server runs no code from them.
 
@@ -137,7 +139,7 @@ export default {
 
 `createOpfServer({ version, opfVersion?, sources?, checkText?, deckApp?, processDecks? })` returns an SDK `McpServer`. `sources` replaces any of the bundled `docs`, `examples`, `skills` and `whatsNew`. `checkText` replaces the check behind `validate_deck`; `opf-mcp` passes the one that measures layout with the fonts `opf convert` draws with. Without it, layout is estimated and the report's `hint` says so.
 
-The bundled data is most of the size of a Worker bundle (about 12 MB minified, 5.6 MB gzipped, of which the example decks are 7 MB and the documentation 1.4 MB). A host that must stay small imports `createOpfMcpServer` from `@openpresentation/mcp/server`, which bundles none of it (about 3.5 MB minified, 0.7 MB gzipped), and takes `sources: { docs, examples, skills, whatsNew? }` from wherever it keeps them (KV, R2, static assets): `docs` is `[{ slug, title, markdown }]`, `examples` is `[{ slug, category, file, deck }]`, `skills` maps a skill name to `{ "SKILL.md": text, ... }`. `defaultSources()` and `DOC_SLUGS` (the pages served) are exported from `@openpresentation/mcp`.
+The default entry bundles the viewer and data (about 25.7 MB minified, 9.1 MB gzipped in the 0.33 build; the example source module is 9.2 MB and the documentation source module is 1.8 MB). A host that must stay small imports `createOpfMcpServer` from `@openpresentation/mcp/server`, which bundles none of it (about 5.3 MB minified, 1.2 MB gzipped), and takes `sources: { docs, examples, skills, whatsNew? }` from wherever it keeps them (KV, R2, static assets): `docs` is `[{ slug, title, markdown }]`, `examples` is `[{ slug, category, file, deck }]`, `skills` maps a skill name to `{ "SKILL.md": text, ... }`. `defaultSources()` and `DOC_SLUGS` (the pages served) are exported from `@openpresentation/mcp`.
 
 **A hosted server that does no deck work.** A tool call always runs on the server the client calls, so a hosted server runs every call on your compute. Pass `processDecks: false` and it does no OPF processing of decks: `show_deck` only opens the viewer, which reads, checks and renders the deck on the user's machine and sends its findings to the model as context; `validate_deck`, `convert` and the `fix_validation_findings` prompt are left out, and `start_here` and the other prompts point to `show_deck`. What stays on the server is the lookups (docs, schemas, catalog, examples), which are small and the same for every caller, and handing over the viewer's HTML. A client without MCP Apps gets no check from such a server. `deckApp: { readFontFile }` gives the viewer font files (the local server reads the installed renderer's); `deckApp: false` leaves the viewer out. The lean `createOpfMcpServer` takes `deckApp: { html }` with `DECK_APP_HTML` from `@openpresentation/mcp`, or a function that returns the same page from storage; the function runs only when a client opens the viewer, so other requests never load the 8 MB page.
 
@@ -156,7 +158,7 @@ It reads only font files under the font folders and the faces the site's manifes
 
 ## Limits
 
-- The viewer is about 8.3 MB of HTML (2.1 MB compressed), loaded once per conversation or cached by the client. A client may cap the size of an MCP App or ask the user before it shows one.
+- The viewer is about 8.5 MB of HTML (2.3 MB compressed), loaded once per conversation or cached by the client. A client may cap the size of an MCP App or ask the user before it shows one.
 - The viewer has no export yet (a sandboxed iframe cannot download; SEP-1865's draft `ui/download-file` is the way once clients support it), and the model sees the deck as JSON, not as pictures of the slides.
 - Text formats only for `convert`. Rendering and PowerPoint need the local `opf` command, which can write files.
 - `validate_deck` reads no files, so a local image path in a deck is not looked up (the CLI warns with `cli/asset-missing`). Pass images as data URIs or assets.

@@ -22,6 +22,7 @@ import { touchAudit } from './support/touch-audit.mjs';
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.ttf': 'font/ttf', '.wasm': 'application/wasm' };
 const server = createServer(async (req, res) => {
+  if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
   try {
     const url = new URL(req.url, 'http://localhost');
     const target = path.resolve(root, `.${decodeURIComponent(url.pathname)}`);

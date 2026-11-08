@@ -90,7 +90,7 @@ try {
   assert.equal(await copyButton.innerText(), 'Copied', 'the button says Copied');
   assert.notEqual(await copyButton.evaluate((n) => n.querySelector('svg').outerHTML), iconBefore, 'with a Check icon');
   assert.equal(await copyButton.evaluate((n) => n.querySelector('svg path').getAttribute('d')), 'M20 6 9 17l-5-5', 'the Lucide Check path');
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), expectedPdf, 'the clipboard holds the prompt');
+  assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n"), expectedPdf, 'the clipboard holds the prompt');
   await page.waitForFunction(() => /Prompt copied/.test(document.querySelector('.opf-handoff-live').textContent));
   assert.equal(await page.locator('.opf-handoff-live').getAttribute('aria-live'), 'polite');
   await page.waitForTimeout(500);
@@ -104,7 +104,7 @@ try {
   await radio('SVG slides').click();
   await copyButton.click();
   await page.waitForFunction(() => document.querySelector('.opf-handoff-copy span').textContent === 'Copied');
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), buildAgentHandoff(deck, { target: 'svg' }).markdown);
+  assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n"), buildAgentHandoff(deck, { target: 'svg' }).markdown);
   await radio('PDF').click();
   assert.equal(await copyButton.innerText(), 'Copy prompt', 'changing the target resets the button');
   mark('copy');

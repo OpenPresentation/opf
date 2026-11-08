@@ -65,9 +65,20 @@ export function checkSyntaxOnly(text) {
   return analyzeSyntax(text).map((problem) => normalizeFinding(problem, "syntax"));
 }
 
+/** The worker's catalogs: the host's with a stand-in for each icon-set loader the main thread could not send (the set exists; it is not loaded). */
+function withIconLoaders(catalogs, loaders) {
+  if (!loaders || !Array.isArray(catalogs)) return catalogs;
+  return catalogs.map((catalog, index) => {
+    if (!loaders[index]) return catalog;
+    const iconSets = { ...catalog.iconSets };
+    for (const id of loaders[index]) iconSets[id] = async () => undefined;
+    return { ...catalog, iconSets };
+  });
+}
+
 /**
  * The worker's side of the protocol, free of any worker API so it can be tested in Node. `handle(message)` returns the reply for one message
- * (or null for a message with no reply). Messages: `{ id, type: "catalogs", catalogs }`, `{ id, type: "check", format, text }` and
+ * (or null for a message with no reply). Messages: `{ id, type: "catalogs", catalogs, loaders }`, `{ id, type: "check", format, text }` and
  * `{ id, type: "syntax", text }`; replies: `{ id, ok: true, result }` or `{ id, ok: false, error }`.
  */
 export function createCheckService() {
@@ -77,7 +88,7 @@ export function createCheckService() {
       const id = message?.id;
       try {
         switch (message?.type) {
-          case "catalogs": catalogs = message.catalogs; return { id, ok: true, result: null };
+          case "catalogs": catalogs = withIconLoaders(message.catalogs, message.loaders); return { id, ok: true, result: null };
           case "check": return { id, ok: true, result: checkSource({ format: message.format, text: message.text, catalogs }) };
           case "syntax": return { id, ok: true, result: checkSyntaxOnly(message.text) };
           default: return { id, ok: false, error: `Unknown message type ${String(message?.type)}.` };

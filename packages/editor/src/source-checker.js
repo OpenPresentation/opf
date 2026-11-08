@@ -52,6 +52,27 @@ function makeWorker(option) {
 }
 
 /**
+ * The catalogs as structured-cloneable data for the worker: `{ catalogs, loaders }`. In each catalog's `iconSets` a loader function is dropped and its id
+ * listed in `loaders` (by catalog index), so the worker knows the set exists without being able to load it. That is all the checks the worker runs
+ * (the reader and `checkFormat`: the format and catalog reference rules) use of an icon set: they never resolve an icon name, so the answer equals the
+ * main thread's. Records (not functions) are sent as they are.
+ */
+export function cloneableCatalogs(catalogs) {
+  const loaders = {};
+  const list = Array.isArray(catalogs) ? catalogs : catalogs === undefined ? undefined : [catalogs];
+  const cleaned = list?.map((catalog, index) => {
+    if (!catalog || typeof catalog !== "object" || !catalog.iconSets || typeof catalog.iconSets !== "object") return catalog;
+    const iconSets = {};
+    for (const [id, set] of Object.entries(catalog.iconSets)) {
+      if (typeof set !== "function") iconSets[id] = set;
+      else (loaders[index] ??= []).push(id);
+    }
+    return { ...catalog, iconSets };
+  });
+  return { catalogs: Array.isArray(catalogs) || catalogs === undefined ? cleaned : cleaned[0], loaders };
+}
+
+/**
  * @param {{ worker: boolean | string | URL | object | (() => object), onError?: (error: unknown) => void, timeout?: number, startTimeout?: number }} options
  */
 export function createSourceChecker(options = {}) {
@@ -128,7 +149,8 @@ export function createSourceChecker(options = {}) {
     if (catalogsSent && sentCatalogs === catalogs) return;
     sentCatalogs = catalogs;
     catalogsSent = true;
-    post({ type: "catalogs", catalogs }).catch(() => { /* `fail` already ran; the request after it rejects too. */ });
+    // A catalog's icon sets can be loader functions, which a worker cannot receive (DataCloneError): it gets the ids of the sets instead.
+    post({ type: "catalogs", ...cloneableCatalogs(catalogs) }).catch(() => { /* `fail` already ran; the request after it rejects too. */ });
   }
 
   return {
