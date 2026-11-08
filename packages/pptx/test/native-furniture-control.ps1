@@ -19,6 +19,11 @@ function Assert-String($Value,[string]$Name,[string]$Context,[int]$Maximum=65535
     if(-not ($Value -is [string])) { throw "$Context property '$Name' must be a string" }
     if((-not $AllowEmpty -and $Value.Length -eq 0) -or $Value.Length -gt $Maximum) { throw "$Context property '$Name' has an invalid length" }
 }
+function Assert-LiteralSeriesName($Value,[string]$Name,[string]$Context) {
+    Assert-String $Value $Name $Context 255 $false
+    if($Value.Trim() -cne $Value -or $Value -match '[\x00-\x1F\x7F=!\[\]\$:]+|^[+@-]'){throw "$Context $Name must be a literal name, not a formula, range, control text or padded value"}
+}
+
 function Read-AndValidateActionPlan([string]$Path) {
     if($Path -eq '') { return ,@() }
     $resolved=(Resolve-Path -LiteralPath $Path).Path
@@ -31,21 +36,29 @@ function Read-AndValidateActionPlan([string]$Path) {
     $parsed=$raw | ConvertFrom-Json
     $items=@($parsed)
     if($items.Count -gt 20) { throw 'ActionPlan cannot contain more than 20 actions' }
-    $operations=@('set-text-style','set-text','set-alt','delete-shape','duplicate-shape','set-tag','delete-tag','move-slide','measure-chart-point')
+    $operations=@('set-text-style','set-text','set-alt','delete-shape','duplicate-shape','set-tag','delete-tag','move-slide','measure-chart-point','set-chart-series-name')
     for($index=0;$index -lt $items.Count;$index++) {
         $action=$items[$index]; $context="Action $($index+1)"
         if($null -eq $action -or $action -isnot [pscustomobject]) { throw "$context must be an object" }
         $op=Require-Property $action 'op' $context; Assert-String $op 'op' $context 40 $false
         if($operations -notcontains $op) { throw "$context has unknown operation '$op'" }
+        if($op -ieq 'set-chart-series-name' -and $op -cne 'set-chart-series-name'){throw "$context requires the exact bounded series-name operation spelling"}
         $slideIndex=Require-Property $action 'slideIndex' $context
         if(-not (Test-Integer $slideIndex) -or $slideIndex -lt 1 -or $slideIndex -gt 3) { throw "$context slideIndex must be an integer from 1 through 3" }
         $allowed=@('op','slideIndex')
-        if($op -ne 'move-slide') {
+        if($op -notin @('move-slide','set-chart-series-name')) {
             if($op -notin @('set-tag','delete-tag') -or $action.target -ne 'slide') {
                 $shapeName=Require-Property $action 'shapeName' $context; Assert-String $shapeName 'shapeName' $context 255 $false; $allowed+='shapeName'
             }
         }
         switch($op) {
+            'set-chart-series-name' {
+                $chartName=Require-Property $action 'chartName' $context;Assert-String $chartName 'chartName' $context 255 $false
+                $seriesIndex=Require-Property $action 'seriesIndex' $context;if(-not (Test-Integer $seriesIndex) -or $seriesIndex -lt 1 -or $seriesIndex -gt 256){throw "$context seriesIndex must be an integer from1through256"}
+                foreach($key in @('expectedName','newName')){$value=Require-Property $action $key $context;Assert-LiteralSeriesName $value $key $context}
+                if($action.expectedName -ceq $action.newName){throw "$context must make an actual literal name change"}
+                $allowed+=@('chartName','seriesIndex','expectedName','newName')
+            }
             'measure-chart-point' {
                 $chartName=Require-Property $action 'chartName' $context; Assert-String $chartName 'chartName' $context 255 $false
                 foreach($key in @('seriesIndex','pointIndex')) {
@@ -91,6 +104,12 @@ function Read-AndValidateActionPlan([string]$Path) {
             }
         }
         foreach($property in $action.PSObject.Properties.Name) { if($allowed -cnotcontains $property) { throw "$context has unknown property '$property'" } }
+    }
+    $renames=@($items | Where-Object {$_.op -ceq 'set-chart-series-name'})
+    if($renames.Count){
+        if(@($items | Where-Object {$_.op -cnotin @('set-chart-series-name','measure-chart-point')}).Count){throw 'Series-name qualification may mix only literal edits and point measurements'}
+        $targets=@{};$newNames=@{}
+        foreach($rename in $renames){$target=ConvertTo-Json -InputObject @($rename.slideIndex,$rename.chartName,$rename.seriesIndex) -Compress;$name=ConvertTo-Json -InputObject @($rename.slideIndex,$rename.chartName,$rename.newName) -Compress;if($targets.ContainsKey($target) -or $newNames.ContainsKey($name)){throw 'Repeated series target or duplicate new name in one native edit plan'};$targets[$target]=$true;$newNames[$name]=$true}
     }
     return ,$items
 }
@@ -169,7 +188,7 @@ $report=[ordered]@{
     source=[ordered]@{path=$sourcePath;sha256=$sourceHash;openedPath=$sourceSnapshot;openedSha256=(Get-FurnitureSha256 $sourceSnapshot)}
     saved=[ordered]@{path=$savedPath;sha256=$null}
     reopened=[ordered]@{path=$savedPath;sha256=$null}
-    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@();chartPoints=@();currentChartPointProbe=$null}
+    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@();chartPoints=@();currentChartPointProbe=$null;chartSeriesEdits=@();currentChartSeriesProbe=$null}
     phases=[ordered]@{original=$null;edited=$null;reopened=$null}
     inputs=[ordered]@{verifier=$request.verifier;processHelper=$request.processHelper}
     environment=[ordered]@{hostVersion=$PSVersionTable.PSVersion.ToString();windowsProductName=$os.ProductName;windowsDisplayVersion=$os.DisplayVersion;windowsBuild="$($os.CurrentBuild).$($os.UBR)";powerPointVersion=$null;powerPointExecutable=$null;powerPointBuild=$null;powerPointExecutableSha256=$null}
@@ -279,7 +298,7 @@ function Read-FurnitureState($Presentation,[string]$Phase) {
         $rasters+=@([ordered]@{slideIndex=$slideIndex;path=$png;sha256=(Get-FurnitureSha256 $png)})
         $slideRecords+=@([ordered]@{index=$slideIndex;slideId=$slideId;name=$slideName;tags=$slideTags;shapeCount=$shapeCount;shapes=$shapeRecords})
     }
-    return [ordered]@{slideCount=$slideCount;slides=$slideRecords;rasters=$rasters}
+    return [ordered]@{slideCount=$slideCount;slides=$slideRecords;rasters=$rasters;chartSeriesNames=(Read-FurnitureSeriesNameState $Presentation $actions $Phase)}
 }
 function Get-ActionTags($Presentation,$Action,[string]$Prefix) {
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
@@ -583,8 +602,63 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$
     return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativeSliceObservations=@($Probe.sliceCoordinates.ToArray());nativePieCenterLocalPoints=$Probe.pieCenterLocalPoints;nativeCurvedBoundsLocalPoints=$Probe.curvedBoundsLocalPoints;nativePlotCenterLocalPoints=$Probe.plotCenterLocalPoints;nativeCircleCenterLocalPoints=$Probe.circleCenterLocalPoints;nativeCircleCenterMethod=$Probe.circleCenterMethod;nativeAreaValueObservation=$Probe.areaValueObservation;coordinateStrategy=$Probe.strategy;nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
 }
 
+# Bounded current native chart metadata only: no ChartData, Values setter, Excel or UI.
+function Get-FurnitureSeriesTarget($Presentation,$Action,[string]$Prefix) {
+    $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
+    $shape=Get-ExactShape $slide $Action.chartName "$Prefix.chart"
+    $has=Invoke-FurnitureCom "$Prefix.chart.hasChart" {$shape.HasChart};if($has -ne -1){Stop-FurnitureLifecycle 'The exact series-name target is not a native chart'}
+    $chart=Invoke-FurnitureCom "$Prefix.chart.get" {$shape.Chart};$type=Invoke-FurnitureCom "$Prefix.chart.type" {$chart.ChartType}
+    if(-not (Test-Integer $type) -or $type -notin @(51,52,53,57,58,59,4,65,63,66,1,76,77,-4169,5,-4120)){Stop-FurnitureLifecycle 'Series-name qualification requires a supported classic point chart'}
+    $collection=Invoke-FurnitureCom "$Prefix.series.get" {return ,$chart.SeriesCollection()};$count=Invoke-FurnitureCom "$Prefix.series.count" {$collection.Count}
+    if(-not (Test-Integer $count) -or $count -lt 1 -or $count -gt 256 -or $Action.seriesIndex -gt $count){Stop-FurnitureLifecycle 'Series-name target count/index is outside the bounded collection'}
+    $series=Invoke-FurnitureCom "$Prefix.series.item" {$collection.Item([int]$Action.seriesIndex)}
+    $seriesType=Invoke-FurnitureCom "$Prefix.series.type" {$series.ChartType};if($seriesType -ne $type){Stop-FurnitureLifecycle 'Mixed native series types are outside name-edit qualification'}
+    return [pscustomobject]@{series=$series;collection=$collection;count=$count;chartType=$type}
+}
+function Read-FurnitureLiteralSeriesName($Series,[string]$Prefix,$Probe) {
+    $name=Invoke-FurnitureCom "$Prefix.series.name.get" {$Series.Name}
+    $Probe.observedType=if($null -eq $name){'null'}else{$name.GetType().FullName};$Probe.observedName=if($name -is [string]){$name}else{$null};$Probe.observedRawValue=if($null -eq $name){$null}elseif($name -is [string] -or $name -is [ValueType]){[Convert]::ToString($name,[Globalization.CultureInfo]::InvariantCulture)}else{'<unsupported native name type>'}
+    if($name -isnot [string]){Stop-FurnitureLifecycle 'Native series name is not a literal String'}
+    return $name
+}
+function Set-FurnitureSeriesName($Presentation,$Action,[string]$Prefix) {
+    if($script:officeOperationsStopped){throw 'Office operations already stopped; preserve the original series-name failure receipt'}
+    try{Assert-LiteralSeriesName $Action.expectedName 'expectedName' $Prefix;Assert-LiteralSeriesName $Action.newName 'newName' $Prefix;if($Action.expectedName -ceq $Action.newName){throw 'Series-name action must make a literal change'}}catch{Stop-FurnitureLifecycle $_.Exception.Message}
+    $probe=[ordered]@{phase='action';slideIndex=$Action.slideIndex;chartName=$Action.chartName;seriesIndex=$Action.seriesIndex;expectedName=$Action.expectedName;newName=$Action.newName;before=$null;after=$null;observedType=$null;observedName=$null;observedRawValue=$null;otherNames=@();status='begin'}
+    $report.actionPlan.currentChartSeriesProbe=$probe;$report.actionPlan.chartSeriesEdits+=@($probe)
+    $target=Get-FurnitureSeriesTarget $Presentation $Action $Prefix
+    $before=Read-FurnitureLiteralSeriesName $target.series $Prefix $probe;$probe.before=$before
+    if($before -cne $Action.expectedName){Stop-FurnitureLifecycle 'Native series name no longer equals the literal expectedName; no setter was called'}
+    for($index=1;$index -le $target.count;$index++){
+        if($index -eq $Action.seriesIndex){continue}
+        $other=Invoke-FurnitureCom "$Prefix.series.other-$index.get" {$target.collection.Item($index)}
+        $name=Invoke-FurnitureCom "$Prefix.series.other-$index.name.get" {$other.Name};$probe.otherNames+=@([ordered]@{index=$index;name=if($name -is [string]){$name}else{$null}})
+        if($name -isnot [string]){Stop-FurnitureLifecycle 'Another native series has no String name'}
+        if($name -ieq $Action.newName){Stop-FurnitureLifecycle 'New literal name already identifies another native series; no setter was called'}
+    }
+    Invoke-FurnitureCom "$Prefix.series.name.set" {$target.series.Name=$Action.newName}
+    $after=Read-FurnitureLiteralSeriesName $target.series "$Prefix.readback" $probe;$probe.after=$after
+    if($after -cne $Action.newName){Stop-FurnitureLifecycle 'Native series name setter did not retain the exact requested literal'}
+    $probe.status='success'
+}
+function Read-FurnitureSeriesNameState($Presentation,$Targets,[string]$Phase) {
+    if($script:officeOperationsStopped){throw 'Office operations already stopped; preserve the original series-name failure receipt'}
+    $records=New-Object 'System.Collections.Generic.List[object]'
+    foreach($action in $Targets){
+        if($action.op -cne 'set-chart-series-name'){continue}
+        $expected=if($Phase -ceq 'original'){$action.expectedName}else{$action.newName}
+        $probe=[ordered]@{phase=$Phase;slideIndex=$action.slideIndex;chartName=$action.chartName;seriesIndex=$action.seriesIndex;expectedName=$expected;observedName=$null;observedType=$null;observedRawValue=$null;status='begin'};$report.actionPlan.currentChartSeriesProbe=$probe
+        $target=Get-FurnitureSeriesTarget $Presentation $action "$Phase.series-name-$($records.Count+1)"
+        $name=Read-FurnitureLiteralSeriesName $target.series "$Phase.series-name-$($records.Count+1)" $probe
+        if($name -cne $expected){Stop-FurnitureLifecycle "Native $Phase series name does not equal its exact expected current literal"}
+        $probe.status='success';$records.Add($probe)
+    }
+    return ,$records.ToArray()
+}
+
 function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
     $prefix="action-$Number-$($Action.op)"
+    if($Action.op -ceq 'set-chart-series-name'){Set-FurnitureSeriesName $Presentation $Action $prefix;return}
     if($Action.op -eq 'move-slide') { $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $prefix; Invoke-FurnitureCom "$prefix.moveTo" { $slide.MoveTo([int]$Action.toIndex) }; return }
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $prefix
     if($Action.op -in @('set-tag','delete-tag')) {

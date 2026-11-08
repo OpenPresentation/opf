@@ -98,3 +98,6 @@ LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798
 
 - [SH25native area-tip probe](sh25-area-tip-probe.md): actualnative Series.Values signed endpoint,30preserved actual observations/58mock controls; product unchanged, new getter/native negative/current-edit acceptance owed.
 
+
+- [SH25current-series edit qualification](sh25-native-series-name.md): literalName action +threephase readback/49mock controls; actualedit blocked by separately identified direct c:tx/c:v importer gap, no edit acceptance claimed.
+

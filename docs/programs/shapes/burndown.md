@@ -169,3 +169,6 @@ item's state edits its row and appends a log line in the same PR.
 
 - 2026-11-08: NEWderived SH25area probe corrects a native measurement proxy: Point.Height spans baseline-to-value, so only area1/76/77use actual Series.Values sign to select the observed tip, never product/action geometry. Thirty actual-coordinate fixtures and58signed/scalar/array/unchanged/refusal controls pass without Office; original117.100pxbefore failure retained. Values/chartData/Excel writes prohibited, all raw values/partial bounds and4pxcriterion retained. New native getter/negative/current-chart edit qualification remains owed. [Rationale](../../handoff/2026-11-08/sh25-area-tip-probe.md).
 
+
+- 2026-11-08: NEWSH25current-chart edit tooling provides a bounded literalSeries.Name action, strictwhole-plan/current-name/duplicate guards and allthreephase native readbacks with owned readonly SaveCopyAs/reopen.49mock/pure controls pass, including first-failure preservation and source-byte protection. Cached native-name precedence/numeric selector/stale-name refusal pass; direct c:tx/c:v literalname currently becomesSeries1, retained as a separate derived product blocker before actual nativeedit qualification. No Values/ChartData/Excel or sourcefile writes. [Handoff](../../handoff/2026-11-08/sh25-native-series-name.md).
+
