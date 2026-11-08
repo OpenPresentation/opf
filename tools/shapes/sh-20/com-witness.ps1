@@ -28,7 +28,7 @@ $inputs = @($inputFiles | ForEach-Object {
 # Keep the Open argument outside PowerShell's automatic $input pipeline variable, and cast it before invoking COM.
 function Open-OpfWitnessInput {
   param($Application, [Parameter(Mandatory=$true)][string]$OwnedPath)
-  return $Application.Presentations.Open([string]$OwnedPath,-1,0,0)
+  return $Application.Presentations.Open([string]$OwnedPath,-1,0,-1)
 }
 if ($PlanOnly) { @{ out=$Out; inputs=$inputs; treeCases=@('org:k1','org:chain4','org:roots2','org:assistant','hierarchy:k1','hierarchy:chain4','hierarchy:roots2','venn:5','venn:6','venn:7'); scope='Plan only: no directory, process or COM object created.' } | ConvertTo-Json -Depth 6; return }
 if (Get-Process POWERPNT -ErrorAction SilentlyContinue) { throw 'PowerPoint is already running. Close it yourself; no COM object was created.' }
@@ -75,6 +75,7 @@ function Read-TextShape($Shape) {
 }
 function Read-SmartArt($Shape) {
   $sa=$Shape.SmartArt
+  if ($Shape.GroupItems.Count -lt 1) { throw 'Live SmartArt groups were not materialized after Export; no metric result.' }
   $nodes=@(for($j=1;$j -le $sa.AllNodes.Count;$j++) {
     $n=$sa.AllNodes.Item($j); $level=[int]$n.Level
     $parent=$null; if($level -gt 1) { $parent=[string]$n.ParentNode.TextFrame2.TextRange.Text }
@@ -85,6 +86,7 @@ function Read-SmartArt($Shape) {
 try {
   $app=Invoke-OpfNativeStage $latch 'create-app' { New-Object -ComObject PowerPoint.Application }
   Invoke-OpfNativeStage $latch 'empty-app' { if($app.Presentations.Count -ne 0) { throw 'PowerPoint acquired an open presentation; refusing this attempt.' } } | Out-Null
+  Invoke-OpfNativeStage $latch 'visible-minimized-window' { $app.Visible=-1; $app.WindowState=2 } | Out-Null
   if (-not $BaselineOnly) {
   $seed=Invoke-OpfNativeStage $latch 'open-seed-copy' { Open-OpfWitnessInput -Application $app -OwnedPath ([string]$inputs[0].copy) }
   Invoke-OpfNativeStage $latch 'seed-identity' { if([IO.Path]::GetFullPath([string]$seed.FullName) -ne $inputs[0].copy) {throw 'Seed identity mismatch.'} } | Out-Null
@@ -120,7 +122,10 @@ try {
     $opened=Invoke-OpfNativeStage $latch "open-control-$i" {Open-OpfWitnessInput -Application $app -OwnedPath ([string]$witnessInput.copy)}
     Invoke-OpfNativeStage $latch "control-$i" {
       if([IO.Path]::GetFullPath([string]$opened.FullName) -ne $witnessInput.copy) {throw 'Control identity mismatch.'}
-      $slide=$opened.Slides.Item(1); $controlShapes=$slide.Shapes
+      $slide=$opened.Slides.Item(1)
+      $pixelWidth=[int][Math]::Round([double]$opened.PageSetup.SlideWidth * 4 / 3); $pixelHeight=[int][Math]::Round([double]$opened.PageSetup.SlideHeight * 4 / 3)
+      $slide.Export((Join-Path $Out ("control-$i.png")),'PNG',$pixelWidth,$pixelHeight)
+      $controlShapes=$slide.Shapes
       $controls.Add(@{source=$witnessInput.source;shapes=@(for($k=1;$k -le $controlShapes.Count;$k++) {$shape=$controlShapes.Item($k);if($shape.HasSmartArt -eq -1){Read-SmartArt $shape}elseif($shape.HasTextFrame -eq -1 -and $shape.TextFrame2.HasText -eq -1){Read-TextShape $shape}})})
     } | Out-Null
     Invoke-OpfNativeStage $latch "close-control-$i" {[void](Close-OpfOwnedPresentation $opened $witnessInput.copy)} | Out-Null
