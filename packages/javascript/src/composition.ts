@@ -4452,6 +4452,22 @@ function withPortraits(input: unknown, options: ComposeSlideOptions, grown: Slid
 const HEADING_MESSAGES = new WeakSet<SlideComposition>();
 /** LH-129: compositions with a grown heading that fit only below its step of the type scale (growTemplate does not keep them). */
 const HEADINGS_OFF_SCALE = new WeakSet<SlideComposition>();
+/** SH-08: the share of the slide the front overlay shapes' bounds must cover to be the slide's body (overlaysDrawBody). */
+export const OVERLAY_BODY_SHARE = 0.2;
+/**
+ * SH-08: whether a slide's overlay shapes draw its body: the bounds of its front-layer shapes placed by fractions (connectors and shapes
+ * anchored `at` a block left out) cover at least OVERLAY_BODY_SHARE of the slide. Such a slide (a SmartArt drawing imported as overlay
+ * shapes) composes its headings as a content slide's, on top.
+ */
+export function overlaysDrawBody(shapes: unknown): boolean {
+  if (!Array.isArray(shapes)) return false;
+  const boxes = shapes.filter((shape): shape is Record<string, unknown> => !!shape && typeof shape === 'object' && !('connector' in shape) && !('at' in shape) && (shape as Record<string, unknown>).layer !== 'back'
+    && ['x', 'y', 'width', 'height'].every(key => typeof (shape as Record<string, unknown>)[key] === 'number'));
+  if (!boxes.length) return false;
+  const left = Math.min(...boxes.map(box => box.x as number)), top = Math.min(...boxes.map(box => box.y as number));
+  const right = Math.max(...boxes.map(box => (box.x as number) + (box.width as number))), bottom = Math.max(...boxes.map(box => (box.y as number) + (box.height as number)));
+  return Math.max(0, right - left) * Math.max(0, bottom - top) >= OVERLAY_BODY_SHARE - 1e-9;
+}
 const overflowCount = (result: SlideComposition): number => result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length;
 // LH-83: the parts that carry the reading text of a quote, code panel, metric or timeline. The others (attribution, filename,
 // language, unit, delta, description, trend, a timeline's name, dates and notes) ask for 14 to 20 px, near the floor by design,
@@ -6085,7 +6101,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const emptyHost = (host: Record<string, any>) => emptyPayload(host.blocks) && fields.every(field => emptyPayload(host[field]));
   // Placed images are not body: a slide whose only body is placed images centers its headings in the free area like a cover.
   const flowBlocks = Array.isArray(slide.blocks) ? slide.blocks.filter((_: unknown, index: number) => !placedBlocks.has(index)) : slide.blocks;
-  const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(flowBlocks) || fields.some(field => !(placedRoot && field === 'image') && !emptyPayload(slide[field]));
+  // SH-08: overlay shapes that draw the slide's body (an imported SmartArt drawing) make it a content slide, so its headings sit on top
+  // instead of centering over the shapes as a cover's do; a badge or a small mark on a cover does not (OVERLAY_BODY_SHARE).
+  const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(flowBlocks) || fields.some(field => !(placedRoot && field === 'image') && !emptyPayload(slide[field])) || overlaysDrawBody(slide.shapes);
   // OPF 0.19: a template slide with promoted regions composes them as in 0.18 (headings on top, regions below); the
   // template's body regions are not used. Any other template slide composes through its regions.
   const useTemplate = template !== undefined && !regions.length;

@@ -36,6 +36,8 @@ const orderedParser = new XMLParser({ignoreAttributes: false, attributeNamePrefi
 let geometry;
 /** Load the preset geometry; `fromPptx` awaits this for a package that has shapes, because the readers below are synchronous. */
 export async function loadShapeGeometry() { geometry ??= await import('@openpresentation/opf/shape-geometry'); return geometry; }
+/** The preset geometry once loadShapeGeometry has loaded it (SH-08 reads a preset's text rectangle), else undefined. */
+export const loadedShapeGeometry = () => geometry;
 
 const array = value => value === undefined || value === null ? [] : Array.isArray(value) ? value : [value];
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -644,7 +646,7 @@ const reportDropped = (dropped, name, slideIndex, report) => {
 };
 
 // An overlay frame as fractions of the slide: from the right edge in a right-to-left deck, as the rest of OPF mirrors start and end.
-function placement(frame, {width, height, rtl}, report, name, slideIndex) {
+export function placement(frame, {width, height, rtl}, report, name, slideIndex) {
   const left = rtl ? width - frame.x - frame.cx : frame.x;
   const place = {x: left / width, y: frame.y / height, width: frame.cx / width, height: frame.cy / height};
   const clamped = Object.fromEntries(Object.entries(place).map(([key, value]) => [key, round(Math.min(1, Math.max(0, value)), 6)]));
