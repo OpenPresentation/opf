@@ -55,3 +55,25 @@ The combined local check completed: build, Biome, typecheck, stability, all163 r
 CI on e9302cb240ca1b500f54461f12af9cd9b857889d exposed a corpus-test false positive: its raw XML regex counts both a SmartArt Choice and its picture Fallback as simultaneous objects, although the exporter intentionally preserves their shared identity. ECMA-376 Part3 selects one branch before application validation ([Microsoft explanation](https://learn.microsoft.com/en-us/office/open-xml/general/introduction-to-markup-compatibility)). The corpus now checks ID collisions between branches that can coexist. Fourteen controls retain rejection of collisions within a Choice/Fallback, against outside objects, across independent wrappers and across compatible nested branches; mutually exclusive branches may share an ID. The existing SH16 same-identity, fallback-import and rendering checks remain unchanged. This test-only correction is independently reviewed; production bytes and goldens are unchanged.
 
 Vetoable decision: correct the structural gate's MCE interpretation instead of changing the native object's intended identity to satisfy its raw regex. The final exact-head qualification follows this commit after focused verification. No release is approved yet; issue#1139 and the evidence-only coordinator checkpoint carry the current operational state.
+
+## Final chart archive review and waterfall follow-up
+
+The supported waterfall numeric-axis blocker is fixed and natively verified in folded#1145. PowerPoint changes its automatic9m maximum to the preview's explicit10m; its inner ChartEx margins remain the existing documented automatic-layout limitation. All130 affected SVG pages plus54 category-reserve cases remain unchanged. The titled waterfall test now asserts exact0..50/by10 scaling before the unchanged rich Delta title checks.
+
+CI also identified the stale RR54 archive snapshot. All21 old snapshots reproduce exactly on unchanged main export code;7 candidate archives differ only in the already reviewed bar/doughnut/scatter/histogram/waterfall parts. Two independent reviewers inspected every XML delta; all workbooks and14other archives are byte-identical. The generated refresh preserves every previous lock, all exact-byte/size/inventory/native-slide assertions, and the fixture's original protection wording. See docs/evidence/rr105-033-archive-review. No raster golden or tolerance changed.
+
+## Combined release candidate after final blocker review
+
+Folded#1145 (73187454; product91922e79) and#1146 (85f64a9) into the033preparation. Those source branches are permanently frozen. The waterfall numeric scale is natively verified, RR54 snapshots are generated/reviewed with all old locks retained, and the titled-waterfall test retains exact scale/title checks. MCP's expected feature/doc growth is measured and now guarded by source exclusion, four positive full-data controls, unchanged7MB removal delta, exact42-page equality, and tight raw/minified/gzip budgets. No runtime data selection or renderer golden changed in that correction.
+
+Focused check:changed for the RR54 and chart-options follow-ups passes build and both complete test files; its only failure is the missing historical compressed evidence file in this sparse checkout. The root Biome configuration intentionally excludes imported PPTX paths; the generator passes node --check. Waterfall source checks pass typecheck and all164 renderer files; core's sole failure is omitted historical script corpus, and its stale titled-waterfall assertion is now corrected here.
+
+Final action: verify the combined MCP controls, export and review the full corpus at this final source head, push the integration once, dispatch FullCI and wait with pr-gate required-all. No merge or release is approved until those final gates pass. A separate034preparation branch is pushed with reviewed wave2 source; it preserves033growth/layout rules and passes typecheck plus3987core tests, with the one missing historical file restored as exact Git blobs and its35 tests passing separately. No034golden/CI/release has started.
+
+## Final CI batch after the last stale axis assertion
+
+The last CI failure was the older RR105 test still expecting automatic box/waterfall axes. It now asserts exact composed and native values for signed data: waterfall0..6/by1 and box-4..5/by2, including hidden axes. The full file passes. A finite diagnostic run of all73 remaining PPTX contract scripts from that CI stopping point completes with zero failures; no suite selections or assertions changed.
+
+The combined MCP production bundle/doc controls also pass2/2. At c7518474491f8143d4844c6857f3f855cd9fe4db a fresh full corpus opens25files/270slides in owned read-only PowerPoint copies; exact-head evaluation/review follows the final test-only commit. All required-all CI and FullCI must pass before merge; the integration remains the sole033release PR. No release has been dispatched.
+
+Vetoable decision: preserve exact scale assertions and retain the reviewed RR54 old locks rather than relaxing archive or axis checks. Frozen folded sources#1140,#1145,#1146 must never be pushed again.

@@ -1,0 +1,238 @@
+{
+  "baselineHead": "cabd3c8a03d02255329edd2352eb1e39df7fb40c",
+  "baselineExportRef": "d19c4bb6172b703d132ebba3fd006e4ec5cdf845",
+  "candidateHead": "a4322cdd9686c2ef34732088c48d72366d379190",
+  "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate.",
+  "entries": [
+    {
+      "name": "column",
+      "baseline": "a9ee19fa6b2ade6292eaccf6fc5170a4b00927fcee33f4d9b1d7398158f9b1d5",
+      "candidate": "a9ee19fa6b2ade6292eaccf6fc5170a4b00927fcee33f4d9b1d7398158f9b1d5",
+      "baselineBytes": 26232,
+      "candidateBytes": 26232,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": []
+    },
+    {
+      "name": "column-labels",
+      "baseline": "58e8913d6759db4bda07dbdcc7dbf7383bfffa424a2955a0ce351321fcb2fa70",
+      "candidate": "58e8913d6759db4bda07dbdcc7dbf7383bfffa424a2955a0ce351321fcb2fa70",
+      "baselineBytes": 26398,
+      "candidateBytes": 26398,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": []
+    },
+    {
+      "name": "bar",
+      "baseline": "7719de62c938ebc055e494fe18f0a490ae685a936820b68cba7120c8090adc2f",
+      "candidate": "8c2f64413169bbdb8631176522073190e78de5e8113081475e8bae86d8837e5a",
+      "baselineBytes": 26128,
+      "candidateBytes": 26052,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": [
+        "ppt/charts/chart1.xml"
+      ]
+    },
+    {
+      "name": "line",
+      "baseline": "fcda3b2d2b4619f200f26d2487ec3e6e88a2a3e4d2bb22b9f3d7f760c4fbf5fd",
+      "candidate": "fcda3b2d2b4619f200f26d2487ec3e6e88a2a3e4d2bb22b9f3d7f760c4fbf5fd",
+      "baselineBytes": 26306,
+      "candidateBytes": 26306,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": []
+    },
+    {
+      "name": "area",
+      "baseline": "88b0531ecba29768a7f7717ed3e4c5cb912812a6c093ba7c33a83135e71b8329",
+      "candidate": "88b0531ecba29768a7f7717ed3e4c5cb912812a6c093ba7c33a83135e71b8329",
+      "baselineBytes": 26178,
+      "candidateBytes": 26178,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": []
+    },
+    {
+      "name": "stacked-column",
+      "baseline": "8b67739b24ff9fc1b8decb34dbc2c12eb9c78678be22fb39d7adea798da4038f",
+      "candidate": "8b67739b24ff9fc1b8decb34dbc2c12eb9c78678be22fb39d7adea798da4038f",
+      "baselineBytes": 27912,
+      "candidateBytes": 27912,
+      "baselineParts": 34,
+      "candidateParts": 34,
+      "changedParts": []
+    },
+    {
+      "name": "percent-stacked",
+      "baseline": "403396b000eb9b98b4779bcbe66cee2891f7815401b32d668a2849ed496bdd6f",
+      "candidate": "403396b000eb9b98b4779bcbe66cee2891f7815401b32d668a2849ed496bdd6f",
+      "baselineBytes": 27920,
+      "candidateBytes": 27920,
+      "baselineParts": 34,
+      "candidateParts": 34,
+      "changedParts": []
+    },
+    {
+      "name": "pie",
+      "baseline": "5bfb5675e58f98b4aedeedd56122af60482a4daa8511ac3d78d6bbba0b2c0a1b",
+      "candidate": "5bfb5675e58f98b4aedeedd56122af60482a4daa8511ac3d78d6bbba0b2c0a1b",
+      "baselineBytes": 26411,
+      "candidateBytes": 26411,
+      "baselineParts": 31,
+      "candidateParts": 31,
+      "changedParts": []
+    },
+    {
+      "name": "doughnut",
+      "baseline": "00b6b1d6ca3039274c95da70413bedadc3b14534ca26a8b0404c5929e635c174",
+      "candidate": "e3b9ec19cc6772fb59f5174ef888726fcf6ff1fd64fccb18f7eadebcdebb5643",
+      "baselineBytes": 26288,
+      "candidateBytes": 26811,
+      "baselineParts": 31,
+      "candidateParts": 32,
+      "changedParts": [
+        "[Content_Types].xml",
+        "docProps/app.xml",
+        "ppt/charts/chart1.xml",
+        "ppt/slides/_rels/slide1.xml.rels",
+        "ppt/slides/slide1.xml",
+        "ppt/tags/opfSlide1.xml",
+        "ppt/tags/opfChartMark1.xml"
+      ]
+    },
+    {
+      "name": "radar",
+      "baseline": "5939afd5992f94e9b047482c0675887adac41334cd7c2ac01fbba4e5e20ecb62",
+      "candidate": "5939afd5992f94e9b047482c0675887adac41334cd7c2ac01fbba4e5e20ecb62",
+      "baselineBytes": 26058,
+      "candidateBytes": 26058,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": []
+    },
+    {
+      "name": "scatter",
+      "baseline": "d11cbe41fc0c1727b62ce86992da72a0ec272e30d3efd4b5b2fed28370b78d9d",
+      "candidate": "88eb8aac1e5fdf959606db7a8def632ed3d891bbdc19e3c32622e6d2f982e416",
+      "baselineBytes": 25900,
+      "candidateBytes": 25903,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": [
+        "ppt/charts/chart1.xml"
+      ]
+    },
+    {
+      "name": "scatter-two-columns",
+      "baseline": "e2d5b5603a3a16fb3f84ccb51c6fb48254623cb4326bd759f34edbb6ce799325",
+      "candidate": "e45baf1046649e32670e9519a35b6b13f80f2a598d8424a0eec56078ad891525",
+      "baselineBytes": 25726,
+      "candidateBytes": 25731,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": [
+        "ppt/charts/chart1.xml"
+      ]
+    },
+    {
+      "name": "single-column",
+      "baseline": "6b7afc94f54ee867b5124d85f7ff30f0c800ebde1f9955619347bea0f0946389",
+      "candidate": "6b7afc94f54ee867b5124d85f7ff30f0c800ebde1f9955619347bea0f0946389",
+      "baselineBytes": 26345,
+      "candidateBytes": 26345,
+      "baselineParts": 31,
+      "candidateParts": 31,
+      "changedParts": []
+    },
+    {
+      "name": "scatter-labels",
+      "baseline": "414441f026b99b7d7b87ba5f85d4c8c87b0a2b4ccb3b220c5ea628e0a360e5bb",
+      "candidate": "96148b77dce65ca678e506042621df03e813f661cc298b5c644d37fb31384aab",
+      "baselineBytes": 25737,
+      "candidateBytes": 25744,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": [
+        "ppt/charts/chart1.xml"
+      ]
+    },
+    {
+      "name": "chartex-native-map",
+      "baseline": "d6ffcc5251d70b68ac1d128ff9876eefd7da591d9a043c38314ac229208e7318",
+      "candidate": "d6ffcc5251d70b68ac1d128ff9876eefd7da591d9a043c38314ac229208e7318",
+      "baselineBytes": 25872,
+      "candidateBytes": 25872,
+      "baselineParts": 30,
+      "candidateParts": 30,
+      "changedParts": []
+    },
+    {
+      "name": "histogram",
+      "baseline": "2a3caa9615a9e8db35543d6b999c023aee7cd34fbcfb00fd605a62a8aff8f425",
+      "candidate": "51394036520211662be53127a5c348600e8146ae37bfa49042ec86e44bf6b1de",
+      "baselineBytes": 28954,
+      "candidateBytes": 28975,
+      "baselineParts": 34,
+      "candidateParts": 34,
+      "changedParts": [
+        "ppt/charts/chartEx1.xml"
+      ]
+    },
+    {
+      "name": "treemap",
+      "baseline": "3f46573198b0e8db4d3a3eb60f4ccb46892fb52b4ebbe8d01554a765893fcd53",
+      "candidate": "3f46573198b0e8db4d3a3eb60f4ccb46892fb52b4ebbe8d01554a765893fcd53",
+      "baselineBytes": 28889,
+      "candidateBytes": 28889,
+      "baselineParts": 34,
+      "candidateParts": 34,
+      "changedParts": []
+    },
+    {
+      "name": "waterfall",
+      "baseline": "adc853fdf20d3b538fa9eac17509e0cef250ed1daf9f6439724a4dad86c0ae9e",
+      "candidate": "963e262393f5ff6a0b2581e1695470a36b515797589a90daa803659268f6b1aa",
+      "baselineBytes": 28880,
+      "candidateBytes": 28898,
+      "baselineParts": 34,
+      "candidateParts": 34,
+      "changedParts": [
+        "ppt/charts/chartEx1.xml"
+      ]
+    },
+    {
+      "name": "table",
+      "baseline": "27463fec020ca9382f851a01b95b3cbd0fde807d369ee14b6621b36aa5f227e2",
+      "candidate": "27463fec020ca9382f851a01b95b3cbd0fde807d369ee14b6621b36aa5f227e2",
+      "baselineBytes": 20243,
+      "candidateBytes": 20243,
+      "baselineParts": 28,
+      "candidateParts": 28,
+      "changedParts": []
+    },
+    {
+      "name": "styled-table",
+      "baseline": "bbad327522f1e99cff6a127e16738e9699058130332b8aabcd7061a002aeb374",
+      "candidate": "bbad327522f1e99cff6a127e16738e9699058130332b8aabcd7061a002aeb374",
+      "baselineBytes": 20087,
+      "candidateBytes": 20087,
+      "baselineParts": 28,
+      "candidateParts": 28,
+      "changedParts": []
+    },
+    {
+      "name": "mixed-blocks",
+      "baseline": "8d018b2132a43688b86a83fb54fb352e5d8ff09c9fd54d35d6eaaa2f00294bce",
+      "candidate": "8d018b2132a43688b86a83fb54fb352e5d8ff09c9fd54d35d6eaaa2f00294bce",
+      "baselineBytes": 27105,
+      "candidateBytes": 27105,
+      "baselineParts": 31,
+      "candidateParts": 31,
+      "changedParts": []
+    }
+  ]
+}
