@@ -1021,7 +1021,7 @@ function renderArrangements(bound, options) {
     for (const node of arrangement.nodes) {
       const trace = options.trace && node.path ? {'data-opf-arrangement-path': node.path} : {};
       if(node.background)parts.push(tag('rect',{...HIDDEN,x:n(node.background.x),y:n(node.background.y),width:n(node.background.width),height:n(node.background.height),rx:n(node.radius??0),fill:paint.fill.hex,...stroke,...trace}));
-      const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex:fill,nodeStroke=arrangement.kind==='hierarchy'?{...stroke,stroke:paint.fill.hex}:stroke,alpha=arrangement.kind==='venn'?.5:arrangement.kind==='hierarchy'?.9:1;
+      const nodeFill=arrangement.kind==='hierarchy'?paint.line.hex:fill,nodeStroke=arrangement.kind==='hierarchy'?{...stroke,stroke:paint.fill.hex}:stroke,alpha=arrangement.kind==='venn'&&node.preset==='ellipse'?.5:arrangement.kind==='hierarchy'?.9:1;
       const nodePaint=alpha===1?nodeStroke:{...nodeStroke,'fill-opacity':alpha};
       if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill:nodeFill, ...nodePaint, ...trace}));
       else if (node.preset === 'ellipse') parts.push(cycleCircle(node, nodeFill, nodePaint, trace));
