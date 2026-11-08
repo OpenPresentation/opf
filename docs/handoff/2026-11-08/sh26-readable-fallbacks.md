@@ -1,0 +1,127 @@
+# SH-26: readable diagram fallback and continuation lists
+
+The pinned template review found 49 clean continuation panels that left seven
+labels on 78-character rows at small type in a large body. All 112 original
+images and finite judgments are preserved on evidence-only branch `4af124c70`;
+the coordinator accepted this reading-measure class as a release blocker.
+
+The old Venn guard ran only inside `arrangedList` when no diagram design fit.
+Global recomposition deliberately suppresses the template, so a continuation
+could become a flat list without reaching that branch or its guard. The new
+shared pass runs after arrangement/card decisions and before strict overflow.
+It recognizes the requested diagram regions even during recomposition and uses
+the exact existing list fitting options, marker style, direction and family.
+
+Vetoable implementation decisions:
+
+- Scope semantic org-chart, hierarchy, Venn and downward-pyramid regions;
+  exclude actual diagram/step nodes and unrelated regions/lists. Catalog bytes,
+  live SmartArt eligibility and measured native geometry do not change.
+- Retain the settled size as the floor. Try the existing type scale upward,
+  never beyond the effective cap, and one to three columns of whole list items.
+  Keep source order, paths, numbering, rich text and original gap. Explicit
+  column counts (payload first, then explicitly authored region rules) and pins constrain the fit; `fill:false` disables growth.
+- Use bounded whole-word width trials and the existing column-break strategy.
+  Once the first readable width overflows vertically, narrower widths cannot
+  repair that same size/count. Never replace complete words with truncation.
+- If no retained-size fit works, mark the fit and existing diagnostic as real
+  overflow. Strict composition refuses it and the existing paginator may split
+  between complete list entries; an irreducible word refuses all output.
+
+All four exact representative cases fail the line-measure assertion on the
+approved baseline and pass after the change. Their 26 px text remains 26 px,
+with two whole-item columns, longest lines of 38 characters and a tallest text
+column of 402.48 px inside 420.76 px (~95.7% fill). The six-label spare-space
+control grows from the frozen 26 px to 34 px. All 49 previously captured pages
+keep their settled 24/26/28 px size, all labels/order and no overflow, with lines
+at most 70 characters.
+
+Independent review reproduced an ignored authored region column limit. The
+correction distinguishes explicit region counts from compiled default counts,
+including nested regions, and preserves payload override precedence. Label and
+description lines both follow the same reading measure. Splitting a multi-entry
+list does not invent a heading for a singleton chunk; an originally single
+described heading retains its heading role, scale and weight. Nested families
+and numbering remain intact. All first-failure receipts are preserved.
+
+Focused controls pass for actual four-family pagination, unchanged source,
+headings/title rule/card frame/footer, caps, `fill:false`, pinned single-column
+refusal, exact gap, RTL numbering, rich runs/families, unrelated regions and
+irreducible words. Existing 140 measured Venn frames, circle text slots and
+retained-type cases pass. One existing very-long Venn test had required a false
+fit-overflow flag despite an already present 70-character overflow diagnostic.
+Its strengthened assertion now requires the truthful flag and strict refusal,
+with the same 26.6667 px, frame and complete source values. Before/after proof
+is retained; no no-shrink or content check was removed.
+
+Initial fixture setup failures are retained separately: the first core-only
+build lacked Gallery dist; then a new pagination test used catalog authoring
+records with `$schema`/`id` fields instead of maintained `gallery.layouts`.
+Building the actual dependency and using the same normalized records as the
+real golden fixture fixed those test setups without weakening schema checks.
+
+The first real office/visual CLI export exposed a different measured capacity:
+the source settles at 32 px Intos in a 330.133 px inner body (377.295 px card).
+Seven complete labels cannot satisfy the reading measure in that owned frame.
+The new truthful refusal is correct; no frame expansion or type reduction is
+permitted. Explicit maintained `opf paginate` splits whole items 2+2+2+1, all at
+37 px, with no overflow and lines at most 68 characters. Five genuine renderer
+font regressions pass. The original failed after invocation is retained intact;
+estimated 26 px fits are not claimed as measured office-font acceptance.
+
+`opf convert` normally continues sibling blocks of one kind; it does not promise
+to split every overflowing list. These cases require explicit `opf paginate`
+then `opf convert`, or `opf convert --paginate`. `--keep-slides` intentionally
+retains an unfit authored slide and its finding for diagnostic comparison.
+
+The first mapped check passed 12 of 13 steps, including real-font renderer
+controls, catalog-free/browser/stability checks and all seven type checks. Core
+passed 4,231 of 4,233: one expected pinned template snapshot delta and one real
+API regression. Treating `recompose:false` as a forced single column was wrong:
+it disables whole-layout recomposition, not bounded flow inside the same region.
+That restriction is removed; payload/region column counts remain binding. The
+existing full gallery floor invariant and 23 SH-26 controls pass after the fix.
+The original mapped receipts remain immutable; a second mandatory batch follows.
+
+The genuine CLI packet covers twelve authored cases and thirty resulting pages.
+Five ordinary/upright-pyramid/Venn/org/hierarchy controls retain entire PNG and
+PPTX bytes. All affected measured pages retain or grow the original 32 px; the
+four seven-label cases paginate to 37 px with at most 68 characters per line.
+Descriptions are complete; their singleton pages use the existing LH-77 heading
+rule. Native import normalizes default level zero and moves item numbering
+starts into block numbering; effective labels/levels/numbers are exact, while
+byte-exact blocks are reported separately rather than claimed universally.
+
+A suspected blank org-chart body was a display-path/cache false candidate:
+raw pixels, direct SVG and a byte-identical fresh display copy show the complete
+body. There is no product paint correction. All original diagnostic/refusal
+attempts remain preserved, including the unsupported PPTX `--slides` command.
+
+Source is still under review. Whole-case sheet review, bounded native-input
+derivatives, the second changed check, actual owner-run Office acceptance and
+a coordinator-owned new pinned golden batch remain the gates. No local golden
+edits, public examples/count changes, Office or publication are claimed.
+
+
+Final source is pushed at 975ced9f289f076cabfbecf1a0f7db53789a5fc7. The second
+mandatory mapped batch is 12/13: core 4,233/4,234, only the expected pinned
+composition-template snapshot; all other selected checks pass. All thirty
+maintained archive locks remain exact (Chartex31 + RR54 data42). No golden or
+fixture promotion was performed.
+
+The durable [review packet](../../evidence/sh26-readable-fallbacks-034/README.md)
+contains all twelve actually viewed paired sheets, thirty after panels, exact
+source/control hashes, complete raw failures and both mapped batches. Native
+qualification now uses thirteen complete-slide OPF subsets, at most three slides
+per file, through ordinary shipped CLI conversion. Their thirty PNGs are exact
+to the primary five-archive/30-page packet. See native-build.json and
+native-receipt.json in the packet; the unsupported PPTX --slides refusal remains
+preserved. All five primary whole PPTX archives remain byte-identical after the
+API correction. Only root runs Office; actual native acceptance and a new pinned
+golden/integration gate remain owed. The RTL deck contains Latin paragraphs;
+its exact continued numbering does not qualify Arabic glyphs or RTL paragraphs.
+
+Review PR: [SH-26 #1207](https://github.com/OpenPresentation/opf/pull/1207),
+a draft against the 0.34 integration branch. Evidence commit is
+`b312bf042b50a41f360ff7a38a6d466a7e308ebe`; production remains `975ced9f2`.
+No watcher or Office process was started by this lane.

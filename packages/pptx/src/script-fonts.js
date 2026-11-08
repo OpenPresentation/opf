@@ -7,6 +7,7 @@
 // When the resolver throws for a deck, the exporter writes what it wrote before FF-07 (lang="en-US", empty theme ea/cs, no
 // rtl) and reports `language-export-unavailable`.
 import {numberRanges, paragraphDirection, physicalAlignment, resolveScriptFonts as coreResolveScriptFonts} from "@openpresentation/opf/composition";
+import {protectNativeLatinText} from "./native-language-provenance.js";
 
 // OPF 0.15 (FA-23): core resolves the font-scheme references a deck or a language object names against the document's
 // catalogs and the host's registered `catalogs` (Catalog[]), the same option the slide context takes. `catalogs` is passed
@@ -46,7 +47,7 @@ export function planScriptFonts(presentation, report, {catalogs} = {}) {
 
 /**
  * FA-13: the OOXML tag a run's own `lang` (TextRun.lang) is written with: core's curated tag for the language (fr becomes
- * fr-FR), or undefined when it is the effective slide language. Without a plan the tag is written as given.
+ * fr-FR). Explicit RTL base-language choices remain marked; other choices equal to the effective slide language are elided. Without a plan the tag is written as given.
  */
 export function runLanguageTag(plan, tag, slideIndex = 0) {
   if (typeof tag !== "string" || !tag) return undefined;
@@ -60,7 +61,10 @@ export function runLanguageTag(plan, tag, slideIndex = 0) {
     } catch { /* an unresolvable tag is written as given */ }
     cache.set(key, lang.toLowerCase() === String(plan.slides?.[slideIndex]?.lang ?? plan.lang).toLowerCase() ? undefined : lang);
   }
-  return cache.get(key);
+  // Preserve an explicit base-language choice before the inherited Latin-digit
+  // adapters run, including mixed-script paragraphs. Its existing altLang marker distinguishes it from a default.
+  const slide = plan.slides?.[slideIndex] ?? plan.deck;
+  return cache.get(key) ?? (slide?.rtl ? slide.lang : undefined);
 }
 
 /**
@@ -367,6 +371,7 @@ export function leftToRightPieces(text) {
 /** Split the runs of a right-to-left paragraph so each Latin phrase and each number is its own en-US run. */
 function splitLatinRuns(body) {
   return body.replace(RUN, (run, properties, escaped) => {
+    if (/\saltLang="en-US"/.test(properties) && !/\slang="en-US"/.test(properties)) return run; // Keep authored proofing; existing English segmentation remains unchanged.
     const text = decodeText(escaped), phrases = leftToRightPieces(text);
     if (!phrases.length) return run;
     const make = (value, lang) => `<a:r>${lang ? properties.replace(/\slang="[^"]*"/, ` lang="${lang}"`) : properties}<a:t>${encodeText(value)}</a:t></a:r>`;
@@ -432,7 +437,7 @@ export function partScriptFonts(path, xml, plan, slideIndex) {
   if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
     xml = xml.replace(/<p:(sp|graphicFrame)>[\s\S]*?<\/p:\1>/g, shape =>
       runScriptFonts(shape, resolved, /<p:cNvPr\b[^>]*\bname="OPF heading /.test(shape)));
-    if (resolved.rtl) xml = tableRtl(paragraphRtl(xml, resolved.direction));
+    if (resolved.rtl) xml = protectNativeLatinText(tableRtl(paragraphRtl(xml, resolved.direction)), resolved.lang);
   } else if (/^ppt\/(?:charts\/chart(?:Ex)?|notesSlides\/notesSlide)\d+\.xml$/.test(path)) {
     xml = runScriptFonts(xml, resolved, false);
     if (resolved.rtl && path.startsWith("ppt/notesSlides/")) xml = paragraphRtl(xml, resolved.direction, {notes: true});
