@@ -53,7 +53,8 @@ export type VariableDiagnosticCode =
   | "variable-builtin-missing"
   | "variable-unused"
   | "variable-rich-flattened"
-  | "variable-format";
+  | "variable-format"
+  | "variable-group-omitted";
 export type VariableDiagnosticSeverity = "error" | "warning" | "info";
 export interface VariableDiagnostic {
   code: VariableDiagnosticCode;
@@ -603,6 +604,57 @@ function reduceLogo(id: string, logo: LogoReference | { error: string }, path: s
 const skippedKeys = new Set(["extensions"]);
 const skippedRootKeys = new Set(["variables", "catalogs", "$schema", "template"]);
 
+/** A group inside a slide: a block or promoted region that holds `blocks`, at any depth under a slide (never the slide itself). */
+const groupPathPattern = /^\/slides\/\d+\/.+/;
+
+/** The declared content variables (not colors, not built-ins) a subtree uses, each with the paths that use it. */
+function subtreeVariables(value: unknown, path: string, context: Context, found = new Map<string, VariableUse[]>()): Map<string, VariableUse[]> {
+  if (typeof value === "string") {
+    const reference = referencePattern.exec(value);
+    const uses: [string, VariableUse["form"]][] = reference ? [[reference[1] as string, "reference"]] : [...value.matchAll(tokenPattern)].flatMap((match) => (match[1] === undefined ? [] : [[match[1], "token"] as [string, VariableUse["form"]]]));
+    for (const [id, form] of uses) {
+      const declaration = context.effective.get(id)?.declaration;
+      if (!declaration || declaration.kind === "color") continue;
+      found.set(id, [...(found.get(id) ?? []), { id, path, form }]);
+    }
+    return found;
+  }
+  if (Array.isArray(value)) for (const [index, entry] of value.entries()) subtreeVariables(entry, `${path}/${index}`, context, found);
+  else if (isRecord(value)) for (const [key, entry] of Object.entries(value)) if (!skippedKeys.has(key)) subtreeVariables(entry, pathFor(path, key), context, found);
+  return found;
+}
+
+/**
+ * LH-30: a group (a block or promoted region with `blocks`) whose content variables are all optional and all unfilled is optional
+ * content as a whole: its pictures, cards and static text go with the fields the variables would fill, so the slide does not draw a
+ * card around a picture with no text, or a heading over nothing. A group that uses no content variable, or any filled or required
+ * one, stays. The resolution omits it (`variable-group-omitted`, info); the validation view, whose samples fill every variable,
+ * keeps it and reports the same info, so a template says which groups go when it is filled without them.
+ */
+/** The message of `variable-group-omitted` for the group's variable ids. */
+function groupOmittedMessage(ids: readonly string[]): string {
+  const names = ids.map((id) => `'${id}'`), one = ids.length === 1;
+  const list = one ? names[0] : `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
+  return one
+    ? `This group uses only the optional variable ${list}, which has no value, so the whole group is left out: its pictures, cards and other text go with it. Give ${list} a value to draw the group.`
+    : `This group uses only the optional variables ${list}, which have no value, so the whole group is left out: its pictures, cards and other text go with them. Give one of them a value to draw the group.`;
+}
+
+function omittedGroup(value: Record<string, unknown>, path: string, context: Context): boolean {
+  if (!Array.isArray(value.blocks) || !groupPathPattern.test(path)) return false;
+  const used = subtreeVariables(value, path, context);
+  if (!used.size) return false;
+  for (const id of used.keys()) {
+    const effective = context.effective.get(id);
+    if (!effective || effective.status !== "unfilled" || effective.declaration.required) return false;
+  }
+  const ids = [...used.keys()];
+  // The resolution does not walk an omitted group, so its uses are recorded here (no variable-unused); the validation view walks it.
+  if (!context.shape) for (const uses of used.values()) context.uses.push(...uses);
+  diag(context, { code: "variable-group-omitted", severity: "info", path, id: ids[0] as string, message: groupOmittedMessage(ids) }, `grp:${path}`);
+  return true;
+}
+
 function walk(value: unknown, path: string, parentIsArray: boolean, context: Context): unknown {
   if (typeof value === "string") {
     const reduced = reduceString(value, path, parentIsArray, context);
@@ -631,6 +683,7 @@ function walk(value: unknown, path: string, parentIsArray: boolean, context: Con
     return changed ? out : value;
   }
   if (isRecord(value)) {
+    if (omittedGroup(value, path, context) && !context.shape) return OMIT;
     let changed = false;
     const entries: [string, unknown][] = [];
     for (const [key, entry] of Object.entries(value)) {

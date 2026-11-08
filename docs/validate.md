@@ -311,6 +311,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/code-highlight-out-of-range`](#opfcode-highlight-out-of-range) | Content | warning | structure | A code highlight marks a line the code does not have. |
 | [`opf/code-highlight-range-reversed`](#opfcode-highlight-range-reversed) | Content | warning | structure | A code highlight range ends before it starts. |
 | [`opf/variable-builtin-missing`](#opfvariable-builtin-missing) | Content | warning | structure | A built-in variable has no value in this document. |
+| [`opf/variable-group-omitted`](#opfvariable-group-omitted) | Content | info | structure | A group is drawn only when one of its optional variables has a value. |
 | [`opf/duration-outside-narrative`](#opfduration-outside-narrative) | Content | warning | structure | The target duration is outside the range the narrative suits. |
 | [`opf/narrative-duration-range`](#opfnarrative-duration-range) | Content | warning | structure | An inline narrative duration range has min greater than max. |
 | [`opf/placeholder-text`](#opfplaceholder-text) | Content | warning | structure | Placeholder text was left in the deck. |
@@ -1084,6 +1085,16 @@ Default severity: **warning**. Cost: structure. A built-in variable has no value
 **Why.** A `{{deck.*}}`, `{{speaker.*}}` or `{{organization.*}}` token whose field the document does not set resolves to nothing, so the text shows a gap; a `var:organization.logo` reference to an organization without a logo draws no image. `{{slide.section}}` is checked per slide: a slide without a `section` that uses it, in its own text or in the header or footer it inherits, is reported at that slide.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/variable-group-omitted`
+
+Default severity: **info**. Cost: structure. A group is drawn only when one of its optional variables has a value.
+
+**Why.** A group (a block or promoted region with `blocks`) whose content variables are all optional (`required: false`) and all unfilled is left out whole when the deck is filled: its pictures, cards and other text go with the fields the variables would fill, so a slide never draws a card around a picture with no text. Validation fills every variable with its example or a sample, so it reports the group here instead.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Counts the declared text, number, date, image, url and list variables the group uses as `{{id}}` or `var:id`, at any depth; color variables and built-ins do not count. A group that uses none, or any required or filled one, is kept and not reported.
 
 ### `opf/duration-outside-narrative`
 
