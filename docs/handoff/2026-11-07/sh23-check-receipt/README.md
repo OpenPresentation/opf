@@ -1,0 +1,5 @@
+# SH-23 required local check receipt
+
+Evidence-only branch; do not merge it. Reviewed source remains frozen at3e20cd6e8f47629e4f5d55ee4534f863d7903f6b, PR1148. The required pnpm check:changed completed in604.5seconds with9/13 steps passing and4 environment failures. Build, lint, typecheck and mapped catalog/docs/changes/font/skill/stability checks pass. [Exact receipt](receipt.json) records every original log SHA256 and compressed byte-preserving output.
+
+The old Windows browser-safe assertion remains red; its path normalization is already part of the reviewed034 integration. Sparse evidence initially prevents check:text and one core file (3845 tests pass). Three exact HEAD evidence fixtures were restored without changing source: check:text then passes and the35 script-width cases pass. Both the original and first incomplete focused failure are retained. PPTX contract reaches test78/229 before Windows EPERM prevents creation of a verifier-alias symlink;151 cases remain unrun. No assertion is disabled, no source fix is hidden in this branch and no all-suite pass is claimed. The assembled integration CI remains required.

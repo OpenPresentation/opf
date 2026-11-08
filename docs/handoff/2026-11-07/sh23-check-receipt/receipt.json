@@ -1,0 +1,183 @@
+{
+  "sourceHead": "3e20cd6e8f47629e4f5d55ee4534f863d7903f6b",
+  "sourceBranch": "codex/sh-23-qualified",
+  "command": "pnpm check:changed",
+  "node": "24.20.0",
+  "pnpm": "10.33.2",
+  "os": "Windows",
+  "exitCode": 1,
+  "totalSeconds": 604.5,
+  "steps": 13,
+  "passed": 9,
+  "failed": 4,
+  "failures": [
+    {
+      "step": "check:browser-safe",
+      "literal": "Windows path assertion expects src/a.ts, receives absolute backslash path",
+      "state": "Source remains frozen; reviewed034 integration includes its prior path normalization fix."
+    },
+    {
+      "step": "check:text",
+      "literal": "ENOENT sparse painting-Linux.json.gz",
+      "focused": "Exact HEAD fixture restored, check:text passes."
+    },
+    {
+      "step": "tests opf",
+      "literal": "3845 pass/1 missing sparse script-corpora.json; first focused rerun then reports missing browser.json",
+      "focused": "Both exact HEAD fixture inputs restored; all35 width tests pass."
+    },
+    {
+      "step": "tests pptx",
+      "literal": "At78/229 keynote-registry-runtime: EPERM creating verifier-alias symlink;151 tests not run.",
+      "focused": "No assertion disabled or privilege workaround; final assembled CI still owed."
+    }
+  ],
+  "sourceStatusAfter": "clean; source head unchanged",
+  "fixtureHydration": [
+    "docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz",
+    "docs/evidence/script-corpora-20261001/script-corpora.json",
+    "docs/evidence/script-corpora-20261001/browser.json"
+  ],
+  "files": [
+    {
+      "source": "check-changed.log",
+      "file": "logs/check-changed.log.gz",
+      "originalSha256": "c5b39376917b9fc841ca3925e9a8983aa73c29e513c79f7daf8277e839255633",
+      "originalBytes": 14700,
+      "gzipSha256": "d5ff81dcd236f851cee2d978c0b5b4385b0bfe7838098aa5570b6dfccd1d24b8"
+    },
+    {
+      "source": "check-changed-exit.txt",
+      "file": "logs/check-changed-exit.txt.gz",
+      "originalSha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04",
+      "originalBytes": 3,
+      "gzipSha256": "445dc25169d3d6f886dc9ff6dd497eb9a200d63dc4b2a2d704569c57cb7faa94"
+    },
+    {
+      "source": "check-text-hydrated.log",
+      "file": "logs/check-text-hydrated.log.gz",
+      "originalSha256": "fd18cc9e1c0056a5829a0391c07fd00bfb0f4d6a9fcd44e341f73167f58b37da",
+      "originalBytes": 994,
+      "gzipSha256": "442018bf0e66810098e99b950b2fb2f00026b7581290d1103e947ae28535dd56"
+    },
+    {
+      "source": "script-width-hydrated.log",
+      "file": "logs/script-width-hydrated.log.gz",
+      "originalSha256": "bfae1c8b6e3b8a6ca79d70f7fe7f246e1c7e90973d1fe27c05bf16ff89e0b7b7",
+      "originalBytes": 1136,
+      "gzipSha256": "0b5218cef5b27638c7aa1b347d1dc475f9fd778251252aebf172aa1d6d7cdc46"
+    },
+    {
+      "source": "focused-rerun-exits.txt",
+      "file": "logs/focused-rerun-exits.txt.gz",
+      "originalSha256": "7260eaf36b4168ac747babcd2d6cfeaa6926a9f69d987d4458fdf9c5735e2c8e",
+      "originalBytes": 29,
+      "gzipSha256": "f8091fe3c059411bce18317ae2b2e4689e490e6e0293169f44cd25c35144dda5"
+    },
+    {
+      "source": "script-width-hydrated-complete.log",
+      "file": "logs/script-width-hydrated-complete.log.gz",
+      "originalSha256": "02649b3b4d9592049f7f6d5232623fb22dc24b4585d7680376a8cff4230a1d47",
+      "originalBytes": 3129,
+      "gzipSha256": "7c54a83caf1b2a27d4c7a15d4d02f405c3883083d0b0f6c83735bb8216304938"
+    },
+    {
+      "source": "script-width-complete-exit.txt",
+      "file": "logs/script-width-complete-exit.txt.gz",
+      "originalSha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+      "originalBytes": 3,
+      "gzipSha256": "7676d9552736e34b7d76d94f08bde9c0a842450c98fe926d4f41c65cd6150cdc"
+    },
+    {
+      "source": "check-changed/biome.log",
+      "file": "logs/check-changed__biome.log.gz",
+      "originalSha256": "068aa21d2fa3f65f858984bcb9141a13e44501a03921aa583c8b24eb3c682f05",
+      "originalBytes": 20653,
+      "gzipSha256": "64181754297d810d761c99f131e3bba1e335cf57359a0614dc0a221bca44f0e1"
+    },
+    {
+      "source": "check-changed/build.log",
+      "file": "logs/check-changed__build.log.gz",
+      "originalSha256": "6f2f7ed0a924279a315beb3ba0fc8caafaa2227649ab736dbf90efb15449073e",
+      "originalBytes": 14427,
+      "gzipSha256": "7010d8bab61b555066773f08601509951ca273d24d56ddbe09feb0949474f7c6"
+    },
+    {
+      "source": "check-changed/pnpm_run_check_browser-safe.log",
+      "file": "logs/check-changed__pnpm_run_check_browser-safe.log.gz",
+      "originalSha256": "6f6aa7071dd28be9f7e9045ddd42fb579ed76e29ce6344d9d7d5de5a8e14e327",
+      "originalBytes": 1954,
+      "gzipSha256": "e619a9652aea91a32460c2cf7560ef74b751d8f718e24374c8690bec3d3147a6"
+    },
+    {
+      "source": "check-changed/pnpm_run_check_catalog-free.log",
+      "file": "logs/check-changed__pnpm_run_check_catalog-free.log.gz",
+      "originalSha256": "7f9c148a425a7bb190585ff83a41c0984cf3898c52d0645afcb2fe1c580afe80",
+      "originalBytes": 199,
+      "gzipSha256": "48b2817b13c521252dddecaa30559644891f7db9a5e0e94131e278ff8d609685"
+    },
+    {
+      "source": "check-changed/pnpm_run_check_changes.log",
+      "file": "logs/check-changed__pnpm_run_check_changes.log.gz",
+      "originalSha256": "587c42276ced455dca20eb719d96a3c9121cda99dd44413fdd264218b5af203b",
+      "originalBytes": 2637,
+      "gzipSha256": "f909645518172ffedf8a476de414b4306f0c4b1ffb4f9b1ec776c75af0c4be4c"
+    },
+    {
+      "source": "check-changed/pnpm_run_check_diagram-doc-images.log",
+      "file": "logs/check-changed__pnpm_run_check_diagram-doc-images.log.gz",
+      "originalSha256": "e53f7ec7fb492617d2d32224d97b0879a77e9ff8b46e69ffd2e370243fe53bf1",
+      "originalBytes": 170,
+      "gzipSha256": "1069474d0ee503825989eea7d9cde13df93f5a4ca8e695b95abcf848eaf51f50"
+    },
+    {
+      "source": "check-changed/pnpm_run_check_font-hotlinks.log",
+      "file": "logs/check-changed__pnpm_run_check_font-hotlinks.log.gz",
+      "originalSha256": "4b261841bfa78268ee9ac2d561064ea04ed8b05ce3331e978e3c51109d662716",
+      "originalBytes": 886,
+      "gzipSha256": "70282df8cbb1727b756e19990b6d12bb281a5cbd6d1350a41ed43c93f4a88cfa"
+    },
+    {
+      "source": "check-changed/pnpm_run_check_skill-commands.log",
+      "file": "logs/check-changed__pnpm_run_check_skill-commands.log.gz",
+      "originalSha256": "3638f03b6116538c38577b067462d6e021796852ea01dbcafa349696c282e21d",
+      "originalBytes": 1036,
+      "gzipSha256": "5aa89e3a98e8d2325d89048bc883368946dfbc2da7ecdd9bb8e9531e7df52b33"
+    },
+    {
+      "source": "check-changed/pnpm_run_check_stability.log",
+      "file": "logs/check-changed__pnpm_run_check_stability.log.gz",
+      "originalSha256": "66907b5cf71bf95cd98c168cb7423509cdad8e0c77b0f192a43f99b36846e54b",
+      "originalBytes": 3500,
+      "gzipSha256": "884249759fe946befb6140196151a7e0fcd5760fafcde854582c35c26c8de066"
+    },
+    {
+      "source": "check-changed/pnpm_run_check_text.log",
+      "file": "logs/check-changed__pnpm_run_check_text.log.gz",
+      "originalSha256": "3ef55fcf6ccabe2e3d354acb824b87e8059017574a77a3d7a36a087c7df17265",
+      "originalBytes": 1738,
+      "gzipSha256": "bf2ed6f139363dad71c7717eda739ba36c0db10e0c19860a44f7843ca9028fe4"
+    },
+    {
+      "source": "check-changed/tests_opf.log",
+      "file": "logs/check-changed__tests_opf.log.gz",
+      "originalSha256": "62604f93d3e4eb3284130ec1a8b519d55d600194b0e558d790d0c73dda21ea9c",
+      "originalBytes": 362899,
+      "gzipSha256": "94c04febd56e1ef1cdc3ec0dcd484407b13ff981a37b600c57ee7d167460f6a0"
+    },
+    {
+      "source": "check-changed/tests_pptx.log",
+      "file": "logs/check-changed__tests_pptx.log.gz",
+      "originalSha256": "d3e62439a7fcb52d2369c378c10502eb20dcdc27feb8906bb4ecd63e34e5dd84",
+      "originalBytes": 24617,
+      "gzipSha256": "7342966ca66d80c97deaea83fffbd31bda187eec39b249a3c99df074d285dee1"
+    },
+    {
+      "source": "check-changed/typecheck.log",
+      "file": "logs/check-changed__typecheck.log.gz",
+      "originalSha256": "a561465cecbcbdd2c2d104a017689a9a9186002e536507c2e83840c12c5027f8",
+      "originalBytes": 5238,
+      "gzipSha256": "d6b5712bdfa88c66b483e9f851c7f0235ab3ace74a6fb2516d456d06f1f2e4a7"
+    }
+  ]
+}
