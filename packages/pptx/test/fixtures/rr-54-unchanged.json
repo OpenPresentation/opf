@@ -14,6 +14,13 @@
       "sourceCandidateRuntime": "560571c7ced447484c55c673c8fbeb8f69f838a4",
       "evidence": "docs/evidence/rr68-default-theme-category/rr54-archive-review.json",
       "scope": "All 21 same-input archives use the exact bare toPptx caller without registered catalogs. Every old hash/size/part count reproduced. Only default theme root/family and app theme-name metadata changes, plus three table OPF_DATA_V1.environment digests recomputed by unchanged theme/table-style hashing. All other decoded tag fields, native payloads, diagnostics, inventories and the three native-slide digests remain identical. All prior history remains unchanged; source-candidate output is not a registry or native UI acceptance claim."
+    },
+    "rr105033ArchiveReview": {
+      "baselineExportRef": "d19c4bb6172b703d132ebba3fd006e4ec5cdf845",
+      "baselineBuildHead": "cabd3c8a03d02255329edd2352eb1e39df7fb40c",
+      "candidateHead": "a4322cdd9686c2ef34732088c48d72366d379190",
+      "evidence": "docs/evidence/rr105-033-archive-review/review.json",
+      "scope": "Reviewed v0.33 default bar labels, doughnut hole, scatter axes and histogram/waterfall scales; all other archives and embedded workbooks remain byte-identical."
     }
   },
   "entries": {
@@ -177,11 +184,11 @@
           }
         ]
       },
-      "sha256": "7719de62c938ebc055e494fe18f0a490ae685a936820b68cba7120c8090adc2f",
+      "sha256": "8c2f64413169bbdb8631176522073190e78de5e8113081475e8bae86d8837e5a",
       "rr81PreviousSha256": "b067bb96b6ad58a5dc30f3ffc01c6218d0dd3ac3f64edc764ac2e6ae2a8e87cc",
       "rr20PreviousSha256": "aecf7b2f67b5b39ea5403632456a6cbfe095348850853c2d20462982137ade45",
       "rr20PartCount": 30,
-      "rr20Bytes": 26128,
+      "rr20Bytes": 26052,
       "rr90PreviousSha256": "71237ab580d86c9c9ae1ec984693666a438bb0050e827fed3c107aaf13e0aa30",
       "rr90PreviousBytes": 26055,
       "wi5PreviousSha256": "ed88c1b513ff14dbb51b12a4db2c99d86d05e15e71c857752d97c6d828a442b8",
@@ -192,7 +199,12 @@
       "lhWave5PreviousSha256": "ba997eb6270943e2be6a5edde9ae786095b959f8c8f1a8fac9870d3164d53cb3",
       "lhWave5PreviousBytes": 26132,
       "lhWave6PreviousSha256": "68394beb9b5e5d6bec1858ccec079d404e9a2e1f5fbd9200b14748c8f42be107",
-      "lhWave6PreviousBytes": 26128
+      "lhWave6PreviousBytes": 26128,
+      "rr105033Previous": {
+        "sha256": "7719de62c938ebc055e494fe18f0a490ae685a936820b68cba7120c8090adc2f",
+        "bytes": 26128,
+        "partCount": 30
+      }
     },
     "line": {
       "deck": {
@@ -525,10 +537,10 @@
           }
         ]
       },
-      "sha256": "00b6b1d6ca3039274c95da70413bedadc3b14534ca26a8b0404c5929e635c174",
+      "sha256": "e3b9ec19cc6772fb59f5174ef888726fcf6ff1fd64fccb18f7eadebcdebb5643",
       "rr81PreviousSha256": "f80a7e3a776b8c72cfb86b811a99e869799a91540377f55eef655461faebd1df",
-      "rr20PartCount": 31,
-      "rr20Bytes": 26288,
+      "rr20PartCount": 32,
+      "rr20Bytes": 26811,
       "rr90PreviousSha256": "1c46e14b031ae6168c6a39d86a22cff958ffb62984c8ee18ebb3c5854195bd23",
       "rr90PreviousBytes": 25573,
       "wi5PreviousSha256": "d4052fc62082484d6907a6c65906b946fda81f087c47eb1ffba198f3b671a8b5",
@@ -539,7 +551,12 @@
       "lhWave2PreviousBytes": 25629,
       "lhWave3PreviousSha256": "cbb0f10ca7e59a6f301aaf175752d4ef1ba9ec2b63797599b3419954a1d97550",
       "lhWave7PreviousSha256": "78a74da681862c058df2e77183193a4ea98fec5d413bcbcb6547050a396ab875",
-      "lhWave7PreviousBytes": 26277
+      "lhWave7PreviousBytes": 26277,
+      "rr105033Previous": {
+        "sha256": "00b6b1d6ca3039274c95da70413bedadc3b14534ca26a8b0404c5929e635c174",
+        "bytes": 26288,
+        "partCount": 31
+      }
     },
     "radar": {
       "deck": {
@@ -634,19 +651,24 @@
           }
         ]
       },
-      "sha256": "d11cbe41fc0c1727b62ce86992da72a0ec272e30d3efd4b5b2fed28370b78d9d",
+      "sha256": "88eb8aac1e5fdf959606db7a8def632ed3d891bbdc19e3c32622e6d2f982e416",
       "previousSha256": "3bc08c644ba443a9fde975c8f9cf39ffa44a4cd0f779c896a7be2ac64332ea9b",
       "rr81PreviousSha256": "a27ec34c283f59e04ba7ae02b885de0cacc7e0c46191079c6947f699a2c542de",
       "rr20PreviousSha256": "3929f43b2bcbfc72ce95f06e0e5604bf6fa3fbad145f6e9621d614781f3bf4b8",
       "rr20PartCount": 30,
-      "rr20Bytes": 25900,
+      "rr20Bytes": 25903,
       "rr90PreviousSha256": "07307458877dae4b4be2038c88e5dae5f0efff27febfb16ab6ec021f9eab1f0c",
       "rr90PreviousBytes": 25839,
       "wi5PreviousSha256": "89646e3b606f2fe238c6fbfea75e9f48ac25c890097fedbb8c90130efbb83525",
       "wi5PreviousBytes": 25905,
       "lhWave1PreviousSha256": "64ce753e195115d2aee44b3ab5c65812b316986b570257af32a4059494700318",
       "lhWave1PreviousBytes": 25908,
-      "lhWave3PreviousSha256": "0118ba62fdbc64d4692209e83db2a5ea6201c20e274243bb6f009f2469912189"
+      "lhWave3PreviousSha256": "0118ba62fdbc64d4692209e83db2a5ea6201c20e274243bb6f009f2469912189",
+      "rr105033Previous": {
+        "sha256": "d11cbe41fc0c1727b62ce86992da72a0ec272e30d3efd4b5b2fed28370b78d9d",
+        "bytes": 25900,
+        "partCount": 30
+      }
     },
     "scatter-two-columns": {
       "deck": {
@@ -675,17 +697,22 @@
           }
         ]
       },
-      "sha256": "e2d5b5603a3a16fb3f84ccb51c6fb48254623cb4326bd759f34edbb6ce799325",
+      "sha256": "e45baf1046649e32670e9519a35b6b13f80f2a598d8424a0eec56078ad891525",
       "previousSha256": "ce86707121a169b6fb13781f87acb279fd29ce2740640c6ba4f0eb6ea7283af5",
       "rr81PreviousSha256": "8e216e257f4c9b02bf2e51bf33566ea949dd95d5b84f2aa5b203a9569d8b249c",
       "rr20PreviousSha256": "edb9d38c631a7eca1cc37f10434b54a86313b36369e2380c0645782fcb725bbd",
       "rr20PartCount": 30,
-      "rr20Bytes": 25726,
+      "rr20Bytes": 25731,
       "rr90PreviousSha256": "90dc328f75ca4abae5a06c1ee36992f23ec891cd1748535c61666e835f66a726",
       "rr90PreviousBytes": 25671,
       "wi5PreviousSha256": "0db7a20e4f5a658fc9ec2fc19b7cf8f38f14058786b0a7e1a2c4536bd7ffbf41",
       "wi5PreviousBytes": 25732,
-      "lhWave3PreviousSha256": "c4694c11f00ef4a20928f5e61d85bcbd95be607856fd592a45e3af70f92d0f24"
+      "lhWave3PreviousSha256": "c4694c11f00ef4a20928f5e61d85bcbd95be607856fd592a45e3af70f92d0f24",
+      "rr105033Previous": {
+        "sha256": "e2d5b5603a3a16fb3f84ccb51c6fb48254623cb4326bd759f34edbb6ce799325",
+        "bytes": 25726,
+        "partCount": 30
+      }
     },
     "single-column": {
       "deck": {
@@ -768,17 +795,22 @@
           }
         ]
       },
-      "sha256": "414441f026b99b7d7b87ba5f85d4c8c87b0a2b4ccb3b220c5ea628e0a360e5bb",
+      "sha256": "96148b77dce65ca678e506042621df03e813f661cc298b5c644d37fb31384aab",
       "previousSha256": "e37430a5255bbcd16dfdcb28250a692d0cde3c770a9c8471e8f80ed195e32575",
       "rr81PreviousSha256": "ad90e489c98bdd271b661bdd74971c0e65c297c9c6ec5ee019d0c4537c6adc5c",
       "rr20PreviousSha256": "a027fa049d3f679a71d9451c8fda5679c07eea9394e00fdba99744fd9b5ed9e8",
       "rr20PartCount": 30,
-      "rr20Bytes": 25737,
+      "rr20Bytes": 25744,
       "rr90PreviousSha256": "bb70b79eb88c74dc52ff83276047b6dccc227f162366ca9c6515a0850951e9f9",
       "rr90PreviousBytes": 25682,
       "wi5PreviousSha256": "538b7d98c2b3e3120d39c0cd98a6f08708decc67a3575108321539dfed94fac8",
       "wi5PreviousBytes": 25743,
-      "lhWave3PreviousSha256": "78afe719842666b1c3ca84fc72f9933110bca43bfb4a816f74e639d6f6155803"
+      "lhWave3PreviousSha256": "78afe719842666b1c3ca84fc72f9933110bca43bfb4a816f74e639d6f6155803",
+      "rr105033Previous": {
+        "sha256": "414441f026b99b7d7b87ba5f85d4c8c87b0a2b4ccb3b220c5ea628e0a360e5bb",
+        "bytes": 25737,
+        "partCount": 30
+      }
     },
     "chartex-native-map": {
       "deck": {
@@ -860,11 +892,11 @@
           }
         ]
       },
-      "sha256": "2a3caa9615a9e8db35543d6b999c023aee7cd34fbcfb00fd605a62a8aff8f425",
+      "sha256": "51394036520211662be53127a5c348600e8146ae37bfa49042ec86e44bf6b1de",
       "rr81PreviousSha256": "94207febff494aa3726d8c29013f11b1d6a6c951554df30b29bc5b790f571e15",
       "rr20PreviousSha256": "c927127b53a5c6b1a77baee28c0b7c17aeb7ae1b1b13d48c2adc835f1d355203",
       "rr20PartCount": 34,
-      "rr20Bytes": 28954,
+      "rr20Bytes": 28975,
       "rr90PreviousSha256": "00fc9d12f7b08be9f89c8c58e0ffe23541415fdbee6efce073d9d16c52395630",
       "rr90PreviousBytes": 28870,
       "wi5PreviousSha256": "7a658703a76437437afa25183d786b73e0db5f699ff262f61ee16c1313f6b55b",
@@ -873,7 +905,12 @@
       "lhWave7PreviousSha256": "1da787e80c9c10564ed74385b1e48fc89108b774e98e203a40ec8dab7df713d6",
       "lhWave7PreviousBytes": 28924,
       "lhWave8PreviousSha256": "94358771d6a0c26bfbacb3142585528e1eb907170a4d325b6fe9bacd9748a0d0",
-      "lhWave8PreviousBytes": 28954
+      "lhWave8PreviousBytes": 28954,
+      "rr105033Previous": {
+        "sha256": "2a3caa9615a9e8db35543d6b999c023aee7cd34fbcfb00fd605a62a8aff8f425",
+        "bytes": 28954,
+        "partCount": 34
+      }
     },
     "treemap": {
       "deck": {
@@ -955,11 +992,11 @@
           }
         ]
       },
-      "sha256": "adc853fdf20d3b538fa9eac17509e0cef250ed1daf9f6439724a4dad86c0ae9e",
+      "sha256": "963e262393f5ff6a0b2581e1695470a36b515797589a90daa803659268f6b1aa",
       "rr81PreviousSha256": "4d82a4539fd94b5292bf557f14810e7110b84a1dc49ac71d84e83e1b7211f7b9",
       "rr20PreviousSha256": "85709dcc4c70c5a485bd70a8814bb6cbb8d4a8a493e6093234efc9ec7ffc9fab",
       "rr20PartCount": 34,
-      "rr20Bytes": 28880,
+      "rr20Bytes": 28898,
       "rr90PreviousSha256": "660b43ce01cbc87cb5d0d832af6ff2196fa9bc05b86b0afcd27ffada570d2c08",
       "rr90PreviousBytes": 28777,
       "wi5PreviousSha256": "397052a755399c5786ebaeb411f8acec38d530b05a649e1302e16c89b1ed31e7",
@@ -969,7 +1006,12 @@
       "lhWave3PreviousSha256": "72c5ebd383301e46c927a836eabfe0f83ae4ec30a9c00fd2b5e5f9d267fe2886",
       "lhWave4PreviousSha256": "283bf6bc3b1ed338922dd51850d1e2dc87f9e61bfe533a56c1bc72e9ebeeeba2",
       "lhWave5PreviousSha256": "53cf88e4edaaa42c6ca1f47a17b740773f50d5172eb0af12bbb98e1f0a1e3ded",
-      "lhWave5PreviousBytes": 28845
+      "lhWave5PreviousBytes": 28845,
+      "rr105033Previous": {
+        "sha256": "adc853fdf20d3b538fa9eac17509e0cef250ed1daf9f6439724a4dad86c0ae9e",
+        "bytes": 28880,
+        "partCount": 34
+      }
     },
     "table": {
       "deck": {
