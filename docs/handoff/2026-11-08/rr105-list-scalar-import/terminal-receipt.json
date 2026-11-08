@@ -102,16 +102,21 @@
       "rawBytes": 48129
     },
     "theme-count-producer.mjs": {
-      "sha256": "18573070dc06488ef850a1ecf61dd9c0c065cac5e2a5a3982e3165f32bcad41f",
-      "bytes": 2032,
-      "rawSha256": "18573070dc06488ef850a1ecf61dd9c0c065cac5e2a5a3982e3165f32bcad41f",
-      "rawBytes": 2032
+      "sha256": "6ecdb5b3ceb0853479293c6fc757af798d4de124c4a139451e4f9a9472f168c6",
+      "bytes": 2031,
+      "note": "Readable LF-normalized copy; exact originally executed bytes retained in theme-count-producer-executed.mjs.gz."
     },
     "theme67-c2da-identical.pptx": {
       "sha256": "12f36179e0d2556d7b57cff407f118ba3cc999097ae443ed60566c117a720528",
       "bytes": 293441,
       "rawSha256": "12f36179e0d2556d7b57cff407f118ba3cc999097ae443ed60566c117a720528",
       "rawBytes": 293441
+    },
+    "theme-count-producer-executed.mjs.gz": {
+      "sha256": "62526344ed0f1b7deb2e4e5717d3b9b9896ba95f75914d5a0c10f2b19c520335",
+      "bytes": 966,
+      "rawSha256": "18573070dc06488ef850a1ecf61dd9c0c065cac5e2a5a3982e3165f32bcad41f",
+      "rawBytes": 2032
     }
   }
 }
