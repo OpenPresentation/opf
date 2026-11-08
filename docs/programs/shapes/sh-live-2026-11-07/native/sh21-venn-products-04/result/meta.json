@@ -1,0 +1,90 @@
+{
+  "org-chart-3-1": {
+    "kind": "org-chart",
+    "count": 3,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "org-chart-5-1": {
+    "kind": "org-chart",
+    "count": 5,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "hierarchy-3-1": {
+    "kind": "hierarchy",
+    "count": 3,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "hierarchy-5-1": {
+    "kind": "hierarchy",
+    "count": 5,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "venn-1-1": {
+    "kind": "venn",
+    "count": 1,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "venn-2-1": {
+    "kind": "venn",
+    "count": 2,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "venn-3-1": {
+    "kind": "venn",
+    "count": 3,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "venn-4-1": {
+    "kind": "venn",
+    "count": 4,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "venn-5-1": {
+    "kind": "venn",
+    "count": 5,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "venn-6-1": {
+    "kind": "venn",
+    "count": 6,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  },
+  "venn-7-1": {
+    "kind": "venn",
+    "count": 7,
+    "text": "short single labels",
+    "aspect": "16:9",
+    "script": "Latin",
+    "findings": []
+  }
+}

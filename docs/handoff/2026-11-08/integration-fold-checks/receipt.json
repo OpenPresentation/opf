@@ -1,0 +1,41 @@
+{
+  "scope": "Accepted F2 documentation, LH34 callouts and blank-panel import correction, LH93 stacked-sibling plots",
+  "source": "c5df81cd1e7e78ec928b8f0828f71a5aaf624acb",
+  "checks": {
+    "build": "pass",
+    "lh34CoreRendererPptx": 7,
+    "lh93CorePptx": 5
+  },
+  "limitations": [
+    "Final integrated mapped/full CI, pinned golden refresh, strict tracker and composition budget refresh remain owed.",
+    "LH34 final pinned-font visual profile remains held.",
+    "Inherited negative horizontal category-axis placement differs between SVG and Office; new derived fix assigned before034 release.",
+    "LH93 explicit-options chart uses inherited Office automatic inner margins, not qualified pixel parity."
+  ],
+  "files": [
+    {
+      "file": "integration-034-lh34-build.log.gz",
+      "rawBytes": 14865,
+      "rawSha256": "1e8d048674aa14874fa7c7b1cd599cd2ec1f7f74760e9036416a971bea8babe3",
+      "gzipSha256": "c367ead0694cff77d23f6ac24c522bfef62dc867c809ed3f9238e7e203a11011"
+    },
+    {
+      "file": "integration-034-lh34-focused.log.gz",
+      "rawBytes": 1344,
+      "rawSha256": "3fce83caf968c684531d9141861c2492ae81dbb10a4e2e3f2bbb9542b7d92dcd",
+      "gzipSha256": "710fc40fdc6ad8a982a8de0f9794e3de0e26ec2f9efd618ca40364304f9f3087"
+    },
+    {
+      "file": "integration-034-lh93-build.log.gz",
+      "rawBytes": 8224,
+      "rawSha256": "c7f5a939e493a1d5209849066c209b89dd0b9644ed86b80cdb3845be300e3c1e",
+      "gzipSha256": "a7e938eac4f5c4cc87c70f22ea9ef27c622fe256cd04ef6f0479e40d9bd8aff5"
+    },
+    {
+      "file": "integration-034-lh93-focused.log.gz",
+      "rawBytes": 695,
+      "rawSha256": "dcc063af71e52059f323c43dde1e6da790dc5f745913ffde6959a7ba915dc86b",
+      "gzipSha256": "260530e00d98980994745ac7b0ce95aae8bccd8bec69525cc7549f2d693cd7dd"
+    }
+  ]
+}

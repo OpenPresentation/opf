@@ -76,6 +76,8 @@ export const diagramEnginePlugin = () => ({
   setup(build) {
     build.onResolve({ filter: /^#diagram-engine$/ }, () => ({ path: path.join(packageRoot, 'src', 'diagram-engine-lazy.ts') }));
     build.onResolve({ filter: /^\.\/chunks\// }, (args) => args.kind === 'dynamic-import' && /[\\/]pele[\\/]/.test(args.importer) ? { path: args.path, external: true } : undefined);
+    // SH-13: OPF's PlantUML reader is a chunk of its own too, loaded the first time a deck draws a PlantUML diagram.
+    build.onResolve({ filter: /^\.\/diagram-plantuml\.js$/ }, (args) => args.kind === 'dynamic-import' && /diagram-engine-lazy\.ts$/.test(args.importer) ? { path: args.path, external: true } : undefined);
   },
 });
 

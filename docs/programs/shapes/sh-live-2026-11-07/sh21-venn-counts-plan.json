@@ -1,0 +1,54 @@
+{
+    "scope":  "Plan only. No output or Office object.",
+    "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-08\\smartart-seeds.pptx",
+    "sha256":  "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+    "jobs":  [
+                 {
+                     "case":  "venn1",
+                     "slide":  12,
+                     "count":  1,
+                     "kind":  "venn1"
+                 },
+                 {
+                     "case":  "venn2",
+                     "slide":  12,
+                     "count":  2,
+                     "kind":  "venn1"
+                 },
+                 {
+                     "case":  "venn3",
+                     "slide":  12,
+                     "count":  3,
+                     "kind":  "venn1"
+                 },
+                 {
+                     "case":  "venn4",
+                     "slide":  12,
+                     "count":  4,
+                     "kind":  "venn1"
+                 },
+                 {
+                     "case":  "venn5",
+                     "slide":  12,
+                     "count":  5,
+                     "kind":  "venn1"
+                 },
+                 {
+                     "case":  "venn6",
+                     "slide":  12,
+                     "count":  6,
+                     "kind":  "venn1"
+                 },
+                 {
+                     "case":  "venn7",
+                     "slide":  12,
+                     "count":  7,
+                     "kind":  "venn1"
+                 }
+             ],
+    "ownership":  [
+                      "owned-seeds.pptx",
+                      "owned-venn-counts.pptx"
+                  ],
+    "derivative":  "native-venn-counts-saved.pptx"
+}

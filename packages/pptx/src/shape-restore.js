@@ -1,7 +1,7 @@
 // SH-05: what the importer settles about the shapes it read, once the document's own colors can be resolved and the content form is
 // rebuilt: the values that are only the theme style's (the fill, line, shadow and text color a style gives, which the exporter writes out
 // explicitly) go back to absent, and the overlay shapes and connectors are assembled into `slide.shapes` in the order they were drawn.
-import {isShapeBlock, shapeStyleLook, shapeTextColor} from '@openpresentation/opf/composition';
+import {overlayIssues, slideBlockIds, isShapeBlock, shapeStyleLook, shapeTextColor} from '@openpresentation/opf/composition';
 import {EFFECT_DEFAULTS} from './effects.js';
 import {REGION_KEYS, ROOT_PAYLOAD_FIELDS} from './content-topology.js';
 
@@ -136,7 +136,9 @@ export function validateOverlayRecord(value) {
     if (sites !== undefined && (!Array.isArray(sites) || sites.length !== 2 || !sites.every(site => site === 0 || site === 1))) throw Error('Invalid overlay connector sites.');
     if (Object.keys(rest).length || (id !== undefined && (typeof id !== 'string' || !id || id.length > MAX_ID))) throw Error('Invalid overlay record entry.');
     if (at !== undefined && (!object(at) || typeof at.block !== 'string' || !at.block || at.block.length > MAX_ID || !['top', 'bottom', 'start', 'end', 'center'].includes(at.edge)
-      || Object.keys(at).some(key => !['block', 'edge', 'offset', 'width', 'height'].includes(key)) || ['offset', 'width', 'height'].some(key => at[key] !== undefined && !Number.isFinite(at[key])))) throw Error('Invalid overlay anchor.');
+      || Object.keys(at).some(key => !['block', 'edge', 'offset', 'width', 'height', 'point', 'series'].includes(key)) || ['offset', 'width', 'height'].some(key => at[key] !== undefined && !Number.isFinite(at[key])))) throw Error('Invalid overlay anchor.');
+    const pointKey = key => typeof key === 'string' && key.length > 0 || Number.isSafeInteger(key) && key >= 0;
+    if (at && (at.point !== undefined && !pointKey(at.point) || at.series !== undefined && (!pointKey(at.series) || at.point === undefined))) throw Error('Invalid chart point anchor.');
   }
   return value;
 }
@@ -190,11 +192,17 @@ function blockAtKey(slide, context, key, paths) {
  * `restored[i]` whether the slide's content form was rebuilt from the stored record (the names of exported shapes then point at the blocks),
  * and `records[i]` the stored overlay record (ids and anchors) while the slide's native structure is as it was exported.
  */
-export function assembleOverlayShapes(imported, contexts, restored, records = [], contentPaths = []) {
+export function assembleOverlayShapes(imported, contexts, restored, records = [], contentPaths = [], report = () => {}) {
+  // Slide and payload ids are unique in the whole presentation, so a generated id avoids every slide's ids, not only its own slide's
+  // (opf#1103: a copy re-saved by another app keeps no stored ids, and two slides' connected blocks were both named `blocks-0-shape`).
+  const taken = new Set();
+  for (const slide of imported.slides) {
+    if (typeof slide?.id === 'string') taken.add(slide.id);
+    for (const id of usedIds(slide)) taken.add(id);
+  }
   imported.slides.forEach((slide, index) => {
     const state = contexts[index]?.shapeImport;
     if (!state || (!state.overlays.length && !state.connectors.length)) return;
-    const taken = usedIds(slide);
     const unique = name => { let id = slug(name), n = 1; while (taken.has(id)) id = `${slug(name)}-${++n}`; taken.add(id); return id; };
     const rows = new Map(records[index] ?? []);
     // The stored ids come first, so a generated one never takes a stored one's name.
@@ -218,7 +226,13 @@ export function assembleOverlayShapes(imported, contexts, restored, records = []
       if (overlay.id !== undefined) entry.id = overlay.id;
       if (row?.layer === 'back') entry.layer = 'back';
       // An anchor returns only where the block it names is there: the native frame is where composition put the shape.
-      if (row?.at !== undefined && taken.has(row.at.block)) { delete entry.x; delete entry.y; delete entry.width; delete entry.height; entry.at = clone(row.at); }
+      if (row?.at !== undefined && slideBlockIds(slide, 'slides.' + index).has(row.at.block)) {
+        const current = {...slide, shapes: [{...entry, at: row.at}]};
+        delete current.shapes[0].x; delete current.shapes[0].y; delete current.shapes[0].width; delete current.shapes[0].height;
+        if (row.at.point === undefined || !overlayIssues(current, 'slides.' + index, imported).some(issue => issue.code === 'shape-anchor-missing')) {
+          delete entry.x; delete entry.y; delete entry.width; delete entry.height; entry.at = clone(row.at);
+        } else report({code: 'shape-property-dropped', path: 'slides.' + index + '.shapes.' + overlay.index, property: 'chart point anchor', message: 'The saved chart point no longer exists in the current native chart; the current native shape position was kept.'});
+      }
       entries.push({z: overlay.z, entry});
     }
     for (const connector of state.connectors) {
