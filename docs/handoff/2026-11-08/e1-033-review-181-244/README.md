@@ -9,3 +9,5 @@ Current progress: sheets 181–188 reviewed at original detail (8/64); the other
 First checkpoint: all 32 slide comparisons on sheets 181–188 were actually viewed. Unplaced/numbering warnings remain bound by pointer; batch13/s29 lacks before. Type-growth, compact-table/timeline and the already-known batch13/s32 reading-measure holds are explicit. No new regression is asserted where the historical producer is unknown. The site CI correction is under the single maintained observer 67705.
 
 Second checkpoint: sheets 181–196 have now been viewed at original detail (16/64), covering 61 actual slide-row comparisons. All explicit pointer-bound warnings, missing before panels and readability holds are retained in review.json. No new regression is asserted from historical producer-unknown panels. The remaining 48 sheets are unreviewed.
+
+Third checkpoint: sheets 181–204 have been viewed at original detail (24/64). All 91 slide-row comparisons retain their source hashes, findings and explicit readability judgments. Dense overflow/unplaced timeline collections remain unaccepted stress controls; no content has been removed. The remaining 40 sheets are unreviewed.
