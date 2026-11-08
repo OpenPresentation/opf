@@ -237,7 +237,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/shape-adjust-unknown`](#opfshape-adjust-unknown) | Format | warning | structure | An adjust value names a guide the preset does not have. |
 | [`opf/shape-adjust-range`](#opfshape-adjust-range) | Format | warning | structure | An adjust value is outside the range of the preset's handle. |
 | [`opf/shape-link-hidden`](#opfshape-link-hidden) | Format | warning | structure | A hidden shape carries a link. |
-| [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape is attached to a block that is not on the slide. |
+| [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape has no resolvable block or qualified plotted chart point. |
 | [`opf/connector-end-missing`](#opfconnector-end-missing) | Format | error | structure | A connector end names no block or overlay shape on the slide. |
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
@@ -431,9 +431,9 @@ Default severity: **warning**. Cost: structure. A hidden shape carries a link.
 
 ### `opf/shape-anchor-missing`
 
-Default severity: **error**. Cost: structure. An overlay shape is attached to a block that is not on the slide.
+Default severity: **error**. Cost: structure. An overlay shape has no resolvable block or qualified plotted chart point.
 
-**Why.** An overlay shape placed with `at` sits against a composed block of its slide, named by the block's `id`. With no block of that id on the slide there is nowhere to put it, so it is not drawn.
+**Why.** An overlay shape placed with `at` sits against a composed block of its slide, named by the block's `id`. A chart point also requires a unique plotted category and series in a qualified shared plot. When an identity or geometry is missing, the shape is not drawn.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
