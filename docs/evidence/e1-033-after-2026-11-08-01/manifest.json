@@ -1,0 +1,148 @@
+{
+  "schema": "opf-e1-after-attempt/v1",
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "source": "34ae758d71abb77845d6b3feb08d2d53308f3a99",
+  "executedRunnerSha256": "666fb06c36d3b73153e64e319b6235d414c3f67325fb336921f4cdf8c59951c7",
+  "release": "0.33.0",
+  "releaseCommit": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+  "recovery": {
+    "commit": "442ad549d53131cfb32b5c65d974777f33f68a67",
+    "path": "docs/evidence/rr20-e1-recovery/payload",
+    "sha256": "901296967ae1cad3c709cbb65f58f4277261133ec00a704c385a40b6ad458816",
+    "sealSha256": "8f9c4fb605f67e64b1924ff77cea1993b5c1de17914f24e288131bae6d9603ef"
+  },
+  "options": {
+    "scale": 0.5,
+    "date": "2026-11-08",
+    "only": null,
+    "fontRoute": {
+      "pack": "office",
+      "substitutionPolicy": "visual",
+      "scripts": "auto",
+      "source": "Unmodified shipping CLI/engine default; no --fonts, loader, custom pack or fallback stub",
+      "sourceSha256": "3b283fee1b22f76a39e80b8eb234ce5600de7711ed7d4dfa1b2f5c15a02099ef"
+    }
+  },
+  "complete": false,
+  "completedDecks": 0,
+  "completedSlides": 0,
+  "pngsWritten": 0,
+  "firstDeck": "overview",
+  "failure": {
+    "status": 2,
+    "reportStream": "stderr",
+    "code": "peer-not-installed",
+    "error": "The 'office' font pack needs font packages that are not installed (optional peer dependencies of @openpresentation/opf-render): run `npm install @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2`.\nInstall what this conversion needs with:\n  npm install @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2",
+    "missing": [
+      "@expo-google-fonts/caladea@0.4.2",
+      "@expo-google-fonts/arimo@0.4.3",
+      "@expo-google-fonts/tinos@0.4.2",
+      "@expo-google-fonts/cousine@0.4.3",
+      "@expo-google-fonts/gelasio@0.4.1",
+      "@expo-google-fonts/noto-sans@0.4.2"
+    ],
+    "installRequest": "npm install @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2"
+  },
+  "consumerAfter": {
+    "verified": true,
+    "files": 5239,
+    "inventorySha256": "336892e58fb4d6a2338365bce8140aa392158527e9d21eb8be4619b2f3b8f0db",
+    "expectedInventorySha256": "336892e58fb4d6a2338365bce8140aa392158527e9d21eb8be4619b2f3b8f0db",
+    "scope": "Exact all-file comparison after stopped first genuine E1 render attempt; no install or runtime edit",
+    "attemptComplete": false,
+    "completedDecks": 0,
+    "writtenPngs": 0
+  },
+  "actions": {
+    "installs": 0,
+    "runtimeEdits": 0,
+    "retries": 0,
+    "contentEdits": 0,
+    "office": 0,
+    "publicArtifactWrites": 0
+  },
+  "archive": {
+    "file": "actual-attempt-01.zip",
+    "bytes": 298397,
+    "sha256": "0061c88ba06db420f5804a46b1ff3602cbb867e4f5f4b51b0412da61a9864f81",
+    "files": 14,
+    "rawBytes": 1033949
+  },
+  "emptyDirectories": [
+    "run/decks/overview/after"
+  ],
+  "files": [
+    {
+      "path": "run/authority.json",
+      "bytes": 4739,
+      "sha256": "8c8937875c7a8ff922014e3cff5b231b16ea837a6504b5c7dcfe5b5fcfc7f677"
+    },
+    {
+      "path": "run/decks/overview/cli.exit.json",
+      "bytes": 53,
+      "sha256": "974dcd8f2d65200efa76d24a339999753339ec6e1f058958c82291dd272f4991"
+    },
+    {
+      "path": "run/decks/overview/cli.stderr.txt",
+      "bytes": 1387,
+      "sha256": "b35bc0e6f6822506b2d00a9c6255c0482b96dac6bba5b886b3262feac017aae6"
+    },
+    {
+      "path": "run/decks/overview/cli.stdout.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run/decks/overview/current-gallery.opf.json",
+      "bytes": 40940,
+      "sha256": "d6b26009e7fd11d5750939cfa4f184e89c67ea17365d1142aee57d0c43426729"
+    },
+    {
+      "path": "run/decks/overview/original.opf.json",
+      "bytes": 80873,
+      "sha256": "b161727dd529c4cf647468a5aa96d3bcd0f0eb0a2da44b49f7a3eca1d54ea560"
+    },
+    {
+      "path": "run/installed-runtime.json",
+      "bytes": 859717,
+      "sha256": "17b251b6aea4fa325fea7ce60a1c0743e4f36bbd2e1b002575d572f3291e9f85"
+    },
+    {
+      "path": "run/receipt.json",
+      "bytes": 36184,
+      "sha256": "c36b21e8628baa706a13bf29a362bc2bbebf1ce0dda4305ab8f784aa0d4a8ca4"
+    },
+    {
+      "path": "run/shipping-font-route.ts",
+      "bytes": 8314,
+      "sha256": "3b283fee1b22f76a39e80b8eb234ce5600de7711ed7d4dfa1b2f5c15a02099ef"
+    },
+    {
+      "path": "launch/attempt-01-command.json",
+      "bytes": 732,
+      "sha256": "b077848a93b7bc0d2a24c76b723a70b2ada9577f6aa953a811aec40dd2ff37af"
+    },
+    {
+      "path": "launch/attempt-01-runtime-unchanged.json",
+      "bytes": 411,
+      "sha256": "706075c922730294f032969e61af0d5e70ae8490c9f702082eb7019e710ecf21"
+    },
+    {
+      "path": "launch/attempt-01.exit.json",
+      "bytes": 172,
+      "sha256": "79b40e5e4ef8a066fa89862b3d9b7f951ad02f5910d493e5c8e43cb13f27ad7c"
+    },
+    {
+      "path": "launch/attempt-01.stderr.log",
+      "bytes": 427,
+      "sha256": "93593fd398346d93c36d20bb3bf733e5e51ac55c24bf0a908779d7cba14b3635"
+    },
+    {
+      "path": "launch/attempt-01.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "collectorCorrection": "Initial metadata collector tried JSON.parse on empty stdout and refused before commit. Corrected only to parse the preserved structured stderr report; original ZIP and all run bytes are unchanged."
+}

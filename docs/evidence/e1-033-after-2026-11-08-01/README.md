@@ -1,0 +1,5 @@
+# Genuine E1 0.33 attempt01 — incomplete evidence
+
+Evidence-only branch. Never merge. Frozen PR1181 source34ae758d ran one approved full invocation; first overview convert stopped at exit2 peer-not-installed before any PNG/deck/slide completed. No later deck was attempted. [Exact archive inventory](manifest.json) retains every actual byte, both raw CLI streams and separate unchanged5239-file runtime proof. The structured CLI report is on stderr; stdout is empty. The initial metadata collector refusal from assuming stdout is recorded, and the original ZIP remains unchanged.
+
+The shipping office/visual/scripts:auto route requires caladea0.4.2, arimo0.4.3, tinos0.4.2, cousine0.4.3, gelasio0.4.1 and noto-sans0.4.2. No installation, runtime edit, font stub, source/content rewrite or retry occurred in this attempt. This attempt qualifies no panel, sheet or publication. The coordinator subsequently authorized a separate new exact registry office consumer and fresh after02; the original consumer/attempt remain untouched. No Office, UI, site, deploy or login action occurred.
