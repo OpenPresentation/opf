@@ -1,0 +1,780 @@
+{
+  "revision": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+  "opfVersion": "0.34.0-preparation",
+  "route": "Unmodified checkout-built shipping CLI convert defaults; --date 2026-11-08; PNG --scale 0.5; CLI office/visual/scripts:auto fonts. Not a registry publication.",
+  "newLiveDomainsEnabled": false,
+  "diagnosticOverrides": false,
+  "inputAuthority": {
+    "revision": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b",
+    "path": "docs/programs/shapes/sh21-product-candidate-2026-11-07/",
+    "onlyJsonInputsRead": true
+  },
+  "producerFiles": [
+    {
+      "file": "packages/cli/dist/index.js",
+      "sha256": "e0e402568580387bd96afc6e342ff1565adf4697f2de828dca1619d73be461c4"
+    },
+    {
+      "file": "packages/javascript/dist/composition.js",
+      "sha256": "15f7e8b3c2dffb9d452668a68864d73e0fea0ff507a67df50e21be2625d886fb"
+    },
+    {
+      "file": "packages/pptx/dist/index.js",
+      "sha256": "14bd51acad6b00872a371c366eb9027ff486ff91c99e0f967d6e7fd209d8496e"
+    },
+    {
+      "file": "packages/render/dist/index.js",
+      "sha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+    }
+  ],
+  "decks": [
+    {
+      "id": "org-chart-3",
+      "kind": "org-chart",
+      "count": 3,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\org-chart-3.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/org-chart-3.opf.json",
+        "sha256": "4ca720d062279c3f8284f2ba34a8c254e66a0cb7fb10fd9fbce62529a0f58cc7",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/org-chart-3.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/org-chart-3",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/org-chart-3/slide-1.png",
+          "sha256": "ea34d0e35b9943b242b66d8a5e7857032ab18db4273ddb14b042f1db418b191f",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/org-chart-3.pptx",
+          "ok": true,
+          "sha256": "d143a392723220e6e617d7939a0741df5514adbebf7a51d1c110bad80816e001"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/org-chart-3.pptx",
+          "sha256": "d143a392723220e6e617d7939a0741df5514adbebf7a51d1c110bad80816e001",
+          "bytes": 103214,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\org-chart-3.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\org-chart-3.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/org-chart-3/slide-1.png",
+          "sha256": "ea34d0e35b9943b242b66d8a5e7857032ab18db4273ddb14b042f1db418b191f",
+          "bytes": 11427,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\org-chart-3.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\org-chart-3\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "org-chart-5",
+      "kind": "org-chart",
+      "count": 5,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\org-chart-5.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/org-chart-5.opf.json",
+        "sha256": "a0daa4e10f8158faca39b397a7d17a057c8096551e161f7e4ea6864557b9ca11",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/org-chart-5.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/org-chart-5",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/org-chart-5/slide-1.png",
+          "sha256": "350b7e374b3e4df5c324d0cac2a2d3427188c043f5fbc75f9711dff46dce717f",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/org-chart-5.pptx",
+          "ok": true,
+          "sha256": "af8e7be5897fdd8857d076d7d2e59f6e723c8ccdd7a70070864a7344fb23b96e"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/org-chart-5.pptx",
+          "sha256": "af8e7be5897fdd8857d076d7d2e59f6e723c8ccdd7a70070864a7344fb23b96e",
+          "bytes": 105940,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\org-chart-5.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\org-chart-5.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/org-chart-5/slide-1.png",
+          "sha256": "350b7e374b3e4df5c324d0cac2a2d3427188c043f5fbc75f9711dff46dce717f",
+          "bytes": 13117,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\org-chart-5.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\org-chart-5\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "hierarchy-3",
+      "kind": "hierarchy",
+      "count": 3,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\hierarchy-3.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/hierarchy-3.opf.json",
+        "sha256": "a5bdd1c9b3cf13f46701aacb00d52d86566985a42efb54daa17511965ae857f6",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/hierarchy-3.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/hierarchy-3",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/hierarchy-3/slide-1.png",
+          "sha256": "f8d57b91f8a614f68c986e47322e075b00ee1e28815ae4bfcf77112fbf35deff",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/hierarchy-3.pptx",
+          "ok": true,
+          "sha256": "f600a39672b6b97b577fbcd53e9be42cfc993e5fd53631f654e46fa8e6cd6860"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/hierarchy-3.pptx",
+          "sha256": "f600a39672b6b97b577fbcd53e9be42cfc993e5fd53631f654e46fa8e6cd6860",
+          "bytes": 104663,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\hierarchy-3.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\hierarchy-3.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/hierarchy-3/slide-1.png",
+          "sha256": "f8d57b91f8a614f68c986e47322e075b00ee1e28815ae4bfcf77112fbf35deff",
+          "bytes": 14824,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\hierarchy-3.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\hierarchy-3\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "hierarchy-5",
+      "kind": "hierarchy",
+      "count": 5,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\hierarchy-5.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/hierarchy-5.opf.json",
+        "sha256": "04af25ce2d328198510e5bbf6adf1317da93cd3c7e4d279395a1df053a9ebfc8",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/hierarchy-5.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/hierarchy-5",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/hierarchy-5/slide-1.png",
+          "sha256": "7486984c079b389a4c9b692b9969b72da6fede293ffbb070ed923d436d783ca7",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/hierarchy-5.pptx",
+          "ok": true,
+          "sha256": "ebe5cf2518be3b26027e082f1c000eaadaab4c234eea853347df20b11bf2a79b"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/hierarchy-5.pptx",
+          "sha256": "ebe5cf2518be3b26027e082f1c000eaadaab4c234eea853347df20b11bf2a79b",
+          "bytes": 109138,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\hierarchy-5.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\hierarchy-5.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/hierarchy-5/slide-1.png",
+          "sha256": "7486984c079b389a4c9b692b9969b72da6fede293ffbb070ed923d436d783ca7",
+          "bytes": 16920,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\hierarchy-5.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\hierarchy-5\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "venn-1",
+      "kind": "venn",
+      "count": 1,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-1.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/venn-1.opf.json",
+        "sha256": "1b4fcec6a6914bac926d4a844cd789cbd0f455788de45be4ede72dd06b05f92f",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/venn-1.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/venn-1",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/venn-1/slide-1.png",
+          "sha256": "4adc3bc2337cedf5191671ada9e2726044ab7b23cafbd4399f65ab596ecc402d",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/venn-1.pptx",
+          "ok": true,
+          "sha256": "9d35994233f4620f563e36a36b6940ecaa11565918b30af415c8ffe7601df2b7"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/venn-1.pptx",
+          "sha256": "9d35994233f4620f563e36a36b6940ecaa11565918b30af415c8ffe7601df2b7",
+          "bytes": 99550,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-1.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-1.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/venn-1/slide-1.png",
+          "sha256": "4adc3bc2337cedf5191671ada9e2726044ab7b23cafbd4399f65ab596ecc402d",
+          "bytes": 12350,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-1.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\venn-1\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "venn-2",
+      "kind": "venn",
+      "count": 2,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-2.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/venn-2.opf.json",
+        "sha256": "57a907114e37d5121b19672186bf10c122887ee727d7101b956290c9baaa37de",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/venn-2.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/venn-2",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/venn-2/slide-1.png",
+          "sha256": "5d364296363a95837efb544b5d4f05822deb4a15bdfb1fc923ef79bb8e597bff",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/venn-2.pptx",
+          "ok": true,
+          "sha256": "a29f3bb6f3c8c65bf0d0af548db923e36958d84a59ece024c614c20696d41798"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/venn-2.pptx",
+          "sha256": "a29f3bb6f3c8c65bf0d0af548db923e36958d84a59ece024c614c20696d41798",
+          "bytes": 100041,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-2.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-2.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/venn-2/slide-1.png",
+          "sha256": "5d364296363a95837efb544b5d4f05822deb4a15bdfb1fc923ef79bb8e597bff",
+          "bytes": 18152,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-2.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\venn-2\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "venn-3",
+      "kind": "venn",
+      "count": 3,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-3.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/venn-3.opf.json",
+        "sha256": "72eb7189db5be14dc76e21663f3912b55083062b95b4747d8cf1842006826552",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/venn-3.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/venn-3",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/venn-3/slide-1.png",
+          "sha256": "2a8a886599a95476612db2f8bda7b98acfd0c70fcffb10fc0c480cb69a254e81",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/venn-3.pptx",
+          "ok": true,
+          "sha256": "ee111a6a51dd1f7243c2794d5643de421c20acb8288b2f31512bb34363a7c6bb"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/venn-3.pptx",
+          "sha256": "ee111a6a51dd1f7243c2794d5643de421c20acb8288b2f31512bb34363a7c6bb",
+          "bytes": 100542,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-3.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-3.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/venn-3/slide-1.png",
+          "sha256": "2a8a886599a95476612db2f8bda7b98acfd0c70fcffb10fc0c480cb69a254e81",
+          "bytes": 18127,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-3.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\venn-3\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "venn-4",
+      "kind": "venn",
+      "count": 4,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-4.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/venn-4.opf.json",
+        "sha256": "f22e89828435b3552f0265334dce37f874dd287fcc3ff0eddad9327a62fc435f",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/venn-4.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/venn-4",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/venn-4/slide-1.png",
+          "sha256": "d64354ac07b6ae68bb9364565dc8810246370c7b13bf534978056655d9252f1a",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/venn-4.pptx",
+          "ok": true,
+          "sha256": "e0ea4259d70a69f5857444aea199d74377fc55bfaa83b1d063a4a9d0bc596647"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/venn-4.pptx",
+          "sha256": "e0ea4259d70a69f5857444aea199d74377fc55bfaa83b1d063a4a9d0bc596647",
+          "bytes": 101022,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-4.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-4.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/venn-4/slide-1.png",
+          "sha256": "d64354ac07b6ae68bb9364565dc8810246370c7b13bf534978056655d9252f1a",
+          "bytes": 20193,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-4.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\venn-4\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "venn-5",
+      "kind": "venn",
+      "count": 5,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-5.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/venn-5.opf.json",
+        "sha256": "e7280fefa3265abe06c35df28d47ea436742fc96ce507139487336c16cf4f849",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/venn-5.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/venn-5",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/venn-5/slide-1.png",
+          "sha256": "be1f3cd37da7ed27ca170cc109713f38f71619e66bb78e227b624a9458b87607",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/venn-5.pptx",
+          "ok": true,
+          "sha256": "ad7e76317efe7ae3c20d08e716adab3d7077d1b7883c01db41e0c9ada3a4235f"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/venn-5.pptx",
+          "sha256": "ad7e76317efe7ae3c20d08e716adab3d7077d1b7883c01db41e0c9ada3a4235f",
+          "bytes": 101523,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-5.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-5.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/venn-5/slide-1.png",
+          "sha256": "be1f3cd37da7ed27ca170cc109713f38f71619e66bb78e227b624a9458b87607",
+          "bytes": 18778,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-5.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\venn-5\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "venn-6",
+      "kind": "venn",
+      "count": 6,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-6.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/venn-6.opf.json",
+        "sha256": "12bdc64b9f838b26384a0f7c55e82bea4fc92ca08298121dc3846f88c808b763",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/venn-6.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/venn-6",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/venn-6/slide-1.png",
+          "sha256": "96193b402d3ae5a934d95293f22121e3593551c6d6316b8e56fc5398f55631fa",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/venn-6.pptx",
+          "ok": true,
+          "sha256": "24988320b515a681ddff0cea828f5e701ee06afe6a03758a2cc2cdca2629f3da"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/venn-6.pptx",
+          "sha256": "24988320b515a681ddff0cea828f5e701ee06afe6a03758a2cc2cdca2629f3da",
+          "bytes": 101981,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-6.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-6.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/venn-6/slide-1.png",
+          "sha256": "96193b402d3ae5a934d95293f22121e3593551c6d6316b8e56fc5398f55631fa",
+          "bytes": 19717,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-6.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\venn-6\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    },
+    {
+      "id": "venn-7",
+      "kind": "venn",
+      "count": 7,
+      "source": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-7.pptx",
+      "sourceCommit": "9b066b2dbcdaa2ba571e58780fd4405cd683ec4f",
+      "input": {
+        "file": "inputs/venn-7.opf.json",
+        "sha256": "f4790ca256b769ef642a423c968f1107f761a4d6ab66f93bb1cb28d3b6ec1832",
+        "authority": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b:docs/programs/shapes/sh21-product-candidate-2026-11-07/venn-7.opf.json"
+      },
+      "previewOk": true,
+      "previewSlides": 1,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/venn-7",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/venn-7/slide-1.png",
+          "sha256": "ca6d49f7f1bc92a0e2331181442d72443c1eb0fbdbcdf3cec800a4e30100491a",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/venn-7.pptx",
+          "ok": true,
+          "sha256": "093d4786b66e55f40c3cf4e275400a23d027c19c83e7fb6255e1546c420d659a"
+        }
+      ],
+      "productionAssertions": {
+        "noLiveSmartArt": true,
+        "editableArrangementShapes": true,
+        "noShrinkAutofit": true,
+        "authoredTextLevelsOrderRoundTrip": true
+      },
+      "outputs": {
+        "pptx": {
+          "file": "pptx/venn-7.pptx",
+          "sha256": "093d4786b66e55f40c3cf4e275400a23d027c19c83e7fb6255e1546c420d659a",
+          "bytes": 102487,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-7.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\venn-7.pptx",
+            "--date",
+            "2026-11-08"
+          ]
+        },
+        "png": {
+          "file": "preview/venn-7/slide-1.png",
+          "sha256": "ca6d49f7f1bc92a0e2331181442d72443c1eb0fbdbcdf3cec800a4e30100491a",
+          "bytes": 22314,
+          "args": [
+            "convert",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-7.opf.json",
+            "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\venn-7\\slide-1.png",
+            "--date",
+            "2026-11-08",
+            "--scale",
+            ".5"
+          ]
+        }
+      }
+    }
+  ]
+}

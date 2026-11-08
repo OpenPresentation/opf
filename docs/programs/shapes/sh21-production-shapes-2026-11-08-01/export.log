@@ -1,0 +1,12 @@
+org-chart-3: default native shapes, matching CLI preview, semantic round trip, no live parts
+org-chart-5: default native shapes, matching CLI preview, semantic round trip, no live parts
+hierarchy-3: default native shapes, matching CLI preview, semantic round trip, no live parts
+hierarchy-5: default native shapes, matching CLI preview, semantic round trip, no live parts
+venn-1: default native shapes, matching CLI preview, semantic round trip, no live parts
+venn-2: default native shapes, matching CLI preview, semantic round trip, no live parts
+venn-3: default native shapes, matching CLI preview, semantic round trip, no live parts
+venn-4: default native shapes, matching CLI preview, semantic round trip, no live parts
+venn-5: default native shapes, matching CLI preview, semantic round trip, no live parts
+venn-6: default native shapes, matching CLI preview, semantic round trip, no live parts
+venn-7: default native shapes, matching CLI preview, semantic round trip, no live parts
+{"revision":"9b066b2dbcdaa2ba571e58780fd4405cd683ec4f","decks":11,"manifestSha256":"393da4c6ede4e233b19f4dbe22b3f7288e4f90300efb6e02a6c90f9b8ff78281","scope":"Production shape qualification only; no Office or live-domain acceptance."}
