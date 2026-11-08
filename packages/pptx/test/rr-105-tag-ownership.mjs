@@ -78,3 +78,11 @@ test('per-slide vote ownership never changes diagnostic all-run counts or global
 test('current native base-language edits remain authoritative after tag parts are renamed',async()=>{
  const bytes=renameTags(await exportDeck(source11)),candidate=edit(bytes,parts=>changeSlide(parts,1,xml=>xml.replaceAll('lang="ar-SA"','lang="he-IL"'))),expected=structuredClone(source11);expected.language='he-IL';assert.deepEqual(await importDeck(candidate),expected);
 });
+
+test('full and reference-only inline-code fallback retains legacy recognition with missing or stale slide tags',async()=>{
+ const source={language:'en-US',design:{fontScheme:'roboto'},slides:[{title:'Runs',text:['Run ',{text:'npm install',code:true},' now']}]};
+ for(const provenance of ['full','references-only']){const bytes=await exportDeck(source,{provenance});for(const damage of ['intact','missing','stale']){const candidate=damage==='intact'?bytes:edit(bytes,parts=>{if(damage==='missing')delete parts['ppt/tags/opfSlide1.xml'];else changeTag(parts,record=>{record.native.structure='00000000000000';});}),actual=await importDeck(candidate),code=runs(actual.slides[0]).find(run=>run.text==='npm install');assert.equal(code?.code,true,provenance+' '+damage+' preserves inline code');assert.equal(code.fontFamily,undefined,provenance+' '+damage+' uses existing code role');assert.equal(characters(code),'npm install');}}
+});
+test('unowned inline monospace remains the observed family without inferred code semantics',async()=>{
+ const source={language:'en-US',design:{fontScheme:'roboto'},slides:[{text:['Run ',{text:'npm install',code:true},' now']}]},bytes=await exportDeck(source,{provenance:false}),actual=await importDeck(bytes),run=runs(actual.slides[0]).find(run=>run.text==='npm install');assert.equal(run?.code,undefined);assert.equal(run.fontFamily,'Roboto Mono');assert.equal(characters(run),'npm install');
+});
