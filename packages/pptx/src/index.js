@@ -65,7 +65,7 @@ import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, phys
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagramGroups, importDiagrams, tagDiagrams } from './diagram-provenance.js';
-import { diagramShapes, writeDiagramGroups } from './diagram-shapes.js';
+import { DIAGRAM_BASELINE_SHARE, DIAGRAM_MIN_PITCH, diagramShapes, writeDiagramGroups } from './diagram-shapes.js';
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
@@ -2600,7 +2600,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // what import reads the slide's layout from), in a variant whose Body placeholder sits at the recomposed body's box.
   const recomposed = template !== undefined && geometry.recomposed !== undefined;
   const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto' || recomposed;
-  const nativeBody = options.bodyText === 'native' ? planNativeBody(opfSlide, geometry, {automatic, report: options.onDiagnostic}) : undefined;
+  const nativeBody = options.bodyText === 'native' ? planNativeBody(opfSlide, geometry, {automatic, report: options.onDiagnostic, textMeasurement: options.textMeasurement}) : undefined;
   if (template && nativeBody) template = recomposed
     ? {...template, key: `${template.key}\u0000recomposed-native-body`, recomposedBody: {box: nativeBody.box, anchor: nativeBody.anchor, style: {...nativeBody.item.textStyle, fontSize: nativeBody.item.text.fontSize, alignment: nativeBody.item.alignment}}}
     : {...template, key: `${template.key}\u0000native-body:${nativeBody.region}`, nativeBodyRegion: nativeBody.region};
@@ -4004,8 +4004,20 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
     }
     // LH-12: an untagged body line is still named for its block (`OPF text <path> line N`), never PowerPoint's generic "Text N".
     // LH-63: a plain-text group has a shape for every line, a blank one included (keepEmpty), as an unformatted body's lines do.
-    if (runs.length || keepEmpty) slide.addText(runs.length ? runs : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name ?? `OPF text ${path} line ${index}`});
+    if (runs.length || keepEmpty) slide.addText(runs.length ? runs : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, ...smallRunSpacing(line, placed), objectName: name ?? `OPF text ${path} line ${index}`});
   }
+}
+
+// RR-105 (opf#1091): core puts a rich line's baseline one fit size below its top (the role size, say a title's 54 px) even when every run
+// is smaller, as an eyebrow-like title of 20 pt runs is. At single spacing PowerPoint takes the first baseline from the runs it draws, so
+// such a line drew about 22 pt above the preview. With exact spacing PowerPoint puts the first baseline DIAGRAM_BASELINE_SHARE of the pitch
+// below the top whatever the runs (SH-07's measurement, valid from DIAGRAM_MIN_PITCH sizes), so the line gets the pitch that puts it on
+// core's baseline. A line whose largest run is the fit size (nearly every line) keeps single spacing, byte for byte.
+function smallRunSpacing(line, placed) {
+  const ascent = placed ? placed.baseline - placed.y : line.baseline - line.y;
+  const largest = Math.max(0, ...line.fragments.map(fragment => fragment.nominalSize ?? fragment.fontSize));
+  const pitch = ascent / DIAGRAM_BASELINE_SHARE;
+  return largest > 0 && pitch >= DIAGRAM_MIN_PITCH * largest ? {lineSpacing: pitch * .75, lineSpacingMultiple: undefined} : {lineSpacingMultiple: 1};
 }
 
 function assertXmlText(text, path) {

@@ -1,6 +1,6 @@
 // RR-86 opt-in prototype. Native paragraphs trade measured line positions for a
 // single editable body. No source words or per-line recovery tags are stored.
-import {bindNoBreak, paragraphDirection, resolveTextStyle} from '@openpresentation/opf/composition';
+import {bindNoBreak, paragraphDirection, resolveTextStyle, textWidthMeasurer} from '@openpresentation/opf/composition';
 import {autoNumScheme} from './numbered-list.js';
 
 const FIELDS = new Set(['text', 'items', 'bullets']);
@@ -18,7 +18,7 @@ const escapeXml = value => String(value).replace(/[&<>"']/g, char => ({'&': '&am
  * The first is returned with the rest as `others`; the first alone binds to the Body placeholder, each other one is an ordinary
  * native text box at its region (RR-88). An item that cannot be a native body falls back to measured shapes with a visible diagnostic.
  */
-export function planNativeBody(slide, geometry, {automatic = false, report = () => {}} = {}) {
+export function planNativeBody(slide, geometry, {automatic = false, report = () => {}, textMeasurement} = {}) {
   const candidates = geometry.items.filter(item => FIELDS.has(item.field));
   const reject = (item, reason) => report({code: 'native-body-fallback', path: item.path, reason,
     message: `Native body export cannot represent this ${reason.replaceAll('-', ' ')}; the current measured shapes were exported.`});
@@ -29,13 +29,13 @@ export function planNativeBody(slide, geometry, {automatic = false, report = () 
   }
   const plans = [];
   for (const item of candidates) {
-    const plan = planOne(item, geometry, automatic, reason => reject(item, reason));
+    const plan = planOne(item, geometry, automatic, reason => reject(item, reason), textMeasurement);
     if (plan) plans.push(plan);
   }
   return plans.length ? {...plans[0], others: plans.slice(1)} : undefined;
 }
 
-function planOne(item, geometry, automatic, reject) {
+function planOne(item, geometry, automatic, reject, textMeasurement) {
   const region = geometry.regions?.find(region => region.name === item.region);
   if (!/^slides\.\d+\.(?:blocks\.\d+\.|[A-Za-z][A-Za-z0-9+_-]*\.)?(?:text|items|bullets)$/.test(item.path) || !automatic && (!region || region.collapsed || region.content.length !== 1 || region.overflow?.length)) {
     reject('complex-composition'); return undefined;
@@ -74,10 +74,126 @@ function planOne(item, geometry, automatic, reject) {
   }
   // A block on a card (LH-22) is a native text box at its place inside the card, never bound to the Body placeholder: Change Layout
   // would move it away from its card, as it would a carded picture.
-  if (item.frameBox) return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...item.box}, anchor: 'top', carded: true};
+  // RR-105 (opf#1089): PowerPoint wraps the body itself, so its box must keep core's lines whole (see nativeWrapBox); a body whose lines
+  // PowerPoint could break differently at any width keeps its measured shapes.
+  const limits = item.frameBox ? {left: item.frameBox.x + CARD_BORDER, right: item.frameBox.x + item.frameBox.width - CARD_BORDER} : {left: 0, right: geometry.width ?? Infinity};
+  const wrap = nativeWrapBox(item, values, list, limits, textMeasurement);
+  if (!wrap) { reject('tight-wrap'); return undefined; }
+  if (item.frameBox) return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...item.box}, anchor: 'top', carded: true, wrap};
   // LH-48: core sets a lone block that fills too little of the body in the middle of its region; the placeholder anchors it there too.
   const centered = region && item.box.height < region.box.height - 1 && Math.abs(item.box.y + item.box.height / 2 - (region.box.y + region.box.height / 2)) < 1;
-  return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...(region?.box ?? item.box)}, anchor: centered ? 'middle' : region?.anchor ?? 'top'};
+  return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...(region?.box ?? item.box)}, anchor: centered ? 'middle' : region?.anchor ?? 'top', wrap};
+}
+
+// RR-105 (opf#1089). PowerPoint's advances and kerning differ from core's measurement by a fraction of a percent, so a native body written
+// at exactly core's wrap width broke a line core measured as fitting (layout-sampler slide 41: a line 0.45 px inside its 483.55 px box
+// wrapped to two lines and ran out of its card), and a body written at its region's width (wider than core's measure) or holding lines
+// core balanced could take up a word that core put on the next line. In the native box every line keeps WRAP_MARGIN of core's wrap width
+// free, and every soft break overruns the box by at least as much: core's line plus the first unit of the next line does not fit.
+export const WRAP_MARGIN = .01;
+const CARD_BORDER = 1; // px: the card's outline (0.75 pt) is its inner edge
+// A space PowerPoint may break at: whitespace other than the no-break spaces (bindNoBreak writes U+00A0).
+const BREAKABLE = /[^\S  ﻿]/u;
+const HYPHEN = /[-‐‒–—]/u;
+
+/**
+ * The text of a planned native body, paragraph by paragraph, with core's lines as ranges of each paragraph and a measurer of the runs as
+ * PowerPoint receives them (no-break spaces bound, each run in its own face and written size). Undefined when core's lines are not the
+ * paragraphs' text (nothing can then be verified).
+ */
+export function nativeBodyLines(item, values, list, textMeasurement) {
+  const base = item.textStyle, measurers = new Map();
+  const measurer = run => {
+    const style = resolveTextStyle({...base, fontFamily: run.fontFamily ?? base.fontFamily,
+      fontWeight: run.bold === undefined ? base.fontWeight : run.bold ? 700 : 400, italic: run.italic ?? base.italic}, textMeasurement);
+    const key = `${style.fontFamily}|${style.fontWeight}|${style.italic ? 1 : 0}`;
+    if (!measurers.has(key)) measurers.set(key, textWidthMeasurer(style, textMeasurement));
+    return measurers.get(key);
+  };
+  const paragraphs = [];
+  const source = (value, lines) => {
+    // One value: its runs (bound as written) and its lines; a text value's hard breaks start new paragraphs.
+    const authored = runsOf(value).map(entry => typeof entry === 'string' ? {text: entry} : entry);
+    const runs = authored.map(run => ({text: bindNoBreak(run.text), size: run.fontSize !== undefined ? run.fontSize / .75 : item.text.fontSize, measure: measurer(run)}));
+    // Core's lines are slices of the authored text; binding no-break spaces keeps every offset.
+    const whole = authored.map(run => run.text).join('');
+    let cursor = 0, current = {runs, lines: []};
+    paragraphs.push(current);
+    for (const line of lines) {
+      if (!whole.startsWith(line, cursor)) return false;
+      current.lines.push({start: cursor, end: cursor + line.length});
+      cursor += line.length;
+      const hard = /^(?:\r\n|\r|\n)/.exec(whole.slice(cursor));
+      if (hard) { cursor += hard[0].length; current = {runs, lines: []}; paragraphs.push(current); }
+    }
+    return cursor === whole.length;
+  };
+  if (list) {
+    if (!values.every((value, index) => source(value, item.text.listEntries[index]?.text?.lines ?? []))) return undefined;
+  } else if (!source(values[0], item.text.lines ?? [])) return undefined;
+  const width = (runs, start, end) => {
+    let total = 0, offset = 0;
+    for (const run of runs) {
+      const from = Math.max(start, offset), to = Math.min(end, offset + run.text.length);
+      if (to > from) total += run.measure(run.text.slice(from - offset, to - offset), run.size);
+      offset += run.text.length;
+    }
+    return total;
+  };
+  return {paragraphs, width};
+}
+
+/**
+ * The widths that decide a native wrap of core's lines: `widest`, the widest line without the spaces that hang at its end, and `unbroken`,
+ * the narrowest soft-wrapped line with the first unit of the next line (Infinity with no soft break): the next line's first word, to a
+ * breakable space or through a hyphen, or its first character after a break inside a word. A box that wraps between the two keeps the
+ * lines. Undefined when the lines cannot be verified.
+ */
+export function nativeWrapWidths(item, values, list, textMeasurement) {
+  const text = nativeBodyLines(item, values, list, textMeasurement);
+  if (!text) return undefined;
+  let widest = 0, unbroken = Infinity;
+  for (const {runs, lines} of text.paragraphs) {
+    const whole = runs.map(run => run.text).join('');
+    lines.forEach((line, index) => {
+      let end = line.end;
+      while (end > line.start && BREAKABLE.test(whole[end - 1])) end--;
+      widest = Math.max(widest, text.width(runs, line.start, end));
+      const next = lines[index + 1];
+      if (!next) return;
+      const afterWord = line.end > line.start && (BREAKABLE.test(whole[line.end - 1]) || HYPHEN.test(whole[line.end - 1]));
+      let unit = next.start;
+      if (afterWord) {
+        while (unit < next.end && !BREAKABLE.test(whole[unit]) && !HYPHEN.test(whole[unit])) unit++;
+        if (unit < next.end && HYPHEN.test(whole[unit])) unit++;
+      }
+      if (unit === next.start && next.end > next.start) unit += String.fromCodePoint(whole.codePointAt(next.start)).length;
+      unbroken = Math.min(unbroken, text.width(runs, line.start, unit));
+    });
+  }
+  return {widest, unbroken};
+}
+
+/**
+ * The native body's horizontal box (`x`, `width`, px; a list's includes its marker indent): core's wrap width plus about one average
+ * character of slack, narrowed or widened so the widest line and the narrowest soft break both keep WRAP_MARGIN of core's wrap width, and
+ * never past `limits` (a card's inner edge, else the slide) on the side the alignment grows (both sides for centered text, which keeps its
+ * center). Undefined when no width keeps every line.
+ */
+export function nativeWrapBox(item, values, list, limits, textMeasurement) {
+  const indent = list ? item.text.listEntries[0].marker.indent : 0, wrapWidth = item.box.width - indent;
+  const widths = wrapWidth > 0 ? nativeWrapWidths(item, values, list, textMeasurement) : undefined;
+  if (!widths) return undefined;
+  const margin = WRAP_MARGIN * wrapWidth;
+  const average = textWidthMeasurer(resolveTextStyle(item.textStyle, textMeasurement), textMeasurement)('abcdefghijklmnopqrstuvwxyz', item.text.fontSize) / 26;
+  const alignment = item.alignment ?? 'left';
+  const left = Math.max(0, item.box.x - limits.left), right = Math.max(0, limits.right - (item.box.x + item.box.width));
+  const room = alignment === 'center' ? 2 * Math.min(left, right) : alignment === 'right' ? left : right;
+  const low = widths.widest + margin, high = Math.min(widths.unbroken - margin, wrapWidth + room);
+  if (!(low <= high)) return undefined;
+  const width = indent + Math.min(Math.max(wrapWidth + average, low), high);
+  const grow = width - item.box.width;
+  return {x: item.box.x - (alignment === 'center' ? grow / 2 : alignment === 'right' ? grow : 0), width};
 }
 
 // RR-88: the native auto-number (`a:buAutoNum`) that reproduces core's markers, or undefined when the entries are not one sequence.
@@ -138,7 +254,9 @@ export function addNativeBody(slide, plan, context, options, helpers) {
       breakLine: position === paragraph.length - 1 && index < paragraphs.length - 1}}));
   });
   const objectName = `OPF native body ${item.path}`;
-  slide.addText(runs, {...helpers.textBoxOptions({x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96}, context, item.text.fontSize * .75),
+  // RR-105: the box wraps where core wrapped (nativeWrapBox), at the item's columns (a region can be wider than core's measure).
+  const {x, width} = plan.wrap;
+  slide.addText(runs, {...helpers.textBoxOptions({x: x / 96, y: box.y / 96, w: width / 96, h: box.height / 96}, context, item.text.fontSize * .75),
     ...baseFont, ...paragraphOptions, objectName, align: item.alignment ?? 'left', valign: {top: 'top', middle: 'mid', bottom: 'bottom'}[anchor],
     fit: 'none', wrap: true, lineSpacing: pitch(0), lineSpacingMultiple: undefined, bold: false, italic: false});
   // Defaults for blank/appended paragraphs must name the selected family too.
