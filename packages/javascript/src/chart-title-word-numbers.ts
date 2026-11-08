@@ -105,6 +105,12 @@ const BLOCKERS: Record<Language, RegExp> = {
   pt: /^(?:bilhão|bilhões|bilião|biliões|mei[oa]|quartos?)$/u,
   nl: /^(?:miljard|biljoen|half|halve|kwart)$/u,
 };
+// These complete positive comparisons end in the language's minus word; bare minus stays refused.
+const AT_LEAST: Partial<Record<Language, RegExp>> = {
+  fr: /(?:^|[^\p{L}])au moins\s+$/iu,
+  es: /(?:^|[^\p{L}])al menos\s+$/iu,
+  pt: /(?:^|[^\p{L}])pelo menos\s+$/iu,
+};
 const SCALES: Record<Language, {thousand: string; million: string; joiner?: string; percent: string; negative: string; fraction: string}> = {
   de: {thousand:'tausend',million:'millionen|million',percent:'prozent',negative:'minus',fraction:'komma'},
   fr: {thousand:'mille',million:'millions|million',percent:'pour\\s+cent',negative:'moins',fraction:'virgule'},
@@ -141,7 +147,7 @@ export function localizedWordNumbers(text: string, primary: string, comparison: 
     const start = words[i]!.index!, before = plain.slice(0, start);
     if (!comparison.test(before.toLowerCase())) continue;
     // Bare French/Spanish/Italian/Portuguese minus is not an unambiguous positive comparison ("moins cinq").
-    if (['fr','es','it','pt'].includes(language) && new RegExp(`(?:^|[^\\p{L}])${spec.negative}\\s+$`, 'iu').test(before)) continue;
+    if (['fr','es','it','pt'].includes(language) && new RegExp(`(?:^|[^\\p{L}])${spec.negative}\\s+$`, 'iu').test(before) && !AT_LEAST[language]?.test(before)) continue;
     let end = i;
     while (end < words.length && end - i < 32 && numberToken(words[end]![0].toLowerCase()) && (end === i || /^[\s‐‑\u00ad-]+$/u.test(plain.slice(words[end - 1]!.index! + words[end - 1]![0].length, words[end]!.index)))) end++;
     if (end === i || (end - i === 32 && end < words.length && numberToken(words[end]![0].toLowerCase()))) continue;
