@@ -12,12 +12,18 @@ function Get-FurnitureSha256([string]$Path) { return (Get-FileHash -LiteralPath 
 function Test-Integer($Value) { return $Value -is [int] -or $Value -is [long] }
 function Require-Property($Action,[string]$Name,[string]$Context) {
     if($null -eq $Action.PSObject.Properties[$Name]) { throw "$Context requires property '$Name'" }
-    return $Action.$Name
+    # Preserve the JSON property value itself: a singleton array must remain an array.
+    return ,($Action.$Name)
 }
 function Assert-String($Value,[string]$Name,[string]$Context,[int]$Maximum=65535,[bool]$AllowEmpty=$true) {
     if(-not ($Value -is [string])) { throw "$Context property '$Name' must be a string" }
     if((-not $AllowEmpty -and $Value.Length -eq 0) -or $Value.Length -gt $Maximum) { throw "$Context property '$Name' has an invalid length" }
 }
+function Assert-LiteralSeriesName($Value,[string]$Name,[string]$Context) {
+    Assert-String $Value $Name $Context 255 $false
+    if($Value.Trim() -cne $Value -or $Value -match '[\x00-\x1F\x7F=!\[\]\$:]+|^[+@-]'){throw "$Context $Name must be a literal name, not a formula, range, control text or padded value"}
+}
+
 function Read-AndValidateActionPlan([string]$Path) {
     if($Path -eq '') { return ,@() }
     $resolved=(Resolve-Path -LiteralPath $Path).Path
@@ -30,21 +36,43 @@ function Read-AndValidateActionPlan([string]$Path) {
     $parsed=$raw | ConvertFrom-Json
     $items=@($parsed)
     if($items.Count -gt 20) { throw 'ActionPlan cannot contain more than 20 actions' }
-    $operations=@('set-text-style','set-text','set-alt','delete-shape','duplicate-shape','set-tag','delete-tag','move-slide')
+    $operations=@('set-text-style','set-text','set-alt','delete-shape','duplicate-shape','set-tag','delete-tag','move-slide','measure-chart-point','set-chart-series-name')
     for($index=0;$index -lt $items.Count;$index++) {
         $action=$items[$index]; $context="Action $($index+1)"
         if($null -eq $action -or $action -isnot [pscustomobject]) { throw "$context must be an object" }
         $op=Require-Property $action 'op' $context; Assert-String $op 'op' $context 40 $false
         if($operations -notcontains $op) { throw "$context has unknown operation '$op'" }
+        if($op -ieq 'set-chart-series-name' -and $op -cne 'set-chart-series-name'){throw "$context requires the exact bounded series-name operation spelling"}
         $slideIndex=Require-Property $action 'slideIndex' $context
         if(-not (Test-Integer $slideIndex) -or $slideIndex -lt 1 -or $slideIndex -gt 3) { throw "$context slideIndex must be an integer from 1 through 3" }
         $allowed=@('op','slideIndex')
-        if($op -ne 'move-slide') {
+        if($op -notin @('move-slide','set-chart-series-name')) {
             if($op -notin @('set-tag','delete-tag') -or $action.target -ne 'slide') {
                 $shapeName=Require-Property $action 'shapeName' $context; Assert-String $shapeName 'shapeName' $context 255 $false; $allowed+='shapeName'
             }
         }
         switch($op) {
+            'set-chart-series-name' {
+                $chartName=Require-Property $action 'chartName' $context;Assert-String $chartName 'chartName' $context 255 $false
+                $seriesIndex=Require-Property $action 'seriesIndex' $context;if(-not (Test-Integer $seriesIndex) -or $seriesIndex -lt 1 -or $seriesIndex -gt 256){throw "$context seriesIndex must be an integer from1through256"}
+                foreach($key in @('expectedName','newName')){$value=Require-Property $action $key $context;Assert-LiteralSeriesName $value $key $context}
+                if($action.expectedName -ceq $action.newName){throw "$context must make an actual literal name change"}
+                $allowed+=@('chartName','seriesIndex','expectedName','newName')
+            }
+            'measure-chart-point' {
+                $chartName=Require-Property $action 'chartName' $context; Assert-String $chartName 'chartName' $context 255 $false
+                foreach($key in @('seriesIndex','pointIndex')) {
+                    $number=Require-Property $action $key $context
+                    if(-not (Test-Integer $number) -or $number -lt 1 -or $number -gt 256) { throw "$context $key must be an integer from 1 through 256" }
+                }
+                $kind=Require-Property $action 'chartKind' $context; Assert-String $kind 'chartKind' $context 40 $false
+                if($kind -cnotin @('horizontal-bar','vertical-bar','marker','slice')) {throw "$context chartKind is not a bounded classic mark"}
+                $edge=Require-Property $action 'edge' $context; Assert-String $edge 'edge' $context 20 $false
+                if($edge -cnotin @('start','end','top','bottom','center')) {throw "$context edge is not a point edge"}
+                $sign=Require-Property $action 'valueSign' $context; if(-not (Test-Integer $sign) -or $sign -notin @(-1,0,1)) {throw "$context valueSign must be -1, 0 or 1"}
+                $allowed+=@('chartName','seriesIndex','pointIndex','chartKind','edge','valueSign')
+            }
+
             'set-text' { $text=Require-Property $action 'text' $context; Assert-String $text 'text' $context; $allowed+='text' }
             'set-text-style' {
                 $hasSize=$null -ne $action.PSObject.Properties['fontSize']; $hasColor=$null -ne $action.PSObject.Properties['color']
@@ -76,6 +104,12 @@ function Read-AndValidateActionPlan([string]$Path) {
             }
         }
         foreach($property in $action.PSObject.Properties.Name) { if($allowed -cnotcontains $property) { throw "$context has unknown property '$property'" } }
+    }
+    $renames=@($items | Where-Object {$_.op -ceq 'set-chart-series-name'})
+    if($renames.Count){
+        if(@($items | Where-Object {$_.op -cnotin @('set-chart-series-name','measure-chart-point')}).Count){throw 'Series-name qualification may mix only literal edits and point measurements'}
+        $targets=@{};$newNames=@{}
+        foreach($rename in $renames){$target=ConvertTo-Json -InputObject @($rename.slideIndex,$rename.chartName,$rename.seriesIndex) -Compress;$name=ConvertTo-Json -InputObject @($rename.slideIndex,$rename.chartName,$rename.newName) -Compress;if($targets.ContainsKey($target) -or $newNames.ContainsKey($name)){throw 'Repeated series target or duplicate new name in one native edit plan'};$targets[$target]=$true;$newNames[$name]=$true}
     }
     return ,$items
 }
@@ -146,7 +180,7 @@ if((Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Presentation
 if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256 -or $actions.Count -ne $request.actionPlan.count) { throw 'Action-plan snapshot does not match the validated request' }
 
 $script:sequence=0; $script:lastStage='worker.initialize'; $script:lastStatus='begin'; $script:cleanupConfirmed=$true; $script:officeOperationsStopped=$false
-$script:ownedPresentationPath=$null; $script:presentation=$null
+$script:ownedPresentationPath=$null; $script:presentation=$null; $script:ownedApplication=$null
 $os=Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $report=[ordered]@{
     schemaVersion=1
@@ -154,12 +188,12 @@ $report=[ordered]@{
     source=[ordered]@{path=$sourcePath;sha256=$sourceHash;openedPath=$sourceSnapshot;openedSha256=(Get-FurnitureSha256 $sourceSnapshot)}
     saved=[ordered]@{path=$savedPath;sha256=$null}
     reopened=[ordered]@{path=$savedPath;sha256=$null}
-    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@()}
+    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@();chartPoints=@();currentChartPointProbe=$null;chartSeriesEdits=@();currentChartSeriesProbe=$null}
     phases=[ordered]@{original=$null;edited=$null;reopened=$null}
     inputs=[ordered]@{verifier=$request.verifier;processHelper=$request.processHelper}
     environment=[ordered]@{hostVersion=$PSVersionTable.PSVersion.ToString();windowsProductName=$os.ProductName;windowsDisplayVersion=$os.DisplayVersion;windowsBuild="$($os.CurrentBuild).$($os.UBR)";powerPointVersion=$null;powerPointExecutable=$null;powerPointBuild=$null;powerPointExecutableSha256=$null}
     cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;lastStage=$script:lastStage;lastStatus=$script:lastStatus;error=$null
-    scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations.'
+    scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations.'
 }
 function Write-FurnitureReport {
     $report.cleanupConfirmed=$script:cleanupConfirmed; $report.officeOperationsStopped=$script:officeOperationsStopped; $report.lastStage=$script:lastStage; $report.lastStatus=$script:lastStatus
@@ -264,7 +298,7 @@ function Read-FurnitureState($Presentation,[string]$Phase) {
         $rasters+=@([ordered]@{slideIndex=$slideIndex;path=$png;sha256=(Get-FurnitureSha256 $png)})
         $slideRecords+=@([ordered]@{index=$slideIndex;slideId=$slideId;name=$slideName;tags=$slideTags;shapeCount=$shapeCount;shapes=$shapeRecords})
     }
-    return [ordered]@{slideCount=$slideCount;slides=$slideRecords;rasters=$rasters}
+    return [ordered]@{slideCount=$slideCount;slides=$slideRecords;rasters=$rasters;chartSeriesNames=(Read-FurnitureSeriesNameState $Presentation $actions $Phase)}
 }
 function Get-ActionTags($Presentation,$Action,[string]$Prefix) {
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
@@ -301,8 +335,330 @@ function Set-FurnitureTextStyle($Shape,$Action,[string]$Prefix) {
     $evidence.textAfter=$after
     return $evidence
 }
+# SH-25 independent object-model measurement. Never activates ChartData, Excel or Edit Data.
+function Read-FurnitureFiniteNumber($Object,[string]$Property,[string]$Stage) {
+    $value=Invoke-FurnitureCom $Stage { $Object.$Property }
+    if($null -eq $value) {Stop-FurnitureLifecycle "$Stage is unavailable"}
+    try {$number=[double]$value} catch {Stop-FurnitureLifecycle "$Stage is not numeric"}
+    if([double]::IsNaN($number) -or [double]::IsInfinity($number)) {Stop-FurnitureLifecycle "$Stage is not finite"}
+    return $number
+}
+function New-FurniturePointProbe($Action,[string]$Prefix) {
+    return [ordered]@{stage=$Prefix;chartName=$Action.chartName;shapeName=$Action.shapeName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;edge=$Action.edge;strategy='native-point-bounds';sliceCoordinates=(New-Object 'System.Collections.Generic.List[object]');pieCenterLocalPoints=$null;curvedBoundsLocalPoints=$null;plotCenterLocalPoints=$null;circleCenterLocalPoints=$null;circleCenterMethod=$null;areaValueObservation=$null;pointBoundsLocalPoints=$null}
+}
+function Read-FurnitureSlicePoint($Point,[int]$Index,[string]$Prefix,$Probe) {
+    $coordinates=New-Object 'System.Collections.Generic.List[double]'
+    foreach($location in @(1,2)) {
+        $stage="$Prefix.point.slice.$Index.$location"
+        $value=Invoke-FurnitureCom $stage {$Point.PieSliceLocation($location,$Index)}
+        $observation=[ordered]@{index=$Index;location=$location;rawValue=if($null -eq $value){$null}else{[Convert]::ToString($value,[Globalization.CultureInfo]::InvariantCulture)}}
+        $Probe.sliceCoordinates.Add($observation)
+        if($null -eq $value) {Stop-FurnitureLifecycle "$stage is unavailable"}
+        try {$number=[double]$value} catch {Stop-FurnitureLifecycle "$stage is not numeric"}
+        if([double]::IsNaN($number) -or [double]::IsInfinity($number)) {Stop-FurnitureLifecycle "$stage is not finite"}
+        $observation['value']=$number
+        $coordinates.Add($number)
+    }
+    return [pscustomobject]@{x=$coordinates[0];y=$coordinates[1]}
+}
+# Pure independent circular-outline bounds, from native points only. Endpoint boxes omit arc extrema.
+# Independent circumcenter from actual native outer1/2/3; PlotArea's inside box can be offset from the drawn rings.
+function Get-FurnitureNativeCircleCenter($Outer) {
+    if($null -eq $Outer -or @($Outer).Count -ne 3){Stop-FurnitureLifecycle 'Three observed native circle points are required'}
+    $points=New-Object 'System.Collections.Generic.List[object]'
+    foreach($candidate in $Outer){
+        if($null -eq $candidate){Stop-FurnitureLifecycle 'Observed native circle point is missing'}
+        $px=$candidate.PSObject.Properties['x'];$py=$candidate.PSObject.Properties['y']
+        if($null -eq $px -or $null -eq $py -or $null -eq $px.Value -or $null -eq $py.Value){Stop-FurnitureLifecycle 'Observed native circle coordinates are missing'}
+        try{$x=[double]$px.Value;$y=[double]$py.Value}catch{Stop-FurnitureLifecycle 'Observed native circle coordinates are not numeric'}
+        if([double]::IsNaN($x) -or [double]::IsInfinity($x) -or [double]::IsNaN($y) -or [double]::IsInfinity($y)){Stop-FurnitureLifecycle 'Observed native circle coordinates are not finite'}
+        $points.Add([pscustomobject]@{x=$x;y=$y})
+    }
+    $a=$points[0];$b=$points[1];$c=$points[2];$epsilon=0.001
+    $ux=$b.x-$a.x;$uy=$b.y-$a.y;$vx=$c.x-$a.x;$vy=$c.y-$a.y
+    $scale=[math]::Max([math]::Max([math]::Abs($ux),[math]::Abs($uy)),[math]::Max([math]::Abs($vx),[math]::Abs($vy)))
+    if([double]::IsNaN($scale) -or [double]::IsInfinity($scale) -or $scale -le $epsilon){Stop-FurnitureLifecycle 'Observed native circle is degenerate or not finite'}
+    # Normalize before the determinant to avoid translation/large-coordinate cancellation.
+    $closed=[math]::Sqrt($vx*$vx+$vy*$vy) -le $epsilon
+    if($closed){
+        # A closed slice's observed halfway arc point is antipodal. Tiny/coincident observations refuse below.
+        $cx=$a.x+$ux/2;$cy=$a.y+$uy/2;$method='closed-native-antipodal-midpoint'
+    }else{
+        $ux/=$scale;$uy/=$scale;$vx/=$scale;$vy/=$scale
+        $det=2*($ux*$vy-$uy*$vx)
+        if([math]::Abs($det)*$scale -le $epsilon){Stop-FurnitureLifecycle 'Observed native circle points are collinear or ill-conditioned at native precision'}
+        $u2=$ux*$ux+$uy*$uy;$v2=$vx*$vx+$vy*$vy
+        $cx=$a.x+$scale*($u2*$vy-$v2*$uy)/$det;$cy=$a.y+$scale*($ux*$v2-$vx*$u2)/$det;$method='native-outer123-circumcenter'
+    }
+    $radius=[math]::Sqrt([math]::Pow($a.x-$cx,2)+[math]::Pow($a.y-$cy,2))
+    if([double]::IsNaN($cx) -or [double]::IsInfinity($cx) -or [double]::IsNaN($cy) -or [double]::IsInfinity($cy) -or [double]::IsNaN($radius) -or [double]::IsInfinity($radius) -or $radius -le $epsilon){Stop-FurnitureLifecycle 'Observed native circle center/radius is degenerate or not finite'}
+    return [pscustomobject]@{x=$cx;y=$cy;method=$method}
+}
+
+function Get-FurnitureCurvedSliceBounds($Center,$Outer,$Inner=$null) {
+    $finitePoint={param($candidate)
+        if($null -eq $candidate) {Stop-FurnitureLifecycle 'Native curved point is missing'}
+        $px=$candidate.PSObject.Properties['x'];$py=$candidate.PSObject.Properties['y']
+        if($null -eq $px -or $null -eq $py -or $null -eq $px.Value -or $null -eq $py.Value) {Stop-FurnitureLifecycle 'Native curved point coordinates are missing'}
+        try {$cx=[double]$px.Value;$cy=[double]$py.Value} catch {Stop-FurnitureLifecycle 'Native curved point is not numeric'}
+        if([double]::IsNaN($cx) -or [double]::IsInfinity($cx) -or [double]::IsNaN($cy) -or [double]::IsInfinity($cy)) {Stop-FurnitureLifecycle 'Native curved point is not finite'}
+        return [pscustomobject]@{x=$cx;y=$cy}
+    }
+    $centerPoint=& $finitePoint $Center
+    if($null -eq $Outer -or @($Outer).Count -ne 3) {Stop-FurnitureLifecycle 'Three native outer arc points are required'}
+    $outerPoints=New-Object 'System.Collections.Generic.List[object]'
+    foreach($candidate in $Outer) {$outerPoints.Add((& $finitePoint $candidate))}
+    $distance={param($point) [math]::Sqrt([math]::Pow($point.x-$centerPoint.x,2)+[math]::Pow($point.y-$centerPoint.y,2))}
+    $radius=& $distance $outerPoints[2]
+    if([double]::IsNaN($radius) -or [double]::IsInfinity($radius) -or $radius -le 0.001) {Stop-FurnitureLifecycle 'Native circular radius is degenerate or not finite'}
+    # API observations are rounded in points. This consistency check is <0.002px, not a change to the four-pixel gate.
+    $epsilon=0.001;$turn=2*[math]::PI;$angleEpsilon=$epsilon/$radius
+    $normalize={param([double]$angle) $answer=$angle%$turn;if($answer -lt 0){$answer+=$turn};return $answer}
+    $angles=New-Object 'System.Collections.Generic.List[double]'
+    foreach($point in $outerPoints) {
+        $r=& $distance $point
+        if([double]::IsNaN($r) -or [double]::IsInfinity($r) -or [math]::Abs($r-$radius) -gt $epsilon) {Stop-FurnitureLifecycle 'Native outer points do not share the observed circular radius'}
+        $angles.Add((& $normalize ([math]::Atan2($point.y-$centerPoint.y,$point.x-$centerPoint.x))))
+    }
+    $start=$angles[0];$sweep=& $normalize ($angles[2]-$start);$middle=& $normalize ($angles[1]-$start)
+    $closed=[math]::Sqrt([math]::Pow($outerPoints[0].x-$outerPoints[2].x,2)+[math]::Pow($outerPoints[0].y-$outerPoints[2].y,2)) -le $epsilon
+    if($closed) {
+        if([math]::Abs($middle-[math]::PI) -gt $angleEpsilon) {Stop-FurnitureLifecycle 'Native closed arc is degenerate or ambiguous, not an observed full circle'}
+        $sweep=$turn
+    } else {
+        if($middle -gt $sweep+$angleEpsilon) {$start=$angles[2];$sweep=& $normalize ($angles[0]-$start);$middle=& $normalize ($angles[1]-$start)}
+        if($sweep -le $angleEpsilon -or $middle -le $angleEpsilon -or $middle -ge $sweep-$angleEpsilon -or [math]::Abs($middle-$sweep/2) -gt $angleEpsilon) {Stop-FurnitureLifecycle 'Native arc midpoint does not establish an unambiguous circular sweep'}
+    }
+    $points=New-Object 'System.Collections.Generic.List[object]'
+    foreach($point in $outerPoints) {$points.Add($point)}
+    $innerRadius=0.0
+    if($null -eq $Inner) {$points.Add($centerPoint)} else {
+        if(@($Inner).Count -ne 3) {Stop-FurnitureLifecycle 'Three native inner arc points are required'}
+        $innerPoints=New-Object 'System.Collections.Generic.List[object]'
+        foreach($candidate in $Inner) {$innerPoints.Add((& $finitePoint $candidate))}
+        $innerRadius=& $distance $innerPoints[2]
+        if([double]::IsNaN($innerRadius) -or [double]::IsInfinity($innerRadius) -or $innerRadius -le 0 -or $innerRadius -ge $radius-$epsilon) {Stop-FurnitureLifecycle 'Native inner radius is not a finite hole inside the outer circle'}
+        for($index=0;$index -lt 3;$index++) {
+            $point=$innerPoints[$index];$r=& $distance $point
+            $angle=& $normalize ([math]::Atan2($point.y-$centerPoint.y,$point.x-$centerPoint.x))
+            $difference=& $normalize ($angle-$angles[$index]);$difference=[math]::Min($difference,$turn-$difference)
+            if([double]::IsNaN($r) -or [double]::IsInfinity($r) -or [math]::Abs($r-$innerRadius) -gt $epsilon -or $difference -gt $angleEpsilon) {Stop-FurnitureLifecycle 'Native inner arc does not share the observed center and sweep'}
+            $points.Add($point)
+        }
+    }
+    foreach($angle in @(0.0,([math]::PI/2),[math]::PI,(3*[math]::PI/2))) {
+        $fromStart=& $normalize ($angle-$start)
+        if($closed -or $fromStart -le $sweep+$angleEpsilon) {
+            foreach($r in @($radius,$innerRadius)) {if($r -gt 0) {$points.Add([pscustomobject]@{x=$centerPoint.x+$r*[math]::Cos($angle);y=$centerPoint.y+$r*[math]::Sin($angle)})}}
+        }
+    }
+    $xs=$points | Measure-Object -Property x -Minimum -Maximum;$ys=$points | Measure-Object -Property y -Minimum -Maximum
+    return [pscustomobject]@{left=[double]$xs.Minimum;top=[double]$ys.Minimum;width=[double]($xs.Maximum-$xs.Minimum);height=[double]($ys.Maximum-$ys.Minimum);center=@($centerPoint.x,$centerPoint.y);outerRadius=$radius;innerRadius=$innerRadius;startAngle=$start;sweep=$sweep;fullCircle=$closed}
+}
+# Read only actual native values; never open ChartData/Excel or resolve a worksheet range.
+function Read-FurnitureAreaValue($Series,[int]$PointIndex,[int]$PointCount,[string]$Prefix,$Probe) {
+    $holder=Invoke-FurnitureCom "$Prefix.series.values.get" {[pscustomobject]@{raw=$Series.Values}}
+    $raw=$holder.raw
+    $describe={param($value)
+        if($null -eq $value){return [ordered]@{type='null';rawValue=$null}}
+        $type=[Convert]::GetTypeCode($value);$name=$value.GetType().FullName
+        $safe=$type -in @([TypeCode]::String,[TypeCode]::Boolean,[TypeCode]::Byte,[TypeCode]::SByte,[TypeCode]::Int16,[TypeCode]::UInt16,[TypeCode]::Int32,[TypeCode]::UInt32,[TypeCode]::Int64,[TypeCode]::UInt64,[TypeCode]::Single,[TypeCode]::Double,[TypeCode]::Decimal)
+        return [ordered]@{type=$name;rawValue=if($safe){[Convert]::ToString($value,[Globalization.CultureInfo]::InvariantCulture)}else{'<unsupported native value type>'}}
+    }
+    $observation=[ordered]@{containerType=if($null -eq $raw){'null'}else{$raw.GetType().FullName};pointIndex=$PointIndex;pointCount=$PointCount;rank=$null;dimensions=@();rawValues=@();selectedValue=$null}
+    $Probe.areaValueObservation=$observation
+    if($raw -is [Array]){
+        $observation.rank=$raw.Rank
+        for($dimension=0;$dimension -lt $raw.Rank;$dimension++){$observation.dimensions+=@([ordered]@{lowerBound=$raw.GetLowerBound($dimension);length=$raw.GetLength($dimension)})}
+        if($raw.Length -gt 10000){Stop-FurnitureLifecycle 'Native area value array exceeds the bounded probe limit'}
+        # Index this managed Variant array explicitly, retaining every returned primitive before rank/value validation.
+        for($linear=0;$linear -lt $raw.Length;$linear++){
+            $indices=New-Object 'int[]' $raw.Rank;$remaining=$linear
+            for($dimension=$raw.Rank-1;$dimension -ge 0;$dimension--){$length=$raw.GetLength($dimension);$indices[$dimension]=$raw.GetLowerBound($dimension)+($remaining%$length);$remaining=[int][math]::Floor($remaining/$length)}
+            $observation.rawValues+=@((& $describe ($raw.GetValue([int[]]$indices))))
+        }
+        if($raw.Rank -ne 1 -or $raw.Length -ne $PointCount){Stop-FurnitureLifecycle 'Native area values have an unqualified rank or count'}
+        $value=$raw.GetValue($raw.GetLowerBound(0)+$PointIndex-1)
+    }else{
+        $observation.rawValues=@((& $describe $raw))
+        if($PointCount -ne 1){Stop-FurnitureLifecycle 'Native area scalar does not identify this point collection'}
+        $value=$raw
+    }
+    if($null -eq $value -or [Convert]::GetTypeCode($value) -notin @([TypeCode]::Byte,[TypeCode]::SByte,[TypeCode]::Int16,[TypeCode]::UInt16,[TypeCode]::Int32,[TypeCode]::UInt32,[TypeCode]::Int64,[TypeCode]::UInt64,[TypeCode]::Single,[TypeCode]::Double,[TypeCode]::Decimal)){Stop-FurnitureLifecycle 'Native area value is missing, nonnumeric or a worksheet range; never resolve it'}
+    $number=[double]$value
+    if([double]::IsNaN($number) -or [double]::IsInfinity($number)){Stop-FurnitureLifecycle 'Native area value is not finite'}
+    $observation.selectedValue=$number
+    return $number
+}
+
+function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$null) {
+    if($null -eq $Probe) {$Probe=New-FurniturePointProbe $Action $Prefix}
+    $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
+    $overlay=Get-ExactShape $slide $Action.shapeName "$Prefix.overlay"
+    $chartShape=Get-ExactShape $slide $Action.chartName "$Prefix.chart"
+    $hasChart=Invoke-FurnitureCom "$Prefix.chart.hasChart" {$chartShape.HasChart}
+    if($hasChart -ne -1) {Stop-FurnitureLifecycle 'The exact chart shape has no native chart'}
+    $chart=Invoke-FurnitureCom "$Prefix.chart.get" {$chartShape.Chart}
+    $chartType=Invoke-FurnitureCom "$Prefix.chart.type" {$chart.ChartType}
+    # Only the sixteen source-supported homogeneous classic types; never guess a combo/3-D/ChartEx formula.
+    # Microsoft XlChartType: https://learn.microsoft.com/en-us/office/vba/api/excel.xlcharttype
+    $nativeKinds=@{51='vertical-bar';52='vertical-bar';53='vertical-bar';57='horizontal-bar';58='horizontal-bar';59='horizontal-bar';4='marker';65='marker';63='marker';66='marker';1='marker';76='marker';77='marker';-4169='marker';5='slice';-4120='slice'}
+    if(-not (Test-Integer $chartType) -or -not $nativeKinds.ContainsKey([int]$chartType)) {Stop-FurnitureLifecycle 'Native chart type is not a supported classic point domain'}
+    if($nativeKinds[[int]$chartType] -cne $Action.chartKind) {Stop-FurnitureLifecycle 'Action chartKind differs from the actual native chart type'}
+    $seriesCollection=Invoke-FurnitureCom "$Prefix.series.get" {return ,$chart.SeriesCollection()}
+    $seriesCount=Invoke-FurnitureCom "$Prefix.series.count" {$seriesCollection.Count}
+    if($Action.seriesIndex -gt $seriesCount) {Stop-FurnitureLifecycle 'Native series index is no longer present'}
+    $series=Invoke-FurnitureCom "$Prefix.series.item" {$seriesCollection.Item([int]$Action.seriesIndex)}
+    $seriesType=Invoke-FurnitureCom "$Prefix.series.type" {$series.ChartType}
+    if(-not (Test-Integer $seriesType) -or $seriesType -ne $chartType) {Stop-FurnitureLifecycle 'Selected native series type differs from the homogeneous chart type'}
+    $seriesName=Invoke-FurnitureCom "$Prefix.series.name" {$series.Name}
+    $points=Invoke-FurnitureCom "$Prefix.points.get" {return ,$series.Points()}
+    $pointCount=Invoke-FurnitureCom "$Prefix.points.count" {$points.Count}
+    if($Action.pointIndex -gt $pointCount) {Stop-FurnitureLifecycle 'Native point index is no longer present'}
+    $point=Invoke-FurnitureCom "$Prefix.points.item" {$points.Item([int]$Action.pointIndex)}
+    $chartLeft=Read-FurnitureFiniteNumber $chartShape 'Left' "$Prefix.chart.left"
+    $chartTop=Read-FurnitureFiniteNumber $chartShape 'Top' "$Prefix.chart.top"
+    $left=Read-FurnitureFiniteNumber $point 'Left' "$Prefix.point.left"
+    $top=Read-FurnitureFiniteNumber $point 'Top' "$Prefix.point.top"
+    $width=Read-FurnitureFiniteNumber $point 'Width' "$Prefix.point.width"
+    $height=Read-FurnitureFiniteNumber $point 'Height' "$Prefix.point.height"
+    $Probe.pointBoundsLocalPoints=@($left,$top,$width,$height)
+    if($width -lt 0 -or $height -lt 0) {Stop-FurnitureLifecycle 'Native point bounds are negative'}
+    $x=$left+$width/2; $y=$top+$height/2
+    if($Action.chartKind -eq 'slice' -and $Action.edge -in @('top','bottom')) {
+        $one=Read-FurnitureSlicePoint $point 1 $Prefix $Probe
+        $two=Read-FurnitureSlicePoint $point 2 $Prefix $Probe
+        $three=Read-FurnitureSlicePoint $point 3 $Prefix $Probe
+        $innerArc=$null
+        if($chartType -eq 5) {
+            $four=Read-FurnitureSlicePoint $point 4 $Prefix $Probe
+            $center=[pscustomobject]@{x=2*$four.x-$three.x;y=2*$four.y-$three.y}
+            $Probe.pieCenterLocalPoints=@($center.x,$center.y)
+        } else {
+            $seven=Read-FurnitureSlicePoint $point 7 $Prefix $Probe
+            $eight=Read-FurnitureSlicePoint $point 8 $Prefix $Probe
+            $nine=Read-FurnitureSlicePoint $point 9 $Prefix $Probe
+            $innerArc=@($nine,$eight,$seven)
+            $center=Get-FurnitureNativeCircleCenter @($one,$two,$three)
+            $Probe.circleCenterLocalPoints=@($center.x,$center.y);$Probe.circleCenterMethod=$center.method
+        }
+        $curve=Get-FurnitureCurvedSliceBounds $center @($one,$two,$three) $innerArc
+        $Probe.curvedBoundsLocalPoints=$curve
+        $Probe.strategy='native-curved-slice-bounds'
+        $x=$curve.left+$curve.width/2;$y=if($Action.edge -eq 'top'){$curve.top}else{$curve.top+$curve.height}
+    } elseif($Action.chartKind -eq 'slice' -and $Action.edge -in @('start','end','center')) {
+        # Native XlPieSliceIndex: outer-center2, outer-clockwise3, mid-clockwise-radius4,
+        # inner-center8 (doughnut only). Index5 does not establish a radial midpoint.
+        # https://learn.microsoft.com/en-us/office/vba/api/excel.xlpiesliceindex
+        # PowerPoint documents this API for pie only; doughnut getter availability stays unqualified.
+        # https://learn.microsoft.com/en-us/office/vba/api/powerpoint.point.pieslicelocation
+        if($Action.edge -eq 'end') {
+            $outer=Read-FurnitureSlicePoint $point 2 $Prefix $Probe
+            $x=$outer.x; $y=$outer.y; $Probe.strategy='native-outer-center2'
+        } else {
+            if($chartType -eq 5) {
+                $clockwise=Read-FurnitureSlicePoint $point 3 $Prefix $Probe
+                $midRadius=Read-FurnitureSlicePoint $point 4 $Prefix $Probe
+                # Two independently observed native radial positions recover the actual center,
+                # including a full-circle slice: C = M + (M - O) = 2*M - O. No serialized plot/overlay.
+                $inner=[pscustomobject]@{x=$midRadius.x+($midRadius.x-$clockwise.x);y=$midRadius.y+($midRadius.y-$clockwise.y)}
+                if([double]::IsNaN($inner.x) -or [double]::IsInfinity($inner.x) -or [double]::IsNaN($inner.y) -or [double]::IsInfinity($inner.y)) {Stop-FurnitureLifecycle 'Reconstructed native pie center is not finite'}
+                $Probe.pieCenterLocalPoints=@($inner.x,$inner.y); $Probe.strategy='pie-center-from-native-radius3/4'
+            } else {
+                $inner=Read-FurnitureSlicePoint $point 8 $Prefix $Probe
+                $Probe.strategy='native-doughnut-inner8'
+            }
+            $x=$inner.x; $y=$inner.y
+            if($Action.edge -eq 'center') {
+                $outer=Read-FurnitureSlicePoint $point 2 $Prefix $Probe
+                $x=$inner.x/2+$outer.x/2; $y=$inner.y/2+$outer.y/2
+                $Probe.strategy+='-midpoint-to-outer2'
+            }
+        }
+    } elseif($chartType -in @(1,76,77)) {
+        # Area Point bounds extend from the actual data tip to its baseline; the middle is not the plotted point.
+        # Read actual Series.Values, never the serialized action sign. Other marker/line routes stay unchanged.
+        $nativeValue=Read-FurnitureAreaValue $series ([int]$Action.pointIndex) ([int]$pointCount) $Prefix $Probe
+        if([math]::Abs($width) -gt 0.001 -or $height -lt 0){Stop-FurnitureLifecycle 'Native area point bounds are outside the qualified zero-width vertical domain'}
+        $x=$left;$y=if($nativeValue -lt 0){$top+$height}else{$top}
+        $Probe.strategy='native-area-tip-from-actual-values'
+    } elseif($Action.chartKind -ne 'marker') {
+        if($Action.edge -eq 'top') {$y=$top}
+        elseif($Action.edge -eq 'bottom') {$y=$top+$height}
+        elseif($Action.edge -in @('start','end')) {
+            $positive=$Action.valueSign -ge 0; $end=$Action.edge -eq 'end'
+            if($Action.chartKind -eq 'horizontal-bar') {$x=if($positive -eq $end){$left+$width}else{$left}}
+            elseif($Action.chartKind -eq 'vertical-bar') {$y=if($positive -eq $end){$top}else{$top+$height}}
+        }
+    }
+    $nativeX=$chartLeft+[double]$x; $nativeY=$chartTop+[double]$y
+    if([double]::IsNaN($nativeX) -or [double]::IsInfinity($nativeX) -or [double]::IsNaN($nativeY) -or [double]::IsInfinity($nativeY)) {Stop-FurnitureLifecycle 'Native chart point coordinate is not finite'}
+    $overlayLeft=Read-FurnitureFiniteNumber $overlay 'Left' "$Prefix.overlay.left"
+    $overlayTop=Read-FurnitureFiniteNumber $overlay 'Top' "$Prefix.overlay.top"
+    $overlayWidth=Read-FurnitureFiniteNumber $overlay 'Width' "$Prefix.overlay.width"
+    $overlayHeight=Read-FurnitureFiniteNumber $overlay 'Height' "$Prefix.overlay.height"
+    $overlayX=$overlayLeft+$overlayWidth/2; $overlayY=$overlayTop+$overlayHeight/2
+    $distance=[math]::Sqrt([math]::Pow($overlayX-$nativeX,2)+[math]::Pow($overlayY-$nativeY,2))*4/3
+    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativeSliceObservations=@($Probe.sliceCoordinates.ToArray());nativePieCenterLocalPoints=$Probe.pieCenterLocalPoints;nativeCurvedBoundsLocalPoints=$Probe.curvedBoundsLocalPoints;nativePlotCenterLocalPoints=$Probe.plotCenterLocalPoints;nativeCircleCenterLocalPoints=$Probe.circleCenterLocalPoints;nativeCircleCenterMethod=$Probe.circleCenterMethod;nativeAreaValueObservation=$Probe.areaValueObservation;coordinateStrategy=$Probe.strategy;nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
+}
+
+# Bounded current native chart metadata only: no ChartData, Values setter, Excel or UI.
+function Get-FurnitureSeriesTarget($Presentation,$Action,[string]$Prefix) {
+    $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
+    $shape=Get-ExactShape $slide $Action.chartName "$Prefix.chart"
+    $has=Invoke-FurnitureCom "$Prefix.chart.hasChart" {$shape.HasChart};if($has -ne -1){Stop-FurnitureLifecycle 'The exact series-name target is not a native chart'}
+    $chart=Invoke-FurnitureCom "$Prefix.chart.get" {$shape.Chart};$type=Invoke-FurnitureCom "$Prefix.chart.type" {$chart.ChartType}
+    if(-not (Test-Integer $type) -or $type -notin @(51,52,53,57,58,59,4,65,63,66,1,76,77,-4169,5,-4120)){Stop-FurnitureLifecycle 'Series-name qualification requires a supported classic point chart'}
+    $collection=Invoke-FurnitureCom "$Prefix.series.get" {return ,$chart.SeriesCollection()};$count=Invoke-FurnitureCom "$Prefix.series.count" {$collection.Count}
+    if(-not (Test-Integer $count) -or $count -lt 1 -or $count -gt 256 -or $Action.seriesIndex -gt $count){Stop-FurnitureLifecycle 'Series-name target count/index is outside the bounded collection'}
+    $series=Invoke-FurnitureCom "$Prefix.series.item" {$collection.Item([int]$Action.seriesIndex)}
+    $seriesType=Invoke-FurnitureCom "$Prefix.series.type" {$series.ChartType};if($seriesType -ne $type){Stop-FurnitureLifecycle 'Mixed native series types are outside name-edit qualification'}
+    return [pscustomobject]@{series=$series;collection=$collection;count=$count;chartType=$type}
+}
+function Read-FurnitureLiteralSeriesName($Series,[string]$Prefix,$Probe) {
+    $name=Invoke-FurnitureCom "$Prefix.series.name.get" {$Series.Name}
+    $Probe.observedType=if($null -eq $name){'null'}else{$name.GetType().FullName};$Probe.observedName=if($name -is [string]){$name}else{$null};$Probe.observedRawValue=if($null -eq $name){$null}elseif($name -is [string] -or $name -is [ValueType]){[Convert]::ToString($name,[Globalization.CultureInfo]::InvariantCulture)}else{'<unsupported native name type>'}
+    if($name -isnot [string]){Stop-FurnitureLifecycle 'Native series name is not a literal String'}
+    return $name
+}
+function Set-FurnitureSeriesName($Presentation,$Action,[string]$Prefix) {
+    if($script:officeOperationsStopped){throw 'Office operations already stopped; preserve the original series-name failure receipt'}
+    try{Assert-LiteralSeriesName $Action.expectedName 'expectedName' $Prefix;Assert-LiteralSeriesName $Action.newName 'newName' $Prefix;if($Action.expectedName -ceq $Action.newName){throw 'Series-name action must make a literal change'}}catch{Stop-FurnitureLifecycle $_.Exception.Message}
+    $probe=[ordered]@{phase='action';slideIndex=$Action.slideIndex;chartName=$Action.chartName;seriesIndex=$Action.seriesIndex;expectedName=$Action.expectedName;newName=$Action.newName;before=$null;after=$null;observedType=$null;observedName=$null;observedRawValue=$null;otherNames=@();status='begin'}
+    $report.actionPlan.currentChartSeriesProbe=$probe;$report.actionPlan.chartSeriesEdits+=@($probe)
+    $target=Get-FurnitureSeriesTarget $Presentation $Action $Prefix
+    $before=Read-FurnitureLiteralSeriesName $target.series $Prefix $probe;$probe.before=$before
+    if($before -cne $Action.expectedName){Stop-FurnitureLifecycle 'Native series name no longer equals the literal expectedName; no setter was called'}
+    for($index=1;$index -le $target.count;$index++){
+        if($index -eq $Action.seriesIndex){continue}
+        $other=Invoke-FurnitureCom "$Prefix.series.other-$index.get" {$target.collection.Item($index)}
+        $name=Invoke-FurnitureCom "$Prefix.series.other-$index.name.get" {$other.Name};$probe.otherNames+=@([ordered]@{index=$index;name=if($name -is [string]){$name}else{$null}})
+        if($name -isnot [string]){Stop-FurnitureLifecycle 'Another native series has no String name'}
+        if($name -ieq $Action.newName){Stop-FurnitureLifecycle 'New literal name already identifies another native series; no setter was called'}
+    }
+    Invoke-FurnitureCom "$Prefix.series.name.set" {$target.series.Name=$Action.newName}
+    $after=Read-FurnitureLiteralSeriesName $target.series "$Prefix.readback" $probe;$probe.after=$after
+    if($after -cne $Action.newName){Stop-FurnitureLifecycle 'Native series name setter did not retain the exact requested literal'}
+    $probe.status='success'
+}
+function Read-FurnitureSeriesNameState($Presentation,$Targets,[string]$Phase) {
+    if($script:officeOperationsStopped){throw 'Office operations already stopped; preserve the original series-name failure receipt'}
+    $records=New-Object 'System.Collections.Generic.List[object]'
+    foreach($action in $Targets){
+        if($action.op -cne 'set-chart-series-name'){continue}
+        $expected=if($Phase -ceq 'original'){$action.expectedName}else{$action.newName}
+        $probe=[ordered]@{phase=$Phase;slideIndex=$action.slideIndex;chartName=$action.chartName;seriesIndex=$action.seriesIndex;expectedName=$expected;observedName=$null;observedType=$null;observedRawValue=$null;status='begin'};$report.actionPlan.currentChartSeriesProbe=$probe
+        $target=Get-FurnitureSeriesTarget $Presentation $action "$Phase.series-name-$($records.Count+1)"
+        $name=Read-FurnitureLiteralSeriesName $target.series "$Phase.series-name-$($records.Count+1)" $probe
+        if($name -cne $expected){Stop-FurnitureLifecycle "Native $Phase series name does not equal its exact expected current literal"}
+        $probe.status='success';$records.Add($probe)
+    }
+    return ,$records.ToArray()
+}
+
 function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
     $prefix="action-$Number-$($Action.op)"
+    if($Action.op -ceq 'set-chart-series-name'){Set-FurnitureSeriesName $Presentation $Action $prefix;return}
     if($Action.op -eq 'move-slide') { $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $prefix; Invoke-FurnitureCom "$prefix.moveTo" { $slide.MoveTo([int]$Action.toIndex) }; return }
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $prefix
     if($Action.op -in @('set-tag','delete-tag')) {
@@ -311,6 +667,7 @@ function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
         $existing=Read-NativeTags $tags "$prefix.tags.precondition"; if(@($existing | Where-Object { $_.name -ieq $Action.tagName }).Count -ne 1) { throw "$prefix expected one existing tag '$($Action.tagName)'" }
         Invoke-FurnitureCom "$prefix.tags.delete" { $tags.Delete($Action.tagName) }; return
     }
+    if($Action.op -eq 'measure-chart-point') {$probe=New-FurniturePointProbe $Action $prefix;$report.actionPlan.currentChartPointProbe=$probe;$report.actionPlan.chartPoints+=@(Read-FurnitureChartPoint $Presentation $Action $prefix $probe);return}
     $shape=Get-ExactShape $slide $Action.shapeName $prefix
     switch($Action.op) {
         'set-text-style' { $evidence=Set-FurnitureTextStyle $shape $Action $prefix; $report.actionPlan.styleEdits+=@([ordered]@{index=$Number;slideIndex=$Action.slideIndex;shapeName=$Action.shapeName;observed=$evidence}) }
@@ -320,33 +677,74 @@ function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
         'duplicate-shape' { Assert-ShapeNameAvailable $slide $Action.newName $prefix; $range=Invoke-FurnitureCom "$prefix.duplicate" { return ,$shape.Duplicate() }; $count=Invoke-FurnitureCom "$prefix.duplicateRange.count.get" { $range.Count }; if($count -ne 1) { throw "$prefix expected one duplicated shape; observed $count" }; $duplicate=Invoke-FurnitureCom "$prefix.duplicateRange.item-1.get" { $range.Item(1) }; Invoke-FurnitureCom "$prefix.duplicate.name.set" { $duplicate.Name=$Action.newName } }
     }
 }
+function Assert-FurnitureOfficeIdle {
+    if(Get-Process -Name POWERPNT -ErrorAction SilentlyContinue) { throw 'POWERPNT.EXE is already running; do not attach to another session' }
+}
+function Stop-FurnitureLifecycle([string]$Message) {
+    $script:officeOperationsStopped=$true; $script:cleanupConfirmed=$false
+    throw $Message
+}
+function Assert-OwnedFurnitureApplication($Application) {
+    $presentations=Invoke-FurnitureCom 'application.ownership.presentations.get' { return ,$Application.Presentations }
+    $count=Invoke-FurnitureCom 'application.ownership.presentations.count.get' { $presentations.Count }
+    if($count -ne 0) { Stop-FurnitureLifecycle 'Application has presentations; refuse to adopt or clean up a potentially foreign instance' }
+    $script:ownedApplication=$Application
+}
+function Quit-OwnedFurnitureApplication($Application) {
+    if(-not [object]::ReferenceEquals($script:ownedApplication,$Application)) { Stop-FurnitureLifecycle 'Refusing to quit an application this worker did not verify and own' }
+    $presentations=Invoke-FurnitureCom 'application.cleanup.presentations.get' { return ,$Application.Presentations }
+    $count=Invoke-FurnitureCom 'application.cleanup.presentations.count.get' { $presentations.Count }
+    if($count -ne 0) { Stop-FurnitureLifecycle 'Application is no longer empty; do not quit or close foreign presentations' }
+    Invoke-FurnitureCom 'application.cleanup.quit' { $Application.Quit() }
+    $script:ownedApplication=$null
+}
+function Open-OwnedFurniture($Application,[string]$Path,[string]$Phase) {
+    if(-not [object]::ReferenceEquals($script:ownedApplication,$Application)) { Stop-FurnitureLifecycle 'Refusing to open through an unverified application' }
+    Assert-PresentationNotOpen $Application $Path "$Phase.preflight"
+    $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$Path; Write-FurnitureReport
+    $presentations=Invoke-FurnitureCom "$Phase.presentations.get" { return ,$Application.Presentations }
+    $script:presentation=Invoke-FurnitureCom "$Phase.presentation.open" { $presentations.Open($Path,-1,0,-1) }
+    $actual=Invoke-FurnitureCom "$Phase.presentation.fullName.get" { $script:presentation.FullName }
+    if($actual -ine $Path) { Stop-FurnitureLifecycle "Opened presentation path differs from exact owned path: $actual" }
+    $readonly=Invoke-FurnitureCom "$Phase.presentation.readOnly.get" { $script:presentation.ReadOnly }
+    if($readonly -ne -1) { Stop-FurnitureLifecycle 'Owned presentation did not open read-only' }
+}
+function Save-OwnedFurnitureCopy([string]$ExpectedPath,[string]$CopyPath) {
+    if($CopyPath -ieq $ExpectedPath -or (Test-Path -LiteralPath $CopyPath)) { Stop-FurnitureLifecycle 'SaveCopyAs requires a fresh derivative separate from the owned input' }
+    $actual=Invoke-FurnitureCom 'edited.presentation.fullName.get' { $script:presentation.FullName }
+    if($actual -ine $ExpectedPath -or $script:ownedPresentationPath -ine $ExpectedPath) { Stop-FurnitureLifecycle 'Refusing to copy a presentation whose exact identity is not owned' }
+    Invoke-FurnitureCom 'edited.presentation.saveCopyAs' { $script:presentation.SaveCopyAs($CopyPath,24) }
+    $after=Invoke-FurnitureCom 'edited.presentation.fullName.afterCopy.get' { $script:presentation.FullName }
+    if($after -ine $ExpectedPath) { Stop-FurnitureLifecycle 'SaveCopyAs changed the owned input identity' }
+}
 function Close-OwnedFurniture([string]$Phase,[string]$ExpectedPath) {
-    $actual=Invoke-FurnitureCom "$Phase.fullName.get" { $script:presentation.FullName }; if($actual -ine $ExpectedPath) { throw "Refusing to close a presentation whose exact saved path is not owned: $actual" }
+    $actual=Invoke-FurnitureCom "$Phase.fullName.get" { $script:presentation.FullName }; if($actual -ine $ExpectedPath -or $script:ownedPresentationPath -ine $ExpectedPath) { Stop-FurnitureLifecycle "Refusing to close a presentation whose exact path is not owned: $actual" }
+    # SaveCopyAs preserved the edited derivative. Discard only this verified owned in-memory state without a save prompt.
+    Invoke-FurnitureCom "$Phase.discardChanges" { $script:presentation.Saved=-1 }
     Invoke-FurnitureCom "$Phase.close" { $script:presentation.Close() }; $script:presentation=$null; $script:ownedPresentationPath=$null; $script:cleanupConfirmed=$true; Write-FurnitureStage "$Phase.cleanup" 'success'
 }
 
 Write-FurnitureReport; Write-FurnitureStage 'worker.initialize' 'success'
 try {
+    Assert-FurnitureOfficeIdle
     $app=Invoke-FurnitureCom 'application.create' { New-Object -ComObject PowerPoint.Application }
+    Assert-OwnedFurnitureApplication $app
     $officeVersion=Invoke-FurnitureCom 'application.version.get' { $app.Version }; $officeDirectory=Invoke-FurnitureCom 'application.path.get' { $app.Path }; $officeExecutable=Join-Path $officeDirectory 'POWERPNT.EXE'
     $report.environment.powerPointVersion=$officeVersion; $report.environment.powerPointExecutable=$officeExecutable; $report.environment.powerPointBuild=(Get-Item -LiteralPath $officeExecutable).VersionInfo.FileVersion; $report.environment.powerPointExecutableSha256=Get-FurnitureSha256 $officeExecutable; Write-FurnitureReport
-    Assert-PresentationNotOpen $app $sourceSnapshot 'input.preflight'; Assert-PresentationNotOpen $app $savedPath 'output.preflight'
-    $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$sourceSnapshot; Write-FurnitureReport
-    $presentations=Invoke-FurnitureCom 'input.presentations.get' { return ,$app.Presentations }; $script:presentation=Invoke-FurnitureCom 'input.presentation.open' { $presentations.Open($sourceSnapshot,0,0,-1) }
+    Assert-PresentationNotOpen $app $savedPath 'output.preflight'
+    Open-OwnedFurniture $app $sourceSnapshot 'input'
     $report.phases.original=Read-FurnitureState $script:presentation 'original'; Write-FurnitureReport
-    Invoke-FurnitureCom 'owned-copy.saveAs' { $script:presentation.SaveAs($savedPath,24) }; $script:ownedPresentationPath=$savedPath; Write-FurnitureReport
     for($index=0;$index -lt $actions.Count;$index++) { Apply-FurnitureAction $script:presentation $actions[$index] ($index+1); $report.actionPlan.completed+=@([ordered]@{index=$index+1;op=$actions[$index].op;status='success'}) }
     Write-FurnitureReport
-    Invoke-FurnitureCom 'edited.presentation.save' { $script:presentation.Save() }
+    Save-OwnedFurnitureCopy $sourceSnapshot $savedPath
     $report.phases.edited=Read-FurnitureState $script:presentation 'edited'; Write-FurnitureReport
-    Close-OwnedFurniture 'edited.presentation' $savedPath; $report.saved.sha256=Get-FurnitureSha256 $savedPath; Write-FurnitureReport
-    Assert-PresentationNotOpen $app $savedPath 'reopen.preflight'; $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$savedPath; Write-FurnitureReport
-    $presentations=Invoke-FurnitureCom 'reopen.presentations.get' { return ,$app.Presentations }; $script:presentation=Invoke-FurnitureCom 'reopen.presentation.open' { $presentations.Open($savedPath,-1,0,-1) }
-    $reopenedPath=Invoke-FurnitureCom 'reopen.presentation.fullName.get' { $script:presentation.FullName }; if($reopenedPath -ine $savedPath) { throw "Reopened presentation path differs from exact saved path: $reopenedPath" }
+    Close-OwnedFurniture 'edited.presentation' $sourceSnapshot; $report.saved.sha256=Get-FurnitureSha256 $savedPath; Write-FurnitureReport
+    Open-OwnedFurniture $app $savedPath 'reopen'
     $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport
     Close-OwnedFurniture 'reopened.presentation' $savedPath; $report.reopened.sha256=Get-FurnitureSha256 $savedPath
     if((Get-FurnitureSha256 $sourcePath) -cne $sourceHash -or (Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Requested source or its snapshot changed during the native lifecycle' }
     if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256) { throw 'Action-plan snapshot changed during the native lifecycle' }
+    Quit-OwnedFurnitureApplication $app
     Write-FurnitureStage 'worker.complete' 'success'; Write-FurnitureReport; Write-Output "Native furniture control completed with $($actions.Count) action(s)."
 } catch {
     $report.error=$_.Exception.Message; if($script:officeOperationsStopped -or $null -ne $script:presentation) { $script:cleanupConfirmed=$false }

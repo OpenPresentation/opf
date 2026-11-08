@@ -1,6 +1,6 @@
 {
-  "version": "0.33.0",
-  "description": "Release qualification corpus: every user-facing change since v0.32.1, as decks (new ones in decks/, existing examples by path), the PPTX variants to export, and per feature the slides and what to check in each native app. build.mjs exports it; run-powerpoint-windows.ps1 probes it through COM; evaluate.mjs grades the probe against the checks below. The Mac (PowerPoint for Mac, Keynote) and Linux (LibreOffice) streams run the same decks and grade the same features by hand where they have no object model.",
+  "version": "0.34.0",
+  "description": "Release qualification corpus: the retained v0.33 baseline plus v0.34 changes, including every supported diagram source syntax, as decks (new ones in decks/, existing examples by path), the PPTX variants to export, and per feature the slides and what to check in each native app. build.mjs exports it; run-powerpoint-windows.ps1 probes it through COM; evaluate.mjs grades the probe against the checks below. The Mac (PowerPoint for Mac, Keynote) and Linux (LibreOffice) streams run the same decks and grade the same features by hand where they have no object model.",
   "checks": {
     "opens": "The file opens without a repair prompt or an error.",
     "slides": "The app shows as many slides as OPF's preview draws.",
@@ -109,6 +109,14 @@
           ]
         }
       ]
+    },
+    {
+      "id": "dot-diagrams",
+      "source": "examples/technical/dot-diagrams.opf.json"
+    },
+    {
+      "id": "plantuml-diagrams",
+      "source": "examples/technical/plantuml-diagrams.opf.json"
     },
     {
       "id": "diagrams-markdown",
@@ -392,6 +400,54 @@
         "visual",
         "shapes"
       ]
+    },
+    {
+      "id": "SH-12",
+      "title": "Graphviz DOT: native nodes, paths, clusters and saved source",
+      "changes": [
+        "sh-12-dot-diagrams"
+      ],
+      "deck": "dot-diagrams",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes",
+        "roundtrip"
+      ],
+      "expect": {
+        "shapes": 1,
+        "roundtrip": {
+          "diagrams": 5
+        }
+      },
+      "check": "Review all five slides: cluster/decision, undirected graph, stadium, cylinder, dashed labeled edges, dark circles/double circle, alt text; saved-current import retains authored DOT source. A custom arrow path is not claimed to be a glued native connector."
+    },
+    {
+      "id": "SH-13",
+      "title": "PlantUML: eight native families and saved source",
+      "changes": [
+        "sh-13-plantuml-diagrams"
+      ],
+      "deck": "plantuml-diagrams",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes",
+        "roundtrip"
+      ],
+      "expect": {
+        "shapes": 1,
+        "roundtrip": {
+          "diagrams": 8
+        }
+      },
+      "check": "Review all eight slides: sequence alt frame, class composition/cardinalities/realization, state, activity, use case include, component, mind map, gantt milestone and alt text. Saved-current import retains authored PlantUML source."
     },
     {
       "id": "SH-09",

@@ -2,6 +2,7 @@
 // (docs/programs/monorepo/README.md, section 4) and against scripts/ci-scope.mjs, whose output decides which jobs run.
 // Text-level on purpose: the repository has no YAML parser dependency. actionlint covers the syntax.
 import assert from 'node:assert/strict';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
@@ -204,21 +205,44 @@ test('nightly.yml: schedule, dispatch and call; never a pull request or push; ev
   assert.doesNotMatch(triggers, /pull_request|push:|merge_group/u);
   assert.match(nightly, /os: \[windows-latest, macos-latest\]/u);
   assert.match(nightly, /node: \[22, 26\]/u);
-  for (const id of ['cli-portability', 'installed', 'pptx-windows', 'editor-macos', 'node-range', 'packed-linux', 'registry', 'npm12-consumer', 'audit', 'platform-residual', 'flake', 'report']) assert.ok(jobsOf(nightly).some((entry) => entry.id === id), `nightly.yml has ${id}`);
+  for (const id of ['cli-portability', 'installed', 'pptx-windows', 'editor-macos', 'editor-windows', 'node-range', 'packed-linux', 'registry', 'npm12-consumer', 'audit', 'platform-residual', 'libreoffice', 'flake', 'report']) assert.ok(jobsOf(nightly).some((entry) => entry.id === id), `nightly.yml has ${id}`);
   assert.match(nightly, /name: Installed candidates \(\$\{\{ matrix\.os \}\}\)/u, 'the old check name is kept');
   assert.match(job(nightly, 'pptx-windows').text, /native-tab-control-v2\.ps1 -PureRegression/u);
   assert.match(job(nightly, 'editor-macos').text, /runs-on: macos-15/u);
+  assert.match(job(nightly, 'editor-windows').text, /runs-on: windows-latest/u);
   // MR-30: npm 12's install-time defaults (no install scripts, no git or remote dependencies) are checked on the packed packages, at an exact npm 12.
   assert.match(job(nightly, 'npm12-consumer').text, /NPM12_VERSION: 12\.\d+\.\d+\n/u, 'npm 12 is pinned to an exact version');
   assert.match(job(nightly, 'npm12-consumer').text, /pnpm test:npm12-consumer/u);
   assert.doesNotMatch(job(nightly, 'npm12-consumer').text, /ignore-scripts|allow-scripts|dangerously/u, 'the leg never re-enables scripts');
 });
 
+test('nightly flake measurement uses Bash and routes every matrix suite to its exact measurement directory', () => {
+  const flake = job(nightly, 'flake').text;
+  assert.match(flake, /^ {4}continue-on-error: true$/mu, 'measurement stays advisory');
+  const repeat = flake.match(/^ {6}- name: Repeat the suites\n([\s\S]*?)(?=^ {6}- name:)/mu)?.[1];
+  assert.ok(repeat, 'inspect the actual repeat step');
+  assert.match(repeat, /^ {8}shell: bash$/mu, 'container default sh rejects the Bash substitution before measuring tests');
+  for (const [name, expression] of [['DIR', 'matrix.dir'], ['SUITES', 'matrix.suites']]) assert.ok(repeat.includes(name + ': ${{ ' + expression + ' }}'));
+  assert.match(repeat, /REPEAT: \$\{\{ inputs\.repeat \|\| '5' \}\}/u);
+  const run = repeat.match(/^ {8}run: \|\n([\s\S]*)/mu)?.[1].split('\n').map(line => line.replace(/^ {10}/u, '')).join('\n');
+  assert.ok(run);
+  const matrix = [...flake.matchAll(/^ {10}- name: ([^\n]+)\n {12}dir: ([^\n]+)\n {12}suites: ([^\n]+)/gmu)].map(([, name, dir, suites]) => ({name, dir, suites}));
+  assert.deepEqual(matrix.map(entry => entry.name), ['installed browser', 'render', 'pptx', 'editor']);
+  const bash = process.platform === 'win32' ? path.resolve(execFileSync('git', ['--exec-path'], {encoding: 'utf8'}).trim(), '../../../bin/bash.exe') : 'bash';
+  // Only capture argv: never run flake-repeat, a browser, package tests or network commands.
+  const capture = 'node() { printf "%s\\0" "$@"; printf "__end__\\0"; }\n';
+  for (const entry of matrix) {
+    const measured = spawnSync(bash, ['--noprofile', '--norc', '-e', '-o', 'pipefail', '-c', capture + run], {encoding: 'utf8', timeout: 10000, env: {...process.env, DIR: entry.dir, SUITES: entry.suites, REPEAT: '5'}});
+    assert.equal(measured.status, 0, entry.name + ': ' + measured.stderr);
+    assert.deepEqual(measured.stdout.split('\0').filter(Boolean), entry.suites.split(' ').flatMap(suite => ['scripts/flake-repeat.mjs', '--dir', entry.dir, '--suite', suite, '--repeat', '5', '--out', 'artifacts/flake-repeat/' + entry.dir.replaceAll('/', '-') + '-' + suite, '__end__']), entry.name);
+  }
+});
+
 test('nightly.yml reports only a scheduled run or one that asked for it, ignores the advisory jobs and needs every leg', () => {
   const report = job(nightly, 'report');
   assert.match(report.text, /if: \$\{\{ always\(\) && \(github\.event_name == 'schedule' \|\| inputs\.report == true\) \}\}/u);
   assert.match(report.text, /--label nightly-red/u);
-  assert.match(report.text, /--ignore platform-residual,flake/u);
+  assert.match(report.text, /--ignore platform-residual,libreoffice,flake$/mu, 'the advisory jobs, LibreOffice until its baseline is promoted (docs/libreoffice.md)');
   const legs = jobsOf(nightly).map((entry) => entry.id).filter((id) => !['plan', 'report'].includes(id));
   assert.deepEqual(needsOf(report).sort(), legs.sort(), 'the report waits for every leg');
   assert.match(nightly, /report:\n {8}description: [^\n]*\n {8}type: boolean\n {8}default: false/u, 'a call reports nothing by default (a release gate stops the release, it opens no issue)');
