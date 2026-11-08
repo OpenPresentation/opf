@@ -1,0 +1,47 @@
+{
+  "scope": "Supersedes earlier cleanup-owed status only. Both exact owned profiles cleaned by original helpers after zero-process PS5preflight; unrelated files/registry preserved.",
+  "cleanedProfiles": 2,
+  "remainingRobotoFamilies": [],
+  "files": [
+    {
+      "path": "invoke-owned-font-cleanup01.ps1",
+      "bytes": 2285,
+      "sha256": "139a1ba7e85e0842d830490506d81e2756a79212dd4110bccd297f7af205c495"
+    },
+    {
+      "path": "owned-font-cleanup01-preflight.json",
+      "bytes": 162,
+      "sha256": "bd3428e79fd94702c18f0680123fe0650b1191ddd3e3d2d2bd60be6bd0a406f6"
+    },
+    {
+      "path": "owned-font-cleanup01.log",
+      "bytes": 104,
+      "sha256": "d52233aaa52342b2483c902febe24c9ee63c33dd6d429ca048ce904f737805b2"
+    },
+    {
+      "path": "owned-font-mono-ready-before-cleanup01.json",
+      "bytes": 1346,
+      "sha256": "6c6508b08bd769cdad3e719df4bbbc4af89e558875729f543a069f4633ee80de"
+    },
+    {
+      "path": "owned-font-roboto-ready-before-cleanup01.json",
+      "bytes": 3344,
+      "sha256": "acdf50213fc0986dd9044bc400b7f7ab279e6d8e6ae7656f744b555a3fbe3e51"
+    },
+    {
+      "path": "owned-font-mono-cleaned01.json",
+      "bytes": 1348,
+      "sha256": "fb37a07ac7c497046df63c931fce97300f2e5e219801d8c3d62151924b7efcf4"
+    },
+    {
+      "path": "owned-font-roboto-cleaned01.json",
+      "bytes": 3346,
+      "sha256": "1682b8742e2dd0139fc35dadb06586c5c48d91422bf038f90f2b4a948b356288"
+    },
+    {
+      "path": "owned-font-fresh-postcleanup01.json",
+      "bytes": 7380,
+      "sha256": "a29c60a79badf334e6419f6aaef7d7cdec7f91203941122818e2feb2db0ce0ee"
+    }
+  ]
+}

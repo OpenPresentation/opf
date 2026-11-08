@@ -1,0 +1,22 @@
+﻿{
+    "profileId":  "opf-native-roboto-mono-0.4.2-400-700-v1",
+    "schemaVersion":  1,
+    "id":  "b3cc29f436a54e9db852644d4e511f28",
+    "status":  "ready",
+    "createdRegistryKey":  false,
+    "suiteSha256":  "a05c780f98fc23aebe6191481accf155040174cf7926748cdb996c00870349e4",
+    "toolSha256":  "b1dfba73768c11823dc0400597f38dc10b235bcde1c1183843c2dfb38343052a",
+    "probeSha256":  "49855dd4a941a7d39804ce6b7254b98d3561dfdbbf3716e4e8ff4622a2a2284f",
+    "entries":  [
+                    {
+                        "sha256":  "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95",
+                        "file":  "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95.ttf",
+                        "value":  "OPF Native Mono b3cc29f436a54e9db852644d4e511f28 e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95 (TrueType)"
+                    },
+                    {
+                        "sha256":  "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83",
+                        "file":  "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83.ttf",
+                        "value":  "OPF Native Mono b3cc29f436a54e9db852644d4e511f28 92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83 (TrueType)"
+                    }
+                ]
+}
