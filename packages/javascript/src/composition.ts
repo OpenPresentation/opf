@@ -4907,7 +4907,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
 /** SH-04: composeLayout's overlay pass: compose the slide's `shapes` onto this composition (composeSlide's last step) and return it. */
 const OVERLAY_ONTO = Symbol('opf.overlayOnto');
 /** LH-10: a second layout trial retains every settled text size while its overlong body paragraphs wrap to the reading measure. */
-const PROSE_REFLOW = Symbol('opf.proseReflow'), PROSE_COMPACT = Symbol('opf.proseCompact');
+const PROSE_REFLOW = Symbol('opf.proseReflow'), PROSE_COMPACT = Symbol('opf.proseCompact'), PROSE_NO_TITLE_RULE = Symbol('opf.proseNoTitleRule');
 type RetainedProse = ReadonlyMap<string, {size: number; limit?: number}>;
 const overReadingMeasure = (item: ComposedItem): boolean => item.field === 'text' && !!item.text?.lines.some(line => line.trim().length > PROSE_MEASURE_CHARS);
 function readableProse(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
@@ -4919,7 +4919,7 @@ function readableProse(input: unknown, options: ComposeSlideOptions, result: Sli
   const retained: RetainedProse = new Map(result.items.filter(item => item.text).map(item => [item.path, {size: item.text!.fontSize, ...(long.includes(item) ? {limit: PROSE_MEASURE_CHARS} : {})}]));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   for (const compact of [false, true]) {
-    const next = composeVariant(input, {...options, [PROSE_REFLOW]: retained, [PROSE_COMPACT]: compact, [CENTER]: true} as ComposeSlideOptions, before, floor);
+    const next = composeVariant(input, {...options, [PROSE_REFLOW]: retained, [PROSE_COMPACT]: compact, [PROSE_NO_TITLE_RULE]: result.titleRule === undefined, [CENTER]: true} as ComposeSlideOptions, before, floor);
     if (!next || overflowCount(next) > 0 || next.items.some(overReadingMeasure) || shrinks(next, result, options)) continue;
     const kept = result.items.every(item => {
       const after = next.items.find(entry => entry.path === item.path);
@@ -5481,7 +5481,9 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
   const unruled = (): SlideComposition | undefined => { if (plain === null) plain = compose(NO_RULES); return plain; };
   const portraitsRead = (next: SlideComposition) => { if (!fired.has('portraits')) return true; const base = unruled(); return !PORTRAIT_FALLBACK.has(next) && !(base && picturesShrink(next, base)); };
   const reads = (next: SlideComposition | undefined) => next !== undefined && readsAsWell(before, trackQuality(next, options), floor) && portraitsRead(next);
-  const core = (options as Record<symbol, unknown>)[WITH_PLACED_TILES] === true ? new Set<GuardedRule>([...CORE_RULES, 'placed-tiles']) : CORE_RULES;
+  const available = (options as Record<symbol, unknown>)[WITH_PLACED_TILES] === true ? new Set<GuardedRule>([...CORE_RULES, 'placed-tiles']) : CORE_RULES;
+  // LH-10 only repairs body measure: a retained-type trial cannot enable title decoration the settled slide rejected.
+  const core = (options as Record<symbol, unknown>)[PROSE_NO_TITLE_RULE] === true ? new Set([...available].filter(rule => rule !== 'title-rule')) : available;
   const ruled = compose(core, fired);
   // LH-39: the figure on one line is tried on top of the rules this arrangement keeps, as guardedCompose does.
   const figure = (rules: ReadonlySet<GuardedRule>, current: SlideComposition | undefined): SlideComposition | undefined => {
