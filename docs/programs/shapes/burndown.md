@@ -166,3 +166,6 @@ item's state edits its row and appends a log line in the same PR.
 
 - 2026-11-08: NEWderived SH25doughnut probe replaces the empirically offset PlotArea center with independent actual outer1/2/3circumcenter. Sealedrawvalues prove4ptcenter offset and inner9/8/7angular pairing; oldfailedsupervisor and separate owned cleanup retained. Actualmock fails-before/passes-after;20purecenter/26curve/45point plus14lifecycle/15font controls pass, including reopened serialized failure12rawvalues. Pie/product/four-pixel gate unchanged; new native/full32case acceptance owed. [Rationale](../../handoff/2026-11-08/sh25-native-circle.md).
 
+
+- 2026-11-08: NEWderived SH25area probe corrects a native measurement proxy: Point.Height spans baseline-to-value, so only area1/76/77use actual Series.Values sign to select the observed tip, never product/action geometry. Thirty actual-coordinate fixtures and58signed/scalar/array/unchanged/refusal controls pass without Office; original117.100pxbefore failure retained. Values/chartData/Excel writes prohibited, all raw values/partial bounds and4pxcriterion retained. New native getter/negative/current-chart edit qualification remains owed. [Rationale](../../handoff/2026-11-08/sh25-area-tip-probe.md).
+

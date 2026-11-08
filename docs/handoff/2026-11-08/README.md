@@ -95,3 +95,6 @@ LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798
 
 - [SH25actual native circle](sh25-native-circle.md): NEWderived wrongPlotArea-center probe correction, actualrawcircumcenter; no product/tolerance change; nativequalification owed.
 
+
+- [SH25native area-tip probe](sh25-area-tip-probe.md): actualnative Series.Values signed endpoint,30preserved actual observations/58mock controls; product unchanged, new getter/native negative/current-edit acceptance owed.
+

@@ -325,7 +325,7 @@ function Read-FurnitureFiniteNumber($Object,[string]$Property,[string]$Stage) {
     return $number
 }
 function New-FurniturePointProbe($Action,[string]$Prefix) {
-    return [ordered]@{stage=$Prefix;chartName=$Action.chartName;shapeName=$Action.shapeName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;edge=$Action.edge;strategy='native-point-bounds';sliceCoordinates=(New-Object 'System.Collections.Generic.List[object]');pieCenterLocalPoints=$null;curvedBoundsLocalPoints=$null;plotCenterLocalPoints=$null;circleCenterLocalPoints=$null;circleCenterMethod=$null}
+    return [ordered]@{stage=$Prefix;chartName=$Action.chartName;shapeName=$Action.shapeName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;edge=$Action.edge;strategy='native-point-bounds';sliceCoordinates=(New-Object 'System.Collections.Generic.List[object]');pieCenterLocalPoints=$null;curvedBoundsLocalPoints=$null;plotCenterLocalPoints=$null;circleCenterLocalPoints=$null;circleCenterMethod=$null;areaValueObservation=$null;pointBoundsLocalPoints=$null}
 }
 function Read-FurnitureSlicePoint($Point,[int]$Index,[string]$Prefix,$Probe) {
     $coordinates=New-Object 'System.Collections.Generic.List[double]'
@@ -436,6 +436,42 @@ function Get-FurnitureCurvedSliceBounds($Center,$Outer,$Inner=$null) {
     $xs=$points | Measure-Object -Property x -Minimum -Maximum;$ys=$points | Measure-Object -Property y -Minimum -Maximum
     return [pscustomobject]@{left=[double]$xs.Minimum;top=[double]$ys.Minimum;width=[double]($xs.Maximum-$xs.Minimum);height=[double]($ys.Maximum-$ys.Minimum);center=@($centerPoint.x,$centerPoint.y);outerRadius=$radius;innerRadius=$innerRadius;startAngle=$start;sweep=$sweep;fullCircle=$closed}
 }
+# Read only actual native values; never open ChartData/Excel or resolve a worksheet range.
+function Read-FurnitureAreaValue($Series,[int]$PointIndex,[int]$PointCount,[string]$Prefix,$Probe) {
+    $holder=Invoke-FurnitureCom "$Prefix.series.values.get" {[pscustomobject]@{raw=$Series.Values}}
+    $raw=$holder.raw
+    $describe={param($value)
+        if($null -eq $value){return [ordered]@{type='null';rawValue=$null}}
+        $type=[Convert]::GetTypeCode($value);$name=$value.GetType().FullName
+        $safe=$type -in @([TypeCode]::String,[TypeCode]::Boolean,[TypeCode]::Byte,[TypeCode]::SByte,[TypeCode]::Int16,[TypeCode]::UInt16,[TypeCode]::Int32,[TypeCode]::UInt32,[TypeCode]::Int64,[TypeCode]::UInt64,[TypeCode]::Single,[TypeCode]::Double,[TypeCode]::Decimal)
+        return [ordered]@{type=$name;rawValue=if($safe){[Convert]::ToString($value,[Globalization.CultureInfo]::InvariantCulture)}else{'<unsupported native value type>'}}
+    }
+    $observation=[ordered]@{containerType=if($null -eq $raw){'null'}else{$raw.GetType().FullName};pointIndex=$PointIndex;pointCount=$PointCount;rank=$null;dimensions=@();rawValues=@();selectedValue=$null}
+    $Probe.areaValueObservation=$observation
+    if($raw -is [Array]){
+        $observation.rank=$raw.Rank
+        for($dimension=0;$dimension -lt $raw.Rank;$dimension++){$observation.dimensions+=@([ordered]@{lowerBound=$raw.GetLowerBound($dimension);length=$raw.GetLength($dimension)})}
+        if($raw.Length -gt 10000){Stop-FurnitureLifecycle 'Native area value array exceeds the bounded probe limit'}
+        # Index this managed Variant array explicitly, retaining every returned primitive before rank/value validation.
+        for($linear=0;$linear -lt $raw.Length;$linear++){
+            $indices=New-Object 'int[]' $raw.Rank;$remaining=$linear
+            for($dimension=$raw.Rank-1;$dimension -ge 0;$dimension--){$length=$raw.GetLength($dimension);$indices[$dimension]=$raw.GetLowerBound($dimension)+($remaining%$length);$remaining=[int][math]::Floor($remaining/$length)}
+            $observation.rawValues+=@((& $describe ($raw.GetValue([int[]]$indices))))
+        }
+        if($raw.Rank -ne 1 -or $raw.Length -ne $PointCount){Stop-FurnitureLifecycle 'Native area values have an unqualified rank or count'}
+        $value=$raw.GetValue($raw.GetLowerBound(0)+$PointIndex-1)
+    }else{
+        $observation.rawValues=@((& $describe $raw))
+        if($PointCount -ne 1){Stop-FurnitureLifecycle 'Native area scalar does not identify this point collection'}
+        $value=$raw
+    }
+    if($null -eq $value -or [Convert]::GetTypeCode($value) -notin @([TypeCode]::Byte,[TypeCode]::SByte,[TypeCode]::Int16,[TypeCode]::UInt16,[TypeCode]::Int32,[TypeCode]::UInt32,[TypeCode]::Int64,[TypeCode]::UInt64,[TypeCode]::Single,[TypeCode]::Double,[TypeCode]::Decimal)){Stop-FurnitureLifecycle 'Native area value is missing, nonnumeric or a worksheet range; never resolve it'}
+    $number=[double]$value
+    if([double]::IsNaN($number) -or [double]::IsInfinity($number)){Stop-FurnitureLifecycle 'Native area value is not finite'}
+    $observation.selectedValue=$number
+    return $number
+}
+
 function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$null) {
     if($null -eq $Probe) {$Probe=New-FurniturePointProbe $Action $Prefix}
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $Prefix
@@ -467,6 +503,7 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$
     $top=Read-FurnitureFiniteNumber $point 'Top' "$Prefix.point.top"
     $width=Read-FurnitureFiniteNumber $point 'Width' "$Prefix.point.width"
     $height=Read-FurnitureFiniteNumber $point 'Height' "$Prefix.point.height"
+    $Probe.pointBoundsLocalPoints=@($left,$top,$width,$height)
     if($width -lt 0 -or $height -lt 0) {Stop-FurnitureLifecycle 'Native point bounds are negative'}
     $x=$left+$width/2; $y=$top+$height/2
     if($Action.chartKind -eq 'slice' -and $Action.edge -in @('top','bottom')) {
@@ -519,6 +556,13 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$
                 $Probe.strategy+='-midpoint-to-outer2'
             }
         }
+    } elseif($chartType -in @(1,76,77)) {
+        # Area Point bounds extend from the actual data tip to its baseline; the middle is not the plotted point.
+        # Read actual Series.Values, never the serialized action sign. Other marker/line routes stay unchanged.
+        $nativeValue=Read-FurnitureAreaValue $series ([int]$Action.pointIndex) ([int]$pointCount) $Prefix $Probe
+        if([math]::Abs($width) -gt 0.001 -or $height -lt 0){Stop-FurnitureLifecycle 'Native area point bounds are outside the qualified zero-width vertical domain'}
+        $x=$left;$y=if($nativeValue -lt 0){$top+$height}else{$top}
+        $Probe.strategy='native-area-tip-from-actual-values'
     } elseif($Action.chartKind -ne 'marker') {
         if($Action.edge -eq 'top') {$y=$top}
         elseif($Action.edge -eq 'bottom') {$y=$top+$height}
@@ -536,7 +580,7 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix,$Probe=$
     $overlayHeight=Read-FurnitureFiniteNumber $overlay 'Height' "$Prefix.overlay.height"
     $overlayX=$overlayLeft+$overlayWidth/2; $overlayY=$overlayTop+$overlayHeight/2
     $distance=[math]::Sqrt([math]::Pow($overlayX-$nativeX,2)+[math]::Pow($overlayY-$nativeY,2))*4/3
-    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativeSliceObservations=@($Probe.sliceCoordinates.ToArray());nativePieCenterLocalPoints=$Probe.pieCenterLocalPoints;nativeCurvedBoundsLocalPoints=$Probe.curvedBoundsLocalPoints;nativePlotCenterLocalPoints=$Probe.plotCenterLocalPoints;nativeCircleCenterLocalPoints=$Probe.circleCenterLocalPoints;nativeCircleCenterMethod=$Probe.circleCenterMethod;coordinateStrategy=$Probe.strategy;nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
+    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativeSliceObservations=@($Probe.sliceCoordinates.ToArray());nativePieCenterLocalPoints=$Probe.pieCenterLocalPoints;nativeCurvedBoundsLocalPoints=$Probe.curvedBoundsLocalPoints;nativePlotCenterLocalPoints=$Probe.plotCenterLocalPoints;nativeCircleCenterLocalPoints=$Probe.circleCenterLocalPoints;nativeCircleCenterMethod=$Probe.circleCenterMethod;nativeAreaValueObservation=$Probe.areaValueObservation;coordinateStrategy=$Probe.strategy;nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
 }
 
 function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
