@@ -1,0 +1,11 @@
+{
+  "baseline": "e79043da0f13c7ed9101456736fea7a116538408",
+  "archive": {
+    "path": "docs/handoff/2026-11-08/rr105-list-scalar-import/theme67-c2da-identical.pptx",
+    "sha256": "12f36179e0d2556d7b57cff407f118ba3cc999097ae443ed60566c117a720528"
+  },
+  "producer67": "12f36179e0d2556d7b57cff407f118ba3cc999097ae443ed60566c117a720528",
+  "producerC2da": "12f36179e0d2556d7b57cff407f118ba3cc999097ae443ed60566c117a720528",
+  "originalTestSha256": "a8bc00ceb137730a19f77ac62680efbe09e362a619ee2891682c11fe38653f5e",
+  "notesFailureLogsReusedWithoutReexport": true
+}
