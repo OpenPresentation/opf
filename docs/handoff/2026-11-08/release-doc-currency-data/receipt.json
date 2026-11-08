@@ -1,0 +1,330 @@
+{
+  "schema": 1,
+  "scope": "F2/F3 current release instructions only",
+  "base": "787bccd52defaef82fb5c91320ed0e0cfb58bc20",
+  "node": {
+    "version": "v24.20.0",
+    "execPath": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe"
+  },
+  "publicationRun": false,
+  "ciObserver": false,
+  "roster": [
+    "@openpresentation/opf",
+    "@openpresentation/cli",
+    "@openpresentation/opf-render",
+    "@openpresentation/opf-pptx",
+    "@openpresentation/opf-editor",
+    "@openpresentation/gallery",
+    "@openpresentation/mcp"
+  ],
+  "checks": {
+    "before": {
+      "docFailures": 5,
+      "guardsPassing": 2
+    },
+    "focusedAfter": {
+      "pass": 25,
+      "fail": 0,
+      "skipped": 0
+    },
+    "mappedFirst": {
+      "pass": 12,
+      "failed": 2,
+      "skipped": 1,
+      "seconds": 89.1,
+      "failures": [
+        "gallery-tracker ENOENT sparse historical inputs",
+        "text ENOENT sparse compressed fixture"
+      ]
+    },
+    "mappedAfter": {
+      "pass": 13,
+      "failed": 0,
+      "skipped": 1,
+      "seconds": 81.2,
+      "typecheckSkip": "No TypeScript/tsconfig changes"
+    }
+  },
+  "restoredTrackedInputs": 1842,
+  "regeneratedTrackers": false,
+  "source": [
+    {
+      "file": "AGENTS.md",
+      "sha256": "c9e5c73b0a88fde6f9a28f34fa80e9e9470269fed7d16cbbc3c7e66712ff198d"
+    },
+    {
+      "file": "docs/release-process.md",
+      "sha256": "ed4c1ac640d60a380accf33220bbcbdf419894c98761167beda69f50d0540650"
+    },
+    {
+      "file": "packages/render/README.md",
+      "sha256": "d38b033621b6f5c732f337f6145520819fff441abc0df554e9994626718293f3"
+    },
+    {
+      "file": "packages/pptx/README.md",
+      "sha256": "49631a2611c3780cfc402975f0ecb877f1cea003554e72dee2d7e9d5f8a7b49d"
+    },
+    {
+      "file": "packages/editor/README.md",
+      "sha256": "5ec9b2e4cefefd05130074732a7359c6577fce9f90dcd16e669b83cd84e58e12"
+    },
+    {
+      "file": "scripts/release-workflows.test.mjs",
+      "sha256": "3ceec3a10e968fba99e4d932a757255c01a4a3f16fb61a01bd149083e5f20788"
+    },
+    {
+      "file": "scripts/checks.json",
+      "sha256": "82f20b6cf671d489410a80c0b6d5104441ea5239a3ca7fddb24d4f6acbaa50c7"
+    },
+    {
+      "file": "docs/programs/release-readiness/burndown.md",
+      "sha256": "abf31b91ee887f87f5ee0b664f2631a4ffc318e0f2e5038d8b4ccb96988b7601"
+    }
+  ],
+  "untouched": [
+    {
+      "target": "spec",
+      "unchanged": true
+    },
+    {
+      "target": "examples",
+      "unchanged": true
+    },
+    {
+      "target": ".github/workflows",
+      "unchanged": true
+    },
+    {
+      "target": "packages/javascript/src",
+      "unchanged": true
+    },
+    {
+      "target": "packages/cli/src",
+      "unchanged": true
+    },
+    {
+      "target": "packages/mcp/src",
+      "unchanged": true
+    },
+    {
+      "target": "packages/render/src",
+      "unchanged": true
+    },
+    {
+      "target": "packages/pptx/src",
+      "unchanged": true
+    },
+    {
+      "target": "packages/editor/src",
+      "unchanged": true
+    },
+    {
+      "target": "packages/gallery/catalog",
+      "unchanged": true
+    },
+    {
+      "target": "pnpm-lock.yaml",
+      "unchanged": true
+    }
+  ],
+  "rawLogs": [
+    {
+      "file": "after-biome.log.gz",
+      "rawBytes": 685,
+      "rawSha256": "df78526294eba0fb3216641d08e93eee47ee936c8319dd027215a16433a9c6f7",
+      "gzipSha256": "821126be33d9b9d108cee136e302640bebb497140f9e0a9ae05b347d6d370949"
+    },
+    {
+      "file": "after-build.log.gz",
+      "rawBytes": 14584,
+      "rawSha256": "ff23a607d7ed5d6b4b523fc33e54683460fc77694855c737f424485d385a9a5c",
+      "gzipSha256": "3cc5c18860b2d90efccf04f04e2a65d2732270f0baf66a74de8557d43e9c771a"
+    },
+    {
+      "file": "after-install.log.gz",
+      "rawBytes": 4467,
+      "rawSha256": "b95f787379ab82fd4d729e8488157e3b9b64f829e8612536f08323e286990dfe",
+      "gzipSha256": "d39bb716323fa06de69e6e0c3c6868d8f24038ff98989df4ebcc629a6d8a3941"
+    },
+    {
+      "file": "after-pnpm_run_check_changes.log.gz",
+      "rawBytes": 2639,
+      "rawSha256": "d6564c2c996f816cfa5dc079e93899944104c5214d550b032c9d159a0444c7af",
+      "gzipSha256": "cf37e59f62655a102bb4175a16a44c3befcf078f8a3b586ec0b02e6aa01d8e7d"
+    },
+    {
+      "file": "after-pnpm_run_check_ci-workflows.log.gz",
+      "rawBytes": 10159,
+      "rawSha256": "d5b25677a5b4e7f5f85abb1f4e22fe0f180202d280ba8228261d8a8980edd9fd",
+      "gzipSha256": "ddb2c0d426c7a8edd805bfe32bfb693c23aff40de5285cf566cb8bb01dd5cd36"
+    },
+    {
+      "file": "after-pnpm_run_check_diagram-doc-images.log.gz",
+      "rawBytes": 171,
+      "rawSha256": "d56e606a25cafc2f1958e249fb8c12b1932139d51362d6d7a69b1e7adb963c3a",
+      "gzipSha256": "9f82d1dc71256e65bcc784c38335a1f29eaa16f362a1b79c2e52e2ae18445885"
+    },
+    {
+      "file": "after-pnpm_run_check_font-hotlinks.log.gz",
+      "rawBytes": 883,
+      "rawSha256": "48f13c76dcbcaac90434a12e49664a72a9aa7c55ed28d90dc872c87fd53221d8",
+      "gzipSha256": "2558681eae7a22ef5b5393d96519dabfaa712b3e2b99c30f243250fef4254990"
+    },
+    {
+      "file": "after-pnpm_run_check_gallery-tracker.log.gz",
+      "rawBytes": 1992,
+      "rawSha256": "e49d608b3509a6d6ace1878106a6a4a364ecfb87ed88e1fdbcccdc95e7ee6c85",
+      "gzipSha256": "f10f455a19ece24a7ef08b764298f94d12017fcff42883c40ccc1d61d377c612"
+    },
+    {
+      "file": "after-pnpm_run_check_release-report.log.gz",
+      "rawBytes": 813,
+      "rawSha256": "3fcc15879814a74393aaa677724fb6f947fc794ae94183bd36811d87b558f389",
+      "gzipSha256": "dc34d5d1b28d91105e9f2e34e0665157db148c2fb5035adb292e9deeea60d8f9"
+    },
+    {
+      "file": "after-pnpm_run_check_release.log.gz",
+      "rawBytes": 5530,
+      "rawSha256": "1b97a7ffea9e46310c226b5d1d144dd68fcd1ec4c0fd77757b05c864c47d1785",
+      "gzipSha256": "20c3b7d3805b0b0554d5f4efa98608d304db627ea887f7feff8c58584ee79ff9"
+    },
+    {
+      "file": "after-pnpm_run_check_runners.log.gz",
+      "rawBytes": 1747,
+      "rawSha256": "a6817fecdaebd4ded5d9facf2bcd6d690c07e3f705651e0a35d64f084608f3cd",
+      "gzipSha256": "6407302cf5d03e7bb6dd0a7385a4b01df814a1f3cc635a034cbce10fd4526aac"
+    },
+    {
+      "file": "after-pnpm_run_check_skill-commands.log.gz",
+      "rawBytes": 1037,
+      "rawSha256": "d61360598023211c45892e705dd14307bb040cb163a84011f2c9a6b72d08456a",
+      "gzipSha256": "284a4a4eed076cc8e7a386473c1c74ddfa5b695a9ffc4a9fe1eb8dbf7dd33082"
+    },
+    {
+      "file": "after-pnpm_run_check_stability.log.gz",
+      "rawBytes": 3967,
+      "rawSha256": "acf20316ada75794c0c12e37e4926dd98acd606876d0469cedc0fb658953bd72",
+      "gzipSha256": "0a91bd68b3d95975f46dcb68441cee58962026e3467bc65e23c322802a93786d"
+    },
+    {
+      "file": "after-pnpm_run_check_text.log.gz",
+      "rawBytes": 1068,
+      "rawSha256": "d70b685e1bd6092168764c873982a5056a907138069894b3b72e7e54ffb523b3",
+      "gzipSha256": "62ba26b8ff2f916ba33d12bb67d5a7b2610d8ba6004a2c8dda7da92612cb7bcd"
+    },
+    {
+      "file": "before.log.gz",
+      "rawBytes": 6594,
+      "rawSha256": "5d354194d0bee119ff27a817c450d84f84b7b0c32108b99278b001b4b42fae4f",
+      "gzipSha256": "d33feab4294e5bd8868a4970cae3b6d8a61808baff662039a8ee29469bf6ab2e"
+    },
+    {
+      "file": "first-biome.log.gz",
+      "rawBytes": 13153,
+      "rawSha256": "2b9ca355a236a4c5345f5a1096162298533b8206004f6fa07df1748c0e7bb4ce",
+      "gzipSha256": "fedce589628279050ccbc3684c3160961f11222d8a8e035f23654116305d56c3"
+    },
+    {
+      "file": "first-build.log.gz",
+      "rawBytes": 14584,
+      "rawSha256": "e69f3dc424331e34b787babc05588ad0825f1210c4db21545a460f0b17ca761f",
+      "gzipSha256": "967d0684f2fc38be51e2ae52434e6929b820487dd4c4017f3dc3046c75a3161a"
+    },
+    {
+      "file": "first-install.log.gz",
+      "rawBytes": 4467,
+      "rawSha256": "b95f787379ab82fd4d729e8488157e3b9b64f829e8612536f08323e286990dfe",
+      "gzipSha256": "d39bb716323fa06de69e6e0c3c6868d8f24038ff98989df4ebcc629a6d8a3941"
+    },
+    {
+      "file": "first-pnpm_run_check_changes.log.gz",
+      "rawBytes": 2639,
+      "rawSha256": "9ad5d6df927abe2be4ae30f4890bcfead23fd4d61f21198249b83c058f904041",
+      "gzipSha256": "0cf4a73db53de3d0e809c74d3653d90cc1426e1c8a9306eee16562878febd16f"
+    },
+    {
+      "file": "first-pnpm_run_check_ci-workflows.log.gz",
+      "rawBytes": 10161,
+      "rawSha256": "aa1c95bbc39e88f726913b1cb467d24b8f78f3d65f1470fae3124e80a256775e",
+      "gzipSha256": "06e8c50e0610a73bbe7aeed0efca8a84f2d310c48011e133a499fc4672a07e23"
+    },
+    {
+      "file": "first-pnpm_run_check_diagram-doc-images.log.gz",
+      "rawBytes": 171,
+      "rawSha256": "d56e606a25cafc2f1958e249fb8c12b1932139d51362d6d7a69b1e7adb963c3a",
+      "gzipSha256": "9f82d1dc71256e65bcc784c38335a1f29eaa16f362a1b79c2e52e2ae18445885"
+    },
+    {
+      "file": "first-pnpm_run_check_font-hotlinks.log.gz",
+      "rawBytes": 886,
+      "rawSha256": "b830cb19ed141080c481d86b1e6f09448cfd0ff8469ba6e5c8892bbd6882151d",
+      "gzipSha256": "0c222616bbac55ec6e8587b947c8108da4141835ddf42b1da806310442a373e8"
+    },
+    {
+      "file": "first-pnpm_run_check_gallery-tracker.log.gz",
+      "rawBytes": 12399,
+      "rawSha256": "ce66f91349cfea7538ef4af2ece956cc2532ac3a855f4cbe7bb99ae0d7f73362",
+      "gzipSha256": "d2ed74e1e03caf46eab6bbb3945be3506ce7dbf903d2a0ccf795e21d81ea5414"
+    },
+    {
+      "file": "first-pnpm_run_check_release-report.log.gz",
+      "rawBytes": 812,
+      "rawSha256": "98c2c157466c79d34f4fece86c81eaa242cd5e0585e4cf3de81832df5761db76",
+      "gzipSha256": "75967c0a7a92594e10140809de1f7ae45842074aaf763e044d92226a4400d3af"
+    },
+    {
+      "file": "first-pnpm_run_check_release.log.gz",
+      "rawBytes": 5534,
+      "rawSha256": "4cf8358fcff035e580a8243a9763a3948b67db64ec20f16baef55af1ecbbe195",
+      "gzipSha256": "a1c4a138b3bdda2435a78404a118c45fce20246cb172ab45e8b97f1eb2e79cd3"
+    },
+    {
+      "file": "first-pnpm_run_check_runners.log.gz",
+      "rawBytes": 1747,
+      "rawSha256": "9eb841bf9659547fbc13c6d472fea10ea2773a0a68e127e076cd0aff734a62d6",
+      "gzipSha256": "2b236b9f188ff3817cbdcfac310ee768617e77e1d2cffad8c204822ba94e2caa"
+    },
+    {
+      "file": "first-pnpm_run_check_skill-commands.log.gz",
+      "rawBytes": 1039,
+      "rawSha256": "f6e626fef6fe8a7678c4ee94c4daa815366f9dbb777df75c55604e8840b01766",
+      "gzipSha256": "f9e9a17d05da4e8154738bcb8791e07c3f49945ab80821285ef759910965e67d"
+    },
+    {
+      "file": "first-pnpm_run_check_stability.log.gz",
+      "rawBytes": 3964,
+      "rawSha256": "95c2f62fa8f69e866cda0bd997cdc605607c12216cdfcc807e5aedd5887007d4",
+      "gzipSha256": "e2f94cabd7ca72167b52f0fcf1faeb357d0fc326568de7ebb0831c5d5dfebd75"
+    },
+    {
+      "file": "first-pnpm_run_check_text.log.gz",
+      "rawBytes": 1842,
+      "rawSha256": "49cdbb86557a72db8149758a6e54a285f78c87b741499395d52454bbfc313aa0",
+      "gzipSha256": "d68262f82f574e0533db15cd99ebad97d0ac8aa5f67aa890f3d71fe7fb030de9"
+    },
+    {
+      "file": "focused-after.log.gz",
+      "rawBytes": 3260,
+      "rawSha256": "42891dc93f495e0f394532d10794d26d298ef90241a420b31170745e8c047bc2",
+      "gzipSha256": "745e95a79958dbab6bac96411c5a7c37eefbb57b264d60927da3f7a852ae18a2"
+    },
+    {
+      "file": "mapped-after.log.gz",
+      "rawBytes": 1503,
+      "rawSha256": "7f1873805d037ea2dbde184e782850f48967a9466f40fb15c98d4e322b9964ed",
+      "gzipSha256": "7322f16f7ef72bbf8ecee17e9eb402cbead1c61afddaecc1650a20e77f4fed32"
+    },
+    {
+      "file": "mapped-first.log.gz",
+      "rawBytes": 7301,
+      "rawSha256": "556d92a34a22f1fde58b5357a559a0abde8d9a06bd8d0a140d7bbf5eed1c3897",
+      "gzipSha256": "d7325b5eb0e5460fb914978c02922415e8bc36a2acd19ed0a86aac24eaedcaf2"
+    },
+    {
+      "file": "plan.log.gz",
+      "rawBytes": 548,
+      "rawSha256": "15d5fcad4a9c5d02c06ce77408b5234a71c0dc3514e59f65361b4dc5bc87084c",
+      "gzipSha256": "997a2ca21525685530ad17e981a71ac3a3ebd20e4485a9e4abb50475641441b5"
+    }
+  ]
+}

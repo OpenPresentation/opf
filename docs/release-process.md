@@ -17,8 +17,7 @@ trusted-publisher entry of `docs/programs/monorepo/owner-steps.md`, O1b). They a
 
 ## Release: one click
 
-> Status: the workflows and `scripts/release.mjs` are in place and rehearsed with dry runs. The first real release through them
-> is the canary `0.26.0-rc.0` (MR-41), then 0.26.0 (MR-44). Releases up to 0.25.x were made from the four old repositories with
+> Historical cutover: this workflow lane was introduced for the canary `0.26.0-rc.0` (MR-41), then 0.26.0 (MR-44). Releases up to 0.25.x were made from the four old repositories with
 > a per-package train; that process is retired and not described here.
 
 **One version, one tag, one workflow.** All seven packages carry the same version (`pnpm check:versions`); a release is the tag
@@ -32,12 +31,11 @@ Actions, **Release**, **Run workflow** on `main`:
 
 | Input | Meaning |
 | --- | --- |
-| `version` | `X.Y.Z`, `X.Y.Z-rc.N`, or `patch` / `minor` of the shared line (the highest `latest` of core, CLI, render, PPTX and editor) |
+| `version` | `X.Y.Z`, `X.Y.Z-rc.N`, or `patch` / `minor` of the shared line (the highest `latest` of core, CLI, render, PPTX, editor and MCP) |
 | `dry-run` | Default **true**: rehearse everything up to `npm publish --dry-run`; nothing is committed, tagged or published. Set false for the real release |
 | `skip-gate` | A dry run only: skip the slow gate |
 
-Run it with `dry-run` true first when the change touches the release machinery; a real release of ordinary changes needs no
-rehearsal. The jobs:
+Run it with `dry-run` true first. After the rehearsal succeeds, run the same version on `main` with `dry-run` false for the real release. The jobs:
 
 1. **plan**: a real release runs on `main`, and the check `verify` is green for its head (one API call, no waiting).
 2. **gate** (parallel with prepare): `nightly.yml` called on that commit: Windows, macOS, Node 22 and 26, the packed-install,
@@ -146,8 +144,8 @@ instead of replacing a public asset. Retry through the existing trusted workflow
 | `pack <version> --commit <sha> --out <dir>` | `pnpm pack` of the seven, `gitHead` stamped, `release-manifest.json` with digests |
 | `smoke <version> (--dir <dir> \| --registry)` | install the seven together, render, resolve, run the CLI |
 | `check-publish <version> [--tag t]` | the pre-publish gate |
-| `publish <version> --dir <dir> [--tag t] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]` | the gate, then `npm publish` in dependency order: npm's output is printed; after all six uploads each package gets one registry look (`--wait`, default 0, polls longer) and one not served yet is logged **pending**, never a failure; a staged result fails unless `--expect-staged` |
-| `await-registry <version> [--wait minutes] [--poll seconds] [--max-poll seconds]` | waits (default 60 min, backoff 15 s to 120 s, cache-busting) until the registry serves all six; fails only when the budget is spent |
+| `publish <version> --dir <dir> [--tag t] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]` | the gate, then `npm publish` in dependency order: npm's output is printed; after all seven uploads each package gets one registry look (`--wait`, default 0, polls longer) and one not served yet is logged **pending**, never a failure; a staged result fails unless `--expect-staged` |
+| `await-registry <version> [--wait minutes] [--poll seconds] [--max-poll seconds]` | waits (default 60 min, backoff 15 s to 120 s, cache-busting) until the registry serves all seven; fails only when the budget is spent |
 | `verify <version> [--tag t] [--commit sha] [--wait minutes]` | the registry and provenance check (a prerelease has no changelog section to check) |
 | `notes <version> [--out file]` | the GitHub release body |
 | `order` | the publish order |

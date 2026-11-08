@@ -339,7 +339,7 @@ LibreOffice is not a runtime dependency. Opening an exported `.pptx` in LibreOff
 
 ## Release Lane
 
-Packages publish from the OpenPresentation/opf monorepo through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. All six packages share one version and publish together, in dependency order, through the root release workflow described in [`docs/release-process.md`](../../docs/release-process.md) (the unified workflow lands with MR-40; until then the root process applies). Never republish an existing version. Verify a release with `npm view @openpresentation/opf-pptx@<version> version gitHead dist.attestations`.
+Packages publish from the OpenPresentation/opf monorepo through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. All seven packages share one version and publish together, in dependency order, through the root release workflow described in [`docs/release-process.md`](../../docs/release-process.md). Start **Release** on `main` with `dry-run` true; after success, run the same version with `dry-run` false. The release workflow prepares the versions, changelogs, commit and tag; the tag starts the trusted publisher. Never republish an existing version. Verify a release with `npm view @openpresentation/opf-pptx@<version> version gitHead dist.attestations`.
 
 ## Shared dynamic composition
 

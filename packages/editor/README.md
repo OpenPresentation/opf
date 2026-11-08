@@ -1114,10 +1114,10 @@ Svelte bindings are isolated under `@openpresentation/opf-editor/svelte` as acti
 
 ## Release Lane
 
-The editor releases with the other five packages of the OPF monorepo at one version, through the repository's release workflow (npm Trusted Publishing from GitHub Actions OIDC, with npm provenance; no npm token is stored). The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29); this authorization does not waive any gate. The steps, the gates and the order are in the root `AGENTS.md` and `docs/release-process.md`. In short:
+The editor releases with the other six packages of the OPF monorepo at one version, through the repository's release workflow (npm Trusted Publishing from GitHub Actions OIDC, with npm provenance; no npm token is stored). The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29); this authorization does not waive any gate. The steps, the gates and the order are in the root `AGENTS.md` and [release process](../../docs/release-process.md):
 
-1. A release-prep PR contains only the version bump (all six manifests), `CHANGELOG.md` files assembled from the root `changes/` fragments, dependency ranges, the lockfile and current-instruction docs.
-2. The release workflow rebuilds `dist/` from source (it is not tracked), runs the gates on the release commit and publishes with provenance. Never republish an existing version.
+1. On `main` with a green `verify` check, run Actions **Release** with the desired version and `dry-run` true.
+2. After the rehearsal succeeds, run the same version with `dry-run` false. The workflow prepares all seven manifests, changelogs, dependency ranges and the lockfile, then commits and tags after its gates pass. The tag-triggered trusted publisher rebuilds and packs the release, verifies the registry and provenance, and creates the GitHub release. Never prepare a separate release-prep PR or republish an existing version.
 3. Verify with `npm view @openpresentation/opf-editor@<version> version gitHead dist.attestations`.
 
 ## Shared dynamic composition

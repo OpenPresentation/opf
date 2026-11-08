@@ -687,7 +687,7 @@ pnpm run golden:update
 
 ## Release Lane
 
-Public npm package publication is handled by the repository's one `npm-publish.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. All six packages (core, CLI, gallery, this renderer, opf-pptx and opf-editor) share one version and are released together: see [docs/release-process.md](../../docs/release-process.md) at the repository root. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate. Fragments for this package are `changes/<slug>.md` files at the repository root with `packages: [render]`. Never republish an existing version.
+Public npm package publication is handled by the repository's one `npm-publish.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. All seven packages (`@openpresentation/opf`, `@openpresentation/cli`, `@openpresentation/gallery`, `@openpresentation/opf-render`, `@openpresentation/opf-pptx`, `@openpresentation/opf-editor` and `@openpresentation/mcp`) share one version and are released together: see [docs/release-process.md](../../docs/release-process.md) at the repository root. Start the **Release** workflow on `main` with `dry-run` true, then run the same version with `dry-run` false after the rehearsal succeeds. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate. Fragments for this package are `changes/<slug>.md` files at the repository root with `packages: [render]`. Never republish an existing version.
 
 ## Shared dynamic composition (local development)
 
