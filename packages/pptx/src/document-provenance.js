@@ -512,9 +512,11 @@ export function documentProvenance(presentation, {mode = 'full', layoutOf = () =
     }
     metadata[key] = clone(value);
   }
+  // Existing decks keep byte-identical provenance; inherited-language sentinels are needed only beside a slide override.
+  const hasSlideLanguages = presentation.slides.some(slide => own(slide, 'language'));
   const slides = presentation.slides.map((slide, index) => {
     const record = {v: 1, slide: index};
-    if (!referencesOnly) record.metadata = {language: own(slide, 'language') ? clone(slide.language) : null};
+    if (!referencesOnly && hasSlideLanguages) record.metadata = {language: own(slide, 'language') ? clone(slide.language) : null};
     for (const key of [...(referencesOnly ? [] : ['id', ...SLIDE_METADATA]), 'beat', ...SLIDE_STRUCTURE]) if (own(slide, key)) record[key] = clone(slide[key]);
     // The record the document embeds for the slide's layout reference, with the group it resolved in: core's provenance of
     // the slide's resolved layout (resolveSlideContext().resolved.provenance.layout), passed in by the exporter.

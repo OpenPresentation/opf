@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import { strFromU8, unzipSync, zipSync } from 'fflate';
 import { toPptx, fromPptx } from '../dist/index.js';
 import { gallery } from '@openpresentation/gallery';
+import { documentProvenance } from '../src/document-provenance.js';
+// Legacy decks must not gain per-slide provenance or change their exact archive bytes.
+assert.deepEqual(documentProvenance({language: 'en-US', slides: [{title: 'Legacy'}]}).slides, [{v: 1, slide: 0}]);
+assert.deepEqual(documentProvenance({slides: [{title: 'Legacy'}]}).slides, [{v: 1, slide: 0}]);
 const deck = { language: 'en-US', slides: [
   { title: 'English', text: 'A simple sentence.' },
   { language: 'ar-SA', title: 'العربية', items: ['الأول', 'الثاني'] },
