@@ -142,7 +142,11 @@ export function importChartMarks(shapes, relationships, entries) {
         for (const tag of array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag'])) {
           if (String(tag.name ?? '').toUpperCase() !== CHART_MARK_TAG) continue;
           const record = decodeTextTag(tag.val);
-          if (record?.v === 1 && typeof record.chart === 'string' && typeof record.role === 'string') { consumed.add(shape); charts.add(record.chart); }
+          if (record?.v === 1 && typeof record.chart === 'string' && typeof record.role === 'string') {
+            consumed.add(shape);
+            // A surface-only hole does not imply default direct labels or a missing legend: explicit options must still import.
+            if (record.role !== 'hole') charts.add(record.chart);
+          }
         }
       } catch { /* an unreadable tag leaves the shape as ordinary content */ }
     }

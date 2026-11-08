@@ -11,7 +11,7 @@ if(Test-Path -LiteralPath $planRoot) { throw 'Preserve the existing plan control
 $tokens=$null; $parseErrors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$tokens,[ref]$parseErrors)
 if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont')
+$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication')
 foreach($name in $names) {
     $functionAst=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $functionAst) { throw "Missing reviewed function: $name" }
@@ -168,10 +168,120 @@ $script:unexpectedCall=$false
 try { Invoke-FurnitureCom 'forbidden-followup' { $script:unexpectedCall=$true } } catch { }
 if($script:unexpectedCall) { throw 'Operation ran after the failure latch' }
 
+
+# RR-109: execute the actual owned lifecycle helpers against file-backed fakes.
+# No Office entrypoint or COM class is evaluated; injected failures prove the latch.
+function Write-FurnitureReport { }
+$lifecycleCases=New-Object 'System.Collections.Generic.List[object]'
+function New-LifecycleFixture([string]$Name,[string]$Mode='') {
+    $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true; $script:presentation=$null; $script:ownedPresentationPath=$null
+    $script:lifecycleLog=New-Object 'System.Collections.Generic.List[string]'
+    $script:lifecycleMode=$Mode; $script:lifecycleCopies=@{}
+    $fixtureInput=Join-Path $planRoot ($Name+'.pptx'); $copy=Join-Path $planRoot ($Name+'-saved.pptx')
+    [IO.File]::WriteAllText($fixtureInput,'original')
+    $list=[pscustomobject]@{Count=0;Values=@()}
+    $list | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    $list | Add-Member -MemberType ScriptMethod -Name Open -Value {
+        param($path,$readOnly,$untitled,$window)
+        $script:lifecycleLog.Add('open:'+ $path + ':' + $readOnly)
+        if($readOnly -ne -1 -or $untitled -ne 0) { throw 'Writable or untitled open was requested' }
+        $text=if($script:lifecycleCopies.ContainsKey($path)){$script:lifecycleCopies[$path]}else{'original'}
+        $presentation=[pscustomobject]@{FullName=$path;ReadOnly=-1;Saved=0;Text=$text;Closed=$false}
+        if($script:lifecycleMode -eq 'wrong-open-path') { $presentation.FullName='unrelated.pptx' }
+        if($script:lifecycleMode -eq 'writable-open') { $presentation.ReadOnly=0 }
+        $presentation | Add-Member -MemberType ScriptMethod -Name SaveCopyAs -Value {
+            param($path,$format)
+            $script:lifecycleLog.Add('save-copy:'+ $path)
+            if($script:lifecycleMode -eq 'copy-failure') { throw 'Injected SaveCopyAs failure' }
+            if($format -ne 24) { throw 'Unexpected output format' }
+            [IO.File]::WriteAllText($path,$this.Text); $script:lifecycleCopies[$path]=$this.Text
+            if($script:lifecycleMode -eq 'copy-identity-change') { $this.FullName=$path }
+        }
+        $presentation | Add-Member -MemberType ScriptMethod -Name Save -Value {throw 'Save must never run'}
+        $presentation | Add-Member -MemberType ScriptMethod -Name SaveAs -Value {throw 'SaveAs must never run'}
+        $presentation | Add-Member -MemberType ScriptMethod -Name Close -Value {
+            if($this.Saved -ne -1) { throw 'Dirty close would prompt' }
+            $script:lifecycleLog.Add('close:'+ $this.FullName)
+            if($script:lifecycleMode -eq 'close-failure') { throw 'Injected Close failure' }
+            $this.Closed=$true; $script:lifecycleCollection.Count=0; $script:lifecycleCollection.Values=@()
+        }
+        $this.Count=1; $this.Values=@($presentation); return $presentation
+    }
+    $script:lifecycleCollection=$list
+    $application=[pscustomobject]@{Presentations=$list;QuitCalled=$false}
+    $application | Add-Member -MemberType ScriptMethod -Name Quit -Value {
+        $script:lifecycleLog.Add('quit')
+        if($script:lifecycleMode -eq 'quit-failure') { throw 'Injected Quit failure' }
+        if($this.Presentations.Count -ne 0) { throw 'Foreign presentation must not be closed' }
+        $this.QuitCalled=$true
+    }
+    $script:ownedApplication=$null
+    Assert-OwnedFurnitureApplication $application
+    return [ordered]@{input=$fixtureInput;copy=$copy;app=$application}
+}
+function Assert-LifecycleLatched([string]$Name,[scriptblock]$Action) {
+    $rejected=$false;try { & $Action } catch { $rejected=$true }
+    if(-not $rejected -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed) { throw "$Name did not refuse and latch" }
+    $before=$script:lifecycleLog.Count
+    try { Save-OwnedFurnitureCopy 'forbidden.pptx' 'forbidden-copy.pptx' } catch { }
+    try { Close-OwnedFurniture 'forbidden-close' 'forbidden.pptx' } catch { }
+    try { Quit-OwnedFurnitureApplication $fixture.app } catch { }
+    if($script:lifecycleLog.Count -ne $before) { throw "$Name performed a later Office operation" }
+    $lifecycleCases.Add([ordered]@{name=$Name;passed=$true})
+}
+$fixture=New-LifecycleFixture 'success'
+Open-OwnedFurniture $fixture.app $fixture.input 'input'
+$script:presentation.Text='Native edit' + [char]13 + 'Second line'
+Save-OwnedFurnitureCopy $fixture.input $fixture.copy
+if($script:presentation.FullName -cne $fixture.input -or $script:ownedPresentationPath -cne $fixture.input) { throw 'SaveCopyAs changed exact owned identity' }
+Close-OwnedFurniture 'edited' $fixture.input
+Open-OwnedFurniture $fixture.app $fixture.copy 'reopen'
+if($script:presentation.Text -cne ('Native edit' + [char]13 + 'Second line')) { throw 'Reopened current text differs' }
+Close-OwnedFurniture 'reopened' $fixture.copy
+Quit-OwnedFurnitureApplication $fixture.app
+if(-not $fixture.app.QuitCalled) {throw 'Owned empty application was not quit'}
+if([IO.File]::ReadAllText($fixture.input) -cne 'original' -or -not $script:cleanupConfirmed -or $script:presentation -ne $null) { throw 'Input changed or owned cleanup incomplete' }
+$lifecycleCases.Add([ordered]@{name='readonly-copy-edit-reopen';passed=$true;events=@($script:lifecycleLog.ToArray())})
+foreach($mode in @('wrong-open-path','writable-open')) {
+    $fixture=New-LifecycleFixture $mode $mode
+    Assert-LifecycleLatched $mode { Open-OwnedFurniture $fixture.app $fixture.input 'input' }
+}
+foreach($mode in @('copy-failure','copy-identity-change')) {
+    $fixture=New-LifecycleFixture $mode $mode; Open-OwnedFurniture $fixture.app $fixture.input 'input'
+    Assert-LifecycleLatched $mode { Save-OwnedFurnitureCopy $fixture.input $fixture.copy }
+}
+$fixture=New-LifecycleFixture 'same-path'; Open-OwnedFurniture $fixture.app $fixture.input 'input'
+Assert-LifecycleLatched 'refuse-input-overwrite' { Save-OwnedFurnitureCopy $fixture.input $fixture.input }
+$fixture=New-LifecycleFixture 'existing-output'; Open-OwnedFurniture $fixture.app $fixture.input 'input'; [IO.File]::WriteAllText($fixture.copy,'prior-attempt')
+Assert-LifecycleLatched 'refuse-existing-output' { Save-OwnedFurnitureCopy $fixture.input $fixture.copy }
+if([IO.File]::ReadAllText($fixture.copy) -cne 'prior-attempt') { throw 'Prior derivative overwritten' }
+$fixture=New-LifecycleFixture 'wrong-close-owner'; Open-OwnedFurniture $fixture.app $fixture.input 'input'; $held=$script:presentation
+Assert-LifecycleLatched 'refuse-unowned-close' { Close-OwnedFurniture 'unowned' 'unrelated.pptx' }
+if($held.Saved -ne 0 -or $held.Closed) { throw 'Unowned presentation modified before identity refusal' }
+$fixture=New-LifecycleFixture 'close-failure' 'close-failure'; Open-OwnedFurniture $fixture.app $fixture.input 'input'
+Assert-LifecycleLatched 'close-failure' { Close-OwnedFurniture 'edited' $fixture.input }
+$fixture=New-LifecycleFixture 'foreign-at-adoption'; $script:ownedApplication=$null; $fixture.app.Presentations.Count=1
+Assert-LifecycleLatched 'refuse-nonempty-application-adoption' {Assert-OwnedFurnitureApplication $fixture.app}
+if($fixture.app.QuitCalled) {throw 'Foreign application was cleaned up'}
+$fixture=New-LifecycleFixture 'foreign-at-quit'; $fixture.app.Presentations.Count=1
+Assert-LifecycleLatched 'refuse-nonempty-application-quit' {Quit-OwnedFurnitureApplication $fixture.app}
+if($fixture.app.QuitCalled) {throw 'Foreign presentation application was quit'}
+$fixture=New-LifecycleFixture 'quit-failure' 'quit-failure'
+Assert-LifecycleLatched 'quit-failure' {Quit-OwnedFurnitureApplication $fixture.app}
+$fixture=New-LifecycleFixture 'unowned-quit'; $other=[pscustomobject]@{Presentations=$fixture.app.Presentations}
+Assert-LifecycleLatched 'refuse-unowned-application-quit' {Quit-OwnedFurnitureApplication $other}
+function Get-Process { param($Name,$ErrorAction) if($script:mockPowerPointRunning){return [pscustomobject]@{Name='POWERPNT'}} }
+$script:mockPowerPointRunning=$true; $rejected=$false;try {Assert-FurnitureOfficeIdle} catch {$rejected=$true}
+if(-not $rejected) {throw 'Running Office was not refused'}
+$script:mockPowerPointRunning=$false; Assert-FurnitureOfficeIdle
+Remove-Item Function:Get-Process
+$lifecycleCases.Add([ordered]@{name='refuse-running-office';passed=$true})
+
 [ordered]@{
     passed=$true
     textFontControls=$fontCases
-    scope='Windows PowerShell 5.1 parse; pure uniform/mixed/unavailable whole-range font descriptors and error latch; size/color edit and exact-target mocks; readback/text-change refusal;  AST-only action-plan validation; empty/single/multi list behavior; invalid-plan rejection; collection identity and fail-closed wrapper. No Office object was constructed.'
+    lifecycleControls=@($lifecycleCases.ToArray())
+    scope='Read-only owned-copy lifecycle, SaveCopyAs identity, overwrite/unowned-close/running-Office refusals, error latch; Windows PowerShell 5.1 parse; pure uniform/mixed/unavailable whole-range font descriptors and error latch; size/color edit and exact-target mocks; readback/text-change refusal;  AST-only action-plan validation; empty/single/multi list behavior; invalid-plan rejection; collection identity and fail-closed wrapper. No Office object was constructed.'
     powershell=$PSVersionTable.PSVersion.ToString()
     verifierSha256=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()
     checkerSha256=(Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash.ToLowerInvariant()

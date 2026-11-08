@@ -43,6 +43,13 @@ One idea per slide. Pick the layout from what the content is, then check it fits
 - Without a layout, one picture among other blocks takes a full-height, cover-cropped side track, and one chart whose plot would be too short takes a 3:2 track beside the other blocks (`geometry.track`). Give a screenshot or diagram that must stay whole `fit: "contain"`; it then flows in the grid.
 - When the budget is exceeded, split the slide where the story breaks (two ideas, two slides), or run `opf paginate deck.opf.json --check` and then `opf paginate deck.opf.json -i` to let the engine split what does not fit. Do not lower `minFontSize` or shorten the content to make it pass.
 
+## Multilingual slides
+
+Set a slide's `language` to a BCP-47 tag or inline Language object when it differs from the deck. The slide's direction, script fonts, quotation marks and number formatting follow it; omission inherits the deck language. A run's `lang` still overrides one run. Keep the author's selected font scheme: an Arabic script-family scheme on an Arabic slide writes that face in the PPTX complex-script slot, including in an English deck.
+
+A timeline with semantic `status` values adds localized status words where the engine vocabulary provides them and the source labels keep their size. Regional variants share their language words; Chinese scripts differ. Unsupported generated translations keep markers and progress without inserting English. Keep precise local wording and schedule-health notes in the event text. See docs/dynamic-composition.md, "Localized timeline status words".
+
+
 ## Headers and footers
 
 Header and footer zones (`left`, `center`, `right`) sit on the content inset, so a footer's left edge meets the body's. They are three columns with a small gutter, and a zone beside empty zones takes their width: a lone `left` footer spans the content width, and a `left` and a `right` zone share the free center. A `center` zone stays centered. A zone that still wraps onto more than two lines gets the `opf/furniture-wraps` warning: shorten it, or move a source to a `caption` on the chart, table or image it describes, or to the speaker notes. See `docs/dynamic-composition.md` for the geometry (`furniture-flow-v2`).
@@ -54,3 +61,7 @@ Inspect the current slide, effective dimensions, resolved layout, fonts, and pat
 Use the same font measurement provider and resolved design for preview, layout, and export. Without actual font measurements, label results as estimates. `overflow: error` gates supported text fit; it does not certify complex charts, images, or PowerPoint pixel parity.
 
 Pagination is an explicit authoring operation. Review the returned ordinary slides and source mappings, then validate and render them. A renderer should not secretly export a different paginated document from the one shown in the editor. The one exception is the export's continuation (LH-90): `opf convert` and `convert` draw an overfull slide of sibling blocks of one kind (eight timelines, each with any note after it) as several slides, split between whole blocks, and report it as `slide-continued` with the report field `continued`. Treat that finding like an overflow: split the slide in the deck where the story breaks, or run `opf paginate`, so the deck and the editor show the same slides; `--keep-slides` draws it as written. The player, `<opf-deck>` and the editor show the same pages (LH-99: steps after the slide, or a stacked thumbnail and a read-only page preview in the editor) without changing the deck or its slide numbers, so the deck as written still overflows until you split it. An unsplittable item requires a targeted change; do not ignore a pagination error or use partial output.
+
+### Narrow an ordered set
+
+Use `inverted-pyramid` for the broad starting pool followed by progressively narrower choices. Keep entries in top-to-bottom order. In a custom layout, set `arrangement: "pyramid"` and `pyramidDirection: "down"` on its region; omit the direction or use `"up"` for the original narrow-top pyramid. These are layout-record fields, not slide payload fields. Downward pyramids export as editable native shapes; no live SmartArt parity is claimed.

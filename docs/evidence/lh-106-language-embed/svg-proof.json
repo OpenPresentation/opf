@@ -1,0 +1,43 @@
+{
+  "scope": "Original catalog-backed rendering versus no-registered-catalog standalone rendering. Old control reproduces omitted slide-language record; it is not an old-source PPTX export.",
+  "examples": [
+    {
+      "name": "multilingual-slides",
+      "slides": 4,
+      "exactSvgEquality": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "standaloneUnresolved": [],
+      "titleFontSizes": {
+        "catalog-backed": 54,
+        "old-standalone-control": 34.5,
+        "fixed-standalone": 54
+      }
+    },
+    {
+      "name": "localized-timeline",
+      "slides": 1,
+      "exactSvgEquality": [
+        true
+      ],
+      "standaloneUnresolved": []
+    }
+  ],
+  "files": {
+    "catalog-backed.png": "6e94bc3b2cca47b478bac0f3ad17657114afa2993346e2ff96fe053d849f7591",
+    "catalog-backed.svg": "c99dc5413986c5b7ebf6f4838dea9664e953f415b18f2cca6b06745b02cf3b4d",
+    "fixed-standalone.png": "6e94bc3b2cca47b478bac0f3ad17657114afa2993346e2ff96fe053d849f7591",
+    "fixed-standalone.svg": "c99dc5413986c5b7ebf6f4838dea9664e953f415b18f2cca6b06745b02cf3b4d",
+    "old-standalone-control.png": "3fa867d130d1c31b2386002d4ce8f0a37fbede4d999a8410a403b6fc77fea9e4",
+    "old-standalone-control.svg": "29c2be11be21161f9cc2f4297c2401573b2fc73ed5c8f6f6ef940ca257c6bbb4"
+  },
+  "base": "67698fadd1b729526718e3d9e4f74909dd2e465e",
+  "sourceHashes": {
+    "packages/javascript/src/catalog-refs.ts": "19152769a689a969d6ed53b37346496999e98212a2377f38713fb48048fed853",
+    "packages/javascript/test/lh-106-language-embed.test.mjs": "1707a839a50766f84ffbe1264c555a7a50ed7f1157b91c6c04c65d6795d96061",
+    "packages/render/test/lh-106-language-embed.mjs": "374f5970cbe134e6a8e9c0882638f805d3f5aac417a6f68fd870427e94aa37e8"
+  }
+}
