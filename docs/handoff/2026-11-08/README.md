@@ -101,3 +101,5 @@ LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798
 
 - [SH25current-series edit qualification](sh25-native-series-name.md): literalName action +threephase readback/49mock controls; actualedit blocked by separately identified direct c:tx/c:v importer gap, no edit acceptance claimed.
 
+
+- [SH25literal native series names](sh25-literal-native-series-name.md): separate current-native c:tx/c:v importer correction with exact-string/cache/selector controls; actual edit/save/current-import remains owed.

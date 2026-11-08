@@ -1,0 +1,9 @@
+# SH25 literal current native series-name import
+
+The new bounded Series.Name edit tooling exposed a separate public importer defect: a valid native `<c:tx><c:v>Native renamed</c:v></c:tx>` imported as `Series 1`. Cached-reference edits already imported the current native name correctly. The before-failing regression is retained; this NEWderived branch changes the importer, separately from frozen1192qualification tooling and all earlier point-anchor sources.
+
+[SeriesText](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.charts.seriestext) permits cached string-reference or direct text-value alternatives. The minimal shared series-name reader handles both ordinary and scatter charts. It preserves decoded literal strings exactly, including explicit empty strings, whitespace, Unicode and numeric-looking text; counts each literal against the existing import-cell budget; and refuses duplicate/simple-content or competing literal/reference sources with a precise invalid-chart-cache diagnostic. Existing reference-cache validation and native-current-data priority remain unchanged. No workbook access, renderer/export geometry, source-field resurrection, baseline or tolerance change.
+
+Eighteen foreign ordinary/scatter exact-string/input-integrity/refusal controls pass after the change and fail before it. The existing58native chart-cache controls pass. Current cached and literal name edits both preserve numeric data/numeric selectors; stale named selectors refuse explicitly while preserving actual native overlay position. Exact actual PowerPoint saved XML and edit/save/reopen/current-import acceptance remain coordinator-owned and unqualified until that witness completes.
+
+The branch starts from fresh main, normally derives frozen1192and its authorized maintained-runner review correction, and keeps the product fix separate. The coordinator alone executes Office; this agent makes no native acceptance claim.

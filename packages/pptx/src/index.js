@@ -2147,8 +2147,22 @@ function cachedValues(node, path, budget, readValue) {
   return result;
 }
 
+// SeriesText is a choice between a cached reference and a direct c:v string.
+// Current literal text must not fall back to the old OPF/workbook header.
 function firstCachedValue(node, path, budget) {
-  return cachedValues(node, path, budget).find(value => value !== null);
+  const values = cachedValues(node, path, budget);
+  const literal = node?.['c:v'];
+  if (literal === undefined) return values.find(value => value !== null);
+  const invalid = message => {
+    throw new OPFPptxError('invalid-chart-cache', `Invalid chart cache: ${message}. Repair the chart data before importing.`, {path: path + '/c:v'});
+  };
+  if (['c:strRef', 'c:numRef', 'c:multiLvlStrRef', 'c:numLit', 'c:strLit'].some(key => node[key] !== undefined)) invalid('multiple competing series-name sources');
+  if (typeof literal !== 'string' && (literal === null || typeof literal !== 'object' || Array.isArray(literal)
+    || Object.keys(literal).some(key => key !== '#text' && key !== 'xml:space' && key !== 'xmlns' && !key.startsWith('xmlns:'))
+    || (literal['#text'] !== undefined && typeof literal['#text'] !== 'string'))) invalid('literal series name must be one simple text value');
+  if (budget.cells + 1 > MAX_CHART_CACHE_CELLS) invalid('combined caches exceed the 1,000,000-cell import limit');
+  budget.cells += 1;
+  return scalarText(literal);
 }
 
 function readSlideNotes(entries, relationships) {
