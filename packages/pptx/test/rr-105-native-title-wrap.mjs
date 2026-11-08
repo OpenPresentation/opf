@@ -8,13 +8,14 @@ import {examples} from '@openpresentation/opf/examples';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {catalogs, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {slideTemplate} from '../src/template-layouts.js';
+import {resolvePresentation} from '@openpresentation/opf-render/svg';
 import {nativeTitleWrapBox, nativeWrapWidths, WRAP_MARGIN} from '../src/native-body.js';
 
 const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual'});
 const measurement = fonts.textMeasurement, EMU = 9525;
 const compose = (deck, index) => {
   const context = resolveSlideContext(deck, index, {catalogs, fonts});
-  return {context, geometry: composeSlide(context.slide, context.options)};
+  return {context, geometry: resolvePresentation(deck, {fonts, catalogs, validate: false}, {slides: [index]}).slides[index].geometry};
 };
 const eligible = item => item.field === 'title' && typeof item.value === 'string' && item.value.trim() && !/[\r\n]/.test(item.value)
   && item.text?.lines?.length > 1 && !item.text.overflow && !item.text.richLines && !item.text.directions?.includes('rtl')
@@ -22,6 +23,7 @@ const eligible = item => item.field === 'title' && typeof item.value === 'string
 const checked = [], fallbacks = [];
 let unsafeBefore = 0;
 for (const {file, deck} of examples) {
+  await fonts.ensure(deck);
   for (const index of deck.slides.keys()) {
     const {context, geometry} = compose(deck, index);
     if (!(slideTemplate(context) || context.slide.layout === undefined || context.slide.layout === 'auto' || geometry.recomposed !== undefined)) continue;
