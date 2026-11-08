@@ -7,3 +7,5 @@ Review direction: bodies fill their space, type grows, no shrink, readable measu
 Current progress: sheets 181–188 reviewed at original detail (8/64); the other 56 remain unreviewed. The earlier first60, coordinator61–120 and e1_review121–180 are untouched. Sole site observer 67705 remains outside this evidence task; no second observer, Office or publication is started.
 
 First checkpoint: all 32 slide comparisons on sheets 181–188 were actually viewed. Unplaced/numbering warnings remain bound by pointer; batch13/s29 lacks before. Type-growth, compact-table/timeline and the already-known batch13/s32 reading-measure holds are explicit. No new regression is asserted where the historical producer is unknown. The site CI correction is under the single maintained observer 67705.
+
+Second checkpoint: sheets 181–196 have now been viewed at original detail (16/64), covering 61 actual slide-row comparisons. All explicit pointer-bound warnings, missing before panels and readability holds are retained in review.json. No new regression is asserted from historical producer-unknown panels. The remaining 48 sheets are unreviewed.
