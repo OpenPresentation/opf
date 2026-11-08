@@ -11,7 +11,7 @@ if(Test-Path -LiteralPath $planRoot) { throw 'Preserve the existing plan control
 $tokens=$null; $parseErrors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$tokens,[ref]$parseErrors)
 if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication','Get-ExactSlide','Read-FurnitureFiniteNumber','Read-FurnitureChartPoint')
+$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication','Get-ExactSlide','Read-FurnitureFiniteNumber','New-FurniturePointProbe','Read-FurnitureSlicePoint','Read-FurnitureChartPoint')
 foreach($name in $names) {
     $functionAst=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $functionAst) { throw "Missing reviewed function: $name" }
@@ -331,11 +331,15 @@ function New-ChartPointFixture([string]$Kind='horizontal-bar') {
     $fixtureType=switch($Kind){'horizontal-bar'{57};'vertical-bar'{51};'marker'{65};'slice'{5};default{throw 'Unknown fake native kind'}}
     # Slice success is a pie (type5) fixture, never evidence of doughnut API availability.
     $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true; $script:forbiddenChartData=$false
-    $point=[pscustomobject]@{Left=10;Top=20;Width=40;Height=30}
+    $point=[pscustomobject]@{Left=10;Top=20;Width=40;Height=30;SliceChartType=$fixtureType;SliceCoordinates=@{2=@(40,60);3=@(60,20);4=@(35,20);8=@(30,40)};SliceCalls=(New-Object 'System.Collections.Generic.List[object]');SliceThrowAt=''}
     $point | Add-Member -MemberType ScriptMethod -Name PieSliceLocation -Value {
         param($location,$index)
-        $values=switch($index){2{@(60,70)};5{@(30,40)};8{@(10,20)};default{throw 'Unexpected slice index'}}
-        return $values[$location-1]
+        $this.SliceCalls.Add([ordered]@{location=$location;index=$index})
+        if($this.SliceChartType -eq 5 -and $index -eq 8) {throw 'Index8 is doughnut-only, not an inner point of a pie'}
+        if($index -eq 5) {throw 'Index5 does not establish the required radial midpoint'}
+        if($this.SliceThrowAt -eq ('{0}:{1}' -f $index,$location)) {throw 'Injected radial getter failure'}
+        if(-not $this.SliceCoordinates.ContainsKey($index)) {throw 'Unexpected slice index'}
+        return $this.SliceCoordinates[$index][$location-1]
     }
     $points=[pscustomobject]@{Count=1;Values=@($point)}
     $points | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
@@ -352,7 +356,7 @@ function New-ChartPointFixture([string]$Kind='horizontal-bar') {
     $shapes | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
     $slides=[pscustomobject]@{Count=1;Values=@([pscustomobject]@{Shapes=$shapes})}
     $slides | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
-    return [ordered]@{presentation=[pscustomobject]@{Slides=$slides};point=$point;points=$points;overlay=$overlay;chart=$chart;series=$seriesCollection}
+    return [ordered]@{presentation=[pscustomobject]@{Slides=$slides};point=$point;points=$points;overlay=$overlay;chart=$chart;chartShape=$chartShape;series=$seriesCollection}
 }
 $coordinateCases=@(
     @('horizontal-bar','end',1,150,235),@('horizontal-bar','start',1,110,235),
@@ -361,7 +365,7 @@ $coordinateCases=@(
     @('vertical-bar','end',1,130,220),@('vertical-bar','start',1,130,250),
     @('vertical-bar','end',-1,130,250),@('vertical-bar','start',-1,130,220),
     @('marker','end',1,130,235),@('marker','top',1,130,235),@('marker','center',1,130,235),
-    @('slice','end',1,160,270),@('slice','start',1,110,220),@('slice','center',1,130,240),
+    @('slice','end',1,140,260),@('slice','start',1,110,220),@('slice','center',1,125,240),
     @('slice','top',1,130,220),@('slice','bottom',1,130,250)
 )
 foreach($spec in $coordinateCases) {
@@ -371,6 +375,39 @@ foreach($spec in $coordinateCases) {
     $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'chart-probe'
     if($observed.nativePointSlidePoints[0] -ne $spec[3] -or $observed.nativePointSlidePoints[1] -ne $spec[4] -or $observed.distancePixels -ne 0 -or -not $observed.withinFourPixels -or $script:forbiddenChartData) {throw 'Native point probe changed coordinate systems or accessed data workbook'}
     $chartPointCases.Add([ordered]@{kind=$spec[0];edge=$spec[1];sign=$spec[2];nativeSlidePoints=@($spec[3],$spec[4]);passed=$true})
+}
+# Radial positions are independent native API observations, including translated and full-circle models.
+foreach($model in @('pie-translated','pie-full-circle','doughnut-radial')) {
+    foreach($edge in @('start','center','end')) {
+        $nativeFixture=New-ChartPointFixture 'slice'
+        $wantedIndices=@();$expected=@()
+        switch($model) {
+            'pie-translated' {
+                $nativeFixture.chartShape.Left=-60;$nativeFixture.chartShape.Top=340
+                $nativeFixture.point.SliceCoordinates=@{2=@(130,180);3=@(150,140);4=@(125,140)}
+                $expected=switch($edge){'start'{@(40,480)};'center'{@(55,500)};'end'{@(70,520)}}
+            }
+            'pie-full-circle' {
+                $nativeFixture.point.Left=0;$nativeFixture.point.Top=20;$nativeFixture.point.Width=100;$nativeFixture.point.Height=100
+                $nativeFixture.point.SliceCoordinates=@{2=@(0,70);3=@(100,70);4=@(75,70)}
+                $expected=switch($edge){'start'{@(150,270)};'center'{@(125,270)};'end'{@(100,270)}}
+            }
+            'doughnut-radial' {
+                $nativeFixture.chart.ChartType=-4120;$nativeFixture.series.Values[0].ChartType=-4120;$nativeFixture.point.SliceChartType=-4120
+                $expected=switch($edge){'start'{@(130,240)};'center'{@(135,250)};'end'{@(140,260)}}
+            }
+        }
+        $wantedIndices=if($model -eq 'doughnut-radial'){switch($edge){'start'{@(8,8)};'center'{@(8,8,2,2)};'end'{@(2,2)}}}else{switch($edge){'start'{@(3,3,4,4)};'center'{@(3,3,4,4,2,2)};'end'{@(2,2)}}}
+        $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='slice';edge=$edge;valueSign=1}
+        $nativeFixture.overlay.Left=$expected[0]-5;$nativeFixture.overlay.Top=$expected[1]-5
+        $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'radial-model'
+        if($observed.nativePointSlidePoints[0] -ne $expected[0] -or $observed.nativePointSlidePoints[1] -ne $expected[1] -or $observed.distancePixels -ne 0) {throw 'Independent radial model used an unsupported index or guessed center'}
+        if((@($observed.nativeSliceObservations | ForEach-Object {$_.index}) -join ',') -cne ($wantedIndices -join ',')) {throw 'Raw native API indices were not retained'}
+        if((@($nativeFixture.point.SliceCalls | ForEach-Object {$_.index}) -join ',') -cne ($wantedIndices -join ',')) {throw 'Unexpected native radial API call'}
+        if(@($observed.nativeSliceObservations | Where-Object {-not $_.Contains('rawValue') -or -not $_.Contains('value')}).Count -ne 0) {throw 'Raw native coordinate values were lost'}
+        if($nativeFixture.point.SliceCalls.Count -ne $wantedIndices.Count -or $script:forbiddenChartData) {throw 'Radial model accessed unrelated native data'}
+        $chartPointCases.Add([ordered]@{name=$model+'-'+$edge;nativeSlidePoints=$expected;indices=$wantedIndices;rawNativeCoordinates=$observed.nativeSliceObservations;passed=$true})
+    }
 }
 $nativeFixture=New-ChartPointFixture 'marker'
 $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='marker';edge='center';valueSign=1}
@@ -393,6 +430,28 @@ foreach($failure in @('missing-series','missing-point','nonfinite-point','slice-
     $eventCount=$script:events.Count;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'forbidden-followup'} catch {}
     if($script:events.Count -ne $eventCount -or $script:forbiddenChartData) {throw 'A later native measurement ran after failure'}
     $chartPointCases.Add([ordered]@{name=$failure;passed=$true})
+}
+
+# Invalid native values/getters latch immediately; the partial independent observations remain inspectable.
+foreach($failure in @('pie-midradius-getter-failure','pie-midradius-nonfinite','pie-midradius-null','pie-center-nonfinite','pie-outer-nonfinite','doughnut-inner-nonfinite')) {
+    $nativeFixture=New-ChartPointFixture 'slice'
+    $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='slice';edge='start';valueSign=1}
+    $expectedCalls=switch($failure){
+        'pie-midradius-getter-failure' {$nativeFixture.point.SliceThrowAt='4:1';3}
+        'pie-midradius-nonfinite' {$nativeFixture.point.SliceCoordinates[4][0]=[double]::NaN;3}
+        'pie-midradius-null' {$nativeFixture.point.SliceCoordinates[4][0]=$null;3}
+        'pie-center-nonfinite' {$nativeFixture.point.SliceCoordinates[3][0]=-1e308;$nativeFixture.point.SliceCoordinates[4][0]=1e308;$action.edge='center';4}
+        'pie-outer-nonfinite' {$nativeFixture.point.SliceCoordinates[2][0]=[double]::PositiveInfinity;$action.edge='center';5}
+        'doughnut-inner-nonfinite' {$nativeFixture.chart.ChartType=-4120;$nativeFixture.series.Values[0].ChartType=-4120;$nativeFixture.point.SliceChartType=-4120;$nativeFixture.point.SliceCoordinates[8][0]=[double]::NaN;1}
+    }
+    $probe=New-FurniturePointProbe $action 'partial-radial';$rejected=$false
+    try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'partial-radial' $probe} catch {$rejected=$true}
+    if(-not $rejected -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed -or $script:forbiddenChartData) {throw 'Invalid radial native coordinates did not latch'}
+    if($nativeFixture.point.SliceCalls.Count -ne $expectedCalls) {throw 'A radial getter ran after the first failure'}
+    if($probe.sliceCoordinates.Count -eq 0 -or @($probe.sliceCoordinates | Where-Object {-not $_.Contains('rawValue')}).Count -ne 0) {throw 'Partial native radial observations were lost'}
+    $eventCount=$script:events.Count;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'forbidden-radial-followup'} catch {}
+    if($script:events.Count -ne $eventCount -or $nativeFixture.point.SliceCalls.Count -ne $expectedCalls) {throw 'A latched radial failure allowed later native calls'}
+    $chartPointCases.Add([ordered]@{name=$failure;nativeCalls=$expectedCalls;partialRawCoordinates=@($probe.sliceCoordinates.ToArray());passed=$true})
 }
 
 foreach($failure in @('wrong-native-kind','mixed-series-type','unsupported-native-type','doughnut-api-unavailable')) {

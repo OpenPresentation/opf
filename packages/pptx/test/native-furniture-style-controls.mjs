@@ -96,7 +96,9 @@ if (process.platform === "win32") {
 	assert.equal(report.accepted, 12);
 	assert.equal(report.rejected, 81);
 	assert.equal(report.cases.filter(item => item.name.startsWith("point-") && item.expected === "reject").length, 49);
-	assert.equal(report.chartPointControls.length, 28);
+	assert.equal(report.chartPointControls.length, 43);
+	assert.equal(report.chartPointControls.filter(item => /^(pie-translated|pie-full-circle|doughnut-radial)-/.test(item.name ?? "")).length, 9);
+	assert.equal(report.chartPointControls.filter(item => /^(pie-midradius|pie-center-nonfinite|pie-outer-nonfinite|doughnut-inner-nonfinite)/.test(item.name ?? "")).length, 6);
 	assert.deepEqual(report.chartPointControls.slice(-4).map(item => item.name), ["wrong-native-kind", "mixed-series-type", "unsupported-native-type", "doughnut-api-unavailable"]);
 	assert.ok(report.chartPointControls.every(item => item.passed));
 	assert.equal(report.lifecycleControls.length, 14);
