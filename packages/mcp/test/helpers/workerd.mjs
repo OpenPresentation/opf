@@ -3,7 +3,7 @@
 // anywhere in the graph fails the bundle), and the `workerd`, `worker` and `browser` export conditions. Core's lane does the same for
 // the validators (packages/javascript/test/support/workerd.mjs). Not a test.
 import { spawn } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import net from "node:net";
 import { tmpdir } from "node:os";
@@ -26,7 +26,7 @@ export function workerd() {
 const esbuild = () => createRequire(require.resolve("tsup"))("esbuild");
 
 /** The bundled Worker (`entry` is a file of test/helpers/): { text, bytes }. Throws when any module of the graph needs a Node builtin. */
-export async function bundleWorker(entry = "mcp-worker.mjs") {
+export async function bundleWorker(entry = "mcp-worker.mjs", { minify = false } = {}) {
 	const result = await esbuild().build({
 		entryPoints: [path.join(packageRoot, "test", "helpers", entry)],
 		absWorkingDir: packageRoot,
@@ -37,10 +37,21 @@ export async function bundleWorker(entry = "mcp-worker.mjs") {
 		mainFields: ["browser", "module", "main"],
 		conditions: ["workerd", "worker", "browser"],
 		write: false,
+		minify,
+		metafile: true,
 		logLevel: "silent",
 	});
 	const text = result.outputFiles[0].text;
-	return { text, bytes: result.outputFiles[0].contents.length };
+	// Audit retained local modules, not just output length. Core keeps source banners; MCP also ships source maps.
+	const sourceInputs = [];
+	for (const [input, retained] of Object.entries(Object.values(result.metafile.outputs)[0].inputs)) {
+		if (retained.bytesInOutput === 0 || !/^(?:dist\/|\.\.\/(?:javascript|gallery)\/dist\/)/.test(input)) continue;
+		const file = path.resolve(packageRoot, input), compiled = readFileSync(file, "utf8");
+		const sources = new Set([...compiled.matchAll(/^\/\/ (.+)$/gm)].map(match => match[1].replaceAll("\\", "/")));
+		if (existsSync(file + ".map")) for (const source of JSON.parse(readFileSync(file + ".map", "utf8")).sources) sources.add(source.replaceAll("\\", "/"));
+		sourceInputs.push({ input, bytes: retained.bytesInOutput, sources: [...sources].sort() });
+	}
+	return { text, bytes: result.outputFiles[0].contents.length, sourceInputs };
 }
 
 const freePort = () =>

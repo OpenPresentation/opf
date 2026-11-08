@@ -1,0 +1,282 @@
+{
+  "schema": 1,
+  "candidateBase": "d26031b98ff9316d479f8db7a383511371cab4a6",
+  "baselineMain": "d19c4bb6172b703d132ebba3fd006e4ec5cdf845",
+  "baselineBuiltCheckout": {
+    "head": "cabd3c8a03d02255329edd2352eb1e39df7fb40c",
+    "scope": "RR107 release/MCP tooling branch; core, renderer, PPTX and gallery source byte-identical to baselineMain; MCP server source also unchanged."
+  },
+  "node": "v26.4.0",
+  "esbuild": "0.28.2",
+  "ciReproduction": {
+    "raw": 8110727,
+    "rawUTF8": 8110959,
+    "minified": 5298351,
+    "gzip": 1198373,
+    "docsBytes": 1231117,
+    "retainedTop": [
+      {
+        "file": "../javascript/dist/chunk-ZXOIGUHX.js",
+        "bytes": 2441302
+      },
+      {
+        "file": "../javascript/dist/chunk-G2A2I5IN.js",
+        "bytes": 1171623
+      },
+      {
+        "file": "../javascript/dist/chunk-5BOHVSTK.js",
+        "bytes": 466337
+      },
+      {
+        "file": "../javascript/dist/chunk-QF5RSRXU.js",
+        "bytes": 442369
+      },
+      {
+        "file": "../gallery/dist/index.js",
+        "bytes": 312264
+      },
+      {
+        "file": "../javascript/dist/chunk-YYT6N7AI.js",
+        "bytes": 268620
+      },
+      {
+        "file": "../../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v3/types.js",
+        "bytes": 102676
+      },
+      {
+        "file": "../../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/schemas.js",
+        "bytes": 79864
+      },
+      {
+        "file": "dist/chunk-42JGPI7A.js",
+        "bytes": 70647
+      },
+      {
+        "file": "../../node_modules/.pnpm/pele@1.13.0/node_modules/pele/dist/esm/chunks/XC4YV6K4.js",
+        "bytes": 66953
+      },
+      {
+        "file": "../../node_modules/.pnpm/pele@1.13.0/node_modules/pele/dist/esm/chunks/EFYWJBJK.js",
+        "bytes": 66824
+      },
+      {
+        "file": "../../node_modules/.pnpm/pele@1.13.0/node_modules/pele/dist/esm/chunks/XDBMULRR.js",
+        "bytes": 63510
+      }
+    ],
+    "dataSourceInputs": []
+  },
+  "baselineMeasurements": {
+    "raw": 8078962,
+    "rawUTF8": 8079188,
+    "minified": 5282557,
+    "gzip": 1192953,
+    "docsBytes": 1223135,
+    "retainedTop": [
+      {
+        "file": "../javascript/dist/chunk-HME2O3PK.js",
+        "bytes": 2441302
+      },
+      {
+        "file": "../javascript/dist/chunk-IZJ2OVL5.js",
+        "bytes": 1140239
+      },
+      {
+        "file": "../javascript/dist/chunk-VNFEHYOF.js",
+        "bytes": 466120
+      },
+      {
+        "file": "../javascript/dist/chunk-F4VVV4ED.js",
+        "bytes": 442205
+      },
+      {
+        "file": "../gallery/dist/index.js",
+        "bytes": 312264
+      },
+      {
+        "file": "../javascript/dist/chunk-YYT6N7AI.js",
+        "bytes": 268620
+      },
+      {
+        "file": "../../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v3/types.js",
+        "bytes": 102676
+      },
+      {
+        "file": "../../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/core/schemas.js",
+        "bytes": 79864
+      },
+      {
+        "file": "dist/chunk-WGDVOJF7.js",
+        "bytes": 70647
+      },
+      {
+        "file": "../../node_modules/.pnpm/pele@1.13.0/node_modules/pele/dist/esm/chunks/XC4YV6K4.js",
+        "bytes": 66953
+      },
+      {
+        "file": "../../node_modules/.pnpm/pele@1.13.0/node_modules/pele/dist/esm/chunks/EFYWJBJK.js",
+        "bytes": 66824
+      },
+      {
+        "file": "../../node_modules/.pnpm/pele@1.13.0/node_modules/pele/dist/esm/chunks/XDBMULRR.js",
+        "bytes": 63510
+      }
+    ],
+    "dataSourceInputs": []
+  },
+  "documentationHistorical": {
+    "baseline": "e3ff9dc71c",
+    "pages": 42,
+    "before": 1197594,
+    "after": 1231117,
+    "deltas": [
+      {
+        "slug": "smartart",
+        "before": 27496,
+        "after": 50436,
+        "delta": 22940
+      },
+      {
+        "slug": "chart-options",
+        "before": 68106,
+        "after": 71120,
+        "delta": 3014
+      },
+      {
+        "slug": "dynamic-composition",
+        "before": 127830,
+        "after": 130021,
+        "delta": 2191
+      },
+      {
+        "slug": "layout-templates",
+        "before": 57243,
+        "after": 58977,
+        "delta": 1734
+      },
+      {
+        "slug": "shapes",
+        "before": 69138,
+        "after": 70723,
+        "delta": 1585
+      },
+      {
+        "slug": "diagrams",
+        "before": 22648,
+        "after": 23349,
+        "delta": 701
+      },
+      {
+        "slug": "agent-skills",
+        "before": 7230,
+        "after": 7583,
+        "delta": 353
+      },
+      {
+        "slug": "validate",
+        "before": 101878,
+        "after": 102178,
+        "delta": 300
+      },
+      {
+        "slug": "chart-table-data",
+        "before": 26668,
+        "after": 26925,
+        "delta": 257
+      },
+      {
+        "slug": "image-treatments",
+        "before": 25471,
+        "after": 25678,
+        "delta": 207
+      },
+      {
+        "slug": "icons",
+        "before": 11700,
+        "after": 11820,
+        "delta": 120
+      },
+      {
+        "slug": "examples",
+        "before": 5732,
+        "after": 5820,
+        "delta": 88
+      },
+      {
+        "slug": "catalog-schema-reference",
+        "before": 56422,
+        "after": 56459,
+        "delta": 37
+      },
+      {
+        "slug": "quickstart",
+        "before": 11040,
+        "after": 11036,
+        "delta": -4
+      }
+    ]
+  },
+  "final": {
+    "lean": {
+      "raw": 8110959,
+      "minified": 5298351,
+      "gzipLevel9": 1198373,
+      "forbiddenSourceInputs": [],
+      "productionForbiddenSourceInputs": []
+    },
+    "full": {
+      "raw": 30264906,
+      "forbiddenSourcePositiveControls": [
+        {
+          "input": "../javascript/dist/docs.js",
+          "bytes": 1820019,
+          "sources": [
+            "src/generated/docs.ts"
+          ]
+        },
+        {
+          "input": "../javascript/dist/examples.js",
+          "bytes": 9247842,
+          "sources": [
+            "src/generated/examples.ts"
+          ]
+        },
+        {
+          "input": "dist/chunk-PA5YTZTZ.js",
+          "bytes": 8651889,
+          "sources": [
+            "../app-dist/deck-app.html",
+            "../src/data.ts",
+            "app-dist/deck-app.html",
+            "src/data.ts"
+          ]
+        }
+      ],
+      "removedBytes": 22153947
+    },
+    "documentation": {
+      "pages": 42,
+      "bytes": 1231144,
+      "sourceEquality": "Every served page equals its selected docs/<slug>.md, normalized to LF; asserted by the maintained test.",
+      "mcpMetricCorrectionBytes": 27
+    }
+  },
+  "ceilings": {
+    "leanRaw": 8150000,
+    "leanMinified": 5350000,
+    "leanGzipLevel9": 1210000,
+    "publicDocumentation": 1240000,
+    "minimumRemovedDataBytes": 7000000
+  },
+  "checks": [
+    "Exact d260 CI byte sizes reproduced",
+    "Lean retained-source audit passes; full entry proves all four data origins are detected",
+    "Minified and gzip budgets pass",
+    "All 42 public pages and unchanged slug/skill/no-maintainer checks pass"
+  ],
+  "notPerformed": [
+    "Windows workerd protocol rerun: native executable independently fails spawn UNKNOWN on this host; d260 Linux protocol checks passed",
+    "deployment",
+    "publication"
+  ]
+}
