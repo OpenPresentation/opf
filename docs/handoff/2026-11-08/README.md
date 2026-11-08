@@ -4,7 +4,7 @@ This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Un
 
 ## Current release gate
 
-Full top-level033 rehearsal42462759180 completed SUCCESS on green actualmainafac3f7fc07539667fe9298f8efc08c967aacb0d. REAL Release42465429345 dispatched09:02:07UTC withdry-run=false/skip-gate=false; allslowgates runagain. One maintained commit watcher30926 followsverify/prepare/commit-and-tag/publish. Do not move main. No release/tag/site deploy is claimed yet; afterpublishverifysevenregistry/provenance/GHrelease plus allthree bump-site outcomes. Owner-only deploy/login/DNS remainreserved.
+Full top-level033 rehearsal42462759180 completed SUCCESS on green actualmainafac3f7fc07539667fe9298f8efc08c967aacb0d. REAL Release42465429345 dispatched09:02:07UTC withdry-run=false/skip-gate=false; allslowgates runagain. One maintained commit watcher92159 nowuses--requiredall onexactafac. Oldnamed30926stoppedonexpectedSKIPPEDjobsfromthecompletedDRYrun, notrealworkflowfailures; actualREALworkflowsuccess andregistry/provenance remainmandatory. Do not move main. No release/tag/site deploy is claimed yet; afterpublishverifysevenregistry/provenance/GHrelease plus allthree bump-site outcomes. Owner-only deploy/login/DNS remainreserved.
 
 034productsource nowincludes reviewed negativecategory1171 and localizedatleast1173. Parentintegrated21parser/geometry controls pass; [receipt](integration-fold-checks/atleast-receipt.json). Allfoldedsources stayfrozen. SH21draft1172/production11shape packet and SH25fresh32caseCLI packet areseparate/unqualifiednative. Parentnative work remainshelduntil033publication. Finalpinnedgoldens, both21+9PPTXarchivefamilies, stricttrackers/budgets and combinedCI remainowed. Earlier snapshots below preservehistory.
 

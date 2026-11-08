@@ -1,0 +1,26 @@
+{
+  "source": "e3579c9e94a41740fc5aa1e4b76925f011cb8484",
+  "result": "Full seven-package build and23geometry/import/offline/pinned-golden controls pass",
+  "reviewedFolds": {
+    "rr108": 1174,
+    "sh21": 1172
+  },
+  "protected": "Accepted locale guard, negative category labels and31oldSVGfixture values preserved",
+  "holds": [
+    "Venn5–7productionreadability rejected; derived shared editable-shape adapter assigned.",
+    "ActualOffice/live qualification not claimed; allnewlive domainsOFF.",
+    "Final pinned raster/core/SVG refresh, both21+9native archive families, stricttrackers/budgets andcombinedCI remain owed."
+  ],
+  "files": [
+    {
+      "file": "foundation-build.log.gz",
+      "rawSha256": "f4b248c72fe6a7114f3558005b89c37c07331bb92cf1ba6e90c5adfea3d45e72",
+      "gzipSha256": "a147c171ab7f8b7ddba27d2f05b26acfe06f25be39030e5f51b07428b407fcc0"
+    },
+    {
+      "file": "foundation-focused.log.gz",
+      "rawSha256": "f957ac1ae7b5dc5209954c7337bba0c7dfe8675db2c257646a93b15d93c1bb5e",
+      "gzipSha256": "270d83542a0523b587f8745173a566f9db881374d876db32dd47acc760dc3b61"
+    }
+  ]
+}

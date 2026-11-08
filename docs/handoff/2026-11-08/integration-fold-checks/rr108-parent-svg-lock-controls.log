@@ -1,0 +1,15 @@
+✔ the baseline is rewritten only in GitHub Actions on Linux in the Playwright image (0.5584ms)
+✔ --local writes the review candidate only, anywhere (0.4142ms)
+✔ the steps are scripts of the renderer package, and the workflow runs this script in the pinned image (0.7341ms)
+✔ the pinned read-only job regenerates core and renderer templates with their review artifacts (0.3101ms)
+✔ the actual write-job allowlist accepts generated baselines and refuses source, sibling and traversing patches (508.158ms)
+✔ the existing SVG printer generates the exact locked keyset/format without changing the reviewed fixture (842.8365ms)
+✔ the pinned read-only job generates the SVG lock while the write job only applies the existing allowlisted patch (0.5309ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1421.0994
