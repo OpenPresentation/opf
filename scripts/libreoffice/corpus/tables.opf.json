@@ -1,0 +1,42 @@
+{
+  "name": "LibreOffice corpus: tables",
+  "slides": [
+    {
+      "layout": "table",
+      "title": "Quarter snapshot",
+      "table": {
+        "columns": ["Metric", "Q1", "Q2", "Q3", "Q4"],
+        "rows": [
+          ["Revenue", "$10.2M", "$11.0M", "$12.4M", "$18.1M"],
+          ["Gross margin", "64%", "66%", "68%", "72%"],
+          ["Pipeline", "$24M", "$27M", "$31M", "$44M"],
+          ["Customers", "410", "455", "502", "590"]
+        ]
+      }
+    },
+    {
+      "layout": "table",
+      "title": "Decisions and owners",
+      "table": {
+        "columns": ["Decision", "Owner", "Why it matters"],
+        "rows": [
+          ["Move the nightly checks off the pull request path", "Platform", "Pull requests finish in minutes instead of an hour, and the slow legs still run every night."],
+          ["Pin the LibreOffice version used for interoperability checks", "Export", "Results stay comparable from one run to the next, and a change of version is a reviewed change."],
+          ["Bundle only fonts under open licenses", "Design", "Every face OPF ships may be redistributed, embedded and installed without a separate agreement."]
+        ]
+      }
+    },
+    {
+      "title": "Table beside text",
+      "left": {
+        "text": "Numbers on the right, the reading of them here: the second half carried the year."
+      },
+      "center+right": {
+        "table": {
+          "columns": [{ "name": "Half" }, { "name": "Revenue", "format": "$#,##0.0\"M\"" }, { "name": "Growth", "format": "0%" }],
+          "rows": [["H1", 21.2, 0.08], ["H2", 30.5, 0.44]]
+        }
+      }
+    }
+  ]
+}

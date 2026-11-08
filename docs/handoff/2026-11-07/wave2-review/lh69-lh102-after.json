@@ -1,0 +1,106 @@
+{
+  "en": {
+    "tiled": [
+      {
+        "field": "title",
+        "size": 54,
+        "lines": [
+          "Next Focus"
+        ]
+      },
+      {
+        "field": "text",
+        "size": 49,
+        "lines": [
+          "Reduce long-tail retries"
+        ]
+      },
+      {
+        "field": "items",
+        "size": 56,
+        "lines": [
+          "Profile slow tool calls",
+          "Cache stable lookups",
+          "Batch low-risk writes"
+        ]
+      }
+    ],
+    "plain": [
+      {
+        "field": "title",
+        "size": 54,
+        "lines": [
+          "Next Focus"
+        ]
+      },
+      {
+        "field": "text",
+        "size": 56,
+        "lines": [
+          "Reduce long-tail retries."
+        ]
+      },
+      {
+        "field": "items",
+        "size": 56,
+        "lines": [
+          "Profile slow tool calls",
+          "Cache stable lookups",
+          "Batch low-risk writes"
+        ]
+      }
+    ]
+  },
+  "ar": {
+    "tiled": [
+      {
+        "field": "title",
+        "size": 54,
+        "lines": [
+          "مسؤوليات الفرق"
+        ]
+      },
+      {
+        "field": "text",
+        "size": 49,
+        "lines": [
+          "تقليل إعادة المحاولات"
+        ]
+      },
+      {
+        "field": "items",
+        "size": 56,
+        "lines": [
+          "قياس الاستدعاءات البطيئة",
+          "تخزين النتائج الثابتة",
+          "تجميع الكتابات الآمنة"
+        ]
+      }
+    ],
+    "plain": [
+      {
+        "field": "title",
+        "size": 54,
+        "lines": [
+          "مسؤوليات الفرق"
+        ]
+      },
+      {
+        "field": "text",
+        "size": 56,
+        "lines": [
+          "تقليل إعادة المحاولات."
+        ]
+      },
+      {
+        "field": "items",
+        "size": 56,
+        "lines": [
+          "قياس الاستدعاءات البطيئة",
+          "تخزين النتائج الثابتة",
+          "تجميع الكتابات الآمنة"
+        ]
+      }
+    ]
+  }
+}

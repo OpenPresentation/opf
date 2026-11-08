@@ -194,6 +194,14 @@ A template is a normal OPF file for everything else: the editor opens it, `opf v
 
 "Empty slots the author must fill" are required variables. There is no separate placeholder construct. A slide, block or field that should not exist unless supplied uses an optional variable (`required: false`): its `var:id` field is omitted when the variable is unfilled.
 
+A group (a block or promoted region with `blocks`, at any depth in a slide) whose content variables are all optional and all unfilled is optional content as a whole (LH-30): it is omitted with everything in it, so a picture, a card or a heading never stays behind without the text it framed. A group that uses no content variable, or any required or filled one, is kept; color variables and built-ins do not count. The resolution reports each omitted group as `variable-group-omitted` (info). Validation fills every variable with its example or a sample, so it cannot see the omission: it reports the same group as `opf/variable-group-omitted` (info) instead, and a template says which groups go when it is filled without them.
+
+```json
+{ "blocks": [{ "blocks": [{ "image": "./portrait.jpg" }, { "text": "var:quote" }] }] }
+```
+
+With `quote` optional and unfilled the whole group, the portrait included, is omitted; with a value both draw.
+
 ## Resolution
 
 ```ts
@@ -224,7 +232,7 @@ The result of a complete pass:
 
 Values are coerced per kind, so data files work as they are: number accepts a finite number or a strict decimal string (`"1250000"`, not `"1,250,000"`); date accepts `YYYY-MM-DD` or an ISO date-time (the date part is kept, no zone conversion); list accepts an array, or a string split on newlines; text accepts a string, a number, a boolean or runs; image accepts a string or `{src}`; url accepts http, https, mailto and tel; color accepts hex. `null`, `undefined` and, for every kind but text, a blank string mean "not provided". A rejected value is an `error` diagnostic (`variable-invalid-value`) and falls back to the declaration. A value for an undeclared variable is a `variable-unknown-value` warning.
 
-Diagnostic codes: `variable-unfilled` (error in a deck, info in a template or partial fill), `variable-invalid-value`, `variable-format` (an unusable number or date pattern), `variable-unknown` (undeclared token), `variable-unknown-builtin`, `variable-builtin-missing`, `variable-unknown-value`, `variable-unused`, `variable-example-used`, `variable-rich-flattened`.
+Diagnostic codes: `variable-unfilled` (error in a deck, info in a template or partial fill), `variable-invalid-value`, `variable-format` (an unusable number or date pattern), `variable-unknown` (undeclared token), `variable-unknown-builtin`, `variable-builtin-missing`, `variable-unknown-value`, `variable-unused`, `variable-example-used`, `variable-rich-flattened`, `variable-group-omitted` (info: a group of only unfilled optional variables, omitted whole).
 
 `listVariables(presentation, values?)` returns each declaration with `filled` and every place it is used (`uses: [{ path, form: 'token' | 'reference' }]`). Fill forms, agents and the editor read it.
 
@@ -275,7 +283,7 @@ Each is vetoable; the alternative says what changing it would cost.
 11. **No template provenance in PPTX in this release.** The package stores the resolved deck. Re-import returns the filled deck. Storing the template form needs a provenance part and a re-import path; recorded as a follow-up.
 12. **`opf fill`: a deck per record, plus `--combine`; no `repeat` construct yet.** A slide marked `repeat` (one instance per row inside one deck, with shared slides emitted once) is the natural next step but needs a schema addition and a per-record scope; `--combine` covers "one slide group per record" without it.
 13. **English number and date formats only.** Separators and names are fixed so output never depends on host locale; a `locale` field is a follow-up.
-14. **Optional unfilled variables vanish; required ones never do.** The resolver does not guess a replacement for a missing value.
+14. **Optional unfilled variables vanish; required ones never do.** The resolver does not guess a replacement for a missing value. A group whose content variables are all optional and unfilled vanishes whole, its static content too (LH-30). Alternative: omit only the fields, which leaves a picture or card with no text.
 
 15. **Built-ins are dotted and read from the document, not declared, and per-slide values are slide-scoped built-ins (FA-31, owner decision 2026-10-09).** A dot can never appear in a user id, so there is no collision rule to learn. The cost is one non-dotted name, `speakers`, which is reserved. `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` resolve per output slide at composition time (`resolveSlideVariables`, `layoutFurniture`), and a furniture `{{slide.number}}` keeps the native PPTX field, so headers and footers need no flags and no second template syntax (the 0.16 `organization`, `speaker`, `section`, `slideNumber` and `slideNumberFormat` keys and `{current}`/`{total}` are removed). Alternative: keep per-field booleans, which fix the order of values in a zone and duplicate the built-ins.
 16. **A missing built-in source resolves to nothing with a warning (previews of a template keep the token).** An unknown path is an error because it is a typo, not missing data.

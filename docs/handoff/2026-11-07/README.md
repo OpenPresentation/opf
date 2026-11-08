@@ -3,6 +3,7 @@
 This is the entry point for whoever continues this work. A supervisor session coordinated about a dozen agents on 2026-11-07 while the owner was away. All of their work is on GitHub: in open PRs, on pushed branches, in the evidence branch `handoff/review-sheets-2026-11-07`, and in this folder. Nothing exists only on the old machine. Start with [KICKOFF.md](KICKOFF.md), which is the one prompt to give the next agent.
 
 Files in this folder:
+- [wave2-review.md](wave2-review.md): independent code/sheet review of all 17 wave-2 heads, reproduced defects and the assembled preparation branch (not yet CI/native-qualified).
 - [working-rules.md](working-rules.md): how to work here (CI batching, goldens, COM, owner rules). Read it before anything else.
 - [com-checks.md](com-checks.md): the PowerPoint checks still owed, deck by deck.
 - [decisions.md](decisions.md): every judgment call made for the owner; each one is vetoable.

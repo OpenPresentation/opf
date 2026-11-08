@@ -1,0 +1,36 @@
+{
+  "name": "LibreOffice corpus: images and crops",
+  "assets": {
+    "photo": "./assets/context-photo.png",
+    "product": "./assets/product-shot.png",
+    "cover": "./assets/cover.png",
+    "diagram": "./assets/diagram.svg"
+  },
+  "slides": [
+    {
+      "title": "A picture beside its text",
+      "layout": "image-beside",
+      "blocks": [
+        { "text": "The picture fills its half of the slide and is cropped to that shape; the text keeps its own column." },
+        { "image": { "src": "asset:photo", "alt": "A team working at a table" } }
+      ]
+    },
+    {
+      "title": "Cropped to a square, kept in focus",
+      "left": { "image": { "src": "asset:product", "alt": "The product on a desk" }, "fit": "cover", "aspectRatio": 1, "focus": { "x": 0.7, "y": 0.4 } },
+      "center+right": { "text": "A cover fit crops the picture to the region; focus keeps the right part of it in view." }
+    },
+    {
+      "title": "Shown whole, not cropped",
+      "blocks": [
+        { "image": { "src": "asset:cover", "alt": "The cover illustration" }, "fit": "contain", "caption": "Figure 1. The whole picture, letterboxed in its region." }
+      ]
+    },
+    {
+      "title": "Picture treatments",
+      "left": { "image": { "src": "asset:photo", "alt": "The team, as a circle" }, "shape": "ellipse", "fit": "cover" },
+      "center": { "image": { "src": "asset:product", "alt": "The product, in grayscale" }, "recolor": "grayscale", "fit": "cover" },
+      "right": { "image": { "src": "asset:diagram", "alt": "An architecture diagram" }, "fit": "contain" }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "LibreOffice corpus: common charts",
+  "slides": [
+    {
+      "title": "Revenue grew every quarter",
+      "chart": { "type": "column", "data": { "columns": ["Quarter", "Revenue"], "rows": [["Q1", 10.2], ["Q2", 11.0], ["Q3", 12.4], ["Q4", 18.1]] } }
+    },
+    {
+      "title": "North America still leads",
+      "chart": { "type": "bar", "data": { "columns": ["Region", "Accounts"], "rows": [["North America", 310], ["Europe", 190], ["Asia Pacific", 120], ["Latin America", 64]] } }
+    },
+    {
+      "title": "Two products, two trends",
+      "chart": {
+        "type": "line",
+        "data": { "columns": ["Month", "Cloud", "On-premises"], "rows": [["Jan", 40, 60], ["Feb", 44, 57], ["Mar", 49, 55], ["Apr", 53, 52], ["May", 58, 50], ["Jun", 61, 47]] }
+      }
+    },
+    {
+      "title": "Where the time goes",
+      "chart": { "type": "pie", "data": { "columns": ["Activity", "Hours"], "rows": [["Building", 46], ["Reviewing", 22], ["Meetings", 18], ["Support", 14]] } }
+    },
+    {
+      "title": "Stacked contributions by team",
+      "chart": {
+        "type": "stacked-column",
+        "data": { "columns": ["Quarter", "Platform", "Export", "Design"], "rows": [["Q1", 12, 8, 5], ["Q2", 14, 9, 6], ["Q3", 15, 11, 6], ["Q4", 17, 12, 8]] }
+      }
+    },
+    {
+      "title": "Area under the curve",
+      "chart": { "type": "area", "data": { "columns": ["Week", "Active users"], "rows": [["W1", 120], ["W2", 180], ["W3", 240], ["W4", 260], ["W5", 310]] } }
+    },
+    {
+      "title": "Spend against return",
+      "chart": { "type": "scatter", "data": { "columns": ["Campaign", "Spend", "Return"], "rows": [["A", 10, 14], ["B", 20, 26], ["C", 30, 33], ["D", 40, 52], ["E", 50, 58]] } }
+    }
+  ]
+}

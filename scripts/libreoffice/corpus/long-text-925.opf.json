@@ -1,0 +1,19 @@
+{
+  "name": "LibreOffice corpus: the long lines of opf#925",
+  "design": { "fontScheme": "aptos" },
+  "slides": [
+    {
+      "title": "What model pages show",
+      "items": [
+        "Price from every provider that hosts the model (per-token, and now per-minute for audio models)",
+        "Context window",
+        "License and open-weights status",
+        "Benchmark scores with sources"
+      ]
+    },
+    {
+      "title": "How it ships",
+      "text": "Daily data-quality and new-model batches go through validation, tests and a build before each deploy to Vercel."
+    }
+  ]
+}

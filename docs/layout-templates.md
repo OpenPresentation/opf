@@ -303,6 +303,12 @@ slide that pins any block with `region` keeps the binding above as written.
      3 to 6. Mosaic pictures are cropped to fill (`cover`) unless the block, slide, deck or theme sets `imageFit` (the
      layout's own `contain` gives way). A lead plus cards is the first block across the region (a short one at the lead
      size) over the others in the balanced grid below, each row at the height it needs, placed by the region's anchor.
+   - The closing's `details` region already flows, so its blocks join nothing; it takes the same lead plus cards (the
+     guarded rule `closing-lead`). A layout whose one body region is a flowing `supporting` region, holding 3 to 6 plain
+     texts that its `auto` flow would stack (a text too long for a cell of the balanced grid) and that read as neither
+     paragraph columns (LH-70) nor a lead plus stack (LH-67), and whose other texts fill whole rows of the balanced grid (2, 3 or 4 of them, never a short last row), sets the first text, its call to action, across the region
+     over the others in the balanced grid, as Claude Design draws a closing's details under its call to action. It is
+     kept only when no text reads smaller and nothing more is found (the size guard).
    - The join is kept unless it overflows more than leaving the extra blocks below the grid (counting `text-overflow` and
      `small-cell`): measured blocks such as tables or timelines that need more room than the joined cells give stay below
      the grid with `opf/layout-unplaced`, where they read whole (three tables in `table-beside`'s narrow region broke their
@@ -513,7 +519,8 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   text under a title of at most 4 words, is the message: the stack gives way, the title is the running head and the block fills the
   body (LH-48, LH-101). A lone text of at most 25 words (`messageWords`, any script) grows on to 56 px (75 px at 4 words or fewer)
   on at most 4 balanced lines; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
-  label draws it as a display word over a short rule; a placed region's short text is a bold heading. Guarded rules
+  label draws it as a display word over a short rule; a placed region's short text is a bold heading, drawn as a tile when it is no
+  sentence (see [Placed tiles](dynamic-composition.md), `placed-tiles`). Guarded rules
   `statement-message` and `display-message`.
   LH-163: where the primary does not read 4.5:1 on a dark or accent surface, a display message's bold words draw in a lighter tint of
   the primary that does (hue and saturation kept, lightness raised), never in a color the author did not mark. LH-164: a slide whose
@@ -554,6 +561,14 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   region, such as hero's media) that covers under 60% of the body height after its regions take their need sits in the middle
   of the space under the headings, as a body of paragraphs does, when it moves as one (a region the layout holds at the foot keeps
   the body where it is) and no block reads smaller. Pictures, charts and videos in other regions keep the layout's cells.
+  Without a layout, a short body of paragraphs and lists that still covers under half of the body after LH-48's three steps
+  grows on past a list's display size, as LH-05's compact grid does: step by step up to 56 px, each step larger, nothing
+  overflowing, at most 60% of the body covered, the body keeping its rows and columns (a body that may draw step badges or
+  cards keeps the three steps, so those drawings are held to the same body). The stack then sits in the middle of the body under the headings, rather than
+  at its top over an empty foot. Promoted regions that
+  each run the body's full height (`left`, `center+right`) and hold only paragraphs and lists set them as one band in the
+  middle of the body, each block starting at the band's top. Both are composed with LH-48's centering and kept only when
+  no block reads smaller and nothing overflows.
 - **Mixed cards (LH-64).** A row of middle- or bottom-anchored cards with a table, code panel or timeline among other measured
   kinds starts at the card top (or hugs and centers in an under-filled body) instead of each kind at its own anchor.
 - **Reading measure (LH-10).** A paragraph in a region wider than about 70 average characters of its size is set on that
