@@ -1,6 +1,6 @@
 # RR-20 centered track resize and authored-track consistency
 
-Branch: codex/rr-20-centered-track-resize. Worktree: C:/opf-work/rr-track-resize. Fresh main 9545016583ccfa151077cda4d51043ac6505a140 normally merged integration 5049cb53768df5c420d6591ec3021461253df370 and frozen QA 1210/c9a6e479477c5a31e37d8b41ca67a95c3ad7e106. A later normal merge, 6f1762b484c2fa86e6f5381a02b7a151919738bb, aligns this lane with integration 67dd9ec10b7019cb95807f59c75186482c800f10. QA 1210 is folded and must never receive another push.
+Published as [PR 1212](https://github.com/OpenPresentation/opf/pull/1212), targeting codex/integration-034. Branch: codex/rr-20-centered-track-resize. Worktree: C:/opf-work/rr-track-resize. Fresh main 9545016583ccfa151077cda4d51043ac6505a140 normally merged integration 5049cb53768df5c420d6591ec3021461253df370 and frozen QA 1210/c9a6e479477c5a31e37d8b41ca67a95c3ad7e106. A later normal merge, 6f1762b484c2fa86e6f5381a02b7a151919738bb, aligns this lane with integration 67dd9ec10b7019cb95807f59c75186482c800f10. QA 1210 is folded and must never receive another push.
 
 Tested production source: 37eb56ce26a873aed6b86255e4d042384099f8bf. Subsequent commits add only evidence and handoff metadata. The receipt and verifier bind committed source bytes, protected trees and every packet artifact.
 
