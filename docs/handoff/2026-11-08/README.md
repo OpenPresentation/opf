@@ -57,3 +57,7 @@ Negative-category correction PR1171 at8dc8185efa003f64b23e1d015a9d6d2e15e1f297 i
 1171integrated build, negative-category/shared-sibling and authored-option controls pass; [source preservation and raw receipts](integration-fold-checks/negative-label-receipt.json). Follow-up review found LH110at-least word forms rejected for French/Spanish/Portuguese while digits work; a NEWderived correction is assigned, and1169remainsfrozen. It must be fixed before034release acceptance.
 
 LH110positive at-least P2 is corrected in reviewed/folded PR1173 atf2472a4f8db3420cadbf8e6a4834587c9d3e9eb3; source now permanently frozen. Complete au moins/al menos/pelo menos word forms match digit forms while bare-minus/fraction/malformed/larger-scale refusals remain. Three genuine before-failing controls and all41sourcecontrols pass. All seven existing clean-CLI witness PNGs and wholePPTX archives regenerate byte-exact, so preserve the sealed seven-file native packet without duplicate Office work. Parent integrated parser/geometry checks follow.
+
+## RR108 traced SVG lock continuation
+
+[Exact31value migration and pinned printer](rr108-svg-lock.md) preserve every existing reviewed value and strict comparison. Actual pie/doughnut SVGs differ only by one intended surface-fill circle each. Final generated hashes remain for the single reviewed034golden batch; the separate21/9PPTXarchive families are not changed here.
