@@ -28,5 +28,34 @@
   "remaining": [
     "0.34 integration golden workflow and full CI",
     "final native application qualification"
-  ]
+  ],
+  "reviewCorrection": {
+    "reason": "Owner rejected unchanged small portrait type with spare room",
+    "oldBound": "historical +10 reference px timeline growth",
+    "newBound": "existing body type scale, display limit43 reference px; explicit maximum/font-grid/fit/no-new-label-lines/no-smaller-part guards",
+    "portraitCanvasPx": {
+      "eventBefore": 23.986666666666668,
+      "eventAfter": 32.24,
+      "dateBefore": 20.986666666666668,
+      "dateAfter": 29.24
+    },
+    "ninePeriodFontPx": {
+      "before": 32,
+      "after": 43
+    },
+    "focusedCoreCases": 10,
+    "svg": "pass",
+    "native": "pass",
+    "defaultControls": "324 deep-equal geometries and byte-identical ordinary PPTX",
+    "changedScope": {
+      "seconds": 118,
+      "build": "pass",
+      "biome": "pass",
+      "rootMappings": "pass except maintained Windows path test",
+      "typecheck": "optional-fit guard error fixed; full workspace typecheck subsequently passed",
+      "opf": "unchanged workerd spawn UNKNOWN"
+    },
+    "finalBiome": "pass",
+    "finalWorkspaceTypecheck": "pass"
+  }
 }

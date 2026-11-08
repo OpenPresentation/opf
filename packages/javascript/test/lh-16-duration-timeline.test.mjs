@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {layoutTimeline, OPFCompositionError} from '../dist/composition.js';
+import {layoutTimeline, composeSlide, snapFontSizeDown, LONE_DISPLAY_SIZES, OPFCompositionError} from '../dist/composition.js';
 import {fromMarkdown, toMarkdown} from '../dist/markdown.js';
 import {convertContent} from '../dist/convert.js';
 import {check} from './support/validation.mjs';
@@ -75,4 +75,15 @@ test('Markdown uses a lossless embedded block for numeric periods',()=>{
 test('conversions without numeric periods report their loss explicitly',()=>{
   for(const kind of ['list','text','table'])assert.ok(convertContent({timeline:events},kind).loss.includes('timeline event duration'),kind);
   for(const kind of ['list','text','table'])assert.ok(!convertContent({timeline:[{what:'A'}]},kind).loss.includes('timeline event duration'),kind);
+});
+
+test('a roomy portrait duration timeline grows to the existing body display scale rather than only spreading small labels',()=>{
+  const slide={timeline:events.map(({description,...event})=>event)},options={width:540,height:960},scale=540/720;
+  const out=composeSlide(slide,options).items.find(item=>item.timelineLayout).timelineLayout;
+  assert.equal(out.arrangement,'vertical');assert.equal(out.overflow,false);
+  for(const part of out.parts.filter(part=>part.role==='what'))assert.equal(part.fit.fontSize,snapFontSizeDown(LONE_DISPLAY_SIZES.text*scale));
+  const capped=composeSlide({...slide,composition:{maxFontSize:37}},options).items.find(item=>item.timelineLayout).timelineLayout;
+  assert.ok(Math.max(...capped.parts.map(part=>part.fit.fontSize))<=37*scale+.001);
+  for(const [index,part]of out.parts.entries())assert.ok(part.fit.fontSize>=capped.parts[index].fit.fontSize);
+  near(out.ranges[1].box.height,4*out.ranges[0].box.height);
 });
