@@ -1,0 +1,156 @@
+TAIL rr-105-chartex-scale.mjs
+RR-105 chartex scale: histogram and Pareto value axes, the Pareto percentage step and the bin labels follow core in PowerPoint.
+TAIL rr-105-numeric-axes.mjs
+RR-105: exact native box and scatter axes match the preview
+TAIL rr-105-smartart-text-color.mjs
+Native SmartArt label colors match on light and dark slides; beside-shape text retains tx1.
+TAIL rr-105-waterfall-axis.mjs
+RR-105: native waterfall scales equal the shared running-total plan, hidden or visible.
+TAIL rr-54-chart-table-data.mjs
+RR-54 chart and table data passed: 42 checks (strict numbers, chart and workbook number formats, dataset/mapping/scatter X equivalence, dataset and formatted tables, full round trip, edits and missing datasets, third-party format codes and chartex, provenance modes, reviewed archive bytes).
+TAIL rr-54-data-hardening.mjs
+RR-54 data hardening passed: 19 checks (plain PowerPoint save, hostile records, large cache values, first-series value axis, exported-cell counts, pasted dataset ids, tag limit, radar and scatter series labels).
+TAIL rr-54-format-respelling.mjs
+rr-54 format re-spelling: 5 checks passed
+TAIL rr-59-absent-defaults.mjs
+RR-59 absent defaults passed: 21 checks (untouched round trips with and without the defaulted keys, the absent record per mode, tag-only package difference, native edits win, older tags and the schema option, untrusted records).
+TAIL rr-59-export-integrity.mjs
+RR-59 integrity: unresolved image diagnostics, exact scalar/style table recovery, native edits, hostile evidence, provenance modes and optional-peer custom measurement passed.
+TAIL rr-59-picture-diagnostics.mjs
+RR-59 picture diagnostics passed: 46 checks (10 picture paths x 5 unresolved source kinds, one unresolved-asset each, the fallback drawn, strictAssets fails).
+TAIL rr-59-script-measurement.mjs
+RR-59 script measurement: ar-SA, mixed Arabic/Latin, rich run language and slide scheme overrides export with strict pinned fonts and shared line geometry. Native raster parity is separate.
+TAIL rr-59-table-alt-provenance.mjs
+RR-59 table alt provenance: unchanged, removed and edited frame alt text with authored cells passed.
+TAIL rr-97-resolver-failure.mjs
+RR-97 resolver failure passed: 15 checks (9 picture uses, background fallback, unchanged resolvable image, strictAssets).
+TAIL rtl-layout.mjs
+RTL layout export passed: logical alignment, hanging bullets at the right, per-paragraph line direction, mirrored regions and tables, reversed column charts, en-US Latin runs, notes and master defaults.
+TAIL safe-typefaces.mjs
+Safe typeface checks passed (6): the policy's safe set, the mapping, the XML pass, measured line breaks and the report.
+TAIL script-fonts.mjs
+Script fonts passed: 13 languages across Latin, Cyrillic, Greek, CJK (ja/zh-Hans/zh-Hant/ko), Arabic/Hebrew RTL, Indic and Thai; lang, rtl, theme and run ea/cs, supplements, import and diagnostics.
+TAIL sections.mjs
+Sections passed: native p14:sectionLst with Default Section runs and deterministic ids, schema order with provenance customer data, import from the list (own export, stripped tags, renamed and moved slides), stored fallback without a list, footer agreement and section-reference-changed, malformed lists and the unit contract.
+TAIL sh-02-shape-blocks.mjs
+sh-02 shape blocks: ok
+TAIL sh-04-overlays.mjs
+sh-04 overlays (pptx): ok
+sh-04 overlay layers (pptx): ok
+TAIL sh-05-powerpoint-shapes.mjs
+sh-05 powerpoint shapes: ok
+TAIL sh-05-shape-import.mjs
+sh-05 shape import: ok
+TAIL sh-07-native-diagrams.mjs
+SH-07 checks passed (8): presets and custom geometry, flattened transforms, paint, text at pele's baselines, node labels, glued straight connectors, gradients, the picture fallback with its finding, the tagged group and its round trip.
+TAIL sh-09-smartart.mjs
+SH-09 SmartArt passed: live Basic Pyramid and Basic Matrix (data model, OPF colors and quick style, drawing, no layout part), the round trip, an edited node, untagged and PowerPoint-style data models, native shapes, the domain fallback and the option check.
+TAIL sh-11-shape-text-rect.mjs
+SH-11 shape text rectangle: 194 shapes (187 presets) export core's textBox and size
+TAIL sh-16-smartart-fallback.mjs
+SH-16 SmartArt fallback passed: the mc:AlternateContent wrapper (dgm1612 choice, picture fallback of the same id and name at the frame grown by its bleed), the preview pixels (base corners, apex and diamond tips included), safe typefaces, a markup-compatibility reader without SmartArt, the round trip from the choice and from the fallback alone, a replaced fallback, references-only provenance, the unavailable fallback and determinism.
+TAIL sh-17-smartart.mjs
+SH-17 SmartArt passed: live Basic Chevron Process, Basic Process and Vertical Process with fallback pictures (data model, OPF colors with the arrows, drawing, no layout part), the round trip from the frame and from the picture alone, PowerPoint-style data models and an edited node, native shapes, the domain fallback, mirrored chevrons and list blocks as cards.
+TAIL sh-18-smartart.mjs
+SH-18 SmartArt passed: live Basic Cycle (data model, arrow label, drawing with turned arrows, fallback picture, no layout part), the round trip from the choice and the fallback alone, a PowerPoint-style data model, native shapes and the domain fallback.
+TAIL sh-19-smartart-layouts.mjs
+sh-19 smartart layouts: ok
+TAIL sh-phase-2-meeting-points.mjs
+shapes phase 2 meeting points passed (4): diagram groups import as diagrams beside overlays, edited groups as SH-05 shapes, one connector writer.
+TAIL shape-block-effects.mjs
+shape-block-effects: ok
+TAIL shape-border-widths.mjs
+{"test":"shape-border-widths","passed":true,"checked":12}
+TAIL shape-effects.mjs
+shape effects (a:effectLst): ok
+TAIL shared-furniture.mjs
+16 furniture exports match accepted editable text boxes, fonts, source lines and images; explicit disabling and strict overflow controls pass.
+TAIL shared-metric.mjs
+Shared metric PPTX: 36 exact aligned geometry/source/type round trips with editable native lines, strict rejection and 198 XML boundary cases.
+TAIL shared-quote.mjs
+Shared quote PPTX: 4 wide/portrait decks and 7 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+TAIL shared-timeline.mjs
+16 timeline exports match accepted text boxes, fonts and source; current edits, clearing, reordering, six damaged-group controls multiple timelines and four strict/warn overflow controls pass.
+TAIL single-column-chart.mjs
+Single-column charts passed: native histogram bins (4 values, constant, single, 1000 values and extremes), 27 chart types exported (row numbers reported, histogram and pareto binned natively), unplottable data reported, ordinary charts unchanged.
+TAIL single-series-colour.mjs
+Single-series colour passed: 18 charts, single-series column and bar charts write one series colour and no c:dPt; multi-series and pie/doughnut unchanged.
+TAIL slide-context.mjs
+{"test":"slide-context","passed":true}
+TAIL slide-number-static.mjs
+Static slide numbers passed: live mode (the default) keeps the placeholder field, three number-with-words forms fixed text, bare number and header, round trip and option validation.
+TAIL slide-variables.mjs
+Slide variables passed: native {{slide.number}} fields with fixed words, fixed {{deck.slideCount}} and {{slide.section}}, body tokens as text, pagination numbers, tokens through the round trip and third-party footers.
+TAIL socials-furniture.mjs
+Socials furniture passed: linked profile lines, stored-organization re-import, edits, disagreement, orphan and 10 engine platforms.
+TAIL source-run-styles-roundtrip.mjs
+Actual unchanged rich text roundtrip + native size/font/color edits PASS
+Reported catalog timeline measured source blocks restore exactly, including nominal24
+Missing/tampered/malformed provenance retains valid native formatting PASS
+TAIL source-run-styles.mjs
+Source run style nominal/absence restoration, native edits, current words, rich spans and evidence controls PASS
+TAIL step-badge-numbering.mjs
+step badge numbering: ok
+TAIL step-badges.mjs
+LH-07 step badges: native badges, connectors, chips and arrows export and import
+TAIL styled-table-import.mjs
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+TAIL styled-table.mjs
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+TAIL svg-image-degrade.mjs
+Unexportable image checks passed (27).
+TAIL svg-image.mjs
+SVG picture checks passed (24): native svgBlip over a PNG fallback in every image place, determinism, import, sanitizing, sizes, host rasterizer and the no-renderer fallback.
+TAIL svg-rasterizer-converter-missing.mjs
+svg-rasterizer-converter-missing: converter-missing maps to svg-rasterizer-unavailable with the install command.
+TAIL svg-style-sanitization.mjs
+SVG style sanitization passed: text and CDATA cleaned in actual native media and raster input, safe bytes preserved.
+TAIL symbol-fonts.mjs
+Symbol fonts: measured export (opf-render FF-45) names the chosen families and keeps the codes.
+Symbol fonts: 5 families; a:latin names the chosen family, characters byte for byte in private-use and Windows-1252 form, re-import round-trips; no a:sym written (native verification pending).
+TAIL table-alt.mjs
+table alt: descr on the table frame, decorative marker, import
+TAIL table-frame-furniture-order.mjs
+Table frame and furniture order passed: 12 table frames equal the drawn table extent (2 shorter than their box, 10 filling it); 3 slides paint furniture after content in spTree and SVG.
+TAIL table-powerpoint-save.mjs
+PowerPoint-saved tables import plain (38 checks).
+TAIL table-theme-colors.mjs
+{"test":"table-theme-colors","passed":true,"schemes":14,"namedReferences":6384,"chromeReferences":672}
+TAIL tag-colour.mjs
+default dark2 slide: 11 of 14 catalog schemes take the text colour
+tag colour ok
+TAIL template-layout-review.mjs
+Template layout review: 144 region identities, native plain titles, prompt typography and foreign layout mapping passed. Native Office acceptance remains pending.
+TAIL template-layouts.mjs
+Template layouts passed (13): 36 templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.
+TAIL template-variables.mjs
+Template variables: template plus values exports the same bytes as the hand-written deck; examples, unfilled and invalid inputs behave.
+TAIL theme-colors.mjs
+{"test":"theme-colors","passed":true,"colorSchemes":14,"themes":3}
+TAIL theme-script-slots.mjs
+{"test":"theme-script-slots","passed":true,"fontSchemes":89,"combinations":120,"corpusDecks":137,"corpusWrittenSlots":8}
+TAIL tier-pillar-pptx.mjs
+LH-135, LH-136: tier eyebrow runs and cards, pillar accent rules as native lines (PPTX).
+TAIL timeline-status.mjs
+Timeline status passed: native ellipses for done, current (ring) and planned, bold and muted text, restored on import and three damaged-ring controls.
+TAIL title-rule.mjs
+title-rule: ok
+TAIL title-split.mjs
+Title split: the topic and qualifier export as one tagged title group and import as the authored title.
+TAIL typeface-inventory.mjs
+{"test":"typeface-inventory","passed":true,"charts":8,"corpus":{"decks":137,"decksWithCharts":115,"workbooks":175,"typefaces":410641}}
+TAIL vendor-compat.mjs
+Vendor compatibility: empty shape text bodies, the 4.0.1 notes master and the FF-05 notes theme are restored; a mislabelled raster stays a raster.
+TAIL video-frame.mjs
+video-frame: ok
+TAIL watermark.mjs
+Watermark export checks passed (51).
+TAIL wave-6-interactions.mjs
+wave 6 interactions passed: 16 checks (numerals beside ruled rows are en-US runs in a right-to-left deck).
+TAIL zip-date.mjs
+ZIP date public fixture: {"node":"v24.20.0","zones":["UTC","America/Los_Angeles","Pacific/Apia"],"validCasesPerZone":13,"invalidCasesPerZone":32,"exports":50,"explicitPostImportTimezoneChange":true,"recursiveLeafParts":41,"preservedDefaultAndUndefined":true,"equalAbsoluteRepresentations":true,"wholeFileTimezoneEquality":true,"nestedWorkbooks":true,"sourceOptionsPreserved":true,"reimport":true,"deterministicRepeat":true}
+{
+  "total": 73,
+  "failed": []
+}

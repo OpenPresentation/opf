@@ -1,0 +1,12 @@
+✔ lean Worker preserves data exclusions and production size budgets (1089.6123ms)
+▶ the bundled sources
+  ✔ every listed doc page exists, none is a maintainer note, and the skills carry no scripts (7.4913ms)
+✔ the bundled sources (8.4572ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1627.0745

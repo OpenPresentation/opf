@@ -1,0 +1,675 @@
+﻿{
+    "deck":  "diagrams",
+    "variant":  "picture",
+    "name":  "diagrams~picture",
+    "sha256":  "0f5db2a96672ac52a7b1a217a20665fa16785cbce794dcd22ff5fd5eba5265ad",
+    "opened":  true,
+    "previewSlides":  7,
+    "openSeconds":  1,
+    "slideCount":  7,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Every request is reviewed before it ships",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     695.1,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        687.36
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 1",
+                                          "type":  28,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      44.22,
+                                                      217.57,
+                                                      871.57,
+                                                      172.27
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.71,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "The client talks to one API",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.71,
+                                                                     43.2,
+                                                                     449.66,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.71,
+                                                                        441.92
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.blocks.0.bullets line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      251.94,
+                                                      427.8,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "The client creates a deck with one call",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     69.6,
+                                                                     251.94,
+                                                                     395.96,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        69.6,
+                                                                        391.09
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.blocks.0.bullets line 1",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      287.94,
+                                                      427.8,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "The API validates it before it answers",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     69.6,
+                                                                     287.94,
+                                                                     379.2,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        69.6,
+                                                                        374.33
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF list slides.1.blocks.0.bullets line 2",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      323.94,
+                                                      427.8,
+                                                      29.28
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Rendering happens later, on request",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     69.6,
+                                                                     323.94,
+                                                                     377.54,
+                                                                     28.8
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        69.6,
+                                                                        372.67
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 2",
+                                          "type":  28,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      513.48,
+                                                      110.61,
+                                                      378.84,
+                                                      386.22
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  3,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.2.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Strategy rests on three themes",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     532.55,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        524.8
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 3",
+                                          "type":  28,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      45.15,
+                                                      200.45,
+                                                      869.7,
+                                                      206.5
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  4,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.3.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.71,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "The rollout runs in three phases",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.71,
+                                                                     43.2,
+                                                                     546.12,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.71,
+                                                                        538.38
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 4",
+                                          "type":  28,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      44.25,
+                                                      183.33,
+                                                      871.5,
+                                                      240.75
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  5,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.4.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Support requests come mostly from two sources",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     843.06,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        835.31
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 5",
+                                          "type":  28,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      237.43,
+                                                      111.21,
+                                                      485.13,
+                                                      384.98
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  6,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.5.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      44.09,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "A rejected brief returns to its author",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     44.09,
+                                                                     43.2,
+                                                                     615.04,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        44.09,
+                                                                        607.29
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 6",
+                                          "type":  28,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      140.25,
+                                                      224.96,
+                                                      679.5,
+                                                      157.5
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  7,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.6.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Deploys move through four states",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     583.63,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        575.88
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF diagram 7",
+                                          "type":  28,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      78,
+                                                      194.21,
+                                                      804,
+                                                      219
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  258,
+                                        "position":  3,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  259,
+                                        "position":  4,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  260,
+                                        "position":  5,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  261,
+                                        "position":  6,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  262,
+                                        "position":  7,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  258,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  259,
+                                       "position":  3,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  260,
+                                       "position":  4,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  261,
+                                       "position":  5,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  262,
+                                       "position":  6,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  7,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  4.7
+}

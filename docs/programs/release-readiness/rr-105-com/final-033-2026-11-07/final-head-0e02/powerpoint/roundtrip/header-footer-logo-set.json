@@ -1,0 +1,75 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Header Footer Logo Set",
+  "slides": [
+    {
+      "design": {
+        "watermark": {
+          "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAIhElEQVR42u3dsWtVZxzG8QsZLEJd7OiQNHsyvEMQIfDiEBUyOLxdQ7oE8gcEVISQjGJxFRRBTCg4ZEoWsaJDXBxiFrFOBUWcmkEd0/bWs1irMfGcN+ee9/OFB0ev7+/5fU3OPffcXg8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHScENN4iGnhnz/XQkzPQ0xvQ0x/FZbdENNOiGk7xLQaYpoPMY0MwOxGqte6Wr32nerfUtr83lbdXau6PG6z9y7PbIjpcYFl2U82QkzTLZzddPXazOjz6Xd71qZ/Wp6pENMTBdlX1kNMYy2Y3Vj1Wszk69Pv+pTN/1CgZYX4pswd4uzmnP83Zbn05b+tBINZJOKuLbctv9SRxYyzW3TeJOB/j/ZlJsPsZpyzXwe+9YKfgTeTdyGm4QZnN1z9Hc66mUyVIABX+5vNnQZnd8f5NvvuQAnv8xt085loYHYTzjVLZrssADf55MnNBmZ307nmuVmoy7f3GnC+awFDNc5uyO/+WTPeRQEsGGzWnKtxduecZ9YsdFEAawabNUs1zm7JeWbNWhcF8Nxgs+ZujbO76zyz5nkXBfDWYLNms8bZbTrPvB8l7qIADDZvntY4u6fOM28IQAiAAAhACIAACEAIgAAIQAiAAAhACIAACEAIgAAIQAiAAAhACIAACEAIgAAIQAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAAiAAIQACIAAhAAIgACEAAiAAIQACIAAhAAIgACEAAiAAIQACIAAhAAIgACEAAyVAIQAhACEAIQAhACEAIQAhACEAIQAhACEAAiAAIQACIAAhAAIgACEAAiAAIQACIAAhAAIgACEAAiAAIQACIAAhAAIgACEAAiAAIQACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACIAACMB5EgABEIAQwIFLtGuwWbNV4+y2nGfW7HZRADsGmzWPapzdI+eZNTtdFMC2wWbNSo2zW3GeWbPdRQGsGmzWXKhxdhecZ9asdlEA8wabNZM1zm7SeWbNfBcFMGKw2fK6gfm9dq7ZMtLrIiGmDcPNkisNzO6Kc82SjV5XCTFNG3CWjDYwu1HnmiXTvS4TYlo35EZztcHZXXW+jWa913VCTGMG3Vh+DzEdaXB2R6q/w1k3k7FeCYSY5gy7kZzOMLvTzrmRzPVKIsS0bOi1Zjbj7Gadd61Z7pVIiGnR8Adr+Umg9iz2SibENBNieqcIB/6d//Qhzu60awIHTr/zMz38W6ThENMdpdjf1f4mL/jt88Kgdwf2l37Xh23+p2WaCDHd9BPB5+/wq27IGW3h7Ear1+aOwc//j9/v9oRN37tMQyGmcyGmpRDT3RDTZvVQipKyVX0Md6X6MM7kAM1vsnrNK9W/YavA+W1W3V2qujxkswEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJAJjwTzSDCUt/QeCuqhoChw8T0W3GPBUejy+2IQXwyCQpffV4P5ajBYfvHloCjtx35L6+vBUegFP7/zN5cxLUObBeBqf7NZ1zK0dflHLWiWTGsb2iiAK5YzSza0DW0UgDv88mVE49Cm5Z+0lFkzr3VokwAuWMqsWdW6gxX1RHWTyvUQ08MQ04sQ06tDzssQ07MQ070Q07UQ008hpmMDdq4rljJrtm3z/gp6vn/xZMCG3F+qyQE530eWMmt2bPXXFfNUiOnBgA/71xDTjy0/5y1LmTW7tnvvUl7s0MDft/mTYdUDLixmxtjwLxfyRkcHf5kAhAC+XMZbHR/+ZQIQm/7/RVwupAAzBEAA+LiEZwsqwPs2XRgkAAJwJfoQ3h0gAALAhwLOFVqESQIgAAIo933oFQIggNKX/2ThZThGAARQsgCWCi/DTwRAACUL4H7hZbhGAARQsgDeFF6GewRAAKUu/xFlSM8IgABKFcBxZUgvCYAAShXAD8qQXhEAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAAZgDARAAAQgBEAABCAEQAAEIARAAAQgBEAABCAEQAAEIARAAAQgBEAABCAEQAAEIARAAAQgBEAABCAEQAAEIAexRvKPKkF4QAAGULIE/Cy/DQwIggJIFsFl4Ga4TAAGULIBfCi/DLAEQQMkCOFN4GU4QAAGULoE/Ci3CRkvOnwAI4FALeKnQIpwnAAIggJi+CzG9LqwED1p0/gRAAIdewp8LK8EpAiAAfFzEW4UU4GLLzp0ACKA1Zfyt48O/0cIzJwACaE0Zv++wBG619MwJgAD8OtBwllt81gRAAK29MDjo7w5shZjOtvycCYAAWv0W4aUBvFmov/hzA3LGm5Yya97a7IMV9Uz12YHNFn6K8E2I6X6IaSnEdHLAzvWupcya57a5nuIerR4qcpg5HmI6MuDnuGQps2bN9qJNAjhnKbNmQevQJgEMhZjeWcxsGdc6tE0CNy1mljzWNrRRABOWs4wHwACfk8AdC9ponmgZ2iyAYdcCGs2UlqHtEpixqGXdCg78VwKLFrbW3NYqDJoEli2u5UfZEpizwH7sR9kSGAsxrVvm/V3td8EPXRPBdP8x5pb7yzf5eJ8fXRfBSIhpPsS0GmLaDjHthJh2S/xIb/9Tff0P9vTv7Xd7LwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJfA38SKPjk9c4KQAAAAASUVORK5CYII=",
+          "opacity": 0.05
+        }
+      },
+      "title": "Header And Footer",
+      "text": "The deck-level header, footer, organization logo and watermark apply by default; the footer zone draws the logo icon beside the organization name.",
+      "section": "Default Furniture"
+    },
+    {
+      "design": {
+        "header": false,
+        "footer": false
+      },
+      "title": "Slide Override",
+      "text": "Slide-level design can suppress inherited repeated furniture.",
+      "section": "Suppressed Furniture"
+    }
+  ],
+  "description": "Technical fixture for organization logo shapes (onLight and onDark), logo references in header and footer zones, a zone row (logo beside text), repeated furniture, and watermark suppression.",
+  "design": {
+    "header": {
+      "left": {
+        "image": {
+          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMTI4IDEyOCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJFeGFtcGxlIGljb24iPjx0aXRsZT5FeGFtcGxlIGljb248L3RpdGxlPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iMjgiIGZpbGw9IiMyNTYzRUIiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNCAyNCkgc2NhbGUoLjg4KSI+PHJlY3QgeD0iOCIgeT0iMTAiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcng9IjciIGZpbGw9IiNGRkZGRkYiLz48cmVjdCB4PSI0OCIgeT0iMTAiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcng9IjciIGZpbGw9IiNDRkU4RjMiLz48cmVjdCB4PSI4IiB5PSI1MCIgd2lkdGg9IjM0IiBoZWlnaHQ9IjM0IiByeD0iNyIgZmlsbD0iI0NGRThGMyIvPjxyZWN0IHg9IjQ4IiB5PSI1MCIgd2lkdGg9IjM0IiBoZWlnaHQ9IjM0IiByeD0iNyIgZmlsbD0iI0ZGRkZGRiIvPjwvZz48L3N2Zz4K"
+        }
+      },
+      "center": {
+        "text": "{{slide.section}}"
+      },
+      "right": {
+        "date": "2026-05-05"
+      }
+    },
+    "footer": {
+      "left": {
+        "image": {
+          "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMTI4IDEyOCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJFeGFtcGxlIGljb24iPjx0aXRsZT5FeGFtcGxlIGljb248L3RpdGxlPjxyZWN0IHg9IjQiIHk9IjQiIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iMjgiIGZpbGw9IiMyNTYzRUIiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNCAyNCkgc2NhbGUoLjg4KSI+PHJlY3QgeD0iOCIgeT0iMTAiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcng9IjciIGZpbGw9IiNGRkZGRkYiLz48cmVjdCB4PSI0OCIgeT0iMTAiIHdpZHRoPSIzNCIgaGVpZ2h0PSIzNCIgcng9IjciIGZpbGw9IiNDRkU4RjMiLz48cmVjdCB4PSI4IiB5PSI1MCIgd2lkdGg9IjM0IiBoZWlnaHQ9IjM0IiByeD0iNyIgZmlsbD0iI0NGRThGMyIvPjxyZWN0IHg9IjQ4IiB5PSI1MCIgd2lkdGg9IjM0IiBoZWlnaHQ9IjM0IiByeD0iNyIgZmlsbD0iI0ZGRkZGRiIvPjwvZz48L3N2Zz4K"
+        },
+        "text": "{{organization.name}}"
+      },
+      "center": {
+        "text": "Confidential fixture"
+      },
+      "right": {
+        "text": "{{slide.number}}"
+      }
+    }
+  },
+  "organization": {
+    "id": "fixture-org",
+    "name": "Fixture Org",
+    "logo": {
+      "full": {
+        "onLight": "asset:logo-dark",
+        "onDark": "asset:logo-light"
+      },
+      "icon": "asset:icon",
+      "wordmark": "asset:wordmark"
+    }
+  },
+  "assets": {
+    "logo-dark": "./assets/logo-dark.svg",
+    "logo-light": "./assets/logo-light.svg",
+    "icon": "./assets/icon.svg",
+    "wordmark": "./assets/wordmark.svg",
+    "watermark": "./assets/watermark.png"
+  }
+}

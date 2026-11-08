@@ -1,0 +1,642 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Qualification: layout harvest waves 7 and 8",
+  "slides": [
+    {
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "assets/cover-image.png"
+        }
+      },
+      "title": "Building a faster supply network",
+      "subtitle": "Board strategy review, October 2026",
+      "id": "cover-picture",
+      "layout": "cover"
+    },
+    {
+      "title": "We will halve the time from order to delivery by next autumn",
+      "blocks": [
+        {
+          "text": "Three changes get us there: regional stock, one planning calendar and carriers we measure every week.",
+          "region": "message"
+        }
+      ],
+      "id": "statement",
+      "layout": "statement"
+    },
+    {
+      "title": "What we will cover",
+      "id": "icon-list",
+      "items": [
+        {
+          "text": "Faster delivery",
+          "description": "Regional stock so most orders ship the same day from a warehouse near the customer, with the slow lanes moved to rail.",
+          "icon": "lucide:truck"
+        },
+        {
+          "text": "One calendar",
+          "description": "Sales, planning and finance work from one weekly plan, reviewed every Monday morning with the regional leads.",
+          "icon": "lucide:calendar"
+        },
+        {
+          "text": "Measured carriers",
+          "description": "Every carrier gets a weekly scorecard on time, damage and cost, published to the whole team.",
+          "icon": "lucide:gauge"
+        }
+      ]
+    },
+    {
+      "title": "Why it matters",
+      "id": "display-message",
+      "text": [
+        {
+          "text": "Customers do not buy software. "
+        },
+        {
+          "text": "They buy fewer bad Mondays.",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "title": "Four commitments",
+      "id": "icon-cards",
+      "items": [
+        {
+          "text": "Ship the same day",
+          "icon": "lucide:truck"
+        },
+        {
+          "text": "Plan every Monday",
+          "icon": "lucide:calendar"
+        },
+        {
+          "text": "Measure carriers",
+          "icon": "lucide:gauge"
+        },
+        {
+          "text": "Protect the margin",
+          "icon": "lucide:shield-check"
+        }
+      ]
+    },
+    {
+      "title": "Where we stand",
+      "blocks": [
+        {
+          "metric": {
+            "value": "3.4",
+            "unit": "days",
+            "label": "Order to delivery",
+            "icon": "lucide:clock"
+          }
+        },
+        {
+          "metric": {
+            "value": "92%",
+            "label": "On-time shipments",
+            "icon": "lucide:circle-check"
+          }
+        },
+        {
+          "metric": {
+            "value": "$1,240,000",
+            "label": "Freight saved",
+            "icon": "lucide:piggy-bank"
+          }
+        }
+      ],
+      "id": "icon-metrics"
+    },
+    {
+      "title": "Three workstreams",
+      "blocks": [
+        {
+          "blocks": [
+            {
+              "text": "Regional stock"
+            },
+            {
+              "text": "Four new hubs carry the 400 fastest-moving items."
+            }
+          ],
+          "icon": "lucide:warehouse"
+        },
+        {
+          "blocks": [
+            {
+              "text": "Planning"
+            },
+            {
+              "text": "One weekly plan replaces three monthly ones."
+            }
+          ],
+          "icon": "lucide:calendar"
+        },
+        {
+          "blocks": [
+            {
+              "text": "Carriers"
+            },
+            {
+              "text": "A scorecard per carrier, every week."
+            }
+          ],
+          "icon": "lucide:gauge"
+        }
+      ],
+      "id": "icon-groups"
+    },
+    {
+      "title": "What customers told us",
+      "blocks": [
+        {
+          "text": "Orders arrive late in the north."
+        },
+        {
+          "text": "Tracking stops at the border."
+        },
+        {
+          "text": "Returns take two weeks to refund."
+        },
+        {
+          "text": "Support cannot see the carrier."
+        },
+        {
+          "text": "Invoices arrive before the goods."
+        }
+      ],
+      "id": "text-tiles"
+    },
+    {
+      "title": "The team",
+      "blocks": [
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "region": "people",
+          "blocks": [
+            {
+              "image": {
+                "src": "assets/alice.png",
+                "alt": "Ana Ruiz"
+              },
+              "shape": "ellipse"
+            },
+            {
+              "items": [
+                {
+                  "text": "Ana Ruiz",
+                  "description": "Program lead\nRuns the weekly plan."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "region": "people",
+          "blocks": [
+            {
+              "image": {
+                "src": "assets/alice.png",
+                "alt": "Sam Lee"
+              },
+              "shape": "ellipse"
+            },
+            {
+              "items": [
+                {
+                  "text": "Sam Lee",
+                  "description": "Logistics\nOwns the hubs."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "region": "people",
+          "blocks": [
+            {
+              "image": {
+                "src": "assets/alice.png",
+                "alt": "Kai Moreau"
+              },
+              "shape": "ellipse"
+            },
+            {
+              "items": [
+                {
+                  "text": "Kai Moreau",
+                  "description": "Analytics\nMeasures carriers."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "region": "people",
+          "blocks": [
+            {
+              "image": {
+                "src": "assets/alice.png",
+                "alt": "Mia Chen"
+              },
+              "shape": "ellipse"
+            },
+            {
+              "items": [
+                {
+                  "text": "Mia Chen",
+                  "description": "Finance\nGuards the margin."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "id": "portraits",
+      "layout": "team"
+    },
+    {
+      "title": "What the pilot region said",
+      "blocks": [
+        {
+          "quote": {
+            "text": "The rollout took six weeks, not six months, and every store manager was using it by the second Monday.",
+            "attribution": "Sofia Brandt",
+            "role": "Head of procurement",
+            "photo": {
+              "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAFhUlEQVR42u2dS4scVRiGa9m/obf9GwZqNS7KQERBGQRtRLIRYRYKgXan4EKauNGlNqKLJguHFgR/gKBigxWNBC/jZYxjZySBTkwE20AIXfLqaRkGdOp6LlXPC++6q7/vqXP9zqkoQgghhBBqSEmcbidxOkridJrE6TyJ00USp6skTtdJnGYd99rEYmFiMzWx2g496cMkTmfmz2W4lFcmhsNQkt5P4nScxOmS5NXupYlt38fE98zD0aTb6TIU655PTf2CxFj3wnnXkMTphEQ498RF4gdmxEoC/LByMbCV/C2afG+7hC0byWeE7/dMYavJZp83P4yWYNAEAPT5AY0JGO3jSZ3zfAIapod1rPDR74c9HuhVAWBMEIP3uMrGDmv77dg76PP20woUBoAFnxYtEDHyx8MiAMwIWOs8KwIAZVwtLC8rUsBJwNrp7TwAjAhUaz3KA8CUQLXWU3b92CU8FQBra/87Zy9nexevZ0eLu9l6ndWu+/fX2U8/rrJ33jwi+WZvwJsZwPnd/ezWzXuZLR38sMqefvwKM4EcAKxtvPk2k7/R/jd/dH5fIA8AjT+Imn1Xev3VnzsNgRcAqM93pc8+vVPp2R995HL21LmvCnnnsS8B4LibGPDl1eLwbqlnfub5b7M3PrqRvX/j91J++9Iye+7F7wFAdqlrvxQHYHThoHTiT/rltw4BICQAzj37dW3J39hlSwAABQF47YNfawdA3QEABALAe0d3agdAdjUwBIACADx85otGki9rdgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7gF4EAA6vxm0d/V2IwCosggAAgDgwrvXak++KovYDg4EgCeevFI7ACovA4CASsJ2X/iutuSrvKzzJWE6seNKh1f/LPXMagnUHZQZE6ioRJVFKi+jKDRO/z6u5Uoff/hb5efX7EBTxLzmXMAJ66yeK73y0oFXCekkALLO6tnW/JPbnT8g6g0AOqips3o2k//QA58DgC8AbKyzejqupRM7GqHXaQ341Od3vdn3GgAMABgAMABgAMAAgAHAD2vqqCmkppJ1T0815dXU18V1NQBwirVYpEUjmxdX2by9DABOsc3kH7/CDgA8afZdydZllkEBUGTLVVu0VX9Pfb4raYscAMydPCqeKHMzh4o1VLSh4o0yv60BnyupSKbzANR5G5fKuIr+vkboLtVpAFQoWXfxZdGWAAAcAlDlEsb/sroDAAgAAB2SaOLwhcYEABAAADom1dQRrCKzAwBoIwBnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMADAPT5lCaSr6ISNoMC2Q7Wh5TqBkCVRQAQCAD6lFrdABS9kwcAHJeE6aOKLm/jAgAPikLVElTpDlRZVPYePp3YcSV9ThcATgwMi36kuer1qzqu5Ur6oDYAOLbO6rnS3sXr3gCw7jIENi+u2ujWzXvZzlkrl0ev8wCw6jIAOqhp8wo7Jf/87r6t/7fKA8CC4+H/XGap41pNXGurAZ/6fDX7lt78jRd5AJgDQGs9zwPAlEC11tM8AIwIVGs9ygPANoFqrbejPOr6TKClXkV5lcTpjIC1zrMiAAwJWOs8jIooidMlQWuNl1FRJXE6JnCt8bgMAP2u7wu0xMphPyojWoGOvv3HAOixNxC0lbteVEXMCDo08v8fCCYEMzhPojrFLmHLdv1KADBgPBBMvz+ImlASp1ssEPm94KMcRU3KQEBL4Oeb32zyT3QHjAk86vMba/aZHXRstF9ynYAuwU2TP4x8kFkxHLN3YG1tf1x5ha8hEPrm4ZgpNDPCH5fe2HHUNcwoL6tWxmViOIxClik0HZmS87npv1Z0Gf826SsTk7mJ0Sh3ASdCCCGEUAn9BY0ovyrQik8JAAAAAElFTkSuQmCC"
+            }
+          }
+        }
+      ],
+      "id": "testimonial"
+    },
+    {
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "assets/context-photo.png",
+          "textPlacement": "panel"
+        }
+      },
+      "tag": "Part 2",
+      "title": "Where the network grows",
+      "subtitle": "Three regions, one plan",
+      "id": "section-picture",
+      "layout": "section"
+    },
+    {
+      "title": "Four steps to the new network",
+      "blocks": [
+        {
+          "items": [
+            {
+              "text": "Pick the hubs",
+              "description": "Choose four sites near our largest customers."
+            }
+          ],
+          "numbering": "arabic",
+          "region": "steps"
+        },
+        {
+          "items": [
+            {
+              "text": "Move the stock",
+              "description": "Move the 400 fastest items into the hubs."
+            }
+          ],
+          "numbering": {
+            "start": 2
+          },
+          "region": "steps"
+        },
+        {
+          "items": [
+            {
+              "text": "Switch the carriers",
+              "description": "Contract two carriers per region on scorecards."
+            }
+          ],
+          "numbering": {
+            "start": 3
+          },
+          "region": "steps"
+        },
+        {
+          "items": [
+            {
+              "text": "Review every week",
+              "description": "Read the scorecards and adjust the plan."
+            }
+          ],
+          "numbering": {
+            "start": 4
+          },
+          "region": "steps"
+        }
+      ],
+      "id": "stepper",
+      "layout": "process"
+    },
+    {
+      "title": "The cost of slow paperwork",
+      "blocks": [
+        {
+          "items": [
+            {
+              "text": "62 minutes a day",
+              "description": "Average time technicians spend on forms after each visit"
+            },
+            {
+              "text": "1 in 6 reports",
+              "description": "Sent back for missing details, which doubles the effort"
+            },
+            {
+              "text": "9 days",
+              "description": "Typical delay before a completed job can be invoiced"
+            }
+          ]
+        },
+        {
+          "text": "Digital forms remove the rework and let us invoice the day the job closes."
+        }
+      ],
+      "id": "figure-row",
+      "layout": "two-column"
+    },
+    {
+      "title": "Choose the smallest useful test",
+      "blocks": [
+        {
+          "text": "Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.",
+          "region": "first"
+        },
+        {
+          "text": "Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.",
+          "region": "second"
+        },
+        {
+          "text": "Recommendation: establish the evidence with Option A before committing to Option B.",
+          "region": "verdict"
+        }
+      ],
+      "id": "run-in",
+      "layout": "comparison"
+    },
+    {
+      "title": "Carrier scorecard",
+      "blocks": [
+        {
+          "table": {
+            "columns": [
+              "Carrier",
+              "On time",
+              "Damage",
+              "Cost"
+            ],
+            "rows": [
+              [
+                "North Freight",
+                "96%",
+                "0.4%",
+                "$1.10"
+              ],
+              [
+                "Coastline",
+                "91%",
+                "0.9%",
+                "$0.95"
+              ],
+              [
+                "Rapid Rail",
+                "88%",
+                "0.2%",
+                "$0.80"
+              ]
+            ]
+          }
+        },
+        {
+          "text": "North Freight leads on time.\nRapid Rail is cheapest and gentlest, and wins the slow lanes."
+        }
+      ],
+      "id": "table-note"
+    },
+    {
+      "title": "Three conditions for a useful pilot",
+      "blocks": [
+        {
+          "items": [
+            {
+              "text": "Clear scope",
+              "description": "Two teams and one workflow keep the pilot focused."
+            }
+          ],
+          "region": "pillars"
+        },
+        {
+          "items": [
+            {
+              "text": "Consistent measures agreed with finance before the start",
+              "description": "Track completion and task time against a baseline."
+            }
+          ],
+          "region": "pillars"
+        },
+        {
+          "items": [
+            {
+              "text": "An explicit decision",
+              "description": "Agree the evidence needed before expanding."
+            }
+          ],
+          "region": "pillars"
+        }
+      ],
+      "id": "heading-tracks",
+      "layout": "pillars"
+    },
+    {
+      "title": "Delivery times in the pilot",
+      "id": "histogram",
+      "chart": {
+        "type": "histogram",
+        "data": {
+          "columns": [
+            "Days"
+          ],
+          "rows": [
+            [
+              1.2
+            ],
+            [
+              1.8
+            ],
+            [
+              2.1
+            ],
+            [
+              2.4
+            ],
+            [
+              2.6
+            ],
+            [
+              2.9
+            ],
+            [
+              3.1
+            ],
+            [
+              3.3
+            ],
+            [
+              3.4
+            ],
+            [
+              3.8
+            ],
+            [
+              4.2
+            ],
+            [
+              4.4
+            ],
+            [
+              4.9
+            ],
+            [
+              5.3
+            ],
+            [
+              5.8
+            ],
+            [
+              6.4
+            ],
+            [
+              7.1
+            ],
+            [
+              8.6
+            ],
+            [
+              2.2
+            ],
+            [
+              2.7
+            ],
+            [
+              3
+            ],
+            [
+              3.6
+            ],
+            [
+              1.5
+            ],
+            [
+              4
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Why orders were late",
+      "id": "pareto",
+      "chart": {
+        "type": "pareto",
+        "data": {
+          "columns": [
+            "Cause",
+            "Orders"
+          ],
+          "rows": [
+            [
+              "Carrier delay",
+              4120
+            ],
+            [
+              "Stock out",
+              2310
+            ],
+            [
+              "Address error",
+              1180
+            ],
+            [
+              "Customs",
+              640
+            ],
+            [
+              "Other",
+              310
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Freight cost, last year to this",
+      "id": "waterfall",
+      "chart": {
+        "type": "waterfall",
+        "data": {
+          "columns": [
+            "Step",
+            "Cost"
+          ],
+          "rows": [
+            [
+              "Last year",
+              8400000
+            ],
+            [
+              "Hubs",
+              -1250000
+            ],
+            [
+              "Carriers",
+              -640000
+            ],
+            [
+              "Fuel",
+              380000
+            ],
+            [
+              "This year",
+              6890000
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Approve the four hubs today",
+      "blocks": [
+        {
+          "text": "Ana Ruiz, program lead\nana.ruiz@example.com",
+          "region": "details"
+        }
+      ],
+      "id": "closing",
+      "layout": "closing"
+    }
+  ],
+  "language": "en-US",
+  "description": "v0.33 qualification: statements, message surfaces, icons, icon cards and text tiles, portraits, picture bands, steppers, figure rows, run-in heads, table-note grids, heading tracks, closing and chart labels."
+}

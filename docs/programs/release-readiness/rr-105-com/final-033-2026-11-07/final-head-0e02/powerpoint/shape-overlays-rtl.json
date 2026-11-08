@@ -1,0 +1,219 @@
+﻿{
+    "deck":  "shape-overlays-rtl",
+    "variant":  "default",
+    "name":  "shape-overlays-rtl",
+    "sha256":  "8193611999c7b45be77a2d658a48003fd9fd369ca52e2e2a3937a08cf2edac5f",
+    "opened":  true,
+    "previewSlides":  1,
+    "openSeconds":  0.3,
+    "slideCount":  1,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Right to left",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     207.02,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        197.89
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.0.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      489,
+                                                      110.61,
+                                                      427.8,
+                                                      285.2
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "First",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     672.71,
+                                                                     234.17,
+                                                                     67.64,
+                                                                     38.09
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        672.71,
+                                                                        60.39
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.1.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      427.8,
+                                                      285.2
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Second",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     204.23,
+                                                                     234.17,
+                                                                     113,
+                                                                     38.09
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        204.23,
+                                                                        105.75
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.shapes.0",
+                                          "type":  1,
+                                          "autoShapeType":  105,
+                                          "box":  [
+                                                      729.6,
+                                                      432,
+                                                      172.8,
+                                                      54
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "New",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     795.45,
+                                                                     446.37,
+                                                                     45.86,
+                                                                     25.26
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        795.45,
+                                                                        41.11
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.shapes.1",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      898.8,
+                                                      232.21,
+                                                      42,
+                                                      42
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "1",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  18,
+                                                       "maxSize":  18,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     911.11,
+                                                                     242.59,
+                                                                     13.26,
+                                                                     21.25
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        915.24,
+                                                                        9.13
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF connector slides.0.shapes.2",
+                                          "type":  1,
+                                          "autoShapeType":  -2,
+                                          "box":  [
+                                                      471,
+                                                      253.21,
+                                                      18,
+                                                      0
+                                                  ],
+                                          "rotation":  0,
+                                          "connector":  {
+                                                            "type":  2,
+                                                            "begin":  true,
+                                                            "end":  true
+                                                        }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "seconds":  1.4
+}

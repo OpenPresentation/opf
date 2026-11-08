@@ -1,0 +1,40 @@
+{
+  "name": "Diagrams in Markdown",
+  "slides": [
+    {
+      "title": "Every request is reviewed before it ships",
+      "id": "flow",
+      "diagram": "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A\n  C --> E[Release]"
+    },
+    {
+      "title": "The client talks to one API",
+      "blocks": [
+        {
+          "items": [
+            "The client creates a deck with one call",
+            "The API validates it before it answers"
+          ]
+        },
+        {
+          "diagram": {
+            "source": "sequenceDiagram\n  Client->>API: POST /decks\n  API->>API: Validate\n  API-->>Client: 201 Created",
+            "alt": "The client posts a deck; the API validates it and answers 201 Created."
+          }
+        }
+      ],
+      "id": "api"
+    },
+    {
+      "title": "Strategy rests on three themes",
+      "id": "ideas",
+      "diagram": "mindmap\n  root((Strategy))\n    Growth\n    Efficiency\n    People"
+    }
+  ],
+  "language": "en-US",
+  "description": "A deck written in the OPF Markdown dialect with Mermaid diagrams.",
+  "design": {
+    "colorScheme": "forest-green",
+    "theme": "classic",
+    "fontScheme": "aptos"
+  }
+}

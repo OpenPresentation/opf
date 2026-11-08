@@ -1,3 +1,17 @@
+# Final033 native acceptance:0e02db5a0aa6a68b7459fe62e3ed5b60f38784ea
+
+Evidence-only branch; never merge it. This is the current final candidate. The historical records below retain the observations and withdrawn decisions that led here.
+
+All25files/270slides open cleanly in owned read-only PowerPoint copies; all25saved derivatives import, no shrink autofit. Final171previews are byte-identical to the reviewed corpus;264of270nativeimages are pixel-identical to the previous accepted d260corpus. Six changed native images are reviewed in final-head-0e02/final-change-review.png: the three waterfall instances now use explicit shared value scales, and three small raster changes (layout-harvest13, diagrams2 and picture diagram3) introduce no new clipping or geometry change. ChartEx automatic inner margins remain documented and are not qualified exact plot parity.
+
+Raw grader failures remain unchanged and visible: SH02/SH11 stacked-text whole-range bounds count a phantom fourth line (individual characters fit); the opt-in native-body sampler47overflow belongs to explicitly scoped034#1114. The actual chart-axis, pyramid-color and RR87save-copy blockers are fixed and natively accepted. UI-only checks are not run.
+
+Folded#1145waterfall and#1146MCP are frozen. RR54generated/reviewed exact snapshots and preserved prior locks are in the source integration. The final chart-scale test and all73remaining PPTX contract scripts pass; combined MCP budget/public-doc controls2/2pass. Focusedcheck:changed passes build/Biome/test and fails only the omitted sparse compressed evidence. No assertions, tolerance or runtime data exclusions were weakened.
+
+FullCI42450079839 and one required-all pr-gate watcher run on this exact head. Native acceptance is complete with the explicit dispositions above; merge still needs allCIgreen. Neither release nor site deployment has happened.
+
+## Historical qualification record
+
 # v0.33 final Windows qualification evidence (in progress)
 
 Evidence-only branch. **Do not merge this branch.** Source fixes are on the release integration branch; this preserves their native evidence without changing raster goldens.

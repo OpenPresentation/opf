@@ -1,0 +1,54 @@
+{
+  "name": "Table And Code Example",
+  "slides": [
+    {
+      "title": "Quarter Snapshot",
+      "top+middle": {
+        "table": {
+          "columns": [
+            "Metric",
+            "Q3",
+            "Q4"
+          ],
+          "rows": [
+            [
+              "Revenue",
+              "$12.4M",
+              "$18.1M"
+            ],
+            [
+              "Gross margin",
+              "68%",
+              "72%"
+            ],
+            [
+              "Pipeline",
+              "$31M",
+              "$44M"
+            ]
+          ]
+        }
+      },
+      "bottom": {
+        "text": "Growth was broad-based, with margin expansion from infrastructure savings."
+      }
+    },
+    {
+      "title": "Decision Rule",
+      "left": {
+        "code": {
+          "source": "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
+          "language": "python",
+          "filename": "decision.py"
+        }
+      },
+      "center+right": {
+        "items": [
+          "Escalate only when the decision is irreversible",
+          "Keep reversible changes moving",
+          "Write the reason back to the audit log"
+        ]
+      }
+    }
+  ]
+}

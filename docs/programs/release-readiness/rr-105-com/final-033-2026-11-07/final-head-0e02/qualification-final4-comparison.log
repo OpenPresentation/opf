@@ -1,0 +1,56 @@
+{
+  "revision": "0e02db5a0aa6a68b7459fe62e3ed5b60f38784ea",
+  "previewCompared": 171,
+  "previewChanged": [],
+  "nativeCompared": 270,
+  "nativeChanged": [
+    {
+      "file": "layout-harvest",
+      "slide": 13,
+      "changedChannels": 4449,
+      "meanChannelDelta": 0.0672336154513889,
+      "oldSha256": "ea12cf7d316f563a7ddfe7bf3db198d05c1b9114f9b1132c4a999f5f10af440d",
+      "newSha256": "abd4360ab33adca90849adcc5af2416fc33dd9024094d2da516d60aaeae67df2"
+    },
+    {
+      "file": "layout-harvest",
+      "slide": 19,
+      "changedChannels": 129110,
+      "meanChannelDelta": 3.2784337022569443,
+      "oldSha256": "30fcaf1b912f02ad1c0871e3a01146adad60a2519a518bb60a92380700390be4",
+      "newSha256": "7e75662270accdc32b155bf23bbe16f344744a604434c6b0e376a1f007cae7e8"
+    },
+    {
+      "file": "layout-harvest~native-body",
+      "slide": 19,
+      "changedChannels": 129110,
+      "meanChannelDelta": 3.2784337022569443,
+      "oldSha256": "30fcaf1b912f02ad1c0871e3a01146adad60a2519a518bb60a92380700390be4",
+      "newSha256": "7e75662270accdc32b155bf23bbe16f344744a604434c6b0e376a1f007cae7e8"
+    },
+    {
+      "file": "diagrams",
+      "slide": 2,
+      "changedChannels": 267,
+      "meanChannelDelta": 0.006630859375,
+      "oldSha256": "30b581f7e791f261fd169a8a515233a0206294944ac340329507adb31fde0c5a",
+      "newSha256": "58d9f758b14b3c1b9d344750af7bc5318c63309e6d2cd46138f7cb00e8f93d32"
+    },
+    {
+      "file": "diagrams~picture",
+      "slide": 3,
+      "changedChannels": 15,
+      "meanChannelDelta": 0.000018446180555555556,
+      "oldSha256": "79b501a97ba249fe949258dac12efdc48d13bc27f9a23a302bf211550529e40f",
+      "newSha256": "a881349c09fd1f8cdd0608405a268e5fd7757f6a51f42bfe521d7ee317b5594a"
+    },
+    {
+      "file": "chart-type-sampler",
+      "slide": 2,
+      "changedChannels": 16490,
+      "meanChannelDelta": 0.43571180555555555,
+      "oldSha256": "9187eaca64d477d7d260eea553f532fad8611e8f9097cfc8bb6706736268a72a",
+      "newSha256": "58bbabce95708d92e00c9d6424de6597145bb45380b0e8971cb2a38b742eca02"
+    }
+  ]
+}

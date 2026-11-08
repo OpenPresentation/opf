@@ -1,0 +1,62 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\release-033-final
+> node scripts/check-changed.mjs "--files" "packages/pptx/test/rr-105-chartex-scale.mjs"
+
+check-changed: 1 changed files since (given) (plus uncommitted and untracked)
+ok  build (13.0 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.9 s)
+FAILED  pnpm run check:text (0.5 s)
+ok  pnpm run check:font-hotlinks (7.2 s)
+-  typecheck
+ok  tests pptx (0.8 s)
+
+--- pnpm run check:text failed (exit 1); last 35 lines of artifacts\check-changed\pnpm_run_check_text.log:
+
+> openpresentation-workspace@ check:text C:\opf-work\release-033-final
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (1.8234ms)
+✖ real compressed evidence is scanned as its text, preserving input bytes (2.6878ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (1.6824ms)
+✔ existing recognized binary evidence remains distinct from text (0.117ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.7467ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.427ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 91.3873
+
+✖ failing tests:
+
+test at scripts\check-text-integrity.test.mjs:17:1
+✖ real compressed evidence is scanned as its text, preserving input bytes (2.6878ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\rich-input-and-platform-ci-20260915\painting-Linux.json.gz'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/check-text-integrity.test.mjs:18:17)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rich-input-and-platform-ci-20260915\\painting-Linux.json.gz'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+step                          status     time
+build                         passed   13.0 s
+biome                         passed    0.1 s  1 files
+pnpm run check:changes        passed    0.9 s
+pnpm run check:font-hotlinks  passed    7.2 s
+pnpm run check:text           FAILED    0.5 s
+typecheck                     skipped       -  no .ts, .mts or tsconfig change
+tests pptx                    passed    0.8 s
+total                                  21.1 s
+
+check-changed: 1 of 7 steps failed: pnpm run check:text
+ ELIFECYCLE  Command failed with exit code 1.

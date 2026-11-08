@@ -1,0 +1,370 @@
+{
+  "scope": "Existing contract test commands at and after the CI stopping test; no permanent test selection or assertions changed.",
+  "results": [
+    {
+      "name": "rr-105-chartex-scale.mjs",
+      "status": 0,
+      "seconds": 0.681
+    },
+    {
+      "name": "rr-105-numeric-axes.mjs",
+      "status": 0,
+      "seconds": 0.688
+    },
+    {
+      "name": "rr-105-smartart-text-color.mjs",
+      "status": 0,
+      "seconds": 0.843
+    },
+    {
+      "name": "rr-105-waterfall-axis.mjs",
+      "status": 0,
+      "seconds": 1.026
+    },
+    {
+      "name": "rr-54-chart-table-data.mjs",
+      "status": 0,
+      "seconds": 2.567
+    },
+    {
+      "name": "rr-54-data-hardening.mjs",
+      "status": 0,
+      "seconds": 1.708
+    },
+    {
+      "name": "rr-54-format-respelling.mjs",
+      "status": 0,
+      "seconds": 0.952
+    },
+    {
+      "name": "rr-59-absent-defaults.mjs",
+      "status": 0,
+      "seconds": 1.817
+    },
+    {
+      "name": "rr-59-export-integrity.mjs",
+      "status": 0,
+      "seconds": 1.6
+    },
+    {
+      "name": "rr-59-picture-diagnostics.mjs",
+      "status": 0,
+      "seconds": 2.67
+    },
+    {
+      "name": "rr-59-script-measurement.mjs",
+      "status": 0,
+      "seconds": 4.572
+    },
+    {
+      "name": "rr-59-table-alt-provenance.mjs",
+      "status": 0,
+      "seconds": 0.627
+    },
+    {
+      "name": "rr-97-resolver-failure.mjs",
+      "status": 0,
+      "seconds": 1.722
+    },
+    {
+      "name": "rtl-layout.mjs",
+      "status": 0,
+      "seconds": 1.319
+    },
+    {
+      "name": "safe-typefaces.mjs",
+      "status": 0,
+      "seconds": 1.384
+    },
+    {
+      "name": "script-fonts.mjs",
+      "status": 0,
+      "seconds": 5.154
+    },
+    {
+      "name": "sections.mjs",
+      "status": 0,
+      "seconds": 1.002
+    },
+    {
+      "name": "sh-02-shape-blocks.mjs",
+      "status": 0,
+      "seconds": 0.655
+    },
+    {
+      "name": "sh-04-overlays.mjs",
+      "status": 0,
+      "seconds": 0.675
+    },
+    {
+      "name": "sh-05-powerpoint-shapes.mjs",
+      "status": 0,
+      "seconds": 0.888
+    },
+    {
+      "name": "sh-05-shape-import.mjs",
+      "status": 0,
+      "seconds": 1.206
+    },
+    {
+      "name": "sh-07-native-diagrams.mjs",
+      "status": 0,
+      "seconds": 1.134
+    },
+    {
+      "name": "sh-09-smartart.mjs",
+      "status": 0,
+      "seconds": 1.723
+    },
+    {
+      "name": "sh-11-shape-text-rect.mjs",
+      "status": 0,
+      "seconds": 0.672
+    },
+    {
+      "name": "sh-16-smartart-fallback.mjs",
+      "status": 0,
+      "seconds": 5.126
+    },
+    {
+      "name": "sh-17-smartart.mjs",
+      "status": 0,
+      "seconds": 1.605
+    },
+    {
+      "name": "sh-18-smartart.mjs",
+      "status": 0,
+      "seconds": 1.378
+    },
+    {
+      "name": "sh-19-smartart-layouts.mjs",
+      "status": 0,
+      "seconds": 1.782
+    },
+    {
+      "name": "sh-phase-2-meeting-points.mjs",
+      "status": 0,
+      "seconds": 0.984
+    },
+    {
+      "name": "shape-block-effects.mjs",
+      "status": 0,
+      "seconds": 0.538
+    },
+    {
+      "name": "shape-border-widths.mjs",
+      "status": 0,
+      "seconds": 0.803
+    },
+    {
+      "name": "shape-effects.mjs",
+      "status": 0,
+      "seconds": 0.075
+    },
+    {
+      "name": "shared-furniture.mjs",
+      "status": 0,
+      "seconds": 2.363
+    },
+    {
+      "name": "shared-metric.mjs",
+      "status": 0,
+      "seconds": 5.221
+    },
+    {
+      "name": "shared-quote.mjs",
+      "status": 0,
+      "seconds": 1.787
+    },
+    {
+      "name": "shared-timeline.mjs",
+      "status": 0,
+      "seconds": 3.041
+    },
+    {
+      "name": "single-column-chart.mjs",
+      "status": 0,
+      "seconds": 1.995
+    },
+    {
+      "name": "single-series-colour.mjs",
+      "status": 0,
+      "seconds": 1.149
+    },
+    {
+      "name": "slide-context.mjs",
+      "status": 0,
+      "seconds": 0.972
+    },
+    {
+      "name": "slide-number-static.mjs",
+      "status": 0,
+      "seconds": 0.821
+    },
+    {
+      "name": "slide-variables.mjs",
+      "status": 0,
+      "seconds": 3.332
+    },
+    {
+      "name": "socials-furniture.mjs",
+      "status": 0,
+      "seconds": 1.594
+    },
+    {
+      "name": "source-run-styles-roundtrip.mjs",
+      "status": 0,
+      "seconds": 1.214
+    },
+    {
+      "name": "source-run-styles.mjs",
+      "status": 0,
+      "seconds": 0.05
+    },
+    {
+      "name": "step-badge-numbering.mjs",
+      "status": 0,
+      "seconds": 0.651
+    },
+    {
+      "name": "step-badges.mjs",
+      "status": 0,
+      "seconds": 0.742
+    },
+    {
+      "name": "styled-table-import.mjs",
+      "status": 0,
+      "seconds": 0.781
+    },
+    {
+      "name": "styled-table.mjs",
+      "status": 0,
+      "seconds": 0.755
+    },
+    {
+      "name": "svg-image-degrade.mjs",
+      "status": 0,
+      "seconds": 0.878
+    },
+    {
+      "name": "svg-image.mjs",
+      "status": 0,
+      "seconds": 5.676
+    },
+    {
+      "name": "svg-rasterizer-converter-missing.mjs",
+      "status": 0,
+      "seconds": 2.137
+    },
+    {
+      "name": "svg-style-sanitization.mjs",
+      "status": 0,
+      "seconds": 0.54
+    },
+    {
+      "name": "symbol-fonts.mjs",
+      "status": 0,
+      "seconds": 1.873
+    },
+    {
+      "name": "table-alt.mjs",
+      "status": 0,
+      "seconds": 0.906
+    },
+    {
+      "name": "table-frame-furniture-order.mjs",
+      "status": 0,
+      "seconds": 1.825
+    },
+    {
+      "name": "table-powerpoint-save.mjs",
+      "status": 0,
+      "seconds": 0.98
+    },
+    {
+      "name": "table-theme-colors.mjs",
+      "status": 0,
+      "seconds": 14.031
+    },
+    {
+      "name": "tag-colour.mjs",
+      "status": 0,
+      "seconds": 2.274
+    },
+    {
+      "name": "template-layout-review.mjs",
+      "status": 0,
+      "seconds": 1.543
+    },
+    {
+      "name": "template-layouts.mjs",
+      "status": 0,
+      "seconds": 4.519
+    },
+    {
+      "name": "template-variables.mjs",
+      "status": 0,
+      "seconds": 0.867
+    },
+    {
+      "name": "theme-colors.mjs",
+      "status": 0,
+      "seconds": 4.056
+    },
+    {
+      "name": "theme-script-slots.mjs",
+      "status": 0,
+      "seconds": 55.557
+    },
+    {
+      "name": "tier-pillar-pptx.mjs",
+      "status": 0,
+      "seconds": 0.788
+    },
+    {
+      "name": "timeline-status.mjs",
+      "status": 0,
+      "seconds": 2.076
+    },
+    {
+      "name": "title-rule.mjs",
+      "status": 0,
+      "seconds": 0.724
+    },
+    {
+      "name": "title-split.mjs",
+      "status": 0,
+      "seconds": 2.122
+    },
+    {
+      "name": "typeface-inventory.mjs",
+      "status": 0,
+      "seconds": 29.14
+    },
+    {
+      "name": "vendor-compat.mjs",
+      "status": 0,
+      "seconds": 0.542
+    },
+    {
+      "name": "video-frame.mjs",
+      "status": 0,
+      "seconds": 0.676
+    },
+    {
+      "name": "watermark.mjs",
+      "status": 0,
+      "seconds": 1.431
+    },
+    {
+      "name": "wave-6-interactions.mjs",
+      "status": 0,
+      "seconds": 0.762
+    },
+    {
+      "name": "zip-date.mjs",
+      "status": 0,
+      "seconds": 5.424
+    }
+  ]
+}
