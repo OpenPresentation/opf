@@ -1,0 +1,65 @@
+{
+  "classification": "Evidence only. Never merge this branch.",
+  "release": {
+    "version": "0.33.0",
+    "source": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3"
+  },
+  "heads": {
+    "org": "ee9289523690807e0ae1325606027f93e6809219",
+    "gallery": "8a476459cd6d9cbba412ef4450401b702d63c8bb",
+    "dev": "7d7359148eb45c073e002738f378314441094d38"
+  },
+  "devPreview": {
+    "url": "https://pr-200-pptx-dev-preview.michael-136.workers.dev",
+    "deploymentCreatedAt": "2026-11-08T12:10:08Z",
+    "deploymentState": "SUCCESS",
+    "browser": {
+      "passed": 12,
+      "failed": 0,
+      "seconds": 46.2
+    },
+    "releasedDiagramHashesVerified": 13,
+    "manifestBytesIdentical": true
+  },
+  "ci": {
+    "siteObserver": "stopped at coordinator request",
+    "reason": "Core 0.33 docs gate owns sole maintained observer",
+    "allSitesFinalGreen": false
+  },
+  "ownerSteps": [
+    "Create or supply actual org and gallery PR preview URLs after final CI; agents do not deploy.",
+    "Review and merge site PR defaults after exact preview qualification; agents do not merge site defaults."
+  ],
+  "files": [
+    {
+      "file": "g033-dev-preview-identity-final.json.gz",
+      "uncompressedBytes": 719,
+      "uncompressedSha256": "a8400a8bf6a61d8548870abc7fc115af2e4fd37e6bb3c0c44cb9dc901b270314"
+    },
+    {
+      "file": "g033-dev-preview-final-browser.log.gz",
+      "uncompressedBytes": 1818,
+      "uncompressedSha256": "bf8a14ad70f1b2a28ab9c0224b5c34088facbc68e879bf4858ed408f8d200cb8"
+    },
+    {
+      "file": "g033-dev-preview-final-assets.json.gz",
+      "uncompressedBytes": 2298,
+      "uncompressedSha256": "3211cf3e0f12cf2ced1de079a81e5fd3723f26c3440cf25a21ecd70ff2ef4ee0"
+    },
+    {
+      "file": "g033-dev-preview-final-assets.log.gz",
+      "uncompressedBytes": 82,
+      "uncompressedSha256": "6a53bea70f6ee24b721941ada9897fb0a1accdf1be761c5f67e33c905b860b67"
+    },
+    {
+      "file": "g033-dev-preview-assets.mjs.gz",
+      "uncompressedBytes": 1396,
+      "uncompressedSha256": "e9dae042d1a84681fcf8119ac0a96d1d9c92e73bf91e83152b7399afcde463a0"
+    },
+    {
+      "file": "g033-sites-third-gate.log.gz",
+      "uncompressedBytes": 343,
+      "uncompressedSha256": "a2e4e5aeb53bfd567e0684e5c7ff7f9e08a50b12b13fc7896a6e1b54ffe2b8fe"
+    }
+  ]
+}
