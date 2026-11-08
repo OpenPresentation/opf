@@ -1,12 +1,14 @@
 # Release continuation: 2026-11-08
 
+**Start with [CURRENT.md](CURRENT.md)** for the unified status, exact active heads, dependency order and approval boundaries. Dated checkpoints below preserve history and are superseded where CURRENT.md says otherwise.
+
 This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Unified checklist and team](https://github.com/OpenPresentation/opf/issues/1139). The [2026-11-07 working rules](../2026-11-07/working-rules.md) remain binding; this file supersedes their historical status snapshots, not their safety rules.
 
 ## Current release gate
 
 v0.33.0 is PUBLISHED AND VERIFIED. Real Release42465429345 completed SUCCESS, including all slow gates, commit/tag, trusted publish follow and all three site-bump jobs. Release commit26fd4de9cee7e57f9e0620eddcad2dcef04e00e3; public GitHub release published2026-11-08T09:56:21Z. Independent fresh registry check at10:00:03UTC confirms all seven latest versions0.33.0, exact gitHead, integrity and provenance metadata. Final maintained publish observer91249 exited0; no release watcher remains. Source033 is frozen. Genuine site/consumer updates are active; the owner now authorizes agent deployments and native Wrangler Previews under the current CI/CD contract. Parent native qualification hold is lifted with fresh process preflight and owned pinned-font setup.
 
-034 integration now normally folds actual033mainfef5, reviewed1189/1190/1191, no-force workflow1193(09bb), native-name tooling1192(d534), retained-font reading-measure1194(ac7d) and actual literal-name importer1195(c914). Folded source heads are permanently frozen. All33current chart PPTX inputs exactly match qualified native inputs;172/172points pass unchanged4px,33saved-current imports exact. Original160-point125/35fail packet and all new corrections/failures are durable. Seven new reading-measure cases and one actual-name reflow have completed ownednative lifecycles; parent finalimport/visual review and rebuilt combined source remain open. Timeline capacity/readability, F1/F3currency, nine-archive tool resolution, finalarchives/goldens/stricttrackers/budgets/CI,033siteownerrollout and034release remain open.
+v0.34.0 is unpublished. Reviewed source is on codex/integration-034; final source/native/golden/CI acceptance and genuine0.33siteadoption remain gates. SH-26 is not yet folded because four native RTL pages visibly reverse Latin text; the separate corrective PR is in preparation. Use CURRENT.md for accepted evidence and every remainder.
 
 ## Current evidence and site review checkpoint: 2026-11-08T18:07:34.990Z
 
