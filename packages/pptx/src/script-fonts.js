@@ -416,6 +416,31 @@ function paragraphRtl(xml, deckDirection, {notes = false} = {}) {
   });
 }
 
+/**
+ * RR-105: a paragraph's LTR direction does not fully describe native run shaping.
+ * Keep proofing language independent: only Latin numeric body/list paragraphs in
+ * an RTL slide get an explicit LTR run property. Never apply it to strong RTL.
+ * DrawingML orders a:rtl after hyperlinks and before a:extLst (CT_TextCharacterProperties).
+ */
+function nativeLatinRunDirection(xml) {
+  return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+    if (!/<p:cNvPr\b[^>]*\bname="OPF (?:list|text) /.test(shape)) return shape;
+    return shape.replace(/<a:p>[\s\S]*?<\/a:p>/g, paragraph => {
+      if (!/<a:pPr\b[^>]*\brtl="0"/.test(paragraph)) return paragraph;
+      const text = [...paragraph.matchAll(/<a:t>([^<]*)<\/a:t>|<a:br\b/g)].map(match => match[1] === undefined ? "\n" : decodeText(match[1])).join("");
+      // Normalize eligibility only; the native/source characters remain exact.
+      const normalized = text.normalize("NFC");
+      if (!/\p{Script=Latin}/u.test(normalized) || !/\p{Nd}/u.test(normalized) || !/^[\p{Script=Latin}\p{Nd}\p{P}\p{S}\p{Z}]*$/u.test(normalized)) return paragraph;
+      return paragraph.replace(/<a:rPr\b[^>]*\/>|<a:rPr\b[^>]*[^/]>[\s\S]*?<\/a:rPr>/g, properties => {
+        if (/<a:rtl\b/.test(properties)) return properties;
+        const direction = '<a:rtl val="0"/>';
+        if (properties.endsWith("/>")) return properties.slice(0, -2) + ">" + direction + "</a:rPr>";
+        return properties.includes("<a:extLst") ? properties.replace("<a:extLst", direction + "<a:extLst") : properties.replace("</a:rPr>", direction + "</a:rPr>");
+      });
+    });
+  });
+}
+
 /** Tables of a right-to-left deck run right to left: the first column is the rightmost, as core's layout draws it. */
 const tableRtl = xml => xml.replace(/<a:tblPr\b([^>]*?)(\/?)>/g, (match, attributes, close) => / rtl="/.test(attributes) ? match : `<a:tblPr rtl="1"${attributes}${close}>`);
 
@@ -437,7 +462,7 @@ export function partScriptFonts(path, xml, plan, slideIndex) {
   if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
     xml = xml.replace(/<p:(sp|graphicFrame)>[\s\S]*?<\/p:\1>/g, shape =>
       runScriptFonts(shape, resolved, /<p:cNvPr\b[^>]*\bname="OPF heading /.test(shape)));
-    if (resolved.rtl) xml = protectNativeLatinText(tableRtl(paragraphRtl(xml, resolved.direction)), resolved.lang);
+    if (resolved.rtl) xml = nativeLatinRunDirection(protectNativeLatinText(tableRtl(paragraphRtl(xml, resolved.direction)), resolved.lang));
   } else if (/^ppt\/(?:charts\/chart(?:Ex)?|notesSlides\/notesSlide)\d+\.xml$/.test(path)) {
     xml = runScriptFonts(xml, resolved, false);
     if (resolved.rtl && path.startsWith("ppt/notesSlides/")) xml = paragraphRtl(xml, resolved.direction, {notes: true});
