@@ -1,3 +1,6 @@
 # Keep generated package text and indexed preview byte counts reproducible on
 # Windows as well as Unix. Binary files retain their original bytes.
 * text=auto eol=lf
+
+# Preserve exact raw qualification and executed producer bytes.
+docs/evidence/sh26-rtl-native-034/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

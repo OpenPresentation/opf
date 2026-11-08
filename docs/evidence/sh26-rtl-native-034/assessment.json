@@ -1,0 +1,2868 @@
+{
+  "at": "2026-11-08T19:49:09.196Z",
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "producerSource": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "integrationSourceNow": "67dd9ec10b7019cb95807f59c75186482c800f10",
+  "exportComparison": {
+    "head": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+    "cases": 13,
+    "slides": 30,
+    "pngByteExact": 30,
+    "pngChanged": 0,
+    "changedArchives": [
+      "supplemental-controls-4-6",
+      "supplemental-controls-7-9"
+    ],
+    "canonicalImportsExact": 13,
+    "actualMaximumTopLevelShapes": 16,
+    "nativeAcceptance": false,
+    "sourceAndRuntimeUnchanged": true,
+    "changedArchiveHintMatches": true
+  },
+  "actualNativeCases": 2,
+  "actualNativeSlides": 6,
+  "reportedFourPageGlyphFindingResolved": true,
+  "sixNativeSlidesVisuallyReviewed": true,
+  "inputSavedImportsExact": 2,
+  "namedStatesExact": 2,
+  "shrinkTags": 0,
+  "previousNativeReuse": {
+    "wholeArchivesByteExact": 11,
+    "slides": 24,
+    "legacyEvidence": "eb3b3cbb815e39db2e06ec3ae3ec06f25be7e94f"
+  },
+  "strictReviewExit": 1,
+  "strictReviewReason": "One pre-existing phase-image variant; all compared old/current original and edited PNG hashes,2291pixels andbbox are exact. No tolerance/assertion was changed.",
+  "phaseVariance": [
+    {
+      "kind": "old",
+      "pixelCount": 2291,
+      "bbox": {
+        "x1": 132,
+        "y1": 389,
+        "x2": 587,
+        "y2": 420
+      },
+      "originalSha256": "2162c342a9336987dbc635d0031999c563ae6f90f46b08f4c0ca6640f9b7a701",
+      "editedSha256": "700b642c0382baff198a97c9a60e93f5b1cc3b8a7f4209ad0fe47c57255ca0a9"
+    },
+    {
+      "kind": "current",
+      "pixelCount": 2291,
+      "bbox": {
+        "x1": 132,
+        "y1": 389,
+        "x2": 587,
+        "y2": 420
+      },
+      "originalSha256": "2162c342a9336987dbc635d0031999c563ae6f90f46b08f4c0ca6640f9b7a701",
+      "editedSha256": "700b642c0382baff198a97c9a60e93f5b1cc3b8a7f4209ad0fe47c57255ca0a9"
+    }
+  ],
+  "lifecycle": "First batch completed case4-6; then zero-process guard refused unstarted7-9 while POWERPNT remained. No attach/kill/workerretry. After a fresh zero-process guard, first actual7-9 run in new output completed. Both worker cleanups confirmed; actual refusal preserved. Post-run OS snapshot is retained.",
+  "fontScope": "Native reported Aptos/AptosDisplay names and sizes; no installedfontbinary, Arabicglyph, crossplatform or arbitraryedit claim",
+  "overallCandidateAcceptance": false,
+  "pending": [
+    "11separateRTLnativecontrasts and held scalar-vs-adjacent-string import drift",
+    "final combined/full/crossplatform CI and strict archive/golden review",
+    "public033siteadoption,034releaseandsites"
+  ],
+  "archives": [
+    {
+      "file": "targeted-export.tar.gz",
+      "bytes": 4969804,
+      "sha256": "6076ba2db114d84d6a6c0522cfc38d8f18e84223b2b03e260ef837d4b4b0eabc",
+      "rawBytes": 6911863,
+      "files": [
+        {
+          "path": "build-log-identity.json",
+          "bytes": 435,
+          "sha256": "b1462e0ab6465063ede08b6a58353c3cb238c6953d164c2d778acc1d9e4ada0b"
+        },
+        {
+          "path": "build.json",
+          "bytes": 9682,
+          "sha256": "377e39115411e41d08b8641e21b9cd29742a850287038c7e5e728f2bf3a39173"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/after.pptx",
+          "bytes": 113964,
+          "sha256": "35ccac9dee25b7d99e84734540bd3e166e1c5e3f3ab288c6076057c0905bcd78"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/before-slide-1.png",
+          "bytes": 49313,
+          "sha256": "afd502335b86a512b5def0a9a9e69d66296eda8c6a6609f68810e55a4cc0cd28"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/before-slide-2.png",
+          "bytes": 49409,
+          "sha256": "a701f7c92fa16e41da802557168be9f21571ad46c6334c71a879c12702ebbba5"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/before-slide-3.png",
+          "bytes": 49466,
+          "sha256": "2a0fb6110704be662d707af789182e67ae4322f9397761d2918b8b34eec86ffd"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/before.pptx",
+          "bytes": 113964,
+          "sha256": "35ccac9dee25b7d99e84734540bd3e166e1c5e3f3ab288c6076057c0905bcd78"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/imports.json.gz",
+          "bytes": 960,
+          "sha256": "6e258b9c935809cef3591497986e4f8f8c8073f94e0cdec6e61dcc10ceca3f14"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/png.exit.json",
+          "bytes": 416,
+          "sha256": "f0b2fd1f0b9f496eb4854d51de0d8e591cfc0935830c46bcdae116167d6c6ee8"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/png.stdout.json",
+          "bytes": 2370,
+          "sha256": "91e2c7b46040c274f648ab26f03838ae7e380d9daf12c13d92f7233997d0b26f"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/pptx.exit.json",
+          "bytes": 387,
+          "sha256": "3f33c8cbdbb03945d5874701d041afa174919557609a325f2e3dd29116b0e12e"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/pptx.stdout.json",
+          "bytes": 2447,
+          "sha256": "5ec46faa4acfd30b7350ac0b9a23514617cd3ff508fbb1e72758bce63b488618"
+        },
+        {
+          "path": "cases/hierarchy-continuation-1-3/source.opf.json",
+          "bytes": 2804,
+          "sha256": "eaf86b44974a9720f34e9933a21b59666c7ec9f180135ec238304fe69750a637"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/after.pptx",
+          "bytes": 103517,
+          "sha256": "0a85b6e8c53cd5f0f67448cc36e83eaac04b1ede6ddb489f6f7cdb0f6371cab6"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/before-slide-1.png",
+          "bytes": 35248,
+          "sha256": "218e5bd828e3e3a06de90cf44e1621f4d22e06ad9c4e11bd4695e912330cc4ac"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/before.pptx",
+          "bytes": 103517,
+          "sha256": "0a85b6e8c53cd5f0f67448cc36e83eaac04b1ede6ddb489f6f7cdb0f6371cab6"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/imports.json.gz",
+          "bytes": 884,
+          "sha256": "0dad02874920181389d516573779249e26110687d3c02f7a2ee604b4a3a9b367"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/png.exit.json",
+          "bytes": 412,
+          "sha256": "93da9c9ab17faa37776438d02c8cae3113762fcb0b938ead13ee49f0562bf0d1"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/png.stdout.json",
+          "bytes": 1728,
+          "sha256": "e544967ba86c635a1f1f44f531e13330a529fbca71bc47473b02673a91dbe3bd"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/pptx.exit.json",
+          "bytes": 383,
+          "sha256": "d8edf0b4b924f446e8a47683dcb772d65bdd2972d3f217b86f075198802c5b5a"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/pptx.stdout.json",
+          "bytes": 2443,
+          "sha256": "97fdaed450129dfd8d6cb55d1e3777f6172d17bf22027ac0500d1729e5542181"
+        },
+        {
+          "path": "cases/hierarchy-continuation-4/source.opf.json",
+          "bytes": 1644,
+          "sha256": "c7938c23c79e594faf6970f35ef69791ad729baebcaae2c018bc69e47bcc30a8"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/after.pptx",
+          "bytes": 115150,
+          "sha256": "ac395e14475622e16e8964a241961b333f368242794af3df744e4b6f214a8f34"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/before-slide-1.png",
+          "bytes": 49730,
+          "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/before-slide-2.png",
+          "bytes": 49799,
+          "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/before-slide-3.png",
+          "bytes": 49849,
+          "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/before.pptx",
+          "bytes": 115150,
+          "sha256": "ac395e14475622e16e8964a241961b333f368242794af3df744e4b6f214a8f34"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/imports.json.gz",
+          "bytes": 938,
+          "sha256": "802ea6fba20fc26781e28ece699d3d8ee0fb17203bdc26e4fa4e388c7f240e2b"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/png.exit.json",
+          "bytes": 430,
+          "sha256": "4be6c37705ba00f50ff4bce248981073591f09ae652d7a42df88f0362699c7ce"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/png.stdout.json",
+          "bytes": 2398,
+          "sha256": "d5caadbcbffe05fde67198e68042ac5b8b20211bb7a4381010fa28d414feb921"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/pptx.exit.json",
+          "bytes": 401,
+          "sha256": "5575c4e787c9e82858151ecfc3b9671380280154cdb6af2c72eafce97e422ecd"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/pptx.stdout.json",
+          "bytes": 2461,
+          "sha256": "c6cba54332bf7b46f33b49823416bef22ee3e22a401e53d6b125f50cc36817ce"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-1-3/source.opf.json",
+          "bytes": 2809,
+          "sha256": "5fb0e64b48b1281e9add1edac6ac68d92ddc54dca4875c7943b0bcaea17f930c"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/after.pptx",
+          "bytes": 103850,
+          "sha256": "add6a8781ddf2aea013bb7866ac4b79def9af4d63da8b269b007078b717cf7ba"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/before-slide-1.png",
+          "bytes": 35520,
+          "sha256": "934f197bcf04996d6a73da42453aa24fc589c96c9324ae2d56d8bc5e03dd3e15"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/before.pptx",
+          "bytes": 103850,
+          "sha256": "add6a8781ddf2aea013bb7866ac4b79def9af4d63da8b269b007078b717cf7ba"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/imports.json.gz",
+          "bytes": 862,
+          "sha256": "d6cee0ce5e1b8f752e15700f2d8f50b2e61cbbe196d0b4c43573d8614a132ccb"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/png.exit.json",
+          "bytes": 426,
+          "sha256": "c1a54f10932908a47c92577b3a051be81ea0b5038606c05445ec48d5d643e743"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/png.stdout.json",
+          "bytes": 1742,
+          "sha256": "f844b8245a9497db8ed7c740383818f7c393d4d5d1326aa5bc7cff62716c4096"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/pptx.exit.json",
+          "bytes": 397,
+          "sha256": "6aec305c01fa72a56a585058251c989907d9a342a4c314eaa9ba9e07991d61bd"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/pptx.stdout.json",
+          "bytes": 2457,
+          "sha256": "076d695a8d8dc2ebd3da4d2853043c61fd429549d0f03c54527bc435157459ab"
+        },
+        {
+          "path": "cases/inverted-pyramid-continuation-4/source.opf.json",
+          "bytes": 1620,
+          "sha256": "897964e07aa774c893fac470d8d58641f918f24a50a7d21c36f73c5bb245bd56"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/after.pptx",
+          "bytes": 115276,
+          "sha256": "f851a84c0f00334eb860e765312fd0ae55cb351dafcaa79212518a625fb18b43"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/before-slide-1.png",
+          "bytes": 50422,
+          "sha256": "2ca5edd84831ec34087a47f1a45b905c6b9ec22cdaeee80762ae5465bdeb8bab"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/before-slide-2.png",
+          "bytes": 50488,
+          "sha256": "153689e875401e0fb3f9876fe55a2e821f17f2f203f8b8978a7bb9f023158a6d"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/before-slide-3.png",
+          "bytes": 50538,
+          "sha256": "2cccc7d72f0fb0345844dd5d5885cf705de928ae351d7619568c6dff085502e0"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/before.pptx",
+          "bytes": 115276,
+          "sha256": "f851a84c0f00334eb860e765312fd0ae55cb351dafcaa79212518a625fb18b43"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/imports.json.gz",
+          "bytes": 944,
+          "sha256": "a2a1d7f85630ae399143d8d624ec366361540f3b614b330020fd8f2a8eed6096"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/png.exit.json",
+          "bytes": 416,
+          "sha256": "7a57896ba05a614f76146b2191671ffc33d651db0f71c2ed14a7f2df13e5e638"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/png.stdout.json",
+          "bytes": 2370,
+          "sha256": "edf469680614a643a1e5ead308cd48e82dee352025b62dd146e1ed0f46a95796"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/pptx.exit.json",
+          "bytes": 387,
+          "sha256": "6d239005b9a41547877a2fd138fc0c8de70d94cb1fcb82a8f729cba818d923ee"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/pptx.stdout.json",
+          "bytes": 2447,
+          "sha256": "fc0db616a89d8cd9cd7bd30ad5d3ff1080694cc7d0ee2b4c0ada32b8d812bba3"
+        },
+        {
+          "path": "cases/org-chart-continuation-1-3/source.opf.json",
+          "bytes": 2817,
+          "sha256": "51e36ee4c27f344706931b620668428c841ebd8d63039bcd55cdb3d1dfe16cad"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/after.pptx",
+          "bytes": 103928,
+          "sha256": "f5983d48e83103d1aa46b204d89a368047de14e2cf4c8ee82af7792420f23bc2"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/before-slide-1.png",
+          "bytes": 36229,
+          "sha256": "ce518f3cf1e176ab9836e79daaa9613dab64841df0f24f8628fb57c16e7b06fe"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/before.pptx",
+          "bytes": 103928,
+          "sha256": "f5983d48e83103d1aa46b204d89a368047de14e2cf4c8ee82af7792420f23bc2"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/imports.json.gz",
+          "bytes": 869,
+          "sha256": "52bd43d8b3542d6c767301d4930ea47affba85abc9bba9dc4878010893a275c9"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/png.exit.json",
+          "bytes": 412,
+          "sha256": "c7efe48536b287fd3d78e963cdf9d3c15d4d0674dfdc1d3be10d21d36d2e5c93"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/png.stdout.json",
+          "bytes": 1728,
+          "sha256": "205670a4816582724fbb32645e9160d33367d52bdb1164e40f915a834dbaf4b8"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/pptx.exit.json",
+          "bytes": 383,
+          "sha256": "f629709d4eeb7d62de789555953bcc6d897b437be7e74d98bb62977ca63fdad6"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/pptx.stdout.json",
+          "bytes": 2443,
+          "sha256": "4009b1a9a096f5a2a5c19aa0a42e16c09a93448671e37df1c1240cd06d79fcb5"
+        },
+        {
+          "path": "cases/org-chart-continuation-4/source.opf.json",
+          "bytes": 1638,
+          "sha256": "3a1830e0f146b76991dbdff6574c4411f204fe6886d1646dcbe4ff96a83cbaf8"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/after.pptx",
+          "bytes": 125013,
+          "sha256": "c2ceedcb514f25a6953cf598a7e0e3635dc7e467b48129ac81119b47c0547713"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/before-slide-1.png",
+          "bytes": 49730,
+          "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/before-slide-2.png",
+          "bytes": 49799,
+          "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/before-slide-3.png",
+          "bytes": 49849,
+          "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/before.pptx",
+          "bytes": 125013,
+          "sha256": "c2ceedcb514f25a6953cf598a7e0e3635dc7e467b48129ac81119b47c0547713"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/imports.json.gz",
+          "bytes": 1674,
+          "sha256": "fb36e9992a75f8393e696b768b7e9b854a9e8996e9d7106f045759799a3f731d"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/png.exit.json",
+          "bytes": 414,
+          "sha256": "2d85ef486569eadcac6a7e21fa7e80460915955c43db18186473f075fa126ade"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/png.stdout.json",
+          "bytes": 2366,
+          "sha256": "1299cb433f07470cd0351fb0d0288b72e0b879cb38f4f572dc5fee86ea978a68"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/pptx.exit.json",
+          "bytes": 385,
+          "sha256": "7b1251fd629e2a31903511b5a75f1fa03e3e5d2b9c1c4386fd89c1fe853be0ac"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/pptx.stdout.json",
+          "bytes": 2445,
+          "sha256": "55245196c6d0ceb8d772629cfd838a7526cce112a27c5267cd45ede098214cbe"
+        },
+        {
+          "path": "cases/supplemental-controls-1-3/source.opf.json",
+          "bytes": 6905,
+          "sha256": "08b4d561885a2d985b376ede606d75c9c7371d4916f8857bb44aafcec9bf7b55"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/after.pptx",
+          "bytes": 173872,
+          "sha256": "bdcc08f01c819ae34e2373b60f27976e29cdc79107d8754bc137c86d75540ee2"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/before-slide-1.png",
+          "bytes": 102335,
+          "sha256": "7650c97f926d2ac0dd1049c294e799cc1a95c248af0780740bc453b8c71d2b1f"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/before-slide-2.png",
+          "bytes": 35314,
+          "sha256": "b3d3362f4865f22eb120d8eae693a7f4c50e6bfb79acfbbc56d213c58f319abb"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/before-slide-3.png",
+          "bytes": 40386,
+          "sha256": "d052137bf634d098a8859c527f79d5a4251f942be61225ed13e4c5a123905cc3"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/before.pptx",
+          "bytes": 173872,
+          "sha256": "bdcc08f01c819ae34e2373b60f27976e29cdc79107d8754bc137c86d75540ee2"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/imports.json.gz",
+          "bytes": 1675,
+          "sha256": "7ac78f7c329dbd86f4f55136309c3a47e6fb6d0b4a678dc07696589017ebaa04"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/png.exit.json",
+          "bytes": 418,
+          "sha256": "4db4966db732aa5f687d0c43450c22cd086d307004fa964ea7e4f2e1d13c5553"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/png.stdout.json",
+          "bytes": 2375,
+          "sha256": "6b8a87f35b2e4e4111b4464ae2ddb64e8d6f300f35c7361b54271886e52237b3"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/pptx.exit.json",
+          "bytes": 389,
+          "sha256": "53f9137072d0d0c98a45b74420a63bd3bed2eb422c99550ced31dea07dc09f19"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/pptx.stdout.json",
+          "bytes": 3310,
+          "sha256": "e6f0aaafb70f678236dd4eab702450231d8fe8ecf7abb0335467d3d0bc0f8fd6"
+        },
+        {
+          "path": "cases/supplemental-controls-10-12/source.opf.json",
+          "bytes": 6656,
+          "sha256": "7313283f681a5e78526fe9d94c5d117ddb798dbb3cd9b6fdb50e3e91f443c9d9"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/after.pptx",
+          "bytes": 126909,
+          "sha256": "e402c62976370c8524834ea35635d3023b1d8ac74bb940b6fd7e9d010b34edb0"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/before-slide-1.png",
+          "bytes": 28334,
+          "sha256": "c48befc6c62dd24d63241c379bbde3da1797e63da71e7ee7a5bef3b2555eac85"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/before-slide-2.png",
+          "bytes": 33735,
+          "sha256": "3cd49a5f77a89b947529126aa0e8c9349d0e14d8d29df5f2f35cb768d4c1af0c"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/before.pptx",
+          "bytes": 126909,
+          "sha256": "e402c62976370c8524834ea35635d3023b1d8ac74bb940b6fd7e9d010b34edb0"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/imports.json.gz",
+          "bytes": 1396,
+          "sha256": "f6b7121f641a976e1fd562874ce8aac7803eb77a4523e5d86ea0009ba09e9aa7"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/png.exit.json",
+          "bytes": 418,
+          "sha256": "05e6dcaf214fa9c27269967f93fbf06620fc4a6fc584ae5a51b8787f21715ffa"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/png.stdout.json",
+          "bytes": 2054,
+          "sha256": "c38f934375b6f3ebb440dafea74a7ceb178b237e25e78de93b5b98f92c6feb45"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/pptx.exit.json",
+          "bytes": 389,
+          "sha256": "dd21cb726745d024e653c27c7c4d0db08d3403153bb14299ab54bfdc532815c4"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/pptx.stdout.json",
+          "bytes": 4195,
+          "sha256": "91c3fb4c3af6a05e0dae71948dbcb63835257cf17aac07ad3d4a57e9eb7e5d60"
+        },
+        {
+          "path": "cases/supplemental-controls-13-14/source.opf.json",
+          "bytes": 6092,
+          "sha256": "6aebdcc651979ff1b5235ef423cba1fdaf75ef8747910149415c3a4dbf9b312a"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/after.pptx",
+          "bytes": 225397,
+          "sha256": "e6c31d6d406830c38c86499860aff9ff617babf841386dffacd55c8370029447"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/before-slide-1.png",
+          "bytes": 57515,
+          "sha256": "4196b4cf74d1966267d242b1e3f355b36dd6114bab5589d2bfb781906d294ca1"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/before-slide-2.png",
+          "bytes": 57600,
+          "sha256": "f9bf296ab703a3ed114a4a9d144db494c710e4d773deb449f52c2587defa7505"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/before-slide-3.png",
+          "bytes": 50252,
+          "sha256": "9e2cbf6e8d29ae3d27c4d55af6dbaafe436c23993b152b9da7b2b186b8575b08"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/before.pptx",
+          "bytes": 224349,
+          "sha256": "6bbbd27c2f11a3e096c30e2a0f3f8a7b7facf14ce74f56278afa6dc2b69aa2a3"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/imports.json.gz",
+          "bytes": 1841,
+          "sha256": "baf4016ba376f24c8b41713e19d6cefc755c354dbca12878d57f007a06653034"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/png.exit.json",
+          "bytes": 414,
+          "sha256": "6147912468937be904e2e0e68bbd1f0df0666e77989127b6a97c739743dc7807"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/png.stdout.json",
+          "bytes": 2366,
+          "sha256": "1c94f499bf849d35f568525757789d7c146eb9b041b8abb23eaa469abea3c513"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/pptx.exit.json",
+          "bytes": 385,
+          "sha256": "75e7c9a7a4bb1d98fdb569c4f09f7b8c5a5793ee0bf8a0cfc75adc077cb40c5a"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/pptx.stdout.json",
+          "bytes": 2445,
+          "sha256": "b4d610c0d1c94a00d3358ac73ba13c548bd695fc831c1a41c8188011e6190a46"
+        },
+        {
+          "path": "cases/supplemental-controls-4-6/source.opf.json",
+          "bytes": 7064,
+          "sha256": "fee5e92c8ce37b3e20da4821b09613aea943d973950299e547dd8752ce4a8ee4"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/after.pptx",
+          "bytes": 127945,
+          "sha256": "fe7dfd65563313719c25ad0c7dab07eeda687cec2fd1d828c6750d95f5864573"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/before-slide-1.png",
+          "bytes": 50673,
+          "sha256": "3b991613a55fe4165a9dd954e94bd4aa5a240579101f2cfa3192bc9a928a7a2e"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/before-slide-2.png",
+          "bytes": 50884,
+          "sha256": "38c57174036c7b8e2e3526124f345c614aebc1955ed10b09c8265f11046373a5"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/before-slide-3.png",
+          "bytes": 36227,
+          "sha256": "df3b69646a2d5d8a5e6ed779ab68e7a464ba2ff1f5036259a4c96d0a9590d061"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/before.pptx",
+          "bytes": 125327,
+          "sha256": "4ad8478ff1a04de5b5ae49a650af096fb0b8d82b6864a6e19414c90ef2cd1871"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/imports.json.gz",
+          "bytes": 1710,
+          "sha256": "008163fa054c27692133b5e25381a4ab15040ee0ecd1a968979dd1f3f5077a2c"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/png.exit.json",
+          "bytes": 414,
+          "sha256": "2f5bc926be3acc46d0eadd982c192149d872155f2e36212e8aeb627feeea2f67"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/png.stdout.json",
+          "bytes": 2366,
+          "sha256": "d7a684a0e5f6783d9b8d28045b4c6479155aa4841a11dac175c9696a9f3356b8"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/pptx.exit.json",
+          "bytes": 385,
+          "sha256": "0e84689f33d661cf7ab84a98afea2dfe9244103195c5027e968e489a1bd7afc3"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/pptx.stdout.json",
+          "bytes": 2445,
+          "sha256": "691f8756d2c94417d7aff7d8a167d2d55d0f68c8a77971541ce337684fb51f03"
+        },
+        {
+          "path": "cases/supplemental-controls-7-9/source.opf.json",
+          "bytes": 7288,
+          "sha256": "15f91115065f6479f896192c968324b271782d1f538e08e5190be617c4363c29"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/after.pptx",
+          "bytes": 113674,
+          "sha256": "a8a70e1f5b8291b4955031a66f09fc82cc7e63ddd0c7550dd51adc230dd5d2f0"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/before-slide-1.png",
+          "bytes": 49813,
+          "sha256": "3c34b2cd01bea8976bee71411980c798408dab26bfbb3a9bb35e58c1fa6d9780"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/before-slide-2.png",
+          "bytes": 49892,
+          "sha256": "93faf886da923d73fbb2c3d0b9fc6c2fec89d7c100574a97df6a9f3b6d8d17c6"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/before-slide-3.png",
+          "bytes": 49916,
+          "sha256": "5878508214fa39d55734aa93308b9ce3bb6e3d4b195bbb740be9e9968824ec33"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/before.pptx",
+          "bytes": 113674,
+          "sha256": "a8a70e1f5b8291b4955031a66f09fc82cc7e63ddd0c7550dd51adc230dd5d2f0"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/imports.json.gz",
+          "bytes": 927,
+          "sha256": "dcb741fe108d0dd212b0fb12bbb64a2e200232ffea687c1b307455339031396c"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/png.exit.json",
+          "bytes": 406,
+          "sha256": "d32c4f33a9820fbe799f39dee1cb68dcbd0f29c2967c696765bbe36f4dd60803"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/png.stdout.json",
+          "bytes": 2350,
+          "sha256": "a3f3c0579a0d2fc86f921952d2c77cc78b7f684d16e9000e8149b69540c39865"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/pptx.exit.json",
+          "bytes": 377,
+          "sha256": "bcc1f9ffa9f64e2637652c6e12f0d3cf35e57ab5e32ffa4c6b4e1cb9e0cf3417"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/pptx.stdout.json",
+          "bytes": 2437,
+          "sha256": "4d2161bb070838c921037d43d99ad4e63b4179e7cf561c1eb7fd0842a4688c5e"
+        },
+        {
+          "path": "cases/venn-continuation-1-3/source.opf.json",
+          "bytes": 2716,
+          "sha256": "73cbb51f87c1e98397a60af4405f298d7676fc73eed0dc4e56cfc5f8d1858dfd"
+        },
+        {
+          "path": "cases/venn-continuation-4/after.pptx",
+          "bytes": 103335,
+          "sha256": "a236a5450fe7a7756c4aa40c9b78a912ec3dd40df18d98d6f197aaa3bafb6396"
+        },
+        {
+          "path": "cases/venn-continuation-4/before-slide-1.png",
+          "bytes": 35584,
+          "sha256": "3c46c61aabdac3d26838fbbd2732ef36917e0643f960838a187bbfd822bcbe08"
+        },
+        {
+          "path": "cases/venn-continuation-4/before.pptx",
+          "bytes": 103335,
+          "sha256": "a236a5450fe7a7756c4aa40c9b78a912ec3dd40df18d98d6f197aaa3bafb6396"
+        },
+        {
+          "path": "cases/venn-continuation-4/imports.json.gz",
+          "bytes": 853,
+          "sha256": "c251584dd6875269667e3c0222999d432182cfcfe66e26f89eeae2fae1b1bc4c"
+        },
+        {
+          "path": "cases/venn-continuation-4/png.exit.json",
+          "bytes": 402,
+          "sha256": "69f9b20cb84755f81fbce581a67b61a42c844ab5e0c7684d21103624a635fbb5"
+        },
+        {
+          "path": "cases/venn-continuation-4/png.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/venn-continuation-4/png.stdout.json",
+          "bytes": 1718,
+          "sha256": "95faf56226f22a3696adee4058ad3148bccdd096e331a1c362539c8d0b09cb7c"
+        },
+        {
+          "path": "cases/venn-continuation-4/pptx.exit.json",
+          "bytes": 373,
+          "sha256": "9abec679d7693c813625e509c3f5bb17ffd96476c218ef39ac3d22a9fec9de38"
+        },
+        {
+          "path": "cases/venn-continuation-4/pptx.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "cases/venn-continuation-4/pptx.stdout.json",
+          "bytes": 2433,
+          "sha256": "eee2cff00f1dc80cd90c13d1f5ad9d76abdf3bf0e0f2e05f14676e7aefe07fe8"
+        },
+        {
+          "path": "cases/venn-continuation-4/source.opf.json",
+          "bytes": 1577,
+          "sha256": "6ba1b453ac601f738216ea7da8c2adee781c83add54aedbf50757a69ba6f40e4"
+        },
+        {
+          "path": "hashes.json",
+          "bytes": 38734,
+          "sha256": "18bcc74730a4a6e9a700bd39a6d8672a2dca37c2978e55bfa53e5bdbb8085f29"
+        },
+        {
+          "path": "input-suite.json",
+          "bytes": 22455,
+          "sha256": "1f87dd96814a7c9582d77a28cde3471f30e5868817665b5cb0128cfd12958ce3"
+        },
+        {
+          "path": "node-and-producer.json",
+          "bytes": 502,
+          "sha256": "c5a3f8e798c3b80541c574b4b0e4497d99e8f4f3ec8fed83f4c9d7c8f9a0b96d"
+        },
+        {
+          "path": "old-build.json",
+          "bytes": 9160,
+          "sha256": "667670ef816ba6952d9a12a06464783339e94f0ec28e9166fe08a5277365d610"
+        },
+        {
+          "path": "preview/hierarchy-continuation-1-3/slide-1.png",
+          "bytes": 49313,
+          "sha256": "afd502335b86a512b5def0a9a9e69d66296eda8c6a6609f68810e55a4cc0cd28"
+        },
+        {
+          "path": "preview/hierarchy-continuation-1-3/slide-2.png",
+          "bytes": 49409,
+          "sha256": "a701f7c92fa16e41da802557168be9f21571ad46c6334c71a879c12702ebbba5"
+        },
+        {
+          "path": "preview/hierarchy-continuation-1-3/slide-3.png",
+          "bytes": 49466,
+          "sha256": "2a0fb6110704be662d707af789182e67ae4322f9397761d2918b8b34eec86ffd"
+        },
+        {
+          "path": "preview/hierarchy-continuation-4/slide-1.png",
+          "bytes": 35248,
+          "sha256": "218e5bd828e3e3a06de90cf44e1621f4d22e06ad9c4e11bd4695e912330cc4ac"
+        },
+        {
+          "path": "preview/inverted-pyramid-continuation-1-3/slide-1.png",
+          "bytes": 49730,
+          "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+        },
+        {
+          "path": "preview/inverted-pyramid-continuation-1-3/slide-2.png",
+          "bytes": 49799,
+          "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+        },
+        {
+          "path": "preview/inverted-pyramid-continuation-1-3/slide-3.png",
+          "bytes": 49849,
+          "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+        },
+        {
+          "path": "preview/inverted-pyramid-continuation-4/slide-1.png",
+          "bytes": 35520,
+          "sha256": "934f197bcf04996d6a73da42453aa24fc589c96c9324ae2d56d8bc5e03dd3e15"
+        },
+        {
+          "path": "preview/org-chart-continuation-1-3/slide-1.png",
+          "bytes": 50422,
+          "sha256": "2ca5edd84831ec34087a47f1a45b905c6b9ec22cdaeee80762ae5465bdeb8bab"
+        },
+        {
+          "path": "preview/org-chart-continuation-1-3/slide-2.png",
+          "bytes": 50488,
+          "sha256": "153689e875401e0fb3f9876fe55a2e821f17f2f203f8b8978a7bb9f023158a6d"
+        },
+        {
+          "path": "preview/org-chart-continuation-1-3/slide-3.png",
+          "bytes": 50538,
+          "sha256": "2cccc7d72f0fb0345844dd5d5885cf705de928ae351d7619568c6dff085502e0"
+        },
+        {
+          "path": "preview/org-chart-continuation-4/slide-1.png",
+          "bytes": 36229,
+          "sha256": "ce518f3cf1e176ab9836e79daaa9613dab64841df0f24f8628fb57c16e7b06fe"
+        },
+        {
+          "path": "preview/supplemental-controls-1-3/slide-1.png",
+          "bytes": 49730,
+          "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+        },
+        {
+          "path": "preview/supplemental-controls-1-3/slide-2.png",
+          "bytes": 49799,
+          "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+        },
+        {
+          "path": "preview/supplemental-controls-1-3/slide-3.png",
+          "bytes": 49849,
+          "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+        },
+        {
+          "path": "preview/supplemental-controls-10-12/slide-1.png",
+          "bytes": 102335,
+          "sha256": "7650c97f926d2ac0dd1049c294e799cc1a95c248af0780740bc453b8c71d2b1f"
+        },
+        {
+          "path": "preview/supplemental-controls-10-12/slide-2.png",
+          "bytes": 35314,
+          "sha256": "b3d3362f4865f22eb120d8eae693a7f4c50e6bfb79acfbbc56d213c58f319abb"
+        },
+        {
+          "path": "preview/supplemental-controls-10-12/slide-3.png",
+          "bytes": 40386,
+          "sha256": "d052137bf634d098a8859c527f79d5a4251f942be61225ed13e4c5a123905cc3"
+        },
+        {
+          "path": "preview/supplemental-controls-13-14/slide-1.png",
+          "bytes": 28334,
+          "sha256": "c48befc6c62dd24d63241c379bbde3da1797e63da71e7ee7a5bef3b2555eac85"
+        },
+        {
+          "path": "preview/supplemental-controls-13-14/slide-2.png",
+          "bytes": 33735,
+          "sha256": "3cd49a5f77a89b947529126aa0e8c9349d0e14d8d29df5f2f35cb768d4c1af0c"
+        },
+        {
+          "path": "preview/supplemental-controls-4-6/slide-1.png",
+          "bytes": 57515,
+          "sha256": "4196b4cf74d1966267d242b1e3f355b36dd6114bab5589d2bfb781906d294ca1"
+        },
+        {
+          "path": "preview/supplemental-controls-4-6/slide-2.png",
+          "bytes": 57600,
+          "sha256": "f9bf296ab703a3ed114a4a9d144db494c710e4d773deb449f52c2587defa7505"
+        },
+        {
+          "path": "preview/supplemental-controls-4-6/slide-3.png",
+          "bytes": 50252,
+          "sha256": "9e2cbf6e8d29ae3d27c4d55af6dbaafe436c23993b152b9da7b2b186b8575b08"
+        },
+        {
+          "path": "preview/supplemental-controls-7-9/slide-1.png",
+          "bytes": 50673,
+          "sha256": "3b991613a55fe4165a9dd954e94bd4aa5a240579101f2cfa3192bc9a928a7a2e"
+        },
+        {
+          "path": "preview/supplemental-controls-7-9/slide-2.png",
+          "bytes": 50884,
+          "sha256": "38c57174036c7b8e2e3526124f345c614aebc1955ed10b09c8265f11046373a5"
+        },
+        {
+          "path": "preview/supplemental-controls-7-9/slide-3.png",
+          "bytes": 36227,
+          "sha256": "df3b69646a2d5d8a5e6ed779ab68e7a464ba2ff1f5036259a4c96d0a9590d061"
+        },
+        {
+          "path": "preview/venn-continuation-1-3/slide-1.png",
+          "bytes": 49813,
+          "sha256": "3c34b2cd01bea8976bee71411980c798408dab26bfbb3a9bb35e58c1fa6d9780"
+        },
+        {
+          "path": "preview/venn-continuation-1-3/slide-2.png",
+          "bytes": 49892,
+          "sha256": "93faf886da923d73fbb2c3d0b9fc6c2fec89d7c100574a97df6a9f3b6d8d17c6"
+        },
+        {
+          "path": "preview/venn-continuation-1-3/slide-3.png",
+          "bytes": 49916,
+          "sha256": "5878508214fa39d55734aa93308b9ce3bb6e3d4b195bbb740be9e9968824ec33"
+        },
+        {
+          "path": "preview/venn-continuation-4/slide-1.png",
+          "bytes": 35584,
+          "sha256": "3c46c61aabdac3d26838fbbd2732ef36917e0643f960838a187bbfd822bcbe08"
+        },
+        {
+          "path": "progress-01.json",
+          "bytes": 6151,
+          "sha256": "b1b16816bb7afd027ee6a9fd801d5e9b412ff118438225df31979d32206bf1f1"
+        },
+        {
+          "path": "progress-02.json",
+          "bytes": 3973,
+          "sha256": "c810dc137236237c22324e3ca7b8a93b58571078afee78c18263983893f5f4cb"
+        },
+        {
+          "path": "progress-03.json",
+          "bytes": 6130,
+          "sha256": "96fa811ee34d6d77f0c0828fbb42670e626b4d9266011d376fbbe4c5738a61a7"
+        },
+        {
+          "path": "progress-04.json",
+          "bytes": 3952,
+          "sha256": "289ce81655c0ca735af2ff9ea8f29d0b519779ab0ad7d4b5a7cdef6e2990e48e"
+        },
+        {
+          "path": "progress-05.json",
+          "bytes": 6130,
+          "sha256": "11e6141f6c2754232db20e21bdbe3541ad92acd44cb07ffe99a3e8413e5ed803"
+        },
+        {
+          "path": "progress-06.json",
+          "bytes": 3952,
+          "sha256": "e2a650f92792d4e9a90f0e76bad9c057636b13dc430dc34e1788f513fb7007d1"
+        },
+        {
+          "path": "progress-07.json",
+          "bytes": 6115,
+          "sha256": "7daa61def15cca8cdf10fd43eb802473c1c18593964912ed8a0c15175dfb2118"
+        },
+        {
+          "path": "progress-08.json",
+          "bytes": 3937,
+          "sha256": "75adcbadbe5cd4ecbe6cb2b2d2b6758b08006d0b5cc56a344b0904a247da988a"
+        },
+        {
+          "path": "progress-09.json",
+          "bytes": 6127,
+          "sha256": "8c9feb213e96fe74f79553abf8cb39c9aff3da740286dd5efbb234b42b03f14d"
+        },
+        {
+          "path": "progress-10.json",
+          "bytes": 8152,
+          "sha256": "2a40606801fbec5f7695fa2a2dffd7ad4eb95af77ea0cdc9bfeed4f3d19ea4ae"
+        },
+        {
+          "path": "progress-11.json",
+          "bytes": 9659,
+          "sha256": "76c42ee53360892f93a65dc6562834b8ae5dc7c947ad3bd963f445f242a41b63"
+        },
+        {
+          "path": "progress-12.json",
+          "bytes": 6044,
+          "sha256": "9acca152846bdbae3fcd64beb0e3cb9788463c6650ec6cd0fc1b73671473f87b"
+        },
+        {
+          "path": "progress-13.json",
+          "bytes": 5877,
+          "sha256": "03c83ba363e9459830f53cc95963a75ded93919964984f15741ca85c461c5f83"
+        },
+        {
+          "path": "receipt.json",
+          "bytes": 92417,
+          "sha256": "b31fd1dc7f68cfba2f20b717bed4b419ae9b1332b55724ae95c1b127572a3683"
+        },
+        {
+          "path": "reference-inventory-after.json",
+          "bytes": 47493,
+          "sha256": "89542d3af76883cab61f69ca3aad05478d0ea511f46b864c08f3c290d21ea679"
+        },
+        {
+          "path": "reference-inventory-before.json",
+          "bytes": 47493,
+          "sha256": "89542d3af76883cab61f69ca3aad05478d0ea511f46b864c08f3c290d21ea679"
+        },
+        {
+          "path": "runtime-after.json",
+          "bytes": 105086,
+          "sha256": "f738b7177006a31fc94268d77bbbae6c195f9deca8dbf0051060e3db71918d03"
+        },
+        {
+          "path": "runtime-before.json",
+          "bytes": 105086,
+          "sha256": "f738b7177006a31fc94268d77bbbae6c195f9deca8dbf0051060e3db71918d03"
+        },
+        {
+          "path": "source-production.diff",
+          "bytes": 29510,
+          "sha256": "bcccd0c9a5bd815aff0018f29592032eb8db05617e870ba0c6a869eabdf51e81"
+        },
+        {
+          "path": "source-scope.json",
+          "bytes": 4746,
+          "sha256": "ae2639734c90bd8785fa395d7d53942b6ec00225c4e9e7b85354952288b54b5b"
+        },
+        {
+          "path": "successful-build.log",
+          "bytes": 14859,
+          "sha256": "bdc01995fb27420962a9a76014899f192c16bb3cf0670331cdb06321b9109bae"
+        },
+        {
+          "path": "summary.json",
+          "bytes": 393,
+          "sha256": "f629ac6d6ecc2689df82ea382c1038ce2c3a8a87f906fb0a799a16b11350d297"
+        }
+      ],
+      "extractionVerified": true
+    },
+    {
+      "file": "native-suite.tar.gz",
+      "bytes": 504716,
+      "sha256": "675cb110308a3748d673905b4df761f18d898683ebba6d10efa9ed2ffe61f0d6",
+      "rawBytes": 701813,
+      "files": [
+        {
+          "path": "actions/supplemental-controls-4-6.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "actions/supplemental-controls-7-9.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "inputs/supplemental-controls-4-6.pptx",
+          "bytes": 225397,
+          "sha256": "e6c31d6d406830c38c86499860aff9ff617babf841386dffacd55c8370029447"
+        },
+        {
+          "path": "inputs/supplemental-controls-7-9.pptx",
+          "bytes": 127945,
+          "sha256": "fe7dfd65563313719c25ad0c7dab07eeda687cec2fd1d828c6750d95f5864573"
+        },
+        {
+          "path": "previews/supplemental-controls-4-6-1.png",
+          "bytes": 57515,
+          "sha256": "4196b4cf74d1966267d242b1e3f355b36dd6114bab5589d2bfb781906d294ca1"
+        },
+        {
+          "path": "previews/supplemental-controls-4-6-2.png",
+          "bytes": 57600,
+          "sha256": "f9bf296ab703a3ed114a4a9d144db494c710e4d773deb449f52c2587defa7505"
+        },
+        {
+          "path": "previews/supplemental-controls-4-6-3.png",
+          "bytes": 50252,
+          "sha256": "9e2cbf6e8d29ae3d27c4d55af6dbaafe436c23993b152b9da7b2b186b8575b08"
+        },
+        {
+          "path": "previews/supplemental-controls-7-9-1.png",
+          "bytes": 50673,
+          "sha256": "3b991613a55fe4165a9dd954e94bd4aa5a240579101f2cfa3192bc9a928a7a2e"
+        },
+        {
+          "path": "previews/supplemental-controls-7-9-2.png",
+          "bytes": 50884,
+          "sha256": "38c57174036c7b8e2e3526124f345c614aebc1955ed10b09c8265f11046373a5"
+        },
+        {
+          "path": "previews/supplemental-controls-7-9-3.png",
+          "bytes": 36227,
+          "sha256": "df3b69646a2d5d8a5e6ed779ab68e7a464ba2ff1f5036259a4c96d0a9590d061"
+        },
+        {
+          "path": "producer-build.json",
+          "bytes": 9682,
+          "sha256": "377e39115411e41d08b8641e21b9cd29742a850287038c7e5e728f2bf3a39173"
+        },
+        {
+          "path": "producer-build.log",
+          "bytes": 14859,
+          "sha256": "bdc01995fb27420962a9a76014899f192c16bb3cf0670331cdb06321b9109bae"
+        },
+        {
+          "path": "producer-summary.json",
+          "bytes": 393,
+          "sha256": "f629ac6d6ecc2689df82ea382c1038ce2c3a8a87f906fb0a799a16b11350d297"
+        },
+        {
+          "path": "sources/supplemental-controls-4-6.opf.json",
+          "bytes": 7064,
+          "sha256": "fee5e92c8ce37b3e20da4821b09613aea943d973950299e547dd8752ce4a8ee4"
+        },
+        {
+          "path": "sources/supplemental-controls-7-9.opf.json",
+          "bytes": 7288,
+          "sha256": "15f91115065f6479f896192c968324b271782d1f538e08e5190be617c4363c29"
+        },
+        {
+          "path": "suite.json",
+          "bytes": 6028,
+          "sha256": "4881318ce1abe0c162c182756488446a9881f352b46dd33da0529b545b42f3bf"
+        }
+      ],
+      "extractionVerified": true
+    },
+    {
+      "file": "native-attempt-01.tar.gz",
+      "bytes": 653271,
+      "sha256": "1680dbbc5e8d9fb703079d39a2e66e0c8270b3c00375c725d2a26fe43cc238b2",
+      "rawBytes": 2559218,
+      "files": [
+        {
+          "path": "completed.json",
+          "bytes": 181,
+          "sha256": "fbb8db6c3b08602028d22689634b325bbb002d95fd4e49f8d0ce496586125887"
+        },
+        {
+          "path": "supplemental-controls-4-6/furniture-harness.log",
+          "bytes": 228,
+          "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json",
+          "bytes": 310254,
+          "sha256": "eb83ffdd8f024f77d32a3d7c108332c876471a79841860f4b2a8de1765b97c6f"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/close-failure.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/copy-failure.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/copy-identity-change.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/empty-list.json",
+          "bytes": 7,
+          "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/existing-output-saved.pptx",
+          "bytes": 13,
+          "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/existing-output.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/foreign-at-adoption.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/foreign-at-quit.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/fractional-move-index.json",
+          "bytes": 55,
+          "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-common-op-array.json",
+          "bytes": 81,
+          "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-common-op-null.json",
+          "bytes": 73,
+          "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-common-op-number.json",
+          "bytes": 70,
+          "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-common-shape-array.json",
+          "bytes": 81,
+          "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-common-shape-null.json",
+          "bytes": 71,
+          "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-common-shape-number.json",
+          "bytes": 68,
+          "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-common-slide-array.json",
+          "bytes": 81,
+          "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-common-slide-null.json",
+          "bytes": 82,
+          "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/legacy-text-array.json",
+          "bytes": 81,
+          "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/malformed-json.json",
+          "bytes": 6,
+          "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/move-index-four.json",
+          "bytes": 53,
+          "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/multi-empty-alt.json",
+          "bytes": 204,
+          "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/non-list-root.json",
+          "bytes": 51,
+          "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/null-entry.json",
+          "bytes": 11,
+          "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/numeric-target.json",
+          "bytes": 98,
+          "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/numeric-text.json",
+          "bytes": 69,
+          "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-chartName-array.json",
+          "bytes": 185,
+          "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-chartName-empty.json",
+          "bytes": 172,
+          "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-chartName-number.json",
+          "bytes": 171,
+          "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-chartName-too-long.json",
+          "bytes": 428,
+          "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-common-op-array.json",
+          "bytes": 185,
+          "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-common-op-null.json",
+          "bytes": 166,
+          "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-common-op-number.json",
+          "bytes": 163,
+          "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-common-shape-array.json",
+          "bytes": 185,
+          "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-common-shape-null.json",
+          "bytes": 175,
+          "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-common-shape-number.json",
+          "bytes": 172,
+          "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-common-slide-array.json",
+          "bytes": 185,
+          "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-common-slide-null.json",
+          "bytes": 186,
+          "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-edge-array.json",
+          "bytes": 185,
+          "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-edge-case.json",
+          "bytes": 183,
+          "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-edge-unsupported.json",
+          "bytes": 181,
+          "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-index-upper-bound.json",
+          "bytes": 187,
+          "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-kind-array.json",
+          "bytes": 185,
+          "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-kind-case.json",
+          "bytes": 183,
+          "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+          "bytes": 191,
+          "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-kind-marker.json",
+          "bytes": 183,
+          "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-kind-slice.json",
+          "bytes": 182,
+          "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-kind-unsupported.json",
+          "bytes": 182,
+          "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-kind-vertical-bar.json",
+          "bytes": 189,
+          "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-missing-chartKind.json",
+          "bytes": 162,
+          "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-missing-chartName.json",
+          "bytes": 157,
+          "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-missing-edge.json",
+          "bytes": 167,
+          "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-missing-pointIndex.json",
+          "bytes": 168,
+          "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-missing-seriesIndex.json",
+          "bytes": 167,
+          "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-missing-valueSign.json",
+          "bytes": 169,
+          "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-pointIndex-array.json",
+          "bytes": 185,
+          "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-pointIndex-boolean.json",
+          "bytes": 186,
+          "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-pointIndex-fraction.json",
+          "bytes": 185,
+          "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-pointIndex-negative.json",
+          "bytes": 184,
+          "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-pointIndex-null.json",
+          "bytes": 186,
+          "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-pointIndex-string.json",
+          "bytes": 185,
+          "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-pointIndex-too-high.json",
+          "bytes": 185,
+          "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-pointIndex-zero.json",
+          "bytes": 183,
+          "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-seriesIndex-array.json",
+          "bytes": 185,
+          "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+          "bytes": 186,
+          "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+          "bytes": 185,
+          "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-seriesIndex-negative.json",
+          "bytes": 184,
+          "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-seriesIndex-null.json",
+          "bytes": 186,
+          "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-seriesIndex-string.json",
+          "bytes": 185,
+          "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+          "bytes": 185,
+          "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-seriesIndex-zero.json",
+          "bytes": 183,
+          "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-shapeName-array.json",
+          "bytes": 185,
+          "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-shapeName-empty.json",
+          "bytes": 173,
+          "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-sign-array.json",
+          "bytes": 185,
+          "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-sign-boolean.json",
+          "bytes": 186,
+          "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-sign-fraction.json",
+          "bytes": 185,
+          "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-sign-string.json",
+          "bytes": 185,
+          "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-sign-too-high.json",
+          "bytes": 183,
+          "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-sign-too-low.json",
+          "bytes": 184,
+          "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-unknown-field.json",
+          "bytes": 197,
+          "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/point-zero-sign.json",
+          "bytes": 183,
+          "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/quit-failure.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/same-path.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/serialized-curved-refusal.json",
+          "bytes": 9449,
+          "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/singleton-empty-text.json",
+          "bytes": 75,
+          "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/slide-index-four.json",
+          "bytes": 63,
+          "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/slide-index-zero.json",
+          "bytes": 63,
+          "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/string-slide-index.json",
+          "bytes": 76,
+          "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-bool-size.json",
+          "bytes": 87,
+          "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-both.json",
+          "bytes": 104,
+          "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-color.json",
+          "bytes": 88,
+          "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-empty.json",
+          "bytes": 71,
+          "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-extra-key.json",
+          "bytes": 106,
+          "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-hash-color.json",
+          "bytes": 89,
+          "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-overflow.json",
+          "bytes": 88,
+          "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-reference-color.json",
+          "bytes": 89,
+          "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-short-color.json",
+          "bytes": 86,
+          "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-size.json",
+          "bytes": 85,
+          "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-string-size.json",
+          "bytes": 87,
+          "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-too-big.json",
+          "bytes": 85,
+          "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/style-zero.json",
+          "bytes": 84,
+          "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/success-saved.pptx",
+          "bytes": 23,
+          "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/success.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/twenty-one-actions.json",
+          "bytes": 2003,
+          "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/unknown-operation.json",
+          "bytes": 63,
+          "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/unknown-property.json",
+          "bytes": 92,
+          "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/unowned-quit.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/writable-open.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/wrong-close-owner.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/furniture.json.plans/wrong-open-path.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/failure/owned worker with spaces.ps1",
+          "bytes": 55,
+          "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/failure/worker.json",
+          "bytes": 342,
+          "sha256": "17c33f6286a43a0434f413f4970271f5b6f3a3fe7f9188f3229dabccc0bf6465"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/failure/worker.stderr.log",
+          "bytes": 357,
+          "sha256": "c75dfb0beb367373e464063ae109a4cea39833e4975f34de4c2afb63dcbdf272"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/failure/worker.stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/report.json",
+          "bytes": 1745,
+          "sha256": "6bd02c5e906095f663c5bbb333ec24e1b48d524f05fa4fd8667ee3f9c57cf48e"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/success/owned worker with spaces.ps1",
+          "bytes": 55,
+          "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/success/worker.json",
+          "bytes": 341,
+          "sha256": "604b1cedab803fe113f5f48a29dc8ac75cf9e570703517db240c2f9f4b202215"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/success/worker.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/success/worker.stdout.log",
+          "bytes": 52,
+          "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/timeout/owned worker with spaces.ps1",
+          "bytes": 133,
+          "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/timeout/worker.json",
+          "bytes": 340,
+          "sha256": "08b623719b1a8e276131d7aab6d9ac22021a0426d5c4346be27d46d1305f29bd"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/timeout/worker.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-4-6/harness/process/timeout/worker.stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-4-6/inputs/action-plan.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "supplemental-controls-4-6/inputs/case.pptx",
+          "bytes": 225397,
+          "sha256": "e6c31d6d406830c38c86499860aff9ff617babf841386dffacd55c8370029447"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/edited-slide-01.png",
+          "bytes": 21276,
+          "sha256": "700b642c0382baff198a97c9a60e93f5b1cc3b8a7f4209ad0fe47c57255ca0a9"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/edited-slide-02.png",
+          "bytes": 21329,
+          "sha256": "b65461195b9e31510e4bee2b69058dc3ce3ce3573c8ba731cd56ce4d20d10cf1"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/edited-slide-03.png",
+          "bytes": 17828,
+          "sha256": "9f24efcfa721098c201d962c95b60cd5624d0cce8586ab0197f4121294c87f30"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/inputs/action-plan.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/inputs/input.pptx",
+          "bytes": 225397,
+          "sha256": "e6c31d6d406830c38c86499860aff9ff617babf841386dffacd55c8370029447"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/inputs/native-furniture-control.ps1",
+          "bytes": 71285,
+          "sha256": "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/inputs/native-process.ps1",
+          "bytes": 2341,
+          "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/native-furniture-control.pptx",
+          "bytes": 229868,
+          "sha256": "6b3b77db2d94214cc73ee3578479ec1fc6341dfcbdfcf454eda41c1a4d0a7ea2"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/original-slide-01.png",
+          "bytes": 21219,
+          "sha256": "2162c342a9336987dbc635d0031999c563ae6f90f46b08f4c0ca6640f9b7a701"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/original-slide-02.png",
+          "bytes": 21329,
+          "sha256": "b65461195b9e31510e4bee2b69058dc3ce3ce3573c8ba731cd56ce4d20d10cf1"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/original-slide-03.png",
+          "bytes": 17828,
+          "sha256": "9f24efcfa721098c201d962c95b60cd5624d0cce8586ab0197f4121294c87f30"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/progress.json",
+          "bytes": 272,
+          "sha256": "e75c64eaf2a987bbd35196058f32019da97d1a72619adfcfb00ff794dcdd296c"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/reopened-slide-01.png",
+          "bytes": 21219,
+          "sha256": "2162c342a9336987dbc635d0031999c563ae6f90f46b08f4c0ca6640f9b7a701"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/reopened-slide-02.png",
+          "bytes": 21329,
+          "sha256": "b65461195b9e31510e4bee2b69058dc3ce3ce3573c8ba731cd56ce4d20d10cf1"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/reopened-slide-03.png",
+          "bytes": 17828,
+          "sha256": "9f24efcfa721098c201d962c95b60cd5624d0cce8586ab0197f4121294c87f30"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/report.json",
+          "bytes": 237785,
+          "sha256": "6046be9482652b8f9af820383878cf3c2894f02a57e2f4ae96aefa16f512fbe9"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/request.json",
+          "bytes": 2259,
+          "sha256": "69bfb9c099296fc569f78a72497812e0f902233e9255f67dbe55162cfda87a07"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/stages.jsonl",
+          "bytes": 1034626,
+          "sha256": "a1369ca42e7dad64a512835eaa3a5cde70977899ff35b970e60b49d6436a95d9"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/supervisor.json",
+          "bytes": 220,
+          "sha256": "b5f145ab41e65fc9fc4cf677c9ba166fc1dc6c7b932a093ae43bac7ce847423c"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/worker.json",
+          "bytes": 341,
+          "sha256": "c40de08659d4bb5eaa0e8156b680ea84a1a4de2f0bf9bf3a45cb94b023b3d372"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/worker.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-4-6/native/worker.stdout.log",
+          "bytes": 54,
+          "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+        },
+        {
+          "path": "supplemental-controls-4-6/native-worker.log",
+          "bytes": 110,
+          "sha256": "7eb006d13c4063d29bcac3f0004c8ccedd7319bac904a88d3f4e7615fc4f63ca"
+        },
+        {
+          "path": "supplemental-controls-4-6/process-check.log",
+          "bytes": 280,
+          "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+        },
+        {
+          "path": "supplemental-controls-4-6/runner.json",
+          "bytes": 8722,
+          "sha256": "92f4e6ced16e903e20c7396bdef229e9ee95974377febeb3b88eb6c3588677c2"
+        },
+        {
+          "path": "supplemental-controls-4-6.preflight.json",
+          "bytes": 169,
+          "sha256": "7183403ff3a4f14d07a8625aae80eee17f63d49dbd17a16808a2524d5e7dea87"
+        },
+        {
+          "path": "supplemental-controls-7-9.preflight.json",
+          "bytes": 197,
+          "sha256": "87b301d60f828ff7a216a959169a438724e2f23f9881d9a6503da05f2fc0386a"
+        }
+      ],
+      "extractionVerified": true
+    },
+    {
+      "file": "native-attempt-02.tar.gz",
+      "bytes": 484294,
+      "sha256": "a7f15ffe1f0734cea8665564f09ae1e2c84989c1eb7999b883e3f0233c848f2f",
+      "rawBytes": 2135890,
+      "files": [
+        {
+          "path": "preflight.json",
+          "bytes": 315,
+          "sha256": "121cca7e2f47c6bcf60e10696a29daca652fddb413401af831d09916d9bb562d"
+        },
+        {
+          "path": "supplemental-controls-7-9/furniture-harness.log",
+          "bytes": 113,
+          "sha256": "02f2ceae1047e656805d8b78fba2897424e392cd0618b203eb62a340421077ce"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json",
+          "bytes": 310254,
+          "sha256": "22c97167e6ff80e485a7cd2e819314e595ddf3cd5be3f23abe0bd4ea9ad34c6a"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/close-failure.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/copy-failure.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/copy-identity-change.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/empty-list.json",
+          "bytes": 7,
+          "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/existing-output-saved.pptx",
+          "bytes": 13,
+          "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/existing-output.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/foreign-at-adoption.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/foreign-at-quit.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/fractional-move-index.json",
+          "bytes": 55,
+          "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-common-op-array.json",
+          "bytes": 81,
+          "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-common-op-null.json",
+          "bytes": 73,
+          "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-common-op-number.json",
+          "bytes": 70,
+          "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-common-shape-array.json",
+          "bytes": 81,
+          "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-common-shape-null.json",
+          "bytes": 71,
+          "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-common-shape-number.json",
+          "bytes": 68,
+          "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-common-slide-array.json",
+          "bytes": 81,
+          "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-common-slide-null.json",
+          "bytes": 82,
+          "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/legacy-text-array.json",
+          "bytes": 81,
+          "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/malformed-json.json",
+          "bytes": 6,
+          "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/move-index-four.json",
+          "bytes": 53,
+          "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/multi-empty-alt.json",
+          "bytes": 204,
+          "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/non-list-root.json",
+          "bytes": 51,
+          "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/null-entry.json",
+          "bytes": 11,
+          "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/numeric-target.json",
+          "bytes": 98,
+          "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/numeric-text.json",
+          "bytes": 69,
+          "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-chartName-array.json",
+          "bytes": 185,
+          "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-chartName-empty.json",
+          "bytes": 172,
+          "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-chartName-number.json",
+          "bytes": 171,
+          "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-chartName-too-long.json",
+          "bytes": 428,
+          "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-common-op-array.json",
+          "bytes": 185,
+          "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-common-op-null.json",
+          "bytes": 166,
+          "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-common-op-number.json",
+          "bytes": 163,
+          "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-common-shape-array.json",
+          "bytes": 185,
+          "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-common-shape-null.json",
+          "bytes": 175,
+          "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-common-shape-number.json",
+          "bytes": 172,
+          "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-common-slide-array.json",
+          "bytes": 185,
+          "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-common-slide-null.json",
+          "bytes": 186,
+          "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-edge-array.json",
+          "bytes": 185,
+          "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-edge-case.json",
+          "bytes": 183,
+          "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-edge-unsupported.json",
+          "bytes": 181,
+          "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-index-upper-bound.json",
+          "bytes": 187,
+          "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-kind-array.json",
+          "bytes": 185,
+          "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-kind-case.json",
+          "bytes": 183,
+          "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+          "bytes": 191,
+          "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-kind-marker.json",
+          "bytes": 183,
+          "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-kind-slice.json",
+          "bytes": 182,
+          "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-kind-unsupported.json",
+          "bytes": 182,
+          "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-kind-vertical-bar.json",
+          "bytes": 189,
+          "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-missing-chartKind.json",
+          "bytes": 162,
+          "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-missing-chartName.json",
+          "bytes": 157,
+          "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-missing-edge.json",
+          "bytes": 167,
+          "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-missing-pointIndex.json",
+          "bytes": 168,
+          "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-missing-seriesIndex.json",
+          "bytes": 167,
+          "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-missing-valueSign.json",
+          "bytes": 169,
+          "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-pointIndex-array.json",
+          "bytes": 185,
+          "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-pointIndex-boolean.json",
+          "bytes": 186,
+          "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-pointIndex-fraction.json",
+          "bytes": 185,
+          "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-pointIndex-negative.json",
+          "bytes": 184,
+          "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-pointIndex-null.json",
+          "bytes": 186,
+          "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-pointIndex-string.json",
+          "bytes": 185,
+          "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-pointIndex-too-high.json",
+          "bytes": 185,
+          "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-pointIndex-zero.json",
+          "bytes": 183,
+          "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-seriesIndex-array.json",
+          "bytes": 185,
+          "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+          "bytes": 186,
+          "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+          "bytes": 185,
+          "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-seriesIndex-negative.json",
+          "bytes": 184,
+          "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-seriesIndex-null.json",
+          "bytes": 186,
+          "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-seriesIndex-string.json",
+          "bytes": 185,
+          "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+          "bytes": 185,
+          "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-seriesIndex-zero.json",
+          "bytes": 183,
+          "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-shapeName-array.json",
+          "bytes": 185,
+          "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-shapeName-empty.json",
+          "bytes": 173,
+          "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-sign-array.json",
+          "bytes": 185,
+          "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-sign-boolean.json",
+          "bytes": 186,
+          "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-sign-fraction.json",
+          "bytes": 185,
+          "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-sign-string.json",
+          "bytes": 185,
+          "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-sign-too-high.json",
+          "bytes": 183,
+          "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-sign-too-low.json",
+          "bytes": 184,
+          "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-unknown-field.json",
+          "bytes": 197,
+          "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/point-zero-sign.json",
+          "bytes": 183,
+          "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/quit-failure.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/same-path.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/serialized-curved-refusal.json",
+          "bytes": 9449,
+          "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/singleton-empty-text.json",
+          "bytes": 75,
+          "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/slide-index-four.json",
+          "bytes": 63,
+          "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/slide-index-zero.json",
+          "bytes": 63,
+          "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/string-slide-index.json",
+          "bytes": 76,
+          "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-bool-size.json",
+          "bytes": 87,
+          "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-both.json",
+          "bytes": 104,
+          "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-color.json",
+          "bytes": 88,
+          "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-empty.json",
+          "bytes": 71,
+          "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-extra-key.json",
+          "bytes": 106,
+          "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-hash-color.json",
+          "bytes": 89,
+          "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-overflow.json",
+          "bytes": 88,
+          "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-reference-color.json",
+          "bytes": 89,
+          "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-short-color.json",
+          "bytes": 86,
+          "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-size.json",
+          "bytes": 85,
+          "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-string-size.json",
+          "bytes": 87,
+          "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-too-big.json",
+          "bytes": 85,
+          "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/style-zero.json",
+          "bytes": 84,
+          "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/success-saved.pptx",
+          "bytes": 23,
+          "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/success.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/twenty-one-actions.json",
+          "bytes": 2003,
+          "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/unknown-operation.json",
+          "bytes": 63,
+          "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/unknown-property.json",
+          "bytes": 92,
+          "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/unowned-quit.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/writable-open.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/wrong-close-owner.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/furniture.json.plans/wrong-open-path.pptx",
+          "bytes": 8,
+          "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/failure/owned worker with spaces.ps1",
+          "bytes": 55,
+          "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/failure/worker.json",
+          "bytes": 342,
+          "sha256": "ac6297722b35f7208f5ef3b74a4762a262f4ca290ed4d5511b434e433209e467"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/failure/worker.stderr.log",
+          "bytes": 357,
+          "sha256": "dab71b0e086fb20ae46f7abd8a802d9ad915bfe44e3520aea69a57b6a685a457"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/failure/worker.stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/report.json",
+          "bytes": 1745,
+          "sha256": "a1372fd0c3a57c662a30ec8c23faa0d720385e0d054d7b600db40dcbecfe949b"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/success/owned worker with spaces.ps1",
+          "bytes": 55,
+          "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/success/worker.json",
+          "bytes": 341,
+          "sha256": "327004c600328a7bd5f0484ddb2503d231bf508edd60a2467f57c38d7139ce07"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/success/worker.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/success/worker.stdout.log",
+          "bytes": 52,
+          "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/timeout/owned worker with spaces.ps1",
+          "bytes": 133,
+          "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/timeout/worker.json",
+          "bytes": 340,
+          "sha256": "fd101202640dec9c350b974d7d9a2c0148b051c00d448c9e6f802e9993d040f9"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/timeout/worker.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-7-9/harness/process/timeout/worker.stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-7-9/inputs/action-plan.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "supplemental-controls-7-9/inputs/case.pptx",
+          "bytes": 127945,
+          "sha256": "fe7dfd65563313719c25ad0c7dab07eeda687cec2fd1d828c6750d95f5864573"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/edited-slide-01.png",
+          "bytes": 17996,
+          "sha256": "6dfcae4f25e39edb7110d86f38f0130af0bfac59d1afea6a8eb9c6942114547a"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/edited-slide-02.png",
+          "bytes": 18157,
+          "sha256": "4cd5314521dca6dced859290f17a5b2807cfd067d62dea36889babad9b70c250"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/edited-slide-03.png",
+          "bytes": 12310,
+          "sha256": "9c505235a4a719185e0081d14f06d485acae3f40fadb0c19666e2c465f9eb5ec"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/inputs/action-plan.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/inputs/input.pptx",
+          "bytes": 127945,
+          "sha256": "fe7dfd65563313719c25ad0c7dab07eeda687cec2fd1d828c6750d95f5864573"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/inputs/native-furniture-control.ps1",
+          "bytes": 71285,
+          "sha256": "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/inputs/native-process.ps1",
+          "bytes": 2341,
+          "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/native-furniture-control.pptx",
+          "bytes": 131352,
+          "sha256": "e723b6b230fcc0728721e945408bce7057ec726cecf64c869a4b1ae98e40d01d"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/original-slide-01.png",
+          "bytes": 17996,
+          "sha256": "6dfcae4f25e39edb7110d86f38f0130af0bfac59d1afea6a8eb9c6942114547a"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/original-slide-02.png",
+          "bytes": 18157,
+          "sha256": "4cd5314521dca6dced859290f17a5b2807cfd067d62dea36889babad9b70c250"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/original-slide-03.png",
+          "bytes": 12310,
+          "sha256": "9c505235a4a719185e0081d14f06d485acae3f40fadb0c19666e2c465f9eb5ec"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/progress.json",
+          "bytes": 272,
+          "sha256": "54135309e203066da6b86894193d35a129dad6addd19b15d4dd6e12db9a3f271"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/reopened-slide-01.png",
+          "bytes": 17996,
+          "sha256": "6dfcae4f25e39edb7110d86f38f0130af0bfac59d1afea6a8eb9c6942114547a"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/reopened-slide-02.png",
+          "bytes": 18157,
+          "sha256": "4cd5314521dca6dced859290f17a5b2807cfd067d62dea36889babad9b70c250"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/reopened-slide-03.png",
+          "bytes": 12310,
+          "sha256": "9c505235a4a719185e0081d14f06d485acae3f40fadb0c19666e2c465f9eb5ec"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/report.json",
+          "bytes": 226945,
+          "sha256": "aa27e3d0c8ff7142bafad0638287172aef791837b3aea43c086b94b21a34a2f3"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/request.json",
+          "bytes": 2259,
+          "sha256": "8616b9c2acf603f8cdafd7efabbfe38d50f4c33071a56c1ac1a6e27744791a6d"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/stages.jsonl",
+          "bytes": 955780,
+          "sha256": "3ceffd10543330052bbdbc6f02606b4697cc9e9b7247ace37fb040194eba44d2"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/supervisor.json",
+          "bytes": 220,
+          "sha256": "a3a1bbc276a8f89e0b6053618fadfe5b5613e839d7d6241c8016c8fa358634c3"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/worker.json",
+          "bytes": 341,
+          "sha256": "09aa7cd32bd6238590edb5cb9d5c998b189f61cb786ed23446354f698f515881"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/worker.stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "supplemental-controls-7-9/native/worker.stdout.log",
+          "bytes": 54,
+          "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+        },
+        {
+          "path": "supplemental-controls-7-9/native-worker.log",
+          "bytes": 54,
+          "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+        },
+        {
+          "path": "supplemental-controls-7-9/process-check.log",
+          "bytes": 139,
+          "sha256": "47b11a6f12865f1b51aa85745c4e63f236ede11c63fd753f09117f5105283ee6"
+        },
+        {
+          "path": "supplemental-controls-7-9/runner.json",
+          "bytes": 4438,
+          "sha256": "b5e21e932d0ebf011351fb391198a3b977fe634ff029887ca820d00ff4e13b87"
+        },
+        {
+          "path": "terminal.json",
+          "bytes": 402,
+          "sha256": "e81a8aae5b3d86d923a789c64f23cc0024312b94b1243264be6e5de65347b3c4"
+        }
+      ],
+      "extractionVerified": true
+    },
+    {
+      "file": "independent-review.tar.gz",
+      "bytes": 413227,
+      "sha256": "4d55412caa0d58ac2749920755df4540113a1f28a7b934c9a7caf5cd72d7377c",
+      "rawBytes": 649721,
+      "files": [
+        {
+          "path": "phase-differences.json",
+          "bytes": 641,
+          "sha256": "2b3d609122b1513056a54d0005462ccd7c74c33dd0f935f4bcac235a32dd74c6"
+        },
+        {
+          "path": "post-native-processes.json",
+          "bytes": 195,
+          "sha256": "1034b4b0084ebab34e254821e4305688aeda3d3565284bd52a6495f0894a77a0"
+        },
+        {
+          "path": "review.json",
+          "bytes": 28572,
+          "sha256": "8db9bb6a3bf3b508fa64d84462ce2292ea8cac8a30a14bba2c949ee9828eb98b"
+        },
+        {
+          "path": "sheet-01.png",
+          "bytes": 322090,
+          "sha256": "51ce64cd800cef8e249e06f5b9ec8af5458781e7df93a5f4a6c6b9f7faa161c3"
+        },
+        {
+          "path": "sheet-02.png",
+          "bytes": 294596,
+          "sha256": "0b169bd0801d70614396a5e6150463737c74aaa58c5a68ee38b0c361784cd4ba"
+        },
+        {
+          "path": "supplemental-controls-4-6-imports.json.gz",
+          "bytes": 1877,
+          "sha256": "7ad907d37fd12bf4fa07aab74c1db81278f42579f6c84272a3b8b82196cdd5c9"
+        },
+        {
+          "path": "supplemental-controls-7-9-imports.json.gz",
+          "bytes": 1750,
+          "sha256": "3a493d07a95d4dcab6b9f7021e977eca4a283493843020bd978d83881cdf7e6b"
+        }
+      ],
+      "extractionVerified": true
+    }
+  ]
+}
