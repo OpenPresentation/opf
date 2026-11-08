@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
+import {toPptx, fromPptx, resolvePresentation, catalogs} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),array=v=>v===undefined?[]:Array.isArray(v)?v:[v];
@@ -35,6 +35,8 @@ for(const options of [{},{fonts:await loadFonts()}])for(const language of ['en',
 
   // The timeline: progress to the current event, with editable generated words in the deck's language.
   const timelineDeck={language,design:{fontScheme:'roboto'},slides:[{title:'Platform migration roadmap',blocks:[{timeline:events}]}]};
+  // A reused caller-owned font handle must prepare newly generated script text for this document.
+  if(options.fonts){await options.fonts.ensure(timelineDeck,{renderOptions:{catalogs}});assert.deepEqual(options.fonts.pending(timelineDeck,{catalogs}),[],'all generated status text has prepared fonts');}
   const timeline=resolvePresentation(timelineDeck,options).slides[0].geometry.items.find(item=>item.timelineLayout).timelineLayout;
   const timelineBytes=await toPptx(timelineDeck,options),timelineShapes=shapesOf(timelineBytes);
   const progress=timelineShapes.filter(shape=>/^OPF timeline \d+ progress$/.test(nameOf(shape)));

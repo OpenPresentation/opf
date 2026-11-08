@@ -1,6 +1,6 @@
 ---
 type: fixed
-packages: [render, pptx, editor]
+packages: [editor, pptx, render]
 ---
 
-Compatibility checks cover every current gallery layout and its text alignment, verify exact localized Arabic timeline status labels and native round trips, and use a reproducible source-reading unit fixture with current catalog and slide-language checks.
+Restore source-editor asset and image-variable completions for shorthand and nested image payloads using the current schema wrapper. Compatibility checks cover every current gallery layout and alignment, exact localized Arabic timeline labels and native round trips with prepared fonts, and reproducible current-catalog source-reading fixtures.
