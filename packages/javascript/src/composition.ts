@@ -5450,12 +5450,25 @@ const TABLE_NOTE = Symbol('opf.tableNote');
  */
 const TABLE_NOTE_SHARES: readonly number[] = [.7, .65, .6], TABLE_NOTE_SHORT = .5, TABLE_NOTE_LINES = 2;
 /**
+ * LH-75: beside its note a table cell may wrap onto at most this many lines (its words whole), so the table keeps its type size. LH-80: the
+ * same allowance holds for a table beside a picture track (automaticTracks).
+ */
+const TABLE_NOTE_CELL_LINES = 2;
+/** LH-75, LH-80: the most lines any one cell of a placed table is set on (Infinity when it cannot be laid out). */
+function tableCellLines(item: ComposedItem, options: ComposeSlideOptions, scale: number): number {
+  try {
+    const laid = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) });
+    return Math.max(1, ...laid.rows.flatMap(row => row.cells.map(cell => 'richLines' in cell.fit ? (cell.fit as RichTextFit).richLines.length : cell.fit.lines.length)));
+  } catch { return Infinity; }
+}
+/**
  * LH-75: a slide whose body is one short table (under half the body's height) and a note of two or more lines (a plain text block), which the
  * layout or the automatic grid sets one above the other, is composed again with the two side by side, about 70:30, the note on one plain
  * card as tall as the row (Claude Design's note panel beside its table), the row in the middle of the body. The table keeps its words whole.
  * The type steps up by LH-48's steps (GROW, the table's rows with it) to the largest at which the row covers at most LONE_TARGET of the
- * body, nothing overflows and no block is smaller, and no cell wraps that did not wrap stacked (LH-44's one-line cells: a table whose natural
- * width does not fit its share keeps the full width, as does a note whose column would be under LH-66's measure at 60:40). Kept
+ * body, nothing overflows and no block is smaller, and no cell takes more than TABLE_NOTE_CELL_LINES lines or breaks a word (LH-75's
+ * decision: a wrapped cell keeps the table's size; a table whose words do not fit its share keeps the full width, as does a note whose column
+ * would be under LH-66's measure at 60:40). Kept
  * (`recomposed.table` on a template slide, composed as the automatic grid with the record's design as LH-61 does) when it reads as
  * well as `result` (readsAsWell); a template that already sets the note beside the table
  * (table-beside), a slide with promoted regions, a block pinned to a region, a note on an emphasis, a layout master and, on a template
@@ -5490,8 +5503,10 @@ function tableNote(input: unknown, options: ComposeSlideOptions, result: SlideCo
       const next = composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor), placedTable = next && tableOf(next), placedNote = next && noteOf(next);
       if (!next || !placedTable || !placedNote?.frameBox || overflowCount(next) > 0 || !beside(placedTable.box, placedNote.box)) break;
       const read = trackQuality(next, options);
-      // LH-44: no cell of the table wraps that did not wrap stacked (a table too wide for its share keeps the full width), and the slide reads as well.
-      if (read.wrappedCells > before.wrappedCells || !readsAsWell(before, read, floor)) break;
+      // LH-75 decision (2026-11-07): a cell may wrap beside the note, onto at most TABLE_NOTE_CELL_LINES lines and with its words whole
+      // (a word too wide for its column is LH-44's overflow, refused above), so the table keeps its size instead of stepping down; the
+      // slide reads as well (no block smaller, no word split).
+      if (tableCellLines(placedTable, options, scale) > TABLE_NOTE_CELL_LINES || !readsAsWell(before, read, floor)) break;
       // The row (the note's card is as tall as the row) covers at most LONE_TARGET of the body, as LH-48's grown body does; each step is larger.
       if (placedNote.frameBox.height > LONE_TARGET * bodyHeight(next) || (steps > 0 && shrinks(next, best!, options))) break;
       best = next;
@@ -5670,14 +5685,19 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     const edge: ImageEdge = landscape ? (index === 0 ? 'left' : 'right') : (index === 0 ? 'top' : 'bottom');
     const aspect = intrinsicImageAspect(host.image, record(options.presentation).assets);
     const kept = (size: number) => { const frame = landscape ? size * base.width / base.height : base.width / (size * base.height); return aspect ? Math.min(frame / aspect, aspect / frame) : 1; };
-    let best: { result: SlideComposition; size: number; read: TrackQuality } | undefined;
+    type Track = { result: SlideComposition; size: number; read: TrackQuality };
+    let best: Track | undefined, wrapped: Track | undefined;
+    const better = (read: TrackQuality, size: number, than: Track | undefined) => { const tie = than && read.size > than.read.size - FONT_GRID_EPSILON; return !than || read.size > than.read.size + FONT_GRID_EPSILON || (tie && read.total > than.read.total + scale) || (tie && read.total > than.read.total - scale && kept(size) > kept(than.size) + 1e-9); };
     for (const size of MEDIA_TRACK_SHARES.filter(share => kept(share) >= MEDIA_TRACK_MIN_KEPT - 1e-9)) {
       const result = attempt(MEDIA_TRACK, { block: index, edge, size }), read = result && quality(result);
-      // LH-80 widened: a track never costs a table its one-line cells (a table beside a picture track wrapped its names).
-      if (!result || !read || !readsAsWell(before, read, floor) || read.wrappedCells > before.wrappedCells) continue;
-      const tie = best && read.size > best.read.size - FONT_GRID_EPSILON;
-      if (!best || read.size > best.read.size + FONT_GRID_EPSILON || (tie && read.total > best.read.total + scale) || (tie && read.total > best.read.total - scale && kept(size) > kept(best.size) + 1e-9)) best = { result, size, read };
+      if (!result || !read || !readsAsWell(before, read, floor)) continue;
+      // LH-80 widened: a track never costs a table its one-line cells (a table beside a picture track wrapped its names)...
+      if (read.wrappedCells <= before.wrappedCells) { if (better(read, size, best)) best = { result, size, read }; continue; }
+      // ...unless no track keeps them: then LH-75's allowance holds, a cell may wrap onto TABLE_NOTE_CELL_LINES lines with its words whole
+      // (readsAsWell counts split words), so the table keeps its type size beside the track (m17 with estimated widths).
+      if (!result.items.some(item => item.field === 'table' && tableCellLines(item, options, scale) > TABLE_NOTE_CELL_LINES) && better(read, size, wrapped)) wrapped = { result, size, read };
     }
+    best ??= wrapped;
     if (!best) return base;
     // A placed picture is listed before the flowed body; a track keeps the blocks' reading order, so the picture of a later block is
     // listed after the blocks before it (the order the preview, the PPTX export and `opf/reading-order` read).

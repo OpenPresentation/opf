@@ -53,11 +53,11 @@ describe('LH-75: a short table beside its note', () => {
     assert.equal(result.diagnostics.filter((entry) => entry.code === 'text-overflow').length, 0);
   });
 
-  test('stays stacked: a tall table, a one-line note, a table whose cells would wrap, and a layout that already puts the note beside', () => {
+  test('stays stacked: a tall table, a one-line note, a table whose cells would take three lines, and a layout that already puts the note beside', () => {
     for (const [label, input, options] of [
       ['a tall table', slide([plans(9), { text: note }]), { layout: layouts.table }],
       ['a one-line note', slide([plans(3), { text: 'One line only.' }]), { layout: layouts.table }],
-      ['a table whose cells would wrap beside the note', slide([wide, { text: note }]), { layout: layouts.table }],
+      ['a table too tall stacked (its cells would take three lines beside the note)', slide([wide, { text: note }]), { layout: layouts.table }],
       ['recompose: false', slide([plans(3), { text: note }]), { layout: layouts.table, recompose: false }],
     ]) {
       const result = composeSlide(input, options);
