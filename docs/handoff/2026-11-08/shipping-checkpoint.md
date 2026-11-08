@@ -2,6 +2,14 @@
 
 Evidence-only branch; never merge it. Unified checklist: https://github.com/OpenPresentation/opf/issues/1139 . Persistent two-release goal remains active.
 
+## Current status at08:24UTC
+
+PR1166 merged by the maintained required-all gate at08:23:14 as **afac3f7fc07539667fe9298f8efc08c967aacb0d**, after two complete green normal/FullCI observations. Top-level **Release0.33 dry run42462759180** is dispatched on that exact main with dry-run=true and skip-gate=false. One maintained commit gate (session75218, log release-033-dry-gate.log) waits for main verify, prepare and rehearse the publish; the successful rehearsal depends on the slow gate. Intentional real-publish skipped jobs are excluded. No package/tag/deploy exists yet. After rehearsal and actual-main verify, dispatch the real Release on unchanged main.
+
+Current034source is pushed at **a3c8b68d01d12c9b88b4bc797c0e636d2b0778ab**: accepted F2docs1168, LH34original1155+corrective1165 and LH93stacked1160 join the earlier assembly. Parent integrated build plus twelve focused controls pass. Blank-body paint-only import finding is closed with unconditional reflow diagnostics and exact geometry guards. All six callout and seven stacked native visual pairs reviewed; pinned-font profile remains held. An inherited negative-category-axis placement mismatch is confirmed, explicitly assigned a new derived bug-fix PR before034 release. Explicit-options Office automatic inner margins remain a byte-identical inherited limitation. Sources are frozen after folding. LH73/LH75 independent review, LH110 final PR and SH25/native/SmartArt work remain open in1139.
+
+The older snapshots below preserve chronology; this status supersedes their next-step statements.
+
 ## v0.33 recovery is the critical path
 
 PR1133 squash-merged at7c0c3f13e9de77e038b6ec26183043eb7fe90822 after exact-head normal/full CI and final native acceptance. Merged-main lint failed because the generated gallery tracker still counted103 release-readiness items instead of105. The automatic Tracker refresh run42456443752 generated exact commit90f645535c02d2aab2373503ca220faf2ad5f287, but repository Actions could not open its PR. No source assertion failed beyond tracker freshness. The Release dry run42456530874 was cancelled while queued; nothing was tagged, published or deployed.
