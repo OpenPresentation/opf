@@ -1,0 +1,206 @@
+[
+  {
+    "batch": "batch-01",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "79b528a885d1c5c8cb24aad9e263f94818775bb11e7b4440b942974f9fa129b7",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-01.json"
+  },
+  {
+    "batch": "batch-02",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "74bf6bcf804dd0a3ba371a74b499e11a53ff4bad816f91b1b30761e152057a7b",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-02.json"
+  },
+  {
+    "batch": "batch-03",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "bf7b20b7040c8b1cc5fa43ade5799442d049183522d99f9252bf759f6e7d70e4",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-03.json"
+  },
+  {
+    "batch": "batch-04",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "50386a4c35f6cf1f542542437acabcbbb24f562477c4a02d613f11171d830ac1",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-04.json"
+  },
+  {
+    "batch": "batch-05",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "fea81eb1b25d28c2694281e06b8c427d013405ab24211d686896b6ca9b69e214",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-05.json"
+  },
+  {
+    "batch": "batch-06",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "70bdee58978936abaf382897c030ff26b73741bb35b631d1abff6c93f9b37c18",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-06.json"
+  },
+  {
+    "batch": "batch-07",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "1632fdaf1518226bcf8bc3985d297142ab03a7217e57a67f02d1e65a6b1fef2b",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-07.json"
+  },
+  {
+    "batch": "batch-08",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "f0038d75d4c96e8e85b40f34c50b04884c07caca459d34612729bb8c43730ea1",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-08.json"
+  },
+  {
+    "batch": "batch-09",
+    "slides": 50,
+    "publishedBatch": false,
+    "sourceSha256": "615a16b198b7d38248b42e23eb308e53582bb688ac98f6f82c96f9bc19afee6b",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-09.json"
+  },
+  {
+    "batch": "batch-10",
+    "slides": 50,
+    "publishedBatch": false,
+    "sourceSha256": "a8eaae0d1de0b2764175e31a14b71901b6f4fa0c60997c2958700db1e9ae2769",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-10.json"
+  },
+  {
+    "batch": "batch-11",
+    "slides": 50,
+    "publishedBatch": false,
+    "sourceSha256": "f4bb2422ef3b91b9033d041ec00566c9d699e2071741d23eabc067520f860653",
+    "sourceCommit": null,
+    "before": 49,
+    "claude": 50,
+    "missingBefore": [
+      "s27"
+    ],
+    "inventory": "batch-11.json"
+  },
+  {
+    "batch": "batch-12",
+    "slides": 50,
+    "publishedBatch": false,
+    "sourceSha256": "08d2a4d2f691cf6a96fcfd7c56e4dee86b4e45199c10db99a698d7d95b4f5ad9",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-12.json"
+  },
+  {
+    "batch": "batch-13",
+    "slides": 33,
+    "publishedBatch": false,
+    "sourceSha256": "f384c7603c8e5d2630d7e9e7d5c59bb3cacf19cd50a26cee04f5239bd148bbd4",
+    "sourceCommit": null,
+    "before": 32,
+    "claude": 33,
+    "missingBefore": [
+      "s29"
+    ],
+    "inventory": "batch-13.json"
+  },
+  {
+    "batch": "batch-14",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "af1a7cfafb45709de051ea9e28534e9f85ed1781dde2df2a11aacc3a31a6b7d3",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-14.json"
+  },
+  {
+    "batch": "batch-15",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "5ec1681e7649121daebc92e0426d5e6b45596731688e16329eb41f7533211079",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-15.json"
+  },
+  {
+    "batch": "batch-16",
+    "slides": 50,
+    "publishedBatch": true,
+    "sourceSha256": "6bdb4afc8bf3ebdb018a31293f1fcdd6dafab83af1e393da8744de061f603080",
+    "sourceCommit": null,
+    "before": 50,
+    "claude": 50,
+    "missingBefore": [],
+    "inventory": "batch-16.json"
+  },
+  {
+    "batch": "batch-17",
+    "slides": 50,
+    "publishedBatch": false,
+    "sourceSha256": "76afb01bb4f5f34839d0097ee57d9f76e61b1ee33381d9ba234345453f1b522d",
+    "sourceCommit": null,
+    "before": 49,
+    "claude": 50,
+    "missingBefore": [
+      "s04"
+    ],
+    "inventory": "batch-17.json"
+  },
+  {
+    "batch": "batch-18",
+    "slides": 11,
+    "publishedBatch": false,
+    "sourceSha256": "54a37088606bf1cfbb5c4406e105666d750cf1609e4e476bbdadc9e2cc2de96f",
+    "sourceCommit": null,
+    "before": 11,
+    "claude": 11,
+    "missingBefore": [],
+    "inventory": "batch-18.json"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "valid": true,
+  "scope": "All2901assets,21packet hashes/entries,19reusedGitblobs,844/550/43source/order/fixed-panel maps,missing3beforefacts and original pilot brief controls verified. No rendering/native/publication.",
+  "log": {
+    "file": "verification.log.gz",
+    "sha256": "9f01c0f535e520aed4c61f696dd15e205b15c19cb3c95052881026c1a42c1be6",
+    "rawSha256": "3ddaf00da4c6174191e3b179a25a5f4308cf4afb3c449c49efe3fdaabfab2648"
+  },
+  "verifierSha256": "e4860b996039ae09b7c57bdfb01995821fddc7fbb36fc180fdf0a95fd23c0562",
+  "recoverySha256": "901296967ae1cad3c709cbb65f58f4277261133ec00a704c385a40b6ad458816"
+}

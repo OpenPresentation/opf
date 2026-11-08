@@ -1,0 +1,199 @@
+{
+  "corpus": [
+    {
+      "batch": "batch-01",
+      "localBriefSha256": "9e5dd825b1623eb78eff6cf25b63b1f0cc88aafcbb4a7bd0d6cddbf67eb70594",
+      "originalClaudeBriefSha256": "9e5dd825b1623eb78eff6cf25b63b1f0cc88aafcbb4a7bd0d6cddbf67eb70594",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-02",
+      "localBriefSha256": "9ff74afba642971d4c1d767b0d9017cfd768288d9a4cbae21fd3bb1f0a51232f",
+      "originalClaudeBriefSha256": "9ff74afba642971d4c1d767b0d9017cfd768288d9a4cbae21fd3bb1f0a51232f",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-03",
+      "localBriefSha256": "06a6877d0dafc4b152c1ec96c2352933b555456b7be1ab99e17522bdbf15d8ad",
+      "originalClaudeBriefSha256": "06a6877d0dafc4b152c1ec96c2352933b555456b7be1ab99e17522bdbf15d8ad",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-04",
+      "localBriefSha256": "4c16c7ca9281dc1a546131f8021e822680454dcfd1cc3e5a00b612aa01fb118b",
+      "originalClaudeBriefSha256": "4c16c7ca9281dc1a546131f8021e822680454dcfd1cc3e5a00b612aa01fb118b",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-05",
+      "localBriefSha256": "8decbb3b6bcc4ef453bde7404a255c49cdd48cda0343de9827b00a46c8bfd07e",
+      "originalClaudeBriefSha256": "8decbb3b6bcc4ef453bde7404a255c49cdd48cda0343de9827b00a46c8bfd07e",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-06",
+      "localBriefSha256": "1d7322d4534a31027b17f474c9b31acaa7f0ab5e2dc2ed7f20c44331053523c4",
+      "originalClaudeBriefSha256": "1d7322d4534a31027b17f474c9b31acaa7f0ab5e2dc2ed7f20c44331053523c4",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-07",
+      "localBriefSha256": "859009a2a5ac0a28bef3abf7a0145f3d221bb2990b028f042987be766ea036e0",
+      "originalClaudeBriefSha256": "859009a2a5ac0a28bef3abf7a0145f3d221bb2990b028f042987be766ea036e0",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-08",
+      "localBriefSha256": "fb2663bb794e1cdaa0647b38d6c4c8885fa834c7f31ad3103676a92fdbb027fa",
+      "originalClaudeBriefSha256": "fb2663bb794e1cdaa0647b38d6c4c8885fa834c7f31ad3103676a92fdbb027fa",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-09",
+      "localBriefSha256": "b5b62cf88aa4f3bd51296e128f1946e6204543a460c801c6ee3bd3989618c184",
+      "originalClaudeBriefSha256": "b5b62cf88aa4f3bd51296e128f1946e6204543a460c801c6ee3bd3989618c184",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-10",
+      "localBriefSha256": "fef888fdd232f41e9ad960471d2aaae4dce97f03bedd058c11dabb303f6f72e3",
+      "originalClaudeBriefSha256": "fef888fdd232f41e9ad960471d2aaae4dce97f03bedd058c11dabb303f6f72e3",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-11",
+      "localBriefSha256": "d0e80f9d49741f4c8f9d9aa7a4141ccc39bb31db93ccf067e5f24218ddb2c397",
+      "originalClaudeBriefSha256": "d0e80f9d49741f4c8f9d9aa7a4141ccc39bb31db93ccf067e5f24218ddb2c397",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-12",
+      "localBriefSha256": "ac1c52f883c5ce03a0ff55907d72f0ede54f0b421d10fabf5ccb5422e05f5cd2",
+      "originalClaudeBriefSha256": "ac1c52f883c5ce03a0ff55907d72f0ede54f0b421d10fabf5ccb5422e05f5cd2",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-13",
+      "localBriefSha256": "3fb3b164bc9c5ab9cea2fd32aaa8abb1a1e1127c296ba796ec3fe3154af5db27",
+      "originalClaudeBriefSha256": "3fb3b164bc9c5ab9cea2fd32aaa8abb1a1e1127c296ba796ec3fe3154af5db27",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-14",
+      "localBriefSha256": "71f774195bd6890853eadcb6b522bacabefe643cbcb41c4eef66b696eea7c747",
+      "originalClaudeBriefSha256": "71f774195bd6890853eadcb6b522bacabefe643cbcb41c4eef66b696eea7c747",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-15",
+      "localBriefSha256": "1b23b6b3926d9a58adce9eaccc567cb77387415676f2c9749d6dd235548cc677",
+      "originalClaudeBriefSha256": "1b23b6b3926d9a58adce9eaccc567cb77387415676f2c9749d6dd235548cc677",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-16",
+      "localBriefSha256": "8bf89fdae031b97ee27118dfe055df4885492b6d8b119a825e055d9526801347",
+      "originalClaudeBriefSha256": "8bf89fdae031b97ee27118dfe055df4885492b6d8b119a825e055d9526801347",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-17",
+      "localBriefSha256": "b2890c9d146cb28339887e3bb73616b4ccd45eb68d367617724262f26ed6719e",
+      "originalClaudeBriefSha256": "b2890c9d146cb28339887e3bb73616b4ccd45eb68d367617724262f26ed6719e",
+      "byteIdentical": true
+    },
+    {
+      "batch": "batch-18",
+      "localBriefSha256": "d9ac6a26ef13ae61b0caf0eff0597725fc14e4b28260ea2d69f5f9e0b36ae854",
+      "originalClaudeBriefSha256": "d9ac6a26ef13ae61b0caf0eff0597725fc14e4b28260ea2d69f5f9e0b36ae854",
+      "byteIdentical": true
+    }
+  ],
+  "pilot": {
+    "localBriefSha256": "19684225823e744a3dbd0e1ae485a7d5a03b0ef78f8741931febe09c7d5ee605",
+    "originalClaudeBriefSha256": "b2dc628a18ab2e1aa4116fd291a32969d2cb16109ad07aa2010dbd5308dcb473",
+    "byteIdentical": false,
+    "originalControl": {
+      "file": "pilot-original-claude-brief.md.gz",
+      "sha256": "79b63a0d9650946157de813babf591e16fbbf17c6d443ba09b13cab628f3b5c6",
+      "rawSha256": "b2dc628a18ab2e1aa4116fd291a32969d2cb16109ad07aa2010dbd5308dcb473",
+      "rawBytes": 14031
+    },
+    "normalizedLineDifferences": [
+      {
+        "line": 235,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 242,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 250,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 259,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 266,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 273,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 280,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 287,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 296,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 304,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 311,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 322,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      },
+      {
+        "line": 333,
+        "local": "- Subtitle: \"Dynamic composition • fictional data\"",
+        "claude": "- Subtitle: \"Illustrative example • fictional data\""
+      }
+    ],
+    "disposition": "Retain both source briefs unchanged. The historical design brief removes the layout cue in13dynamic subtitles; this is not silently relabeled exact content identity. All other normalized lines match."
+  },
+  "declaredBeforeLabel": "2026-11-01, from original task inventory; not independently recovered engine/font provenance",
+  "captureTransport": {
+    "executedSource": "capture-executed.mjs.gz",
+    "executedSourceSha256": "752ce853cd42e4bd5b716ba4f438462ff7c4d069af4576f4033c420d89361443",
+    "gitSource": "capture.mjs",
+    "gitSourceSha256": "40b0080e76e495f56db5db62b0f16d78870ecdb6aff001055763fb801224fab2",
+    "difference": "Only UTF-8 BOM/CRLF normalization for Git transport; exact executed producer bytes are separately retained."
+  }
+}

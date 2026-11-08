@@ -1,0 +1,132 @@
+{
+  "recoverySha256": "901296967ae1cad3c709cbb65f58f4277261133ec00a704c385a40b6ad458816",
+  "packets": [
+    {
+      "file": "packets/sources.zip",
+      "bytes": 6414,
+      "sha256": "0eacd8dda4e041571980654a4b0be73385f9661581e303aff81ede31dfde34cc",
+      "entries": 1
+    },
+    {
+      "file": "packets/batch-01.zip",
+      "bytes": 4910321,
+      "sha256": "0c14f24fa2c37bdc2f9caf2babcdf1ac33d18db3383b26286fe6a5205d5c39f2",
+      "entries": 157
+    },
+    {
+      "file": "packets/batch-02.zip",
+      "bytes": 5329961,
+      "sha256": "f9640c8f8fad894d1ae19890fd4f8242945c1a07332d8063c334980f4c4f9384",
+      "entries": 158
+    },
+    {
+      "file": "packets/batch-03.zip",
+      "bytes": 5253238,
+      "sha256": "02647cab4017cb1937a95a678bfdea5c2fd300ff5e93508bff69a4d95fb75a0e",
+      "entries": 160
+    },
+    {
+      "file": "packets/batch-04.zip",
+      "bytes": 5029984,
+      "sha256": "1f2a7bca25c7e1669361aa1e6a54b7963b9efbce5da259939ad09bb2cf9ff814",
+      "entries": 159
+    },
+    {
+      "file": "packets/batch-05.zip",
+      "bytes": 5469147,
+      "sha256": "b9a370f65845f362d5df996d57cb07151b89efb5b08545ad6587379f6c9d7880",
+      "entries": 162
+    },
+    {
+      "file": "packets/batch-06.zip",
+      "bytes": 5319454,
+      "sha256": "4c4a14e67ebbf40d36372ecd70de055d0623ef060e5a4684ad3b5eb84e6fa29f",
+      "entries": 160
+    },
+    {
+      "file": "packets/batch-07.zip",
+      "bytes": 4889644,
+      "sha256": "910236fb53ad49ed26e7a1313e21c09e914f5f7359e06a8f8bc713d783c241e4",
+      "entries": 163
+    },
+    {
+      "file": "packets/batch-08.zip",
+      "bytes": 4870864,
+      "sha256": "c3904923eb6575564118d8cd8b7d5953b0ddaaf2a0baeb4aaae514e6670eb313",
+      "entries": 161
+    },
+    {
+      "file": "packets/batch-09.zip",
+      "bytes": 5131563,
+      "sha256": "3b59f85b51d1f5a1de2c20e58e4a23d2773da63d08ea6eee8c585476d1e1dace",
+      "entries": 161
+    },
+    {
+      "file": "packets/batch-10.zip",
+      "bytes": 5567090,
+      "sha256": "dba49911dac0c797a0c7785c72b316fa616181a9288088ed6a3ea6183bd350b9",
+      "entries": 171
+    },
+    {
+      "file": "packets/batch-11.zip",
+      "bytes": 5797246,
+      "sha256": "bcdedf9da11c82eb8d16c77298f2d1c8b278b79f96829534a4885bdc3af6c2c5",
+      "entries": 167
+    },
+    {
+      "file": "packets/batch-12.zip",
+      "bytes": 5136923,
+      "sha256": "ba90cee766a0d81dc1e209f8ae6a94c5fa5e666c408313f34e40a65a9fe4cb20",
+      "entries": 175
+    },
+    {
+      "file": "packets/batch-13.zip",
+      "bytes": 3694693,
+      "sha256": "fdab6c8fc1d90336d1fd8a8c822d655bfd5a373762ecd63a29e77ef23bbf6cb5",
+      "entries": 111
+    },
+    {
+      "file": "packets/batch-14.zip",
+      "bytes": 5540342,
+      "sha256": "88674b0f80ccd64270023e15b1d916d2c4ad3e2892d8b1515c984359a74531a1",
+      "entries": 154
+    },
+    {
+      "file": "packets/batch-15.zip",
+      "bytes": 4896672,
+      "sha256": "84c06cc09dac50b0614f506a41c7c49ef833e09f9422c524402ba2a23c5a48f0",
+      "entries": 156
+    },
+    {
+      "file": "packets/batch-16.zip",
+      "bytes": 5319633,
+      "sha256": "818a10e58024b3f6bfde17ca1decc7115515dcaaed11ce18a8309f882466d6ad",
+      "entries": 162
+    },
+    {
+      "file": "packets/batch-17.zip",
+      "bytes": 4900508,
+      "sha256": "2395323bcfa576fed602086ef476aaa62d34618a9b8e010c2530b20b3355fe37",
+      "entries": 159
+    },
+    {
+      "file": "packets/batch-18.zip",
+      "bytes": 1072072,
+      "sha256": "bd0ae12637ffacb371079bd12542985aa0d2e9f0a473f11f9414ea06ef23698b",
+      "entries": 41
+    },
+    {
+      "file": "packets/pilot.zip",
+      "bytes": 4167579,
+      "sha256": "b6ee5d1401263a84e22d45de113b54f264eee71b10c376d049a3d34b00027286",
+      "entries": 139
+    },
+    {
+      "file": "packets/controls.zip",
+      "bytes": 9660,
+      "sha256": "5faa6078d7cc0c8a722d4a59ed1b42dfc00d81bc95231da160f3115cac09c5b7",
+      "entries": 5
+    }
+  ],
+  "captureScriptSha256": "752ce853cd42e4bd5b716ba4f438462ff7c4d069af4576f4033c420d89361443"
+}
