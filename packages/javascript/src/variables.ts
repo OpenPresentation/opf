@@ -614,7 +614,12 @@ function subtreeVariables(value: unknown, path: string, context: Context, found 
     const uses: [string, VariableUse["form"]][] = reference ? [[reference[1] as string, "reference"]] : [...value.matchAll(tokenPattern)].flatMap((match) => (match[1] === undefined ? [] : [[match[1], "token"] as [string, VariableUse["form"]]]));
     for (const [id, form] of uses) {
       const declaration = context.effective.get(id)?.declaration;
-      if (!declaration || declaration.kind === "color") continue;
+      if (declaration?.kind === "color") continue;
+      if (!declaration && isBuiltinName(id)) {
+        const logo = form === "reference" ? parseLogoName(id, context.doc) : undefined;
+        if ((form === "token" && isSlideScopedBuiltin(id)) || (logo && !("error" in logo)) || builtinSource(id, context.doc).ok) continue;
+      }
+      // Unknown names keep the group so the normal walk reports them; omission must never hide a malformed template.
       found.set(id, [...(found.get(id) ?? []), { id, path, form }]);
     }
     return found;
