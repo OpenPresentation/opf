@@ -59,7 +59,7 @@ export function nativeTreeGeometry(kind:NativeTreeKind,frame:Box,entries:readonl
   const width=Math.abs(to[0]-from[0]),straight=width<1e-6;
   // PowerPoint gives a vertical zero-width connector a fixed0.1in bounding box (7.2pt), independent of frame scale.
   const box={x:straight?from[0]-4.8:Math.min(from[0],to[0]),y:from[1],width:straight?9.6:width,height:to[1]-from[1]};
-  const middle=(from[1]+to[1])/2;
+  const middle=(parent.box.y+parent.box.height+to[1])/2;
   const points:readonly [number,number][]=hanging?[from,[from[0],to[1]],to]:[from,[from[0],middle],[to[0],middle],to];
   connectors.push({parent:parent.index,child:child.index,box,points});
  }

@@ -25,3 +25,10 @@ test('SH21: tree geometry refuses malformed topology/frames without silently rep
   for(const invalid of [{...frame,width:0},{...frame,height:-1},{...frame,x:Infinity}])assert.equal(nativeTreeGeometry(kind,invalid,[{text:'Root'}]).ok,false);
  }
 });
+test('SH21: Hierarchy connector crossbars match genuine native paths around the paired foreground/background nodes',()=>{
+ const input=JSON.parse(readFileSync(new URL('./fixtures/sh21-native-tree-paths.json',import.meta.url),'utf8')),frame=Object.fromEntries(Object.entries(input.frame).map(([key,n])=>[key,n/PT]));
+ const result=nativeTreeGeometry(input.kind,frame,input.entries);assert.equal(result.ok,true);const unused=[...input.connectors];
+ const normalize=points=>{const out=[];for(const point of points){if(out.length&&Math.hypot(point[0]-out.at(-1)[0],point[1]-out.at(-1)[1])<.00015)continue;while(out.length>=2){const a=out.at(-2),b=out.at(-1);if(Math.abs((b[0]-a[0])*(point[1]-b[1])-(b[1]-a[1])*(point[0]-b[0]))>.00015)break;out.pop();}out.push(point);}return out;};
+ for(const edge of result.connectors){const box=[edge.box.x,edge.box.y,edge.box.width,edge.box.height].map(n=>n*PT),index=unused.findIndex(e=>e.box.every((n,k)=>Math.abs(n-box[k])<.1));assert.ok(index>=0);const expected=normalize(unused.splice(index,1)[0].points),actual=normalize(edge.points.map(point=>point.map(n=>n*PT)));assert.equal(actual.length,expected.length);for(const[k,point]of actual.entries())for(let axis=0;axis<2;axis++)assert.ok(Math.abs(point[axis]-expected[k][axis])<.00015,'every independent native path point matches');}
+ assert.equal(unused.length,0);
+});
