@@ -69,3 +69,11 @@ Folded#1145 (73187454; product91922e79) and#1146 (85f64a9) into the033preparatio
 Focused check:changed for the RR54 and chart-options follow-ups passes build and both complete test files; its only failure is the missing historical compressed evidence file in this sparse checkout. The root Biome configuration intentionally excludes imported PPTX paths; the generator passes node --check. Waterfall source checks pass typecheck and all164 renderer files; core's sole failure is omitted historical script corpus, and its stale titled-waterfall assertion is now corrected here.
 
 Final action: verify the combined MCP controls, export and review the full corpus at this final source head, push the integration once, dispatch FullCI and wait with pr-gate required-all. No merge or release is approved until those final gates pass. A separate034preparation branch is pushed with reviewed wave2 source; it preserves033growth/layout rules and passes typecheck plus3987core tests, with the one missing historical file restored as exact Git blobs and its35 tests passing separately. No034golden/CI/release has started.
+
+## Final CI batch after the last stale axis assertion
+
+The last CI failure was the older RR105 test still expecting automatic box/waterfall axes. It now asserts exact composed and native values for signed data: waterfall0..6/by1 and box-4..5/by2, including hidden axes. The full file passes. A finite diagnostic run of all73 remaining PPTX contract scripts from that CI stopping point completes with zero failures; no suite selections or assertions changed.
+
+The combined MCP production bundle/doc controls also pass2/2. At c7518474491f8143d4844c6857f3f855cd9fe4db a fresh full corpus opens25files/270slides in owned read-only PowerPoint copies; exact-head evaluation/review follows the final test-only commit. All required-all CI and FullCI must pass before merge; the integration remains the sole033release PR. No release has been dispatched.
+
+Vetoable decision: preserve exact scale assertions and retain the reviewed RR54 old locks rather than relaxing archive or axis checks. Frozen folded sources#1140,#1145,#1146 must never be pushed again.

@@ -30,9 +30,12 @@ const histogram = {type: 'histogram', data: {columns: ['Days'], rows: days.map((
   assert.match(xml, new RegExp(`<cx:binCount val="${layer.bins}"/>`));
   assert.ok(!xml.includes('<cx:axis id="2">'), 'a histogram has no percentage axis');
 }
-// The other chartex constructs keep PowerPoint's automatic axis.
-for (const type of ['waterfall', 'box-and-whisker']) {
-  const xml = await chartexOf({type, data: {columns: ['Step', 'Value'], rows: [['A', 4], ['B', -2], ['C', 3]]}});
-  assert.ok(xml.includes('<cx:valScaling/>'), `${type}: automatic axis`);
+// Signed box data and running-total waterfalls now share explicit core scales too.
+for (const [type, expected] of [['waterfall', [0, 6, 1]], ['box-and-whisker', [-4, 5, 2]]]) {
+  const chart = {type, data: {columns: ['Step', 'Value'], rows: [['A', 4], ['B', -2], ['C', 3]]}};
+  const core = composeSlide(slideOf(chart), {width: 1280, height: 720}).items.find(item => item.field === 'chart').chart.layer.numericAxes.value;
+  assert.deepEqual([core.min, core.max, core.majorUnit], expected, `${type}: exact signed-data scale`);
+  const value = scaling(await chartexOf(chart), 1);
+  assert.deepEqual([attr(value, 'min'), attr(value, 'max'), attr(value, 'majorUnit')], expected, `${type}: native axis is core's, including when hidden`);
 }
-console.log('RR-105 chartex scale: histogram and Pareto value axes, the Pareto percentage step and the bin labels follow core in PowerPoint.');
+console.log('RR-105 chartex scale: histogram, Pareto, waterfall and box value axes, the Pareto percentage step and the bin labels follow core in PowerPoint.');
