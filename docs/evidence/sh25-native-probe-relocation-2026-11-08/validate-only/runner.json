@@ -1,0 +1,187 @@
+﻿{
+    "schemaVersion":  1,
+    "case":  "pie-en-us",
+    "timestamp":  "2026-11-08T09:21:40.6608410Z",
+    "manifestSha256":  "35967d566daaa805dfed897afa8a80ad4a92ede18070fe9919113a43a5450416",
+    "selectedCase":  {
+                         "id":  "pie-en-us",
+                         "worker":  "furniture",
+                         "automaticControlEligible":  true,
+                         "input":  "cases/pie-en-us/input.pptx",
+                         "actionPlan":  "cases/pie-en-us/action-plan.json",
+                         "archiveSha256":  "ab05f31fad0548524f0cd44dda3b532937d20fb98a9619b6e84cffbef0d6a8d3",
+                         "slideCount":  1
+                     },
+    "provenance":  {
+                       "sourceCliManifest":  {
+                                                 "path":  "C:\\opf-work\\sh25-safety-review-01\\sealed-cli-02\\build.json",
+                                                 "sha256":  "609320782757b254a37696fdcb791e1cb78b6864636b319e7f2a92716ee02fa0",
+                                                 "sourceRevision":  "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+                                                 "dirty":  false
+                                             },
+                       "suiteRepository":  {
+                                               "directory":  "C:\\opf-work\\sh25-chart-points",
+                                               "revision":  "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+                                               "dirty":  false,
+                                               "files":  [
+                                                             {
+                                                                 "path":  "scripts/native-acceptance/run-windows.ps1",
+                                                                 "bytes":  14306,
+                                                                 "sha256":  "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+                                                             },
+                                                             {
+                                                                 "path":  "spec/schemas/opf.schema.json",
+                                                                 "bytes":  286160,
+                                                                 "sha256":  "b219f73ace45cfb7b00ab5531420d33c13510c4ab68190f970e6ec0bfd92fa17"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/javascript/src/chart-point-anchors.ts",
+                                                                 "bytes":  16823,
+                                                                 "sha256":  "7e2464f8a592dce306a9651d9025373e873f8d5aafd30fd8da23fc16da6783b8"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/javascript/src/composition.ts",
+                                                                 "bytes":  1013154,
+                                                                 "sha256":  "c48ffa53765a9e557d945c02527bc3b713b224c710762ec81dfa9d97d96843b1"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/javascript/src/chart-axis.ts",
+                                                                 "bytes":  25988,
+                                                                 "sha256":  "f76f8c6a677bce4c0468574fcb0b29e93a8c089305a219cce9e5db4a669c2ca1"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/javascript/src/chart-plot.ts",
+                                                                 "bytes":  19464,
+                                                                 "sha256":  "6f8b11c435b0b5b7e551dbe6c42ef0033060797170a649ebbaf507eb47354374"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/pptx/src/index.js",
+                                                                 "bytes":  464484,
+                                                                 "sha256":  "13efda27a6c31963b1a5f42e5fa1bf30bda9135aa86000484851f9e32f771c87"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/render/src/svg.js",
+                                                                 "bytes":  178651,
+                                                                 "sha256":  "d4a0ba3ac0437f50ed90ae80114e22954f29d8a8d64c1a7db8832aea4767f962"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/cli/src/convert-command.ts",
+                                                                 "bytes":  28811,
+                                                                 "sha256":  "273b23ee38e9e0f7e1da05e6336fd0da5d9ecb4605acaa3bff15666fcb35be76"
+                                                             }
+                                                         ]
+                                           },
+                       "workerRepository":  {
+                                                "directory":  "C:\\opf-work\\sh25-chart-points\\packages\\pptx",
+                                                "revision":  "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+                                                "dirty":  false,
+                                                "files":  [
+                                                              {
+                                                                  "path":  "test/native-furniture-control.ps1",
+                                                                  "bytes":  44005,
+                                                                  "sha256":  "a2e8947593c4e981996c4a6d613fd7550616cd9a8b151cec23b3c2e49956751d"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-furniture-harness-check.ps1",
+                                                                  "bytes":  32157,
+                                                                  "sha256":  "31c802e8b2c95c5486d5240106133b5554ae8d8ec0e241059e3be18bd1b0d462"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-process.ps1",
+                                                                  "bytes":  2341,
+                                                                  "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-process-check.ps1",
+                                                                  "bytes":  2333,
+                                                                  "sha256":  "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+                                                              }
+                                                          ]
+                                            },
+                       "nativeAcceptance":  false,
+                       "registryAcceptance":  false
+                   },
+    "executingCode":  {
+                          "suite":  {
+                                        "revision":  "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+                                        "dirty":  false,
+                                        "files":  [
+                                                      {
+                                                          "path":  "scripts/native-acceptance/run-windows.ps1",
+                                                          "bytes":  14306,
+                                                          "sha256":  "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+                                                      },
+                                                      {
+                                                          "path":  "spec/schemas/opf.schema.json",
+                                                          "bytes":  286160,
+                                                          "sha256":  "b219f73ace45cfb7b00ab5531420d33c13510c4ab68190f970e6ec0bfd92fa17"
+                                                      },
+                                                      {
+                                                          "path":  "packages/javascript/src/chart-point-anchors.ts",
+                                                          "bytes":  16823,
+                                                          "sha256":  "7e2464f8a592dce306a9651d9025373e873f8d5aafd30fd8da23fc16da6783b8"
+                                                      },
+                                                      {
+                                                          "path":  "packages/javascript/src/composition.ts",
+                                                          "bytes":  1013154,
+                                                          "sha256":  "c48ffa53765a9e557d945c02527bc3b713b224c710762ec81dfa9d97d96843b1"
+                                                      },
+                                                      {
+                                                          "path":  "packages/javascript/src/chart-axis.ts",
+                                                          "bytes":  25988,
+                                                          "sha256":  "f76f8c6a677bce4c0468574fcb0b29e93a8c089305a219cce9e5db4a669c2ca1"
+                                                      },
+                                                      {
+                                                          "path":  "packages/javascript/src/chart-plot.ts",
+                                                          "bytes":  19464,
+                                                          "sha256":  "6f8b11c435b0b5b7e551dbe6c42ef0033060797170a649ebbaf507eb47354374"
+                                                      },
+                                                      {
+                                                          "path":  "packages/pptx/src/index.js",
+                                                          "bytes":  464484,
+                                                          "sha256":  "13efda27a6c31963b1a5f42e5fa1bf30bda9135aa86000484851f9e32f771c87"
+                                                      },
+                                                      {
+                                                          "path":  "packages/render/src/svg.js",
+                                                          "bytes":  178651,
+                                                          "sha256":  "d4a0ba3ac0437f50ed90ae80114e22954f29d8a8d64c1a7db8832aea4767f962"
+                                                      },
+                                                      {
+                                                          "path":  "packages/cli/src/convert-command.ts",
+                                                          "bytes":  28811,
+                                                          "sha256":  "273b23ee38e9e0f7e1da05e6336fd0da5d9ecb4605acaa3bff15666fcb35be76"
+                                                      }
+                                                  ]
+                                    },
+                          "workers":  {
+                                          "revision":  "6a07ee6aedad12a3c82507bd3216ce6c3e9a531d",
+                                          "dirty":  false,
+                                          "files":  [
+                                                        {
+                                                            "path":  "test/native-furniture-control.ps1",
+                                                            "bytes":  44005,
+                                                            "sha256":  "a2e8947593c4e981996c4a6d613fd7550616cd9a8b151cec23b3c2e49956751d"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-furniture-harness-check.ps1",
+                                                            "bytes":  32157,
+                                                            "sha256":  "31c802e8b2c95c5486d5240106133b5554ae8d8ec0e241059e3be18bd1b0d462"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-process.ps1",
+                                                            "bytes":  2341,
+                                                            "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-process-check.ps1",
+                                                            "bytes":  2333,
+                                                            "sha256":  "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+                                                        }
+                                                    ]
+                                      }
+                      },
+    "timeoutSeconds":  60,
+    "status":  "pure-checks-completed; native-not-run",
+    "nativeAcceptance":  false,
+    "registryAcceptance":  false
+}

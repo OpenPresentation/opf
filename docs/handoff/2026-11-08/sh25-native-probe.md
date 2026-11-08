@@ -28,3 +28,11 @@ Every enabled placement must agree with independent actual native mark coordinat
 Actual API availability, every required four-pixel proof, adequate signed/scale/option witnesses, and actual SaveCopyAs/reopen/reimport of current chart and annotation semantics remain owed. Source and archived inputs must remain immutable; a later producer requires new provenance and byte-identity or explicit newly qualified evidence. Font and exploratory native runs remain paused while 0.33 publishes.
 
 Git-object verification of archive commit 9c9b6543bf009ee21efd627a895105bf8c4e2621 passed: all 526 inventory entries match committed blob bytes and SHA-256 (14471108 bytes). See [verification receipt](sh25-native-probe-git-verification.json). The sealed packet is unchanged by this attestation.
+
+## Preserved producer path after deterministic continuation
+
+The mutable SH25 continuation has normally merged newer approved integration sources. To run the original unchanged suite, use the separately preserved clean checkout C:/opf-work/sh25-source-6a07 at exact 6a07ee6aedad12a3c82507bd3216ce6c3e9a531d. Its runner and worker hashes remain the recorded ones. A fresh [relocated ValidateOnly receipt](../../evidence/sh25-native-probe-relocation-2026-11-08/validate-only/runner.json) confirms the archived suite and different exact-source path pass without Office. The mutable C:/opf-work/sh25-chart-points checkout no longer satisfies this original suite binding; the runner correctly rejects that newer HEAD.
+
+    powershell -NoProfile -NonInteractive -File C:/opf-work/sh25-source-6a07/scripts/native-acceptance/run-windows.ps1 -SuiteDirectory C:/opf-work/sh25-probe-evidence/docs/evidence/sh25-native-probes-2026-11-08/sealed-cli -PptxRepository C:/opf-work/sh25-source-6a07/packages/pptx -Case pie-en-us -OutputDirectory C:/opf-work/sh25-native-pie-01 -TimeoutSeconds 60
+
+Parent alone runs the actual command after the hold. Add -ValidateOnly for pure validation. Pie and doughnut remain separate first owned attempts. All original 208 sealed files and the suite hash remain unchanged.
