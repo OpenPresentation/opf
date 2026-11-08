@@ -1,7 +1,13 @@
 {
   "schemaVersion": 1,
   "scope": "Evidence only; visual acceptance remains held",
+  "bytePreservation": "Scoped .gitattributes disables line-ending normalization so raw native receipts, sealed code and hash manifests retain exact source bytes.",
   "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
     {
       "path": "README.md",
       "bytes": 2902,
