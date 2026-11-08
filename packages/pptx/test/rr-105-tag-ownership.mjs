@@ -21,6 +21,7 @@ const renameTags=bytes=>edit(bytes,parts=>{
  assert.ok(!Object.keys(parts).some(name=>/^ppt\/tags\/opf/i.test(name)));
 });
 const runs=value=>Array.isArray(value)?value.flatMap(runs):value&&typeof value==='object'?[...(typeof value.text==='string'?[value]:[]),...Object.values(value).filter(v=>v&&typeof v==='object').flatMap(runs)]:[];
+const characters=value=>typeof value==='string'?value:Array.isArray(value)?value.map(characters).join(''):value&&typeof value==='object'?characters(value.text):'';
 const source11=JSON.parse(await read('11-source.json'));
 
 test('retained Office inputs and saved archives are exact immutable fixtures',async()=>{
@@ -59,7 +60,11 @@ for(const kind of ['foreign-name','unreferenced','malformed','stale','moved','du
 });
 test('a genuine foreign alternate proofing pair remains current even beside valid OPF structure',async()=>{
  const bytes=await exportDeck(source11),candidate=edit(bytes,parts=>changeSlide(parts,1,xml=>xml.replaceAll('lang="fr-FR" altLang="en-US"','lang="en-US" altLang="ar-SA"'))),diagnostics=[],result=await importDeck(candidate,diagnostics);
- assert.equal(result.language,'en-US');assert.ok(runs(result.slides[0]).some(run=>run.lang==='en-US'&&run.text.includes('Item 1')));assert.ok(diagnostics.some(d=>d.code==='native-language-unowned'));
+ assert.equal(result.language,'en-US');assert.equal(characters(result.slides[0].items),source11.slides[0].items[0][0].text);assert.ok(diagnostics.some(d=>d.code==='native-language-unowned'));
+ // With sufficient current Arabic base votes, English must stay an explicit override.
+ const surrounded=structuredClone(source11);surrounded.slides[0].subtitle='عنوان عربي إضافي';surrounded.slides[0].tag='لغة عربية';
+ const mixed=edit(await exportDeck(surrounded),parts=>changeSlide(parts,1,xml=>xml.replaceAll('lang="fr-FR" altLang="en-US"','lang="en-US" altLang="ar-SA"'))),mixedDiagnostics=[],mixedResult=await importDeck(mixed,mixedDiagnostics);
+ assert.equal(mixedResult.language,'ar-SA');assert.ok(runs(mixedResult.slides[0]).some(run=>run.lang==='en-US'&&run.text.includes('Item 1')));assert.ok(mixedDiagnostics.some(d=>d.code==='native-language-unowned'));
 });
 test('pasted unowned slide uses its own actual vote while owned slide keeps its base',async()=>{
  const source={language:'ar-SA',slides:[source11.slides[0],source11.slides[0]]},bytes=await exportDeck(source),candidate=edit(bytes,parts=>changeSlide(parts,2,xml=>xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g,''))),result=await importDeck(candidate);

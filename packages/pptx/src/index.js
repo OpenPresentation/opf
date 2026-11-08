@@ -43,7 +43,7 @@ import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -540,10 +540,10 @@ export async function fromPptx(input, options = {}) {
   const languageThemePath = presentationThemePath(presentationRoot, presentationRels, path => parseRelationships(entries, path), entries);
   // opf-pptx#168: each slide's theme, through its layout and master (several masters carry per-slide script fonts).
   const relatedPart = (path, type) => path ? [...parseRelationships(entries, path).values()].find(rel => rel.type?.endsWith(`/${type}`) && rel.path && entries[rel.path])?.path : undefined;
-  const hasOpfTags = Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path));
+  const ownedSlides = opfSlideOwnership(entries, slidePaths);
   const nativeLanguages = nativeLanguageReadView(entries, parseRelationships, options.onDiagnostic);
   const observedLanguage = observeLanguage({
-    preferBaseRuns: hasOpfTags,
+    preferBaseRuns: ownedSlides,
     slides: slidePaths.map(path => decodeText(nativeLanguages.get(path) ?? entries[path])),
     theme: languageThemePath && entries[languageThemePath] ? decodeText(entries[languageThemePath]) : null,
     themePath: languageThemePath,
@@ -635,7 +635,7 @@ export async function fromPptx(input, options = {}) {
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
     const slideLanguage = observedLanguage.slides?.[index] ?? observedLanguage;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, nativeLanguages, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: hasOpfTags ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, nativeLanguages, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: ownedSlides[index] ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
     if (slideLanguage.language !== undefined && slideLanguage.language !== observedLanguage.language) imported.slides[index].language = slideLanguage.language;
   }
   if (datasets) imported.datasets = datasets;
