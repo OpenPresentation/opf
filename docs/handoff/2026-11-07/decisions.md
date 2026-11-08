@@ -89,3 +89,5 @@ The owner was away and asked the supervisor to decide and keep going. Each line 
 - Keep all new live domains unavailable until product exports, parent/node edits and save/reopen pass the unchanged native gate. Measured rectangles alone do not qualify an editable layout.
 
 - Final sampler maintenance (vetoable): append new layouts after the existing49 slides, preserving all existing authored content and native witness ordinals. Refresh all referenced layout records through `updateFromCatalog`/`applyPatch` and `embed`; this sampler presents the current catalog rather than freezing obsolete record revisions. The maintained updater refuses unknown/duplicate layout references, validates standalone portability and is idempotent.
+
+- v0.34 bundle ceilings (vetoable): retain the core catalog-free generator and its3% rule, and give reviewed MCP unminified/minified/gzip/public-doc assertions the same3% headroom rounded to1000bytes. Exact source measurements and unchanged data exclusions are in [mcp-size-budget-034.md](mcp-size-budget-034.md). No public page or baseline tolerance is reduced to pass.
