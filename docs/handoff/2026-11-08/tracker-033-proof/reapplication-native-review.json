@@ -7,5 +7,9 @@
   "files": 25,
   "all25FileHashesExact": true,
   "declaredSlides": 270,
-  "scope": "Read-only identity comparison of accepted existing qualification inputs; no new rendering/Office or native acceptance."
+  "scope": "Read-only identity comparison of accepted existing qualification inputs; no new rendering/Office or native acceptance.",
+  "actualFiles": 25,
+  "actualSlides": 270,
+  "actualVisibleSlides": 268,
+  "countRecorderNote": "Initial numeric-only conversion refused the two explicit hidden-slide count strings (10 visible of 11; 9 visible of 10). Corrected parsing preserves actual total and visible totals; no product/native fact changed."
 }

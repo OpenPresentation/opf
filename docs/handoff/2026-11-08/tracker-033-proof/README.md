@@ -13,3 +13,5 @@ The initial before-tests-only receipts show14/15 package tests plus the same sta
 Follow-up strict font freshness also passes: node scripts/build-font-tracker.mjs --check reports Font tracker is up to date with OPF_TRACKER_STALE unset. The first sparse attempt failed literally on missing font-replacements report; its receipts are retained under sparse-font-*. Thirty-seven explicit committed inputs were restored and byte-verified against7c0; font-restored-inputs.json records every size/hash. This is a freshness check, not a new font-fidelity or font test-suite acceptance claim.
 
 The [strict local Release prepare preflight](release-prepare/README.md) passes with normal gallery stability, exact captured declarations/minor-bump plan and unchanged tracked bytes. Top-level Release rehearsal and actual release remain required.
+
+The [independent reapplication review and fixture handoff](reapplication-review.md) accepts only the allowed tracker/handoff delta and proves product/native-input identity. Strict mapped checks and actual release remain the coordinator's next steps.
