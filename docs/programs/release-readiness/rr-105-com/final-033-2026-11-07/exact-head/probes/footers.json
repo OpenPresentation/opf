@@ -1,0 +1,693 @@
+﻿{
+    "deck":  "footers",
+    "variant":  "default",
+    "name":  "footers",
+    "sha256":  "6d68b8e5f3978496dbecb216df16b22164721c948cf5776f488c961847fbbfe9",
+    "opened":  true,
+    "previewSlides":  4,
+    "openSeconds":  0.2,
+    "slideCount":  4,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  true,
+                                      "footerText":  "Northwind Logistics",
+                                      "slideNumber":  true,
+                                      "date":  true,
+                                      "placeholders":  [
+                                                           {
+                                                               "type":  15,
+                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                               "text":  "Northwind Logistics"
+                                                           },
+                                                           {
+                                                               "type":  13,
+                                                               "name":  "OPF furniture 0 part 1 line 0",
+                                                               "text":  "Page 1 of 4"
+                                                           },
+                                                           {
+                                                               "type":  16,
+                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                               "text":  "2026-11-07"
+                                                           }
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "First slide",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     175.68,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        167.93
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF text slides.0.text line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.58,
+                                                      275.41,
+                                                      873.6,
+                                                      51.24
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "The footer reads Page 1 of 4.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  42,
+                                                       "maxSize":  42,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.58,
+                                                                     275.41,
+                                                                     514.46,
+                                                                     50.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.58,
+                                                                        505.97
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 0 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.67,
+                                                      502.69,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  15,
+                                          "text":  {
+                                                       "text":  "Northwind Logistics",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.67,
+                                                                     502.69,
+                                                                     105.59,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.67,
+                                                                        103.09
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 1 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.8,
+                                                      502.69,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  13,
+                                          "text":  {
+                                                       "text":  "Page 1 of 4",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     452.25,
+                                                                     502.69,
+                                                                     58,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        452.25,
+                                                                        55.51
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 0 part 2 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      637.28,
+                                                      502.69,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  16,
+                                          "text":  {
+                                                       "text":  "2026-11-07",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     857.3,
+                                                                     502.69,
+                                                                     60.85,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        857.3,
+                                                                        58.35
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  true,
+                                      "footerText":  "Northwind Logistics",
+                                      "slideNumber":  true,
+                                      "date":  true,
+                                      "placeholders":  [
+                                                           {
+                                                               "type":  15,
+                                                               "name":  "OPF furniture 1 part 0 line 0",
+                                                               "text":  "Northwind Logistics"
+                                                           },
+                                                           {
+                                                               "type":  13,
+                                                               "name":  "OPF furniture 1 part 1 line 0",
+                                                               "text":  "Page 2 of 4"
+                                                           },
+                                                           {
+                                                               "type":  16,
+                                                               "name":  "OPF furniture 1 part 2 line 0",
+                                                               "text":  "2026-11-07"
+                                                           }
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Second slide",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     228.88,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        221.13
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF text slides.1.text line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.58,
+                                                      275.41,
+                                                      873.6,
+                                                      51.24
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "The footer reads Page 2 of 4.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  42,
+                                                       "maxSize":  42,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.58,
+                                                                     275.41,
+                                                                     514.46,
+                                                                     50.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.58,
+                                                                        505.97
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 1 part 0 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.67,
+                                                      502.69,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  15,
+                                          "text":  {
+                                                       "text":  "Northwind Logistics",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.67,
+                                                                     502.69,
+                                                                     105.59,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.67,
+                                                                        103.09
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 1 part 1 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      340.8,
+                                                      502.69,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  13,
+                                          "text":  {
+                                                       "text":  "Page 2 of 4",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     452.25,
+                                                                     502.69,
+                                                                     58,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        452.25,
+                                                                        55.51
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 1 part 2 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      637.28,
+                                                      502.69,
+                                                      278.4,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  16,
+                                          "text":  {
+                                                       "text":  "2026-11-07",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     857.3,
+                                                                     502.69,
+                                                                     60.85,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        857.3,
+                                                                        58.35
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  3,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.2.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.71,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Third slide",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.71,
+                                                                     43.2,
+                                                                     186.19,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.71,
+                                                                        178.44
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF text slides.2.text line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.58,
+                                                      276.96,
+                                                      873.6,
+                                                      51.24
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "This slide hides its footer.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  42,
+                                                       "maxSize":  42,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.58,
+                                                                     276.96,
+                                                                     462.48,
+                                                                     50.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.58,
+                                                                        453.99
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  4,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  true,
+                                      "date":  false,
+                                      "placeholders":  [
+                                                           {
+                                                               "type":  13,
+                                                               "name":  "OPF furniture 3 part 0 line 0",
+                                                               "text":  "4 / 4"
+                                                           }
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.3.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Fourth slide",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     211.69,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        203.94
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF text slides.3.text line 0",
+                                          "type":  17,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.58,
+                                                      275.94,
+                                                      873.6,
+                                                      51.24
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "The footer reads 4 / 4.",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  42,
+                                                       "maxSize":  42,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     43.58,
+                                                                     275.94,
+                                                                     397.06,
+                                                                     50.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.58,
+                                                                        388.57
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF furniture 3 part 0 line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      503.76,
+                                                      873.6,
+                                                      14.64
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  13,
+                                          "text":  {
+                                                       "text":  "4 / 4",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  12,
+                                                       "maxSize":  12,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     469.06,
+                                                                     503.76,
+                                                                     24.38,
+                                                                     14.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        469.06,
+                                                                        21.88
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+                                                        "Page 1 of 4"
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+                                                        "Page 2 of 4"
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  258,
+                                        "position":  3,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  259,
+                                        "position":  4,
+                                        "numbers":  [
+                                                        "4 / 4"
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+                                                       "Page 1 of 4"
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  258,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  259,
+                                       "position":  3,
+                                       "numbers":  [
+                                                       "3 / 4"
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  4,
+                                       "numbers":  [
+                                                       "Page 4 of 4"
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  0.7
+}

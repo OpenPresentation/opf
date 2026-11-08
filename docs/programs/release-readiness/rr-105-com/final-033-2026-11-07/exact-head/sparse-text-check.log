@@ -1,0 +1,35 @@
+
+> openpresentation-workspace@ check:text C:\opf-work\release-033-final
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (2.1181ms)
+✖ real compressed evidence is scanned as its text, preserving input bytes (3.1324ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (1.7207ms)
+✔ existing recognized binary evidence remains distinct from text (0.1036ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.4709ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.4126ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 79.9477
+
+✖ failing tests:
+
+test at scripts\check-text-integrity.test.mjs:17:1
+✖ real compressed evidence is scanned as its text, preserving input bytes (3.1324ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\release-033-final\docs\evidence\rich-input-and-platform-ci-20260915\painting-Linux.json.gz'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///C:/opf-work/release-033-final/scripts/check-text-integrity.test.mjs:18:17)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\release-033-final\\docs\\evidence\\rich-input-and-platform-ci-20260915\\painting-Linux.json.gz'
+  }
+ ELIFECYCLE  Command failed with exit code 1.

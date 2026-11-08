@@ -1,0 +1,9 @@
+check-changed: 4 changed files since (given) (plus uncommitted and untracked)
+  agent-slot: waiting for a heavy-check slot (3 busy: pid 12252 pnpm --filter @openpresentation/opf-pptx --fail-if-no-match  1m; pid 51568 pnpm --filter @openpresentation/opf-render --fail-if-no-matc 9m; pid 45736 pnpm --filter @openpresentation/opf-pptx --fail-if-no-match  3m)
+ok  build (164.8 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (1.2 s)
+FAILED  pnpm run check:text (0.9 s)
+ok  pnpm run check:font-hotlinks (9.1 s)
+-  typecheck
+  agent-slot: waiting for a heavy-check slot (3 busy: pid 39824 pnpm --filter @openpresentation/mcp --fail-if-no-match test 0m; pid 51568 pnpm --filter @openpresentation/opf-render --fail-if-no-matc 12m; pid 45736 pnpm --filter @openpresentation/opf-pptx --fail-if-no-match  6m)

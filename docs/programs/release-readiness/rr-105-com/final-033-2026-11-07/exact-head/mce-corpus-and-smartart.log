@@ -1,0 +1,3 @@
+Drawing IDs: 14 MCE feasible-branch collision controls pass.
+Corpus structure passed: 137 decks, 920 slides, 1405 explicitly substituted images; fallback fonts, valid slide XML, unique IDs, finite geometry, table grids, valid content-type targets and imported slide counts.
+SH-16 SmartArt fallback passed: the mc:AlternateContent wrapper (dgm1612 choice, picture fallback of the same id and name at the frame grown by its bleed), the preview pixels (base corners, apex and diamond tips included), safe typefaces, a markup-compatibility reader without SmartArt, the round trip from the choice and from the fallback alone, a replaced fallback, references-only provenance, the unavailable fallback and determinism.

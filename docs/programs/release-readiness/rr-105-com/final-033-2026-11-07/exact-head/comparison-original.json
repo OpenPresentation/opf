@@ -1,0 +1,64 @@
+{
+  "revision": "d26031b98ff9316d479f8db7a383511371cab4a6",
+  "previewCompared": 171,
+  "previewChanged": [],
+  "nativeCompared": 270,
+  "nativeChanged": [
+    {
+      "file": "layout-harvest",
+      "slide": 1,
+      "changedChannels": 1506,
+      "meanChannelDelta": 0.016003960503472223,
+      "oldSha256": "ab0bab4d1875d5d9dec47c04dd26397765b40c892757604441e2e39714ae6927",
+      "newSha256": "076a5a01ecbbaaab9d5835806d23f26e8c62e639e36786bf66eaec6243278ed3"
+    },
+    {
+      "file": "layout-harvest",
+      "slide": 19,
+      "changedChannels": 3267,
+      "meanChannelDelta": 0.05296061197916667,
+      "oldSha256": "4b1b5e6734ae28355e2adbc89dac120004b4499a7baf683fc3b14087243901f0",
+      "newSha256": "30fcaf1b912f02ad1c0871e3a01146adad60a2519a518bb60a92380700390be4"
+    },
+    {
+      "file": "diagrams",
+      "slide": 2,
+      "changedChannels": 267,
+      "meanChannelDelta": 0.006630859375,
+      "oldSha256": "58d9f758b14b3c1b9d344750af7bc5318c63309e6d2cd46138f7cb00e8f93d32",
+      "newSha256": "30b581f7e791f261fd169a8a515233a0206294944ac340329507adb31fde0c5a"
+    },
+    {
+      "file": "diagrams~picture",
+      "slide": 3,
+      "changedChannels": 15,
+      "meanChannelDelta": 0.000018446180555555556,
+      "oldSha256": "a881349c09fd1f8cdd0608405a268e5fd7757f6a51f42bfe521d7ee317b5594a",
+      "newSha256": "79b501a97ba249fe949258dac12efdc48d13bc27f9a23a302bf211550529e40f"
+    },
+    {
+      "file": "layout-sampler",
+      "slide": 31,
+      "changedChannels": 29634,
+      "meanChannelDelta": 1.6047371419270833,
+      "oldSha256": "c2fcfa97fe396352ae0040f26f1090dc7256514f610ca79ea343f160af95b6f4",
+      "newSha256": "fa55ba9cd3aac983cf4a713fef4b61192494b478086661ff0b718356fd824e29"
+    },
+    {
+      "file": "layout-sampler~native-body",
+      "slide": 31,
+      "changedChannels": 29634,
+      "meanChannelDelta": 1.6047371419270833,
+      "oldSha256": "c2fcfa97fe396352ae0040f26f1090dc7256514f610ca79ea343f160af95b6f4",
+      "newSha256": "fa55ba9cd3aac983cf4a713fef4b61192494b478086661ff0b718356fd824e29"
+    },
+    {
+      "file": "chart-type-sampler",
+      "slide": 1,
+      "changedChannels": 28643,
+      "meanChannelDelta": 0.6197707790798611,
+      "oldSha256": "3164c0cbb5b49e9bf097d4b36ab1123c717d0f626703b73b2b1f4f0e37037a32",
+      "newSha256": "bf08fcf6dfd64430a744792bfacacde062b58df3c47911d5faf4100b09493db2"
+    }
+  ]
+}

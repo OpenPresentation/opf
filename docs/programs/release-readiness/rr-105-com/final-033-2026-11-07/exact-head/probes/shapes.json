@@ -1,0 +1,1905 @@
+﻿{
+    "deck":  "shapes",
+    "variant":  "default",
+    "name":  "shapes",
+    "sha256":  "267365357c29f2bb0c046aa56a009c9f2c06facf613e11b81c30663501f699a4",
+    "opened":  true,
+    "previewSlides":  8,
+    "openSeconds":  0.2,
+    "slideCount":  8,
+    "slideSize":  [
+                      960,
+                      540
+                  ],
+    "slides":  [
+                   {
+                       "index":  1,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Presets and adjust values",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     445.84,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        438.09
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.0.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "rect",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     127.86,
+                                                                     166.25,
+                                                                     39.84,
+                                                                     25.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        127.86,
+                                                                        35.59
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.1.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      266.1,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "roundRect",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     321.01,
+                                                                     166.25,
+                                                                     99.34,
+                                                                     25.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        321.01,
+                                                                        95.1
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.2.shape",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      499.4,
+                                                      110.61,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "ellipse",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     561.33,
+                                                                     190,
+                                                                     64.5,
+                                                                     25.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        561.33,
+                                                                        60.26
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.3.shape",
+                                          "type":  1,
+                                          "autoShapeType":  52,
+                                          "box":  [
+                                                      711.9,
+                                                      110.61,
+                                                      204.9,
+                                                      102.45
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "chevron",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     777.75,
+                                                                     149.18,
+                                                                     77.44,
+                                                                     25.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        777.75,
+                                                                        73.2
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.4.shape",
+                                          "type":  1,
+                                          "autoShapeType":  33,
+                                          "box":  [
+                                                      43.2,
+                                                      312.71,
+                                                      204.9,
+                                                      102.45
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "rightArrow",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     86.79,
+                                                                     351.27,
+                                                                     97.39,
+                                                                     25.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        86.79,
+                                                                        93.14
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.5.shape",
+                                          "type":  1,
+                                          "autoShapeType":  92,
+                                          "box":  [
+                                                      276.5,
+                                                      312.71,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "star5",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     345.47,
+                                                                     405.52,
+                                                                     50.42,
+                                                                     25.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        345.47,
+                                                                        46.18
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.6.shape",
+                                          "type":  1,
+                                          "autoShapeType":  105,
+                                          "box":  [
+                                                      489,
+                                                      312.71,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Callout",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     558.08,
+                                                                     368.35,
+                                                                     71,
+                                                                     25.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        558.08,
+                                                                        66.75
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.0.blocks.7.shape",
+                                          "type":  1,
+                                          "autoShapeType":  63,
+                                          "box":  [
+                                                      722.3,
+                                                      312.71,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Decide?",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  21,
+                                                       "maxSize":  21,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     777.25,
+                                                                     392.1,
+                                                                     78.45,
+                                                                     25.32
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        777.25,
+                                                                        74.21
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  2,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.1.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Custom outlines and shaded paths",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     603.21,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        595.47
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.1.blocks.0.path",
+                                          "type":  5,
+                                          "autoShapeType":  138,
+                                          "box":  [
+                                                      165.05,
+                                                      110.61,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "path",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     225.56,
+                                                                     183.57,
+                                                                     69.59,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        225.56,
+                                                                        63.09
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.1.blocks.1.path",
+                                          "type":  5,
+                                          "autoShapeType":  138,
+                                          "box":  [
+                                                      610.85,
+                                                      110.61,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.1.blocks.2.shape",
+                                          "type":  1,
+                                          "autoShapeType":  13,
+                                          "box":  [
+                                                      211.08,
+                                                      312.71,
+                                                      92.05,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "can",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     231.32,
+                                                                     391.42,
+                                                                     58.06,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        231.32,
+                                                                        51.57
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.1.blocks.3.shape",
+                                          "type":  1,
+                                          "autoShapeType":  14,
+                                          "box":  [
+                                                      610.85,
+                                                      312.71,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "cube",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     644.89,
+                                                                     408.67,
+                                                                     76.5,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        644.89,
+                                                                        70.01
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  3,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.2.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Fills",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     80.28,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        72.54
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.2.blocks.0.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "none",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     110.53,
+                                                                     159.82,
+                                                                     76.75,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        110.53,
+                                                                        70.25
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.2.blocks.1.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      266.1,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "solid",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     334.74,
+                                                                     159.82,
+                                                                     74.13,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        334.74,
+                                                                        67.63
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.2.blocks.2.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      489,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "hex alpha",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     524.7,
+                                                                     159.82,
+                                                                     140.01,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        524.7,
+                                                                        133.51
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.2.blocks.3.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      711.9,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "opacity",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     763.04,
+                                                                     159.82,
+                                                                     109.13,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        763.04,
+                                                                        102.63
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.2.blocks.4.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      312.71,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "linear",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     106.28,
+                                                                     361.92,
+                                                                     85.25,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        106.28,
+                                                                        78.75
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.2.blocks.5.shape",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      276.5,
+                                                      312.71,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "radial",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     329.41,
+                                                                     385.66,
+                                                                     84.79,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        329.41,
+                                                                        78.3
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.2.blocks.6.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      489,
+                                                      312.71,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "pattern",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     540.92,
+                                                                     361.92,
+                                                                     107.56,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        540.92,
+                                                                        101.07
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.2.blocks.7.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      711.9,
+                                                      312.71,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Lighter 60%",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     732.93,
+                                                                     361.92,
+                                                                     169.35,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        732.93,
+                                                                        162.85
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  4,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.3.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Strokes",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     139.44,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        131.7
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.3.blocks.0.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "dash",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     116.15,
+                                                                     162.32,
+                                                                     64.63,
+                                                                     33.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        116.15,
+                                                                        59.01
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.3.blocks.1.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      266.1,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "[4, 2] round",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     300.8,
+                                                                     162.32,
+                                                                     141.12,
+                                                                     33.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        300.8,
+                                                                        135.5
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.3.blocks.2.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      489,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "double",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     549.58,
+                                                                     162.32,
+                                                                     89.37,
+                                                                     33.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        549.58,
+                                                                        83.75
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.3.blocks.3.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      711.9,
+                                                      110.61,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "thickThin inside",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     720.79,
+                                                                     162.32,
+                                                                     192.75,
+                                                                     33.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        720.79,
+                                                                        187.13
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.3.blocks.4.shape",
+                                          "type":  1,
+                                          "autoShapeType":  7,
+                                          "box":  [
+                                                      53.6,
+                                                      312.71,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "miter",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     114.16,
+                                                                     434.18,
+                                                                     68.61,
+                                                                     33.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        114.16,
+                                                                        62.99
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.3.blocks.5.shape",
+                                          "type":  1,
+                                          "autoShapeType":  7,
+                                          "box":  [
+                                                      276.5,
+                                                      312.71,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "bevel",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     336.39,
+                                                                     434.18,
+                                                                     69.95,
+                                                                     33.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        336.39,
+                                                                        64.33
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.3.blocks.6.shape",
+                                          "type":  1,
+                                          "autoShapeType":  25,
+                                          "box":  [
+                                                      591.45,
+                                                      312.71,
+                                                      92.05,
+                                                      92.05
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.3.blocks.7.shape",
+                                          "type":  5,
+                                          "autoShapeType":  138,
+                                          "box":  [
+                                                      711.9,
+                                                      312.71,
+                                                      204.9,
+                                                      136.6
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "gradient, sketch",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     761.58,
+                                                                     347.41,
+                                                                     111.17,
+                                                                     67.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        761.58,
+                                                                        111.17
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  5,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.4.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.71,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Theme styles",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.71,
+                                                                     43.2,
+                                                                     236.92,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.71,
+                                                                        229.17
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.4.blocks.0.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      119.03,
+                                                      110.61,
+                                                      276.14,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "none",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     221.98,
+                                                                     183.57,
+                                                                     76.75,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        221.98,
+                                                                        70.26
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.4.blocks.1.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      564.83,
+                                                      110.61,
+                                                      276.14,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "subtle",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     659.15,
+                                                                     183.57,
+                                                                     94,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        659.15,
+                                                                        87.5
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.4.blocks.2.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      119.03,
+                                                      312.71,
+                                                      276.14,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "moderate",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     189.99,
+                                                                     385.66,
+                                                                     140.73,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        189.99,
+                                                                        134.23
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.4.blocks.3.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      564.83,
+                                                      312.71,
+                                                      276.14,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "intense",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  32.25,
+                                                       "maxSize":  32.25,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     648.1,
+                                                                     385.66,
+                                                                     116.09,
+                                                                     38.18
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        648.1,
+                                                                        109.6
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  6,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.5.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.71,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Text inside a shape",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.71,
+                                                                     43.2,
+                                                                     330.14,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.71,
+                                                                        322.4
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.5.blocks.0.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      119.03,
+                                                      110.61,
+                                                      276.14,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Anchored at the top with 16 px insets",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     139.73,
+                                                                     122.61,
+                                                                     240.37,
+                                                                     67.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        139.73,
+                                                                        240.37
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.5.blocks.1.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      564.83,
+                                                      110.61,
+                                                      276.14,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Bottom, with rich runs",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     598.53,
+                                                                     218.52,
+                                                                     214.37,
+                                                                     67.19
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        598.53,
+                                                                        214.37
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.5.blocks.2.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      201.87,
+                                                      312.71,
+                                                      110.46,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Vertical",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     240.51,
+                                                                     359.24,
+                                                                     33.19,
+                                                                     96.66
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        240.51,
+                                                                        33.19
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.5.blocks.3.shape",
+                                          "type":  1,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      647.67,
+                                                      312.71,
+                                                      110.46,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "OPF",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  27.75,
+                                                       "maxSize":  27.75,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     685.21,
+                                                                     345.47,
+                                                                     35.38,
+                                                                     158.08
+                                                                 ],
+                                                       "overflow":  [
+                                                                        "bottom"
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        685.21,
+                                                                        35.38
+                                                                    ]
+                                                   }
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  7,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.6.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Rotation, flip, accessibility and links",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     624.4,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        616.66
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.6.blocks.0.shape",
+                                          "type":  1,
+                                          "autoShapeType":  33,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      279.2,
+                                                      139.6
+                                                  ],
+                                          "rotation":  340,
+                                          "text":  {
+                                                       "text":  "rotate -20",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     114.5,
+                                                                     154.25,
+                                                                     108.38,
+                                                                     62.59
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.6.blocks.1.shape",
+                                          "type":  1,
+                                          "autoShapeType":  8,
+                                          "box":  [
+                                                      387.95,
+                                                      110.61,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "flip",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     494.31,
+                                                                     234.48,
+                                                                     37.62,
+                                                                     28.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        494.31,
+                                                                        32.75
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.6.blocks.2.shape",
+                                          "type":  1,
+                                          "autoShapeType":  160,
+                                          "box":  [
+                                                      685.15,
+                                                      110.61,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "both",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     748.45,
+                                                                     188.46,
+                                                                     52.63,
+                                                                     28.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        753.32,
+                                                                        47.76
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.6.blocks.3.shape",
+                                          "type":  1,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      44.73,
+                                                      312.71,
+                                                      276.14,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0,
+                                          "text":  {
+                                                       "text":  "Linked",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  -1,
+                                                       "minSize":  24,
+                                                       "maxSize":  24,
+                                                       "font":  "Aptos",
+                                                       "bound":  [
+                                                                     148.71,
+                                                                     390.56,
+                                                                     73.05,
+                                                                     28.4
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        148.71,
+                                                                        68.18
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.6.blocks.4.shape",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      387.95,
+                                                      312.71,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF shape slides.6.blocks.5.shape",
+                                          "type":  1,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      685.15,
+                                                      312.71,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   },
+                   {
+                       "index":  8,
+                       "hidden":  false,
+                       "layout":  "OPF auto",
+                       "footer":  {
+                                      "footer":  false,
+                                      "footerText":  "",
+                                      "slideNumber":  false,
+                                      "date":  false,
+                                      "placeholders":  [
+
+                                                       ]
+                                  },
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.7.title line 0",
+                                          "type":  14,
+                                          "autoShapeType":  1,
+                                          "box":  [
+                                                      43.2,
+                                                      43.2,
+                                                      873.6,
+                                                      49.41
+                                                  ],
+                                          "rotation":  0,
+                                          "placeholder":  1,
+                                          "text":  {
+                                                       "text":  "Picture strokes and masks",
+                                                       "autoSize":  0,
+                                                       "wordWrap":  0,
+                                                       "minSize":  40.5,
+                                                       "maxSize":  40.5,
+                                                       "font":  "Aptos Display",
+                                                       "bound":  [
+                                                                     43.2,
+                                                                     43.2,
+                                                                     460.09,
+                                                                     48.6
+                                                                 ],
+                                                       "overflow":  [
+
+                                                                    ],
+                                                       "inkBound":  [
+                                                                        43.2,
+                                                                        452.34
+                                                                    ]
+                                                   }
+                                      },
+                                      {
+                                          "name":  "OPF image 1",
+                                          "type":  13,
+                                          "autoShapeType":  5,
+                                          "box":  [
+                                                      43.2,
+                                                      110.61,
+                                                      427.8,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF image 2",
+                                          "type":  13,
+                                          "autoShapeType":  9,
+                                          "box":  [
+                                                      610.85,
+                                                      110.61,
+                                                      184.1,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF image 3",
+                                          "type":  13,
+                                          "autoShapeType":  10,
+                                          "box":  [
+                                                      43.2,
+                                                      312.7,
+                                                      427.8,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0
+                                      },
+                                      {
+                                          "name":  "OPF image 4",
+                                          "type":  13,
+                                          "autoShapeType":  92,
+                                          "box":  [
+                                                      489,
+                                                      312.7,
+                                                      427.8,
+                                                      184.1
+                                                  ],
+                                          "rotation":  0
+                                      }
+                                  ],
+                       "smartArtEdits":  [
+
+                                         ]
+                   }
+               ],
+    "renumber":  {
+                     "before":  [
+                                    {
+                                        "slideId":  256,
+                                        "position":  1,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  257,
+                                        "position":  2,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  258,
+                                        "position":  3,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  259,
+                                        "position":  4,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  260,
+                                        "position":  5,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  261,
+                                        "position":  6,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  262,
+                                        "position":  7,
+                                        "numbers":  [
+
+                                                    ]
+                                    },
+                                    {
+                                        "slideId":  263,
+                                        "position":  8,
+                                        "numbers":  [
+
+                                                    ]
+                                    }
+                                ],
+                     "moved":  [
+                                   {
+                                       "slideId":  257,
+                                       "position":  1,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  258,
+                                       "position":  2,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  259,
+                                       "position":  3,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  260,
+                                       "position":  4,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  261,
+                                       "position":  5,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  262,
+                                       "position":  6,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  263,
+                                       "position":  7,
+                                       "numbers":  [
+
+                                                   ]
+                                   },
+                                   {
+                                       "slideId":  256,
+                                       "position":  8,
+                                       "numbers":  [
+
+                                                   ]
+                                   }
+                               ]
+                 },
+    "seconds":  1.5
+}
