@@ -8,6 +8,14 @@ v0.33.0 is PUBLISHED AND VERIFIED. Real Release42465429345 completed SUCCESS, in
 
 034 integration now normally folds actual033mainfef5, reviewed1189/1190/1191, no-force workflow1193(09bb), native-name tooling1192(d534), retained-font reading-measure1194(ac7d) and actual literal-name importer1195(c914). Folded source heads are permanently frozen. All33current chart PPTX inputs exactly match qualified native inputs;172/172points pass unchanged4px,33saved-current imports exact. Original160-point125/35fail packet and all new corrections/failures are durable. Seven new reading-measure cases and one actual-name reflow have completed ownednative lifecycles; parent finalimport/visual review and rebuilt combined source remain open. Timeline capacity/readability, F1/F3currency, nine-archive tool resolution, finalarchives/goldens/stricttrackers/budgets/CI,033siteownerrollout and034release remain open.
 
+## Coordinator checkpoint: 2026-11-08 14:47 UTC
+
+Current integration normally folds main9545016583ccfa151077cda4d51043ac6505a140 and reviewed archive-resolver PR1198fcb18d4afb9ba85cfc904c9ca9196abff83ce647 as e292cb89855ce16e082c3c6e59321b6f8bffd6cb. Source1198 is permanently frozen. Parent actual ESM-condition/nine-baseline-order regression passes; final40-layout nine/21 archive promotion remains owed. Source36cf and actual954 squash trees are exact; packages/spec/locks remain byte-identical to published03326fd. Main954 own verify/audit uses the sole maintained observer; org final source-pin consumption is preparing without an early push or deploy.
+
+Eight retained-reading/name-reflow native witnesses are independently accepted: all saved imports, named geometry/text/font states and three-phase images exact, zero shrink; two over-capacity section controls remain explicit refusals. Durable evidence head58cac229bda48622e91faaee8a17efe42077a73c is evidence-only and never merged.
+
+Timeline PR1199 at5848dd33be426ed54c63e095f665b889ed45fab0 is frozen, parent code/sheet/nine focused controls accepted, but actual92-shape native qualification remains owed. A NEW explicit bounded read-only survey tooling PR is in preparation with actual Office-free boundary controls; original30-shape edit guard and60-second maximum remain unchanged. Short mixed-code capacity, source currency/Pareto adaptation reporting, remaining184E1 sheets, final goldens/archives/budgets/stricttrackers/CI/release/site rollout remain open. Pele is verified as the shared actual diagram engine; no blanket compatibility claim is made.
+
 ## v0.33 reapplication
 
 PR #1133 passed exact-head normal/full CI and final Windows PowerPoint qualification, then squash-merged as `7c0c3f13e9de77e038b6ec26183043eb7fe90822`. Main failed strict gallery-tracker freshness: generated metadata counted 103 RR items instead of 105. The automatic Tracker refresh succeeded but could not open its PR. The queued release dry run was cancelled; no tag, npm publication or site deployment happened.
