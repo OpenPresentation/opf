@@ -49,3 +49,7 @@ LH93 PR1160 at49edd06819280c6f03c5a442aaa1d4599c373b0d is independently code-rev
 LH73PR1164 at39b243e7858c13e2505b032bebdada9b55689ede and LH75PR1167 atafd1f881d145d89d77e55fdb7b6ac4806085ca74 are folded after independent code/sheet review plus parent review of all2unequal-note and13table-growth before/after/Claude panels. Notes retain28px in LH73; LH75 notes grow28 to32px with about15%larger cells and bounded three-line/75% growth only after valid initial placement. Sources are permanently frozen. Fifteen clean CLI native witnesses are sealed but actual Office acceptance remains owed after033 publication; final integrated CI/goldens/trackers remain open.
 
 LH110PR1169 at aee237aaad5740afb731d88cc44b6c1160947a65 is folded after independent source/two-sheet review and17focused parser/period controls. The source is permanently frozen; six localized92%references/2023bands change, English/ordinary cases remain exact. Seven clean CLI native files remain owed. LH73/LH75 joint integrated build and23controls pass; raw receipts accompany the next checkpoint.
+
+## SH21 source draft after034 alignment
+
+[SH20–22 current draft](sh21-draft.md) records the normal approved034 merge, final40 sampler correction, exact preservation receipt, focused controls and all remaining native limits. Production editable-shape CLI qualification is separated from the frozen diagnostic live packet; every new live domain remains off.

@@ -1,5 +1,7 @@
 # SH-21 measured arrangement wiring
 
+Current 2026-11-08 source and qualification boundaries: [normal034 merge, focused controls, production-only packet and unchanged live gates](../2026-11-08/sh21-draft.md). Earlier dated paragraphs below retain the progression and failures.
+
 The shared geometry and single-root level model are wired through schema, composition, SVG and PPTX. The three arrangement values are org-chart, hierarchy and venn. Parent/child links and source order are written into SmartArt data; authored blank parents stay parents, and native reparenting is read from connections. Native-shape exports preserve original list depths. SVG and PPTX use the observed paired Hierarchy rounded cards, 90% foreground opacity, 50% Venn fills, connector paths and measured inside/outside label boxes. Existing six arrangement style parts remain unchanged.
 
 Focused composition, geometry, native-shape round-trip and direct SmartArt-part tests pass. The direct parts have well-formed XML, true tree semantics, distinct style identities and complete caches. SH09 and SH16 legacy tests pass; the SH19 test-only alignment follow-up passes separately.
