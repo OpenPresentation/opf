@@ -501,7 +501,10 @@ function translate(source: string, maxEdges: number): DotTranslation {
   let clusterIndex = 0;
   const writeCluster = (cluster: Cluster, indent: string) => {
     const label = labelText(cluster.attributes.get('label'), { graph: graph.name, directed: graph.directed }) ?? '';
-    out.push(`${indent}subgraph c${clusterIndex++}["${label ? quoted(label) : ' '}"]`);
+    while (used.has(`c${clusterIndex}`)) clusterIndex++;
+    const id = `c${clusterIndex++}`;
+    used.add(id);
+    out.push(`${indent}subgraph ${id}["${label ? quoted(label) : ' '}"]`);
     for (const line of nodeLines.get(cluster) ?? []) out.push(`${indent}  ${line}`);
     for (const child of cluster.children) writeCluster(child, `${indent}  `);
     out.push(`${indent}end`);

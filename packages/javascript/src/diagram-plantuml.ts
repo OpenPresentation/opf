@@ -553,7 +553,8 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
     }
     const link = readLink(text);
     if (link) {
-      out.push(`${indent}${state(link.from)} --> ${state(link.to)}${link.label ? ` : ${bare(link.label)}` : ''}`);
+      const [from, to] = link.left && !link.right ? [link.to, link.from] : [link.from, link.to];
+      out.push(`${indent}${state(from)} --> ${state(to)}${link.label ? ` : ${bare(link.label)}` : ''}`);
       if (++transitions > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} transitions.`);
       continue;
     }
@@ -980,6 +981,13 @@ function component(lines: Line[], title: string | undefined, direction: string |
   }
   if (stack.length) fail('diagram-syntax', 'A { block is not closed with }.');
   if (!nodes.size) fail('diagram-syntax', 'The component diagram has no elements.');
+  const usedIds = new Set(nodes.keys());
+  let groupId = 0;
+  for (const group of groups) {
+    while (usedIds.has(`g${groupId}`)) groupId++;
+    group.id = `g${groupId++}`;
+    usedIds.add(group.id);
+  }
   const out: string[] = [titled(title, `flowchart ${direction ?? 'TB'}`)];
   for (const [, entry] of nodes) if (entry.group === undefined) out.push(`  ${entry.line}`);
   const write = (at: number, indent: string) => {
@@ -1033,6 +1041,9 @@ function mindmap(lines: Line[]): string {
 // ---- Gantt charts -> pele gantt (OPF schedules the tasks; pele draws the dates).
 
 const DAY = 86400000;
+// Refuse schedules beyond a slide-sized planning horizon and bound the work across all tasks, including closed-day scans.
+const GANTT_MAX_DAYS = 36600;
+const GANTT_MAX_STEPS = GANTT_MAX_DAYS * 10;
 const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
 function gantt(lines: Line[], title: string | undefined): string {
@@ -1044,7 +1055,11 @@ function gantt(lines: Line[], title: string | undefined): string {
   const date = (text: string, line: number) => {
     const match = /^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/.exec(text.trim());
     if (!match) fail('diagram-syntax', `A date is written YYYY-MM-DD: ${text}.`, line, 1);
-    return Date.UTC(Number(match![1]), Number(match![2]) - 1, Number(match![3]));
+    const year = Number(match![1]), month = Number(match![2]), day = Number(match![3]);
+    const parsed = new Date(0);
+    parsed.setUTCFullYear(year, month - 1, day);
+    if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) fail('diagram-syntax', `The date is not a calendar date: ${text}.`, line, 1);
+    return parsed.getTime();
   };
   const task = (raw: string, line: number): Task => {
     const name = aliases.get(raw) ?? raw;
@@ -1052,7 +1067,11 @@ function gantt(lines: Line[], title: string | undefined): string {
     if (!entry) { entry = { name, id: `t${tasks.size}`, milestone: false, ...(section ? { section } : {}), line }; tasks.set(name, entry); order.push(entry); }
     return entry;
   };
-  const amount = (count: string, unit: string) => Number(count) * (/^week/i.test(unit) ? 7 : 1);
+  const amount = (count: string, unit: string) => {
+    const days = Number(count) * (/^week/i.test(unit) ? 7 : 1);
+    if (!Number.isSafeInteger(days) || days > GANTT_MAX_DAYS) fail('diagram-limit', `A gantt duration or offset exceeds ${GANTT_MAX_DAYS} days; shorten the schedule or split the diagram.`);
+    return days;
+  };
   for (const current of lines) {
     const text = current.text.replace(/\s+and\s+(is\s+colored|is\s+displayed|on\s+\{).*$/i, '');
     let match: RegExpExecArray | null;
@@ -1107,11 +1126,16 @@ function gantt(lines: Line[], title: string | undefined): string {
   }
   if (!order.length) fail('diagram-syntax', 'The gantt chart has no tasks.');
   // OPF schedules the tasks in working days (closed weekdays and dates are skipped), from the project start or, without one, from day 1.
+  if (closed.size === 7) fail('diagram-syntax', 'The gantt chart closes every weekday; leave at least one working day open.');
+  let steps = 0;
+  const tick = () => {
+    if (++steps > GANTT_MAX_STEPS) fail('diagram-limit', `The gantt schedule needs more than ${GANTT_MAX_STEPS} calendar-day checks; shorten the schedule or split the diagram.`);
+  };
   const relative = projectStart === undefined;
   const origin = projectStart ?? Date.UTC(2001, 0, 1);
   const open = (day: number) => !closed.has(new Date(day).getUTCDay()) && !closedDates.has(day);
-  const forward = (day: number, count: number) => { let at = day; for (let step = 0; step < count; at += DAY) if (open(at)) step++; return at; };
-  const firstOpen = (day: number) => { let at = day; while (!open(at)) at += DAY; return at; };
+  const forward = (day: number, count: number) => { let at = day; for (let step = 0; step < count; at += DAY) { tick(); if (open(at)) step++; } return at; };
+  const firstOpen = (day: number) => { let at = day; while (!open(at)) { tick(); at += DAY; } return at; };
   const resolved = new Map<string, { start: number; end: number }>();
   const resolve = (entry: Task, depth = 0): { start: number; end: number } => {
     const done = resolved.get(entry.name);
@@ -1126,11 +1150,13 @@ function gantt(lines: Line[], title: string | undefined): string {
     const duration = entry.duration ?? (entry.milestone ? 0 : undefined);
     let start = entry.start ?? (entry.startRef ? point(entry.startRef) : undefined);
     let end = entry.end !== undefined ? entry.end + DAY : entry.endRef ? point(entry.endRef) : undefined;
-    if (start === undefined && end !== undefined && duration !== undefined) { start = end; for (let step = 0; step < duration; ) { start -= DAY; if (open(start)) step++; } }
+    if (start === undefined && end !== undefined && duration !== undefined) { start = end; for (let step = 0; step < duration; ) { tick(); start -= DAY; if (open(start)) step++; } }
     if (start === undefined) start = origin;
     start = duration === 0 ? start : firstOpen(start);
     if (end === undefined) end = duration === undefined ? forward(start, 1) : forward(start, duration);
-    const span = { start, end: Math.max(start, end) };
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end - start > GANTT_MAX_DAYS * DAY) fail('diagram-limit', `A gantt task spans more than ${GANTT_MAX_DAYS} calendar days; shorten the schedule or split the diagram.`, entry.line, 1);
+    if (end < start) fail('diagram-syntax', `The gantt task [${entry.name}] ends before it starts.`, entry.line, 1);
+    const span = { start, end };
     resolved.set(entry.name, span);
     return span;
   };
@@ -1145,7 +1171,8 @@ function gantt(lines: Line[], title: string | undefined): string {
     const span = resolve(entry);
     if (entry.section !== currentSection) { currentSection = entry.section; if (entry.section !== undefined) out.push(`  section ${bare(entry.section)}`); }
     const tags = [entry.milestone ? 'milestone' : '', entry.complete === 100 ? 'done' : entry.complete ? 'active' : ''].filter(Boolean);
-    const days = entry.milestone ? 0 : Math.max(1, Math.round((span.end - span.start) / DAY) - [...Array(Math.max(0, Math.round((span.end - span.start) / DAY))).keys()].filter(step => !open(span.start + step * DAY)).length);
+    let days = 0;
+    if (!entry.milestone) { for (let at = span.start; at < span.end; at += DAY) { tick(); if (open(at)) days++; } days = Math.max(1, days); }
     out.push(`  ${bare(plainText(entry.name)).replace(/:/g, '#58;')} :${[...tags, entry.id, iso(span.start), `${days}d`].join(', ')}`);
   }
   return out.join('\n');
