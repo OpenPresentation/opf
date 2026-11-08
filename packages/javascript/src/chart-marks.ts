@@ -21,7 +21,8 @@
 // a waterfall's palette positions. PPTX import does not write these defaults back as options.
 import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
-import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
+import {words, type ChartLayerFocus} from './chart-focus.js';
+import {titleReferenceNumbers} from './chart-title-numbers.js';
 import type {ChartLayerRows} from './chart-rows.js';
 import {columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
@@ -580,23 +581,25 @@ export interface ChartLayerReferences { lines: ChartReferenceLine[]; bands: Char
 
 const LINE_TYPES = new Set(['column', 'line', 'line-with-markers', 'area']);
 const BAND_TYPES = new Set(['line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area']);
-// English comparisons that name a threshold, right before the number (articles and "of" may stand between): "stayed above 92%",
-// "beat the target of 30", "at least 1,000". Conservative on purpose: a number after any other word is a data value or not a reference.
-const COMPARISON = /\b(?:above|below|over|under|exceed(?:s|ed|ing)?|surpass(?:es|ed|ing)?|beat(?:s|ing)?|top(?:s|ped)?|cross(?:es|ed|ing)?|reach(?:es|ed|ing)?|at least|at most|more than|less than|fewer than|within|beyond|target|goal|threshold|limit|cap|benchmark)(?:\s+(?:the|a|an|its|our|their|of|target|goal|threshold|limit|benchmark))*\s+$/i;
+// The comparisons that name a threshold right before the number are chart-title-numbers.ts' (TITLE_REFERENCE_LANGUAGES: English, German,
+// French, Spanish, Italian, Portuguese, Dutch): "stayed above 92%", "beat the target of 30", "über 92 %", "above ninety percent".
 const PERIOD_PREPOSITIONS = new Set(['in', 'since', 'during', 'after', 'from', 'until', 'before', 'by', 'around']);
 
 /**
  * LH-110: what the slide title (and subtitle) `text` names for reference marks, or undefined: `lines`, the numbers it compares the data
- * with (an English comparison right before the number, as `COMPARISON` lists) that no plotted value equals at the precision written, of
- * the value axis' kind (a percent only on a percent column) and within the data's range widened by its span on each side; `rows`, the one
- * category it names after a time preposition ("in 2023", "since March") on a line or area chart whose categories run in time. Column,
- * line and area charts (not stacked) take lines; line and area charts take bands. English titles only; `highlight` keeps the chart as
+ * with (a comparison right before the number in the deck language, `titleReferenceNumbers`: digits, and in English number words) that no
+ * plotted value equals at the precision written, of the value axis' kind (a percent only on a percent column) and within the data's range
+ * widened by its span on each side; `rows`, the one category it names after a time preposition ("in 2023", "since March") on a line or
+ * area chart whose categories run in time. Column, line and area charts (not stacked) take lines; line and area charts take bands. Lines
+ * in English, German, French, Spanish, Italian, Portuguese and Dutch titles, bands in English titles; `highlight` keeps the chart as
  * authored.
  */
 export function chartTitleReferences(chart: unknown, data: ResolvedChartData, options: {text?: string; language?: string} = {}): {lines: {value: number; text: string}[]; rows: number[]} | undefined {
   if (!record(chart) || !data.ok || data.combo || chart.highlight !== undefined || !options.text?.trim()) return undefined;
   const language = options.language || 'en';
-  if (!/^en(?:-|$)/i.test(language)) return undefined;
+  const english = /^en(?:-|$)/i.test(language);
+  const numbers = titleReferenceNumbers(options.text, language);
+  if (!english && !numbers.length) return undefined;
   const type = typeOf(chart);
   if (!LINE_TYPES.has(type) && !BAND_TYPES.has(type)) return undefined;
   if (data.columns.length < 2 || !data.rows.length) return undefined;
@@ -606,8 +609,8 @@ export function chartTitleReferences(chart: unknown, data: ResolvedChartData, op
     const values = data.rows.flatMap(row => row.slice(1).map(chartNumber)).filter((value): value is number => value !== null);
     if (values.length) {
       const lo = Math.min(...values), hi = Math.max(...values), span = Math.max(hi - lo, Math.abs(hi) * 0.05);
-      for (const number of titleNumbers(options.text)) {
-        if (!COMPARISON.test(number.before) || number.percent !== format.includes('%')) continue;
+      for (const number of numbers) {
+        if (number.percent !== format.includes('%')) continue;
         const target = number.percent ? number.value / 100 : number.value, decimals = number.percent ? number.decimals + 2 : number.decimals;
         if (values.some(value => Math.abs(Number(value.toFixed(decimals)) - target) < 10 ** -(decimals + 6))) continue;
         if (target < lo - span || target > hi + span || lines.some(line => line.value === target)) continue;
@@ -617,7 +620,8 @@ export function chartTitleReferences(chart: unknown, data: ResolvedChartData, op
   }
   const rows: number[] = [];
   const categories = data.rows.map(row => label(row[0]));
-  if (BAND_TYPES.has(type) && chartCategoriesInTime(data.rows.map(row => row[0]), {title: label(data.columns[0]), language})) {
+  // The period a title names stays English (its time prepositions).
+  if (english && BAND_TYPES.has(type) && chartCategoriesInTime(data.rows.map(row => row[0]), {title: label(data.columns[0]), language})) {
     const title = words(options.text, language);
     const after = (at: number) => at > 0 && PERIOD_PREPOSITIONS.has(title[at - 1]!);
     categories.forEach((category, row) => {
