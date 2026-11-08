@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "productPr": "https://github.com/OpenPresentation/opf/pull/1208",
+  "productHead": "d3cfeab8dc0dd5aeb4a62e62ae673927f762a771",
+  "node": "v24.20.0",
+  "platform": "win32",
+  "focusedTests": 18,
+  "combinedAffectedControls": 29,
+  "mapped": {
+    "exit": 1,
+    "seconds": 492.9,
+    "rootChecks": "all passed",
+    "strictDeterminism": "passed",
+    "packageFailure": {
+      "test": "packages/pptx/test/lh-114-pull-line-timeline.mjs:42",
+      "message": "ar: status words; actual4 expected0",
+      "independentBaselineConfirmation": true,
+      "position": "90/277",
+      "notRun": 187
+    }
+  },
+  "browser": {
+    "command": "pnpm --filter @openpresentation/opf-pptx build:browser-check",
+    "exit": 0,
+    "level": "browser bundle checks",
+    "warnings": "Existing core generated chunks excluded by sideEffects; raw output retained."
+  },
+  "syntax": {
+    "command": "pnpm --filter @openpresentation/opf-pptx typecheck",
+    "exit": 0,
+    "files": 456,
+    "failed": 0
+  },
+  "nativeQualification": "owed; coordinator owns PowerPoint",
+  "rawLogSha256": {
+    "mapped.log": "f5425c4075ef33ea23e832d505b59863938756f3fae867bebd28198385556440",
+    "pptx-contract.log": "eccebc330389f3d1dab00c055b7da705df3e0ffe48d22fa3116c8c19bf7897ad",
+    "browser-build.log": "e675b0ba53da9201ce2e22bd1e5c673bf0888af16317ec59b0e6d94bf3cc9b7c",
+    "syntax.log": "276eac1aea4a2a31cbb2e62e910096192310b89e951b91aee4bc527eba04207c"
+  },
+  "decision": "Vetoable: archive terminal logs on a separate evidence-only branch so the frozen product producer head remains unchanged; no extra source-PR CI run.",
+  "archivePolicy": "Evidence archive only; coordinator can reference or copy into next handoff batch."
+}
