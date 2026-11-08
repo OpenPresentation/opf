@@ -1,0 +1,44 @@
+param([string]$ScriptPath='', [Parameter(Mandatory=$true)][string]$ReportPath)
+$ErrorActionPreference='Stop'
+if($ScriptPath -eq ''){$ScriptPath=Join-Path $PSScriptRoot 'native-furniture-control.ps1'}
+if(Test-Path -LiteralPath $ReportPath){throw 'Preserve prior oracle report; choose a fresh ReportPath'}
+$parent=Split-Path -Parent ([IO.Path]::GetFullPath($ReportPath));if(-not(Test-Path -LiteralPath $parent -PathType Container)){throw 'Report parent must exist'}
+$planRoot=$ReportPath+'.plans';if(Test-Path -LiteralPath $planRoot){throw 'Preserve prior oracle plan fixtures'};[void](New-Item -ItemType Directory -Path $planRoot)
+$tokens=$null;$errors=$null;$ast=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$tokens,[ref]$errors)
+if($errors.Count){throw ($errors|Out-String)}
+foreach($name in @('Test-Integer','Require-Property','Assert-String','Assert-LiteralSeriesName','Read-AndValidateActionPlan','Assert-FurnitureSurvey','Invoke-FurnitureCom','Get-ExactSlide','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Read-FurnitureFiniteNumber','Read-FurnitureLtrRunState','Invoke-FurnitureLtrRunOracle','Apply-FurnitureAction','Stop-FurnitureLifecycle')){
+ $definition=$ast.Find({param($n)$n -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -eq $name},$true)
+ if($null -eq $definition){throw "Missing reviewed oracle function: $name"}
+ # Only explicitly selected validation and mockable functions; never the Office entrypoint.
+ Invoke-Expression $definition.Extent.Text
+}
+$cases=New-Object 'System.Collections.Generic.List[object]';$script:events=New-Object 'System.Collections.Generic.List[string]'
+function Write-FurnitureStage([string]$Name,[string]$Status,[string]$ErrorMessage=$null){$script:events.Add($Name+':'+$Status)}
+$valid=[ordered]@{op='ltr-run-oracle';slideIndex=1;shapeName='OPF list slides.0.items line 0'}
+function Plan-Control([string]$Name,$Value,[bool]$Accept){$file=Join-Path $planRoot ($Name+'.json');ConvertTo-Json -InputObject $Value -Depth 8|Set-Content -LiteralPath $file -Encoding UTF8;$accepted=$true;try{$items=Read-AndValidateActionPlan $file}catch{$accepted=$false};if($accepted -ne $Accept){throw "$Name unexpected plan acceptance"};$cases.Add([ordered]@{name=$Name;passed=$true;accepted=$accepted})}
+Plan-Control 'sole-exact-plan' @($valid) $true
+foreach($spec in @(@('case','op','LTR-RUN-ORACLE'),@('other-slide','slideIndex',2),@('other-name','shapeName','Other'),@('unknown-field','method','LtrRun'),@('api-field','api','TextRange2'),@('text-field','text','Changed'),@('font-field','fontSize',30),@('language-field','languageId',1033))){$v=[ordered]@{};foreach($k in $valid.Keys){$v[$k]=$valid[$k]};$v[$spec[1]]=$spec[2];Plan-Control ('plan-'+$spec[0]) @($v) $false}
+Plan-Control 'combined-oracle' @($valid,$valid) $false
+Plan-Control 'combined-legacy' @($valid,[ordered]@{op='set-text';slideIndex=1;shapeName='Other';text='Other'}) $false
+$surveyRejected=$false;try{Assert-FurnitureSurvey $true @([pscustomobject]$valid) 'not-read.pptx'}catch{$surveyRejected=$true};if(-not $surveyRejected){throw 'ReadOnlySurvey accepted mutating oracle'};$cases.Add([ordered]@{name='readonly-survey-refusal';passed=$true})
+function Collection($Values,[int]$Count){$c=[pscustomobject]@{Values=@($Values);Count=$Count};$c|Add-Member ScriptMethod Item {param([int]$Index)return ,$this.Values[$Index-1]};return ,$c}
+function Fixture([string]$Mode){
+ $font=[pscustomobject]@{Name='Aptos';Size=[single]27.75;Bold=0;Italic=0}
+ $range=[pscustomobject]@{Text=('Cafe'+[char]0x0301+' 1: keep words');LanguageID=1025;Font=$font}
+ $range|Add-Member ScriptMethod LtrRun {$script:oracleCalls++;switch($script:oracleMode){'words'{$this.Text+=' changed'}'unicode'{$this.Text+=[char]0x200F}'normalize'{$this.Text=$this.Text.Normalize([Text.NormalizationForm]::FormC)}'language'{$this.LanguageID=1033}'font-name'{$this.Font.Name='Other'}'font-size'{$this.Font.Size=24}'font-bold'{$this.Font.Bold=-1}'font-italic'{$this.Font.Italic=-1}'geometry'{$script:oracleShape.Left+=1}'throw'{throw 'Deliberate LtrRun failure'}}}
+ $shape=[pscustomobject]@{Name='OPF list slides.0.items line 0';HasTextFrame=-1;TextFrame=[pscustomobject]@{TextRange=$range};TextFrame2=[pscustomobject]@{TextRange=[pscustomobject]@{Font=$font}};Left=40;Top=200;Width=650;Height=31;Rotation=0}
+ $slide=[pscustomobject]@{Shapes=(Collection @($shape) 1)};$presentation=[pscustomobject]@{Slides=(Collection @($slide) 1)}
+ $script:oracleMode=$Mode;$script:oracleShape=$shape;$script:oracleCalls=0;$script:ltrRunOracleAttempted=$false;$script:officeOperationsStopped=$false;$script:cleanupConfirmed=$true;$script:report=[ordered]@{actionPlan=[ordered]@{ltrRunOracle=$null}}
+ return [pscustomobject]@{presentation=$presentation;slide=$slide;shape=$shape;range=$range;font=$font}
+}
+function Assert-Latched([string]$Name){if(-not $script:officeOperationsStopped -or $script:cleanupConfirmed -or -not $script:ltrRunOracleAttempted){throw "$Name did not latch"};$script:forbiddenCalled=$false;try{Invoke-FurnitureCom 'forbidden-after-oracle' {$script:forbiddenCalled=$true}}catch{};if($script:forbiddenCalled){throw "$Name allowed later Office calls"}}
+$f=Fixture 'none';Apply-FurnitureAction $f.presentation ([pscustomobject]$valid) 1;$proof=$script:report.actionPlan.ltrRunOracle
+if($script:oracleCalls -ne 1 -or -not $proof.completed -or $proof.callCount -ne 1 -or $proof.before.languageId -ne 1025 -or $proof.after.languageId -ne 1025 -or -not [string]::Equals($proof.before.text,$proof.after.text,[StringComparison]::Ordinal)){throw 'Positive oracle did not preserve exact native state'}
+if($proof.before.utf16CodeUnits.Count -ne $f.range.Text.Length -or $proof.before.utf16CodeUnits[4] -ne 0x0301){throw 'NFD UTF16 evidence changed'}
+$cases.Add([ordered]@{name='exact-one-call-positive';passed=$true;evidence=$proof})
+$retried=$false;try{Apply-FurnitureAction $f.presentation ([pscustomobject]$valid) 2}catch{$retried=$true};if(-not $retried -or $script:oracleCalls -ne 1){throw 'Oracle retried'};Assert-Latched 'no-retry';$cases.Add([ordered]@{name='no-retry';passed=$true})
+foreach($mode in @('words','unicode','normalize','language','font-name','font-size','font-bold','font-italic','geometry','throw')){$f=Fixture $mode;$rejected=$false;try{Apply-FurnitureAction $f.presentation ([pscustomobject]$valid) 1}catch{$rejected=$true};if(-not $rejected -or $script:oracleCalls -ne 1 -or $script:report.actionPlan.ltrRunOracle.completed -or -not $script:report.actionPlan.ltrRunOracle.failure){throw "$mode was not refused after exactly one call"};Assert-Latched $mode;$cases.Add([ordered]@{name=('changed-'+$mode);passed=$true;callCount=$script:oracleCalls;evidence=$script:report.actionPlan.ltrRunOracle})}
+foreach($spec in @(@('empty-text','Text',''),@('oversize-text','Text',('x'*257)),@('text-type','Text',7),@('mixed-language','LanguageID',-2),@('zero-language','LanguageID',0),@('language-type','LanguageID','1025'))){$f=Fixture 'none';$f.range.($spec[1])=$spec[2];$rejected=$false;try{Apply-FurnitureAction $f.presentation ([pscustomobject]$valid) 1}catch{$rejected=$true};if(-not $rejected -or $script:oracleCalls -ne 0){throw "$($spec[0]) called oracle"};Assert-Latched $spec[0];$cases.Add([ordered]@{name=('refuse-'+$spec[0]);passed=$true;callCount=0})}
+foreach($mode in @('no-frame','missing-shape','duplicate-shape','too-many-shapes','too-many-slides','text-getter','language-getter')){$f=Fixture 'none';switch($mode){'no-frame'{$f.shape.HasTextFrame=0}'missing-shape'{$f.shape.Name='Other'}'duplicate-shape'{$f.slide.Shapes=Collection @($f.shape,$f.shape) 2}'too-many-shapes'{$f.slide.Shapes.Count=31}'too-many-slides'{$f.presentation.Slides.Count=4}'text-getter'{$f.range.PSObject.Properties.Remove('Text');$f.range|Add-Member ScriptProperty Text {throw 'Deliberate text getter failure'}}'language-getter'{$f.range.PSObject.Properties.Remove('LanguageID');$f.range|Add-Member ScriptProperty LanguageID {throw 'Deliberate language getter failure'}}};$rejected=$false;try{Apply-FurnitureAction $f.presentation ([pscustomobject]$valid) 1}catch{$rejected=$true};if(-not $rejected -or $script:oracleCalls -ne 0){throw "$mode called oracle"};Assert-Latched $mode;$cases.Add([ordered]@{name=('refuse-'+$mode);passed=$true;callCount=0})}
+[ordered]@{passed=$true;officeConstructed=$false;actualOfficeAcceptance=$false;cases=@($cases.ToArray());events=@($script:events.ToArray());scope='AST-only reviewed functions and plain object mocks; no Office entrypoint, UI, native application or fallback invoked.';verifierSha256=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()}|ConvertTo-Json -Depth 16|Set-Content -LiteralPath $ReportPath -Encoding UTF8
+Write-Output ("LtrRun oracle mock qualification passed: "+$cases.Count+" controls; no Office")

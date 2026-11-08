@@ -37,13 +37,14 @@ function Read-AndValidateActionPlan([string]$Path) {
     $parsed=$raw | ConvertFrom-Json
     $items=@($parsed)
     if($items.Count -gt 20) { throw 'ActionPlan cannot contain more than 20 actions' }
-    $operations=@('set-text-style','set-text','set-alt','delete-shape','duplicate-shape','set-tag','delete-tag','move-slide','measure-chart-point','set-chart-series-name')
+    $operations=@('set-text-style','set-text','set-alt','delete-shape','duplicate-shape','set-tag','delete-tag','move-slide','measure-chart-point','set-chart-series-name','ltr-run-oracle')
     for($index=0;$index -lt $items.Count;$index++) {
         $action=$items[$index]; $context="Action $($index+1)"
         if($null -eq $action -or $action -isnot [pscustomobject]) { throw "$context must be an object" }
         $op=Require-Property $action 'op' $context; Assert-String $op 'op' $context 40 $false
         if($operations -notcontains $op) { throw "$context has unknown operation '$op'" }
         if($op -ieq 'set-chart-series-name' -and $op -cne 'set-chart-series-name'){throw "$context requires the exact bounded series-name operation spelling"}
+        if($op -ieq 'ltr-run-oracle' -and $op -cne 'ltr-run-oracle'){throw "$context requires the exact diagnostic oracle spelling"}
         $slideIndex=Require-Property $action 'slideIndex' $context
         if(-not (Test-Integer $slideIndex) -or $slideIndex -lt 1 -or $slideIndex -gt 3) { throw "$context slideIndex must be an integer from 1 through 3" }
         $allowed=@('op','slideIndex')
@@ -74,6 +75,9 @@ function Read-AndValidateActionPlan([string]$Path) {
                 $allowed+=@('chartName','seriesIndex','pointIndex','chartKind','edge','valueSign')
             }
 
+            'ltr-run-oracle' {
+                if($items.Count -ne 1 -or $slideIndex -ne 1 -or $shapeName -cne 'OPF list slides.0.items line 0'){throw "$context diagnostic oracle must be the sole action on the known slide-1 source-09 shape"}
+            }
             'set-text' { $text=Require-Property $action 'text' $context; Assert-String $text 'text' $context; $allowed+='text' }
             'set-text-style' {
                 $hasSize=$null -ne $action.PSObject.Properties['fontSize']; $hasColor=$null -ne $action.PSObject.Properties['color']
@@ -211,6 +215,7 @@ Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $actions $sourceSnapshot
 
 $script:sequence=0; $script:lastStage='worker.initialize'; $script:lastStatus='begin'; $script:cleanupConfirmed=$true; $script:officeOperationsStopped=$false
 $script:ownedPresentationPath=$null; $script:presentation=$null; $script:ownedApplication=$null
+$script:ltrRunOracleAttempted=$false
 $os=Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $report=[ordered]@{
     schemaVersion=1
@@ -219,7 +224,7 @@ $report=[ordered]@{
     source=[ordered]@{path=$sourcePath;sha256=$sourceHash;openedPath=$sourceSnapshot;openedSha256=(Get-FurnitureSha256 $sourceSnapshot)}
     saved=[ordered]@{path=$savedPath;sha256=$null}
     reopened=[ordered]@{path=$savedPath;sha256=$null}
-    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@();chartPoints=@();currentChartPointProbe=$null;chartSeriesEdits=@();currentChartSeriesProbe=$null}
+    actionPlan=[ordered]@{path=$request.actionPlan.path;sha256=$request.actionPlan.sha256;snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);actions=$actions;completed=@();styleEdits=@();chartPoints=@();currentChartPointProbe=$null;chartSeriesEdits=@();currentChartSeriesProbe=$null;ltrRunOracle=$null}
     phases=[ordered]@{original=$null;edited=$null;reopened=$null}
     inputs=[ordered]@{verifier=$request.verifier;processHelper=$request.processHelper}
     environment=[ordered]@{hostVersion=$PSVersionTable.PSVersion.ToString();windowsProductName=$os.ProductName;windowsDisplayVersion=$os.DisplayVersion;windowsBuild="$($os.CurrentBuild).$($os.UBR)";powerPointVersion=$null;powerPointExecutable=$null;powerPointBuild=$null;powerPointExecutableSha256=$null}
@@ -371,6 +376,52 @@ function Set-FurnitureTextStyle($Shape,$Action,[string]$Prefix) {
     if($after -cne $before) { throw "$Prefix style action changed native words" }
     $evidence.textAfter=$after
     return $evidence
+}
+# Native-format diagnostic only. No script calls this API without the closed sole-action plan.
+# https://learn.microsoft.com/en-us/office/vba/api/powerpoint.textrange.ltrrun
+function Read-FurnitureLtrRunState($Shape,$Range,$State,[string]$Prefix) {
+    $State.text=Invoke-FurnitureCom "$Prefix.text.get" { return ,$Range.Text }
+    if($State.text -isnot [string] -or $State.text.Length -lt 1 -or $State.text.Length -gt 256){throw "$Prefix requires 1 through 256 UTF16 code units"}
+    $units=New-Object 'System.Collections.Generic.List[int]'
+    foreach($character in $State.text.ToCharArray()){$units.Add([int]$character)}
+    $State.utf16CodeUnits=$units.ToArray()
+    $State.languageId=Invoke-FurnitureCom "$Prefix.languageId.get" { return ,$Range.LanguageID }
+    if(-not(Test-Integer $State.languageId) -or $State.languageId -le 0){throw "$Prefix requires a positive uniform native LanguageID"}
+    $State.font=Read-FurnitureTextFont $Shape $State.text "$Prefix.font"
+    if($State.font.status -cne 'uniform'){throw "$Prefix requires uniform native font descriptors"}
+    $State.geometry=[ordered]@{}
+    foreach($field in @('Left','Top','Width','Height','Rotation')){$State.geometry[$field]=Read-FurnitureFiniteNumber $Shape $field "$Prefix.geometry.$field.get"}
+}
+function Invoke-FurnitureLtrRunOracle($Presentation,$Action,[string]$Prefix) {
+    if($script:ltrRunOracleAttempted){Stop-FurnitureLifecycle 'The diagnostic LtrRun oracle has already been attempted; no retry is allowed'}
+    $script:ltrRunOracleAttempted=$true
+    $probe=[ordered]@{api='PowerPoint.TextFrame.TextRange.LtrRun';attempted=$true;callCount=0;callSucceeded=$false;before=$null;after=$null;completed=$false;failure=$null;scope='One native format call only; observed LanguageID and exact UTF16, font and geometry preservation do not establish glyph acceptance or XML primary-language preservation.'}
+    $report.actionPlan.ltrRunOracle=$probe
+    try {
+        if($Action.op -cne 'ltr-run-oracle' -or $Action.slideIndex -ne 1 -or $Action.shapeName -cne 'OPF list slides.0.items line 0'){throw 'The diagnostic oracle target differs from the known source-09 shape'}
+        $slide=Get-ExactSlide $Presentation 1 $Prefix
+        $shape=Get-ExactShape $slide $Action.shapeName $Prefix
+        $has=Invoke-FurnitureCom "$Prefix.hasTextFrame.get" { $shape.HasTextFrame }
+        if($has -eq 0){throw 'The diagnostic oracle target has no text frame'}
+        $frame=Invoke-FurnitureCom "$Prefix.textFrame.get" { return ,$shape.TextFrame }
+        $range=Invoke-FurnitureCom "$Prefix.textRange.get" { return ,$frame.TextRange }
+        $probe.before=[ordered]@{text=$null;utf16CodeUnits=@();languageId=$null;font=$null;geometry=$null}
+        Read-FurnitureLtrRunState $shape $range $probe.before "$Prefix.before"
+        $probe.callCount=1
+        Invoke-FurnitureCom "$Prefix.ltrRun.call" { $range.LtrRun() | Out-Null }
+        $probe.callSucceeded=$true
+        $probe.after=[ordered]@{text=$null;utf16CodeUnits=@();languageId=$null;font=$null;geometry=$null}
+        Read-FurnitureLtrRunState $shape $range $probe.after "$Prefix.after"
+        if(-not [string]::Equals($probe.before.text,$probe.after.text,[StringComparison]::Ordinal)){throw 'Native LtrRun changed exact UTF16 text; no normalization is allowed'}
+        if($probe.before.languageId -ne $probe.after.languageId){throw 'Native LtrRun changed the observed primary proofing LanguageID'}
+        if(-not [string]::Equals($probe.before.font.name,$probe.after.font.name,[StringComparison]::Ordinal)){throw 'Native LtrRun changed the reported font name'}
+        foreach($field in @('sizePoints','bold','italic')){if($probe.before.font[$field] -ne $probe.after.font[$field]){throw "Native LtrRun changed font $field"}}
+        foreach($field in @('Left','Top','Width','Height','Rotation')){if($probe.before.geometry[$field] -ne $probe.after.geometry[$field]){throw "Native LtrRun changed shape $field"}}
+        $probe.completed=$true
+    } catch {
+        $probe.failure=$_.Exception.Message
+        Stop-FurnitureLifecycle $probe.failure
+    }
 }
 # SH-25 independent object-model measurement. Never activates ChartData, Excel or Edit Data.
 function Read-FurnitureFiniteNumber($Object,[string]$Property,[string]$Stage) {
@@ -695,6 +746,7 @@ function Read-FurnitureSeriesNameState($Presentation,$Targets,[string]$Phase) {
 
 function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
     $prefix="action-$Number-$($Action.op)"
+    if($Action.op -ceq 'ltr-run-oracle'){Invoke-FurnitureLtrRunOracle $Presentation $Action $prefix;return}
     if($Action.op -ceq 'set-chart-series-name'){Set-FurnitureSeriesName $Presentation $Action $prefix;return}
     if($Action.op -eq 'move-slide') { $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $prefix; Invoke-FurnitureCom "$prefix.moveTo" { $slide.MoveTo([int]$Action.toIndex) }; return }
     $slide=Get-ExactSlide $Presentation ([int]$Action.slideIndex) $prefix
