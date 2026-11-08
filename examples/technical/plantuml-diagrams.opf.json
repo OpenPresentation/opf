@@ -1,0 +1,213 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "PlantUML diagrams",
+  "description": "Technical fixture for PlantUML diagrams (diagram syntax \"plantuml\"), one slide per kind OPF draws: a sequence diagram, a class diagram, a state diagram, an activity diagram, a use case diagram, a component diagram, a mind map and a gantt chart. OPF reads the PlantUML itself and pele draws each as the Mermaid family of the same kind.",
+  "filename": "plantuml-diagrams",
+  "language": "en-US",
+  "design": {
+    "theme": "classic",
+    "colorScheme": "steel-blue",
+    "fontScheme": "open-sans"
+  },
+  "slides": [
+    {
+      "id": "sequence",
+      "title": "The API answers every request with findings",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nactor Author\nparticipant \"Deck API\" as API\ndatabase Store\nAuthor -> API : POST /decks\nAPI -> Store : save\nStore --> API : id\nalt valid\n  API --> Author : 201 Created\nelse invalid\n  API --> Author : 422 findings\nend\n@enduml"
+      }
+    },
+    {
+      "id": "class",
+      "title": "A deck is a list of slides",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nclass Deck {\n  +name : String\n  +render() : Pptx\n}\nclass Slide {\n  +title : String\n}\ninterface Block\nclass Chart\nclass Diagram\nDeck \"1\" *-- \"many\" Slide : holds\nSlide o-- Block\nChart ..|> Block\nDiagram ..|> Block\n@enduml"
+      }
+    },
+    {
+      "id": "state",
+      "title": "A deck moves from draft to published",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\n[*] --> Draft\nstate \"In review\" as Review\nDraft --> Review : submit\nReview --> Draft : changes\nReview --> Published : approve\nPublished --> [*]\n@enduml"
+      }
+    },
+    {
+      "id": "activity",
+      "title": "Every brief is reviewed before it is built",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nstart\n:Write the brief;\nif (Approved?) then (yes)\n  :Build the deck;\nelse (no)\n  :Revise it;\nendif\nstop\n@enduml"
+      }
+    },
+    {
+      "id": "usecase",
+      "title": "Presenters write, reviewers approve",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nleft to right direction\nactor Presenter\nactor Reviewer\nrectangle OPF {\n  usecase (Write a deck) as Write\n  usecase (Review a deck) as Review\n  usecase (Export) as Export\n}\nPresenter --> Write\nReviewer --> Review\nWrite ..> Export : <<include>>\n@enduml"
+      }
+    },
+    {
+      "id": "component",
+      "title": "The editor and the site share one API",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nleft to right direction\npackage \"Front end\" {\n  [Editor]\n  [Site]\n}\nnode Server {\n  [API]\n  database \"Decks\" as DB\n}\n[Editor] --> [API] : REST\n[Site] --> [API] : REST\n[API] --> DB\n@enduml"
+      }
+    },
+    {
+      "id": "mindmap",
+      "title": "Three bets carry the strategy",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startmindmap\n* Strategy\n** Growth\n*** New markets\n*** Partners\n** Efficiency\n*** Automation\n** People\n*** Hiring\n@endmindmap"
+      }
+    },
+    {
+      "id": "gantt",
+      "title": "The release ships in February",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startgantt\nProject starts 2026-01-05\nsaturday are closed\nsunday are closed\n-- Design --\n[Brief] lasts 5 days\n[Brief] is 100% completed\nthen [Layouts] lasts 10 days\n-- Build --\nthen [Engine] lasts 10 days\n[Release] happens at [Engine]'s end\n@endgantt",
+        "alt": "Brief, layouts and engine run back to back from January 5; the release follows the engine in February."
+      }
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen",
+          "variants": [
+            {
+              "id": "light",
+              "name": "Light",
+              "variant": "light1"
+            },
+            {
+              "id": "light-alt",
+              "name": "Light alt",
+              "variant": {
+                "background": "light1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            },
+            {
+              "id": "dark",
+              "name": "Dark",
+              "variant": "dark1"
+            },
+            {
+              "id": "dark-alt",
+              "name": "Dark alt",
+              "variant": {
+                "background": "dark1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "colorSchemes": {
+        "steel-blue": {
+          "name": "Steel Blue",
+          "accent1": "#4A66AC",
+          "accent2": "#629DD1",
+          "accent3": "#297FD5",
+          "accent4": "#7F8FA9",
+          "accent5": "#5AA2AE",
+          "accent6": "#9D90A0",
+          "dark1": "#000000",
+          "dark2": "#182238",
+          "followedHyperlink": "#3EBBF0",
+          "hyperlink": "#9454C3",
+          "light1": "#FFFFFF",
+          "light2": "#EAEDF6",
+          "summary": "Cool steel blues for credible, data-forward presentations.",
+          "description": "A steel-blue palette that combines credibility, precision, and calm. Useful for analysis-heavy decks.",
+          "tags": [
+            "calm",
+            "precise",
+            "measured",
+            "professional",
+            "analytical"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "open-sans": {
+          "name": "Open Sans",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Open Sans",
+          "minor": "Open Sans",
+          "textSample": "Modern and sleek",
+          "type": "sans-serif",
+          "description": "Open Sans is a sans serif OPF font scheme for Latin presentations, using Open Sans for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      }
+    }
+  }
+}

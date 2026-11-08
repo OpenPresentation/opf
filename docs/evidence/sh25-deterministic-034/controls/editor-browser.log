@@ -1,0 +1,38 @@
+shape overlays browser test ok: 37 checks
+  - an overlay shape inserted from the gallery
+  - the gallery places a shape on the slide, with the choice remembered
+  - a selected overlay shape shows its frame, and the section its place and stacking
+  - dragging the shape moves it: x and y are written as fractions
+  - a move is kept on the slide
+  - a click selects and Escape cancels a drag
+  - dragging a handle resizes it
+  - the north-west handle keeps the opposite corner
+  - arrow keys move the frame, one undoable step each
+  - Shift and an arrow resize it
+  - X, Y, Width and Height in the section
+  - an overlay shape changes preset and keeps its place
+  - an overlay shape's adjust handle writes adjust
+  - an overlay shape has the adjust handles and the shape picker too
+  - Bring to front
+  - Send backward
+  - Bring forward and Send backward are the array order
+  - Delete removes an overlay shape
+  - dragging an attached shape changes its offset and keeps `at`
+  - resizing an attached shape changes at.width and at.height
+  - Free from block turns it into fractions
+  - an attached shape keeps its anchor until it is freed
+  - Connect joins two blocks with a connector, one undoable step
+  - Connect picks two blocks and the route, with an arrowhead
+  - Escape cancels the Connect tool
+  - the connector's route
+  - the connector end (a shape with no id gets one)
+  - a connection site
+  - the connector's line and arrowheads
+  - Send to back moves the connector in the array
+  - a connector has its route, ends, sites, line and arrowheads in the section
+  - deleting a shape deletes the connectors on it
+  - deleting an overlay deletes the connectors on it
+  - attach to a chart point
+  - select another chart point
+  - select another chart series
+  - select a point edge

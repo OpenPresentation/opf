@@ -1,0 +1,60 @@
+{
+  "scope": "Successful native default materialization, topology and paint facts; no product export/edit eligibility claim.",
+  "files": [
+    {
+      "file": "sh21-materialize-defaults-01/materialize-defaults.ps1",
+      "sha256": "b7ee923b8e84a55fb098fd02e4368ca19953b0299a29da3642ddca19be33c05d",
+      "bytes": 5996
+    },
+    {
+      "file": "sh21-materialize-defaults-01/result/hierarchy1.png",
+      "sha256": "9ab4f13128fe580a499c1fea3c67eec79a7e6a21a987534c3a94ff02defd7f39",
+      "bytes": 10125
+    },
+    {
+      "file": "sh21-materialize-defaults-01/result/native-defaults-saved.pptx",
+      "sha256": "24f879760bb12b4c577e00bf0495c73702a84bf5dcbca6a832bdd8358c504161",
+      "bytes": 66862
+    },
+    {
+      "file": "sh21-materialize-defaults-01/result/orgChart1.png",
+      "sha256": "d1598f0ff89e7c45f6398329ad4867b42f836d711b2fa5ecd17588e49d3f2eea",
+      "bytes": 4447
+    },
+    {
+      "file": "sh21-materialize-defaults-01/result/owned-defaults.pptx",
+      "sha256": "bfd3c1252eceedde70a4f79bbabee52d373620732fff24da598aac3eb2b451d8",
+      "bytes": 33895
+    },
+    {
+      "file": "sh21-materialize-defaults-01/result/owned-seeds.pptx",
+      "sha256": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+      "bytes": 228310
+    },
+    {
+      "file": "sh21-materialize-defaults-01/result/venn1.png",
+      "sha256": "0236fd312139418d16222564cbe95665fe720cd4eeb470616c0f6a23164cc399",
+      "bytes": 9995
+    },
+    {
+      "file": "sh21-materialize-defaults-01/result/witness.json",
+      "sha256": "dbb3f1fe74f280dcac15e42573bf7e5ec3a47b97f0daf0afde6957a8553a6179",
+      "bytes": 15413
+    },
+    {
+      "file": "sh21-materialize-defaults-01/worker.json",
+      "sha256": "33c96cada5908eff2bd29a48dd829358061a546192de76175caf8f4940760c63",
+      "bytes": 316
+    },
+    {
+      "file": "sh21-materialize-defaults-01/worker.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "sh21-materialize-defaults-01/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ]
+}

@@ -567,7 +567,7 @@ function presentationSemanticIssues(value: unknown): ValidationIssue[] {
         const checked = isOverlayConnector(entry) ? (isRecord(entry.adjust) ? { shape: connectorAdjustPreset(entry), adjust: entry.adjust } : undefined) : entry;
         if (checked) for (const issue of shapeIssues(checked, (...keys) => keys.reduce((at, key) => pathFor(at, key), entryPath))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
       });
-      for (const issue of overlayIssues(slide, slidePath)) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
+      for (const issue of overlayIssues(slide, slidePath, value)) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
       issues.push(...validateSlideRegions(slide, slidePath));
       const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
         if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
