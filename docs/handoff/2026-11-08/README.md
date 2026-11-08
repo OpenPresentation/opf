@@ -61,3 +61,9 @@ LH110positive at-least P2 is corrected in reviewed/folded PR1173 atf2472a4f8db34
 ## RR108 traced SVG lock continuation
 
 [Exact31value migration and pinned printer](rr108-svg-lock.md) preserve every existing reviewed value and strict comparison. Actual pie/doughnut SVGs differ only by one intended surface-fill circle each. Final generated hashes remain for the single reviewed034golden batch; the separate21/9PPTXarchive families are not changed here.
+
+## SH21 source draft after034 alignment
+
+[SH20–22 current draft](sh21-draft.md) records the normal approved034 merge, final40 sampler correction, exact preservation receipt, focused controls and all remaining native limits. Production editable-shape CLI qualification is separated from the frozen diagnostic live packet; every new live domain remains off.
+
+SH21foundation1172cc6fa905 is folded after independent16focusedcontrols/source/11preview review, with explicitdesignhold: org/hierarchy/Venn1–4 acceptedforintegration; productionVenn5–7circleclusters rejected as too small. A NEWderivedadapterwillfillthebody withlargercircles/unchanged-or-larger outside labels, sharedSVG/PPTXgeometry, reportedadaptation andcompletefallbackwhenunfit. Preserve measurednativegeometry/77cbefrozenpacket; allnewlivedomainsOFF. ActualOffice/finalcombinedchecks remainowed. RR1081174f316isalsofolded/frozen; all31OLDSVGvalues unchanged, independent7writer/printercontrols pass, finalpinnedupdatepending.
