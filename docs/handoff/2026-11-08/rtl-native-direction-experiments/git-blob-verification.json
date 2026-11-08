@@ -1,0 +1,115 @@
+{
+  "verifiedCommit": "663b8701f8ca60eedb4c4cb3c24bf0744f7accf6",
+  "verified": true,
+  "firstCheck": "The authored prose working copy had CRLF while Git stored LF. It was normalized to its committed representation; no raw evidence or archive was changed. Verification then passed for all18 files.",
+  "files": [
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments.md",
+      "bytes": 4212,
+      "gitBlobSha1": "2b8844ec3d6d3ccdca879b66112ee910a00de718",
+      "sha256": "f266fb6eae5b0a23d832634b964f7733a6bb8b6738b75d87b92706f3b44b9173"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/candidate-probes-02.files.json",
+      "bytes": 8910,
+      "gitBlobSha1": "58e2c7457d9f06c5b2b66cbc822d67ceaca387ec",
+      "sha256": "c56c271c11519aec37463376f29a3245b4e0f24b8be8da572a60f05239fc0b8e"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/candidate-probes-02.zip",
+      "bytes": 672394,
+      "gitBlobSha1": "9c3c11e4b2a62235317759ac92d0d58a6cff1dab",
+      "sha256": "c3e667c55e72385de6e8bbea7b88e4d0a95d71e3a6993e0057ead66daa4323a4"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/executed.files.json",
+      "bytes": 1367,
+      "gitBlobSha1": "96c37de6843a4dd703f27f1db339412b3f31f626",
+      "sha256": "2f7671effc86bbea7f55d23b7652f968c17c2720e36797028908060b7835558c"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/executed.zip",
+      "bytes": 7825,
+      "gitBlobSha1": "80c4c85b45dcddc816945e76bbd8925f68998082",
+      "sha256": "433b6cd20cdee49f059bc8b8844f2c6ae1b4d76b1505fb8de61ef7b313102c3f"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/first-producer-attempt-01.files.json",
+      "bytes": 2077,
+      "gitBlobSha1": "918c29efaec8e0b88c5ad7874c0fa7c248e6be8a",
+      "sha256": "7e9798b9ea3f581dcfcce10602baae70d9fb76693a1b4812670e4f1325e5224a"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/first-producer-attempt-01.zip",
+      "bytes": 132501,
+      "gitBlobSha1": "b173885074c909ee75d6e30e21c1259fad140d6a",
+      "sha256": "30f4796fca991eb6e3911a1f267e0539e34051ec22917e50cacfa838f3158459"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/native-contrast-11.files.json",
+      "bytes": 352468,
+      "gitBlobSha1": "5bdb138e54d7e1c0785e147becb4d1c2d2a798e2",
+      "sha256": "0aa2dfadf313951878eeaee33d25821aa3ec75b58d238aab26f5312c1d6f1327"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/native-contrast-11.zip",
+      "bytes": 3633782,
+      "gitBlobSha1": "5a19af6cb0d5008a3f8f5b9c77800fba0d226ff5",
+      "sha256": "039c3ed8cda544a88298229a2c577fc7a1a41b68f8319b117779278715026505"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/native-direction-3.files.json",
+      "bytes": 96294,
+      "gitBlobSha1": "e0cb4eeac5a06053d154c16d6e21148d09fe8561",
+      "sha256": "97e10d720317b056a1bbdcc64d2123b5e7e38e17017e48e385221aa25cac5d19"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/native-direction-3.zip",
+      "bytes": 1026881,
+      "gitBlobSha1": "b08da38c8f0fb62cd32305775cff230aebd3a57b",
+      "sha256": "4db5bda9f4a5185270b5e7bae66806f1fc8fa62cf8d371d2032b28d31859394d"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/receipt.json",
+      "bytes": 7938,
+      "gitBlobSha1": "3e16768d39f6370281896d292c5e316b478fd905",
+      "sha256": "da77c407df04b34eadba19639a57e8e8c68c0f1a888d9ce22b6285a31c762f41"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/review-contrast-11.files.json",
+      "bytes": 2998,
+      "gitBlobSha1": "e9c2e85c86e929648e351942d70794eea710a6eb",
+      "sha256": "7672c6cab544a63a26e8a183b55fdea560c4111b3d29b364101473aa2a0c76fb"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/review-contrast-11.zip",
+      "bytes": 425898,
+      "gitBlobSha1": "3e22037c7ba4551dfccf44f1a60d4e6efda0eabb",
+      "sha256": "51a8518bea69708fe46b59b233214b11cf4483d6abc3164383d56f7b55bb6fd8"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/review-direction-3.files.json",
+      "bytes": 1072,
+      "gitBlobSha1": "b395f2c48e1f88947da09b1c1ecdb9f49236a35c",
+      "sha256": "ffb8e5899ce18aba2afabe6889414df0a40c957b9c0513e7584e371ae6243056"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/review-direction-3.zip",
+      "bytes": 146754,
+      "gitBlobSha1": "4ca833f222e7f3ffa61115dd8632540be82ef5e2",
+      "sha256": "25216df3eea9dd67ba3c02c4ac543373fa043290de0e6b445617b1ebefd8fdc5"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/validation-and-first-failures.files.json",
+      "bytes": 4561,
+      "gitBlobSha1": "5428b16a0b7440a4c3ddd0371685a99e9582556d",
+      "sha256": "b2433450b02913b8616c0c283800689a0181776184870b113493bcbd1c793f76"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-direction-experiments/validation-and-first-failures.zip",
+      "bytes": 184113,
+      "gitBlobSha1": "f98e84dd9adc9d127f26e11c7f9f7dde3b4fc57a",
+      "sha256": "9c8fa8724d75ac756eab9e9d668f04d7ca639612e88ebdebc8c5fe8640a7e9f3"
+    }
+  ]
+}
