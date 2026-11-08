@@ -2,7 +2,7 @@
 import { chartNumber, resolveChartData, type ResolvedChartData } from './chart-data.js';
 import { chartDrawPlan, type ChartDrawPlan } from './chart-fallback.js';
 import { chartAxisFraction, chartTextSize, stackCategoryValues } from './chart-axis.js';
-import { chartBarGeometry } from './chart-layer.js';
+import { chartBarGeometry, chartBarSeriesOffset } from './chart-layer.js';
 import { chartPlotInset, type ChartPlotGeometry } from './chart-plot.js';
 import { horizontalBarPlot } from './chart-marks.js';
 import { chartOptionTarget, resolveChartOptions } from './chart-options.js';
@@ -129,7 +129,7 @@ export function chartPointGeometry(chart: unknown, composed: ComposedChart, refe
         y: number;
     };
     if (kind === 'bar') {
-        const band = (horizontal ? plot.height : plot.width) / count, bar = chartBarGeometry(band, series.length, grouping), shift = bar.clustered ? selected.series * bar.width : 0;
+        const band = (horizontal ? plot.height : plot.width) / count, bar = chartBarGeometry(band, series.length, grouping), shift = chartBarSeriesOffset(bar, selected.series, series.length, !horizontal && geometry.direction === 'rtl');
         const a = valueAt(Math.min(axis.max, Math.max(axis.min, entry.from))), b = valueAt(entry.to), sign = entry.to >= entry.from ? 1 : -1;
         box = horizontal ? { x: Math.min(a, b), y: plot.y + selected.row * band + bar.offset + shift, width: Math.abs(b - a), height: bar.width } : { x: plot.x + slot * band + bar.offset + shift, y: Math.min(a, b), width: bar.width, height: Math.abs(b - a) };
         const cx = box.x + box.width / 2, cy = box.y + box.height / 2;

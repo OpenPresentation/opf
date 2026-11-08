@@ -416,6 +416,14 @@ export function chartBarGeometry(band: number, seriesCount: number, grouping: st
 }
 
 /**
+ * LH-176/SH-25: source series within one native bar cluster. A reversed vertical category axis also reverses the physical
+ * left-to-right series slots; horizontal categories keep their top-to-bottom series order. Stacks occupy one slot in either direction.
+ */
+export function chartBarSeriesOffset(bar: ChartBarGeometry, series: number, count: number, reversedColumn = false): number {
+  return bar.clustered ? (reversedColumn ? count - 1 - series : series) * bar.width : 0;
+}
+
+/**
  * LH-03, LH-142: true when the chart draws no value axis: no tick labels, gridlines or value axis line, because its labels carry the values
  * (a small chart's value labels, a horizontal stacked bar chart's segment values). Both engines read this one answer.
  */

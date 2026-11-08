@@ -128,3 +128,7 @@ Vetoable/native safety clarification: the failed curved doughnut worker remained
 033publicconsistency: source-only1188(f481) corrects published-native opt-in guidance/sevenpackages and sharedReflowglossary. Solemaintainedgate14494is required-all/exact-head/merge with180secondinterval; allsiteobservers stopped. Sitescurrentorg202ee928952, gallery1728a476459(green twice), dev2007d735914locallyverified. Rootorgschema rendering shrinks2,837,996toabout1.835MBwhile retaining everypath/typedvalue/constraint and unchanged1.9MBguard; all5browser/fullschema tests pass. Actualpublicpreview/deploy/merge staysowner-only.
 
 - [SH20/22 completed domain audit](sh20-22-final-boundary.md): all516records identical;132eligible/0fail,30OPF; no safe additional live domain, all excluded scripts retain measured native-shape fallback. Original3099files separately archived(evidence-only).
+
+## RTL clustered-column native blocker
+
+[Source correction and immutable before/after proof](rtl-column-series.md) follow actual native series-slot observations without changing source data, colors, category reversal, chart XML or horizontal/stacked/LTR behavior. Five candidate overlay centers now align mathematically with prior independent native bounds; fresh candidate Office lifecycle and final combined gates remain required. Frozen SH25 and earlier source branches are unchanged.
