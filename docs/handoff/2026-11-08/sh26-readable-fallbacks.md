@@ -101,3 +101,22 @@ Source is still under review. Whole-case sheet review, bounded native-input
 derivatives, the second changed check, actual owner-run Office acceptance and
 a coordinator-owned new pinned golden batch remain the gates. No local golden
 edits, public examples/count changes, Office or publication are claimed.
+
+
+Final source is pushed at 975ced9f289f076cabfbecf1a0f7db53789a5fc7. The second
+mandatory mapped batch is 12/13: core 4,233/4,234, only the expected pinned
+composition-template snapshot; all other selected checks pass. All thirty
+maintained archive locks remain exact (Chartex31 + RR54 data42). No golden or
+fixture promotion was performed.
+
+The durable [review packet](../../evidence/sh26-readable-fallbacks-034/README.md)
+contains all twelve actually viewed paired sheets, thirty after panels, exact
+source/control hashes, complete raw failures and both mapped batches. Native
+qualification now uses thirteen complete-slide OPF subsets, at most three slides
+per file, through ordinary shipped CLI conversion. Their thirty PNGs are exact
+to the primary five-archive/30-page packet. See native-build.json and
+native-receipt.json in the packet; the unsupported PPTX --slides refusal remains
+preserved. All five primary whole PPTX archives remain byte-identical after the
+API correction. Only root runs Office; actual native acceptance and a new pinned
+golden/integration gate remain owed. The RTL deck contains Latin paragraphs;
+its exact continued numbering does not qualify Arabic glyphs or RTL paragraphs.
