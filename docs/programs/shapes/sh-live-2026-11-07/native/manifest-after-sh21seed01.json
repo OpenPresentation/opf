@@ -1,0 +1,50 @@
+{
+  "scope": "Failed read-only seed attempt and exact owned cleanup; no native acceptance. Existing source/copy hashes unchanged; no process terminated.",
+  "files": [
+    {
+      "file": "sh21-seed-readonly-01/cleanup.json",
+      "sha256": "2b13ed92b4be2b485d33c1b0f4bb160ede7fa4cfc293e11ff5c93020ebdac8ef",
+      "bytes": 386
+    },
+    {
+      "file": "sh21-seed-readonly-01/cleanup.ps1",
+      "sha256": "833e258320209fd7dc4bde0e89a996f033ceccb165b563fb379f68d11bc41a84",
+      "bytes": 1380
+    },
+    {
+      "file": "sh21-seed-readonly-01/result/orgChart1.png",
+      "sha256": "7296388d4d6a54ab0279c35ca0a623438294ad3e06b36586d3b73343c8ea0039",
+      "bytes": 6404
+    },
+    {
+      "file": "sh21-seed-readonly-01/result/owned-seeds.pptx",
+      "sha256": "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+      "bytes": 228310
+    },
+    {
+      "file": "sh21-seed-readonly-01/result/witness.json",
+      "sha256": "a1ec82959f2993f72175ab2051d4645cf45986a3fd16c610e007734c0725f67b",
+      "bytes": 613
+    },
+    {
+      "file": "sh21-seed-readonly-01/seed-readonly.ps1",
+      "sha256": "5da3616bec9d1bb1ba9a239e05600cad32d6f1e9c4355a9a139ad848777d9af6",
+      "bytes": 4728
+    },
+    {
+      "file": "sh21-seed-readonly-01/worker.json",
+      "sha256": "2954722ffc15f7acabd111ea48b7219c6464d1b2b71a82e88902050b555b5ea0",
+      "bytes": 316
+    },
+    {
+      "file": "sh21-seed-readonly-01/worker.stderr.log",
+      "sha256": "f6196da586aec934a99b28720afa457c73bd9dd966afb928c52ab0fda39f16a2",
+      "bytes": 311
+    },
+    {
+      "file": "sh21-seed-readonly-01/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ]
+}

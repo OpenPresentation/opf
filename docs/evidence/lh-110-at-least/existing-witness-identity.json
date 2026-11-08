@@ -1,0 +1,120 @@
+{
+  "baselineProducer": "6e9ce2b0a53a7f913d9cda4ed0f0cc980bdca8c3",
+  "candidate": "40fcf45f6054852a0b19acfe4f59b566b228a20a",
+  "route": "Maintained CLI convert, date2026-11-08, PNG scale0.5; exact frozen1169 inputs and previously sealed output hashes",
+  "cases": [
+    {
+      "id": "localized-chart-references-en-US",
+      "inputSha256": "ab4bc75e1a800daf9414a5e31e949fedd25333cb405ad41e27f3f3901b62e672",
+      "outputs": {
+        "pptx": {
+          "sha256": "958f0abeb9afe4ab3bce05a99485af0fc6a8f1b26198d0c8eef3776e2dd8dab3",
+          "expected": "958f0abeb9afe4ab3bce05a99485af0fc6a8f1b26198d0c8eef3776e2dd8dab3",
+          "byteIdentical": true
+        },
+        "png": {
+          "sha256": "2b1cdb52d1394431ea0bde9cafd87d3312c8096884ce2f9661521a473ee8a817",
+          "expected": "2b1cdb52d1394431ea0bde9cafd87d3312c8096884ce2f9661521a473ee8a817",
+          "byteIdentical": true
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-de-DE",
+      "inputSha256": "7f914d3c865448acbe1c60fd5717a506e52bb2a9892a6d2dd13ced6f0ff1d810",
+      "outputs": {
+        "pptx": {
+          "sha256": "826fb9fa650a8bd1b0de60ca7dbb869c01ab726caf0e1761b913c505e6b357b1",
+          "expected": "826fb9fa650a8bd1b0de60ca7dbb869c01ab726caf0e1761b913c505e6b357b1",
+          "byteIdentical": true
+        },
+        "png": {
+          "sha256": "6c618ecac5f3cb2420a169cb0cff12c2c85db9ff86ce97a0d75df6a309dd96f3",
+          "expected": "6c618ecac5f3cb2420a169cb0cff12c2c85db9ff86ce97a0d75df6a309dd96f3",
+          "byteIdentical": true
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-fr-FR",
+      "inputSha256": "01ba2bead103d4c2d009d6cf56df59581ce41be3447ab926a49e5bb72515e0d3",
+      "outputs": {
+        "pptx": {
+          "sha256": "9407a2dd6837cbacbc7332b570ba8f3575bfc14fab18cbccc788cb809a3ac1da",
+          "expected": "9407a2dd6837cbacbc7332b570ba8f3575bfc14fab18cbccc788cb809a3ac1da",
+          "byteIdentical": true
+        },
+        "png": {
+          "sha256": "c42669337528cd0ca3c13da6076273478d2a0a547a41087bfa9fe87c25ba2eed",
+          "expected": "c42669337528cd0ca3c13da6076273478d2a0a547a41087bfa9fe87c25ba2eed",
+          "byteIdentical": true
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-es-ES",
+      "inputSha256": "a4dc544d31cbf10839f51d11c0583ecac06cf24f940a1eae87b01467bb0e7510",
+      "outputs": {
+        "pptx": {
+          "sha256": "6ae3fd620e3b7ac63cd48c6ffddd38c09ec4721bc3b0387fecf7f746a680e372",
+          "expected": "6ae3fd620e3b7ac63cd48c6ffddd38c09ec4721bc3b0387fecf7f746a680e372",
+          "byteIdentical": true
+        },
+        "png": {
+          "sha256": "938a018b6775e1c1f47c4f542ca34aa531f49f8d329982234973408a0d4fdb24",
+          "expected": "938a018b6775e1c1f47c4f542ca34aa531f49f8d329982234973408a0d4fdb24",
+          "byteIdentical": true
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-it-IT",
+      "inputSha256": "01561362e7bee8bd91bd876b822f6f6c188e32895a954cfe8d76936d4fbd92f6",
+      "outputs": {
+        "pptx": {
+          "sha256": "cd43aa61dbd95a352d6c49be26013cbd8440ecef9ca959f904ed1345083e5b89",
+          "expected": "cd43aa61dbd95a352d6c49be26013cbd8440ecef9ca959f904ed1345083e5b89",
+          "byteIdentical": true
+        },
+        "png": {
+          "sha256": "86a3b3e70de8716351ef03845fc05161b8ffe725b5bffd2c1605cbbeb1e13d36",
+          "expected": "86a3b3e70de8716351ef03845fc05161b8ffe725b5bffd2c1605cbbeb1e13d36",
+          "byteIdentical": true
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-pt-PT",
+      "inputSha256": "35d547455bf48b97b05cb2190590c17e503ad63f30fb55d0d4eb1b5bf10b1a19",
+      "outputs": {
+        "pptx": {
+          "sha256": "128fdc4c7faf42ef46cac9d5b138a0a51596ebd1fc79d2d0d82b0caf8568f9dc",
+          "expected": "128fdc4c7faf42ef46cac9d5b138a0a51596ebd1fc79d2d0d82b0caf8568f9dc",
+          "byteIdentical": true
+        },
+        "png": {
+          "sha256": "1007bd2e17adb6509f927e9e0d5e6e489cea7de1ca1b38deeecd8f3bc570d646",
+          "expected": "1007bd2e17adb6509f927e9e0d5e6e489cea7de1ca1b38deeecd8f3bc570d646",
+          "byteIdentical": true
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-nl-NL",
+      "inputSha256": "5c59d5153b2e32fce2967de29dbbb52ed19d77674759e708dff322ccffe5bd9c",
+      "outputs": {
+        "pptx": {
+          "sha256": "6634f0f87bbae8169dca7336e591b2f5088f918c3eebe83321e302ff502eeea9",
+          "expected": "6634f0f87bbae8169dca7336e591b2f5088f918c3eebe83321e302ff502eeea9",
+          "byteIdentical": true
+        },
+        "png": {
+          "sha256": "0394726de6b037c394e8fb6b741a12c207e355c4bd39cf8b8d0bdd916208577d",
+          "expected": "0394726de6b037c394e8fb6b741a12c207e355c4bd39cf8b8d0bdd916208577d",
+          "byteIdentical": true
+        }
+      }
+    }
+  ],
+  "allFourteenOutputsByteIdentical": true
+}

@@ -4,7 +4,7 @@
 // as for any other edit; the `prepare...` forms return the patch without a session. Stacking is the array order (later is on top). A connector end names a
 // block or overlay by its `id`: connecting two things that have none gives them one, in the same patch, so one undo takes both back. Editing a shape's own
 // properties (fill, line, text) is shape-options.js, which also takes an overlay shape's path. Plain JS with no DOM and no Node imports.
-import { SHAPE_PRESETS, presetAspect } from "@openpresentation/opf/composition";
+import { SHAPE_PRESETS, presetAspect, resolveChartData, chartDrawPlan } from "@openpresentation/opf/composition";
 import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
@@ -199,6 +199,32 @@ export function prepareOverlayDetach(presentation, path, frame) {
 export function detachOverlay(editor, path, frame, meta = {}) {
   requireEditor(editor);
   return applyPrepared(editor, prepareOverlayDetach(editor.presentation, path, frame), meta, "overlay-detach");
+}
+
+/** Attach a shape to a block or a source-backed chart point as one atomic, validated edit. */
+export function prepareOverlayAnchor(presentation, path, anchor) {
+  const found = requireOverlay(presentation, path, "shape");
+  if (!isObject(anchor)) throw bad("An anchor is an object with block and edge, and optionally point and series.", {anchor});
+  const parts = splitOpfPath(found.path), pointer = key => opfPathToJsonPointer([...parts, key]);
+  const patches = ["x", "y", "width", "height"].filter(key => Object.hasOwn(found.entry, key)).map(key => ({op: "remove", path: pointer(key)}));
+  if (!same(found.entry.at, anchor)) patches.push({op: Object.hasOwn(found.entry, "at") ? "replace" : "add", path: pointer("at"), value: structuredClone(anchor)});
+  return prepared(presentation, patches, found.path);
+}
+export function setOverlayAnchor(editor, path, anchor, meta = {}) {
+  requireEditor(editor);
+  return applyPrepared(editor, prepareOverlayAnchor(editor.presentation, path, anchor), meta, "overlay-anchor");
+}
+/** Chart blocks a shape can follow, with zero-based point/series choices (indexes disambiguate repeated names). */
+export function listChartPointTargets(presentation, slideIndex) {
+  const classic = new Set(["column","stacked-column","100pct-stacked-column","bar","stacked-bar","100pct-stacked-bar","line","line-with-markers","stacked-line","stacked-line-with-markers","area","stacked-area","100pct-stacked-area","scatter","pie","doughnut"]);
+  return listConnectionEnds(presentation, slideIndex).flatMap(end => {
+    if (end.kind !== "block" || !end.id) return [];
+    const block = getValueAtPath(presentation, splitOpfPath(end.path)), chart = block?.chart;
+    if (!classic.has(chart?.type)) return [];
+    const data = resolveChartData(chart, presentation); if (!data.ok) return [];
+    const plan = chartDrawPlan(chart, data), first = plan.kind === "scatter" && plan.hasX ? 2 : 1;
+    return [{id: end.id, path: end.path, label: end.label, points: plan.rows.map((row, index) => ({index, name: String(row[0] ?? "")})), series: plan.columns.slice(first).map((name, index) => ({index, name: String(name ?? "")}))}];
+  });
 }
 
 // --- stacking and removing -------------------------------------------------------------------------------------------------------

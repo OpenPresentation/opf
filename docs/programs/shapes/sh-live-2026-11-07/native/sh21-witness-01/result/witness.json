@@ -1,0 +1,70 @@
+﻿{
+    "passed":  false,
+    "stages":  [
+                   "create-app:ok",
+                   "empty-app:ok",
+                   "open-seed-copy:ok",
+                   "seed-identity:ok",
+                   "create-owned:ok",
+                   "save-owned:ok",
+                   "measure-trees:failed"
+               ],
+    "failure":  "measure-trees: Error HRESULT E_FAIL has been returned from a call to a COM component.",
+    "inputs":  [
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-witness-01\\result\\inputs\\0-smartart-seeds.pptx",
+                       "sha256":  "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-08\\smartart-seeds.pptx",
+                       "sha256After":  "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-witness-01\\result\\inputs\\1-cycle-4-short-square.pptx",
+                       "sha256":  "a18d5448d38bdad8f5dad59a5d930c3a9e18091740a254f3509d31c43c8985f7",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\cycle-4-short-square.pptx",
+                       "sha256After":  "a18d5448d38bdad8f5dad59a5d930c3a9e18091740a254f3509d31c43c8985f7"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-witness-01\\result\\inputs\\2-matrix-4-cjk-wide.pptx",
+                       "sha256":  "68d95fde367e84303392894c9601bf8e8d107a89ff9748fb39b232263e0683c2",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-cjk-wide.pptx",
+                       "sha256After":  "68d95fde367e84303392894c9601bf8e8d107a89ff9748fb39b232263e0683c2"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-witness-01\\result\\inputs\\3-matrix-4-rtl-wide.pptx",
+                       "sha256":  "2a35e78da09b3e77a351a2e3bd5fce618762418aec4de7d08e60eabdced47071",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-rtl-wide.pptx",
+                       "sha256After":  "2a35e78da09b3e77a351a2e3bd5fce618762418aec4de7d08e60eabdced47071"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-witness-01\\result\\inputs\\4-cycle-4-short-square.pptx",
+                       "sha256":  "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\cycle-4-short-square.pptx",
+                       "sha256After":  "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-witness-01\\result\\inputs\\5-matrix-4-cjk-wide.pptx",
+                       "sha256":  "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-cjk-wide.pptx",
+                       "sha256After":  "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-witness-01\\result\\inputs\\6-matrix-4-rtl-wide.pptx",
+                       "sha256":  "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-rtl-wide.pptx",
+                       "sha256After":  "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2"
+                   }
+               ],
+    "controls":  [
+
+                 ],
+    "trees":  [
+
+              ]
+}

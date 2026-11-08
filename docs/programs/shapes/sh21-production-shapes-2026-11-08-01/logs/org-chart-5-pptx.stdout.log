@@ -1,0 +1,84 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\org-chart-5.opf.json",
+    "sha256": "a0daa4e10f8158faca39b397a7d17a057c8096551e161f7e4ea6864557b9ca11",
+    "bytes": 912
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\sh21-production-native-inputs-01\\pptx\\org-chart-5.pptx",
+      "sha256": "af8e7be5897fdd8857d076d7d2e59f6e723c8ccdd7a70070864a7344fb23b96e",
+      "bytes": 105940,
+      "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "pptx/smartart-unavailable",
+      "severity": "info",
+      "category": "pptx",
+      "path": "/slides/0/items",
+      "scope": "document",
+      "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification.",
+      "help": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",
+      "reason": "Organization Chart text and edits are awaiting native qualification"
+    },
+    {
+      "ruleId": "pptx/typeface-not-office-safe",
+      "severity": "info",
+      "category": "pptx",
+      "path": "",
+      "scope": "document",
+      "message": "The PPTX names Source Sans 3, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+      "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+      "families": [
+        "Source Sans 3"
+      ]
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 2
+  },
+  "format": "pptx",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

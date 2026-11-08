@@ -1,0 +1,7 @@
+
+> openpresentation-workspace@ check:catalog-free C:\opf-work\lh-110-localized
+> node scripts/check-catalog-free.mjs
+
+catalog-free check failed:
+  composition: 260168 bytes gzipped, over the budget of 256668; check what grew, then run --update if it is intended
+ ELIFECYCLE  Command failed with exit code 1.

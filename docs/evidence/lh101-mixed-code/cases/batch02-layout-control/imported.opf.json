@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Layout harvest batch-02",
+  "slides": [
+    {
+      "title": "Operating Model",
+      "blocks": [
+        {
+          "code": {
+            "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
+            "language": "ts",
+            "filename": "broadband-public-hearing-deck-rule.ts"
+          }
+        },
+        {
+          "text": "Rural Connectivity Office should focus the next cycle on explain broadband route choices and resident impact while making the operating tradeoffs clear to public engagement stakeholders."
+        }
+      ],
+      "id": "s30",
+      "layout": "code"
+    }
+  ],
+  "language": "en",
+  "design": {
+    "background": "light1"
+  }
+}

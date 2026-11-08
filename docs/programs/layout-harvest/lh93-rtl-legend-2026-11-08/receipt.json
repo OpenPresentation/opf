@@ -1,0 +1,24 @@
+{
+  "producer": "6ee1cb75dc760a46c9f6d91eed7c2cedb547d765",
+  "sourceBase": "af2fd88e70dccd5a444bea976d3feee908720081",
+  "node": "v24.20.0",
+  "coreModel": 4,
+  "existingChartLayer": 15,
+  "exportScenarios": 2,
+  "cleanCliCases": 5,
+  "wholeNativeBeforeAfterIdentical": 5,
+  "unaffectedPreviewIdentical": 4,
+  "cleanOutputEqualsReviewedAfter": true,
+  "mapped": {
+    "seconds": 256.9,
+    "total": 13,
+    "pass": 10,
+    "fail": 3,
+    "failures": [
+      "Inherited composition gzip budget271275>267675",
+      "Sparse painting-Linux.json.gz absent; exact tracked blob restored and affected check:text passes",
+      "Core4106/4116 tests pass;10fail incl inherited validation laziness, sparse corpus, timing, template and generateddocs locks"
+    ]
+  },
+  "native": "Current clean negative-RTL native acceptance owed to coordinator; no Office run by agent"
+}

@@ -1,0 +1,11 @@
+{
+  "args": [
+    "packages/cli/dist/index.js",
+    "convert",
+    "C:/opf-work/lh101-mixed-code-after-03/cases/batch02-layout-control/source.opf.json",
+    "C:/opf-work/lh101-mixed-code-after-03/cases/batch02-layout-control/after.pptx",
+    "--date",
+    "2026-11-08"
+  ],
+  "status": 0
+}

@@ -1,0 +1,26 @@
+{
+  "source": "1451de861a25059d27375f40234ebe367bc4e091",
+  "result": "Build and negative-category/shared-sibling/authored-options controls pass",
+  "preservedSource": "All previously accepted core/schema/render/editor/gallery/CLI/MCP/example/skill/tooling trees unchanged; product delta onlyPPTXindex+newtest",
+  "mergeResolution": "Keep LH75 three-line75%growth; combine current progress histories. Generated SVG font-license trailing whitespace retained byte-exact, source whitespacecheck passes.",
+  "native": "Three files sealed, not run",
+  "inheritedFixtureLimit": "All nine fallback archives are baseline/candidate identical; new034catalog layout adds one template versus stored lock; final maintained archive refresh owed",
+  "newOpenDefect": "LH110 at-least word forms rejected in fr/es/pt while digit forms pass; derived correction assigned,1169frozen",
+  "files": [
+    {
+      "file": "negative-build.log.gz",
+      "rawSha256": "6d446f65d2eb4ab8856267c30622000871436803c56ed486f97e0ac207fed563",
+      "gzipSha256": "75015a800f04901b7b78702b579d770d6664f56daccc94de6afade9e107ed130"
+    },
+    {
+      "file": "negative-focused.log.gz",
+      "rawSha256": "75cb9944424f99b329aee205802fba0ef1ea1a0b0d1a4e750da8b3849b434c07",
+      "gzipSha256": "f2cb01d66da6f75efe14c533eedc7539d822a6007636c7e5ebf53aa9cabc5472"
+    },
+    {
+      "file": "negative-options.log.gz",
+      "rawSha256": "ad242f732a978e227107b21a85f96dc49c1883a6cc39d338668ab03497b3bea0",
+      "gzipSha256": "06a9bcc5fad13f300267cee6cfdb3d7b024f62760e7497dbb52d159e6164979d"
+    }
+  ]
+}

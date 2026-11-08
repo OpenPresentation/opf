@@ -3,6 +3,7 @@ import { readFile, mkdtemp, rm } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import {windowsPowerShellEnvironment} from '../../../scripts/native-acceptance/windows-powershell-env.mjs';
 
 // RR-87: the owned-copy native helper. Offline: it reads the scripts and, on Windows, runs the fake-Office controls
 // (test/native-playground-check.ps1). No PowerPoint process is started and the helper itself is never run.
@@ -27,7 +28,7 @@ if (process.platform === 'win32') {
   try {
     const report = path.join(directory, 'report.json');
     const shell = process.env.WINDIR ? path.join(process.env.WINDIR, 'System32/WindowsPowerShell/v1.0/powershell.exe') : 'powershell.exe';
-    const run = spawnSync(shell, ['-NoProfile', '-NonInteractive', '-File', new URL('native-playground-check.ps1', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'), '-ReportPath', report], { encoding: 'utf8', timeout: 120000 });
+    const run = spawnSync(shell, ['-NoProfile', '-NonInteractive', '-File', new URL('native-playground-check.ps1', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'), '-ReportPath', report], { encoding: 'utf8', timeout: 120000, env: windowsPowerShellEnvironment(process.env) });
     assert.equal(run.status, 0, `the offline controls pass: ${run.stdout}${run.stderr}`);
     const result = JSON.parse((await readFile(report, 'utf8')).replace(/^﻿/, ''));
     assert.deepEqual(result.cases.map((entry) => entry.case), ['ownership', 'already-open', 'failure-latch', 'close-only-owned', 'fresh-attempt', 'timeout', 'save-identity']);
