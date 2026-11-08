@@ -55,6 +55,22 @@ test('explicit cap and fill:false retain settled26px while preserving the readin
     assert.ok(entries(item).every(entry=>entry.text.richLines.every(line=>line.fragments.map(f=>f.text).join('').trim().length<=70)));
   }
 });
+test('a matched diagram region listColumns:1 stays single-column without a payload override',()=>{
+  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'];record.regions.find(region=>region.name==='levels').listColumns=1;
+  const result=compose(doc),item=body(result)[0];assert.equal(item.payload.columns,undefined);assert.equal(item.listColumns,undefined);assert.deepEqual(item.value,doc.slides[0].blocks[0].items);
+  assert.ok(result.diagnostics.some(d=>d.code==='text-overflow'&&/70 characters/.test(d.message)));
+  doc.slides[0].composition.overflow='error';assert.throws(()=>compose(doc),OPFCompositionError);
+});
+test('described singleton columns keep maintained column roles and whole description text',()=>{
+  const doc=documentFor(fixture.cases[1].slide);doc.slides[0].composition.maxFontSize=26;doc.slides[0].blocks[0].items=doc.slides[0].blocks[0].items.slice(0,2).map(text=>({text,description:'Supporting detail remains in its authored entry. '.repeat(2)}));
+  const result=compose(doc),item=body(result)[0];assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));
+  assert.deepEqual(entries(item).map(entry=>entry.value),doc.slides[0].blocks[0].items.map(value=>value.text));assert.deepEqual(entries(item).map(entry=>entry.descriptionValue),doc.slides[0].blocks[0].items.map(value=>value.description));
+  const singleton=item.listColumns?.find(column=>column.end-column.start===1);assert.ok(singleton,'Actually exercise a split with one described entry');
+  assert.equal(singleton.text.listEntries[0].heading,undefined,'Slicing a described list must not invent a singleton heading');
+  assert.equal(singleton.text.listEntries[0].text.fontSize,singleton.text.fontSize);
+  assert.ok(singleton.text.listEntries[0].description.fontSize<=singleton.text.fontSize);
+  for(const entry of entries(item))for(const fit of[entry.text,entry.description].filter(Boolean))for(const line of fit.richLines)assert.ok(line.fragments.map(fragment=>fragment.text).join('').trim().length<=70);
+});
 test('an explicit single column and pinned region refuse an unfit retained-size reading measure',()=>{
   const doc=documentFor(fixture.cases[0].slide);doc.slides[0].blocks[0].columns=1;doc.slides[0].blocks[0].region='levels';
   const result=compose(doc),item=body(result)[0];assert.equal(item.region,'levels');assert.equal(item.listColumns,undefined);
@@ -89,4 +105,29 @@ test('unrelated plain lists keep their existing full-width lines and irreducible
   const doc=documentFor(fixture.cases[0].slide);delete doc.slides[0].layout;const ordinary=compose(doc);assert.ok(body(ordinary)[0].text.lines.some(line=>line.trim().length>70));
   const impossible=documentFor({layout:'org-chart',title:'Complete unbreakable word',blocks:[{items:['x'.repeat(80)]}]});
   assert.ok(compose(impossible).diagnostics.some(d=>d.code==='text-overflow'));assert.throws(()=>paginate(impossible),OPFPaginationError);
+});
+
+
+test('an originally single described heading retains its heading scale, weight and complete description',()=>{
+  const doc=documentFor(fixture.cases[1].slide);doc.slides[0].blocks[0].items=[{text:'A complete authored heading',description:'Supporting detail remains in its authored entry. '.repeat(5)}];
+  const result=compose(doc),item=body(result)[0],entry=entries(item)[0];
+  assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));assert.equal(entry.heading,true);assert.ok(entry.text.fontSize>item.text.fontSize);
+  assert.ok(entry.text.richLines.flatMap(line=>line.fragments).every(fragment=>fragment.style.fontWeight===700));assert.deepEqual(entry.descriptionValue,doc.slides[0].blocks[0].items[0].description);
+  for(const fit of[entry.text,entry.description])for(const line of fit.richLines)assert.ok(line.fragments.map(fragment=>fragment.text).join('').trim().length<=70);
+});
+
+test('structured numbered families stay whole across fallback columns with exact levels and source paths',()=>{
+  const doc=documentFor(fixture.cases[2].slide),text=doc.slides[0].blocks[0].items[0];
+  doc.slides[0].blocks[0].numbering='arabic';doc.slides[0].blocks[0].items=[0,1,2,3,4,5].map((_,index)=>({text,level:index%2}));
+  const result=compose(doc),item=body(result)[0],all=entries(item);assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));assert.ok(item.listColumns.length>1);
+  assert.deepEqual(all.map(entry=>entry.level),[0,1,0,1,0,1]);assert.deepEqual(all.map(entry=>entry.index),[0,1,2,3,4,5]);assert.deepEqual(all.map(entry=>entry.value),doc.slides[0].blocks[0].items.map(entry=>entry.text));
+  assert.ok(item.listColumns.every(column=>column.start%2===0&&column.end%2===0));assert.ok(all.every(entry=>entry.marker.number));assert.ok(all.every(entry=>entry.heading===undefined));
+  assert.deepEqual(all.map(entry=>entry.textPath),doc.slides[0].blocks[0].items.map((_,index)=>'slides.0.blocks.0.items.'+index+'.text'));
+});
+
+
+test('an explicit payload auto count overrides an authored nested region single-column rule',()=>{
+  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'],region=record.regions.find(region=>region.name==='levels');
+  region.listColumns=1;record.regions=[record.regions[0],{direction:'column',regions:[region]}];doc.slides[0].blocks[0].columns='auto';
+  const result=compose(doc),item=body(result)[0];assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));assert.ok(item.listColumns.length>1);assert.deepEqual(entries(item).map(entry=>entry.value),doc.slides[0].blocks[0].items);
 });

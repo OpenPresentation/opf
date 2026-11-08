@@ -11190,17 +11190,32 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const readingTemplate = recordTemplate ?? (recomposing && isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined);
   const readingRegion = (region: LayoutRegion) => ['org-chart', 'hierarchy', 'venn'].includes(region.arrangement ?? '') || region.arrangement === 'pyramid' && region.pyramidDirection === 'down';
   if (readingTemplate?.regions.some(readingRegion)) {
-    const readable = (fit: ListFit) => fit.listEntries.every(entry => !blockCutsWord(entry) && entry.text.richLines.every(line => line.fragments.map(fragment => fragment.text).join('').trim().length <= PROSE_MEASURE_CHARS));
+    // layoutTemplate defaults listColumns to 1; only an authored region count constrains this fallback trial.
+    const regionColumns = new Map<string, 'auto' | 1>();
+    const collectColumns = (entries: unknown): void => {
+      if (!Array.isArray(entries)) return;
+      for (const value of entries) {
+        const entry = record(value);
+        if (typeof entry.name === 'string' && (entry.listColumns === 'auto' || entry.listColumns === 1)) regionColumns.set(entry.name, entry.listColumns);
+        else if (entry.name === undefined) collectColumns(entry.regions);
+      }
+    };
+    collectColumns(layout.regions);
+    const readable = (fit: ListFit) => fit.listEntries.every(entry => [entry.text, entry.description].every(text => !text || !blockCutsWord({...entry, text}) && text.richLines.every(line => line.fragments.map(fragment => fragment.text).join('').trim().length <= PROSE_MEASURE_CHARS)));
     for (const item of items) {
       if (!['items', 'bullets'].includes(item.field) || !item.text || !('listEntries' in item.text) || item.text.overflow || item.caption || stepPaths.has(item.path) || stepFlows.has(item.path)) continue;
-      const region = readingTemplate.regions.find(region => region.name === (item.region ?? item.payload.region));
+      const listRegions = readingTemplate.regions.filter(region => region.accepts.includes('list'));
+      const region = readingTemplate.regions.find(region => region.name === (item.region ?? item.payload.region)) ?? (listRegions.length === 1 ? listRegions[0] : undefined);
       if (region ? !readingRegion(region) : readingTemplate.regions.some(region => region.accepts.includes('list') && !readingRegion(region))) continue;
       if (arrangements.some(arrangement => arrangement.path === item.path || arrangement.nodes.some(node => node.path === item.path || node.path?.startsWith(item.path + '.')))) continue;
       const current = item.text as ListFit;
       if (readable(current)) continue;
       const values = item.value as ListValue[], area = fallbackListAreas.get(item.path) ?? item.box, ownColumns = item.payload.columns;
-      const counts = typeof ownColumns === 'number' ? [ownColumns] : options.recompose === false ? [1] : [1, 2, 3].filter(count => count <= values.length);
-      const listOptions = listOptionsFor(item.field, item.path, item.payload.numbering, values), numbering = listOptions.numbering;
+      const mode = ownColumns === 'auto' || ownColumns === 1 || ownColumns === 2 || ownColumns === 3 ? ownColumns : region ? regionColumns.get(region.name) : undefined;
+      const counts = typeof mode === 'number' ? [mode] : options.recompose === false ? [1] : [1, 2, 3].filter(count => count <= values.length);
+      // Like listColumnsFor, slicing a multi-entry list must not promote a one-entry chunk into a new heading.
+      // A genuinely single described heading retains its original listOptionsFor role.
+      const listOptions = {...listOptionsFor(item.field, item.path, item.payload.numbering, values), ...(values.length > 1 ? {heading: false} : {})}, numbering = listOptions.numbering;
       const cap = options.fill === false || ownRunSizes(values) ? current.fontSize : Math.max(current.fontSize, Math.min(ARRANGEMENT_GROWTH * contentNominalSize(item.field) * scale, capOf(item.composition)));
       const sizes = [current.fontSize];
       for (let next = typeScaleAbove(current.fontSize, item.composition.minFontSize ?? 16, scale), n = 0; next <= cap + FONT_GRID_EPSILON && n < 32; n++, next = typeScaleAbove(next, item.composition.minFontSize ?? 16, scale)) sizes.push(next);
@@ -11217,7 +11232,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
             const breaks = [0, ...listColumnBreaks(heights, whole.listEntries.map(entry => entry.level), count), values.length];
             const place = (dy: number, height: number) => boxes.slice(0, breaks.length - 1).map((box, index): ComposedListColumn => {
               const start = breaks[index]!, end = breaks[index + 1]!, chunk = numbering !== undefined ? sliceNumberedItems(values, numbering, start, end) : values.slice(start, end);
-              const text = fitList(chunk, {...box, y: box.y + dy, height}, size, size, {...listOptions, ...(values.length > 1 ? {heading: false} : {})});
+              const text = fitList(chunk, {...box, y: box.y + dy, height}, size, size, listOptions);
               return {box: {...box, y: box.y + dy, height}, start, end, text: {...text, listEntries: text.listEntries.map(entry => {
                 const at = entry.index + start, object = values[at] !== null && typeof values[at] === 'object' && !Array.isArray(values[at]);
                 return {...entry, index: at, textPath: `${item.path}.${at}${object ? '.text' : ''}`, descriptionPath: `${item.path}.${at}.description`};

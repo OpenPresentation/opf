@@ -20,7 +20,7 @@ Vetoable implementation decisions:
 - Retain the settled size as the floor. Try the existing type scale upward,
   never beyond the effective cap, and one to three columns of whole list items.
   Keep source order, paths, numbering, rich text and original gap. Explicit
-  column counts and pins constrain the fit; `fill:false` disables growth.
+  column counts (payload first, then explicitly authored region rules) and pins constrain the fit; `fill:false` disables growth.
 - Use bounded whole-word width trials and the existing column-break strategy.
   Once the first readable width overflows vertically, narrower widths cannot
   repair that same size/count. Never replace complete words with truncation.
@@ -35,6 +35,14 @@ column of 402.48 px inside 420.76 px (~95.7% fill). The six-label spare-space
 control grows from the frozen 26 px to 34 px. All 49 previously captured pages
 keep their settled 24/26/28 px size, all labels/order and no overflow, with lines
 at most 70 characters.
+
+Independent review reproduced an ignored authored region column limit. The
+correction distinguishes explicit region counts from compiled default counts,
+including nested regions, and preserves payload override precedence. Label and
+description lines both follow the same reading measure. Splitting a multi-entry
+list does not invent a heading for a singleton chunk; an originally single
+described heading retains its heading role, scale and weight. Nested families
+and numbering remain intact. All first-failure receipts are preserved.
 
 Focused controls pass for actual four-family pagination, unchanged source,
 headings/title rule/card frame/footer, caps, `fill:false`, pinned single-column

@@ -29,6 +29,7 @@ item's state edits its row and appends a log line in the same PR.
 | SH-24 | Inverted pyramid arrangement (issue #1128): widest-first geometry, ordered import and editable native export | core, render, pptx, gallery | Shared continuous/stepped geometry, no shrink, preserved entry order and qualified export tiers | reviewed: implementation/focused checks pass; three native slides and12editable shapes accepted, saved ordered import passes; final integration/goldens/CI owed |
 
 | SH-25 | Overlay shapes anchored to an authored chart data point (#1113), with one shared mark/inner-plot geometry | core, schema, render, pptx, editor | The academy United States ring and every enabled classic point anchor center within 4 px of the actual native point; per-engine geometry tests and sheets | in-progress: candidate schema/shared marks/native import/editor controls implemented; current d987 baseline32 SVG/PPTX invariance, 8 sheets and browser37 pass; actual native4px, final budget/integration gates owed; derived pie probe corrects doughnut-only index8 through independent native3/4 radius observations, with original failure retained  Literal native-name imports now retain current c:tx/c:v text instead of Series1; actual native current-data/refusal/reflow evidence is recorded in the latest checkpoint. Derived lazy-validation correction retains structural anchor checks without selecting geometry for format requests; [scope/receipts](../../handoff/2026-11-08/sh25-lazy-validation.md). |
+| SH-26 | Readable diagram fallback and continuation lists after template recomposition | core, render, pptx | All four new arrangement families keep complete whole-word lines at most 70 characters, retain or grow settled type, honor authored constraints and refuse unfit bodies; actual diagram/native/catalog controls unchanged | in-progress: exact four regressions, all 49 captured continuation pages and focused controls pass; whole-case CLI sheets, required checks and new pinned golden batch owed ([handoff](../../handoff/2026-11-08/sh26-readable-fallbacks.md)) |
 
 ## Decisions
 
@@ -76,7 +77,6 @@ item's state edits its row and appends a log line in the same PR.
   sketch while it is open, but its re-save writes the drawn outline as fixed custom geometry: the slide looks the same and the line is no
   longer a live sketch. Accepted and documented; the export keeps writing the sketch extension.
 
-| SH-26 | Readable diagram fallback and continuation lists after template recomposition | core, render, pptx | All four new arrangement families keep complete whole-word lines at most70characters, retain or grow settled type, honor authored constraints and refuse unfit bodies; actual diagram/native/catalog controls unchanged | in-progress: exact four regressions, all49 captured continuation pages and36 focused controls pass; whole-case CLI sheets, required checks and new pinned golden batch owed ([handoff](../../handoff/2026-11-08/sh26-readable-fallbacks.md)) |
 
 ## Progress log
 
