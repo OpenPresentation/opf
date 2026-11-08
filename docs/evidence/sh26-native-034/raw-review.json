@@ -1,0 +1,3058 @@
+{
+  "scope": "Thirteen sealed inputs, all thirty SH-26 pages. Owned original/SaveCopyAs/read-only reopen, empty actions. Whole-range declared Aptos names, native geometry/text, phase PNGs and canonical import compared. Aptos/Aptos Display were not GDI-enumerated; no glyph-file or exact font-binary claim. Root visual acceptance remains separate.",
+  "nativeAcceptance": false,
+  "sourceManifestSha256": "1f87dd96814a7c9582d77a28cde3471f30e5868817665b5cb0128cfd12958ce3",
+  "importerRepositoryRevision": "df4dd288c8894d2485c84f690e939e12b6fcc6bf",
+  "rows": [
+    {
+      "id": "inverted-pyramid-continuation-1-3",
+      "inputSha256": "ac395e14475622e16e8964a241961b333f368242794af3df744e4b6f214a8f34",
+      "savedSha256": "2c0ba7671509e90aa694fb3afe4884ad7b02bfdb45149f0cf08e11d4870cb96c",
+      "terminal": {
+        "timestamp": "2026-11-08T17:44:02.4179437Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 3,
+      "declaredSlideCount": 3,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "182cff3d358eaaa510835da3a81220c8ce8601e0096da0f23d16827a98f61b8c",
+            "182cff3d358eaaa510835da3a81220c8ce8601e0096da0f23d16827a98f61b8c",
+            "182cff3d358eaaa510835da3a81220c8ce8601e0096da0f23d16827a98f61b8c"
+          ],
+          "previewSha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Inverted pyramid",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.0.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "e713133f408cc819e1c26008e23a19c35d26caf5cab910c34111ba42996e6782",
+            "e713133f408cc819e1c26008e23a19c35d26caf5cab910c34111ba42996e6782",
+            "e713133f408cc819e1c26008e23a19c35d26caf5cab910c34111ba42996e6782"
+          ],
+          "previewSha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Inverted pyramid",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.1.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 0",
+              "text": "Item 3: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 2",
+              "text": "Item 4: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "5ffd46ef2ab3606055f331b84b6670f1cfd10d56e4ce7fb1a8cd7c958f178732",
+            "5ffd46ef2ab3606055f331b84b6670f1cfd10d56e4ce7fb1a8cd7c958f178732",
+            "5ffd46ef2ab3606055f331b84b6670f1cfd10d56e4ce7fb1a8cd7c958f178732"
+          ],
+          "previewSha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.2.title line 0",
+              "text": "Inverted pyramid",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.2.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 0",
+              "text": "Item 5: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 2",
+              "text": "Item 6: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inverted-pyramid-continuation-4",
+      "inputSha256": "add6a8781ddf2aea013bb7866ac4b79def9af4d63da8b269b007078b717cf7ba",
+      "savedSha256": "ec187aa42ce61bbcadd629f7851bf589afc5b80ec0bafaae235c7eec1e00fa33",
+      "terminal": {
+        "timestamp": "2026-11-08T17:44:13.7682022Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 5,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "006a9436a47ac608a6b5bc6cc1ead7440e4c0d9a8df360b382053058549eaa68",
+            "006a9436a47ac608a6b5bc6cc1ead7440e4c0d9a8df360b382053058549eaa68",
+            "006a9436a47ac608a6b5bc6cc1ead7440e4c0d9a8df360b382053058549eaa68"
+          ],
+          "previewSha256": "934f197bcf04996d6a73da42453aa24fc589c96c9324ae2d56d8bc5e03dd3e15",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Inverted pyramid",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.0.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 7: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "org-chart-continuation-1-3",
+      "inputSha256": "f851a84c0f00334eb860e765312fd0ae55cb351dafcaa79212518a625fb18b43",
+      "savedSha256": "364e61ea59e6a2ddacf569cadb25d868e1a0e0f80eee110dd74f5383ced31465",
+      "terminal": {
+        "timestamp": "2026-11-08T17:44:31.8960216Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 3,
+      "declaredSlideCount": 3,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "4016a1f4d31d94c5b18d1b5b579bad99591c782309339586ec2138c7d1cbb5eb",
+            "4016a1f4d31d94c5b18d1b5b579bad99591c782309339586ec2138c7d1cbb5eb",
+            "4016a1f4d31d94c5b18d1b5b579bad99591c782309339586ec2138c7d1cbb5eb"
+          ],
+          "previewSha256": "2ca5edd84831ec34087a47f1a45b905c6b9ec22cdaeee80762ae5465bdeb8bab",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.0.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "9359ffb8ac9a559d1cfd5012686c62be820fea49c5e93146d2aacc38bb58593a",
+            "9359ffb8ac9a559d1cfd5012686c62be820fea49c5e93146d2aacc38bb58593a",
+            "9359ffb8ac9a559d1cfd5012686c62be820fea49c5e93146d2aacc38bb58593a"
+          ],
+          "previewSha256": "153689e875401e0fb3f9876fe55a2e821f17f2f203f8b8978a7bb9f023158a6d",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.1.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 0",
+              "text": "Item 3: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 2",
+              "text": "Item 4: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "ef96b750b738b5bc3b42c335e88a06ab9e9b22f5e22a705fa94075ca37e62b35",
+            "ef96b750b738b5bc3b42c335e88a06ab9e9b22f5e22a705fa94075ca37e62b35",
+            "ef96b750b738b5bc3b42c335e88a06ab9e9b22f5e22a705fa94075ca37e62b35"
+          ],
+          "previewSha256": "2cccc7d72f0fb0345844dd5d5885cf705de928ae351d7619568c6dff085502e0",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.2.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.2.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 0",
+              "text": "Item 5: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 2",
+              "text": "Item 6: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "org-chart-continuation-4",
+      "inputSha256": "f5983d48e83103d1aa46b204d89a368047de14e2cf4c8ee82af7792420f23bc2",
+      "savedSha256": "2041306155eadffffa0467c5f80dc6ff436a00d86f2a863f27d665d45e726ffb",
+      "terminal": {
+        "timestamp": "2026-11-08T17:44:43.0942139Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 5,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "cdea1c26798c39305419eb25448f95310a4aee94ffe07dce5d584b4482c56b89",
+            "cdea1c26798c39305419eb25448f95310a4aee94ffe07dce5d584b4482c56b89",
+            "cdea1c26798c39305419eb25448f95310a4aee94ffe07dce5d584b4482c56b89"
+          ],
+          "previewSha256": "ce518f3cf1e176ab9836e79daaa9613dab64841df0f24f8628fb57c16e7b06fe",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.0.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 7: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hierarchy-continuation-1-3",
+      "inputSha256": "35ccac9dee25b7d99e84734540bd3e166e1c5e3f3ab288c6076057c0905bcd78",
+      "savedSha256": "57ade3dcb60d48cffd295eabae17ecf41a98a76e4d1673dde00090ef32308a86",
+      "terminal": {
+        "timestamp": "2026-11-08T17:44:59.7649428Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 3,
+      "declaredSlideCount": 3,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 6,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "e7b731cd611f9b1c138c896e478253557dee04235c2c7e5bff411f4231999ec3",
+            "e7b731cd611f9b1c138c896e478253557dee04235c2c7e5bff411f4231999ec3",
+            "e7b731cd611f9b1c138c896e478253557dee04235c2c7e5bff411f4231999ec3"
+          ],
+          "previewSha256": "afd502335b86a512b5def0a9a9e69d66296eda8c6a6609f68810e55a4cc0cd28",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Hierarchy: a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 30.37,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 6,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "91f7648bfbf5dfa2af52be9355a42519be013aade74e79af33930763039012bb",
+            "91f7648bfbf5dfa2af52be9355a42519be013aade74e79af33930763039012bb",
+            "91f7648bfbf5dfa2af52be9355a42519be013aade74e79af33930763039012bb"
+          ],
+          "previewSha256": "a701f7c92fa16e41da802557168be9f21571ad46c6334c71a879c12702ebbba5",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Hierarchy: a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 30.37,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 0",
+              "text": "Item 3: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 2",
+              "text": "Item 4: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "shapeCount": 6,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "dd0967be9e1ca625b7294ae5d4d208003158dfa99c8d164ec72bc6a908d595fb",
+            "dd0967be9e1ca625b7294ae5d4d208003158dfa99c8d164ec72bc6a908d595fb",
+            "dd0967be9e1ca625b7294ae5d4d208003158dfa99c8d164ec72bc6a908d595fb"
+          ],
+          "previewSha256": "2a0fb6110704be662d707af789182e67ae4322f9397761d2918b8b34eec86ffd",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.2.title line 0",
+              "text": "Hierarchy: a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 30.37,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 0",
+              "text": "Item 5: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 2",
+              "text": "Item 6: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hierarchy-continuation-4",
+      "inputSha256": "0a85b6e8c53cd5f0f67448cc36e83eaac04b1ede6ddb489f6f7cdb0f6371cab6",
+      "savedSha256": "645510f2ea03ca1baa5b0eec5f29babca2a171d7760fb52144900eee51f891e6",
+      "terminal": {
+        "timestamp": "2026-11-08T17:45:10.4464478Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 4,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "2f5b351ecce29327db6d3cde16a929e4b2983748197e6532d9d1c162cc9e2dfb",
+            "2f5b351ecce29327db6d3cde16a929e4b2983748197e6532d9d1c162cc9e2dfb",
+            "2f5b351ecce29327db6d3cde16a929e4b2983748197e6532d9d1c162cc9e2dfb"
+          ],
+          "previewSha256": "218e5bd828e3e3a06de90cf44e1621f4d22e06ad9c4e11bd4695e912330cc4ac",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Hierarchy: a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 30.37,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 7: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "venn-continuation-1-3",
+      "inputSha256": "a8a70e1f5b8291b4955031a66f09fc82cc7e63ddd0c7550dd51adc230dd5d2f0",
+      "savedSha256": "cac5b549b64bae551b7e8b520066b5bcf3ea2daafe70df511f0789f7efb1993b",
+      "terminal": {
+        "timestamp": "2026-11-08T17:45:27.1918871Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 3,
+      "declaredSlideCount": 3,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 6,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "f8f4e12a9cbb8fe7c9e8156fd08fe1554800986cd5316c9bcc757c43d10edbbd",
+            "f8f4e12a9cbb8fe7c9e8156fd08fe1554800986cd5316c9bcc757c43d10edbbd",
+            "f8f4e12a9cbb8fe7c9e8156fd08fe1554800986cd5316c9bcc757c43d10edbbd"
+          ],
+          "previewSha256": "3c34b2cd01bea8976bee71411980c798408dab26bfbb3a9bb35e58c1fa6d9780",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Venn: a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 33.75,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 6,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "0a02f75d5ed8eb79c70e43f055e6e8d36382996cf222f74410b65a399ab484a7",
+            "0a02f75d5ed8eb79c70e43f055e6e8d36382996cf222f74410b65a399ab484a7",
+            "0a02f75d5ed8eb79c70e43f055e6e8d36382996cf222f74410b65a399ab484a7"
+          ],
+          "previewSha256": "93faf886da923d73fbb2c3d0b9fc6c2fec89d7c100574a97df6a9f3b6d8d17c6",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Venn: a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 33.75,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 0",
+              "text": "Item 3: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 2",
+              "text": "Item 4: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "shapeCount": 6,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "56f151738ed4456d8e3ec191124e8c2aa43912a9368600c893e5674a2cdd1b5b",
+            "56f151738ed4456d8e3ec191124e8c2aa43912a9368600c893e5674a2cdd1b5b",
+            "56f151738ed4456d8e3ec191124e8c2aa43912a9368600c893e5674a2cdd1b5b"
+          ],
+          "previewSha256": "5878508214fa39d55734aa93308b9ce3bb6e3d4b195bbb740be9e9968824ec33",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.2.title line 0",
+              "text": "Venn: a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 33.75,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 0",
+              "text": "Item 5: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 2",
+              "text": "Item 6: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "venn-continuation-4",
+      "inputSha256": "a236a5450fe7a7756c4aa40c9b78a912ec3dd40df18d98d6f197aaa3bafb6396",
+      "savedSha256": "b972266825cef700d7e3ed29f498357f64a2fbde31b1fc51e22987f46fb9e2fb",
+      "terminal": {
+        "timestamp": "2026-11-08T17:45:38.0913264Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 1,
+      "declaredSlideCount": 1,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 4,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "e5542f38804a4a4c685eebdcf08744b30e8ca1f7690083f80c522e7036f4c4f0",
+            "e5542f38804a4a4c685eebdcf08744b30e8ca1f7690083f80c522e7036f4c4f0",
+            "e5542f38804a4a4c685eebdcf08744b30e8ca1f7690083f80c522e7036f4c4f0"
+          ],
+          "previewSha256": "3c46c61aabdac3d26838fbbd2732ef36917e0643f960838a187bbfd822bcbe08",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Venn: a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 33.75,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 7: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "supplemental-controls-1-3",
+      "inputSha256": "c2ceedcb514f25a6953cf598a7e0e3635dc7e467b48129ac81119b47c0547713",
+      "savedSha256": "74e33e346e6f2bcf3069610f0d87d6ac4b99058697e21d5057606ca89a684e1e",
+      "terminal": {
+        "timestamp": "2026-11-08T17:45:56.0493812Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 3,
+      "declaredSlideCount": 3,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "182cff3d358eaaa510835da3a81220c8ce8601e0096da0f23d16827a98f61b8c",
+            "182cff3d358eaaa510835da3a81220c8ce8601e0096da0f23d16827a98f61b8c",
+            "182cff3d358eaaa510835da3a81220c8ce8601e0096da0f23d16827a98f61b8c"
+          ],
+          "previewSha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Inverted pyramid",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.0.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "e713133f408cc819e1c26008e23a19c35d26caf5cab910c34111ba42996e6782",
+            "e713133f408cc819e1c26008e23a19c35d26caf5cab910c34111ba42996e6782",
+            "e713133f408cc819e1c26008e23a19c35d26caf5cab910c34111ba42996e6782"
+          ],
+          "previewSha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Inverted pyramid",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.1.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 0",
+              "text": "Item 3: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 2",
+              "text": "Item 4: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "5ffd46ef2ab3606055f331b84b6670f1cfd10d56e4ce7fb1a8cd7c958f178732",
+            "5ffd46ef2ab3606055f331b84b6670f1cfd10d56e4ce7fb1a8cd7c958f178732",
+            "5ffd46ef2ab3606055f331b84b6670f1cfd10d56e4ce7fb1a8cd7c958f178732"
+          ],
+          "previewSha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.2.title line 0",
+              "text": "Inverted pyramid",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.2.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 0",
+              "text": "Item 5: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 2",
+              "text": "Item 6: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "supplemental-controls-4-6",
+      "inputSha256": "6bbbd27c2f11a3e096c30e2a0f3f8a7b7facf14ce74f56278afa6dc2b69aa2a3",
+      "savedSha256": "83f099334a502f14b05e0d8c52018140c00d902b5789b0fc89a383b5a612f58a",
+      "terminal": {
+        "timestamp": "2026-11-08T17:46:17.1865075Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 3,
+      "declaredSlideCount": 3,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        },
+        {
+          "code": "mixed-run-languages",
+          "path": "language",
+          "message": "Runs use 2 languages (en-US x12, ar-SA x6). The presentation uses en-US; slides with another predominant language declare it, and individual rich-text runs keep their own lang."
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        },
+        {
+          "code": "mixed-run-languages",
+          "path": "language",
+          "message": "Runs use 2 languages (en-US x12, ar-SA x6). The presentation uses en-US; slides with another predominant language declare it, and individual rich-text runs keep their own lang."
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 7,
+          "phaseImagesExact": false,
+          "phaseImagesSha256": [
+            "2162c342a9336987dbc635d0031999c563ae6f90f46b08f4c0ca6640f9b7a701",
+            "700b642c0382baff198a97c9a60e93f5b1cc3b8a7f4209ad0fe47c57255ca0a9",
+            "700b642c0382baff198a97c9a60e93f5b1cc3b8a7f4209ad0fe47c57255ca0a9"
+          ],
+          "previewSha256": "4196b4cf74d1966267d242b1e3f355b36dd6114bab5589d2bfb781906d294ca1",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.0.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 34.68,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 34.68,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Supporting detail remains in its authored entry. Supporting detail ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 3",
+              "text": "remains in its authored entry. ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "b65461195b9e31510e4bee2b69058dc3ce3ce3573c8ba731cd56ce4d20d10cf1",
+            "b65461195b9e31510e4bee2b69058dc3ce3ce3573c8ba731cd56ce4d20d10cf1",
+            "b65461195b9e31510e4bee2b69058dc3ce3ce3573c8ba731cd56ce4d20d10cf1"
+          ],
+          "previewSha256": "f9bf296ab703a3ed114a4a9d144db494c710e4d773deb449f52c2587defa7505",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.1.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 0",
+              "text": "Item 2: Customers told us onboarding took too long, ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 34.68,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 1",
+              "text": "so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 34.68,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 2",
+              "text": "Supporting detail remains in its authored entry. Supporting detail ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 3",
+              "text": "remains in its authored entry. ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "97d56762d4cfb0b9d5be69c49daf77cc4e180ab2edff855a091b89759fffe215",
+            "97d56762d4cfb0b9d5be69c49daf77cc4e180ab2edff855a091b89759fffe215",
+            "97d56762d4cfb0b9d5be69c49daf77cc4e180ab2edff855a091b89759fffe215"
+          ],
+          "previewSha256": "9e2cbf6e8d29ae3d27c4d55af6dbaafe436c23993b152b9da7b2b186b8575b08",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.2.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.2.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 2",
+              "text": "Item 2: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "supplemental-controls-7-9",
+      "inputSha256": "4ad8478ff1a04de5b5ae49a650af096fb0b8d82b6864a6e19414c90ef2cd1871",
+      "savedSha256": "c2c969db9e5cc119f7529db7aba4e192de886c3b3a20f61f62d621d6e7743c59",
+      "terminal": {
+        "timestamp": "2026-11-08T17:46:36.0135070Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 3,
+      "declaredSlideCount": 3,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.1"
+        },
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.2"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "387c0ecf12b2be6bfeb6be3edda94d8201a50d7e2659e4a981a60fefca5ac974",
+            "387c0ecf12b2be6bfeb6be3edda94d8201a50d7e2659e4a981a60fefca5ac974",
+            "387c0ecf12b2be6bfeb6be3edda94d8201a50d7e2659e4a981a60fefca5ac974"
+          ],
+          "previewSha256": "3b991613a55fe4165a9dd954e94bd4aa5a240579101f2cfa3192bc9a928a7a2e",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.0.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 3: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Item 4: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "9dced1daa88f20adb14c23092eb4f5903d43ef959c50cf0f9cb372db0152dea6",
+            "9dced1daa88f20adb14c23092eb4f5903d43ef959c50cf0f9cb372db0152dea6",
+            "9dced1daa88f20adb14c23092eb4f5903d43ef959c50cf0f9cb372db0152dea6"
+          ],
+          "previewSha256": "38c57174036c7b8e2e3526124f345c614aebc1955ed10b09c8265f11046373a5",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.1.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 0",
+              "text": "Item 5: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 2",
+              "text": "Item 6: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 3",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "shapeCount": 5,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "953009552a0f5110dd2b88e7cf5766f4d0bfe8acaedd27eee171e1dd6ae56f36",
+            "953009552a0f5110dd2b88e7cf5766f4d0bfe8acaedd27eee171e1dd6ae56f36",
+            "953009552a0f5110dd2b88e7cf5766f4d0bfe8acaedd27eee171e1dd6ae56f36"
+          ],
+          "previewSha256": "df3b69646a2d5d8a5e6ed779ab68e7a464ba2ff1f5036259a4c96d0a9590d061",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.2.title line 0",
+              "text": "Organization chart",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.2.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 0",
+              "text": "Item 7: Customers told us onboarding took too long, so we rebuilt it ",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 1",
+              "text": "around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 27.75,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "supplemental-controls-10-12",
+      "inputSha256": "bdcc08f01c819ae34e2373b60f27976e29cdc79107d8754bc137c86d75540ee2",
+      "savedSha256": "85fdc9445a2760060f91b68aa83cf2678f7ee1774e149c1170c894443ec9c74b",
+      "terminal": {
+        "timestamp": "2026-11-08T17:46:52.7574729Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 3,
+      "declaredSlideCount": 3,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "content-card-reflow",
+          "message": "An unchanged tagged OPF content card was recognized as decoration. Its native frame styling and placement are not reconstructed in the reflowed document.",
+          "path": "slides.0"
+        }
+      ],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 10,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "35cfb0e9fb152a45447afef28ac6589c6e63ae0f1dda959a2372488e2947358a",
+            "35cfb0e9fb152a45447afef28ac6589c6e63ae0f1dda959a2372488e2947358a",
+            "35cfb0e9fb152a45447afef28ac6589c6e63ae0f1dda959a2372488e2947358a"
+          ],
+          "previewSha256": "7650c97f926d2ac0dd1049c294e799cc1a95c248af0780740bc453b8c71d2b1f",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Inverted pyramid",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF heading slides.0.title line 1",
+              "text": "a longer title that may need a second line on the slide",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 21,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 24,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 24,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 24,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 3",
+              "text": "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 24,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 4",
+              "text": "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 24,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 5",
+              "text": "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 24,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 6",
+              "text": "Item 7: Customers told us onboarding took too long, so we rebuilt it around th",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 24,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 2,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "3946b72073c689a9903d4d7dba71251fafb5eb6f7c757f783bc8bf0b6413980c",
+            "3946b72073c689a9903d4d7dba71251fafb5eb6f7c757f783bc8bf0b6413980c",
+            "3946b72073c689a9903d4d7dba71251fafb5eb6f7c757f783bc8bf0b6413980c"
+          ],
+          "previewSha256": "b3d3362f4865f22eb120d8eae693a7f4c50e6bfb79acfbbc56d213c58f319abb",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Complete native arrangement remains",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "shapeCount": 7,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "a0e1ad68adf26622639b626b75ff42de5c048a235211fee7823d45d7f5f5d2bc",
+            "a0e1ad68adf26622639b626b75ff42de5c048a235211fee7823d45d7f5f5d2bc",
+            "a0e1ad68adf26622639b626b75ff42de5c048a235211fee7823d45d7f5f5d2bc"
+          ],
+          "previewSha256": "d052137bf634d098a8859c527f79d5a4251f942be61225ed13e4c5a123905cc3",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.2.title line 0",
+              "text": "Complete native arrangement remains",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 0",
+              "text": "First",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 1",
+              "text": "Second",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.2.blocks.0.items line 2",
+              "text": "Third",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "supplemental-controls-13-14",
+      "inputSha256": "e402c62976370c8524834ea35635d3023b1d8ac74bb940b6fd7e9d010b34edb0",
+      "savedSha256": "aaf8c19ce2884d5471d3336ee72abee9272ba88f023b6b92c8cc857c06ab3c38",
+      "terminal": {
+        "timestamp": "2026-11-08T17:47:09.5795798Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "slideCount": 2,
+      "declaredSlideCount": 2,
+      "declaredMaximumTopLevelShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [],
+      "slides": [
+        {
+          "page": 1,
+          "shapeCount": 13,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "56bab48cd382ea390b4c24ffb019527a667abfcfdcacf5ecd77042fb2262ea3d",
+            "56bab48cd382ea390b4c24ffb019527a667abfcfdcacf5ecd77042fb2262ea3d",
+            "56bab48cd382ea390b4c24ffb019527a667abfcfdcacf5ecd77042fb2262ea3d"
+          ],
+          "previewSha256": "c48befc6c62dd24d63241c379bbde3da1797e63da71e7ee7a5bef3b2555eac85",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.0.title line 0",
+              "text": "Complete native arrangement remains",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 0",
+              "text": "Root",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 1",
+              "text": "First",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.0.blocks.0.items line 2",
+              "text": "Second",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "shapeCount": 16,
+          "phaseImagesExact": true,
+          "phaseImagesSha256": [
+            "099d38532b5e4e4912dcaf9c74cc396b8ff5cc0ac2afb44e576d59552ff992cd",
+            "099d38532b5e4e4912dcaf9c74cc396b8ff5cc0ac2afb44e576d59552ff992cd",
+            "099d38532b5e4e4912dcaf9c74cc396b8ff5cc0ac2afb44e576d59552ff992cd"
+          ],
+          "previewSha256": "3cd49a5f77a89b947529126aa0e8c9349d0e14d8d29df5f2f35cb768d4c1af0c",
+          "nativeFonts": [
+            {
+              "name": "OPF heading slides.1.title line 0",
+              "text": "Complete native arrangement remains",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos Display",
+                "sizePoints": 40.5,
+                "bold": -1,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 0",
+              "text": "Root",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 1",
+              "text": "First",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            },
+            {
+              "name": "OPF list slides.1.blocks.0.items line 2",
+              "text": "Second",
+              "font": {
+                "status": "uniform",
+                "name": "Aptos",
+                "sizePoints": 36,
+                "bold": 0,
+                "italic": 0,
+                "unavailableFields": [],
+                "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "files": [
+    {
+      "file": "actual-suite02.json.gz",
+      "bytes": 2617661,
+      "sha256": "8274c8fd0b4ec9f5477eade1191119e3ce0a6ba742f64ff4f59dd95056bf6cb8"
+    },
+    {
+      "file": "assessment.json",
+      "bytes": 3360,
+      "sha256": "4c4c43e4b4fc1eab5b99db78841f568e4443062a163d3fd355c4f30ad0e4c7fa"
+    },
+    {
+      "file": "e2-layout-study.json",
+      "bytes": 2244,
+      "sha256": "87afcd973506d6f3647ae238f0fdb55adda5e32206f1d966e6125790e29c7232"
+    },
+    {
+      "file": "native-hierarchy-continuation-1-3.json.gz",
+      "bytes": 546108,
+      "sha256": "5d396c07858179eec0025be0437577269abb4ed91ab3ca7c61d5a5a12a7729c6"
+    },
+    {
+      "file": "native-hierarchy-continuation-4.json.gz",
+      "bytes": 356490,
+      "sha256": "00cebed7241492f3536a139473490498c91fe0d03b4e67bd80f4f17651f1899a"
+    },
+    {
+      "file": "native-inverted-pyramid-continuation-1-3.json.gz",
+      "bytes": 565485,
+      "sha256": "45b3d98b3b0b6cb434f81bae7799ec55be2f67d09c6eac1886048a791ff52f64"
+    },
+    {
+      "file": "native-inverted-pyramid-continuation-4.json.gz",
+      "bytes": 360720,
+      "sha256": "a1f77f41d637a39655def154f3accfe4b9303a4b5ea03a0fe810364675c70707"
+    },
+    {
+      "file": "native-org-chart-continuation-1-3.json.gz",
+      "bytes": 568823,
+      "sha256": "b75c93382b3841a7985a351b43e1ef753eafbae28adafaf099b1d26b74e77ada"
+    },
+    {
+      "file": "native-org-chart-continuation-4.json.gz",
+      "bytes": 359845,
+      "sha256": "aeccd9cff760ff2dda6ac52c8dbf1f20b3062411b0ebd84e40500dec99646038"
+    },
+    {
+      "file": "native-root-receipts.json.gz",
+      "bytes": 1999,
+      "sha256": "2ab41dd9e705cede60b9fc8ca172332a53e7384dba7580d0769ea7dd8cea42e3"
+    },
+    {
+      "file": "native-supplemental-controls-1-3.json.gz",
+      "bytes": 590041,
+      "sha256": "bf80af610e88cbfe5218a1662b2a9a2855215b86a05336191dcd171a520f70bb"
+    },
+    {
+      "file": "native-supplemental-controls-10-12.json.gz",
+      "bytes": 721684,
+      "sha256": "9e7c88fae32e3aecd64f4e15dcba415288a0f924e1f99c26bd8f293c5156714f"
+    },
+    {
+      "file": "native-supplemental-controls-13-14.json.gz",
+      "bytes": 517168,
+      "sha256": "1409ae43864bda5c7221494d5ecdb9740e0eb611c32b9e90684382ea1146efad"
+    },
+    {
+      "file": "native-supplemental-controls-4-6.json.gz",
+      "bytes": 831851,
+      "sha256": "4b7addde9f63cf0c02ac3d82e488a8cb75de35966f746b65e33183634eebfaa3"
+    },
+    {
+      "file": "native-supplemental-controls-7-9.json.gz",
+      "bytes": 571401,
+      "sha256": "172dd343d5a95414fc92fa3e0a748c08360105695b759faf09f2d8d6fd508f2b"
+    },
+    {
+      "file": "native-venn-continuation-1-3.json.gz",
+      "bytes": 546462,
+      "sha256": "d57612a06dba16c77b9e017aac4c4f94c941374191663e4e66ba8c418df83164"
+    },
+    {
+      "file": "native-venn-continuation-4.json.gz",
+      "bytes": 354229,
+      "sha256": "f75a7b1211d307f9c2da144d8ebd58035ac124c8129de145c34cd6731cb388e6"
+    },
+    {
+      "file": "original-suite-setup-failed01.json.gz",
+      "bytes": 1365523,
+      "sha256": "d75e9f7a43b0bb979823671f7d8aebf4c17cd0f5a09b27c2ef446e1aa1a04c6f"
+    },
+    {
+      "file": "packaging-refusals.json",
+      "bytes": 422,
+      "sha256": "5f904b735eca8920961cfeb9a14978ec53bc3c00d60368d12a6c3177642e0f1e"
+    },
+    {
+      "file": "packet-inventory.json",
+      "bytes": 478880,
+      "sha256": "aa2879c83f8107bd04559ac1b6a17b1df02bbc4bdf822241687195f3a98537cc"
+    },
+    {
+      "file": "producer-worker-raw.json.gz",
+      "bytes": 535972,
+      "sha256": "1fd4892d9d6955c3b44c51c37dbff90aaa269581c136be49d9930ba7e0b58bf9"
+    },
+    {
+      "file": "raw-phase-difference.json",
+      "bytes": 316,
+      "sha256": "099a46115793adb5f590ebb7b71d929eee8943c9ff16dce06849a05e54c87c72"
+    },
+    {
+      "file": "raw-review.json",
+      "bytes": 129310,
+      "sha256": "68496dd42f660b7b9a9c8e91b27e1aa13136ad0a041409270cbbbc3661321a83"
+    },
+    {
+      "file": "raw-suite.json",
+      "bytes": 22455,
+      "sha256": "1f87dd96814a7c9582d77a28cde3471f30e5868817665b5cb0128cfd12958ce3"
+    },
+    {
+      "file": "README.md",
+      "bytes": 5409,
+      "sha256": "4bae5547242a74c1e56258a29debaa79745b7a3db9778bc0ee37abeb29967dde"
+    },
+    {
+      "file": "review-raw.json.gz",
+      "bytes": 2100589,
+      "sha256": "5692e171c32c9bd3fcd853e0b8bf5313d17a6bc4eb5d1b511512b68f6e7cb98e"
+    },
+    {
+      "file": "review-sheets/sheet-01.png",
+      "bytes": 309822,
+      "sha256": "e107a08b33c23f6217db30acb79fb124b7aa6f5bec23d096b9b4fe4faa0e5d1c"
+    },
+    {
+      "file": "review-sheets/sheet-02.png",
+      "bytes": 291468,
+      "sha256": "d0ef5bb03094cc0f76d759e46ae736b4a5ce49e60fd1c815859e4643497a44ca"
+    },
+    {
+      "file": "review-sheets/sheet-03.png",
+      "bytes": 289258,
+      "sha256": "097d2c4fbcbe623ef85eddb79fb6da36d6b342641d631f93261a9c7038afd34b"
+    },
+    {
+      "file": "review-sheets/sheet-04.png",
+      "bytes": 285908,
+      "sha256": "91444422613877b917d45a407dfc8cb371ad5864e15e40994d0a3282ce8d7e03"
+    },
+    {
+      "file": "review-sheets/sheet-05.png",
+      "bytes": 303870,
+      "sha256": "c7f1a1ebd6b7c28ee67817c6a1ec0e140679bc4d8da344c16a3ef1f7a37c753f"
+    },
+    {
+      "file": "review-sheets/sheet-06.png",
+      "bytes": 287748,
+      "sha256": "c30141ab54c1d13b8b6a294e101cd4ef8b4681de5c827601ab046bfd29f2df61"
+    },
+    {
+      "file": "review-sheets/sheet-07.png",
+      "bytes": 321022,
+      "sha256": "9ef6a2f3b37eb373aa29c16b6340d7ca8b58cb17c18743ad9533b0a8531a216b"
+    },
+    {
+      "file": "review-sheets/sheet-08.png",
+      "bytes": 311773,
+      "sha256": "0966adf8f4e9f567eb27e298777044261cd0d22d61b502fa98f436ba5f476671"
+    },
+    {
+      "file": "review-sheets/sheet-09.png",
+      "bytes": 334547,
+      "sha256": "36c88b87281a814730d8579e1df5ed70648fba7365547c38a15aab19bed78302"
+    },
+    {
+      "file": "review-sheets/sheet-10.png",
+      "bytes": 279622,
+      "sha256": "e8ffcf857c6600d4e72164c021bfd2b214baac37435a5cab8799239c244aee52"
+    },
+    {
+      "file": "source-inventory.json",
+      "bytes": 740964,
+      "sha256": "32e22f8059e2e4277bb154227529274d22d75ccd3a3508e2e02aaf15cc816c2d"
+    },
+    {
+      "file": "tools/packaging-source.mjs.gz",
+      "bytes": 2966,
+      "sha256": "1987a8ff3d8ac84932be554d13687dd82ad046ce5c169f6aec7a181cda065a11"
+    }
+  ]
+}

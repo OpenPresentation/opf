@@ -1,0 +1,21 @@
+[
+  {
+    "a": "original",
+    "b": "edited",
+    "differentPixels": 2291,
+    "maxChannel": 174,
+    "bounds": {
+      "minX": 132,
+      "minY": 389,
+      "maxX": 587,
+      "maxY": 420
+    }
+  },
+  {
+    "a": "edited",
+    "b": "reopened",
+    "differentPixels": 0,
+    "maxChannel": 0,
+    "bounds": null
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-08",
+  "artifact": "OPF layouts without built-in records",
+  "status": "Dated superseded notice saved as first paragraph by the coordinator",
+  "notice": "Superseded on 2026-11-08. This layout design study is preserved as historical context. For published OPF 0.33.0, use Dynamic composition and the catalog contract for automatic flow, nested groups, pins, pagination, embedded records and host-registered catalogs. Default records belong to @openpresentation/gallery; core has no /catalog import. The current layout sampler contains all 36 named default layouts plus 13 dynamic compositions. Earlier Gallery 1.0 references, /catalog imports and 278-layout counts below remain historical snapshots.",
+  "links": [
+    {
+      "label": "Dynamic composition",
+      "href": "https://github.com/OpenPresentation/opf/blob/main/docs/dynamic-composition.md"
+    },
+    {
+      "label": "catalog contract",
+      "href": "https://github.com/OpenPresentation/opf/blob/main/docs/default-catalog.md"
+    },
+    {
+      "label": "layout sampler",
+      "href": "https://github.com/OpenPresentation/opf/blob/main/examples/technical/layout-sampler.opf.json"
+    }
+  ],
+  "verification": {
+    "rootObserved": "Notice saved, three exact links, private access preserved, original historical body retained",
+    "packagingLaneObserved": "Provided screenshot viewed; dated notice appears above the original historical heading/body with all three visible link labels",
+    "linkTargets": "Exact hrefs reported by the coordinator; all three target blobs previously verified on live GitHub main9545016583ccfa151077cda4d51043ac6505a140",
+    "sampler": "Release26fd and current main sampler/layout index were byte-identical:36 named layouts plus13 dynamic compositions; no0.34 claim"
+  },
+  "screenshot": {
+    "localFilename": "layout-study-superseded.png",
+    "bytes": 228816,
+    "sha256": "7d351c691a68d84382f2defd1d5d8d285f637ebe7f14d9a44b02f60f720f7a37",
+    "width": 65536,
+    "height": 4292542531,
+    "includedInPublicPacket": false,
+    "reason": "Private UI/account and historical-body details omitted; sanitized notice text and hash only"
+  },
+  "developerWalkthrough": "Still owed; this receipt does not claim it was changed"
+}

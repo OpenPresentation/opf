@@ -1,0 +1,12 @@
+{
+  "sourceBytesUnchanged": true,
+  "refusals": [
+    {
+      "stage": "Staged-byte validation of a new packaging-source copy",
+      "expectedRawBytes": 7618,
+      "indexBytes": 7617,
+      "cause": "Git text normalization removed a carriage return from the copied packaging tool",
+      "correction": "Preserve the original packaging-source bytes in gzip; raw producer/worker/source/output bytes unchanged"
+    }
+  ]
+}

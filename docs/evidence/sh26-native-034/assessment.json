@@ -1,0 +1,91 @@
+{
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "state": "Published held/failed evidence snapshot; root holds actual native visual acceptance",
+  "sourcePullRequest": "https://github.com/OpenPresentation/opf/pull/1207",
+  "sourceFrozenHead": "87126af094474c1263aedee3317d563bde5fa58d",
+  "exportProducer": {
+    "revision": "975ced9f289f076cabfbecf1a0f7db53789a5fc7",
+    "dirty": false,
+    "buildSha256": "667670ef816ba6952d9a12a06464783339e94f0ec28e9166fe08a5277365d610",
+    "primaryBuildSha256": "68f5368958f5292cb4ad281a0e5605a56d19598142fa45d9a29857e88a183bcc"
+  },
+  "workerRevision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "importerRevision": "df4dd288c8894d2485c84f690e939e12b6fcc6bf",
+  "suiteSha256": "1f87dd96814a7c9582d77a28cde3471f30e5868817665b5cb0128cfd12958ce3",
+  "facts": {
+    "cases": 13,
+    "slides": 30,
+    "canonicalInputToSavedImportsExact": 13,
+    "namedOriginalEditedReopenedStatesExact": 13,
+    "shrinkTagCount": 0,
+    "ownedCleanupConfirmed": 13,
+    "rootReportedVisualPairsViewed": 30
+  },
+  "rootReportedVisualDefect": {
+    "kind": "Reversed Latin text in the RTL-deck numbered control",
+    "pages": [
+      {
+        "case": "supplemental-controls-4-6",
+        "nativePage": 3,
+        "primarySupplementalPage": 6
+      },
+      {
+        "case": "supplemental-controls-7-9",
+        "nativePage": 1,
+        "primarySupplementalPage": 7
+      },
+      {
+        "case": "supplemental-controls-7-9",
+        "nativePage": 2,
+        "primarySupplementalPage": 8
+      },
+      {
+        "case": "supplemental-controls-7-9",
+        "nativePage": 3,
+        "primarySupplementalPage": 9
+      }
+    ],
+    "acceptanceHold": true,
+    "sourceFix": null
+  },
+  "rootReportedPhaseVariant": {
+    "case": "supplemental-controls-4-6",
+    "nativePage": 1,
+    "originalToEdited": {
+      "a": "original",
+      "b": "edited",
+      "differentPixels": 2291,
+      "maxChannel": 174,
+      "bounds": {
+        "minX": 132,
+        "minY": 389,
+        "maxX": 587,
+        "maxY": 420
+      }
+    },
+    "editedToReopened": {
+      "a": "edited",
+      "b": "reopened",
+      "differentPixels": 0,
+      "maxChannel": 0,
+      "bounds": null
+    },
+    "disposition": "Bounded glyph/kerning variant in the bold English heading second line; text/order/box/named fonts/import states unchanged; no phase pixel-exact claim"
+  },
+  "scopeLimits": [
+    "Aptos/Aptos Display were not GDI-enumerated; named font properties are not an exact glyph-file or font-binary proof.",
+    "ar-SA source fixture contains only Latin paragraphs. It does not qualify Arabic glyphs or RTL-paragraph native behavior.",
+    "Actions were empty; this owned lifecycle is original/SaveCopyAs/read-only reopen, not arbitrary native editing.",
+    "Canonical import and named-state equality do not override the observed four-page visual defect.",
+    "The first suite setup failed; its producer and all partial40 output files are preserved. No standalone setup failure log was present in the bounded *sh26* artifact inventory."
+  ],
+  "visualReviewAuthority": "Root supplied the observed visual judgments; this packaging lane did not run Office or alter outputs.",
+  "publication": {
+    "authorizedBy": "Root coordinator",
+    "date": "2026-11-08",
+    "evidenceOnly": true,
+    "neverMerge": true,
+    "productFold": false
+  }
+}
