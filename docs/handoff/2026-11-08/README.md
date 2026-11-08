@@ -113,3 +113,7 @@ RR105034corpus continuation: [DOT/PlantUML native coverage](rr105-034-diagram-co
 
 - [Native feature reconciliation](native-feature-reconciliation.md): original516/465/201/264observations, exact script failures/OFF boundaries, current production/live/diagram/SH25 qualification still separated.
 
+
+## RTL clustered-column native blocker
+
+[Source correction and immutable before/after proof](rtl-column-series.md) follow actual native series-slot observations without changing source data, colors, category reversal, chart XML or horizontal/stacked/LTR behavior. Five candidate overlay centers now align mathematically with prior independent native bounds; fresh candidate Office lifecycle and final combined gates remain required. Frozen SH25 and earlier source branches are unchanged.
