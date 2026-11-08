@@ -98,7 +98,7 @@ try {
     )
     foreach($count in @(5,6,7)) {$cases+=@{layout='venn1';seed=12;name="v$count";tree=@(1..$count | ForEach-Object {T "Set $_"})}}
     foreach($case in $cases) {
-      $layout=$null; foreach($shape in $seed.Slides.Item($case.seed).Shapes) {if($shape.HasSmartArt -eq -1){$layout=$shape.SmartArt.Layout;break}}
+      $layout=$null; $seedShapes=$seed.Slides.Item($case.seed).Shapes; for($k=1;$k -le $seedShapes.Count;$k++) {$shape=$seedShapes.Item($k);if($shape.HasSmartArt -eq -1){$layout=$shape.SmartArt.Layout;break}}
       if($null -eq $layout -or -not ([string]$layout.Id).EndsWith('/'+$case.layout)) {throw 'Seed layout mismatch.'}
       $slide=$pres.Slides.Add($pres.Slides.Count+1,12); $shape=$slide.Shapes.AddSmartArt($layout,20,20,600,400)
       Sync-Nodes $shape.SmartArt.Nodes $case.tree $null
@@ -115,8 +115,8 @@ try {
     $opened=Invoke-OpfNativeStage $latch "open-control-$i" {$app.Presentations.Open($input.copy,-1,0,0)}
     Invoke-OpfNativeStage $latch "control-$i" {
       if([IO.Path]::GetFullPath([string]$opened.FullName) -ne $input.copy) {throw 'Control identity mismatch.'}
-      $slide=$opened.Slides.Item(1)
-      $controls.Add(@{source=$input.source;shapes=@(foreach($shape in $slide.Shapes) {if($shape.HasSmartArt -eq -1){Read-SmartArt $shape}elseif($shape.HasTextFrame -eq -1 -and $shape.TextFrame2.HasText -eq -1){Read-TextShape $shape}})})
+      $slide=$opened.Slides.Item(1); $controlShapes=$slide.Shapes
+      $controls.Add(@{source=$input.source;shapes=@(for($k=1;$k -le $controlShapes.Count;$k++) {$shape=$controlShapes.Item($k);if($shape.HasSmartArt -eq -1){Read-SmartArt $shape}elseif($shape.HasTextFrame -eq -1 -and $shape.TextFrame2.HasText -eq -1){Read-TextShape $shape}})})
     } | Out-Null
     Invoke-OpfNativeStage $latch "close-control-$i" {[void](Close-OpfOwnedPresentation $opened $input.copy)} | Out-Null
   }
