@@ -10229,6 +10229,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // - `cards`: a matrix of other than four entries is a grid of cards (cardGridColumns), start-aligned, reported `arrangement-adapted`.
   // When none holds the entries at the floor, the list stays as it was and `arrangement-adapted` says so. Each entry is a list column.
   type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; connectors?: NativeTreeConnector[]; largest?: true; last?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined; layout?: OpfLayoutRecipe; fitNodes?: (size:number)=>ArrangementNode[]|undefined; minimumSize?:number; adaptation?:string; instead?:string };
+  const fallbackListAreas = new Map<string, LayoutBox>();
   const arrangedList = (item: ComposedItem, kind: Arrangement, area: LayoutBox, pyramidDirection: 'up' | 'down' = 'up'): ComposedArrangement | undefined => {
     const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
     const tree=kind==='org-chart'||kind==='hierarchy',measured=tree||kind==='venn';
@@ -10396,24 +10397,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!chosen) {
       diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The entries of the ${kind === 'chevrons' ? 'row of chevrons' : kind.replace('-', ' ')} do not fit its ${SMART_ART_NAMES[kind].nodes} at the list's size, so they are drawn as a list.` });
       fillRegionWithList(item, area, top);
-      if(kind==='venn'){
-        // Keep the existing complete-list type. A Venn fallback caps its own reading measure without changing generic lists.
-        const current=item.text as ListFit,options=listOptionsFor(item.field,item.path,item.payload.numbering,values);
-        const readable=(text:ListFit)=>text.listEntries.every(entry=>!cutsWord(entry)&&entry.text.richLines.every(line=>line.fragments.map(fragment=>fragment.text).join('').trim().length<=70));
-        if(!readable(current)){
-          let wrapped:ListFit|undefined,box:LayoutBox|undefined;
-          // Widest first on a bounded 64-step width grid. A failed height fit never lowers the retained type or clips the complete list.
-          for(let step=1;step<64;step++){
-            const width=area.width*(1-step/64),trial={...area,x:area.x+(area.width-width)/2,width};
-            const probe=fitList(values,trial,current.fontSize,current.fontSize,options);
-            if(!readable(probe))continue;
-            if(!probe.overflow&&probe.height<=area.height+1e-6){box={...trial,y:area.y+(area.height-probe.height)/2,height:probe.height};wrapped=fitList(values,box,current.fontSize,current.fontSize,options);}
-            break;
-          }
-          if(wrapped&&!wrapped.overflow&&box){item.text=wrapped;item.box=box;}
-          else diagnostics.push({code:'text-overflow',path:item.path,message:'The complete Venn fallback cannot wrap whole words to 70 characters per line at its retained type size within this body. Paginate the slide or shorten the labels; strict composition refuses this unfit fallback.'});
-        }
-      }
+      fallbackListAreas.set(item.path, area);
       return undefined;
     }
     let { design, placed } = chosen;
@@ -11201,6 +11185,68 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
+  // SH-26: global recomposition/continuation can draw an arranged region as a flat list without reaching arrangedList's fallback.
+  // Read the requested template here too, retaining the exact settled type and style before strict overflow and pagination inspect it.
+  const readingTemplate = recordTemplate ?? (recomposing && isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined);
+  const readingRegion = (region: LayoutRegion) => ['org-chart', 'hierarchy', 'venn'].includes(region.arrangement ?? '') || region.arrangement === 'pyramid' && region.pyramidDirection === 'down';
+  if (readingTemplate?.regions.some(readingRegion)) {
+    const readable = (fit: ListFit) => fit.listEntries.every(entry => !blockCutsWord(entry) && entry.text.richLines.every(line => line.fragments.map(fragment => fragment.text).join('').trim().length <= PROSE_MEASURE_CHARS));
+    for (const item of items) {
+      if (!['items', 'bullets'].includes(item.field) || !item.text || !('listEntries' in item.text) || item.text.overflow || item.caption || stepPaths.has(item.path) || stepFlows.has(item.path)) continue;
+      const region = readingTemplate.regions.find(region => region.name === (item.region ?? item.payload.region));
+      if (region ? !readingRegion(region) : readingTemplate.regions.some(region => region.accepts.includes('list') && !readingRegion(region))) continue;
+      if (arrangements.some(arrangement => arrangement.path === item.path || arrangement.nodes.some(node => node.path === item.path || node.path?.startsWith(item.path + '.')))) continue;
+      const current = item.text as ListFit;
+      if (readable(current)) continue;
+      const values = item.value as ListValue[], area = fallbackListAreas.get(item.path) ?? item.box, ownColumns = item.payload.columns;
+      const counts = typeof ownColumns === 'number' ? [ownColumns] : options.recompose === false ? [1] : [1, 2, 3].filter(count => count <= values.length);
+      const listOptions = listOptionsFor(item.field, item.path, item.payload.numbering, values), numbering = listOptions.numbering;
+      const cap = options.fill === false || ownRunSizes(values) ? current.fontSize : Math.max(current.fontSize, Math.min(ARRANGEMENT_GROWTH * contentNominalSize(item.field) * scale, capOf(item.composition)));
+      const sizes = [current.fontSize];
+      for (let next = typeScaleAbove(current.fontSize, item.composition.minFontSize ?? 16, scale), n = 0; next <= cap + FONT_GRID_EPSILON && n < 32; n++, next = typeScaleAbove(next, item.composition.minFontSize ?? 16, scale)) sizes.push(next);
+      let kept: ComposedListColumn[] | undefined;
+      for (const size of sizes.reverse()) {
+        for (const count of counts) {
+          for (let step = 0; step < 64; step++) {
+            const width = area.width * (1 - step / 64), between = Math.min(gap, width / (count * 2)), columnWidth = (width - between * (count - 1)) / count;
+            const left = area.x + (area.width - width) / 2;
+            const boxes = Array.from({length: count}, (_, index) => roundBox({x: rtl ? left + width - columnWidth - index * (columnWidth + between) : left + index * (columnWidth + between), y: area.y, width: columnWidth, height: area.height}));
+            const whole = fitList(values, {...boxes[0]!, height: 1e6}, size, size, listOptions);
+            if (!readable(whole)) continue;
+            const first = whole.listEntries[0]!.textBox.y, heights = whole.listEntries.map((entry, index) => (whole.listEntries[index + 1]?.textBox.y ?? first + whole.height) - entry.textBox.y);
+            const breaks = [0, ...listColumnBreaks(heights, whole.listEntries.map(entry => entry.level), count), values.length];
+            const place = (dy: number, height: number) => boxes.slice(0, breaks.length - 1).map((box, index): ComposedListColumn => {
+              const start = breaks[index]!, end = breaks[index + 1]!, chunk = numbering !== undefined ? sliceNumberedItems(values, numbering, start, end) : values.slice(start, end);
+              const text = fitList(chunk, {...box, y: box.y + dy, height}, size, size, {...listOptions, ...(values.length > 1 ? {heading: false} : {})});
+              return {box: {...box, y: box.y + dy, height}, start, end, text: {...text, listEntries: text.listEntries.map(entry => {
+                const at = entry.index + start, object = values[at] !== null && typeof values[at] === 'object' && !Array.isArray(values[at]);
+                return {...entry, index: at, textPath: `${item.path}.${at}${object ? '.text' : ''}`, descriptionPath: `${item.path}.${at}.description`};
+              })}};
+            });
+            const trial = place(0, area.height);
+            // Once whole-word measure is met, a narrower width cannot repair a height overflow at this same retained size/count.
+            if (trial.some(column => column.text.overflow)) break;
+            if (trial.some(column => !readable(column.text))) continue;
+            const height = Math.max(...trial.map(column => column.text.height));
+            if (height > area.height + 1e-6) break;
+            const centered = place(Math.max(0, (area.height - height) / 2), height);
+            if (centered.every(column => !column.text.overflow && readable(column.text))) kept = centered;
+            break;
+          }
+          if (kept) break;
+        }
+        if (kept) break;
+      }
+      if (kept) {
+        item.text = kept.length === 1 ? kept[0]!.text : mergeListColumns(kept);
+        item.box = kept.length === 1 ? kept[0]!.box : {...area};
+        if (kept.length > 1) item.listColumns = kept; else delete item.listColumns;
+      } else {
+        item.text = {...current, overflow: true};
+        diagnostics.push({code: 'text-overflow', path: item.path, message: 'The complete diagram fallback cannot wrap whole words to 70 characters per line at its retained type size within this body. Paginate the slide; strict composition refuses this unfit fallback.'});
+      }
+    }
+  }
   diagnostics.push(...imageCalloutDiagnostics);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {

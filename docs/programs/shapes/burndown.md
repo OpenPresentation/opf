@@ -76,6 +76,8 @@ item's state edits its row and appends a log line in the same PR.
   sketch while it is open, but its re-save writes the drawn outline as fixed custom geometry: the slide looks the same and the line is no
   longer a live sketch. Accepted and documented; the export keeps writing the sketch extension.
 
+| SH-26 | Readable diagram fallback and continuation lists after template recomposition | core, render, pptx | All four new arrangement families keep complete whole-word lines at most70characters, retain or grow settled type, honor authored constraints and refuse unfit bodies; actual diagram/native/catalog controls unchanged | in-progress: exact four regressions, all49 captured continuation pages and36 focused controls pass; whole-case CLI sheets, required checks and new pinned golden batch owed ([handoff](../../handoff/2026-11-08/sh26-readable-fallbacks.md)) |
+
 ## Progress log
 
 - 2026-11-05: program opened with the owner-approved design (`docs/shapes.md` holds the property map).
@@ -189,3 +191,5 @@ item's state edits its row and appends a log line in the same PR.
 - 2026-11-08: Coordinator actualName03completed guarded native edit/SaveCopyAs/read-only reopen with exactName phases and0.0541/0.0754pxpoint observations. Actual113630byte savedpackage proves direct c:tx/c:v and old-readerSeries1failure; corrected current-import preserves allnames/values/indexanchor and explicitly drops stale namedanchor. Independent PNG review flags longer native legend name omitting secondentry; no whole-slide visual edit parity claimed. Exact fixture retained separately from narrow product parserfix.
 
 - 2026-11-08: SH25current actual native import/reflow proof restores both Native renamed+Expansion visibly at unchanged15ptlegend and preserves currentvalues/numericbinding/explicit staleCurrent finding. Genuine original/native-edit/reflow sheet and full actual03raw attempt are durable; native longer-name fixed-box omission remains honest public guidance, not hidden or text-shrunk.193s/85.5smapped runs retain inherited archive246/247unrun; exact sparse restoration/textPASS. Coordinator actualreexport/native release acceptance remains separate.
+
+- 2026-11-08: SH-26 addresses the confirmed49-panel clean continuation reading-measure blocker from the individually viewed pinned112-template artifact. All49 sources preserve settled24/26/28px and every label with≤70-character lines; a six-label control grows26→34px. Whole-item columns retain style/direction/markers/paths and explicit constraints; unfit bodies now report truthful overflow. Existing measured Venn/negative controls pass; no catalog, native-domain, chart or golden edit. [Handoff](../../handoff/2026-11-08/sh26-readable-fallbacks.md).
