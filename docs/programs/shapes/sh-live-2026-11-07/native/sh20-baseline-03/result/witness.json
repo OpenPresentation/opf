@@ -1,0 +1,1499 @@
+﻿{
+    "passed":  true,
+    "stages":  [
+                   "create-app:ok",
+                   "empty-app:ok",
+                   "visible-minimized-window:ok",
+                   "open-control-1:ok",
+                   "control-1:ok",
+                   "close-control-1:ok",
+                   "open-control-2:ok",
+                   "control-2:ok",
+                   "close-control-2:ok",
+                   "open-control-3:ok",
+                   "control-3:ok",
+                   "close-control-3:ok",
+                   "open-control-4:ok",
+                   "control-4:ok",
+                   "close-control-4:ok",
+                   "open-control-5:ok",
+                   "control-5:ok",
+                   "close-control-5:ok",
+                   "open-control-6:ok",
+                   "control-6:ok",
+                   "close-control-6:ok",
+                   "quit-empty-owned-app:ok"
+               ],
+    "failure":  null,
+    "inputs":  [
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh20-baseline-03\\result\\inputs\\0-smartart-seeds.pptx",
+                       "sha256":  "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-08\\smartart-seeds.pptx",
+                       "sha256After":  "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh20-baseline-03\\result\\inputs\\1-cycle-4-short-square.pptx",
+                       "sha256":  "a18d5448d38bdad8f5dad59a5d930c3a9e18091740a254f3509d31c43c8985f7",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\cycle-4-short-square.pptx",
+                       "sha256After":  "a18d5448d38bdad8f5dad59a5d930c3a9e18091740a254f3509d31c43c8985f7"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh20-baseline-03\\result\\inputs\\2-matrix-4-cjk-wide.pptx",
+                       "sha256":  "68d95fde367e84303392894c9601bf8e8d107a89ff9748fb39b232263e0683c2",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-cjk-wide.pptx",
+                       "sha256After":  "68d95fde367e84303392894c9601bf8e8d107a89ff9748fb39b232263e0683c2"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh20-baseline-03\\result\\inputs\\3-matrix-4-rtl-wide.pptx",
+                       "sha256":  "2a35e78da09b3e77a351a2e3bd5fce618762418aec4de7d08e60eabdced47071",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-rtl-wide.pptx",
+                       "sha256After":  "2a35e78da09b3e77a351a2e3bd5fce618762418aec4de7d08e60eabdced47071"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh20-baseline-03\\result\\inputs\\4-cycle-4-short-square.pptx",
+                       "sha256":  "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\cycle-4-short-square.pptx",
+                       "sha256After":  "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh20-baseline-03\\result\\inputs\\5-matrix-4-cjk-wide.pptx",
+                       "sha256":  "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-cjk-wide.pptx",
+                       "sha256After":  "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9"
+                   },
+                   {
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh20-baseline-03\\result\\inputs\\6-matrix-4-rtl-wide.pptx",
+                       "sha256":  "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2",
+                       "unchanged":  true,
+                       "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-rtl-wide.pptx",
+                       "sha256After":  "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2"
+                   }
+               ],
+    "controls":  [
+                     {
+                         "shapes":  [
+                                        {
+                                            "layout":  "urn:openpresentation.org/smartart/layout/cycle-ring/2a9c3e78a7ddd720",
+                                            "items":  [
+                                                          {
+                                                              "margins":  [
+                                                                              7.2,
+                                                                              24.456377,
+                                                                              7.2,
+                                                                              7.2
+                                                                          ],
+                                                              "text":  "Vision",
+                                                              "complexScript":  "+mn-cs",
+                                                              "width":  120.22574615478516,
+                                                              "latin":  "Source Sans 3",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  43.200000762939453,
+                                                              "height":  102.87669372558594,
+                                                              "eastAsian":  "Source Sans 3",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  85.4128342,
+                                                                                "width":  90.54,
+                                                                                "top":  29.478426,
+                                                                                "height":  45.81504,
+                                                                                "text":  "Vision"
+                                                                            }
+                                                                        ],
+                                                              "left":  306.00747680664063,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "width":  46.8802375793457,
+                                                              "preset":  33,
+                                                              "height":  34.292205810546875,
+                                                              "name":  "",
+                                                              "top":  165.17330932617188,
+                                                              "shapeType":  1,
+                                                              "left":  377.963623046875,
+                                                              "rotation":  68.079849243164063
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              7.2,
+                                                                              24.456377,
+                                                                              7.2,
+                                                                              7.2
+                                                                          ],
+                                                              "text":  "Plan",
+                                                              "complexScript":  "+mn-cs",
+                                                              "width":  120.22574615478516,
+                                                              "latin":  "Source Sans 3",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  218.56196594238281,
+                                                              "height":  102.87669372558594,
+                                                              "eastAsian":  "Source Sans 3",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  167.552048,
+                                                                                "width":  67.39496,
+                                                                                "top":  204.8404,
+                                                                                "height":  45.81504,
+                                                                                "text":  "Plan"
+                                                                            }
+                                                                        ],
+                                                              "left":  376.57418823242188,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "width":  46.8802375793457,
+                                                              "preset":  33,
+                                                              "height":  34.292205810546875,
+                                                              "name":  "",
+                                                              "top":  340.5350341796875,
+                                                              "shapeType":  1,
+                                                              "left":  377.96353149414063,
+                                                              "rotation":  111.92024993896484
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              7.2,
+                                                                              24.456377,
+                                                                              7.2,
+                                                                              7.2
+                                                                          ],
+                                                              "text":  "Build",
+                                                              "complexScript":  "+mn-cs",
+                                                              "width":  120.22574615478516,
+                                                              "latin":  "Source Sans 3",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  393.9232177734375,
+                                                              "height":  102.87669372558594,
+                                                              "eastAsian":  "Source Sans 3",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  91.29536,
+                                                                                "width":  78.77496,
+                                                                                "top":  380.20166,
+                                                                                "height":  45.81504,
+                                                                                "text":  "Build"
+                                                                            }
+                                                                        ],
+                                                              "left":  306.00747680664063,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "width":  46.8802375793457,
+                                                              "preset":  33,
+                                                              "height":  34.292205810546875,
+                                                              "name":  "",
+                                                              "top":  340.53512573242188,
+                                                              "shapeType":  1,
+                                                              "left":  307.3966064453125,
+                                                              "rotation":  248.07954406738281
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              7.2,
+                                                                              24.456377,
+                                                                              7.2,
+                                                                              7.2
+                                                                          ],
+                                                              "text":  "Ship",
+                                                              "complexScript":  "+mn-cs",
+                                                              "width":  120.22574615478516,
+                                                              "latin":  "Source Sans 3",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  218.56196594238281,
+                                                              "height":  102.87669372558594,
+                                                              "eastAsian":  "Source Sans 3",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  26.2903938,
+                                                                                "width":  67.65,
+                                                                                "top":  204.8404,
+                                                                                "height":  45.81504,
+                                                                                "text":  "Ship"
+                                                                            }
+                                                                        ],
+                                                              "left":  235.44000244140625,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "width":  46.8802375793457,
+                                                              "preset":  33,
+                                                              "height":  34.292205810546875,
+                                                              "name":  "",
+                                                              "top":  165.17323303222656,
+                                                              "shapeType":  1,
+                                                              "left":  307.39645385742188,
+                                                              "rotation":  291.92037963867188
+                                                          }
+                                                      ],
+                                            "nodes":  [
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "Vision",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  1
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "Plan",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  2
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "Build",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  3
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "Ship",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  4
+                                                          }
+                                                      ]
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "How we ",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  174.24000549316406,
+                                            "latin":  "Source Sans 3",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  220.58999633789063,
+                                            "height":  49.409999847412109,
+                                            "eastAsian":  "Source Sans 3",
+                                            "shapeType":  17,
+                                            "size":  40.5,
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  143.13,
+                                                              "top":  220.59,
+                                                              "height":  48.6,
+                                                              "text":  "How we "
+                                                          }
+                                                      ],
+                                            "left":  43.200000762939453,
+                                            "anchor":  1,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "work",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  174.24000549316406,
+                                            "latin":  "Source Sans 3",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  270,
+                                            "height":  49.409999847412109,
+                                            "eastAsian":  "Source Sans 3",
+                                            "shapeType":  17,
+                                            "size":  40.5,
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  85.38,
+                                                              "top":  270,
+                                                              "height":  48.6,
+                                                              "text":  "work"
+                                                          }
+                                                      ],
+                                            "left":  43.200000762939453,
+                                            "anchor":  1,
+                                            "name":  "OPF heading slides.0.title line 1",
+                                            "preset":  1
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\cycle-4-short-square.pptx"
+                     },
+                     {
+                         "shapes":  [
+                                        {
+                                            "layout":  "urn:openpresentation.org/smartart/layout/matrix-quadrants/735a6dfb02ce92fe",
+                                            "items":  [
+                                                          {
+                                                              "margins":  [
+                                                                              10.8,
+                                                                              76.30803,
+                                                                              10.8,
+                                                                              10.8
+                                                                          ],
+                                                              "text":  "ビジョン",
+                                                              "complexScript":  "+mn-cs",
+                                                              "width":  247.67991638183594,
+                                                              "latin":  "Aptos",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  43.200000762939453,
+                                                              "height":  217.7999267578125,
+                                                              "eastAsian":  "Meiryo",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  51.839962,
+                                                                                "width":  144.004959,
+                                                                                "top":  86.940155,
+                                                                                "height":  50.55,
+                                                                                "text":  "ビジョン"
+                                                                            }
+                                                                        ],
+                                                              "left":  403.44000244140625,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              10.8,
+                                                                              76.30803,
+                                                                              10.8,
+                                                                              10.8
+                                                                          ],
+                                                              "text":  "目標と計画",
+                                                              "complexScript":  "+mn-cs",
+                                                              "width":  247.67991638183594,
+                                                              "latin":  "Aptos",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  43.200000762939453,
+                                                              "height":  217.7999267578125,
+                                                              "eastAsian":  "Meiryo",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  299.519958,
+                                                                                "width":  180.004959,
+                                                                                "top":  86.940155,
+                                                                                "height":  50.55,
+                                                                                "text":  "目標と計画"
+                                                                            }
+                                                                        ],
+                                                              "left":  669.1199951171875,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              10.8,
+                                                                              76.30803,
+                                                                              10.8,
+                                                                              10.8
+                                                                          ],
+                                                              "text":  "プログラム",
+                                                              "complexScript":  "+mn-cs",
+                                                              "width":  247.67991638183594,
+                                                              "latin":  "Aptos",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  279,
+                                                              "height":  217.7999267578125,
+                                                              "eastAsian":  "Meiryo",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  33.839962,
+                                                                                "width":  180.004959,
+                                                                                "top":  322.740143,
+                                                                                "height":  50.55,
+                                                                                "text":  "プログラム"
+                                                                            }
+                                                                        ],
+                                                              "left":  403.44000244140625,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              10.8,
+                                                                              54.34803,
+                                                                              10.8,
+                                                                              10.8
+                                                                          ],
+                                                              "text":  "チームと基盤",
+                                                              "complexScript":  "+mn-cs",
+                                                              "width":  247.67991638183594,
+                                                              "latin":  "Aptos",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  279,
+                                                              "height":  217.7999267578125,
+                                                              "eastAsian":  "Meiryo",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  299.519958,
+                                                                                "width":  180,
+                                                                                "top":  300.780151,
+                                                                                "height":  44,
+                                                                                "text":  "チームと基"
+                                                                            },
+                                                                            {
+                                                                                "left":  371.519958,
+                                                                                "width":  36.00496,
+                                                                                "top":  344.780151,
+                                                                                "height":  50.55,
+                                                                                "text":  "盤"
+                                                                            }
+                                                                        ],
+                                                              "left":  669.1199951171875,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          }
+                                                      ],
+                                            "nodes":  [
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "ビジョン",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  1
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "目標と計画",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  2
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "プログラム",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  3
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "チームと基盤",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  4
+                                                          }
+                                                      ]
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "私たちの戦略",
+                                            "complexScript":  "+mj-cs",
+                                            "width":  342.239990234375,
+                                            "latin":  "Aptos Display",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  245.29496765136719,
+                                            "height":  49.409999847412109,
+                                            "eastAsian":  "Meiryo",
+                                            "shapeType":  14,
+                                            "size":  40.5,
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  243.005035,
+                                                              "top":  245.294968,
+                                                              "height":  48.6,
+                                                              "text":  "私たちの戦略"
+                                                          }
+                                                      ],
+                                            "left":  43.200000762939453,
+                                            "anchor":  1,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "preset":  1
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-cjk-wide.pptx"
+                     },
+                     {
+                         "shapes":  [
+                                        {
+                                            "layout":  "urn:openpresentation.org/smartart/layout/matrix-quadrants/41bce624c1a098de",
+                                            "items":  [
+                                                          {
+                                                              "margins":  [
+                                                                              10.8,
+                                                                              76.30803,
+                                                                              10.8,
+                                                                              10.8
+                                                                          ],
+                                                              "text":  "الرؤية",
+                                                              "complexScript":  "Noto Naskh Arabic",
+                                                              "width":  247.67991638183594,
+                                                              "latin":  "Aptos",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  43.200000762939453,
+                                                              "height":  217.7999267578125,
+                                                              "eastAsian":  "Aptos",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  90.56248,
+                                                                                "width":  66.56,
+                                                                                "top":  86.940155,
+                                                                                "height":  42.67,
+                                                                                "text":  "الرؤية"
+                                                                            }
+                                                                        ],
+                                                              "left":  43.200000762939453,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              10.8,
+                                                                              76.30803,
+                                                                              10.8,
+                                                                              10.8
+                                                                          ],
+                                                              "text":  "الأهداف",
+                                                              "complexScript":  "Noto Naskh Arabic",
+                                                              "width":  247.67991638183594,
+                                                              "latin":  "Aptos",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  43.200000762939453,
+                                                              "height":  217.7999267578125,
+                                                              "eastAsian":  "Aptos",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  339.912476,
+                                                                                "width":  99.22,
+                                                                                "top":  86.940155,
+                                                                                "height":  42.67,
+                                                                                "text":  "الأهداف"
+                                                                            }
+                                                                        ],
+                                                              "left":  308.8800048828125,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              10.8,
+                                                                              76.30803,
+                                                                              10.8,
+                                                                              10.8
+                                                                          ],
+                                                              "text":  "البرامج",
+                                                              "complexScript":  "Noto Naskh Arabic",
+                                                              "width":  247.67991638183594,
+                                                              "latin":  "Aptos",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  279,
+                                                              "height":  217.7999267578125,
+                                                              "eastAsian":  "Aptos",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  86.01744,
+                                                                                "width":  75.65,
+                                                                                "top":  322.740143,
+                                                                                "height":  42.67,
+                                                                                "text":  "البرامج"
+                                                                            }
+                                                                        ],
+                                                              "left":  43.200000762939453,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          },
+                                                          {
+                                                              "margins":  [
+                                                                              10.8,
+                                                                              76.30803,
+                                                                              10.8,
+                                                                              10.8
+                                                                          ],
+                                                              "text":  "الفرق والمنصة",
+                                                              "complexScript":  "Noto Naskh Arabic",
+                                                              "width":  247.67991638183594,
+                                                              "latin":  "Aptos",
+                                                              "rotation":  0,
+                                                              "spacing":  {
+                                                                              "rule":  0,
+                                                                              "within":  43.92,
+                                                                              "before":  0,
+                                                                              "after":  0
+                                                                          },
+                                                              "top":  279,
+                                                              "height":  217.7999267578125,
+                                                              "eastAsian":  "Aptos",
+                                                              "shapeType":  1,
+                                                              "size":  36,
+                                                              "lines":  [
+                                                                            {
+                                                                                "left":  303.8925,
+                                                                                "width":  171.26,
+                                                                                "top":  322.740143,
+                                                                                "height":  42.67,
+                                                                                "text":  "الفرق والمنصة"
+                                                                            }
+                                                                        ],
+                                                              "left":  308.8800048828125,
+                                                              "anchor":  1,
+                                                              "name":  "",
+                                                              "preset":  5
+                                                          }
+                                                      ],
+                                            "nodes":  [
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "الرؤية",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  1
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "الأهداف",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  2
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "البرامج",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  3
+                                                          },
+                                                          {
+                                                              "children":  0,
+                                                              "text":  "الفرق والمنصة",
+                                                              "level":  1,
+                                                              "type":  1,
+                                                              "parent":  null,
+                                                              "index":  4
+                                                          }
+                                                      ]
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "استراتيجيتنا",
+                                            "complexScript":  "Noto Naskh Arabic",
+                                            "width":  342.239990234375,
+                                            "latin":  "Aptos Display",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  245.1832275390625,
+                                            "height":  49.409999847412109,
+                                            "eastAsian":  "Aptos Display",
+                                            "shapeType":  14,
+                                            "size":  40.5,
+                                            "lines":  [
+                                                          {
+                                                              "left":  755.305054,
+                                                              "width":  161.38,
+                                                              "top":  245.183228,
+                                                              "height":  48.6,
+                                                              "text":  "استراتيجيتنا"
+                                                          }
+                                                      ],
+                                            "left":  574.55999755859375,
+                                            "anchor":  1,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "preset":  1
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-rtl-wide.pptx"
+                     },
+                     {
+                         "shapes":  [
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "How we ",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  174.24000549316406,
+                                            "latin":  "Source Sans 3",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  220.58999633789063,
+                                            "height":  49.409999847412109,
+                                            "eastAsian":  "Source Sans 3",
+                                            "shapeType":  17,
+                                            "size":  40.5,
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  143.13,
+                                                              "top":  220.59,
+                                                              "height":  48.6,
+                                                              "text":  "How we "
+                                                          }
+                                                      ],
+                                            "left":  43.200000762939453,
+                                            "anchor":  1,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "work",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  174.24000549316406,
+                                            "latin":  "Source Sans 3",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  270,
+                                            "height":  49.409999847412109,
+                                            "eastAsian":  "Source Sans 3",
+                                            "shapeType":  17,
+                                            "size":  40.5,
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  85.38,
+                                                              "top":  270,
+                                                              "height":  48.6,
+                                                              "text":  "work"
+                                                          }
+                                                      ],
+                                            "left":  43.200000762939453,
+                                            "anchor":  1,
+                                            "name":  "OPF heading slides.0.title line 1",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "Vision",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  90.540000915527344,
+                                            "latin":  "Source Sans 3",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  72.6783447265625,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Source Sans 3",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  320.8504,
+                                                              "width":  90.63,
+                                                              "top":  72.6783447,
+                                                              "height":  43.2,
+                                                              "text":  "Vision"
+                                                          }
+                                                      ],
+                                            "left":  320.85040283203125,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 0",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "Plan",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  67.3919677734375,
+                                            "latin":  "Source Sans 3",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  248.04039001464844,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Source Sans 3",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  402.9911,
+                                                              "width":  67.38,
+                                                              "top":  248.04039,
+                                                              "height":  43.2,
+                                                              "text":  "Plan"
+                                                          }
+                                                      ],
+                                            "left":  402.9910888671875,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 1",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "Build",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  78.768028259277344,
+                                            "latin":  "Source Sans 3",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  423.40164184570313,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Source Sans 3",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  326.7364,
+                                                              "width":  78.75504,
+                                                              "top":  423.401642,
+                                                              "height":  43.2,
+                                                              "text":  "Build"
+                                                          }
+                                                      ],
+                                            "left":  326.73638916015625,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 2",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "Ship",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  67.644012451171875,
+                                            "latin":  "Source Sans 3",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  248.04039001464844,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Source Sans 3",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  261.730865,
+                                                              "width":  67.75504,
+                                                              "top":  248.04039,
+                                                              "height":  43.2,
+                                                              "text":  "Ship"
+                                                          }
+                                                      ],
+                                            "left":  261.73086547851563,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 3",
+                                            "preset":  1
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\cycle-4-short-square.pptx"
+                     },
+                     {
+                         "shapes":  [
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "私たちの戦略",
+                                            "complexScript":  "+mj-cs",
+                                            "width":  342.239990234375,
+                                            "latin":  "Aptos Display",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  245.29496765136719,
+                                            "height":  49.409999847412109,
+                                            "eastAsian":  "Meiryo",
+                                            "shapeType":  14,
+                                            "size":  40.5,
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  243.005035,
+                                                              "top":  245.294968,
+                                                              "height":  48.6,
+                                                              "text":  "私たちの戦略"
+                                                          }
+                                                      ],
+                                            "left":  43.200000762939453,
+                                            "anchor":  1,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "ビジョン",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  144,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  130.13999938964844,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Meiryo",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  455.28,
+                                                              "width":  144.005035,
+                                                              "top":  130.14,
+                                                              "height":  43.2,
+                                                              "text":  "ビジョン"
+                                                          }
+                                                      ],
+                                            "left":  455.27999877929688,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 0",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "目標と計画",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  180,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  130.13999938964844,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Meiryo",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  702.96,
+                                                              "width":  180.005035,
+                                                              "top":  130.14,
+                                                              "height":  43.2,
+                                                              "text":  "目標と計画"
+                                                          }
+                                                      ],
+                                            "left":  702.96002197265625,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 1",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "プログラム",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  178.91999816894531,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  365.94000244140625,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Meiryo",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  437.82,
+                                                              "width":  180.005035,
+                                                              "top":  365.94,
+                                                              "height":  43.2,
+                                                              "text":  "プログラム"
+                                                          }
+                                                      ],
+                                            "left":  437.82000732421875,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 2",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "チームと基",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  178.91999816894531,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  343.98001098632813,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Meiryo",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  703.5,
+                                                              "width":  180.005035,
+                                                              "top":  343.98,
+                                                              "height":  43.2,
+                                                              "text":  "チームと基"
+                                                          }
+                                                      ],
+                                            "left":  703.5,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 3",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "盤",
+                                            "complexScript":  "+mn-cs",
+                                            "width":  36,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  387.89999389648438,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Meiryo",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  774.96,
+                                                              "width":  36.00504,
+                                                              "top":  387.9,
+                                                              "height":  43.2,
+                                                              "text":  "盤"
+                                                          }
+                                                      ],
+                                            "left":  774.96002197265625,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 4",
+                                            "preset":  1
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-cjk-wide.pptx"
+                     },
+                     {
+                         "shapes":  [
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "استراتيجيتنا",
+                                            "complexScript":  "Noto Naskh Arabic",
+                                            "width":  342.239990234375,
+                                            "latin":  "Aptos Display",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  245.1832275390625,
+                                            "height":  49.409999847412109,
+                                            "eastAsian":  "Aptos Display",
+                                            "shapeType":  14,
+                                            "size":  40.5,
+                                            "lines":  [
+                                                          {
+                                                              "left":  755.305054,
+                                                              "width":  161.38,
+                                                              "top":  245.183228,
+                                                              "height":  48.6,
+                                                              "text":  "استراتيجيتنا"
+                                                          }
+                                                      ],
+                                            "left":  574.55999755859375,
+                                            "anchor":  1,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "الرؤية",
+                                            "complexScript":  "Noto Naskh Arabic",
+                                            "width":  76.211967468261719,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  130.13999938964844,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Aptos",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  138.304016,
+                                                              "width":  66.75504,
+                                                              "top":  130.14,
+                                                              "height":  43.2,
+                                                              "text":  "الرؤية"
+                                                          }
+                                                      ],
+                                            "left":  128.93402099609375,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 0",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "الأهداف",
+                                            "complexScript":  "Noto Naskh Arabic",
+                                            "width":  101.66401672363281,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  130.13999938964844,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Aptos",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  384.258026,
+                                                              "width":  99.25504,
+                                                              "top":  130.14,
+                                                              "height":  43.2,
+                                                              "text":  "الأهداف"
+                                                          }
+                                                      ],
+                                            "left":  381.88803100585938,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 1",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "البرامج",
+                                            "complexScript":  "Noto Naskh Arabic",
+                                            "width":  90.215980529785156,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  365.94000244140625,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Aptos",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  136.301971,
+                                                              "width":  75.75504,
+                                                              "top":  365.94,
+                                                              "height":  43.2,
+                                                              "text":  "البرامج"
+                                                          }
+                                                      ],
+                                            "left":  121.93196868896484,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 2",
+                                            "preset":  1
+                                        },
+                                        {
+                                            "margins":  [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                        ],
+                                            "text":  "الفرق والمنصة",
+                                            "complexScript":  "Noto Naskh Arabic",
+                                            "width":  178.63197326660156,
+                                            "latin":  "Aptos",
+                                            "rotation":  0,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "top":  365.94000244140625,
+                                            "height":  43.919998168945313,
+                                            "eastAsian":  "Aptos",
+                                            "shapeType":  17,
+                                            "size":  36,
+                                            "lines":  [
+                                                          {
+                                                              "left":  350.649048,
+                                                              "width":  171.38,
+                                                              "top":  365.94,
+                                                              "height":  43.2,
+                                                              "text":  "الفرق والمنصة"
+                                                          }
+                                                      ],
+                                            "left":  343.40402221679688,
+                                            "anchor":  1,
+                                            "name":  "OPF list slides.0.items line 3",
+                                            "preset":  1
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-rtl-wide.pptx"
+                     }
+                 ],
+    "trees":  [
+
+              ]
+}

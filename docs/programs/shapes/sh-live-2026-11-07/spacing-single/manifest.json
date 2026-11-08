@@ -1,0 +1,56 @@
+{
+  "scope": "Diagnostic spacing experiment only; no eligibility claim.",
+  "records": [
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\cycle-4-short-square.pptx",
+      "output": "C:\\opf-work\\sh20-23-review\\artifacts\\spacing-single\\pptx\\cycle-4-short-square.pptx",
+      "partsChanged": [
+        "ppt/diagrams/data1.xml",
+        "ppt/diagrams/drawing1.xml"
+      ],
+      "beforeSha256": "a18d5448d38bdad8f5dad59a5d930c3a9e18091740a254f3509d31c43c8985f7",
+      "afterSha256": "fe8014cd8276ed1c45ae1dcab9ce9e9431faabc64d8ba42edb2eb6111356dbf4"
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-cjk-wide.pptx",
+      "output": "C:\\opf-work\\sh20-23-review\\artifacts\\spacing-single\\pptx\\matrix-4-cjk-wide.pptx",
+      "partsChanged": [
+        "ppt/diagrams/data1.xml",
+        "ppt/diagrams/drawing1.xml"
+      ],
+      "beforeSha256": "68d95fde367e84303392894c9601bf8e8d107a89ff9748fb39b232263e0683c2",
+      "afterSha256": "daf2503d75c15496a38410f28230a847237e36dacdda436eb54e2e3a028c35ed"
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx\\matrix-4-rtl-wide.pptx",
+      "output": "C:\\opf-work\\sh20-23-review\\artifacts\\spacing-single\\pptx\\matrix-4-rtl-wide.pptx",
+      "partsChanged": [
+        "ppt/diagrams/data1.xml",
+        "ppt/diagrams/drawing1.xml"
+      ],
+      "beforeSha256": "2a35e78da09b3e77a351a2e3bd5fce618762418aec4de7d08e60eabdced47071",
+      "afterSha256": "cc8b98edf01d7eb42814515f040ddc00e8fdc1531096e5a627ae8d9c95c64ed9"
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\cycle-4-short-square.pptx",
+      "output": "C:\\opf-work\\sh20-23-review\\artifacts\\spacing-single\\pptx-shapes\\cycle-4-short-square.pptx",
+      "partsChanged": [],
+      "beforeSha256": "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8",
+      "afterSha256": "df0997602db7ac6efb2b55a5d58cff0e61fe6bc4b99a4b62b9a7d21d44a780b8"
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-cjk-wide.pptx",
+      "output": "C:\\opf-work\\sh20-23-review\\artifacts\\spacing-single\\pptx-shapes\\matrix-4-cjk-wide.pptx",
+      "partsChanged": [],
+      "beforeSha256": "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9",
+      "afterSha256": "aef4cfd8b5317382e736d372898912cb41ed9d6e441608425a2d87a78dd36db9"
+    },
+    {
+      "input": "C:\\opf-work\\_supervisor\\com-jobs\\sh-live-extras\\sweep\\pptx-shapes\\matrix-4-rtl-wide.pptx",
+      "output": "C:\\opf-work\\sh20-23-review\\artifacts\\spacing-single\\pptx-shapes\\matrix-4-rtl-wide.pptx",
+      "partsChanged": [],
+      "beforeSha256": "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2",
+      "afterSha256": "96b13568f670b92ab4ba361a7f18ff9b611694e9d37c4d7c806192d2dd997ee2"
+    }
+  ]
+}
