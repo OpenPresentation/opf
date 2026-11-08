@@ -1,0 +1,24 @@
+{
+  "scope": "Final read-only frozen-runtime check after both imports, XML review, failure review and seals; no rebuild/install/write to producers",
+  "node": "v24.20.0",
+  "producerSha256": "e955244c687f171e0e65f925897cd742580af0ea971658df634c1d9f800589c6",
+  "rows": [
+    {
+      "producer": "q473",
+      "revision": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+      "status": "",
+      "verifiedFiles": 611,
+      "runtimeSha256": "df05a1d7e9ab1262243a81105719ca4659bf2fa2705c79b00318d8bd5642d929",
+      "allFilesExact": true
+    },
+    {
+      "producer": "corrected",
+      "revision": "9e36a7bbd3a663e8b669115cf4e7397f42037e9b",
+      "status": "",
+      "verifiedFiles": 612,
+      "runtimeSha256": "a749a8038bc37a682537066e76a516e448b3e541cccb2cc6d0b35e31c116ef52",
+      "allFilesExact": true
+    }
+  ],
+  "nativeAcceptance": false
+}

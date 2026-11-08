@@ -1,0 +1,84 @@
+{
+  "groups": [
+    {
+      "name": "font-source-export",
+      "archive": "font-source-export.zip",
+      "bytes": 702160,
+      "sha256": "6299dce5146ea904537fc257a4bdd928bccf2bf6fdda4065fd866a39154f5d26",
+      "fileCount": 83,
+      "rawBytes": 1120364,
+      "losslessRoundTrip": true
+    },
+    {
+      "name": "font-native",
+      "archive": "font-native.zip",
+      "bytes": 1001528,
+      "sha256": "9d7239c5c7bce1e50058feb2770e85254bb2ac55bb93498019260402b9226f43",
+      "fileCount": 445,
+      "rawBytes": 2958520,
+      "losslessRoundTrip": true
+    },
+    {
+      "name": "font-and-ltr-machine-review",
+      "archive": "font-and-ltr-machine-review.zip",
+      "bytes": 569503,
+      "sha256": "c64e0214b6a1a258773084ffbe52c8c99395c3d1d59bcd4f99fa3f36973414e0",
+      "fileCount": 21,
+      "rawBytes": 2384675,
+      "losslessRoundTrip": true
+    },
+    {
+      "name": "ltr-native-failure",
+      "archive": "ltr-native-failure.zip",
+      "bytes": 236597,
+      "sha256": "a85dd6b8536534410a0d34553d5b814d1a8baf0c0fa78bf349b5ca448ffbd859",
+      "fileCount": 144,
+      "rawBytes": 765644,
+      "losslessRoundTrip": true
+    },
+    {
+      "name": "ltr-suite",
+      "archive": "ltr-suite.zip",
+      "bytes": 99302,
+      "sha256": "d8dfaaa5213f0ee04d834b8272c7f54eb64afc6a1853dc67afbd638d0690a4d4",
+      "fileCount": 4,
+      "rawBytes": 134934,
+      "losslessRoundTrip": true
+    },
+    {
+      "name": "execution-wrappers",
+      "archive": "execution-wrappers.zip",
+      "bytes": 4404,
+      "sha256": "002cd9546f01c84c873d55f40f06db88f3e1abb539acb7fa9add601ee0716c2c",
+      "fileCount": 5,
+      "rawBytes": 8403,
+      "losslessRoundTrip": true
+    },
+    {
+      "name": "initial-seal-retained",
+      "archive": "initial-seal-retained.zip",
+      "bytes": 2466833,
+      "sha256": "a1d7c3324243f18f2e1e105f086052d258d677749dd8e2307b192f04769dda42",
+      "fileCount": 10,
+      "rawBytes": 2899846,
+      "losslessRoundTrip": true
+    },
+    {
+      "name": "review-producers",
+      "archive": "review-producers.zip",
+      "bytes": 19746,
+      "sha256": "dfa639e3e365ad1eeb4d22bb3a59455e8b4d4974a20bb97c75dfc51084672072",
+      "fileCount": 7,
+      "rawBytes": 46219,
+      "losslessRoundTrip": true
+    }
+  ],
+  "totalFiles": 719,
+  "nestedMembers": 6013,
+  "scannedBytes": 31243478,
+  "findings": [],
+  "documentPropertyIdentities": [
+    "{\"creator\":\"OpenPresentation\",\"lastModifiedBy\":\"OpenPresentation\"}",
+    "{\"creator\":\"OpenPresentation\",\"lastModifiedBy\":\"Michael Grimm\"}"
+  ]
+}

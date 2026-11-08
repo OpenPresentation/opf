@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "scope": "Exact outer local publication candidates. Coordinator review is required before any push. All nested raw evidence hashes are bound by payload-inventory.json.",
+  "branch": "codex/evidence-rr105-font-native-review",
+  "base": "9545016583ccfa151077cda4d51043ac6505a140",
+  "nativeAcceptance": false,
+  "overallAccepted": false,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 294,
+      "sha256": "aebb53ef64d074c47cbd34fac140f00773adcf4b5d73530a118a02ed0ea994e9"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review.md",
+      "bytes": 9635,
+      "sha256": "50d3ca13c68e76029d0a3e524f16819c3a34a772c8b70b0db44ae2c1ceef9b24"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/credential-scan.json",
+      "bytes": 10847,
+      "sha256": "a1834f5c558286496ea4c4dd0e1208b330f0f32a21c22d21e9511f13abd3508f"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/execution-wrappers.zip.gz",
+      "bytes": 4011,
+      "sha256": "b4b8765a1d7fc8a44295800e1cf2eaafe8c12df4f0f74e116e9d70608bde0191"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/final-runtime-verification.json",
+      "bytes": 846,
+      "sha256": "221f59a075a5f9a72291896a8c5e49c38ac3fe102f9b18920fd730151cfcadc3"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/font-and-ltr-machine-review.zip.gz",
+      "bytes": 566590,
+      "sha256": "ef84a026bda988148e0e0d015f1e668fd378958d19e7b1f0e8d419dfbd302260"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/font-native-evidence-seal-02.log",
+      "bytes": 2538,
+      "sha256": "232153fa2e09d39409c6c7d78196b48abf30aa860b6b26f714874929c0e727cd"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/font-native.zip.gz",
+      "bytes": 867323,
+      "sha256": "e4b07823cbe25ee4ba41c70ccf55a017ba5c559b9e3341e1c38c1a23a63f88ac"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/font-slot-comparison.png",
+      "bytes": 242271,
+      "sha256": "74b36f2f7b76fdbb87a01f488852a3c10fdd2f7b488d042379800fca86216a41"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/font-source-export.zip.gz",
+      "bytes": 663050,
+      "sha256": "7e2439a1dc44dc017660a1a1b8b9309702ec17afd0f11ac83cf29a1ccf9cfd30"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/initial-seal-retained.zip.gz",
+      "bytes": 2466850,
+      "sha256": "af4d72ec2c99c79987d2305427e023253f2b7a7e293a090565a413630bc05714"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/ltr-native-failure.zip.gz",
+      "bytes": 204867,
+      "sha256": "bf1827eff350d055d5515417d582a0415ba4a51ee64c922c9a109f6a6598862b"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/ltr-suite.zip.gz",
+      "bytes": 99162,
+      "sha256": "42f21999500286bb66b5b29727a57c4d0aa1c29c79bbe7fae77e9f015ad4d038"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/payload-inventory.json",
+      "bytes": 268650,
+      "sha256": "b581be58e37a20c03bde10cb5d3e7d42cd92830514fa64cc60be25dc658e3882"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/review-producers.zip.gz",
+      "bytes": 18819,
+      "sha256": "aa4450ad4d35b2886f8dbb2dae22fb3a639d017e26ba6c65935e4f4da3d968bd"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/transport-receipt.json",
+      "bytes": 1034,
+      "sha256": "6634c7bf0a8cd00dbd2339ca907d2ef358391bda79b6d9d922cc92de7eaaa4bf"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/verification-receipts.zip.gz",
+      "bytes": 206712,
+      "sha256": "3f74c04c32a93322546d2a616b8d2ca453a73ca6ad7646cb2ddc0c3fe16771fc"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/verify-frozen-runtime-final.mjs.gz",
+      "bytes": 765,
+      "sha256": "68abc823ad0ae9251c86cf59dc724d1be1a70c6a509ef33d25036d80cd900f18"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-font-slot-native-review/verify-packet.mjs",
+      "bytes": 2144,
+      "sha256": "207ebf3a09c36775773729ef6ec75ce74ae62e8ce5eff57d7a764ff102fb3532"
+    }
+  ]
+}

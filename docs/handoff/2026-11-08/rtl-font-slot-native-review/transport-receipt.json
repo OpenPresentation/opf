@@ -1,0 +1,23 @@
+{
+  "scope": "Coordinator-approved reversible transport only: exact accepted ZIP bytes wrapped honestly as .zip.gz. Existing text-integrity scanner/test/config remains unchanged. No normalized content or waived gate.",
+  "vetoableDecision": "The unchanged scanner treated .zip binary bytes as text and reported 167 mojibake signatures. Use its existing signature-valid gzip archive support while retaining all exact ZIP/file hashes and both red terminal logs.",
+  "pretransportPublicationManifestSha256": "c49053c758f6b823843ee8f176aac439fbc7d83fe7727a22a432995624524c1b",
+  "pretransportPayloadInventorySha256": "74bce14355143f3ffe32299eb3af0f30f039fe091af89f750f13348ac4e98ddd",
+  "supplementalCredentialScan": {
+    "files": 11,
+    "rules": [
+      "private-key",
+      "github-token",
+      "github-pat",
+      "openai-style-key",
+      "aws-access-key",
+      "jwt",
+      "credential-url",
+      "bearer-value",
+      "secret-assignment"
+    ],
+    "findings": []
+  },
+  "nativeAcceptance": false,
+  "overallAccepted": false
+}
