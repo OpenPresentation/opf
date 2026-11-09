@@ -310,7 +310,7 @@ _No named properties._
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
 | `design` | no | `ref:DesignHints` | The layout's design defaults, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion.... |
-| `direction` | no | `enum:row \| column` | How the record's 'regions' are laid out: 'row' places them side by side, left to right in reading order; 'column' stacks them top to bottom. Default 'column'. |
+| `direction` | no | `enum:row \| column` | How the record's 'regions' are laid out: 'row' places them side by side from the start edge in reading order (left to right; right to left in a right-to-left deck); 'column' stacks them top to bottom. Default 'column'. |
 | `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the content of every body region when it is shorter than the region. A split's 'anchor' replaces it for the regions under that split, and a region's own 'anchor' replaces both. Only 'anchor' is in... |
 | `regions` | yes | `array<ref:RegionEntry>` | The record's regions in reading order: 1 to 12 entries, each a region ({ name, size?, ...rules }) or a split ({ direction, regions, size?, anchor? }). Every region is declared once, here, with its content rules; a blo... |
 | `overflowRegion` | no | `string` | The region where content that no region accepts goes, whatever its 'accepts', while it has room; content beyond every region's room is drawn there too, with the warning opf/layout-unplaced. Omitted: the first primary... |
@@ -346,7 +346,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `name` | yes | `enum:title \| subtitle` | 'title' or 'subtitle'. |
 | `size` | no | `ref:RegionSize` |  |
-| `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the heading group in its area when the area is sized (a number): 'middle' (default) centers it, 'bottom' sets it at the foot of the area, as a cover or section sets its display title low (LH-130),... |
+| `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the heading group in its area when the area is sized (a number): 'middle' (default) centers it, 'bottom' sets it at the foot of the area, as a cover or section sets its display title low, 'top' at... |
 | `rule` | no | `boolean` | 'title' only: draw a short accent rule (80 by 5 px at a 720 px short edge) half a gap above the title, at the title's start edge, on a slide with a title and no tag; a tag is the group's eyebrow and takes the rule's p... |
 
 #### Split
@@ -364,7 +364,7 @@ _No named properties._
 
 #### Region
 
-- Type: `allOf:schema`
+- Type: `object`
 - Required fields: `name`
 - Purpose: One body region of a layout: its name, its share of the space and the rules for which content it takes and how several blocks share it.
 
@@ -372,16 +372,15 @@ _No named properties._
 | --- | --- | --- | --- |
 | `name` | yes | `string` | The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words... |
 | `size` | no | `ref:RegionSize` |  |
-| `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| shape \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block (SH-02). A group is also accepted where every one of its lea... |
+| `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| shape \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block. A group is also accepted where every one of its leaf kinds... |
 | `role` | no | `enum:primary \| secondary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, secondary, supporting; every other kind to a primary region first, then secondary, supporting, media;... |
 | `flow` | no | `enum:none \| grid \| column \| auto` | How several blocks share the region: 'none' one block fills it (blocks no region had room for join it, up to 6, and it flows as 'auto'); 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6... |
 | `max` | no | `integer` | Blocks the region holds on one slide. Default 1 for flow 'none' (which requires 1), else 6. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves i... |
 | `bleed` | no | `boolean` | The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false. |
 | `listColumns` | no | `oneOf:const:"auto" / const:1` | 'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'; a list of 6 o... |
 | `metrics` | no | `enum:stack \| tile` | How a metric block in the region is laid out. 'stack' (default): value, unit, label and the rest as one block at the region's anchor and content alignment. 'tile': the metric fills its cell (its card when the layout d... |
-| `sequence` | no | `enum:steps \| numbered` | The region lists the steps of a sequence (LH-07). 'steps': two or more text or list blocks are the steps, each under a numbered badge (an accent circle with its numeral; a one-entry numbered list gives the badge its n... |
-| `arrangement` | no | `enum:pyramid \| matrix \| cycle \| chevrons \| flow \| vertical-flow \| org-chart \| hierarchy \| venn` | SH-09: the region draws its lone list of one level as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's... |
-| `pyramidDirection` | no | `enum:up \| down` | For arrangement 'pyramid': 'up' (default) puts the narrow tip first, at the top; 'down' puts the widest level first and the tip at the bottom. Entries retain their authored top-to-bottom order. Both the continuous and... |
+| `sequence` | no | `enum:steps \| numbered` | The region lists the steps of a sequence. 'steps': two or more text or list blocks are the steps, each under a numbered badge (an accent circle with its numeral; a one-entry numbered list gives the badge its number an... |
+| `arrangement` | no | `enum:pyramid \| matrix \| cycle \| chevrons \| flow \| vertical-flow \| org-chart \| hierarchy \| venn \| inverted-pyramid` | The region draws its lone list as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller. PowerPoint's own geometry is tri... |
 | `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the region's content when it is shorter than the region. Replaces the 'anchor' of the record and of the splits around it. Default: the nearest of those that sets one, else 'top'. A picture shown w... |
 | `empty` | no | `enum:collapse \| keep` | What the region does on a slide that gives it no content: 'collapse' (default) joins its cells to a neighbouring area that shares the full length of one of its edges and is not itself empty; 'keep' leaves the space. |
 
@@ -402,13 +401,13 @@ _No named properties._
 | `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
 | `listStyle` | no | `enum:stack \| rows` | As design.listStyle of a deck: 'stack' or 'rows' (ruled rows) for the lists of slides using this layout. |
 | `mirror` | no | `boolean` | Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do no... |
-| `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant / ref:LayoutVariantRole` | The color variant slides on this layout draw on (LH-01): a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'su... |
+| `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant / ref:LayoutVariantRole` | The color variant slides on this layout draw on: a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'surface',... |
 
 #### LayoutVariantRole
 
 - Type: `enum:surface | brand`
 - Required fields: none
-- Purpose: A layout variant relative to the deck's own variant (LH-01). 'surface' is the deck's secondary surface on its own side: light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck is already on light2 or dark2), so a statement stands off the deck without changing its tone. 'brand' is the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), with light text: a closing slide's str...
+- Purpose: A layout variant relative to the deck's own variant. 'surface' is the deck's secondary surface on its own side: light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck is already on light2 or dark2), so a statement stands off the deck without changing its tone. 'brand' is the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), with light text: a closing slide's strong surf...
 
 _No named properties._
 

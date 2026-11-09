@@ -246,6 +246,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/data-column-duplicate`](#opfdata-column-duplicate) | Format | error | structure | A dataset or table has two columns with the same name. |
 | [`opf/chart-mapping-unknown-column`](#opfchart-mapping-unknown-column) | Format | error | structure | A chart mapping names a column the data does not have. |
 | [`opf/chart-reference-axis-unavailable`](#opfchart-reference-axis-unavailable) | Format | error | structure | A reference names a value axis the chart does not have. |
+| [`opf/chart-reference-unsupported-type`](#opfchart-reference-unsupported-type) | Format | error | structure | A chart has reference lines but its type has no single value axis to draw them on. |
 | [`opf/number-format-invalid`](#opfnumber-format-invalid) | Format | error | structure | A number format cannot be read. |
 | [`opf/variable-invalid-value`](#opfvariable-invalid-value) | Format | error | structure | A variable value does not match its declared type. |
 | [`opf/variable-unknown-builtin`](#opfvariable-unknown-builtin) | Format | error | structure | A token names a built-in variable that does not exist. |
@@ -298,6 +299,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
 | [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid, matrix, cycle, row of chevrons or flow is drawn another way. |
+| [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label or a data line. |
+| [`opf/shape-off-slide`](#opfshape-off-slide) | Layout | warning | composition | A shape or image callout lies wholly outside the slide. |
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
@@ -499,6 +502,14 @@ Default severity: **error**. Cost: structure. A chart mapping names a column the
 Default severity: **error**. Cost: structure. A reference names a value axis the chart does not have.
 
 **Why.** Secondary references require an actual secondary line series on a combo chart.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/chart-reference-unsupported-type`
+
+Default severity: **error**. Cost: structure. A chart has reference lines but its type has no single value axis to draw them on.
+
+**Why.** An explicit reference line is never dropped silently, so a chart type that cannot draw it is an error.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -965,6 +976,18 @@ Default severity: **warning**. Cost: composition. An icon is not drawn.
 Default severity: **info**. Cost: composition. A pyramid, matrix, cycle, row of chevrons or flow is drawn another way.
 
 **Why.** A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.
+
+### `opf/chart-label-collision`
+
+Default severity: **warning**. Cost: composition. A reference label meets another label or a data line.
+
+**Why.** A reference label is tried above and below its line (beside it on a bar chart). When both places meet another reference label or a data line, it is drawn at the first and reported; its text and value are kept.
+
+### `opf/shape-off-slide`
+
+Default severity: **warning**. Cost: composition. A shape or image callout lies wholly outside the slide.
+
+**Why.** Overlay shapes and image callouts may straddle or leave the slide on purpose, so a position outside it is valid. One with no part on the slide draws nothing, which is nearly always a percent or a pixel written where a fraction belongs.
 
 ### `opf/furniture-wraps`
 

@@ -2887,8 +2887,7 @@
               ],
               "role": "primary",
               "flow": "none",
-              "arrangement": "pyramid",
-              "pyramidDirection": "down"
+              "arrangement": "inverted-pyramid"
             }
           ],
           "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes; live Inverted Pyramid SmartArt is not yet qualified.",

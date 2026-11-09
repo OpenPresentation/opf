@@ -14,7 +14,7 @@ const deck = () => ({
       blocks: [{ id: "alpha", text: "Alpha" }, { text: "Beta" }],
       shapes: [
         { id: "note", shape: "wedgeRectCallout", text: "Hi", x: 0.1, y: 0.5, width: 0.2, height: 0.12 },
-        { id: "badge", shape: "ellipse", at: { block: "alpha", edge: "top", offset: 8, width: 40, height: 40 } },
+        { id: "badge", shape: "ellipse", at: { block: "alpha", edge: "top", offset: 8, widthPx: 40, heightPx: 40 } },
         { connector: { from: "alpha", to: "note" }, stroke: { width: 2 } },
       ],
     },

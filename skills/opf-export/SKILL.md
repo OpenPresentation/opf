@@ -135,4 +135,4 @@ SmartArt imports with its text (`docs/smartart.md`, "SmartArt PowerPoint users m
 
 Prefer new output paths while developing a conversion; follow the user's explicit overwrite preferences. Creating a local export does not include publishing or sending it.
 
-Inverted pyramids (`inverted-pyramid`, or a pyramid region with `pyramidDirection: "down"`) use editable native shapes from the shared geometry. The `pyramid3` live SmartArt domain is not qualified; keep that distinction in export claims. Imported Inverted Pyramid entries retain their widest-first order.
+Inverted pyramids (the `inverted-pyramid` layout, or a region with `arrangement: "inverted-pyramid"`) use editable native shapes from the shared geometry. The `pyramid3` live SmartArt domain is not qualified; keep that distinction in export claims. Imported Inverted Pyramid entries retain their widest-first order.

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate';
 import {toPptx,fromPptx} from './helpers/default-catalog.mjs';
-const chart={type:'column',data:{columns:['Country','Current','Expansion'],rows:[['US',20,10],['France',15,8]]}},deck={design:{fontScheme:{major:'Arial',minor:'Arial'}},slides:[{title:'Current native names stay authoritative',blocks:[{id:'chart',chart}],shapes:[{shape:'ellipse',fill:'none',stroke:{color:'accent2',width:3},at:{block:'chart',point:'US',series:0,edge:'end',width:32,height:32}},{shape:'ellipse',fill:'none',stroke:{color:'accent2',width:3},at:{block:'chart',point:'France',series:'Current',edge:'end',width:32,height:32}}]}]};
+const chart={type:'column',data:{columns:['Country','Current','Expansion'],rows:[['US',20,10],['France',15,8]]}},deck={design:{fontScheme:{major:'Arial',minor:'Arial'}},slides:[{title:'Current native names stay authoritative',blocks:[{id:'chart',chart}],shapes:[{shape:'ellipse',fill:'none',stroke:{color:'accent2',width:3},at:{block:'chart',point:'US',series:0,edge:'end',widthPx:32,heightPx:32}},{shape:'ellipse',fill:'none',stroke:{color:'accent2',width:3},at:{block:'chart',point:'France',series:'Current',edge:'end',widthPx:32,heightPx:32}}]}]};
 const bytes=await toPptx(deck);
 // Both native SeriesText alternatives are current data; neither may resurrect stale OPF/workbook names.
 for(const form of ['cached-name','literal-name']){

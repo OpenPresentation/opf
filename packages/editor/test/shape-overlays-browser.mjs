@@ -35,7 +35,7 @@ const source = {
       title: 'Attached',
       blocks: [{ id: 'metric', metric: { value: 42, label: 'Score' } }],
       shapes: [
-        { id: 'badge', shape: 'ellipse', text: '1', at: { block: 'metric', edge: 'top', offset: 8, width: 48, height: 48 } },
+        { id: 'badge', shape: 'ellipse', text: '1', at: { block: 'metric', edge: 'top', offset: 8, widthPx: 48, heightPx: 48 } },
         { id: 'free', shape: 'rect', x: 0.1, y: 0.7, width: 0.2, height: 0.1 },
       ],
     },
@@ -349,7 +349,7 @@ try {
     {op:'add',path:'/language',value:{bcp47:'en-US',direction:'rtl'}},
     {op:'replace',path:'/slides',value:[{title:'RTL position',blocks:[{id:'body',text:'Body'}],shapes:[
       {id:'centered',shape:'rect',x:.4,y:.2,width:.2,height:.2},
-      {id:'attached-rtl',shape:'ellipse',at:{block:'body',edge:'end',offset:150,width:48,height:48}}
+      {id:'attached-rtl',shape:'ellipse',at:{block:'body',edge:'end',offset:150,widthPx:48,heightPx:48}}
     ]}]}
   ]));
   await settle(); await select('slides.0.shapes.0');

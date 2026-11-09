@@ -10,7 +10,7 @@ import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection }
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
-import { connectorAdjustPreset, isOverlayConnector, overlayIssues } from "./overlay-shapes.js";
+import { PositionRangeError, connectorAdjustPreset, isOverlayConnector, overlayIssues, representablePositionBox } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
@@ -289,7 +289,7 @@ function isImplicitBlocksComposition(
 function validateContentPayload(
   value: Record<string, unknown>,
   path: string,
-  options: { slideRoot?: boolean; topLevel?: boolean } = {},
+  options: { slideRoot?: boolean; topLevel?: boolean; canvas?: { width: number; height: number } } = {},
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const explicitType = value.type;
@@ -319,7 +319,7 @@ function validateContentPayload(
     if (incompatible.length) issues.push(semanticIssue(path, "blocks cannot be mixed with leaf payload fields", { fields: incompatible }));
     if (!Array.isArray(value.blocks) || (value.blocks.length === 0 && !options.slideRoot)) issues.push(semanticIssue(pathFor(path, "blocks"), "a group requires at least one block"));
     if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => {
-      if (isRecord(block)) issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`, { topLevel: options.slideRoot === true }));
+      if (isRecord(block)) issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`, { topLevel: options.slideRoot === true, ...(options.canvas ? { canvas: options.canvas } : {}) }));
     });
     // FA-22: at most one placed block per slide edge.
     if (options.slideRoot && Array.isArray(value.blocks)) {
@@ -378,6 +378,17 @@ function validateContentPayload(
     value.image.callouts.forEach((callout, index) => {
       if (!isRecord(callout)) return;
       for (const key of ['x', 'y']) if (typeof callout[key] === 'number' && !Number.isFinite(callout[key])) issues.push(semanticIssue(`${pathFor(path, 'image')}/callouts/${index}/${key}`, 'an image callout origin must be a finite signed fraction', {key}));
+      // A finite origin too far away to be written as exact geometry is refused here, at its coordinate, as an overlay shape's is: a
+      // picture's frame is never larger than the slide, so the slide's own size bounds every callout.
+      const canvas = options.canvas;
+      if (canvas && ['x', 'y', 'width', 'height'].every(key => typeof callout[key] === 'number' && Number.isFinite(callout[key]))) {
+        const at = `${pathFor(path, 'image')}/callouts/${index}`, frame = callout as { x: number; y: number; width: number; height: number };
+        try { representablePositionBox({ x: frame.x * canvas.width, y: frame.y * canvas.height, width: frame.width * canvas.width, height: frame.height * canvas.height }, at.replace(/^\//, '').replaceAll('/', '.')); }
+        catch (error) {
+          if (!(error instanceof PositionRangeError)) throw error;
+          issues.push(semanticIssue(`${at}/${error.coordinate}`, error.message, { key: error.coordinate }));
+        }
+      }
     });
   }
   const allowedFields = new Set<string>([
@@ -385,8 +396,11 @@ function validateContentPayload(
     ...spec.fields,
   ]);
 
+  // `bullets` are talking points of a text payload: `type: "list"` beside them is one mistake with one fix, not a missing `items`
+  // and an incompatible field.
+  const listOfBullets = resolvedKind === "list" && hasOwn(value, "bullets") && !hasOwn(value, "items");
   for (const required of spec.required) {
-    if (!hasOwn(value, required)) {
+    if (!hasOwn(value, required) && !listOfBullets) {
       issues.push(semanticIssue(path, `content payload type '${resolvedKind}' requires '${required}'`, {
         type: resolvedKind,
         required,
@@ -403,7 +417,7 @@ function validateContentPayload(
 
   const incompatible = payloadFields.filter((field) => !allowedFields.has(field));
   if (incompatible.length > 0) {
-    issues.push(semanticIssue(path, `content payload type '${resolvedKind}' cannot include incompatible fields: ${incompatible.join(", ")}`, {
+    issues.push(semanticIssue(path, listOfBullets && incompatible.length === 1 ? "'bullets' belongs to a text payload, so it cannot be a 'list': write the entries under 'items', or remove 'type'" : `content payload type '${resolvedKind}' cannot include incompatible fields: ${incompatible.join(", ")}`, {
       type: resolvedKind,
       incompatible,
     }));
@@ -447,7 +461,7 @@ function regionsOverlap(left: SlideRegion, right: SlideRegion): boolean {
   return intersects(left.rows, right.rows) && intersects(left.columns, right.columns);
 }
 
-function validateSlideRegions(slide: Record<string, unknown>, slidePath: string): ValidationIssue[] {
+function validateSlideRegions(slide: Record<string, unknown>, slidePath: string, canvas?: { width: number; height: number }): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const regionKeys = Object.keys(slide).filter((key) => promotedRegionKeySet.has(key));
   const rootFields = presentFields(slide, rootPayloadFields);
@@ -460,13 +474,13 @@ function validateSlideRegions(slide: Record<string, unknown>, slidePath: string)
   }
 
   if (regionKeys.length === 0 && rootFields.length > 0) {
-    issues.push(...validateContentPayload(slide, slidePath, { slideRoot: true }));
+    issues.push(...validateContentPayload(slide, slidePath, { slideRoot: true, ...(canvas ? { canvas } : {}) }));
   }
 
   for (const key of regionKeys) {
     const value = slide[key];
     if (isRecord(value)) {
-      issues.push(...validateContentPayload(value, pathFor(slidePath, key)));
+      issues.push(...validateContentPayload(value, pathFor(slidePath, key), canvas ? { canvas } : {}));
     }
   }
 
@@ -547,16 +561,22 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
   // seen decides which message describes the collision truthfully.
   const documentIds = new Map<string, "slide" | "payload">();
   let overlayCanvas: {width: number; height: number} | undefined, overlayCanvasResolved = false;
-  const canvasForOverlays = (slide: Record<string, unknown>, index: number) => {
-    if (!Array.isArray(slide.shapes) || !slide.shapes.some(shape => isRecord(shape) && shape.connector === undefined && ['x', 'y', 'width', 'height'].every(key => typeof shape[key] === 'number' && Number.isFinite(shape[key])))) return undefined;
+  // The deck's canvas, resolved once and only for a deck that positions something by fractions (an overlay shape or an image callout).
+  const deckCanvas = () => {
     if (!overlayCanvasResolved) {
       overlayCanvasResolved = true;
       const design = isRecord(value.design) ? value.design : {};
       const dimensions = design.dimensions ?? resolveDesignRecords(value, undefined, {catalogs: catalogs ?? []}).theme.dimensions;
       try { overlayCanvas = resolveCanvasDimensions(dimensions); } catch { /* The authored dimensions have their own schema error. */ }
     }
-    return overlayCanvas ? {...overlayCanvas, rtl: resolveSlideDirection(value, index) === 'rtl'} : undefined;
+    return overlayCanvas;
   };
+  const canvasForOverlays = (slide: Record<string, unknown>, index: number) => {
+    if (!Array.isArray(slide.shapes) || !slide.shapes.some(shape => isRecord(shape) && shape.connector === undefined && ['x', 'y', 'width', 'height'].every(key => typeof shape[key] === 'number' && Number.isFinite(shape[key])))) return undefined;
+    const canvas = deckCanvas();
+    return canvas ? {...canvas, rtl: resolveSlideDirection(value, index) === 'rtl'} : undefined;
+  };
+  const hasCallouts = (node: unknown, depth = 0): boolean => isRecord(node) && depth <= 34 && Object.entries(node).some(([key, entry]) => key === 'callouts' ? Array.isArray(entry) && entry.length > 0 : key === 'image' || key === 'blocks' || promotedRegionKeySet.has(key) ? (Array.isArray(entry) ? entry.some(item => hasCallouts(item, depth + 1)) : hasCallouts(entry, depth + 1)) : false);
   value.slides.forEach((slide, index) => {
     if (isRecord(slide)) {
       const slidePath = `/slides/${index}`;
@@ -585,7 +605,7 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
         if (checked) for (const issue of shapeIssues(checked, (...keys) => keys.reduce((at, key) => pathFor(at, key), entryPath))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
       });
       for (const issue of overlayIssues(slide, slidePath, value, canvasForOverlays(slide, index))) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
-      issues.push(...validateSlideRegions(slide, slidePath));
+      issues.push(...validateSlideRegions(slide, slidePath, hasCallouts(slide) ? deckCanvas() : undefined));
       const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
         if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
       };

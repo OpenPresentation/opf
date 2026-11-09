@@ -19,7 +19,7 @@ const anchored = (point) => ({
     {
       title: "Cost comparison",
       blocks: [{ id: "costs", chart }],
-      shapes: [{ shape: "ellipse", fill: "none", at: { block: "costs", edge: "end", point, width: 60, height: 60 } }],
+      shapes: [{ shape: "ellipse", fill: "none", at: { block: "costs", edge: "end", point, widthPx: 60, heightPx: 60 } }],
     },
   ],
 });

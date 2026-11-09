@@ -543,7 +543,7 @@
         ", and ",
         {
           "text": "linked",
-          "href": "https://openpresentation.org"
+          "link": "https://openpresentation.org"
         },
         " segments."
       ],

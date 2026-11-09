@@ -420,6 +420,9 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
     } });
     if (!placed) return;
     const shape = composeShape(host, placed.box, { scale, aspect: 0 });
+    // A shape wholly outside the slide draws nothing: usually a percent or a pixel written where a fraction belongs.
+    if (host.hidden !== true && outsideCanvas(placed.box, { width, height }, typeof host.rotate === 'number' && host.rotate % 180 !== 0))
+      composition.diagnostics.push({ code: 'shape-off-slide', path, message: placed.attachedTo ? `This shape lies wholly outside the slide where it is attached to '${placed.attachedTo.id}', so nothing of it is drawn.` : `This shape lies wholly outside the slide (x ${host.x}, y ${host.y}), so nothing of it is drawn. x and y are fractions of the slide: 0.2 is 20% of its width, and 20 is twenty slide widths away.` });
     const item: ComposedOverlayShape = {
       kind: 'shape', index, ...(nonEmpty(host.id) ? { id: host.id } : {}), path, field: 'shape', type: 'shape', value: host.text, payload: host, box: { ...shape.box }, shape,
       ...context.item(host, shape, path), alignment: 'center', ...(placed.attachedTo ? { attachedTo: placed.attachedTo } : {}), layer: host.layer === 'back' ? 'back' : 'front',
@@ -467,9 +470,12 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
  * An overlay shape's frame in slide pixels: `x`, `y`, `width`, `height` as fractions of the slide (`x` from the right edge in a right-to-left
  * deck), or `at` against a composed block. Undefined when the entry has neither placement, both, or a block that is not composed.
  */
+/** The largest width or height of an overlay shape, in slides (and of an anchored one, in targets): above 1 a shape bleeds off the slide. */
+export const OVERLAY_SIZE_MAX = 8;
+
 function overlayBox(host: Rec, context: { path: string; width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined; point: (block: BlockTarget, at: Rec) => ChartPointGeometry | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
   const { width, height, scale, rtl } = context;
-  const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], key === 'x' || key === 'y' ? -Number.MAX_VALUE : 0, key === 'x' || key === 'y' ? Number.MAX_VALUE : 1));
+  const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], key === 'x' || key === 'y' ? -Number.MAX_VALUE : 0, key === 'x' || key === 'y' ? Number.MAX_VALUE : OVERLAY_SIZE_MAX));
   const hasFractions = ['x', 'y', 'width', 'height'].some(key => host[key] !== undefined), hasAt = host.at !== undefined;
   if (hasFractions === hasAt) return undefined;
   if (hasFractions) {
@@ -486,8 +492,11 @@ function overlayBox(host: Rec, context: { path: string; width: number; height: n
   const target = point?.box ?? block.box;
   const preset = typeof host.shape === 'string' && isPresetShape(host.shape) ? host.shape : host.path !== undefined ? undefined : 'rect';
   const aspect = presetAspect(preset);
-  const size = (value: unknown, along: number): number | undefined => { const own = finite(value, Number.MIN_VALUE, 1280); return own === undefined ? undefined : own <= 1 ? own * along : own * scale; };
-  let w = size(at.width, target.width), h = size(at.height, target.height);
+  // One unit per key: `width` and `height` are fractions of the target (the block's box, or a chart mark's bounds), `widthPx` and
+  // `heightPx` reference pixels. A pixel size wins where a document that skipped validation gives both.
+  const share = (value: unknown, along: number): number | undefined => { const own = finite(value, Number.MIN_VALUE, OVERLAY_SIZE_MAX); return own === undefined ? undefined : own * along; };
+  const pixels = (value: unknown): number | undefined => { const own = finite(value, Number.MIN_VALUE, 1280); return own === undefined ? undefined : own * scale; };
+  let w = pixels(at.widthPx) ?? share(at.width, target.width), h = pixels(at.heightPx) ?? share(at.height, target.height);
   if (w === undefined && h === undefined) {
     const short = point ? Math.max(12 * scale, OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height)) : OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height);
     if (aspect >= 1) { h = short; w = short * aspect; } else { w = short; h = short / aspect; }
@@ -509,7 +518,7 @@ function overlayBox(host: Rec, context: { path: string; width: number; height: n
 // One reference pixel is 9525 EMU; outputs must remain finite through the actual
 // six-place geometry rounding and exactly representable as JavaScript integers.
 type OverlayFrameKey = 'x' | 'y' | 'width' | 'height';
-class PositionRangeError extends RangeError {
+export class PositionRangeError extends RangeError {
   constructor(public readonly coordinate: OverlayFrameKey, path: string) {
     super(`Position coordinate ${path}.${coordinate} cannot be represented as finite rounded geometry and a safe integer native coordinate.`);
     this.name = 'RangeError';
@@ -518,6 +527,17 @@ class PositionRangeError extends RangeError {
 function fractionalOverlayFrame(host: Rec, canvas: { width: number; height: number; rtl: boolean }, path: string): LayoutBox {
   const {width, height, rtl} = canvas;
   return representablePositionBox({x: rtl ? width - (host.x + host.width) * width : host.x * width, y: host.y * height, width: host.width * width, height: host.height * height}, path);
+}
+/**
+ * True when a box has no part on the canvas. A rotated box is judged by its bounding circle (the circle through its corners), so a
+ * shape whose turned corner may reach the slide is never reported.
+ */
+export function outsideCanvas(box: LayoutBox, canvas: { width: number; height: number }, rotated = false): boolean {
+  if (rotated) {
+    const radius = Math.hypot(box.width, box.height) / 2, x = box.x + box.width / 2, y = box.y + box.height / 2;
+    return x + radius <= 0 || x - radius >= canvas.width || y + radius <= 0 || y - radius >= canvas.height;
+  }
+  return box.x + box.width <= 0 || box.x >= canvas.width || box.y + box.height <= 0 || box.y >= canvas.height;
 }
 /** Internal shared geometry boundary for authored positioned panels. No layout, fonts or data loading. */
 export function representablePositionBox(box: LayoutBox, path: string): LayoutBox {
@@ -605,7 +625,7 @@ export function overlayIssues(slide: unknown, slidePath: string, presentation?: 
     const fractions = ['x', 'y', 'width', 'height'].filter(key => host[key] !== undefined), anchored = host.at !== undefined;
     const missing = fractions.length ? ['x', 'y', 'width', 'height'].filter(key => host[key] === undefined) : [];
     for (const key of ['x', 'y']) if (typeof host[key] === 'number' && !Number.isFinite(host[key])) issues.push({ path: `${at}/${key}`, message: `an overlay shape's ${key} must be a finite fraction of the slide`, params: { key } });
-    if (canvas && !anchored && ['x', 'y', 'width', 'height'].every(key => typeof host[key] === 'number' && Number.isFinite(host[key])) && host.width >= 0 && host.width <= 1 && host.height >= 0 && host.height <= 1) {
+    if (canvas && !anchored && ['x', 'y', 'width', 'height'].every(key => typeof host[key] === 'number' && Number.isFinite(host[key])) && host.width >= 0 && host.width <= OVERLAY_SIZE_MAX && host.height >= 0 && host.height <= OVERLAY_SIZE_MAX) {
       try { fractionalOverlayFrame(host, canvas, at.replace(/^\//, '').replaceAll('/', '.')); }
       catch (error) {
         if (!(error instanceof PositionRangeError)) throw error;

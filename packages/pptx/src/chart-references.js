@@ -102,17 +102,19 @@ export function applyReferenceSeries(xml, info, binding) {
     ordered = ['value', 'secondary'].flatMap((a) => refs.filter((l) => l.axis === a));
   let ordinal = 0;
   const helpers = [];
-  let out = applyComboConstruct(xml).replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
+  // Only a chart that gained helper series is a multi-type chart: one whose references are all overlays keeps its own grouping
+  // (a stacked line chart stays stacked).
+  let out = (refs.length ? applyComboConstruct(xml) : xml).replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
     const index = ordinal++ - info.primaryCount;
     if (index < 0) return ser;
     const line = ordered[index];
     if (!line) throw Error('Unexpected reference helper series.');
     const id = `${info.key}:${line.index}`,
       idx = Number(/<c:idx val="(\d+)"/.exec(ser)?.[1]);
-    helpers.push({ id, index: line.index });
-    const color = resolveExportColor(line.stroke.color, { ...info.context, fallback: info.color });
+    const color = hiddenAware(resolveExportColor(line.stroke.color, { ...info.context, fallback: info.color }), line);
     const hex = color.slice(0, 6),
       alpha = color.length === 8 ? `<a:alpha val="${Math.round((parseInt(color.slice(6), 16) / 255) * 100000)}"/>` : '';
+    helpers.push({ id, index: line.index, ...authoredRecord(line, color) });
     const paint = `<c:spPr><a:ln w="${Math.round(line.strokeWidth * 9525)}" cap="flat"><a:solidFill><a:srgbClr val="${hex}">${alpha}</a:srgbClr></a:solidFill><a:prstDash val="${line.stroke.dash}"/></a:ln></c:spPr>`;
     let next = ser
       .replace(/<c:spPr>[\s\S]*?<\/c:spPr>/g, '')
@@ -155,7 +157,8 @@ export function applyReferenceSeries(xml, info, binding) {
               tag: { role: shape['p:nvSpPr']['p:cNvPr'].name === id + ' line' ? 'line' : 'label' },
             }));
         const value = { value: l.value, axis: l.axis, labelPosition: l.labelPosition };
-        return { id, index: l.index, ...value, binding: overlayHash(parser.parse(out), binding.frame, owned, value) };
+        const color = hiddenAware(resolveExportColor(l.stroke.color, { ...info.context, fallback: info.color }), l);
+        return { id, index: l.index, ...value, ...authoredRecord(l, color), binding: overlayHash(parser.parse(out), binding.frame, owned, value) };
       }),
   });
 }
@@ -201,6 +204,32 @@ function chartRecord(doc) {
 }
 // Canvas dimensions round to EMU before import: scale=shortEdgeEMU/6858000.
 // Half a canvas EMU contributes at most64/1440 line EMU at the64 reference-pixel bound.
+/** A reference of no width ('none', or width 0) is written fully transparent: PowerPoint draws a line of width 0 as a hairline. */
+const hiddenAware = (color, line) => (line.strokeWidth > 0 ? color : color.slice(0, 6) + '00');
+/** The native paint as raw facts (EMU width, color, alpha, dash): equal on export and import while nobody restyled the line. */
+const paintKey = (emu, hex, alpha, dash) => `${emu}|${String(hex).replace(/^#/, '').slice(0, 6).toUpperCase()}|${alpha}|${dash}`;
+/** What the export wrote and the stroke the document had, so an unchanged line imports as authored: no explicit defaults, color names kept. */
+function authoredRecord(line, color) {
+  const written = paintKey(Math.round(line.strokeWidth * 9525), color.slice(0, 6), color.length === 8 ? parseInt(color.slice(6), 16) : 255, line.stroke.dash);
+  return { written, ...(line.authoredStroke !== undefined ? { stroke: line.authoredStroke } : {}) };
+}
+function currentPaintKey(node, colors) {
+  const ln = node?.['a:ln'],
+    read = readBackgroundColor(ln?.['a:solidFill'], colors);
+  return ln && read ? paintKey(Number(ln.w), read.hex, read.alpha < 1 ? Math.round(read.alpha * 255) : 255, ln['a:prstDash']?.val ?? 'solid') : undefined;
+}
+/** A verified reference in the document's own form: defaults omitted, and the authored stroke while the native paint is as written. */
+function authoredReference(ref, owned, key) {
+  const unchanged = typeof owned?.written === 'string' && owned.written === key;
+  const stroke = unchanged ? owned.stroke : ref.stroke;
+  return {
+    index: ref.index,
+    value: ref.value,
+    ...(ref.axis === 'secondary' ? { axis: ref.axis } : {}),
+    ...(ref.label !== undefined ? { label: ref.label, ...(ref.labelPosition === 'start' ? { labelPosition: ref.labelPosition } : {}) } : {}),
+    ...(stroke !== undefined ? { stroke } : {}),
+  };
+}
 function stroke(node, scale, colors) {
   const ln = node?.['a:ln'],
     w = Number(ln?.w),
@@ -356,13 +385,19 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
       ['1', 1, true, 'true'].includes(label?.['c:delete']?.val) ||
       ['1', 1, true, 'true'].includes(e.ser['c:dLbls']?.['c:delete']?.val);
     const labelText = label && !hiddenLabel ? labelTexts.get(h.id) : undefined;
-    refs.push({
-      index: h.index,
-      value: Number(values[0]),
-      axis: axisName,
-      ...(labelText?.trim() ? { label: labelText, labelPosition: idx === 0 ? 'start' : 'end' } : {}),
-      stroke: paint,
-    });
+    refs.push(
+      authoredReference(
+        {
+          index: h.index,
+          value: Number(values[0]),
+          axis: axisName,
+          ...(labelText?.trim() ? { label: labelText, labelPosition: idx === 0 ? 'start' : 'end' } : {}),
+          stroke: paint,
+        },
+        h,
+        currentPaintKey(styles.get(h.id) ?? e?.ser?.['c:spPr'], colors),
+      ),
+    );
     consumedIds.add(h.id);
   }
   // Filter XML and parsed nodes using the SAME verified identities, preserving every uncertain series.
@@ -384,7 +419,7 @@ export function addReferenceOverlays(slide, lines, { key, tags, context, color, 
   for (const l of lines.filter((l) => !l.native)) {
     const id = `${key}:${l.index}`,
       name = id + ' line',
-      hex = resolveExportColor(l.stroke.color, { ...context, fallback: color });
+      hex = hiddenAware(resolveExportColor(l.stroke.color, { ...context, fallback: color }), l);
     slide.addShape('line', {
       objectName: name,
       x: l.x1 / 96,
@@ -615,13 +650,13 @@ export function importReferenceOverlays(shapes, frames, rels, entries, { scale =
         });
         continue;
       }
-      refs.push({
-        index: o.index,
-        value: o.value,
-        axis: o.axis,
-        ...(label ? { label, labelPosition: o.labelPosition } : {}),
-        stroke: paint,
-      });
+      refs.push(
+        authoredReference(
+          { index: o.index, value: o.value, axis: o.axis, ...(label ? { label, labelPosition: o.labelPosition } : {}), stroke: paint },
+          o,
+          currentPaintKey(styles.get(String(line?.['p:nvSpPr']?.['p:cNvPr']?.id)) ?? s, colors),
+        ),
+      );
       for (const m of members) consumed.add(m.shape);
     }
     byPart.set(part, refs);

@@ -27,12 +27,17 @@ import {composeSlide,layoutTemplate,smartArtUnavailable} from '../dist/compositi
 import {validateCatalogRecord} from '../dist/index.js';
 const record=gallery.layouts['inverted-pyramid'];
 const published={$schema:'https://openpresentation.org/schema/opf-layout/v2',id:'inverted-pyramid',...record};
-test('schema and compiled regions carry the direction only on pyramid arrangements',()=>{
+test('the arrangement names its direction: inverted-pyramid in the record, one pyramid kind with a direction in composition',()=>{
   assert.ok(record);
   assert.equal(validateCatalogRecord('layouts',published).valid,true);
   assert.equal(layoutTemplate(record).regions.find(r=>r.name==='levels').pyramidDirection,'down');
-  for(const direction of ['sideways',null,12])assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement:'pyramid',pyramidDirection:direction}]}).valid,false);
-  for(const arrangement of [undefined,'matrix','flow'])assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement,pyramidDirection:'down'}]}).valid,false);
+  assert.equal(record.regions.find(r=>r.name==='levels').arrangement,'inverted-pyramid');
+  // A record has no separate direction key, as flow and vertical-flow have none.
+  for(const direction of ['down','up','sideways'])assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement:'pyramid',pyramidDirection:direction}]}).valid,false);
+  assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement:'inverted-pyramid'}]}).valid,true);
+  const compiled=arrangement=>layoutTemplate({...record,regions:[{name:'levels',arrangement}]}).regions[0];
+  assert.deepEqual([compiled('inverted-pyramid').arrangement,compiled('inverted-pyramid').pyramidDirection],['pyramid','down']);
+  assert.deepEqual([compiled('pyramid').arrangement,compiled('pyramid').pyramidDirection],['pyramid',undefined]);
 });
 test('composition preserves top-to-bottom source paths without shrinking or enabling unmeasured SmartArt',()=>{
   const items=['Possibilities','Qualified options','Shortlist','Decision'];
@@ -42,7 +47,7 @@ test('composition preserves top-to-bottom source paths without shrinking or enab
     const a=result.arrangements?.[0];assert.ok(a);assert.equal(a.pyramidDirection,'down');
     assert.deepEqual(a.nodes.map(n=>n.index),[0,1,2,3]);
     assert.ok(a.nodes[0].box.width>a.nodes.at(-1).box.width);
-    const up=composeSlide(slide,{layout:{...record,regions:record.regions.map(region=>{const {pyramidDirection,...rest}=region;return rest;})}});
+    const up=composeSlide(slide,{layout:{...record,regions:record.regions.map(region=>region.arrangement==='inverted-pyramid'?{...region,arrangement:'pyramid'}:region)}});
     assert.equal(a.fontSize,up.arrangements[0].fontSize,'direction changes no text size');
     assert.match(smartArtUnavailable({kind:'pyramid',pyramidDirection:'down',count:4,frame:a.frame,nodes:[]}),/no qualified live/);
   }

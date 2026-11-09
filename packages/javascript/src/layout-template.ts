@@ -163,8 +163,9 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
-    ...(isArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
-    ...(entry.arrangement === 'pyramid' && entry.pyramidDirection === 'down' ? {pyramidDirection: 'down' as const} : {}),
+    // A layout record names the direction in the arrangement, as `flow` and `vertical-flow` do: `inverted-pyramid` is the pyramid drawn
+    // widest level first. Composition keeps one pyramid kind with a direction.
+    ...(entry.arrangement === 'inverted-pyramid' ? { arrangement: 'pyramid' as const, pyramidDirection: 'down' as const } : isArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

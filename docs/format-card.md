@@ -15,32 +15,36 @@ Optional top-level fields, grouped:
 - Identity: `name`, `description`, `filename`, `author`, `organization`, `speaker`, `tags`.
 - Intent (used by AI generation): `audience`, `purpose`, `tone`, `language`, `narrative`, `takeaway`, `duration`.
 - Appearance: `design` (`theme`, `colorScheme`, `fontScheme`, `dimensions`, `background`, `variant` (from core 0.23.0: `"dark1"` or `{ background, accents }`, a map over the one color scheme), `logo` override, `watermark`, `header`, `footer`, alignment hints), `variables`; logos themselves live on `organization`.
-- Resources: `assets` (registry referenced as `asset:<id>`), `catalogs` (the records the document embeds, grouped by catalog: `default`, `custom` and named groups with a `source`).
+- Resources: `assets` (registry referenced as `asset:<id>`), `datasets` (shared data tables that charts and tables name with `dataset`), `icons` (deck-local SVG icons named by `icon`), `references` (the sources text runs `cite`), `catalogs` (the records the document embeds, grouped by catalog: `default`, `custom` and named groups with a `source`).
+- Templates: `template: true` marks an incomplete deck whose `variables` are filled later.
 - Machine state: `extensions` (preserved, never rendered).
 
 ## Slides and content
 
-A slide carries `title` / `subtitle` / `tag` / `notes` / `section` / `beat` / `layout` / `id` / `extensions` plus content in one of three shapes — pick the loosest that says what you mean:
+A slide carries `title` / `subtitle` / `tag` / `notes` / `section` / `beat` / `layout` / `id` / `language` (when it differs from the deck's) / `hidden` / `extensions` plus content in one of three shapes — pick the loosest that says what you mean:
 
 1. **Root payload** — content-kind fields directly on the slide. The kind is inferred from the field: `text`, `items` (list), `bullets`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, `diagram` (Mermaid, Graphviz DOT or PlantUML source). Several kinds at the root are shorthand for `blocks`.
 2. **`blocks`** — an ordered array of payloads when placement should stay engine-inferred. A block is a leaf payload or a **group**: `{ "type": "group", "blocks": [...], "composition": { ... } }`. Groups nest (hard cap 32; stay ≤ 3 in practice) and cannot mix `blocks` with leaf fields.
 3. **Promoted regions** — a 3×3 grid when position matters. Rows `top|middle|bottom`, columns `left|center|right`, spans with `+`, intersections with `:` — `"left"`, `"center+right"`, `"top:left"`, `"middle+bottom:center+right"`. Keys must not overlap; regions cannot mix with a root payload.
 
-`composition` (on a slide or group) arranges children: `{ "mode": "auto|grid|row|column", "columns": 1-12, "weights": [..], "gap": 0-0.1, "padding": 0-0.2, "minFontSize": 8-32, "overflow": "warn|error" }`. Weights are relative track sizes; gap/padding are fractions of the canvas short edge. Engines own placement — there is no x/y.
+`composition` (on a slide or group) arranges children: `{ "mode": "auto|grid|row|column", "columns": 1-12, "weights": [..], "gap": 0-0.1, "padding": 0-0.2, "minFontSize": 8-32, "maxFontSize": 8-200, "overflow": "warn|error" }`. Weights are relative track sizes; gap/padding are fractions of the canvas short edge; the font sizes are reference pixels at a 720-pixel short edge. Engines own the placement of content: a block has no x/y.
 
-Payload notes: chart (never the Chart.js `categories`/`series`/`labels`/`datasets` shape; the first column holds the labels, each further column is one series) is `{ "type": "<chart-type id>", "data": { "columns": [...], "rows": [...] } }` or `{ "data": { "dataset": "<id>" } }`; table rows may hold scalars, `TextRun[]`, or styled cells `{ "value", "style": { "fill", "color", "align", "borders", ... }, "colSpan", "rowSpan" }`; `metric`/`quote`/`code` accept string shorthand; list nesting uses `level` on items, not nested payloads.
+Only what is drawn over the composed slide is positioned. A slide's `shapes` holds overlay shapes and connectors: `{ "shape": "ellipse", "x": -0.06, "y": -0.1, "width": 0.22, "height": 0.39 }` (signed fractions of the slide, never percents or pixels; a shape may hang over an edge, and one with nothing on the slide is the warning `opf/shape-off-slide`) or `{ "shape": "wedgeRectCallout", "text": "New", "at": { "block": "<id>", "edge": "top" } }` (it follows the block; sized by `width`/`height` as fractions of the block or `widthPx`/`heightPx` in reference pixels). An image object takes `callouts`, text panels placed by fractions of the picture.
+
+Payload notes: chart (never the Chart.js `categories`/`series`/`labels`/`datasets` shape; the first column holds the labels, each further column is one series) is `{ "type": "<chart-type id>", "data": { "columns": [...], "rows": [...] } }` or `{ "data": { "dataset": "<id>" } }`, with optional `legend`, `dataLabels`, `axisTitles`, `colors`, `highlight` and explicit `referenceLines` (`[{ "value": 0.25, "label": "Target 25%" }]` on a chart with one value axis: column, bar, line, area, their stacked forms and combo; a title never creates one); table rows may hold scalars, `TextRun[]`, or styled cells `{ "value", "style": { "fill", "color", "align", "borders", ... }, "colSpan", "rowSpan" }`; `metric`/`quote`/`code` accept string shorthand; list nesting uses `level` on items, not nested payloads.
 
 ## Rich text and color references
 
-`text`, list items, bullets, and table cells accept `TextRun[]`: strings or `{ "text", "bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "link", "superscript", "subscript" }`.
+`text`, list items, bullets, and table cells accept `TextRun[]`: strings or `{ "text", "bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "code", "lang", "link", "superscript", "subscript", "cite", "footnote" }`. `fontSize` is in points (12 points is 16 reference pixels), the one size in OPF that is not in reference pixels; an unknown key in a run is an error.
 
-Every content color field (`TextRun.color`, table cell `style.fill` / `style.color`, cell border `color`) accepts three forms:
+Every content color field (`TextRun.color`, table cell `style.fill` / `style.color`, cell border `color`) accepts four forms:
 
 - Literal hex: `"#0F172A"`, `"#B42318CC"`.
-- A color-scheme name, resolved through the effective scheme: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`, or roles `primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`.
+- A color-scheme name, resolved through the effective scheme: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`, or roles `primary`, `secondary`, `accent`, `background`, `surface`, `surfaceAlt`, `text`, `textSecondary`.
+- A color made lighter or darker: `{ "color": "accent1", "lighten": 0.4 }` or `{ "color": "#1E40AF", "darken": 0.25 }`.
 - A variable reference `var:<id>` into the top-level map: `"variables": { "risk": "#B42318" }` (or `{ "type": "color", "value": "#B42318", "description": "..." }`).
 
-Prefer names and variables over hex — they survive re-theming. Unknown `var:` ids warn, never error. The styled cell and border color fields enforce the three forms at the schema level; run colors tolerate any string (unrecognized values warn and renderers fall back to the theme), so imported decks keep validating.
+Prefer names and variables over hex — they survive re-theming. Unknown `var:` ids warn, never error. The styled cell and border color fields enforce these forms at the schema level; run colors tolerate any string (unrecognized values warn and renderers fall back to the theme), so imported decks keep validating.
 
 ## Ids and extensions
 
@@ -58,7 +62,7 @@ Reusable records live in catalogs; a reference is a bare id or `name:id`: `narra
 
 Prefer: string shorthands; bare ids for default-catalog records; inference over explicit `type`; regions only when position matters; groups only when `blocks` ordering is not enough; names/`var:` over hex in color fields; `items` for lists and `bullets` only for plain talking points (never both in one block or region; see [content payloads](content-payloads.md#items-versus-bullets)).
 
-Never: loose chart or table fields directly on a slide; region keys mixed with a root payload; overlapping region keys; `blocks` mixed with leaf fields on one payload; duplicate ids; x/y or pixel geometry (it does not exist in OPF).
+Never: loose chart or table fields directly on a slide; region keys mixed with a root payload; overlapping region keys; `blocks` mixed with leaf fields on one payload; duplicate ids; x/y or pixel geometry on a block (only overlay `shapes` and image `callouts` are positioned, by fractions); a percent or a pixel where a fraction belongs (`"x": 20`).
 
 ## Two canonical slides
 

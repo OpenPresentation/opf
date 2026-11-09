@@ -65,6 +65,7 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('data-column-duplicate', 'format', 'error', 'A dataset or table has two columns with the same name.', 'Series, mappings and fields address columns by name, so a repeated name makes them ambiguous.', { standard: SCHEMA }),
 	rule('chart-mapping-unknown-column', 'format', 'error', 'A chart mapping names a column the data does not have.', 'The series cannot be built from a column that is not there.', { standard: SCHEMA }),
 	rule('chart-reference-axis-unavailable', 'format', 'error', 'A reference names a value axis the chart does not have.', 'Secondary references require an actual secondary line series on a combo chart.', {standard: SCHEMA}),
+	rule('chart-reference-unsupported-type', 'format', 'error', 'A chart has reference lines but its type has no single value axis to draw them on.', 'An explicit reference line is never dropped silently, so a chart type that cannot draw it is an error.', {standard: SCHEMA}),
 	rule('number-format-invalid', 'format', 'error', 'A number format cannot be read.', 'A format code that no engine can parse is drawn as the plain number or fails to export.', { standard: 'Excel number format codes, as far as OPF supports them' }),
 	rule('variable-invalid-value', 'format', 'error', 'A variable value does not match its declared type.', 'A number variable given text, or a date given a non-date, cannot be filled into the deck.', { standard: SCHEMA }),
 	rule('variable-unknown-builtin', 'format', 'error', 'A token names a built-in variable that does not exist.', 'The `deck.`, `speaker.`, `organization.` and `slide.` names (and `speakers`) are reserved for built-in variables; a name under them that is not a built-in can never be filled, so the token would show literally. The slide-scoped `slide.number`, `slide.section` and `deck.slideCount` are inline tokens only, so `var:slide.*` and `var:deck.slideCount` are reported too; organization logos are whole-field references only (`var:organization.logo.icon`), so a `{{organization.logo}}` token, an unknown logo shape or an unknown organization id is reported.', { standard: SCHEMA }),
@@ -389,6 +390,22 @@ export const regionFullRule = rule(
 	'A region holds at most `max` blocks on one slide. A pin to a full region is ignored and the block is placed by its kind.',
 	{ cost: 'composition' },
 );
+export const shapeOffSlideRule = rule(
+	'shape-off-slide',
+	'layout',
+	'warning',
+	'A shape or image callout lies wholly outside the slide.',
+	'Overlay shapes and image callouts may straddle or leave the slide on purpose, so a position outside it is valid. One with no part on the slide draws nothing, which is nearly always a percent or a pixel written where a fraction belongs.',
+	{ cost: 'composition' },
+);
+export const chartLabelCollisionRule = rule(
+	'chart-label-collision',
+	'layout',
+	'warning',
+	'A reference label meets another label or a data line.',
+	'A reference label is tried above and below its line (beside it on a bar chart). When both places meet another reference label or a data line, it is drawn at the first and reported; its text and value are kept.',
+	{ cost: 'composition' },
+);
 export const iconDroppedRule = rule(
 	'icon-dropped',
 	'layout',
@@ -622,6 +639,8 @@ const implementedRules: ValidationRuleInfo[] = [
 	unplacedRule,
 	iconDroppedRule,
 	arrangementAdaptedRule,
+	chartLabelCollisionRule,
+	shapeOffSlideRule,
 	furnitureWrapsRule,
 	outsideRule,
 	resolutionRule,

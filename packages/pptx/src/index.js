@@ -3923,7 +3923,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...layerXml.options
   };
   const referenceLines=layer?.references?.lines??[];
-  if(referenceLines.some(l=>!l.native))options.onDiagnostic?.({code:'chart-reference-overlay',path,message:'Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes.'});
+  if(referenceLines.some(l=>!l.native))options.onDiagnostic?.({code:'chart-reference-overlay',path,message:'Horizontal bars, stacked charts and charts of one category draw their reference lines as line and text shapes over the chart. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes.'});
   const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,labelColor:markLabelColor,font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
   if(refInfo&&!referenceLines.some(l=>l.native))assertReferenceExportBudget(chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines'});
   if(refInfo)context.chartHeadings.get(objectName).references=refInfo;
@@ -4087,7 +4087,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:`#${context.colors.border}`,width:1/scale}, hiddenBorder:{color:'#000000',width:0}});
   // LH-29: the preview draws a dotted cell border as dots one line width long and two apart; PowerPoint has no such preset and
   // its square dot (sysDot) is one on, one off. A dashed border (four on, three off) is PowerPoint's dash exactly.
-  if (layout.rows.some(row => row.cells.some(cell => Object.values(cell.style?.borders ?? {}).some(border => border?.dash === 'dot' && border.width > 0))))
+  if (layout.rows.some(row => row.cells.some(cell => Object.values(cell.style?.borders ?? {}).some(border => border?.dash === 'dot' && (border.width ?? 1) > 0))))
     options.onDiagnostic?.({code: 'export-lossy', feature: 'border-dot', path, message: 'A dotted table border exports as PowerPoint\'s square dot, one line width on and one off; the preview leaves two widths between dots, so the dots sit closer together in PowerPoint.'});
   slide.addTable(rows, {
     objectName,
@@ -5984,12 +5984,13 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
               for (const [edge, native] of [['left','lnL'],['right','lnR'],['top','lnT'],['bottom','lnB']]) {
                 const border = style.borders?.[edge];
                 if (!border) continue;
-                const slideContext = table.context, borderHex = exportColor(border.color, slideContext, slideContext.colors.border);
+                // A border without a color or a width keeps the table rule's own (the scheme's border neutral, one slide pixel).
+                const slideContext = table.context, borderWidth = border.width ?? 1 / table.scale, borderHex = border.color == null ? slideContext.colors.border : exportColor(border.color, slideContext, slideContext.colors.border);
                 const borderOpacity = borderHex.length === 8 ? parseInt(borderHex.slice(6), 16) / 255 : 1;
                 const borderScheme = borderOpacity === 1 ? schemeColorValue(border.color, borderHex, slideContext) : undefined;
-                const fill = border.width === 0 ? '<a:noFill/>' : borderScheme ? `<a:solidFill><a:schemeClr val="${borderScheme}"/></a:solidFill>` : nativeBackgroundFill({type:'solid',color:'#' + borderHex.slice(0, 6), opacity: borderOpacity},{width:1,height:1}, slideContext.colors.border);
+                const fill = borderWidth === 0 ? '<a:noFill/>' : borderScheme ? `<a:solidFill><a:schemeClr val="${borderScheme}"/></a:solidFill>` : nativeBackgroundFill({type:'solid',color:'#' + borderHex.slice(0, 6), opacity: borderOpacity},{width:1,height:1}, slideContext.colors.border);
                 const dash = {solid:'solid',dash:'dash',dot:'sysDot'}[border.dash ?? 'solid'];
-                const line = `<a:${native} w="${Math.round(border.width * table.scale * 9525)}" cap="flat" cmpd="sng" algn="ctr">${fill}<a:prstDash val="${dash}"/></a:${native}>`;
+                const line = `<a:${native} w="${Math.round(borderWidth * table.scale * 9525)}" cap="flat" cmpd="sng" algn="ctr">${fill}<a:prstDash val="${dash}"/></a:${native}>`;
                 const existing = new RegExp(`<a:${native}\\b[^>]*>[\\s\\S]*?<\\/a:${native}>`);
                 contents = existing.test(contents) ? contents.replace(existing, line) : contents + line;
               }

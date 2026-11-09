@@ -23,7 +23,7 @@ import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
 import {chartBarGeometry, chartValueAxisHidden, columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
-import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
+import {BREAKABLE, carveChartLegend, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 
 interface Box { x: number; y: number; width: number; height: number }
 
@@ -462,7 +462,7 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
   const start = rtl ? centre - reach - lead : centre + reach + lead;
   const swatch = fontPx * 0.6;
   const placed = shape.series.map((_, j) => {
-    const point = shape.stacks[j]![last], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true;
+    const point = shape.stacks[j]![last], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true && !stableNameWidths(chart);
     const y = point ? shape.at((point.from + point.to) / 2) : shape.at(0);
     const width = swatch + fontPx * 0.4 + (bold && geometry.bold ? geometry.bold(name, fontPx) : geometry.measure(name, fontPx)) + fontPx * 0.25;
     return {j, name, bold, y, width};
@@ -492,19 +492,22 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
  * LH-154: an axis title is a band the preview carves off the chart's edge (a value axis title under the tick row, a category axis title at
  * the start; one text line each), so the plot leaves both: the title no longer overlaps the tick labels or the row names.
  */
-function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false, extra: {legend?: boolean; labelRoom?: number} = {}): ChartPlotInset | undefined {
+function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, outer: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false, extra: {legend?: boolean; labelRoom?: number} = {}): ChartPlotInset | undefined {
   const axisScale = chartAxisScale(axis);
   if (!data.ok || !axisScale) return undefined;
-  const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
+  const {fontPx, pad, lineHeight} = metrics(outer, geometry.scale, geometry.minFontSize);
   const width = (text: string) => geometry.measure(text, fontPx);
   const categories = data.rows.map(row => label(row[0]));
   const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
+  // An explicit legend is a band the preview carves off the chart before it lays the plot out (placeLegend): the plot is laid out in the rest.
+  const explicitLegend = options.active && options.legend !== undefined;
+  const box = explicitLegend ? carveChartLegend(outer, options.legend, data.columns.slice(1).map(name => label(name)), {fontPx, pad, lineHeight, width, key: 'bar'}) : outer;
   const titles = options.active ? options.axisTitles : {category: undefined, value: undefined};
   const start = titles.category ? lineHeight : 0, titleBand = titles.value ? lineHeight : 0, span = box.width - start;
   const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
   const gutter = Math.min(Math.max(span * 0.3, Math.min(span * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
   // A chart whose legend is neither in the header nor replaced by names keeps the side legend (up to 45% of the chart), which the plot leaves room for.
-  const side = namesRow || header?.legend || extra.legend === false ? 0 : Math.min(span * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
+  const side = namesRow || header?.legend || extra.legend === false || explicitLegend ? 0 : Math.min(span * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
   let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx - (extra.labelRoom ?? 0));
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   if (!hidden && format !== undefined && !typeOf(chart).startsWith('100pct')) {
@@ -516,7 +519,7 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   const below = box.y + (header?.height ?? 0);
   const top = namesRow ? below + (header ? 0 : pad) + lineHeight + fontPx * 0.1 : below + pad + lineHeight / 2, bottom = box.y + box.height - titleBand - pad - (hidden ? 0 : lineHeight);
   if (!(bottom - top > 1)) return undefined;
-  return {left: x - box.x, top: top - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
+  return {left: x - outer.x, top: top - outer.y, right: outer.x + outer.width - (x + plotWidth), bottom: outer.y + outer.height - bottom};
 }
 
 const HORIZONTAL_BARS = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
@@ -527,12 +530,14 @@ const HORIZONTAL_BARS = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
  * a small chart's value labels (LH-03, no value axis) keep the widest label's room beyond the longest bar. Undefined for a chart with
  * options or a chart drawn on a table's rows (LH-115): those keep their own plot. Stacked marks are refitted after sharing (refreshChartMarks).
  */
-export function horizontalBarPlot(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, axis: ChartValueAxis, box: Box, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
+export function horizontalBarPlot(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, axis: ChartValueAxis, box: Box, geometry: Omit<ChartPlotGeometry, 'box'>, allow: {options?: boolean} = {}): ChartPlotInset | undefined {
   if (!record(chart) || !data.ok || data.combo || data.hasX || !HORIZONTAL_BARS.has(typeOf(chart)) || layer?.rows) return undefined;
-  if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active) return undefined;
+  // A chart with options keeps the preview's own plot, except where composition must know it: explicit reference lines (`allow.options`).
+  const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
+  if (options.active && allow.options !== true) return undefined;
   if (layer?.stack) return layer.plot;
   const hidden = chartValueAxisHidden(layer), {fontPx} = metrics(box, geometry.scale, geometry.minFontSize);
-  const labeled = hidden && layer?.small?.labels === true;
+  const labeled = hidden && (layer?.small?.labels === true || options.dataLabels !== undefined);
   const labelRoom = labeled ? Math.max(0, ...data.rows.flatMap(row => row.slice(1).map((cell, j) => { const value = chartNumber(cell); return value === null ? 0 : geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx) + fontPx * 0.5; }))) : 0;
   return horizontalStackPlot(chart, data, axis, box, layer?.header, false, geometry, hidden, {legend: data.columns.length > 2, labelRoom});
 }
@@ -548,7 +553,7 @@ function placeBarNames(chart: unknown, data: ResolvedChartData, axis: ChartValue
   if (!shape) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize), swatch = fontPx * 0.6, y = plot.y - fontPx * 0.1 - lineHeight;
   const placed = shape.series.map((_, j) => {
-    const point = shape.stacks[j]![0], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true;
+    const point = shape.stacks[j]![0], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true && !stableNameWidths(chart);
     const x = point ? Math.min(shape.at(point.from), shape.at(point.to)) : shape.at(0);
     const width = swatch + fontPx * 0.4 + (bold && geometry.bold ? geometry.bold(name, fontPx) : geometry.measure(name, fontPx)) + fontPx * 0.25;
     return {j, name, bold, x, width};
@@ -603,7 +608,7 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
       const valueAxis = axisFor(captionOnly?.height ?? 0);
       if (!valueAxis) return undefined;
       const base: ChartLayer = {...rest, ...(captionOnly ? {header: captionOnly} : {})};
-      const gutter = (edge ? fontPx * 0.6 : fontPx * 0.25) + Math.max(...data.columns.slice(1).map((name, j) => swatch + fontPx * 0.4 + (focus?.includes(j) ? bold : measure)(label(name), fontPx) + fontPx * 0.25));
+      const gutter = (edge ? fontPx * 0.6 : fontPx * 0.25) + Math.max(...data.columns.slice(1).map((name, j) => swatch + fontPx * 0.4 + (focus?.includes(j) && !stableNameWidths(chart) ? bold : measure)(label(name), fontPx) + fontPx * 0.25));
       const plot = chartPlotInset(chart, data, {valueAxis, layer: {...base, stack: {values: [], ...(edge ? {edge} : {}), names: {gutter, swatch, entries: []}}}}, {...plotGeometry, box});
       if (!plot) return undefined;
       const entries = placeStackNames(chart, data, valueAxis, box, plot, {...plotGeometry, bold}, false, focus, edge);
@@ -644,20 +649,23 @@ export function restackForRows(chart: unknown, data: ResolvedChartData, layer: C
   if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) {
     const {plot: _shared, references: _references, ...rest} = layer;
     const plot = {left: rows.left, right: rows.right, top: rows.top, bottom: box.height - rows.bottom};
-    const references = axis && layer.references ? placeReferences(chartReferences(chart), data, {value: axis}, box, plot, {...geometry, horizontal: true, chartType:'bar'}) : undefined;
+    const references = axis && layer.references ? placeReferences(chartReferences(chart), data, {value: axis}, box, plot, {...geometry, horizontal: true, chartType: typeOf(chart)}) : undefined;
     return {...rest, rows, ...(references ? {plot, references} : {})};
   }
-  const {plot: _plot, header: _header, stack, ...rest} = layer;
+  const {plot: _plot, header: _header, stack, references: _references, ...rest} = layer;
   const header = stack.legend ?? layer.header;
   const plot: Box = {x: box.x + rows.left, y: box.y + rows.top, width: box.width - rows.left - rows.right, height: rows.bottom - rows.top};
   const marks = plot.width > 1 && plot.height > 1 ? stackMarks(chart, data, axis, plot, {...geometry, box}) : undefined;
-  return {...rest, ...(header ? {header} : {}), rows, stack: {values: marks?.values ?? stack.values.map(row => row.map(() => false))}};
+  // Explicit references move with the bars onto the table's rows.
+  const inset = {left: rows.left, right: rows.right, top: rows.top, bottom: box.height - rows.bottom};
+  const references = layer.references ? placeReferences(chartReferences(chart), data, {value: axis}, box, inset, {...geometry, horizontal: true, chartType: typeOf(chart)}) : undefined;
+  return {...rest, ...(header ? {header} : {}), rows, stack: {values: marks?.values ?? stack.values.map(row => row.map(() => false))}, ...(references ? {plot: inset, references} : {})};
 }
 
 // Explicit reference geometry lives in chart-references.ts.
 export {chartReferences,placeReferences} from './chart-references.js';
 export type {ChartReferenceLine,ChartLayerReferences} from './chart-references.js';
-import {chartReferences,placeReferences} from './chart-references.js';
+import {CHART_REFERENCE_HORIZONTAL,chartReferences,placeReferences,stableNameWidths} from './chart-references.js';
 /** A composed chart item, as composition hands it to {@link refreshChartMarks}. */
 interface ComposedChartItem { value: unknown; box: Box; chart?: {valueAxis?: ChartValueAxis; secondaryValueAxis?:ChartValueAxis; layer?: ChartLayer} }
 
@@ -710,7 +718,7 @@ export function refreshChartMarks(items: readonly ComposedChartItem[], geometryF
       if (marks) next = {...next, stack: {...next.stack!, ...(marks.ends.length ? {ends: marks.ends} : {ends: undefined})}};
     }
     if (layer.references) {
-      const references = placeReferences(chartReferences(item.value), data, {value: axis, ...(item.chart?.secondaryValueAxis ? {secondary:item.chart.secondaryValueAxis} : {})}, item.box, layer.plot, {...geometry,horizontal:typeOf(item.value)==='bar',chartType:typeOf(item.value)});
+      const references = placeReferences(chartReferences(item.value), data, {value: axis, ...(item.chart?.secondaryValueAxis ? {secondary:item.chart.secondaryValueAxis} : {})}, item.box, layer.plot, {...geometry,horizontal:CHART_REFERENCE_HORIZONTAL.has(typeOf(item.value)),chartType:typeOf(item.value),edge:next.stack?.edge===true});
       if (references) next = {...next, references};
     }
     item.chart!.layer = next;

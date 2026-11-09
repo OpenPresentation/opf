@@ -263,6 +263,14 @@ const chartReferenceAxisUnavailable: RuleText = () => ({
   next: "use the value axis, or put a line series on a combo chart's secondary axis.",
 });
 
+const chartReferenceUnsupportedType: RuleText = (finding) => {
+  const type = match(finding.message, /a '(.+?)' chart has none/)?.[1];
+  return {
+    message: type ? `A ${code(type)} chart cannot draw reference lines: it has no single value axis.` : "This chart type cannot draw reference lines: it has no single value axis.",
+    next: "remove `referenceLines`, or use a column, bar, line or area chart (clustered or stacked) or a combo chart.",
+  };
+};
+
 const numberFormatInvalid: RuleText = (finding, _context, helpers) => {
   const value = helpers.valueAt(helpers.segments);
   const reason = match(finding.message, /^Number format '.*?' ((?:needs|scales|has|uses|asks|allows|is)\b.+)$/)?.[1];
@@ -716,6 +724,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/data-column-duplicate": dataColumnDuplicate,
   "opf/chart-mapping-unknown-column": chartMappingUnknownColumn,
   "opf/chart-reference-axis-unavailable": chartReferenceAxisUnavailable,
+  "opf/chart-reference-unsupported-type": chartReferenceUnsupportedType,
   "opf/number-format-invalid": numberFormatInvalid,
   "opf/variable-invalid-value": variableInvalidValue,
   "opf/variable-unknown-builtin": variableUnknownBuiltin,

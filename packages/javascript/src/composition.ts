@@ -95,7 +95,8 @@ export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
 import {composeShape,composeStroke,isPresetShape,isShapeBlock,presetAspect,presetMask,sketchStroke,stackedText,PICTURE_STROKE_WIDTH,SHAPE_BLOCK_KEYS,type ComposedShape,type ComposedStroke} from './shape-block.js';
 import {chartPointGeometry} from './chart-point-anchors.js';
-import {composeOverlayShapes,hasOverlayShapes,representablePositionBox,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
+import {CHART_REFERENCE_HORIZONTAL} from './chart-references.js';
+import {composeOverlayShapes,hasOverlayShapes,outsideCanvas,representablePositionBox,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
 import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
 export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SHAPE_FAMILIES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
@@ -125,8 +126,11 @@ export interface LayoutDiagnostic {
    * LH-14: `icon-dropped` for an icon the slide has no room for without setting text smaller: the text stays, the chip is not drawn.
    * SH-09: `arrangement-adapted` for a pyramid or matrix drawn another way: a matrix of other than four entries as cards, or a list the
    * arrangement's designs cannot hold at the list's size (or of a shape it does not draw) as a list.
+   * `shape-off-slide` for an overlay shape or an image callout that lies wholly outside the slide, so nothing of it is drawn.
+   * `chart-label-collision` for an explicit reference label that meets another label or a data line on both of its sides: it is drawn where
+   * it was asked for and nothing is dropped, which is not a text overflow.
    */
-  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "shape-off-slide";
   path: string;
   message: string;
   /**
@@ -6511,6 +6515,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default
   // fit of automatic composition is `contain`, a placed (edge) picture and every layout keep the engine default `cover`.
   const fitImageCallout = (text: string, box: LayoutBox, calloutPath: string, settings: Composition): ComposedImageCallout => {
+    // A callout wholly outside the slide draws nothing: usually a percent or a pixel written where a fraction belongs. It is advice, not
+    // an overflow: a strict composition (overflow: error) still composes it.
+    if (outsideCanvas(box, { width, height })) imageDiagnostics.push({ code: 'shape-off-slide', path: calloutPath, message: "This image callout lies wholly outside the slide, so nothing of it is drawn. x and y are fractions of the picture's frame: 0.2 is 20% of its width." });
     const inset = 10 * scale, floor = Math.max(contentNominalSize('text'), settings.minFontSize ?? 16) * scale;
     const available = { x: box.x + inset, y: box.y + inset, width: Math.max(scale, box.width - 2 * inset), height: Math.max(scale, box.height - 2 * inset) };
     const limit = Math.max(floor, Math.min(2 * floor, (settings.maxFontSize ?? Infinity) * scale));
@@ -7790,7 +7797,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let valueAxis = axisFor(layer?.header?.height ?? 0);
     // LH-105, LH-113: the series or categories the slide names are the chart's focus (chart-focus.ts): the title's, else what its other
     // texts, list entries, quotes and chart alts name together; a focus replaces the small chart's last-point emphasis.
-    const focus = drawn.data.ok && !references.length ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
+    const focus = drawn.data.ok ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
     if (focus) {
       const small = layer?.small ? (({emphasis: _emphasis, ...rest}) => rest)(layer.small) : undefined;
       layer = {...layer, ...(small ? {small} : {}), focus};
@@ -7826,8 +7833,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (references.length && valueAxis) {
         const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
         const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
-        const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
-        const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
+        const referenceType = typeof (drawn.chart as {type?:unknown})?.type==='string' ? (drawn.chart as {type:string}).type : undefined;
+        const horizontalReferences = referenceType !== undefined && CHART_REFERENCE_HORIZONTAL.has(referenceType);
+        // A horizontal bar chart with chart options has no shared plot of its own, so it is laid out here for its references.
+        const plot = layer?.plot ?? (horizontalReferences ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry,{options:true}) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+        const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:horizontalReferences,...(referenceType!==undefined?{chartType:referenceType}:{}),edge:layer?.stack?.edge===true}) : undefined;
         if (placed && plot) {
           layer = {...layer, plot, references: placed};
         }
@@ -10134,7 +10144,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   // Explicit labels report only their final placement, after sibling scales/plots and table-row alignment.
-  for (const item of items) for (const finding of item.chart?.layer?.references?.diagnostics ?? []) diagnostics.push({code: 'text-overflow', path: item.path + '.referenceLines.' + finding.index + '.label', message: finding.message});
+  for (const item of items) for (const finding of item.chart?.layer?.references?.diagnostics ?? []) diagnostics.push({code: finding.code === 'chart-reference-label-collision' ? 'chart-label-collision' : 'text-overflow', path: item.path + '.referenceLines.' + finding.index + '.label', message: finding.message});
   // LH-115: the timeline under its column chart spans the plot, so each event sits under its column; it is listed before the chart when
   // it was written first (reading order).
   if (underChart?.chart && underChart.timeline) {
@@ -11438,7 +11448,7 @@ export {horizontalBarPlot} from './chart-marks.js';
 export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
 export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartLayerReferences} from './chart-marks.js';
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
-export {CHART_REFERENCE_TYPES} from './chart-references.js';
+export {CHART_REFERENCE_TYPES,CHART_REFERENCE_STACKED,CHART_REFERENCE_HORIZONTAL} from './chart-references.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';

@@ -657,8 +657,8 @@
             "point": "United States",
             "series": "Annual lost productivity ($B)",
             "edge": "end",
-            "width": 80,
-            "height": 80
+            "widthPx": 80,
+            "heightPx": 80
           },
           "alt": "United States bar end: $109.4 billion in annual lost productivity"
         }

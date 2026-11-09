@@ -308,6 +308,16 @@ const regionKind: RuleText = (finding) => {
 };
 
 // LH-14: an icon the slide does not draw.
+const shapeOffSlide: RuleText = (finding) => ({
+  message: /callout/.test(finding.message) ? "An image callout lies wholly outside the slide, so it is not drawn." : "A shape lies wholly outside the slide, so it is not drawn.",
+  next: "write its position as fractions (0.2 for 20%), or move it so part of it is on the slide.",
+});
+
+const chartLabelCollision: RuleText = () => ({
+  message: "A reference label meets another label or a data line.",
+  next: "put the label at the other end of its line, shorten it, or give the chart more room.",
+});
+
 const iconDropped: RuleText = (finding) => {
   const room = /no room for its chip/.test(finding.message);
   return {
@@ -644,6 +654,8 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/region-kind": regionKind,
   "opf/region-full": regionFull,
   "opf/icon-dropped": iconDropped,
+  "opf/chart-label-collision": chartLabelCollision,
+  "opf/shape-off-slide": shapeOffSlide,
   "opf/arrangement-adapted": arrangementAdapted,
   "opf/layout-unplaced": layoutUnplaced,
   "opf/furniture-wraps": furnitureWraps,

@@ -1825,7 +1825,8 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) 
       ? [start,axis.fixed,end,axis.fixed] : [axis.fixed,start,axis.fixed,end]}));
   });
   return [...defaults,...explicitEdges].flatMap(({coordinates:[x1,y1,x2,y2],border,path}) => {
-    const width = border ? border.width * scale : 1;
+    // An explicit border without a width keeps the table rule's own (one slide pixel).
+    const width = border?.width != null ? border.width * scale : 1;
     if (width === 0) return [];
     const stroke = border?.color == null
       ? defaultColor

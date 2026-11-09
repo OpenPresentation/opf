@@ -48,15 +48,12 @@ const rewrite = (e, path, fn) => {
 const series = (xml) => [...xml.matchAll(/<c:ser>[\s\S]*?<\/c:ser>/g)].map((m) => m[0]);
 const helper = (s) => s.includes('opf:reference ');
 const editHelpers = (xml, fn) => xml.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (s) => (helper(s) ? fn(s) : s));
+// An unchanged export imports as the document wrote it: no explicit defaults, and the authored stroke (its color names included).
 const nref = (r) => ({
   value: r.value,
-  axis: r.axis ?? 'value',
-  ...(r.label ? { label: r.label, labelPosition: r.labelPosition ?? 'end' } : {}),
-  stroke: {
-    color: (r.stroke?.color ?? '#BC1234').toUpperCase(),
-    width: r.stroke?.width ?? 4 / 3,
-    dash: r.stroke?.dash ?? 'dash',
-  },
+  ...(r.axis === 'secondary' ? { axis: 'secondary' } : {}),
+  ...(r.label ? { label: r.label, ...(r.labelPosition === 'start' ? { labelPosition: 'start' } : {}) } : {}),
+  ...(r.stroke !== undefined ? { stroke: r.stroke } : {}),
 });
 for (const type of ['column', 'line', 'line-with-markers', 'area'])
   test(`${type}: native helpers, workbook, order, bounds and import`, async () => {
@@ -181,7 +178,7 @@ test('native constant edits restore CURRENT value/label/style/endpoint; primary 
     out = await imported(bytes);
   assert.deepEqual(out.chart.data, { dataset: 'metrics' });
   assert.deepEqual(out.chart.referenceLines, [
-    { value: 22, axis: 'value', label: 'Revised', labelPosition: 'start', stroke: { color: '#123456', width: 3, dash: 'dot' } },
+    { value: 22, label: 'Revised', labelPosition: 'start', stroke: { color: '#123456', width: 3, dash: 'dot' } },
   ]);
   assert.ok(!out.diagnostics.some((d) => d.code === 'chart-data-provenance-changed'));
 });
@@ -339,20 +336,18 @@ test('ColorRef alpha, transform, theme/variable resolution and zero-width are re
       const e = await exported(d),
         out = await imported(e.bytes);
       assert.ok(out.chart.referenceLines, JSON.stringify({ type, color, diagnostics: out.diagnostics }));
-      const paint = out.chart.referenceLines[0].stroke;
-      assert.equal(paint.width, 0);
-      assert.equal(paint.dash, 'dot');
-      if (color === '#12345680') assert.equal(paint.color, '#12345680');
-      if (typeof color === 'object') assert.equal(paint.color, resolveColorRef(color, {}).toUpperCase());
-      if (color === 'var:reference') assert.equal(paint.color, resolveColorRef(color, { variables: d.variables }).toUpperCase());
-      if (color === 'accent1') assert.match(paint.color, /^#[0-9A-F]{6}$/);
+      // An unchanged export gives the authored stroke back, its color reference included; nothing is resolved to hex.
+      assert.deepEqual(out.chart.referenceLines[0].stroke, { color, width: 0, dash: 'dot' }, JSON.stringify({ type, color }));
+      // A line of no width is written fully transparent in both forms, never as PowerPoint's hairline.
+      const written = type === 'line' ? series(e.xml).find(helper) : new TextDecoder().decode(unzipSync(e.bytes)['ppt/slides/slide1.xml']).split('<p:sp>').find((shape) => shape.includes(' line"'));
+      assert.match(written, /<a:alpha val="0"\/>/, JSON.stringify({ type, color }));
     }
 });
 test('RTL start/end native endpoints and singleton overlay labels follow logical category order', async () => {
   for (const type of ['line', 'column', 'bar']) {
     const d = doc(type, [
       { ...ref, labelPosition: 'start' },
-      { ...ref, value: 15, labelPosition: 'end' },
+      { ...ref, value: 15 },
     ]);
     d.language = 'ar';
     if (type === 'column') d.slides[0].chart.data.rows = [['Only', 20]];
@@ -360,7 +355,7 @@ test('RTL start/end native endpoints and singleton overlay labels follow logical
       out = await imported(e.bytes);
     assert.deepEqual(
       out.chart.referenceLines.map((r) => r.labelPosition),
-      ['start', 'end'],
+      ['start', undefined],
     );
     assert.deepEqual(
       out.chart.referenceLines.map((r) => r.value),
@@ -763,4 +758,28 @@ for(const grouping of ['stacked','percentStacked'])test('edited '+grouping+' mul
 
 test('explicit helpers still restore under an omitted standard/default native grouping',async()=>{
  const e=await exported(doc('line',[ref,{value:15,label:'Low',stroke:ref.stroke}])),out=await imported(rewrite(e.entries,'ppt/charts/chart1.xml',xml=>xml.replace(/<c:lineChart>[\s\S]*?<\/c:lineChart>/g,g=>helper(g)?g.replace('<c:grouping val="standard"/>',''):g)));assert.deepEqual(out.chart.referenceLines.map(r=>r.value),[25,15]);assert.deepEqual(out.chart.data,data);
+});
+test('stacked charts and bar charts with options export their references as overlays and import them as authored', async () => {
+  const stacked = { columns: ['Quarter', 'New', 'Renewal'], rows: [['Q1', 40, 60], ['Q2', 55, 70], ['Q3', 60, 90]] };
+  const refs = [{ value: 200, label: 'Plan', stroke: { color: 'accent2', width: 2 } }, { value: 120 }, { value: 150, label: 'Floor', stroke: 'none' }];
+  const cases = [
+    ...['stacked-column', 'stacked-bar', 'stacked-area', 'stacked-line'].map((type) => ({ type, data: stacked })),
+    { type: 'stacked-column', data: stacked, legend: 'bottom' },
+    { type: 'bar', data, legend: 'bottom' },
+    { type: 'bar', data, dataLabels: true, axisTitles: { value: 'Units' } },
+  ];
+  for (const { type, data: rows, ...extra } of cases) {
+    const d = doc(type, refs, { data: structuredClone(rows), ...extra }),
+      label = JSON.stringify({ type, ...extra });
+    const e = await exported(d);
+    // No native helper series: a helper inside a stacked group would be stacked, and a bar chart's value axis runs across.
+    assert.equal(series(e.xml).filter(helper).length, 0, label);
+    assert.ok(e.diagnostics.some((f) => f.code === 'chart-reference-overlay' && /stacked charts/.test(f.message)), label);
+    const slide = strFromU8(e.entries['ppt/slides/slide1.xml']);
+    assert.equal([...slide.matchAll(/name="[^"]*:\d+ line"/g)].length, 3, label);
+    assert.equal([...slide.matchAll(/name="[^"]*:\d+ label"/g)].length, 2, label);
+    const out = await imported(e.bytes);
+    assert.deepEqual(out.chart.referenceLines, refs, label + JSON.stringify(out.diagnostics));
+    assert.equal(out.chart.type, type, label);
+  }
 });

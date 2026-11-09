@@ -1254,7 +1254,19 @@ export function createDesignControls(container, options = {}) {
     });
     const chartType = selectField("chart-type", "Chart type", {
       help: "Types this data supports",
-      onChange: (value) => run(() => switchDimension(editor, "charts", value, { slideIndex: getSlide(), path: dynamic.blockPath, ...catalogOptions() }), `Chart type set to ${chartType.select.selectedOptions[0]?.textContent ?? value}.`),
+      onChange: (value) => run(() => {
+        const switchOptions = { slideIndex: getSlide(), path: dynamic.blockPath, ...catalogOptions() };
+        try {
+          return switchDimension(editor, "charts", value, switchOptions);
+        } catch (error) {
+          // A type that cannot draw the chart's reference lines: offer to remove them rather than refuse or drop them silently.
+          const win = doc.defaultView;
+          if (error?.code !== "chart-reference-lines-unsupported" || typeof win?.confirm !== "function") throw error;
+          const count = error.details?.count ?? 1;
+          if (!win.confirm(`This chart type cannot draw ${count === 1 ? "the chart's reference line" : `${count} of the chart's reference lines`}. Remove ${count === 1 ? "it" : "them"} and switch?`)) throw error;
+          return switchDimension(editor, "charts", value, { ...switchOptions, removeReferenceLines: true });
+        }
+      }, (change) => `Chart type set to ${chartType.select.selectedOptions[0]?.textContent ?? value}.${change?.loss?.length ? ` Removed: ${change.loss.join(" ")}` : ""}`),
     });
     // The block's path is internal: it is a copyable chip under Advanced (a host with its own Advanced, such as the Studio, turns it off).
     const pathChip = h("button", { type: "button", class: "opf-dc-path", "data-role": "selection-path", title: "Copy path" });

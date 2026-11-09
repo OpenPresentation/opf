@@ -115,6 +115,41 @@ function categoryLabelReserve(labels: readonly string[], plot: {x: number; width
   return (options.find(option => option.n === 1) ?? options.reduce((best, option) => option.n < best.n ? option : best)).reserve;
 }
 
+interface LegendMetrics { fontPx: number; pad: number; lineHeight: number; width: (text: string) => number; key?: 'line' | 'bar' }
+
+/** The width of a side legend column as the preview sizes it: its key, a gap and the widest name, at most 45% of the box. */
+function legendColumnWidth(within: number, names: readonly string[], m: Pick<LegendMetrics, 'fontPx' | 'width' | 'key'>): number {
+  const keyWidth = m.key === 'line' ? m.fontPx * 1.4 : m.fontPx * 0.6, keyGap = m.fontPx * 0.4;
+  return Math.min(within * 0.45, keyWidth + keyGap + Math.max(0, ...names.map(m.width)) + m.fontPx * 0.5);
+}
+
+/**
+ * The box a chart keeps after an explicit `legend` took its band, carved the way the preview's placeLegend carves it: a side legend
+ * takes its column and the padding, a top or bottom legend the rows its entries flow into. `none` and a legend without entries take
+ * nothing. Shared by the vertical plot (chartPlotInset) and the horizontal bar plot (chart-marks horizontalStackPlot).
+ */
+export function carveChartLegend(box: Box, legend: string | undefined, names: readonly string[], m: LegendMetrics): Box {
+  if (!names.length) return box;
+  if (legend === 'left' || legend === 'right') {
+    const size = legendColumnWidth(box.width, names, m) + m.pad;
+    return legend === 'left' ? {...box, x: box.x + size, width: Math.max(1, box.width - size)} : {...box, width: Math.max(1, box.width - size)};
+  }
+  if (legend === 'top' || legend === 'bottom') {
+    // Entries flow in rows across the chart width, as the preview's top and bottom legends do.
+    const keyWidth = m.key === 'line' ? m.fontPx * 1.4 : m.fontPx * 0.6, keyGap = m.fontPx * 0.4;
+    const available = Math.max(1, box.width - 2 * m.pad), spacing = m.fontPx * 0.8;
+    let rows = 0, used = Infinity;
+    for (const name of names) {
+      const entry = Math.min(available, keyWidth + keyGap + m.width(name) + spacing);
+      if (used + entry <= available + 0.01) used += entry; else { rows++; used = entry; }
+    }
+    if (!rows) return box;
+    const size = rows * m.lineHeight + m.pad;
+    return legend === 'top' ? {...box, y: box.y + size, height: Math.max(1, box.height - size)} : {...box, height: Math.max(1, box.height - size)};
+  }
+  return box;
+}
+
 /**
  * LH-93: the inner plot box of a column, line or area chart (not a horizontal bar or combo chart) as an inset from its chart box, laid
  * out the way the preview lays it out (opf-render charts.js): below the header row (LH-81) or a top legend, above a bottom legend, the
@@ -148,24 +183,13 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   };
   if (layer?.header) cut('top', layer.header.height);
   const options = resolveChartOptions(chart, chartOptionTarget(authored));
-  const keyWidth = spec.key === 'line' ? fontPx * 1.4 : fontPx * 0.6, keyGap = fontPx * 0.4;
-  const legendWidth = (within: number) => Math.min(within * 0.45, keyWidth + keyGap + Math.max(0, ...names.map(width)) + fontPx * 0.5);
+  const legendWidth = (within: number) => legendColumnWidth(within, names, {fontPx, width, key: spec.key});
   // LH-105: a line chart whose series are named at their line ends (layer.endLabels) draws no legend, and keeps a gutter for the names.
   // LH-109: so does a stacked chart whose series are named beside its last column.
   let legendManaged = Boolean(layer?.header?.legend) || layer?.endLabels !== undefined || layer?.stack?.names !== undefined;
   if (options.active && options.legend !== undefined) {
     legendManaged = true;
-    if (options.legend === 'left' || options.legend === 'right') cut(options.legend, legendWidth(inner.width) + pad);
-    else if (options.legend === 'top' || options.legend === 'bottom') {
-      // Entries flow in rows across the chart width, as the preview's top and bottom legends do.
-      const available = Math.max(1, inner.width - 2 * pad), spacing = fontPx * 0.8;
-      let rows = 0, used = Infinity;
-      for (const name of names) {
-        const entry = Math.min(available, keyWidth + keyGap + width(name) + spacing);
-        if (used + entry <= available + 0.01) used += entry; else { rows++; used = entry; }
-      }
-      if (rows) cut(options.legend, rows * lineHeight + pad);
-    }
+    inner = carveChartLegend(inner, options.legend, names, {fontPx, pad, lineHeight, width, key: spec.key});
   }
   if (options.active) {
     if (options.axisTitles.value) cut(resolved.combo&&rtl?'right':'left', lineHeight);

@@ -1,0 +1,6 @@
+---
+type: changed
+packages: [opf, render, pptx, editor]
+---
+
+Placement has one unit per key and warns when nothing is drawn. An anchored overlay shape (`shapes[].at`) takes `width` and `height` as fractions of its target (the block, or with `point` the chart mark; 1 is the target's own size, up to 8) and the new `widthPx` and `heightPx` as reference pixels, one of the two for each side: the old rule (up to 1 a fraction, above 1 pixels) made 1 the target's width and 1.01 one pixel. Write a pixel size such as `"width": 160` as `"widthPx": 160`. A free overlay shape may be larger than the slide: `width` and `height` go up to 8 slides (a circle or band that bleeds off the edges), the PPTX import no longer limits such shapes to the slide, and the editor's frame tools follow. `OverlayShape.x`/`y` and `ImageCallout.x`/`y` are `FiniteNumber`s, so `1e999` is refused by the schema, and a callout origin too far away to be exact geometry is a located `opf/schema` error like a shape's. New warning `opf/shape-off-slide`: an overlay shape or image callout with no part on the slide (usually a percent or a pixel written where a fraction belongs); one that straddles an edge is not reported, and a strict composition still composes it.

@@ -1,5 +1,6 @@
 /** Canonical table grid. No renderer, fonts, DOM or network dependencies. */
-export interface TableBorder { color: string; width: number; dash?: 'solid'|'dash'|'dot' }
+/** One cell border as engines read it. The document's `'none'` is a border of no width; an omitted color or width is the table rule's own. */
+export interface TableBorder { color?: string; width?: number; dash?: 'solid'|'dash'|'dot' }
 export interface TableCellStyle {
   fill?: string; color?: string; bold?: boolean;
   align?: 'left'|'center'|'right'; verticalAlign?: 'top'|'middle'|'bottom';
@@ -19,6 +20,12 @@ export interface TableGrid {
   issues: TableGridIssue[];
 }
 const record = (value:unknown):Record<string,any> => value && typeof value==='object'&&!Array.isArray(value)?value as Record<string,any>:{};
+/** A cell's style with each `'none'` border written as the border of no width that engines draw nothing for. */
+function cellStyle(style:Record<string,any>):TableCellStyle {
+  const borders=style.borders;
+  if(!borders||typeof borders!=='object'||Array.isArray(borders)||!Object.values(borders).includes('none')) return style;
+  return {...style,borders:Object.fromEntries(Object.entries(borders).map(([edge,border])=>[edge,border==='none'?{color:'#00000000',width:0}:border]))};
+}
 export function tableGrid(value:unknown,path='table'):TableGrid {
   const table=record(value),hasHeaders=Array.isArray(table.columns)&&table.columns.length>0;
   const values:unknown[][]=[...(hasHeaders?[table.columns]:[]),...(Array.isArray(table.rows)?table.rows:[])];
@@ -39,7 +46,7 @@ export function tableGrid(value:unknown,path='table'):TableGrid {
     if(!Number.isSafeInteger(rowSpan)||!Number.isSafeInteger(colSpan)||rowSpan<1||colSpan<1||r+rowSpan>rowCount||c+colSpan>columnCount||(hasHeaders&&r===0&&rowSpan>1)) {
       issues.push({path:cellPath,message:'Cell spans must be positive integers within the table grid and cannot cross from headers into body rows.'});continue;
     }
-    const cell:TableGridCell={input,value:styled?object.value:column?object.name:input,style:styled?record(object.style):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?cellPath+'.value':column?cellPath+'.name':cellPath};
+    const cell:TableGridCell={input,value:styled?object.value:column?object.name:input,style:styled?cellStyle(record(object.style)):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?cellPath+'.value':column?cellPath+'.name':cellPath};
     rows[r]!.push(cell);
     for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
       if(owners[y]![x])issues.push({path:cellPath,message:'Cell spans cannot overlap another spanning cell.'});

@@ -52,3 +52,32 @@ test('finite extreme references and data share composed scales instead of disapp
  }
  const doc=deck({type:'combo',data:{columns:['Q','Actual','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},line:['Rate'],secondaryAxis:['Rate'],referenceLines:[{value:-Number.MAX_VALUE,axis:'secondary'},{value:Number.MAX_VALUE,axis:'secondary'}]}),svg=toSvg(doc,1,{trace:true});assert.equal(refs(svg).length,2);assert.ok(!/NaN|Infinity/.test(svg));
 });
+test('a bar chart with chart options draws its reference inside the plot the options leave, with its label',()=>{
+ const bars={type:'bar',data:{columns:['Region','Bookings'],rows:[['North America',42],['EMEA',31],['APAC',18]]},referenceLines:[{value:35,label:'Plan'}]};
+ for(const extra of [{},{legend:'bottom'},{legend:'right'},{dataLabels:true},{axisTitles:{value:'USD m'}},{legend:'top',dataLabels:true,axisTitles:{category:'Region',value:'USD m'}}]){
+  const doc=deck({...bars,...extra}),svg=toSvg(doc,1,{trace:true}),lines=refs(svg),label=JSON.stringify(extra);
+  assert.equal(lines.length,1,label);assert.ok(svg.includes('Plan'),label);
+  const item=resolvePresentation(doc).slides[0].geometry.items.find(i=>i.field==='chart'),placed=item.chart.layer.references.lines[0],plot=item.chart.layer.plot;
+  near(lines[0].x1,placed.x1);near(lines[0].x2,placed.x1);near(lines[0].y1,item.box.y+plot.top);near(lines[0].y2,item.box.y+item.box.height-plot.bottom);
+  // The bars are drawn in the same pinned plot: every bar starts at the plot's left edge.
+  const barRects=tags(svg,'rect').filter(a=>/^slides\.0\.chart\.data\.rows\.\d+\.1$/.test(a['data-opf-path']??''));assert.equal(barRects.length,3,label);
+  for(const rect of barRects)near(rect.x,item.box.x+plot.left);
+ }
+});
+test('stacked charts draw their references on the stack total; a stroke of none draws the label alone',()=>{
+ const stacked={columns:['Quarter','New','Renewal'],rows:[['Q1',40,60],['Q2',55,70],['Q3',60,90]]};
+ for(const type of ['stacked-column','stacked-bar','stacked-area','stacked-line']){
+  const doc=deck({type,data:stacked,referenceLines:[{value:200,label:'Plan'},{value:120,label:'Floor',stroke:'none'}]}),svg=toSvg(doc,1,{trace:true}),lines=refs(svg);
+  assert.equal(lines.length,1,type+': the line of no width is not drawn');assert.ok(svg.includes('Plan')&&svg.includes('Floor'),type);
+  const item=resolvePresentation(doc).slides[0].geometry.items.find(i=>i.field==='chart'),placed=item.chart.layer.references.lines[0],axis=item.chart.valueAxis;
+  assert.ok(axis.max>=200,type);near(lines[0].x1,placed.x1);near(lines[0].y1,placed.y1);near(lines[0].x2,placed.x2);near(lines[0].y2,placed.y2);
+ }
+});
+test('title-derived emphasis is the same with and without reference lines',()=>{
+ const multi={columns:['Quarter','Enterprise','Consumer'],rows:[['Q1',10,18],['Q2',15,13],['Q3',25,20]]};
+ const fills=chart=>{const svg=toSvg({design:{fontScheme:'roboto',colorScheme:'cool-horizon'},slides:[{title:'Enterprise pulled ahead',chart}]},1,{trace:true});return tags(svg,'rect').filter(a=>/^slides\.0\.chart\.data\.rows\.\d+\.\d+$/.test(a['data-opf-path']??'')).map(a=>a.fill);};
+ const plain=fills({type:'column',data:multi}),withReference=fills({type:'column',data:multi,referenceLines:[{value:12,label:'Target'}]});
+ assert.equal(plain.length,6);assert.deepEqual(withReference,plain);assert.ok(new Set(plain).size>1,'the title focuses one series');
+ // An explicit empty highlight switches the derived emphasis off.
+ const off=fills({type:'column',data:multi,highlight:{series:[]}});assert.notDeepEqual(off,plain);
+});
