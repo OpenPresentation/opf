@@ -156,5 +156,106 @@
   ],
   "fullIntegrationCiOwed": true,
   "nativeQualification": false,
-  "goldenOrArchivePromotion": false
+  "goldenOrArchivePromotion": false,
+  "finalDocs": {
+    "head": "e58f26a17f6ca510d289c37b81aef0ad65a98b78",
+    "tree": "49173af254e92d9e59070e67cdab24c417bd2150",
+    "base": "db27bad2d71f3bb17706dbc3b507797a7cd6d7a8",
+    "exitCode": 0,
+    "passedSteps": 7,
+    "typecheckSkipped": true,
+    "printedElapsedSeconds": 33.8,
+    "files": [
+      {
+        "source": "final-docs-01.log",
+        "file": "final-docs/00-final-docs-01.log.gz",
+        "rawBytes": 1115,
+        "rawSha256": "7aa9744cded6ad8f291f73f5d113cecbacee7bc41621daf515a0ae9402357069",
+        "storedBytes": 460,
+        "storedSha256": "7787341353f65c8b5ef6b97f5623848ac732f5624f53ad4b962890c077b0d2a4"
+      },
+      {
+        "source": "final-docs-01.exit.json",
+        "file": "final-docs/01-final-docs-01.exit.json.gz",
+        "rawBytes": 502,
+        "rawSha256": "de0159c2f7efcbfaa23b4c2a4a87149267d4aca736fbd9e373634111efa1ce08",
+        "storedBytes": 322,
+        "storedSha256": "9df3762d6899db8e0d63836e18da8fbd29dfb00ccf53579bc7cad8a0dd36f4b3"
+      },
+      {
+        "source": "steps/build.log",
+        "file": "final-docs/02-build.log.gz",
+        "rawBytes": 14580,
+        "rawSha256": "1f087aefd282c92d6533683da78b401d8a52787b5bd4ea4ebb5e4be45f2b69f0",
+        "storedBytes": 2979,
+        "storedSha256": "e2ae9f2c06df6e933605a71b84fa17b932f567106e1f7a6eafa802b3a5494149"
+      },
+      {
+        "source": "steps/biome.log",
+        "file": "final-docs/03-biome.log.gz",
+        "rawBytes": 687,
+        "rawSha256": "91b56bae8c1de12557190ea20ff72876473d91b577e52c5d16c6bf69b81c93c0",
+        "storedBytes": 321,
+        "storedSha256": "93f0c68c4a792fb1b1f00dc344f1313d7a9c612b436ca30894ee57e34e52dd45"
+      },
+      {
+        "source": "steps/pnpm_run_check_changes.log",
+        "file": "final-docs/04-pnpm_run_check_changes.log.gz",
+        "rawBytes": 2640,
+        "rawSha256": "2cbaa899b0ba700f555e70c954d54511829ccd7149d353ce2a9d1f2ca70f89ed",
+        "storedBytes": 1170,
+        "storedSha256": "b65849d3c5c46fff6728d5906e3b684c2e89e09dcc3aa305674d040e56319107"
+      },
+      {
+        "source": "steps/pnpm_run_check_gallery-tracker.log",
+        "file": "final-docs/05-pnpm_run_check_gallery-tracker.log.gz",
+        "rawBytes": 1993,
+        "rawSha256": "d95b6d705f05b1a5b491c95e920cd7c2da78339eeeeccdc21228698bedafef7a",
+        "storedBytes": 1067,
+        "storedSha256": "47bb48283aa1af9d30c1b6216d611b1d4500e7734e73adbe7be3a1e5b6bdd5ed"
+      },
+      {
+        "source": "steps/pnpm_run_check_release-report.log",
+        "file": "final-docs/06-pnpm_run_check_release-report.log.gz",
+        "rawBytes": 811,
+        "rawSha256": "13d5e74a8846d3af2bc026a3fa6ad63db5993bd1638c23e16f27150211997b6c",
+        "storedBytes": 463,
+        "storedSha256": "24e7e22d2f7031ab16d100294d3cb44e597756709b380629cd4af0b7e45e2c45"
+      },
+      {
+        "source": "steps/pnpm_run_check_skill-commands.log",
+        "file": "final-docs/07-pnpm_run_check_skill-commands.log.gz",
+        "rawBytes": 1038,
+        "rawSha256": "25e00dce05d395363137f8a5d7f22147fd95c39ebfcc72c157428558d49f05fe",
+        "storedBytes": 584,
+        "storedSha256": "db348548a600d3b46f4197241596e0e9ef827e7093ace17b0cc229489368990e"
+      },
+      {
+        "source": "steps/pnpm_run_check_text.log",
+        "file": "final-docs/08-pnpm_run_check_text.log.gz",
+        "rawBytes": 1071,
+        "rawSha256": "18fc7b1a8fed55bbcd639e800d253058dd70c906caaaf66a9c3be964575f40dc",
+        "storedBytes": 594,
+        "storedSha256": "fde1f4c73350000e012535da042252768fd8a02ece16efd4e49ab99f9f411492"
+      }
+    ]
+  },
+  "shippingBindings": [
+    {
+      "file": "packages/gallery/previews/layouts/hierarchy.svg",
+      "gitBlob": "96ecde1ea31745b958859d51519d31bee4382d98"
+    },
+    {
+      "file": "packages/gallery/previews/layouts/org-chart.svg",
+      "gitBlob": "4959fa24e3ee094c3e9039f289d857fcc6e96a8b"
+    },
+    {
+      "file": "docs/programs/release-readiness/gallery-tracker.json",
+      "gitBlob": "e955b1a47941b08257bc64bb2c8d6949d645701b"
+    },
+    {
+      "file": "docs/programs/release-readiness/gallery-tracker.md",
+      "gitBlob": "57d81ba622860b0ac16895acaa458537b974f1a7"
+    }
+  ]
 }
