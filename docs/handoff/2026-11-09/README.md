@@ -1,5 +1,7 @@
 # OPF continuation — November 9 UTC / November 8 Pacific
 
+Read [CURRENT.md](CURRENT.md) first for the latest verified site outcomes, terminal observers, active source checks and owner holds.
+
 This supersedes the immediate-state and observer wording in the November8 handoff. Preserve the full original scope in issue1139 and docs/handoff/2026-11-07:0.33 packages are published;0.34 is unpublished. No new package release occurred. Read working-rules.md and the outstanding native/owner boundaries before acting.
 
 ## Current release and site state
