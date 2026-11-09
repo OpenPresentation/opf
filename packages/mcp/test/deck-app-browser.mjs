@@ -347,6 +347,46 @@ try {
 		await shoot("chat-dark-both");
 	});
 
+	await run("exports PowerPoint, PDF and PNG in the sandbox and hands each file to the host", async () => {
+		// The host of the last check saves files (ui/download-file), so the editor's Export menu is in the bar.
+		const exported = async (format) => {
+			const before = (await hostState()).downloads.length;
+			await view().locator("#deck-export .opf-export-trigger").click();
+			if (format === "pptx") await shoot("export-menu");
+			await view().locator(`.opf-export-item[data-format="${format}"]`).click();
+			await page.waitForFunction((count) => window.host.downloads.length > count, before, { timeout: 120000 });
+			const { resource } = (await hostState()).downloads.at(-1).contents[0];
+			return { ...resource, bytes: Buffer.from(resource.blob, "base64") };
+		};
+		const pptx = await exported("pptx");
+		assert.match(pptx.uri, /^file:\/\/\/field-notes\.pptx$/i);
+		assert.equal(pptx.bytes.subarray(0, 2).toString("latin1"), "PK", "a PowerPoint file is a ZIP archive");
+		assert.ok(pptx.bytes.includes(Buffer.from("ppt/slides/slide9.xml")), "with the deck's nine slides");
+		const pdf = await exported("pdf");
+		assert.equal(pdf.mimeType, "application/pdf");
+		assert.equal(pdf.bytes.subarray(0, 5).toString("latin1"), "%PDF-");
+		assert.ok(pdf.bytes.length > 10_000);
+		// PNG draws each slide through the browser's image decoder: a data: URL here, since the sandbox allows no blob: image.
+		const png = await exported("png");
+		assert.equal(png.bytes.subarray(0, 2).toString("latin1"), "PK", "nine PNG slides come as one ZIP archive");
+		assert.ok(png.bytes.includes(Buffer.from("-009.png")));
+	});
+
+	await run("a host that cannot save files gets no Export menu, and a deck that cannot open says so in place of the slide", async () => {
+		await open({ document: deck });
+		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		assert.equal(await view().locator("#deck-export").isVisible(), false);
+		assert.equal(await view().locator(".opf-source-action-download").count() === 0 || !(await view().locator(".opf-source-action-download").isVisible()), true);
+		const result = await client.callTool({ name: "show_deck", arguments: { document: deck } });
+		await page.evaluate((setup) => {
+			window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [], downloads: [] };
+			window.startView(setup);
+		}, { viewUrl, arguments: {}, result, theme: "light" });
+		await view().locator('#deck-wait[data-failed="true"]').waitFor({ timeout: 30000 });
+		assert.equal(await view().locator("#deck-wait-text").innerText(), "The assistant sent no deck.");
+		assert.equal(await view().locator(".deck-wait-slide").isVisible(), false);
+	});
+
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);
 	});

@@ -63,6 +63,11 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 .deck-icon { width: var(--opf-ui-control-h); padding: 0; border-color: transparent; background: transparent; color: var(--opf-ui-muted-fg); }
 .deck-icon:hover:not(:disabled) { border-color: transparent; color: var(--opf-ui-fg); }
 .deck-icon:disabled { opacity: 0.45; }
+/* The editor's Export menu, worn as an icon button: Send stays the view's one filled button. Its name stays for a screen reader. */
+.deck-export .opf-export .opf-export-trigger { width: var(--opf-ui-control-h); padding: 0; justify-content: center; border-color: transparent; background: transparent; color: var(--opf-ui-muted-fg); }
+.deck-export .opf-export .opf-export-trigger:hover, .deck-export .opf-export .opf-export-trigger[aria-expanded="true"] { opacity: 1; background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+.deck-export .opf-export-trigger-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.deck-export .opf-export-trigger svg:last-child { display: none; }
 .deck-expand-close, #deck-expand[data-mode="fullscreen"] .deck-expand-open { display: none; }
 #deck-expand[data-mode="fullscreen"] .deck-expand-close { display: block; }
 /* The one primary action of the view, and only while there is something to send. */
@@ -91,10 +96,21 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 #opf-deck[data-show="both"] .deck-source { border-right: 1px solid var(--opf-ui-border); }
 
 .deck-stage-col { display: flex; flex-direction: column; background: var(--deck-stage-bg); }
-/* The editor sizes the canvas to the stage (fit: "contain"); the stage centres it. */
-.deck-stage { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; padding: 16px; display: flex; align-items: center; justify-content: center; }
+/* The editor sizes the canvas to the stage (fit: "contain"); the stage centres it. The 16px around the slide is a margin, not
+   padding, so the stage itself has the slide's shape and the slide fills it with equal space on every side. */
+.deck-stage { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; margin: 16px; display: flex; align-items: center; justify-content: center; }
 .deck-canvas { flex: none; }
-.deck-wait { position: absolute; inset: 0; margin: 0; display: grid; place-items: center; padding: 24px; color: var(--opf-ui-muted-fg); text-align: center; }
+/* Until the deck is drawn: a slide-shaped placeholder with the status under its lines. A failure keeps the words and drops the lines. */
+.deck-wait { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 6% 7%; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius-sm); background: var(--opf-ui-surface); }
+.deck-wait-slide { display: flex; flex-direction: column; gap: 12px; }
+.deck-wait-slide span { height: 14px; border-radius: var(--opf-ui-radius-sm); background: var(--opf-ui-muted); animation: deck-wait 1.4s ease-in-out infinite; }
+.deck-wait-slide span:nth-child(1) { width: 52%; height: 24px; margin-bottom: 8px; }
+.deck-wait-slide span:nth-child(2) { width: 78%; animation-delay: 0.15s; }
+.deck-wait-slide span:nth-child(3) { width: 61%; animation-delay: 0.3s; }
+.deck-wait-text { margin: 24px 0 0; color: var(--opf-ui-muted-fg); }
+.deck-wait[data-failed="true"] .deck-wait-slide { display: none; }
+.deck-wait[data-failed="true"] .deck-wait-text { margin: 0; color: var(--opf-ui-fg); }
+@keyframes deck-wait { 50% { opacity: 0.45; } }
 #opf-deck[data-ready="true"] .deck-wait { display: none; }
 .deck-row { flex: none; display: flex; align-items: center; min-width: 0; padding: 4px 8px; border-top: 1px solid var(--opf-ui-border); background: var(--opf-ui-surface); }
 .deck-row:has(#deck-thumbs:empty) { display: none; }
@@ -153,6 +169,10 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 /* A chat column (about 660px in Claude): the name gives its room to the controls, and Both stacks the slide over the source. */
 @media (max-width: 859px) {
 	.deck-title { display: none; }
+	/* Design keeps its palette icon and its name for a screen reader. */
+	#deck-design .opf-design-menu-trigger { width: var(--opf-ui-control-h); padding: 0; justify-content: center; border-color: transparent; background: transparent; color: var(--opf-ui-muted-fg); }
+	#deck-design .opf-design-menu-trigger:hover, #deck-design .opf-design-menu-trigger[aria-expanded="true"] { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+	#deck-design .opf-design-menu-trigger-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 	#opf-deck[data-show="both"] .deck-panes { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
 	#opf-deck[data-show="both"] .deck-stage-col { order: -1; }
 	#opf-deck[data-show="both"] .deck-source { border-right: 0; border-top: 1px solid var(--opf-ui-border); }
@@ -172,4 +192,5 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 }
 @media (prefers-reduced-motion: reduce) {
 	.deck-button, .deck-tabs [role="tab"] { transition: none; }
+	.deck-wait-slide span { animation: none; }
 }

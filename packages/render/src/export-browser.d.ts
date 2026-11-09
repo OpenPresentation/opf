@@ -8,6 +8,11 @@ export interface BrowserToPngOptions extends ToSvgOptions {
   scale?: number;
   /** A CSS colour painted first (default white); `"transparent"` keeps the alpha channel. */
   background?: string;
+  /**
+   * How the SVG is handed to the browser's image decoder: a `blob:` URL (default) or a `data:` URL, for a page whose Content-Security-Policy
+   * allows `data:` images but not `blob:` ones (the sandbox of an MCP App). A `blob:` URL that does not load is tried again as `data:`.
+   */
+  svgSource?: "blob" | "data";
   signal?: AbortSignal;
 }
 
@@ -15,6 +20,8 @@ export interface BrowserToPngOptions extends ToSvgOptions {
 export interface BrowserToPdfOptions extends Omit<ToSvgOptions, "fonts" | "onDiagnostic">, Pick<ToPdfOptions, "raster" | "background" | "serifFamily" | "metadata" | "tagged" | "compress" | "strict" | "rasterFallbackScale" | "defaultFontFamily" | "sansSerifFamily" | "monospaceFamily" | "onDiagnostic"> {
   /** `raster: true`: pixel density of each page image (default 2). */
   scale?: number;
+  /** As for `toPng`: how a slide drawn as an image (a raster PDF, or a part the vector PDF cannot draw) reaches the image decoder. */
+  svgSource?: "blob" | "data";
   /**
    * `raster: true` only: the pdf-lib module (`import * as pdfLib from "pdf-lib"`), an optional peer of the renderer that this entry never imports itself, so a
    * bundle of it holds no PDF library. Without it a raster PDF tries to import "pdf-lib" by name and rejects with `OPFRenderError` `converter-missing`

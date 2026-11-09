@@ -12,7 +12,7 @@
 // palette: the viewer's own chrome and the editor's parts read the same `--opf-ui-*` tokens, mapped onto the host's colours.
 import { App, type McpUiDisplayMode, type McpUiHostContext, applyDocumentTheme, applyHostStyleVariables } from "@modelcontextprotocol/ext-apps";
 import { gallery } from "@openpresentation/gallery";
-import { type Finding, validate } from "@openpresentation/opf";
+import { type Finding, embed, validate } from "@openpresentation/opf";
 import { createOpfEditor, layoutOptionsFor, type OpfEditor } from "@openpresentation/opf-editor/workspace";
 import { type BrowserFontsHandle, loadFonts } from "@openpresentation/opf-render/fonts-browser";
 import { FONT_BASE, bytesOf, extraFaces, fontFetch, startupFaces } from "./fonts.js";
@@ -37,7 +37,7 @@ const catalogs = [gallery];
 const root = document.documentElement;
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const shell = $("opf-deck");
-const wait = $("deck-wait");
+const wait = $("deck-wait-text");
 const sync = $("deck-sync");
 const undoButton = $<HTMLButtonElement>("deck-undo");
 const redoButton = $<HTMLButtonElement>("deck-redo");
@@ -295,10 +295,16 @@ function setReviewOpen(open: boolean): void {
 	else (shell.querySelector(".opf-review-pill") as HTMLElement | null)?.focus();
 }
 
-/** A message for the person: in the stage until the deck is on screen, then in the footer (the editor's status line). */
+/** A message for the person: under the placeholder slide until the deck is on screen, then in the footer (the editor's status line). */
 function status(message: string): void {
 	if (mounted && editor) editor.status(message);
 	else wait.textContent = message;
+}
+
+/** The deck will not open: the placeholder stops promising one. */
+function fail(message: string): void {
+	status(message);
+	if (!mounted) $("deck-wait").dataset.failed = "true";
 }
 
 /** The stage in the shape of the deck's slides (16:9 until a slide is drawn). */
@@ -306,6 +312,66 @@ function showDeck(): void {
 	const box = $("deck-canvas").querySelector("svg")?.viewBox.baseVal;
 	if (box?.width && box.height) shell.style.setProperty("--deck-aspect", `${box.width} / ${box.height}`);
 }
+
+// -------------------------------------------------------------------------------------------------------------------
+// Export: the editor's own Export menu (PowerPoint, PDF, PNG, SVG and the OPF source), made in this frame. The sandbox cannot save
+// a file, so every file goes to the host (ui/download-file), and the menu is offered only where the host takes it.
+
+/** A file for the host to save. A large one is encoded in pieces: one call with every byte as an argument overflows the stack. */
+async function saveFile(name: string, type: string, data: Blob | string): Promise<void> {
+	let resource: { uri: string; mimeType: string; text: string } | { uri: string; mimeType: string; blob: string };
+	if (typeof data === "string") resource = { uri: `file:///${name}`, mimeType: type, text: data };
+	else {
+		const bytes = new Uint8Array(await data.arrayBuffer());
+		let binary = "";
+		for (let at = 0; at < bytes.length; at += 0x8000) binary += String.fromCharCode(...bytes.subarray(at, at + 0x8000));
+		resource = { uri: `file:///${name}`, mimeType: type, blob: btoa(binary) };
+	}
+	const saved = await app.downloadFile({ contents: [{ type: "resource", resource }] });
+	if (saved.isError) throw new Error("The file was not saved.");
+}
+
+/**
+ * An editable PowerPoint file from the deck, made here with @openpresentation/opf-pptx (the exporter the playground uses), with the
+ * preview's fonts and catalogs so the file matches the slides. The exporter loads only when this runs. It makes no request: a
+ * remote picture stays a labelled placeholder, and an SVG picture's PNG fallback is drawn by the renderer's browser rasterizer.
+ */
+async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgress(progress: { stage?: string; done?: number; total?: number; message?: string }): void }): Promise<{ bytes: Uint8Array; warnings: string[] }> {
+	const check = () => request.signal.throwIfAborted();
+	// An export is a saved copy: every record the deck references is embedded first, so the file is built from the document itself.
+	const whole = embed(structuredClone(deck) as never, { catalogs }).document as unknown as { slides?: unknown[] };
+	if (!Array.isArray(whole.slides) || !whole.slides.length) throw new Error("There are no slides to export.");
+	request.onProgress({ stage: "fonts", done: 0, total: 1, message: "Preparing fonts…" });
+	await fonts?.ensure(whole as never, { signal: request.signal, catalogs } as never);
+	check();
+	request.onProgress({ stage: "convert", done: 0, total: 1, message: "Building the PowerPoint file…" });
+	const [{ toPptx }, { toPng }] = await Promise.all([import("@openpresentation/opf-pptx"), import("@openpresentation/opf-render/export-browser")]);
+	const notes = new Set<string>();
+	const png = (svg: string, options: { scale?: number; background?: string }) => toPng(svg as `<${string}`, { ...options, svgSource: "data" });
+	const bytes = await toPptx(whole as never, {
+		fonts,
+		catalogs,
+		onDiagnostic: (item: { code: string; message: string }) => {
+			if (PPTX_NOTES.has(item.code)) notes.add(item.message);
+		},
+		// The PNG fallback of an SVG picture: at the SVG's own size, then larger when the exporter asks for more pixels.
+		svgRasterizer: async (svg: string, size: { width: number }) => {
+			const first = await png(svg, { background: "transparent" });
+			const own = new DataView(first.buffer, first.byteOffset, first.byteLength).getUint32(16);
+			return own > 0 && own < size.width ? png(svg, { scale: Math.min(8, size.width / own), background: "transparent" }) : first;
+		},
+	} as never);
+	check();
+	return { bytes: bytes as Uint8Array, warnings: [...notes] };
+}
+/** The exporter's notes worth showing to a person; the rest are layout bookkeeping. */
+const PPTX_NOTES = new Set(["unresolved-asset", "content-placeholder", "chart-data-unplottable", "chart-data-adapted", "chart-map-geodata", "svg-sanitized", "svg-image-rasterized", "watermark-not-exported", "unresolved-reference", "media-provenance-omitted", "variable-example-used"]);
+
+/** PNG and the raster parts of a PDF, with the slide handed to the image decoder as a data: URL (the sandbox allows no blob: image). */
+const converters = {
+	toPng: async (svg: unknown, options?: object) => (await import("@openpresentation/opf-render/export-browser")).toPng(svg as `<${string}`, { ...options, svgSource: "data" }),
+	toPdf: async (svgs: unknown, options?: object) => (await import("@openpresentation/opf-render/export-browser")).toPdf(svgs, { ...options, svgSource: "data" }),
+};
 
 async function copyText(text: string): Promise<void> {
 	try {
@@ -333,12 +399,17 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	started = true;
 	const format: Format = args.format ?? (isText(args.document) && !/^[\s﻿]*[[{]/.test(args.document) ? "yaml" : "json");
 	if (args.document === undefined) {
-		status("Claude sent no deck.");
+		fail(`${sentence(assistant())} sent no deck.`);
 		return;
 	}
 	status("Drawing the slides…");
 	fonts = await fontsReady;
 	const textForm = isText(args.document) && format !== "json";
+	// Export is offered where the host saves files (ui/download-file): the sandbox cannot, and a menu that makes a file nobody gets
+	// would be worse than none.
+	const canSave = Boolean(app.getHostCapabilities()?.downloadFile);
+	const exportSlot = $("deck-export");
+	exportSlot.hidden = !canSave;
 	// Edits count from the moment the deck is on screen; the first load is not one.
 	let ready = false;
 	// The editor is given the whole view, so its theme covers the viewer's own bar and footer as well as its parts.
@@ -354,11 +425,10 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		icons: { valid: "M20 6 9 17l-5-5" },
 		source: {
 			onCopy: (file) => copyText(file.text),
-			onDownload: async (file) => {
-				const saved = await app.downloadFile({ contents: [{ type: "resource", resource: { uri: `file:///${file.filename}`, mimeType: file.mime, text: file.text } }] });
-				if (saved.isError) throw new Error("The file was not saved.");
-			},
+			onDownload: (file) => saveFile(file.filename, file.mime, file.text),
 		},
+		// The agent handoff is left out of the menu: the deck is already in a conversation with one.
+		...(canSave ? { export: { exportPptx, onDownload: (file: { blob: Blob; fileName: string }) => saveFile(file.fileName, file.blob.type || "application/octet-stream", file.blob), convertOptions: { converters }, items: { agent: false } } as never } : {}),
 		// The editor's own parts, each in the viewer's element: the deck's name, the review pill (the footer's verdict) and the Review
 		// panel (in a drawer the verdict opens), the Design quick menu (theme, colours, fonts and this slide's layout) and Find and
 		// replace (Ctrl/Cmd F). Undo and Redo are the viewer's icon buttons over the editor's undo() and redo(). The slide navigator
@@ -368,6 +438,7 @@ async function start(args: ShowDeckArguments): Promise<void> {
 			reviewPill: $("deck-verdict"),
 			review: $("deck-review-panel"),
 			designMenu: $("deck-design"),
+			...(canSave ? { export: exportSlot } : {}),
 			find: $("deck-find"),
 			source: $("deck-source"),
 			canvas: $("deck-canvas"),
@@ -436,17 +507,17 @@ sendButton.addEventListener("click", () => void sendToClaude());
 expandButton.addEventListener("click", () => void setDisplayMode(context.displayMode === "fullscreen" ? "inline" : "fullscreen"));
 
 app.ontoolinputpartial = () => {
-	if (!started) status("Claude is writing the deck…");
+	if (!started) status(`${sentence(assistant())} is writing the deck…`);
 };
-app.ontoolinput = (params) => void start((params.arguments ?? {}) as ShowDeckArguments).catch((error: unknown) => status(`The deck could not open: ${error instanceof Error ? error.message : String(error)}`));
+app.ontoolinput = (params) => void start((params.arguments ?? {}) as ShowDeckArguments).catch((error: unknown) => fail(`The deck could not open: ${error instanceof Error ? error.message : String(error)}`));
 app.ontoolresult = (result) => {
 	if (result.isError && !started) {
 		const text = result.content?.find((part) => part.type === "text");
-		status(text && "text" in text ? String(text.text) : "The tool failed.");
+		fail(text && "text" in text ? String(text.text) : "The tool failed.");
 	}
 };
 app.ontoolcancelled = () => {
-	if (!started) status("Claude stopped before the deck was ready.");
+	if (!started) fail(`${sentence(assistant())} stopped before the deck was ready.`);
 };
 app.onhostcontextchanged = (update) => applyContext(update);
 app.onteardown = async () => {

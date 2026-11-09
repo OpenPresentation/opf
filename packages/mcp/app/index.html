@@ -22,6 +22,7 @@
     <span class="deck-spacer"></span>
     <div id="deck-design" class="deck-item"></div>
     <button type="button" id="deck-find-open" class="deck-button deck-icon" aria-label="Find and replace" title="Find and replace · Ctrl/Cmd F"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+    <div id="deck-export" class="deck-item deck-export" hidden></div>
     <button type="button" id="deck-expand" class="deck-button deck-icon" aria-label="Full screen" title="Full screen" hidden><svg class="deck-expand-open" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg><svg class="deck-expand-close" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg></button>
     <button type="button" id="deck-send" class="deck-button deck-send" hidden disabled>Send to Claude</button>
   </header>
@@ -30,7 +31,7 @@
     <div id="deck-panes" class="deck-panes" role="tabpanel">
       <section id="deck-source" class="deck-source" aria-label="Deck source"></section>
       <section class="deck-stage-col" aria-label="Slides">
-        <div id="deck-stage" class="deck-stage"><div id="deck-canvas" class="deck-canvas"></div><p id="deck-wait" class="deck-wait" role="status">Waiting for the deck…</p></div>
+        <div id="deck-stage" class="deck-stage"><div id="deck-canvas" class="deck-canvas"></div><div id="deck-wait" class="deck-wait" role="status"><div class="deck-wait-slide" aria-hidden="true"><span></span><span></span><span></span></div><p id="deck-wait-text" class="deck-wait-text">Waiting for the deck…</p></div></div>
         <div class="deck-row"><div id="deck-thumbs" class="deck-thumbs"></div></div>
       </section>
     </div>
