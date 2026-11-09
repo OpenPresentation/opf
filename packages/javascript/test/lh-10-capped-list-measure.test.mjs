@@ -83,15 +83,20 @@ test('paginated arrangement fallback keeps all 35 entries and exact mappings und
   assert.deepEqual(mappings.map(map => map.sourcePath), Array.from({length: 5}, (_, i) => 'slides.0.blocks.'+i+'.items'));
   assert.ok(mappings.every(map => map.range.unit === 'items' && map.range.start === 0 && map.range.end === 7));
   assert.deepEqual(result.presentation.slides.flatMap(page => page.blocks.flatMap(block => block.items)), document.slides[0].blocks.flatMap(block => block.items));
+  let paintedEntries = 0;
   for (const [i, page] of result.presentation.slides.entries()) {
     const geometry = composeSlide(page, {layout}), lists = geometry.items.filter(item => item.field === 'items');
+    assert.ok(lists.length > 0, 'each page paints body lists');
+    assert.equal(lists.length, page.blocks.filter(block => Array.isArray(block.items)).length, 'every returned list is painted');
     assert.deepEqual(fitFailures(geometry), []);
     for (const item of lists) {
+      paintedEntries += textEntries(item).length;
       complete(item, entries); assert.deepEqual(fontsOf(item), [24]); assert.ok(maxLine(item) <= 70, 'page '+(i+1)+' '+item.path+' lines='+maxLine(item)+' columns='+item.listColumns?.length);
       if (i > 0) assert.ok(item.box.width < geometry.contentBox.width, 'automatic fallback uses a narrower readable measure');
     }
     if (i > 0) assert.equal(page.composition.maxFontSize, 24);
   }
+  assert.equal(paintedEntries, 35, 'all source entries have actual painted geometry');
 });
 
 test('an unreadable column alternative that splits words does not replace an intact capped list', () => {
