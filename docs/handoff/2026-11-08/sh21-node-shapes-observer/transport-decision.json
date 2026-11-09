@@ -1,0 +1,11 @@
+{
+  "decision": "SH21-source-transport",
+  "approvedBy": "coordinator",
+  "choice": "B: readable LF plus lossless raw worker gzip",
+  "rawWorkerSha256": "51439c085e65c168b99424b5355338e6c6b77febb747629bf51ce8aa6a439df5",
+  "readableGitSha256": "c56386c968913799208b49362c7cef7d118b43352edcb74a5cee3e5bfaf8d256",
+  "attributeAttempt": "git-byte-preservation-attempt-01.json",
+  "attributeAttemptOutcome": "git diff --check exited2, retaining line185 CR as trailing-whitespace failure; no whitespace assertion was changed",
+  "finalScopedAttributeFile": false,
+  "officeRun": false
+}

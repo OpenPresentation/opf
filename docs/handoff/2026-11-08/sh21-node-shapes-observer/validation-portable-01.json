@@ -1,0 +1,22 @@
+{
+  "command": "node scripts/check-changed.mjs --base 5330090d78c3453310c803b6b4f5ddfb1f0f8622",
+  "exitCode": 0,
+  "finishedAt": "2026-11-09T00:10:46.4073056Z",
+  "officeConstructed": false,
+  "seconds": 28.7,
+  "workerSha256": "51439c085e65c168b99424b5355338e6c6b77febb747629bf51ce8aa6a439df5",
+  "log": {
+    "path": "validation-portable-01.log.gz",
+    "decodedSha256": "27f160230026fe969ca6f1111b0a79371b08ce2cb2ab189680ee92f80e393061",
+    "decodedBytes": 758
+  },
+  "focused": {
+    "path": "portable-focused-01.log.gz",
+    "decodedSha256": "67bb0ed7505e667c37f48fd966d0c6b7d2238a61c7bb9349614497af604dc328",
+    "decodedBytes": 285,
+    "mockControls": 49,
+    "planCases": 4,
+    "planRefusals": 4
+  },
+  "scope": "Single-file Git byte preservation, unchanged worker behavior and updated handoff; no native run"
+}

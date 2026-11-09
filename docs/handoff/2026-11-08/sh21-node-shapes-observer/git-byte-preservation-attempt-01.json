@@ -1,0 +1,10 @@
+{
+  "scope": "Forward exact-byte Git preservation; no observer logic change",
+  "provisionalCommit": "5330090d78c3453310c803b6b4f5ddfb1f0f8622",
+  "provisionalGitBlobSha256": "c56386c968913799208b49362c7cef7d118b43352edcb74a5cee3e5bfaf8d256",
+  "actualQualifiedAndFinalIndexSha256": "51439c085e65c168b99424b5355338e6c6b77febb747629bf51ce8aa6a439df5",
+  "bytes": 18095,
+  "rule": "observer-worker.ps1 -text",
+  "onlyThisNewFileAffected": true,
+  "nativeRun": false
+}

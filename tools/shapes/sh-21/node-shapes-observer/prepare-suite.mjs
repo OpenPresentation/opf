@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {gunzipSync} from 'node:zlib';
 import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
-import {lane,sha,BASELINE_SHA,HELPERS_SHA} from './derive-worker.mjs';
+import {lane,sha,BASELINE_SHA,HELPERS_SHA,verifyWorkerTransport} from './derive-worker.mjs';
 export const root=path.resolve(lane,'../../../..');
 export function plainPath(file) {
   const absolute=path.resolve(file);
@@ -38,16 +38,18 @@ export function prepareSuite(output) {
   const source=plainPath(path.join(root,definition.sourcePacket));
   const records=verifyInputFiles(source,definition);
   const helpers=gunzipSync(fs.readFileSync(path.join(lane,'reference-helpers.ps1.gz')));assert.equal(sha(helpers),HELPERS_SHA);
-  const worker=fs.readFileSync(path.join(lane,'observer-worker.ps1'));
-  const manifest={...definition,scope:'Predeclared failure-observation diagnostic; first-count guard preserved. No Office run or live eligibility.',sourceHead:git('rev-parse','HEAD'),files:records,sourceIdentity:{workerPath:path.join(lane,'observer-worker.ps1'),workerSha256:sha(worker),executedBaselineSha256:BASELINE_SHA,nativeHelpersSha256:HELPERS_SHA},nativeAuthorized:false,nativeRun:false};
+  const worker=verifyWorkerTransport(gunzipSync(fs.readFileSync(path.join(lane,'observer-worker.ps1.gz'))),fs.readFileSync(path.join(lane,'observer-worker.ps1')),gunzipSync(fs.readFileSync(path.join(lane,'reference-worker.ps1.gz'))),fs.readFileSync(path.join(lane,'observer-functions.ps1'),'utf8'));
+  const manifest={...definition,scope:'Predeclared failure-observation diagnostic; first-count guard preserved. No Office run or live eligibility.',sourceHead:git('rev-parse','HEAD'),files:records,sourceIdentity:{workerPath:path.join(target,'observer-worker.ps1'),workerSha256:sha(worker),readableGitSourceSha256:sha(fs.readFileSync(path.join(lane,'observer-worker.ps1'))),executedBaselineSha256:BASELINE_SHA,nativeHelpersSha256:HELPERS_SHA},nativeAuthorized:false,nativeRun:false};
   fs.mkdirSync(target);
   for(const record of records) {const to=path.join(target,record.path);fs.mkdirSync(path.dirname(to),{recursive:true});fs.writeFileSync(to,fs.readFileSync(path.join(source,record.path)),{flag:'wx'});}
+  fs.writeFileSync(path.join(target,'observer-worker.ps1'),worker,{flag:'wx'});
   fs.writeFileSync(path.join(target,'native-helpers.ps1'),helpers,{flag:'wx'});
   const oldMeta=JSON.parse(fs.readFileSync(path.join(source,'meta.json'),'utf8'));
   const meta=Object.fromEntries(Object.entries(oldMeta).filter(([key])=>key==='venn-1-1'||key==='venn-2-1'));
   fs.writeFileSync(path.join(target,'meta.json'),JSON.stringify(meta,null,2)+'\n',{flag:'wx'});
   // The unchanged helper also retains matching preview controls. Never rerender them.
   for(const spec of definition.cases) {const rel='preview/'+spec.id+'-1.png';const from=plainPath(path.join(source,rel));const b=fs.readFileSync(from);fs.mkdirSync(path.join(target,'preview'),{recursive:true});fs.writeFileSync(path.join(target,rel),b,{flag:'wx'});manifest.files.push({path:rel,bytes:b.length,sha256:sha(b)});}
+  for(const rel of ['observer-worker.ps1','native-helpers.ps1','meta.json']) {const b=fs.readFileSync(path.join(target,rel));manifest.files.push({path:rel,bytes:b.length,sha256:sha(b)});}
   fs.writeFileSync(path.join(target,'manifest.json'),JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});
   return {suite:target,sourceHead:manifest.sourceHead,manifestSha256:sha(fs.readFileSync(path.join(target,'manifest.json'))),workerSha256:sha(worker),nativeAuthorized:false,nativeRun:false};
 }

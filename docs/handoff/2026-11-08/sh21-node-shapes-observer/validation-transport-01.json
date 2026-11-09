@@ -1,0 +1,16 @@
+{
+  "command": "node scripts/check-changed.mjs --base 5330090d78c3453310c803b6b4f5ddfb1f0f8622",
+  "exitCode": 0,
+  "finishedAt": "2026-11-09T00:16:22.9294881Z",
+  "nativeRun": false,
+  "seconds": 34.1,
+  "sourceReceiptSha256": "2690b93302487a249863c48b96e09b54b37054a5b904a2be57e101434bf7b67e",
+  "qualifiedRawWorkerSha256": "51439c085e65c168b99424b5355338e6c6b77febb747629bf51ce8aa6a439df5",
+  "readableGitWorkerSha256": "c56386c968913799208b49362c7cef7d118b43352edcb74a5cee3e5bfaf8d256",
+  "log": {
+    "path": "validation-transport-01.log.gz",
+    "decodedSha256": "54c92e9b62f10b79e15756ac6f8de13cb8d18ba71ca2ca15e6c425c6b7baa2b5",
+    "decodedBytes": 922
+  },
+  "scope": "Actual raw transport/path selection, readable source binding and meaningful new PPTX test; all mapped selected checks pass; no Office/native run"
+}

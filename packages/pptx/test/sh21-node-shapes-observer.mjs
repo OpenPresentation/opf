@@ -5,7 +5,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {gunzipSync} from 'node:zlib';
 import {spawnSync} from 'node:child_process';
-import {lane,sha,BASELINE_SHA,HELPERS_SHA,deriveObserverWorker} from '../../../tools/shapes/sh-21/node-shapes-observer/derive-worker.mjs';
+import {lane,sha,BASELINE_SHA,HELPERS_SHA,deriveObserverWorker,verifyWorkerTransport} from '../../../tools/shapes/sh-21/node-shapes-observer/derive-worker.mjs';
 import {root,verifyInputFiles,prepareSuite} from '../../../tools/shapes/sh-21/node-shapes-observer/prepare-suite.mjs';
 import {scanPowerShellSource} from './powershell-scan.mjs';
 import {windowsPowerShellEnvironment} from '../../../scripts/native-acceptance/windows-powershell-env.mjs';
@@ -17,7 +17,10 @@ const lf=Buffer.from(baseline.toString('utf8').replaceAll('\r\n','\n'));
 assert.equal(lf.length,9470);assert.equal(sha(lf),'69ef26f58a0245b9b2c7f916c0aec48a338a29edfad67cab16708386e4d87b5e');
 const functions=fs.readFileSync(path.join(lane,'observer-functions.ps1'),'utf8');
 const derived=deriveObserverWorker(baseline,functions);
-assert.deepEqual(fs.readFileSync(path.join(lane,'observer-worker.ps1')),derived.bytes);
+const rawWorker=verifyWorkerTransport(gunzipSync(fs.readFileSync(path.join(lane,'observer-worker.ps1.gz'))),fs.readFileSync(path.join(lane,'observer-worker.ps1')),baseline,functions);
+assert.deepEqual(rawWorker,derived.bytes);
+const changedWorker=Buffer.from(rawWorker);changedWorker[100]^=1;assert.throws(()=>verifyWorkerTransport(changedWorker,fs.readFileSync(path.join(lane,'observer-worker.ps1')),baseline,functions),/exact qualified raw worker/);
+assert.throws(()=>verifyWorkerTransport(rawWorker,Buffer.concat([fs.readFileSync(path.join(lane,'observer-worker.ps1')),Buffer.from('# changed')]),baseline,functions),/canonical LF/);
 assert.throws(()=>deriveObserverWorker(lf,functions),/exact executed/);
 let recovered=derived.bytes.toString('utf8');for(const edit of [...derived.edits].reverse())recovered=recovered.replace(edit.after,()=>edit.before);assert.deepEqual(Buffer.from(recovered),baseline);
 const code=scanPowerShellSource(functions);assert.deepEqual(code.issues,[]);
@@ -28,11 +31,12 @@ const source=path.join(root,definition.sourcePacket),records=verifyInputFiles(so
 assert.equal(records.length,4);
 const scratch=path.join(root,'artifacts');fs.mkdirSync(scratch,{recursive:true});const attempt=fs.mkdtempSync(path.join(scratch,'sh21-observer-'));
 for(const name of ['observer-worker.ps1','observer-functions.ps1','qualify.ps1','derive-worker.mjs','inputs.json'])fs.copyFileSync(path.join(lane,name),path.join(attempt,name));
+const rawExecutionPath=path.join(attempt,'observer-as-executed.ps1');fs.writeFileSync(rawExecutionPath,rawWorker);
 fs.writeFileSync(path.join(attempt,'baseline.ps1'),baseline);fs.writeFileSync(path.join(attempt,'helpers.ps1'),helpers);
 if(process.platform==='win32') {
   assert.throws(()=>prepareSuite(path.join(root.toUpperCase(),'must-not-create-native-suite')),/Keep suite outside source worktree/,'Windows case variants cannot bypass the code-root boundary');
   const report=path.join(attempt,'source-and-mocks.json');
-  const run=spawnSync('powershell.exe',['-NoProfile','-NonInteractive','-File',path.join(lane,'qualify.ps1'),'-ScriptPath',path.join(lane,'observer-worker.ps1'),'-BaselinePath',path.join(attempt,'baseline.ps1'),'-NativeHelpersPath',path.join(attempt,'helpers.ps1'),'-Manifest',path.join(lane,'inputs.json'),'-ReportPath',report],{env:psEnvironment,encoding:'utf8',timeout:60000});
+  const run=spawnSync('powershell.exe',['-NoProfile','-NonInteractive','-File',path.join(lane,'qualify.ps1'),'-ScriptPath',rawExecutionPath,'-BaselinePath',path.join(attempt,'baseline.ps1'),'-NativeHelpersPath',path.join(attempt,'helpers.ps1'),'-Manifest',path.join(lane,'inputs.json'),'-ReportPath',report],{env:psEnvironment,encoding:'utf8',timeout:60000});
   fs.writeFileSync(path.join(attempt,'qualify.stdout.log'),run.stdout??'');fs.writeFileSync(path.join(attempt,'qualify.stderr.log'),run.stderr??'');
   assert.equal(run.status,0,(run.error?.message??'')+'\n'+run.stdout+'\n'+run.stderr+'\nRetained: '+attempt);
   const outcome=JSON.parse(fs.readFileSync(report,'utf8').replace(/^\uFEFF/,''));
@@ -44,7 +48,7 @@ if(process.platform==='win32') {
   for(const record of records) {const to=path.join(suite,record.path);fs.mkdirSync(path.dirname(to),{recursive:true});fs.copyFileSync(path.join(source,record.path),to);}
   const manifest=path.join(suite,'manifest.json');fs.writeFileSync(manifest,JSON.stringify(definition));
   const out=path.join(attempt,'must-not-exist');
-  const args=['-NoProfile','-NonInteractive','-File',path.join(lane,'observer-worker.ps1'),'-Manifest',manifest,'-Out',out,'-NativeHelpersPath',path.join(attempt,'helpers.ps1'),'-PlanOnly'];
+  const args=['-NoProfile','-NonInteractive','-File',rawExecutionPath,'-Manifest',manifest,'-Out',out,'-NativeHelpersPath',path.join(attempt,'helpers.ps1'),'-PlanOnly'];
   const plan=spawnSync('powershell.exe',args,{env:psEnvironment,encoding:'utf8',timeout:30000});
   fs.writeFileSync(path.join(attempt,'plan.stdout.log'),plan.stdout??'');fs.writeFileSync(path.join(attempt,'plan.stderr.log'),plan.stderr??'');
   assert.equal(plan.status,0,plan.error?.message??plan.stdout+plan.stderr);assert(!fs.existsSync(out),'PlanOnly created native output');

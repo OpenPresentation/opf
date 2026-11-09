@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {gunzipSync} from 'node:zlib';
+import {gunzipSync,gzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 export const lane = path.dirname(fileURLToPath(import.meta.url));
@@ -32,10 +32,17 @@ export function deriveObserverWorker(baseline, additions) {
   assert.deepEqual(Buffer.from(recovered), baseline, 'every other original byte, including its one CRLF, is exact');
   return {bytes:Buffer.from(text), edits};
 }
+export const QUALIFIED_RAW_SHA='51439c085e65c168b99424b5355338e6c6b77febb747629bf51ce8aa6a439df5';
+export function verifyWorkerTransport(raw,display,baseline,additions) {
+  assert.equal(sha(raw),QUALIFIED_RAW_SHA,'exact qualified raw worker');
+  assert.deepEqual(raw,deriveObserverWorker(baseline,additions).bytes,'raw worker remains exactly derived');
+  assert.equal(display.toString('utf8'),raw.toString('utf8').replaceAll('\r\n','\n'),'readable Git source is canonical LF and otherwise identical');
+  return raw;
+}
 if(process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const output = process.argv[2] ? path.resolve(process.argv[2]) : path.join(lane,'observer-worker.ps1');
+  const output = process.argv[2] ? path.resolve(process.argv[2]) : path.join(lane,'observer-worker.ps1.gz');
   const baseline=gunzipSync(fs.readFileSync(path.join(lane,'reference-worker.ps1.gz')));
   const derived=deriveObserverWorker(baseline,fs.readFileSync(path.join(lane,'observer-functions.ps1'),'utf8'));
-  fs.writeFileSync(output,derived.bytes,{flag:'wx'});
+  fs.writeFileSync(output,output.endsWith('.gz')?gzipSync(derived.bytes,{level:9}):derived.bytes,{flag:'wx'});
   console.log(JSON.stringify({output,baselineSha256:BASELINE_SHA,workerSha256:sha(derived.bytes),bytes:derived.bytes.length,edits:derived.edits.length,nativeAuthorized:false,officeConstructed:false}));
 }
