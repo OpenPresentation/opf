@@ -1,0 +1,14 @@
+{
+  "directory": "docs/evidence/rr105-034-archive-review",
+  "baselineSourceTrees": "100644 blob 88d10438bf85e0131f824c5ec2b9787b97ef39cb\tpackage.json\n040000 tree 21b796a245aa2d3c9f83ee853ef0fdc01a9762ae\tpackages/cli\n040000 tree 331e46a43c480ac577c64d6eacee6a2ccbfb11b4\tpackages/editor\n040000 tree b585799389797fc7cbb7c0e2db8f166d353c5c77\tpackages/gallery\n040000 tree 788d334f2dfb73a0a243dd8e91b8f89d92b6dde7\tpackages/javascript\n040000 tree be3e82bce07bfb7f92bb8030b2065173eec200aa\tpackages/mcp\n040000 tree b8254237748d400fa065dbeac369ea92b6f55518\tpackages/pptx\n040000 tree f74f19bc5514fc58be3fded5a0d8ae2fbde47104\tpackages/render\n100644 blob 3432ab613e493c84d6eea74cb68d30be08720102\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree d7107be1cf1e020d9e17769dec09c7c4bf2a808d\tspec",
+  "candidateSourceTrees": "100644 blob 0d5eec02984fea0ef0b564a4b83658cc35a1bbf0\tpackage.json\n040000 tree 410bcb89e14daca2b4d6856c53c28843f7511550\tpackages/cli\n040000 tree 4e4fda1438a020d8700f0d8e7e73dd140779ec47\tpackages/editor\n040000 tree 0299af51fc1866552ba6d6022e7caddeb0f2bf4f\tpackages/gallery\n040000 tree b74a16068838e9a31c1d52fe5580a807cc31f959\tpackages/javascript\n040000 tree 0a1749c9e7cb79aebf7c3158d6c431edaf2ead5a\tpackages/mcp\n040000 tree 0c570bd278c2deb0b83b4036dd42cb7bfc77ca75\tpackages/pptx\n040000 tree 20c8f6d1f1c5cd0efea0c96176b96b9bf7d4f47f\tpackages/render\n100644 blob 3432ab613e493c84d6eea74cb68d30be08720102\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree eead5477c84895367abc9d909866b23ba77e35ac\tspec",
+  "fixtureSha256": "c005a990dc7cb510060a5b4b497c71ff026742a57abbda0879e634215b5bea25",
+  "reviewerSha256": "4b3c1b3c6928842df9ff45875846e88f05510aef6e24cf07b3fcf1a8ff246698",
+  "candidateHelperSha256": "04c4c4e05a58fcb9dea2da100d886728b31e4b0f0d55753aa89449a3ca6f2519",
+  "sealedReportSha256": "b616e554a77f037a33777bca03ff22bd0a7c2eb9c342656e5761598941297626",
+  "sealedArchiveEvidenceCommit": "5e89a184ffc8a38539f5fb5e573f403066bcca17",
+  "candidateConstruction": {
+    "source": "07afb555113ee43560387a65d049ce859339a6f3",
+    "method": "Pure construction from previously sealed exact report/fixture and byte-identical native-locked controls; no archive serialization rerun."
+  }
+}

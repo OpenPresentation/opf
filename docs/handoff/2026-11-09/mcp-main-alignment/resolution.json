@@ -1,0 +1,88 @@
+{
+  "main": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "staging": "c2bee28714578af8d3e72475a5cdbaa37fdf9bf6",
+  "branch": "codex/v034-main-alignment",
+  "files": [
+    {
+      "file": "docs/mcp.md",
+      "beforeSha256": "32e41f4c94ac8bc603754c3da677ea0174ac7aab49a6cdd16e306026d54275f6",
+      "proposedSha256": "c9704547c1cb83c592bb930143d5a1ae629d3a6033553e1da83ac227ffa23e60"
+    },
+    {
+      "file": "packages/mcp/app/main.ts",
+      "beforeSha256": "5df0c496988ad261a239bb2b614d2314583d7c4e2e9bf830c2a16d8f8947b3a3",
+      "proposedSha256": "7827505fa3ea6e88b71a737cfa1296de43df1f8fad27a47b34ac8571abcc27bd"
+    },
+    {
+      "file": "packages/mcp/test/deck-app-browser.mjs",
+      "beforeSha256": "19cc52ee1a0a93220fff800f7cad8a7904e31970c732b8fc0919dc5a6b462eaf",
+      "proposedSha256": "ecd8abdb747f0c0c35fed1e7ca4175e77980bae02ec1c5f145c286323e1773ea"
+    }
+  ],
+  "status": "PROPOSED_UNCOMMITTED_UNTESTED",
+  "firstAuthoringFailure": {
+    "guard": "hidden capability guard",
+    "actualMatches": 2,
+    "expectedMatches": 1,
+    "sourceWritten": false,
+    "correction": "limit replacement to that exact case instead of all following scenarios"
+  },
+  "scope": "Manual three-file resolution, no install/build/browser/Office or native witness authoring",
+  "reviewedByCoordinator": true,
+  "stageBlobs": [
+    {
+      "mode": "100644",
+      "blob": "9edd5babb50a1701178e0e90b27799673580013f",
+      "stage": 1,
+      "file": "docs/mcp.md"
+    },
+    {
+      "mode": "100644",
+      "blob": "54dd6f438500f2e634df0730dbb669fbe7fa4c2b",
+      "stage": 2,
+      "file": "docs/mcp.md"
+    },
+    {
+      "mode": "100644",
+      "blob": "4812a276c298a08537c834beabab0121309bcf3f",
+      "stage": 3,
+      "file": "docs/mcp.md"
+    },
+    {
+      "mode": "100644",
+      "blob": "6eb831f625b4c45b611c45ee28194e10123ea717",
+      "stage": 1,
+      "file": "packages/mcp/app/main.ts"
+    },
+    {
+      "mode": "100644",
+      "blob": "3d03890f3df649b62e6b7594c20ea9b7f2b35fb8",
+      "stage": 2,
+      "file": "packages/mcp/app/main.ts"
+    },
+    {
+      "mode": "100644",
+      "blob": "d43e54d7791021627ad82d71e92369b3e902620b",
+      "stage": 3,
+      "file": "packages/mcp/app/main.ts"
+    },
+    {
+      "mode": "100644",
+      "blob": "c7da9698275cd48229de5315b4590e4f7664f617",
+      "stage": 1,
+      "file": "packages/mcp/test/deck-app-browser.mjs"
+    },
+    {
+      "mode": "100644",
+      "blob": "8609deabe15c3d82f5cda13638f3143032360434",
+      "stage": 2,
+      "file": "packages/mcp/test/deck-app-browser.mjs"
+    },
+    {
+      "mode": "100644",
+      "blob": "cdb6f1f19026c5159ef79cdbabe5b6117db9773a",
+      "stage": 3,
+      "file": "packages/mcp/test/deck-app-browser.mjs"
+    }
+  ]
+}

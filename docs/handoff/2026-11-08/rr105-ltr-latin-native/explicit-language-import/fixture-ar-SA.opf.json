@@ -1,0 +1,18 @@
+{
+  "language": "ar-SA",
+  "slides": [
+    {
+      "items": [
+        {
+          "text": [
+            {
+              "text": "Item 1: authored proofing choice.",
+              "lang": "ar-SA"
+            }
+          ]
+        }
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

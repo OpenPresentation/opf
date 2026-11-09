@@ -1,0 +1,7 @@
+# Original SH-27 mapped check: preserved RED
+
+The required command on source58e ran once from18:50:09Z to19:16:47Z (1597.3s). Its actual exit is1:22steps passed and two sparse-checkout inputs were missing. The archive retains all26 original files byte-for-byte, including the complete command output and24 step logs. Core passed4248/4249; only script-width-estimates lacked its evidence corpus. The text check lacked its tracked painting fixture. These failures are not relabeled green. Types, renderer contract,284PPTX scripts plus its native-body browser and the editor146-script suite passed.
+
+This source predates the RTL/signed-callout/explicit-center contributiond9. Root inspected its actual rendered callout PNG (56/50px labels), replayed all three contribution verifiers, reviewed the placement guards and normally mergedd9 into staging1d860ac69db988d0b199d572ab38cba9858e967c. The final combined chart/positioning source still needs its coherent mapped gate; these historical receipts do not qualify that later head. No Office, release or golden run occurred here. Frozen PR1251 source58e and contributiond9 must receive no further pushes.
+
+Vetoable decision: retain and disclose the original sparse-input failures; use one final coherent source gate instead of repeating the unchanged20-minute PPTX suite for receipt packaging. Run `node docs/handoff/2026-11-09/sh27-mapped-check-evidence/verify.mjs` to verify the sealed original files.

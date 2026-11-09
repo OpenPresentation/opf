@@ -1,0 +1,353 @@
+{
+  "policy": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "scripts": "auto"
+  },
+  "samePhysicalFontFilesAsPublished033": true,
+  "faces": [
+    {
+      "package": "@expo-google-fonts/roboto",
+      "file": "400Regular/Roboto_400Regular.ttf",
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459",
+      "license": "OFL-1.1",
+      "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "package": "@expo-google-fonts/roboto",
+      "file": "500Medium/Roboto_500Medium.ttf",
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38",
+      "license": "OFL-1.1",
+      "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "package": "@expo-google-fonts/roboto",
+      "file": "600SemiBold/Roboto_600SemiBold.ttf",
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab",
+      "license": "OFL-1.1",
+      "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "package": "@expo-google-fonts/roboto",
+      "file": "700Bold/Roboto_700Bold.ttf",
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6",
+      "license": "OFL-1.1",
+      "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "package": "@expo-google-fonts/roboto",
+      "file": "800ExtraBold/Roboto_800ExtraBold.ttf",
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5",
+      "license": "OFL-1.1",
+      "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "package": "@expo-google-fonts/roboto",
+      "file": "400Regular_Italic/Roboto_400Regular_Italic.ttf",
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793",
+      "license": "OFL-1.1",
+      "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "package": "@expo-google-fonts/roboto",
+      "file": "700Bold_Italic/Roboto_700Bold_Italic.ttf",
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee",
+      "license": "OFL-1.1",
+      "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "package": "@expo-google-fonts/roboto-mono",
+      "file": "400Regular/RobotoMono_400Regular.ttf",
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95",
+      "license": "OFL-1.1",
+      "licenseSha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+    },
+    {
+      "package": "@expo-google-fonts/roboto-mono",
+      "file": "700Bold/RobotoMono_700Bold.ttf",
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83",
+      "license": "OFL-1.1",
+      "licenseSha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215"
+    },
+    {
+      "package": "carlito",
+      "file": "Carlito-Regular.ttf",
+      "sha256": "f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595",
+      "license": "OFL-1.1",
+      "licenseSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "package": "carlito",
+      "file": "Carlito-Italic.ttf",
+      "sha256": "0b019225e58d702bfedcbd35c21696769f8ee115cb6343f84c2f240312450d1c",
+      "license": "OFL-1.1",
+      "licenseSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "package": "carlito",
+      "file": "Carlito-Bold.ttf",
+      "sha256": "bb5d20f79b82599ec72983597437373a80f2d2085fa91fc144fd74e876a594db",
+      "license": "OFL-1.1",
+      "licenseSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "package": "carlito",
+      "file": "Carlito-BoldItalic.ttf",
+      "sha256": "b32928186c119599e03ca6a1ffc680fdcb7fac95772f4b95d989cf6cd3861517",
+      "license": "OFL-1.1",
+      "licenseSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "package": "@expo-google-fonts/caladea",
+      "file": "400Regular/Caladea_400Regular.ttf",
+      "sha256": "59faf27a90dee5c1b7813b12b26c725ea88adc1bfe37b0ac8e0b8b32a5732c2a",
+      "license": "OFL-1.1",
+      "licenseSha256": "ccdab61d371d8c8683a128a92cd7d498dbdb1d37689f7cb21f1bf6b16658d213"
+    },
+    {
+      "package": "@expo-google-fonts/caladea",
+      "file": "400Regular_Italic/Caladea_400Regular_Italic.ttf",
+      "sha256": "669e65b265d40899b59d7f3531ca136b7e0fda80a3d1b5d47bbe7825be81fbe3",
+      "license": "OFL-1.1",
+      "licenseSha256": "ccdab61d371d8c8683a128a92cd7d498dbdb1d37689f7cb21f1bf6b16658d213"
+    },
+    {
+      "package": "@expo-google-fonts/caladea",
+      "file": "700Bold/Caladea_700Bold.ttf",
+      "sha256": "11d1e1dc461d1e491b6a396d91934c3bb09d06a77cc3d21ad0b10346c39c3ec2",
+      "license": "OFL-1.1",
+      "licenseSha256": "ccdab61d371d8c8683a128a92cd7d498dbdb1d37689f7cb21f1bf6b16658d213"
+    },
+    {
+      "package": "@expo-google-fonts/caladea",
+      "file": "700Bold_Italic/Caladea_700Bold_Italic.ttf",
+      "sha256": "93d7c2003fe3fd8381cbd518af6cc2f4b510a37c7741c49a95893b6da8edbbc7",
+      "license": "OFL-1.1",
+      "licenseSha256": "ccdab61d371d8c8683a128a92cd7d498dbdb1d37689f7cb21f1bf6b16658d213"
+    },
+    {
+      "package": "@expo-google-fonts/arimo",
+      "file": "400Regular/Arimo_400Regular.ttf",
+      "sha256": "88cc899855d30f9c779b73c3319d0e077b098f927187aafce11ca029add707a6",
+      "license": "OFL-1.1",
+      "licenseSha256": "11cce536cd2f3864d767003af5dcd739e2e15818cf2279b6175edeadd3960992"
+    },
+    {
+      "package": "@expo-google-fonts/arimo",
+      "file": "400Regular_Italic/Arimo_400Regular_Italic.ttf",
+      "sha256": "6bd2c6a6fa87f4566cf0a92c5834884597acbd7be9719e550837865ac4167a42",
+      "license": "OFL-1.1",
+      "licenseSha256": "11cce536cd2f3864d767003af5dcd739e2e15818cf2279b6175edeadd3960992"
+    },
+    {
+      "package": "@expo-google-fonts/arimo",
+      "file": "700Bold/Arimo_700Bold.ttf",
+      "sha256": "ec96ac9fdd94766f66f6140c1375bf011577558f88d43f76b3b59307d2a6bca3",
+      "license": "OFL-1.1",
+      "licenseSha256": "11cce536cd2f3864d767003af5dcd739e2e15818cf2279b6175edeadd3960992"
+    },
+    {
+      "package": "@expo-google-fonts/arimo",
+      "file": "700Bold_Italic/Arimo_700Bold_Italic.ttf",
+      "sha256": "b42b19c10bf5d526f00068303a643282c3df55a79c6fa2eea80b4a078a4a705a",
+      "license": "OFL-1.1",
+      "licenseSha256": "11cce536cd2f3864d767003af5dcd739e2e15818cf2279b6175edeadd3960992"
+    },
+    {
+      "package": "@expo-google-fonts/tinos",
+      "file": "400Regular/Tinos_400Regular.ttf",
+      "sha256": "924ef269e73da94c1803ff68877f5d998dd16605c5ffad82ee181034f8a1fffe",
+      "license": "OFL-1.1",
+      "licenseSha256": "cb3382d4643e8b02c12e322c220a3c76a5020d667e4fd4e7c75e744cca6caa6b"
+    },
+    {
+      "package": "@expo-google-fonts/tinos",
+      "file": "400Regular_Italic/Tinos_400Regular_Italic.ttf",
+      "sha256": "4a52de5bcf70e37bd71949f8a85302b75795a1943aedffbbee4f2db7744e1c81",
+      "license": "OFL-1.1",
+      "licenseSha256": "cb3382d4643e8b02c12e322c220a3c76a5020d667e4fd4e7c75e744cca6caa6b"
+    },
+    {
+      "package": "@expo-google-fonts/tinos",
+      "file": "700Bold/Tinos_700Bold.ttf",
+      "sha256": "576a19b5dc026cafe6ae8fde4c849588dae6475cf5d912cebdf2827388c43ad9",
+      "license": "OFL-1.1",
+      "licenseSha256": "cb3382d4643e8b02c12e322c220a3c76a5020d667e4fd4e7c75e744cca6caa6b"
+    },
+    {
+      "package": "@expo-google-fonts/tinos",
+      "file": "700Bold_Italic/Tinos_700Bold_Italic.ttf",
+      "sha256": "10c90ef7896d758923c06a1485d7824cdb457466da0bf7d42f81c5228931281b",
+      "license": "OFL-1.1",
+      "licenseSha256": "cb3382d4643e8b02c12e322c220a3c76a5020d667e4fd4e7c75e744cca6caa6b"
+    },
+    {
+      "package": "@expo-google-fonts/cousine",
+      "file": "400Regular/Cousine_400Regular.ttf",
+      "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799",
+      "license": "OFL-1.1",
+      "licenseSha256": "b81c4d4dc0a9f72c9155e78187316e016e2012a8102468804173dc61468b906d"
+    },
+    {
+      "package": "@expo-google-fonts/cousine",
+      "file": "400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "sha256": "f1626b7287db36af8ba2ff88840c82f121f4cbda8971fe3f717f975e9fd782a8",
+      "license": "OFL-1.1",
+      "licenseSha256": "b81c4d4dc0a9f72c9155e78187316e016e2012a8102468804173dc61468b906d"
+    },
+    {
+      "package": "@expo-google-fonts/cousine",
+      "file": "700Bold/Cousine_700Bold.ttf",
+      "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3",
+      "license": "OFL-1.1",
+      "licenseSha256": "b81c4d4dc0a9f72c9155e78187316e016e2012a8102468804173dc61468b906d"
+    },
+    {
+      "package": "@expo-google-fonts/cousine",
+      "file": "700Bold_Italic/Cousine_700Bold_Italic.ttf",
+      "sha256": "acb798f3629cda0041fbd6234237cf549a1b932792f2a71b0986eb3e1382ed37",
+      "license": "OFL-1.1",
+      "licenseSha256": "b81c4d4dc0a9f72c9155e78187316e016e2012a8102468804173dc61468b906d"
+    },
+    {
+      "package": "@expo-google-fonts/gelasio",
+      "file": "400Regular/Gelasio_400Regular.ttf",
+      "sha256": "44aae47442ad39e623788930f38f1e702febcf094c284c5058bf49f7da23de9a",
+      "license": "OFL-1.1",
+      "licenseSha256": "b393cb01867c919b44381512120dc3e4c954c7b47e2035c405f3a324799a4d29"
+    },
+    {
+      "package": "@expo-google-fonts/gelasio",
+      "file": "400Regular_Italic/Gelasio_400Regular_Italic.ttf",
+      "sha256": "2b24b3d41c06d030a31db6610454595775e572a2992d73171cab783407d202a8",
+      "license": "OFL-1.1",
+      "licenseSha256": "b393cb01867c919b44381512120dc3e4c954c7b47e2035c405f3a324799a4d29"
+    },
+    {
+      "package": "@expo-google-fonts/gelasio",
+      "file": "700Bold/Gelasio_700Bold.ttf",
+      "sha256": "fade86eca52203e2ccaf9aee494aa4b0335589879738c47e9d92a53630696d10",
+      "license": "OFL-1.1",
+      "licenseSha256": "b393cb01867c919b44381512120dc3e4c954c7b47e2035c405f3a324799a4d29"
+    },
+    {
+      "package": "@expo-google-fonts/gelasio",
+      "file": "700Bold_Italic/Gelasio_700Bold_Italic.ttf",
+      "sha256": "24f1cb5cf5f765acc5d744a54a6c5dfe34723e58842f5b1b696716497e032852",
+      "license": "OFL-1.1",
+      "licenseSha256": "b393cb01867c919b44381512120dc3e4c954c7b47e2035c405f3a324799a4d29"
+    },
+    {
+      "package": "intos",
+      "file": "Intos-Regular.ttf",
+      "sha256": "4de204b6414d30f9f49b9375dc9b71ccea1683e55ac37de6c8d541abbc760eea",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "Intos-Italic.ttf",
+      "sha256": "8ca602e312af876190610b0416fdfc67f58ee38bcf9e01ce2f0fcc1094d8fbe4",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "Intos-Bold.ttf",
+      "sha256": "8afd148fff67d6426d0d6906d4c6232886aedc81a7832544806e6c93c44340ab",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "Intos-BoldItalic.ttf",
+      "sha256": "dec13afb35718df39f5a422d7ecb2f69bd719c9ae3196508c17021a428578a11",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosDisplay-Regular.ttf",
+      "sha256": "b652fdab5e8939540f084529a507ddd158629985b8eee1b553ef05c46d131877",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosDisplay-Italic.ttf",
+      "sha256": "2741bd21a8904acf3ce28aff7a896c0c87777e3d459e1e10ffe085057471bc28",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosDisplay-Bold.ttf",
+      "sha256": "5055714a7215331b7786b10538138baa4dc969a8afe018bbf459f8b5395026d8",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosDisplay-BoldItalic.ttf",
+      "sha256": "1d9e18845be66b00793b8142581898b70ca72425f4d9f498fe4c35f88c39014d",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosNarrow-Regular.ttf",
+      "sha256": "ea91acdb933f2f1919df688f154140b851191adf4ecb77f7d931724198ea23c1",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosNarrow-Italic.ttf",
+      "sha256": "f2b4745a51b0c0c13d9768caf14017014c299e11a19031f83c1d8c77f4e23c6b",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosNarrow-Bold.ttf",
+      "sha256": "59fd6e53b61ae483809ce1d8fc396357ec33d7beedef2e81f87da11551a99e51",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosNarrow-BoldItalic.ttf",
+      "sha256": "6e1cb55b955539301ffc51b1a602a3fb9c8411b9082383fd29f555492eb9d079",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosSerif-Regular.ttf",
+      "sha256": "56351ac7a9d0b66a5d9a0b6c656cefa6fa5cf9fb5e3ee7e44bd1e4e327828d35",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosSerif-Italic.ttf",
+      "sha256": "eed3fa7449ce0fc31fe51569ce056ce483e25ce8f6e2fdda16d6cd36ff231327",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosSerif-Bold.ttf",
+      "sha256": "ad994397ce37c29f8881e9fe6e7fcdc743b643465a96ab4d1e2a02d95784a79f",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    },
+    {
+      "package": "intos",
+      "file": "IntosSerif-BoldItalic.ttf",
+      "sha256": "f99eb0845ab26e305ffe58f3baa9c920d676d2204a222d925d4fa001573f53f2",
+      "license": "OFL-1.1",
+      "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e"
+    }
+  ]
+}

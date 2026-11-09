@@ -467,9 +467,27 @@ describe("validation findings", () => {
     walk(path.join(repoRoot, "docs/fixtures"));
     assert.ok(files.length > 50);
     const dataCodes = new Set(["dataset-unknown", "dataset-field-unknown", "data-column-duplicate", "chart-mapping-unknown-column", "number-format-invalid", "chart-value-not-numeric", "chart-mapping-adapted"]);
+    const paretoAdaptations = new Map([
+      ["examples/gallery/business-functions/partner-ecosystem-launch-kit.opf.json", ["/slides/2/chart/type"]],
+      ["examples/gallery/design-and-media/visual-brand-system-sampler.opf.json", ["/slides/2/chart/type"]],
+      ["examples/gallery/education/curriculum-approval-brief.opf.json", ["/slides/6/blocks/0/chart/type"]],
+      ["examples/gallery/government/wildfire-evacuation-preparedness.opf.json", ["/slides/2/chart/type"]],
+      ["examples/gallery/industries/consulting-margin-recovery-plan.opf.json", ["/slides/2/chart/type"]],
+      ["examples/gallery/presentation-types/product-launch-narrative.opf.json", ["/slides/6/blocks/0/chart/type"]],
+    ]);
     for (const file of files) {
-      const result = dataReport(JSON.parse(readFileSync(file, "utf8")));
-      assert.deepEqual(result.findings.filter((entry) => dataCodes.has(entry.ruleId.slice(4))).filter((entry) => entry.severity !== "info"), [], path.relative(repoRoot, file));
+      const document = JSON.parse(readFileSync(file, "utf8"));
+      const result = dataReport(document);
+      const relative = path.relative(repoRoot, file).split(path.sep).join("/");
+      const paths = paretoAdaptations.get(relative) ?? [];
+      for (const pointer of paths) {
+        const chart = pointer.split("/").slice(1, -1).reduce((node, key) => node[key], document);
+        assert.equal(chart.type, "pareto", relative);
+        assert.ok(chart.data.columns.slice(1).filter((_, offset) => chart.data.rows.some(row => typeof row[offset + 1] === "number")).length >= 2, relative);
+      }
+      const actual = result.findings.filter((entry) => dataCodes.has(entry.ruleId.slice(4))).filter((entry) => entry.severity !== "info").map(({ ruleId, severity, path }) => ({ ruleId, severity, path }));
+      const expected = paths.map(path => ({ ruleId: "opf/chart-mapping-adapted", severity: "warning", path }));
+      assert.deepEqual(actual, expected, relative);
     }
   });
 });

@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "sourceProducer": "07afb555113ee43560387a65d049ce859339a6f3",
+  "sourceBase": "9545016583ccfa151077cda4d51043ac6505a140",
+  "localPureControls": "pass",
+  "rootIndependentControls": "pass",
+  "rootIndependentLog": {
+    "path": "C:/opf-work/release-033-artifacts/independent-rr54-history-controls.log",
+    "sha256": "7490c60d97d5e318692bdcbba1041c8bcbc54066ba10320f0a44aa4396b1b986"
+  },
+  "mapped": {
+    "seconds": 572.3,
+    "passedSteps": 9,
+    "skippedSteps": 1,
+    "failedSteps": 1,
+    "failure": {
+      "file": "packages/pptx/test/keynote-registry-runtime.mjs",
+      "line": 44,
+      "code": "EPERM",
+      "operation": "symlink(root, verifier-alias)",
+      "scope": "Unchanged inherited Windows symlink privilege limitation; no assertion change or broad rerun"
+    },
+    "pptx": {
+      "passedBeforeFirstFailure": 78,
+      "total": 235,
+      "notRunAfterFailure": 156
+    },
+    "determinism": {
+      "passed": true,
+      "children": 45,
+      "cases": 43,
+      "seconds": 280
+    }
+  },
+  "construction": {
+    "archiveSerializations": 0,
+    "correctedCandidateSha256": "d62b991a3772856d812296cf12582be2ede6850e39d644d3414ab39a89a06e27",
+    "all21CurrentLockFieldsEqualSealedCandidate": true,
+    "legacy033EntryHistoriesPreserved": 7,
+    "originalSourceHistoryPreserved": true,
+    "fixturePromoted": false
+  },
+  "logs": [
+    {
+      "file": "mapped/biome.log",
+      "bytes": 675,
+      "sha256": "bb091c46f65d38075cf90fbf5475a5b8e2e2453d312e9a498cc5b40748e842c7"
+    },
+    {
+      "file": "mapped/build.log",
+      "bytes": 14456,
+      "sha256": "da43672837abc8ed62a6486a8c35d2f2c943c6cf978b823227d3f4be5e5bf5a0"
+    },
+    {
+      "file": "mapped/pnpm_run_check_changes.log",
+      "bytes": 2643,
+      "sha256": "917422451fb3deaeb5a3c23db0f9d84bc1616b85eb130e13e50a0aa714d84a94"
+    },
+    {
+      "file": "mapped/pnpm_run_check_font-hotlinks.log",
+      "bytes": 891,
+      "sha256": "a0187c5fd21c11b049ffd14c197383b8c6ff42b41ca3886541816fecbb6998df"
+    },
+    {
+      "file": "mapped/pnpm_run_check_gallery-tracker.log",
+      "bytes": 1996,
+      "sha256": "1196617e0e61ded9137c1e97c1dfaaa257c9b3986525a82b2548efe038adda57"
+    },
+    {
+      "file": "mapped/pnpm_run_check_release-report.log",
+      "bytes": 816,
+      "sha256": "a6ccea0c1d48da8f7a03cec7f2741b0f82637cd7b64882d404eaa7a38262a6d7"
+    },
+    {
+      "file": "mapped/pnpm_run_check_skill-commands.log",
+      "bytes": 1044,
+      "sha256": "ea95662830beacf9c918686f5e8ce76adc8b8e90f04728ee614fc1af3b5110a9"
+    },
+    {
+      "file": "mapped/pnpm_run_check_stability.log",
+      "bytes": 3965,
+      "sha256": "b4b920b34822e7535a0d7b24cda73945e75950a6af45aef83c56b968a827a54b"
+    },
+    {
+      "file": "mapped/pnpm_run_check_text.log",
+      "bytes": 972,
+      "sha256": "a0729700c4334ea92d5504ba468cfebe22adcedb06e310359246162c5e5f8e27"
+    },
+    {
+      "file": "mapped/tests_pptx.log",
+      "bytes": 24741,
+      "sha256": "724aa951c19679c574bc913cad31113752643eb7d4e22c7095064ec2f9f39509"
+    },
+    {
+      "file": "controls-01.log",
+      "bytes": 195,
+      "sha256": "7490c60d97d5e318692bdcbba1041c8bcbc54066ba10320f0a44aa4396b1b986"
+    },
+    {
+      "file": "controls-02.log",
+      "bytes": 195,
+      "sha256": "7490c60d97d5e318692bdcbba1041c8bcbc54066ba10320f0a44aa4396b1b986"
+    },
+    {
+      "file": "check-changed-01.log",
+      "bytes": 7033,
+      "sha256": "85d19d6a84ab3269382b1f35ee5b5bb6fa414c75ff79d2ecb8c1c93149e38546"
+    },
+    {
+      "file": "reconstruct-01.log",
+      "bytes": 89,
+      "sha256": "3a77e36e921eed36909538f38be6e50748856f3ccd379479d4c8d23d1fbe9bde"
+    },
+    {
+      "file": "independent-root-controls.log",
+      "bytes": 195,
+      "sha256": "7490c60d97d5e318692bdcbba1041c8bcbc54066ba10320f0a44aa4396b1b986"
+    }
+  ]
+}

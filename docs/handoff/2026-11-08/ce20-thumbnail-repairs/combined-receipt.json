@@ -1,0 +1,80 @@
+{
+  "source": "21a3143cbc20fdacbef92ef5594441e886fccfcb",
+  "sourceTree": "b7eba30fd82024b7fa8fd4c53da04d61e3f0b86e",
+  "base": "e99e6607336c9294685a7f491be3d66490eebc05",
+  "sourceBindings": [
+    {
+      "file": "packages/editor/src/workspace.js",
+      "ref": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "gitBlob": "ae9e4dbf4c3b484e2e34a3eb1a34a2cf9f3b3465",
+      "sha256": "19e7931b69ecc94bf273028878a2b05f22be2d17f3ce136437f14def2c72164f"
+    },
+    {
+      "file": "packages/editor/src/styles/panels.css",
+      "ref": "1ef603961af054e1071a031349de19963eb8fd25",
+      "gitBlob": "d74abbde74edef8dec2e3445849504eada2f8d96",
+      "sha256": "f4506507f6fa216c91559c6df28276e0ff90109ea791636aeffb756abfe02433"
+    },
+    {
+      "file": "packages/editor/test/support/counted-svg.mjs",
+      "ref": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "gitBlob": "3f4dbc91f3ae2809d53279ceb934691cd37bb0a1",
+      "sha256": "05813259ae86f6138eb632df3dfd6ac6ae661cb846f66a220af8fc0274a8a814"
+    },
+    {
+      "file": "packages/editor/test/support/unused-thumbnail-cache.mjs",
+      "ref": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+      "gitBlob": "f8dc219ac025b4bbb712a734f0eb2f8e0f91a26e",
+      "sha256": "a846b905007140740cb252a180a8cb49ca33012fe183977d80337b2057b02796"
+    },
+    {
+      "file": "packages/editor/test/support/thumbnail-painted-fit.mjs",
+      "ref": "1ef603961af054e1071a031349de19963eb8fd25",
+      "gitBlob": "3af9e7a4cac8a75b2f65d3482d1afe0acd8c78f8",
+      "sha256": "ce8480911732bff08b93c3a365c55dcb7ca2868f8d79da14fe6b49a3d61ed1b1"
+    },
+    {
+      "file": "packages/editor/test/workspace-browser.mjs",
+      "ref": "1ef603961af054e1071a031349de19963eb8fd25",
+      "gitBlob": "02c30f2c99298a5bd10fd535119801b5eb1c746c",
+      "sha256": "9c902f92eda8e4209cb9d106f0cbeed2717ab5f679de0f65bdb0091f828f43a9"
+    }
+  ],
+  "node": "v24.20.0",
+  "pnpm": "10.33.2",
+  "mapped": {
+    "command": "pnpm check:changed --base e99e6607336c9294685a7f491be3d66490eebc05",
+    "exit": 0,
+    "applicableStepsPassed": 8,
+    "typecheck": "Not selected: no .ts, .mts or tsconfig change",
+    "editorContractScriptsPassed": 146,
+    "codemirrorGuard": "Actually passed in this combined run; no current EPERM failure",
+    "artifact": "combined-mapped.log.gz",
+    "editorArtifact": "combined-editor-contract.log.gz"
+  },
+  "workspace": {
+    "command": [
+      "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+      "scripts/agent-slot.mjs",
+      "--",
+      "node",
+      "packages/editor/test/workspace-browser.mjs"
+    ],
+    "cwd": "C:\\opf-work\\ce20-thumbnails",
+    "attempts": 1,
+    "exit": 0,
+    "checksPassed": 24,
+    "realCachePhasesPassed": 12,
+    "paintedFitPhasesPassed": 7,
+    "sourceBefore": "21a3143cbc20fdacbef92ef5594441e886fccfcb",
+    "sourceAfter": "21a3143cbc20fdacbef92ef5594441e886fccfcb",
+    "started": "2026-11-09T04:50:58.409Z",
+    "finished": "2026-11-09T04:51:10.292Z",
+    "rawLogSha256": "2335a280def3eeeece33f230b82c5d2874af909d9b59d0f82d5f3d4e0e74f63e"
+  },
+  "historicalFailures": "Original isolated source failures remain preserved in their inherited packets. They are historical evidence, not the outcome of this combined source. No guard, test or timeout was edited or skipped for these green results.",
+  "scope": "Combined local selected checks and one actual workspace browser run; not full monorepo, remote CI, published package, hosted or native qualification.",
+  "runtimeAndTestChangesAfterSource": false,
+  "remoteActions": false,
+  "artifacts": 5
+}

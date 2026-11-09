@@ -104,7 +104,7 @@
     "column": 13,
     "kind": "schema",
     "ruleId": "opf/unresolved-reference",
-    "help": "The nearest layouts that exist: 'chart', 'chevrons', 'dashboard'. Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "help": "The nearest layouts that exist: 'org-chart', 'chart', 'chevrons'. Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
     "category": "references",
     "location": {
      "offset": 82,
@@ -113,6 +113,12 @@
      "column": 13
     },
     "suggestions": [
+     {
+      "value": "org-chart",
+      "label": "Organization chart",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/org-chart"
+     },
      {
       "value": "chart",
       "label": "Chart",
@@ -136,12 +142,6 @@
       "label": "Section",
       "origin": "registered",
       "definition": "https://www.pptx.gallery#/layouts/section"
-     },
-     {
-      "value": "two-column",
-      "label": "Two columns",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/two-column"
      }
     ],
     "lookup": [
@@ -180,7 +180,7 @@
     "column": 1,
     "kind": "schema",
     "ruleId": "opf/unresolved-reference",
-    "help": "The nearest layouts that exist: 'chart', 'chevrons', 'dashboard'. Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "help": "The nearest layouts that exist: 'org-chart', 'chart', 'chevrons'. Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
     "category": "references",
     "location": {
      "offset": 79,
@@ -189,6 +189,12 @@
      "column": 1
     },
     "suggestions": [
+     {
+      "value": "org-chart",
+      "label": "Organization chart",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/org-chart"
+     },
      {
       "value": "chart",
       "label": "Chart",
@@ -212,12 +218,6 @@
       "label": "Section",
       "origin": "registered",
       "definition": "https://www.pptx.gallery#/layouts/section"
-     },
-     {
-      "value": "two-column",
-      "label": "Two columns",
-      "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/two-column"
      }
     ],
     "lookup": [
@@ -1196,7 +1196,7 @@
     "column": 1,
     "kind": "syntax",
     "ruleId": "markdown/options-unknown-key",
-    "help": "A slide options comment reads <!-- slide: id=cover layout=title section=\"Part 1\" hidden -->. Keys: id, type, layout, section, tag, hidden, beat. Anything else goes in a fenced opf-slide block.",
+    "help": "A slide options comment reads <!-- slide: id=cover layout=title section=\"Part 1\" hidden -->. Keys: id, type, layout, section, tag, hidden, beat, language. Anything else goes in a fenced opf-slide block.",
     "category": "format",
     "location": {
      "offset": 21,

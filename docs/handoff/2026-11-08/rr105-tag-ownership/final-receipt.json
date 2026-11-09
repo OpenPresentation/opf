@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "sourceAndControlCommit": "a18fab82a9ddc071196dea857889e0c3eed3acd2",
+  "currentIntegration": "56981114388f2d23444270abac13b6568ee363f6",
+  "normalMerge": "39bdda35f5513e7afb47537e64f346bbdcbfa1dc",
+  "conflict": "Only additive burndown progress lines; both sides retained.",
+  "sourceAndTestSha256": {
+    "packages/pptx/src/document-provenance.js": "c7fbed43fcd0acd162867f75c6635cda799ce9fd7c32494871528f0b3d6a3c33",
+    "packages/pptx/src/index.js": "5ef6da9991c73a3954aa19e11bf7d57afc9af16f3a495dec121c2b610c60e3c6",
+    "packages/pptx/src/script-fonts.js": "fb8ec017faa680a4c24e19308da0fad7e2cc594d5e6e81889de09be87b3b99aa",
+    "packages/pptx/test/rr-105-tag-ownership.mjs": "c3755f863aae398c2db2b3d593a592f86bd22ee867dd0bc4302ffed8849b2826"
+  },
+  "distSha256": {
+    "packages/pptx/dist/document-provenance.js": "c7fbed43fcd0acd162867f75c6635cda799ce9fd7c32494871528f0b3d6a3c33",
+    "packages/pptx/dist/index.js": "5ef6da9991c73a3954aa19e11bf7d57afc9af16f3a495dec121c2b610c60e3c6",
+    "packages/pptx/dist/script-fonts.js": "fb8ec017faa680a4c24e19308da0fad7e2cc594d5e6e81889de09be87b3b99aa"
+  },
+  "focusedNewPassed": 22,
+  "combinedPassed": 55,
+  "syntax": {
+    "files": 458,
+    "failed": 0
+  },
+  "allSevenBuild": {
+    "exitCode": 0,
+    "sourceHead": "39bdda35f5513e7afb47537e64f346bbdcbfa1dc"
+  },
+  "legacyCodeGate": {
+    "restoredExactly": true,
+    "scope": "Only codeFamily uses the unchanged package filename gate; per-slide validated ownership protects language votes only.",
+    "genuineBeforeFailures": 4,
+    "modes": [
+      "full",
+      "references-only"
+    ],
+    "cases": [
+      "missing slide marker",
+      "stale slide marker"
+    ],
+    "unownedNegative": "All tag parts, customer-data containers, tag relationships and content-type entries explicitly removed; no inferred code, native font retained."
+  },
+  "constructionFailure": "provenance:false still contains OPF_TEXT boundaries for rich text. Initial unowned negative was therefore tagged; raw54/55 run retained, fixture strengthened without changing its assertion.",
+  "exports": {
+    "completeArchives": 7,
+    "allBeforeAndAfterCommonIntegrationByteIdentical": true,
+    "hashes": {
+      "case11": "475d1de07b59559ff5ebd5c6cc79c4a0beed08afd4d884cbafe4127dde503ab1",
+      "case07-scalar": "d6d4a28ab17acf5040efaf03f0d46574e45b31d7b4d29ce0a2daceff4acd891b",
+      "case07-array": "9ff9124f7371cfdf861798671d9eb56545fb54212e7f2cab73b7316d3f737157",
+      "ltr": "f7bcc3bd61bb1a38bc68aba53f1a41ac43416d84a18b67653467c011bfa1dfca",
+      "rtl-explicit-ar": "0861d80d2b438cfdabf75e40c1455cc2702976296090b1c5f869d01a513160b4",
+      "body-fr": "6facc9880600d88c32389a89b348a14e08c928a296b6b44186672622e6e8837b",
+      "two-slides": "df7ace668f7757b935c39ad5546b4ea018c80bbfcbacd4a2988a01e6098b0a0b"
+    }
+  },
+  "native": {
+    "importerHead": "b7536f19e92cdea55384ba40471af700622d798e",
+    "evidenceCommit": "f4363a8c747b97b7810d9c892353dc9c088a5826",
+    "newScalar07AuthoredOriginalAndSavedExact": true,
+    "allElevenOldCanonicalBeforeSavedExact": true,
+    "savedFrench11AuthoredSourceExact": true,
+    "sourceInputAndDrawingBytesUnchangedByThisImportMaintenance": true,
+    "overallAcceptance": false,
+    "preservedGlyphFailures": [
+      "05",
+      "06",
+      "09",
+      "10"
+    ],
+    "finalRuntimeFastReimport": "Coordinator-owned; no repeated Office needed for unchanged inputs."
+  },
+  "mapped": {
+    "status": "owed on final clean head",
+    "base": "56981114388f2d23444270abac13b6568ee363f6"
+  },
+  "files": {
+    "code-fallback-initial-before.log.gz": {
+      "sha256": "9374d1d2ed25eefa084c7bfcb4d6f32a2073fad452b7666322a061f06397c6e7",
+      "bytes": 1134,
+      "rawSha256": "79e2cc6ba36a3fbfa603640a73392bc358f4c7aa13969d53d6af3d4c2ad511fc",
+      "rawBytes": 2573
+    },
+    "code-fallback-before-each.log.gz": {
+      "sha256": "53edb13eaf6ae336c0aed30c82d6d315681c2d9790f2336f42a2e55184846248",
+      "bytes": 1235,
+      "rawSha256": "bb06c2dc523daa2d9df45b71abed2f2eb79e223b0f22c2ad1379a2c88088df07",
+      "rawBytes": 4968
+    },
+    "code-unowned-fixture-first-failure.log.gz": {
+      "sha256": "a76fed751f3177b2858b342d2ca35a6022a3ee7c03a39f21b3adffa66ec512a5",
+      "bytes": 2515,
+      "rawSha256": "31d8b6b2f439476ceaaf1dd3500b968d9d228e211952862df7defc095fc2a3ac",
+      "rawBytes": 6369
+    },
+    "code-missing-slide-b753.json.gz": {
+      "sha256": "e9bd3cf1585f102dc08418dc333b909695a2707b2d61c97984c0ad19351705c4",
+      "bytes": 351,
+      "rawSha256": "1ad4d1a306ff5fdfd54d659e92450e19f2b2fb77878443435979f7ed9e3e7337",
+      "rawBytes": 1116
+    },
+    "code-missing-slide-e7-baseline.json.gz": {
+      "sha256": "8921fcae7ba4b2eb47c30117d218d53f667e1b23b6287f2d59ba3425233b18b7",
+      "bytes": 360,
+      "rawSha256": "fd75b7f3c651a0d5b1dd56bcacb16f506235d2b5060a4d9145e63cac8d394510",
+      "rawBytes": 1106
+    },
+    "focused-final-common569.log.gz": {
+      "sha256": "bdc9041b179a7b743d4e4d9accdf96689d115dc2b1201d73370809d00aec3e31",
+      "bytes": 2209,
+      "rawSha256": "457659022d41c208acf670c2501c07005fef56c2ad130e1346ae9db552d5158b",
+      "rawBytes": 5615
+    },
+    "syntax-common569.log.gz": {
+      "sha256": "11cae41a54a18dd05cf0058d1e8a7d73a9f38ea2306ae59a544787631448adbc",
+      "bytes": 49,
+      "rawSha256": "baaf2be5e0b9a53678c38ce9505051c110dc0de0f710074c257f3c58e36d9b01",
+      "rawBytes": 29
+    },
+    "common-569-all-seven-build.log.gz": {
+      "sha256": "247c4168a0437732cd4dedd12178f4574e221e5a6d3e1bbdfaa94bc57914cee4",
+      "bytes": 2991,
+      "rawSha256": "f456115c93340cd4868df37e47fab8c7f05c957972e74f09efefd4fe2aa2bc2e",
+      "rawBytes": 14788
+    },
+    "setup-direct-recursive-build-first.log.gz": {
+      "sha256": "dc8fe911e10a5a55b97be00ee68dbf51498811e8f793310a44746725be209d16",
+      "bytes": 137,
+      "rawSha256": "2e4189bbff93fda3eb6e0717e64445c4955e06e65e201290f24627fde4cae93e",
+      "rawBytes": 123
+    },
+    "all-seven-build-b753.log.gz": {
+      "sha256": "0d69a761f32f2e9afde1620c4afb1fe7db57fce0246821986bc28e6e21c9e3a7",
+      "bytes": 2992,
+      "rawSha256": "6a7283d85b65d6e55386c5ee227baf79d69ad17ccfb6ae58da99fbbe08f508d2",
+      "rawBytes": 14788
+    },
+    "exact-input-hydration-after-569.json.gz": {
+      "sha256": "77d1cfe9de536e9517b8bd4c421fa9ffc98bd943019ce440316d282e883ecacc",
+      "bytes": 140187,
+      "rawSha256": "afc6b8f437a025643aa7a28bb33395aa69f14637b57ae81fe1fe92f87d9db999",
+      "rawBytes": 821002
+    },
+    "exports-common569.json": {
+      "sha256": "d5d2eb61966e54321582a3b9585fc7d075f85785a48e580c659625acdc4187da",
+      "bytes": 587
+    }
+  }
+}

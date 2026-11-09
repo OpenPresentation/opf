@@ -319,16 +319,33 @@ function showDeck(): void {
 
 /** A file for the host to save. A large one is encoded in pieces: one call with every byte as an argument overflows the stack. */
 async function saveFile(name: string, type: string, data: Blob | string): Promise<void> {
-	let resource: { uri: string; mimeType: string; text: string } | { uri: string; mimeType: string; blob: string };
-	if (typeof data === "string") resource = { uri: `file:///${name}`, mimeType: type, text: data };
-	else {
-		const bytes = new Uint8Array(await data.arrayBuffer());
-		let binary = "";
-		for (let at = 0; at < bytes.length; at += 0x8000) binary += String.fromCharCode(...bytes.subarray(at, at + 0x8000));
-		resource = { uri: `file:///${name}`, mimeType: type, blob: btoa(binary) };
+	status("");
+	if (!app.getHostCapabilities()?.downloadFile) {
+		const error = new Error("This host does not support file downloads. Select the source text to save it.");
+		status(error.message);
+		throw error;
 	}
-	const saved = await app.downloadFile({ contents: [{ type: "resource", resource }] });
-	if (saved.isError) throw new Error("The file was not saved.");
+	try {
+		const uri = "file:///" + encodeURIComponent(name);
+		let resource: { uri: string; mimeType: string; text: string } | { uri: string; mimeType: string; blob: string };
+		if (typeof data === "string") resource = { uri, mimeType: type, text: data };
+		else {
+			const bytes = new Uint8Array(await data.arrayBuffer());
+			let binary = "";
+			for (let at = 0; at < bytes.length; at += 0x8000) binary += String.fromCharCode(...bytes.subarray(at, at + 0x8000));
+			resource = { uri, mimeType: type, blob: btoa(binary) };
+		}
+		const result = await app.downloadFile({ contents: [{ type: "resource", resource }] });
+		if (result.isError) {
+			const error = new Error("Download failed. The file download was cancelled or denied by the host.");
+			status(error.message);
+			throw error;
+		}
+	} catch (error) {
+		const message = error instanceof Error && error.message.startsWith("Download failed.") ? error.message : "Download failed. The host could not save this file. Select the source text to save it.";
+		status(message);
+		throw new Error(message, { cause: error });
+	}
 }
 
 /**

@@ -258,6 +258,11 @@ const chartMappingUnknownColumn: RuleText = (finding) => {
   };
 };
 
+const chartReferenceAxisUnavailable: RuleText = () => ({
+  message: "This reference uses a secondary value axis that the chart does not have.",
+  next: "use the value axis, or put a line series on a combo chart's secondary axis.",
+});
+
 const numberFormatInvalid: RuleText = (finding, _context, helpers) => {
   const value = helpers.valueAt(helpers.segments);
   const reason = match(finding.message, /^Number format '.*?' ((?:needs|scales|has|uses|asks|allows|is)\b.+)$/)?.[1];
@@ -710,6 +715,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/dataset-field-unknown": datasetFieldUnknown,
   "opf/data-column-duplicate": dataColumnDuplicate,
   "opf/chart-mapping-unknown-column": chartMappingUnknownColumn,
+  "opf/chart-reference-axis-unavailable": chartReferenceAxisUnavailable,
   "opf/number-format-invalid": numberFormatInvalid,
   "opf/variable-invalid-value": variableInvalidValue,
   "opf/variable-unknown-builtin": variableUnknownBuiltin,

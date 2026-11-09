@@ -8,7 +8,7 @@
 import { statSync } from "node:fs";
 import path from "node:path";
 import { ensureIcons } from "../icons.js";
-import { type Catalog, type Fonts, continueOverfull, paginate } from "../core.js";
+import { type Catalog, type Fonts, continueOverfull, paginate, validate } from "../core.js";
 import { createImageResolver } from "./assets.js";
 import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError } from "../api-errors.js";
@@ -16,7 +16,7 @@ import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, subst
 import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
 import { deckStem, padNumber } from "./files.js";
 import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom, requirePptxOptions } from "./peers.js";
-import { Reporter, reportThrown } from "./reporter.js";
+import { type Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
 
 export type ExportFormat = "svg" | "png" | "pdf" | "pptx";
@@ -315,9 +315,10 @@ export async function runExport(presentation: unknown, options: ResolvedExportOp
 	// them from the font files, so they skip the script data URLs. Without `fonts`, a deck the process's shared handle serves
 	// unchanged borrows it (the pack is prepared once per process); any other deck gets a handle of its own.
 	const embedScripts = format === "svg" && options.text === "fonts";
-	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts);
+	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) });
 	try {
-		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts)).handle;
+		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) })).handle;
+		if(options.fonts && handle.registry?.fontNames)await handle.ensure?.(presentation,{renderOptions:{catalogs,...(date?{date}:{})}});
 		return await drawWith(presentation, handle, options, ctx, { reporter, catalogs, date, renderer, ...(pptx ? { pptx } : {}), userFonts, resolver });
 	} finally {
 		lease?.release();
@@ -386,6 +387,8 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
 		}
 	}
+	// Continuations can add generated labels; prepare their actual faces before drawing the final pages.
+	if(deck!==presentation && handle.registry?.fontNames)await handle.ensure?.(deck,{renderOptions:{catalogs,...(date?{date}:{})}});
 	// LH-145: the picture backgrounds are measured once, after pagination (which copies a slide's design), and both engines get the same sampler.
 	const pictureLuminance = options.measurePictures === false ? undefined : await measurePictureBackgrounds(renderer, deck, resolver, catalogs, reporter);
 	const slideCount = (deck as { slides?: unknown[] }).slides?.length ?? 0;
@@ -397,6 +400,18 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 	const named = options.slides === undefined ? undefined : parseSlideSelection(options.slides, slideCount, slidesLabel);
 	const selected = format === "pptx" ? [] : named ?? (options.includeHidden ? everySlide : everySlide.filter((number) => !isHidden(number)));
 	const skippedHidden = format === "pptx" || named || options.includeHidden ? [] : everySlide.filter(isHidden);
+	// Format/reference gating stays unchanged. Report selected chart data advisories once for drawings whose renderer does not
+	// report them itself. Native PPTX already explains these adaptations through its exporter diagnostics.
+	if (format !== "pptx" || options.as === "images") {
+		const rules = ["opf/chart-mapping-adapted", "opf/chart-series-dropped"];
+		const chartCheck = validate(deck, { only: rules, catalogs });
+		for (const finding of chartCheck.findings) {
+			if (finding.severity !== "warning" || !rules.includes(finding.ruleId)) continue;
+			const sourceIndex = /^\/slides\/(\d+)(?:\/|$)/.exec(finding.path)?.[1];
+			if (format !== "pptx" && (sourceIndex === undefined || !selected.includes(Number(sourceIndex) + 1))) continue;
+			if (!reporter.findings.some(existing => existing.ruleId === finding.ruleId && existing.path === finding.path && existing.message === finding.message)) reporter.addFinding(finding);
+		}
+	}
 	if (format !== "pptx" && !selected.length)
 		throw new OPFApiError(skippedHidden.length ? (ctx.flags ? "Every slide is hidden. Use --include-hidden to write them, or --slides to name slides." : "Every slide is hidden. Use includeHidden to write them, or slides to name slides.") : "The presentation has no slides.", skippedHidden.length ? "all-slides-hidden" : "no-slides");
 

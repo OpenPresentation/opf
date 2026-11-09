@@ -1,0 +1,40 @@
+{
+  "format": 1,
+  "source": "d623be2d49da7b448f82c2e0395609487d89a4f5",
+  "sourceTree": "28de71d5e34fbca804f508a2c0416a70593e6da8",
+  "base": "5b9e4386c00319da1fa4370dcc0b3eb6e93c9578",
+  "focused": {
+    "scripts": 4,
+    "passed": 4,
+    "chartexChecks": 31,
+    "rr54ChartTableChecks": 42,
+    "reviewerAndHistoryControls": true
+  },
+  "mapped": {
+    "invocations": 1,
+    "exitCode": 1,
+    "seconds": 1480.9,
+    "stepsPassed": 9,
+    "stepsFailed": 1,
+    "typecheckSkipped": 1,
+    "soleFailure": "pnpm run check:gallery-tracker; strict freshness17/18",
+    "pptx": {
+      "scriptsSelected": 280,
+      "scriptsCompleted": 280,
+      "passed": true,
+      "seconds": 1393.2,
+      "browserBundleBuilt": true
+    },
+    "rawInternalNonzeroSkipLines": []
+  },
+  "fixture": {
+    "path": "packages/pptx/test/fixtures/chartex-fallback-main.json",
+    "sha256": "94cfa51624b4a1bf01e4f7ad84f7ed1ffc61f2f3b245ee49a5ec8088cd6b0105"
+  },
+  "unchanged21Sha256": "d62b991a3772856d812296cf12582be2ede6850e39d644d3414ab39a89a06e27",
+  "noRuntimeSourceChanges": true,
+  "originalCombined86997": "RED preserved; not relabeled",
+  "nativeAcceptance": false,
+  "ciDispatched": false,
+  "pushed": false
+}

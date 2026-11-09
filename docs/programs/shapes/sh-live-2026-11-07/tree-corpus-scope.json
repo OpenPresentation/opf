@@ -1,0 +1,294 @@
+{
+  "orgChart1:k1": {
+    "frames": 20,
+    "nodes": [
+      2
+    ],
+    "labels": [
+      2
+    ],
+    "issues": []
+  },
+  "orgChart1:k2": {
+    "frames": 20,
+    "nodes": [
+      3
+    ],
+    "labels": [
+      3
+    ],
+    "issues": []
+  },
+  "orgChart1:k3": {
+    "frames": 20,
+    "nodes": [
+      4
+    ],
+    "labels": [
+      4
+    ],
+    "issues": []
+  },
+  "orgChart1:k4": {
+    "frames": 20,
+    "nodes": [
+      5
+    ],
+    "labels": [
+      5
+    ],
+    "issues": []
+  },
+  "orgChart1:k6": {
+    "frames": 20,
+    "nodes": [
+      7
+    ],
+    "labels": [
+      7
+    ],
+    "issues": []
+  },
+  "orgChart1:2x2": {
+    "frames": 20,
+    "nodes": [
+      7
+    ],
+    "labels": [
+      7
+    ],
+    "issues": []
+  },
+  "orgChart1:3x1": {
+    "frames": 20,
+    "nodes": [
+      7
+    ],
+    "labels": [
+      7
+    ],
+    "issues": []
+  },
+  "orgChart1:uneven": {
+    "frames": 20,
+    "nodes": [
+      6
+    ],
+    "labels": [
+      6
+    ],
+    "issues": []
+  },
+  "orgChart1:depth3": {
+    "frames": 20,
+    "nodes": [
+      4
+    ],
+    "labels": [
+      4
+    ],
+    "issues": []
+  },
+  "orgChart1:asst": {
+    "frames": 20,
+    "nodes": [
+      5
+    ],
+    "labels": [
+      5
+    ],
+    "issues": []
+  },
+  "orgChart1:roots2": {
+    "frames": 20,
+    "nodes": [
+      4
+    ],
+    "labels": [
+      4
+    ],
+    "issues": []
+  },
+  "hierarchy1:k1": {
+    "frames": 20,
+    "nodes": [
+      3
+    ],
+    "labels": [
+      2
+    ],
+    "issues": []
+  },
+  "hierarchy1:k2": {
+    "frames": 20,
+    "nodes": [
+      3
+    ],
+    "labels": [
+      3
+    ],
+    "issues": []
+  },
+  "hierarchy1:k3": {
+    "frames": 20,
+    "nodes": [
+      4
+    ],
+    "labels": [
+      4
+    ],
+    "issues": []
+  },
+  "hierarchy1:k4": {
+    "frames": 20,
+    "nodes": [
+      5
+    ],
+    "labels": [
+      5
+    ],
+    "issues": []
+  },
+  "hierarchy1:k6": {
+    "frames": 20,
+    "nodes": [
+      7
+    ],
+    "labels": [
+      7
+    ],
+    "issues": []
+  },
+  "hierarchy1:2x2": {
+    "frames": 20,
+    "nodes": [
+      7
+    ],
+    "labels": [
+      7
+    ],
+    "issues": []
+  },
+  "hierarchy1:3x1": {
+    "frames": 20,
+    "nodes": [
+      7
+    ],
+    "labels": [
+      7
+    ],
+    "issues": []
+  },
+  "hierarchy1:uneven": {
+    "frames": 20,
+    "nodes": [
+      6
+    ],
+    "labels": [
+      6
+    ],
+    "issues": []
+  },
+  "hierarchy1:depth3": {
+    "frames": 20,
+    "nodes": [
+      5
+    ],
+    "labels": [
+      4
+    ],
+    "issues": []
+  },
+  "hierarchy1:asst": {
+    "frames": 20,
+    "nodes": [
+      4
+    ],
+    "labels": [
+      4
+    ],
+    "issues": [
+      "Aide: The specified value is out of range."
+    ]
+  },
+  "hierarchy1:roots2": {
+    "frames": 20,
+    "nodes": [
+      5
+    ],
+    "labels": [
+      4
+    ],
+    "issues": []
+  },
+  "venn1:v1": {
+    "frames": 20,
+    "nodes": [
+      1
+    ],
+    "labels": [
+      1
+    ],
+    "issues": []
+  },
+  "venn1:v2": {
+    "frames": 20,
+    "nodes": [
+      2
+    ],
+    "labels": [
+      2
+    ],
+    "issues": []
+  },
+  "venn1:v3": {
+    "frames": 20,
+    "nodes": [
+      3
+    ],
+    "labels": [
+      3
+    ],
+    "issues": []
+  },
+  "venn1:v4": {
+    "frames": 20,
+    "nodes": [
+      4
+    ],
+    "labels": [
+      4
+    ],
+    "issues": []
+  },
+  "venn1:v5": {
+    "frames": 20,
+    "nodes": [
+      5
+    ],
+    "labels": [
+      5
+    ],
+    "issues": []
+  },
+  "venn1:v6": {
+    "frames": 20,
+    "nodes": [
+      6
+    ],
+    "labels": [
+      6
+    ],
+    "issues": []
+  },
+  "venn1:v7": {
+    "frames": 20,
+    "nodes": [
+      7
+    ],
+    "labels": [
+      7
+    ],
+    "issues": []
+  }
+}

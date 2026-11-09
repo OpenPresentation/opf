@@ -39,6 +39,8 @@ export async function paginateDeck(deck: unknown, options: PaginateDeckOptions):
 }
 
 export interface MeasuringFontsOptions {
+	/** Catalogs used by the same composition the fonts prepare. */
+	catalogs?: readonly Catalog[];
 	/** Folders of `.ttf` and `.otf` files, loaded before the bundled pack (as `--fonts`). They need opf-render. */
 	fontFolders?: readonly string[];
 	/** Receives the font diagnostics. */
@@ -66,8 +68,8 @@ export async function measuringFonts(deck: unknown, options: MeasuringFontsOptio
 	try {
 		const renderer = await loadRenderer();
 		const userFonts = await listFontDirectories([...folders], options.flags ? "--fonts" : "fonts");
-		const lease = await leaseSharedFonts(renderer, deck, userFonts, options.reporter);
-		const handle = lease?.handle ?? (await prepareFonts(renderer, deck, userFonts, options.reporter)).handle;
+		const lease = await leaseSharedFonts(renderer, deck, userFonts, options.reporter, false, { catalogs: options.catalogs ?? defaultCatalogs() });
+		const handle = lease?.handle ?? (await prepareFonts(renderer, deck, userFonts, options.reporter, false, { catalogs: options.catalogs ?? defaultCatalogs() })).handle;
 		return { fonts: handle as Fonts, release: () => lease?.release() };
 	} catch (error) {
 		if (error instanceof OPFApiError && (error.code === "peer-not-installed" || error.code === "peer-too-old") && !folders.length) return { estimated: error, release: () => {} };

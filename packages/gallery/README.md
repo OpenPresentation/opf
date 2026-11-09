@@ -95,6 +95,7 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `timeline` | Dated events or a roadmap along one axis, with optional notes. |
 | `faq` | Questions with their answers. |
 | `pyramid` | Levels that build on each other, as a pyramid, the first at the top. |
+| `inverted-pyramid` | Levels that narrow to a point, with the widest first. Editable native shapes in PowerPoint. |
 | `matrix` | Four parts of a whole, as the quadrants of a square beside the title. |
 | `cycle` | Steps that repeat, as a loop of nodes with arrows beside the title. |
 | `chevrons` | Stages in order, as a row of chevrons. |

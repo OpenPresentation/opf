@@ -107,7 +107,9 @@ export function templateDeck(id, record) {
       // Counted per kind across the slide, so two regions of one kind show different samples.
       const index = used[kind] ?? 0;
       used[kind] = index + 1;
-      blocks.push({ region: name, ...sampleBlock(kind, index) });
+      const sample = kind === "list" && ["org-chart", "hierarchy"].includes(region.arrangement)
+        ? { items: [{text:"Plan",level:0},{text:"Build",level:1},{text:"Review",level:1}] } : sampleBlock(kind, index);
+      blocks.push({ region: name, ...sample });
     }
   }
   const filled = { layout: id, title: TITLE, subtitle: SUBTITLE };

@@ -88,7 +88,7 @@ export interface FontsHandle extends RenderFonts {
   /** Remove the faces this handle added to the document (a browser handle). */
   dispose?(): void;
 }
-export interface FaceDescription { family:string; weight:number; italic:boolean; scripts?:string[] }
+export interface FaceDescription { family:string; weight:number; italic:boolean; scripts?:string[]; /** Present when selection metadata is requested. */ familyGroup?:string }
 export interface FontRegistry {
   textMeasurement: TextMeasurement & {outlineBounds: NonNullable<TextMeasurement['outlineBounds']>; resolveFont(style: TextStyle): FontResolution};
   clearSubstitutions(): void;
@@ -97,7 +97,7 @@ export interface FontRegistry {
   /** Embedded faces matching `predicate`; large script faces can stay with raster fontFiles. */
   selectEmbeddedFonts(predicate: (face: FaceDescription) => boolean): EmbeddedFont[];
   /** Parsed face metadata in entry order, without encoding font bytes. */
-  describeFaces(): FaceDescription[];
+  describeFaces(options?: {selection?: boolean}): FaceDescription[];
   /** Every face as `{ family, data }`, the bytes the registry measures with. */
   exportFaces(): { family: string; data: Uint8Array }[];
   readonly substitutions: FontResolution[];

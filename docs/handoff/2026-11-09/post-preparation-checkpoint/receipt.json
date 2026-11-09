@@ -1,0 +1,135 @@
+{
+  "source": "e73ca1d175a9bd29a17529c942c8a951a2837dee",
+  "sourceTree": "e743982ec9990431046681947609064564a22656",
+  "scope": "Final metadata-only qualification; exact past-state input snapshots, not claims about future working bytes. No product/native/release acceptance.",
+  "exit": {
+    "base": "e73ca1d175a9bd29a17529c942c8a951a2837dee",
+    "startedAt": "2026-11-09T15:12:36.018Z",
+    "finishedAt": "2026-11-09T15:13:09.343Z",
+    "exitCode": 0,
+    "signal": null,
+    "stepsPassed": 7,
+    "scope": "Final integration handoff metadata only after the exact reviewed tooling fold; no new product or native acceptance."
+  },
+  "measuredSeconds": 32.5,
+  "inputs": [
+    {
+      "file": "docs/handoff/2026-11-09/CURRENT.md",
+      "bytes": 13719,
+      "sha256": "7e21664fe95456101d97ba7f2046f4d231bb10ca5454c2345b6773e2983deba3",
+      "mtime": "2026-11-09T15:11:24.533Z",
+      "snapshot": {
+        "file": "inputs/1.gz",
+        "bytes": 13719,
+        "sha256": "7e21664fe95456101d97ba7f2046f4d231bb10ca5454c2345b6773e2983deba3",
+        "gzipBytes": 6606,
+        "gzipSHA256": "8deb10e7af8e036905a38f6bba7c8fe31bd97dfb18717075a62523268e1946ad"
+      }
+    },
+    {
+      "file": "docs/handoff/2026-11-09/post-preparation-integration.json",
+      "bytes": 2646,
+      "sha256": "90a82abc3878f43a3f9c8d07531c6528bf6c37da18cb7d1b5476fc7314bced92",
+      "mtime": "2026-11-09T15:11:24.532Z",
+      "snapshot": {
+        "file": "inputs/2.gz",
+        "bytes": 2646,
+        "sha256": "90a82abc3878f43a3f9c8d07531c6528bf6c37da18cb7d1b5476fc7314bced92",
+        "gzipBytes": 1147,
+        "gzipSHA256": "f080091c7775170a384a17965b2f37de03dcc97effc9b364483a9ad04d76e22f"
+      }
+    },
+    {
+      "file": "docs/programs/release-readiness/burndown.md",
+      "bytes": 401275,
+      "sha256": "42b6b02b7cd17d1ca1a0462bb55d619163bcddc6946a2cec20bad6d45dfafa04",
+      "mtime": "2026-11-09T15:11:24.533Z",
+      "snapshot": {
+        "file": "inputs/3.gz",
+        "bytes": 401275,
+        "sha256": "42b6b02b7cd17d1ca1a0462bb55d619163bcddc6946a2cec20bad6d45dfafa04",
+        "gzipBytes": 125871,
+        "gzipSHA256": "a99ae4cd7a3e781fef596e24ee93b02b14319b8801f3c5c45478e7b33bd0005b"
+      }
+    }
+  ],
+  "raw": [
+    {
+      "file": "raw/driver.log.gz",
+      "bytes": 1089,
+      "sha256": "717e137f6df23fb149fe87b484b1f9db7447ce2d05a717e7a3c016ea1c1789a1",
+      "gzipBytes": 445,
+      "gzipSHA256": "bae0caaf5b9ecd4371c58253181d9b9de881f00a64fa0a5375376122e1b3f460"
+    },
+    {
+      "file": "raw/driver.exit.json.gz",
+      "bytes": 1018,
+      "sha256": "f22cd9b6a3798477a226120432d621c292f92aa0f3765d4c6e5310757670bce8",
+      "gzipBytes": 528,
+      "gzipSHA256": "09d7238bb73f3b7f56c96695a2aad765db907e9e7a5745ee00ce932df7f907f2"
+    },
+    {
+      "file": "raw/inputs.json.gz",
+      "bytes": 638,
+      "sha256": "ad7c9e3ea132af19dd8aac143b23d1a0aef4b6dd01cd2f0f1f4c2a4b9104d107",
+      "gzipBytes": 341,
+      "gzipSHA256": "5f9b159574679eddb19381ab46149e7cbd6fdf75e462b4fb44b2d01400c31f7d"
+    },
+    {
+      "file": "raw/build.log.gz",
+      "bytes": 14584,
+      "sha256": "370e59f423bd6cc97a485753c7108cac49f5c2ab58b0f39c6a8a93df334f7bcd",
+      "gzipBytes": 2975,
+      "gzipSHA256": "2ea0d45fb7d996d3818a03b23c04f081b6896a47e2296bf535590ed5c37c850d"
+    },
+    {
+      "file": "raw/biome.log.gz",
+      "bytes": 685,
+      "sha256": "810dbe4054133f1fe567d6c2f66c191322d433851d7a640ca1490ce72db6b815",
+      "gzipBytes": 321,
+      "gzipSHA256": "27e7e647aa379b6566d4d3676bd1a19cf4c4a231045e2798d90b335a9460e32f"
+    },
+    {
+      "file": "raw/pnpm_run_check_changes.log.gz",
+      "bytes": 2637,
+      "sha256": "3ef9d1241f1057d60ac929c827a5fa7f234d2912e706fe60e6eb592e80ddfeb8",
+      "gzipBytes": 1164,
+      "gzipSHA256": "59d85c8bd5d9aaa33e232a67530fc2846dded9af8758c977582b2af25fc7b730"
+    },
+    {
+      "file": "raw/pnpm_run_check_gallery-tracker.log.gz",
+      "bytes": 1991,
+      "sha256": "e675957e953ba5b3bb97a15dabb027800edf1f80e197162b304b008ccd577ef9",
+      "gzipBytes": 1056,
+      "gzipSHA256": "c246b6fa53bf676911fd0d3ec03f6a356d01724a71484ba63d72f8648b1d1821"
+    },
+    {
+      "file": "raw/pnpm_run_check_release-report.log.gz",
+      "bytes": 810,
+      "sha256": "1875372752b414140280fc4bd750d125e9473d36cd9ae57ba73dfd62eb4389fb",
+      "gzipBytes": 461,
+      "gzipSHA256": "6a4ad2d81c73b8d4763523a7bae49349330e2f3af1eeb25c62d79a8fa3d6f4bb"
+    },
+    {
+      "file": "raw/pnpm_run_check_skill-commands.log.gz",
+      "bytes": 1036,
+      "sha256": "3cc6d9606a79b0c650f998aaa0faf907d6ff6588a31a3b3b9633a6b505b4f80b",
+      "gzipBytes": 580,
+      "gzipSHA256": "7fee3d7cf23859c8eaa23f7324c584e3f0846ac98a9420d38a1da982ee3b66eb"
+    },
+    {
+      "file": "raw/pnpm_run_check_text.log.gz",
+      "bytes": 1073,
+      "sha256": "e215fc0efddacd7d1abbe45d44faa26a87a2204ab0f9653f971ea50a7d40836b",
+      "gzipBytes": 593,
+      "gzipSHA256": "9e6e696dc66ae0ff60ea941a024712b72b9f4c1bacfd4bfabcb0ff10759c4686"
+    },
+    {
+      "file": "raw/hydration.json.gz",
+      "bytes": 821002,
+      "sha256": "f8859562cb900500ee842465ca04295070daaad02dc4f6ed3b34329127579291",
+      "gzipBytes": 140181,
+      "gzipSHA256": "87c79d169b0f8c628ca7db225c4f4e195b20a8a39078f68b0d2b1431d2a1f7ac"
+    }
+  ]
+}

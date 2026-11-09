@@ -1,0 +1,45 @@
+{
+  "format": 1,
+  "base": "5b9e4386c00319da1fa4370dcc0b3eb6e93c9578",
+  "prePromotionWorkingTreeClean": true,
+  "prePromotionPackageObjects": [
+    {
+      "path": "packages/javascript",
+      "object": "25ecc33f83c5072e2d6f2b03be416a222ae88c1a"
+    },
+    {
+      "path": "packages/gallery",
+      "object": "f50d996f5aba09b862afe510eeb31ab04a0719bd"
+    },
+    {
+      "path": "packages/render",
+      "object": "b7789f4afffaf2f0f734d0823745463924cfec51"
+    },
+    {
+      "path": "packages/pptx",
+      "object": "7bf7dad3aa66ed2aa2114540e31f43ebdd3184f5"
+    }
+  ],
+  "maintainedProcedure": "packages/pptx/docs/archive-review.md: copy the reviewed generated candidate JSON in a separate source change",
+  "reviewEvidence": "594863c06e7c442c6784226fe30d9357e290ac07",
+  "reviewPacket": "docs/handoff/2026-11-09/rr20-current-nine-archive-review/actual-nine-review.zip",
+  "reviewPacketSha256": "b96a1fcab960b21e7a53687bf89cde940edc27efae19c3d7ef6a1c0c8b77679b",
+  "reviewSource": "5b9e4386c00319da1fa4370dcc0b3eb6e93c9578",
+  "proposalSha256": "94cfa51624b4a1bf01e4f7ad84f7ed1ffc61f2f3b245ee49a5ec8088cd6b0105",
+  "proposalCopiedByteExactly": true,
+  "originalFixtureSha256": "73cea56b226a75d785c2d00d980776743bc412e18f723717ee7e61cab5549d68",
+  "nineEntryCount": 9,
+  "changedPartsPerArchive": [
+    "ppt/tags/opfLayout18.xml"
+  ],
+  "previousSourceAndEntryHistoryPreserved": true,
+  "unchanged21": {
+    "path": "packages/pptx/test/fixtures/rr-54-unchanged.json",
+    "sha256": "d62b991a3772856d812296cf12582be2ede6850e39d644d3414ab39a89a06e27",
+    "preserved": true,
+    "evidence": "7c7e5df4c5f293ba326245b0e124dcf835f078be"
+  },
+  "pureCauseEvidence": "aa9580f6371da243540d031393c6a943e688ecbe",
+  "noRuntimeChanges": true,
+  "noNativeAcceptance": true
+}

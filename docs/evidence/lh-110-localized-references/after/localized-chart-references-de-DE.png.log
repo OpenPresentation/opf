@@ -1,0 +1,73 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\lh-110-localized\\docs\\evidence\\lh-110-localized-references\\inputs\\localized-chart-references-de-DE.opf.json",
+    "sha256": "7f914d3c865448acbe1c60fd5717a506e52bb2a9892a6d2dd13ced6f0ff1d810",
+    "bytes": 4606
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\lh110-cli-stable\\localized-chart-references-de-DE.png",
+      "sha256": "6c618ecac5f3cb2420a169cb0cff12c2c85db9ff86ce97a0d75df6a309dd96f3",
+      "bytes": 21658,
+      "mediaType": "image/png",
+      "slide": 1,
+      "id": "de-DE",
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Arial Black",
+        "resolved": "Montserrat",
+        "compatibility": "visual"
+      },
+      {
+        "requested": "Arial",
+        "resolved": "Arimo",
+        "compatibility": "metric"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

@@ -1,0 +1,660 @@
+﻿[
+    {
+        "slides":  [
+                       {
+                           "smartArt":  [
+                                            {
+                                                "layoutName":  "Organization Chart",
+                                                "nodes":  3,
+                                                "layout":  "urn:microsoft.com/office/officeart/2005/8/layout/orgChart1",
+                                                "dataNodes":  [
+                                                                  {
+                                                                      "children":  2,
+                                                                      "text":  "Lead",
+                                                                      "type":  1,
+                                                                      "level":  1,
+                                                                      "parent":  null,
+                                                                      "index":  1
+                                                                  },
+                                                                  {
+                                                                      "children":  0,
+                                                                      "text":  "Build",
+                                                                      "type":  1,
+                                                                      "level":  2,
+                                                                      "parent":  "Lead",
+                                                                      "index":  2
+                                                                  },
+                                                                  {
+                                                                      "children":  0,
+                                                                      "text":  "Ship",
+                                                                      "type":  1,
+                                                                      "level":  2,
+                                                                      "parent":  "Lead",
+                                                                      "index":  3
+                                                                  }
+                                                              ],
+                                                "items":  [
+                                                              {
+                                                                  "width":  192.5849609375,
+                                                                  "height":  66.847640991210938,
+                                                                  "shapeType":  9,
+                                                                  "transparency":  1,
+                                                                  "type":  -2,
+                                                                  "left":  480,
+                                                                  "name":  "",
+                                                                  "fillType":  -2,
+                                                                  "top":  270.47384643554688,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "width":  192.5849609375,
+                                                                  "height":  66.847640991210938,
+                                                                  "shapeType":  9,
+                                                                  "transparency":  1,
+                                                                  "type":  -2,
+                                                                  "left":  287.41494750976563,
+                                                                  "name":  "",
+                                                                  "fillType":  -2,
+                                                                  "top":  270.47384643554688,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "left":  320.83880615234375,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  400.0624,
+                                                                                    "width":  73.48,
+                                                                                    "top":  56.9902763,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Lead"
+                                                                                }
+                                                                            ],
+                                                                  "type":  1,
+                                                                  "size":  36,
+                                                                  "text":  "Lead",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  111.31275939941406,
+                                                                  "fillType":  1,
+                                                                  "height":  159.16110229492188,
+                                                                  "width":  318.32220458984375
+                                                              },
+                                                              {
+                                                                  "left":  128.25386047363281,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  204.829956,
+                                                                                    "width":  78.77496,
+                                                                                    "top":  282.999084,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Build"
+                                                                                }
+                                                                            ],
+                                                                  "type":  1,
+                                                                  "size":  36,
+                                                                  "text":  "Build",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  337.32156372070313,
+                                                                  "fillType":  1,
+                                                                  "height":  159.16110229492188,
+                                                                  "width":  318.32220458984375
+                                                              },
+                                                              {
+                                                                  "left":  513.42376708984375,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  595.5624,
+                                                                                    "width":  67.65,
+                                                                                    "top":  282.999084,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Ship"
+                                                                                }
+                                                                            ],
+                                                                  "type":  1,
+                                                                  "size":  36,
+                                                                  "text":  "Ship",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  337.32156372070313,
+                                                                  "fillType":  1,
+                                                                  "height":  159.16110229492188,
+                                                                  "width":  318.32220458984375
+                                                              }
+                                                          ],
+                                                "frame":  {
+                                                              "left":  43.2,
+                                                              "width":  873.6,
+                                                              "top":  110.995514,
+                                                              "height":  385.804474
+                                                          }
+                                            }
+                                        ],
+                           "index":  1
+                       }
+                   ],
+        "file":  "org-chart-3"
+    },
+    {
+        "slides":  [
+                       {
+                           "smartArt":  [
+                                            {
+                                                "layoutName":  "Organization Chart",
+                                                "nodes":  5,
+                                                "layout":  "urn:microsoft.com/office/officeart/2005/8/layout/orgChart1",
+                                                "dataNodes":  [
+                                                                  {
+                                                                      "children":  2,
+                                                                      "text":  "Root",
+                                                                      "type":  1,
+                                                                      "level":  1,
+                                                                      "parent":  null,
+                                                                      "index":  1
+                                                                  },
+                                                                  {
+                                                                      "children":  2,
+                                                                      "text":  "Build",
+                                                                      "type":  1,
+                                                                      "level":  2,
+                                                                      "parent":  "Root",
+                                                                      "index":  2
+                                                                  },
+                                                                  {
+                                                                      "children":  0,
+                                                                      "text":  "Web",
+                                                                      "type":  1,
+                                                                      "level":  3,
+                                                                      "parent":  "Build",
+                                                                      "index":  3
+                                                                  },
+                                                                  {
+                                                                      "children":  0,
+                                                                      "text":  "App",
+                                                                      "type":  1,
+                                                                      "level":  3,
+                                                                      "parent":  "Build",
+                                                                      "index":  4
+                                                                  },
+                                                                  {
+                                                                      "children":  0,
+                                                                      "text":  "Ship",
+                                                                      "type":  1,
+                                                                      "level":  2,
+                                                                      "parent":  "Root",
+                                                                      "index":  5
+                                                                  }
+                                                              ],
+                                                "items":  [
+                                                              {
+                                                                  "width":  88.711654663085938,
+                                                                  "height":  30.792440414428711,
+                                                                  "shapeType":  9,
+                                                                  "transparency":  1,
+                                                                  "type":  -2,
+                                                                  "left":  479.99990844726563,
+                                                                  "name":  "",
+                                                                  "fillType":  -2,
+                                                                  "top":  184.39353942871094,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "width":  21.99456787109375,
+                                                                  "height":  171.55802917480469,
+                                                                  "shapeType":  9,
+                                                                  "transparency":  1,
+                                                                  "type":  -2,
+                                                                  "left":  332.635986328125,
+                                                                  "name":  "",
+                                                                  "fillType":  -2,
+                                                                  "top":  288.50149536132813,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "width":  21.99456787109375,
+                                                                  "height":  67.450157165527344,
+                                                                  "shapeType":  9,
+                                                                  "transparency":  1,
+                                                                  "type":  -2,
+                                                                  "left":  332.635986328125,
+                                                                  "name":  "",
+                                                                  "fillType":  -2,
+                                                                  "top":  288.50149536132813,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "width":  88.711654663085938,
+                                                                  "height":  30.792440414428711,
+                                                                  "shapeType":  9,
+                                                                  "transparency":  1,
+                                                                  "type":  -2,
+                                                                  "left":  391.28826904296875,
+                                                                  "name":  "",
+                                                                  "fillType":  -2,
+                                                                  "top":  184.39353942871094,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "left":  406.6845703125,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  400.9625,
+                                                                                    "width":  71.68,
+                                                                                    "top":  13.832756,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Root"
+                                                                                }
+                                                                            ],
+                                                                  "type":  1,
+                                                                  "size":  36,
+                                                                  "text":  "Root",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  111.07810974121094,
+                                                                  "fillType":  1,
+                                                                  "height":  73.315353393554688,
+                                                                  "width":  146.63078308105469
+                                                              },
+                                                              {
+                                                                  "left":  317.97283935546875,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  308.703217,
+                                                                                    "width":  78.77504,
+                                                                                    "top":  117.940712,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Build"
+                                                                                }
+                                                                            ],
+                                                                  "type":  1,
+                                                                  "size":  36,
+                                                                  "text":  "Build",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  215.18606567382813,
+                                                                  "fillType":  1,
+                                                                  "height":  73.315353393554688,
+                                                                  "width":  146.63078308105469
+                                                              },
+                                                              {
+                                                                  "left":  354.63055419921875,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  351.715942,
+                                                                                    "width":  66.0649643,
+                                                                                    "top":  222.048584,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Web"
+                                                                                }
+                                                                            ],
+                                                                  "type":  1,
+                                                                  "size":  36,
+                                                                  "text":  "Web",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  319.2939453125,
+                                                                  "fillType":  1,
+                                                                  "height":  73.315353393554688,
+                                                                  "width":  146.63078308105469
+                                                              },
+                                                              {
+                                                                  "left":  354.63055419921875,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  354.990936,
+                                                                                    "width":  59.5150375,
+                                                                                    "top":  326.156525,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "App"
+                                                                                }
+                                                                            ],
+                                                                  "type":  1,
+                                                                  "size":  36,
+                                                                  "text":  "App",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  423.40188598632813,
+                                                                  "fillType":  1,
+                                                                  "height":  73.315353393554688,
+                                                                  "width":  146.63078308105469
+                                                              },
+                                                              {
+                                                                  "left":  495.39620971679688,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  491.6891,
+                                                                                    "width":  67.65,
+                                                                                    "top":  117.940712,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Ship"
+                                                                                }
+                                                                            ],
+                                                                  "type":  1,
+                                                                  "size":  36,
+                                                                  "text":  "Ship",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  215.18606567382813,
+                                                                  "fillType":  1,
+                                                                  "height":  73.315353393554688,
+                                                                  "width":  146.63078308105469
+                                                              }
+                                                          ],
+                                                "frame":  {
+                                                              "left":  43.2,
+                                                              "width":  873.6,
+                                                              "top":  110.995514,
+                                                              "height":  385.804474
+                                                          }
+                                            }
+                                        ],
+                           "index":  1
+                       }
+                   ],
+        "file":  "org-chart-5"
+    },
+    {
+        "slides":  [
+                       {
+                           "smartArt":  [
+                                            {
+                                                "layoutName":  "Hierarchy",
+                                                "nodes":  3,
+                                                "layout":  "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1",
+                                                "dataNodes":  [
+                                                                  {
+                                                                      "children":  2,
+                                                                      "text":  "Lead",
+                                                                      "type":  1,
+                                                                      "level":  1,
+                                                                      "parent":  null,
+                                                                      "index":  1
+                                                                  },
+                                                                  {
+                                                                      "children":  0,
+                                                                      "text":  "Build",
+                                                                      "type":  1,
+                                                                      "level":  2,
+                                                                      "parent":  "Lead",
+                                                                      "index":  2
+                                                                  },
+                                                                  {
+                                                                      "children":  0,
+                                                                      "text":  "Ship",
+                                                                      "type":  1,
+                                                                      "level":  2,
+                                                                      "parent":  "Lead",
+                                                                      "index":  3
+                                                                  }
+                                                              ],
+                                                "items":  [
+                                                              {
+                                                                  "width":  141.46945190429688,
+                                                                  "height":  67.3265380859375,
+                                                                  "shapeType":  9,
+                                                                  "transparency":  1,
+                                                                  "type":  -2,
+                                                                  "left":  467.13912963867188,
+                                                                  "name":  "",
+                                                                  "fillType":  -2,
+                                                                  "top":  258.0166015625,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "width":  141.46945190429688,
+                                                                  "height":  67.3265380859375,
+                                                                  "shapeType":  9,
+                                                                  "transparency":  1,
+                                                                  "type":  -2,
+                                                                  "left":  325.669677734375,
+                                                                  "name":  "",
+                                                                  "fillType":  -2,
+                                                                  "top":  258.0166015625,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "width":  231.49543762207031,
+                                                                  "height":  146.99960327148438,
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "type":  5,
+                                                                  "left":  351.39132690429688,
+                                                                  "name":  "",
+                                                                  "fillType":  1,
+                                                                  "top":  111.01700592041016,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "left":  377.11306762695313,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0.10000002384185791,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  412.9233,
+                                                                                    "width":  73.48,
+                                                                                    "top":  75.04937,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Lead"
+                                                                                }
+                                                                            ],
+                                                                  "type":  5,
+                                                                  "size":  36,
+                                                                  "text":  "Lead",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  135.45259094238281,
+                                                                  "fillType":  1,
+                                                                  "height":  146.99960327148438,
+                                                                  "width":  231.49543762207031
+                                                              },
+                                                              {
+                                                                  "width":  231.49543762207031,
+                                                                  "height":  146.99960327148438,
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "type":  5,
+                                                                  "left":  209.92189025878906,
+                                                                  "name":  "",
+                                                                  "fillType":  1,
+                                                                  "top":  325.34323120117188,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "left":  235.64361572265625,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0.10000002384185791,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  268.806335,
+                                                                                    "width":  78.77496,
+                                                                                    "top":  289.37558,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Build"
+                                                                                }
+                                                                            ],
+                                                                  "type":  5,
+                                                                  "size":  36,
+                                                                  "text":  "Build",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  349.77880859375,
+                                                                  "fillType":  1,
+                                                                  "height":  146.99960327148438,
+                                                                  "width":  231.49543762207031
+                                                              },
+                                                              {
+                                                                  "width":  231.49543762207031,
+                                                                  "height":  146.99960327148438,
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0,
+                                                                  "type":  5,
+                                                                  "left":  492.86077880859375,
+                                                                  "name":  "",
+                                                                  "fillType":  1,
+                                                                  "top":  325.34323120117188,
+                                                                  "rotation":  0
+                                                              },
+                                                              {
+                                                                  "left":  518.58251953125,
+                                                                  "rotation":  0,
+                                                                  "name":  "",
+                                                                  "complexScript":  "+mn-cs",
+                                                                  "shapeType":  1,
+                                                                  "transparency":  0.10000002384185791,
+                                                                  "alignment":  2,
+                                                                  "spacing":  {
+                                                                                  "rule":  0,
+                                                                                  "within":  43.92,
+                                                                                  "before":  0,
+                                                                                  "after":  0
+                                                                              },
+                                                                  "lines":  [
+                                                                                {
+                                                                                    "left":  557.307739,
+                                                                                    "width":  67.65,
+                                                                                    "top":  289.37558,
+                                                                                    "height":  45.81504,
+                                                                                    "text":  "Ship"
+                                                                                }
+                                                                            ],
+                                                                  "type":  5,
+                                                                  "size":  36,
+                                                                  "text":  "Ship",
+                                                                  "eastAsian":  "Source Sans 3",
+                                                                  "latin":  "Source Sans 3",
+                                                                  "top":  349.77880859375,
+                                                                  "fillType":  1,
+                                                                  "height":  146.99960327148438,
+                                                                  "width":  231.49543762207031
+                                                              }
+                                                          ],
+                                                "frame":  {
+                                                              "left":  43.2,
+                                                              "width":  873.6,
+                                                              "top":  110.995514,
+                                                              "height":  385.804474
+                                                          }
+                                            }
+                                        ],
+                           "index":  1
+                       }
+                   ],
+        "file":  "hierarchy-3"
+    }
+]

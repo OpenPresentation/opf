@@ -57,6 +57,8 @@ export interface RenderFonts {
 	loadSystemFonts?: boolean;
 }
 export interface FontRegistry {
+	/** Private demand-loader metadata capability; role names require no font bytes. */
+	fontNames?: object;
 	scriptSelection?: { detected: string[]; scripts: string[]; unavailable: string[]; packages?: string[]; notInstalled?: string[]; uncovered?: string[] };
 }
 /** The handle `loadFonts()` of opf-render `/fonts-node` returns: pass it as `{ fonts }` to every deck-level call. */
@@ -67,6 +69,8 @@ export interface FontsHandle extends RenderFonts {
 	useBundledFonts: false;
 	loadSystemFonts: false;
 	registry: FontRegistry;
+	/** Present on current handles; prepare newly used faces after document edits or pagination. */
+	ensure?(presentation: unknown, options?: Record<string, unknown>): Promise<unknown>;
 	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean }[];
 }
 /** The engines of opf-render 0.18 (RR-73). Slides count from 1; a number gives one SVG, a selection a list. */

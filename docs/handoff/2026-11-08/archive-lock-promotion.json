@@ -1,0 +1,30 @@
+{
+  "scope": "Copy only reviewed generated expected archive fields; all9+21 actual baseline/raw-parts/workbook proofs are on immutable5e89. The21 candidate uses independently reviewed pure append-only reconstruction, not manual hash edits or new exports.",
+  "rawReview": "5e89a184ffc8a38539f5fb5e573f403066bcca17",
+  "historyTool": "2a5e9cd643b4498ad828dc6aebc099e46248ebfb",
+  "reviewedProducer": "513156a982397eaa0033808215fbb86dd284745b",
+  "promotionSource": "0cafa9b9448fc4daecfb168a56672b32d9a18b4b",
+  "nativeAcceptance": false,
+  "proof": [
+    {
+      "kind": "nine",
+      "path": "packages/pptx/test/fixtures/chartex-fallback-main.json",
+      "beforeSha256": "091830fe3593631790c37822dfbda3cfe3bd1790b172f070954fdef2e087f5cd",
+      "candidateSha256": "73cea56b226a75d785c2d00d980776743bc412e18f723717ee7e61cab5549d68",
+      "generatedSource": "C:/opf-work/archive034-review-01/nine/candidate-fixture.json",
+      "entryCount": 9,
+      "strictLockFieldsEqualOriginalGenerated": true,
+      "historical033Preserved": true
+    },
+    {
+      "kind": "twenty-one",
+      "path": "packages/pptx/test/fixtures/rr-54-unchanged.json",
+      "beforeSha256": "c005a990dc7cb510060a5b4b497c71ff026742a57abbda0879e634215b5bea25",
+      "candidateSha256": "d62b991a3772856d812296cf12582be2ede6850e39d644d3414ab39a89a06e27",
+      "generatedSource": "C:/opf-work/rr20-archive-history/docs/evidence/rr20-archive-history/corrected-034-candidate-fixture.json",
+      "entryCount": 21,
+      "strictLockFieldsEqualOriginalGenerated": true,
+      "historical033Preserved": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "exit": {
+    "startedAt": "2026-11-09T17:59:11.3544884Z",
+    "finishedAt": "2026-11-09T17:59:41.6437437Z",
+    "exitCode": 1,
+    "base": "169055e9b5431aab58d3cf16199bf9d2bc38af97",
+    "scope": "Staging source-union and dated handoff metadata only; full combined source/native/CI qualification still pending"
+  },
+  "passed": 4,
+  "failed": 1,
+  "typecheck": "skipped",
+  "seconds": 29.8,
+  "failure": "Missing unchanged sparse painting-Linux.json.gz; no hydration or waiver",
+  "raw": {
+    "file": "metadata.json.gz",
+    "bytes": 16167,
+    "sha256": "b97d8f873a33dc59601f96726743d0fa7f011abf2c289af1d6d7abf0964280a7",
+    "rawBytes": 43420,
+    "rawSHA256": "d7ac8ea9776cb63a26f6a4ac1d8b0669f9735caff078b341c71f220e330cfd7c"
+  },
+  "combinedSourceAcceptance": false
+}
