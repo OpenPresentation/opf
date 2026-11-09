@@ -24,7 +24,7 @@ pnpm build:font-tracker
 pnpm build:gallery-tracker
 ```
 
-Afterward, maintained preview check, font-tracker check, strict gallery-tracker check and release-report all passed. Tracker mode is explicitly `fail`, never `warn`. No tracker rule, tolerance, test assertion or source was altered. Required mapped qualification is recorded separately once run against the exact source-stage commit and integration PR base; these focused passes do not predeclare that outcome.
+Afterward, maintained preview check, font-tracker check, strict gallery-tracker check and release-report all passed. Tracker mode is explicitly `fail`, never `warn`. No tracker rule, tolerance, test assertion or source was altered. Required `check:changed --base de693209caf392e3b86c30cc810a7fe9078a8ec9` passed at source-stage commit `db27bad2d71f3bb17706dbc3b507797a7cd6d7a8`, tree `3435aac96128b01a650c4be34259d12511993ada`: 16 mapped steps passed in 98.8 seconds; typecheck correctly skipped because no TypeScript changed. This includes Gallery tests and strict freshness, catalog, schema/example, font-hotlink, palette, stability and documentation checks. `qualification.json` and all 16 step logs retain the exact outcomes; full integration CI remains separate.
 
 ## Before/after inspection
 
