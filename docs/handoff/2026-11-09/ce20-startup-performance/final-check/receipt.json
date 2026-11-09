@@ -1,0 +1,9 @@
+{
+  "checkedHead": "5d415c355186a66a4be274d2565bcc33e7e8c382",
+  "checkedTree": "0f11642d4c73781515d23862917377e0bbaa2ce8",
+  "base": "9133596d3b0063b32d7b57ad39c545287cd269ee",
+  "passed": true,
+  "seconds": 28,
+  "scope": "evidence/handoff only; does not supersede retained source template-golden failure",
+  "artifacts": 7
+}
