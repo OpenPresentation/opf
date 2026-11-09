@@ -11,3 +11,13 @@ Pure qualification so far: first focused run12/13 PASS, sole PowerShell5.1 self-
 The fixture is copied byte-for-byte from the sealed public synthetic suite03 input; source2400d38bf549cdb661c31725776df25e497d364c, workerce92ccc65d8cb40cc6532b2d9082e12202d6c283, suite digestfd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65 are evidence identities only. No writes/builds/exports/Office calls occurred in those frozen producer/worker/suite directories. The test PNG is the retained prepared renderer preview, never a native screenshot claim.
 
 Native/registry acceptance stays false. The three phases include a no-op edited capture because actions are empty; no editability, font/glyph/baseline/raster, release or chart-reference implementation acceptance is implied. Seven-slide chart controller and retired table helper remain separate.
+
+## Frozen source qualification
+
+Runtime/tool source ad00d5cad0b80b63237dc1bd377cf773e4060186, tree b0e2e4a3ccd6823e0ab8c54f3db08a3878fda438, has independent read-only peer approval. Final focused19/19 PASS in23.2s. Required check:changed finished exit1/88.9s:7 steps PASS,3 sparse-input failures, types SKIP. Native80/84 includes all19 new controls passing; four preexisting tests lack rr-68 comparison.json or script-corpora.json. Gallery9/18 lacks historical inputs; text6/7 lacks painting-Linux.json.gz, leaving the following scan unrun. These are not a strict freshness/native acceptance verdict. No hydration, recovery, generator or warning override was attempted.
+
+The original development PowerShell setup failure and targeted recovery, expanded18-control result, final19-control result, full aggregate and all10 original per-step logs remain retained. The first interactive lint failure is summarized explicitly as a summary rather than represented as an original raw log; the later lint02 PASS is lossless. No failed or unrun result is promoted.
+
+raw-files.json retains28 original/derived files (177636 raw bytes, 38991 compressed bytes). The portable offline verifier binds all raw bytes, all14 source-producer paths, unchanged payload blobs,14 protected objects and frozen-input receipts. It is a leaf-scope proof, not a combined integration verifier. Do not weaken protected-object checks for companion PR changes.
+
+No real execution envelope or actual controller/native invocation exists. Creating one requires freezing the FINAL reviewed metadata head, then using the original preparation and worker roots/consumer in the externally pinned envelope. Keep subsequent execution evidence on a separate branch so that controller HEAD remains immutable during and after the attempt. Root must review before any real run.
