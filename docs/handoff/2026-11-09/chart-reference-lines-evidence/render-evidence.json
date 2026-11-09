@@ -159,7 +159,7 @@
     {
       "slide": 3,
       "name": "secondary-combo",
-      "pngSha256": "9f449783542c2a67cab087020fa5c6f6023118c963b297a89e74bfc162c37d12",
+      "pngSha256": "a467a426996ecbb654e8f70c90a37a1903c16e72c40a5ffbcb010f276bbf8cc8",
       "box": {
         "x": 57.6,
         "y": 147.832422,
@@ -204,11 +204,11 @@
             "endpoint": 2,
             "labelBox": {
               "x": 932.5326171875,
-              "y": 249.0936848958333,
+              "y": 283.0936848958333,
               "width": 114.16015625,
               "height": 30
             },
-            "labelSide": "above",
+            "labelSide": "below",
             "labelAlign": "center"
           },
           {

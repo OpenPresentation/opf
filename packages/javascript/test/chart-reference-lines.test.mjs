@@ -74,3 +74,7 @@ test('table-aligned bars recompute references against final row plot and publish
  const result=composeSlide({title:'Warranty claims by product line',blocks:[{chart:bars},{table}]},{width:1280,height:720}),item=result.items.find(i=>i.field==='chart'),rows=item.chart.layer.rows,line=item.chart.layer.references.lines[0];assert.ok(rows);assert.ok(Math.abs(line.y1-item.box.y-rows.top)<1e-6);assert.ok(Math.abs(line.y2-item.box.y-rows.bottom)<1e-6);assert.equal(item.chart.layer.plot.left,rows.left);
  const overflow=composeSlide({blocks:[{chart:chart({referenceLines:[{value:20,label:'Very long label '.repeat(100)}]})},{chart:chart()}]},{width:1280,height:720});for(const item of overflow.items.filter(i=>i.field==='chart'&&i.chart.layer.references)){const actual=overflow.diagnostics.filter(d=>d.path.startsWith(item.path+'.referenceLines.'));assert.equal(actual.length,item.chart.layer.references.diagnostics.length);}
 });
+
+test('reference labels choose the other adjacent side when an ordinary data line crosses the preferred box',()=>{
+ const c=chart({referenceLines:[{value:28,label:'Target'}]});const placed=place(c);assert.equal(placed.lines[0].labelSide,'below');assert.equal(placed.diagnostics.length,0);
+});

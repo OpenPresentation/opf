@@ -7826,7 +7826,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
         const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
         const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
-        const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar'}) : undefined;
+        const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
         if (placed && plot) {
           layer = {...layer, plot, references: placed};
         }
@@ -7840,7 +7840,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       layer = {...layer, focus: {...layer.focus, ...(labeled ? {labeled} : {})}};
     }
     const secondaryValueAxis=chartComboAxes(drawn.chart,drawn.data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
-    if(drawn.data.ok&&drawn.data.combo&&valueAxis&&!layer?.plot){const plot=chartPlotInset(drawn.chart,drawn.data,{valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}),...(layer?{layer}:{})},geometry);if(plot)layer={...layer,plot};}
+    if(drawn.data.ok&&drawn.data.combo&&valueAxis&&!layer?.plot){const plot=chartPlotInset(drawn.chart,drawn.data,{valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}),...(layer?{layer}:{})},{...geometry,measure:(text:string,size:number)=>measure(text,size,400)});if(plot)layer={...layer,plot};}
     return valueAxis || layer ? {...(valueAxis ? {valueAxis} : {}),...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})} : undefined;
   };
   // WI-3: a contained picture and a video frame sit at the region's anchor inside the cell the flow gave them (top by default),

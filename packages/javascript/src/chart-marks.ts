@@ -643,7 +643,7 @@ export function restackForRows(chart: unknown, data: ResolvedChartData, layer: C
   if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) {
     const {plot: _shared, references: _references, ...rest} = layer;
     const plot = {left: rows.left, right: rows.right, top: rows.top, bottom: box.height - rows.bottom};
-    const references = axis && layer.references ? placeReferences(chartReferences(chart), data, {value: axis}, box, plot, {...geometry, horizontal: true}) : undefined;
+    const references = axis && layer.references ? placeReferences(chartReferences(chart), data, {value: axis}, box, plot, {...geometry, horizontal: true, chartType:'bar'}) : undefined;
     return {...rest, rows, ...(references ? {plot, references} : {})};
   }
   const {plot: _plot, header: _header, stack, ...rest} = layer;
@@ -709,7 +709,7 @@ export function refreshChartMarks(items: readonly ComposedChartItem[], geometryF
       if (marks) next = {...next, stack: {...next.stack!, ...(marks.ends.length ? {ends: marks.ends} : {ends: undefined})}};
     }
     if (layer.references) {
-      const references = placeReferences(chartReferences(item.value), data, {value: axis, ...(item.chart?.secondaryValueAxis ? {secondary:item.chart.secondaryValueAxis} : {})}, item.box, layer.plot, {...geometry,horizontal:typeOf(item.value)==='bar'});
+      const references = placeReferences(chartReferences(item.value), data, {value: axis, ...(item.chart?.secondaryValueAxis ? {secondary:item.chart.secondaryValueAxis} : {})}, item.box, layer.plot, {...geometry,horizontal:typeOf(item.value)==='bar',chartType:typeOf(item.value)});
       if (references) next = {...next, references};
     }
     item.chart!.layer = next;

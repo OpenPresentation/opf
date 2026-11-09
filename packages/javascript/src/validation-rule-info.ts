@@ -64,7 +64,6 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('dataset-field-unknown', 'format', 'error', 'A table asks a dataset for a column it does not have.', 'The column cannot be shown when the dataset has no column of that name.', { standard: SCHEMA }),
 	rule('data-column-duplicate', 'format', 'error', 'A dataset or table has two columns with the same name.', 'Series, mappings and fields address columns by name, so a repeated name makes them ambiguous.', { standard: SCHEMA }),
 	rule('chart-mapping-unknown-column', 'format', 'error', 'A chart mapping names a column the data does not have.', 'The series cannot be built from a column that is not there.', { standard: SCHEMA }),
-	rule('chart-reference-value-invalid', 'format', 'error', 'A reference value is not finite.', 'Reference values use finite numbers in their value axis data units.', {standard: SCHEMA}),
 	rule('chart-reference-axis-unavailable', 'format', 'error', 'A reference names a value axis the chart does not have.', 'Secondary references require an actual secondary line series on a combo chart.', {standard: SCHEMA}),
 	rule('number-format-invalid', 'format', 'error', 'A number format cannot be read.', 'A format code that no engine can parse is drawn as the plain number or fails to export.', { standard: 'Excel number format codes, as far as OPF supports them' }),
 	rule('variable-invalid-value', 'format', 'error', 'A variable value does not match its declared type.', 'A number variable given text, or a date given a non-date, cannot be filled into the deck.', { standard: SCHEMA }),

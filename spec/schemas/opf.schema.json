@@ -4358,7 +4358,7 @@
       "required": ["value"],
       "description": "One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement.",
       "properties": {
-        "value": { "type": "number", "description": "Finite value in the associated data-axis units. With format0%,0.25 means25%;25 means2500%. Every reference expands automatic bounds when needed." },
+        "value": { "type": "number", "minimum": -1.7976931348623157e308, "maximum": 1.7976931348623157e308, "description": "Finite value in the associated data-axis units. With format0%,0.25 means25%;25 means2500%. Every reference expands automatic bounds when needed." },
         "axis": { "type": "string", "enum": ["value", "secondary"], "default": "value", "description": "Secondary requires a combo chart with an actual secondary line series." },
         "label": { "type": "string", "minLength": 1, "pattern": "\\S", "description": "Optional nonblank plain text, shown verbatim. Omission draws no label." },
         "labelPosition": { "type": "string", "enum": ["start", "end"], "default": "end", "description": "Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label." },

@@ -22,3 +22,16 @@ Vetoable implementation decisions within the approved contract:
 - Visual inspection found avoidable singleton overlay endpoint-label overhang. Full-plot horizontal overlay labels now align inward at their logical endpoint; native point labels remain centered. Numeric positions and spans are unchanged. Five pinned-font PNGs and geometry/hash evidence are kept in [chart-reference-lines-evidence](chart-reference-lines-evidence/render-evidence.json).
 
 - Final-plot audit repaired table-aligned bar references after LH-115 alignment and moved label diagnostics to the final shared/aligned placement. Existing no-reference alignment remains covered. SVG dot uses the existing Stroke/DrawingML 1:3 pattern. The expanded focused/neighbor suite passes44 tests after retaining/correcting a float equality assertion and an incorrect assumed area SVG tag. Coherent required check and PPTX/native remain pending.
+
+
+## Broader local check and repair
+
+Original official `pnpm check:changed --base169055e9b5431aab58d3cf16199bf9d2bc38af97` finished16 passed/7 failed steps in302.4s. [Original output](chart-reference-lines-evidence/mapped-check-01.log) is retained unchanged. It is not an aggregate-green result.
+
+Owned failures repaired: generated schema reference via maintained generator; generated validator reference plus98-rule text/explain/corpus integration; new example embeds every catalog record and source inventory now148; legacy combo-axis test updated for the newly shared axes; final combo plot binds the400-weight measurer. The focused validation/schema/examples/core/render contract set passes377 tests, and subsequent full `pnpm typecheck` passes. The original full core and render suites still need a coherent rerun after PPTX integration.
+
+Known original failures left visible: old PPTX overlay code cannot yet export the new explicit example; parallel PPTX contribution is pending. Sparse-worktree fixture failures name `docs/evidence/rr-42-native-20261002/values.json` (gallery tracker), `docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz` (text integrity), and `docs/evidence/script-corpora-20261001/script-corpora.json` (full core). No broad hydration, tracker regeneration, tolerance change or bypass was used.
+
+Visual review confirmed that the combo's secondary25% label crossed its27% ordinary data line at the last category. Placement now tests actual ordinary line/marker geometry before choosing a side and moves that label below the target; regenerated PNG inspected, values/axes/span unchanged. Final diagnostics include unresolved ink/label collisions. Filled regions do not act as line-ink obstacles; chart typography remains unchanged.
+
+Additional vetoable decisions: finite numeric values are constrained directly by authoritative schema bounds ±Number.MAX_VALUE (every finite JavaScript number remains legal; NaN/Infinity are rejected). This supersedes the earlier WIP semantic finite-value rule; the axis-association semantic rule retains full text/explain/docs/tests. For unchanged owned fallback overlays only, exact authored value may be restored after versioned/hash-bound current line+label and chart plot/axis/frame binding validate, avoiding EMU quantization drift; any edit/uncertainty retains visible shapes without stale references. Native helper values/styles/labels always come from current chart XML.
