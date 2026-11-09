@@ -353,27 +353,23 @@
         },
         "x": {
           "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping."
+          "description": "Signed fraction of the visible image frame width from its physical left edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds still apply."
         },
         "y": {
           "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping."
+          "description": "Signed fraction of the visible image frame height from its physical top edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds still apply."
         },
         "width": {
           "type": "number",
           "exclusiveMinimum": 0,
           "maximum": 1,
-          "description": "Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping."
+          "description": "Positive fraction of the visible image frame width, at most 1. The signed x origin controls placement outside the frame."
         },
         "height": {
           "type": "number",
           "exclusiveMinimum": 0,
           "maximum": 1,
-          "description": "Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping."
+          "description": "Positive fraction of the visible image frame height, at most 1. The signed y origin controls placement outside the frame."
         }
       }
     },
@@ -2572,15 +2568,11 @@
         },
         "x": {
           "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Left edge as a fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. With 'y', 'width' and 'height'."
+          "description": "Left edge as a signed fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. Negative values or values greater than 1 place the shape outside the slide. With 'y', 'width' and 'height'."
         },
         "y": {
           "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Top edge as a fraction of the slide height, from the top edge."
+          "description": "Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape outside the slide."
         },
         "width": {
           "type": "number",

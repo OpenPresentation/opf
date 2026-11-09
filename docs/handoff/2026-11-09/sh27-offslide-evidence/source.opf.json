@@ -1,0 +1,59 @@
+{
+  "name": "Intentional slide-edge bleed",
+  "language": "en-US",
+  "design": {
+    "theme": "classic",
+    "fontScheme": "roboto",
+    "colorScheme": "cool-horizon",
+    "background": "#080808"
+  },
+  "slides": [
+    {
+      "title": "Shapes can cross the slide edge",
+      "text": "The ellipse begins 10% of the slide height above the top edge.",
+      "shapes": [
+        {
+          "id": "glow",
+          "shape": "ellipse",
+          "x": 0.2692,
+          "y": -0.1,
+          "width": 0.42,
+          "height": 0.75,
+          "fill": {
+            "color": "accent2",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.45,
+          "softEdge": 60
+        },
+        {
+          "id": "left-bleed",
+          "shape": "ellipse",
+          "x": -0.15,
+          "y": 0.6,
+          "width": 0.3,
+          "height": 0.5,
+          "fill": "accent1",
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true
+        },
+        {
+          "id": "bottom-bleed",
+          "shape": "rect",
+          "x": 0.8,
+          "y": 0.9,
+          "width": 0.3,
+          "height": 0.2,
+          "fill": "accent2",
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true
+        }
+      ]
+    }
+  ]
+}

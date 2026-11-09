@@ -383,9 +383,9 @@ export function createShapeControls(ctx) {
 
   // --- an overlay shape: where it is, what is over it (Part B) -----------------------------------------------------------------------------
   const place = (change, done) => run(() => setOverlayFrame(editor, path, change), done);
-  const percent = (key, label, help) => numberField(`shape-frame-${key}`, label, { min: 0, max: 100, step: 1, help, onCommit: (value) => { if (value !== null) place({ [key]: Math.round(value * 100) / 10000 }, `${label} changed.`); } });
-  const frameX = percent("x", "X", "Percent of the slide from its start edge (the left, in a left-to-right deck)");
-  const frameY = percent("y", "Y", "Percent of the slide from its top");
+  const percent = (key, label, help) => numberField(`shape-frame-${key}`, label, { ...(key === "x" || key === "y" ? {} : { min: 0, max: 100 }), step: 1, help, onCommit: (value) => { if (value !== null) place({ [key]: Math.round(value * 100) / 10000 }, `${label} changed.`); } });
+  const frameX = percent("x", "X", "Percent of the slide from its start edge (the left, in a left-to-right deck); negative places it outside");
+  const frameY = percent("y", "Y", "Percent of the slide from its top; negative places it above the slide");
   const frameWidth = percent("width", "Width", "Percent of the slide's width");
   const frameHeight = percent("height", "Height", "Percent of the slide's height");
   const changeAnchor = (change, done) => {
