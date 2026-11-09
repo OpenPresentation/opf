@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "source": "Retained public synthetic prepared dense-events input; no Office output.",
+  "manifestSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+  "producer": "2400d38bf549cdb661c31725776df25e497d364c",
+  "worker": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "selectedCase": {
+    "id": "feature-dense-events",
+    "input": "inputs/feature-dense-events.pptx",
+    "source": "sources/feature-dense-events.opf.json",
+    "actionPlan": "actions/feature-dense-events.json",
+    "archiveSha256": "dcbaec0f1889997af5f21ea67ad5aa10d8865eb99eb5149ce624e316a50730c4",
+    "slideCount": 1,
+    "automaticControlEligible": false,
+    "roundTripEqual": true,
+    "roundTripAcceptance": "source-preserved",
+    "fontProfile": "prepared-office-font-handle-for-export-and-preview",
+    "chartex": "not-chart-fixture",
+    "previews": {
+      "svg": [
+        "previews/feature-dense-events-01.svg"
+      ],
+      "png": [
+        "previews/feature-dense-events-01.png"
+      ]
+    },
+    "worker": "furniture"
+  },
+  "files": [
+    {
+      "key": "input",
+      "path": "input.pptx",
+      "bytes": 123356,
+      "sha256": "dcbaec0f1889997af5f21ea67ad5aa10d8865eb99eb5149ce624e316a50730c4"
+    },
+    {
+      "key": "actionPlan",
+      "path": "action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "key": "source",
+      "path": "source.opf.json",
+      "bytes": 5522,
+      "sha256": "9661195f8e6b2153853741fbfed236f30cb5ec5ae731abde46830808459bfa90"
+    },
+    {
+      "key": "rendererPreview",
+      "path": "preview.png",
+      "bytes": 80726,
+      "sha256": "40283c54d3590985aa3abe126b60b68dc757f4ddc187a93e21075c0ac6480554",
+      "scope": "Retained prepared renderer preview; used only as modeled PNG bytes in Office-free binder tests, never a native output claim"
+    }
+  ]
+}
