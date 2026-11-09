@@ -1,3 +1,13 @@
+# Latest fold: reviewed whole-seven controller, source only
+
+Root source-reviewed the wrapper/worker/lifecycle/immutable snapshot/offline observation paths and independently replayed702records/20,102,322B PASS. DraftPR1253 frozen9b53d81e986b9fb04483153344b8219c507a822c was normally folded as370c7ccc6e084a05ceb71505e100dccb3c3c7988. The only conflict was the RR105 row/progress:612-byte new suffix and1478-byte incoming tail are added to ENTIRE exact prior2a burndown. Proof plus replay in native-controller-wave preserve every prior byte. All6 controller/runtime/test blobs equal the reviewed leaf; no packages/spec/lock/package manifest source changed. Both RR1141252 and seven1253 leaves are now folded/frozen; never push them again.
+
+This is source/pure qualification, NOT native acceptance.9focused/55managed,22public pure/refusal commands,7bootstrap refusals,2worker-output controls and4original-import+4title-mutant checks pass. No Office or supervisor was invoked. Archived development envelopes must not be executed: create fresh bindings from the final clean controller HEAD, still independently bound to original fd13/2400/ce92/preview.11 consumer. Root exclusively owns any later Office run and original global-zero/read-only/no-cleanup-after-failure rules remain binding. Original current-runtime59-case and Arabic/glyph/E1/E3/native/managed-golden/coherent-CI/release work remain owed.
+
+Owner P0 source df0635e9 is frozen and root-approved after actual quick/flushed replacement, exact-source delayed-font race and real Layout Studio refusal/success controls. B seals the append before ONE site214push; independent source-only review is underway. Old7bdf CI/preview is not new acceptance. RR117 bee8 source is reviewed; lead prepares the bounded paired genuinely settled browser/heap trial on an evidence-only branch, NOT timed yet. Current original31-item scope remains intact. v0.34 remains unpublished.
+
+## Prior checkpoints retained verbatim
+
 # Latest continuation: demand fonts reviewed, measured and folded; owner recovery fix under final caller checks
 
 Root normally folded frozen draftPR1252 headcc0e32402f77962fa84d3f04681e45aad0bcffcb as7e12ee39a42a4663e9f47077086a7a0dc37515e7. Merge tree08cef064110192cd0271de4df8f470c7ba0e96f1 EXACTLY equals the reviewed leaf tree; all feature/spec/changes/lock/package bytes equal final reviewed3857 source. RR114 leaf is frozen and must never receive another push. The canonical PR1225 remains e5; this separate staging source is not release/aggregate/native acceptance.
