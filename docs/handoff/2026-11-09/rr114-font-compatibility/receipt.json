@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "source": "19d9dd6f6cced99e4c79ed888e91ccf3b30e5f3a",
+  "base": "e7dc37096a7332a65ae2af8c37e2283790408650",
+  "sourceTree": "6b2f1e792a09f3a07321b8d815393eb2569dd30c",
+  "rawBytes": 1319854,
+  "compressedBytes": 692978,
+  "archiveSha256": "0b2e29c1e140b99b460694614bd6baf1d48201293f51599c8223c6e4c0414c83",
+  "records": 66,
+  "bindings": [
+    {
+      "file": "packages/pptx/src/index.js",
+      "sha256": "5212843f3f35822079248e9f4f8afc741275c3cf9b9127ac3d672580f598f34f"
+    },
+    {
+      "file": "packages/pptx/test/lh-16-duration-timeline.mjs",
+      "sha256": "633bc0386810828b7cde6c1b8e9b5b0e36858f6ea38d97bafa243f1c0bc46743"
+    },
+    {
+      "file": "packages/pptx/test/node-demand-native-fallback.mjs",
+      "sha256": "0601fba34661f9a48b45fbf480fb0557418e843b74f37bf5560fa4ebf0a16963"
+    },
+    {
+      "file": "packages/pptx/test/registry-glyph-fallback.mjs",
+      "sha256": "a609ae897718cbf65a18c78d691652c4b13c7992053768624476eb2fc899f3f1"
+    },
+    {
+      "file": "packages/render/README.md",
+      "sha256": "ccddbd76307e627e2581fb7ce89c88859097c0f668c348aa57bea5376c3647d5"
+    },
+    {
+      "file": "packages/render/src/font-demand.js",
+      "sha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e"
+    },
+    {
+      "file": "packages/render/src/fonts-node.d.ts",
+      "sha256": "7d4714b6ec3fb2c7350c399e0bc75d9ad24ef39759035c80d9ab454719f963f8"
+    },
+    {
+      "file": "packages/render/src/fonts-node.js",
+      "sha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+    },
+    {
+      "file": "packages/render/src/lazy-fonts.js",
+      "sha256": "3cf6152e89c454958a4f41f0f6691018521c36dfb0f73ffdf84e4eb0dee23027"
+    },
+    {
+      "file": "packages/render/src/svg.js",
+      "sha256": "1b19829ba80dffd569f2da363a61077a3aa5b7b1955ad2bb3895833371241417"
+    },
+    {
+      "file": "packages/render/test/emoji-math.mjs",
+      "sha256": "d7ee799ffe2b4696c08a4ae105847efa0e11cab7d37e4571d3bb86d4bad85eed"
+    },
+    {
+      "file": "packages/render/test/script-fonts-auto-robust.mjs",
+      "sha256": "ad53f5bfae76e550ace0905fa45470099f3bd4f730438c627c69ad6f6218dd6c"
+    }
+  ],
+  "built": [
+    {
+      "source": "packages/pptx/src/index.js",
+      "output": "packages/pptx/dist/index.js",
+      "sourceOnDiskSha256": "5212843f3f35822079248e9f4f8afc741275c3cf9b9127ac3d672580f598f34f",
+      "builtSha256": "5212843f3f35822079248e9f4f8afc741275c3cf9b9127ac3d672580f598f34f"
+    },
+    {
+      "source": "packages/render/src/font-demand.js",
+      "output": "packages/render/dist/font-demand.js",
+      "sourceOnDiskSha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e",
+      "builtSha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e"
+    },
+    {
+      "source": "packages/render/src/fonts-node.d.ts",
+      "output": "packages/render/dist/fonts-node.d.ts",
+      "sourceOnDiskSha256": "7d4714b6ec3fb2c7350c399e0bc75d9ad24ef39759035c80d9ab454719f963f8",
+      "builtSha256": "7d4714b6ec3fb2c7350c399e0bc75d9ad24ef39759035c80d9ab454719f963f8"
+    },
+    {
+      "source": "packages/render/src/fonts-node.js",
+      "output": "packages/render/dist/fonts-node.js",
+      "sourceOnDiskSha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8",
+      "builtSha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+    },
+    {
+      "source": "packages/render/src/lazy-fonts.js",
+      "output": "packages/render/dist/lazy-fonts.js",
+      "sourceOnDiskSha256": "3cf6152e89c454958a4f41f0f6691018521c36dfb0f73ffdf84e4eb0dee23027",
+      "builtSha256": "3cf6152e89c454958a4f41f0f6691018521c36dfb0f73ffdf84e4eb0dee23027"
+    },
+    {
+      "source": "packages/render/src/svg.js",
+      "output": "packages/render/dist/svg.js",
+      "sourceOnDiskSha256": "1b19829ba80dffd569f2da363a61077a3aa5b7b1955ad2bb3895833371241417",
+      "builtSha256": "1b19829ba80dffd569f2da363a61077a3aa5b7b1955ad2bb3895833371241417"
+    }
+  ],
+  "observed": {
+    "initialBuildExit": 0,
+    "originalControls": [
+      {
+        "test": "registry-glyph-fallback",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "test": "lh-16-duration-timeline",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "test": "script-fonts-auto-robust",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "test": "emoji-math",
+        "before": 1,
+        "after": 0
+      }
+    ],
+    "focusedNeighborSession": 88424,
+    "focusedNeighborExit": 0,
+    "focusedTests": {
+      "demand": 11,
+      "fault": 3,
+      "native": 4
+    },
+    "lazyResolutionPairs": 558,
+    "autoScriptParityDecks": 148,
+    "packageTypecheck": {
+      "renderFiles": 334,
+      "pptxFiles": 471,
+      "failed": 0
+    },
+    "outputs": {
+      "svgPairs": 2,
+      "nativePartPairs": 8
+    },
+    "notRun": [
+      "aggregate check:changed (coordinator owns one combined gate)",
+      "CI watcher",
+      "native Office",
+      "golden regeneration",
+      "release"
+    ]
+  },
+  "setupHistory": [
+    "Initial scoped Biome invocation returned no-files because root config intentionally excludes render/PPTX. Package syntax checks pass.",
+    "Owned edit-adoption anchor refused after earlier unique replacements; remaining assertions were read and applied separately. This was harness setup, not a product failure.",
+    "Witness01 could not resolve root fflate; corrected to the PPTX package resolution context. Original error log remains.",
+    "Safe parity01/02 genuinely failed on intermediate chosen-mode implementation; private outer mapping repaired the raw fallback boundary. Original logs remain."
+  ]
+}

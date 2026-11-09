@@ -90,7 +90,7 @@ export interface NodeFontsHandle extends FontsHandle {
    * the new faces. A package that is not installed or a script no pinned font serves is reported once through `onDiagnostic`.
    * Resolves with the script packages and exact face descriptors this call added (`scripts` and `lazy`).
    */
-  ensure(presentation: unknown, options?: Partial<ToSvgOptions> & { onDiagnostic?: ScriptPackOptions["onDiagnostic"]; renderOptions?: Partial<ToSvgOptions>; /** Additional preparation for an exporter that maps source families, such as safe PPTX typefaces. Does not rewrite the document. */ mapFamily?: (family: string) => string }): Promise<EnsureResult>;
+  ensure(presentation: unknown, options?: Partial<ToSvgOptions> & { onDiagnostic?: ScriptPackOptions["onDiagnostic"]; renderOptions?: Partial<ToSvgOptions>; /** Additional preparation for an exporter that maps source families, such as safe PPTX typefaces. Does not rewrite the document. */ mapFamily?: (family: string) => string; /** Prepare native PPTX chosen-family roles/weights as well as physical preview faces. Does not alter ordinary rendering. */ preserveChosenFamilies?: boolean }): Promise<EnsureResult>;
   /** Synchronous: the missing face resources and script packages the presentation needs. */
   pending(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
 }

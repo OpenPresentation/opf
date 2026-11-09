@@ -291,7 +291,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
   let ensureQueue = Promise.resolve();
   // `pending` is asked before every render: each string is scanned once and each slide's families resolved once (see createScriptAnalysis).
   const scriptMemory = createScriptAnalysis();
-  const renderOptionsFor = callOptions => {const {renderOptions,onDiagnostic,mapFamily,signal,...inline}=callOptions??{};return {...options.renderOptions,...inline,...renderOptions};};
+  const renderOptionsFor = callOptions => {const {renderOptions,onDiagnostic,mapFamily,preserveChosenFamilies,signal,...inline}=callOptions??{};return {...options.renderOptions,...inline,...renderOptions};};
   const refresh = () => { embeddedFonts = undefined; fontFiles = [...registry.fontFiles]; };
   const [subsetter, shaper] = await Promise.all([nodeHarfbuzz("subsets"), nodeHarfbuzz("shaper")]);
   for (const [kind, engine] of [["subsets", subsetter], ["shaper", shaper]]) if (!engine) {
@@ -317,7 +317,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
         const prepare = demand ? (_registry,_loaded,presentation,opts)=>demand.ensure(presentation,opts) : ensureFonts;
         let rejected = false;
         try {
-          return await prepare(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: renderOptionsFor(callOptions), ...(callOptions.mapFamily ? {mapFamily:callOptions.mapFamily} : {})});
+          return await prepare(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: renderOptionsFor(callOptions), ...(callOptions.mapFamily ? {mapFamily:callOptions.mapFamily} : {}), ...(callOptions.preserveChosenFamilies ? {preserveChosenFamilies:true} : {})});
         } catch (error) {
           rejected = true;
           throw error;
