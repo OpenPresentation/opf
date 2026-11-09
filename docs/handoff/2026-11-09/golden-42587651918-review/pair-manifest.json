@@ -1,0 +1,2367 @@
+{
+  "version": 1,
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "beforeRef": "348fd323b31302b5a3cdd7af2db8bb8bf6fffa2a",
+  "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+  "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+  "baselinePath": "packages/render/test/golden/layout-templates-rr96-color-variants.json",
+  "archives": [
+    {
+      "run": "42587651918",
+      "path": "golden-42587651918.zip",
+      "bytes": 2763486,
+      "sha256": "7eed35d3e55bba0850ab716ce7be66ac3d6cc9298bd27e7b6d7c2a72ec200c0d"
+    },
+    {
+      "run": "42498350968",
+      "path": "golden-42498350968.zip",
+      "bytes": 5351851,
+      "sha256": "8f77c62729f58b9fed689df0344457f0d7deea108f8416808fdd150bff68976c"
+    }
+  ],
+  "counts": {
+    "before": 731,
+    "after": 728,
+    "changed": 67,
+    "removed": 3,
+    "added": 0,
+    "coreBefore": 480,
+    "coreAfter": 480,
+    "coreChanged": 10
+  },
+  "pairs": [
+    {
+      "index": 0,
+      "key": "inverted-pyramid 1 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0011.png",
+        "archiveMember": "templates/0011.png",
+        "index": 11,
+        "bytes": 16198,
+        "sha256": "77323f510dde9fa5eb1b57377c7d5354f41c38e6074fe4d626d26c79392054d8",
+        "expected": {
+          "svg": "934777d20e9b73c9b2792fc91c68a8ee8933659f2b05a047f61fb9635a5b5578",
+          "png": "77323f510dde9fa5eb1b57377c7d5354f41c38e6074fe4d626d26c79392054d8",
+          "bytes": 16198
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0000.png",
+        "archiveMember": "templates/0000.png",
+        "index": 0,
+        "bytes": 16296,
+        "sha256": "fa4a0dba98f1526243e3fd705f94fb424a5aea22ed671ff11c4c101b833c5c55",
+        "expected": {
+          "svg": "343293ce95f44cd81589cb686be52c653d5db47817ece2db057213207bd5490b",
+          "png": "fa4a0dba98f1526243e3fd705f94fb424a5aea22ed671ff11c4c101b833c5c55",
+          "bytes": 16296
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 1,
+      "key": "inverted-pyramid 4 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0014.png",
+        "archiveMember": "templates/0014.png",
+        "index": 14,
+        "bytes": 20536,
+        "sha256": "86cc338a466001f31c78e2b5ec6d2bcfc4e9908c335114a4366d926df25f8edf",
+        "expected": {
+          "svg": "914f659a3b2c4c54b0a51c76855ba24b0b676d6c7cbdce6f6a3b2382fd3939d6",
+          "png": "86cc338a466001f31c78e2b5ec6d2bcfc4e9908c335114a4366d926df25f8edf",
+          "bytes": 20536
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0001.png",
+        "archiveMember": "templates/0001.png",
+        "index": 1,
+        "bytes": 20362,
+        "sha256": "7ad9661a4ff3a4b903baa8df48627803f302101a0a48f5c83ec9966864eadf61",
+        "expected": {
+          "svg": "747795160d15730ebd419e28ffbd50c197a0431c629b4c57f339d15d53a70ac3",
+          "png": "7ad9661a4ff3a4b903baa8df48627803f302101a0a48f5c83ec9966864eadf61",
+          "bytes": 20362
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 2,
+      "key": "inverted-pyramid 5 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0015.png",
+        "archiveMember": "templates/0015.png",
+        "index": 15,
+        "bytes": 18043,
+        "sha256": "1143cd73dc2c335dc199c1946a7ab86f7fdfbf6f6f95820cdc813ca171b0059f",
+        "expected": {
+          "svg": "bc91be90affe9d263a16ef37d04c1fa1bb508298e221be7cad2e01b1906902a3",
+          "png": "1143cd73dc2c335dc199c1946a7ab86f7fdfbf6f6f95820cdc813ca171b0059f",
+          "bytes": 18043
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0002.png",
+        "archiveMember": "templates/0002.png",
+        "index": 2,
+        "bytes": 23196,
+        "sha256": "69c702cb26db634bde3ba0b83fbd7464c3366d79ecf68ff8ae652832f87aecf6",
+        "expected": {
+          "svg": "89e1b8bb997dbc04ede5964940f0a75972adaeb5e36084733721279501c6c914",
+          "png": "69c702cb26db634bde3ba0b83fbd7464c3366d79ecf68ff8ae652832f87aecf6",
+          "bytes": 23196
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 3,
+      "key": "inverted-pyramid 6 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0016.png",
+        "archiveMember": "templates/0016.png",
+        "index": 16,
+        "bytes": 21930,
+        "sha256": "d870742c287b46c85bce81ce30fa7e7008d9ed9466672a34bf51ca90b95f6c64",
+        "expected": {
+          "svg": "8a1c19c48784d3a90bbc9ce5ba6cb10e5c9000158613d6956ff583377e545946",
+          "png": "d870742c287b46c85bce81ce30fa7e7008d9ed9466672a34bf51ca90b95f6c64",
+          "bytes": 21930
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0003.png",
+        "archiveMember": "templates/0003.png",
+        "index": 3,
+        "bytes": 21766,
+        "sha256": "1a245351eb7e95b93040c2c0ae0a6608e7649923df2fc0dcffff09b99042786b",
+        "expected": {
+          "svg": "0631c845c9c444258c6e8a3dff52e4ee4e05a534f1587a651b46f9bc63750bd9",
+          "png": "1a245351eb7e95b93040c2c0ae0a6608e7649923df2fc0dcffff09b99042786b",
+          "bytes": 21766
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 4,
+      "key": "org-chart 1 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0023.png",
+        "archiveMember": "templates/0023.png",
+        "index": 23,
+        "bytes": 16339,
+        "sha256": "0066c2baa3929a3fd75aa2dc0d644a73c3276cf398b498b9f93abc20aaffbf62",
+        "expected": {
+          "svg": "898cc7dbd89dabc72d5f9c23951d0b7684c78ab00ae6720f2a10e63ec6300bb9",
+          "png": "0066c2baa3929a3fd75aa2dc0d644a73c3276cf398b498b9f93abc20aaffbf62",
+          "bytes": 16339
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0004.png",
+        "archiveMember": "templates/0004.png",
+        "index": 4,
+        "bytes": 16436,
+        "sha256": "1edfeee258bab0c6ff2b3392826792a4b44376cafaccda7944dc5b1833f6ddee",
+        "expected": {
+          "svg": "e6852391a94e2bb5fd644b152ecab4c05b3e74805828650f48c648d2ff535af0",
+          "png": "1edfeee258bab0c6ff2b3392826792a4b44376cafaccda7944dc5b1833f6ddee",
+          "bytes": 16436
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 5,
+      "key": "org-chart 4 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0026.png",
+        "archiveMember": "templates/0026.png",
+        "index": 26,
+        "bytes": 20665,
+        "sha256": "f197fb8243a18a859909168c9915965e9de293240ad3cae8c961a16520136730",
+        "expected": {
+          "svg": "d141c719cae486ec0aa82b9e7f6463cf662f59afe6befdb43cc014114d5e932c",
+          "png": "f197fb8243a18a859909168c9915965e9de293240ad3cae8c961a16520136730",
+          "bytes": 20665
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0005.png",
+        "archiveMember": "templates/0005.png",
+        "index": 5,
+        "bytes": 20494,
+        "sha256": "9e99cdb6f819f44db58ca22144ae79af4ed1df94790effb4f26305f85d3f09be",
+        "expected": {
+          "svg": "b65771adb2d4f7aa7bedfafc887b05e810fde32aaca2c78b6c82df75b3b63f09",
+          "png": "9e99cdb6f819f44db58ca22144ae79af4ed1df94790effb4f26305f85d3f09be",
+          "bytes": 20494
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 6,
+      "key": "org-chart 5 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0027.png",
+        "archiveMember": "templates/0027.png",
+        "index": 27,
+        "bytes": 20503,
+        "sha256": "b750aa101c9e108008973521bf381635b5483774157216a50db681167630bc2f",
+        "expected": {
+          "svg": "ee03cd6f3ee7bed5cd9ddf2842b451cd918ff26f2fc5323880c89fb17dfe9056",
+          "png": "b750aa101c9e108008973521bf381635b5483774157216a50db681167630bc2f",
+          "bytes": 20503
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0006.png",
+        "archiveMember": "templates/0006.png",
+        "index": 6,
+        "bytes": 23329,
+        "sha256": "87503dc46e55d116c57dbea1be558bf6f69d7b224021db418f7837d417aa810b",
+        "expected": {
+          "svg": "e04ec09c69e8d7efbeca60cb4f5610ca28143f9a6eb8382e4b7c5d6d5c7d9930",
+          "png": "87503dc46e55d116c57dbea1be558bf6f69d7b224021db418f7837d417aa810b",
+          "bytes": 23329
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 7,
+      "key": "org-chart 6 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0028.png",
+        "archiveMember": "templates/0028.png",
+        "index": 28,
+        "bytes": 22060,
+        "sha256": "b5188b57f85cf03ac8fa05822723088a0907b5c7d3a3ef2fa24c0484b991403b",
+        "expected": {
+          "svg": "bc39f5d3fb6aa768654c4348d3a464d95cb84d90cd00684001644b50b956b3e0",
+          "png": "b5188b57f85cf03ac8fa05822723088a0907b5c7d3a3ef2fa24c0484b991403b",
+          "bytes": 22060
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0007.png",
+        "archiveMember": "templates/0007.png",
+        "index": 7,
+        "bytes": 21900,
+        "sha256": "810540cee5590300fe4c589dd13d72f784efab4412d1427090b89a812762d79a",
+        "expected": {
+          "svg": "537f0346e32ea15a2ee709888ad7ff1693a30015485b79b6e7dbd2c0c6363878",
+          "png": "810540cee5590300fe4c589dd13d72f784efab4412d1427090b89a812762d79a",
+          "bytes": 21900
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 8,
+      "key": "hierarchy 1 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0035.png",
+        "archiveMember": "templates/0035.png",
+        "index": 35,
+        "bytes": 15814,
+        "sha256": "b999e22aeb8ea1123f3ea8df65bd7e328498c83e5ac92d0ea21aa7f87ad1882c",
+        "expected": {
+          "svg": "ddf7b2b96fbe6a673e6211e02101adb3208751c941f02d979b7140646b18126b",
+          "png": "b999e22aeb8ea1123f3ea8df65bd7e328498c83e5ac92d0ea21aa7f87ad1882c",
+          "bytes": 15814
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0008.png",
+        "archiveMember": "templates/0008.png",
+        "index": 8,
+        "bytes": 15913,
+        "sha256": "3780a1ab295501423179f9ad5cf1da88d2013bb728368e39e287aea18e6be033",
+        "expected": {
+          "svg": "99138e4219f4e0ac28705282b9e5f3174c3a250bbe2549c5cc25a4e65fb00e7a",
+          "png": "3780a1ab295501423179f9ad5cf1da88d2013bb728368e39e287aea18e6be033",
+          "bytes": 15913
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 9,
+      "key": "hierarchy 4 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0038.png",
+        "archiveMember": "templates/0038.png",
+        "index": 38,
+        "bytes": 20152,
+        "sha256": "f8c1ae378ebd89fb13a4231867c13d748bf4290624957c21600dd6a7447ba76d",
+        "expected": {
+          "svg": "9bffbd26d659eae96ea70e2d9cab698d7b05c5963041ec4d820a0faeb55cabf9",
+          "png": "f8c1ae378ebd89fb13a4231867c13d748bf4290624957c21600dd6a7447ba76d",
+          "bytes": 20152
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0009.png",
+        "archiveMember": "templates/0009.png",
+        "index": 9,
+        "bytes": 19974,
+        "sha256": "8a9cc1eb2d01509f5228ce1735db6da561d50149d525dc9cbec5023efb6e1a7c",
+        "expected": {
+          "svg": "a5e49a89a3b51649b38fad8f33a3bbb1ba3726baa6748fe3ead2bebd2dd1cbf2",
+          "png": "8a9cc1eb2d01509f5228ce1735db6da561d50149d525dc9cbec5023efb6e1a7c",
+          "bytes": 19974
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 10,
+      "key": "hierarchy 5 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0039.png",
+        "archiveMember": "templates/0039.png",
+        "index": 39,
+        "bytes": 19981,
+        "sha256": "bdd2cd4f7f575b49af2c679be0453158406e4e0f23266b7267d693382eeb6a59",
+        "expected": {
+          "svg": "d214adce36f84c5e1f55b06c48154c6d660720b9af8a5842905bade018e17010",
+          "png": "bdd2cd4f7f575b49af2c679be0453158406e4e0f23266b7267d693382eeb6a59",
+          "bytes": 19981
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0010.png",
+        "archiveMember": "templates/0010.png",
+        "index": 10,
+        "bytes": 22813,
+        "sha256": "02779855459ed8c717a23ff10bc3fe45dc9b73a7f8636da92daae97147cd64f7",
+        "expected": {
+          "svg": "8713e4df47c3c43a9c0c9c802cb06e855acb56e474a24a59a4f1bad876dc7fac",
+          "png": "02779855459ed8c717a23ff10bc3fe45dc9b73a7f8636da92daae97147cd64f7",
+          "bytes": 22813
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 11,
+      "key": "hierarchy 6 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0040.png",
+        "archiveMember": "templates/0040.png",
+        "index": 40,
+        "bytes": 21544,
+        "sha256": "5e600de29c3003fc56d77b44138aa6821839bf3e904a01ed33e60e5cc9407c9c",
+        "expected": {
+          "svg": "c115a2b5f15e664d61fa42c934bd08a8a7e25bc802da8d77dbd3eedaaabf5282",
+          "png": "5e600de29c3003fc56d77b44138aa6821839bf3e904a01ed33e60e5cc9407c9c",
+          "bytes": 21544
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0011.png",
+        "archiveMember": "templates/0011.png",
+        "index": 11,
+        "bytes": 21381,
+        "sha256": "ce1525f5eceef6a0565e84f0385f86d79a94a90c1a79317f025e72ebd32881f3",
+        "expected": {
+          "svg": "a88e912c3536b80a5bed245d2b8e787406ffd56dafd2fb5bde958e5700d6a2b7",
+          "png": "ce1525f5eceef6a0565e84f0385f86d79a94a90c1a79317f025e72ebd32881f3",
+          "bytes": 21381
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 12,
+      "key": "venn 1 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0047.png",
+        "archiveMember": "templates/0047.png",
+        "index": 47,
+        "bytes": 15538,
+        "sha256": "a0421aef2d2bda748a7692dbd9324f5652d60a67707461d63d8bd971d3d7f13c",
+        "expected": {
+          "svg": "ba5a971215917834b1bc3d6ee61c3403492c03463138ee5707df7500bd5ba0f3",
+          "png": "a0421aef2d2bda748a7692dbd9324f5652d60a67707461d63d8bd971d3d7f13c",
+          "bytes": 15538
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0012.png",
+        "archiveMember": "templates/0012.png",
+        "index": 12,
+        "bytes": 15634,
+        "sha256": "6a237c0d31dc96af5ebcbea0e44d031d315ee0b12af800ca9c209ef78b7d240c",
+        "expected": {
+          "svg": "fd37169c973471cf4529e272832ab91063877a848b077799821e8661742a2c17",
+          "png": "6a237c0d31dc96af5ebcbea0e44d031d315ee0b12af800ca9c209ef78b7d240c",
+          "bytes": 15634
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 13,
+      "key": "venn 4 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0050.png",
+        "archiveMember": "templates/0050.png",
+        "index": 50,
+        "bytes": 19864,
+        "sha256": "689b6dea4bfc586cc9d806efbec2d6d5d665375874fc236fe19579051058a5ea",
+        "expected": {
+          "svg": "467d783c2edc84882b3da4224cfee58b1c20534f1ed53bc52526db53ef7c30ff",
+          "png": "689b6dea4bfc586cc9d806efbec2d6d5d665375874fc236fe19579051058a5ea",
+          "bytes": 19864
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0013.png",
+        "archiveMember": "templates/0013.png",
+        "index": 13,
+        "bytes": 19689,
+        "sha256": "f5d708c1387594d937855ce936de54501c6307e47add0369c17c5b36aa109215",
+        "expected": {
+          "svg": "53a876da208eb5ff662fbe2038ad0d7433f71b68d3dd2e9cee8baa90113f8aea",
+          "png": "f5d708c1387594d937855ce936de54501c6307e47add0369c17c5b36aa109215",
+          "bytes": 19689
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 14,
+      "key": "venn 6 long",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0052.png",
+        "archiveMember": "templates/0052.png",
+        "index": 52,
+        "bytes": 21258,
+        "sha256": "40145be6c79bd10371c56beabb143821f8eff78e2eb6db5a95a9454cdca2edbf",
+        "expected": {
+          "svg": "bbdead0a42f5b3b949d9bc1fd19b8d9d95dee00bca6a5365136f5938c634860f",
+          "png": "40145be6c79bd10371c56beabb143821f8eff78e2eb6db5a95a9454cdca2edbf",
+          "bytes": 21258
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0014.png",
+        "archiveMember": "templates/0014.png",
+        "index": 14,
+        "bytes": 21097,
+        "sha256": "19ed251660ec4eeb4d03ff8a6c87a1f284bb3abd06ce161f3636692fddcc7103",
+        "expected": {
+          "svg": "331f6a33d6dc282601e6817ebd94f129508442e9d4c07b093e1b9c60bafbff60",
+          "png": "19ed251660ec4eeb4d03ff8a6c87a1f284bb3abd06ce161f3636692fddcc7103",
+          "bytes": 21097
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 15,
+      "key": "paginated inverted-pyramid 4 long page 1",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0053.png",
+        "archiveMember": "templates/0053.png",
+        "index": 53,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "73ef52d42dfabaa6a351b451202be86809f629a59fec03d9efb669284efce117",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0015.png",
+        "archiveMember": "templates/0015.png",
+        "index": 15,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "3848149e5ae6da90f566737b369fb3eda426c392e4d6d36bb97987142d7076b1",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 16,
+      "key": "paginated inverted-pyramid 4 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0054.png",
+        "archiveMember": "templates/0054.png",
+        "index": 54,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "19785a9767f46ca5b15eb37044133c7b45a7135d3b5966c0295852513103db58",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0016.png",
+        "archiveMember": "templates/0016.png",
+        "index": 16,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "377d8d4f3919664d48dc59ceab9defcf9dfd4a1d69908061bcf15bd2b433c29c",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 17,
+      "key": "paginated inverted-pyramid 4 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0055.png",
+        "archiveMember": "templates/0055.png",
+        "index": 55,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "f2184164eefe204633262b65052623f350f64cf684c9d426c4bd68059b8847d0",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0017.png",
+        "archiveMember": "templates/0017.png",
+        "index": 17,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "2f0f994fa13425d5a685e97c39c24e20a88e5e3890630ab9123717c919b82893",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 18,
+      "key": "paginated inverted-pyramid 4 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0056.png",
+        "archiveMember": "templates/0056.png",
+        "index": 56,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "769cb602ce02dfe6aa202743504e7b54ca2fb8ee0c9435185e9991c3c0cfa2f6",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0018.png",
+        "archiveMember": "templates/0018.png",
+        "index": 18,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "6b012290d3708299fc504d3ed82a01bfbba36054c495cc6d8c306c63e1f43238",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 19,
+      "key": "paginated inverted-pyramid 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0058.png",
+        "archiveMember": "templates/0058.png",
+        "index": 58,
+        "bytes": 12209,
+        "sha256": "bc2016647d6d0e8fd01d7b400d50231508ccc8fb8159f89f5532dd2987063383",
+        "expected": {
+          "svg": "71eef9fd7aa1a6761647edbfe4cf20a9675ac5f78243601b6278a32ca4a1a99b",
+          "png": "bc2016647d6d0e8fd01d7b400d50231508ccc8fb8159f89f5532dd2987063383",
+          "bytes": 12209
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0019.png",
+        "archiveMember": "templates/0019.png",
+        "index": 19,
+        "bytes": 14828,
+        "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+        "expected": {
+          "svg": "5b0b684a55aef4b6825c4f20ce768dc2057730b68c7f3ac2ffa1fe2850257b3f",
+          "png": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+          "bytes": 14828
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 20,
+      "key": "paginated inverted-pyramid 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0059.png",
+        "archiveMember": "templates/0059.png",
+        "index": 59,
+        "bytes": 12209,
+        "sha256": "bc2016647d6d0e8fd01d7b400d50231508ccc8fb8159f89f5532dd2987063383",
+        "expected": {
+          "svg": "787f09168603fb7a2bca988a6db442f7f4ce45f7dab591083dc82ce4a3b1bd9c",
+          "png": "bc2016647d6d0e8fd01d7b400d50231508ccc8fb8159f89f5532dd2987063383",
+          "bytes": 12209
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0020.png",
+        "archiveMember": "templates/0020.png",
+        "index": 20,
+        "bytes": 14828,
+        "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+        "expected": {
+          "svg": "a800fbd66dccaa2490ec7a2cb2c3fc2f7976b39e3c209250790b1c23a117884e",
+          "png": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+          "bytes": 14828
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 21,
+      "key": "paginated inverted-pyramid 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0060.png",
+        "archiveMember": "templates/0060.png",
+        "index": 60,
+        "bytes": 12209,
+        "sha256": "bc2016647d6d0e8fd01d7b400d50231508ccc8fb8159f89f5532dd2987063383",
+        "expected": {
+          "svg": "d2fc3ffa4baac6498ab16099f739164ccbe049a0346c103233bd1d0aca69096c",
+          "png": "bc2016647d6d0e8fd01d7b400d50231508ccc8fb8159f89f5532dd2987063383",
+          "bytes": 12209
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0021.png",
+        "archiveMember": "templates/0021.png",
+        "index": 21,
+        "bytes": 14828,
+        "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+        "expected": {
+          "svg": "d240dc7fb8fd1ef3b8fb7fa36abf1c3b59ee5e2c7a6a9c701340061de12298dd",
+          "png": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+          "bytes": 14828
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 22,
+      "key": "paginated inverted-pyramid 6 long page 1",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0061.png",
+        "archiveMember": "templates/0061.png",
+        "index": 61,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "73ef52d42dfabaa6a351b451202be86809f629a59fec03d9efb669284efce117",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0022.png",
+        "archiveMember": "templates/0022.png",
+        "index": 22,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "3848149e5ae6da90f566737b369fb3eda426c392e4d6d36bb97987142d7076b1",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 23,
+      "key": "paginated inverted-pyramid 6 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0062.png",
+        "archiveMember": "templates/0062.png",
+        "index": 62,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "19785a9767f46ca5b15eb37044133c7b45a7135d3b5966c0295852513103db58",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0023.png",
+        "archiveMember": "templates/0023.png",
+        "index": 23,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "377d8d4f3919664d48dc59ceab9defcf9dfd4a1d69908061bcf15bd2b433c29c",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 24,
+      "key": "paginated inverted-pyramid 6 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0063.png",
+        "archiveMember": "templates/0063.png",
+        "index": 63,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "f2184164eefe204633262b65052623f350f64cf684c9d426c4bd68059b8847d0",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0024.png",
+        "archiveMember": "templates/0024.png",
+        "index": 24,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "2f0f994fa13425d5a685e97c39c24e20a88e5e3890630ab9123717c919b82893",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 25,
+      "key": "paginated inverted-pyramid 6 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0064.png",
+        "archiveMember": "templates/0064.png",
+        "index": 64,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "769cb602ce02dfe6aa202743504e7b54ca2fb8ee0c9435185e9991c3c0cfa2f6",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0025.png",
+        "archiveMember": "templates/0025.png",
+        "index": 25,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "6b012290d3708299fc504d3ed82a01bfbba36054c495cc6d8c306c63e1f43238",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 26,
+      "key": "paginated inverted-pyramid 6 long page 5",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0065.png",
+        "archiveMember": "templates/0065.png",
+        "index": 65,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "0ed3018200df0bea75826f0a14ebcb1e5b68f02d0446d500ccb13e923916846c",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0026.png",
+        "archiveMember": "templates/0026.png",
+        "index": 26,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "bed22367b1d6b93f184df5b0ea08f325488cb9c943a6ac9d419db8a41f78111a",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 27,
+      "key": "paginated inverted-pyramid 6 long page 6",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0066.png",
+        "archiveMember": "templates/0066.png",
+        "index": 66,
+        "bytes": 13139,
+        "sha256": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+        "expected": {
+          "svg": "92c7c6502da019e0fb03f972a8891ab244cb3bdc261c1b8571123a6e780d86db",
+          "png": "d0c2c31b915a0a9d68b317c290093d9eabfc88c0708d3c382f4a0e886254ae05",
+          "bytes": 13139
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0027.png",
+        "archiveMember": "templates/0027.png",
+        "index": 27,
+        "bytes": 13964,
+        "sha256": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+        "expected": {
+          "svg": "f22a1913005907c5b86744d20f4a40cb529af5612fe6ff85230622d76a97f862",
+          "png": "be25a98f4b852f7af4ef61ab1b447be35f78c6e16023f10ea3067f925d6f6f2d",
+          "bytes": 13964
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 28,
+      "key": "paginated org-chart 4 long page 1",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0067.png",
+        "archiveMember": "templates/0067.png",
+        "index": 67,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "78bb75dc9ac2214bd068a7382368b8d6717e6efb42bd70fb2ae029066bc62fc6",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0028.png",
+        "archiveMember": "templates/0028.png",
+        "index": 28,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "2721482d4c3c4c05c76c64ed2bb2a96ec93a09a32203fa656dee8c61524a43f5",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 29,
+      "key": "paginated org-chart 4 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0068.png",
+        "archiveMember": "templates/0068.png",
+        "index": 68,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "02e64fa51d32b97ec7b081b5397ddba00d156f46c59c1e1c69c80b416ce480b5",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0029.png",
+        "archiveMember": "templates/0029.png",
+        "index": 29,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "c305e389a57dbf7a251dd0573c38f94d05a80b4342c48b24ae03745165b5c804",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 30,
+      "key": "paginated org-chart 4 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0069.png",
+        "archiveMember": "templates/0069.png",
+        "index": 69,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "08c7d67cb3912e876ffa586fa41a9228878dc4e3df0e3e9ff6a474f51308fbce",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0030.png",
+        "archiveMember": "templates/0030.png",
+        "index": 30,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "72336faa2897dd9e9795159efdd213cf3a1d922afb95ef61b624718da04483f3",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 31,
+      "key": "paginated org-chart 4 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0070.png",
+        "archiveMember": "templates/0070.png",
+        "index": 70,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "ec30ec1c42620393bbbea36cf8f6df6e1b71a70bc0c45b875db660a86ca821ed",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0031.png",
+        "archiveMember": "templates/0031.png",
+        "index": 31,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "85a47a81731270c41bc2ed6e81f40a2f4359974d1acdc610fd52dbebf9743fe9",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 32,
+      "key": "paginated org-chart 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0072.png",
+        "archiveMember": "templates/0072.png",
+        "index": 72,
+        "bytes": 8469,
+        "sha256": "a91cd8d831fa0276c9089c9eb74c9aed89ce441fbc1dddf3cd720d2845a902a0",
+        "expected": {
+          "svg": "41b81a463269f48cb65395d4d40a5eeca6df50976e1856bdbba8daaa6e44b994",
+          "png": "a91cd8d831fa0276c9089c9eb74c9aed89ce441fbc1dddf3cd720d2845a902a0",
+          "bytes": 8469
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0032.png",
+        "archiveMember": "templates/0032.png",
+        "index": 32,
+        "bytes": 12536,
+        "sha256": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
+        "expected": {
+          "svg": "c874076fb11810ed52a60537b2aa396903f6a5de52d540b289753a57b47210bd",
+          "png": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
+          "bytes": 12536
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 33,
+      "key": "paginated org-chart 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0073.png",
+        "archiveMember": "templates/0073.png",
+        "index": 73,
+        "bytes": 8469,
+        "sha256": "a91cd8d831fa0276c9089c9eb74c9aed89ce441fbc1dddf3cd720d2845a902a0",
+        "expected": {
+          "svg": "ddd30cbaec52e201d18316565b39de9d0c1c106629dd0a581ca2b57bd08a1126",
+          "png": "a91cd8d831fa0276c9089c9eb74c9aed89ce441fbc1dddf3cd720d2845a902a0",
+          "bytes": 8469
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0033.png",
+        "archiveMember": "templates/0033.png",
+        "index": 33,
+        "bytes": 12536,
+        "sha256": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
+        "expected": {
+          "svg": "bc70a90b99246c517eeccc862211e02d6098e32ec41f9710b7a3fdd98d2335d3",
+          "png": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
+          "bytes": 12536
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 34,
+      "key": "paginated org-chart 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0074.png",
+        "archiveMember": "templates/0074.png",
+        "index": 74,
+        "bytes": 8469,
+        "sha256": "a91cd8d831fa0276c9089c9eb74c9aed89ce441fbc1dddf3cd720d2845a902a0",
+        "expected": {
+          "svg": "a227b083d25155d021d2220fd704f83dc5c3c9fc419842bb9cd8f354644e6efb",
+          "png": "a91cd8d831fa0276c9089c9eb74c9aed89ce441fbc1dddf3cd720d2845a902a0",
+          "bytes": 8469
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0034.png",
+        "archiveMember": "templates/0034.png",
+        "index": 34,
+        "bytes": 12536,
+        "sha256": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
+        "expected": {
+          "svg": "52ba52566fb5239ec2f0a54e6276ca1911a05d705661540cdd34a9b02cc13518",
+          "png": "63d49b69526a0bd7b0754bdbbc2f51496e67fccee83bca36af09977b86502532",
+          "bytes": 12536
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 35,
+      "key": "paginated org-chart 6 long page 1",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0075.png",
+        "archiveMember": "templates/0075.png",
+        "index": 75,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "78bb75dc9ac2214bd068a7382368b8d6717e6efb42bd70fb2ae029066bc62fc6",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0035.png",
+        "archiveMember": "templates/0035.png",
+        "index": 35,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "2721482d4c3c4c05c76c64ed2bb2a96ec93a09a32203fa656dee8c61524a43f5",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 36,
+      "key": "paginated org-chart 6 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0076.png",
+        "archiveMember": "templates/0076.png",
+        "index": 76,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "02e64fa51d32b97ec7b081b5397ddba00d156f46c59c1e1c69c80b416ce480b5",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0036.png",
+        "archiveMember": "templates/0036.png",
+        "index": 36,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "c305e389a57dbf7a251dd0573c38f94d05a80b4342c48b24ae03745165b5c804",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 37,
+      "key": "paginated org-chart 6 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0077.png",
+        "archiveMember": "templates/0077.png",
+        "index": 77,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "08c7d67cb3912e876ffa586fa41a9228878dc4e3df0e3e9ff6a474f51308fbce",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0037.png",
+        "archiveMember": "templates/0037.png",
+        "index": 37,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "72336faa2897dd9e9795159efdd213cf3a1d922afb95ef61b624718da04483f3",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 38,
+      "key": "paginated org-chart 6 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0078.png",
+        "archiveMember": "templates/0078.png",
+        "index": 78,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "ec30ec1c42620393bbbea36cf8f6df6e1b71a70bc0c45b875db660a86ca821ed",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0038.png",
+        "archiveMember": "templates/0038.png",
+        "index": 38,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "85a47a81731270c41bc2ed6e81f40a2f4359974d1acdc610fd52dbebf9743fe9",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 39,
+      "key": "paginated org-chart 6 long page 5",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0079.png",
+        "archiveMember": "templates/0079.png",
+        "index": 79,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "74a84ebbdd9af3f288f55083426f1038f4a4c6c043637d9cb96f76a610c8050e",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0039.png",
+        "archiveMember": "templates/0039.png",
+        "index": 39,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "6254161440de67d7c154ce38404ed29684a73e2a2c3349be18fbfc29008762ed",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 40,
+      "key": "paginated org-chart 6 long page 6",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0080.png",
+        "archiveMember": "templates/0080.png",
+        "index": 80,
+        "bytes": 13272,
+        "sha256": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+        "expected": {
+          "svg": "2e4e23171792658d676fbc1f2fb9ee9979d7d6c6a485980d846f83e45d9a0025",
+          "png": "e3818bdc3b5ba55d75390033f39ce8993f6d80da24a8f8eba22c3ec4f584319d",
+          "bytes": 13272
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0040.png",
+        "archiveMember": "templates/0040.png",
+        "index": 40,
+        "bytes": 14094,
+        "sha256": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+        "expected": {
+          "svg": "ea0dc790b8a21fde9012cf12174845eb1e451282af9f006aa21b6ef0bbeb8bfb",
+          "png": "91ceb38214335be3f0b7ac8761f32a40cec80c20d94e179101b1061e44b9519a",
+          "bytes": 14094
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 41,
+      "key": "paginated hierarchy 4 long page 1",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0081.png",
+        "archiveMember": "templates/0081.png",
+        "index": 81,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "c1cfdfdf3c3c1d1bd4dca3de89df1ca39fc40a4208b3b298a878c56b0a88fe6c",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0041.png",
+        "archiveMember": "templates/0041.png",
+        "index": 41,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "4feeb14071255894b0cb988de0da730c9ff9221058b1c683cf59e55cf5b8834f",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 42,
+      "key": "paginated hierarchy 4 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0082.png",
+        "archiveMember": "templates/0082.png",
+        "index": 82,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "ebb82f7ea1e718b57ad025354d6584524bc587181052fa6889ddd3970113d434",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0042.png",
+        "archiveMember": "templates/0042.png",
+        "index": 42,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "2b4714360cbd1d08e712d79222a01a5a318928ef861df4d56af554d821a450d6",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 43,
+      "key": "paginated hierarchy 4 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0083.png",
+        "archiveMember": "templates/0083.png",
+        "index": 83,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "8b492f0020194353c9c27b98eca28c0f16cca6f7c196cf34390ea3f113a7f0e7",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0043.png",
+        "archiveMember": "templates/0043.png",
+        "index": 43,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "9a0a6f4194fdf7c4564b54f3e30a68f93412d3301093ded5851b4547364631de",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 44,
+      "key": "paginated hierarchy 4 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0084.png",
+        "archiveMember": "templates/0084.png",
+        "index": 84,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "321372f0126b9af5186181b7dd0fac91f7285693040cc2db0c8e61bf4b55d529",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0044.png",
+        "archiveMember": "templates/0044.png",
+        "index": 44,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "7e7653bc23bcd1fbf8772e100b214f2bc66dc6e2cf2d799a1b9dd8020fc768f8",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 45,
+      "key": "paginated hierarchy 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0086.png",
+        "archiveMember": "templates/0086.png",
+        "index": 86,
+        "bytes": 7946,
+        "sha256": "6bc40029271f86560d198c33ee41cc39d3d7d2f6cc00938c60a296dc49753a0c",
+        "expected": {
+          "svg": "ec2884d313363aef504727ee51643ec0abc941cf43bc3f0f1e6b95d43baa0136",
+          "png": "6bc40029271f86560d198c33ee41cc39d3d7d2f6cc00938c60a296dc49753a0c",
+          "bytes": 7946
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0045.png",
+        "archiveMember": "templates/0045.png",
+        "index": 45,
+        "bytes": 12014,
+        "sha256": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
+        "expected": {
+          "svg": "6e3aa5797182eae98e6b5a9f297d3d704be1116633908810f624c3fdd3fdb1a2",
+          "png": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
+          "bytes": 12014
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 46,
+      "key": "paginated hierarchy 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0087.png",
+        "archiveMember": "templates/0087.png",
+        "index": 87,
+        "bytes": 7946,
+        "sha256": "6bc40029271f86560d198c33ee41cc39d3d7d2f6cc00938c60a296dc49753a0c",
+        "expected": {
+          "svg": "c7c89286419252e512a9788802aa129d842d086c0dadad6afc0832fc127d59e2",
+          "png": "6bc40029271f86560d198c33ee41cc39d3d7d2f6cc00938c60a296dc49753a0c",
+          "bytes": 7946
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0046.png",
+        "archiveMember": "templates/0046.png",
+        "index": 46,
+        "bytes": 12014,
+        "sha256": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
+        "expected": {
+          "svg": "d9b41e6fe95eb86445c040b1bf2952c382daeb846e0ab7d2d7240f79a69b39a0",
+          "png": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
+          "bytes": 12014
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 47,
+      "key": "paginated hierarchy 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0088.png",
+        "archiveMember": "templates/0088.png",
+        "index": 88,
+        "bytes": 7946,
+        "sha256": "6bc40029271f86560d198c33ee41cc39d3d7d2f6cc00938c60a296dc49753a0c",
+        "expected": {
+          "svg": "9249ccb7d98918e3ea840231df5b81e03d5d2d502ed81ff947e4cf7b54fd40b7",
+          "png": "6bc40029271f86560d198c33ee41cc39d3d7d2f6cc00938c60a296dc49753a0c",
+          "bytes": 7946
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0047.png",
+        "archiveMember": "templates/0047.png",
+        "index": 47,
+        "bytes": 12014,
+        "sha256": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
+        "expected": {
+          "svg": "f0cf490961e85551c5f56d18a91176f6077c66c5e5b9ea9643b422ab63bd128a",
+          "png": "aac76b5c5824842e034847036de5fe677990876fdc871354f39cadfbeb174158",
+          "bytes": 12014
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 48,
+      "key": "paginated hierarchy 6 long page 1",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0089.png",
+        "archiveMember": "templates/0089.png",
+        "index": 89,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "c1cfdfdf3c3c1d1bd4dca3de89df1ca39fc40a4208b3b298a878c56b0a88fe6c",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0048.png",
+        "archiveMember": "templates/0048.png",
+        "index": 48,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "4feeb14071255894b0cb988de0da730c9ff9221058b1c683cf59e55cf5b8834f",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 49,
+      "key": "paginated hierarchy 6 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0090.png",
+        "archiveMember": "templates/0090.png",
+        "index": 90,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "ebb82f7ea1e718b57ad025354d6584524bc587181052fa6889ddd3970113d434",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0049.png",
+        "archiveMember": "templates/0049.png",
+        "index": 49,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "2b4714360cbd1d08e712d79222a01a5a318928ef861df4d56af554d821a450d6",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 50,
+      "key": "paginated hierarchy 6 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0091.png",
+        "archiveMember": "templates/0091.png",
+        "index": 91,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "8b492f0020194353c9c27b98eca28c0f16cca6f7c196cf34390ea3f113a7f0e7",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0050.png",
+        "archiveMember": "templates/0050.png",
+        "index": 50,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "9a0a6f4194fdf7c4564b54f3e30a68f93412d3301093ded5851b4547364631de",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 51,
+      "key": "paginated hierarchy 6 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0092.png",
+        "archiveMember": "templates/0092.png",
+        "index": 92,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "321372f0126b9af5186181b7dd0fac91f7285693040cc2db0c8e61bf4b55d529",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0051.png",
+        "archiveMember": "templates/0051.png",
+        "index": 51,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "7e7653bc23bcd1fbf8772e100b214f2bc66dc6e2cf2d799a1b9dd8020fc768f8",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 52,
+      "key": "paginated hierarchy 6 long page 5",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0093.png",
+        "archiveMember": "templates/0093.png",
+        "index": 93,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "32b99e18b848b0d3544bb1a0c4ade9f37522ab4bdbfe25aead7a390e87589b88",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0052.png",
+        "archiveMember": "templates/0052.png",
+        "index": 52,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "89e2462d931c5061d5f6d7eba8f887168f829b53c76833a2021208f8bdd188e2",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 53,
+      "key": "paginated hierarchy 6 long page 6",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0094.png",
+        "archiveMember": "templates/0094.png",
+        "index": 94,
+        "bytes": 12751,
+        "sha256": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+        "expected": {
+          "svg": "e501fc780ff65419d2b1ba03373054a8a4ab9079ee2b0d810c9824de50554098",
+          "png": "3c994df106d6dc1f87aa780266d5c5f31611157bd577522d7dd7f3b345e49b17",
+          "bytes": 12751
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0053.png",
+        "archiveMember": "templates/0053.png",
+        "index": 53,
+        "bytes": 13575,
+        "sha256": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+        "expected": {
+          "svg": "9956e34ea7706033eeec2ad100374251432d40272f250f1b895e75623ada8144",
+          "png": "80450c3d914edd369fc4120a1c268eac753b3c9705f169b4d7dace871f03dd5b",
+          "bytes": 13575
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 54,
+      "key": "paginated venn 4 long page 1",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0095.png",
+        "archiveMember": "templates/0095.png",
+        "index": 95,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "57fea1f396bde9920d4f1158e3fe5d0f36fc17082292246b9874829c19e827bd",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0054.png",
+        "archiveMember": "templates/0054.png",
+        "index": 54,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "42fe5c48125ba5e5a2fd31a79711f72a66f85b2e9b34ab342bb1ca976fd581e9",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 55,
+      "key": "paginated venn 4 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0096.png",
+        "archiveMember": "templates/0096.png",
+        "index": 96,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "f95989ca7b6cf1f6da677fd46d391f1c59ed76248d51a7af2ca0fbb7ef7ae2f4",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0055.png",
+        "archiveMember": "templates/0055.png",
+        "index": 55,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "cb7e4c14d327079d19918768cc5ef0085104d83b9e06a99fd25314100eed2974",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 56,
+      "key": "paginated venn 4 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0097.png",
+        "archiveMember": "templates/0097.png",
+        "index": 97,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "7873342a4192b82222a3db1ca46d3b9081366569978b515ce62dcd930c41f250",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0056.png",
+        "archiveMember": "templates/0056.png",
+        "index": 56,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "ba79f66a9a4e7e9e7241757b8a64f3251071d33c2fd5cfef2d46ce58ce67837b",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 57,
+      "key": "paginated venn 4 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0098.png",
+        "archiveMember": "templates/0098.png",
+        "index": 98,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "5ccb5bcd79792f5e6f039ab04581300b3228b05bbb5122f1928cd9d5137125ca",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0057.png",
+        "archiveMember": "templates/0057.png",
+        "index": 57,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "8b7ad143e3c9414e8ef6c37358774c6a4697ceb54ebce8333f5eef0016694a26",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 58,
+      "key": "paginated venn 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0100.png",
+        "archiveMember": "templates/0100.png",
+        "index": 100,
+        "bytes": 15901,
+        "sha256": "64f446358205584c952a3e88ae1cafcb9efdde1c2121619c29cab536ab46682f",
+        "expected": {
+          "svg": "ba681f45ec60ad5923ef25294644599073e4a78ff979a0c84deecb9262ad2d9a",
+          "png": "64f446358205584c952a3e88ae1cafcb9efdde1c2121619c29cab536ab46682f",
+          "bytes": 15901
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0058.png",
+        "archiveMember": "templates/0058.png",
+        "index": 58,
+        "bytes": 14152,
+        "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+        "expected": {
+          "svg": "d57ce68411d0f8d5682492b216accf52d7f2e66b951091a73aa29af641f262db",
+          "png": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+          "bytes": 14152
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 59,
+      "key": "paginated venn 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0101.png",
+        "archiveMember": "templates/0101.png",
+        "index": 101,
+        "bytes": 7692,
+        "sha256": "8e4ca744560a31bc762c6dd9903d8c84932f7c35d94c389840e9e165c0ad3f3e",
+        "expected": {
+          "svg": "7ad688fd9790819841e5be516c9139ea485250b72351ac5bd61118d6878e398b",
+          "png": "8e4ca744560a31bc762c6dd9903d8c84932f7c35d94c389840e9e165c0ad3f3e",
+          "bytes": 7692
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0059.png",
+        "archiveMember": "templates/0059.png",
+        "index": 59,
+        "bytes": 14152,
+        "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+        "expected": {
+          "svg": "c9e67666a0e856313673f86e7ae121efefe1a79dfa2cf3bc18fe64da5b6dabe5",
+          "png": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+          "bytes": 14152
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 60,
+      "key": "paginated venn 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0102.png",
+        "archiveMember": "templates/0102.png",
+        "index": 102,
+        "bytes": 15901,
+        "sha256": "64f446358205584c952a3e88ae1cafcb9efdde1c2121619c29cab536ab46682f",
+        "expected": {
+          "svg": "76c497567eb18a8ad5db82312e229f08c319fef920b11844fc9e422a16244828",
+          "png": "64f446358205584c952a3e88ae1cafcb9efdde1c2121619c29cab536ab46682f",
+          "bytes": 15901
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0060.png",
+        "archiveMember": "templates/0060.png",
+        "index": 60,
+        "bytes": 14152,
+        "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+        "expected": {
+          "svg": "46996892998ed096ed9d758dc7627b7e9345731a1117cd5a731a9faacd711415",
+          "png": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+          "bytes": 14152
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 61,
+      "key": "paginated venn 6 long page 1",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0106.png",
+        "archiveMember": "templates/0106.png",
+        "index": 106,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "57fea1f396bde9920d4f1158e3fe5d0f36fc17082292246b9874829c19e827bd",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0061.png",
+        "archiveMember": "templates/0061.png",
+        "index": 61,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "42fe5c48125ba5e5a2fd31a79711f72a66f85b2e9b34ab342bb1ca976fd581e9",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 62,
+      "key": "paginated venn 6 long page 2",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0107.png",
+        "archiveMember": "templates/0107.png",
+        "index": 107,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "f95989ca7b6cf1f6da677fd46d391f1c59ed76248d51a7af2ca0fbb7ef7ae2f4",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0062.png",
+        "archiveMember": "templates/0062.png",
+        "index": 62,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "cb7e4c14d327079d19918768cc5ef0085104d83b9e06a99fd25314100eed2974",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 63,
+      "key": "paginated venn 6 long page 3",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0108.png",
+        "archiveMember": "templates/0108.png",
+        "index": 108,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "7873342a4192b82222a3db1ca46d3b9081366569978b515ce62dcd930c41f250",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0063.png",
+        "archiveMember": "templates/0063.png",
+        "index": 63,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "ba79f66a9a4e7e9e7241757b8a64f3251071d33c2fd5cfef2d46ce58ce67837b",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 64,
+      "key": "paginated venn 6 long page 4",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0109.png",
+        "archiveMember": "templates/0109.png",
+        "index": 109,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "5ccb5bcd79792f5e6f039ab04581300b3228b05bbb5122f1928cd9d5137125ca",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0064.png",
+        "archiveMember": "templates/0064.png",
+        "index": 64,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "8b7ad143e3c9414e8ef6c37358774c6a4697ceb54ebce8333f5eef0016694a26",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 65,
+      "key": "paginated venn 6 long page 5",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0110.png",
+        "archiveMember": "templates/0110.png",
+        "index": 110,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "08565120f7449152771c72432f34c1344b7543362f64ea08de3a0c3e463d193c",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0065.png",
+        "archiveMember": "templates/0065.png",
+        "index": 65,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "d6885343f61ef3e8021ba0dd34dfa55b0312ca41339eb6a1e3cf7a32865dbb4b",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    },
+    {
+      "index": 66,
+      "key": "paginated venn 6 long page 6",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0111.png",
+        "archiveMember": "templates/0111.png",
+        "index": 111,
+        "bytes": 12462,
+        "sha256": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+        "expected": {
+          "svg": "cea0eb6d3e53afa935a3631466eb4c3fc84b7afa06529e3ebeec6b71291449db",
+          "png": "e516e484035d51dbefa4f47588c75e295937469c3663697de1d510de9bbd64fa",
+          "bytes": 12462
+        }
+      },
+      "after": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42587651918/templates/0066.png",
+        "archiveMember": "templates/0066.png",
+        "index": 66,
+        "bytes": 13286,
+        "sha256": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+        "expected": {
+          "svg": "1af32345c74e740d495bf8cd4c13a2e3cee9025bc4629b8b2920db555aafcd75",
+          "png": "07546df1ea2f35808dfacaa4cda04bfc2d976fd0e8820963de6f48abd3458c24",
+          "bytes": 13286
+        }
+      },
+      "visualJudgment": "ROOT_REVIEW_REQUIRED; child semantic image interpretation unreliable/retracted"
+    }
+  ],
+  "removed": [
+    {
+      "key": "paginated venn 5 long page 5",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0103.png",
+        "archiveMember": "templates/0103.png",
+        "index": 103,
+        "bytes": 7692,
+        "sha256": "8e4ca744560a31bc762c6dd9903d8c84932f7c35d94c389840e9e165c0ad3f3e",
+        "expected": {
+          "svg": "a99b8c679f4f77a07511e3c80fc59e7a29f03f76984254f57297443036073086",
+          "png": "8e4ca744560a31bc762c6dd9903d8c84932f7c35d94c389840e9e165c0ad3f3e",
+          "bytes": 7692
+        }
+      },
+      "sourceCoverage": "NOT_YET_PROVEN; inspect exact maintained fixture pagination"
+    },
+    {
+      "key": "paginated venn 5 long page 6",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0104.png",
+        "archiveMember": "templates/0104.png",
+        "index": 104,
+        "bytes": 15901,
+        "sha256": "64f446358205584c952a3e88ae1cafcb9efdde1c2121619c29cab536ab46682f",
+        "expected": {
+          "svg": "1e38db08761d70d4e60cf5a47f830763f1431f09cae6618cc29c74296f5d6ee4",
+          "png": "64f446358205584c952a3e88ae1cafcb9efdde1c2121619c29cab536ab46682f",
+          "bytes": 15901
+        }
+      },
+      "sourceCoverage": "NOT_YET_PROVEN; inspect exact maintained fixture pagination"
+    },
+    {
+      "key": "paginated venn 5 long page 7",
+      "before": {
+        "path": "C:/opf-work/release-033-artifacts/golden-42498350968/templates/0105.png",
+        "archiveMember": "templates/0105.png",
+        "index": 105,
+        "bytes": 7692,
+        "sha256": "8e4ca744560a31bc762c6dd9903d8c84932f7c35d94c389840e9e165c0ad3f3e",
+        "expected": {
+          "svg": "285bc11ba546504f013a7811fbb1303206e136ae5d8c012e201e748945027f3b",
+          "png": "8e4ca744560a31bc762c6dd9903d8c84932f7c35d94c389840e9e165c0ad3f3e",
+          "bytes": 7692
+        }
+      },
+      "sourceCoverage": "NOT_YET_PROVEN; inspect exact maintained fixture pagination"
+    }
+  ],
+  "added": [],
+  "changedCore": [
+    {
+      "key": "inverted-pyramid 1 long",
+      "before": [
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items - 57.6,193.6,1164.8,468.8 30px cols=2"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region levels 57.6,193.6,1164.8,468.8 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items levels 57.6,193.6,1164.8,468.8 30px cols=2",
+        "diagnostic arrangement-adapted blocks.0.items"
+      ]
+    },
+    {
+      "key": "inverted-pyramid 5 long",
+      "before": [
+        "area title 57.6,57.6,1164.8,112",
+        "region levels 57.6,193.6,1164.8,222.4 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items levels 57.6,195.8,1164.8,218 21.3px",
+        "item blocks.1.items - 57.6,440,273.2,222.4 16px",
+        "item blocks.2.items - 354.8,440,273.2,222.4 16px",
+        "item blocks.3.items - 652,440,273.2,222.4 16px",
+        "item blocks.4.items - 949.2,440,273.2,222.4 16px",
+        "diagnostic layout-unplaced blocks.1",
+        "diagnostic layout-unplaced blocks.2",
+        "diagnostic layout-unplaced blocks.3",
+        "diagnostic layout-unplaced blocks.4",
+        "diagnostic arrangement-adapted blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region levels 57.6,193.6,1164.8,468.8 grid 5",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items levels 57.6,193.6,273.2,222.4 16px",
+        "item blocks.1.items levels 354.8,193.6,273.2,222.4 16px",
+        "item blocks.2.items levels 652,193.6,273.2,222.4 16px",
+        "item blocks.3.items levels 949.2,193.6,273.2,222.4 16px",
+        "item blocks.4.items levels 503.4,440,273.2,222.4 16px",
+        "diagnostic text-overflow blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items"
+      ]
+    },
+    {
+      "key": "inverted-pyramid 6 long",
+      "before": [
+        "area title 57.6,57.6,1164.8,112",
+        "region levels 57.6,193.6,1164.8,222.4 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items levels 57.6,195.8,1164.8,218 21.3px",
+        "item blocks.1.items - 57.6,440,273.2,99.2 16px",
+        "item blocks.2.items - 354.8,440,273.2,99.2 16px",
+        "item blocks.3.items - 652,440,273.2,99.2 16px",
+        "item blocks.4.items - 949.2,440,273.2,99.2 16px",
+        "item blocks.5.items - 503.4,563.2,273.2,99.2 16px",
+        "diagnostic layout-unplaced blocks.1",
+        "diagnostic layout-unplaced blocks.2",
+        "diagnostic layout-unplaced blocks.3",
+        "diagnostic layout-unplaced blocks.4",
+        "diagnostic layout-unplaced blocks.5",
+        "diagnostic arrangement-adapted blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items",
+        "diagnostic text-overflow blocks.5.items"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region levels 57.6,193.6,1164.8,468.8 grid 6",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items levels 57.6,193.6,372.3,222.4 16px",
+        "item blocks.1.items levels 453.9,193.6,372.3,222.4 16px",
+        "item blocks.2.items levels 850.1,193.6,372.3,222.4 16px",
+        "item blocks.3.items levels 57.6,440,372.3,222.4 16px",
+        "item blocks.4.items levels 453.9,440,372.3,222.4 16px",
+        "item blocks.5.items levels 850.1,440,372.3,222.4 16px",
+        "diagnostic text-overflow blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items",
+        "diagnostic text-overflow blocks.5.items"
+      ]
+    },
+    {
+      "key": "org-chart 1 long",
+      "before": [
+        "area title 57.6,57.6,1164.8,112",
+        "region people 57.6,193.6,1164.8,468.8 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items people 57.6,284.9,1164.8,286.2 28px",
+        "diagnostic arrangement-adapted blocks.0.items"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region people 57.6,193.6,1164.8,468.8 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items people 57.6,284.9,1164.8,286.2 28px",
+        "diagnostic arrangement-adapted blocks.0.items",
+        "diagnostic text-overflow blocks.0.items"
+      ]
+    },
+    {
+      "key": "org-chart 5 long",
+      "before": [
+        "area title 57.6,57.6,1164.8,112",
+        "region people 57.6,193.6,1164.8,222.4 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items people 57.6,195.8,1164.8,218 21.3px",
+        "item blocks.1.items - 57.6,440,273.2,222.4 16px",
+        "item blocks.2.items - 354.8,440,273.2,222.4 16px",
+        "item blocks.3.items - 652,440,273.2,222.4 16px",
+        "item blocks.4.items - 949.2,440,273.2,222.4 16px",
+        "diagnostic layout-unplaced blocks.1",
+        "diagnostic layout-unplaced blocks.2",
+        "diagnostic layout-unplaced blocks.3",
+        "diagnostic layout-unplaced blocks.4",
+        "diagnostic arrangement-adapted blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region people 57.6,193.6,1164.8,468.8 grid 5",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items people 57.6,193.6,273.2,222.4 16px",
+        "item blocks.1.items people 354.8,193.6,273.2,222.4 16px",
+        "item blocks.2.items people 652,193.6,273.2,222.4 16px",
+        "item blocks.3.items people 949.2,193.6,273.2,222.4 16px",
+        "item blocks.4.items people 503.4,440,273.2,222.4 16px",
+        "diagnostic text-overflow blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items"
+      ]
+    },
+    {
+      "key": "org-chart 6 long",
+      "before": [
+        "area title 57.6,57.6,1164.8,112",
+        "region people 57.6,193.6,1164.8,222.4 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items people 57.6,195.8,1164.8,218 21.3px",
+        "item blocks.1.items - 57.6,440,273.2,99.2 16px",
+        "item blocks.2.items - 354.8,440,273.2,99.2 16px",
+        "item blocks.3.items - 652,440,273.2,99.2 16px",
+        "item blocks.4.items - 949.2,440,273.2,99.2 16px",
+        "item blocks.5.items - 503.4,563.2,273.2,99.2 16px",
+        "diagnostic layout-unplaced blocks.1",
+        "diagnostic layout-unplaced blocks.2",
+        "diagnostic layout-unplaced blocks.3",
+        "diagnostic layout-unplaced blocks.4",
+        "diagnostic layout-unplaced blocks.5",
+        "diagnostic arrangement-adapted blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items",
+        "diagnostic text-overflow blocks.5.items"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region people 57.6,193.6,1164.8,468.8 grid 6",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items people 57.6,193.6,372.3,222.4 16px",
+        "item blocks.1.items people 453.9,193.6,372.3,222.4 16px",
+        "item blocks.2.items people 850.1,193.6,372.3,222.4 16px",
+        "item blocks.3.items people 57.6,440,372.3,222.4 16px",
+        "item blocks.4.items people 453.9,440,372.3,222.4 16px",
+        "item blocks.5.items people 850.1,440,372.3,222.4 16px",
+        "diagnostic text-overflow blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items",
+        "diagnostic text-overflow blocks.5.items"
+      ]
+    },
+    {
+      "key": "hierarchy 1 long",
+      "before": [
+        "area title 57.6,57.6,1164.8,112",
+        "region nodes 57.6,193.6,1164.8,468.8 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items nodes 57.6,284.9,1164.8,286.2 28px",
+        "diagnostic arrangement-adapted blocks.0.items"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region nodes 57.6,193.6,1164.8,468.8 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items nodes 57.6,284.9,1164.8,286.2 28px",
+        "diagnostic arrangement-adapted blocks.0.items",
+        "diagnostic text-overflow blocks.0.items"
+      ]
+    },
+    {
+      "key": "hierarchy 5 long",
+      "before": [
+        "area title 57.6,57.6,1164.8,112",
+        "region nodes 57.6,193.6,1164.8,222.4 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items nodes 57.6,195.8,1164.8,218 21.3px",
+        "item blocks.1.items - 57.6,440,273.2,222.4 16px",
+        "item blocks.2.items - 354.8,440,273.2,222.4 16px",
+        "item blocks.3.items - 652,440,273.2,222.4 16px",
+        "item blocks.4.items - 949.2,440,273.2,222.4 16px",
+        "diagnostic layout-unplaced blocks.1",
+        "diagnostic layout-unplaced blocks.2",
+        "diagnostic layout-unplaced blocks.3",
+        "diagnostic layout-unplaced blocks.4",
+        "diagnostic arrangement-adapted blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region nodes 57.6,193.6,1164.8,468.8 grid 5",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items nodes 57.6,193.6,273.2,222.4 16px",
+        "item blocks.1.items nodes 354.8,193.6,273.2,222.4 16px",
+        "item blocks.2.items nodes 652,193.6,273.2,222.4 16px",
+        "item blocks.3.items nodes 949.2,193.6,273.2,222.4 16px",
+        "item blocks.4.items nodes 503.4,440,273.2,222.4 16px",
+        "diagnostic text-overflow blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items"
+      ]
+    },
+    {
+      "key": "hierarchy 6 long",
+      "before": [
+        "area title 57.6,57.6,1164.8,112",
+        "region nodes 57.6,193.6,1164.8,222.4 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items nodes 57.6,195.8,1164.8,218 21.3px",
+        "item blocks.1.items - 57.6,440,273.2,99.2 16px",
+        "item blocks.2.items - 354.8,440,273.2,99.2 16px",
+        "item blocks.3.items - 652,440,273.2,99.2 16px",
+        "item blocks.4.items - 949.2,440,273.2,99.2 16px",
+        "item blocks.5.items - 503.4,563.2,273.2,99.2 16px",
+        "diagnostic layout-unplaced blocks.1",
+        "diagnostic layout-unplaced blocks.2",
+        "diagnostic layout-unplaced blocks.3",
+        "diagnostic layout-unplaced blocks.4",
+        "diagnostic layout-unplaced blocks.5",
+        "diagnostic arrangement-adapted blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items",
+        "diagnostic text-overflow blocks.5.items"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region nodes 57.6,193.6,1164.8,468.8 grid 6",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items nodes 57.6,193.6,372.3,222.4 16px",
+        "item blocks.1.items nodes 453.9,193.6,372.3,222.4 16px",
+        "item blocks.2.items nodes 850.1,193.6,372.3,222.4 16px",
+        "item blocks.3.items nodes 57.6,440,372.3,222.4 16px",
+        "item blocks.4.items nodes 453.9,440,372.3,222.4 16px",
+        "item blocks.5.items nodes 850.1,440,372.3,222.4 16px",
+        "diagnostic text-overflow blocks.0.items",
+        "diagnostic text-overflow blocks.1.items",
+        "diagnostic text-overflow blocks.2.items",
+        "diagnostic text-overflow blocks.3.items",
+        "diagnostic text-overflow blocks.4.items",
+        "diagnostic text-overflow blocks.5.items"
+      ]
+    },
+    {
+      "key": "venn 1 long",
+      "before": [
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items - 57.6,193.6,1164.8,468.8 30px cols=2"
+      ],
+      "after": [
+        "area title 57.6,57.6,1164.8,112",
+        "region sets 57.6,193.6,1164.8,468.8 column 1",
+        "item title - 57.6,57.6,1164.8,65.9 54px",
+        "item title - 57.6,135.5,1164.8,34.2 28px",
+        "item blocks.0.items sets 57.6,193.6,1164.8,468.8 30px cols=2",
+        "diagnostic arrangement-adapted blocks.0.items"
+      ]
+    }
+  ],
+  "examples": {
+    "baseline": "test/golden/opf-examples-png.fa-33-region-lists",
+    "sourceMatches": true,
+    "changedSlides": [],
+    "changedDecks": [],
+    "filesWritten": [],
+    "filesRemoved": []
+  },
+  "scope": {
+    "chartApproved": false,
+    "nativeAcceptance": false,
+    "visualAcceptance": false,
+    "regenerationPerformed": false,
+    "all728CompositionCoverage": false
+  }
+}

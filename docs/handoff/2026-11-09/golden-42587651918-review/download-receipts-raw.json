@@ -1,0 +1,18 @@
+[
+  {
+    "path": "golden-42587651918-download.json",
+    "rawBytes": 281,
+    "rawSha256": "59c98310616f03af98499e211099bfeef0437381e1aadd663307f969639b3b93",
+    "transport": "golden-42587651918-download.json.gz",
+    "transportBytes": 217,
+    "transportSha256": "282365a88bac7ed000cb91e091b443c0b4ce5c2986fe8379599f58c8ebcb0999"
+  },
+  {
+    "path": "golden-42498350968-download.json",
+    "rawBytes": 282,
+    "rawSha256": "3f7eafac75b26db7e6d62298a5851f3b832e0b41947f5ff00da0b82a37433c32",
+    "transport": "golden-42498350968-download.json.gz",
+    "transportBytes": 218,
+    "transportSha256": "d543018e44260f22ccc7f78363430da783d0a6a848eddddadbfe3233f4a11f29"
+  }
+]

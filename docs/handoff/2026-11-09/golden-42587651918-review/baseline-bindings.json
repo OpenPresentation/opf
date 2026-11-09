@@ -1,0 +1,34 @@
+[
+  {
+    "local": "before-template-baseline.json",
+    "ref": "348fd323b31302b5a3cdd7af2db8bb8bf6fffa2a",
+    "path": "packages/render/test/golden/layout-templates-rr96-color-variants.json",
+    "gitBlob": "38624a2f0947201fd98d04d2805fc05286d33925",
+    "bytes": 151752,
+    "sha256": "e04a0cd706af7db5874982422f9ebbd3a0dc3c61dc07c7d0110a0ed788d9c672"
+  },
+  {
+    "local": "after-template-baseline.json",
+    "ref": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+    "path": "packages/render/test/golden/layout-templates-rr96-color-variants.json",
+    "gitBlob": "9af032a2f7df4b3ab0ae005703f92ffa8898e738",
+    "bytes": 151116,
+    "sha256": "bd9074b3817d36e6f5b3c8e97913384a998dd8bc2db17a8a3ab6af03ba7199dd"
+  },
+  {
+    "local": "before-core-baseline.json",
+    "ref": "348fd323b31302b5a3cdd7af2db8bb8bf6fffa2a",
+    "path": "packages/javascript/test/fixtures/template-goldens-0.19.json",
+    "gitBlob": "ed92726c89da66cadff4271a3745d4a018ff00ac",
+    "bytes": 201365,
+    "sha256": "d740958877ae08a6a4d039fe3fc0281f29e1c56f3a256d30d3fea99a9407909f"
+  },
+  {
+    "local": "after-core-baseline.json",
+    "ref": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+    "path": "packages/javascript/test/fixtures/template-goldens-0.19.json",
+    "gitBlob": "252f8252e2ed4f4223c4c3a12900c4cf7676fd4d",
+    "bytes": 200754,
+    "sha256": "ee945f90db686bb6f731afb5911ec2ebce1c1425050596d3fe6e2e5f62cb7239"
+  }
+]
