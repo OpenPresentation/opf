@@ -1,3 +1,7 @@
 # Keep generated package text and indexed preview byte counts reproducible on
 # Windows as well as Unix. Binary files retain their original bytes.
 * text=auto eol=lf
+
+# Immutable public WHOLE-seven test inputs retain exact original bytes.
+scripts/native-acceptance/test-fixtures/seven-chart/*.pptx -text
+scripts/native-acceptance/test-fixtures/seven-chart/whole-seven.opf.json -text
