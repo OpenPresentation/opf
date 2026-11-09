@@ -8,6 +8,11 @@ const require = createRequire(new URL('../../../../packages/pptx/package.json', 
 const {unzipSync} = require('fflate'), {XMLParser} = require('fast-xml-parser');
 const own = path.dirname(fileURLToPath(import.meta.url));
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+const checks = JSON.parse(fs.readFileSync(path.join(own, 'metadata-checks.json')));
+const checkBytes = fs.readFileSync(path.join(own, checks.archive.path)); assert.equal(checkBytes.length, checks.archive.bytes); assert.equal(digest(checkBytes), checks.archive.sha256);
+const checkRaw = unzipSync(checkBytes); assert.deepEqual(Object.keys(checkRaw).sort(), checks.files.map(f => f.path).sort());
+for (const file of checks.files) {assert.equal(checkRaw[file.path].length, file.bytes); assert.equal(digest(checkRaw[file.path]), file.sha256);}
+assert.equal(checks.outcome.failed, 1);
 const manifest = JSON.parse(fs.readFileSync(path.join(own, 'manifest.json')));
 const archive = fs.readFileSync(path.join(own, manifest.archive.path));
 assert.equal(archive.length, manifest.archive.bytes); assert.equal(digest(archive), manifest.archive.sha256);

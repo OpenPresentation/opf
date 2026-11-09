@@ -1,0 +1,58 @@
+{
+  "testedHead": "32f166114bb7dc0f7244b9204c33e6f0bd9c9b14",
+  "base": "f9897413098c01d14c0c38e813790bd6897365ea",
+  "outcome": {
+    "passed": 4,
+    "failed": 1,
+    "skipped": 1,
+    "seconds": 33.3,
+    "missingTrackedInput": "docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz"
+  },
+  "archive": {
+    "path": "metadata-checks.zip",
+    "bytes": 8627,
+    "sha256": "2046d9860f8c3b782c0ebc06a096c9194b583a67cdc7aae8bbf264de0409604c"
+  },
+  "files": [
+    {
+      "path": "driver/driver.log",
+      "bytes": 2898,
+      "sha256": "3074c3aa3e330a8356b7ae55ce3970c29f91dbc5d2f3859f964e663a19078eb0"
+    },
+    {
+      "path": "driver/exit.json",
+      "bytes": 125,
+      "sha256": "f203d2a4e492ce390c42b750bab4559ee07c7f629019645deaa0f35fa3274ceb"
+    },
+    {
+      "path": "driver/preflight.json",
+      "bytes": 464,
+      "sha256": "469990251fc557753328246ccd8a87a0004c5d33286580607a9a677ec2e02ed9"
+    },
+    {
+      "path": "steps/biome.log",
+      "bytes": 677,
+      "sha256": "cc9de3abfdb7a7526b82ed57f7763312ee1f38687ee3383fb841f22cdca10a66"
+    },
+    {
+      "path": "steps/build.log",
+      "bytes": 14605,
+      "sha256": "9b7fc0a013c17981e2d85f43d162f523b0cce95b32b3ecf4c0e194cb07020dbe"
+    },
+    {
+      "path": "steps/pnpm_run_check_changes.log",
+      "bytes": 2643,
+      "sha256": "2e4cfe4afcca2a9fd5300a83a1acea6c94b4bb555c1fe8e63d0e3df98020ef31"
+    },
+    {
+      "path": "steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1043,
+      "sha256": "b7f60bc5742431c42591b1f2dbc538a25c32f134c572b56c3c5605f79b445bfd"
+    },
+    {
+      "path": "steps/pnpm_run_check_text.log",
+      "bytes": 1857,
+      "sha256": "a501af260e27dbc53ab5b510752fef8afc049f1a3f67ad8588813f7784c1b18e"
+    }
+  ]
+}
