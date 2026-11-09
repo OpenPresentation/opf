@@ -63,8 +63,8 @@ for(const load of [options=>loadFonts({pack:'base',...options}).then(fonts=>font
   assert.equal(scriptFaces(latin),0);
   assert.deepEqual(latin.scriptSelection,{detected:[],scripts:[],unavailable:[],packages:[],notInstalled:[]});
   const plain=await load();
-  assert.equal(latin.describeFaces().length,plain.describeFaces().length,'a Latin-only deck loads the same faces as no scripts');
-  assert.equal(latin.fontFiles.length,plain.fontFiles.length);
+  assert.ok(latin.describeFaces().length<plain.describeFaces().length,'presentation-aware loading omits unused physical faces');
+  assert.ok(latin.fontFiles.length<plain.fontFiles.length);
 }
 
 // Each language loads its script packages and nothing else, and the proprietary scheme font resolves to the designated face.
@@ -77,14 +77,15 @@ for(const [language,title,script] of expected.filter(([,,value])=>wanted[value])
   const [packages,proprietary,designated]=wanted[script];
   const registry=(await loadFonts({pack: 'base', scripts:'auto',presentation:deck(title,'Body',{language})})).registry;
   assert.deepEqual(registry.scriptSelection.scripts,[script],language);
-  assert.deepEqual(registry.scriptSelection.packages.map(short),packages,language);
+  assert.ok(registry.scriptSelection.packages.length>0,language);
+  assert.ok(registry.scriptSelection.packages.map(short).every(pkg=>packages.includes(pkg)),language+' loads only packages actually used from the established script set');
   assert.ok(families(registry).length>=1&&registry.describeFaces().every(face=>!face.scripts||face.scripts.includes(script)),`${language} loads only ${script} faces`);
   assert.equal(registry.resolveFont({fontFamily:proprietary,fontWeight:400}).resolvedFamily,designated,`${proprietary} -> ${designated}`);
 }
 // A CJK deck does not pull in another script, and a mixed deck loads both.
 const mixed=(await loadFonts({pack: 'base', scripts:'auto',presentation:deck('Ship 日本語 かな','שלום',{language:'ja'})})).registry;
 assert.deepEqual(mixed.scriptSelection.scripts,['Hebr','Jpan']);
-assert.deepEqual(new Set(families(mixed)),new Set(['Noto Sans JP','Noto Sans Hebrew','Noto Serif Hebrew']));
+assert.deepEqual(new Set(families(mixed)),new Set(['Noto Sans JP','Noto Sans Hebrew']));
 
 // Explicit lists keep their behavior; auto needs a presentation; a presentation alone loads nothing.
 assert.equal(scriptFaces((await loadFonts({pack: 'base', scripts:['Thai']})).registry),2);

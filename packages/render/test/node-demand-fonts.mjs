@@ -403,3 +403,32 @@ test('explicit aliases and fallbackFamily select the same single actual face as 
       );
   }
 });
+
+test('document preparation preserves unresolved-family inspection; actual measurement and drawing still refuse', async () => {
+  for (const doc of [
+    simple,
+    {
+      slides: [
+        { text: [{ text: 'Unknown', fontFamily: 'Never A Real Font' }] },
+      ],
+    },
+  ]) {
+    const config = { pack: 'base', scripts: 'auto', renderOptions };
+    const fonts = await loadFonts({ ...config, presentation: doc });
+    assert.deepEqual(fonts.pending(doc, renderOptions), []);
+    const baseline = await loadFonts({ pack: 'base' });
+    assert.throws(() => toSvg(doc, 1, { ...renderOptions, fonts }), {
+      code: 'font-unavailable',
+    });
+    assert.throws(() => toSvg(doc, 1, { ...renderOptions, fonts: baseline }), {
+      code: 'font-unavailable',
+    });
+    assert.throws(
+      () =>
+        fonts.textMeasurement.measure('Drawn', 20, {
+          fontFamily: 'Aptos Display',
+        }),
+      { code: 'font-unavailable' },
+    );
+  }
+});

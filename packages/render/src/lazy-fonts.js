@@ -118,8 +118,8 @@ function recordingMeasurement(settle, into, coverage) {
         }
         // Demand loaders know coverage only after selected bytes are verified. Unknown faces are optimistic for one round.
         try { coverage?.(String(text), size, settled); }
-        catch(error) { if(error?.code !== 'missing-glyph')throw error; }
-        // Recording cannot stop on an uncovered glyph: ensure must still run its bounded optional fallback chain.
+        catch(error) { if(!['missing-glyph','font-unavailable','font-style-unavailable'].includes(error?.code))throw error; }
+        // Recording must finish on unresolved styles or uncovered glyphs: ensure still runs its bounded optional fallback chain.
         // Actual rendering has no recording hook and retains its original missing-glyph refusal.
       }
       return String(text).length * size * RECORDED_EM;
@@ -231,7 +231,7 @@ export function createFontAnalysis() {
     const view = registry ? registryView(registry) : undefined;
     const settle = style => {
       if (!view) return { ...style };
-      try { return view(style); } catch (error) { if(registry?.coverage)throw error; return { ...style }; }
+      try { return view(style); } catch { return { ...style }; }
     };
     const keys = deckKeys(presentation);
     if (!keys) {

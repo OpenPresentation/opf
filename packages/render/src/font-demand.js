@@ -302,6 +302,22 @@ export async function createNodeDemand(
                 )
               )
                 registry.textMeasurement.measure(text, size, style);
+              else if (
+                !faces.some(
+                  (face) =>
+                    key(face) ===
+                    key({
+                      family: style.fontFamily,
+                      weight: style.fontWeight ?? 400,
+                      italic: !!style.italic,
+                    }),
+                )
+              )
+                throw new OPFFontError(
+                  'font-unavailable',
+                  'No allowed candidate for this coverage probe.',
+                  { path: style.path, fontFamily: style.fontFamily },
+                );
             },
           });
     const wanted = new Set(drawn.map(key));
@@ -466,7 +482,8 @@ export async function createNodeDemand(
           covers,
           limit: 8,
         });
-        loaded.selection.uncovered = uncovered;
+        if (uncovered.length || Object.hasOwn(loaded.selection, 'uncovered'))
+          loaded.selection.uncovered = uncovered;
         if (uncovered.length)
           notify(
             'script-glyph-uncovered',
