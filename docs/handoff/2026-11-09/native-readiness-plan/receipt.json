@@ -1,0 +1,92 @@
+{
+  "base": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+  "plan": "555f7fa40fcec7e99b7e8faf222489b30df3fa19",
+  "readmeOID": "f1bb770b33c35becf2fbf82ee966950c42c3bc58",
+  "protectedTrees": {
+    "packages": "b412b7044ef757d5a4b8ad3534dc51ee6876ca92",
+    "spec": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5",
+    "scripts": "fee63b0ee5c22dfe1dcd76fb6675b28a1d206225",
+    "tools": "653243de846c184621b65ab4adab62688172364d"
+  },
+  "toolchain": {
+    "node": "v24.20.0",
+    "pnpm": "10.33.2",
+    "physicalOfficeVersion": "not newly observed"
+  },
+  "qualification": {
+    "docsExit": 0,
+    "passed": 4,
+    "skipped": 2,
+    "seconds": 30.2,
+    "packageTestsSelected": [],
+    "scope": "Documentation checks only; build step is required checker setup, not witness export preparation"
+  },
+  "files": [
+    {
+      "file": "raw/known-text-fixture.json.gz",
+      "bytes": 353,
+      "sha256": "272dc223c6a6a04f42d611b8eeb303dbbac9a44f02ad9772cde33ec1e06bc79c",
+      "storedBytes": 276,
+      "storedSHA256": "36aba945edfc6886af35e227d2579ac25ff749514ab188a26f4ae7076b20b619"
+    },
+    {
+      "file": "raw/install.log.gz",
+      "bytes": 2451,
+      "sha256": "8a2438b8162ffbbde53c748ab16c1174d64be6e61365edc36474d6907efa1a4b",
+      "storedBytes": 507,
+      "storedSHA256": "e96e2f673455f2a2a4fea2ebfb9786d90dd347b6e766cc6afb18c71ad2f4ddd7"
+    },
+    {
+      "file": "raw/install.exit.json.gz",
+      "bytes": 182,
+      "sha256": "a6f3930d6d99bd609db11cc6bbc34f8c0bd3077dc31e8f7c857d23f8a8fbf25c",
+      "storedBytes": 166,
+      "storedSHA256": "2b41e619506333981d223f2f967756747ff3437cdec10e9cde3caba50651a3d0"
+    },
+    {
+      "file": "raw/docs-check.log.gz",
+      "bytes": 928,
+      "sha256": "5462de19ae362cde097653cf5650b1032a9485d84d9652e5c5fab6d148be3358",
+      "storedBytes": 415,
+      "storedSHA256": "face00a8d792c9d600671eadd52af9f0cf838cd8eb226897337cf3b4e62c3ae1"
+    },
+    {
+      "file": "raw/docs-check.exit.json.gz",
+      "bytes": 221,
+      "sha256": "3d3797f949b5d8b79d02e73f327f51aea3f0020d1d1864291e53e696d4a63e59",
+      "storedBytes": 186,
+      "storedSHA256": "1fa11593cdc39a84ce0eab5471c579dd9243976a4af412e4212e44504dd833fc"
+    },
+    {
+      "file": "raw/docs-final.log.gz",
+      "bytes": 916,
+      "sha256": "e76ccb207d28db07bb6bf41c879ce2faead9a92fac948b300194d19a781fec4e",
+      "storedBytes": 410,
+      "storedSHA256": "7949db3322c3fb607f95b4e0786e15b8e2a8e43f1587177e73f2557c02a374f4"
+    },
+    {
+      "file": "raw/docs-final.exit.json.gz",
+      "bytes": 221,
+      "sha256": "b133f1dedd4fc01796b8a6eb39fa69138208c0b557541f4896f89a3d8ba93598",
+      "storedBytes": 161,
+      "storedSHA256": "dd8a406ff2b2ae49e0911e5f29d7ae1a64abf20c50ff42e798816ee0f1bdbad2"
+    }
+  ],
+  "officeCalls": 0,
+  "nativeScriptsExecuted": 0,
+  "witnessExports": 0,
+  "fontRegistration": 0,
+  "networkRequests": 0,
+  "providerActions": 0,
+  "ciDispatches": 0,
+  "nativeAcceptance": false,
+  "branchPolicy": "NEVER MERGE",
+  "finalDocs": {
+    "exitCode": 0,
+    "passed": 5,
+    "skipped": 1,
+    "seconds": 30.7,
+    "packageTestsSelected": [],
+    "scope": "Receipt/raw/offline verifier only; final check receipts appended without further source changes"
+  }
+}
