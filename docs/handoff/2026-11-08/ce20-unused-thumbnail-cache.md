@@ -24,8 +24,18 @@ Only packages/editor/src/workspace.js changes runtime behavior. The browser regr
 - Current exact source/verdict agreement is checked after same-title source edits. Existing source-readiness behavior is preserved.
 - Local harness screenshots were inspected for Org portrait and reopened portrait sorter. These are source/render witnesses, not hosted-site fit or native PowerPoint qualification.
 
-Remaining local checks and their exact source identity will be recorded in the sealed packet. The coordinator owns independent review, publication, PR creation and wave integration. No provider/API/CI/push/Office/release action is delegated here.
+Qualified runtime/test source is 49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8, tree a5ed5be5076bf71154a34600b75f92b4506fd756. At that exact source, workspace-browser (including the final 12-phase regression), embed-host-browser, thumbnail-strip-actions-browser and the normal 15-case Studio browser controls pass. No full performance benchmark was run.
+
+Required mapped checks ran on that source. Build, Biome, changelog, font-hotlinks, skills, stability and text pass; types are correctly unselected. The editor contract runner stops at its unchanged codemirror-guard.mjs, whose directory symlink fails with Windows EPERM after 18 passing scripts. A bounded continuation uses the maintained selectTests/nodeArgs exports and executes all 125 not-reached scripts, without exclusions or changes: 124 pass; the unchanged native-playground-controls.mjs fails because its explicit Windows PowerShell child cannot find Get-FileHash. This control uses fake Office objects only; no actual Office automation occurred. Total selected scripts: 144 exercised, 142 pass, two environment failures. Aggregate mapped status remains RED, not green. Root requires real CI for a complete passing package result; no test/global-setting/privilege workaround or retry of those controls is included.
+
+The [sealed packet](ce20-unused-thumbnail-cache/receipt.json) preserves 42 lossless transports, all initial failures, the detailed contract log, all remaining outcomes, real renderer selections and local screenshots. Its verifier binds four actual runtime/test inputs, seven source-commit files and 14 unchanged protected files, including both failing controls. Run node docs/handoff/2026-11-08/ce20-unused-thumbnail-cache/verify.mjs from the checkout. Pre-freeze focused observations are labeled separately; the exact-source workspace browser reruns the final regression.
+
+Independent review identified a pre-existing sorter portrait crop, assigned by the coordinator to a separate branch. These screenshots are metadata/current-render-content witnesses, not proof of painted portrait fit. This cache branch contains no crop fix and makes no such qualification claim.
+
+The coordinator owns independent review, publication, PR creation and wave integration. No provider/API/CI/push/Office/release action occurred here.
 
 ## Resume
 
-Do not treat local work-count evidence as a published 0.34 package or a repaired 0.33 hosted preview. Complete required mapped checks and scoped existing browser/cache controls, seal raw successes and failures, and report the final commit/tree to the coordinator. Never edit frozen site/runtime branches, chart files, generated fixtures or goldens.
+Do not treat local work-count evidence as a published 0.34 package or a repaired 0.33 hosted preview. Root must obtain the required passing CI result, independently review the packet and normally fold the approved item into the 0.34 integration. The separate portrait crop and hosted qualification remain open. Never edit frozen site/runtime branches, chart files, generated fixtures or goldens.
+
+Evidence-only 44-file mapped checks pass in29.4seconds after the frozen-source results. This checks the documentation/packet changes only; the original package mapped gate remains RED. The packet additionally preserves that raw result and the bounded continuation driver.
