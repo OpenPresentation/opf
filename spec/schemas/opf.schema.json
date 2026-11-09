@@ -3929,7 +3929,7 @@
     },
     "Diagram": {
       "type": "object",
-      "description": "A diagram written as text (Mermaid, Graphviz DOT or PlantUML). Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { \"source\": value }.",
+      "description": "A diagram written as text (Mermaid, Graphviz DOT or PlantUML), laid out with the deck's measured fonts and resolved colors at the largest type size that fits. PPTX export defaults to editable native shapes, connectors and text in one group for qualified families; unsupported families or drawing constructs use an SVG picture with a PNG fallback. The diagrams: \"picture\" option always uses that picture form. A string diagram is shorthand for { \"source\": value }.",
       "additionalProperties": false,
       "required": ["source"],
       "properties": {
@@ -3947,7 +3947,7 @@
         },
         "alt": {
           "type": "string",
-          "description": "Text alternative that says what the diagram shows. Exported as the picture's description. Without it, engines derive one from the diagram's labels.",
+          "description": "Text alternative that says what the diagram shows. Exported as the description of the native shape group or picture. Without it, engines derive one from the diagram's labels.",
           "examples": ["Ideas move from brief to approval; approved work is built, rejected work returns to the brief."]
         }
       }
