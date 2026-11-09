@@ -1,0 +1,32 @@
+{
+  "head": "84b16a863d34f1801b0ac36ad3e3a4d87c941c3f",
+  "base": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+  "command": [
+    "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+    "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/pnpm/bin/pnpm.cjs",
+    "check:changed",
+    "--base",
+    "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db"
+  ],
+  "node": "v24.20.0",
+  "started": "2026-11-09T09:17:52.609Z",
+  "completed": "2026-11-09T09:18:26.079Z",
+  "exitCode": 0,
+  "signal": null,
+  "checkerSeconds": 32.6,
+  "passedSteps": 5,
+  "failedSteps": 0,
+  "typecheck": "skipped",
+  "selectedSteps": [
+    "build",
+    "biome",
+    "check:changes",
+    "check:skill-commands",
+    "check:text"
+  ],
+  "packageTestsSelected": [],
+  "inputDirtyMetadata": [
+    "docs/handoff/2026-11-09/golden-42587651918-review/source-proof.json"
+  ],
+  "scope": "One required docs-only check after actual new derivative figure and later-audit additions. No browser/native/product package suite or authoritative golden update."
+}

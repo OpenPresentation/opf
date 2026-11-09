@@ -72,3 +72,25 @@ The first assembly command had an evidence-script repository-path error (five pa
 The earlier source-coverage gap is now resolved by a later audit supplied by the separate source agent and reviewed by root. Its original report, driver, output and fresh-build preflight/log/exit receipt are preserved losslessly under venn5long-evidence. The driver ran once at clean exact f32 source/tree, invoked the maintained paginatedDecks helper and selected Venn 5 long; it wrote no raster or golden. Input/output are exactly 35 labels in the same complete value/order sequence, in four pages of 14,7,7,7 labels, with no text-overflow diagnostic. Duplicate repeated label strings limit discrimination of original block identity; count and full value/order are preserved. This audit does not repair or approve the six separate no-shrink failures. The original pair-manifest.json remains unchanged as an initial snapshot; this later evidence supersedes only its historical coverage-pending field.
 
 The actual new derivative-figure and later-audit additions require one new docs-only mapped check. Its raw result will be appended after execution; previous required checks remain literal, and no product/browser/native suite or golden update is requested.
+
+Final figure-change mapped qualification at tested head84b16a863d34f1801b0ac36ad3e3a4d87c941c3f (plus source-proof metadata) is GREEN: 32.6 seconds checker time / 33.5 seconds outer process, five selected steps passed, typecheck skipped, no package tests selected. Build, Biome, check:changes, check:skill-commands and check:text passed. Exact commands, exit and seven raw outputs are retained under checks/figures-mapped. This sealing descendant adds only the factual check receipt and review links; no repeated product qualification or new authoritative golden update follows. The entire golden wave remains NOT ACCEPTED until the six rejected cases are corrected and requalified.
+
+### Direct paired PNG review sheets
+
+- [Sheet 01: pairs 00-03](paired-sheets/sheet-01.png) - REJECTED indices 02, 03
+- [Sheet 02: pairs 04-07](paired-sheets/sheet-02.png) - REJECTED indices 06, 07
+- [Sheet 03: pairs 08-11](paired-sheets/sheet-03.png) - REJECTED indices 10, 11
+- [Sheet 04: pairs 12-15](paired-sheets/sheet-04.png)
+- [Sheet 05: pairs 16-19](paired-sheets/sheet-05.png)
+- [Sheet 06: pairs 20-23](paired-sheets/sheet-06.png)
+- [Sheet 07: pairs 24-27](paired-sheets/sheet-07.png)
+- [Sheet 08: pairs 28-31](paired-sheets/sheet-08.png)
+- [Sheet 09: pairs 32-35](paired-sheets/sheet-09.png)
+- [Sheet 10: pairs 36-39](paired-sheets/sheet-10.png)
+- [Sheet 11: pairs 40-43](paired-sheets/sheet-11.png)
+- [Sheet 12: pairs 44-47](paired-sheets/sheet-12.png)
+- [Sheet 13: pairs 48-51](paired-sheets/sheet-13.png)
+- [Sheet 14: pairs 52-55](paired-sheets/sheet-14.png)
+- [Sheet 15: pairs 56-59](paired-sheets/sheet-15.png)
+- [Sheet 16: pairs 60-63](paired-sheets/sheet-16.png)
+- [Sheet 17: pairs 64-66](paired-sheets/sheet-17.png)

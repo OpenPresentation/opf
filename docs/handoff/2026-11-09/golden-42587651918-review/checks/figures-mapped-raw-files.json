@@ -1,0 +1,58 @@
+[
+  {
+    "original": "C:\\opf-work\\golden034-review-logs-20261109-01\\figures-mapped\\check-changed.log",
+    "transport": "figures-mapped/check-changed.log.gz",
+    "rawBytes": 903,
+    "rawSha256": "05bd74c910cae3d5e39e093952c98843aa4c452a2ea57f44a7e011aca46099c5",
+    "transportBytes": 405,
+    "transportSha256": "69c83956acb794c2c28224d07663c47afb93345a7587cd1de67050109ee761a4"
+  },
+  {
+    "original": "C:\\opf-work\\golden034-review-logs-20261109-01\\figures-mapped\\check-changed.exit.json",
+    "transport": "figures-mapped/check-changed.exit.json.gz",
+    "rawBytes": 563,
+    "rawSha256": "fb9a70770a2fe6804df4267b288bf47e7408c73d9b6059cfcb8fe1ea3c20e78b",
+    "transportBytes": 335,
+    "transportSha256": "a95c0a1d938e0cb53b53b39fb39246bafb678bd1fed92ee3383a1f01b362bbc4"
+  },
+  {
+    "original": "C:\\opf-work\\golden034-review\\artifacts\\check-changed\\build.log",
+    "transport": "figures-mapped/steps-build.log.gz",
+    "rawBytes": 14589,
+    "rawSha256": "40c5d332305abb546a0a81e63c23e9e9babff98a713e18a00656ceba64e06ce6",
+    "transportBytes": 2972,
+    "transportSha256": "8fdbabecc11e1ed143aa2deef11b41ba61bcc191f4c71439b6efe3723313aca2"
+  },
+  {
+    "original": "C:\\opf-work\\golden034-review\\artifacts\\check-changed\\biome.log",
+    "transport": "figures-mapped/steps-biome.log.gz",
+    "rawBytes": 683,
+    "rawSha256": "fbf93d5770a64f1016bbda580bf596cd33a5c6ab99aba1cb009f0c19e61717d1",
+    "transportBytes": 323,
+    "transportSha256": "fd5008051894b20d0b77b73f0d3d2f1f3b2cc48dcd91c1db42d46233e4c5f3f2"
+  },
+  {
+    "original": "C:\\opf-work\\golden034-review\\artifacts\\check-changed\\pnpm_run_check_changes.log",
+    "transport": "figures-mapped/steps-pnpm_run_check_changes.log.gz",
+    "rawBytes": 2642,
+    "rawSha256": "d36948a9b8a31f2699e2e15dac964bacae0fd42e62d903db8c2634857b361bb4",
+    "transportBytes": 1168,
+    "transportSha256": "e4c07fa7c3bf09b9495f0f65a88ce6b11f0713cf4c44dbc290707b999e81c777"
+  },
+  {
+    "original": "C:\\opf-work\\golden034-review\\artifacts\\check-changed\\pnpm_run_check_skill-commands.log",
+    "transport": "figures-mapped/steps-pnpm_run_check_skill-commands.log.gz",
+    "rawBytes": 1040,
+    "rawSha256": "fd4089c09505810a5a159582552e2412ceb485230b158d4cb90178a2627e701e",
+    "transportBytes": 584,
+    "transportSha256": "fdd12d75fe26270dbbcc513671478b065c74401dd00bed38fdf0f35c33c7d127"
+  },
+  {
+    "original": "C:\\opf-work\\golden034-review\\artifacts\\check-changed\\pnpm_run_check_text.log",
+    "transport": "figures-mapped/steps-pnpm_run_check_text.log.gz",
+    "rawBytes": 1072,
+    "rawSha256": "9c713258e9aa0f735f3928e49f172f73922f1c1d428f99d495917e01da9fffa5",
+    "transportBytes": 596,
+    "transportSha256": "2b1e092471e434d6337c7b016fa5bfd998ba7d339d6fb3fa9fd97e4cd467568a"
+  }
+]
