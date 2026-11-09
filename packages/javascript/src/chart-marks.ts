@@ -640,7 +640,12 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
  */
 export function restackForRows(chart: unknown, data: ResolvedChartData, layer: ChartLayer, rows: ChartLayerRows, box: Box, axis: ChartValueAxis | undefined, geometry: Omit<ChartPlotGeometry, 'box'>): ChartLayer {
   // LH-93: a plot shared with sibling charts gives way to the table's rows (rows take precedence in both engines).
-  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) { const {plot: _shared, ...rest} = layer; return {...rest, rows}; }
+  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) {
+    const {plot: _shared, references: _references, ...rest} = layer;
+    const plot = {left: rows.left, right: rows.right, top: rows.top, bottom: box.height - rows.bottom};
+    const references = axis && layer.references ? placeReferences(chartReferences(chart), data, {value: axis}, box, plot, {...geometry, horizontal: true}) : undefined;
+    return {...rest, rows, ...(references ? {plot, references} : {})};
+  }
   const {plot: _plot, header: _header, stack, ...rest} = layer;
   const header = stack.legend ?? layer.header;
   const plot: Box = {x: box.x + rows.left, y: box.y + rows.top, width: box.width - rows.left - rows.right, height: rows.bottom - rows.top};

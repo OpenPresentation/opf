@@ -20,3 +20,5 @@ Vetoable implementation decisions within the approved contract:
 - Preserve uncertain mixed area/helper groups as all-data combo import with an explicit area-to-column diagnostic where the current OPF model cannot retain the native mixed representation. This is limited preservation, not parity.
 
 - Visual inspection found avoidable singleton overlay endpoint-label overhang. Full-plot horizontal overlay labels now align inward at their logical endpoint; native point labels remain centered. Numeric positions and spans are unchanged. Five pinned-font PNGs and geometry/hash evidence are kept in [chart-reference-lines-evidence](chart-reference-lines-evidence/render-evidence.json).
+
+- Final-plot audit repaired table-aligned bar references after LH-115 alignment and moved label diagnostics to the final shared/aligned placement. Existing no-reference alignment remains covered. SVG dot uses the existing Stroke/DrawingML 1:3 pattern. The expanded focused/neighbor suite passes44 tests after retaining/correcting a float equality assertion and an incorrect assumed area SVG tag. Coherent required check and PPTX/native remain pending.

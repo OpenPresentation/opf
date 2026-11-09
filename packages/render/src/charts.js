@@ -198,14 +198,14 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // LH-105: direct labels instead of a legend: the series names at the line ends, the category names on the slices.
   c.endLabels = layer?.endLabels;
   if (layer?.endLabels) c.legendManaged = true;
-  // LH-107 to LH-110 (core chart-marks.ts): a waterfall's roles, a pie's value list, a stacked chart's values and names, the title's
-  // reference marks.
+  // Shared chart marks: waterfall roles, pie value lists, stacked values/names and explicit references.
   c.waterfall = layer?.waterfall;
   c.histogram = layer?.histogram;
   c.valueList = layer?.valueList;
   // LH-182: a doughnut's square and its hole (core), the hole filled with the surface.
   c.doughnut = layer?.doughnut;
   c.stack = layer?.stack;
+  c.references = layer?.references;
   if (layer?.valueList || layer?.stack?.names) c.legendManaged = true;
   // LH-93: sibling charts sharing one value axis share one plot height; core gives each its inner plot as an inset from the chart box.
   const inset = layer?.plot;
@@ -822,7 +822,7 @@ function renderCategoryChart(c, spec) {
     const aligned = c.alignedRows?.centers.length === count ? c.alignedRows : undefined;
     plot = aligned ? { x, y: aligned.top, width, height: Math.max(1, aligned.bottom - aligned.top) } : { x, y: top, width, height: Math.max(1, bottom - top) };
     // LH-125: a horizontal stacked bar chart draws its plot where core pinned it (its names stand in a row above); the PPTX export pins the same.
-    if (c.plotBox && !aligned) { plot = { ...c.plotBox }; scale = scaleFor(plot.width); }
+    if (c.plotBox && (!aligned || c.references)) { plot = { ...c.plotBox }; scale = scaleFor(plot.width); }
     // LH-59: the categories read top to bottom in data order (PowerPoint's reversed category axis, which the export writes).
     const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
     const rowBand = plot.height / count;
@@ -984,7 +984,7 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
 function drawReferenceLines(c, lines) {
   for (const line of lines ?? []) {
     const color=line.stroke.color===undefined?c.chartTextColor:resolveColorRef(line.stroke.color,{colorScheme:c.bound.design.colorScheme,roles:c.bound.design.colors,variables:c.bound.design.variables,fallback:c.chartTextColor});
-    const width=line.strokeWidth,dash=line.stroke.dash==='dash'?[4*width,3*width]:line.stroke.dash==='dot'?[width,2*width]:undefined;
+    const width=line.strokeWidth,dash=line.stroke.dash==='dash'?[4*width,3*width]:line.stroke.dash==='dot'?[width,3*width]:undefined;
     if(width>0)c.mark('line',{x1:line.x1,y1:line.y1,x2:line.x2,y2:line.y2,stroke:color,'stroke-width':width,...(dash?{'stroke-dasharray':dash.map(c.num).join(' ')}:{})},c.path+'.referenceLines.'+line.index);
     if(line.label!==undefined&&line.labelBox)c.text(line.label,line.labelBox,c.path+'.referenceLines.'+line.index+'.label',line.labelAlign??'center',c.labelColor);
   }

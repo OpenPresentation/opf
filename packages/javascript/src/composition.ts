@@ -7829,7 +7829,6 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar'}) : undefined;
         if (placed && plot) {
           layer = {...layer, plot, references: placed};
-          for(const finding of placed.diagnostics) diagnostics.push({code:'text-overflow',path:node.path+'.referenceLines.'+finding.index+'.label',message:finding.message});
         }
       }
     }
@@ -10090,7 +10089,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // (a deck without a bold body face must not fail on a slide that never draws one).
   const marked = items.filter(item => item.chart?.layer?.stack || item.chart?.layer?.references);
   if (marked.length) {
-    const needsBold = marked.some(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends || item.chart?.layer?.references);
+    const needsBold = marked.some(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends);
     const chartBold = needsBold ? textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement) : undefined;
     // Each horizontal chart can only lose its names row and restore its axis once, so at most two monotonic transitions per chart.
     for (let pass = 0; pass <= marked.length * 2; pass++) {
@@ -10133,6 +10132,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (rows) { chart.chart.layer = restackForRows(chart.value, data, layer, rows, chart.box, chart.chart.valueAxis, plotGeometry(chart)); break; }
     }
   }
+  // Explicit labels report only their final placement, after sibling scales/plots and table-row alignment.
+  for (const item of items) for (const finding of item.chart?.layer?.references?.diagnostics ?? []) diagnostics.push({code: 'text-overflow', path: item.path + '.referenceLines.' + finding.index + '.label', message: finding.message});
   // LH-115: the timeline under its column chart spans the plot, so each event sits under its column; it is listed before the chart when
   // it was written first (reading order).
   if (underChart?.chart && underChart.timeline) {
