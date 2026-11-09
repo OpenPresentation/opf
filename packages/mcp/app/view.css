@@ -1,95 +1,175 @@
-/* The deck view's own chrome. It reads the host's standard MCP Apps variables (--color-*, --font-*, --border-radius-*) and falls
-   back to its own values, light and dark, when a host sends none. The slides themselves draw with the deck's theme. */
-:root {
-	color-scheme: light dark;
-	--deck-bg-default: #ffffff;
-	--deck-surface-default: #f4f5f7;
-	--deck-fg-default: #171a1f;
-	--deck-muted-default: #5b6474;
-	--deck-line-default: #d7dbe2;
-	--deck-accent-default: #2547c4;
-	--deck-on-accent-default: #ffffff;
-	--deck-warn-default: #9a5a00;
-	--deck-error-default: #b42318;
-	--deck-ok-default: #1f7a4d;
-}
-:root[data-theme="dark"] {
-	--deck-bg-default: #171a1f;
-	--deck-surface-default: #20242b;
-	--deck-fg-default: #e8eaee;
-	--deck-muted-default: #a0a8b6;
-	--deck-line-default: #3a414c;
-	--deck-accent-default: #8aa4ff;
-	--deck-on-accent-default: #10131a;
-	--deck-warn-default: #e2a64a;
-	--deck-error-default: #ff8a80;
-	--deck-ok-default: #5fcf95;
-}
-:root {
-	--deck-bg: var(--color-background-primary, var(--deck-bg-default));
-	--deck-surface: var(--color-background-secondary, var(--deck-surface-default));
-	--deck-fg: var(--color-text-primary, var(--deck-fg-default));
-	--deck-muted: var(--color-text-secondary, var(--deck-muted-default));
-	--deck-line: var(--color-border-primary, var(--deck-line-default));
-	--deck-accent: var(--color-ring-primary, var(--deck-accent-default));
-	--deck-radius: var(--border-radius-md, 8px);
-}
+/* The deck view's own chrome, in the openpresentation.org design system: a 48px bar and a 28px status footer around the editor's
+   panes (the playground's bar). It reads only the editor's `--opf-ui-*` tokens, so the bar, the panes and the editor's own parts
+   share one palette. In a host that sends the standard MCP Apps variables, main.ts maps the neutral tokens onto the host's
+   background and text (the `theme` of createOpfEditor); the accent and the status colours stay OPF's. The slides draw with the
+   deck's own theme. */
 * { box-sizing: border-box; }
 /* The view lays itself out to the frame; its panes scroll inside, the page never does (a host frame is often narrower than it looks). */
-html, body { margin: 0; height: 100%; overflow: hidden; background: var(--deck-bg); color: var(--deck-fg); font-family: var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif); font-size: 14px; line-height: 1.4; }
-button { font: inherit; color: inherit; }
-button:focus-visible { outline: 2px solid var(--deck-accent); outline-offset: 2px; }
+html, body { margin: 0; overflow: hidden; background: transparent; }
+:root[data-fill="true"], :root[data-fill="true"] body { height: 100%; }
 
-#opf-deck { display: flex; flex-direction: column; height: 600px; max-height: var(--deck-max-height, none); min-height: 360px; }
-:root[data-display="fullscreen"] #opf-deck, :root[data-fixed-height="true"] #opf-deck { height: 100vh; max-height: none; }
+#opf-deck {
+	--deck-stage-bg: var(--opf-ui-muted-2);
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	max-height: var(--deck-max-height, none);
+	border: 1px solid var(--opf-ui-border);
+	border-radius: var(--opf-ui-radius-md);
+	overflow: hidden;
+	background: var(--opf-ui-surface);
+	color: var(--opf-ui-fg);
+	font: 13px/1.4 var(--opf-ui-font);
+	scrollbar-width: thin;
+	scrollbar-color: var(--opf-ui-border-strong) transparent;
+}
+:root[data-fill="true"] #opf-deck { height: 100vh; max-height: none; }
+:root[data-display="fullscreen"] #opf-deck { border: 0; border-radius: 0; }
+/* No specificity, so a button class below sets its own colour. */
+:where(#opf-deck) button { font: inherit; color: inherit; }
+#opf-deck [hidden] { display: none !important; }
 
-.deck-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 10px; border-bottom: 1px solid var(--deck-line); min-width: 0; }
-/* The title takes what the bar has left (basis 0), down to 96px, so it never pushes the controls onto a second row. */
-.deck-title { flex: 1 1 0; min-width: 96px; max-width: 260px; overflow: hidden; }
-.deck-spacer { flex: 1 1 0; }
-.deck-tabs { display: inline-flex; border: 1px solid var(--deck-line); border-radius: var(--deck-radius); padding: 2px; gap: 2px; flex: none; }
-.deck-tabs [role="tab"] { border: 0; background: none; padding: 4px 10px; border-radius: calc(var(--deck-radius) - 2px); cursor: pointer; color: var(--deck-muted); }
-.deck-tabs [role="tab"][aria-selected="true"] { background: var(--deck-surface); color: var(--deck-fg); font-weight: 600; }
-.deck-history, .deck-item { flex: none; display: inline-flex; align-items: center; gap: 4px; }
-.deck-history:empty, .deck-item:empty { display: none; }
-.deck-button { border: 1px solid var(--deck-line); background: var(--deck-bg); border-radius: var(--deck-radius); padding: 5px 12px; cursor: pointer; white-space: nowrap; flex: none; }
-.deck-primary { background: var(--deck-accent); border-color: var(--deck-accent); color: var(--deck-on-accent-default); font-weight: 600; }
-.deck-button:disabled { opacity: 0.5; cursor: default; }
-.deck-icon { display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; }
-.deck-icon[data-mode="fullscreen"] svg { transform: rotate(180deg); }
+/* ---- the bar: history, the deck's name, the view switch, Design, Find, full screen, Send -------------------------------------- */
+.deck-bar { flex: none; display: flex; align-items: center; gap: 8px; height: 48px; min-width: 0; padding: 0 12px; border-bottom: 1px solid var(--opf-ui-border); }
+.deck-group { flex: none; display: inline-flex; align-items: center; gap: 2px; }
+/* The name takes the room the bar has left and never pushes a control off the row. */
+.deck-title { flex: 0 1 240px; min-width: 0; overflow: hidden; }
+.deck-title:empty { display: none; }
+.deck-spacer { flex: 1 1 0; min-width: 0; }
+.deck-item { flex: none; display: inline-flex; align-items: center; }
+.deck-item:empty { display: none; }
 
-/* Find and replace is the editor's floating card: it sits over the panes, top left, instead of pushing the slide down. */
-.deck-find { position: absolute; top: 8px; left: 8px; width: min(560px, calc(100% - 16px)); z-index: 6; }
-.deck-find[hidden], .deck-find:empty { display: none; }
-.deck-root { flex: 1 1 auto; min-height: 0; position: relative; }
-/* The Review panel slides over the right edge of the panes; the review pill opens it. */
-.deck-review { position: absolute; inset: 0 0 0 auto; width: min(380px, 100%); display: flex; flex-direction: column; background: var(--deck-bg); border-left: 1px solid var(--deck-line); box-shadow: -8px 0 24px rgb(0 0 0 / 12%); z-index: 5; }
-.deck-review[hidden] { display: none; }
-.deck-review-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-bottom: 1px solid var(--deck-line); }
-.deck-review-title { font-weight: 600; }
-.deck-review-panel { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 10px 12px; }
-.deck-panes { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+/* Buttons: 32px, 6px corners, a 1px border (the design system's secondary button). Icon buttons are quiet until hovered. */
+.deck-button {
+	flex: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	height: var(--opf-ui-control-h);
+	padding: 0 12px;
+	border: 1px solid var(--opf-ui-border);
+	border-radius: var(--opf-ui-radius);
+	background: var(--opf-ui-surface);
+	font-weight: 500;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: color var(--opf-ui-ease), background-color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.deck-button:hover:not(:disabled) { background: var(--opf-ui-muted); border-color: var(--opf-ui-border-strong); }
+.deck-button:focus-visible, .deck-tabs [role="tab"]:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: 2px; }
+.deck-button:disabled { color: var(--opf-ui-muted-fg); cursor: default; }
+.deck-send:disabled { opacity: 0.7; }
+.deck-icon { width: var(--opf-ui-control-h); padding: 0; border-color: transparent; background: transparent; color: var(--opf-ui-muted-fg); }
+.deck-icon:hover:not(:disabled) { border-color: transparent; color: var(--opf-ui-fg); }
+.deck-icon:disabled { opacity: 0.45; }
+.deck-expand-close, #deck-expand[data-mode="fullscreen"] .deck-expand-open { display: none; }
+#deck-expand[data-mode="fullscreen"] .deck-expand-close { display: block; }
+/* The one primary action of the view, and only while there is something to send. */
+.deck-send[data-unsent="true"] { border-color: var(--opf-ui-accent); background: var(--opf-ui-accent); color: var(--opf-ui-accent-fg); }
+.deck-send[data-unsent="true"]:hover:not(:disabled) { border-color: var(--opf-ui-accent); background: color-mix(in srgb, var(--opf-ui-accent) 88%, var(--opf-ui-fg)); }
+
+/* The view switch: the playground's, a 2px accent rule under the selected view. */
+.deck-tabs { flex: none; display: inline-flex; align-self: stretch; gap: 2px; }
+.deck-tabs [role="tab"] { position: relative; padding: 0 10px; border: 0; background: none; color: var(--opf-ui-muted-fg); font-weight: 500; cursor: pointer; transition: color var(--opf-ui-ease); }
+.deck-tabs [role="tab"]:hover { color: var(--opf-ui-fg); }
+.deck-tabs [role="tab"][aria-selected="true"] { color: var(--opf-ui-fg); }
+.deck-tabs [role="tab"][aria-selected="true"]::after { content: ""; position: absolute; inset: auto 6px -1px; height: 2px; background: var(--opf-ui-accent-strong); }
+.deck-tabs [role="tab"]:focus-visible { outline-offset: -4px; border-radius: var(--opf-ui-radius); }
+
+/* ---- the panes ------------------------------------------------------------------------------------------------------------------ */
+.deck-root { flex: 1 1 auto; min-height: 0; position: relative; display: flex; flex-direction: column; }
+.deck-panes { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
 .deck-source, .deck-stage-col { min-width: 0; min-height: 0; }
 .deck-source { overflow: hidden; display: flex; flex-direction: column; }
 .deck-source > * { flex: 1 1 auto; min-height: 0; }
-#opf-deck[data-view="preview"] .deck-source { display: none; }
-#opf-deck[data-view="source"] .deck-stage-col { display: none; }
-#opf-deck[data-view="both"] .deck-panes { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
-#opf-deck[data-view="both"] .deck-source { border-right: 1px solid var(--deck-line); }
-@media (max-width: 640px) {
-	#opf-deck[data-view="both"] .deck-panes { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
-	#opf-deck[data-view="both"] .deck-source { border-right: 0; border-bottom: 1px solid var(--deck-line); }
-}
-.deck-stage-col { display: flex; flex-direction: column; background: var(--deck-surface); }
-.deck-stage { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; padding: 12px; display: flex; align-items: center; justify-content: center; }
-/* The editor sizes the canvas to the stage (fit: "contain"); the stage centres it. */
-.deck-canvas { flex: none; }
-.deck-row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-top: 1px solid var(--deck-line); min-width: 0; }
-.deck-nav { flex: none; }
-.deck-thumbs { flex: 1 1 auto; min-width: 0; overflow-x: auto; }
+/* The sandbox cannot save a file itself: Download shows only where the host saves it (ui/download-file). */
+#opf-deck:not([data-download="true"]) .opf-source-action-download { display: none; }
+#opf-deck[data-show="preview"] .deck-source { display: none; }
+#opf-deck[data-show="source"] .deck-stage-col { display: none; }
+#opf-deck[data-show="both"] .deck-panes { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+#opf-deck[data-show="both"] .deck-source { border-right: 1px solid var(--opf-ui-border); }
 
-.deck-foot { display: flex; gap: 12px; align-items: center; padding: 4px 10px; border-top: 1px solid var(--deck-line); font-size: 12px; color: var(--deck-muted); min-height: 26px; }
-.deck-notice:empty { display: none; }
-.deck-status { margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-@media (max-width: 900px) { .deck-title { display: none; } }
-@media (max-width: 640px) { .deck-bar { flex-wrap: wrap; } }
+.deck-stage-col { display: flex; flex-direction: column; background: var(--deck-stage-bg); }
+/* The editor sizes the canvas to the stage (fit: "contain"); the stage centres it. */
+.deck-stage { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; padding: 16px; display: flex; align-items: center; justify-content: center; }
+.deck-canvas { flex: none; }
+.deck-wait { position: absolute; inset: 0; margin: 0; display: grid; place-items: center; padding: 24px; color: var(--opf-ui-muted-fg); text-align: center; }
+#opf-deck[data-ready="true"] .deck-wait { display: none; }
+.deck-row { flex: none; display: flex; align-items: center; min-width: 0; padding: 4px 8px; border-top: 1px solid var(--opf-ui-border); background: var(--opf-ui-surface); }
+.deck-row:has(#deck-thumbs:empty) { display: none; }
+/* The strip is the editor's: it scrolls itself and keeps the open slide in view, so this element must not scroll (a scrolling
+   wrapper lets the strip grow to its full width, and it then has nothing to scroll). Here it is a compact row under the slide. */
+#deck-thumbs { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+#deck-thumbs .opf-thumbs { scrollbar-color: var(--opf-ui-border-strong) transparent; }
+#deck-thumbs, #deck-thumbs .opf-thumbs { --opf-thumbs-w: 96px !important; }
+#deck-thumbs .opf-thumbs-list { gap: 8px; padding: 4px 6px; }
+
+/* Inline in a chat the view is as tall as its content: the stage keeps the slide's shape, so a deck takes the height its slide
+   needs and no more. A host that fixes the height, and full screen, fill the frame instead. */
+:root:not([data-fill="true"]) .deck-stage { aspect-ratio: var(--deck-aspect, 16 / 9); max-height: 480px; }
+:root:not([data-fill="true"]) #opf-deck[data-show="source"] .deck-panes { height: 480px; }
+:root:not([data-fill="true"]) #opf-deck[data-show="both"] .deck-panes { height: 460px; }
+:root:not([data-fill="true"]) #opf-deck[data-show="both"] .deck-stage { aspect-ratio: auto; max-height: none; }
+
+/* Find and replace is the editor's floating card: it sits over the panes, top left, instead of pushing the slide down. */
+.deck-find { position: absolute; top: 8px; left: 8px; width: min(560px, calc(100% - 16px)); z-index: 6; }
+.deck-find:empty { display: none; }
+/* The Review panel slides over the right edge of the panes; the verdict in the footer opens it. */
+.deck-review { position: absolute; inset: 0 0 0 auto; width: min(380px, 100%); display: flex; flex-direction: column; background: var(--opf-ui-surface); border-left: 1px solid var(--opf-ui-border); box-shadow: var(--opf-ui-shadow-pop); z-index: 5; }
+.deck-review-head { flex: none; display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 0 8px 0 12px; border-bottom: 1px solid var(--opf-ui-border); }
+.deck-review-title { font-weight: 600; }
+.deck-review-head .deck-button { height: 28px; padding: 0 10px; }
+.deck-review-panel { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 10px 12px; }
+
+/* ---- the status footer: the verdict at the left, the version in mono at the right ---------------------------------------------- */
+.deck-foot { flex: none; display: flex; align-items: center; gap: 12px; height: 28px; min-width: 0; padding: 0 12px 0 6px; border-top: 1px solid var(--opf-ui-border); color: var(--opf-ui-muted-fg); font-size: 12px; white-space: nowrap; }
+.deck-verdict { flex: none; display: inline-flex; }
+/* The editor's review pill, worn as the footer's verdict: no border, the colour of its state, the words carry the meaning. */
+.deck-verdict .opf-review-pill { height: 22px; padding: 0 6px; border: 0; border-radius: var(--opf-ui-radius-sm); background: none; font-weight: 500; }
+.deck-verdict .opf-review-pill:hover:not(:disabled) { background: var(--opf-ui-muted); }
+.deck-verdict .opf-review-pill[data-state="valid"] { color: var(--opf-ui-success); }
+.deck-verdict .opf-review-pill[data-severity="error"] { color: var(--opf-ui-danger); }
+.deck-verdict .opf-review-pill[data-severity="warning"] { color: var(--opf-ui-warn); }
+/* The editor's slide navigator at footer size: previous, "01 / 16", next. It is not shown over the source alone. */
+.deck-nav { flex: none; display: inline-flex; }
+.deck-nav:empty, #opf-deck[data-show="source"] .deck-nav { display: none; }
+.deck-nav .opf-nav { gap: 0; }
+.deck-nav .opf-nav .opf-nav-button { width: 22px; height: 22px; border-radius: var(--opf-ui-radius-sm); }
+.deck-nav .opf-nav .opf-nav-icon { width: 14px; height: 14px; }
+.deck-nav .opf-nav-counter { min-width: 52px; font-size: 11.5px; }
+@media (pointer: coarse) {
+	.deck-foot { height: 40px; }
+	.deck-nav .opf-nav .opf-nav-button { width: 36px; height: 36px; }
+}
+.deck-mono { flex: none; font-family: var(--opf-ui-mono); font-size: 11.5px; }
+.deck-status { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.deck-sync { flex: none; }
+.deck-sync:empty, .deck-mono:empty { display: none; }
+.deck-sync[data-state="pending"]::before, .deck-sync[data-state="shared"]::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--opf-ui-warn); vertical-align: 1px; }
+.deck-sync[data-state="shared"]::before { background: var(--opf-ui-success); }
+
+/* ---- narrower frames ----------------------------------------------------------------------------------------------------------- */
+/* A chat column (about 660px in Claude): the name gives its room to the controls, and Both stacks the slide over the source. */
+@media (max-width: 859px) {
+	.deck-title { display: none; }
+	#opf-deck[data-show="both"] .deck-panes { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+	#opf-deck[data-show="both"] .deck-stage-col { order: -1; }
+	#opf-deck[data-show="both"] .deck-source { border-right: 0; border-top: 1px solid var(--opf-ui-border); }
+	#opf-deck[data-show="both"] .deck-row { display: none; }
+	:root:not([data-fill="true"]) #opf-deck[data-show="both"] .deck-panes { height: auto; grid-template-rows: auto 280px; }
+	:root:not([data-fill="true"]) #opf-deck[data-show="both"] .deck-stage { aspect-ratio: var(--deck-aspect, 16 / 9); max-height: 300px; }
+	:root[data-fill="true"] #opf-deck[data-show="both"] .deck-panes { grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+	#deck-thumbs, #deck-thumbs .opf-thumbs { --opf-thumbs-w: 80px !important; }
+	#deck-thumbs .opf-thumbs-title { display: none; }
+}
+/* A phone: two rows, no Both, and the footer keeps the verdict and the sync state. */
+@media (max-width: 639px) {
+	.deck-bar { height: auto; flex-wrap: wrap; gap: 4px 8px; padding: 6px 8px; }
+	.deck-tabs { align-self: auto; height: 36px; }
+	#tab-both { display: none; }
+	.deck-foot .deck-mono { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.deck-button, .deck-tabs [role="tab"] { transition: none; }
+}

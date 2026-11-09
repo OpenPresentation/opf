@@ -7,6 +7,9 @@
 // The loop: the host sends the tool's arguments (the deck), the view mounts the editor and shows Preview, Source or Both. Every
 // edit is applied, checked and redrawn here; one second after the last edit the whole deck goes to the model as context
 // (ui/update-model-context), and "Send to Claude" also starts a turn (ui/message).
+//
+// The look is the openpresentation.org design system's playground bar (a 48px bar, a 28px status footer; view.css) in one
+// palette: the viewer's own chrome and the editor's parts read the same `--opf-ui-*` tokens, mapped onto the host's colours.
 import { App, type McpUiDisplayMode, type McpUiHostContext, applyDocumentTheme, applyHostStyleVariables } from "@modelcontextprotocol/ext-apps";
 import { gallery } from "@openpresentation/gallery";
 import { type Finding, validate } from "@openpresentation/opf";
@@ -34,7 +37,10 @@ const catalogs = [gallery];
 const root = document.documentElement;
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const shell = $("opf-deck");
-const notice = $("deck-notice");
+const wait = $("deck-wait");
+const sync = $("deck-sync");
+const undoButton = $<HTMLButtonElement>("deck-undo");
+const redoButton = $<HTMLButtonElement>("deck-redo");
 const findButton = $<HTMLButtonElement>("deck-find-open");
 const reviewDrawer = $("deck-review");
 const reviewClose = $<HTMLButtonElement>("deck-review-close");
@@ -55,6 +61,12 @@ let findings: Finding[] = [];
 let contextTimer: ReturnType<typeof setTimeout> | undefined;
 let checkTimer: ReturnType<typeof setTimeout> | undefined;
 let started = false;
+let mounted = false;
+let themed: string[] = [];
+
+/** What the person calls the model on the other side: Claude in Claude, "the assistant" in another MCP Apps host. */
+const assistant = () => (/claude/i.test(app.getHostVersion()?.name ?? "") ? "Claude" : "the assistant");
+const sentence = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
 // -------------------------------------------------------------------------------------------------------------------
 // Fonts: Roboto Regular is in the page; any other face comes from the server through the host (read_font_file).
@@ -143,9 +155,25 @@ async function sendContext(): Promise<void> {
 	const deck = editor.getDocument();
 	try {
 		await app.updateModelContext({ content: [{ type: "text", text: contextText() }], structuredContent: { edited, counts, findings: findings.slice(0, MAX_LISTED_FINDINGS), ...(edited ? { document: deck as Record<string, unknown> } : {}) } });
+		// Edits made while this update was on its way wait for the next one.
+		if (edited && !contextTimer && sync.dataset.state === "pending") setSync("shared");
 	} catch (error) {
-		status(`Claude did not take the update: ${error instanceof Error ? error.message : String(error)}`);
+		status(`${sentence(assistant())} did not take the update: ${error instanceof Error ? error.message : String(error)}`);
 	}
+}
+
+// What the person sees of that: their edits reach the model without a click, and the footer says where they are.
+function setSync(state: "none" | "pending" | "shared" | "sent"): void {
+	sync.dataset.state = state;
+	sync.textContent = state === "pending" ? "Edits not shared yet" : state === "shared" ? `${sentence(assistant())} has your edits` : state === "sent" ? `Sent to ${assistant()}` : "";
+}
+
+/** Send is the view's one primary action, and only while there are edits the model has not been asked about. */
+function syncSend(): void {
+	sendButton.textContent = `Send to ${assistant()}`;
+	sendButton.disabled = !unsent;
+	sendButton.dataset.unsent = String(unsent);
+	sendButton.title = unsent ? `Ask ${assistant()} to continue from your version` : `Edit the deck, then send your version to ${assistant()}`;
 }
 
 const scheduleContext = () => {
@@ -154,7 +182,7 @@ const scheduleContext = () => {
 };
 
 async function sendToClaude(): Promise<void> {
-	if (!editor) return;
+	if (!editor || !unsent) return;
 	sendButton.disabled = true;
 	try {
 		if (checkTimer) {
@@ -162,14 +190,13 @@ async function sendToClaude(): Promise<void> {
 			runChecks(editor.getDocument());
 		}
 		await sendContext();
-		const ask = edited ? "I edited the deck in the OPF viewer. Please continue from my version." : "Please look at the deck in the OPF viewer and suggest improvements.";
-		await app.sendMessage({ role: "user", content: [{ type: "text", text: ask }] });
+		await app.sendMessage({ role: "user", content: [{ type: "text", text: "I edited the deck in the OPF viewer. Please continue from my version." }] });
 		unsent = false;
-		status("Sent to Claude.");
+		setSync("sent");
 	} catch (error) {
-		status(`Could not send to Claude: ${error instanceof Error ? error.message : String(error)}`);
+		status(`Could not send to ${assistant()}: ${error instanceof Error ? error.message : String(error)}`);
 	} finally {
-		sendButton.disabled = !unsent && edited;
+		syncSend();
 	}
 }
 
@@ -180,7 +207,7 @@ const fullscreenOffered = () => (context.availableDisplayModes ?? []).includes("
 
 function setView(next: View, fromUser = false): void {
 	view = next;
-	shell.dataset.view = next;
+	shell.dataset.show = next;
 	for (const [index, tab] of tabs.entries()) {
 		const selected = VIEWS[index] === next;
 		tab.setAttribute("aria-selected", String(selected));
@@ -199,23 +226,67 @@ async function setDisplayMode(mode: McpUiDisplayMode): Promise<void> {
 	}
 }
 
+/**
+ * One palette for the whole view. The editor's tokens are OPF's (the openpresentation.org design system); in a host that sends
+ * the standard MCP Apps variables, the neutral ones are derived from the host's background and text instead, so the bar, the
+ * source pane and the footer sit in the host's surface rather than beside it. The accent and the status colours stay OPF's.
+ */
+function hostTheme(): { colorScheme: "light" | "dark" | "auto"; tokens: Record<string, string> } {
+	const sent = context.styles?.variables as Record<string, string | undefined> | undefined;
+	const tokens: Record<string, string> = {
+		"--opf-ui-font": 'var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif)',
+		"--opf-ui-mono": "var(--font-mono, ui-monospace, Menlo, Consolas, monospace)",
+	};
+	if (sent?.["--color-background-primary"] && sent["--color-text-primary"]) {
+		const background = "var(--color-background-primary)";
+		const text = "var(--color-text-primary)";
+		const mix = (percent: number) => `color-mix(in srgb, ${text} ${percent}%, ${background})`;
+		Object.assign(tokens, {
+			"--opf-ui-surface": background,
+			"--opf-ui-bg": mix(3),
+			"--opf-ui-muted": mix(9),
+			"--opf-ui-muted-2": mix(5),
+			"--opf-ui-fg": text,
+			"--opf-ui-muted-fg": `var(--color-text-secondary, ${mix(66)})`,
+			"--opf-ui-border": mix(14),
+			"--opf-ui-border-strong": mix(28),
+			"--opf-ui-code-bg": mix(2),
+			"--opf-ui-code-border": mix(14),
+			"--opf-ui-studio-canvas-bg": mix(8),
+		});
+	}
+	return { colorScheme: context.theme ?? "auto", tokens };
+}
+
+function applyTheme(): void {
+	const theme = hostTheme();
+	// On the shell itself too, so the view has its colours before the editor mounts.
+	for (const name of themed) shell.style.removeProperty(name);
+	themed = Object.keys(theme.tokens);
+	for (const [name, value] of Object.entries(theme.tokens)) shell.style.setProperty(name, value);
+	editor?.setTheme(theme);
+}
+
 function applyContext(update: Partial<McpUiHostContext>): void {
 	context = { ...context, ...update };
-	if (context.theme) {
-		applyDocumentTheme(context.theme);
-		editor?.setTheme({ colorScheme: context.theme });
-	}
+	if (context.theme) applyDocumentTheme(context.theme);
 	if (context.styles?.variables) applyHostStyleVariables(context.styles.variables);
+	applyTheme();
 	root.dataset.display = context.displayMode ?? "inline";
 	const dimensions = context.containerDimensions as { height?: number; maxHeight?: number } | undefined;
-	root.dataset.fixedHeight = String(typeof dimensions?.height === "number");
+	// Inline, the view is as tall as its content; full screen and a host that fixes the height fill the frame.
+	root.dataset.fill = String(context.displayMode === "fullscreen" || typeof dimensions?.height === "number");
 	if (typeof dimensions?.maxHeight === "number") shell.style.setProperty("--deck-max-height", `${dimensions.maxHeight}px`);
 	expandButton.hidden = !fullscreenOffered();
 	const expandLabel = context.displayMode === "fullscreen" ? "Exit full screen" : "Full screen";
 	expandButton.setAttribute("aria-label", expandLabel);
 	expandButton.title = expandLabel;
 	expandButton.dataset.mode = context.displayMode ?? "inline";
-	sendButton.hidden = !app.getHostCapabilities()?.message;
+	const can = app.getHostCapabilities();
+	sendButton.hidden = !can?.message;
+	// The sandbox cannot save a file itself: the source pane offers Download only where the host does it (ui/download-file).
+	shell.dataset.download = String(Boolean(can?.downloadFile));
+	syncSend();
 }
 
 function setReviewOpen(open: boolean): void {
@@ -224,9 +295,32 @@ function setReviewOpen(open: boolean): void {
 	else (shell.querySelector(".opf-review-pill") as HTMLElement | null)?.focus();
 }
 
+/** A message for the person: in the stage until the deck is on screen, then in the footer (the editor's status line). */
 function status(message: string): void {
-	notice.textContent = message;
-	notice.hidden = !message;
+	if (mounted && editor) editor.status(message);
+	else wait.textContent = message;
+}
+
+/** The stage in the shape of the deck's slides (16:9 until a slide is drawn). */
+function showDeck(): void {
+	const box = $("deck-canvas").querySelector("svg")?.viewBox.baseVal;
+	if (box?.width && box.height) shell.style.setProperty("--deck-aspect", `${box.width} / ${box.height}`);
+}
+
+async function copyText(text: string): Promise<void> {
+	try {
+		await navigator.clipboard.writeText(text);
+	} catch {
+		// A sandboxed frame without the clipboard permission: copy through a selection instead.
+		const area = document.createElement("textarea");
+		area.value = text;
+		area.style.cssText = "position:fixed;opacity:0";
+		document.body.append(area);
+		area.select();
+		const copied = document.execCommand("copy");
+		area.remove();
+		if (!copied) throw new Error("The host did not allow the copy.");
+	}
 }
 
 // -------------------------------------------------------------------------------------------------------------------
@@ -247,19 +341,31 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	const textForm = isText(args.document) && format !== "json";
 	// Edits count from the moment the deck is on screen; the first load is not one.
 	let ready = false;
-	editor = createOpfEditor($("deck-root"), {
+	// The editor is given the whole view, so its theme covers the viewer's own bar and footer as well as its parts.
+	editor = createOpfEditor(shell, {
 		// JSON (an object or its text) opens as the document; YAML and Markdown open as source text once the editor is ready.
 		document: textForm ? { name: "Untitled", slides: [{ title: " " }] } : args.document,
 		fonts,
 		catalogs,
 		fit: "contain",
-		theme: { colorScheme: context.theme ?? "auto" },
-		// The editor's own parts, each in the viewer's element: Undo and Redo, the review pill and the Review panel (in a drawer the
-		// pill opens), the Design quick menu (theme, colours, fonts and this slide's layout) and Find and replace (Ctrl/Cmd F).
+		theme: hostTheme(),
+		// The footer's verdict is the editor's review pill, worded as the playground words it.
+		labels: { reviewPill: { valid: "Valid OPF" } },
+		icons: { valid: "M20 6 9 17l-5-5" },
+		source: {
+			onCopy: (file) => copyText(file.text),
+			onDownload: async (file) => {
+				const saved = await app.downloadFile({ contents: [{ type: "resource", resource: { uri: `file:///${file.filename}`, mimeType: file.mime, text: file.text } }] });
+				if (saved.isError) throw new Error("The file was not saved.");
+			},
+		},
+		// The editor's own parts, each in the viewer's element: the deck's name, the review pill (the footer's verdict) and the Review
+		// panel (in a drawer the verdict opens), the Design quick menu (theme, colours, fonts and this slide's layout) and Find and
+		// replace (Ctrl/Cmd F). Undo and Redo are the viewer's icon buttons over the editor's undo() and redo(). The slide navigator
+		// (previous, "01 / 16", next) sits in the footer, so the thumbnail strip has the whole row under the slide.
 		slots: {
 			title: $("deck-title"),
-			history: $("deck-history"),
-			reviewPill: $("deck-review-pill"),
+			reviewPill: $("deck-verdict"),
 			review: $("deck-review-panel"),
 			designMenu: $("deck-design"),
 			find: $("deck-find"),
@@ -272,11 +378,19 @@ async function start(args: ShowDeckArguments): Promise<void> {
 			overlay: shell,
 		},
 	});
+	// Undo stops at the deck as it was opened: loading it (YAML and Markdown load as one change) is not the person's edit.
+	let depth = 0;
+	let openedAt = 0;
 	editor.on("change", (event) => {
+		depth = (event.event as { snapshot?: { undoDepth?: number } } | undefined)?.snapshot?.undoDepth ?? (event.canUndo ? openedAt + 1 : 0);
+		undoButton.disabled = !ready || depth <= openedAt;
+		redoButton.disabled = !ready || !event.canRedo;
 		if (!ready) return;
 		edited = true;
 		unsent = true;
-		sendButton.disabled = false;
+		syncSend();
+		setSync(app.getHostCapabilities()?.updateModelContext ? "pending" : "none");
+		showDeck();
 		scheduleChecks(event.document);
 		scheduleContext();
 	});
@@ -287,9 +401,12 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	// The source pane calls OPF Markdown "md".
 	if (textForm) editor.setSourceText(args.document as string, { format: format === "markdown" ? "md" : "yaml" });
 	ready = true;
+	openedAt = depth;
+	mounted = true;
+	shell.dataset.ready = "true";
 	if (typeof args.slide === "number" && args.slide >= 1) editor.setSlide(args.slide - 1);
 	setView(VIEWS.includes(args.view as View) ? (args.view as View) : "preview");
-	status("");
+	showDeck();
 	runChecks(editor.getDocument());
 	await sendContext();
 }
@@ -306,6 +423,10 @@ for (const [index, tab] of tabs.entries()) {
 		next.click();
 	});
 }
+undoButton.addEventListener("click", () => {
+	if (!undoButton.disabled) editor?.undo();
+});
+redoButton.addEventListener("click", () => editor?.redo());
 findButton.addEventListener("click", () => editor?.openFind());
 reviewClose.addEventListener("click", () => setReviewOpen(false));
 reviewDrawer.addEventListener("keydown", (event) => {
@@ -333,7 +454,7 @@ app.onteardown = async () => {
 	return {};
 };
 
-status("Waiting for the deck…");
+$("deck-version").textContent = `OPF ${MCP_VERSION}`;
 setView("preview");
 await app.connect();
 applyContext(app.getHostContext() ?? {});

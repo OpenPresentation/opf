@@ -4,7 +4,8 @@
 // WASM). The host speaks the protocol by hand (ui/initialize, tool-input, tool-result) and relays the view's tools/call to the
 // real server (createOpfServer with the stdio font reader) over an in-memory MCP client. Run it after `pnpm run build`:
 //   node test/deck-app-browser.mjs
-// OPF_DECK_APP_SCREENSHOTS=<directory> also saves a screenshot of each view (Preview, Source, Both; light and dark) there.
+// OPF_DECK_APP_SCREENSHOTS=<directory> also saves a screenshot of each view (Preview, Source, Both; light and dark; a chat column
+// in a host's own colours) there.
 // OPF_MCP_URL=<endpoint> drives a server over Streamable HTTP instead, a hosted one such as https://openpresentation.org/mcp or a
 // local Workers preview (http://127.0.0.1:8787/mcp): the same checks, with its own viewer page and fonts. Node's fetch needs
 // NODE_USE_ENV_PROXY=1 behind a proxy.
@@ -41,13 +42,15 @@ assert.equal(resource._meta?.ui?.csp, undefined, "the view declares no CSP domai
 const HOST_PAGE = `<!doctype html><meta charset="utf-8"><title>host</title><style>body{margin:0}iframe{border:0;width:960px;height:640px}</style>
 <iframe id="view" sandbox="allow-scripts allow-same-origin"></iframe>
 <script>
-window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [] };
+window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [], downloads: [] };
 const frame = document.getElementById("view");
 const send = (message) => frame.contentWindow.postMessage({ jsonrpc: "2.0", ...message }, "*");
 let initialized = false;
 window.startView = (setup) => {
   window.setup = setup;
   initialized = false;
+  frame.style.width = setup.width ? setup.width + "px" : "";
+  frame.style.height = "";
   frame.src = setup.viewUrl;
 };
 window.addEventListener("message", async (event) => {
@@ -60,10 +63,17 @@ window.addEventListener("message", async (event) => {
     case "ui/initialize":
       return reply({
         protocolVersion: "2026-01-26",
-        hostInfo: { name: "test-host", version: "1.0.0" },
-        hostCapabilities: { serverTools: {}, serverResources: {}, logging: {}, openLinks: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} } },
-        hostContext: { theme: setup.theme, displayMode: "inline", availableDisplayModes: ["inline", "fullscreen"], containerDimensions: { width: 960, maxHeight: 640 }, platform: "web" },
+        hostInfo: { name: setup.hostName ?? "test-host", version: "1.0.0" },
+        hostCapabilities: { serverTools: {}, serverResources: {}, logging: {}, openLinks: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} }, ...(setup.download ? { downloadFile: {} } : {}) },
+        hostContext: { theme: setup.theme, displayMode: "inline", availableDisplayModes: ["inline", "fullscreen"], containerDimensions: { width: setup.width ?? 960, maxHeight: 640 }, platform: "web", ...(setup.variables ? { styles: { variables: setup.variables } } : {}) },
       });
+    case "ui/notifications/size-changed":
+      // A host gives an inline view the height it asks for, up to the maximum it named.
+      if (message.params.height) frame.style.height = Math.min(640, Math.ceil(message.params.height)) + "px";
+      return;
+    case "ui/download-file":
+      host.downloads.push(message.params);
+      return reply({});
     case "ui/notifications/initialized":
       initialized = true;
       send({ method: "ui/notifications/tool-input", params: { arguments: setup.arguments } });
@@ -125,12 +135,12 @@ try {
 		if (shots) await page.locator("#view").screenshot({ path: path.join(shots, `${name}.png`) });
 	};
 
-	const open = async (args, theme = "light") => {
+	const open = async (args, theme = "light", host = {}) => {
 		const result = await client.callTool({ name: "show_deck", arguments: args });
 		await page.evaluate((setup) => {
-			window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [] };
+			window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [], downloads: [] };
 			window.startView(setup);
-		}, { viewUrl, arguments: args, result, theme });
+		}, { viewUrl, arguments: args, result, theme, ...host });
 		await page.waitForFunction(() => window.host.context.length > 0, null, { timeout: 60000 });
 	};
 
@@ -177,8 +187,10 @@ try {
 		assert.match(text, /Checks in the viewer: \d+ errors, \d+ warnings/);
 		assert.equal(first.structuredContent.edited, false);
 		assert.equal(first.structuredContent.document, undefined, "an unedited deck is not sent back");
-		// The editor's review pill shows the counts of its own review.
-		await view().locator("#deck-review-pill .opf-review-pill").waitFor();
+		// The footer's verdict is the editor's review pill, with the counts of its own review; the slide navigator and the version follow.
+		await view().locator("#deck-verdict .opf-review-pill").waitFor();
+		assert.match(await view().locator(".deck-foot #deck-nav .opf-nav-counter").innerText(), /^0?1 \/ 0?2$/);
+		assert.match(await view().locator("#deck-version").innerText(), /^OPF \d+\.\d+\.\d+/);
 	});
 
 	await run("switches between Preview, Source and Both", async () => {
@@ -200,27 +212,36 @@ try {
 	});
 
 	await run("an edit goes back to the model as the whole deck, and Send to Claude starts a turn", async () => {
+		const send = view().locator("#deck-send");
+		assert.equal(await send.isDisabled(), true, "nothing to send before an edit");
+		assert.equal(await view().locator("#deck-undo").isDisabled(), true);
 		const title = view().locator("#deck-title input");
 		await title.fill("Q3 board update");
 		await title.press("Enter");
 		await page.waitForFunction(() => window.host.context.some((update) => update.structuredContent?.edited), null, { timeout: 15000 });
+		// The footer says where the edits are: with the model, without a click.
+		await view().locator('#deck-sync[data-state="shared"]').waitFor();
+		assert.equal(await view().locator("#deck-sync").innerText(), "The assistant has your edits");
 		const update = (await hostState()).context.findLast((item) => item.structuredContent?.edited);
 		assert.equal(update.structuredContent.document.name, "Q3 board update");
 		assert.match(update.content[0].text, /The user edited the deck in the OPF viewer/);
 		assert.match(update.content[0].text, /"name": "Q3 board update"/);
-		const send = view().locator("#deck-send");
 		assert.equal(await send.isVisible(), true);
+		assert.equal(await send.getAttribute("data-unsent"), "true", "Send is the primary action while there are unsent edits");
 		await send.click();
 		await page.waitForFunction(() => window.host.messages.length === 1, null, { timeout: 15000 });
 		assert.match((await hostState()).messages[0].content[0].text, /I edited the deck in the OPF viewer/);
+		await view().locator('#deck-sync[data-state="sent"]').waitFor();
+		assert.equal(await send.isDisabled(), true, "sent: nothing more to send until the next edit");
 	});
 
 	await run("Undo and Redo, Find, the Review panel and the Design menu are the editor's own", async () => {
 		const title = view().locator("#deck-title input");
-		await view().locator('#deck-history [data-opf-action="undo"]').click();
+		await view().locator("#deck-undo").click();
 		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.name === "Quarterly update", null, { timeout: 15000 });
 		assert.equal(await title.inputValue(), "Quarterly update", "Undo takes the rename back, and the model hears it");
-		await view().locator('#deck-history [data-opf-action="redo"]').click();
+		assert.equal(await view().locator("#deck-redo").isDisabled(), false);
+		await view().locator("#deck-redo").click();
 		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.name === "Q3 board update", null, { timeout: 15000 });
 
 		assert.equal(await view().locator("#deck-find").isVisible(), false);
@@ -233,7 +254,7 @@ try {
 		await field.press("Escape");
 		await view().locator("#deck-find").waitFor({ state: "hidden" });
 
-		await view().locator("#deck-review-pill .opf-review-pill").click();
+		await view().locator("#deck-verdict .opf-review-pill").click();
 		await view().locator("#deck-review").waitFor();
 		assert.ok((await view().locator("#deck-review-panel").innerText()).trim().length > 0, "the Review panel lists its checks");
 		await shoot("review-light");
@@ -249,19 +270,23 @@ try {
 		await page.waitForFunction((id) => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === id, chosen, { timeout: 15000 });
 	});
 
-	await run("fits a frame as narrow as a desktop chat column: the bar wraps, nothing scrolls sideways", async () => {
-		// Claude Desktop's chat column at 125% display scaling frames the view about 860 CSS pixels wide.
-		for (const width of [860, 640, 420]) {
+	await run("fits a frame as narrow as a chat column: the bar stays one row, nothing scrolls sideways", async () => {
+		// Claude's chat column frames the view about 660 CSS pixels wide (860 on a wide desktop window); 420 is a phone.
+		await view().locator("body").press("Escape");
+		for (const width of [860, 660, 640, 600, 420]) {
 			await page.evaluate((px) => {
 				document.getElementById("view").style.width = `${px}px`;
 			}, width);
 			await page.waitForTimeout(150);
 			const fit = await page.frame({ url: /\/view$/ }).evaluate(() => {
 				const send = document.getElementById("deck-send").getBoundingClientRect();
-				return { scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, sendRight: send.right };
+				const bar = document.querySelector(".deck-bar").getBoundingClientRect();
+				return { scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, sendRight: send.right, bar: bar.height };
 			});
 			assert.ok(fit.scroll <= fit.client, `${width}px: the page is ${fit.scroll}px wide in a ${fit.client}px frame`);
-			assert.ok(fit.sendRight <= fit.client, `${width}px: Send to Claude ends at ${fit.sendRight}px`);
+			assert.ok(fit.sendRight <= fit.client, `${width}px: Send ends at ${fit.sendRight}px`);
+			if (width >= 640) assert.equal(fit.bar, 48, `${width}px: the bar is one 48px row`);
+			if (width === 420) await shoot("narrow-420");
 			if (width === 860) await shoot("narrow-860");
 		}
 		await page.evaluate(() => {
@@ -278,6 +303,48 @@ try {
 		assert.equal(await page.frame({ url: /\/view$/ }).evaluate(() => document.documentElement.dataset.theme), "dark");
 		assert.match((await hostState()).context[0].content[0].text, /2 slides, slide 2 open, both view/);
 		await shoot("both-dark");
+	});
+
+	await run("in a chat column with the host's own colours the whole view is one palette, and the open slide's thumbnail is in view", async () => {
+		// The standard MCP Apps variables, as a dark host sends them (warm greys, like Claude's).
+		const variables = { "--color-background-primary": "#262624", "--color-background-secondary": "#30302e", "--color-text-primary": "#faf9f5", "--color-text-secondary": "#c2c0b6", "--color-border-primary": "#4a4945", "--font-sans": "system-ui, sans-serif", "--font-mono": "ui-monospace, monospace" };
+		const long = { name: "Field notes", language: "en-US", slides: Array.from({ length: 9 }, (_, index) => ({ id: `s${index + 1}`, title: `Slide number ${index + 1}`, blocks: [{ text: "One line of body text." }] })) };
+		await open({ document: long, slide: 9 }, "dark", { variables, width: 660, hostName: "Claude", download: true });
+		await view().locator("#deck-canvas", { hasText: "Slide number 9" }).waitFor({ timeout: 30000 });
+		const frame = page.frame({ url: /\/view$/ });
+		const seen = await frame.evaluate(async () => {
+			await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+			const style = (selector) => getComputedStyle(document.querySelector(selector));
+			const strip = document.querySelector("#deck-thumbs .opf-thumbs").getBoundingClientRect();
+			const current = document.querySelector('#deck-thumbs [aria-current="true"]').getBoundingClientRect();
+			return { shell: style("#opf-deck").backgroundColor, text: style("#opf-deck").color, title: style(".deck-foot").color, design: style(".opf-design-menu-trigger").color, send: document.getElementById("deck-send").textContent, strip: [strip.left, strip.right], current: [current.left, current.right], height: document.getElementById("opf-deck").getBoundingClientRect().height };
+		});
+		assert.equal(seen.shell, "rgb(38, 38, 36)", "the view's surface is the host's background");
+		assert.equal(seen.text, "rgb(250, 249, 245)");
+		assert.equal(seen.design, "rgb(250, 249, 245)", "the editor's own parts take the same text colour");
+		assert.equal(seen.title, "rgb(194, 192, 182)", "muted text is the host's secondary text");
+		assert.equal(seen.send, "Send to Claude");
+		assert.ok(seen.current[0] >= seen.strip[0] && seen.current[1] <= seen.strip[1] + 1, `the open slide's thumbnail is in the strip's view (${seen.current} in ${seen.strip})`);
+		assert.ok(seen.height < 560, `inline, the view is as tall as its slide needs (${seen.height}px)`);
+		await shoot("chat-dark-preview");
+		// Both in a column this narrow stacks the slide over the source, and Download is offered where the host saves files.
+		await view().locator("#tab-both").click();
+		await view().locator("#deck-source .cm-editor").waitFor();
+		const stacked = await frame.evaluate(() => {
+			const stage = document.querySelector(".deck-stage-col").getBoundingClientRect();
+			const source = document.getElementById("deck-source").getBoundingClientRect();
+			return { stageBottom: stage.bottom, sourceTop: source.top };
+		});
+		assert.ok(stacked.sourceTop >= stacked.stageBottom - 1, "the slide is above the source");
+		// The user asked for Both in a narrow frame: the view asks the host for full screen.
+		assert.deepEqual((await hostState()).displayModes, ["fullscreen"]);
+		await shoot("chat-dark-both-fullscreen");
+		await view().locator(".opf-source-action-download").click();
+		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
+		assert.match((await hostState()).downloads[0].contents[0].resource.uri, /\.opf\.json$/);
+		await view().locator("#deck-expand").click();
+		await page.waitForFunction(() => window.host.displayModes.length === 2);
+		await shoot("chat-dark-both");
 	});
 
 	await run("runs without a CSP violation or a page error", async () => {
