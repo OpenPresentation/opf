@@ -33,3 +33,5 @@ raw-files.json seals53 original/derived files,80065016 raw bytes in6154166 compr
 Run the portable offline verifier from this leaf: pinned Node24 docs/handoff/2026-11-09/lh179-windows-webkit/verify.mjs. It checks every compressed/raw hash and12 protected Git objects, including entire packages/spec/pins and all timing/mobile test inputs, plus both shipping blobs. It is a leaf-scope assertion; companion integration changes require a separate exact ownership proof rather than weakening it.
 
 Root owns source review, publication/normal folding and actual full-checkout/Windows CI qualification. Native execution, provider actions, release readiness and chart representation approval are not claimed.
+
+Final metadata-only stage: producer da7a49a4bbfbd8ffad709978496c7b1c80d51a45, exit0/34.1s,5 selected steps PASS and types SKIP. Its7 raw logs/exit plus exact61-path qualified-input identity are sealed separately (8 files) and verified without overwriting the original source aggregate. Final evidence-only additions do not claim a new runtime qualification.

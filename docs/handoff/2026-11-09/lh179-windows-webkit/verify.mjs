@@ -43,3 +43,10 @@ for(const [file,object] of Object.entries({...proof.sourceObjects,...proof.prote
 execFileSync('git',['diff','--exit-code','HEAD','--',...Object.keys(proof.sourceObjects),...Object.keys(proof.protectedObjects)],{cwd:repo,stdio:'pipe',env:{...process.env,GIT_NO_LAZY_FETCH:'1'}});
 assert.equal(Object.keys(proof.sourceObjects).length,2);assert.equal(Object.keys(proof.protectedObjects).length,12);
 console.log(JSON.stringify({verified:true,source:proof.source,rawFiles:manifest.count,rawBytes:total,shippingObjects:2,protectedObjects:12,qualification:'Original aggregate remains RED; local profiles are nonreproductions, not timing acceptance'}));
+
+// Later stage retains the original qualified metadata producer; it cannot turn the source aggregate green.
+const finalManifest=fs.readFileSync(path.join(folder,'metadata-qualification.json'));
+assert.equal(sha(finalManifest),'6eed08a97bbb894c993bc779369c47cce32685cf1dca979c4f5ecc75143c7cdf');
+const stage=JSON.parse(finalManifest),stageRaw=new Map();
+for(const item of stage.files){assert.match(item.archive,/^qualification\/\d{3}\.gz$/u);const zipped=fs.readFileSync(path.join(folder,item.archive));assert.equal(zipped.length,item.compressedBytes);assert.equal(sha(zipped),item.compressedSha256);const bytes=gunzipSync(zipped,{maxOutputLength:item.bytes+1});assert.equal(bytes.length,item.bytes);assert.equal(sha(bytes),item.sha256);stageRaw.set(item.path,bytes);}
+assert.equal(stageRaw.size,8);const qualified=JSON.parse(stageRaw.get('identity.json'));assert.equal(qualified.testedHead,stage.testedHead);assert.equal(git('rev-parse',qualified.testedHead+'^{tree}'),qualified.testedTree);for(const [file,object] of Object.entries(qualified.qualifiedInputs))assert.equal(git('rev-parse',qualified.testedHead+':'+file),object,file);assert.equal(JSON.parse(stageRaw.get('metadata-01.exit.json')).status,0);assert.match(stageRaw.get('metadata-01.log').toString(),/check-changed: passed/u);console.log(JSON.stringify({metadataRawFiles:8,testedHead:qualified.testedHead,metadataPassedSteps:5,typesSkipped:true,originalSourceAggregate:'RED, unchanged'}));
