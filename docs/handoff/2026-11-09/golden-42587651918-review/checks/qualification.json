@@ -1,0 +1,70 @@
+{
+  "initial": {
+    "head": "e1f6359e8ce7a140f6979d3e54d5ad00be6839d0",
+    "base": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+    "command": [
+      "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+      "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/pnpm/bin/pnpm.cjs",
+      "check:changed",
+      "--base",
+      "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db"
+    ],
+    "node": "v24.20.0",
+    "started": "2026-11-09T09:03:30.429Z",
+    "completed": "2026-11-09T09:04:10.692Z",
+    "exitCode": 1,
+    "signal": null,
+    "checkerSeconds": 39.2,
+    "passedSteps": 5,
+    "failedSteps": 1,
+    "typecheck": "skipped",
+    "failure": "Missing exact tracked sparse compressed fixture; test6of7 passed"
+  },
+  "narrowTextRecovery": {
+    "head": "e1f6359e8ce7a140f6979d3e54d5ad00be6839d0",
+    "command": [
+      "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+      "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/pnpm/bin/pnpm.cjs",
+      "run",
+      "check:text"
+    ],
+    "started": "2026-11-09T09:05:04.438Z",
+    "completed": "2026-11-09T09:05:07.414Z",
+    "exitCode": 0,
+    "signal": null,
+    "testControls": 7,
+    "textIntegrityFiles": 8851
+  },
+  "final": {
+    "head": "238b661b98f299f9dcfba59f88804580cb892d3c",
+    "base": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+    "command": [
+      "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+      "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/pnpm/bin/pnpm.cjs",
+      "check:changed",
+      "--base",
+      "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db"
+    ],
+    "node": "v24.20.0",
+    "started": "2026-11-09T09:06:29.589Z",
+    "completed": "2026-11-09T09:07:02.319Z",
+    "exitCode": 0,
+    "signal": null,
+    "checkerSeconds": 31.9,
+    "passedSteps": 5,
+    "failedSteps": 0,
+    "typecheck": "skipped",
+    "selectedSteps": [
+      "build",
+      "biome",
+      "check:changes",
+      "check:skill-commands",
+      "check:text"
+    ],
+    "packageTestsSelected": [],
+    "inputDirtyMetadata": [
+      "docs/handoff/2026-11-09/golden-42587651918-review/source-proof.json"
+    ]
+  },
+  "scope": "Evidence-only docs qualification. Original RED retained. No visual/native/chart/release acceptance."
+}

@@ -1,5 +1,5 @@
 {
-  "head": "e1f6359e8ce7a140f6979d3e54d5ad00be6839d0",
+  "head": "238b661b98f299f9dcfba59f88804580cb892d3c",
   "base": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
   "node": "v24.20.0",
   "trees": {
@@ -32,6 +32,19 @@
     "docs/handoff/2026-11-09/golden-42587651918-review/baseline-bindings.json",
     "docs/handoff/2026-11-09/golden-42587651918-review/before-core-baseline.json",
     "docs/handoff/2026-11-09/golden-42587651918-review/before-template-baseline.json",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial-raw-files.json",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial/check-changed.exit.json.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial/check-changed.log.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial/steps-biome.log.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial/steps-build.log.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial/steps-install.log.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial/steps-pnpm_run_check_changes.log.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial/steps-pnpm_run_check_skill-commands.log.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/initial/steps-pnpm_run_check_text.log.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/recovery-raw-files.json",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/recovery/text-recovery.exit.json.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/recovery/text-recovery.log.gz",
+    "docs/handoff/2026-11-09/golden-42587651918-review/checks/sparse-fixture-hydration.json",
     "docs/handoff/2026-11-09/golden-42587651918-review/download-receipts-raw.json",
     "docs/handoff/2026-11-09/golden-42587651918-review/golden-42498350968-download.json",
     "docs/handoff/2026-11-09/golden-42587651918-review/golden-42498350968-download.json.gz",
@@ -42,6 +55,7 @@
     "docs/handoff/2026-11-09/golden-42587651918-review/pair-manifest.json",
     "docs/handoff/2026-11-09/golden-42587651918-review/pixel-body-observations.json",
     "docs/handoff/2026-11-09/golden-42587651918-review/read-only.mjs",
+    "docs/handoff/2026-11-09/golden-42587651918-review/source-proof.json",
     "docs/handoff/2026-11-09/golden-42587651918-review/verify.mjs"
   ],
   "scope": "Evidence-only normal merge of exact golden source; no source/package fixture changes"
