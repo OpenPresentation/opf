@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, resolveColorRef, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -340,6 +340,7 @@ const neutrals = bound.design.roles.neutrals;
     // RR-92: the value axis core composed for a column, bar, line or area chart ({ min, max, majorUnit }); absent for the other types.
     valueAxis: item.chart?.valueAxis,
     secondaryValueAxis:item.chart?.secondaryValueAxis,
+    resolveColorRef:svg.resolveColorRef,
     numericAxes: item.chart?.layer?.numericAxes,
     gridColor: neutrals.gridline.hex,
     axisColor: neutrals.axisLine.hex,
@@ -983,7 +984,7 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
 // Explicit reference values and independent strokes, with optional labels at the endpoints core placed.
 function drawReferenceLines(c, lines) {
   for (const line of lines ?? []) {
-    const color=line.stroke.color===undefined?c.chartTextColor:resolveColorRef(line.stroke.color,{colorScheme:c.bound.design.colorScheme,roles:c.bound.design.colors,variables:c.bound.design.variables,fallback:c.chartTextColor});
+    const color=line.stroke.color===undefined?c.chartTextColor:c.resolveColorRef(line.stroke.color,c.chartTextColor);
     const width=line.strokeWidth,dash=line.stroke.dash==='dash'?[4*width,3*width]:line.stroke.dash==='dot'?[width,3*width]:undefined;
     if(width>0)c.mark('line',{x1:line.x1,y1:line.y1,x2:line.x2,y2:line.y2,stroke:color,'stroke-width':width,...(dash?{'stroke-dasharray':dash.map(c.num).join(' ')}:{})},c.path+'.referenceLines.'+line.index);
     if(line.label!==undefined&&line.labelBox)c.text(line.label,line.labelBox,c.path+'.referenceLines.'+line.index+'.label',line.labelAlign??'center',c.labelColor);

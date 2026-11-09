@@ -37,3 +37,7 @@ test('table-aligned bars draw their reference on the final row plot',()=>{
 test('area and markerful line references retain normal data marks and category-center spans',()=>{
  for(const type of ['area','line-with-markers']){const doc=deck({type,referenceLines:[{value:20,label:'Target'}]}),svg=toSvg(doc,1,{trace:true}),line=refs(svg)[0];assert.ok(line);assert.ok(Number(line.x1)<Number(line.x2));assert.ok(tags(svg,type==='area'?'path':'circle').some(mark=>mark['data-opf-path']?.includes('.data.')));}
 });
+
+test('reference ColorRefs preserve alpha, transforms, variables and the textSecondary role',()=>{
+ const doc=deck({referenceLines:[{value:11,stroke:{color:'#A0123480'}},{value:15,stroke:{color:{color:'#808080',lighten:.5}}},{value:19,stroke:{color:'var:target'}},{value:23,stroke:{color:'textSecondary'}}]});doc.variables={target:{type:'color',value:'#123456'}};const svg=toSvg(doc,1,{trace:true}),lines=refs(svg),design=resolvePresentation(doc).slides[0].design;assert.equal(lines.length,4);assert.equal(lines[0].stroke.toUpperCase(),'#A0123480');assert.equal(lines[1].stroke.toUpperCase(),'#C0C0C0');assert.equal(lines[2].stroke.toUpperCase(),'#123456');assert.equal(lines[3].stroke.toUpperCase(),design.colors.mutedText.toUpperCase());
+});
