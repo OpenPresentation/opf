@@ -693,3 +693,23 @@ test('actual bar and singleton labels use full native label paint while default 
     }
   }
 });
+
+test('divergent ordinary group category caches are diagnosed without losing numeric series or claiming category parity', async () => {
+  const e = await exported(doc('area')),
+    out = await imported(
+      rewrite(e.entries, 'ppt/charts/chart1.xml', (xml) =>
+        editHelpers(xml, (s) => s.replace('<c:v>Q1</c:v>', '<c:v>Different category</c:v>')),
+      ),
+    );
+  assert.equal(out.chart.referenceLines, undefined);
+  assert.deepEqual(out.chart.data.rows, [
+    ['Q1', 10, 25],
+    ['Q2', 20, 25],
+    ['Q3', 30, 25],
+  ]);
+  assert.ok(
+    out.diagnostics.some(
+      (d) => d.option === 'category' && /first series.*labels/.test(d.message) && /numeric.*retained/.test(d.message),
+    ),
+  );
+});

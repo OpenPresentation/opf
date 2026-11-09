@@ -1946,6 +1946,10 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
   if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath, {codes: valueCodes, xCode, report}));
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
   const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, 'c:tx'), budget) ?? `Series ${index + 1}`);
+  if(mixed||coalesced)for(let index=1;index<series.length;index++){
+    const categories=cachedValues(series[index]?.['c:cat'],cachePath(index,'c:cat'),budget);
+    if(categories.length!==labels.length||categories.some((value,row)=>value!==labels[row])){report?.({option:'category',message:'Ordinary native groups have divergent category caches. The single OPF category axis uses the first series\' labels; every numeric series and its source order is retained, but independent foreign category-label parity is not representable.'});break;}
+  }
   // RR-86: explicit current line paint has no per-series OPF field. Report the native locator without
   // inferring semantic highlight, rewriting the theme or claiming that these colors differ visually.
   for (const [index, entry] of series.entries()) {
