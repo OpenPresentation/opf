@@ -8,6 +8,22 @@ import {fileURLToPath} from 'node:url';
 import {zipSync,strToU8} from 'fflate';
 import {scanPowerShellSource} from './powershell-scan.mjs';
 
+// PowerShell formats long error records at the host width. Keep the precise ZIP
+// failure and exception identity while accepting a wrapped message; retain raw logs.
+function assertCorruptZipDiagnostic(output){
+ assert.match(output,/Central\s+Directory corrupt\./);
+ assert.match(output,/FullyQualifiedErrorId\s*:\s*InvalidDataException,run-windows\.ps1(?:\s|$)/);
+}
+const wrappedZipDiagnostic='run-windows.ps1 : Exception calling "OpenRead" with "1" argument(s): "Central \r\nDirectory corrupt."\r\n    + FullyQualifiedErrorId : InvalidDataException,run-windows.ps1\r\n';
+for(const output of [wrappedZipDiagnostic,wrappedZipDiagnostic.replace('Central \r\nDirectory','Central Directory'),wrappedZipDiagnostic.replaceAll('\r\n','\n')]){
+ assert.doesNotThrow(()=>assertCorruptZipDiagnostic(output));
+}
+for(const output of [wrappedZipDiagnostic.replace('InvalidDataException','FileNotFoundException'),wrappedZipDiagnostic.replace('Directory corrupt.','Directory missing.'),wrappedZipDiagnostic.replace(/\s*\+ FullyQualifiedErrorId[\s\S]*/,''),'']){
+ assert.throws(()=>assertCorruptZipDiagnostic(output),assert.AssertionError);
+}
+
+console.log('Malformed ZIP diagnostics PASS: 3 formatting controls and 4 wrong-cause refusals; no Office.');
+
 const root=fileURLToPath(new URL('../../../',import.meta.url));
 const workerRoot=path.join(root,'packages/pptx');
 const worker=path.join(workerRoot,'test/native-furniture-control.ps1');
@@ -87,7 +103,7 @@ Write-Output ('PASS: '+$cases.Count+' actual pure survey and state-boundary cont
  fs.writeFileSync(path.join(suite,'suite.json'),JSON.stringify({schemaVersion:1,files:['case.pptx','action-plan.json'].map(p=>record(suite,p)),cases:[{id:'survey',input:'case.pptx',actionPlan:'action-plan.json',slideCount:mode==='declared-two'?2:mode==='declared-string'?'1':mode==='declared-boolean'?true:1,worker:'furniture',automaticControlEligible:true}],provenance:{workerRepository:identity(workerRoot,['test/native-furniture-control.ps1','test/native-process.ps1','test/native-process-check.ps1','test/native-furniture-harness-check.ps1']),suiteRepository:identity(root,['scripts/native-acceptance/run-windows.ps1'])}}));
  const result=saveResult(mode,run(['-File',runner,'-SuiteDirectory',suite,'-PptxRepository',workerRoot,'-Case','survey','-OutputDirectory',attempt,'-ValidateOnly','-ReadOnlySurvey',...(mode==='timeout-61'?['-TimeoutSeconds','61']:[])]));
  if(mode==='valid'){assert.equal(result.status,0,result.stdout+result.stderr);const receipt=JSON.parse(fs.readFileSync(path.join(attempt,'runner.json'),'utf8').replace(/^\uFEFF/,''));assert.equal(receipt.readOnlySurvey,true);assert.equal(receipt.nativeAcceptance,false);assert.equal(receipt.status,'pure-checks-completed; native-not-run');}
- else {assert.notEqual(result.status,0,mode+' must refuse');assert.equal(fs.existsSync(attempt),false,mode+' must refuse before output or Office');assert.match(result.stdout+result.stderr,mode==='actions'?/empty validated action plan/:mode.startsWith('declared-')?/one declared slide/:mode==='physical-two'?/one slide part/:mode==='bad-zip'?/Central Directory/:mode==='too-large'?/16 MiB/:mode==='too-many-entries'?/4096 entries/:/ValidateRange|greater than|60/);}
+ else {assert.notEqual(result.status,0,mode+' must refuse');assert.equal(fs.existsSync(attempt),false,mode+' must refuse before output or Office');if(mode==='bad-zip')assertCorruptZipDiagnostic(result.stdout+result.stderr);else assert.match(result.stdout+result.stderr,mode==='actions'?/empty validated action plan/:mode.startsWith('declared-')?/one declared slide/:mode==='physical-two'?/one slide part/:mode==='too-large'?/16 MiB/:mode==='too-many-entries'?/4096 entries/:/ValidateRange|greater than|60/);}
  cases.push({mode,passed:true,exitCode:result.status});
  }
  // A worker-mode request cannot silently turn the larger survey boundary on or off.
