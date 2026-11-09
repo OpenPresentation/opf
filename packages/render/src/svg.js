@@ -623,6 +623,8 @@ function bindSlide(presentation, index, context) {
     textMeasurement = { ...deckMeasurement, measure: (text, size, style) => pick(style).measure(text, size, style) };
     if (typeof deckMeasurement.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, style) => (pick(style).outlineBounds ?? deckMeasurement.outlineBounds)(text, size, style);
   }
+  // Only the outer native preparation resolver retains substituted chosen families/weights. Raw glyph planning stays physical.
+  if (context.resolveInputStyle && textMeasurement) textMeasurement = {...textMeasurement, resolveStyle: context.resolveInputStyle};
   if (context.mapInputFamily && textMeasurement) {
     const raw = textMeasurement, style = value => value && typeof value.fontFamily === "string" ? {...value, fontFamily: context.mapInputFamily(value.fontFamily)} : value;
     textMeasurement = {...raw, measure: (text, size, value) => raw.measure(text, size, style(value))};
@@ -2633,9 +2635,9 @@ deckInternals.openDeck = (input, options = {}) => {
       const slideContext = resolveContext(presentation, index, { presentation, options: drawn });
       return resolveDesign(presentation, slideContext.slide, slideContext);
     },
-    bind(index, textMeasurement = drawn.textMeasurement, mapInputFamily) {
+    bind(index, textMeasurement = drawn.textMeasurement, {mapInputFamily, resolveInputStyle} = {}) {
       measurements[index] = textMeasurement;
-      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement }, mapInputFamily });
+      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement }, mapInputFamily, resolveInputStyle });
     },
     render(index) { return renderResolvedSlide(resolved, index, { ...drawn, textMeasurement: measurements[index] }); },
   };

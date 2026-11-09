@@ -111,7 +111,7 @@ const byFace = (a, b) => a.family < b.family ? -1 : a.family > b.family ? 1 : Nu
  * The measurement `presentationFaces` draws with: it records every style it is asked to measure (resolved through `settle`) into
  * the map `record.into` holds (switch it to file what follows elsewhere).
  */
-function recordingMeasurement(settle, into, coverage, resolveStyle = settle) {
+function recordingMeasurement(settle, into, coverage) {
   const record = { into };
   record.textMeasurement = {
     measure(text, size, style) {
@@ -130,7 +130,7 @@ function recordingMeasurement(settle, into, coverage, resolveStyle = settle) {
       }
       return String(text).length * size * RECORDED_EM;
     },
-    resolveStyle,
+    resolveStyle: settle,
     ...(coverage ? { [fontCoverageProbe](text,size,style) { coverage(String(text),size,settle(style)); } } : {}),
   };
   return record;
@@ -239,18 +239,19 @@ export function createFontAnalysis() {
       if (!view) return { ...style };
       try { return view(style); } catch { return { ...style }; }
     };
-    // Native PPTX keeps substituted authored roles/weights; measurement still records physical selected faces.
-    const resolveStyle = registry?.preserveChosenFamilies && view ? style => {
-      try { return view(style, true); } catch { return { ...style }; }
-    } : settle;
+    // Native keeps chosen roles outside its raw script planner. Its inner resolver must still expose physical Emoji/script faces.
+    const inputBinding = registry?.preserveChosenFamilies && view ? {
+      mapInputFamily: registry.mapFamily,
+      resolveInputStyle: style => { try { return view(style, true); } catch { return { ...style }; } },
+    } : undefined;
     const keys = deckKeys(presentation);
     if (!keys) {
       // Not a deck object: one whole-deck pass, kept nowhere.
       const seen = new Map();
-      const measurement = recordingMeasurement(settle, seen, registry?.coverage, resolveStyle).textMeasurement;
-      if (registry?.preserveChosenFamilies && registry.mapFamily) {
+      const measurement = recordingMeasurement(settle, seen, registry?.coverage).textMeasurement;
+      if (inputBinding) {
         const opened = deckInternals.openDeck(presentation, resolveOptions);
-        for (let index = 0; index < opened.presentation.slides.length; index++) opened.bind(index, measurement, registry.mapFamily);
+        for (let index = 0; index < opened.presentation.slides.length; index++) opened.bind(index, measurement, inputBinding);
         for (let index = 0; index < opened.presentation.slides.length; index++) if (resolveOptions.skipHidden !== true || !opened.presentation.slides[index].hidden) opened.render(index);
       } else toSvg(presentation, { ...resolveOptions, fonts: { textMeasurement: measurement } });
       stats.decks++;
@@ -265,8 +266,8 @@ export function createFontAnalysis() {
       // Composition of the slides, then their drawing, as `toSvg` runs them.
       const opened = deck.open();
       const made = new Map(missing.map(index => [index, { composed: new Map(), drawn: new Map() }]));
-      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed, registry?.coverage, resolveStyle)]));
-      for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement, registry?.preserveChosenFamilies ? registry.mapFamily : undefined);
+      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed, registry?.coverage)]));
+      for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement, inputBinding);
       // A slide is drawn with the measurement it was composed with; what it measures from here on is its drawing. `skipHidden`
       // leaves hidden slides undrawn (they are still composed), as in `toSvg`.
       for (const index of missing) {
