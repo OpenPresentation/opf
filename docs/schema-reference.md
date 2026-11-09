@@ -75,10 +75,10 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `text` | yes | `string` | Plain editable text. Native edits preserve current words; an empty string is retained. |
-| `x` | yes | `number` | Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
-| `y` | yes | `number` | Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
-| `width` | yes | `number` | Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
-| `height` | yes | `number` | Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
+| `x` | yes | `number` | Signed fraction of the visible image frame width from its physical left edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds... |
+| `y` | yes | `number` | Signed fraction of the visible image frame height from its physical top edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds... |
+| `width` | yes | `number` | Positive fraction of the visible image frame width, at most 1. The signed x origin controls placement outside the frame. |
+| `height` | yes | `number` | Positive fraction of the visible image frame height, at most 1. The signed y origin controls placement outside the frame. |
 
 
 ### Audience

@@ -473,7 +473,7 @@ function overlayBox(host: Rec, context: { path: string; width: number; height: n
   const hasFractions = ['x', 'y', 'width', 'height'].some(key => host[key] !== undefined), hasAt = host.at !== undefined;
   if (hasFractions === hasAt) return undefined;
   if (hasFractions) {
-    for (const key of ['x', 'y'] as const) if (typeof host[key] === 'number' && !Number.isFinite(host[key])) throw new OverlayFrameRangeError(key, context.path);
+    for (const key of ['x', 'y'] as const) if (typeof host[key] === 'number' && !Number.isFinite(host[key])) throw new PositionRangeError(key, context.path);
     if (fractions.some(value => value === undefined)) return undefined;
     return { box: fractionalOverlayFrame(host, {width, height, rtl}, context.path) };
   }
@@ -509,20 +509,24 @@ function overlayBox(host: Rec, context: { path: string; width: number; height: n
 // One reference pixel is 9525 EMU; outputs must remain finite through the actual
 // six-place geometry rounding and exactly representable as JavaScript integers.
 type OverlayFrameKey = 'x' | 'y' | 'width' | 'height';
-class OverlayFrameRangeError extends RangeError {
+class PositionRangeError extends RangeError {
   constructor(public readonly coordinate: OverlayFrameKey, path: string) {
-    super(`Overlay coordinate ${path}.${coordinate} cannot be represented as finite rounded geometry and a safe integer native coordinate.`);
+    super(`Position coordinate ${path}.${coordinate} cannot be represented as finite rounded geometry and a safe integer native coordinate.`);
     this.name = 'RangeError';
   }
 }
 function fractionalOverlayFrame(host: Rec, canvas: { width: number; height: number; rtl: boolean }, path: string): LayoutBox {
   const {width, height, rtl} = canvas;
-  const values: LayoutBox = {x: rtl ? width - (host.x + host.width) * width : host.x * width, y: host.y * height, width: host.width * width, height: host.height * height};
+  return representablePositionBox({x: rtl ? width - (host.x + host.width) * width : host.x * width, y: host.y * height, width: host.width * width, height: host.height * height}, path);
+}
+/** Internal shared geometry boundary for authored positioned panels. No layout, fonts or data loading. */
+export function representablePositionBox(box: LayoutBox, path: string): LayoutBox {
+  const values = {...box};
   for (const key of ['x', 'y', 'width', 'height'] as const) {
     const value = values[key];
-    if (!Number.isFinite(value) || !Number.isFinite(value * 1e6)) throw new OverlayFrameRangeError(key, path);
+    if (!Number.isFinite(value) || !Number.isFinite(value * 1e6)) throw new PositionRangeError(key, path);
     const rounded = round(value);
-    if (!Number.isSafeInteger(Math.round(rounded * 9525))) throw new OverlayFrameRangeError(key, path);
+    if (!Number.isSafeInteger(Math.round(rounded * 9525))) throw new PositionRangeError(key, path);
     values[key] = rounded;
   }
   return values;
@@ -604,7 +608,7 @@ export function overlayIssues(slide: unknown, slidePath: string, presentation?: 
     if (canvas && !anchored && ['x', 'y', 'width', 'height'].every(key => typeof host[key] === 'number' && Number.isFinite(host[key])) && host.width >= 0 && host.width <= 1 && host.height >= 0 && host.height <= 1) {
       try { fractionalOverlayFrame(host, canvas, at.replace(/^\//, '').replaceAll('/', '.')); }
       catch (error) {
-        if (!(error instanceof OverlayFrameRangeError)) throw error;
+        if (!(error instanceof PositionRangeError)) throw error;
         issues.push({path: `${at}/${error.coordinate}`, message: error.message, params: {key: error.coordinate}});
       }
     }

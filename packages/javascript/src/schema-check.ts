@@ -374,6 +374,12 @@ function validateContentPayload(
   // SH-02: adjust names and ranges of the preset (an image's mask too), and a link on a hidden shape.
   if (resolvedKind === "shape" || resolvedKind === "image")
     for (const issue of shapeIssues(value, (...keys) => keys.reduce((at, key) => pathFor(at, key), path))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
+  if (resolvedKind === "image" && isRecord(value.image) && Array.isArray(value.image.callouts)) {
+    value.image.callouts.forEach((callout, index) => {
+      if (!isRecord(callout)) return;
+      for (const key of ['x', 'y']) if (typeof callout[key] === 'number' && !Number.isFinite(callout[key])) issues.push(semanticIssue(`${pathFor(path, 'image')}/callouts/${index}/${key}`, 'an image callout origin must be a finite signed fraction', {key}));
+    });
+  }
   const allowedFields = new Set<string>([
     "type",
     ...spec.fields,
