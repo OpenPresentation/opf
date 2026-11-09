@@ -1,3 +1,21 @@
+# Current wave: measured speed fix folded; recovery preview gate active
+
+v0.33.0 remains published and v0.34.0 unpublished. All31 original issue1139 checklist lines remain intact. The canonical PR1225 is still e5; this is the separately pushed staging wave.
+
+Root reviewed chart correction7100 source/tests and replayed28 raw records/109206B, then normally folded it as766f1be19366924fd164040ada299910d4f9a637. That merge tree exactly equals the reviewed7100 tree. No chart leaf may receive another push. The final53 focused controls preserve corrected metadata-fixture/setup failures and do not establish aggregate/native acceptance.
+
+Root implemented RR-116 cache sourcea9, passed semantic plus99 real-outline/127 preparation controls, and measured eight symmetric Node children in a team quiet window. All208 SVG hashes match. Warm mean child medians fall12.5%/14.9% on16/36 slides; no memory saving is claimed. Independent agent review found no actionable issue and replayed evidence d65d184be. Source/metadata2e4 was normally folded as363a99cfce0fa3ccc993aafe7dd86a9160ccc223, with every non-burndown feature file exactly preserved. The evidence-only branch MUST NOT MERGE. RR-116 leaf is now folded/frozen.
+
+Site PR214 at7bdf6e934dfe6e4163c817d85cd447c2b77b44d8 passed root critical source review, all four1440/900/390/320 PNG reviews and its1135-record verifier. Local44 distinct browser cases pass. Root marked it ready; the maintained native workflow is automatically pending build/Native Preview. Sole observer41122 uses exact-head pr-gate with180-second interval, required all, no merge. Logs C:/opf-work/site214-gate01.log and eventual exit receipt identify the actual outcome. Current CI, deployed recovery checks (including dark theme) and public adoption remain owed; no manual upload.
+
+RR-114 source checkpoint aa43c500 is pushed WIP: the original16-slide deck holds exactly three faces and default/edit/script SVG controls pass; newest core/PPTX-safe adoption and faults still need qualification. RR-115 source/evidence ec1fed2c is pushed frozen: five public controls, existing persistence suite and focused UI false/retry probe pass; full maintained browser/aggregate and root review are owed. Its report continuity RED is preserved until authentic RR-113/114 rows join. RR-117 is implementing a conservative bounded derived-composition cache, fresh global checks, exact report parity and genuinely settled review.whenIdle; source/performance acceptance remains owed.
+
+Root also prepared a fresh seven-controller continuation at C:/opf-work/seven-controller, head4d8fedf2329b579e593459b18b10f3916ba5516c, normally combining staging eeb and unqualified8b WIP. The only conflict preserves both additive RR105 suffixes/progress; proof C:/opf-work/seven-rr105-merge.json. Three WIP tooling files are unchanged and remain unqualified; no bootstrap/wrapper/test/Office run occurred. The missing safe controller work remains in scope, with a dedicated agent to resume it.
+
+No managed golden, source-wide gate, Office, release or production deployment occurred in this checkpoint. The single coherent engine gate waits for RR-114/115/116/117 assembly; then reviewed goldens, a genuine six-package/current59 generation, native qualification and required CI/release/site work remain. The original owner and credential boundaries below still apply.
+
+## Previous checkpoint, retained
+
 # November 9: positioning folded; measured font reduction; three active repairs
 
 v0.33.0 is published. v0.34.0 is unpublished. The complete original scope and 31 checklist lines in [issue 1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact; this checkpoint does not replace them with the three current feature lanes.
