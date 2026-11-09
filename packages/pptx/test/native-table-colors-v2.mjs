@@ -52,7 +52,7 @@ if(process.platform==='win32'){
   fs.writeFileSync(path.join(scratch,'stdout.log'),result.stdout??'');fs.writeFileSync(path.join(scratch,'stderr.log'),result.stderr??'');
   assert.equal(result.error,undefined);assert.equal(result.status,0,result.stdout+result.stderr);
   const controls=JSON.parse(fs.readFileSync(report,'utf8').replace(/^\uFEFF/u,''));
-  assert.equal(controls.passed,true);assert.equal(controls.cases.length,52+cases.length+1+8+2+3+2);
+  assert.equal(controls.passed,true);assert.equal(controls.cases.length,52+cases.length+1+8+2+3+3);
   assert.ok(controls.cases.every(item=>item.passed));
   console.log(`Actual-source pure PowerShell table lifecycle: ${controls.cases.length} controls PASS; ${scratch}`);
  }finally{if(!parent)fs.rmSync(scratch,{recursive:true,force:true});}

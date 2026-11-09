@@ -95,7 +95,7 @@ export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
 import {composeShape,composeStroke,isPresetShape,isShapeBlock,presetAspect,presetMask,sketchStroke,stackedText,PICTURE_STROKE_WIDTH,SHAPE_BLOCK_KEYS,type ComposedShape,type ComposedStroke} from './shape-block.js';
 import {chartPointGeometry} from './chart-point-anchors.js';
-import {composeOverlayShapes,hasOverlayShapes,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
+import {composeOverlayShapes,hasOverlayShapes,representablePositionBox,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
 import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
 export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SHAPE_FAMILIES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
@@ -1288,7 +1288,7 @@ function diagramMeasure(measurement: TextMeasurement | undefined, body: string, 
  * Picture geometry of one image block in its region (FA-22): the frame (the frame area, then the aspect ratio), the mask,
  * the line, opacity, recolor and overlay: the treatments 0.14 drew on the slide picture, applied to image blocks.
  */
-function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFitOption; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor; calloutDiagnostics: LayoutDiagnostic[]; callout?: (text: string, box: LayoutBox, path: string) => ComposedImageCallout }): ComposedImage {
+function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFitOption; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor; callout?: (text: string, box: LayoutBox, path: string) => ComposedImageCallout }): ComposedImage {
   const kindName = isPresetShape(host.shape) ? host.shape : 'rect';
   const { scale } = context;
   const requested: ImageFitOption = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
@@ -1337,9 +1337,10 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
     if (callouts.length) result.calloutFrame = { ...frame };
     result.callouts = callouts.map((value: unknown, index: number) => {
       const source = record(value), path = `${hostPath}.image.callouts.${index}`;
-      if (typeof source.text !== 'string' || ['x','y','width','height'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key]) || source[key] < 0 || source[key] > 1) || source.width <= 0 || source.height <= 0) throw new TypeError('Callouts need plain text, unit coordinates and positive unit width and height at ' + path);
-      if (source.x + source.width > 1 + 1e-9 || source.y + source.height > 1 + 1e-9) context.calloutDiagnostics.push({ code: 'text-overflow', path, message: 'The image callout extends beyond its visible image frame; move or resize the panel. Its text is preserved without clipping.' });
-      return context.callout!(source.text, roundBox({ x: frame.x + frame.width * source.x, y: frame.y + frame.height * source.y, width: frame.width * source.width, height: frame.height * source.height }), path);
+      if (typeof source.text !== 'string' || ['x','y'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key])) || ['width','height'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key]) || source[key] <= 0 || source[key] > 1)) throw new TypeError('Callouts need plain text, finite signed origins and positive unit width and height at ' + path);
+      // Authored panels may straddle the image or slide edge. Only text fit is overflow;
+      // image cropping/masks never reposition or clip the annotation.
+      return context.callout!(source.text, representablePositionBox({ x: frame.x + frame.width * source.x, y: frame.y + frame.height * source.y, width: frame.width * source.width, height: frame.height * source.height }, path), path);
     });
   }
   return result;
@@ -6529,7 +6530,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     area = { ...area, y: area.y + dy }; fit = translateTextFit(fit, dy);
     return { path: calloutPath, text, box, textBox: area, fit, textStyle: styleFor('text', calloutPath) };
   };
-  const imageContext = (placement?: ComposedPlacement, anchor?: RegionAnchor, settings: Composition = composition) => ({ calloutDiagnostics: imageCalloutDiagnostics, callout: (text: string, box: LayoutBox, at: string) => fitImageCallout(text, box, at, settings), fit: hints.imageFit ?? (!placement && autoComposition() ? 'contain' as const : undefined), scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}), ...(anchor ? { anchor } : {}) });
+  const imageContext = (placement?: ComposedPlacement, anchor?: RegionAnchor, settings: Composition = composition) => ({ callout: (text: string, box: LayoutBox, at: string) => fitImageCallout(text, box, at, settings), fit: hints.imageFit ?? (!placement && autoComposition() ? 'contain' as const : undefined), scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}), ...(anchor ? { anchor } : {}) });
   // FA-22 placement. The top-level image nodes are the image blocks of `blocks` (not groups) or the root image; promoted
   // regions have none. The n-th takes its own placement, else the n-th layout image placeholder's (FA-26: image regions are
   // counted in reading order through placeholder groups, and only a top-level one carries a placement). Each band takes its

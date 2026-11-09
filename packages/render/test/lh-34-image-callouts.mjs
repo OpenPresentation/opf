@@ -4,7 +4,7 @@ import {toSvg,resolvePresentation,defaultCatalog}from'./catalog-harness.mjs';
 import {loadFonts}from'../dist/fonts-node.js';
 const src='data:image/png;base64,'+readFileSync(new URL('../../pptx/test/fixtures/images/wide.png',import.meta.url)).toString('base64'),fonts=await loadFonts();
 for(const language of ['en','ar'])for(const dimensions of [[1280,720],[540,960]])for(const fit of ['contain','cover']){
-  const callouts=[{text:'Readable text',x:.08,y:.08,width:.84,height:.28},{text:'Second label',x:.1,y:.6,width:.8,height:.3}];
+  const callouts=[{text:'Readable text',x:-.12,y:-.1,width:.84,height:.28},{text:'Second label',x:.1,y:.6,width:.8,height:.3}];
   const deck={language,design:{fontScheme:'roboto',variant:fit==='cover'?'dark1':'light1',dimensions:{widthInches:dimensions[0]/96,heightInches:dimensions[1]/96}},slides:[{title:'Labels over an image',blocks:[{image:{src,alt:'A scene',callouts},fit,shape:'roundRect',overlay:{color:'#000000',opacity:.7}}]}]},options={fonts,trace:true};
   const bound=resolvePresentation(deck,options).slides[0],image=bound.geometry.items.find(item=>item.image).image,svg=toSvg(deck,1,options);
   assert.equal((svg.match(/data-opf-image-callout=/g)??[]).length,2);
@@ -19,3 +19,7 @@ const missing=toSvg({design:{fontScheme:'roboto'},slides:[{image:{src:'unavailab
 console.log('image callout SVG: exact physical frame geometry, text above mask/overlay, unavailable pixels preserve labels');
 
 for(const [language,text]of [['ar','نقطة الفحص'],['zh-CN','检查位置']]){const deck={language,design:{fontScheme:'roboto'},slides:[{image:{src,callouts:[{text,x:.05,y:.15,width:.9,height:.65}]}}]};await fonts.ensure(deck,{renderOptions:{catalogs:[defaultCatalog]}});const svg=toSvg(deck,1,{fonts});assert.ok(svg.includes(text));}
+
+const outside={design:{fontScheme:'roboto'},slides:[{image:{src,callouts:[{text:'Offslide annotation',x:-2,y:-2,width:.5,height:.4}]},composition:{overflow:'error'}}]};
+const outsideGeometry=resolvePresentation(outside,{fonts}).slides[0].geometry,outsideLabel=outsideGeometry.items.find(item=>item.image).image.callouts[0],outsideSvg=toSvg(outside,1,{fonts,trace:true});
+assert.ok(outsideLabel.box.x<0&&outsideLabel.box.y<0);assert.ok(outsideSvg.includes('Offslide annotation'));assert.match(outsideSvg,/<svg[^>]+viewBox="0 0 1280 720"/);assert.equal(outsideGeometry.diagnostics.some(d=>d.code==='text-overflow'),false);

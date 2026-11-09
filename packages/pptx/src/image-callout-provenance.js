@@ -31,7 +31,7 @@ export function importImageCallouts({shapes,paragraphs,pictures,relationships,en
     for(const panel of panels) {
       const {index,frame,lines}=panel.data;
       if(panel.ambiguous||panel.data.total!==total||!Number.isSafeInteger(index)||index<0||index>=total||result[index]||!Number.isSafeInteger(lines)||lines<1||lines>10000)throw Error('Ambiguous callout panel.');
-      if(!frame||Object.keys(frame).some(key=>!['x','y','width','height'].includes(key))||['x','y','width','height'].some(key=>typeof frame[key]!=='number'||!Number.isFinite(frame[key])||frame[key]<0||frame[key]>1)||frame.width<=0||frame.height<=0)throw Error('Invalid fractional frame.');
+      if(!frame||Object.keys(frame).some(key=>!['x','y','width','height'].includes(key))||['x','y'].some(key=>typeof frame[key]!=='number'||!Number.isFinite(frame[key]))||['width','height'].some(key=>typeof frame[key]!=='number'||!Number.isFinite(frame[key])||frame[key]<=0||frame[key]>1))throw Error('Invalid fractional frame.');
       const transform=panel.shape['p:spPr']?.['a:xfrm'];
       const flipped=value=>value!==undefined&&value!==false&&value!==0&&value!=='0'&&value!=='false';
       // PowerPoint adds a blank text body to a rectangle that exported without one.

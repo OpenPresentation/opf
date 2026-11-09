@@ -35,6 +35,7 @@ export interface OverlayInsertOptions {
   shape: string;
   /** The frame in fractions of the slide; else about a fifth of the slide wide at the preset's proportions, centered on `center`. */
   frame?: OverlayFrame;
+  /** Explicit finite signed center in the overlay start-edge convention; may cross the slide. Omission keeps gallery insertion visible. */
   center?: { x: number; y: number };
   /** The slide's pixel size for those proportions (default 1280 by 720). */
   size?: { width: number; height: number };
@@ -45,7 +46,7 @@ export declare function prepareOverlayInsert(presentation: unknown, options: Ove
 /** Add an overlay shape on top of a slide as one undoable step; the change's `path` is the new entry. */
 export declare function insertOverlayShape(editor: EditorSession, options: OverlayInsertOptions, meta?: Record<string, unknown>): OverlayChange & { shape: string; frame: OverlayFrame };
 
-/** A frame change: fractions for a shape placed by `x`, `y`, `width` and `height`; `offset` (pixels), `width` and `height` for one attached to a block. */
+/** A frame change: signed x/y fractions and width/height fractions for a shape placed by `x`, `y`, `width` and `height`; `offset` (pixels), `width` and `height` for one attached to a block. */
 export interface OverlayAnchor {block: string; edge: "top" | "bottom" | "start" | "end" | "center"; point?: string | number; series?: string | number; offset?: number; width?: number; height?: number}
 export declare function prepareOverlayAnchor(presentation: unknown, path: string, anchor: OverlayAnchor): PreparedOverlayChange;
 /** Attach a shape to a block or chart point as one validated, undoable change. */

@@ -6,7 +6,7 @@ import { resolveDesignRecords } from "./design-records.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { chartDrawDiagnostics } from "./chart-fallback.js";
-import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
+import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
@@ -374,6 +374,12 @@ function validateContentPayload(
   // SH-02: adjust names and ranges of the preset (an image's mask too), and a link on a hidden shape.
   if (resolvedKind === "shape" || resolvedKind === "image")
     for (const issue of shapeIssues(value, (...keys) => keys.reduce((at, key) => pathFor(at, key), path))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
+  if (resolvedKind === "image" && isRecord(value.image) && Array.isArray(value.image.callouts)) {
+    value.image.callouts.forEach((callout, index) => {
+      if (!isRecord(callout)) return;
+      for (const key of ['x', 'y']) if (typeof callout[key] === 'number' && !Number.isFinite(callout[key])) issues.push(semanticIssue(`${pathFor(path, 'image')}/callouts/${index}/${key}`, 'an image callout origin must be a finite signed fraction', {key}));
+    });
+  }
   const allowedFields = new Set<string>([
     "type",
     ...spec.fields,
@@ -514,7 +520,7 @@ function deckMetadataIssues(value: Record<string, unknown>): ValidationIssue[] {
   return issues;
 }
 
-function presentationSemanticIssues(value: unknown): ValidationIssue[] {
+function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[]): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
   }
@@ -540,6 +546,17 @@ function presentationSemanticIssues(value: unknown): ValidationIssue[] {
   // Slide and payload ids share one namespace, so the origin of the id already
   // seen decides which message describes the collision truthfully.
   const documentIds = new Map<string, "slide" | "payload">();
+  let overlayCanvas: {width: number; height: number} | undefined, overlayCanvasResolved = false;
+  const canvasForOverlays = (slide: Record<string, unknown>, index: number) => {
+    if (!Array.isArray(slide.shapes) || !slide.shapes.some(shape => isRecord(shape) && shape.connector === undefined && ['x', 'y', 'width', 'height'].every(key => typeof shape[key] === 'number' && Number.isFinite(shape[key])))) return undefined;
+    if (!overlayCanvasResolved) {
+      overlayCanvasResolved = true;
+      const design = isRecord(value.design) ? value.design : {};
+      const dimensions = design.dimensions ?? resolveDesignRecords(value, undefined, {catalogs: catalogs ?? []}).theme.dimensions;
+      try { overlayCanvas = resolveCanvasDimensions(dimensions); } catch { /* The authored dimensions have their own schema error. */ }
+    }
+    return overlayCanvas ? {...overlayCanvas, rtl: resolveSlideDirection(value, index) === 'rtl'} : undefined;
+  };
   value.slides.forEach((slide, index) => {
     if (isRecord(slide)) {
       const slidePath = `/slides/${index}`;
@@ -567,7 +584,7 @@ function presentationSemanticIssues(value: unknown): ValidationIssue[] {
         const checked = isOverlayConnector(entry) ? (isRecord(entry.adjust) ? { shape: connectorAdjustPreset(entry), adjust: entry.adjust } : undefined) : entry;
         if (checked) for (const issue of shapeIssues(checked, (...keys) => keys.reduce((at, key) => pathFor(at, key), entryPath))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
       });
-      for (const issue of overlayIssues(slide, slidePath, value)) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
+      for (const issue of overlayIssues(slide, slidePath, value, canvasForOverlays(slide, index))) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
       issues.push(...validateSlideRegions(slide, slidePath));
       const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
         if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
@@ -1098,7 +1115,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {
-    errors.push(...presentationSemanticIssues(subject));
+    errors.push(...presentationSemanticIssues(subject, options.catalogs));
     errors.push(...variableIssues.errors);
     const data = dataIssues(subject);
     errors.push(...data.errors);

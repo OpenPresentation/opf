@@ -133,7 +133,7 @@ export async function prepareTableProfile(options, {root = ownRepository} = {}) 
   return {envelope: file, sha256: digest(bytes), controllerRevision: controller.revision, nativeAcceptance: false};
 }
 export async function assertTableFreshOutput(output) {
-  for (const relative of ['runner.json', 'table-colors/worker.json', 'table-colors/worker.stdout.log', 'table-colors/worker.stderr.log', 'table-colors/supervisor.json', 'table-colors/native.json', 'table-colors/failure.json', 'table-colors/progress.json', 'table-colors/stages.jsonl', 'table-colors/table-colors-saved.pptx', 'table-colors/table-colors-edited.pptx', ...['original', 'reopened', 'edited'].flatMap(phase => Array.from({length: 6}, (_, index) => `table-colors/${phase}-${index + 1}.png`))])
+  for (const relative of ['runner.json', 'table-colors/worker.json', 'table-colors/worker.stdout.log', 'table-colors/worker.stderr.log', 'table-colors/supervisor.json', 'table-colors/native.json', 'table-colors/failure.json', 'table-colors/progress.json', 'table-colors/stages.jsonl', 'table-colors/character-probes.jsonl', 'table-colors/table-colors-saved.pptx', 'table-colors/table-colors-edited.pptx', ...['original', 'reopened', 'edited'].flatMap(phase => Array.from({length: 6}, (_, index) => `table-colors/${phase}-${index + 1}.png`))])
     await assert.rejects(() => lstat(path.join(output, relative)), {code: 'ENOENT'}, `Preserve prior attempt: ${relative}`);
 }
 export async function bindTableProfile({envelopeFile, envelopeSha256, fresh = false, root = ownRepository}) {

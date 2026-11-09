@@ -106,8 +106,11 @@ function hash(text) {
 
 /** The hash of a chart part's cached data: series names, categories, values and number format codes, in order. */
 export function chartEvidence(xml) {
+  // RR-105: Office rewrites display captions from cx:rich to cx:txData/cx:v on save. A title is not cached data.
+  // Exclude only ChartEx title subtrees; actual data points, series names and number formats keep their legacy evidence.
+  const cached = String(xml).replace(/<cx:title\b[\s\S]*?<\/cx:title>/g, '');
   const parts = [];
-  for (const match of String(xml).matchAll(/<(c:v|c:formatCode|cx:pt|cx:v)\b[^>]*>([^<]*)<\/\1>|<cx:lvl\b[^>]*?\bformatCode="([^"]*)"/g)) {
+  for (const match of cached.matchAll(/<(c:v|c:formatCode|cx:pt|cx:v)\b[^>]*>([^<]*)<\/\1>|<cx:lvl\b[^>]*?\bformatCode="([^"]*)"/g)) {
     const code = match[3] !== undefined ? decodeEntities(match[3]) : match[1] === 'c:formatCode' ? decodeEntities(match[2]) : undefined;
     if (code === undefined) parts.push(`${match[1]}:${canonicalValue(decodeEntities(match[2]))}`);
     else if (!generalCode(code)) parts.push(formatEvidence(code));

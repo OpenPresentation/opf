@@ -75,10 +75,10 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `text` | yes | `string` | Plain editable text. Native edits preserve current words; an empty string is retained. |
-| `x` | yes | `number` | Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
-| `y` | yes | `number` | Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
-| `width` | yes | `number` | Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
-| `height` | yes | `number` | Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
+| `x` | yes | `number` | Signed fraction of the visible image frame width from its physical left edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds... |
+| `y` | yes | `number` | Signed fraction of the visible image frame height from its physical top edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds... |
+| `width` | yes | `number` | Positive fraction of the visible image frame width, at most 1. The signed x origin controls placement outside the frame. |
+| `height` | yes | `number` | Positive fraction of the visible image frame height, at most 1. The signed y origin controls placement outside the frame. |
 
 
 ### Audience
@@ -883,8 +883,8 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'. |
-| `x` | no | `number` | Left edge as a fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. With 'y', 'width' and 'height'. |
-| `y` | no | `number` | Top edge as a fraction of the slide height, from the top edge. |
+| `x` | no | `number` | Left edge as a signed fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. Negative values or values greater than 1 place the shape outsi... |
+| `y` | no | `number` | Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape outside the slide. |
 | `width` | no | `number` | Width as a fraction of the slide width. |
 | `height` | no | `number` | Height as a fraction of the slide height. |
 | `at` | no | `ref:OverlayAnchor` |  |
