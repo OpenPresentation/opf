@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartBandColor, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, resolveColorRef, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -238,7 +238,7 @@ export function renderCatalogChart(item, box, bound, options, svg) {
     c.dataLabels = { content: ["value"], position: "outside-end", separator: ", " };
     c.waterfallSigned = true;
   }
-  // LH-110: the period band lies under the marks, the reference lines over them.
+  // Explicit reference lines are drawn over the data.
   render(c, spec);
   drawReferenceLines(c, layer?.references?.lines);
   drawStackNames(c, layer?.stack?.names);
@@ -980,11 +980,10 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   }));
 }
 
-// LH-110: the reference lines the title names, dashed across the plot in the chart text color, each labeled bold in the text color
-// where core placed the label (the plot's start, under or over the line).
+// Explicit reference values and independent strokes, with optional labels at the endpoints core placed.
 function drawReferenceLines(c, lines) {
   for (const line of lines ?? []) {
-    const color=line.stroke.color===undefined?c.chartTextColor:coreChartSeriesPalette(c.bound.design.colorScheme,[line.stroke.color],{accents:c.bound.design.roles.map.accents,roles:c.bound.design.colors,variables:c.bound.design.variables})[0]??c.chartTextColor;
+    const color=line.stroke.color===undefined?c.chartTextColor:resolveColorRef(line.stroke.color,{colorScheme:c.bound.design.colorScheme,roles:c.bound.design.colors,variables:c.bound.design.variables,fallback:c.chartTextColor});
     const width=line.strokeWidth,dash=line.stroke.dash==='dash'?[4*width,3*width]:line.stroke.dash==='dot'?[width,2*width]:undefined;
     if(width>0)c.mark('line',{x1:line.x1,y1:line.y1,x2:line.x2,y2:line.y2,stroke:color,'stroke-width':width,...(dash?{'stroke-dasharray':dash.map(c.num).join(' ')}:{})},c.path+'.referenceLines.'+line.index);
     if(line.label!==undefined&&line.labelBox)c.text(line.label,line.labelBox,c.path+'.referenceLines.'+line.index+'.label',line.labelAlign??'center',c.labelColor);
@@ -1117,7 +1116,8 @@ function renderComboChart(c, spec) {
   });
   const { scale, secondary } = axis;
   const plot=c.plotBox??axis.plot;
-  drawBottomLabels(c, axis.plan, plot, entries);
+  const categoryLabels=c.plotBox?planBottomLabels(c,entries,plot,Math.max(c.lineHeight+c.textHeight,c.box.height*0.4),{minX:plot.x-fontPx*0.5,maxX:plot.x+plot.width+fontPx*0.5,rotatedMinX:c.box.x+c.pad}):axis.plan;
+  drawBottomLabels(c, categoryLabels, plot, entries);
   c.plotArea = plot;
   const valueAt = (axisScale) => (value) => plot.y + axisFraction(value, axisScale, true) * plot.height;
   const at = valueAt(scale), atSecondary = secondary ? valueAt(secondary) : at;

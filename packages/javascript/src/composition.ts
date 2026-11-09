@@ -9,14 +9,13 @@ export {vennNodes,type VennBox,type VennNode} from './venn-arrangement.js';
 import {timelineDurationFractions} from './timeline-duration.js';
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
-import {chartTextSize,chartValueAxis,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
+import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {groupNumber,NUMBER_GROUPING_MIN} from './number-grouping.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
-import {chartComboAxes} from './chart-axis.js';
 import {chartDoughnut,restackForRows,chartStack,chartReferences,chartValueList,chartWaterfall,horizontalBarPlot,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartHistogram} from './chart-histogram.js';
 import {chartNumericAxes} from './chart-numeric-axes.js';
@@ -11428,7 +11427,7 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
   return { width, height };
 }
 // RR-92: the value axis (scale, intervals and the axis of a category chart), shared by the preview and the PPTX export.
-export {chartAxisFraction,niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_MAX_OVERSHOOT,CHART_LABELED_ZERO_SHARE,chartValueAxis,shareSiblingChartAxes,chartTextSize,chartIntervalsFor,CHART_TEXT_PX,CHART_TEXT_FLOOR_PX,CHART_MIN_TICK_SPACING_PX,CHART_MAX_INTERVALS} from './chart-axis.js';
+export {chartAxisFraction,niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_MAX_OVERSHOOT,CHART_LABELED_ZERO_SHARE,chartValueAxis,chartComboAxes,shareSiblingChartAxes,chartTextSize,chartIntervalsFor,CHART_TEXT_PX,CHART_TEXT_FLOOR_PX,CHART_MIN_TICK_SPACING_PX,CHART_MAX_INTERVALS} from './chart-axis.js';
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {groupNumber,groupsThousands,groupsAxisTicks,groupsDataRange,NUMBER_GROUPING_MIN,GROUPED_LABEL_CODE} from './number-grouping.js';
@@ -11438,7 +11437,6 @@ export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabe
 export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartLayerReferences} from './chart-marks.js';
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
 export {CHART_REFERENCE_TYPES} from './chart-references.js';
-export type {TitleReferenceNumber} from './chart-title-numbers.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';

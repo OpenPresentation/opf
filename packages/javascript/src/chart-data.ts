@@ -43,6 +43,7 @@ export type DataDiagnosticCode =
   | 'chart-highlight-unknown-name'
   | 'chart-highlight-adapted'
   | 'chart-series-dropped'
+  | 'chart-reference-value-invalid'
   | 'chart-reference-axis-unavailable'
   | 'table-highlight-unknown-name'
   | 'number-format-invalid';
@@ -594,6 +595,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     ];
   }
   if (record(chart) && Array.isArray(chart.referenceLines)) chart.referenceLines.forEach((entry, index) => {
+    if (record(entry) && typeof entry.value === 'number' && !Number.isFinite(entry.value)) diagnostics.push({code:'chart-reference-value-invalid',severity:'error',path:at(base,'referenceLines',index,'value'),message:'A reference value must be finite in its value axis data units.'});
     if (record(entry) && entry.axis === 'secondary' && !combo?.some(series => series.axis === 'secondary')) diagnostics.push({code:'chart-reference-axis-unavailable',severity:'error',path:at(base,'referenceLines',index,'axis'),message:'A secondary reference requires a combo chart with a plotted line series on its secondary value axis.'});
   });
   const order = [category, ...(x === undefined ? [] : [x]), ...series];

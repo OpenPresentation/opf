@@ -322,7 +322,7 @@ export interface ChartAxisGeometry {
   language?: string;
   /** LH-119: the chart is a line whose points carry their value labels and whose value axis is hidden (the small chart, LH-03). */
   labeled?: boolean;
-  /** LH-110: values the axis must hold besides the data (the reference lines the title names). */
+  /** LH-110: values the axis must hold besides the data (explicit reference lines). */
   include?: readonly number[];
 }
 
@@ -365,8 +365,9 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const extents = stacks.flat().flatMap((point) => (point === null ? [] : spec.kind === 'line' || !stackedGrouping ? [point.to] : [point.from, point.to]));
   const anchor = spec.kind === 'bar' || spec.kind === 'area' ? [0] : [];
   const include = [...geometry.include ?? [], ...chartReferences(chart).filter(ref=>ref.axis==='value').map(ref=>ref.value)].filter(Number.isFinite);
-  const dataMin = extents.length ? Math.min(...extents, ...anchor, ...include) : 0;
-  const dataMax = extents.length ? Math.max(...extents, ...anchor, ...include) : 1;
+  const bounds = [...extents, ...anchor, ...include];
+  const dataMin = bounds.length ? Math.min(...bounds) : 0;
+  const dataMax = bounds.length ? Math.max(...bounds) : 1;
   const pad = 10 * scale;
   const fontPx = chartTextSize(geometry) * scale;
   const lineHeight = fontPx * 1.5;
@@ -389,7 +390,7 @@ export function chartComboAxes(chart:unknown,resolved:ResolvedChartData,geometry
   const forAxis=(axis:'primary'|'secondary'):ChartValueAxis=>{
     const columns=resolved.combo!.flatMap((entry,index)=>entry.axis===axis?[index+1]:[]);
     const values=resolved.rows.flatMap(row=>columns.map(column=>chartNumber(row[column]))).filter((v):v is number=>v!==null);
-    if(axis==='primary'&&resolved.combo!.some(entry=>entry.role==='bar'))values.push(0);
+    if(resolved.combo!.some(entry=>entry.axis===axis&&entry.role==='bar'))values.push(0);
     values.push(...refs.filter(ref=>ref.axis===(axis==='primary'?'value':'secondary')).map(ref=>ref.value));
     const fitted=niceScale(values.length?Math.min(...values):0,values.length?Math.max(...values):1,intervals,{endOnTick:true});
     return {min:fitted.min,max:fitted.max,majorUnit:fitted.step};

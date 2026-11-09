@@ -104,34 +104,6 @@ describe("LH-109: stacked values and names", () => {
   });
 });
 
-describe("LH-110: reference marks the title names", () => {
-  test("a compared number the data does not hold draws a labeled line, and the axis holds it", () => {
-    const item = chartOf({ title: "On-time delivery stayed above 92% all year", chart: delivery });
-    const [line] = item.chart.layer.references.lines;
-    assert.equal(line.value, 0.92);
-    assert.equal(line.text, "92%");
-    assert.ok(item.chart.valueAxis.min <= 0.92, "the axis reaches the line");
-    assert.ok(line.label.y > line.y, "the label sits under the line: the data are above it");
-  });
-
-  test("conservative matching: a data value, a number without a comparison, another language or a percent on a plain column draw nothing", () => {
-    assert.equal(layerOf({ title: "On-time delivery peaked at 97.9%", chart: delivery }).references, undefined, "a value the data holds");
-    assert.equal(layerOf({ title: "On-time delivery was 92% or better", chart: delivery }).references, undefined, "no comparison word");
-    // LH-110 remainder: French, German, Spanish, Italian, Portuguese and Dutch titles are read (lh-110-title-numbers.test.mjs); others are not.
-    assert.equal(layerOf({ title: "La ponctualité est restée au-dessus de 92 %", chart: delivery }, { presentation: { language: "fr", slides: [] } }).references?.lines[0]?.value, 0.92);
-    assert.equal(layerOf({ title: "定時配達率は92%を上回った", chart: delivery }, { presentation: { language: "ja", slides: [] } }).references, undefined);
-    assert.equal(layerOf({ title: "Tickets stayed below 9000", chart: delivery }).references, undefined, "far outside the data and not a percent");
-  });
-
-  test("a line chart in time shades the one period the title names after a time preposition", () => {
-    const layer = layerOf({ title: "Cloud spend overtook on-premises in 2023", chart: spend });
-    assert.deepEqual(layer.references.bands.map((band) => band.row), [3]);
-    assert.ok(layer.references.bands[0].box.height > 100);
-    assert.equal(layerOf({ title: "Cloud spend grew every year of 2026", chart: spend }).references, undefined, "a year that is not a category");
-    assert.equal(layerOf({ title: "Cloud spend overtook on-premises in 2023", chart: { ...spend, type: "column" } }).references, undefined, "columns: the focus emphasis names the period");
-  });
-});
-
 describe("LH-109 and LH-110 with LH-93's shared plots", () => {
   test("sibling stacked charts share one plot; their names and lines are placed against it", () => {
     const left = stacked(), right = { ...stacked(), data: { ...stacked().data, rows: stacked().data.rows.map(([q, a, b, c]) => [q, a / 2, b, c]) } };

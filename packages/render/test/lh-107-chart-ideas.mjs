@@ -62,21 +62,5 @@ let checks = 0;
   checks += 3;
 }
 
-// 4. Reference line (dashed, labeled as the title writes it) and period band (under the lines).
-{
-  const delivery = { type: 'line', data: { columns: ['Month', { name: 'On-time delivery', format: '0.0%' }], rows: months.map((month, i) => [month, [0.934, 0.941, 0.928, 0.952, 0.961, 0.957, 0.944, 0.936, 0.949, 0.968, 0.972, 0.979][i]]) } };
-  const svg = toSvg(deck({ title: 'On-time delivery stayed above 92% all year', chart: delivery }), 1, { trace: true });
-  assert.ok(texts(svg).some((entry) => entry.body === '92%' && entry['font-weight'] === '700'), 'the line is labeled 92%');
-  const dashed = tags(svg, 'line').filter((line) => line['stroke-dasharray'] && line.y1 === line.y2);
-  assert.equal(dashed.length, 1, 'one dashed reference line');
-  const input = deck({ title: 'Cloud spend overtook on-premises in 2023', chart: { type: 'line', data: { columns: ['Year', 'Cloud ($B)', 'On-premises ($B)'], rows: [['2020', 3.1, 8.4], ['2021', 4.2, 7.9], ['2022', 5.6, 7.3], ['2023', 7.3, 6.5], ['2024', 9.4, 5.6], ['2025', 11.8, 4.8]] } } });
-  const banded = toSvg(input, 1, { trace: true });
-  const design = resolvePresentation(input).slides[0].design;
-  const band = tags(banded, 'rect').find((rect) => rect['data-opf-path'] === 'slides.0.chart.data.rows.3.0');
-  assert.ok(band, 'the 2023 band');
-  assert.equal(band.fill.toUpperCase(), chartBandColor(design.backgroundColor ?? design.colors.background, design.colors.text).toUpperCase());
-  assert.ok(banded.indexOf('data-opf-path="slides.0.chart.data.rows.3.0"') < banded.indexOf('<polyline'), 'the band lies under the lines');
-  checks += 4;
-}
 
-console.log(`LH-107 to LH-110 preview passed: ${checks} checks; waterfall roles and signed labels, value list, stacked values and names, reference line and band.`);
+console.log(`LH-107 to LH-110 preview passed: ${checks} checks; waterfall roles and signed labels, value list, stacked values and names.`);
