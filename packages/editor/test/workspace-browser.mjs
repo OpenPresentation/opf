@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { startWorkspacePage, deck } from './support/workspace-page.mjs';
 import { runUnusedThumbnailCacheRegression } from './support/unused-thumbnail-cache.mjs';
+import { runThumbnailPaintedFitRegression } from './support/thumbnail-painted-fit.mjs';
 
 // CE-06 in a real browser: `createOpfEditor` (src/workspace.js) mounted on a bare page with the package stylesheet, the renderer's browser
 // fonts handle and the gallery catalog. Covers mount and destroy without leaks (listeners, observers, DOM, the fonts lease, a destroy before
@@ -9,6 +10,7 @@ import { runUnusedThumbnailCacheRegression } from './support/unused-thumbnail-ca
 const checks = [];
 const mark = (name) => checks.push(name);
 await runUnusedThumbnailCacheRegression();
+await runThumbnailPaintedFitRegression();
 const app = await startWorkspacePage();
 const { page, errors } = app;
 const ev = (fn, arg) => page.evaluate(fn, arg);
