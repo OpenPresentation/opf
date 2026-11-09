@@ -1,7 +1,7 @@
 // SH-19 tools: read an OPF-written layout part (dgm:layoutDef) back into core's LayoutDefinition (smart-art-layout.ts), so OPF's
 // interpreter can evaluate what the file holds (the gate, and the COM fixture of the interpreter's unit test).
 import { createRequire } from 'node:module';
-const { XMLParser } = createRequire('C:/opf-work/wave2-review/packages/pptx/package.json')('fast-xml-parser');
+const { XMLParser } = createRequire(new URL('../../../packages/pptx/package.json', import.meta.url))('fast-xml-parser');
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', preserveOrder: true, parseAttributeValue: false });
 const nameOf = item => Object.keys(item).find(key => key !== ':@');
 const attr = item => item[':@'] ?? {};
