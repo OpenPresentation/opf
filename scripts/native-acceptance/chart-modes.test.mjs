@@ -99,6 +99,10 @@ test('all30 current chart archives retain strict locks, every series/cache/workb
     assert.throws(()=>assertClassicChartData(change('ppt/charts/chart1.xml',xml=>xml.replace('<c:v>Q1</c:v>','<c:v>WRONG</c:v>')),1,data,contract,'wrong-category'),/categories/);
     assert.throws(()=>assertClassicChartData(change('ppt/charts/chart1.xml',xml=>xml.replace('<c:v>4</c:v>','<c:v>400</c:v>')),1,data,contract,'wrong-value'),/values/);
     assert.throws(()=>assertClassicChartData(change('ppt/charts/chart1.xml',xml=>xml.replace('barDir val="col"','barDir val="bar"')),1,data,contract,'wrong-type'),/vertical columns/);
+    for(const [from,to] of [['Sheet1!$B$1','Sheet1!$C$1'],['Sheet1!$A$2:$A$4','Sheet1!$B$2:$B$4'],['Sheet1!$B$2:$B$4','Sheet1!$C$2:$C$4']]){
+      assert.throws(()=>assertClassicChartData(change('ppt/charts/chart1.xml',xml=>xml.replace(from,to)),1,data,contract,'wrong-formula'),/classic .* formula/);
+    }
+    assert.throws(()=>assertClassicChartData(change('ppt/charts/chart1.xml',xml=>xml.replace('ptCount val="3"','ptCount val="2"')),1,data,contract,'wrong-cache-count'),/declared classic cache count/);
     const workbook='ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx',nested=fflate.unzipSync(parts[workbook]);
     nested['xl/worksheets/sheet1.xml']=fflate.strToU8(fflate.strFromU8(nested['xl/worksheets/sheet1.xml']).replace('<v>4</v>','<v>400</v>'));
     assert.throws(()=>assertClassicChartData({...parts,[workbook]:fflate.zipSync(nested)},1,data,contract,'wrong-workbook'),/workbook/);
@@ -106,6 +110,15 @@ test('all30 current chart archives retain strict locks, every series/cache/workb
     const plotted={columns:boxData.columns,rows:boxData.rows.map(row=>[boxData.columns[0],...row.slice(1)])};
     assertNativeBoxData(boxParts,plotted,contract,'native-box');
     const boxFile=Object.keys(boxParts).find(file=>/^ppt\/charts\/chartEx\d+\.xml$/.test(file));
+    const changeBox=replace=>({...boxParts,[boxFile]:fflate.strToU8(replace(fflate.strFromU8(boxParts[boxFile])))});
+    for(const [from,to] of [['Sheet1!$B$1','Sheet1!$C$1'],['Sheet1!$A$2:$A$4','Sheet1!$B$2:$B$4'],['Sheet1!$B$2:$B$4','Sheet1!$C$2:$C$4']]){
+      assert.throws(()=>assertNativeBoxData(changeBox(xml=>xml.replace(from,to)),plotted,contract,'wrong-native-formula'),/native .* formula/);
+    }
+    assert.throws(()=>assertNativeBoxData(changeBox(xml=>xml.replace('ptCount="3"','ptCount="2"')),plotted,contract,'wrong-native-count'),/declared native cache count/);
+    assert.throws(()=>assertNativeBoxData(changeBox(xml=>xml.replace('r:id="rId1"','r:id="rId999"')),plotted,contract,'wrong-native-relation-id'),/unique embedded workbook relationship/);
+    const nativeRels='ppt/charts/_rels/'+path.basename(boxFile)+'.rels';
+    const wrongLink={...boxParts,[nativeRels]:fflate.strToU8(fflate.strFromU8(boxParts[nativeRels]).replace('Microsoft_Excel_Worksheet1.xlsx','Microsoft_Excel_Worksheet999.xlsx')),[workbook.replace('1.xlsx','999.xlsx')]:boxParts[workbook]};
+    assert.throws(()=>assertNativeBoxData(wrongLink,plotted,contract,'wrong-native-workbook-link'),/native.classic same workbook/);
     boxParts[boxFile]=fflate.strToU8(fflate.strFromU8(boxParts[boxFile]).replace('<cx:pt idx="0">4</cx:pt>','<cx:pt idx="0">400</cx:pt>'));
     assert.throws(()=>assertNativeBoxData(boxParts,plotted,contract,'wrong-native-box'),/native box values/);
   }finally{await rm(scratch,{recursive:true,force:true});}
