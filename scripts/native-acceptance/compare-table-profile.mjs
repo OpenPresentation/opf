@@ -24,6 +24,13 @@ export function assertTableLifecycle({runner, terminal, report, stages, profile,
   assert.equal(terminal.timedOut, false); assert.equal(terminal.exitCode, 0); assert.equal(terminal.cleanupConfirmed, true);
   assert.equal(terminal.lastDurableStage, 'worker.complete');
   assert.equal(report.cleanupConfirmed, true); assert.equal(report.officeOperationsStopped, false);
+  const environment = report.environment;
+  assert.ok(environment && typeof environment.hostVersion === 'string' && environment.hostVersion.length > 0);
+  assert.ok(typeof environment.powerPointVersion === 'string' && environment.powerPointVersion.length > 0);
+  assert.ok(typeof environment.executablePath === 'string' && path.isAbsolute(environment.executablePath));
+  assert.match(environment.executableSha256, /^[a-f0-9]{64}$/u);
+  for (const key of ['executableVersion', 'windowsBuild']) assert.ok(environment[key] === null || (typeof environment[key] === 'string' && environment[key].length > 0));
+  assert.deepEqual(environment.metadataUnavailable, ['executableVersion', 'windowsBuild'].filter(key => environment[key] === null), 'Unavailable environment metadata must be explicit');
   assert.equal(report.edits.length, 6);
   assert.deepEqual(report.edits, Array.from({length: 6}, (_, index) => ({slide: index + 1, row: 2, column: 1, before: 'Body', after: 'Native Body', prefix: 'Native '})));
   assert.ok(Array.isArray(stages) && stages.length > 0);

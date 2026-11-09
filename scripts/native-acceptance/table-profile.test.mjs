@@ -53,6 +53,7 @@ function lifecycleFixture() {
   const runner = {...clone(common), sourceSuiteSha256: profile.suiteSha256, runOfficeRequested: true, timeoutSeconds: 45, status: 'native-observation-completed; comparison-and-coordinator-review-required'};
   const terminal = {envelopeSha256, timedOut: false, exitCode: 0, cleanupConfirmed: true, lastDurableStage: 'worker.complete'};
   const report = {...clone(common), cleanupConfirmed: true, officeOperationsStopped: false, edits: Array.from({length: 6}, (_, i) => ({slide: i + 1, row: 2, column: 1, before: 'Body', after: 'Native Body', prefix: 'Native '}))};
+  report.environment = {hostVersion: '5.1.synthetic', powerPointVersion: '16.0.synthetic', executablePath: path.resolve('synthetic-POWERPNT.EXE'), executableSha256: 'e'.repeat(64), executableVersion: null, windowsBuild: 'synthetic-control', metadataUnavailable: ['executableVersion']};
   const names = ['worker.initialize', 'application.create', 'application.initial.count', 'original.preflight.count', 'original.open', 'original.fullName', 'original.readOnly', ...Array.from({length: 6}, (_, i) => `original.slide.${i + 1}.capture`), 'original.saveCopyAs', 'original.close', 'reopened.preflight.count', 'reopened.open', 'reopened.fullName', 'reopened.readOnly', ...Array.from({length: 6}, (_, i) => `reopened.slide.${i + 1}.capture`), ...Array.from({length: 6}, (_, i) => `edit.slide.${i + 1}.prefix`), 'edited.saveCopyAs', 'reopened.close', 'edited.preflight.count', 'edited.open', 'edited.fullName', 'edited.readOnly', ...Array.from({length: 6}, (_, i) => `edited.slide.${i + 1}.capture`), 'edited.close', 'application.final.count', 'application.quit', 'worker.complete'];
   const files = {original: 'table-colors.pptx', reopened: 'table-colors-saved.pptx', edited: 'table-colors-edited.pptx'};
   for (const phase of ['original', 'reopened', 'edited']) report[phase] = Array.from({length: 6}, (_, index) => ({png: `${phase}-${index + 1}.png`}));
@@ -70,6 +71,7 @@ test('table execution adapter keeps genuine generation and controller identities
     ['generator impersonation', f => { f.report.generationIdentity = clone(f.profile.controller); }],
     ['stale controller', f => { f.runner.executionIdentity.revision = 'd'.repeat(40); }],
     ['writeable open', f => { f.report.opens[1].readOnly = 0; }], ['foreign identical path', f => { f.report.opens[1].path += '-foreign'; }],
+    ['missing environment', f => { delete f.report.environment; }], ['fabricated availability', f => { f.report.environment.metadataUnavailable = []; }],
     ['timeout', f => { f.terminal.timedOut = true; }], ['exit failure', f => { f.terminal.exitCode = 1; }],
     ['cleanup', f => { f.terminal.cleanupConfirmed = false; }], ['latch', f => { f.report.officeOperationsStopped = true; }],
     ['61 seconds', f => { f.runner.timeoutSeconds = 61; }], ['five edits', f => { f.report.edits.pop(); }],
@@ -207,4 +209,14 @@ test('full modeled profile binds old generator, worker and installed bytes separ
       assert.equal(result.error, undefined); assert.equal(result.status, 0, result.stdout + result.stderr); assert.match(result.stdout, /PASS actual bootstrap/u);
     }
   } finally { await rm(scratch, {recursive: true, force: true}); }
+});
+
+
+test('output separation checks both directions, sibling boundaries and Windows case aliases before preparation or binding', async () => {
+  const {assertTableOutputSeparate} = await import('./table-profile.mjs');
+  const root = path.resolve('owned-source');
+  assertTableOutputSeparate(root + '-sibling', [root]);
+  for (const output of [root, path.join(root, 'child'), path.dirname(root)]) assert.throws(() => assertTableOutputSeparate(output, [root]), /overlaps/u);
+  assert.throws(() => assertTableOutputSeparate('relative', [root]), /absolute/u);
+  if (process.platform === 'win32') for (const output of [root.toUpperCase(), path.join(root.toUpperCase(), 'new-output')]) assert.throws(() => assertTableOutputSeparate(output, [root.toLowerCase()]), /overlaps/u);
 });

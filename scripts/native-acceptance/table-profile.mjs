@@ -89,15 +89,25 @@ export async function loadTableSource({suiteDirectory, producerRepository, legac
   return {suite, suiteBytes, generation, input, generationBytes, sourceBytes, selected};
 }
 const ownRepository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+export function assertTableOutputSeparate(output, roots) {
+  const key = value => {
+    assert.ok(path.isAbsolute(value), 'Table output and protected paths must be absolute');
+    const full = path.resolve(value);
+    return process.platform === 'win32' ? full.toLowerCase() : full;
+  };
+  const candidate = key(output);
+  for (const root of roots) {
+    const protectedPath = key(root);
+    assert.ok(candidate !== protectedPath && !candidate.startsWith(protectedPath + path.sep) && !protectedPath.startsWith(candidate + path.sep), 'Table output overlaps an immutable source/runtime root');
+  }
+}
 export async function prepareTableProfile(options, {root = ownRepository} = {}) {
   const keys = ['suiteDirectory', 'producerRepository', 'legacyWorkerRepository', 'consumer', 'output'];
   for (const key of keys) options[key] = path.resolve(options[key]);
   const controllerRepository = path.resolve(root);
   const controller = repositoryIdentity(controllerRepository, TABLE_PROFILE_FILES);
   assert.equal(controller.dirty, false, 'Freeze the new controller before preparing a profile');
-  for (const root of [...keys.filter(key => key !== 'output').map(key => options[key]), controllerRepository]) {
-    assert.ok(options.output !== root && !options.output.startsWith(root + path.sep) && !root.startsWith(options.output + path.sep), 'Output overlaps an input/code/runtime root');
-  }
+  assertTableOutputSeparate(options.output, [...keys.filter(key => key !== 'output').map(key => options[key]), controllerRepository]);
   assert.equal(await realpath(path.dirname(options.output)), path.dirname(options.output));
   const source = await loadTableSource(options);
   await mkdir(options.output); // Exclusive; a failed preparation remains intact.
@@ -135,6 +145,7 @@ export async function bindTableProfile({envelopeFile, envelopeSha256, fresh = fa
   assert.equal(envelope.schemaVersion, 1); assert.equal(envelope.profile, 'table-colors-v2');
   assert.equal(envelope.nativeAcceptance, false); assert.equal(envelope.registryAcceptance, false);
   assert.equal(path.resolve(envelopeFile), path.join(envelope.output, 'table-profile.json'));
+  assertTableOutputSeparate(envelope.output, [envelope.suiteDirectory, envelope.producerRepository, envelope.legacyWorkerRepository, envelope.consumer, envelope.controllerRepository]);
   assert.deepEqual(envelope.limits, {slides: 6, tables: 6, cells: 24, phases: 3, nativeCells: 72, pngs: 18, imports: 9, timeoutSecondsMax: 60});
   assert.equal(envelope.node.path, process.execPath); assert.equal(envelope.node.version, process.version);
   assert.match(process.version, /^v24\./u, 'Table controller requires Node24');

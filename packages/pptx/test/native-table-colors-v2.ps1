@@ -74,6 +74,21 @@ function Own-TableApplication($Application) {
     $count=Invoke-TableCom 'application.initial.count' {$Application.Presentations.Count}
     Assert-TableCondition ($count -eq 0) 'Created application is not empty; refuse ownership'
     $script:app=$Application
+    $script:report.environment=Read-TableEnvironment $Application
+}
+function Read-TableEnvironment($Application) {
+    $version=Invoke-TableCom 'application.version' {$Application.Version}
+    Assert-TableCondition ($version -is [string] -and -not [string]::IsNullOrEmpty($version)) 'PowerPoint version probe unavailable; stop Office operations'
+    $directory=Invoke-TableCom 'application.path' {$Application.Path}
+    Assert-TableCondition ($directory -is [string] -and -not [string]::IsNullOrEmpty($directory)) 'PowerPoint path probe unavailable; stop Office operations'
+    $executable=Assert-TablePlainPath (Join-Path $directory 'POWERPNT.EXE')
+    $item=Get-Item -LiteralPath $executable -Force
+    if($item.PSIsContainer) { Stop-TableLifecycle 'PowerPoint executable metadata path is not a regular file' }
+    $os=Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+    $executableVersion=$item.VersionInfo.FileVersion;if([string]::IsNullOrEmpty($executableVersion)) {$executableVersion=$null}
+    $windowsBuild=$null;if($os.CurrentBuild -match '^\d+$' -and ($os.UBR -is [int] -or $os.UBR -is [long])) {$windowsBuild="$($os.CurrentBuild).$($os.UBR)"}
+    $missing=@();if($null -eq $executableVersion) {$missing+=@('executableVersion')};if($null -eq $windowsBuild) {$missing+=@('windowsBuild')}
+    return [ordered]@{hostVersion=$PSVersionTable.PSVersion.ToString();powerPointVersion=$version;executablePath=$executable;executableVersion=$executableVersion;executableSha256=(Get-TableHash $executable);windowsBuild=$windowsBuild;metadataUnavailable=$missing}
 }
 function Open-TableOwned([string]$Path,[string]$Phase) {
     Assert-TableCondition ($null -ne $script:app -and $null -eq $script:presentation) 'No exclusive application ownership'
@@ -117,6 +132,7 @@ function Read-TablePhase([string]$Phase) {
             $characters=@()
             for($character=1;$character -le $text.Length;$character++) {
                 $rgb=Invoke-TableCom "$prefix.character.$character.color" {$range.Characters($character,1).Font.Color.RGB}
+                Assert-TableCondition (($rgb -is [int] -or $rgb -is [long]) -and $rgb -ge 0 -and $rgb -le 16777215) 'Native character RGB probe unavailable or invalid'
                 $hex='#{0:X2}{1:X2}{2:X2}' -f ([long]$rgb -band 255),(([long]$rgb -shr 8) -band 255),(([long]$rgb -shr 16) -band 255)
                 Assert-TableCondition ($hex -ceq $wantedColors[$character-1]) 'Native table character color differs'
                 $characters+=@([ordered]@{character=$text.Substring($character-1,1);color=$hex})
