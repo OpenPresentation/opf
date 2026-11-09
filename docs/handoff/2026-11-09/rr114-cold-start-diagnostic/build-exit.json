@@ -1,0 +1,20 @@
+{
+  "finished": "2026-11-09T23:09:26.5197727Z",
+  "exitCode": 0,
+  "source": "7ab8760827d45b843fc6401bfb071f7ea583f9bd",
+  "command": [
+    "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+    "scripts/agent-slot.mjs",
+    "--",
+    "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+    "C:/Users/micha/AppData/Roaming/npm/node_modules/pnpm/bin/pnpm.cjs",
+    "-r",
+    "--filter",
+    "@openpresentation/opf-render...",
+    "--filter",
+    "@openpresentation/gallery...",
+    "run",
+    "build"
+  ],
+  "started": "2026-11-09T23:09:20.1286453Z"
+}

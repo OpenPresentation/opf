@@ -1,0 +1,133 @@
+Scope: 3 of 9 workspace projects
+packages/gallery build$ node scripts/build.mjs
+packages/gallery build: Built @openpresentation/gallery: 226 content records, 40 layout previews.
+packages/gallery build: Done
+packages/javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+packages/javascript build: > @openpresentation/opf@0.33.0 generate C:\opf-work\rr114-cold\packages\javascript
+packages/javascript build: > node scripts/generate.mjs && node scripts/generate-content.mjs
+packages/javascript build: Generated src/generated/examples.ts (148 examples, 7 galleries)
+packages/javascript build: Generated src/generated/docs.ts (69 docs)
+packages/javascript build: Generated src/generated/repo-readme.ts (19513 bytes)
+packages/javascript build: CLI Building entry: {"deck":"src/deck.ts","markdown":"src/markdown.ts","yaml":"src/yaml.ts","schema":"src/schema-navigation.ts","source":"src/source.ts","patch":"src/patch.ts","ids":"src/ids.ts","diff":"src/diff.ts","format":"src/format.ts","convert":"src/convert.ts","font-policy":"src/font-policy.ts","symbol-font-encodings":"src/symbol-font-encodings.ts","shape-geometry":"src/shape-geometry.ts","shape-catalog":"src/shape-catalog.ts","data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts","browser":"src/browser.ts","node-engine":"src/node-engine.ts","schema-engine-ajv":"src/schema-engine-ajv.ts","schema-engine-precompiled":"src/schema-engine-precompiled.ts","precompiled":"src/precompiled.ts","diagram-engine-eager":"src/diagram-engine-eager.ts","diagram-engine-lazy":"src/diagram-engine-lazy.ts","shape-engine-eager":"src/shape-engine-eager.ts","shape-engine-lazy":"src/shape-engine-lazy.ts"}
+packages/javascript build: CLI Using tsconfig: tsconfig.json
+packages/javascript build: CLI tsup v9.0.0
+packages/javascript build: CLI Using tsup config: C:\opf-work\rr114-cold\packages\javascript\tsup.config.ts
+packages/javascript build: CLI Target: es2022
+packages/javascript build: CLI Cleaning output folder
+packages/javascript build: ESM Build start
+packages/javascript build: Generated an empty chunk: "types".
+packages/javascript build: DTS Build start
+packages/javascript build: ESM dist\diagram-plantuml-ZZYMHBHZ.js    87.00 B
+packages/javascript build: ESM dist\shape-engine-module-BK7JNEUV.js 308.00 B
+packages/javascript build: ESM dist\shape-engine-eager.js           323.00 B
+packages/javascript build: ESM dist\conversion-HAFMLOGO.js          835.00 B
+packages/javascript build: ESM dist\repo-readme.js                  19.47 KB
+packages/javascript build: ESM dist\shape-engine-lazy.js            308.00 B
+packages/javascript build: ESM dist\schema-engine-precompiled.js    131.00 B
+packages/javascript build: ESM dist\node-engine.js                  2.96 KB
+packages/javascript build: ESM dist\precompiled.js                  231.00 B
+packages/javascript build: ESM dist\schema-engine-ajv.js            1.15 KB
+packages/javascript build: ESM dist\diagram-engine-eager.js         360.00 B
+packages/javascript build: ESM dist\chunk-43JWUIGF.js               203.00 B
+packages/javascript build: ESM dist\browser.js                      4.31 KB
+packages/javascript build: ESM dist\diagram-engine-lazy.js          430.00 B
+packages/javascript build: ESM dist\chunk-IJXKVM4W.js               10.69 KB
+packages/javascript build: ESM dist\composition.js                  12.82 KB
+packages/javascript build: ESM dist\index.js                        5.41 KB
+packages/javascript build: ESM dist\chunk-FOGV7WRW.js               47.25 KB
+packages/javascript build: ESM dist\chunk-INIMUBSE.js               286.00 B
+packages/javascript build: ESM dist\schemas.js                      241.00 B
+packages/javascript build: ESM dist\spec-files.js                   115.00 B
+packages/javascript build: ESM dist\types.js                        1.00 B
+packages/javascript build: ESM dist\chunk-W4DYDRV2.js               6.21 KB
+packages/javascript build: ESM dist\format.js                       157.00 B
+packages/javascript build: ESM dist\validator.js                    368.00 B
+packages/javascript build: ESM dist\chunk-U5OY26RF.js               71.11 KB
+packages/javascript build: ESM dist\font-policy.js                  151.00 B
+packages/javascript build: ESM dist\convert.js                      59.94 KB
+packages/javascript build: ESM dist\chunk-466I5SCB.js               62.35 KB
+packages/javascript build: ESM dist\shape-geometry.js               229.00 B
+packages/javascript build: ESM dist\chunk-FK5XG742.js               153.62 KB
+packages/javascript build: ESM dist\shape-catalog.js                14.63 KB
+packages/javascript build: ESM dist\data.js                         443.00 B
+packages/javascript build: ESM dist\chunk-ZYSCX2U2.js               6.31 KB
+packages/javascript build: ESM dist\pagination.js                   282.00 B
+packages/javascript build: ESM dist\deck.js                         474.00 B
+packages/javascript build: ESM dist\chunk-EA54YIIL.js               36.05 KB
+packages/javascript build: ESM dist\chunk-7L5OXBML.js               2.94 KB
+packages/javascript build: ESM dist\markdown.js                     390.00 B
+packages/javascript build: ESM dist\chunk-F74ZAJMY.js               31.53 KB
+packages/javascript build: ESM dist\symbol-font-encodings.js        414.09 KB
+packages/javascript build: ESM dist\chunk-QLR5ZWMU.js               3.70 KB
+packages/javascript build: ESM dist\yaml.js                         390.00 B
+packages/javascript build: ESM dist\chunk-RYZPBJLB.js               302.00 B
+packages/javascript build: ESM dist\chunk-S7ZHCEFV.js               15.19 KB
+packages/javascript build: ESM dist\chunk-ZDXAM4YB.js               43.92 KB
+packages/javascript build: ESM dist\schema.js                       396.00 B
+packages/javascript build: ESM dist\source.js                       22.70 KB
+packages/javascript build: ESM dist\chunk-6CG7DOM5.js               4.88 KB
+packages/javascript build: ESM dist\chunk-B3HXZPMA.js               55.05 KB
+packages/javascript build: ESM dist\chunk-VWKFV5AN.js               4.69 KB
+packages/javascript build: ESM dist\patch.js                        536.00 B
+packages/javascript build: ESM dist\ids.js                          339.00 B
+packages/javascript build: ESM dist\chunk-YYT6N7AI.js               261.58 KB
+packages/javascript build: ESM dist\diff.js                         271.00 B
+packages/javascript build: ESM dist\chunk-FXHCRPBC.js               30.58 KB
+packages/javascript build: ESM dist\chunk-3INPJGFU.js               10.03 KB
+packages/javascript build: ESM dist\chunk-TRCKV625.js               27.48 KB
+packages/javascript build: ESM dist\chunk-JBARNYFR.js               776.00 B
+packages/javascript build: ESM dist\chunk-NZXTZ2A2.js               445.30 KB
+packages/javascript build: ESM dist\chunk-PRXZD2II.js               463.00 B
+packages/javascript build: ESM dist\chunk-FQK6POYV.js               485.31 KB
+packages/javascript build: ESM dist\chunk-7QJUCCFA.js               1.33 MB
+packages/javascript build: ESM dist\docs.js                         1.83 MB
+packages/javascript build: ESM dist\chunk-JEYWTUQK.js               2.31 MB
+packages/javascript build: ESM dist\examples.js                     8.91 MB
+packages/javascript build: ESM ⚡️ Build success in 2736ms
+packages/javascript build: [plugin dts] Entry "data.d.ts" still references private shared type exports with no public re-export: Chart. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+packages/javascript build: [plugin dts] Entry "node-engine.d.ts" still references private shared type exports with no public re-export: EmbeddedFace. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+packages/javascript build: [plugin dts] Entry "schemas.d.ts" still references private shared type exports with no public re-export: JsonObject, JsonSchemaDocument. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+packages/javascript build: DTS ⚡️ Build success in 3179ms
+packages/javascript build: DTS dist\precompiled.d.ts               13.00 B
+packages/javascript build: DTS dist\data.d.ts                      2.55 KB
+packages/javascript build: DTS dist\deck.d.ts                      2.89 KB
+packages/javascript build: DTS dist\format.d.ts                    951.00 B
+packages/javascript build: DTS dist\ids.d.ts                       6.71 KB
+packages/javascript build: DTS dist\repo-readme.d.ts               139.00 B
+packages/javascript build: DTS dist\shape-catalog.d.ts             4.49 KB
+packages/javascript build: DTS dist\symbol-font-encodings.d.ts     5.56 KB
+packages/javascript build: DTS dist\shape-geometry.d.ts            7.40 KB
+packages/javascript build: DTS dist\docs.d.ts                      682.00 B
+packages/javascript build: DTS dist\examples.d.ts                  2.07 KB
+packages/javascript build: DTS dist\font-policy.d.ts               7.72 KB
+packages/javascript build: DTS dist\patch.d.ts                     10.44 KB
+packages/javascript build: DTS dist\schema.d.ts                    9.33 KB
+packages/javascript build: DTS dist\yaml.d.ts                      5.88 KB
+packages/javascript build: DTS dist\diff.d.ts                      5.80 KB
+packages/javascript build: DTS dist\validator.d.ts                 5.00 KB
+packages/javascript build: DTS dist\markdown.d.ts                  5.02 KB
+packages/javascript build: DTS dist\convert.d.ts                   14.69 KB
+packages/javascript build: DTS dist\node-engine.d.ts               11.09 KB
+packages/javascript build: DTS dist\source.d.ts                    16.21 KB
+packages/javascript build: DTS dist\index.d.ts                     39.28 KB
+packages/javascript build: DTS dist\schemas.d.ts                   14.46 KB
+packages/javascript build: DTS dist\spec-files.d.ts                1.59 KB
+packages/javascript build: DTS dist\types.d.ts                     74.28 KB
+packages/javascript build: DTS dist\pagination.d.ts                540.00 B
+packages/javascript build: DTS dist\composition.d.ts               25.43 KB
+packages/javascript build: DTS dist\deck-report-CW_BkX7-.d.ts      2.36 KB
+packages/javascript build: DTS dist\catalog-schemas-CiEafJRf.d.ts  1.70 KB
+packages/javascript build: DTS dist\chart-data-yEE-WzgV.d.ts       11.01 KB
+packages/javascript build: DTS dist\presentation-CLGKiART.d.ts     290.38 KB
+packages/javascript build: DTS dist\catalog-refs-BacOFTcg.d.ts     7.55 KB
+packages/javascript build: DTS dist\json-BFSdESOE.d.ts             825.00 B
+packages/javascript build: DTS dist\finding-l9dlQ2NF.d.ts          7.24 KB
+packages/javascript build: DTS dist\pagination-D4U0bSme.d.ts       13.51 KB
+packages/javascript build: DTS dist\explain-iZeNOUc6.d.ts          3.89 KB
+packages/javascript build: DTS dist\validation-types-U_24Qe5b.d.ts 15.15 KB
+packages/javascript build: DTS dist\conversion-BTrZQc6m.d.ts       32.26 KB
+packages/javascript build: DTS dist\composition-pdsYn31I.d.ts      466.30 KB
+packages/javascript build: Minified dist/chunk-JEYWTUQK.js: 2425609 -> 1853134 bytes.
+packages/javascript build: Done
+packages/render build$ node scripts/build.mjs
+packages/render build: Done
