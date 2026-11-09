@@ -17,3 +17,15 @@ The sibling legacy timeline-status test's separate stale German no-vocabulary as
 ## Qualification state
 
 Focused source is passing. Exact source/protected-object proof, full required check:changed --baseb8 and terminal logs are being sealed. Sparse tracked evidence inputs will be restored only from exact HEAD with write-wx/index/OID guards, never by generation or warning overrides. No stale tracker or other guard will be regenerated or weakened in this leaf. The final receipt distinguishes local focused outcomes, inherited package failures and exact-head combined CI owed.
+
+## Frozen source and actual qualification
+
+Reviewed frozen source9450d35c7b305eb14f3f9023a738a38f27cb1943/tree8bc2fbf0bae47aeed21ad2f0f5e2d1927e239561 has exactly4 changed paths, with one shipping test and no runtime change. source-proof.json binds19 protected runtime/schema/font/golden/workflow/pin objects, all old en/ar pull-rule/progress checks and7 original assertion lines preserved verbatim. Coordinator source review approves this scope; source9450 remains unchanged throughout qualification.
+
+The required pnpm check:changed --baseb8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b is TERMINAL0:9 steps PASS/85.8s (outer86.702s). The renderer leg selects ONLY the changed test and passes0.5s; no broad renderer suite is repeated. Typecheck correctly SKIPs for no TypeScript change. Build, Biome selection, changes, diagram-doc-images, font-hotlinks, skill-commands, stability and text pass. Both original before RED and candidate focused PASS remain retained. A manual Biome command processed0 ignored files and exited1/no fixes; it is not counted as formatting/lint success. The later maintained selected Biome step passes normally. No config/schema migration or override.
+
+Exact-HEAD hydration restored4356 tracked files/113,711,152 bytes. The known painting-Linux.json.gz already existed afterward and was independently checked against its exact HEAD blob/OID with unchanged index; no second write, substitute or bypass. checks.zip/json preserve the original89,665-byte CI log, local before/after/build/setup receipts and all9 completed mapped-step logs losslessly. The offline verifier validates all source bindings, original assertions, expected exits and raw bytes. Final handoff-only validation is separate; exact-head combined integration CI and the original release/native/chart gates remain with the coordinator. No push by this agent.
+
+Run the portable offline verifier with pinned Node24 from this checkout:
+
+    node docs/handoff/2026-11-09/lh121-pull-line-localization/verify.mjs
