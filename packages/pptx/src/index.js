@@ -19,7 +19,7 @@ import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptio
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
-import {referenceChartTypes,applyReferenceSeries,readNativeReferences,addReferenceOverlays,attachReferenceTags,importReferenceOverlays,ordinaryMixedGroups,sealReferenceBindings,coalesceOrdinaryLines,REFERENCE_URI} from './chart-references.js';
+import {assertReferenceExportBudget,referenceChartTypes,applyReferenceSeries,readNativeReferences,addReferenceOverlays,attachReferenceTags,importReferenceOverlays,ordinaryMixedGroups,sealReferenceBindings,coalesceOrdinaryLines,REFERENCE_URI} from './chart-references.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
 import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
 import {importSmartArtShapes} from './smart-art-import.js';
@@ -3921,13 +3921,14 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const referenceLines=layer?.references?.lines??[];
   if(referenceLines.some(l=>!l.native))options.onDiagnostic?.({code:'chart-reference-overlay',path,message:'Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes.'});
   const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,labelColor:markLabelColor,font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
+  if(refInfo&&!referenceLines.some(l=>l.native))assertReferenceExportBudget(chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines'});
   if(refInfo)context.chartHeadings.get(objectName).references=refInfo;
   const comboArgs=chartData.combo?.length&&chartData.combo.length===chartData.series.length?comboChart(chartData,chartOptionsXml,{palette,chartOptions,labelColor,font:context.fonts.body,textSize}):undefined;
   const secondary=chartLayout?.secondaryValueAxis;
   if(comboArgs&&secondary)comboArgs[1].valAxes=[{valAxisMinVal:chartLayout.valueAxis.min,valAxisMaxVal:chartLayout.valueAxis.max,valAxisMajorUnit:chartLayout.valueAxis.majorUnit},{...comboArgs[1].valAxes?.[1],valAxisMinVal:secondary.min,valAxisMaxVal:secondary.max,valAxisMajorUnit:secondary.majorUnit}];
   if(referenceLines.some(l=>l.native)){
     const base=comboArgs?.[0]??[{type:chartData.type,data:chartData.series,options:{lineDataSymbol:chartOptionsXml.lineDataSymbol,barDir:chartData.barDir,barGrouping:chartData.barGrouping}}];
-    slide.addChart(referenceChartTypes(base,chartData.series,referenceLines),comboArgs?.[1]??chartOptionsXml);
+    slide.addChart(referenceChartTypes(base,chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines'}),comboArgs?.[1]??chartOptionsXml);
     addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100});
     return;
   }

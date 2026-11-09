@@ -1,5 +1,6 @@
 // LH-110: explicit reference series/overlays. Ownership identifies generated furniture; CURRENT XML owns values and paint.
 import { XMLParser } from 'fast-xml-parser';
+import { OPFPptxError } from './errors.js';
 import { attachTextTags, decodeTextTag, encodeTextTag } from './code-provenance.js';
 import { readBackgroundColor, colorTransforms } from './background.js';
 import { drawingObject } from './background-import.js';
@@ -41,8 +42,40 @@ function addExt(xml, close, name, value) {
   if (head.endsWith('</c:extLst>')) return head.slice(0, -11) + ownExt(name, value) + '</c:extLst>' + tail;
   return head + '<c:extLst>' + ownExt(name, value) + '</c:extLst>' + tail;
 }
+// Match the importer budgets before allocating helpers/workbook columns. These are export resource limits, not schema limits.
+export function assertReferenceExportBudget(series, lines, { key = 'OPF chart', path = 'chart.referenceLines' } = {}) {
+  if (!lines.length) return;
+  const refuse = (budget, limit) => {
+    throw new OPFPptxError('chart-reference-resource-limit', 'Reference lines exceed the existing ' + budget + ' import budget; reduce chart rows, series or references before exporting.', { path, budget, limit });
+  };
+  if (lines.length > 100000) refuse('ownership-count', 100000);
+  const nativeCount = lines.reduce((n, line) => n + Number(line.native), 0);
+  if (series.length + nativeCount > 100000) refuse('series-count', 100000);
+  let cells = 0, rows = 0;
+  for (const entry of series) {
+    for (const vector of [entry.labels, entry.values]) {
+      const count = vector?.length ?? 0;
+      if (!Number.isSafeInteger(count) || count < 0 || count > 100000) refuse('points', 100000);
+      cells += count;
+      rows = Math.max(rows, count);
+    }
+  }
+  // Reference classification counts category and value caches; ordinary import also bounds its returned data table.
+  cells += nativeCount * (series[0]?.labels?.length ?? 0) * 2;
+  if (!Number.isSafeInteger(cells) || cells > 1000000 || rows * (series.length + nativeCount + 1) > 1000000) refuse('cache-cells', 1000000);
+  const ownership = { v: 1, key, helpers: [], overlays: [] };
+  for (const line of lines) {
+    const id = key + ':' + line.index;
+    if (line.native) ownership.helpers.push({ id, index: line.index });
+    else ownership.overlays.push({ id, index: line.index, value: line.value, axis: line.axis, labelPosition: line.labelPosition, binding: '0000000000000000' });
+  }
+  // The structural record uses UTF-8 uppercase hex; the binding placeholder has the exact fixed serialized width.
+  if (enc.encode(JSON.stringify(ownership)).length * 2 > 4 * 1024 * 1024) refuse('ownership-metadata', 4 * 1024 * 1024);
+}
+
 /** Add helpers through the ordinary vendor writer, including their editable workbook columns. */
-export function referenceChartTypes(base, series, lines) {
+export function referenceChartTypes(base, series, lines, options) {
+  assertReferenceExportBudget(series, lines, options);
   const types = [...base];
   for (const axis of ['value', 'secondary']) {
     const refs = lines.filter((l) => l.native && l.axis === axis);
@@ -421,6 +454,14 @@ function overlayHash(doc, frame, members, value) {
   const state = {
     v: 1,
     value,
+    // Full-plot singleton overlays must not become category-center native helpers after a category/type edit.
+    // Ordinary numeric values remain outside the identity so unrelated data edits do not erase a valid explicit reference.
+    chartEligibility: GROUPS.flatMap((kind) => arr(plot?.['c:' + kind]).map((group) => ({
+      kind,
+      direction: group['c:barDir'],
+      grouping: group['c:grouping'],
+      categories: arr(group['c:ser']).map((entry) => Number(cache(entry['c:cat'])?.['c:ptCount']?.val ?? 0)),
+    }))),
     frame: frame['p:xfrm'],
     plot: plot?.['c:layout']?.['c:manualLayout'],
     axes: ['c:catAx', 'c:valAx'].flatMap((k) =>
