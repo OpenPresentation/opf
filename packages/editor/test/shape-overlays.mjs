@@ -211,3 +211,19 @@ console.log("shape overlays ok");
   assert.equal(editor.presentation.slides[0].shapes[0].x, -0.1);
   editor.undo(); assert.equal(editor.presentation.slides[0].shapes[0].x, 0.1);
 }
+
+// An explicitly authored center may cross the slide. Only omission uses the visible gallery default.
+{
+  for (const center of [{x:-.1,y:-.2},{x:1.2,y:1.3}]) {
+    const editor=session(),before=structuredClone(editor.presentation);
+    insertOverlayShape(editor,{slideIndex:0,shape:'ellipse',center});
+    const entry=editor.presentation.slides[0].shapes.at(-1);
+    assert.ok(Math.abs(entry.x+entry.width/2-center.x)<.0001);assert.ok(Math.abs(entry.y+entry.height/2-center.y)<.0001);
+    assert.ok(center.x<0?entry.x<0:entry.x>1);assert.ok(entry.width>0&&entry.width<=1&&entry.height>0&&entry.height<=1);
+    editor.undo();assert.deepEqual(editor.presentation,before,'one Undo removes exactly the signed-center insertion');
+  }
+  const editor=session();insertOverlayShape(editor,{slideIndex:0,shape:'ellipse'});const entry=editor.presentation.slides[0].shapes.at(-1);
+  assert.ok(entry.x>=0&&entry.y>=0&&entry.x+entry.width<=1&&entry.y+entry.height<=1,'omitted center stays visible');
+  for(const key of ['x','y'])for(const value of [NaN,Infinity,-Infinity]) {const before=structuredClone(editor.presentation);fails(()=>insertOverlayShape(editor,{slideIndex:0,shape:'ellipse',center:{x:.5,y:.5,[key]:value}}),'invalid-overlay');assert.deepEqual(editor.presentation,before);}
+}
+console.log('signed explicit center insertion and default visible placement passed');

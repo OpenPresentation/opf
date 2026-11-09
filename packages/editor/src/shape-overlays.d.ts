@@ -35,6 +35,7 @@ export interface OverlayInsertOptions {
   shape: string;
   /** The frame in fractions of the slide; else about a fifth of the slide wide at the preset's proportions, centered on `center`. */
   frame?: OverlayFrame;
+  /** Explicit finite signed center in the overlay start-edge convention; may cross the slide. Omission keeps gallery insertion visible. */
   center?: { x: number; y: number };
   /** The slide's pixel size for those proportions (default 1280 by 720). */
   size?: { width: number; height: number };

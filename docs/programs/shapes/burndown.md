@@ -218,3 +218,5 @@ item's state edits its row and appends a log line in the same PR.
 - 2026-11-09: SH-27 signed-position follow-up reproduces valid1e300→Infinity in core and actual PPTX XML plus inline RTL resolver mismatch on frozen58e. New authoritative editor direction and pure located representability refusal are under focused qualification, while original58e mapped evidence stays frozen. No Office; annotation bleed is a separate approved commit.
 
 - 2026-11-09: SH-27 explicit image annotation bleed is separately approved: signed physical origins, bounded sizes/focus/stops, strict genuine text fit, no forced clip/move/shrink/reflow or bleed warning. Schema/composition/native frame recovery/docs are under focused qualification after the old-build three-layer regression refusal; original frozen SH27 mapped gate is unchanged.
+
+- 2026-11-09: SH-27 explicit overlay insertion center is a separate approved API consistency follow-up: honor finite signed centers and keep omitted-center gallery insertion visible; preserve sizes and Undo. Focused qualification pending, with final coherent integration gate owed.

@@ -87,7 +87,7 @@ function applyPrepared(editor, result, meta, source) {
 
 /**
  * Compute the patch that adds an overlay shape on top of a slide: `{ shape, x, y, width, height, ...block }`. The frame is `options.frame` (fractions), else
- * about a fifth of the slide wide at the preset's own proportions, centered on `options.center` (fractions, default the middle). `options.size` is the slide's
+ * about a fifth of the slide wide at the preset's own proportions, centered on `options.center` (finite signed fractions in the overlay's start-edge convention; omission stays visible in the middle). `options.size` is the slide's
  * pixel size for those proportions (default 1280 by 720). Returns `{ presentation, patches, path, changed, shape, frame }` with `path` the new entry.
  */
 export function prepareOverlayInsert(presentation, options) {
@@ -107,7 +107,10 @@ export function prepareOverlayInsert(presentation, options) {
       width = (height * size.height * aspect) / size.width;
     }
     const center = options.center ?? { x: 0.5, y: 0.5 };
-    frame = { x: Math.min(1 - width, Math.max(0, center.x - width / 2)), y: Math.min(1 - height, Math.max(0, center.y - height / 2)), width, height };
+    if (![center.x, center.y].every(Number.isFinite)) throw bad("An explicit center needs finite x and y slide fractions.", { center });
+    const x = center.x - width / 2, y = center.y - height / 2;
+    // Gallery insertion stays visible by default; an authored center is placement, not a clamp request.
+    frame = { x: options.center == null ? Math.min(1 - width, Math.max(0, x)) : x, y: options.center == null ? Math.min(1 - height, Math.max(0, y)) : y, width, height };
   }
   const entry = { shape: preset, x: rounded(frame.x), y: rounded(frame.y), width: rounded(frame.width), height: rounded(frame.height), ...(isObject(options.block) ? structuredClone(options.block) : {}) };
   const existing = Array.isArray(slide.shapes) ? slide.shapes.length : 0;
