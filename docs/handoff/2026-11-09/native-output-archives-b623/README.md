@@ -1,0 +1,22 @@
+# Native preparation outputs preserved losslessly
+
+PUBLIC-SAFE evidence-only branch `codex/evidence-native034-output-archives-20261109`, **NEVER MERGE**. This packet makes the existing preparation outputs durable; it does not qualify them in PowerPoint, seal the generic suite or publish a release.
+
+Producer source is `b623a3674037f29d68496e96a3f5b6da55d73470`, tree `0d45431440e1b3150a31e8eee4a220a86908fa1e`. The frozen preparation evidence is [b721182](https://github.com/OpenPresentation/opf/tree/b721182431f1dd5961c1c3f1906ffcad94a3fdf7/docs/handoff/2026-11-09/native-current-preparation-b623). Its exact committed receipt, file inventory and raw log archive are copied here with their Git object identities. Source package manifests still say 0.33.0; the release-corpus manifest describes planned 0.34.0. These are not published 0.34 packages.
+
+| Archive under docs/evidence/native-current-b623-20261109 | Original files | Original bytes | ZIP bytes | Scope |
+| --- | ---: | ---: | ---: | --- |
+| release-corpus.zip | 216 | 17,092,778 | 14,265,681 | 22 decks, 27 PPTX variants, 188 preview PNGs and original build.json; successful preparation only |
+| generic-partial-unsealed.zip | 238 | 44,189,370 | 23,746,157 | All 28 primary cases and the first chart-mode export/import; original failed historical chart guard; **NO suite.json** |
+| nine-diagnostics.zip | 10 | 1,121,237 | 745,625 | Nine PPTX outputs and the original public-safe receipt; current-reference comparison, **nativeAcceptance:false** |
+| Total | 464 | 62,403,385 | 38,757,463 | Every original file preserved |
+
+The partial preparation remains failed and unsealed. Its historical guard expects treemap whole-archive SHA ae8fe51d4d66b62a99d93bbb6023eb6f6c6f35cc4d4f6e3fefae2ea741b7e2a1; actual current SHA is c844c8abe2f223546f9a735e27f16cb0e036dd7c519b01992e02df5c22639079. The frozen producer raw log retains that failure. The separate nine-case receipt reports exact agreement with current canonical and accepted 594863 outputs; this does not transfer the old 0.20.2 physical-native qualification. Four primary round-trip differences remain recorded by the producer, and later chart modes/table preparation were unreached.
+
+Only `C:/opf-work/n034-q02`, `C:/opf-work/n034-suite02` and `C:/opf-work/n034-nine02` were read. The producer confirmed all inputs are tracked public examples or synthetic qualification decks and pinned open packages. Installed consumers, node_modules, credentials and unrelated paths were excluded. No original file was modified, moved, deleted or regenerated. Every source path, byte count, SHA-256 and original mtime is recorded in manifest.json. ZIP member paths and bytes are unchanged; deterministic container timestamps are 1980-01-01 and regular-file permissions are 0644.
+
+Vetoable decision: honor the owner's explicit durable-results requirement by publishing all existing public-safe output bytes on this evidence branch. Use three deterministic lossless archives, each below 50 MiB, in the repository's evidence directory; keep the small manifest and offline verifier outside the normal sparse exclusion. Preserve failed/unsealed/unqualified status rather than treating archive integrity as feature or native acceptance.
+
+Run `node docs/handoff/2026-11-09/native-output-archives-b623/archive.mjs` from this evidence checkout. It reads no original output roots and makes no network, Office, render or export call. It verifies all three archive hashes and every member's exact path/order/CRC/size/SHA-256 under explicit compressed/expanded bounds, the exact producer metadata and protected source objects. Ensure the three ZIP files are present in a sparse checkout. Optional `--originals` additionally verifies the three named local producer roots when they still exist. `--create` refuses existing archive destinations and is not needed for replay.
+
+Progress: all 464 original files were archived once and verified against both archive bytes and unchanged original bytes/mtimes. Required repository metadata checks and the independent archive-reader receipt are recorded alongside this handoff after completion. The required check's ordinary package build is performed only in this new archive checkout; it does not rerun native preparation or alter the frozen producer. Physical Office, font/native gates, current-suite sealing, final consumer/CI/release acceptance and chart-representation agreement remain open.

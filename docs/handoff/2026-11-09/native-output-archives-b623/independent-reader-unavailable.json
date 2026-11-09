@@ -1,0 +1,7 @@
+{
+  "result": "UNRUN: Python is not installed",
+  "archiveVerdict": "No Python audit executed; independent .NET audit used without installing Python.",
+  "exitCode": 9009,
+  "command": "python independent-zip-audit.py",
+  "message": "Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases."
+}

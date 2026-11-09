@@ -1,0 +1,78 @@
+{
+  "source": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "tree": "0d45431440e1b3150a31e8eee4a220a86908fa1e",
+  "protectedTrees": {
+    "packages": "15c540efe20c5eab8fc02e5f7bc847ab4786e061",
+    "spec": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5",
+    "scripts": "fee63b0ee5c22dfe1dcd76fb6675b28a1d206225",
+    ".github": "99970ce6bce01b23b6b34b390afa1e3f27562a16",
+    "skills": "823e68c8937f295e58d2cae9d237e8088a998ff4",
+    "examples": "ebb65fd34f2df67e98bb8f6f2e0682833b7c7804",
+    "pnpm-lock.yaml": "3432ab613e493c84d6eea74cb68d30be08720102",
+    "package.json": "0d5eec02984fea0ef0b564a4b83658cc35a1bbf0",
+    "pnpm-workspace.yaml": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+  },
+  "raw": {
+    "members": 45,
+    "bytes": 241202,
+    "sha256": "ae54dcf9d24abb668f9001d7bfd12ad7c9a02bef193c7b45f9e9cd846ec62546"
+  },
+  "corpus": {
+    "decks": 22,
+    "variants": 27,
+    "previews": 188,
+    "pptxSlides": 291,
+    "files": 216,
+    "allSuccessful": true
+  },
+  "genericPreparation": {
+    "status": "FAILED historical guard; unsealed",
+    "primaryCases": 28,
+    "files": 238,
+    "roundTripEqual": 24,
+    "reviewRequired": 4,
+    "fullSuiteAccepted": false
+  },
+  "nineCurrentComparison": {
+    "allMatched": true,
+    "acceptedRef": "594863c06e7c442c6784226fe30d9357e290ac07",
+    "canonicalFixture": {
+      "path": "packages/pptx/test/fixtures/chartex-fallback-main.json",
+      "sha256": "94cfa51624b4a1bf01e4f7ad84f7ed1ffc61f2f3b245ee49a5ec8088cd6b0105"
+    },
+    "historicalNativeFixture": {
+      "path": "scripts/native-acceptance/fixtures/chartex-fallback-main.json",
+      "sha256": "867c384ba2a1733e7bba738b8e2f797b8efbee0b3083a22bea391c6a32994b1e",
+      "unchanged": true
+    }
+  },
+  "officeCalls": 0,
+  "fontRegistrationCalls": 0,
+  "providerAPICalls": 0,
+  "deployments": 0,
+  "releases": 0,
+  "nativeAccepted": false,
+  "registryAccepted": false,
+  "packedEcosystemAccepted": false,
+  "suiteSealed": false,
+  "publication": "Public-safe evidence-only NEVERMERGE",
+  "metadataChecks": {
+    "mapped": {
+      "passed": 4,
+      "failed": 1,
+      "typeSkipped": 1,
+      "seconds": 31.1,
+      "status": "RED retained; sole sparse fixture ENOENT"
+    },
+    "onlyFailedTextRecovery": {
+      "passed": 7,
+      "total": 7,
+      "exitCode": 0
+    },
+    "archive": {
+      "bytes": 10382,
+      "sha256": "fba96f926b78e94708a3a6961448065ac305ab2c46a18c523ed0bff8fd3d6115"
+    },
+    "noProductTests": true
+  }
+}

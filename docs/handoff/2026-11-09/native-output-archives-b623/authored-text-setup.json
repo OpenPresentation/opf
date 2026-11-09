@@ -1,0 +1,5 @@
+{
+  "originalWhitespaceCheckExit": 2,
+  "cause": "PowerShell-added CRLF in newly authored metadata under local -text preservation rules",
+  "correction": "Normalized only newly authored metadata to LF before commit; producer Git blobs, original roots and three ZIPs unchanged"
+}

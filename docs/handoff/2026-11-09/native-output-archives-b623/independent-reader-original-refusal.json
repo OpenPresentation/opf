@@ -1,0 +1,8 @@
+{
+  "result": "Reader adapter refusal before member decoding",
+  "exitCode": 1,
+  "message": "Nonregular member refused",
+  "archiveChanged": false,
+  "command": "independent-zip-audit.ps1",
+  "cause": "ZipArchive exposes ExternalAttributes as signed Int32; arithmetic right shift sign-extends the regular Unix file mode. Masking the extracted high 16 bits reads the recorded 0100644 exactly."
+}

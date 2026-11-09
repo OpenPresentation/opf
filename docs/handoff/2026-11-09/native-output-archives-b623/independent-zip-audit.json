@@ -1,0 +1,30 @@
+{
+  "suiteSealed": false,
+  "nativeAcceptance": false,
+  "archives": [
+    {
+      "bytes": 14265681,
+      "sha256": "59e0c3ac1ecc3b0422b3e012381a14079bee30a2b18f75849b1728834a42a41c",
+      "members": 216,
+      "file": "release-corpus.zip"
+    },
+    {
+      "bytes": 23746157,
+      "sha256": "0a6f05ee321b183695f095304a53a356208773741f05d7fc2f0e8feddd2ad2ff",
+      "members": 238,
+      "file": "generic-partial-unsealed.zip"
+    },
+    {
+      "bytes": 745625,
+      "sha256": "8bc81045bd48e0cfbc3ea66ec6f714e677609128ee9acf163bce5700fa507e5e",
+      "members": 10,
+      "file": "nine-diagnostics.zip"
+    }
+  ],
+  "result": "PASS",
+  "expandedBytes": 62403385,
+  "sourceTree": "0d45431440e1b3150a31e8eee4a220a86908fa1e",
+  "source": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "members": 464,
+  "reader": "Windows .NET System.IO.Compression.ZipArchive"
+}
