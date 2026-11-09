@@ -40,3 +40,18 @@ const browser=JSON.parse(Buffer.from(entries['browser-host/browser.json']).toStr
 assert.equal(node.families,87);assert.equal(node.styleChecks,348);assert.equal(node.paintChecks,333);
 assert.equal(browser.families,87);assert.equal(browser.filesFetchedInTotal,94);
 console.log(JSON.stringify({source:receipt.source,protectedObjects:receipt.protectedObjects.length,rawFiles:receipt.rawFiles,rawBytes:total,retainedMappedExit:receipt.expectedExits['mapped-01.exit.json'],result:'offline source and lossless evidence verification PASS; mapped status is separate'}));
+
+const finalPath=path.join(here,'final-docs-checks.json');
+if(fs.existsSync(finalPath)){
+ const final=JSON.parse(fs.readFileSync(finalPath,'utf8'));
+ git('merge-base','--is-ancestor',final.source,'HEAD');
+ assert.equal(git('rev-parse',final.source+'^{tree}'),final.sourceTree);
+ const bytes=fs.readFileSync(path.join(here,'final-docs-checks.zip'));
+ assert.equal(bytes.length,final.archiveBytes);assert.equal(sha(bytes),final.archiveSha256);
+ const raw=unzipSync(bytes);assert.deepEqual(Object.keys(raw).sort(),final.files.map(f=>f.name));
+ let count=0;for(const file of final.files){assert.equal(raw[file.name].length,file.bytes);assert.equal(sha(raw[file.name]),file.sha256);count+=file.bytes;}
+ assert.equal(count,final.rawBytes);assert.equal(final.rawFiles,7);
+ const exit=JSON.parse(Buffer.from(raw['run.exit.json']).toString('utf8'));
+ assert.equal(exit.source,final.source);assert.equal(exit.exitCode,0);
+ console.log(JSON.stringify({finalDocsSource:final.source,rawFiles:final.rawFiles,passedSteps:final.passedSteps,typecheckSkip:final.skippedTypecheck,result:'final documentation-only receipt PASS; original mapped run remains RED'}));
+}

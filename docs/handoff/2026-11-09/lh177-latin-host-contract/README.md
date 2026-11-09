@@ -27,3 +27,7 @@ Run the offline verifier with pinned Node 24 from this checkout:
     node docs/handoff/2026-11-09/lh177-latin-host-contract/verify.mjs
 
 It verifies source ancestry, protected objects, frozen test blobs and every raw archive byte. Its PASS is distinct from the retained mapped exit 1. Final evidence-only descendants may change only this dated handoff; no further test/runtime changes.
+
+## Final documentation validation
+
+The documentation-only mapped run at cc526969c134a728ec6b40b6946a579c0d46c693 passes all 5 selected steps in 29.9 s; typecheck correctly skips and no package suite runs. final-docs-checks.json/zip preserve exactly the 7 current raw outputs and receipts, excluding stale renderer logs from the earlier run. The offline verifier checks both packets. This final evidence-only tail changes only this handoff and is verified offline; the initial full mapped run remains RED, and final combined CI after the coordinator's existing golden run is still owed.
