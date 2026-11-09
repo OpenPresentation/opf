@@ -4,8 +4,9 @@ import { attachTextTags, decodeTextTag, encodeTextTag } from './code-provenance.
 import { readBackgroundColor, colorTransforms } from './background.js';
 import { drawingObject } from './background-import.js';
 import { resolveExportColor } from './color-ref.js';
-import { applyComboConstruct } from './chart-types.js';
-const URI = 'urn:openpresentation:chart-references:v1',
+import { applyComboConstruct, NATIVE_CHART_ELEMENTS } from './chart-types.js';
+export const REFERENCE_URI = 'urn:openpresentation:chart-references:v1';
+const URI = REFERENCE_URI,
   TAG = 'OPF_CHART_REFERENCE_V1';
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false });
 const ordered = new XMLParser({
@@ -90,7 +91,7 @@ export function applyReferenceSeries(xml, info, binding) {
     const label =
       line.label === undefined
         ? ''
-        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx><c:rich><a:bodyPr/><a:lstStyle/><a:p><a:pPr/><a:r><a:rPr lang="en-US" sz="${info.textSize}"/><a:t>${escape(line.label)}</a:t></a:r></a:p></c:rich></c:tx><c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbl>`;
+        : `<c:dLbl><c:idx val="${line.endpoint}"/><c:tx>${nativeLabelXml(line.label, info)}</c:tx><c:dLblPos val="${line.labelSide === 'below' ? 'b' : 't'}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbl>`;
     next = next.replace(
       /(<c:tx>[\s\S]*?<\/c:tx>)/,
       `$1${paint}${marker}<c:dLbls>${label}<c:delete val="${line.label === undefined ? 1 : 0}"/><c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/></c:dLbls>`,
@@ -150,13 +151,23 @@ function chartRecord(doc) {
   const all = [...r.helpers, ...r.overlays];
   if (
     all.length > 100000 ||
-    all.some((e) => typeof e.id !== 'string' || !Number.isSafeInteger(e.index) || e.index < 0) ||
+    all.some(
+      (e) =>
+        !e ||
+        typeof e !== 'object' ||
+        Array.isArray(e) ||
+        typeof e.id !== 'string' ||
+        !Number.isSafeInteger(e.index) ||
+        e.index < 0,
+    ) ||
     new Set(all.map((e) => e.id)).size !== all.length ||
     new Set(all.map((e) => e.index)).size !== all.length
   )
     return;
   return r;
 }
+// Canvas dimensions round to EMU before import: scale=shortEdgeEMU/6858000.
+// Half a canvas EMU contributes at most64/1440 line EMU at the64 reference-pixel bound.
 function stroke(node, scale, colors) {
   const ln = node?.['a:ln'],
     w = Number(ln?.w),
@@ -173,7 +184,7 @@ function stroke(node, scale, colors) {
   if (
     !Number.isSafeInteger(w) ||
     w < 0 ||
-    w > 64 * scale * 9525 ||
+    w > Math.round(64 * scale * 9525 + 64 / 1440) ||
     !['solid', 'dash', 'dot'].includes(dash) ||
     !read ||
     !color ||
@@ -185,7 +196,7 @@ function stroke(node, scale, colors) {
     ln['a:gradFill']
   )
     return;
-  return { color, width: w / (9525 * scale), dash };
+  return { color, width: Math.min(64, w / (9525 * scale)), dash };
 }
 function finiteCacheValue(value) {
   const token = value.trim();
@@ -195,8 +206,8 @@ function finiteCacheValue(value) {
   return number;
 }
 /** Classify before group detection. No title/name/constant-value inference; ambiguous/edited helpers stay ordinary data. */
-export function readNativeReferences(xml, { scale = 1, colors = {}, report } = {}) {
-  const doc = parser.parse(xml),
+export function readNativeReferences(xml, { scale = 1, colors = {}, report, parsed } = {}) {
+  const doc = parsed ?? parser.parse(xml),
     r = chartRecord(doc),
     plot = doc?.['c:chartSpace']?.['c:chart']?.['c:plotArea'];
   const result = { xml, doc, plot, references: [], record: r };
@@ -211,11 +222,16 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report } = {
   }
   const groups = GROUPS.flatMap((kind) => arr(plot['c:' + kind]).map((node) => ({ kind, node }))),
     all = groups.flatMap((g) => arr(g.node['c:ser']).map((ser) => ({ ...g, ser, owner: record(ser, 'reference') })));
-  const styles = new Map();
+  const styles = new Map(),
+    labelTexts = new Map();
   for (const [raw] of xml.matchAll(/<c:ser>[\s\S]*?<\/c:ser>/g)) {
-    const value = drawingObject(ordered.parse(raw))['c:ser'],
+    const nodes = ordered.parse(raw);
+    const value = drawingObject(nodes)['c:ser'],
       id = record(value, 'reference')?.id;
-    if (id) styles.set(id, value['c:spPr']);
+    if (id) {
+      styles.set(id, value['c:spPr']);
+      labelTexts.set(id, currentLabelText(nodes));
+    }
   }
   const helperIds = new Set(r.helpers.map((h) => h.id)),
     owners = new Map();
@@ -271,6 +287,8 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report } = {
       paint &&
       axis.length === 1 &&
       primaryAxis &&
+      (axisName === 'value' ||
+        ordinary.some((o) => o.kind === 'lineChart' && ids(o.node).includes(String(axis[0]['c:axId']?.val)))) &&
       values?.length >= 2 &&
       values.every((v) => finiteCacheValue(v) !== undefined && finiteCacheValue(v) === finiteCacheValue(values[0])) &&
       cats &&
@@ -281,7 +299,11 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report } = {
       !e.ser['c:trendline'] &&
       !e.ser['c:errBars'] &&
       labels.length <= 1 &&
-      (!label || ((idx === 0 || idx === values.length - 1) && ['t', 'b'].includes(side) && label['c:tx']?.['c:rich']));
+      (!label ||
+        ((idx === 0 || idx === values.length - 1) &&
+          ['t', 'b'].includes(side) &&
+          label['c:tx']?.['c:rich'] &&
+          labelTexts.get(h.id) !== undefined));
     if (!valid) {
       report?.({
         code: 'chart-reference-ownership-uncertain',
@@ -294,16 +316,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report } = {
     const hiddenLabel =
       ['1', 1, true, 'true'].includes(label?.['c:delete']?.val) ||
       ['1', 1, true, 'true'].includes(e.ser['c:dLbls']?.['c:delete']?.val);
-    const labelText =
-      label && !hiddenLabel
-        ? arr(label['c:tx']['c:rich']['a:p'])
-            .map((p) =>
-              arr(p['a:r'])
-                .map((run) => text(run['a:t']))
-                .join(''),
-            )
-            .join('\n')
-        : undefined;
+    const labelText = label && !hiddenLabel ? labelTexts.get(h.id) : undefined;
     refs.push({
       index: h.index,
       value: Number(values[0]),
@@ -376,9 +389,17 @@ function overlayTag(shape, rels, entries) {
   let found;
   for (const l of arr(shape?.['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
     const rel = rels.get(l['r:id']);
-    if (rel?.targetMode === 'External' || !rel?.path || !entries[rel.path]) continue;
+    if (
+      rel?.type !== 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags' ||
+      rel?.targetMode === 'External' ||
+      !rel?.path ||
+      !entries[rel.path]
+    )
+      continue;
     try {
-      for (const t of arr(parser.parse(dec.decode(entries[rel.path]))['p:tagLst']?.['p:tag']))
+      for (const t of arr(
+        parser.parse(dec.decode(entries[rel.path]).includes(TAG) ? dec.decode(entries[rel.path]) : '')['p:tagLst']?.['p:tag'],
+      ))
         if (t.name === TAG && typeof t.val === 'string' && t.val.length < 16384) {
           if (found) return;
           found = decodeTextTag(t.val);
@@ -430,16 +451,32 @@ function overlayHash(doc, frame, members, value) {
 
 /** Recover explicit fallbacks only when CURRENT chart/shape evidence can express the line faithfully. Otherwise preserve visible shapes. */
 export function importReferenceOverlays(shapes, frames, rels, entries, { scale = 1, colors = {}, report, slideXml } = {}) {
-  const styles = shapeStyles(slideXml);
   const consumed = new Set(),
     byPart = new Map(),
     tagged = shapes
       .map((shape) => ({
         shape,
-        style: styles.get(String(shape['p:nvSpPr']?.['p:cNvPr']?.id)),
         tag: overlayTag(shape, rels, entries),
       }))
       .filter((e) => e.tag);
+  if (!tagged.length) {
+    for (const frame of frames) {
+      const p = rels.get(frame['a:graphic']?.['a:graphicData']?.['c:chart']?.['r:id'])?.path;
+      if (
+        p &&
+        entries[p] &&
+        dec.decode(entries[p]).includes(URI) &&
+        chartRecord(parser.parse(dec.decode(entries[p])))?.overlays.length
+      )
+        report?.({
+          code: 'chart-reference-overlay-uncertain',
+          message: 'Reference overlay tags are missing; ordinary drawings are preserved and no stale reference is restored.',
+        });
+    }
+    return { consumed, byPart, preserved: new Set() };
+  }
+  const styles = shapeStyles(slideXml);
+  for (const m of tagged) m.style = styles.get(String(m.shape['p:nvSpPr']?.['p:cNvPr']?.id));
   const keyCounts = new Map();
   for (const frame of frames) {
     const rel = rels.get(frame['a:graphic']?.['a:graphicData']?.['c:chart']?.['r:id']);
@@ -566,8 +603,16 @@ export function ordinaryMixedGroups(plot) {
 
 /** Bind fallback receipts after final proofing/font/theme normalization, immediately before document/data provenance. */
 export function sealReferenceBindings(entries, infos, relationships) {
+  const owned = new Map([...infos].filter(([, i]) => i.references?.lines.some((l) => !l.native)));
+  if (!owned.size) return;
   for (const [part, bytes] of Object.entries(entries)) {
     if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
+    if (
+      ![...dec.decode(bytes).matchAll(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g)].some(([f]) =>
+        owned.has(/<p:cNvPr\b[^>]*\bname="([^"]+)"/.exec(f)?.[1]),
+      )
+    )
+      continue;
     const widths = new Map(
       [...infos.values()].flatMap((i) =>
         (i.references?.lines ?? [])
@@ -619,4 +664,76 @@ export function sealReferenceBindings(entries, infos, relationships) {
 function shapeStyles(xml) {
   const shapes = xml ? drawingObject(ordered.parse(xml))?.['p:sld']?.['p:cSld']?.['p:spTree']?.['p:sp'] : [];
   return new Map(arr(shapes).map((s) => [String(s['p:nvSpPr']?.['p:cNvPr']?.id), s['p:spPr']]));
+}
+
+export function coalesceOrdinaryLines(plot) {
+  const groups = arr(plot?.['c:lineChart']);
+  if (groups.length < 2 || NATIVE_CHART_ELEMENTS.some((k) => k !== 'lineChart' && plot?.['c:' + k])) return;
+  if (groups.some((g) => !['standard', undefined].includes(g['c:grouping']?.val))) return;
+  const axis = JSON.stringify([...ids(groups[0])].sort());
+  if (groups.some((g) => JSON.stringify([...ids(g)].sort()) !== axis)) return;
+  const entries = groups
+    .flatMap((g) => arr(g['c:ser']))
+    .map((ser, i) => ({ ser, i, order: Number(ser['c:order']?.val ?? i) }))
+    .sort((a, b) => a.order - b.order || a.i - b.i)
+    .map((e) => e.ser);
+  return { ...groups[0], 'c:ser': entries };
+}
+
+function nativeLabelXml(label, info) {
+  const run = (part) =>
+    '<a:r><a:rPr lang="en-US" sz="' +
+    info.textSize +
+    '"><a:solidFill><a:srgbClr val="' +
+    info.labelColor +
+    '"/></a:solidFill><a:latin typeface="' +
+    escape(info.font) +
+    '"/><a:ea typeface="' +
+    escape(info.font) +
+    '"/><a:cs typeface="' +
+    escape(info.font) +
+    '"/></a:rPr><a:t>' +
+    escape(part) +
+    '</a:t></a:r>';
+  return (
+    '<c:rich><a:bodyPr/><a:lstStyle/>' +
+    String(label)
+      .split(/\r\n|\r|\n/)
+      .map((p) => '<a:p><a:pPr/>' + run(p) + '</a:p>')
+      .join('') +
+    '</c:rich>'
+  );
+}
+function currentLabelText(nodes) {
+  const child = (nodes, key) => arr(nodes).find((n) => Object.hasOwn(n, key))?.[key],
+    ser = child(nodes, 'c:ser'),
+    labels = child(ser, 'c:dLbls'),
+    points = arr(labels).filter((n) => Object.hasOwn(n, 'c:dLbl'));
+  if (points.length !== 1) return;
+  const tx = child(points[0]['c:dLbl'], 'c:tx'),
+    rich = child(tx, 'c:rich');
+  if (!rich || rich.some((n) => !['a:bodyPr', 'a:lstStyle', 'a:p'].some((k) => Object.hasOwn(n, k)))) return;
+  const paragraphs = arr(rich).filter((n) => Object.hasOwn(n, 'a:p'));
+  if (!paragraphs.length) return;
+  const output = [];
+  for (const paragraph of paragraphs) {
+    let text = '';
+    for (const n of paragraph['a:p']) {
+      if (n['a:pPr'] !== undefined || n['a:endParaRPr'] !== undefined) continue;
+      if (n['a:br'] !== undefined) {
+        text += '\n';
+        continue;
+      }
+      if (n['a:r'] === undefined) return;
+      for (const r of n['a:r']) {
+        if (r['a:rPr'] !== undefined) continue;
+        if (r['a:t'] === undefined) return;
+        text += arr(r['a:t'])
+          .map((v) => String(v['#text'] ?? ''))
+          .join('');
+      }
+    }
+    output.push(text);
+  }
+  return output.join('\n');
 }

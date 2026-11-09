@@ -435,3 +435,228 @@ test('fully stripped overlays stay visible ordinary drawings, never synthetic re
   assert.equal(out.document.slides[0].shapes.length, 2);
   assert.deepEqual(out.chart.data, data);
 });
+
+test('same-axis edited helpers remain lines; marker adaptations are explicit', async () => {
+  for (const type of ['line', 'line-with-markers']) {
+    const e = await exported(doc(type)),
+      out = await imported(
+        rewrite(e.entries, 'ppt/charts/chart1.xml', (x) => editHelpers(x, (s) => s.replace('<c:v>25</c:v>', '<c:v>26</c:v>'))),
+      );
+    assert.equal(out.chart.type, type);
+    assert.equal(out.chart.line, undefined);
+    assert.deepEqual(
+      out.chart.data.rows.map((r) => r.slice(1)),
+      [
+        [10, 26],
+        [20, 25],
+        [30, 25],
+      ],
+    );
+    if (type === 'line-with-markers') assert.ok(out.diagnostics.some((d) => /mixed native marker/.test(d.message)));
+  }
+});
+test('secondary helpers without an ordinary secondary data line are retained as ordinary data', async () => {
+  const d = doc('combo', [{ ...ref, value: 0.9, axis: 'secondary' }], {
+    data: {
+      columns: ['Q', 'Sales', 'Margin'],
+      rows: [
+        ['A', 10, 0.2],
+        ['B', 20, 0.3],
+      ],
+    },
+    secondaryAxis: ['Margin'],
+  });
+  const e = await exported(d),
+    bytes = rewrite(e.entries, 'ppt/charts/chart1.xml', (xml) =>
+      xml.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (s) => (!helper(s) && s.includes('<c:v>Margin</c:v>') ? '' : s)),
+    );
+  const out = await imported(bytes);
+  assert.equal(out.chart.referenceLines, undefined);
+  assert.equal(out.chart.type, 'combo');
+  assert.deepEqual(out.chart.data.rows, [
+    ['A', 10, 0.9],
+    ['B', 20, 0.9],
+  ]);
+  assert.ok(out.diagnostics.some((d) => d.code === 'chart-reference-ownership-uncertain'));
+});
+test('native labels carry explicit legible paint/body font on light and dark backgrounds', async () => {
+  for (const background of ['#FFFFFF', '#101820']) {
+    const d = doc();
+    d.design.background = background;
+    d.design.colorScheme = {
+      id: 'cool-horizon',
+      dark1: background === '#FFFFFF' ? '#101820' : '#FFFFFF',
+      light1: background === '#FFFFFF' ? '#101820' : '#FFFFFF',
+      text: background === '#FFFFFF' ? '#101820' : '#FFFFFF',
+      dark2: background,
+      light2: background,
+    };
+    const e = await exported(d),
+      h = series(e.xml).find(helper),
+      run = parser.parse(h)['c:ser']['c:dLbls']['c:dLbl']['c:tx']['c:rich']['a:p']['a:r']['a:rPr'];
+    assert.ok(run['a:solidFill']);
+    assert.ok(run['a:latin']?.typeface);
+    assert.equal(run['a:latin'].typeface, run['a:ea'].typeface);
+    if (background === '#101820') assert.notEqual(run['a:solidFill']?.['a:srgbClr']?.val, '000000');
+  }
+});
+test('native multiline labels use hard breaks and current a:br edits preserve all words', async () => {
+  const d = doc('line', [{ ...ref, label: 'Target\n2027' }]),
+    e = await exported(d),
+    h = series(e.xml).find(helper),
+    rich = parser.parse(h)['c:ser']['c:dLbls']['c:dLbl']['c:tx']['c:rich'];
+  assert.equal(arr(rich['a:p']).length, 2);
+  assert.equal((await imported(e.bytes)).chart.referenceLines[0].label, 'Target\n2027');
+  const out = await imported(
+    rewrite(e.entries, 'ppt/charts/chart1.xml', (x) =>
+      editHelpers(x, (s) => s.replace('<a:t>Target</a:t>', '<a:t>New</a:t></a:r><a:br/><a:r><a:t>Target</a:t>')),
+    ),
+  );
+  assert.equal(out.chart.referenceLines[0].label, 'New\nTarget\n2027');
+  const unsupported = await imported(
+    rewrite(e.entries, 'ppt/charts/chart1.xml', (x) =>
+      editHelpers(x, (s) => s.replace('<a:t>Target</a:t>', '<a:fld id="field"><a:t>Field text</a:t></a:fld>')),
+    ),
+  );
+  assert.equal(unsupported.chart.referenceLines, undefined);
+  assert.equal(unsupported.chart.data.columns.length, 3);
+});
+test('malformed explicit ownership records preserve ordinary series without crashing', async () => {
+  const e = await exported(doc('area')),
+    out = await imported(
+      rewrite(e.entries, 'ppt/charts/chart1.xml', (xml) =>
+        xml.replace(/(<opf:references[^>]*data=")([^"]+)(")/, (_m, a, h, b) => {
+          const r = decodeTextTag(h);
+          r.helpers = [null];
+          return a + encodeTextTag(r) + b;
+        }),
+      ),
+    );
+  assert.equal(out.chart.referenceLines, undefined);
+  assert.equal(out.chart.data.columns.length, 3);
+});
+test('maximum stroke width survives native EMU quantization on custom landscape and portrait canvases', async () => {
+  for (const type of ['line', 'bar'])
+    for (const dimensions of [
+      { widthInches: 9.123456, heightInches: 5.123456 },
+      { widthInches: 5.123456, heightInches: 9.123456 },
+    ]) {
+      const d = doc(type, [{ ...ref, stroke: { ...ref.stroke, width: 64 } }]);
+      d.design.dimensions = dimensions;
+      const out = await imported((await exported(d)).bytes);
+      assert.equal(out.chart.referenceLines?.length, 1);
+      assert.equal(out.chart.referenceLines[0].stroke.width, 64);
+    }
+});
+test('actual legacy band rectangle retains its native fill and frame as a visible ordinary overlay', async () => {
+  const e = await exported(doc('bar')),
+    copy = { ...e.entries },
+    slide = strFromU8(copy['ppt/slides/slide1.xml']),
+    line = [...slide.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].find((m) => m[0].includes(':0 line'))[0];
+  const band = line
+    .replace(/(<p:cNvPr[^>]*id=")[^"]+/, (_m, a) => a + '999')
+    .replace('name="OPF chart 1:0 line"', 'name="Legacy band rectangle"')
+    .replace(/<a:ext cx="[^"]+" cy="[^"]+"\/>/, '<a:ext cx="952500" cy="476250"/>')
+    .replace('prst="line"', 'prst="rect"')
+    .replace('<a:noFill/>', '')
+    .replace(/<a:ln/, '<a:solidFill><a:srgbClr val="123456"/></a:solidFill><a:ln')
+    .replace(/<p:tags r:id="[^"]+"\/>/, '<p:tags r:id="rIdLegacyBandTest"/>');
+  copy['ppt/slides/slide1.xml'] = strToU8(slide.replace('</p:spTree>', band + '</p:spTree>'));
+  copy['ppt/slides/_rels/slide1.xml.rels'] = strToU8(
+    strFromU8(copy['ppt/slides/_rels/slide1.xml.rels']).replace(
+      '</Relationships>',
+      '<Relationship Id="rIdLegacyBandTest" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags" Target="../tags/legacyBandTest.xml"/></Relationships>',
+    ),
+  );
+  copy['ppt/tags/legacyBandTest.xml'] = strToU8(
+    '<p:tagLst xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:tag name="OPF_CHART_MARK_V1" val="' +
+      encodeTextTag({ v: 1, chart: 'OPF chart 1', role: 'band' }) +
+      '"/></p:tagLst>',
+  );
+  copy['[Content_Types].xml'] = strToU8(
+    strFromU8(copy['[Content_Types].xml']).replace(
+      '</Types>',
+      '<Override PartName="/ppt/tags/legacyBandTest.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tags+xml"/></Types>',
+    ),
+  );
+  const out = await imported(zipSync(copy)),
+    shape = out.document.slides[0].shapes.find((s) => s.fill === '#123456');
+  assert.ok(shape);
+  assert.equal(shape.shape, 'rect');
+  assert.equal(shape.width, 0.078125);
+  assert.equal(shape.height, 0.069444);
+  assert.ok(out.diagnostics.some((d) => d.code === 'legacy-chart-reference-overlay'));
+  assert.equal(out.chart.referenceLines.length, 1);
+});
+
+test('moving a constant helper onto an unused secondary axis never yields an invalid secondary reference', async () => {
+  const d = doc('combo', [{ ...ref, value: 0.5 }], {
+    data: {
+      columns: ['Q', 'Sales', 'Margin'],
+      rows: [
+        ['A', 10, 0.2],
+        ['B', 20, 0.3],
+      ],
+    },
+    secondaryAxis: ['Margin'],
+  });
+  const e = await exported(d),
+    groups = [...e.xml.matchAll(/<c:lineChart>[\s\S]*?<\/c:lineChart>/g)].map((m) => m[0]),
+    oldSecondary = groups.find((g) => g.includes('<c:v>Margin</c:v>')),
+    [secondaryAxes] = [oldSecondary.match(/<c:axId[^>]*\/>/g).join('')];
+  const bytes = rewrite(e.entries, 'ppt/charts/chart1.xml', (xml) =>
+    xml.replace(/<c:lineChart>[\s\S]*?<\/c:lineChart>/g, (g) =>
+      helper(g)
+        ? g.replace(/<c:axId[^>]*\/>/g, '').replace('</c:lineChart>', secondaryAxes + '</c:lineChart>')
+        : g.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (s) => (s.includes('<c:v>Margin</c:v>') ? '' : s)),
+    ),
+  );
+  const out = await imported(bytes);
+  assert.equal(out.chart.referenceLines, undefined);
+  assert.deepEqual(out.chart.data.rows, [
+    ['A', 10, 0.5],
+    ['B', 20, 0.5],
+  ]);
+  assert.ok(out.diagnostics.some((d) => d.code === 'chart-reference-ownership-uncertain'));
+});
+test('separate-axis ordinary line groups disclose required primary-column adaptation and retain all values/roles', async () => {
+  const d = doc('combo', [{ ...ref, value: 0.5 }], {
+      data: {
+        columns: ['Q', 'Sales', 'Margin'],
+        rows: [
+          ['A', 10, 0.2],
+          ['B', 20, 0.3],
+        ],
+      },
+      secondaryAxis: ['Margin'],
+    }),
+    e = await exported(d),
+    out = await imported(
+      rewrite(e.entries, 'ppt/charts/chart1.xml', (xml) => xml.replace(/<c:barChart>[\s\S]*?<\/c:barChart>/g, '')),
+    );
+  assert.equal(out.chart.referenceLines, undefined);
+  assert.equal(out.chart.type, 'combo');
+  assert.deepEqual(out.chart.data.rows, [
+    ['A', 0.2, 0.5],
+    ['B', 0.3, 0.5],
+  ]);
+  assert.ok(out.diagnostics.some((d) => /first current series 'Margin'.*primary-axis columns/.test(d.message)));
+  assert.ok(!out.chart.line?.includes('Margin'));
+  assert.ok(!out.chart.secondaryAxis?.includes('Margin'));
+});
+test('native stroke above the mathematically rounded schema maximum remains ordinary data', async () => {
+  const d = doc('line', [{ ...ref, stroke: { ...ref.stroke, width: 64 } }]);
+  d.design.dimensions = { widthInches: 9.123456, heightInches: 5.123456 };
+  const e = await exported(d),
+    out = await imported(
+      rewrite(e.entries, 'ppt/charts/chart1.xml', (xml) =>
+        editHelpers(xml, (s) => s.replace(/(<a:ln w=")(\d+)/, (_m, a, n) => a + (Number(n) + 1))),
+      ),
+    );
+  assert.equal(out.chart.referenceLines, undefined);
+  assert.equal(out.chart.data.columns.length, 3);
+  assert.deepEqual(
+    out.chart.data.rows.map((r) => r[1]),
+    [10, 20, 30],
+  );
+});

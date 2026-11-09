@@ -19,7 +19,7 @@ import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptio
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
-import {referenceChartTypes,applyReferenceSeries,readNativeReferences,addReferenceOverlays,attachReferenceTags,importReferenceOverlays,ordinaryMixedGroups,sealReferenceBindings} from './chart-references.js';
+import {referenceChartTypes,applyReferenceSeries,readNativeReferences,addReferenceOverlays,attachReferenceTags,importReferenceOverlays,ordinaryMixedGroups,sealReferenceBindings,coalesceOrdinaryLines,REFERENCE_URI} from './chart-references.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
 import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
 import {importSmartArtShapes} from './smart-art-import.js';
@@ -1896,8 +1896,8 @@ function payloadFromSlideItem(item, report) {
 function chartFromRelationship(entries, slidePath, relationships, relId, report, {marked = false,referenceContext,referenceState={}} = {}) {
   const relationship = relationships.get(relId);
   if (!relationship?.path || !entries[relationship.path]) return null;
-  parseRequiredXml(entries, relationship.path);
-  const refs=readNativeReferences(decodeText(entries[relationship.path]),{...referenceContext,report});
+  const parsed=parseRequiredXml(entries, relationship.path);
+  const refs=readNativeReferences(decodeText(entries[relationship.path]),{...referenceContext,report,parsed});
   Object.assign(referenceState,{xml:refs.xml,references:refs.references});
   const doc=refs.doc;
   const plotArea = doc["c:chartSpace"]?.["c:chart"]?.["c:plotArea"];
@@ -1905,13 +1905,15 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
 
   // FA-15: a clustered column group with one or two line groups is a combo chart; its series are read in c:order.
   const combo = comboFromNative(plotArea);
-  const mixed=combo?undefined:ordinaryMixedGroups(plotArea);
+  const coalesced=combo?undefined:coalesceOrdinaryLines(plotArea);
+  const mixed=combo||coalesced?undefined:ordinaryMixedGroups(plotArea);
   const comboSeries = combo ? comboSeriesOf(combo) : mixed;
-  const chartNode = combo ? {node: combo.bar, type: 'combo'} : mixed?{node:asArray(plotArea['c:barChart'])[0]??asArray(plotArea['c:areaChart'])[0]??asArray(plotArea['c:lineChart'])[0],type:'combo'}:firstChartNode(plotArea);
+  const chartNode = combo ? {node: combo.bar, type: 'combo'} : coalesced?{node:coalesced,type:chartTypeFromNative('lineChart',coalesced)}:mixed?{node:asArray(plotArea['c:barChart'])[0]??asArray(plotArea['c:areaChart'])[0]??asArray(plotArea['c:lineChart'])[0],type:'combo'}:firstChartNode(plotArea);
   if(mixed)report?.({option:'type',message:mixed.some(e=>e.area)?'Every current area/line group is retained as a combo chart; OPF combo cannot represent area series, so area series become columns. Current values, names and source order are retained; this changes the representation.':'All ordinary native groups are retained as a combo chart rather than selecting only the first group.'});
   if (!chartNode) return null;
   const series = comboSeries ? comboSeries.map(entry => entry.ser) : asArray(chartNode.node["c:ser"]);
   if (series.length === 0) return null;
+  if(coalesced&&new Set(series.map(s=>s['c:marker']?.['c:symbol']?.val??'circle')).size>1)report?.({option:'type',message:'Same-axis native line groups keep every data series in one line chart. OPF has one marker mode for that chart, so mixed native marker choices import with markers on every line.'});
   if (series.length > MAX_CHART_CACHE_POINTS) {
     throw new OPFPptxError('invalid-chart-cache', 'Chart cache exceeds the 100,000-series import limit; reduce its series before importing.', {path: relationship.path});
   }
@@ -2005,10 +2007,12 @@ function secondaryValueAxisOf(plotArea, combo) {
 // `line` and `secondaryAxis` of an imported combo chart by series name (elideComboDefault drops a `line` that is the default).
 // Combo lines always draw markers in OPF; a native line without markers is reported, never silently changed.
 function comboFields(comboSeries, names, report) {
-  const line = names.filter((_, index) => comboSeries[index].role === 'line');
-  const secondaryAxis = names.filter((_, index) => comboSeries[index].secondary);
+  const allLines=comboSeries.every(e=>e.role==='line');
+  const line = names.filter((_, index) => comboSeries[index].role === 'line'&&(!allLines||index>0));
+  const secondaryAxis = names.filter((_, index) => comboSeries[index].secondary&&(!allLines||index>0));
   const unmarked = names.filter((_, index) => comboSeries[index].role === 'line' && comboSeries[index].ser?.["c:marker"]?.["c:symbol"]?.val === 'none');
   if (unmarked.length) report?.({option: 'line', message: `The combo chart's line ${unmarked.length === 1 ? 'series' : 'series'} ${unmarked.map(name => `'${name}'`).join(', ')} ${unmarked.length === 1 ? 'has' : 'have'} no markers; OPF combo lines always draw markers, so ${unmarked.length === 1 ? 'it imports' : 'they import'} with markers.`});
+  if(comboSeries.every(e=>e.role==='line'))report?.({option:'type',message:`Separate-axis native line groups require an OPF combo: the first current series '${names[0]}' becomes primary-axis columns to satisfy its required column role; remaining line/axis roles are retained where expressible. All current data columns and source order are preserved.`});
   if (new Set(line).size !== line.length || new Set(names).size !== names.length) {
     report?.({option: 'line', message: 'Two series of the combo chart share a name, so which of them is a line cannot be said by name; the chart imports with its default line (the last series).'});
     return {};
@@ -3912,7 +3916,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   };
   const referenceLines=layer?.references?.lines??[];
   if(referenceLines.some(l=>!l.native))options.onDiagnostic?.({code:'chart-reference-overlay',path,message:'Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes.'});
-  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,context:{...context},textSize,hidden:[]}:undefined;
+  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,labelColor:markLabelColor,font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
   if(refInfo)context.chartHeadings.get(objectName).references=refInfo;
   const comboArgs=chartData.combo?.length&&chartData.combo.length===chartData.series.length?comboChart(chartData,chartOptionsXml,{palette,chartOptions,labelColor,font:context.fonts.body,textSize}):undefined;
   const secondary=chartLayout?.secondaryValueAxis;
@@ -3920,7 +3924,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   if(referenceLines.some(l=>l.native)){
     const base=comboArgs?.[0]??[{type:chartData.type,data:chartData.series,options:{lineDataSymbol:chartOptionsXml.lineDataSymbol,barDir:chartData.barDir,barGrouping:chartData.barGrouping}}];
     slide.addChart(referenceChartTypes(base,chartData.series,referenceLines),comboArgs?.[1]??chartOptionsXml);
-    addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,font:context.fonts.body,size:textSize/100});
+    addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:markLabelColor,font:context.fonts.body,size:textSize/100});
     return;
   }
   if(comboArgs){slide.addChart(...comboArgs);addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,font:context.fonts.body,size:textSize/100});return;}
@@ -5812,7 +5816,7 @@ async function normalizePptxZip(raw, context) {
     // datasets map beside the document tag.
     if (context.provenanceMode === 'full') {
       try {
-        attachDataProvenance(parts, {records: context.dataRecords, paths: context.dataRecordPaths, datasets: context.datasets, parseRelationships, report: context.reportDiagnostic, chartXml: xml=>readNativeReferences(xml,{scale:Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720}).xml});
+        attachDataProvenance(parts, {records: context.dataRecords, paths: context.dataRecordPaths, datasets: context.datasets, parseRelationships, report: context.reportDiagnostic, chartXml: xml=>!xml.includes(REFERENCE_URI)?xml:readNativeReferences(xml,{scale:Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720}).xml});
       } catch (error) {
         throw new OPFPptxError("packaging-failed", "Chart and table data tags could not be attached.", {cause: errorMessage(error)});
       }
