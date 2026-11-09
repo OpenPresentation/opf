@@ -5530,13 +5530,22 @@ function centerTemplate(input: unknown, options: ComposeSlideOptions, result: Sl
 /**
  * Wave 2 (LH-46 with LH-44 and LH-41): extra blocks that join a fixed region share its cells. Measured blocks (tables, timelines, code)
  * that need more room than those cells give overflow there, where below the grid they read whole (three tables in table-beside's narrow
- * region broke their words). The joined composition is kept unless leaving the extra blocks below the grid overflows less.
+ * region broke their words). The joined composition is kept unless leaving the extra blocks below the grid overflows less, or equally with every body part at least as large and one larger.
  */
 function composeArranged(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const joined = composeLayout(input, options);
   if (!joined.regions || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(joined) === 0) return joined;
   const unjoined = composeLayout(input, { ...options, [UNJOINED]: true } as ComposeSlideOptions);
-  return overflowCount(unjoined) < overflowCount(joined) ? unjoined : joined;
+  const joinedOverflows = overflowCount(joined), unjoinedOverflows = overflowCount(unjoined);
+  if (unjoinedOverflows < joinedOverflows) return unjoined;
+  if (unjoinedOverflows === joinedOverflows) {
+    const joinedSizes = bodyReadability(joined, options).byPath, unjoinedSizes = bodyReadability(unjoined, options).byPath;
+    // Equal fit failures do not justify smaller text. Require the same body parts, then keep the arrangement that preserves every
+    // source size and grows at least one; the fit findings and unplaced-block diagnostics still describe that arrangement honestly.
+    if (joinedSizes.size === unjoinedSizes.size && [...joinedSizes.keys()].every(path => unjoinedSizes.has(path))
+      && !shrinks(unjoined, joined, options) && shrinks(joined, unjoined, options)) return unjoined;
+  }
+  return joined;
 }
 /**
  * Wave 3: one more arrangement of a slide that composeSlide already composed under the guard (a track, LH-80 and LH-49, or a larger body,
