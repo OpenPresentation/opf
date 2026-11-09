@@ -1,6 +1,6 @@
 # RR-114 font compatibility follow-up
 
-Current source checkpoint: all four CI failures from completed run 42707671494 were reproduced on untouched reviewed e7dc in a fresh isolated worktree. All four now pass. Four new native slide/theme XML comparisons against a whole-pack handle also preserve the before/after outlined SVG, strict Emoji glyph refusal and repeated-export face counts. Demand/fault neighbor qualification and coordinator review are pending at this checkpoint; no aggregate, release, native Office or golden acceptance is claimed.
+Current source checkpoint: all four CI failures from completed run 42707671494 were reproduced on untouched reviewed e7dc in a fresh isolated worktree. All four now pass. Four new native slide/theme XML comparisons against a whole-pack handle also preserve the before/after outlined SVG, strict Emoji glyph refusal and repeated-export face counts. Final qualification on exact source `19d9dd6f6cced99e4c79ed888e91ccf3b30e5f3a`: demand 11, fault 3, native parity 4, lazy selection (558 resolutions) and CE20 selection-cache controls pass. The two affected package syntax checks pass (805 files total). Two actual outlined-SVG pairs and eight actual slide/theme XML pairs are retained with both native PPTX inputs. Coordinator source review and the one coherent aggregate/CI/native gate remain separate; no release or golden acceptance is claimed.
 
 ## Vetoable decisions
 
@@ -16,3 +16,7 @@ Current source checkpoint: all four CI failures from completed run 42707671494 w
 - A new neighboring safe-control genuinely failed under the first chosen-mode implementation because its mapFamily remapped script-generated Noto Sans to Arial. The private outer mapping correction fixes that mismatch; preserve the failure log rather than hiding it.
 
 The coordinator owns one combined mapped gate, current CI and final native acceptance. Do not push the already folded demand-fonts, chart or other source leaves. The separate RR117 formal evidence branch is never mergeable.
+
+## Durable evidence
+
+`raw.json.gz` contains 66 lossless records, including every original RED, intermediate safe failure, build/test logs, source-bound probe scripts, actual selected/safe demand and whole-pack PPTX files and both independently produced outlined SVGs. `receipt.json` binds the exact historical Git source and byte-identical built modules. Run `node docs/handoff/2026-11-09/rr114-font-compatibility/verify.mjs` offline from the repository root; it checks all members and output pairs and reports whether current relevant package files still match the tested source. A future merged revision is not treated as tested merely because this historical archive verifies. No shared package/font/license input was modified.
