@@ -7,8 +7,14 @@ error correctly refused a malformed ZIP before output or Office. Host-width form
 The recorded error identity was `InvalidDataException,run-windows.ps1`. No exporter or ZIP
 validation defect is established by that failure.
 
-Original raw log: ci-job.log.gz, decoded91,134 bytes, SHA-256
-`0f335bd079dc00bf348212d5c1f9b7b1e4d5673b83ca8b55cad6e23f9cb61015`.
+Provenance correction: ci-job.log.gz is the initially supplied **normalized inspection copy**,
+not the transport-original. Its decoded91,134 bytes and SHA-256
+`0f335bd079dc00bf348212d5c1f9b7b1e4d5673b83ca8b55cad6e23f9cb61015`
+remain unchanged, as do raw.zip and their Git history. The initial raw/original-log.json label
+inside that retained archive was mistaken. The exact connector-decoded UTF8 log, including
+BOM and original CRLF, is now ci-job-exact.log.gz:91,998 bytes, SHA-256
+`eb23c604dbd80fd60b185fb7f6ff9769762f71149629140d02331fb055722965`. It was recovered from the coordinator's exact Base64 receipt
+without another API call. The failure/correct-refusal diagnosis is unchanged.
 The unchanged matcher also fails deterministically against the captured wrapped diagnostic.
 
 Vetoable decision RR105-WINDOWS-ZIP-DIAGNOSTIC: accept whitespace between the exact message

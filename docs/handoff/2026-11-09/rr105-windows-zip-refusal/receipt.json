@@ -10,14 +10,6 @@
     "entries": 399,
     "decodedBytes": 70182095
   },
-  "originalCI": {
-    "file": "C:/Users/micha/.codex/worktrees/5b0a/opf/.tmp/ci034-1ef/job-129248453015.log",
-    "bytes": 91134,
-    "sha256": "0f335bd079dc00bf348212d5c1f9b7b1e4d5673b83ca8b55cad6e23f9cb61015",
-    "source": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
-    "run": "42642923443",
-    "job": "129248453015"
-  },
   "focused": {
     "status": "PASS",
     "existingPure": 17,
@@ -57,6 +49,35 @@
       "file": "metadata-checks.zip",
       "bytes": 8985,
       "sha256": "6ab8d169f18c721a63697906c42e90df487521cf7570b13f511067ff26147915",
+      "entries": 9
+    }
+  },
+  "inspectionCI": {
+    "file": "C:/Users/micha/.codex/worktrees/5b0a/opf/.tmp/ci034-1ef/job-129248453015.log",
+    "bytes": 91134,
+    "sha256": "0f335bd079dc00bf348212d5c1f9b7b1e4d5673b83ca8b55cad6e23f9cb61015",
+    "source": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+    "run": "42642923443",
+    "job": "129248453015",
+    "kind": "LF-normalized inspection copy, retained unchanged"
+  },
+  "transportOriginal": {
+    "file": "ci-job-exact.log.gz",
+    "base64Source": "C:/Users/micha/.codex/worktrees/5b0a/opf/.tmp/ci034-1ef/exact/job-129248453015.b64",
+    "bytes": 91998,
+    "sha256": "eb23c604dbd80fd60b185fb7f6ff9769762f71149629140d02331fb055722965",
+    "kind": "exact connector-decoded UTF8 bytes including BOM and original CRLF"
+  },
+  "provenanceLabelCheck": {
+    "status": "PASS",
+    "passed": 7,
+    "typeSkipped": 1,
+    "seconds": 33.4,
+    "scope": "transport-versus-inspection labels/evidence only; packagefileunchanged",
+    "archive": {
+      "file": "provenance-checks.zip",
+      "bytes": 8992,
+      "sha256": "4f7e6b4f66b12128ac25441fef38b6cb411ef36c3a44b4780186cad62e0cc62a",
       "entries": 9
     }
   }
