@@ -284,6 +284,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
       matches.length === 1 &&
       uniqueIndexes &&
       e.kind === 'lineChart' &&
+      (e.node['c:grouping']===undefined||e.node['c:grouping']?.val==='standard') &&
       e.ser?.['c:marker']?.['c:symbol']?.val === 'none' &&
       paint &&
       axis.length === 1 &&
@@ -311,7 +312,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
         code: 'chart-reference-ownership-uncertain',
         option: 'referenceLines',
         message:
-          'A structurally identified reference helper was edited into unsupported or nonconstant data, or its ownership/axes/categories are ambiguous; all of its current data remains ordinary chart data.' +
+          'A structurally identified reference helper was edited into unsupported or nonconstant data, or its native grouping/ownership/axes/categories are ambiguous; all of its current data remains ordinary chart data.' +
           (unsupportedLabels
             ? ' Current auto-label, leader-line or manual label-placement constructs cannot be represented by a plain reference label.'
             : ''),

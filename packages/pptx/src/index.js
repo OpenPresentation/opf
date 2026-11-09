@@ -2016,7 +2016,7 @@ function comboFields(comboSeries, names, report) {
   const secondaryAxis = names.filter((_, index) => comboSeries[index].secondary&&(!allLines||index>0));
   const unmarked = names.filter((_, index) => comboSeries[index].role === 'line' && comboSeries[index].ser?.["c:marker"]?.["c:symbol"]?.val === 'none');
   if (unmarked.length) report?.({option: 'line', message: `The combo chart's line ${unmarked.length === 1 ? 'series' : 'series'} ${unmarked.map(name => `'${name}'`).join(', ')} ${unmarked.length === 1 ? 'has' : 'have'} no markers; OPF combo lines always draw markers, so ${unmarked.length === 1 ? 'it imports' : 'they import'} with markers.`});
-  if(comboSeries.every(e=>e.role==='line'))report?.({option:'type',message:`Separate-axis native line groups require an OPF combo: the first current series '${names[0]}' becomes primary-axis columns to satisfy its required column role; remaining line/axis roles are retained where expressible. All current data columns and source order are preserved.`});
+  if(comboSeries.every(e=>e.role==='line'))report?.({option:'type',message:`Native line groups with incompatible axes/grouping require an OPF combo: the first current series '${names[0]}' becomes primary-axis columns to satisfy its required column role; remaining line/axis roles are retained where expressible. All current data columns and source order are preserved.`});
   if (new Set(line).size !== line.length || new Set(names).size !== names.length) {
     report?.({option: 'line', message: 'Two series of the combo chart share a name, so which of them is a line cannot be said by name; the chart imports with its default line (the last series).'});
     return {};
