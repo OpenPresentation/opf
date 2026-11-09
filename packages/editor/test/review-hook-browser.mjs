@@ -210,6 +210,63 @@ try {
   assert.notDeepEqual(firstSlideFacts(resourceEpochs.rows[0]), firstSlideFacts(resourceEpochs.rows[1]), 'the resource epoch materially changes earlier geometry-dependent findings');
   assert.notDeepEqual(firstSlideFacts(resourceEpochs.rows[1]), firstSlideFacts(resourceEpochs.rows[2]), 'returning to narrow measurement restores the corresponding fresh findings');
   checks.push('workspace invalidates unchanged earlier geometry after icons, shapes and diagram resource preparation');
+  // A resource call may commit an earlier package/metadata epoch before rejecting a later one.
+  // A different complete document then has nothing pending, so successful-loading invalidation alone is insufficient.
+  const partialResourceFailure = await tab.evaluate(async () => {
+    const host = document.createElement('div'), slot = document.createElement('div');
+    document.body.append(host, slot);
+    let pending = [], factor = 0.2, ensureCalls = 0;
+    const events = [], errors = [], committed = [];
+    const fonts = {
+      textMeasurement: { measure: (text, size) => text.length * size * factor },
+      pending: () => [...pending],
+      ensure: async () => {
+        ensureCalls++;
+        await Promise.resolve();
+        committed.push(pending[0]);
+        pending = [];
+        factor = 3;
+        throw Object.assign(new Error('Owned later resource failure after a committed epoch'), { code: 'owned-resource-failure', details: { loaded: ['shape:partial'], failed: [{ package: 'diagram:later', code: 'owned-resource-failure' }] } });
+      },
+    };
+    const documentValue = { name: 'Partial resource failure', language: 'en-US', slides: [
+      { id: 'unchanged-first', title: 'Long earlier content', subtitle: 'Same input', composition: { minFontSize: 24, maxFontSize: 24 }, blocks: [{ text: 'Complete authored word '.repeat(130) }, { text: 'Second complete block' }] },
+      { id: 'changed-last', title: 'Later slide', subtitle: 'Gate trigger', text: 'Content' },
+    ] };
+    const workspace = window.harness.createOpfEditor(host, { document: documentValue, fonts, catalogs: [], slots: { review: slot }, panels: { canvas: false }, review: { delay: 1 }, on: { fonts: event => events.push(event.state) }, onError: error => errors.push({ code: error.code, cause: error.cause?.code }) });
+    await workspace.ready;
+    await workspace.whenIdle();
+    await workspace.review.whenIdle();
+    const before = workspace.review.validation;
+    pending = ['shape:partial', 'diagram:later'];
+    workspace.session.set('slides.1.title', 'Temporary failing content');
+    await workspace.whenIdle();
+    await workspace.review.whenIdle();
+    const failed = { errors: [...errors], events: [...events] };
+    // Remove the failed new content rather than retrying it: the surviving document is already resource-complete.
+    workspace.session.set('slides.1.title', 'Recovered complete document');
+    await workspace.whenIdle();
+    await workspace.review.whenIdle();
+    const actual = workspace.review.validation;
+    const cold = window.harness.validate(workspace.session.snapshot().presentation, { catalogs: [], fonts });
+    workspace.review.invalidate();
+    workspace.review.schedule();
+    await workspace.review.whenIdle();
+    const explicitCold = workspace.review.validation;
+    const completePending = fonts.pending();
+    workspace.destroy(); host.remove(); slot.remove();
+    return { before, actual, cold, explicitCold, failed, events, errors, ensureCalls, committed, completePending };
+  });
+  assert.equal(partialResourceFailure.ensureCalls, 1, 'the complete recovery document does not retry the failed resource');
+  assert.deepEqual(partialResourceFailure.committed, ['shape:partial']);
+  assert.deepEqual(partialResourceFailure.completePending, []);
+  assert.deepEqual(partialResourceFailure.failed, { errors: [{ code: 'fonts-unavailable', cause: 'owned-resource-failure' }], events: ['loading', 'error'] });
+  assert.deepEqual(partialResourceFailure.events, ['loading', 'error'], 'pending=[] recovery adds no loading-to-ready event');
+  assert.deepEqual(partialResourceFailure.explicitCold, partialResourceFailure.cold, 'explicitly invalidated review agrees with the actual public cold validator');
+  assert.notDeepEqual(partialResourceFailure.before.findings.filter(finding => finding.slide === 0), partialResourceFailure.cold.findings.filter(finding => finding.slide === 0), 'the partial epoch materially changed an unchanged earlier slide');
+  assert.deepEqual(partialResourceFailure.actual, partialResourceFailure.cold, 'settled complete recovery must not retain pre-failure composition');
+  checks.push('failed partial resource preparation invalidates earlier geometry before a different complete document settles');
+
   assert.deepEqual(problems, [], 'no page errors');
   console.log(`Review hook (browser): ${checks.length} checks. ${checks.join('; ')}.`);
 } finally {

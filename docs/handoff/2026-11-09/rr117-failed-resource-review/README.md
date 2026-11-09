@@ -1,0 +1,9 @@
+# RR-117 failed partial resource review
+
+Source review of frozen d764/dea488 found that workspace review invalidation only runs after successful resource loading. The maintained actual-browser managed-resource fixture now proves the missing failure path: a call changes the resource/measurement epoch, commits one resource, then rejects a later one. A different complete document has pending=[] and no new loading/ready event; the unchanged earlier slide incorrectly retains zero findings while both public cold validate and explicit panel.invalidate report text overflow.
+
+Baseline is a genuine executed RED at C:/opf-work/rr117-partial-resource-before01.log, with unchanged production source and the added test only. The failure wrapper/cause, one ensure call, partial commit, empty pending recovery and material geometry change all pass before the final parity assertion. No invalid fixture or disabled assertion is involved. The existing ten browser controls run first and remain intact.
+
+Vetoable decision RR117-FAILED-RESOURCE: clear only retained review composition in the workspace failed callback. Keep the failed document gated and the original error/reporting behavior; the next successful schedule still runs all checks. This conservatively covers partial font/icon/shape/diagram state changes without assuming a failed call was atomic. No schema, core-cache, debounce, thumbnail, hosted-review or rendering changes.
+
+The branch is a new normal descendant of dea488, codex/rr-117-failed-resource-invalidation, in the owned C:/opf-work/rr117-review checkout. Original RR117 archives and verifiers remain unchanged; replay them at their frozen source. Candidate actual-browser replay and append-only source/evidence sealing are pending at this checkpoint. Root owns combined/paired/cache heap acceptance. No package rebuild, broad aggregate, Office, goldens, provider action or release.

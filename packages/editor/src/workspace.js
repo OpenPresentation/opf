@@ -530,6 +530,8 @@ export function createOpfEditor(element, options = {}) {
         }
       },
       failed: (error) => {
+        // Earlier verified resources may have committed before a later one failed; a different complete deck can have no pending load.
+        review?.invalidate();
         fontsFailure = error;
         emit("fonts", { state: "error", error });
         say(error.message);
