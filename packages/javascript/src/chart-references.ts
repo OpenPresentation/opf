@@ -63,9 +63,12 @@ export function placeReferences(refs:readonly ChartReference[],data:ResolvedChar
   const crosses=(segment:typeof segments[number],label:Box):boolean=>{
     const dx=segment.x2-segment.x1,dy=segment.y2-segment.y1,pad=segment.pad;
     let from=0,to=1;
-    for(const [p,q]of [[-dx,segment.x1-label.x+pad],[dx,label.x+label.width-segment.x1+pad],[-dy,segment.y1-label.y+pad],[dy,label.y+label.height-segment.y1+pad]]){
-      if(p===0){if(q!<0)return false;continue;}
-      const t=q!/p!;if(p!<0)from=Math.max(from,t);else to=Math.min(to,t);if(from>to)return false;
+    const bounds:[number,number][]=[[-dx,segment.x1-label.x+pad],[dx,label.x+label.width-segment.x1+pad],[-dy,segment.y1-label.y+pad],[dy,label.y+label.height-segment.y1+pad]];
+    for(const [p,q]of bounds){
+      if(p===0){if(q<0)return false;continue;}
+      const t=q/p;
+      if(p<0)from=Math.max(from,t);else to=Math.min(to,t);
+      if(from>to)return false;
     }
     return true;
   };
