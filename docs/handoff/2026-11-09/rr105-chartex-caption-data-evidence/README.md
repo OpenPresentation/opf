@@ -1,0 +1,11 @@
+# RR-105 ChartEx caption/data evidence
+
+New isolated branch `codex/rr-105-chartex-title-evidence` from fresh main normally aligned to reviewed integration `e5de880999235872f4c44fe646e78fec49c16baa`. Histogram PR1247 and its producer/evidence remain frozen and separate.
+
+The actual native08 no-op waterfall save retains all six numeric values and all three PNG phases, but public import changes one-column Sample data to two-column Row/Sample. OPF_DATA_V1 survives unchanged and owned (the part is renamed opfData1.xml to tag45.xml); the classic chart bytes also remain exact. Office rewrites the decorative Sample title from cx:rich/a:t to cx:txData/cx:v. The old global cache regex hashes that extra caption value, changing057cdc6c5efc23fe to99cba9762b6196f5, so restoration correctly refuses that incorrect fingerprint. This is a false data-change finding, not numeric-data loss or paint failure.
+
+Vetoable policy: exclude only decorative ChartEx title subtrees from data evidence. Display-title serialization/rename cannot change the authored data topology; actual caches, categories, series names and number formats remain authoritative. No schema, renderer, OPF_DATA record, original source/archives, existing canonical fixture, golden or tolerance is changed.
+
+Regression-only baseline `a758aa40db1f9a4846ca8b36a6180baefd1c77a6` preserves the genuine5 PASS/2 FAIL. A new lossless immutable witness ZIP contains byte-exact public native08 original83a01144/saved845aaa46/source bytes, not a reconstructed or edited fixture. After the four-line fingerprint repair, all7 controls pass: original and actual saved whole public import, caption-only rename, and numeric/category/series/format stale-data refusals. Existing row provenance25 controls and ChartEx31 checks pass, retaining all9 canonical fallback archive hashes and the exact original057cdc fingerprint. These are pure library tests; no new export outside maintained focused controls, native operation or application acceptance.
+
+One coherent required changed check remains pending. Preserve every initial result; do not retry Office, alter source tags or hydrate unrelated evidence to make it green. Coordinator owns source review/publication, CI and final native/release acceptance.
