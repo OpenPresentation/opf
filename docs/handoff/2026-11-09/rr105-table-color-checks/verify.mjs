@@ -1,0 +1,24 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+const require = createRequire(new URL('../../../../packages/pptx/package.json', import.meta.url)), {unzipSync} = require('fflate');
+const own = import.meta.dirname, manifest = JSON.parse(fs.readFileSync(path.join(own, 'manifest.json')));
+const hash = b => createHash('sha256').update(b).digest('hex');
+const zip = fs.readFileSync(path.join(own, manifest.archive.path)); assert.equal(zip.length, manifest.archive.bytes); assert.equal(hash(zip), manifest.archive.sha256);
+const raw = unzipSync(zip); assert.deepEqual(Object.keys(raw).sort(), manifest.files.map(f => f.path).sort());
+for (const f of manifest.files) {assert.equal(raw[f.path].length, f.bytes); assert.equal(hash(raw[f.path]), f.sha256);}
+const text = k => new TextDecoder().decode(raw[k]).replace(/^\uFEFF/u, ''), json = k => JSON.parse(text(k));
+assert.equal(json('mapped-driver/exit.json').code, 1); assert.equal(json('mapped-driver/preflight.json').head, manifest.source);
+assert.match(text('mapped-driver/driver.log'), /3 of 13 steps failed/u); assert.match(text('mapped-steps/tests_pptx.log'), /284 scripts passed \(contract suite\)/u);
+assert.match(text('mapped-steps/tests_pptx.log'), /Canonical native table expectations match actual OOXML: all24cells\/36runs/u);
+assert.equal(json('focused/worker.exit.json').status, 0); assert.equal(json('focused/profile.exit.json').status, 0);
+const controls = json('managed/controls.json'); assert.equal(controls.passed, true); assert.equal(controls.cases.length, 80); assert.ok(controls.cases.every(c => c.passed));
+assert.ok(controls.cases.some(c => c.name === 'probe-write-failure' && c.noCallsAfterFailure));
+const wrong = json('managed/color-probe.jsonl'), unavailable = json('managed/rgb-null-probe.jsonl');
+assert.equal(wrong.actualRgb, 123456); assert.equal(wrong.actualHex, '#40E201'); assert.equal(wrong.expectedColor, '#000000'); assert.equal(unavailable.actualRgb, null); assert.equal(unavailable.rgbValid, false);
+const source = json('source-proof.json'); assert.equal(source.head, manifest.source); assert.equal(source.clean, true); assert.equal(source.protectedObjects.length, 11); assert.ok(source.protectedObjects.every(o => o.base === o.head));
+const authored = json('authored-source-unchanged.json'); assert.equal(authored.byteEqual, true); assert.equal(authored.authoredSourceBytes, 5941); assert.equal(authored.expectedChanges.length, 2); assert.equal(authored.OfficeCalls, 0);
+assert.equal(manifest.nativeAcceptance, false); assert.equal(manifest.registryAcceptance, false);
+console.log(JSON.stringify({passed: true, files: manifest.files.length, source: manifest.source, pptxScripts: 284, managedControls: 80, profileGroups: 8, originalMappedAggregateFailed: true, nativeAcceptance: false}));
