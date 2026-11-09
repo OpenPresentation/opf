@@ -1,0 +1,60 @@
+{
+  "archiveBytes": 166813,
+  "archiveSHA256": "518c6bc06fd89feb6f17dbbe7d93af2499c54dc5160f048642c6134febde14e9",
+  "source": "e62eb10471ffa2176fef98a51f5ee9dbe8b0d7c6",
+  "tested": "complete frozen evidence payload; 19 files",
+  "command": "pinned Node24 pnpm10.33.2 check:changed --base 981b914ca73fa653cb05e49a4f6c0dc04adff965",
+  "outcome": "TERMINAL0; 5 steps PASS/29.6s; typecheck SKIP no TypeScript change; no package suite selected",
+  "files": [
+    {
+      "name": "steps/biome.log",
+      "bytes": 687,
+      "sha256": "60d1a3f2b9fc0bcaae56d1cccab01e50596d88922a065d9d4e642eab78fe102a"
+    },
+    {
+      "name": "steps/build.log",
+      "bytes": 14579,
+      "sha256": "62db0b3cc79c78202dbce209c769e4549a6f5b40b8db8a3351c872eb3a9c8916"
+    },
+    {
+      "name": "steps/pnpm_run_check_changes.log",
+      "bytes": 2635,
+      "sha256": "b562521011a07bc808b634c031e338cf34ee4dff6e662b40e5978f591a80e2ed"
+    },
+    {
+      "name": "steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1037,
+      "sha256": "1c52ea241336dd2d6c030a562fff5798899a768553ed1498c5bd1f1d0901996c"
+    },
+    {
+      "name": "steps/pnpm_run_check_text.log",
+      "bytes": 1070,
+      "sha256": "854956f2fc0baf64ea10a9671a1c684c739bd272fd9d3e1ffb2f402ccd1fec15"
+    },
+    {
+      "name": "complete-check-01.log",
+      "bytes": 900,
+      "sha256": "db699e8bf28e631c85a2bdcb8c6a122c5a29139181e22db66bbff253863e8809"
+    },
+    {
+      "name": "complete-check-01.exit.json",
+      "bytes": 500,
+      "sha256": "610a99a3ee017730f9ca2a33d12c49fb06c3d9be2551e9bd3e8340c5f99c15e9"
+    },
+    {
+      "name": "packet-hydration-01.json",
+      "bytes": 821002,
+      "sha256": "22c8ac2fc5bc7068e1370bc2df355b3c29c4bd18bda2e0e47e5def95d4690bd6"
+    },
+    {
+      "name": "packet-install-01.log",
+      "bytes": 4439,
+      "sha256": "8e441fb0ed5e2f865265e6f990ea37800d2c0631f4d786995d464393c8438b99"
+    },
+    {
+      "name": "packet-install-01.exit.json",
+      "bytes": 522,
+      "sha256": "325311a1aeb1ad94d26f83ead5783e807aebbbbf1e40210fa01b795874be05e9"
+    }
+  ]
+}
