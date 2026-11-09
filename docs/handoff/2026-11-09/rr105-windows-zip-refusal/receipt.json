@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "base": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+  "testedSource": "68967f8900a816f6b71c399e668884e487e5f934",
+  "testBlob": "9f5853bc7c60f147e4f812eda367616f5bc66a7e",
+  "raw": {
+    "file": "raw.zip",
+    "bytes": 485166,
+    "sha256": "5e3a4b1736e81e9574dac9f4ce3dbb2dda6e3873541de65ce9e8bed75521d3bf",
+    "entries": 399,
+    "decodedBytes": 70182095
+  },
+  "originalCI": {
+    "file": "C:/Users/micha/.codex/worktrees/5b0a/opf/.tmp/ci034-1ef/job-129248453015.log",
+    "bytes": 91134,
+    "sha256": "0f335bd079dc00bf348212d5c1f9b7b1e4d5673b83ca8b55cad6e23f9cb61015",
+    "source": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+    "run": "42642923443",
+    "job": "129248453015"
+  },
+  "focused": {
+    "status": "PASS",
+    "existingPure": 17,
+    "existingValidateOnly": 10,
+    "existingRequestRefusals": 3,
+    "formatPositives": 3,
+    "wrongCauseNegatives": 4
+  },
+  "mapped": {
+    "passed": 10,
+    "typeSkipped": 1,
+    "seconds": 92,
+    "status": "PASS",
+    "scope": "single changedPPTXtest; no otherpackage suite"
+  },
+  "controls": [
+    {
+      "scope": "focused-01.log",
+      "root": "C:\\opf-work\\n034-zip-tmp\\opf-survey-JVyICl"
+    },
+    {
+      "scope": "mapped-01-steps/tests_pptx.log",
+      "root": "C:\\opf-work\\n034-zip-tmp\\opf-survey-0ZV8la"
+    }
+  ],
+  "workerUnchanged": true,
+  "officeConstructed": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "metadataCheck": {
+    "passed": 7,
+    "typeSkipped": 1,
+    "seconds": 31.4,
+    "status": "PASS",
+    "scope": "docs/evidence only versus68967; no productrepeat",
+    "archive": {
+      "file": "metadata-checks.zip",
+      "bytes": 8985,
+      "sha256": "6ab8d169f18c721a63697906c42e90df487521cf7570b13f511067ff26147915",
+      "entries": 9
+    }
+  }
+}

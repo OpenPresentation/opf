@@ -23,6 +23,13 @@ exact1ef. Fragment[] is maintainer-only. Current producer2400, sealed59-case sui
 all retired-helper guards and the six native exclusions are unchanged. Native/registry
 acceptance and chart-reference implementation remain outside this test-only repair.
 
-Focused actual PowerShell control and required mapped checks are pending at this source
-checkpoint. Root alone owns PowerPoint and any CI observer/dispatch; this branch opens no
+Focused actual PowerShell control passed:17 function boundaries,10 maintained ValidateOnly
+cases and3 bound-request refusals, plus3 diagnostic-format positives and4 wrong-cause negatives.
+Required mapped check on source68967 passed10 steps with one type skip in92.0 seconds; its
+package selection ran only the changed native-readonly-survey script (16.9 seconds). The direct
+Biome command reported this test ignored under existing configuration; the maintained mapped
+Biome step passed with its normal policy. Neither case justifies changing lint configuration.
+Raw focused and mapped controls, the original matcher failure and exact source hashes are
+retained in raw.zip. The final source commit may add metadata only; receipt.testBlob binds the
+exact tested package file. Root alone owns PowerPoint and any CI observer/dispatch; this branch opens no
 Office instance, registers no fonts, runs no UI, and publishes no release.
