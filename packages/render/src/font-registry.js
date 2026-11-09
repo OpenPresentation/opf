@@ -1,3 +1,4 @@
+import { selectionFamilyGroup } from "./font-selection.js";
 import { sha256Bytes } from "./sha256.js";
 import bidiFactory from "bidi-js";
 import { create } from "fontkit";
@@ -164,8 +165,8 @@ export function pickFace(faces, family, style, {policy = "none", aliases = new M
   return {face, compatibility, rule, styleFallback, via, ...(encoding ? {encoding} : {})};
 }
 
-export function createFontRegistry(entries, options = {}) {
-  if (!Array.isArray(entries) || !entries.length) throw new OPFFontError("empty-font-registry", "Supply at least one font file.");
+export function createFontRegistry(entries, options = {}, {allowEmpty = false, controls} = {}) {
+  if (!Array.isArray(entries) || !entries.length && !allowEmpty) throw new OPFFontError("empty-font-registry", "Supply at least one font file.");
   const makeFace = entry => {
     if (!(entry.data instanceof Uint8Array)) throw new OPFFontError("invalid-font-data", "Font data must be a Uint8Array.");
     const data = entry.data.slice();
@@ -177,8 +178,7 @@ export function createFontRegistry(entries, options = {}) {
     // OpenType groups Medium/SemiBold/ExtraBold under a preferred family, while
     // retaining separate legacy families for four-style native font selectors.
     // An explicit caller rename owns its namespace and must not add this alias.
-    const familyGroup = entry.family && entry.family.toLowerCase() !== font.familyName?.toLowerCase()
-      ? family : validFamily(font.getName?.('preferredFamily', 'en') ?? family);
+    const familyGroup = validFamily(selectionFamilyGroup(font, entry.family ?? family));
     const linking = font['OS/2']?.fsSelection ?? font.head?.macStyle;
     const fontFace = linking && typeof linking.bold === 'boolean' && typeof linking.italic === 'boolean'
       ? {family:validFamily(font.getName?.('fontFamily', 'en') ?? font.familyName ?? family),bold:linking.bold,italic:linking.italic} : undefined;
@@ -230,6 +230,14 @@ export function createFontRegistry(entries, options = {}) {
     aliases = new Map(Object.entries({...scriptAliases,...options.aliases}).map(([from,to])=>[validFamily(from).toLowerCase(),validFamily(to)]));
   };
   buildAliases();
+  // Private loader control: a fallback first loaded for coverage may later be explicitly selected by a script font scheme.
+  if (controls) controls.activateScriptFamilies = families => {
+    const named = new Set(families.map(family=>family.toLowerCase()));
+    let changed = false;
+    for (const face of faces) if (face.fallbackOnly && named.has(face.family.toLowerCase())) { face.fallbackOnly = false; changed = true; }
+    if (changed) { buildAliases(); substitutions.clear(); }
+    return changed;
+  };
   const policy = options.substitutionPolicy ?? "none";
   if (!["none","metric","visual"].includes(policy)) throw new OPFFontError("invalid-font-policy", "substitutionPolicy must be none, metric, or visual.");
   if (options.fallbackFamily) validFamily(options.fallbackFamily);
@@ -375,7 +383,7 @@ export function createFontRegistry(entries, options = {}) {
     // `loadFonts` handle's embeddedFonts). Whichever list it is given, the SVG writer embeds a face only where its text draws it (RR-61).
     get embeddedFonts() { return embedded(face=>face.embed!=="used"); },
     /** Parsed face metadata in entry order, without encoding font bytes. */
-    describeFaces: ()=>faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{}),...(face.fallbackOnly?{fallbackOnly:true}:{})})),
+    describeFaces: ({selection = false} = {})=>faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(selection?{familyGroup:face.familyGroup}:{}),...(face.scripts?{scripts:[...face.scripts]}:{}),...(face.fallbackOnly?{fallbackOnly:true}:{})})),
     /** Embedded faces for which `predicate({family,weight,italic,scripts})` holds; large script faces can be left to raster fontFiles. */
     selectEmbeddedFonts: predicate=>embedded(predicate),
     /** Every face as `{family, data}` (the bytes the registry measures with), for the browser PDF export to embed. */

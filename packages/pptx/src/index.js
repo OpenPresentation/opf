@@ -298,7 +298,7 @@ export async function toPptx(input, options = {}) {
   // LH-14: and the icon sets it names (the gallery loads each set on first use) and the SVG files of its icons, when the host reads files.
   await ensureIcons(presentation, {catalogs: options.catalogs, ...(options.readIconSource ? {readSource: options.readIconSource} : {})});
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
-  if (options.as === 'images') return pictureSlidesPptx(presentation, options);
+  if (options.as === 'images') { await options.fonts?.ensure?.(presentation,{renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})}}); return pictureSlidesPptx(presentation, options); }
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
   // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
   options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map()};
@@ -321,6 +321,8 @@ export async function toPptx(input, options = {}) {
     };
     return Object.assign(safe, {replaced});
   })() : undefined;
+  // Demand handles prepare the families this export actually measures, including an explicit Office-safe mapping.
+  await options.fonts?.ensure?.(presentation,{renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})},...(safeTypeface?{mapFamily:safeTypeface}:{})});
   if (safeTypeface) options = {...options, safeTypeface, textMeasurement: safeMeasurement(options.textMeasurement, safeTypeface)};
   // The renderer remains optional for custom measurement providers. Its public script planner supplies the same
   // shaping/measurement segmentation as preview when installed; the selected native family wrapper stays outside it.

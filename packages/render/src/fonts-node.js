@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
+import { createNodeDemand } from "./font-demand.js";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { lazyFontList } from "./lazy-font-list.js";
@@ -77,7 +78,7 @@ async function loadPackages(packages, skipped, {fallbackOnly = false, what = "Th
       const file = path.join(directory, face.file);
       const data = await verifiedFile(file, face.sha256, {package:pkg.name, file:face.file});
       fontFiles.push(file);
-      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(pkg.scripts ? {scripts:[...pkg.scripts]} : {}), ...(fallbackOnly ? {fallbackOnly:true, embed:"used"} : {})});
+      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(pkg.scripts ? {scripts:[...pkg.scripts]} : {}), ...(fallbackOnly || face.fallbackOnly ? {fallbackOnly:true, embed:"used"} : {})});
     }
   }
   return {entries, fontFiles, packages:packages.map(pkg => pkg.name)};
@@ -277,10 +278,12 @@ function nodeHarfbuzz(kind) {
  */
 export async function loadFonts({pack = "base", embedScriptFonts = false, ...options} = {}) {
   if (pack !== "base" && pack !== "office" && pack !== "none") throw new OPFFontError("invalid-font-pack", "Choose the base, office or none font pack.", {pack});
-  const {registry, loaded} = await buildRegistry(pack, options);
+  const demand = options.presentation !== undefined ? await createNodeDemand(pack, options, {loadPackages, callerFaces, renamedAliases}) : undefined;
+  const {registry, loaded} = demand ?? await buildRegistry(pack, options);
+  if(demand)registry.lazyFonts=lazyOf(registry);
   // Script faces are large (CJK faces are 5-10 MB each). Raster output reads them from fontFiles; embed them in standalone SVG only
   // on request. The default Noto Sans fallback is always offered (embed "used"), so an SVG carries it exactly when its text draws it.
-  const selectEmbedded = () => registry.selectEmbeddedFonts(face => embedScriptFonts || !face.scripts || face.fallbackOnly);
+  const selectEmbedded = () => { const selected=registry.selectEmbeddedFonts(face => embedScriptFonts || !face.scripts || face.fallbackOnly); return demand?demand.orderFaces(selected):selected; };
   // The embedded list is base64 of every face: computed on first use, and again after `ensure` added faces.
   let embeddedFonts, fontFiles = [...registry.fontFiles];
   // Calls mutate one registry: serialize their reads/additions, while returning each
@@ -310,7 +313,9 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     /** Load the script faces the presentation's text needs (see `ensureFonts`); `embeddedFonts` and `fontFiles` then include them. */
     ensure(presentation, callOptions = {}) {
       const result = ensureQueue.then(async () => {
-        const prepared = await ensureFonts(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: {...options.renderOptions, ...callOptions.renderOptions}});
+        const prepare = demand ? (_registry,_loaded,presentation,opts)=>demand.ensure(presentation,opts) : ensureFonts;
+        const prepared = await prepare(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: {...options.renderOptions, ...callOptions.renderOptions}, ...(callOptions.mapFamily ? {mapFamily:callOptions.mapFamily} : {})});
+        if(demand)registry.lazyFonts=lazyOf(registry);
         refresh();
         return prepared;
       });
@@ -319,6 +324,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     },
     /** Synchronous: the script packages the presentation needs that are not loaded yet. Empty means `ensure` loads nothing. */
     pending(presentation, renderOptions) {
+      if(demand)return demand.pending(presentation,{...options.renderOptions,...renderOptions});
       const held = new Set([...loaded.packages, ...(loaded.selection?.notInstalled ?? [])]);
       const analysis = analyzePresentationScripts(presentation, undefined, {...options.renderOptions, ...renderOptions}, scriptMemory);
       const primary = scriptFontPackages(scriptSelectionOf(analysis).scripts).map(pkg => pkg.name).filter(name => !held.has(name));

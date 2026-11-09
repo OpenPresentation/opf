@@ -67,6 +67,8 @@ export interface FontsHandle extends RenderFonts {
 	useBundledFonts: false;
 	loadSystemFonts: false;
 	registry: FontRegistry;
+	/** Present on current handles; prepare newly used faces after document edits or pagination. */
+	ensure?(presentation: unknown, options?: Record<string, unknown>): Promise<unknown>;
 	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean }[];
 }
 /** The engines of opf-render 0.18 (RR-73). Slides count from 1; a number gives one SVG, a selection a list. */

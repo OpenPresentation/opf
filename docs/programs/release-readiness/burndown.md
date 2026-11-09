@@ -169,6 +169,8 @@ the `world` region map chart, parked with an offline native map export as the
 future work ([opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133)).
 Declined, no issue: a VS Code extension, and a language set per slide or per run.
 
+| RR-114 | Node fonts load only the faces the document needs; exact style/fallback/edited-deck fidelity, no unnecessary optional packages, existing explicit whole-pack path preserved | opf, render, pptx | — | in-progress | Isolated implementation; normal build and exact owner16 probe select3 faces. Full parity and mapped/paired qualification pending. [Handoff](../../handoff/2026-11-09/rr114-node-demand-fonts/README.md). |
+
 ## Acceptance criteria
 
 **RR-01 Release.** opf-pptx 0.11.8 (carrying #126) and the CLI 0.9.2 are
@@ -1096,3 +1098,5 @@ package, close RR-68 or claim a new release result; normal source integration ga
 - 2026-11-09: RR-105 ChartEx caption/data provenance repair: exact native08 OPF_DATA/caches survive, but Office title rewrite adds a decorative cx:v to the old global fingerprint. Preserve real5PASS/2FAIL baseline; title-only exclusion yields7PASS plus25 row/31 ChartEx controls with real edits still refusing stale data. No original/canonical fixture edit, golden/tolerance change, Office retry or native acceptance. One required source check pending ([handoff](../../handoff/2026-11-09/rr105-chartex-caption-data-evidence/README.md)).
 
 - 2026-11-09: RR-105 actual table-v2 original slide4 color refusal retained, exit1/cleanupfalse and no later Office. Pure all24cell/36run OOXML/theme trace finds two stale inherited-white expectations against reviewed RR96 black-on-#767676 maximum contrast. Narrow generator/probe repair is in qualification; old source/suite/profile unchanged, native RGB unknown and fresh binding/physical qualification still owed. Vetoable RR105-TABLE-CONTRAST: no exporter/schema/palette/tolerance change.
+
+- 2026-11-09 RR-114: owner requested actual face-level Node loading after53-face baseline. Initial demand implementation uses full selection metadata, verified selected files, zero-face neutral handles and serialized edit preparation; the exact16-slide input now holds3 faces in a normal public-API probe. No timing, required-gate or native acceptance is claimed; source/parity qualification is in progress.

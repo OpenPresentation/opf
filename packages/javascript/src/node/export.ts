@@ -315,9 +315,10 @@ export async function runExport(presentation: unknown, options: ResolvedExportOp
 	// them from the font files, so they skip the script data URLs. Without `fonts`, a deck the process's shared handle serves
 	// unchanged borrows it (the pack is prepared once per process); any other deck gets a handle of its own.
 	const embedScripts = format === "svg" && options.text === "fonts";
-	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts);
+	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) });
 	try {
-		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts)).handle;
+		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) })).handle;
+		if(options.fonts)await handle.ensure?.(presentation,{renderOptions:{catalogs,...(date?{date}:{})}});
 		return await drawWith(presentation, handle, options, ctx, { reporter, catalogs, date, renderer, ...(pptx ? { pptx } : {}), userFonts, resolver });
 	} finally {
 		lease?.release();
@@ -386,6 +387,8 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
 		}
 	}
+	// Continuations can add generated labels; prepare their actual faces before drawing the final pages.
+	if(deck!==presentation)await handle.ensure?.(deck,{renderOptions:{catalogs,...(date?{date}:{})}});
 	// LH-145: the picture backgrounds are measured once, after pagination (which copies a slide's design), and both engines get the same sampler.
 	const pictureLuminance = options.measurePictures === false ? undefined : await measurePictureBackgrounds(renderer, deck, resolver, catalogs, reporter);
 	const slideCount = (deck as { slides?: unknown[] }).slides?.length ?? 0;
