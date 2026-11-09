@@ -10,5 +10,57 @@
   "newRow": "| RR-111 | The MCP viewer's actual Download source control delegates exact current source text, MIME and suggested filename to an advertised host download capability, with visible unsupported/denied/cancelled/error outcomes and no iframe fallback | mcp | — | review | [opf#1220](https://github.com/OpenPresentation/opf/issues/1220); corrected source.onDownload adapter passes12 actual browser groups and types; mapped9/10 with strict tracker freshness RED only, MCP55pass/1optional skip; coordinator source review/fold5b9e4386 accepted; maina52/stagingc2 alignment preserves the redesigned UI/Export and exact-source guarded transport; local install/normal build/types and all16 sandbox browser groups PASS,19captures retained/coordinator5reviewed; combined/final tracker/client gates owed ([handoff](../../handoff/2026-11-09/rr111-host-download/README.md)) |",
   "insertedRowText": "maina52/stagingc2 alignment preserves the redesigned UI/Export and exact-source guarded transport; local install/normal build/types and all16 sandbox browser groups PASS,19captures retained/coordinator5reviewed; ",
   "appendedTail": "\n- 2026-11-09 — RR-111: normally align fresh maina52 MCP viewer redesign/Export with reviewed stagingc2. Coordinator approved the three manual conflict resolutions before commit; preserve both browser scenario sets, encoded filename/exact-source transport, visible host refusals, copy/opening-Undo safeguards and no iframe download fallback. New capable-host binary denial and explicitly hidden-handler guard are in qualification. Vetoable RR111-MAIN-ALIGNMENT; local build/types/full browser/images and final assembled CI remain owed. [Handoff](../../handoff/2026-11-09/mcp-main-alignment/README.md).\n\n- 2026-11-09 — RR-111 main alignment source1c7ae946: pinned offline install, normal build, maintained server/app types and all16original+new sandbox browser groups PASS without retry;19actual captures preserved,5independently reviewed by coordinator. Exact main lock/PPTX workspace-link and6main runtime/test blobs explicit; all other owned code matches parents. Preserve original authoring/source-owner refusals and ignored-path Biome0files/exit1 honestly. Coherent mapped/CI and actual host/native/release acceptance remain separate. [Proof](../../handoff/2026-11-09/mcp-main-alignment/README.md).\n",
-  "priorBytesPreserved": true
+  "priorBytesPreserved": true,
+  "fold": "d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e",
+  "exactRuntimeTestBlobs": [
+    {
+      "file": "packages/mcp/app/index.html",
+      "blob": "4f1788113185161312a5cd416f6a16f57ab1d36a"
+    },
+    {
+      "file": "packages/mcp/app/main.ts",
+      "blob": "5ca99c53dc5c72ed0ec39f7d11e0ba0091054fc8"
+    },
+    {
+      "file": "packages/mcp/app/view.css",
+      "blob": "d39619980fb8353f455f96cbaa03f8c46127b9ed"
+    },
+    {
+      "file": "packages/mcp/package.json",
+      "blob": "17ca65ab3688439c4790ff0cc28be6a4dd563504"
+    },
+    {
+      "file": "packages/mcp/src/server.ts",
+      "blob": "30b42ee4f00d3d06d0adcb53163767c3504607bf"
+    },
+    {
+      "file": "packages/mcp/test/deck-app-browser.mjs",
+      "blob": "f405f5db3cca81061a7769b12ea8c937f97d396d"
+    },
+    {
+      "file": "packages/render/src/export-browser.d.ts",
+      "blob": "a9a87e2baa879968435ff1e4df64db352602e6d8"
+    },
+    {
+      "file": "packages/render/src/export-browser.js",
+      "blob": "166f3f0a2d368b8c5268ea48bd4aeb66ad87bcdc"
+    },
+    {
+      "file": "packages/render/test/export-browser.mjs",
+      "blob": "bd562145b895d680766ebd7010951f1eb9925085"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "blob": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "file": "docs/mcp.md",
+      "blob": "165993176fa479a1fd3b92d8c8a9c18e268092d6"
+    }
+  ],
+  "readmeUnion": {
+    "nativeParagraphExact": true,
+    "browserParagraphExact": true,
+    "initialGuardRefusal": "Looked for the API flag spelling preserveChosenFamilies in prose; prose intentionally describes behavior. Exact leaf-native and main-browser paragraphs both remain."
+  }
 }
