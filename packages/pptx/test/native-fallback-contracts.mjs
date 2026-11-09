@@ -74,11 +74,13 @@ for(const name of ['world-category','all-seven'])for(const mode of ['auto','fall
     const result=await fromPptx(zipSync(entries));assert.equal(result.slides.length,source.slides.length);
     for(const [index,slide] of source.slides.entries()){
       const actual=chartOf(result.slides[index]);assert.ok(actual);
-      const expectedType=mode==='fallback'||slide.chart.type==='world'?'column':slide.chart.type;
+      // RR-105: signed categorical histograms truthfully import their data-preserving column fallback, with or without provenance.
+      const plan=chartDrawPlan(slide.chart,resolveChartData(slide.chart));
+      const negativeHistogram=slide.chart.type==='histogram'&&plan.columns.length>1&&plan.rows.some(row=>row.slice(1).some(value=>typeof value==='number'&&value<0));
+      const expectedType=mode==='fallback'||slide.chart.type==='world'||negativeHistogram?'column':slide.chart.type;
       assert.equal(actual.type,expectedType,`${name}/${mode}/stripped${stripped}/slide${index+1}`);
       // LH-60: a box-and-whisker chart with one value per category is exported as one group (one box per series); its data record
       // restores the authored categories, and without the OPF tags the values come back under the group's name.
-      const plan=chartDrawPlan(slide.chart,resolveChartData(slide.chart));
       const expectedData=stripped&&plan.fallback==='box-per-series'?{...slide.chart.data,rows:plan.rows}:slide.chart.data;
       assert.deepEqual(actual.data,expectedData,`${name}/${mode}/stripped${stripped}: every authored category/series/value survives`);
     }

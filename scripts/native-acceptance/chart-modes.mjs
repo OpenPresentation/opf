@@ -52,18 +52,28 @@ export async function generateChartModes({consumer,output,engines}={}){
       assert.ok(Object.entries(parts).filter(([file])=>/^ppt\/slides\/slide\d+\.xml$/.test(file)).every(([,data])=>!fflate.strFromU8(data).includes('AlternateContent')),id+': no alternate content in fallback');
     }
     const maps=deck.slides.filter((slide,index)=>slide.chart.type==='world'&&plans[index].type==='world').length;
-    const forcedColumns=deck.slides.filter((slide,index)=>slide.chart.type==='pareto'&&slide.chart.data.columns.length>2||slide.chart.type==='world'&&plans[index].type!=='world').length;
+    // RR-105: category aggregation cannot paint signed values; keep every row in classic columns in every mode.
+    const negativeHistograms=new Set(deck.slides.map(({chart},index)=>chart.type==='histogram'&&plans[index].columns.length>1&&plans[index].rows.some(row=>row.slice(1).some(value=>typeof value==='number'&&value<0))?index:null).filter(index=>index!==null));
+    const forcedColumns=deck.slides.filter((slide,index)=>slide.chart.type==='pareto'&&slide.chart.data.columns.length>2||slide.chart.type==='world'&&plans[index].type!=='world'||negativeHistograms.has(index)).length;
     assert.equal(chartExParts.length,mode==='fallback'?0:deck.slides.length-forcedColumns-(mode==='auto'?maps:0),id+': exact current chartEx count');
     assert.ok(!diagnostics.some(issue=>issue.adaptation==='series-dropped'),id+': no dropped series');
     for(const [index,slide] of deck.slides.entries()){
-      const chart=slide.chart,pareto=chart.type==='pareto'&&chart.data.columns.length>2,world=chart.type==='world',box=chart.type==='box-and-whisker'&&chart.data.columns.length>2;
-      if(!pareto&&!world&&!box)continue;
+      const chart=slide.chart,pareto=chart.type==='pareto'&&chart.data.columns.length>2,world=chart.type==='world',box=chart.type==='box-and-whisker'&&chart.data.columns.length>2,negativeHistogram=negativeHistograms.has(index);
+      if(!pareto&&!world&&!box&&!negativeHistogram)continue;
       assert.deepEqual(imported.slides[index].chart.data,chart.data,id+': complete authored data/import mapping');
       // Box fallback deliberately groups samples under its column heading;
       // OPF_DATA separately restores Q1/Q2/Q3, checked above.
       const plotted=box?{columns:chart.data.columns,rows:chart.data.rows.map(row=>[chart.data.columns[0],...row.slice(1)])}:chart.data;
       assertClassicChartData(parts,index+1,plotted,contracts,id);
       if(box&&mode!=='fallback')assertNativeBoxData(parts,plotted,contracts,id);
+      if(negativeHistogram){
+        assert.equal(imported.slides[index].chart.type,'column',id+': signed categorical histogram imports its actual column representation');
+        const notices=diagnostics.filter(issue=>issue.path==='slides.'+index+'.chart'&&issue.code==='chart-data-adapted');
+        assert.equal(notices.length,1,id+': one signed-histogram adaptation');
+        assert.equal(notices[0].adaptation,'chartex-fallback',id+': explicit data-domain fallback');
+        assert.match(notices[0].message,/categorical histogram.*negative/i,id+': truthful limitation');
+        assert.doesNotMatch(notices[0].message,/pass chartex|does not write|not yet accepted/,id+': native is not an override');
+      }
       if(pareto||world&&plans[index].type!=='world'){
         assert.equal(imported.slides[index].chart.type,'column',id+': core column fallback import');
         assert.ok(diagnostics.some(issue=>issue.code==='chart-data-adapted'&&issue.adaptation==='chart-fallback'&&issue.path==='slides.'+index+'.chart'),id+': explicit current column fallback diagnostic');

@@ -10,6 +10,7 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import test from 'node:test';
 import {assertReviewedFallbackArchive,generateChartModes} from './chart-modes.mjs';
+import {installedEngines} from './generate.mjs';
 
 test('source-candidate fallback references retain both published histories and exact theme-only review',async()=>{
   const fixture=JSON.parse(await readFile(new URL('./fixtures/chartex-fallback-main.json',import.meta.url)));
@@ -87,7 +88,14 @@ test('all30 current chart archives retain strict locks, every series/cache/workb
       const pareto=result.cases.find(item=>item.chart==='pareto-multi'&&item.mode===mode);
       assert.equal(pareto.chartExParts,0);assert.deepEqual(pareto.importedChartTypes,['column']);
       assert.deepEqual(pareto.diagnostics.map(issue=>issue.code+'/'+issue.adaptation),['chart-data-adapted/chart-fallback']);
-      assert.equal(result.cases.find(item=>item.chart==='all-seven'&&item.mode===mode).chartExParts,mode==='fallback'?0:6);
+      assert.equal(result.cases.find(item=>item.chart==='all-seven'&&item.mode===mode).chartExParts,mode==='fallback'?0:5);
+    }
+    for(const mode of ['fallback','auto','native']){
+      const signed=result.cases.find(item=>item.chart==='histogram-category'&&item.mode===mode);
+      assert.equal(signed.chartExParts,0);assert.deepEqual(signed.importedChartTypes,['column']);
+      assert.deepEqual(signed.diagnostics.map(issue=>issue.code+'/'+issue.adaptation),['chart-data-adapted/chartex-fallback']);
+      assert.match(signed.diagnostics[0].message,/categorical histogram.*negative/i);
+      assert.doesNotMatch(signed.diagnostics[0].message,/pass chartex|does not write|not yet accepted/);
     }
     const {chartFixture}=await loadChartFixtureSource(),contract={parser,fflate};
     const bytes=await readFile(path.join(scratch,'chart-modes/pareto-multi-native.pptx'));
@@ -122,4 +130,30 @@ test('all30 current chart archives retain strict locks, every series/cache/workb
     boxParts[boxFile]=fflate.strToU8(fflate.strFromU8(boxParts[boxFile]).replace('<cx:pt idx="0">4</cx:pt>','<cx:pt idx="0">400</cx:pt>'));
     assert.throws(()=>assertNativeBoxData(boxParts,plotted,contract,'wrong-native-box'),/native box values/);
   }finally{await rm(scratch,{recursive:true,force:true});}
+});
+
+
+test('native eligibility counterexamples keep nonnegative categories and negative raw observations',async()=>{
+  const consumer=process.env.OPF_NATIVE_FIXTURE_CONSUMER?path.resolve(process.env.OPF_NATIVE_FIXTURE_CONSUMER):fileURLToPath(new URL('../..',import.meta.url));
+  const {pptx,gallery,fflate}=await installedEngines(consumer);
+  const examples=[
+    {name:'nonnegative category values including zero',data:{columns:['Category','Value'],rows:[['A',42],['B',0],['C',19]]},aggregation:true,values:[42,0,19]},
+    {name:'negative raw observations',data:{columns:['Value'],rows:[[-8],[-3],[0],[4],[19]]},aggregation:false,values:[-8,-3,0,4,19]},
+  ];
+  for(const mode of ['auto','native'])for(const item of examples){
+    const diagnostics=[],source={slides:[{chart:{type:'histogram',data:item.data}}]};
+    const bytes=await pptx.toPptx(source,{catalogs:[gallery],chartex:mode,onDiagnostic:issue=>diagnostics.push(issue)});
+    const parts=fflate.unzipSync(bytes),names=Object.keys(parts).filter(file=>/^ppt\/charts\/chartEx\d+\.xml$/.test(file));
+    assert.equal(names.length,1,item.name+': native chart retained in '+mode);
+    const xml=fflate.strFromU8(parts[names[0]]);
+    assert.equal(xml.includes('<cx:aggregation/>'),item.aggregation,item.name+': aggregation identity');
+    assert.equal(xml.includes('<cx:binning '),!item.aggregation,item.name+': raw binning identity');
+    const values=[...xml.matchAll(/<cx:numDim type="val">[\s\S]*?<cx:lvl[^>]*>([\s\S]*?)<\/cx:lvl>/g)].flatMap(([,block])=>[...block.matchAll(/<cx:pt idx="\d+">([^<]*)<\/cx:pt>/g)].map(([,value])=>Number(value)));
+    assert.deepEqual(values,item.values,item.name+': complete native values');
+    const imported=await pptx.fromPptx(bytes,{catalogs:[gallery]});
+    assert.equal(imported.slides.length,1);
+    assert.equal(imported.slides[0].chart.type,'histogram',item.name+': native type preserved');
+    assert.deepEqual(imported.slides[0].chart.data,item.data,item.name+': complete imported values');
+    assert.deepEqual(diagnostics.filter(issue=>issue.code==='chart-data-adapted'),[],item.name+': no guard adaptation');
+  }
 });
