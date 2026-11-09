@@ -1,5 +1,8 @@
 # Release continuation: 2026-11-08
 
+
+Latest coordinator state: [published1216/1217 and Org207, combined local green checks, observer52422 and unchanged holds](coordinator-checkpoint-1217-org207.md). This supersedes older immediate-state/no-observer wording below.
+
 **Start with [CURRENT.md](CURRENT.md)** for the unified status, exact active heads, dependency order and approval boundaries. Dated checkpoints below preserve history and are superseded where CURRENT.md says otherwise.
 
 This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Unified checklist and team](https://github.com/OpenPresentation/opf/issues/1139). The [2026-11-07 working rules](../2026-11-07/working-rules.md) remain binding; this file supersedes their historical status snapshots, not their safety rules.
@@ -276,3 +279,4 @@ The connected Clerk PPTX.dev development instance matches the GitHub preview pub
 This closes the missing test-identity configuration gap; it does not prove signed-in behavior. Actual immutable-preview health, dashboard, sign-out and API-key lifecycle checks remain required. The runtime suite uses the now-existing fixture and must not create users or silently qualify a skipped run.
 
 The coordinator also confirmed the legacy Cloudflare preview workflow had no active uploads and disabled workflow396783060. Its Worker removal is assigned to the sites agent with a fresh exact-resource/dependency check and preservation of R2 storage. This revises the earlier replacement-first timing decision: disabling the old deployer prevents recreation, while verified native Preview qualification still gates the site merge. No Worker deletion is claimed until the provider receipt is verified.
+

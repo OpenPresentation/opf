@@ -1,5 +1,8 @@
 # Current two-release handoff — 2026-11-08
 
+
+Latest coordinator state: [published1216/1217 and Org207, combined local green checks, observer52422 and unchanged holds](coordinator-checkpoint-1217-org207.md). This supersedes older immediate-state/no-observer wording below.
+
 This is the current entry point. Historical checkpoints are preserved in [scope-closure-review/current-before-c973.md](scope-closure-review/current-before-c973.md). The full original scope is [November7 README](../2026-11-07/README.md), its rules/COM/sites inventories and [issue1139](https://github.com/OpenPresentation/opf/issues/1139). Do not shrink the goal to the work already built.
 
 Latest verified continuation: [rollout-prerequisites-and-metadata-fix.md](rollout-prerequisites-and-metadata-fix.md) records merged org202 with actual qualified Preview, blocked production and NEW fix206 with terminal observer94527 and23/24 actual public qualification failure; merged DEV203 and genuine200f18 with ordinary/native-build green but missing-key upload hold; all three published future034 stages; reviewed/published exact metadata ports; and fresh chart proposal6731719486 awaiting explicit agreement. It supersedes older status below; historical receipts remain preserved.
@@ -64,3 +67,4 @@ Use Node24.20.0 at C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/
 Normal merges may reapply sparse patterns and remove hydrated inputs. Before required checks restore exact tracked HEAD blobs with C:/opf-work/release-033-artifacts/restore-tracked-evidence-inputs.mjs <repo> <freshreceipt>, not substitute fixtures. Do not overwrite frozen runtimes or delete evidence. Git metadata/short C:/opf-work operations need routine escalation under this sandbox.
 
 Keep all completed work pushed, decision/veto records current and the full goal intact. Root coordinates source acceptance, serialized providers/Office, final CI and releases; delegated source/roster/qualification agents do not own deployment approval. Source approval is not overall/native/release acceptance.
+
