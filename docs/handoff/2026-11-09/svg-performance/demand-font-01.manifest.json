@@ -1,0 +1,240 @@
+{
+  "format": "opf-node-demand-trial-v1",
+  "runtimeSource": "ed29f47f092aeefbde5fabac26d395f92c6b7823",
+  "sourceHead": "3857ff1bbc467ddb0d0031bc400e159d120b67b9",
+  "sourceTree": "6d43e3c18ffe2a2c7e5cb953dabc3681e456e661",
+  "runtimeTree": "6d6d7703b4a6b56b63565dc7cfb83bdff320b829",
+  "base": "706c9c6faa93542f59684cf9c7afe7bfc727c2a3",
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "process": {
+    "session": 57278,
+    "exitCode": 0,
+    "started": "2026-11-09T21:53:32.145Z",
+    "finished": "2026-11-09T21:54:22.247Z"
+  },
+  "archive": {
+    "file": "demand-font-01.raw.json.gz",
+    "size": 102118,
+    "sha256": "1470fa8ce1d23d0f6fc146e36a3ea0d8fec809d2a4c0b5a31b8acfbc3d1a1bf0",
+    "rawBytes": 713581,
+    "members": 31,
+    "decodedBytes": 531971
+  },
+  "entries": [
+    {
+      "name": "results/01-16-whole.json",
+      "size": 37818,
+      "sha256": "690abcf637ece35b4ef48f35fff988117c51db3d3c3f3c876b284fca40676780"
+    },
+    {
+      "name": "results/01-16-whole.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/01-16-whole.stdout",
+      "size": 309,
+      "sha256": "09b3dd362dfc2d37f6d3f2a50ee03598d476ff8015c5b38341a7d981256329af"
+    },
+    {
+      "name": "results/02-16-demand.json",
+      "size": 26472,
+      "sha256": "332c4ef3d8581499b4e3e4d5788d0abc9ca836c26d6f41eaf65119eb95944694"
+    },
+    {
+      "name": "results/02-16-demand.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/02-16-demand.stdout",
+      "size": 311,
+      "sha256": "a7d511f9fa4ce0f505160b60ee98f77f60f56c9a32318460525c18baaf9c93eb"
+    },
+    {
+      "name": "results/03-36-whole.json",
+      "size": 63625,
+      "sha256": "e796152caa9e2f27825c0170043d34561ba0e62462e506ab42a6ae810867e4fa"
+    },
+    {
+      "name": "results/03-36-whole.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/03-36-whole.stdout",
+      "size": 319,
+      "sha256": "156ae00d9278034f2a9551fd82bebf638a253d363fc774dd911b87847cb4ec60"
+    },
+    {
+      "name": "results/04-36-demand.json",
+      "size": 52297,
+      "sha256": "4871b6af873ba8e28e30209f9e3a1229733dd9b5a9c422e3bf5ac31e13905a0a"
+    },
+    {
+      "name": "results/04-36-demand.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/04-36-demand.stdout",
+      "size": 321,
+      "sha256": "8a83faab0a286888cfbb8e40fa36fc7531eea687323663268ff1c236ce103614"
+    },
+    {
+      "name": "results/05-36-demand.json",
+      "size": 52285,
+      "sha256": "ee0f43f00aae7bcf2ad573fe944bc9879524efea4b13882d63301abaddcced90"
+    },
+    {
+      "name": "results/05-36-demand.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/05-36-demand.stdout",
+      "size": 321,
+      "sha256": "4c79448f992db098fa9c2f7b44765dea43d0cd7afa79159c80c0ebc854f285bb"
+    },
+    {
+      "name": "results/06-36-whole.json",
+      "size": 63605,
+      "sha256": "08b3e0460b3d243950234cc48af6ed7d8d35cac9e609ebab275a5726f3f9ee75"
+    },
+    {
+      "name": "results/06-36-whole.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/06-36-whole.stdout",
+      "size": 329,
+      "sha256": "a55d12e16afd5302e5feb9a71a5af2b3aee75ac62e039945d01b4b9a32850050"
+    },
+    {
+      "name": "results/07-16-demand.json",
+      "size": 26483,
+      "sha256": "0557f069952b79f2e0ebad047d1072a1120d424eaab3b8acfd4ddc9ff09f3f1d"
+    },
+    {
+      "name": "results/07-16-demand.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/07-16-demand.stdout",
+      "size": 310,
+      "sha256": "735c2a238d67979b88e0e2db74dc006344fd42c34e33559e12a1f9ccee16326d"
+    },
+    {
+      "name": "results/08-16-whole.json",
+      "size": 37791,
+      "sha256": "1fecf2e7b50c5bc64c6c5717d606cfee9352f36d9c69f24ec71e17969ae7454a"
+    },
+    {
+      "name": "results/08-16-whole.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/08-16-whole.stdout",
+      "size": 300,
+      "sha256": "f81def43f99aedaa00f521c889002c344a6c7ad2e2b025c11a4ce4749e31444f"
+    },
+    {
+      "name": "results/summary.json",
+      "size": 9711,
+      "sha256": "cefbacffb82ba52ac90cbde3fb0f784251e031f69f49cad100f630e0105fdf3f"
+    },
+    {
+      "name": "demand-font-case.mjs",
+      "size": 5928,
+      "sha256": "8dcf1863803287028ca1d42671d5d43bd409ea39f80757c8459f667ccd80b757"
+    },
+    {
+      "name": "run-demand-font-trial.mjs",
+      "size": 4401,
+      "sha256": "bc77fd7e0b5d53ba691f0ee148e51a97a48ca0da97225238f9aa6e6eb8b284fd"
+    },
+    {
+      "name": "process.log",
+      "size": 1198,
+      "sha256": "79a818894f536327fead322ae672310ffc795cc8036443c9902b608960f25cdb"
+    },
+    {
+      "name": "process-exit.json",
+      "size": 165,
+      "sha256": "76598c692e3d92c7773e4b36ef1ce2131c311824d83bdb1074cab5f07304fd52"
+    },
+    {
+      "name": "inputs/original-16.opf.json",
+      "size": 48696,
+      "sha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29"
+    },
+    {
+      "name": "inputs/extended-36.opf.json",
+      "size": 98976,
+      "sha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "path": "packages/render/src/font-manifest.js",
+      "base": "57fedfb66d411169a2ca0c07a8c6a338f9d3a8ea",
+      "source": "57fedfb66d411169a2ca0c07a8c6a338f9d3a8ea"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "base": "3432ab613e493c84d6eea74cb68d30be08720102",
+      "source": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "base": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+      "source": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "path": "packages/render/package.json",
+      "base": "07ad8b819a6897bf4d7881fda22917ad98deeb4f",
+      "source": "07ad8b819a6897bf4d7881fda22917ad98deeb4f"
+    }
+  ],
+  "modules": [
+    {
+      "file": "fonts-node.js",
+      "bytes": 26063,
+      "sha256": "e57fc27f3f3727ab601118b0a0279913b5b7e11d98ec35853d12b7e56cbeeed4"
+    },
+    {
+      "file": "font-demand.js",
+      "bytes": 19748,
+      "sha256": "d0a22840d1c61dea0272306862fbf2039f5f0466e469d43637c8b9871e40d0e9"
+    },
+    {
+      "file": "font-registry.js",
+      "bytes": 34237,
+      "sha256": "63041d9ce5e4aed51726e53bdf2d4624e29d256a903c2ada7eb5a0c63399544a"
+    },
+    {
+      "file": "font-selection.js",
+      "bytes": 309,
+      "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27"
+    },
+    {
+      "file": "font-selection-metadata.js",
+      "bytes": 809,
+      "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da"
+    },
+    {
+      "file": "lazy-fonts.js",
+      "bytes": 24553,
+      "sha256": "df49a2f1f836b195e2601c1b0789f76ead0284aa7078753a1445c70ac3f4c2cf"
+    },
+    {
+      "file": "script-fonts.js",
+      "bytes": 52019,
+      "sha256": "d09a8f9ee1c753c1dcec1cec8e762a9722580bc5925eb3da1b68202c60c04eb4"
+    }
+  ]
+}

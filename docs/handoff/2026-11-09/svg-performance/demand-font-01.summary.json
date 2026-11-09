@@ -1,0 +1,361 @@
+{
+  "schema": 1,
+  "started": "2026-11-09T21:53:32.145Z",
+  "status": "PASS",
+  "runtimeSource": "3857ff1bbc467ddb0d0031bc400e159d120b67b9",
+  "runtimeTree": "6d43e3c18ffe2a2c7e5cb953dabc3681e456e661",
+  "childSha256": "8dcf1863803287028ca1d42671d5d43bd409ea39f80757c8459f667ccd80b757",
+  "moduleReceipts": [
+    {
+      "file": "fonts-node.js",
+      "bytes": 26063,
+      "sha256": "e57fc27f3f3727ab601118b0a0279913b5b7e11d98ec35853d12b7e56cbeeed4"
+    },
+    {
+      "file": "font-demand.js",
+      "bytes": 19748,
+      "sha256": "d0a22840d1c61dea0272306862fbf2039f5f0466e469d43637c8b9871e40d0e9"
+    },
+    {
+      "file": "font-registry.js",
+      "bytes": 34237,
+      "sha256": "63041d9ce5e4aed51726e53bdf2d4624e29d256a903c2ada7eb5a0c63399544a"
+    },
+    {
+      "file": "font-selection.js",
+      "bytes": 309,
+      "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27"
+    },
+    {
+      "file": "font-selection-metadata.js",
+      "bytes": 809,
+      "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da"
+    },
+    {
+      "file": "lazy-fonts.js",
+      "bytes": 24553,
+      "sha256": "df49a2f1f836b195e2601c1b0789f76ead0284aa7078753a1445c70ac3f4c2cf"
+    },
+    {
+      "file": "script-fonts.js",
+      "bytes": 52019,
+      "sha256": "d09a8f9ee1c753c1dcec1cec8e762a9722580bc5925eb3da1b68202c60c04eb4"
+    }
+  ],
+  "protocol": "Explicit all-team quiet window; eight fresh Node24 children in mirrored16/36 whole/demand order; same reviewed candidate runtime and input bytes; first render plus two warm; standalone SVG byte hashes compared across both modes. Historical whole-pack path omits presentation then ensures the deck; demand supplies presentation/scripts:auto. Compression, hashing and GC remain outside render timing. Whole-process RSS is not isolated font-only allocation.",
+  "rows": [
+    {
+      "order": 1,
+      "size": 16,
+      "variant": "whole",
+      "started": "2026-11-09T21:53:32.211Z",
+      "finished": "2026-11-09T21:53:37.028Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "fontMs": 267.0902,
+      "fontCpuMs": {
+        "user": 296,
+        "system": 156
+      },
+      "faceCount": 131,
+      "setupMemory": {
+        "rss": 282386432,
+        "heapTotal": 203567104,
+        "heapUsed": 37419432,
+        "external": 150747327,
+        "arrayBuffers": 75959296,
+        "peakRssBytes": 282685440
+      },
+      "firstRenderMs": 2048.5215,
+      "warmMedianMs": 1049.2698499999997,
+      "warmCpuMs": [
+        1203,
+        1125
+      ],
+      "renderPeakRssBytes": 504451072,
+      "finalMemory": {
+        "rss": 422076416,
+        "heapTotal": 244690944,
+        "heapUsed": 100766760,
+        "external": 157284968,
+        "arrayBuffers": 76991090,
+        "peakRssBytes": 504451072
+      }
+    },
+    {
+      "order": 2,
+      "size": 16,
+      "variant": "demand",
+      "started": "2026-11-09T21:53:37.030Z",
+      "finished": "2026-11-09T21:53:41.202Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "fontMs": 1067.7625,
+      "fontCpuMs": {
+        "user": 1515,
+        "system": 281
+      },
+      "faceCount": 3,
+      "setupMemory": {
+        "rss": 203821056,
+        "heapTotal": 123187200,
+        "heapUsed": 49976936,
+        "external": 77647327,
+        "arrayBuffers": 2859504,
+        "peakRssBytes": 210227200
+      },
+      "firstRenderMs": 1027.1884000000002,
+      "warmMedianMs": 841.99215,
+      "warmCpuMs": [
+        985,
+        922
+      ],
+      "renderPeakRssBytes": 320442368,
+      "finalMemory": {
+        "rss": 284884992,
+        "heapTotal": 201773056,
+        "heapUsed": 58167776,
+        "external": 84184721,
+        "arrayBuffers": 3891298,
+        "peakRssBytes": 320442368
+      }
+    },
+    {
+      "order": 3,
+      "size": 36,
+      "variant": "whole",
+      "started": "2026-11-09T21:53:41.203Z",
+      "finished": "2026-11-09T21:53:49.379Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "fontMs": 290.1226,
+      "fontCpuMs": {
+        "user": 359,
+        "system": 93
+      },
+      "faceCount": 131,
+      "setupMemory": {
+        "rss": 282628096,
+        "heapTotal": 204091392,
+        "heapUsed": 37721904,
+        "external": 150797607,
+        "arrayBuffers": 76009576,
+        "peakRssBytes": 282886144
+      },
+      "firstRenderMs": 3190.6279000000004,
+      "warmMedianMs": 2114.6036999999997,
+      "warmCpuMs": [
+        2407,
+        2235
+      ],
+      "renderPeakRssBytes": 510955520,
+      "finalMemory": {
+        "rss": 426897408,
+        "heapTotal": 257249280,
+        "heapUsed": 104655664,
+        "external": 164053542,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 510955520
+      }
+    },
+    {
+      "order": 4,
+      "size": 36,
+      "variant": "demand",
+      "started": "2026-11-09T21:53:49.380Z",
+      "finished": "2026-11-09T21:53:57.281Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "fontMs": 2133.4848,
+      "fontCpuMs": {
+        "user": 3000,
+        "system": 359
+      },
+      "faceCount": 3,
+      "setupMemory": {
+        "rss": 280367104,
+        "heapTotal": 190296064,
+        "heapUsed": 51576432,
+        "external": 77699063,
+        "arrayBuffers": 2910200,
+        "peakRssBytes": 284962816
+      },
+      "firstRenderMs": 1946.0410000000002,
+      "warmMedianMs": 1682.7966999999994,
+      "warmCpuMs": [
+        1985,
+        1765
+      ],
+      "renderPeakRssBytes": 340107264,
+      "finalMemory": {
+        "rss": 302817280,
+        "heapTotal": 211972096,
+        "heapUsed": 62178968,
+        "external": 90953750,
+        "arrayBuffers": 9070065,
+        "peakRssBytes": 340107264
+      }
+    },
+    {
+      "order": 5,
+      "size": 36,
+      "variant": "demand",
+      "started": "2026-11-09T21:53:57.282Z",
+      "finished": "2026-11-09T21:54:04.963Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "fontMs": 1960.1395,
+      "fontCpuMs": {
+        "user": 2688,
+        "system": 156
+      },
+      "faceCount": 3,
+      "setupMemory": {
+        "rss": 277405696,
+        "heapTotal": 190820352,
+        "heapUsed": 51576240,
+        "external": 77699063,
+        "arrayBuffers": 2909784,
+        "peakRssBytes": 285331456
+      },
+      "firstRenderMs": 1879.7601999999997,
+      "warmMedianMs": 1695.3505499999997,
+      "warmCpuMs": [
+        1952,
+        1828
+      ],
+      "renderPeakRssBytes": 338735104,
+      "finalMemory": {
+        "rss": 297463808,
+        "heapTotal": 211447808,
+        "heapUsed": 62181112,
+        "external": 90953750,
+        "arrayBuffers": 5171207,
+        "peakRssBytes": 338735104
+      }
+    },
+    {
+      "order": 6,
+      "size": 36,
+      "variant": "whole",
+      "started": "2026-11-09T21:54:04.964Z",
+      "finished": "2026-11-09T21:54:13.181Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "fontMs": 292.26739999999995,
+      "fontCpuMs": {
+        "user": 468,
+        "system": 94
+      },
+      "faceCount": 131,
+      "setupMemory": {
+        "rss": 281407488,
+        "heapTotal": 205664256,
+        "heapUsed": 37723712,
+        "external": 150797399,
+        "arrayBuffers": 76009576,
+        "peakRssBytes": 281595904
+      },
+      "firstRenderMs": 3200.5995000000003,
+      "warmMedianMs": 2132.9462000000003,
+      "warmCpuMs": [
+        2437,
+        2407
+      ],
+      "renderPeakRssBytes": 512040960,
+      "finalMemory": {
+        "rss": 425058304,
+        "heapTotal": 256462848,
+        "heapUsed": 104642936,
+        "external": 164053542,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 512040960
+      }
+    },
+    {
+      "order": 7,
+      "size": 16,
+      "variant": "demand",
+      "started": "2026-11-09T21:54:13.183Z",
+      "finished": "2026-11-09T21:54:17.360Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "fontMs": 1058.5647,
+      "fontCpuMs": {
+        "user": 1422,
+        "system": 203
+      },
+      "faceCount": 3,
+      "setupMemory": {
+        "rss": 204828672,
+        "heapTotal": 123187200,
+        "heapUsed": 49983488,
+        "external": 77202933,
+        "arrayBuffers": 2859504,
+        "peakRssBytes": 210423808
+      },
+      "firstRenderMs": 1043.6612,
+      "warmMedianMs": 843.8461500000001,
+      "warmCpuMs": [
+        969,
+        906
+      ],
+      "renderPeakRssBytes": 319864832,
+      "finalMemory": {
+        "rss": 284004352,
+        "heapTotal": 201248768,
+        "heapUsed": 58166432,
+        "external": 84184935,
+        "arrayBuffers": 3891298,
+        "peakRssBytes": 319864832
+      }
+    },
+    {
+      "order": 8,
+      "size": 16,
+      "variant": "whole",
+      "started": "2026-11-09T21:54:17.361Z",
+      "finished": "2026-11-09T21:54:22.245Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "fontMs": 267.3512,
+      "fontCpuMs": {
+        "user": 360,
+        "system": 47
+      },
+      "faceCount": 131,
+      "setupMemory": {
+        "rss": 283811840,
+        "heapTotal": 200683520,
+        "heapUsed": 37420072,
+        "external": 150302725,
+        "arrayBuffers": 75959296,
+        "peakRssBytes": 283811840
+      },
+      "firstRenderMs": 2048.2277,
+      "warmMedianMs": 1078.2919,
+      "warmCpuMs": [
+        1297,
+        1156
+      ],
+      "renderPeakRssBytes": 500731904,
+      "finalMemory": {
+        "rss": 423964672,
+        "heapTotal": 244166656,
+        "heapUsed": 100767320,
+        "external": 157284968,
+        "arrayBuffers": 76991090,
+        "peakRssBytes": 500731904
+      }
+    }
+  ],
+  "finished": "2026-11-09T21:54:22.247Z"
+}
