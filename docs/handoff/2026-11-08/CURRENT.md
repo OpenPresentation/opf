@@ -2,7 +2,7 @@
 
 This is the current entry point. Historical checkpoints are preserved in [scope-closure-review/current-before-c973.md](scope-closure-review/current-before-c973.md). The full original scope is [November7 README](../2026-11-07/README.md), its rules/COM/sites inventories and [issue1139](https://github.com/OpenPresentation/opf/issues/1139). Do not shrink the goal to the work already built.
 
-Latest verified continuation: [site-final-heads.md](site-final-heads.md) records the two final pushed heads, source/evidence review and sole current observer53224. [Previous source/public-gallery checkpoint](site-qualification-followup.md) preserves the verified gallery033 rollout and earlier chronology. The latest checkpoint supersedes older preparation wording below.
+Latest verified continuation: [sites-staging-034.md](sites-staging-034.md) records merged DEV203, genuine DEV200f18 with sole observer22654, merged org202b0c05e2c with exact46/46 hosted plus Windows phase1/1 qualification and retained timing failures, pushed/reviewed gallery034 staging and folded Diagram documentation. Org production/public verification remains owed. It supersedes older status below; historical receipts remain preserved.
 
 ## Release and assembly
 
