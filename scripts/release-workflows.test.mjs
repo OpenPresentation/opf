@@ -40,7 +40,7 @@ const needsOf = (entry) => {
 };
 const jobsWith = (text, pattern) => jobsOf(text).filter((entry) => pattern.test(entry.text)).map((entry) => entry.id);
 
-test('the six packages: the script and the workspace agree, and the publisher workflow the verifier expects exists', () => {
+test('the published packages: the script and the workspace agree, and the publisher workflow the verifier expects exists', () => {
   assert.deepEqual([...NAMES].sort(), PUBLISHED.map(({ name }) => name).sort());
   assert.deepEqual(PACKAGES.map(({ dir }) => dir).sort(), PUBLISHED.map(({ dir }) => dir).sort());
   assert.equal(PUBLISH_WORKFLOW, '.github/workflows/npm-publish.yml');
@@ -127,6 +127,21 @@ test('npm-publish.yml: verify checks the registry against this commit and waits 
   assert.match(entry, /--verify-tag/u);
   assert.match(entry, /--prerelease/u);
   assert.match(entry, /release\.mjs notes "\$VERSION"/u);
+});
+
+test('npm-publish.yml: builds and checks a full MCP bundle, retains exactly its versioned assets, and attaches after registry verification', () => {
+  const build = job(publish, 'build').text;
+  const releaseJob = job(publish, 'release').text;
+  assert.ok(build.indexOf('run: pnpm build') < build.indexOf('run build:mcpb --check'));
+  assert.match(build, /pnpm --filter @openpresentation\/mcp run build:mcpb --check/u);
+  assert.doesNotMatch(build, /--no-script-fonts/u, 'the public bundle carries all pinned script fonts');
+  assert.match(build, /release-mcpb\.mjs checksum "\$VERSION" --dir packages\/mcp\/artifacts/u);
+  assert.match(build, /name: mcpb\n {10}path: \|\n {12}packages\/mcp\/artifacts\/opf-\$\{\{ needs\.plan\.outputs\.version \}\}\.mcpb\n {12}packages\/mcp\/artifacts\/opf-\$\{\{ needs\.plan\.outputs\.version \}\}\.mcpb\.sha256/u);
+  assert.ok(needsOf(job(publish, 'release')).includes('verify'));
+  assert.match(releaseJob, /name: mcpb\n {10}path: \$\{\{ runner\.temp \}\}\/mcpb/u);
+  assert.match(releaseJob, /release-mcpb\.mjs attach "\$VERSION" --dir "\$RUNNER_TEMP\/mcpb"/u);
+  assert.doesNotMatch(releaseJob, /exit 0|release edit|--clobber/u, 'existing notes survive and a retry still repairs missing assets');
+  assert.ok(releaseJob.indexOf('gh release create') < releaseJob.indexOf('release-mcpb.mjs attach'));
 });
 
 test('every action is pinned to a full commit SHA', () => {
@@ -223,4 +238,108 @@ test('every release.mjs command the workflows call exists, and the workflows nam
 test('the first publish of the gallery below its own 5.0.0 is covered: the tag is explicit and the gate compares with the shared line', () => {
   assert.match(releaseScript, /'--tag', tag/u);
   assert.match(releaseScript, /name === GALLERY \? previous : latest\[name\]/u);
+});
+
+// Current runbook quantities describe the publisher roster, not the six authoring skills or historical format limits.
+const countWords = new Map(
+  [
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+    'ten',
+    'eleven',
+    'twelve',
+  ].map((word, index) => [word, index]),
+);
+function releaseRosterErrors(text, count) {
+  const errors = [];
+  for (const match of text.matchAll(
+    /\b(all|other)\s+(\d+|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(?:published\s+)?(packages|manifests|uploads)\b/giu,
+  )) {
+    const actual = countWords.get(match[2].toLowerCase()) ?? Number(match[2]),
+      expected = count - (match[1].toLowerCase() === 'other' ? 1 : 0);
+    if (actual !== expected) errors.push({ claim: match[0], actual, expected });
+  }
+  for (const match of text.matchAll(
+    /\bregistry\s+serves\s+all\s+(\d+|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b/giu,
+  )) {
+    const actual = countWords.get(match[1].toLowerCase()) ?? Number(match[1]);
+    if (actual !== count)
+      errors.push({ claim: match[0], actual, expected: count });
+  }
+  return errors;
+}
+const currentReleaseInstructions = [
+  ['AGENTS.md', '## Releases'],
+  ['packages/render/AGENTS.md', null],
+  ['docs/release-process.md', null],
+  ['packages/render/README.md', '## Release Lane'],
+  ['packages/pptx/README.md', '## Release Lane'],
+  ['packages/editor/README.md', '## Release Lane'],
+];
+for (const [file, heading] of currentReleaseInstructions)
+  test(`current release instructions match publisher roster: ${file}`, () => {
+    const text = read(file),
+      start = heading ? text.indexOf(heading) : 0;
+    assert.ok(start >= 0, `${file} release section exists`);
+    const tail = text.slice(start),
+      end = heading ? tail.indexOf('\n## ', heading.length) : -1,
+      section = end < 0 ? tail : tail.slice(0, end);
+    assert.deepEqual(
+      releaseRosterErrors(section, NAMES.length),
+      [],
+      `${file} current package/manifests/registry quantities`,
+    );
+  });
+test('current release roster enumeration includes every authoritative published npm name', () => {
+  for (const [file, section] of [
+    [
+      'docs/release-process.md',
+      read('docs/release-process.md').split('\n## Release:')[0],
+    ],
+    [
+      'packages/render/README.md',
+      read('packages/render/README.md')
+        .split('## Release Lane')[1]
+        .split('\n## ')[0],
+    ],
+  ]) {
+    const named = [
+      ...new Set(section.match(/@openpresentation\/[a-z-]+/gu)),
+    ].sort();
+    assert.deepEqual(
+      named,
+      [...NAMES].sort(),
+      `${file} release roster names match the publisher`,
+    );
+  }
+});
+test('release quantity guard distinguishes the package roster, its other members and unrelated counts', () => {
+  assert.deepEqual(
+    releaseRosterErrors(
+      `All ${NAMES.length} packages; other ${NAMES.length - 1} packages; all ${NAMES.length} manifests; registry serves all ${NAMES.length}`,
+      NAMES.length,
+    ),
+    [],
+  );
+  assert.ok(
+    releaseRosterErrors(`all ${NAMES.length - 1} uploads`, NAMES.length).length,
+  );
+  assert.ok(
+    releaseRosterErrors(`other ${NAMES.length} packages`, NAMES.length).length,
+  );
+  assert.deepEqual(
+    releaseRosterErrors(
+      'all six skills; six historical WebP cases',
+      NAMES.length,
+    ),
+    [],
+  );
 });

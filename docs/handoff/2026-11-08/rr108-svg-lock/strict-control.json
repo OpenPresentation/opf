@@ -1,0 +1,10 @@
+{
+  "node": "v24.20.0",
+  "status": 1,
+  "expectedFailure": "Exact original two digest changes remain rejected until pinned golden generation; no fixture values were refreshed",
+  "types": [
+    "pie",
+    "doughnut"
+  ],
+  "strictComparisonPreserved": true
+}

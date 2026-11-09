@@ -1,0 +1,184 @@
+{
+  "name": "Observed E1 chart report boundaries",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "title": "Signal Trend",
+      "composition": {
+        "mode": "auto"
+      },
+      "blocks": [
+        {
+          "chart": {
+            "type": "radar",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Current",
+                "Baseline"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  28,
+                  25
+                ],
+                [
+                  "Q2",
+                  32,
+                  27
+                ],
+                [
+                  "Q3",
+                  35,
+                  29
+                ],
+                [
+                  "Q4",
+                  39,
+                  31
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "waterfall",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Current",
+                "Baseline"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  20,
+                  17
+                ],
+                [
+                  "Q2",
+                  24,
+                  19
+                ],
+                [
+                  "Q3",
+                  27,
+                  21
+                ],
+                [
+                  "Q4",
+                  31,
+                  23
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "id": "s13"
+    },
+    {
+      "title": "Execution Timeline",
+      "composition": {
+        "mode": "grid"
+      },
+      "blocks": [
+        {
+          "chart": {
+            "type": "funnel",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Current",
+                "Baseline"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  25,
+                  22
+                ],
+                [
+                  "Q2",
+                  29,
+                  24
+                ],
+                [
+                  "Q3",
+                  32,
+                  26
+                ],
+                [
+                  "Q4",
+                  36,
+                  28
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "metric": {
+            "value": "6.2",
+            "unit": "min",
+            "label": "Median task time",
+            "description": "Down from 9.4 min"
+          }
+        },
+        {
+          "quote": {
+            "text": "Teams already know where the friction is; the deck makes the sequence of choices explicit.",
+            "attribution": "Program sponsor",
+            "source": "Planning interview"
+          }
+        }
+      ],
+      "id": "s07"
+    },
+    {
+      "layout": "dashboard",
+      "title": "Signal Trend",
+      "blocks": [
+        {
+          "chart": {
+            "type": "pareto",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Current",
+                "Baseline"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  26,
+                  23
+                ],
+                [
+                  "Q2",
+                  30,
+                  25
+                ],
+                [
+                  "Q3",
+                  33,
+                  27
+                ],
+                [
+                  "Q4",
+                  37,
+                  29
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "id": "s36"
+    }
+  ]
+}

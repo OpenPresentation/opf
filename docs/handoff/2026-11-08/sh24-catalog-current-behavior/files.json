@@ -1,0 +1,47 @@
+{
+  "format": 1,
+  "artifacts": [
+    {
+      "file": "sh24-catalog-copy-install-01.log.gz",
+      "rawBytes": 4438,
+      "rawSha256": "1ef4a53abfd281b3ba563ca4757733fbc680b0e79c92f074f6c7d98f417e2317",
+      "storedBytes": 578,
+      "storedSha256": "66cf86887d7e643cf9019b257e58996a8c32c5cf58716de88094db638ce12ac7"
+    },
+    {
+      "file": "sh24-catalog-copy-mapped-01.log.gz",
+      "rawBytes": 9086,
+      "rawSha256": "9820b78bdb9387b4c882ac6ea92aea4c53bd92e7fa356b05ef3ca2fc2767bf83",
+      "storedBytes": 1714,
+      "storedSha256": "28fb1817cc55a7532c4edb639ff9c36dc950ce1e1701eceed83ceaabe53bcdb7"
+    },
+    {
+      "file": "sh24-catalog-copy-mapped-01.log.exit.json.gz",
+      "rawBytes": 230,
+      "rawSha256": "9c5deb5db64b406d9247572a6c096a60d4fd86513c54b705ad714b1e94f18e38",
+      "storedBytes": 178,
+      "storedSha256": "24fed4d43ed7c9920c527d0f55ff7b17c3987b077d7fc5782af653433701010a"
+    },
+    {
+      "file": "sh24-catalog-copy-rehash-01.log.gz",
+      "rawBytes": 56,
+      "rawSha256": "3cf7d5547657b7a2a41925a0a79a6f4a4de5c8dc292cfa5506038bca95fd2d71",
+      "storedBytes": 67,
+      "storedSha256": "403c01925004fd65117a23759f2b5070931da2d2d468c987e288fac981f83e9f"
+    },
+    {
+      "file": "sh24-catalog-copy-mapped-02.log.gz",
+      "rawBytes": 1768,
+      "rawSha256": "74f0d5233f8446ff6affef8166529e6d9bca2fa16b2ac8970a8bf6cd25b4d851",
+      "storedBytes": 579,
+      "storedSha256": "be68c31b120a61f3d7de0b72a5a76b9e5f7c8167b09effe8cae0ed6a64fdbe80"
+    },
+    {
+      "file": "sh24-catalog-copy-mapped-02.log.exit.json.gz",
+      "rawBytes": 230,
+      "rawSha256": "71a25f3bfa13e3bdc61c23ffa030a14174e9f8a9e06ecd220364cdc2eb1a16bf",
+      "storedBytes": 176,
+      "storedSha256": "dbaaa0ee11830ae584fd5c5de971cae2e02db765c4f6a953ab5bd693782e1d9d"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+Native style/font descriptor harness controls: Windows AST-only validation and object mocks PASS; no Office.
+✔ packages\pptx\test\native-furniture-style-controls.mjs (1979.2419ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1984.0085

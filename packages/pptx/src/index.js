@@ -1,5 +1,5 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
-import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, planNativeBody} from './native-body.js';
+import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, nativeTitleWrapBox, planNativeBody} from './native-body.js';
 import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './numbered-list.js';
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
@@ -21,6 +21,7 @@ import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direc
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
 import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
+import {importSmartArtShapes} from './smart-art-import.js';
 import {addIcons,attachIconTags,importIconShapes,restoreIcons} from './icons.js';
 import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
@@ -33,14 +34,16 @@ import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations}
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
+import {attachNativeLanguageTags,nativeLanguageReadView,onlyNativeLanguageTags} from './native-language-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
+import {attachImageCalloutTags,importImageCallouts} from './image-callout-provenance.js';
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, staticDateFallback, stampFurnitureImageKeys} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordOverlays, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -60,17 +63,17 @@ import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
 import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
 import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
-import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
+import {languageDiagnostics, leftToRightPieces, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagramGroups, importDiagrams, tagDiagrams } from './diagram-provenance.js';
-import { diagramShapes, writeDiagramGroups } from './diagram-shapes.js';
+import { DIAGRAM_BASELINE_SHARE, DIAGRAM_MIN_PITCH, diagramShapes, writeDiagramGroups } from './diagram-shapes.js';
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -332,6 +335,7 @@ export async function toPptx(input, options = {}) {
   // opf-pptx#221: the placeholder panels written as one native group, and the OPF_IMAGE_PLACEHOLDER_V1 records of image blocks.
   context.imagePlaceholderGroups = new Set();
   context.imagePlaceholderTags = new Map();
+  context.imageCalloutTags = new Map();
   context.tableHeaders = new Map();
   context.tableCells = new Map();
   // FA-23: every exported image picture (image blocks, the alt-text form of an image background, timeline pictures) and
@@ -413,7 +417,8 @@ export async function toPptx(input, options = {}) {
   context.imageFormat = options.imageFormat ?? "compatible";
   // Chartex export mode (FF-22b): 'auto' (default) writes native chartex parts for the constructs the native PowerPoint
   // check confirmed (treemap, histogram, pareto, box-and-whisker, waterfall, funnel) and the clustered column fallback
-  // for the unconfirmed map; 'native' writes every chartex part; 'fallback' writes clustered columns only.
+  // for the unconfirmed map; 'native' writes every supported chartex part; 'fallback' writes clustered columns only.
+  // Data-domain fallbacks still apply in every mode (negative categorical histograms and core's multi-series Pareto).
   if (options.chartex !== undefined && !['auto', 'native', 'fallback'].includes(options.chartex)) {
     throw new OPFPptxError('invalid-chartex-mode', 'chartex must be auto, native or fallback.', {path: 'options.chartex'});
   }
@@ -536,8 +541,14 @@ export async function fromPptx(input, options = {}) {
   const languageThemePath = presentationThemePath(presentationRoot, presentationRels, path => parseRelationships(entries, path), entries);
   // opf-pptx#168: each slide's theme, through its layout and master (several masters carry per-slide script fonts).
   const relatedPart = (path, type) => path ? [...parseRelationships(entries, path).values()].find(rel => rel.type?.endsWith(`/${type}`) && rel.path && entries[rel.path])?.path : undefined;
+  // Preserve the legacy package-level inline-code font gate; language votes use
+  // the independently validated current-slide ownership below.
+  const hasOpfTags = Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path));
+  const ownedSlides = opfSlideOwnership(entries, slidePaths);
+  const nativeLanguages = nativeLanguageReadView(entries, parseRelationships, options.onDiagnostic);
   const observedLanguage = observeLanguage({
-    slides: slidePaths.map(path => decodeText(entries[path])),
+    preferBaseRuns: ownedSlides,
+    slides: slidePaths.map(path => decodeText(nativeLanguages.get(path) ?? entries[path])),
     theme: languageThemePath && entries[languageThemePath] ? decodeText(entries[languageThemePath]) : null,
     themePath: languageThemePath,
     slideThemes: slidePaths.map(path => {
@@ -623,10 +634,13 @@ export async function fromPptx(input, options = {}) {
   const datasets = readDatasetsTag(entries, presentationRoot, presentationRels, options.onDiagnostic);
   const mediaRegistry = Object.create(null);
   // SH-05: shape readers are synchronous; the preset geometry they read (SH-01) loads here, when a slide has a shape other than a rectangle.
-  if (slidePaths.some(path => /<a:prstGeom\s+prst="(?!rect")|<a:custGeom\b/.test(decodeText(entries[path])))) await loadShapeGeometry();
+  // SH-08: a SmartArt's drawing (ppt/diagrams/drawingN.xml) is read as shapes when its layout has no OPF form.
+  if (slidePaths.some(path => /<a:prstGeom\s+prst="(?!rect")|<a:custGeom\b/.test(decodeText(entries[path]))) || Object.keys(entries).some(path => /^ppt\/diagrams\/drawing\d+\.xml$/.test(path))) await loadShapeGeometry();
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage), deckLang: observedLanguage.lang, codeFamily: Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path)) ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    const slideLanguage = observedLanguage.slides?.[index] ?? observedLanguage;
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, nativeLanguages, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: hasOpfTags ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    if (slideLanguage.language !== undefined && slideLanguage.language !== observedLanguage.language) imported.slides[index].language = slideLanguage.language;
   }
   if (datasets) imported.datasets = datasets;
   // A watermark carried identically by every slide is the deck's design.watermark.
@@ -698,8 +712,8 @@ export async function fromPptx(input, options = {}) {
   restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
   restoreLogoFallback(imported, furnitureContexts);
   // The overlay joins its slide before the run colors, so the text of its shapes is settled with the rest.
-  applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance);
-  applyRunColors(imported, slideProvenance, restoredGroups, report, options);
+  applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance, options.onDiagnostic);
+  applyRunColors(imported, slideProvenance, restoredGroups, report, options, furnitureContexts);
   settleShapes(imported, furnitureContexts, options);
   restoreSlotFills(imported, slideProvenance, options);
   dropImpliedVariants(imported, options);
@@ -729,9 +743,9 @@ export async function fromPptx(input, options = {}) {
 
 // RR-08: run colours named by a ColorRef (variable, scheme slot, role) come back as that name where the document's own
 // colour resolution still gives the run's colour; see run-colors.js.
-function applyRunColors(imported, slideProvenance, restoredGroups, report, options) {
+function applyRunColors(imported, slideProvenance, restoredGroups, report, options, contexts) {
   const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
-  const info = slideProvenance.map((entry, index) => entry.structure === "untagged" ? undefined : {record: entry.record, structure: entry.structure === "match", content: restoredContent.has(index)});
+  const info = slideProvenance.map((entry, index) => entry.structure === "untagged" ? undefined : {record: entry.record, structure: entry.structure === "match", content: restoredContent.has(index), scalars: contexts?.[index]?.listScalars});
   restoreRunColors(imported.slides, info, colorResolver(imported, options), report);
 }
 
@@ -750,12 +764,12 @@ function colorResolver(imported, options) {
 }
 
 // SH-05: the overlay shapes and connectors of each slide join it, in the order they were drawn.
-function applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance) {
+function applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance, report) {
   const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
   // The stored ids and anchors of the overlay count while the slide's native structure is as it was exported (an edited slide keeps what PowerPoint now shows).
   const paths = imported.slides.map(() => null);
   for (const group of restoredGroups) if (group.applied && group.contentPaths?.paths) paths[group.contentPaths.slide] = group.contentPaths.paths;
-  assembleOverlayShapes(imported, furnitureContexts, imported.slides.map((_, index) => restoredContent.has(index)), slideProvenance.map(entry => entry.structure === 'match' ? entry.record?.overlays : undefined), paths);
+  assembleOverlayShapes(imported, furnitureContexts, imported.slides.map((_, index) => restoredContent.has(index)), slideProvenance.map(entry => entry.structure === 'match' ? entry.record?.overlays : undefined), paths, report);
 }
 
 // SH-05: what only the theme style gave a shape (its fill, line, shadow and text color) is not the shape's own.
@@ -1060,6 +1074,9 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     }
   }
   if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
+  const callouts = importImageCallouts({shapes: nativeContext.shapes, paragraphs: nativeContext.paragraphs, pictures: nativeContext.pictures, relationships, entries, validPictures: images.blocks, report: diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.image.callouts`})});
+  for (const index of callouts.consumed) images.consumedShapes.add(index);
+  nativeContext.imageCallouts = callouts.values;
   nativeContext.imageBlocks = images.blocks;
   nativeContext.imageSources = images.sources;
   nativeContext.imagePictures = images.consumed;
@@ -1124,7 +1141,8 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
         options.onDiagnostic?.({code: 'mixed-body-paragraphs', path: `slides.${slideIndex}`, message: 'A native body mixes bulleted and plain paragraphs; current text is retained as list entries because OPF has no mixed-paragraph body model.'});
     }
   }
-  const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships);
+  const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  nativeContext.listScalars = listRecord.scalars;
   const content = mergeAdjacentBulletShapes(restoreStepNumbers(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs, listRecord.roles), nativeContext.stepNumbers))
     .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? [], inferredStretch: item.inferredStretch}))
     .filter((entry) => entry.payload);
@@ -1196,7 +1214,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const roles = new Map();
   nativeContext.signalRoles = roles;
   const readBody = nativeBodyReader(slidePath, {
-    part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
+    part: (path, parser) => options.nativeLanguages?.has(path) ? parser.parse(decodeText(options.nativeLanguages.get(path))) : parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
   }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily, rtlDeck: options.rtlDeck === true});
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
@@ -1205,7 +1223,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   nativeContext.mediaAssets = media.assets;
   nativeContext.readBody=readBody;
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
-  const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   // LH-108 to LH-110: a chart's value list, stacked names and reference marks are its defaults, not content.
   const chartMarks=importChartMarks(shapes,relationships,entries);
@@ -1294,14 +1312,24 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const drawnShape = drawnShapes.get(index);
     const shapeKind = drawnShape ? shapeRole(drawnShape, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) : 'text';
     if (shapeKind !== 'text') {
-      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index))});
+      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.shapes.${index}.text`}))});
       roles.set(shapeKeys.get(shape), shapeKind === 'block' ? 'shape' : 'overlay');
       if (imported) items.push({...imported, sources: [`sp:${index}`]});
       continue;
     }
-    const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
+    const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && (!shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'] || onlyNativeLanguageTags(shape, relationships, entries));
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
-    if (item && ordinaryBody) item.readNativeBody = () => readBody(index);
+    if (item && ordinaryBody) {
+      const currentBody = readBody(index, {onlyScaled: true});
+      item.readNativeBody = () => currentBody ?? readBody(index);
+      // A saved scale also governs native heading/list size comparisons. Only
+      // scaled bodies use resolved sizes here; ordinary classification is unchanged.
+      if (currentBody?.some(paragraph => paragraph.nativeFontScale !== undefined)) {
+        const pointSize = paragraph => Math.max(0, ...asArray(paragraph?.richText).filter(run => run && typeof run === 'object' && run.text?.trim()).map(run => run.fontSize ?? 0));
+        item.paragraphs = item.paragraphs.map((paragraph, paragraphIndex) => ({...paragraph, maxFontSize: pointSize(currentBody[paragraphIndex])}));
+        item.maxFontSize = Math.max(0, ...item.paragraphs.map(paragraph => paragraph.maxFontSize));
+      }
+    }
     if (item && !item.bounds && nativeContext.layoutBounds) item.bounds = nativeContext.layoutBounds(shape) ?? item.bounds;
     // A damaged/edited furniture group falls back to current native text,
     // including cleared text boxes, without inventing a title or shape label.
@@ -1335,14 +1363,24 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions, {rtlDeck: options.rtlDeck === true}) : [];
   // RR-54: chart and table data records (OPF_DATA_V1) restore against the stored datasets; their diagnostics name the frame.
   const dataContext = label => ({datasets: options.dataProvenance?.datasets, markedCharts: chartMarks.charts, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
-  // SH-09: a Basic Pyramid or Basic Matrix SmartArt (OPF's or PowerPoint's) is its list again, on the pyramid or matrix layout (src/smart-art.js).
+  // SH-09: a Basic Pyramid or Basic Matrix SmartArt (OPF's or PowerPoint's) is its list again, on the pyramid or matrix layout (src/smart-art.js);
+  // SH-08: any SmartArt is a list (an arrangement's layout, the list or the process layout), a Mermaid hierarchy, or its drawing as overlay shapes.
   const smartArt = importSmartArt({frames, relationships, entries, slideIndex, report: diagnostic => options.onDiagnostic?.(diagnostic)});
+  const addSmartArt = (found, xfrm, source) => {
+    if (found.type === 'list') {
+      if (!nativeContext.layoutTag && nativeContext.smartArtLayout === undefined) nativeContext.smartArtLayout = found.layout;
+      items.push({kind: 'list', bounds: shapeBounds(xfrm), payload: found.payload, sources: [source]});
+    } else if (found.type === 'diagram') items.push({kind: 'diagram', bounds: shapeBounds(xfrm), payload: found.payload, sources: [source]});
+    else if (found.type === 'shapes') {
+      // The drawing takes the frame's place in the slide's z order.
+      const at = drawnAll.find(entry => entry.tag === 'p:graphicFrame' && entry.frame && ['x', 'y', 'cx', 'cy'].every(key => entry.frame[key] === found.frame[key]));
+      importSmartArtShapes(found, {context: shapeContext, z: at?.z ?? Math.max(0, ...drawnAll.map(entry => entry.z)) + 1});
+    }
+  };
   for (const [index, frame] of frames.entries()) {
     if (smartArt.has(index)) {
-      const found = smartArt.get(index);
       roles.set(`frame:${index}`, 'smartart');
-      if (!nativeContext.layoutTag && nativeContext.smartArtLayout === undefined) nativeContext.smartArtLayout = found.layout;
-      items.push({kind: 'list', bounds: shapeBounds(frame['p:xfrm']), payload: found.payload, sources: [`frame:${index}`]});
+      addSmartArt(smartArt.get(index), frame['p:xfrm'], `frame:${index}`);
       continue;
     }
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`), dataContext(index));
@@ -1356,8 +1394,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const wrapped = choice ? importSmartArt({frames: [choice], relationships, entries, slideIndex, report: diagnostic => options.onDiagnostic?.(diagnostic)}).get(0) : undefined;
     if (wrapped) {
       roles.set(`alt:${alternateIndex}`, 'smartart');
-      if (!nativeContext.layoutTag && nativeContext.smartArtLayout === undefined) nativeContext.smartArtLayout = wrapped.layout;
-      items.push({kind: 'list', bounds: shapeBounds(choice['p:xfrm']), payload: wrapped.payload, sources: [`alt:${alternateIndex}`]});
+      addSmartArt(wrapped, choice['p:xfrm'], `alt:${alternateIndex}`);
       continue;
     }
     const fallback = asArray(alternate?.["mc:Fallback"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
@@ -1389,6 +1426,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item?.payload && treatment) item.payload = {...item.payload, ...structuredClone(treatment), ...(nativeContext.imageSources?.has(index) ? {image: {...item.payload.image, src: nativeContext.imageSources.get(index)}} : {})};
     else if (item?.nativeStretch) { item.payload.fit='stretch'; item.inferredStretch=true; }
     else if (item?.nativeFitUnsupported) report({code:'unsupported-image-fit',message:'Native picture tiling or an offset stretch fill is not represented by the imported image block; review the reflowed image.'});
+    if (item?.payload && nativeContext.imageCallouts?.has(index)) item.payload.image = {...item.payload.image, callouts: nativeContext.imageCallouts.get(index)};
     if (item) items.push({...item, sources: [`pic:${index}`]});
   }
 
@@ -2126,8 +2164,22 @@ function cachedValues(node, path, budget, readValue) {
   return result;
 }
 
+// SeriesText is a choice between a cached reference and a direct c:v string.
+// Current literal text must not fall back to the old OPF/workbook header.
 function firstCachedValue(node, path, budget) {
-  return cachedValues(node, path, budget).find(value => value !== null);
+  const values = cachedValues(node, path, budget);
+  const literal = node?.['c:v'];
+  if (literal === undefined) return values.find(value => value !== null);
+  const invalid = message => {
+    throw new OPFPptxError('invalid-chart-cache', `Invalid chart cache: ${message}. Repair the chart data before importing.`, {path: path + '/c:v'});
+  };
+  if (['c:strRef', 'c:numRef', 'c:multiLvlStrRef', 'c:numLit', 'c:strLit'].some(key => node[key] !== undefined)) invalid('multiple competing series-name sources');
+  if (typeof literal !== 'string' && (literal === null || typeof literal !== 'object' || Array.isArray(literal)
+    || Object.keys(literal).some(key => key !== '#text' && key !== 'xml:space' && key !== 'xmlns' && !key.startsWith('xmlns:'))
+    || (literal['#text'] !== undefined && typeof literal['#text'] !== 'string'))) invalid('literal series name must be one simple text value');
+  if (budget.cells + 1 > MAX_CHART_CACHE_CELLS) invalid('combined caches exceed the 1,000,000-cell import limit');
+  budget.cells += 1;
+  return scalarText(literal);
 }
 
 function readSlideNotes(entries, relationships) {
@@ -2589,7 +2641,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // what import reads the slide's layout from), in a variant whose Body placeholder sits at the recomposed body's box.
   const recomposed = template !== undefined && geometry.recomposed !== undefined;
   const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto' || recomposed;
-  const nativeBody = options.bodyText === 'native' ? planNativeBody(opfSlide, geometry, {automatic, report: options.onDiagnostic}) : undefined;
+  const nativeBody = options.bodyText === 'native' ? planNativeBody(opfSlide, geometry, {automatic, report: options.onDiagnostic, textMeasurement: options.textMeasurement}) : undefined;
   if (template && nativeBody) template = recomposed
     ? {...template, key: `${template.key}\u0000recomposed-native-body`, recomposedBody: {box: nativeBody.box, anchor: nativeBody.anchor, style: {...nativeBody.item.textStyle, fontSize: nativeBody.item.text.fontSize, alignment: nativeBody.item.alignment}}}
     : {...template, key: `${template.key}\u0000native-body:${nativeBody.region}`, nativeBodyRegion: nativeBody.region};
@@ -2642,7 +2694,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // SH-09: core's pyramids and matrices, under their entries: live SmartArt (the entries are its nodes) or native shapes (src/smart-art.js).
   // SH-16: each live frame's fallback picture is cut from this slide's preview, drawn once.
   let preview;
-  const liveArrangements = await addArrangements(slide, geometry.arrangements, {context: {...slideContext, direction: geometry.direction, deckLang: context.deckLang}, mode: context.smartArtMode, items: geometry.items, slideIndex,
+  const liveArrangements = await addArrangements(slide, geometry.arrangements, {context: {...slideContext, direction: geometry.direction, deckLang: context.scriptFonts?.slides?.[slideIndex]?.lang ?? context.deckLang}, mode: context.smartArtMode, items: geometry.items, slideIndex,
     records: context.smartArt, tags: context.arrangementTags, smartArtTags: context.smartArtTags, provenance: context.provenanceMode, report: options.onDiagnostic, fontOf: nativeFontOptions,
     fallback: (arrangement, picture) => smartArtFallback(slide, arrangement, picture, () => (preview ??= smartArtSlideSvg(presentation, slideIndex + 1, options)), context, options)});
   const arranged = new Set((geometry.arrangements ?? []).map(arrangement => arrangement.path));
@@ -2655,7 +2707,15 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       ? geometry.regions?.find(region => region.name === item.region && region.flow === 'none' && region.content?.length === 1 && !region.overflow?.length) : undefined;
     // RR-88: under bodyText 'native' a plain-string title that wraps is one native text box (native wrap, no autofit) at its measured
     // block, so it can bind to the Title placeholder like a one-line title (Keynote reports `title showing` only for a bound title).
-    const nativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
+    const wantsNativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
+    const titleFace = wantsNativeTitle ? nativeFontOptions(item.textStyle) : undefined;
+    const nativeTitle = wantsNativeTitle ? nativeTitleWrapBox(item, geometry, options.textMeasurement, {
+      nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true},
+      report: reason => options.onDiagnostic?.({
+      code: 'native-body-fallback', path: item.path, reason,
+      message: reason === 'font-metrics' ? 'Native title export uses a visual font substitute for measurement, so native line breaks cannot be verified; the authored font and size were retained as measured lines.'
+        : 'Native title export cannot preserve the measured line breaks with a wrap margin inside its title area; the measured lines were exported.'
+    })}) : undefined;
     if ((template || context.automaticSlides[slideIndex]) && item.field === 'title' && typeof item.value === 'string' && (item.text?.lines?.length === 1 || nativeTitle) && !item.text.overflow && !item.text.richLines)
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
@@ -2696,7 +2756,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
         fill:paint(surface),line:{...paint(itemContext.roles.neutrals?.cardBorder?.hex??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${owner.path}`});
     }
     if (nativeTitle) {
-      addNativeTitle(slide, item, itemContext, options, context);
+      addNativeTitle(slide, item, itemContext, options, context, nativeTitle);
     } else if (nativePlans.some(plan => plan.item === item)) {
       // RR-88: the first native body is the Body placeholder; every further one is an ordinary native text box at its region.
       const plan = nativePlans.find(plan => plan.item === item);
@@ -2726,14 +2786,22 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       // On its node in the color that reads on the primary, centered; beside a level or on a card in the slide's text color, at the start edge.
       const arrangement = geometry.arrangements.find(entry => entry.path === item.path), text = exportPaint(itemContext).text.hex.slice(1);
       const lineContext = arrangement.text === 'node' ? {...itemContext,colors:{...itemContext.colors,text},textColor:text} : itemContext;
-      await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined);
-      if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
+      await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined,['org-chart','hierarchy'].includes(arrangement.kind));
+      if(item.textStyle){
+        const look = listRunLook(item.text,item.textStyle,itemContext);
+        recordListRuns(context.documentProvenance,slideIndex,item.path,look);
+        if(look?.text)recordListScalars(context.documentProvenance,slideIndex,item.path,scriptSplitListScalars(item.text,itemContext));
+      }
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
       // LH-168: a list numbered by core's step badges carries its numbers on the badges, not as list markers.
       const badgeNumbered=(geometry.steps??[]).some(step=>step.badges?.some(badge=>badge.list?.path===item.path));
       await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined&&!badgeNumbered);
       // opf-pptx#212: the look every run of the list is written with where its source states none (full provenance only).
-      if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
+      if(item.textStyle){
+        const look = listRunLook(item.text,item.textStyle,itemContext);
+        recordListRuns(context.documentProvenance,slideIndex,item.path,look);
+        if(look?.text)recordListScalars(context.documentProvenance,slideIndex,item.path,scriptSplitListScalars(item.text,itemContext));
+      }
     } else if (["text", "title", "subtitle", "tag"].includes(item.field) && item.text?.richLines) {
       // FA-10: a TextRun[] heading draws and exports like rich body text; its lines are named and tagged as a heading (the body's are not).
       const heading = item.field !== 'text';
@@ -2839,7 +2907,7 @@ function exportSlideContext(presentation, slideIndex, baseContext, options) {
     || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-  const slideContext = { ...baseContext, core, composeFonts: {...core.options.fontFamilies, heading: resolved.fonts.heading, body: resolved.fonts.body, code: resolved.fonts.code}, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, roles: resolved.roles, variables: resolved.variables };
+  const slideContext = { ...baseContext, slideIndex, core, composeFonts: {...core.options.fontFamilies, heading: resolved.fonts.heading, body: resolved.fonts.body, code: resolved.fonts.code}, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, roles: resolved.roles, variables: resolved.variables };
   // RR-96: a slide whose variant differs from the deck's writes its own clrMapOvr (accent order included).
   if (resolved.roles.map && baseContext.clrMap) {
     const attributes = clrMapAttributes(resolved.roles.map);
@@ -2942,6 +3010,27 @@ function listRunLook(fit,style,context){
   if(text.size!==1||description.size>1)return undefined;
   return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};
 }
+// Follow the same paragraph direction and LTR ranges as native bidi splitting.
+// No source strings or flags for ordinary LTR/rich values enter the record.
+function scriptSplitListScalars(fit, context) {
+  const plan = context.scriptFonts?.slides?.[context.slideIndex ?? 0] ?? context.scriptFonts?.deck;
+  if (!plan?.rtl) return undefined;
+  const result = [];
+  fit.listEntries.forEach((entry, item) => {
+    for (const [role, value] of [['text', entry.value], ['description', entry.descriptionValue]]) {
+      if (typeof value !== 'string' || !entry[role]) continue;
+      const text = entry[role], split = text.richLines.some((line, index) => {
+        if ((text.directions?.[index] ?? entry.direction) !== 'rtl') return false;
+        return line.fragments.some(fragment => {
+          const ranges = leftToRightPieces(fragment.text);
+          return ranges.length > 0 && (line.fragments.length > 1 || ranges.some(([from, to]) => from > 0 || to < fragment.text.length));
+        });
+      });
+      if (split) result.push([item, role]);
+    }
+  });
+  return result.length ? result : undefined;
+}
 function richLineRuns(line,color,native,context,path) {
   const fallback=color.replace(/^#/,'');
   return line.fragments.map(fragment=>{
@@ -2959,7 +3048,7 @@ function richLineRuns(line,color,native,context,path) {
 // PptxGenJS embeds the media and its relationship through one picture per slide (OPF bullet image); packaging removes
 // that picture and points each marker paragraph at the relationship with a:buBlip. An icon that cannot be embedded
 // keeps the character bullets, as the preview does.
-async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,slideIndex,options,numbered=false,align) {
+async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,slideIndex,options,numbered=false,align,keepLevels=false) {
   // RR-33: a numbered list writes native auto-numbers (a:buAutoNum) at core's marker geometry. Core older than the numbering
   // release composes bullet markers, so nothing numbered can be written; say so instead of exporting bullets silently.
   if(numbered&&!fit.listEntries.some(entry=>entry.marker.number))options.onDiagnostic?.({code:'numbering-unsupported-core',path,message:'The installed @openpresentation/opf does not compose numbered lists (numbering), so the list is exported with bullets. Use a core release that supports numbering.'});
@@ -2999,7 +3088,7 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         const objectName=`OPF list ${path} line ${lineNumber++}`;
         const number=first?entry.marker.number:undefined;
         if(first&&!markerless)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
-        const paragraph=first&&!markerless?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false};
+        const paragraph=first&&!markerless?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false,...(keepLevels?{indentLevel:level}:{})};
         const runs=richLineRuns(line,color,native,context,path);
         if(!runs.length)runs.push({text:'',options:{}});
         // Keep paragraph intent identical across runs. ZIP normalization below
@@ -3261,10 +3350,29 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
       const fields = Object.fromEntries(IMAGE_TREATMENT_KEYS.filter(key => block[key] !== undefined).map(key => [key, structuredClone(block[key])]));
       context.imagePlaceholderTags.set(panel, {v: 1, slide: `slides.${slideIndex}`, path: item.path, image: structuredClone(item.value), ...(Object.keys(fields).length ? {treatment: fields} : {})});
     }
+    // Unavailable pixels have no trustworthy native picture owner. Keep labels as ordinary editable text, without stale source restoration.
+    const recorded = context.imagePlaceholderTags.get(panel);
+    if (recorded?.image && typeof recorded.image === 'object') delete recorded.image.callouts;
+    addImageCalloutItems(slide, item, undefined, context, options);
     return panel;
   }
   if (image.overlay) addImageOverlay(slide, image.overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
+  addImageCalloutItems(slide, item, name, context, options);
   return name;
+}
+
+// Text panels are independent native rectangles and measured line boxes, painted above the picture mask/overlay.
+function addImageCalloutItems(slide, item, owner, context, options) {
+  for (const [index, callout] of (item.image.callouts ?? []).entries()) {
+    const objectName = `OPF image callout ${owner ?? item.path} ${index}`;
+    const box = callout.box;
+    slide.addShape('rect', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, fill: {color: pptxColor(context.colors.background)}, line: {transparency: 100}, objectName});
+    if (owner) {
+      const source = item.value.callouts[index];
+      context.imageCalloutTags.set(objectName, {v: 1, owner, index, total: item.image.callouts.length, role: 'panel', frame: {x: source.x, y: source.y, width: source.width, height: source.height}, lines: callout.fit.lines.length});
+    }
+    addMeasuredPayloadText(slide, callout.text, callout.textBox, context, options, {color: context.colors.text, path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, align: 'center', keepEmpty: true, diagnosticsHandled: true, objectName, ...(owner ? {imageCallout: {owner, index}} : {})});
+  }
 }
 
 // The palette a diagram is painted in: core's diagramPalette from the slide's resolved design, with the inputs opf-render's
@@ -3772,7 +3880,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // from the top (c:catAx orientation maxMin) and the value axis crosses it at the last category (c:valAx crosses max), so the value
     // labels stay at the bottom.
     // LH-125: its value labels sit next to that axis (the bottom), not 'low' (PptxGenJS's default for a bar chart), which on a reversed category axis is the top.
-    ...(chartData.type === 'bar' && chartData.barDir === 'bar' ? { catAxisOrientation: 'maxMin', catAxisCrossesAt: 'max', valAxisLabelPos: 'nextTo' } : {}),
+    // LH-93: preview category names sit at the low-value edge. On a negative range Office's nextTo default attaches them to zero.
+    // Low moves only the labels to the reserved gutter; it preserves the axis crossing, numeric bounds, data and authored options.
+    ...(chartData.type === 'bar' && chartData.barDir === 'bar' ? { catAxisOrientation: 'maxMin', catAxisCrossesAt: 'max', valAxisLabelPos: 'nextTo',
+      ...(chartLayout?.valueAxis?.min < 0 ? {catAxisLabelPos: 'low'} : {}) } : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
@@ -3997,8 +4108,20 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
     }
     // LH-12: an untagged body line is still named for its block (`OPF text <path> line N`), never PowerPoint's generic "Text N".
     // LH-63: a plain-text group has a shape for every line, a blank one included (keepEmpty), as an unformatted body's lines do.
-    if (runs.length || keepEmpty) slide.addText(runs.length ? runs : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name ?? `OPF text ${path} line ${index}`});
+    if (runs.length || keepEmpty) slide.addText(runs.length ? runs : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, ...smallRunSpacing(line, placed), objectName: name ?? `OPF text ${path} line ${index}`});
   }
+}
+
+// RR-105 (opf#1091): core puts a rich line's baseline one fit size below its top (the role size, say a title's 54 px) even when every run
+// is smaller, as an eyebrow-like title of 20 pt runs is. At single spacing PowerPoint takes the first baseline from the runs it draws, so
+// such a line drew about 22 pt above the preview. With exact spacing PowerPoint puts the first baseline DIAGRAM_BASELINE_SHARE of the pitch
+// below the top whatever the runs (SH-07's measurement, valid from DIAGRAM_MIN_PITCH sizes), so the line gets the pitch that puts it on
+// core's baseline. A line whose largest run is the fit size (nearly every line) keeps single spacing, byte for byte.
+function smallRunSpacing(line, placed) {
+  const ascent = placed ? placed.baseline - placed.y : line.baseline - line.y;
+  const largest = Math.max(0, ...line.fragments.map(fragment => fragment.nominalSize ?? fragment.fontSize));
+  const pitch = ascent / DIAGRAM_BASELINE_SHARE;
+  return largest > 0 && pitch >= DIAGRAM_MIN_PITCH * largest ? {lineSpacing: pitch * .75, lineSpacingMultiple: undefined} : {lineSpacingMultiple: 1};
 }
 
 function assertXmlText(text, path) {
@@ -4029,8 +4152,8 @@ function isNativeTitle(item) {
 // RR-88: the wrapped title as one native text box: the whole string, native wrap, no autofit, at the block its measured lines fill
 // (top of the first line to the bottom of the last), with the measured line pitch as exact spacing. Tagged as one heading line,
 // so import reads the current words as the title. The caller binds it to the Title placeholder.
-function addNativeTitle(slide, item, context, options, deckContext) {
-  const fit = item.text, box = item.box, lines = fit.placement?.lines;
+function addNativeTitle(slide, item, context, options, deckContext, wrap) {
+  const fit = item.text, box = {...item.box, x: wrap.x, width: wrap.width}, lines = fit.placement?.lines;
   const tops = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize : box.y + index * fit.lineHeight);
   const bottoms = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize + lines[index].height : box.y + (index + 1) * fit.lineHeight);
   const top = Math.min(...tops), height = Math.max(...bottoms) - top;
@@ -4067,7 +4190,8 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
     const headingLine=(config.headingLines?.offset??0)+index,headingBoundary=config.headingLines?.join&&index===fit.lines.length-1?config.headingLines.join:boundary;
     const objectName=config.heading?`OPF heading ${config.path} line ${headingLine}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
-    if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
+    if(config.imageCallout)context.imageCalloutTags.set(objectName,{v:1,...config.imageCallout,role:'text',line:index,count:fit.lines.length,...boundary});
+    else if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
     else if(config.quote)context.quoteTags.set(objectName,{v:1,role:'text',group:config.quote.group,part:config.quote.part,line:index,count:fit.lines.length,...boundary,...(config.quote.part===0&&index===0?{anchor:config.quote.anchor}:{})});
     else if(config.furniture){
@@ -4081,7 +4205,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const lineColor = pptxColor(config.color ?? context.textColor);
     slide.addText(link?.href && line ? [{text: line, options: {hyperlink: {url: link.href}, color: lineColor, underline: {style: 'none'}}}] : line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
-      ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize),
+      ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, config.lang),
       color: lineColor, align: alignment,
       ...(fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),
       // Reuse the frame's existing relationship to cover blank caption boxes.
@@ -4487,6 +4611,16 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   const {x1,y1,x2,y2}=layout.connector;
   slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,width:3*scale*.75}});
   context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
+  for(const range of layout.ranges??[]){
+    const name=`OPF timeline ${group} range ${range.eventIndex}`,box=range.box;
+    slide.addShape('rect',{objectName:name,x:box.x/96,y:box.y/96,w:box.width/96,h:box.height/96,fill:{color:context.colors.accent,transparency:68},line:{color:normalizeHex(context.colors.background),width:scale*1.5}});
+    context.timelineTags.set(name,{v:1,group,role:'range',eventIndex:range.eventIndex});
+  }
+  for(const link of layout.rangeLinks??[]){
+    const name=`OPF timeline ${group} range link ${link.eventIndex}`,dx=link.x2-link.x1,dy=link.y2-link.y1;
+    slide.addShape('line',{objectName:name,x:Math.min(link.x1,link.x2)/96,y:Math.min(link.y1,link.y2)/96,w:Math.abs(dx)/96,h:Math.abs(dy)/96,flipV:dx*dy<0,line:{color:context.colors.border,width:scale*.75}});
+    context.timelineTags.set(name,{v:1,group,role:'range-link',eventIndex:link.eventIndex});
+  }
   // LH-121: the connector up to the current event, a second native line in the primary color over the first.
   if(layout.progress){
     const progressName=`OPF timeline ${group} progress`,{x1,y1,x2,y2}=layout.progress;
@@ -4512,7 +4646,11 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   }
   for(const [index,part]of layout.parts.entries()){
     const statusColor=part.status==='planned'?normalizeHex(timelineTextColor(part,statusColors)):undefined;
-    addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor},...(statusColor?{color:statusColor}:{})});
+    // Native RTL proofing reorders Latin date digits even when the paragraph is LTR.
+    // Keep a wholly Latin date as one English run, as the existing bidi writer does
+    // for Latin phrases, without parsing dates or changing any text or geometry.
+    const latinDate=context.direction==='rtl'&&part.role==='when'&&/\p{Script=Latin}/u.test(part.text)&&/^[\p{Script=Latin}0-9\p{P}\p{S}\p{Z}]*$/u.test(part.text);
+    addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor},...(latinDate?{lang:'en-US'}:{}),...(statusColor?{color:statusColor}:{})});
   }
   // LH-121: the generated status words, tagged into the group as `status` so import consumes them (the status comes from the markers).
   for(const label of layout.statusLabels??[]){
@@ -4767,7 +4905,7 @@ function chosenFamilyMeasurement(measurement) {
 
 // FA-13: TextRun.lang as the run's own proofing language (a:rPr lang), when it differs from the deck language.
 function langOptions(context, tag) {
-  const lang = runLanguageTag(context.scriptFonts, tag);
+  const lang = runLanguageTag(context.scriptFonts, tag, context.slideIndex ?? 0);
   return lang ? {lang} : {};
 }
 
@@ -4875,24 +5013,30 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   if (!resolvedData.ok) return unplottable(resolvedData.reason, "The chart data cannot be drawn here.", resolvedData.message);
   // LH-60: core's draw plan: the construct both engines draw (a map over categories that are not places as columns, a pie of several
   // series as a doughnut of rings, a box per series, a scatter by position) and the data as drawn.
-  const plan = chartDrawPlan(source, resolvedData, {language: typeof presentation?.language === 'string' ? presentation.language : undefined});
+  const slideIndex = /^slides\.(\d+)\./.exec(path)?.[1];
+  const plan = chartDrawPlan(source, resolvedData, {language: quoteLanguage(presentation, slideIndex === undefined ? undefined : Number(slideIndex))});
   const data = {columns: plan.columns, rows: plan.rows};
   const columnCodes = (plan.formats ?? []).map(excelCode);
   const diagnostics = resolvedData.diagnostics.filter((entry) => entry.severity === 'warning' && entry.code !== 'chart-value-not-numeric');
   const rejected = resolvedData.diagnostics.filter((entry) => entry.code === 'chart-value-not-numeric');
-  const {spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
+  const {id: resolvedType, spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
   // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
   // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
   // (src/chartex.js). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
   // the unconfirmed map on the clustered column chart alone; 'fallback' keeps every chartex id there. The fallback is
   // reported as chartex-fallback, never silent. LH-175: a Pareto chart of several series is core's pareto-as-columns fallback (a
   // clustered column chart of every series, as the preview draws it), so it reaches here as a column chart in every mode.
-  const native = chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed);
+  // RR-105: native category aggregation omits negative categories in PowerPoint, even though its cache retains them.
+  // Keep the editable classic representation in every mode; negative raw samples in one column still use native binning.
+  const negativeCategoricalHistogram = resolvedType === 'histogram' && data.columns.length > 1 && data.rows.some(row => row.slice(1).some(value => typeof value === 'number' && value < 0));
+  const native = !negativeCategoricalHistogram && (chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed));
   const chartex = resolved.family === 'chartex' && native ? resolved : null;
   const spec = resolved.family === 'chartex' ? CHARTEX_FALLBACK : resolved;
   const typeName = stringifyText(chart.type);
   const adaptations = [];
-  if (resolved.family === 'chartex' && !native) {
+  if (negativeCategoricalHistogram) {
+    adaptations.push({adaptation: "chartex-fallback", message: "PowerPoint's native categorical histogram aggregation does not display negative category values; every category and value is exported as an editable native clustered column chart instead. This data-domain fallback applies in every chartex mode."});
+  } else if (resolved.family === 'chartex' && !native) {
     const reason = chartexMode === 'fallback'
       ? 'that this exporter does not write'
       : 'that PowerPoint has not yet accepted natively from this exporter (pass chartex: \'native\' to write its chartex part)';
@@ -5345,6 +5489,7 @@ async function normalizePptxZip(raw, context) {
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
+  attachImageCalloutTags(entries,context.imageCalloutTags);
   attachChartMarkTags(entries,context.chartMarkTags);
   attachStepTags(entries,context.stepTags);
   // SH-09: the trapezoids' adjustments, the arrangement shapes' tags, then each tagged SmartArt placeholder becomes its frame and parts.
@@ -5612,6 +5757,10 @@ async function normalizePptxZip(raw, context) {
         : `${family} is written as ${safe}, an Office-safe family on every Windows and macOS machine; the text was laid out with ${safe}'s widths, so its line breaks can differ from the preview drawn in ${family}.`});
   }
   finalizeFontsUsed(output);
+  // Structural proofing records are needed even without full source provenance.
+  const languageParts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));
+  attachNativeLanguageTags(languageParts);
+  for (const [path, bytes] of Object.entries(languageParts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];
   // Document references record evidence from the final normalized parts.
   if (context.documentProvenance) {
     const parts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));

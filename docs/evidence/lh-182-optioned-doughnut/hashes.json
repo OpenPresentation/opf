@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "cea845dae1c15177cfa9dc60de0411e41fe1d213",
+  "files": {
+    "affected-examples.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "after.pptx": "811ea93536f0c764a70cd17165501d277164315d860978871dc07d4387d13292",
+    "before-after-1.png": "4926568006a2d027bbb9ff447feb9f8678aedac54388a2c8a9dd56f1cb49bead",
+    "before-after-2.png": "d5d68110f246d72154156ac55192168ecc6ac38ce2a6e6e7edb786cf772c7370",
+    "before-after-3.png": "6b96283aba5e2a6f50431193af7be7dd36a7fb247ae8d2b722878d180c76408a",
+    "before-after-4.png": "a43d47ab6973d2129acf2c45e0d5288481e7c084a64956a6cec060f0f0aa51b4",
+    "before.pptx": "480a69697a2e15d9ddd20ed8cf6941d5210b0e74cab8041e307ce3a2face471b",
+    "svg-proof.json": "5d927624a77aca20c92477e76c4a3698df8925e38442130d62a19ceded41a688",
+    "witness.opf.json": "034b8ac0724b5df12a260b9b17e23adb10e29d15cbb700ccc2be39593c72856b"
+  }
+}

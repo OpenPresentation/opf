@@ -1,0 +1,4964 @@
+{
+  "scope": "Derived ordering and exact 1/8pt canvas assessment only; raw files unchanged. No new-product or Office acceptance.",
+  "manifestSha256": "4a9852e3703aa58970a3f7a18a1f623705a6331308339e1cefe56cc9ebef2c8d",
+  "rawRunSha256": "0f134a709724c680201a2a2a6666d15389ae14d2ac74b1253e5f2a2a3af9c13f",
+  "files": [
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Demand Generation",
+        "Campaign Brief"
+      ],
+      "name": "01-demand-generation-campaign-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Demand Generation",
+        "Campaign Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Demand Generation",
+        "Campaign Brief"
+      ],
+      "name": "01-demand-generation-campaign-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Demand Generation",
+        "Campaign Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Employee Town",
+        "Hall Run of Show"
+      ],
+      "name": "02-employee-town-hall-run-of-show-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Employee Town",
+        "Hall Run of Show"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Employee Town",
+        "Hall Run of Show"
+      ],
+      "name": "02-employee-town-hall-run-of-show-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Employee Town Hall Run of",
+        "Show"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Engineering",
+        "Capacity Planning"
+      ],
+      "name": "03-engineering-capacity-planning-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Engineering",
+        "Capacity Planning"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Engineering",
+        "Capacity Planning"
+      ],
+      "name": "03-engineering-capacity-planning-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Engineering Capacity",
+        "Planning"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Onboarding",
+        "Experience Redesign"
+      ],
+      "name": "04-onboarding-experience-redesign-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Onboarding Experience",
+        "Redesign"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Onboarding",
+        "Experience Redesign"
+      ],
+      "name": "04-onboarding-experience-redesign-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Onboarding Experience",
+        "Redesign"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Partner Ecosystem",
+        "Launch Kit"
+      ],
+      "name": "05-partner-ecosystem-launch-kit-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Partner Ecosystem",
+        "Launch Kit"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Partner Ecosystem",
+        "Launch Kit"
+      ],
+      "name": "05-partner-ecosystem-launch-kit-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Partner Ecosystem",
+        "Launch Kit"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Pricing and",
+        "Packaging Decision"
+      ],
+      "name": "06-pricing-and-packaging-decision-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Pricing and",
+        "Packaging Decision"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Pricing and",
+        "Packaging Decision"
+      ],
+      "name": "06-pricing-and-packaging-decision-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Pricing and Packaging",
+        "Decision"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Product Roadmap",
+        "Decision Review"
+      ],
+      "name": "07-product-roadmap-decision-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Product Roadmap",
+        "Decision Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Product Roadmap",
+        "Decision Review"
+      ],
+      "name": "07-product-roadmap-decision-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Product Roadmap Decision",
+        "Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Revenue Forecast",
+        "Inspection"
+      ],
+      "name": "08-revenue-forecast-inspection-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Revenue Forecast",
+        "Inspection"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Revenue Forecast",
+        "Inspection"
+      ],
+      "name": "08-revenue-forecast-inspection-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Revenue Forecast",
+        "Inspection"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Scope 3 Reporting",
+        "Readiness"
+      ],
+      "name": "09-scope-3-reporting-readiness-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Scope 3 Reporting",
+        "Readiness"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Scope 3 Reporting",
+        "Readiness"
+      ],
+      "name": "09-scope-3-reporting-readiness-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Scope 3 Reporting",
+        "Readiness"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Visual Brand",
+        "System Sampler"
+      ],
+      "name": "10-visual-brand-system-sampler-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Visual Brand",
+        "System Sampler"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Visual Brand",
+        "System Sampler"
+      ],
+      "name": "10-visual-brand-system-sampler-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Visual Brand System",
+        "Sampler"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Apprenticeship",
+        "Partnership Deck"
+      ],
+      "name": "11-apprenticeship-partnership-deck-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Apprenticeship",
+        "Partnership Deck"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Apprenticeship",
+        "Partnership Deck"
+      ],
+      "name": "11-apprenticeship-partnership-deck-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Apprenticeship",
+        "Partnership Deck"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Campus Energy",
+        "Action Brief"
+      ],
+      "name": "12-campus-energy-action-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Campus Energy",
+        "Action Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Campus Energy",
+        "Action Brief"
+      ],
+      "name": "12-campus-energy-action-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Campus Energy Action",
+        "Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "District Literacy",
+        "Acceleration Plan"
+      ],
+      "name": "13-district-literacy-acceleration-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "District Literacy",
+        "Acceleration Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "District Literacy",
+        "Acceleration Plan"
+      ],
+      "name": "13-district-literacy-acceleration-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "District Literacy",
+        "Acceleration Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "School Safety",
+        "Preparedness Brief"
+      ],
+      "name": "14-school-safety-preparedness-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "School Safety",
+        "Preparedness Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "School Safety",
+        "Preparedness Brief"
+      ],
+      "name": "14-school-safety-preparedness-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "School Safety Preparedness",
+        "Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Student Mental Health",
+        "Capacity Review"
+      ],
+      "name": "15-student-mental-health-capacity-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Student Mental Health",
+        "Capacity Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Student Mental Health",
+        "Capacity Review"
+      ],
+      "name": "15-student-mental-health-capacity-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Student Mental Health Capacity",
+        "Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Workforce Pathway",
+        "Partnership"
+      ],
+      "name": "16-workforce-pathway-partnership-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Workforce Pathway",
+        "Partnership"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Workforce Pathway",
+        "Partnership"
+      ],
+      "name": "16-workforce-pathway-partnership-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Workforce Pathway",
+        "Partnership"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Digital Services",
+        "Modernization"
+      ],
+      "name": "17-digital-services-modernization-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Digital Services",
+        "Modernization"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Digital Services",
+        "Modernization"
+      ],
+      "name": "17-digital-services-modernization-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Digital Services",
+        "Modernization"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Police Training",
+        "Program Update"
+      ],
+      "name": "18-police-training-program-update-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Police Training",
+        "Program Update"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Police Training",
+        "Program Update"
+      ],
+      "name": "18-police-training-program-update-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Police Training Program",
+        "Update"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Vaccination",
+        "Outreach Briefing"
+      ],
+      "name": "19-vaccination-outreach-briefing-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Vaccination",
+        "Outreach Briefing"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Vaccination",
+        "Outreach Briefing"
+      ],
+      "name": "19-vaccination-outreach-briefing-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Vaccination Outreach",
+        "Briefing"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Workforce",
+        "Reskilling Initiative"
+      ],
+      "name": "20-workforce-reskilling-initiative-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Workforce",
+        "Reskilling Initiative"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Workforce",
+        "Reskilling Initiative"
+      ],
+      "name": "20-workforce-reskilling-initiative-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Workforce Reskilling",
+        "Initiative"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Airline Disruption",
+        "Recovery Review"
+      ],
+      "name": "21-airline-disruption-recovery-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Airline Disruption",
+        "Recovery Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Airline Disruption",
+        "Recovery Review"
+      ],
+      "name": "21-airline-disruption-recovery-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Airline Disruption Recovery",
+        "Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Ambulatory Access",
+        "Recovery Plan"
+      ],
+      "name": "22-ambulatory-access-recovery-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Ambulatory Access",
+        "Recovery Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Ambulatory Access",
+        "Recovery Plan"
+      ],
+      "name": "22-ambulatory-access-recovery-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Ambulatory Access Recovery",
+        "Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Battery Line",
+        "Supplier Readiness"
+      ],
+      "name": "23-battery-line-supplier-readiness-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Battery Line",
+        "Supplier Readiness"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Battery Line",
+        "Supplier Readiness"
+      ],
+      "name": "23-battery-line-supplier-readiness-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Battery Line Supplier",
+        "Readiness"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Boutique Hotel",
+        "Revenue Recovery"
+      ],
+      "name": "24-boutique-hotel-revenue-recovery-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Boutique Hotel",
+        "Revenue Recovery"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Boutique Hotel",
+        "Revenue Recovery"
+      ],
+      "name": "24-boutique-hotel-revenue-recovery-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Boutique Hotel Revenue",
+        "Recovery"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Branch Modernization",
+        "Investment Case"
+      ],
+      "name": "25-branch-modernization-investment-case-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Branch Modernization",
+        "Investment Case"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Branch Modernization",
+        "Investment Case"
+      ],
+      "name": "25-branch-modernization-investment-case-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Branch Modernization",
+        "Investment Case"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Claims Triage",
+        "Operating Model"
+      ],
+      "name": "26-claims-triage-operating-model-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Claims Triage",
+        "Operating Model"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Claims Triage",
+        "Operating Model"
+      ],
+      "name": "26-claims-triage-operating-model-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Claims Triage",
+        "Operating Model"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Cold Chain Waste",
+        "Reduction Review"
+      ],
+      "name": "27-cold-chain-waste-reduction-review-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Cold Chain Waste",
+        "Reduction Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Cold Chain Waste",
+        "Reduction Review"
+      ],
+      "name": "27-cold-chain-waste-reduction-review-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Cold Chain Waste",
+        "Reduction Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Construction",
+        "Safety Stand Down"
+      ],
+      "name": "28-construction-safety-stand-down-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Construction",
+        "Safety Stand Down"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Construction",
+        "Safety Stand Down"
+      ],
+      "name": "28-construction-safety-stand-down-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Construction Safety Stand",
+        "Down"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Consulting Margin",
+        "Recovery Plan"
+      ],
+      "name": "29-consulting-margin-recovery-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Consulting Margin",
+        "Recovery Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Consulting Margin",
+        "Recovery Plan"
+      ],
+      "name": "29-consulting-margin-recovery-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Consulting Margin",
+        "Recovery Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Fan Experience",
+        "Operations Brief"
+      ],
+      "name": "30-fan-experience-operations-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Fan Experience",
+        "Operations Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Fan Experience",
+        "Operations Brief"
+      ],
+      "name": "30-fan-experience-operations-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Fan Experience Operations",
+        "Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Food Bank Distribution",
+        "Capacity Plan"
+      ],
+      "name": "31-food-bank-distribution-capacity-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Food Bank Distribution",
+        "Capacity Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Food Bank Distribution",
+        "Capacity Plan"
+      ],
+      "name": "31-food-bank-distribution-capacity-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Food Bank Distribution",
+        "Capacity Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Grid Resilience",
+        "Capital Plan"
+      ],
+      "name": "32-grid-resilience-capital-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Grid Resilience",
+        "Capital Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Grid Resilience",
+        "Capital Plan"
+      ],
+      "name": "32-grid-resilience-capital-plan-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Grid Resilience Capital",
+        "Plan"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Managed Detection",
+        "Market Update"
+      ],
+      "name": "33-managed-detection-market-update-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          600.0
+        ],
+        "nativePt": [
+          720.0,
+          450.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          450.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          450.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Managed Detection Market",
+        "Update"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Managed Detection",
+        "Market Update"
+      ],
+      "name": "33-managed-detection-market-update-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          600.0
+        ],
+        "nativePt": [
+          720.0,
+          450.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          450.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          450.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Managed Detection Market",
+        "Update"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Mixed Use Leasing",
+        "Pipeline Review"
+      ],
+      "name": "34-mixed-use-leasing-pipeline-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Mixed Use Leasing",
+        "Pipeline Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Mixed Use Leasing",
+        "Pipeline Review"
+      ],
+      "name": "34-mixed-use-leasing-pipeline-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1279.968,
+          799.9680000000001
+        ],
+        "nativePt": [
+          960.0,
+          600.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          959.9760000000001,
+          599.9760000000001
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          600.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Mixed Use Leasing Pipeline",
+        "Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Rural Broadband",
+        "Expansion Proposal"
+      ],
+      "name": "35-rural-broadband-expansion-proposal-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Rural Broadband",
+        "Expansion Proposal"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Rural Broadband",
+        "Expansion Proposal"
+      ],
+      "name": "35-rural-broadband-expansion-proposal-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Rural Broadband",
+        "Expansion Proposal"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Satellite Maintenance",
+        "Readiness Review"
+      ],
+      "name": "36-satellite-maintenance-readiness-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Satellite Maintenance",
+        "Readiness Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Satellite Maintenance",
+        "Readiness Review"
+      ],
+      "name": "36-satellite-maintenance-readiness-review-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Satellite Maintenance Readiness",
+        "Review"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Streaming Churn",
+        "Winback Strategy"
+      ],
+      "name": "37-streaming-churn-winback-strategy-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Streaming Churn",
+        "Winback Strategy"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Streaming Churn",
+        "Winback Strategy"
+      ],
+      "name": "37-streaming-churn-winback-strategy-s1",
+      "canvas": {
+        "authoredPx": [
+          1122.24,
+          793.92
+        ],
+        "nativePt": [
+          841.625,
+          595.5
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          841.6800000000001,
+          595.4399999999999
+        ],
+        "expectedQuantizedPt": [
+          841.625,
+          595.5
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Streaming Churn Winback",
+        "Strategy"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Veterinary Staffing",
+        "Stabilization"
+      ],
+      "name": "38-veterinary-staffing-stabilization-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Veterinary Staffing",
+        "Stabilization"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Veterinary Staffing",
+        "Stabilization"
+      ],
+      "name": "38-veterinary-staffing-stabilization-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Veterinary Staffing",
+        "Stabilization"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Arabic Digital",
+        "Services Brief"
+      ],
+      "name": "39-arabic-digital-services-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Arabic Digital",
+        "Services Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Arabic Digital",
+        "Services Brief"
+      ],
+      "name": "39-arabic-digital-services-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Arabic Digital Services",
+        "Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Brazil Climate",
+        "Adaptation Brief"
+      ],
+      "name": "40-brazil-climate-adaptation-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Brazil Climate",
+        "Adaptation Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Brazil Climate",
+        "Adaptation Brief"
+      ],
+      "name": "40-brazil-climate-adaptation-brief-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Brazil Climate Adaptation",
+        "Brief"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Customer QBR",
+        "Renewal Deck"
+      ],
+      "name": "41-customer-qbr-renewal-deck-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Customer QBR",
+        "Renewal Deck"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Customer QBR",
+        "Renewal Deck"
+      ],
+      "name": "41-customer-qbr-renewal-deck-s1",
+      "canvas": {
+        "authoredPx": [
+          1056.0,
+          816.0
+        ],
+        "nativePt": [
+          792.0,
+          612.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          792.0,
+          612.0
+        ],
+        "expectedQuantizedPt": [
+          792.0,
+          612.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Customer QBR Renewal",
+        "Deck"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Seed Pitch for",
+        "Climate Risk API"
+      ],
+      "name": "42-seed-pitch-for-climate-risk-api-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Seed Pitch for",
+        "Climate Risk API"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Seed Pitch for",
+        "Climate Risk API"
+      ],
+      "name": "42-seed-pitch-for-climate-risk-api-s1",
+      "canvas": {
+        "authoredPx": [
+          960.0,
+          720.0
+        ],
+        "nativePt": [
+          720.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          720.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          720.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Seed Pitch for Climate",
+        "Risk API"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "How each round",
+        "feeds the next"
+      ],
+      "name": "43-icons-and-arrangements-s6",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "How each round",
+        "feeds the next"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "How each round",
+        "feeds the next"
+      ],
+      "name": "43-icons-and-arrangements-s6",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "How each round",
+        "feeds the next"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "What happens",
+        "after sign-up"
+      ],
+      "name": "44-icons-and-arrangements-s9",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "What happens",
+        "after sign-up"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "What happens",
+        "after sign-up"
+      ],
+      "name": "44-icons-and-arrangements-s9",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "What happens after",
+        "sign-up"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0,
+        1
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "A smaller pilot.",
+        "A clearer decision."
+      ],
+      "name": "45-layout-sampler-s1",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "A smaller pilot.",
+        "A clearer decision."
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 1,
+          "name": "OPF heading slides.0.title line 1"
+        },
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Three parts,",
+        "one decision"
+      ],
+      "name": "46-layout-sampler-s4",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Three parts,",
+        "one decision"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Three parts,",
+        "one decision"
+      ],
+      "name": "46-layout-sampler-s4",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Three parts, one",
+        "decision"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Four ways to",
+        "run the pilot"
+      ],
+      "name": "47-layout-sampler-s32",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Four ways to",
+        "run the pilot"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "Four ways to",
+        "run the pilot"
+      ],
+      "name": "47-layout-sampler-s32",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "Four ways to run",
+        "the pilot"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "How each pilot",
+        "round feeds the next"
+      ],
+      "name": "48-layout-sampler-s33",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "How each pilot",
+        "round feeds the next"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "How each pilot",
+        "round feeds the next"
+      ],
+      "name": "48-layout-sampler-s33",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "How each pilot",
+        "round feeds the next"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "How a team",
+        "joins the pilot"
+      ],
+      "name": "49-layout-sampler-s36",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "How a team",
+        "joins the pilot"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": false,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": false,
+      "expectedLines": [
+        "How a team",
+        "joins the pilot"
+      ],
+      "name": "49-layout-sampler-s36",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": false,
+      "actualLines": [
+        "How a team joins",
+        "the pilot"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "After",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Image Fill",
+        "Override"
+      ],
+      "name": "50-slide-design-overrides-s4",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Image Fill",
+        "Override"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    },
+    {
+      "linesMatch": true,
+      "unchangedNativeChecks": {
+        "overflow": [],
+        "frame": true,
+        "noAutofit": true,
+        "size": true
+      },
+      "mode": "BeforeXmlControl",
+      "orderedShapeIndices": [
+        0
+      ],
+      "rawPassed": true,
+      "expectedLines": [
+        "Image Fill",
+        "Override"
+      ],
+      "name": "50-slide-design-overrides-s4",
+      "canvas": {
+        "authoredPx": [
+          1280.0,
+          720.0
+        ],
+        "nativePt": [
+          960.0,
+          540.0
+        ],
+        "matches": true,
+        "quantumPt": 0.125,
+        "authoredPt": [
+          960.0,
+          540.0
+        ],
+        "expectedQuantizedPt": [
+          960.0,
+          540.0
+        ]
+      },
+      "passed": true,
+      "actualLines": [
+        "Image Fill",
+        "Override"
+      ],
+      "rawShapeOrder": [
+        {
+          "index": 0,
+          "name": "OPF heading slides.0.title line 0"
+        }
+      ]
+    }
+  ],
+  "complete": true,
+  "passed": false
+}

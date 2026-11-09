@@ -8,7 +8,7 @@
 import { statSync } from "node:fs";
 import path from "node:path";
 import { ensureIcons } from "../icons.js";
-import { type Catalog, type Fonts, continueOverfull, paginate } from "../core.js";
+import { type Catalog, type Fonts, continueOverfull, paginate, validate } from "../core.js";
 import { createImageResolver } from "./assets.js";
 import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError } from "../api-errors.js";
@@ -16,7 +16,7 @@ import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, subst
 import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
 import { deckStem, padNumber } from "./files.js";
 import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom, requirePptxOptions } from "./peers.js";
-import { Reporter, reportThrown } from "./reporter.js";
+import { type Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
 
 export type ExportFormat = "svg" | "png" | "pdf" | "pptx";
@@ -397,6 +397,18 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 	const named = options.slides === undefined ? undefined : parseSlideSelection(options.slides, slideCount, slidesLabel);
 	const selected = format === "pptx" ? [] : named ?? (options.includeHidden ? everySlide : everySlide.filter((number) => !isHidden(number)));
 	const skippedHidden = format === "pptx" || named || options.includeHidden ? [] : everySlide.filter(isHidden);
+	// Format/reference gating stays unchanged. Report selected chart data advisories once for drawings whose renderer does not
+	// report them itself. Native PPTX already explains these adaptations through its exporter diagnostics.
+	if (format !== "pptx" || options.as === "images") {
+		const rules = ["opf/chart-mapping-adapted", "opf/chart-series-dropped"];
+		const chartCheck = validate(deck, { only: rules, catalogs });
+		for (const finding of chartCheck.findings) {
+			if (finding.severity !== "warning" || !rules.includes(finding.ruleId)) continue;
+			const sourceIndex = /^\/slides\/(\d+)(?:\/|$)/.exec(finding.path)?.[1];
+			if (format !== "pptx" && (sourceIndex === undefined || !selected.includes(Number(sourceIndex) + 1))) continue;
+			if (!reporter.findings.some(existing => existing.ruleId === finding.ruleId && existing.path === finding.path && existing.message === finding.message)) reporter.addFinding(finding);
+		}
+	}
 	if (format !== "pptx" && !selected.length)
 		throw new OPFApiError(skippedHidden.length ? (ctx.flags ? "Every slide is hidden. Use --include-hidden to write them, or --slides to name slides." : "Every slide is hidden. Use includeHidden to write them, or slides to name slides.") : "The presentation has no slides.", skippedHidden.length ? "all-slides-hidden" : "no-slides");
 
