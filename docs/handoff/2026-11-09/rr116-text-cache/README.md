@@ -1,0 +1,9 @@
+# RR-116: repeated text analysis
+
+The owner asked for additional rendering performance and memory improvements after the Node/browser baseline. This branch starts with a fresh origin/main worktree and normally includes reviewed staging eeb. It changes only the measurement-cache boundary in font-registry: resolve the actual face/policy first, form separate automatic/explicit direction keys, and run Unicode direction and OpenType language analysis only on a shaping miss or width-to-outline upgrade. Glyph validation, language-specific shaping, size adjustment and cache bounds stay intact. It does not implement RR-114 selective font loading.
+
+Actual focused controls pass automatic direction, mixed paragraphs and isolates, size scaling, explicit overrides/untyped host values, language independence, outline upgrades, per-face/caller-face caches, bounded eviction, long-input exclusion and engine reset. Existing real-font tests pass99 pinned face/text outline combinations and127-face preparation/integrity controls. Original build/install logs and exact source hashes will be sealed with the benchmark evidence. No speed, aggregate, native or release acceptance is claimed yet.
+
+Next: a coordinated quiet-window before/after run against identical runtime inputs, exact16/36-slide SVG hashes and measured CPU/RSS. Keep a change only if measurements support it. Then peer review and the single coherent source gate with RR-114/RR-115/chart/positioning work. No hand-written golden hashes or tolerance changes.
+
+Vetoable decision: automatic/explicit requests have separate cache keys, which permits skipping analysis on a hit and preserves every shaping override. This may duplicate semantically equal auto/explicit results; the existing bounded cache and full output/measurement controls remain required.

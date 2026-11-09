@@ -278,11 +278,10 @@ export function createFontRegistry(entries, options = {}) {
   const metrics = (text,size,style,includeOutline=false) => {
     if (typeof text!=='string'||!Number.isFinite(size)||size<=0) throw new OPFFontError('invalid-text-measurement','Text measurement requires a string and a positive finite font size.');
     const {face,resolution}=resolve(style);
-    // A BCP-47 `lang` selects the font's OpenType language system, as a browser
-    // does for an element's lang (FF-19). Without it, shaping is unchanged.
-    const language=openTypeLanguage(style.lang);
-    const direction = style.direction ?? (bidi.getEmbeddingLevels(text).paragraphs[0]?.level % 2 ? "rtl" : "ltr");
-    const key = `${direction}\u0000${style.lang ?? ""}\u0000${text}`;
+    // Automatic and explicit direction requests have separate keys. A cache hit
+    // needs neither Unicode direction analysis nor OpenType language lookup.
+    const directionKey = style.direction == null ? "auto" : `explicit:${style.direction}`;
+    const key = `${directionKey}\u0000${style.lang ?? ""}\u0000${text}`;
     let value=face.cache.get(key);
     if (value===undefined) {
       if (options.strictGlyphs!==false) for(const character of text) {
@@ -296,6 +295,9 @@ export function createFontRegistry(entries, options = {}) {
       }
     }
     if(value===undefined||includeOutline&&!Object.hasOwn(value,'outline')) {
+      // A width-only entry is shaped again when its outline is first requested.
+      const language = openTypeLanguage(style.lang);
+      const direction = style.direction ?? (bidi.getEmbeddingLevels(text).paragraphs[0]?.level % 2 ? "rtl" : "ltr");
       // FF-31: features a policy row turns off in its replacement (Gelasio for Georgia: liga, clig), the
       // same ones the SVG output turns off, so measured and drawn advances agree.
       const off=disabledFeaturesFor(face.family),policyFeatures=off&&Object.fromEntries(off.map(tag=>[tag,false]));
