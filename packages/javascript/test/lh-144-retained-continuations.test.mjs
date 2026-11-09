@@ -23,7 +23,10 @@ for(const {id,count,offset} of [{id:'inverted-pyramid',count:5,offset:0},{id:'in
  assert.deepEqual(pages.flatMap(page=>page.blocks),doc.slides[offset].blocks,'whole blocks stay byte-for-byte authored');
  let firstMaximum;
  for(let page=offset;page<result.presentation.slides.length;page++){
-  const drawn=geometry(result.presentation,page),fonts=bodies(drawn).flatMap(fragments).map(fragment=>fragment.fontSize);
+  const drawn=geometry(result.presentation,page),paintedBodies=bodies(drawn),fonts=paintedBodies.flatMap(fragments).map(fragment=>fragment.fontSize);
+  assert.equal(paintedBodies.length,result.presentation.slides[page].blocks.length,'every whole block has an actual drawn body');
+  assert.ok(fonts.length>0,'every returned page paints actual body text');
+  for(const item of paintedBodies){assert.ok(fragments(item).length>0,'each returned body paints fragments');const entries=(item.listColumns??[{text:item.text}]).flatMap(column=>column.text.listEntries);assert.deepEqual(entries.map(entry=>entry.index),item.value.map((_,index)=>index),'actual ordered entry coverage');}
   assert.deepEqual(fitIssues(drawn),[]);
   assert.ok(fonts.every(size=>size>=settled-1e-6),`page ${page}: ${fonts} retains ${settled}`);
   firstMaximum??=Math.max(...fonts);
@@ -89,4 +92,17 @@ for(const composition of [{maxFontSize:18},{minFontSize:24}])test(`authored comp
   if(composition.minFontSize)assert.ok(fonts.every(size=>size>=composition.minFontSize-1e-6));
   assert.deepEqual(fitIssues(drawn),[]);
  }
+});
+
+test('whole-table continuation remeasures code cells in the caller-selected code family',()=>{
+ const code='~~~~~~';let measuredCode=0;
+ const measurement={measure(text,size,style){if(/^~+$/.test(text)&&String(style.path).includes('.value.')){measuredCode++;assert.equal(style.fontFamily,'Chosen Code','actual authored code fragment uses its selected family');}return [...text].length*size*(style.fontFamily==='Chosen Code'?.6:.4);}};
+ const table={columns:['Code','Count'],rows:[[{value:[{text:code,code:true}]},'1'],[{value:[{text:code,code:true}]},'2']]};
+ const slide={title:'Tables',composition:{mode:'column'},blocks:Array.from({length:16},()=>({table:structuredClone(table)}))};
+ const saved=structuredClone(slide);
+ const result=paginateSlide(slide,{wholeBlocks:true,layout:layouts['table-beside'],fontFamilies:{heading:'Body',body:'Body',code:'Chosen Code'},fonts:{textMeasurement:measurement}});
+ assert.ok(measuredCode>0,'the chosen code face is actually measured');
+ assert.ok(result.slides.length>1);
+ assert.deepEqual(result.slides.flatMap(page=>page.blocks),slide.blocks);
+ assert.deepEqual(slide,saved);
 });

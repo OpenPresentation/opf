@@ -43,7 +43,7 @@ export function continuationFonts(composed: SlideComposition, options: ComposeSl
       fit(part.fit,String(part.path).slice(item.path.length),part.role,part.style);
     }
     else if (item.field==='table') {
-      const table=layoutTable(item.value as any,item.box,{scale,minFontSize:item.composition.minFontSize,fontFamily:options.fontFamilies?.body,textMeasurement:options.textMeasurement,presentation:options.presentation,...(item.tableGrowth?{growth:item.tableGrowth}:{})});
+      const table=layoutTable(item.value as any,item.box,{scale,minFontSize:item.composition.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path:item.path,presentation:options.presentation,...(item.tableGrowth?{growth:item.tableGrowth}:{})});
       for (const [rowIndex,row] of table.rows.entries()) for (const [columnIndex,cell] of row.cells.entries()) fit(cell.fit,`cell.${rowIndex}.${columnIndex}`,'cell',item.textStyle);
     } else if (item.listColumns?.length) {
       // Column boundaries may change; the source entry indexes remain stable.
