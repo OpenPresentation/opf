@@ -315,10 +315,20 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     ensure(presentation, callOptions = {}) {
       const result = ensureQueue.then(async () => {
         const prepare = demand ? (_registry,_loaded,presentation,opts)=>demand.ensure(presentation,opts) : ensureFonts;
-        const prepared = await prepare(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: renderOptionsFor(callOptions), ...(callOptions.mapFamily ? {mapFamily:callOptions.mapFamily} : {})});
-        if(demand)registry.lazyFonts=lazyOf(registry);
-        refresh();
-        return prepared;
+        let rejected = false;
+        try {
+          return await prepare(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: renderOptionsFor(callOptions), ...(callOptions.mapFamily ? {mapFamily:callOptions.mapFamily} : {})});
+        } catch (error) {
+          rejected = true;
+          throw error;
+        } finally {
+          // A later resource can fail after verified faces or fallback-only metadata already changed.
+          // Derived views must reflect those committed registry changes while the original rejection propagates.
+          try {
+            refresh();
+            if(demand)registry.lazyFonts=lazyOf(registry);
+          } catch(error) { if(!rejected)throw error; } // Never replace the original preparation rejection.
+        }
       });
       ensureQueue = result.catch(() => {});
       return result;
