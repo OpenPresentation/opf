@@ -39,3 +39,5 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - [Inverted pyramids](inverted-pyramids.opf.json): wide-first selections, narrative labels and grouped workstreams, exported as editable native shapes.
 
 The exhaustive [layout sampler](./layout-sampler.opf.json) has all40 default layouts and13 dynamic compositions (53 slides). Regenerate its referenced current records and append new layouts with `node scripts/update-layout-sampler.mjs`; existing slide identities, words and ordinals remain unchanged.
+
+When reviewing dense grouped examples, use the default whole-block continuation path from convert, or call continueOverfull first for slide-by-slide rendering. It retains settled sizes for comparable automatic body roles before choosing the page count; explicit rich sizes and author minima/maxima keep their own constraints. Later pages cap actual arrangement text to the first page. No fixed minimum is added. Inspect the returned pages and continued/source mappings; an indivisible unfit block preserves the original fit refusal and content. Use explicit paginate for splits inside a block.
