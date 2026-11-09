@@ -1,0 +1,3537 @@
+{
+  "format": 1,
+  "scope": "one-deck pure archive derivation only; no exporter, fixture promotion or native acceptance",
+  "assembly": "ef5405b3bbf9c47c8ae2e790e08aa72dcb18875f",
+  "reviewedProducer": "513156a982397eaa0033808215fbb86dd284745b",
+  "publishedEvidence": {
+    "commit": "5e89a184ffc8a38539f5fb5e573f403066bcca17",
+    "archivePath": "docs/evidence/rr105-034-archive-review/nine/treemap-category.zip",
+    "outerSha256": "33611d6be8310b553ab01cda1c1867b264d19df579d0ff926a07408ba42027b0",
+    "innerPath": "after.pptx",
+    "provenancePath": "docs/evidence/rr105-034-archive-review/maintained-originals-and-provenance.zip",
+    "provenanceEntry": "nine/provenance.json",
+    "provenanceSha256": "97e8703ca009259ce7aacaf62bd467daab3185e2c0d663c2cae84c141ba8834f"
+  },
+  "priorReviewRuntime": {
+    "node": "v24.20.0",
+    "platform": "win32"
+  },
+  "proofRuntime": {
+    "node": "v24.20.0",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "source": {
+    "path": "packages/gallery/catalog/layouts/inverted-pyramid.json",
+    "before": {
+      "sha256": "a1b5ab6c27d111beb29db3a5851abb84ecae129d4b0a851d8389300a2e252ade",
+      "bytes": 905,
+      "text": "{\n  \"$schema\": \"https://openpresentation.org/schema/opf-layout/v2\",\n  \"id\": \"inverted-pyramid\",\n  \"name\": \"Inverted pyramid\",\n  \"summary\": \"Levels that narrow to a point, with the widest first.\",\n  \"tags\": [\n    \"Groups of items\"\n  ],\n  \"direction\": \"column\",\n  \"regions\": [\n    {\n      \"name\": \"title\"\n    },\n    {\n      \"name\": \"levels\",\n      \"accepts\": [\n        \"list\"\n      ],\n      \"role\": \"primary\",\n      \"flow\": \"none\",\n      \"arrangement\": \"pyramid\",\n      \"pyramidDirection\": \"down\"\n    }\n  ],\n  \"description\": \"Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes; live Inverted Pyramid SmartArt is not yet qualified.\",\n  \"preview\": {\n    \"vectorSrc\": \"https://www.pptx.gallery/layout-previews/inverted-pyramid.svg\"\n  }\n}\n"
+    },
+    "after": {
+      "sha256": "0807b5bde5ce92531c50aeda229c309ae7c56582798fa762f39f96b4973c4145",
+      "bytes": 852,
+      "text": "{\n  \"$schema\": \"https://openpresentation.org/schema/opf-layout/v2\",\n  \"id\": \"inverted-pyramid\",\n  \"name\": \"Inverted pyramid\",\n  \"summary\": \"Levels that narrow to a point, with the widest first.\",\n  \"tags\": [\n    \"Groups of items\"\n  ],\n  \"direction\": \"column\",\n  \"regions\": [\n    {\n      \"name\": \"title\"\n    },\n    {\n      \"name\": \"levels\",\n      \"accepts\": [\n        \"list\"\n      ],\n      \"role\": \"primary\",\n      \"flow\": \"none\",\n      \"arrangement\": \"pyramid\",\n      \"pyramidDirection\": \"down\"\n    }\n  ],\n  \"description\": \"Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes.\",\n  \"preview\": {\n    \"vectorSrc\": \"https://www.pptx.gallery/layout-previews/inverted-pyramid.svg\"\n  }\n}\n"
+    },
+    "changedFields": [
+      "description"
+    ],
+    "oldEmbeddedRecordHash": "4baa264255f9f66b",
+    "newEmbeddedRecordHash": "22f5fe00efa7a1f8"
+  },
+  "fixture": {
+    "path": "packages/pptx/test/fixtures/chartex-fallback-main.json",
+    "sha256": "73cea56b226a75d785c2d00d980776743bc412e18f723717ee7e61cab5549d68",
+    "expectedSha256": "d1e56048a3953d90d9f81232afd6f8f6ba79e66a286eb9c28873e065cbb21394"
+  },
+  "originalArchive": {
+    "bytes": 107595,
+    "sha256": "d1e56048a3953d90d9f81232afd6f8f6ba79e66a286eb9c28873e065cbb21394"
+  },
+  "unchangedRepackByteExact": true,
+  "derivedArchive": {
+    "bytes": 107591,
+    "sha256": "c844c8abe2f223546f9a735e27f16cb0e036dd7c519b01992e02df5c22639079"
+  },
+  "observedFailureSha256": "c844c8abe2f223546f9a735e27f16cb0e036dd7c519b01992e02df5c22639079",
+  "derivedEqualsObserved": true,
+  "zip": {
+    "compressionLevel": 6,
+    "localDate": "1980-01-01T00:00:00 local",
+    "method": 8,
+    "dosTime": 0,
+    "dosDate": 33
+  },
+  "changedPart": {
+    "path": "ppt/tags/opfLayout18.xml",
+    "beforeText": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><p:tagLst xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><p:tag name=\"OPF_LAYOUT_V1\" val=\"7B2276223A312C226964223A22696E7665727465642D707972616D6964222C2267726F7570223A2264656661756C74222C22736F75726365223A2268747470733A2F2F7777772E707074782E67616C6C657279222C227265666572656E6365223A22696E7665727465642D707972616D6964222C2268617368223A2234626161323634323535663966363662222C22726567696F6E73223A7B22333030223A226C6576656C73227D7D\"/></p:tagLst>",
+    "afterText": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><p:tagLst xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><p:tag name=\"OPF_LAYOUT_V1\" val=\"7B2276223A312C226964223A22696E7665727465642D707972616D6964222C2267726F7570223A2264656661756C74222C22736F75726365223A2268747470733A2F2F7777772E707074782E67616C6C657279222C227265666572656E6365223A22696E7665727465642D707972616D6964222C2268617368223A2232326635666530306566613761316638222C22726567696F6E73223A7B22333030223A226C6576656C73227D7D\"/></p:tagLst>",
+    "byteDifferences": [
+      {
+        "offset": 416,
+        "before": 52,
+        "after": 50
+      },
+      {
+        "offset": 417,
+        "before": 54,
+        "after": 51
+      },
+      {
+        "offset": 420,
+        "before": 49,
+        "after": 54
+      },
+      {
+        "offset": 421,
+        "before": 54,
+        "after": 51
+      },
+      {
+        "offset": 422,
+        "before": 49,
+        "after": 53
+      },
+      {
+        "offset": 423,
+        "before": 51,
+        "after": 54
+      },
+      {
+        "offset": 424,
+        "before": 50,
+        "after": 54
+      },
+      {
+        "offset": 425,
+        "before": 51,
+        "after": 54
+      },
+      {
+        "offset": 426,
+        "before": 54,
+        "after": 53
+      },
+      {
+        "offset": 428,
+        "before": 52,
+        "after": 48
+      },
+      {
+        "offset": 430,
+        "before": 50,
+        "after": 48
+      },
+      {
+        "offset": 431,
+        "before": 51,
+        "after": 54
+      },
+      {
+        "offset": 433,
+        "before": 51,
+        "after": 54
+      },
+      {
+        "offset": 434,
+        "before": 53,
+        "after": 54
+      },
+      {
+        "offset": 436,
+        "before": 54,
+        "after": 49
+      },
+      {
+        "offset": 438,
+        "before": 57,
+        "after": 55
+      },
+      {
+        "offset": 440,
+        "before": 54,
+        "after": 49
+      },
+      {
+        "offset": 442,
+        "before": 54,
+        "after": 49
+      },
+      {
+        "offset": 443,
+        "before": 51,
+        "after": 54
+      },
+      {
+        "offset": 445,
+        "before": 54,
+        "after": 51
+      },
+      {
+        "offset": 446,
+        "before": 50,
+        "after": 56
+      }
+    ]
+  },
+  "parts": [
+    {
+      "name": "[Content_Types].xml",
+      "before": {
+        "bytes": 14601,
+        "sha256": "045b6d3b45851fb72318b09ceace4f832ae5ab1b416c7ed8b44a78ba6d01470b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 882
+      },
+      "after": {
+        "bytes": 14601,
+        "sha256": "045b6d3b45851fb72318b09ceace4f832ae5ab1b416c7ed8b44a78ba6d01470b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 882
+      },
+      "changed": false
+    },
+    {
+      "name": "_rels/.rels",
+      "before": {
+        "bytes": 605,
+        "sha256": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 239
+      },
+      "after": {
+        "bytes": 605,
+        "sha256": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 239
+      },
+      "changed": false
+    },
+    {
+      "name": "docProps/app.xml",
+      "before": {
+        "bytes": 1357,
+        "sha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 551
+      },
+      "after": {
+        "bytes": 1357,
+        "sha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 551
+      },
+      "changed": false
+    },
+    {
+      "name": "docProps/core.xml",
+      "before": {
+        "bytes": 762,
+        "sha256": "4114c9e9ec2ef95c0e6ccd8ea499ebc3faa312100f5b4f5c18079b2791779a1c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 351
+      },
+      "after": {
+        "bytes": 762,
+        "sha256": "4114c9e9ec2ef95c0e6ccd8ea499ebc3faa312100f5b4f5c18079b2791779a1c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 351
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/_rels/presentation.xml.rels",
+      "before": {
+        "bytes": 1272,
+        "sha256": "57f5cdc0dfccd7479cd4e76cb96ce171982e1d712e29e88035220b72813650a2",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 290
+      },
+      "after": {
+        "bytes": 1272,
+        "sha256": "57f5cdc0dfccd7479cd4e76cb96ce171982e1d712e29e88035220b72813650a2",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 290
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/charts/_rels/chart1.xml.rels",
+      "before": {
+        "bytes": 318,
+        "sha256": "e8251d095aee5afe902d788febf1b4ed304d0a5c3960ea903fd60dccf922b753",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 200
+      },
+      "after": {
+        "bytes": 318,
+        "sha256": "e8251d095aee5afe902d788febf1b4ed304d0a5c3960ea903fd60dccf922b753",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 200
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/charts/chart1.xml",
+      "before": {
+        "bytes": 5124,
+        "sha256": "341baa4d421cacbdc2f8cfafc3a490d659864ed963225c96028ddfe30c166799",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1374
+      },
+      "after": {
+        "bytes": 5124,
+        "sha256": "341baa4d421cacbdc2f8cfafc3a490d659864ed963225c96028ddfe30c166799",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1374
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx",
+      "before": {
+        "bytes": 5821,
+        "sha256": "56d966380d498a0fdecb1292f42d49681b5cacbd862decb547e047181294c980",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 5005
+      },
+      "after": {
+        "bytes": 5821,
+        "sha256": "56d966380d498a0fdecb1292f42d49681b5cacbd862decb547e047181294c980",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 5005
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+      "before": {
+        "bytes": 298,
+        "sha256": "aa28ea0b8047e5c53ef232c7811d3b5ef01ac58b6cdd58a83d3ce0b6a39edcfe",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 184
+      },
+      "after": {
+        "bytes": 298,
+        "sha256": "aa28ea0b8047e5c53ef232c7811d3b5ef01ac58b6cdd58a83d3ce0b6a39edcfe",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 184
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/notesMasters/notesMaster1.xml",
+      "before": {
+        "bytes": 7538,
+        "sha256": "30b679d7ba224d98894bc533dc61f2277215c7309afa38e0bdd6c2f24b420453",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1474
+      },
+      "after": {
+        "bytes": 7538,
+        "sha256": "30b679d7ba224d98894bc533dc61f2277215c7309afa38e0bdd6c2f24b420453",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1474
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+      "before": {
+        "bytes": 459,
+        "sha256": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 459,
+        "sha256": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/notesSlides/notesSlide1.xml",
+      "before": {
+        "bytes": 1627,
+        "sha256": "01118c71e396cde0af931dfe4a8a1cfae23911cb55763f875af14d9615f7ef86",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 667
+      },
+      "after": {
+        "bytes": 1627,
+        "sha256": "01118c71e396cde0af931dfe4a8a1cfae23911cb55763f875af14d9615f7ef86",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 667
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/presProps.xml",
+      "before": {
+        "bytes": 305,
+        "sha256": "ffec24dd17fe9d2d8fb844a8b198d7f569c79195c43c4ecc196c350eb1ef4d05",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 169
+      },
+      "after": {
+        "bytes": 305,
+        "sha256": "ffec24dd17fe9d2d8fb844a8b198d7f569c79195c43c4ecc196c350eb1ef4d05",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 169
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/presentation.xml",
+      "before": {
+        "bytes": 3345,
+        "sha256": "89e39dee29c14a02f4aab511d24050d397cea263b01e262b13fee18acaa01bfb",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 596
+      },
+      "after": {
+        "bytes": 3345,
+        "sha256": "89e39dee29c14a02f4aab511d24050d397cea263b01e262b13fee18acaa01bfb",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 596
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+      "before": {
+        "bytes": 311,
+        "sha256": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 183
+      },
+      "after": {
+        "bytes": 311,
+        "sha256": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 183
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout10.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "e26d86b9c92a9bac12c6f042fd592fd12932d08cdcb1555b73c24ae266d2b597",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "e26d86b9c92a9bac12c6f042fd592fd12932d08cdcb1555b73c24ae266d2b597",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout11.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "afc87db1ae8e0f25b7a99bf87f41866f4769ecf443044eee5ec1b940365c2ec6",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "afc87db1ae8e0f25b7a99bf87f41866f4769ecf443044eee5ec1b940365c2ec6",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout12.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "b21e9e8040ca85eb1ee0680d2a82cd84da5c3d1851153c4e720f6e0ea5033b89",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "b21e9e8040ca85eb1ee0680d2a82cd84da5c3d1851153c4e720f6e0ea5033b89",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout13.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "6bac1b69461c147e2ee4a0bc6b90e8f63544e9287fc4b6f6a816d393c6bd1abb",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "6bac1b69461c147e2ee4a0bc6b90e8f63544e9287fc4b6f6a816d393c6bd1abb",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout14.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "61c49ba8a195e47da26e06c1f4a7046f47f6cbdf12fda103fefe565f2ea98cc4",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "61c49ba8a195e47da26e06c1f4a7046f47f6cbdf12fda103fefe565f2ea98cc4",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout15.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "663cd3d66ae97465584718142aee9c928598777b24073847f298f73c26278f82",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "663cd3d66ae97465584718142aee9c928598777b24073847f298f73c26278f82",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout16.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "149d333d5576f7f6e47606afc190282ff0b5b6e3cf313404d0ccb9106192b84d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "149d333d5576f7f6e47606afc190282ff0b5b6e3cf313404d0ccb9106192b84d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout17.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "15a9e62845f5308b9cffbcd32ccce56cfeec314900caa61d8890ee4b56945a78",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "15a9e62845f5308b9cffbcd32ccce56cfeec314900caa61d8890ee4b56945a78",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout18.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "35c8ee5ca38ebbb445254243bac1a1c776fdaed9e0a62adb36daa813efca10c0",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "35c8ee5ca38ebbb445254243bac1a1c776fdaed9e0a62adb36daa813efca10c0",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout19.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "0f9c989773a7401b3cf786e282c5a7117ec5632c143dcb29065b3851d9efeeec",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "0f9c989773a7401b3cf786e282c5a7117ec5632c143dcb29065b3851d9efeeec",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout2.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "0ae0786bf0e90ddb8c9311cbe1a905c2004e7934ef5ddca134b7ff0a9086e1bd",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 206
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "0ae0786bf0e90ddb8c9311cbe1a905c2004e7934ef5ddca134b7ff0a9086e1bd",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 206
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout20.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "18c2e3a7c0611d06304211319f0756dffd35be2c861d9d9a67ddebb52dc7f79c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "18c2e3a7c0611d06304211319f0756dffd35be2c861d9d9a67ddebb52dc7f79c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout21.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "91518351ed6e9936ecfa3cd726ca12c868ae3303b74225356ee9e25316303cde",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "91518351ed6e9936ecfa3cd726ca12c868ae3303b74225356ee9e25316303cde",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout22.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "1827e165ae7c017279c8aca0cf7477ade1621a82b6325a52ac8a564977ae6456",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "1827e165ae7c017279c8aca0cf7477ade1621a82b6325a52ac8a564977ae6456",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout23.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "166cb493c34914367ee72bc2ce5ebcd580432de110660c0886d664f74356f08d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "166cb493c34914367ee72bc2ce5ebcd580432de110660c0886d664f74356f08d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout24.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "0a9d138dfcfb3c03cda599235dd37ca7cbeb21a6adb4f0c651622874de3c6ddf",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "0a9d138dfcfb3c03cda599235dd37ca7cbeb21a6adb4f0c651622874de3c6ddf",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout25.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "12ffe0f24291ed1caef9db5124f13a1393587c47602d0eb59fed4192ba23feec",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "12ffe0f24291ed1caef9db5124f13a1393587c47602d0eb59fed4192ba23feec",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout26.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "6e420eef7cb03390daf58a5444ebc2e72c7a229cb2e40f24495f6e707f970a85",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "6e420eef7cb03390daf58a5444ebc2e72c7a229cb2e40f24495f6e707f970a85",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout27.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "2d24c994494a1de0dc28b25336950f2916ed6665a9c33fafb886860e94892471",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "2d24c994494a1de0dc28b25336950f2916ed6665a9c33fafb886860e94892471",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout28.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "a091a62afe8a40452fe724143365f9329cdce16747f4b8d957ccac7e8609558e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "a091a62afe8a40452fe724143365f9329cdce16747f4b8d957ccac7e8609558e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout29.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "b22ceabc47faab18046dfea2ed30085c177909c305f80e63a20763d74577ca6f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "b22ceabc47faab18046dfea2ed30085c177909c305f80e63a20763d74577ca6f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout3.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "2a8b0c4ef18cf52cad5cb8f876b0d9b81e828b95064ddeff638bf15f8d05f214",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "2a8b0c4ef18cf52cad5cb8f876b0d9b81e828b95064ddeff638bf15f8d05f214",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout30.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "2b84c68d27dbdc56dde5925f5bc82c8c3afa9b86112b925e8909286bd903708c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "2b84c68d27dbdc56dde5925f5bc82c8c3afa9b86112b925e8909286bd903708c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout31.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "665e8dc31d4b244a57503e51f93bf6ff03215c2d84608230903ea59beba37eab",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "665e8dc31d4b244a57503e51f93bf6ff03215c2d84608230903ea59beba37eab",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout32.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "1f1959b9a45ae9a02ca2ba753a5ed538cb2cf1cfee8799b7b49fb5b67d9a737f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "1f1959b9a45ae9a02ca2ba753a5ed538cb2cf1cfee8799b7b49fb5b67d9a737f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout33.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "fee274f59b2f32549a2b3cea3d1f176ecdd0bc7d3b5901d332f2aff273bb2a8a",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "fee274f59b2f32549a2b3cea3d1f176ecdd0bc7d3b5901d332f2aff273bb2a8a",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout34.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "d9a9becf15ab1063df42397def5bd07b8e0036a040a19a0efc0512dbfc4c73c8",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "d9a9becf15ab1063df42397def5bd07b8e0036a040a19a0efc0512dbfc4c73c8",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout35.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "3e23775f56c4a1c49b42f4f302db2408e0005d7307e58ffc4c0db83a2fde1342",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "3e23775f56c4a1c49b42f4f302db2408e0005d7307e58ffc4c0db83a2fde1342",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout36.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "028ab0623c7e813733b95e2be78d182322692ee4622b19a48c46f67d0728e755",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "028ab0623c7e813733b95e2be78d182322692ee4622b19a48c46f67d0728e755",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout37.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "4106aba58d44b261728a7aa05d9a2121df911c39baaf55d5d49c6460c2dccb9c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "4106aba58d44b261728a7aa05d9a2121df911c39baaf55d5d49c6460c2dccb9c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout38.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "a5f073604a59f8efa2e3be989adb908cab411ae58c7ac377fda7ae084e12e40d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "a5f073604a59f8efa2e3be989adb908cab411ae58c7ac377fda7ae084e12e40d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout39.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "62e8c17f546b900abc329d88a8ea2e9e397a7ba99e7e7bc378578cc311253dd5",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "62e8c17f546b900abc329d88a8ea2e9e397a7ba99e7e7bc378578cc311253dd5",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout4.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "b979bc121e3f47d504509d6e4f8b4ec5e7ed4c952292c5bb32383db6d90ff7db",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "b979bc121e3f47d504509d6e4f8b4ec5e7ed4c952292c5bb32383db6d90ff7db",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout40.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "e9eed93c8be97d447f198520bf0d9d26a469ace4b261f6baf45351f267c2f522",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "e9eed93c8be97d447f198520bf0d9d26a469ace4b261f6baf45351f267c2f522",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 209
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout41.xml.rels",
+      "before": {
+        "bytes": 448,
+        "sha256": "f0e3b1951215df4a6fc3560b173165255221daf8d1f9fc1630ee27905f595fba",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "after": {
+        "bytes": 448,
+        "sha256": "f0e3b1951215df4a6fc3560b173165255221daf8d1f9fc1630ee27905f595fba",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 208
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout42.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "f687ed9076871f9841ac8a0865468fc86386708ec5eec7ef647db5a9e2a9e717",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 204
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "f687ed9076871f9841ac8a0865468fc86386708ec5eec7ef647db5a9e2a9e717",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 204
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout5.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "e4127efd13cc76e5d45371def07578475693e15383364ee0fb60b02d56a5508d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "e4127efd13cc76e5d45371def07578475693e15383364ee0fb60b02d56a5508d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout6.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "9cd0f507208fb13c925480763b7e148938eb569ab9d2a3aa056b93951c46c35e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "9cd0f507208fb13c925480763b7e148938eb569ab9d2a3aa056b93951c46c35e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout7.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "42905fc5edd920f942847923a8dc0829201988dab8260815f023ea5860071250",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "42905fc5edd920f942847923a8dc0829201988dab8260815f023ea5860071250",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout8.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "0792121b947faf5bb280afdd5ff681cdf1b99996609985600b9838f6f639de56",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "0792121b947faf5bb280afdd5ff681cdf1b99996609985600b9838f6f639de56",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/_rels/slideLayout9.xml.rels",
+      "before": {
+        "bytes": 447,
+        "sha256": "f35e04404bf87dad0c27689bd99778b13971bf07bafe8b3b931e735483766ba9",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "after": {
+        "bytes": 447,
+        "sha256": "f35e04404bf87dad0c27689bd99778b13971bf07bafe8b3b931e735483766ba9",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 207
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout1.xml",
+      "before": {
+        "bytes": 1791,
+        "sha256": "b48d5a89511907e5e624c32d937627e373a46baafa39da80063dc1307315fb21",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 650
+      },
+      "after": {
+        "bytes": 1791,
+        "sha256": "b48d5a89511907e5e624c32d937627e373a46baafa39da80063dc1307315fb21",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 650
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout10.xml",
+      "before": {
+        "bytes": 6643,
+        "sha256": "9165fbb00c9bb7343f46803273d078659f526848524e465a8cfa011d2543b849",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1147
+      },
+      "after": {
+        "bytes": 6643,
+        "sha256": "9165fbb00c9bb7343f46803273d078659f526848524e465a8cfa011d2543b849",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1147
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout11.xml",
+      "before": {
+        "bytes": 7454,
+        "sha256": "fda01849680d37bf2e4b9bf64fc4d300ee9258c55c5ecc6a99dc7427a16c9d25",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1091
+      },
+      "after": {
+        "bytes": 7454,
+        "sha256": "fda01849680d37bf2e4b9bf64fc4d300ee9258c55c5ecc6a99dc7427a16c9d25",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1091
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout12.xml",
+      "before": {
+        "bytes": 9388,
+        "sha256": "57808b20175caa33f8c931d747e676ea725275692bf3147b1419c158394bf96c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1134
+      },
+      "after": {
+        "bytes": 9388,
+        "sha256": "57808b20175caa33f8c931d747e676ea725275692bf3147b1419c158394bf96c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1134
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout13.xml",
+      "before": {
+        "bytes": 5516,
+        "sha256": "bf45236f72ab1be9fbfbceced84ac6ee7aad064b3ede459f7c0ae9efa2f573f1",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1033
+      },
+      "after": {
+        "bytes": 5516,
+        "sha256": "bf45236f72ab1be9fbfbceced84ac6ee7aad064b3ede459f7c0ae9efa2f573f1",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1033
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout14.xml",
+      "before": {
+        "bytes": 9398,
+        "sha256": "bd9e74d01884a0b97158f420559b7a13c926f974528b6cdc37377869bade1584",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1147
+      },
+      "after": {
+        "bytes": 9398,
+        "sha256": "bd9e74d01884a0b97158f420559b7a13c926f974528b6cdc37377869bade1584",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1147
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout15.xml",
+      "before": {
+        "bytes": 5514,
+        "sha256": "a8a9841c0226d30cb7421265dd104b04e4ab973b3061b3f5d6c02a08076ef41d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1034
+      },
+      "after": {
+        "bytes": 5514,
+        "sha256": "a8a9841c0226d30cb7421265dd104b04e4ab973b3061b3f5d6c02a08076ef41d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1034
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout16.xml",
+      "before": {
+        "bytes": 9395,
+        "sha256": "0ea267d1fa2ede66c1f8de8b45578e726ebf0ce25af9346f42c300aca553a48f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1151
+      },
+      "after": {
+        "bytes": 9395,
+        "sha256": "0ea267d1fa2ede66c1f8de8b45578e726ebf0ce25af9346f42c300aca553a48f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1151
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout17.xml",
+      "before": {
+        "bytes": 5234,
+        "sha256": "e2c0b0d027c4993067b939ee9374fb428f1567808dd9dab1eedaf35932fa1ee7",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1013
+      },
+      "after": {
+        "bytes": 5234,
+        "sha256": "e2c0b0d027c4993067b939ee9374fb428f1567808dd9dab1eedaf35932fa1ee7",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1013
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout18.xml",
+      "before": {
+        "bytes": 5248,
+        "sha256": "7a6a3ac077745a0bf22c03c618d335060289fea8d44a87b35f6d1c229d42a384",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1021
+      },
+      "after": {
+        "bytes": 5248,
+        "sha256": "7a6a3ac077745a0bf22c03c618d335060289fea8d44a87b35f6d1c229d42a384",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1021
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout19.xml",
+      "before": {
+        "bytes": 5257,
+        "sha256": "6f8e023cc0127f9e0ff127690ea713dc86d586a65b00e53af2d36f32e09fafb7",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1029
+      },
+      "after": {
+        "bytes": 5257,
+        "sha256": "6f8e023cc0127f9e0ff127690ea713dc86d586a65b00e53af2d36f32e09fafb7",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1029
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout2.xml",
+      "before": {
+        "bytes": 7168,
+        "sha256": "ddc66b9b37c4b5db6d19eeb10e4ce51242b351b6f3e97c2b3cc19db8abab9f04",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1135
+      },
+      "after": {
+        "bytes": 7168,
+        "sha256": "ddc66b9b37c4b5db6d19eeb10e4ce51242b351b6f3e97c2b3cc19db8abab9f04",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1135
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout20.xml",
+      "before": {
+        "bytes": 5248,
+        "sha256": "b7f7f9623f430267806935d203858a9460b1ff7c0da0f1728a6cc4e12cb51dec",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1023
+      },
+      "after": {
+        "bytes": 5248,
+        "sha256": "b7f7f9623f430267806935d203858a9460b1ff7c0da0f1728a6cc4e12cb51dec",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1023
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout21.xml",
+      "before": {
+        "bytes": 5244,
+        "sha256": "4831e96f4bea3db09f581a9a7f5ebf558fff05f53a8f899d1b8cd5ac1964ce37",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1020
+      },
+      "after": {
+        "bytes": 5244,
+        "sha256": "4831e96f4bea3db09f581a9a7f5ebf558fff05f53a8f899d1b8cd5ac1964ce37",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1020
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout22.xml",
+      "before": {
+        "bytes": 5249,
+        "sha256": "f644ebcb3eb4d2323e1538ec103490c169bbad98090e79c16ff0c90b38effa18",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1021
+      },
+      "after": {
+        "bytes": 5249,
+        "sha256": "f644ebcb3eb4d2323e1538ec103490c169bbad98090e79c16ff0c90b38effa18",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1021
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout23.xml",
+      "before": {
+        "bytes": 5245,
+        "sha256": "b9839143372ae38e753587b23021e7783bdcba6eea46f877375d78de5e7db1a1",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1020
+      },
+      "after": {
+        "bytes": 5245,
+        "sha256": "b9839143372ae38e753587b23021e7783bdcba6eea46f877375d78de5e7db1a1",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1020
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout24.xml",
+      "before": {
+        "bytes": 5252,
+        "sha256": "032a54df1e1d915fce2d541c87dfc7ef058faa19acc6fcc1031cd65fce3e2cca",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1026
+      },
+      "after": {
+        "bytes": 5252,
+        "sha256": "032a54df1e1d915fce2d541c87dfc7ef058faa19acc6fcc1031cd65fce3e2cca",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1026
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout25.xml",
+      "before": {
+        "bytes": 5259,
+        "sha256": "7777f2ca3b98fd3b3fc89d9c99c8abec9443be5ac29a997965cf3b0287b24853",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1026
+      },
+      "after": {
+        "bytes": 5259,
+        "sha256": "7777f2ca3b98fd3b3fc89d9c99c8abec9443be5ac29a997965cf3b0287b24853",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1026
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout26.xml",
+      "before": {
+        "bytes": 5249,
+        "sha256": "60ffa13e74c2af28b8658142a8390e74987df4bc1609d4c140ef2772797f2199",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1023
+      },
+      "after": {
+        "bytes": 5249,
+        "sha256": "60ffa13e74c2af28b8658142a8390e74987df4bc1609d4c140ef2772797f2199",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1023
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout27.xml",
+      "before": {
+        "bytes": 5243,
+        "sha256": "6b213b928e828bcef2c65a1b3b59d0829d439b4200daecb2189871f1be09cc7f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1017
+      },
+      "after": {
+        "bytes": 5243,
+        "sha256": "6b213b928e828bcef2c65a1b3b59d0829d439b4200daecb2189871f1be09cc7f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1017
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout28.xml",
+      "before": {
+        "bytes": 7496,
+        "sha256": "3aaa9a5461961774f9fe50fa8da4757411037b82ff44092da6cdb9cdeb119500",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1093
+      },
+      "after": {
+        "bytes": 7496,
+        "sha256": "3aaa9a5461961774f9fe50fa8da4757411037b82ff44092da6cdb9cdeb119500",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1093
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout29.xml",
+      "before": {
+        "bytes": 5516,
+        "sha256": "60fabf53b8032c80e3d320339b0051d2f8fe0f9dd9ae1251803282749c739a1b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1035
+      },
+      "after": {
+        "bytes": 5516,
+        "sha256": "60fabf53b8032c80e3d320339b0051d2f8fe0f9dd9ae1251803282749c739a1b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1035
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout3.xml",
+      "before": {
+        "bytes": 6699,
+        "sha256": "129f7ba41879ecb6681d5d6251f003d442ea06dbcd73cfc38782ef92e6dcf9d9",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1155
+      },
+      "after": {
+        "bytes": 6699,
+        "sha256": "129f7ba41879ecb6681d5d6251f003d442ea06dbcd73cfc38782ef92e6dcf9d9",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1155
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout30.xml",
+      "before": {
+        "bytes": 5192,
+        "sha256": "fd03a2ccdb621384bc4bbf6ddb81b56838b2b091d4dee0cbedae99a6b5a9dc12",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1024
+      },
+      "after": {
+        "bytes": 5192,
+        "sha256": "fd03a2ccdb621384bc4bbf6ddb81b56838b2b091d4dee0cbedae99a6b5a9dc12",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1024
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout31.xml",
+      "before": {
+        "bytes": 7137,
+        "sha256": "9b5eb4a4edec1b77ddcc752e635261708223f76a2eb39e6cc111073cf52028b0",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1128
+      },
+      "after": {
+        "bytes": 7137,
+        "sha256": "9b5eb4a4edec1b77ddcc752e635261708223f76a2eb39e6cc111073cf52028b0",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1128
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout32.xml",
+      "before": {
+        "bytes": 5202,
+        "sha256": "caeaeff000f48a3ddda1c37239fcfeb315b40307ed22b0dfca8c73d4a8df451c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1017
+      },
+      "after": {
+        "bytes": 5202,
+        "sha256": "caeaeff000f48a3ddda1c37239fcfeb315b40307ed22b0dfca8c73d4a8df451c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1017
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout33.xml",
+      "before": {
+        "bytes": 7457,
+        "sha256": "a2fd43761daed9e9859baba3f22dc310fb53ba74e86a31228f1bf6e477dc69bb",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1090
+      },
+      "after": {
+        "bytes": 7457,
+        "sha256": "a2fd43761daed9e9859baba3f22dc310fb53ba74e86a31228f1bf6e477dc69bb",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1090
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout34.xml",
+      "before": {
+        "bytes": 7139,
+        "sha256": "af9691b63317a989cacfe1c734fa01028408b9a2301c7b0e7752d1e0ecaebdde",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1140
+      },
+      "after": {
+        "bytes": 7139,
+        "sha256": "af9691b63317a989cacfe1c734fa01028408b9a2301c7b0e7752d1e0ecaebdde",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1140
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout35.xml",
+      "before": {
+        "bytes": 7141,
+        "sha256": "b952494b2cce19f9ae4eb6b4c490547d4f6f0464de54b77f250d92af0321c7cc",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1122
+      },
+      "after": {
+        "bytes": 7141,
+        "sha256": "b952494b2cce19f9ae4eb6b4c490547d4f6f0464de54b77f250d92af0321c7cc",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1122
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout36.xml",
+      "before": {
+        "bytes": 7137,
+        "sha256": "04da9b4ec48b7c05bc1d2890423fe1c5ff0ebeee0c2fc87f867fec23f7954c3e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1139
+      },
+      "after": {
+        "bytes": 7137,
+        "sha256": "04da9b4ec48b7c05bc1d2890423fe1c5ff0ebeee0c2fc87f867fec23f7954c3e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1139
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout37.xml",
+      "before": {
+        "bytes": 7455,
+        "sha256": "51e7682adebcf222433ff8dc4e9b3266b6d04709bc123f774a8bc61f8653b0c4",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1100
+      },
+      "after": {
+        "bytes": 7455,
+        "sha256": "51e7682adebcf222433ff8dc4e9b3266b6d04709bc123f774a8bc61f8653b0c4",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1100
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout38.xml",
+      "before": {
+        "bytes": 9055,
+        "sha256": "a9fcbebb2baaf78f5d0ec1c4b2872ababe9474ee6d6c052d15df42b27a007e95",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1185
+      },
+      "after": {
+        "bytes": 9055,
+        "sha256": "a9fcbebb2baaf78f5d0ec1c4b2872ababe9474ee6d6c052d15df42b27a007e95",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1185
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout39.xml",
+      "before": {
+        "bytes": 7450,
+        "sha256": "dba5be5d9fa10527d00527717b28a45beb966aa33afc5265ea62705dad23961f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1092
+      },
+      "after": {
+        "bytes": 7450,
+        "sha256": "dba5be5d9fa10527d00527717b28a45beb966aa33afc5265ea62705dad23961f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1092
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout4.xml",
+      "before": {
+        "bytes": 5245,
+        "sha256": "512b62ea2720778b94ad8856d47fd50b29f8edfe4e94fbe85367edfae1c0b3b5",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1019
+      },
+      "after": {
+        "bytes": 5245,
+        "sha256": "512b62ea2720778b94ad8856d47fd50b29f8edfe4e94fbe85367edfae1c0b3b5",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1019
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout40.xml",
+      "before": {
+        "bytes": 5512,
+        "sha256": "6917eeb92dc505ea8a8141fda33f9bbec8b8b336943aa6e065c103fb4f314c98",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1031
+      },
+      "after": {
+        "bytes": 5512,
+        "sha256": "6917eeb92dc505ea8a8141fda33f9bbec8b8b336943aa6e065c103fb4f314c98",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1031
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout41.xml",
+      "before": {
+        "bytes": 5512,
+        "sha256": "a2a7cc01e15969f7b5e8709ebe983b5521b8391b9ee97d1e1bc6371ed2f447b9",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1031
+      },
+      "after": {
+        "bytes": 5512,
+        "sha256": "a2a7cc01e15969f7b5e8709ebe983b5521b8391b9ee97d1e1bc6371ed2f447b9",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1031
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout42.xml",
+      "before": {
+        "bytes": 3585,
+        "sha256": "b4d3d4b9bbb8e2e980be1dce4f978af10bbaf943072b947e53138d3ef9191003",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 906
+      },
+      "after": {
+        "bytes": 3585,
+        "sha256": "b4d3d4b9bbb8e2e980be1dce4f978af10bbaf943072b947e53138d3ef9191003",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 906
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout5.xml",
+      "before": {
+        "bytes": 5251,
+        "sha256": "71803454baf5efc3b1944fd8ff4d53b6dc2082fbb272309ab6328a10d1eb8f22",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1011
+      },
+      "after": {
+        "bytes": 5251,
+        "sha256": "71803454baf5efc3b1944fd8ff4d53b6dc2082fbb272309ab6328a10d1eb8f22",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1011
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout6.xml",
+      "before": {
+        "bytes": 6648,
+        "sha256": "c4b3ad8c986a6b4176fe37931ca093fe2a869b5050d9f7498509a60f7a35ab71",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1147
+      },
+      "after": {
+        "bytes": 6648,
+        "sha256": "c4b3ad8c986a6b4176fe37931ca093fe2a869b5050d9f7498509a60f7a35ab71",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1147
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout7.xml",
+      "before": {
+        "bytes": 6646,
+        "sha256": "fec7a5be389c9280749eb9ea850a76b03de51bc7e10d0f723db9bd4810a689d6",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1149
+      },
+      "after": {
+        "bytes": 6646,
+        "sha256": "fec7a5be389c9280749eb9ea850a76b03de51bc7e10d0f723db9bd4810a689d6",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1149
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout8.xml",
+      "before": {
+        "bytes": 5509,
+        "sha256": "0a643aa698dee4b34ce4ef9d2128c537f65402e1a35fab30aa1a3e6dfecd777c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1032
+      },
+      "after": {
+        "bytes": 5509,
+        "sha256": "0a643aa698dee4b34ce4ef9d2128c537f65402e1a35fab30aa1a3e6dfecd777c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1032
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideLayouts/slideLayout9.xml",
+      "before": {
+        "bytes": 5230,
+        "sha256": "2364614cf5491151c94aa48346309b8fa1122c6b1f6677f92646ca2d8e1c5a5e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1011
+      },
+      "after": {
+        "bytes": 5230,
+        "sha256": "2364614cf5491151c94aa48346309b8fa1122c6b1f6677f92646ca2d8e1c5a5e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1011
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+      "before": {
+        "bytes": 6827,
+        "sha256": "0337dc8304a0e3a2b3183b2846c0092779d0d6adc1fea4e6cef344ceeddb877a",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 454
+      },
+      "after": {
+        "bytes": 6827,
+        "sha256": "0337dc8304a0e3a2b3183b2846c0092779d0d6adc1fea4e6cef344ceeddb877a",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 454
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slideMasters/slideMaster1.xml",
+      "before": {
+        "bytes": 11344,
+        "sha256": "40d40906d4aec761231a6d9105dfead9c80fd8edb40243a7ac202bd9bc69f76e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1657
+      },
+      "after": {
+        "bytes": 11344,
+        "sha256": "40d40906d4aec761231a6d9105dfead9c80fd8edb40243a7ac202bd9bc69f76e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1657
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slides/_rels/slide1.xml.rels",
+      "before": {
+        "bytes": 890,
+        "sha256": "35d45b1ea9c71d868b3f0d6885d5360cad740f596b09d950dff876363cab1164",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 256
+      },
+      "after": {
+        "bytes": 890,
+        "sha256": "35d45b1ea9c71d868b3f0d6885d5360cad740f596b09d950dff876363cab1164",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 256
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/slides/slide1.xml",
+      "before": {
+        "bytes": 2395,
+        "sha256": "5ff49730ae3c7dabdd518c91db058d3b856f86f2049b458221c8954a61d3202a",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 928
+      },
+      "after": {
+        "bytes": 2395,
+        "sha256": "5ff49730ae3c7dabdd518c91db058d3b856f86f2049b458221c8954a61d3202a",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 928
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tableStyles.xml",
+      "before": {
+        "bytes": 182,
+        "sha256": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 165
+      },
+      "after": {
+        "bytes": 182,
+        "sha256": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 165
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfDocument.xml",
+      "before": {
+        "bytes": 1355,
+        "sha256": "b82283708bbb3e6a30925e96ff4dda824729d04fe179799a160f0abd05fd2cfa",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 524
+      },
+      "after": {
+        "bytes": 1355,
+        "sha256": "b82283708bbb3e6a30925e96ff4dda824729d04fe179799a160f0abd05fd2cfa",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 524
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfHeading1.xml",
+      "before": {
+        "bytes": 426,
+        "sha256": "cb597849ea3dcf820ee476d55bc898e79d515f73b04a9c6811b58ce5bb10b410",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 280
+      },
+      "after": {
+        "bytes": 426,
+        "sha256": "cb597849ea3dcf820ee476d55bc898e79d515f73b04a9c6811b58ce5bb10b410",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 280
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout1.xml",
+      "before": {
+        "bytes": 473,
+        "sha256": "e12e592fe09de59c395f7f0e664831cbe410192e6198af28c0f4bb13ab29fd9f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 302
+      },
+      "after": {
+        "bytes": 473,
+        "sha256": "e12e592fe09de59c395f7f0e664831cbe410192e6198af28c0f4bb13ab29fd9f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 302
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout10.xml",
+      "before": {
+        "bytes": 523,
+        "sha256": "dd8e0277eecf7e61ce2a0f57c31a7c175096e5e38067c7f5a71d20cf3e8fe96d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 326
+      },
+      "after": {
+        "bytes": 523,
+        "sha256": "dd8e0277eecf7e61ce2a0f57c31a7c175096e5e38067c7f5a71d20cf3e8fe96d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 326
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout11.xml",
+      "before": {
+        "bytes": 559,
+        "sha256": "a7ff537f97902acfb5f66323e4e39619107fd33b7da9af65cb08e028d9a7d208",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 334
+      },
+      "after": {
+        "bytes": 559,
+        "sha256": "a7ff537f97902acfb5f66323e4e39619107fd33b7da9af65cb08e028d9a7d208",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 334
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout12.xml",
+      "before": {
+        "bytes": 485,
+        "sha256": "2683f3510b9a946d03cd45a9f94041686a03469b95514ab72634e016f3201298",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 301
+      },
+      "after": {
+        "bytes": 485,
+        "sha256": "2683f3510b9a946d03cd45a9f94041686a03469b95514ab72634e016f3201298",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 301
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout13.xml",
+      "before": {
+        "bytes": 555,
+        "sha256": "fd398b578ac2093d81a32082fa2b9d8636c7a3ce6afbf5dce91d708b7dd1b28d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 331
+      },
+      "after": {
+        "bytes": 555,
+        "sha256": "fd398b578ac2093d81a32082fa2b9d8636c7a3ce6afbf5dce91d708b7dd1b28d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 331
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout14.xml",
+      "before": {
+        "bytes": 481,
+        "sha256": "08a6247d75fb03880958ddf7e6c448e5eb4b148ab95d858f1e7c3bd1cd8b3776",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 304
+      },
+      "after": {
+        "bytes": 481,
+        "sha256": "08a6247d75fb03880958ddf7e6c448e5eb4b148ab95d858f1e7c3bd1cd8b3776",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 304
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout15.xml",
+      "before": {
+        "bytes": 545,
+        "sha256": "8988cbcb300ccd1c732963574d0c79feacc76e4630b48be53ca764b74ff2758f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 322
+      },
+      "after": {
+        "bytes": 545,
+        "sha256": "8988cbcb300ccd1c732963574d0c79feacc76e4630b48be53ca764b74ff2758f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 322
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout16.xml",
+      "before": {
+        "bytes": 473,
+        "sha256": "ebe02b4efb597e808be8db9685aa087e04e2fdb6f96b57f0bebf86224231b2df",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 300
+      },
+      "after": {
+        "bytes": 473,
+        "sha256": "ebe02b4efb597e808be8db9685aa087e04e2fdb6f96b57f0bebf86224231b2df",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 300
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout17.xml",
+      "before": {
+        "bytes": 483,
+        "sha256": "c3a1f6bcdec5fd5bf52dcb9e0e1c4f5b0a254988e450118152ca2753ebe16433",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "after": {
+        "bytes": 483,
+        "sha256": "c3a1f6bcdec5fd5bf52dcb9e0e1c4f5b0a254988e450118152ca2753ebe16433",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout18.xml",
+      "before": {
+        "bytes": 519,
+        "sha256": "fe270c824515aee70089d47a8b16f46dde0b9b6eeda9bd5318e360cfd4347e3b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 314
+      },
+      "after": {
+        "bytes": 519,
+        "sha256": "c4ccc8045df75933eb140b8ca9e4059bb01570698d848253201ac4c6d8da454c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 310
+      },
+      "changed": true
+    },
+    {
+      "name": "ppt/tags/opfLayout19.xml",
+      "before": {
+        "bytes": 485,
+        "sha256": "34e890f6a6c2c680a8ef78c13ed96d1a5e81110e37de3cb9da9d238638abd669",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 307
+      },
+      "after": {
+        "bytes": 485,
+        "sha256": "34e890f6a6c2c680a8ef78c13ed96d1a5e81110e37de3cb9da9d238638abd669",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 307
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout2.xml",
+      "before": {
+        "bytes": 455,
+        "sha256": "89290e2183603728ae6a34a23141c907c764e3afbbf8bae9f9174bcc8d61d887",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 293
+      },
+      "after": {
+        "bytes": 455,
+        "sha256": "89290e2183603728ae6a34a23141c907c764e3afbbf8bae9f9174bcc8d61d887",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 293
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout20.xml",
+      "before": {
+        "bytes": 475,
+        "sha256": "3446a4301816bfa26d22cacedc164dc23da2be4fdb3f47e16ea68b1c76a36d1b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 302
+      },
+      "after": {
+        "bytes": 475,
+        "sha256": "3446a4301816bfa26d22cacedc164dc23da2be4fdb3f47e16ea68b1c76a36d1b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 302
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout21.xml",
+      "before": {
+        "bytes": 487,
+        "sha256": "98ae241b3157a5a2eb7b4df51da8e84d5a6bc56b9b3c4112699babffdc197d14",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "after": {
+        "bytes": 487,
+        "sha256": "98ae241b3157a5a2eb7b4df51da8e84d5a6bc56b9b3c4112699babffdc197d14",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout22.xml",
+      "before": {
+        "bytes": 471,
+        "sha256": "f04c00166da7620effb1709440d0e6114a28c6a6fdbccb2057c6c837d9103da6",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 302
+      },
+      "after": {
+        "bytes": 471,
+        "sha256": "f04c00166da7620effb1709440d0e6114a28c6a6fdbccb2057c6c837d9103da6",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 302
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout23.xml",
+      "before": {
+        "bytes": 507,
+        "sha256": "d1635a65fbe12be147dcfdbf158515cad48b27c840f56ccc4a14371321f4e252",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 315
+      },
+      "after": {
+        "bytes": 507,
+        "sha256": "d1635a65fbe12be147dcfdbf158515cad48b27c840f56ccc4a14371321f4e252",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 315
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout24.xml",
+      "before": {
+        "bytes": 491,
+        "sha256": "f2c885bbc35ac099c06a86e4c5d9d7fa47694b11ebae8e655f311a490f5dcf3c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 305
+      },
+      "after": {
+        "bytes": 491,
+        "sha256": "f2c885bbc35ac099c06a86e4c5d9d7fa47694b11ebae8e655f311a490f5dcf3c",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 305
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout25.xml",
+      "before": {
+        "bytes": 489,
+        "sha256": "376293cf6347909f7599986718e459bf53429aec600dbc38575fb38386caf8a4",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 305
+      },
+      "after": {
+        "bytes": 489,
+        "sha256": "376293cf6347909f7599986718e459bf53429aec600dbc38575fb38386caf8a4",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 305
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout26.xml",
+      "before": {
+        "bytes": 467,
+        "sha256": "9ad1b90f6fe47f9ac3bd8a3a498b7bbea2a0aad827a04567586b55f16706a575",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 300
+      },
+      "after": {
+        "bytes": 467,
+        "sha256": "9ad1b90f6fe47f9ac3bd8a3a498b7bbea2a0aad827a04567586b55f16706a575",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 300
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout27.xml",
+      "before": {
+        "bytes": 511,
+        "sha256": "4b4d7a809a53f36ff62ff09fc708cf8e6d9f90adccc73e43e660b82e8062ded2",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 311
+      },
+      "after": {
+        "bytes": 511,
+        "sha256": "4b4d7a809a53f36ff62ff09fc708cf8e6d9f90adccc73e43e660b82e8062ded2",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 311
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout28.xml",
+      "before": {
+        "bytes": 489,
+        "sha256": "3757f7766d33294e480550a4b4e9089215f12a5ff54fb01f77732479d5e9892b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 302
+      },
+      "after": {
+        "bytes": 489,
+        "sha256": "3757f7766d33294e480550a4b4e9089215f12a5ff54fb01f77732479d5e9892b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 302
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout29.xml",
+      "before": {
+        "bytes": 473,
+        "sha256": "d4bd4f8955f34791f35defb8b4b6dc7ae5ba45e7ccd79704116681a535e37291",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 301
+      },
+      "after": {
+        "bytes": 473,
+        "sha256": "d4bd4f8955f34791f35defb8b4b6dc7ae5ba45e7ccd79704116681a535e37291",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 301
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout3.xml",
+      "before": {
+        "bytes": 477,
+        "sha256": "f2b85b76852df8971a38c12d5871e348f0bd47539fd979e57ddb1ee854ff6f63",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "after": {
+        "bytes": 477,
+        "sha256": "f2b85b76852df8971a38c12d5871e348f0bd47539fd979e57ddb1ee854ff6f63",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout30.xml",
+      "before": {
+        "bytes": 527,
+        "sha256": "53e365e00a16572b042de857cd176ea83ea40e79e41307c1d85ff5b44a7ce0ac",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 320
+      },
+      "after": {
+        "bytes": 527,
+        "sha256": "53e365e00a16572b042de857cd176ea83ea40e79e41307c1d85ff5b44a7ce0ac",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 320
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout31.xml",
+      "before": {
+        "bytes": 487,
+        "sha256": "7b36106cf695e369f728828ab606299ed3677c08f8949436215f99c0957ce7de",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 304
+      },
+      "after": {
+        "bytes": 487,
+        "sha256": "7b36106cf695e369f728828ab606299ed3677c08f8949436215f99c0957ce7de",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 304
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout32.xml",
+      "before": {
+        "bytes": 501,
+        "sha256": "a8a5f90fff15d319ad5464211567d83e5a17829c7b3e59b1c4e3d182a6021917",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "after": {
+        "bytes": 501,
+        "sha256": "a8a5f90fff15d319ad5464211567d83e5a17829c7b3e59b1c4e3d182a6021917",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout33.xml",
+      "before": {
+        "bytes": 529,
+        "sha256": "9583a56a21aa51246745f6d0266987027d709c35af27f633c417df404cecda6e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 316
+      },
+      "after": {
+        "bytes": 529,
+        "sha256": "9583a56a21aa51246745f6d0266987027d709c35af27f633c417df404cecda6e",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 316
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout34.xml",
+      "before": {
+        "bytes": 499,
+        "sha256": "1e59ad2f6d022be4ee292e4456be659346e775bdda854fbd013997920d1e243d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 309
+      },
+      "after": {
+        "bytes": 499,
+        "sha256": "1e59ad2f6d022be4ee292e4456be659346e775bdda854fbd013997920d1e243d",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 309
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout35.xml",
+      "before": {
+        "bytes": 529,
+        "sha256": "dba845ac44c80796f40f3906d398b0852cee1b7862bf80251d4161e8d6b490b5",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 319
+      },
+      "after": {
+        "bytes": 529,
+        "sha256": "dba845ac44c80796f40f3906d398b0852cee1b7862bf80251d4161e8d6b490b5",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 319
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout36.xml",
+      "before": {
+        "bytes": 495,
+        "sha256": "4e311386a8953525b4daff9cc35896c5de9c5d5625046001ad2a1d9e62fb2ba1",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "after": {
+        "bytes": 495,
+        "sha256": "4e311386a8953525b4daff9cc35896c5de9c5d5625046001ad2a1d9e62fb2ba1",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout37.xml",
+      "before": {
+        "bytes": 527,
+        "sha256": "19c3444bc8c43cf78821331358d5b887236d2acdf2073dc39ccd01146fdb0cf1",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 323
+      },
+      "after": {
+        "bytes": 527,
+        "sha256": "19c3444bc8c43cf78821331358d5b887236d2acdf2073dc39ccd01146fdb0cf1",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 323
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout38.xml",
+      "before": {
+        "bytes": 517,
+        "sha256": "a0a7053fe8ac366f0e30d5a7e8ebafbdd20a73a8a53423970db0e789b7bfc72f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 316
+      },
+      "after": {
+        "bytes": 517,
+        "sha256": "a0a7053fe8ac366f0e30d5a7e8ebafbdd20a73a8a53423970db0e789b7bfc72f",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 316
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout39.xml",
+      "before": {
+        "bytes": 471,
+        "sha256": "b899496e272b11252329923b13d1f75035daa736dd377f9931c1515698c3b86b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 304
+      },
+      "after": {
+        "bytes": 471,
+        "sha256": "b899496e272b11252329923b13d1f75035daa736dd377f9931c1515698c3b86b",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 304
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout4.xml",
+      "before": {
+        "bytes": 501,
+        "sha256": "66e84e7ac0103bf0c218bf18a868851dd79fedf87f585761c1287261b41bffaf",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 307
+      },
+      "after": {
+        "bytes": 501,
+        "sha256": "66e84e7ac0103bf0c218bf18a868851dd79fedf87f585761c1287261b41bffaf",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 307
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout40.xml",
+      "before": {
+        "bytes": 473,
+        "sha256": "6022b4654395da0e863aa3095fa933b0dd0ee40319133539c8f120fb78c28da3",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 298
+      },
+      "after": {
+        "bytes": 473,
+        "sha256": "6022b4654395da0e863aa3095fa933b0dd0ee40319133539c8f120fb78c28da3",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 298
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout41.xml",
+      "before": {
+        "bytes": 369,
+        "sha256": "e3fe5dc236d57a7d951ed7528d1b48671a2f2cc0c7a0cb3be456aed756225533",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 254
+      },
+      "after": {
+        "bytes": 369,
+        "sha256": "e3fe5dc236d57a7d951ed7528d1b48671a2f2cc0c7a0cb3be456aed756225533",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 254
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout5.xml",
+      "before": {
+        "bytes": 493,
+        "sha256": "9f28268cdc6d3f59f1b4320155a966a8c1e826efb727ce076b291a6348dafbaa",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "after": {
+        "bytes": 493,
+        "sha256": "9f28268cdc6d3f59f1b4320155a966a8c1e826efb727ce076b291a6348dafbaa",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 306
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout6.xml",
+      "before": {
+        "bytes": 485,
+        "sha256": "c7464214fc4189644886ce9b2c6b27abbfb8afd0b785468ae9e0270ab975b0a0",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 310
+      },
+      "after": {
+        "bytes": 485,
+        "sha256": "c7464214fc4189644886ce9b2c6b27abbfb8afd0b785468ae9e0270ab975b0a0",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 310
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout7.xml",
+      "before": {
+        "bytes": 467,
+        "sha256": "ed20d6316606b26d5f32cf5dcb71b8529726b4f287ada051c86ccebb143ac9db",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 299
+      },
+      "after": {
+        "bytes": 467,
+        "sha256": "ed20d6316606b26d5f32cf5dcb71b8529726b4f287ada051c86ccebb143ac9db",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 299
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout8.xml",
+      "before": {
+        "bytes": 467,
+        "sha256": "aa77f29c70bb0abb5a4ffa42807d1fc0b64cabe18cadb660cc7dfce52eace697",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 300
+      },
+      "after": {
+        "bytes": 467,
+        "sha256": "aa77f29c70bb0abb5a4ffa42807d1fc0b64cabe18cadb660cc7dfce52eace697",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 300
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfLayout9.xml",
+      "before": {
+        "bytes": 475,
+        "sha256": "11f1564f079c195faafaaaf3a3c585bcf4cc83a916c4c79b0b4ad768c40354b5",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 300
+      },
+      "after": {
+        "bytes": 475,
+        "sha256": "11f1564f079c195faafaaaf3a3c585bcf4cc83a916c4c79b0b4ad768c40354b5",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 300
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/tags/opfSlide1.xml",
+      "before": {
+        "bytes": 552,
+        "sha256": "9c3d914f60217b7ff8025f096d97dbec41c626a0271e7e35fe932aa977c12df2",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 339
+      },
+      "after": {
+        "bytes": 552,
+        "sha256": "9c3d914f60217b7ff8025f096d97dbec41c626a0271e7e35fe932aa977c12df2",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 339
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/theme/theme1.xml",
+      "before": {
+        "bytes": 8327,
+        "sha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1709
+      },
+      "after": {
+        "bytes": 8327,
+        "sha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1709
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/theme/theme2.xml",
+      "before": {
+        "bytes": 8327,
+        "sha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1709
+      },
+      "after": {
+        "bytes": 8327,
+        "sha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 1709
+      },
+      "changed": false
+    },
+    {
+      "name": "ppt/viewProps.xml",
+      "before": {
+        "bytes": 816,
+        "sha256": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 389
+      },
+      "after": {
+        "bytes": 816,
+        "sha256": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8",
+        "method": 8,
+        "flags": 0,
+        "dosTime": 0,
+        "dosDate": 33,
+        "compressedBytes": 389
+      },
+      "changed": false
+    }
+  ],
+  "protectedObjects": [
+    {
+      "path": "packages/javascript",
+      "object": "25ecc33f83c5072e2d6f2b03be416a222ae88c1a"
+    },
+    {
+      "path": "packages/gallery",
+      "object": "f50d996f5aba09b862afe510eeb31ab04a0719bd"
+    },
+    {
+      "path": "packages/render",
+      "object": "b7789f4afffaf2f0f734d0823745463924cfec51"
+    },
+    {
+      "path": "packages/pptx",
+      "object": "7bf7dad3aa66ed2aa2114540e31f43ebdd3184f5"
+    },
+    {
+      "path": "spec",
+      "object": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "object": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "path": "package.json",
+      "object": "0d5eec02984fea0ef0b564a4b83658cc35a1bbf0"
+    }
+  ],
+  "tools": [
+    {
+      "path": "packages/gallery/scripts/build.mjs",
+      "sha256": "d01f5a28b863ccb6825ec9386e7b115152a2774fca64144be4f5b35c04d36f84"
+    },
+    {
+      "path": "packages/pptx/src/template-layouts.js",
+      "sha256": "6608e59125d57d303292ddd0bffbb62a416823ddd02238b7fccc37bbd8209458"
+    },
+    {
+      "path": "packages/pptx/src/code-provenance.js",
+      "sha256": "80b67b48814a5d10900245673ae996646c1a999b1c557e9350f12d40ee5f8f0c"
+    },
+    {
+      "path": "packages/pptx/src/index.js",
+      "sha256": "5ef6da9991c73a3954aa19e11bf7d57afc9af16f3a495dec121c2b610c60e3c6"
+    }
+  ],
+  "fflate": {
+    "version": "0.8.3",
+    "moduleSha256": "befa44cd80a1da830179db9e57930050a2e460ca3df13f0b05f83f52b1491818"
+  },
+  "productFilesChanged": 0,
+  "exportsRun": 0,
+  "buildsRun": 0,
+  "officeCalls": 0,
+  "fixturePromoted": false,
+  "otherEightDecksQualified": false
+}
