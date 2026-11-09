@@ -78,6 +78,23 @@ function scaleFrom(min: number, max: number, step: number): ChartScale {
   return { min, max, step, ticks };
 }
 
+/** Rebuild bounded native-axis ticks without overflowing an otherwise finite axis span or tick product. */
+export function chartAxisScale(axis: ChartValueAxis | undefined): ChartScale | undefined {
+  if (!axis || ![axis.min, axis.max, axis.majorUnit].every(Number.isFinite) || axis.max < axis.min || !(axis.majorUnit > 0)) return undefined;
+  const span = axis.max - axis.min;
+  const intervals = Number.isFinite(span) ? span / axis.majorUnit : axis.max / axis.majorUnit - axis.min / axis.majorUnit;
+  if (!Number.isFinite(intervals) || intervals > 1000) return undefined;
+  const ticks: number[] = [];
+  for (let index = 0, count = Math.floor(intervals + 1e-9); index <= count; index++) {
+    const ordinary = axis.min + index * axis.majorUnit;
+    // Only change arithmetic when an intermediate overflows: a negative minimum can cancel a product beyond MAX_VALUE.
+    const value = Number.isFinite(ordinary) ? ordinary : (axis.min / axis.majorUnit + index) * axis.majorUnit;
+    if (!Number.isFinite(value)) return undefined;
+    ticks.push(clean(value));
+  }
+  return {min: axis.min, max: axis.max, step: axis.majorUnit, ticks};
+}
+
 function pickStep(min: number, max: number, limit: number, steps: readonly number[]): number {
   return steps.find((step) => Math.round((max - min) / step) <= limit) ?? max - min;
 }
@@ -434,7 +451,10 @@ export function shareSiblingChartAxes<T extends SiblingChart>(charts: readonly T
     const axes = members.map(item => item.chart!.valueAxis!);
     const min = Math.min(...axes.map(axis => axis.min)), max = Math.max(...axes.map(axis => axis.max));
     if (axes.every(axis => axis.min === min && axis.max === max)) continue;
-    const intervals = Math.max(1, Math.min(...axes.map(axis => Math.round((axis.max - axis.min) / axis.majorUnit))));
+    const intervals = Math.max(1, Math.min(...axes.map(axis => {
+      const span = axis.max - axis.min;
+      return Math.round(Number.isFinite(span) ? span / axis.majorUnit : axis.max / axis.majorUnit - axis.min / axis.majorUnit);
+    })));
     const percent = axes[0]!.percent === true;
     const shared = niceScale(min, max, intervals, { percent });
     for (const item of members) item.chart!.valueAxis = { min: shared.min, max: shared.max, majorUnit: shared.step, ...(percent ? { percent: true as const } : {}) };

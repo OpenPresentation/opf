@@ -41,3 +41,14 @@ test('area and markerful line references retain normal data marks and category-c
 test('reference ColorRefs preserve alpha, transforms, variables and the textSecondary role',()=>{
  const doc=deck({referenceLines:[{value:11,stroke:{color:'#A0123480'}},{value:15,stroke:{color:{color:'#808080',lighten:.5}}},{value:19,stroke:{color:'var:target'}},{value:23,stroke:{color:'textSecondary'}}]});doc.variables={target:{type:'color',value:'#123456'}};const svg=toSvg(doc,1,{trace:true}),lines=refs(svg),design=resolvePresentation(doc).slides[0].design;assert.equal(lines.length,4);assert.equal(lines[0].stroke.toUpperCase(),'#A0123480');assert.equal(lines[1].stroke.toUpperCase(),'#C0C0C0');assert.equal(lines[2].stroke.toUpperCase(),'#123456');assert.equal(lines[3].stroke.toUpperCase(),design.colors.mutedText.toUpperCase());
 });
+
+test('finite extreme references and data share composed scales instead of disappearing or falling back to ordinary bounds',()=>{
+ for(const type of ['column','bar','line','line-with-markers','area','combo'])for(const values of [[Number.MAX_VALUE],[-Number.MAX_VALUE],[-Number.MAX_VALUE,Number.MAX_VALUE]]){
+  const chart={type,...(type==='combo'?{data:{columns:['Q','Actual','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},line:['Rate'],secondaryAxis:['Rate']}:{}),referenceLines:values.map(value=>({value,label:'Target'}))};
+  const doc=deck(chart),svg=toSvg(doc,1,{trace:true}),item=resolvePresentation(doc).slides[0].geometry.items.find(i=>i.field==='chart'),lines=refs(svg);assert.equal(lines.length,values.length,type+' '+values);assert.ok(!/NaN|Infinity/.test(svg));
+  for(let i=0;i<values.length;i++){const line=item.chart.layer.references.lines[i];near(lines[i].x1,line.x1);near(lines[i].x2,line.x2);near(lines[i].y1,line.y1);near(lines[i].y2,line.y2);}
+  // Ordinary line points near zero must use the same huge composed axis, not the old data-only fallback.
+  if(type==='line'&&values.length===2){const main=tags(svg,'polyline').find(a=>a['data-opf-path']==='slides.0.chart.data.columns.1'),ys=main.points.split(' ').map(point=>Number(point.split(',')[1]));assert.ok(Math.max(...ys)-Math.min(...ys)<.02);}
+ }
+ const doc=deck({type:'combo',data:{columns:['Q','Actual','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},line:['Rate'],secondaryAxis:['Rate'],referenceLines:[{value:-Number.MAX_VALUE,axis:'secondary'},{value:Number.MAX_VALUE,axis:'secondary'}]}),svg=toSvg(doc,1,{trace:true});assert.equal(refs(svg).length,2);assert.ok(!/NaN|Infinity/.test(svg));
+});

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {chartReferences,placeReferences,chartValueAxis,chartComboAxes,composeSlide,resolveChartData} from '../dist/composition.js';
+import {chartReferences,placeReferences,chartValueAxis,chartComboAxes,chartAxisScale,composeSlide,resolveChartData} from '../dist/composition.js';
 import {check,errorsOf,warningsOf} from './support/validation.mjs';
 const data={columns:['Quarter','Actual'],rows:[['Q1',10],['Q2',20],['Q3',30]]};
 const chart=(extra={})=>({type:'line',data,...extra});
@@ -83,4 +83,25 @@ test('wide reference strokes leave their own labels clear without moving numeric
  const c=chart({referenceLines:[{value:20,label:'Target',stroke:{width:64}}]}),line=place(c).lines[0];assert.ok(line.labelBox.y+line.labelBox.height<=line.y1-line.strokeWidth/2);assert.equal(line.y1,line.y2);
  const bar=place({...c,type:'bar'},{horizontal:true}).lines[0];assert.ok(bar.labelBox.x>=bar.x1+bar.strokeWidth/2);assert.equal(bar.x1,bar.x2);
  const hidden=place(chart({referenceLines:[{value:20,label:'Target',stroke:{width:0}}]})).lines[0];assert.ok(hidden.labelBox);assert.equal(hidden.strokeWidth,0);assert.equal(hidden.y1,line.y1);
+});
+
+test('finite endpoint references survive real composition on every supported chart and own combo axis',()=>{
+ for(const value of [-Number.MAX_VALUE,Number.MAX_VALUE])assert.deepEqual(errorsOf(check(deck(chart({referenceLines:[{value}]})))),[]);
+ for(const type of ['column','bar','line','line-with-markers','area','combo'])for(const values of [[Number.MAX_VALUE],[-Number.MAX_VALUE],[-Number.MAX_VALUE,Number.MAX_VALUE]]){
+  const c=chart({type,...(type==='combo'?{data:{columns:['Q','Amount','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},line:['Rate'],secondaryAxis:['Rate']}:{}),referenceLines:values.map(value=>({value,label:'Target'}))});
+  const item=composeSlide({chart:c},{width:1280,height:720}).items.find(i=>i.field==='chart');
+  assert.equal(item.chart.layer.references.lines.length,values.length,type+' '+values);
+  const axis=item.chart.valueAxis;assert.ok(axis.min<=Math.min(...values)&&axis.max>=Math.max(...values));
+  assert.ok(item.chart.layer.references.lines.flatMap(l=>[l.x1,l.y1,l.x2,l.y2,...Object.values(l.labelBox??{})]).every(Number.isFinite));
+  const ticks=chartAxisScale(axis).ticks;assert.ok(ticks.length>1&&ticks.length<=1001&&ticks.every(Number.isFinite));
+ }
+ const c=chart({type:'combo',data:{columns:['Q','Amount','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},line:['Rate'],secondaryAxis:['Rate'],referenceLines:[{value:-Number.MAX_VALUE,axis:'secondary'},{value:Number.MAX_VALUE,axis:'secondary'}]});
+ const item=composeSlide({chart:c},{width:1280,height:720}).items.find(i=>i.field==='chart');assert.equal(item.chart.layer.references.lines.length,2);assert.equal(item.chart.secondaryValueAxis.min,-Number.MAX_VALUE);assert.equal(item.chart.secondaryValueAxis.max,Number.MAX_VALUE);assert.ok(item.chart.valueAxis.max<10);
+ const siblings=composeSlide({blocks:[{chart:chart({referenceLines:[{value:-Number.MAX_VALUE},{value:Number.MAX_VALUE}]})},{chart:chart()}]},{width:1280,height:720}).items.filter(i=>i.field==='chart');assert.deepEqual(siblings[0].chart.valueAxis,siblings[1].chart.valueAxis);assert.equal(siblings[0].chart.layer.references.lines.length,2);
+});
+
+test('shared axis reconstruction keeps ordinary ticks and bounds overflow-sized tick work',()=>{
+ assert.deepEqual(chartAxisScale({min:0,max:45,majorUnit:10}),{min:0,max:45,step:10,ticks:[0,10,20,30,40]});
+ const scale=chartAxisScale({min:-Number.MAX_VALUE,max:Number.MAX_VALUE,majorUnit:1e308});assert.equal(scale.ticks.length,4);assert.ok(scale.ticks.every(Number.isFinite));assert.ok(scale.ticks.every((v,i)=>i===0||v>scale.ticks[i-1]));
+ assert.equal(chartAxisScale({min:0,max:2000,majorUnit:1}),undefined);assert.equal(chartAxisScale({min:0,max:1,majorUnit:0}),undefined);assert.equal(chartAxisScale({min:0,max:Infinity,majorUnit:1}),undefined);
 });

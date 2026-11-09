@@ -7,7 +7,7 @@
 // by side keep one baseline and one top, and siblings in different rows take the shortest plot's height on their own baseline. The plot
 // is stored as an inset from the chart box (ChartLayer.plot); the preview draws its plot there and the PPTX export writes it as the
 // plot area's manual layout (c:plotArea c:manualLayout, layoutTarget inner), so PowerPoint draws the same plot.
-import {chartTextSize, type ChartValueAxis} from './chart-axis.js';
+import {chartAxisScale, chartTextSize, type ChartValueAxis} from './chart-axis.js';
 import {formatDataNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import type {ChartLayer, ChartPlotInset} from './chart-layer.js';
@@ -126,7 +126,8 @@ function categoryLabelReserve(labels: readonly string[], plot: {x: number; width
 export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, composed: {valueAxis?: ChartValueAxis; secondaryValueAxis?:ChartValueAxis; layer?: ChartLayer}, geometry: ChartPlotGeometry): ChartPlotInset | undefined {
   if (!record(chart) || !resolved.ok) return undefined;
   const axis = composed.valueAxis, layer = composed.layer;
-  if (!axis || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
+  const axisScale = chartAxisScale(axis);
+  if (!axis || !axisScale) return undefined;
   const authored = typeof chart.type === 'string' ? chart.type.trim().toLowerCase() : '';
   const plan = chartDrawPlan(chart, resolved, {language: geometry.language});
   const spec = Object.hasOwn(VERTICAL, plan.type) ? VERTICAL[plan.type]! : undefined;
@@ -178,8 +179,7 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const top = inner.y + pad + (hidden ? lineHeight : lineHeight / 2);
   const format = typeof plan.formats[1] === 'string' && plan.formats[1] !== '' && !numberFormatError(plan.formats[1]) ? plan.formats[1] : undefined;
   const percent = spec.percent === true;
-  const ticks: number[] = [];
-  for (let index = 0, count = Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9); index <= count; index++) ticks.push(clean(axis.min + index * axis.majorUnit));
+  const ticks = axisScale.ticks;
   const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format, !percent && format === undefined && groupsAxisTicks(axis) ? {language: geometry.language} : undefined)))) + fontPx * 0.5;
   // The end of the plot (the last category: the right, or the left right to left) keeps half a text size, or the end-label gutter.
   const end = Math.max(fontPx / 2, layer?.endLabels?.gutter ?? 0, layer?.stack?.names?.gutter ?? 0);
@@ -194,8 +194,9 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const secondary=composed.secondaryValueAxis;
   if(resolved.combo&&secondary){
     const index=resolved.combo.findIndex(entry=>entry.axis==='secondary')+1,format=plan.formats[index];
-    const count=Math.min(1000,Math.floor((secondary.max-secondary.min)/secondary.majorUnit+1e-9));
-    const labels=Array.from({length:count+1},(_,i)=>tickLabel(secondary.min+i*secondary.majorUnit,false,format,!format&&groupsAxisTicks(secondary)?{language:geometry.language}:undefined));
+    const secondaryScale=chartAxisScale(secondary);
+    if(!secondaryScale)return undefined;
+    const labels=secondaryScale.ticks.map(value=>tickLabel(value,false,format,!format&&groupsAxisTicks(secondary)?{language:geometry.language}:undefined));
     secondaryWidth=Math.max(...labels.map(width))+fontPx*0.5;
   }
   const far=Math.max(end,secondaryWidth);

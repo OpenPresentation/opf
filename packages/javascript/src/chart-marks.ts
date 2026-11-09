@@ -17,7 +17,7 @@
 //
 // An explicit option wins: `dataLabels` and `legend` keep the chart as authored (no default labels, no list, no names), `colors` keeps
 // a waterfall's palette positions. PPTX import does not write these defaults back as options.
-import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
+import {chartAxisScale, chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
@@ -493,7 +493,8 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
  * the start; one text line each), so the plot leaves both: the title no longer overlaps the tick labels or the row names.
  */
 function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false, extra: {legend?: boolean; labelRoom?: number} = {}): ChartPlotInset | undefined {
-  if (!data.ok || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
+  const axisScale = chartAxisScale(axis);
+  if (!data.ok || !axisScale) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const width = (text: string) => geometry.measure(text, fontPx);
   const categories = data.rows.map(row => label(row[0]));
@@ -507,7 +508,7 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx - (extra.labelRoom ?? 0));
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   if (!hidden && format !== undefined && !typeOf(chart).startsWith('100pct')) {
-    const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axis.min + Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9) * axis.majorUnit;
+    const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axisScale.ticks.at(-1)!;
     const lastHalf = width(tickLabel(endTick, false, format)) / 2, right = box.x + box.width - pad;
     const nextX = Math.max(x, box.x + pad + first);
     plotWidth = Math.max(1, Math.min(x + plotWidth, right - lastHalf) - nextX); x = nextX;

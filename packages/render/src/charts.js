@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -398,18 +398,6 @@ export function formatChartValue(value, format) {
 // ---------------------------------------------------------------------------
 // Shared axis and legend helpers
 
-// Keep ordinary arithmetic unchanged. A range spanning both finite endpoints
-// can overflow even though every value/bound is finite; divide before subtracting.
-
-
-// LH-59: ticks run from min in steps of step up to max, which a tightened axis (core's niceScale) need not land on.
-function scaleFrom(min, max, step) {
-  const ticks = [];
-  const count = Math.floor((max - min) / step + 1e-9);
-  for (let index = 0; index <= count; index++) ticks.push(clean(min + index * step));
-  return { min, max, step, ticks };
-}
-
 function clean(value) {
   const rounded = Number(value.toPrecision(12));
   return Object.is(rounded, -0) ? 0 : rounded;
@@ -766,17 +754,9 @@ function chartAggregateError(path, aggregate) {
 
 // RR-92: a column, bar, line or area chart draws the value axis core composed for its box (c.valueAxis), the one the PPTX export
 // writes. Without it (a chart the composition has no axis for) the scale is fitted to the plot's length as before.
-// A range so wide that min + n x majorUnit leaves Number's range (finite data up to Number.MAX_VALUE) has no ticks to rebuild from the
-// three numbers; it takes the saturating scale `niceScale` computes.
+// Shared reconstruction handles finite endpoints whose span or intermediate tick product exceeds Number's range.
 function categoryScale(c, dataMin, dataMax, length, labelExtent, percent) {
   return composedScale(c.valueAxis) ?? niceScale(dataMin, dataMax, chartIntervalsFor(length, labelExtent, c.u), { percent });
-}
-
-// The scale of an axis core composed ({min, max, majorUnit}), or undefined when there is none or its ticks leave Number's range.
-function composedScale(axis) {
-  if (!axis || !Number.isFinite(axis.max - axis.min) || !(axis.majorUnit > 0) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
-  const scale = scaleFrom(axis.min, axis.max, axis.majorUnit);
-  return scale.ticks.every(Number.isFinite) ? scale : undefined;
 }
 
 function renderCategoryChart(c, spec) {
