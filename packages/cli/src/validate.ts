@@ -231,7 +231,7 @@ export async function run(args: string[], host: Host): Promise<void> {
 				const read = readDeckReport(raw, { format, validate: false }).presentation;
 				// LH-14: the icon sets the deck names load first (the gallery loads each on first use), so an unknown icon name is reported.
 				await ensureIcons(read, { catalogs: settings.catalogs });
-				const measuring = measures(settings.only) ? await measuringFonts(read, { reporter: new Reporter(), flags: true }) : undefined;
+				const measuring = measures(settings.only) ? await measuringFonts(read, { reporter: new Reporter(), flags: true, catalogs: settings.catalogs, reportInvalidDocument: true }) : undefined;
 				let checked: ReturnType<typeof checkText>;
 				try {
 					checked = checkText(raw, format, measuring?.fonts ? { ...settings, fonts: measuring.fonts } : settings);

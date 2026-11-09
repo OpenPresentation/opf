@@ -75,6 +75,8 @@ export interface FontsHandle extends RenderFonts {
 }
 /** The engines of opf-render 0.18 (RR-73). Slides count from 1; a number gives one SVG, a selection a list. */
 export interface RenderModule {
+	/** Optional on older renderers; recognize only their actual structured validation exception. */
+	OPFRenderError?: new (code: string, message: string, details?: Record<string, unknown>) => Error & { code: string; details: Record<string, unknown> };
 	/** One slide of the deck as SVG; slides count from 1. */
 	toSvg(presentation: unknown, slide: number, options?: Record<string, unknown>): string;
 	/** One SVG slide as PNG. */
