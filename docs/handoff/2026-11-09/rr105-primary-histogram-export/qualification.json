@@ -1,0 +1,53 @@
+{
+  "scope": "Normal evidence metadata selection only; ordinary default build driver in separate evidence checkout, ZERO package tests/export/render/Office. Original producer and primary output immutable.",
+  "status": "RED",
+  "passed": 4,
+  "failed": 1,
+  "typeSkipped": 1,
+  "seconds": 28.7,
+  "failure": "check:text ENOENT docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz; no history hydration.",
+  "archive": {
+    "path": "checks.zip",
+    "bytes": 8597,
+    "sha256": "17c747abb16b15214fa9d7649ec85e4fdf3b19b76444b2f25cf4e6f74c5790e6",
+    "members": 7,
+    "expandedBytes": 28279
+  },
+  "files": [
+    {
+      "path": "aggregate.log",
+      "bytes": 2948,
+      "sha256": "b031c4393bb34836b821e81db86b7da8acab736bb572521338992cc885c3be57"
+    },
+    {
+      "path": "biome.log",
+      "bytes": 679,
+      "sha256": "a721d50b06af1eb1013edfe2a8433aa70af23371ca88eb0a6522d191673d1f2e"
+    },
+    {
+      "path": "build.log",
+      "bytes": 14599,
+      "sha256": "676126de9cefa0b38e50a291d082089c234c9d48a0f5b6f2536bad481333fa82"
+    },
+    {
+      "path": "install.log",
+      "bytes": 4527,
+      "sha256": "5fdc1cab25eaff91922db63c8bd11b8b1fd12805ab5c266cf9df515f638a200a"
+    },
+    {
+      "path": "pnpm_run_check_changes.log",
+      "bytes": 2637,
+      "sha256": "90036639f4ac46fb4a0567c5a54e950481dfe680831f9af4c61ab0d41c9e64c0"
+    },
+    {
+      "path": "pnpm_run_check_skill-commands.log",
+      "bytes": 1041,
+      "sha256": "4919550a871056c6c09a37e40b9de87550ef4d02c475bdfad1ffd87bfe97be9f"
+    },
+    {
+      "path": "pnpm_run_check_text.log",
+      "bytes": 1848,
+      "sha256": "52019390500a195866611970347b7f631dbff27b3f44ba370e8c9eaf35e31c59"
+    }
+  ]
+}

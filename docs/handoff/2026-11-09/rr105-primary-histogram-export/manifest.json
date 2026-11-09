@@ -1,0 +1,58 @@
+{
+  "source": "62e41b41451758458f532f06b0ca2085131de492",
+  "qualifiedSource": "7514fa6e45c02c8e40da213e12ee2199a56b61ce",
+  "runtimeSource": "6fc49797226d16d4b86e75f1b2efa6977f7f8aa7",
+  "originalOutput": "C:/opf-work/n034-hist-primary01",
+  "archive": {
+    "path": "output.zip",
+    "bytes": 122305,
+    "sha256": "ae3454061ad04e482380cf9e265713ec2c0ebdf2b5aba341c58bceb0d9405ffd",
+    "members": 8,
+    "expandedBytes": 612644
+  },
+  "files": [
+    {
+      "path": "candidate.pptx",
+      "bytes": 107574,
+      "sha256": "1b9655431dc68021cfae788b33470293a827d59757d6f520d03653f00c7c048b"
+    },
+    {
+      "path": "diagnostics.json",
+      "bytes": 422,
+      "sha256": "2a8dbc1c5e62ec71be2dfd0573891b79118c72a62302183c30a3e444be1d0a2b"
+    },
+    {
+      "path": "imported.opf.json",
+      "bytes": 655,
+      "sha256": "64496c3d018f02b09775050592a016f2519f6d865f7a6c43070919923ebbe728"
+    },
+    {
+      "path": "module-bindings.json",
+      "bytes": 491448,
+      "sha256": "3c08d83240424a4a83201d705fa584be06b1f67daf4dadc01592b9972a45c82e"
+    },
+    {
+      "path": "producer.mjs",
+      "bytes": 9096,
+      "sha256": "ac033018bdaaf9717f0a9ee8a9e0baf0ce1957c5f3d05cd65509cd68e96f1366"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 2535,
+      "sha256": "618b208f51da9ed7e1fbef5a5627e6d61b24f8c76410a88707981c7d4cff7515"
+    },
+    {
+      "path": "source.opf.json",
+      "bytes": 658,
+      "sha256": "feacbc02309d0af1e0c9c9ddfc92465f1f6ac13e1359c0a4e4fb15bc5de70344"
+    },
+    {
+      "path": "export.log",
+      "bytes": 256,
+      "sha256": "0c29b114172658fbf5a7c9201f178c69d26c7d8fa7ae72a76cbec6a05ff89ed8"
+    }
+  ],
+  "exportCalls": 1,
+  "nativeAcceptance": false,
+  "physicalRunApproved": false
+}
