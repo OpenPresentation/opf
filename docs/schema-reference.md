@@ -1267,12 +1267,12 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Independent reference-line styling. Width uses reference pixels at a720px short edge, as Stroke; unsupported arrows, gradients and compound strokes are not exposed.
+- Purpose: Independent reference-line styling. Width uses reference pixels at a 720px short edge, as Stroke; unsupported arrows, gradients and compound strokes are not exposed.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `color` | no | `ref:ColorRef` | Defaults to the chart-text neutral. |
-| `width` | no | `number` | Reference pixels at a720px short edge. Zero hides only the stroke; the value still affects bounds and its optional label remains. |
+| `width` | no | `number` | Reference pixels at a 720px short edge. Zero hides only the stroke; the value still affects bounds and its optional label remains. |
 | `dash` | no | `enum:solid \| dash \| dot` |  |
 
 
@@ -1284,7 +1284,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `value` | yes | `number` | Finite value in the associated data-axis units. With format0%,0.25 means25%;25 means2500%. Every reference expands automatic bounds when needed. |
+| `value` | yes | `number` | Finite value in the associated data-axis units. With format 0%, 0.25 means 25%; 25 means 2500%. Every reference expands automatic bounds when needed. |
 | `axis` | no | `enum:value \| secondary` | Secondary requires a combo chart with an actual secondary line series. |
 | `label` | no | `string` | Optional nonblank plain text, shown verbatim. Omission draws no label. |
 | `labelPosition` | no | `enum:start \| end` | Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label. |
@@ -1304,7 +1304,7 @@ _No named properties._
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
 | `line` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
 | `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the right of the plot. That axis has its own scale, and its tick labels use the number format of the first secondary series' co... |
-| `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references, supported on column,bar,line,line-with-markers,area,combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with2+categories span... |
+| `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references, supported on column, bar, line, line-with-markers, area and combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or m... |
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
 | `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent keeps today's behaviour exactly (a legend at the right of multi-series charts and of pie and doughnut charts, none for single-series charts). A named position... |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator. |

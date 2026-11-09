@@ -2,7 +2,7 @@
 // inside stacked segments with the series named beside the last column. Composition
 // decides them (core chart-marks.ts); this asserts what the preview draws from them.
 import assert from 'node:assert/strict';
-import { chartBandColor, chartWaterfallColors } from '@openpresentation/opf/composition';
+import { chartWaterfallColors } from '@openpresentation/opf/composition';
 import { resolvePresentation, toSvg } from './catalog-harness.mjs';
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
