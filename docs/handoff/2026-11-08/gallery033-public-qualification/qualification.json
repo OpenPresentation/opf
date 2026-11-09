@@ -1,0 +1,65 @@
+{
+  "site": "https://www.pptx.gallery",
+  "version": "0.33.0",
+  "sourceHead": "5fbd9a7988b4c2c06fa6dc15874709d2d62c2dd5",
+  "sourceTree": "8bbf9143d71f0c9ff219460850981d19e1ef7f1e",
+  "productionRun": 42539931664,
+  "artifact": {
+    "id": 13640848131,
+    "bytes": 108309,
+    "sha256": "43336a90cfad05de2ef49056e977b9255a08857b9ebdc2aa9e272c3447197531"
+  },
+  "productionDeployment": "8db19fec-62ef-44d9-b540-55a298ecb112",
+  "productionVersion": "10b4b055-38d0-4d59-96d3-ffbe60b02cfd",
+  "immutableUrl": "https://10b4b055-pptx-gallery.michael-136.workers.dev",
+  "githubDeployment": 7644117854,
+  "requiredGate": {
+    "exitCode": 0,
+    "scriptSha256": "0693bdce73bf4bf17317e4073773bc357630e99a96c1be5f3240aeb2f7058f2c",
+    "checks": [
+      "verify",
+      "gate",
+      "build",
+      "upload",
+      "qualify",
+      "production-checks / checks",
+      "report"
+    ]
+  },
+  "rootPublicBrowser": {
+    "passed": 3,
+    "failed": 0,
+    "seconds": 18.8,
+    "platform": "Windows",
+    "browser": "Edge",
+    "desktopWidths": [
+      1440,
+      1920
+    ],
+    "mobileWidth": 390,
+    "allLayoutIds": 36,
+    "representativeLayoutCases": 12,
+    "screenshotsVisuallyReviewed": 3
+  },
+  "rootPublicEditor": {
+    "passed": true,
+    "exactFileHashes": 45,
+    "packageVersion": "0.33.0"
+  },
+  "ciQualification": {
+    "immutable": true,
+    "canonical": true,
+    "publicEditor": true,
+    "productionChecks": true
+  },
+  "remaining": {
+    "otherSites": true,
+    "version034": true,
+    "galleryIconsShapes171": true
+  },
+  "priorObserverCorrections": [
+    "PR-only worker-build requirement removed; owned local observer stopped without touching CI",
+    "older checkout rollup could not see workflow-run suites; current maintained integration gate passed immediately"
+  ],
+  "observedAt": "2026-11-09T00:47:46.5936566Z"
+}
