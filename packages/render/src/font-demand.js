@@ -197,7 +197,7 @@ export async function createNodeDemand(
       },
     },
   });
-  function context(presentation, renderOptions, initial = false, mapFamily) {
+  function context(presentation, renderOptions, initial = false, mapFamily, preserveChosenFamilies = false) {
     const empty =
       Array.isArray(presentation.slides) && presentation.slides.length === 0;
     const scriptAnalysis = empty
@@ -291,6 +291,7 @@ export async function createNodeDemand(
             fallbackFamily: registryOptions.fallbackFamily,
             coverageKey: generation,
             mapFamily,
+            preserveChosenFamilies,
             coverage(text, size, style) {
               if (
                 heldKeys.has(
@@ -350,6 +351,7 @@ export async function createNodeDemand(
       renderOptions = options.renderOptions,
       initial = false,
       mapFamily,
+      preserveChosenFamilies = false,
     } = {},
   ) {
     if (presentation === null || typeof presentation !== 'object')
@@ -360,7 +362,7 @@ export async function createNodeDemand(
     const added = [],
       addedPackages = new Set();
     for (;;) {
-      const plan = context(presentation, renderOptions, initial, mapFamily);
+      const plan = context(presentation, renderOptions, initial, mapFamily, preserveChosenFamilies);
       // Preserve the historical whole-pack CSS order, independently of which styles an edit happens to add first.
       for (const pkg of plan.orderedPackages) remember(pkg.faces);
       if (plan.mode === 'auto') {

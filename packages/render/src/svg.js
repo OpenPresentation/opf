@@ -591,6 +591,8 @@ function bindSlide(presentation, index, context) {
   const blocks = blockContent(slide, slidePath);
 
   const design = resolveDesign(presentation, slide, slideContext);
+  // Private native-font analysis maps authored roles before planning; generated fallback names remain raw.
+  if (context.mapInputFamily) design.fonts = Object.fromEntries(Object.entries(design.fonts).map(([role, family]) => [role, context.mapInputFamily(family)]));
   // Script fonts (FF-19): each text run is measured and drawn with its script
   // slot's face; the latin slot stays the design font scheme's family.
   const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement, {
@@ -620,6 +622,12 @@ function bindSlide(presentation, index, context) {
     const pick = style => scriptFontsFor(style?.lang)?.textMeasurement ?? deckMeasurement;
     textMeasurement = { ...deckMeasurement, measure: (text, size, style) => pick(style).measure(text, size, style) };
     if (typeof deckMeasurement.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, style) => (pick(style).outlineBounds ?? deckMeasurement.outlineBounds)(text, size, style);
+  }
+  if (context.mapInputFamily && textMeasurement) {
+    const raw = textMeasurement, style = value => value && typeof value.fontFamily === "string" ? {...value, fontFamily: context.mapInputFamily(value.fontFamily)} : value;
+    textMeasurement = {...raw, measure: (text, size, value) => raw.measure(text, size, style(value))};
+    for (const name of ["resolveStyle", "resolveFont"]) if (typeof raw[name] === "function") textMeasurement[name] = (value, ...rest) => raw[name](style(value), ...rest);
+    if (typeof raw.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, value) => raw.outlineBounds(text, size, style(value));
   }
   // fontScheme.accent (the tag and quote text) takes the same look-alike policy.
   // RR-17 (FF-41): a family that names its weight (Arial Black, Segoe UI Semibold and Light) keeps its own name through composition, so each run
@@ -2625,9 +2633,9 @@ deckInternals.openDeck = (input, options = {}) => {
       const slideContext = resolveContext(presentation, index, { presentation, options: drawn });
       return resolveDesign(presentation, slideContext.slide, slideContext);
     },
-    bind(index, textMeasurement = drawn.textMeasurement) {
+    bind(index, textMeasurement = drawn.textMeasurement, mapInputFamily) {
       measurements[index] = textMeasurement;
-      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement } });
+      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement }, mapInputFamily });
     },
     render(index) { return renderResolvedSlide(resolved, index, { ...drawn, textMeasurement: measurements[index] }); },
   };

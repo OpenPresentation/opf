@@ -52,19 +52,25 @@ function registryView({ faces, policy = "none", aliases = new Map(), fallbackFam
   // failures (their paths belong to the current request), for this call only.
   const selected = new Map();
   let selections = 0;
-  return style => {
+  return (style, preserveChosen = false) => {
     if(mapFamily&&typeof style?.fontFamily==="string")style={...style,fontFamily:mapFamily(style.fontFamily)};
     const family = style?.fontFamily, weight = style?.fontWeight ?? 400, italic = !!style?.italic;
-    let weights = selected.get(family), variants = weights?.get(weight), face = variants?.get(italic);
-    if (face === undefined) {
-      ({ face } = pickFace(pool, family, style, { policy, aliases, fallbackFamily }));
+    let weights = selected.get(family), variants = weights?.get(weight), choice = variants?.get(italic);
+    if (choice === undefined) {
+      choice = pickFace(pool, family, style, { policy, aliases, fallbackFamily });
       // Bound memory even for a host with hundreds of distinct requested styles.
       if (selections >= 512) { selected.clear(); selections = 0; weights = undefined; variants = undefined; }
       if (!weights) selected.set(family, weights = new Map());
       if (!variants) weights.set(weight, variants = new Map());
-      variants.set(italic, face);
+      variants.set(italic, choice);
       selections++;
     }
+    if (preserveChosen && choice.via !== "family") {
+      const chosen = { ...style };
+      delete chosen.fontFace;
+      return chosen;
+    }
+    const { face } = choice;
     return { ...style, fontFamily: face.family, fontWeight: face.weight, italic: face.italic };
   };
 }
@@ -105,7 +111,7 @@ const byFace = (a, b) => a.family < b.family ? -1 : a.family > b.family ? 1 : Nu
  * The measurement `presentationFaces` draws with: it records every style it is asked to measure (resolved through `settle`) into
  * the map `record.into` holds (switch it to file what follows elsewhere).
  */
-function recordingMeasurement(settle, into, coverage) {
+function recordingMeasurement(settle, into, coverage, resolveStyle = settle) {
   const record = { into };
   record.textMeasurement = {
     measure(text, size, style) {
@@ -124,7 +130,7 @@ function recordingMeasurement(settle, into, coverage) {
       }
       return String(text).length * size * RECORDED_EM;
     },
-    resolveStyle: settle,
+    resolveStyle,
     ...(coverage ? { [fontCoverageProbe](text,size,style) { coverage(String(text),size,settle(style)); } } : {}),
   };
   return record;
@@ -228,16 +234,25 @@ export function createFontAnalysis() {
   function faces(presentation, options = {}, registry) {
     const resolveOptions = resolveOptionsOf(options);
     if (registry) registry = { ...registry, faces: [...registry.faces] };
-    const view = registry ? registryView(registry) : undefined;
+    const view = registry ? registryView(registry.preserveChosenFamilies ? {...registry, mapFamily: undefined} : registry) : undefined;
     const settle = style => {
       if (!view) return { ...style };
       try { return view(style); } catch { return { ...style }; }
     };
+    // Native PPTX keeps substituted authored roles/weights; measurement still records physical selected faces.
+    const resolveStyle = registry?.preserveChosenFamilies && view ? style => {
+      try { return view(style, true); } catch { return { ...style }; }
+    } : settle;
     const keys = deckKeys(presentation);
     if (!keys) {
       // Not a deck object: one whole-deck pass, kept nowhere.
       const seen = new Map();
-      toSvg(presentation, { ...resolveOptions, fonts: { textMeasurement: recordingMeasurement(settle, seen, registry?.coverage).textMeasurement } });
+      const measurement = recordingMeasurement(settle, seen, registry?.coverage, resolveStyle).textMeasurement;
+      if (registry?.preserveChosenFamilies && registry.mapFamily) {
+        const opened = deckInternals.openDeck(presentation, resolveOptions);
+        for (let index = 0; index < opened.presentation.slides.length; index++) opened.bind(index, measurement, registry.mapFamily);
+        for (let index = 0; index < opened.presentation.slides.length; index++) if (resolveOptions.skipHidden !== true || !opened.presentation.slides[index].hidden) opened.render(index);
+      } else toSvg(presentation, { ...resolveOptions, fonts: { textMeasurement: measurement } });
       stats.decks++;
       return [...seen.values()].sort(byFace);
     }
@@ -250,8 +265,8 @@ export function createFontAnalysis() {
       // Composition of the slides, then their drawing, as `toSvg` runs them.
       const opened = deck.open();
       const made = new Map(missing.map(index => [index, { composed: new Map(), drawn: new Map() }]));
-      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed, registry?.coverage)]));
-      for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement);
+      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed, registry?.coverage, resolveStyle)]));
+      for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement, registry?.preserveChosenFamilies ? registry.mapFamily : undefined);
       // A slide is drawn with the measurement it was composed with; what it measures from here on is its drawing. `skipHidden`
       // leaves hidden slides undrawn (they are still composed), as in `toSvg`.
       for (const index of missing) {
@@ -298,9 +313,9 @@ export function createFontAnalysis() {
   return { faces, families, stats };
 }
 
-function registryKey({ faces, policy = "none", aliases = new Map(), fallbackFamily, coverageKey, mapFamily }) {
+function registryKey({ faces, policy = "none", aliases = new Map(), fallbackFamily, coverageKey, mapFamily, preserveChosenFamilies }) {
   // Every field `pickFace` reads, as it reads them (`italic` is compared with ===, `fallbackOnly` and `scripts` by truth).
-  return JSON.stringify([faces.map(face => [face.family, face.familyGroup ?? face.family, face.weight ?? null, face.italic ?? null, !!face.fallbackOnly, !!face.scripts]), policy, [...aliases], fallbackFamily ?? null, coverageKey ?? null, optionToken(mapFamily)]);
+  return JSON.stringify([faces.map(face => [face.family, face.familyGroup ?? face.family, face.weight ?? null, face.italic ?? null, !!face.fallbackOnly, !!face.scripts]), policy, [...aliases], fallbackFamily ?? null, coverageKey ?? null, optionToken(mapFamily), !!preserveChosenFamilies]);
 }
 
 /**

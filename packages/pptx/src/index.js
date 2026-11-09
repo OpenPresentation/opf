@@ -323,7 +323,7 @@ export async function toPptx(input, options = {}) {
     return Object.assign(safe, {replaced});
   })() : undefined;
   // Demand handles prepare the families this export actually measures, including an explicit Office-safe mapping.
-  if(options.fonts?.registry?.fontNames)await options.fonts?.ensure?.(presentation,{catalogs:options.catalogs,...(options.date?{date:options.date}:{}),renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})},...(safeTypeface?{mapFamily:safeTypeface}:{})});
+  if(options.fonts?.registry?.fontNames)await options.fonts?.ensure?.(presentation,{catalogs:options.catalogs,...(options.date?{date:options.date}:{}),renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})},preserveChosenFamilies:true,...(safeTypeface?{mapFamily:safeTypeface}:{})});
   if (safeTypeface) options = {...options, safeTypeface, textMeasurement: safeMeasurement(options.textMeasurement, safeTypeface)};
   // The renderer remains optional for custom measurement providers. Its public script planner supplies the same
   // shaping/measurement segmentation as preview when installed; the selected native family wrapper stays outside it.
