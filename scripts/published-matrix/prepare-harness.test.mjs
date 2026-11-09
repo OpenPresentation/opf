@@ -49,3 +49,14 @@ test('actual cross-OS CLI refuses mixed identities and still refuses missing dig
   hosts.windows=fixture();save();unlinkSync(path.join(root,'published-matrix-windows/digests.json'));result=run();assert.notEqual(result.status,0);assert.match(result.stderr,/need at least two operating systems/);
  }finally{assert.ok(path.resolve(root).startsWith(path.join(os.tmpdir(),'opf-compare-')));rmSync(root,{recursive:true,force:true});}
 });
+
+test('every required package, including Gallery, must exist even when both hosts omit the same identity',()=>{
+ for(const name of Object.keys(installed().packages)){
+  const left=host(),right=host();
+  for(const report of [left,right]){delete report.installed.packages[name];delete report.driver.consumer.packages[name];}
+  assert.throws(()=>consumerIdentity(left.installed),/consumer required/,name+' direct identity');
+  assert.throws(()=>assertComparablePublishedHosts({linux:left,windows:right}),/consumer required/,name+' symmetric removal');
+ }
+ const left=host(),right=host();delete left.driver.consumer.packages['@openpresentation/gallery'];delete right.driver.consumer.packages['@openpresentation/gallery'];
+ assert.throws(()=>assertComparablePublishedHosts({linux:left,windows:right}),/driver\/installed consumer mismatch/,'Gallery cannot disappear only from both driver proofs');
+});

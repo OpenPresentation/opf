@@ -18,7 +18,7 @@ export function consumerIdentity(installed) {
     assert.match(entry.integrity,/^sha512-[A-Za-z0-9+/]+={0,2}$/u,`${name}: registry integrity required`);
     packages[name]={version:entry.version,gitHead:entry.gitHead,integrity:entry.integrity};
   }
-  for(const name of ['opf','opf-render','opf-pptx','opf-editor'])assert.ok(packages[`@openpresentation/${name}`],`${name}: consumer required`);
+  for(const name of ['opf','opf-render','opf-pptx','opf-editor','gallery'])assert.ok(packages[`@openpresentation/${name}`],`${name}: consumer required`);
   return {tag:installed.registryTag,packages};
 }
 export function preparePublishedHarness({repo,consumer,output,out}) {
