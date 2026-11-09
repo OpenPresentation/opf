@@ -1,0 +1,274 @@
+{
+  "format": 1,
+  "branch": "codex/evidence-integration034-five-source-20261109",
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "coordinatorExecSession": 86997,
+  "source": "ef5405b3bbf9c47c8ae2e790e08aa72dcb18875f",
+  "sourceTree": "c51d176abbfc8786a79272b57c030f295d7c8bcf",
+  "sourceProofBase": "6d5d61edc5c78a5c92128dd517c7dd6257d52331",
+  "runMeasuredSince": "9545016583ccfa151077cda4d51043ac6505a140",
+  "run": {
+    "startedAt": "2026-11-09T06:28:19.8291853Z",
+    "endedAt": "2026-11-09T06:52:13.0826657Z",
+    "exitCode": 1,
+    "head": "ef5405b3bbf9c47c8ae2e790e08aa72dcb18875f",
+    "log": "C:/opf-work/release-033-artifacts/integration034-five-source-check-changed-01.log"
+  },
+  "printedElapsedSeconds": 1432.5,
+  "steps": [
+    {
+      "step": "build",
+      "status": "passed",
+      "seconds": 11.8
+    },
+    {
+      "step": "biome",
+      "status": "passed",
+      "seconds": 1.8,
+      "note": "1066 files"
+    },
+    {
+      "step": "pnpm run check:browser-safe",
+      "status": "passed",
+      "seconds": 6.9
+    },
+    {
+      "step": "pnpm run check:catalog",
+      "status": "passed",
+      "seconds": 3.4
+    },
+    {
+      "step": "pnpm run check:catalog-free",
+      "status": "passed",
+      "seconds": 3.4
+    },
+    {
+      "step": "pnpm run check:changes",
+      "status": "passed",
+      "seconds": 1.5
+    },
+    {
+      "step": "pnpm run check:ci-scope",
+      "status": "passed",
+      "seconds": 11.9
+    },
+    {
+      "step": "pnpm run check:ci-workflows",
+      "status": "passed",
+      "seconds": 24.4
+    },
+    {
+      "step": "pnpm run check:diagram-doc-images",
+      "status": "passed",
+      "seconds": 2.8
+    },
+    {
+      "step": "pnpm run check:e1-current-after",
+      "status": "passed",
+      "seconds": 1
+    },
+    {
+      "step": "pnpm run check:engines-range",
+      "status": "passed",
+      "seconds": 1.5
+    },
+    {
+      "step": "pnpm run check:examples",
+      "status": "passed",
+      "seconds": 57.9
+    },
+    {
+      "step": "pnpm run check:examples-convert",
+      "status": "passed",
+      "seconds": 71.1
+    },
+    {
+      "step": "pnpm run check:first-deck",
+      "status": "passed",
+      "seconds": 4.6
+    },
+    {
+      "step": "pnpm run check:font-hotlinks",
+      "status": "passed",
+      "seconds": 14.3
+    },
+    {
+      "step": "pnpm run check:font-tracker",
+      "status": "passed",
+      "seconds": 3.8
+    },
+    {
+      "step": "pnpm run check:gallery-tracker",
+      "status": "passed",
+      "seconds": 3.7
+    },
+    {
+      "step": "pnpm run check:golden-update",
+      "status": "passed",
+      "seconds": 2.3
+    },
+    {
+      "step": "pnpm run check:libreoffice",
+      "status": "passed",
+      "seconds": 0.9
+    },
+    {
+      "step": "pnpm run check:native-acceptance",
+      "status": "passed",
+      "seconds": 4.1
+    },
+    {
+      "step": "pnpm run check:palette",
+      "status": "passed",
+      "seconds": 1.2
+    },
+    {
+      "step": "pnpm run check:playwright-pin",
+      "status": "passed",
+      "seconds": 1.2
+    },
+    {
+      "step": "pnpm run check:registry-golden",
+      "status": "passed",
+      "seconds": 3.9
+    },
+    {
+      "step": "pnpm run check:release",
+      "status": "passed",
+      "seconds": 1.7
+    },
+    {
+      "step": "pnpm run check:release-report",
+      "status": "passed",
+      "seconds": 0.9
+    },
+    {
+      "step": "pnpm run check:runners",
+      "status": "passed",
+      "seconds": 1.6
+    },
+    {
+      "step": "pnpm run check:schema-docs",
+      "status": "passed",
+      "seconds": 0.7
+    },
+    {
+      "step": "pnpm run check:schema-examples",
+      "status": "passed",
+      "seconds": 4.3
+    },
+    {
+      "step": "pnpm run check:schema-strict",
+      "status": "passed",
+      "seconds": 1.6
+    },
+    {
+      "step": "pnpm run check:skill-commands",
+      "status": "passed",
+      "seconds": 22.6
+    },
+    {
+      "step": "pnpm run check:skill-glossary",
+      "status": "passed",
+      "seconds": 0.9
+    },
+    {
+      "step": "pnpm run check:spec",
+      "status": "passed",
+      "seconds": 1
+    },
+    {
+      "step": "pnpm run check:stability",
+      "status": "passed",
+      "seconds": 69.2
+    },
+    {
+      "step": "pnpm run check:text",
+      "status": "passed",
+      "seconds": 4.8
+    },
+    {
+      "step": "pnpm run check:works-percent",
+      "status": "passed",
+      "seconds": 0.8
+    },
+    {
+      "step": "typecheck",
+      "status": "passed",
+      "seconds": 27.1
+    },
+    {
+      "step": "tests opf",
+      "status": "FAILED",
+      "seconds": 117.1
+    },
+    {
+      "step": "tests cli",
+      "status": "passed",
+      "seconds": 315.3
+    },
+    {
+      "step": "tests mcp",
+      "status": "passed",
+      "seconds": 92.5
+    },
+    {
+      "step": "tests render",
+      "status": "FAILED",
+      "seconds": 366.5
+    },
+    {
+      "step": "tests pptx",
+      "status": "FAILED",
+      "seconds": 59
+    },
+    {
+      "step": "tests editor",
+      "status": "passed",
+      "seconds": 225
+    },
+    {
+      "step": "tests gallery",
+      "status": "passed",
+      "seconds": 4
+    },
+    {
+      "step": "tests integration",
+      "status": "passed",
+      "seconds": 22.9
+    }
+  ],
+  "passed": 41,
+  "failed": 3,
+  "perStepLogs": 44,
+  "artifacts": 51,
+  "rawBytes": 1598184,
+  "storedBytes": 369829,
+  "snapshot": "C:/opf-work/i034-five-snapshot-20261109-01",
+  "snapshotPermission": "Coordinator terminal receipt and explicit snapshot permission; copy complete acknowledged before subsequent delta checks.",
+  "coordinatorMetadata": {
+    "files": [
+      "assembly.json",
+      "verify-assembly.mjs",
+      "fold-audit-84641.json",
+      "README.md"
+    ],
+    "frozenHeadFiles": false,
+    "qualification": "Separately captured untracked coordinator metadata; README changed after cheap checks, final documentation qualification remains owed."
+  },
+  "sourceChanged": false,
+  "fixturesChanged": false,
+  "combinedGreen": false,
+  "docsQualificationOwed": true,
+  "ciOwed": true,
+  "nativeOwed": true,
+  "releaseAccepted": false,
+  "separateCausalEvidence": {
+    "branch": "codex/evidence-sh24-archive-metadata-20261109",
+    "head": "aa9580f6371da243540d031393c6a943e688ecbe",
+    "tree": "a2171ea13dc20c12d157b21820898f6aa0094e7e",
+    "handoff": "docs/handoff/2026-11-09/sh24-archive-metadata-proof/",
+    "scope": "Specific treemap c844 SH24 embedded-layout-hash causal proof; separate pending coordinator acceptance, not replayed here, no fixture promotion/all-nine acceptance or passing original run"
+  }
+}

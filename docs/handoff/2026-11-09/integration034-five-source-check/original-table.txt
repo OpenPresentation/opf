@@ -1,0 +1,46 @@
+step                               status     time
+build                              passed   11.8 s
+biome                              passed    1.8 s  1066 files
+pnpm run check:browser-safe        passed    6.9 s
+pnpm run check:catalog             passed    3.4 s
+pnpm run check:catalog-free        passed    3.4 s
+pnpm run check:changes             passed    1.5 s
+pnpm run check:ci-scope            passed   11.9 s
+pnpm run check:ci-workflows        passed   24.4 s
+pnpm run check:diagram-doc-images  passed    2.8 s
+pnpm run check:e1-current-after    passed    1.0 s
+pnpm run check:engines-range       passed    1.5 s
+pnpm run check:examples            passed   57.9 s
+pnpm run check:examples-convert    passed   71.1 s
+pnpm run check:first-deck          passed    4.6 s
+pnpm run check:font-hotlinks       passed   14.3 s
+pnpm run check:font-tracker        passed    3.8 s
+pnpm run check:gallery-tracker     passed    3.7 s
+pnpm run check:golden-update       passed    2.3 s
+pnpm run check:libreoffice         passed    0.9 s
+pnpm run check:native-acceptance   passed    4.1 s
+pnpm run check:palette             passed    1.2 s
+pnpm run check:playwright-pin      passed    1.2 s
+pnpm run check:registry-golden     passed    3.9 s
+pnpm run check:release             passed    1.7 s
+pnpm run check:release-report      passed    0.9 s
+pnpm run check:runners             passed    1.6 s
+pnpm run check:schema-docs         passed    0.7 s
+pnpm run check:schema-examples     passed    4.3 s
+pnpm run check:schema-strict       passed    1.6 s
+pnpm run check:skill-commands      passed   22.6 s
+pnpm run check:skill-glossary      passed    0.9 s
+pnpm run check:spec                passed    1.0 s
+pnpm run check:stability           passed   69.2 s
+pnpm run check:text                passed    4.8 s
+pnpm run check:works-percent       passed    0.8 s
+typecheck                          passed   27.1 s
+tests opf                          FAILED  117.1 s
+tests cli                          passed  315.3 s
+tests mcp                          passed   92.5 s
+tests render                       FAILED  366.5 s
+tests pptx                         FAILED   59.0 s
+tests editor                       passed  225.0 s
+tests gallery                      passed    4.0 s
+tests integration                  passed   22.9 s
+total                                      1432.5 s
