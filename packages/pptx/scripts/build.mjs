@@ -41,6 +41,7 @@ await copyFile(new URL('src/chart-highlight.js', root), new URL('chart-highlight
 await copyFile(new URL('src/chart-layer.js', root), new URL('chart-layer.js', dist));
 await copyFile(new URL('src/chart-direct-labels.js', root), new URL('chart-direct-labels.js', dist));
 await copyFile(new URL('src/chart-marks.js', root), new URL('chart-marks.js', dist));
+await copyFile(new URL('src/chart-references.js', root), new URL('chart-references.js', dist));
 await copyFile(new URL('src/step-badges.js', root), new URL('step-badges.js', dist));
 await copyFile(new URL('src/smart-art.js', root), new URL('smart-art.js', dist));
 await copyFile(new URL('src/smart-art-layouts.js', root), new URL('smart-art-layouts.js', dist));

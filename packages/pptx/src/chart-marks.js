@@ -15,15 +15,13 @@
 //                              (text boxes over the chart at core's boxes).
 //   doughnut hole (LH-182)     an ellipse in the surface color under the chart frame, at the hole of the doughnut core pinned (the
 //                              plot area's inner manual layout), so what is behind the chart does not show through the hole.
-//   reference marks (LH-110)   a period band (a rectangle under the chart frame: the chart and plot areas are unfilled) and a dashed
-//                              reference line with its bold label (over the frame), on the pinned plot.
+// Explicit references are handled separately by chart-references.js; legacy V1 reference/band shapes remain ordinary visible content.
 //
 // The shapes do not follow the chart if it is moved by hand in PowerPoint: they are drawn for the plot core pinned. Each carries an
 // OPF_CHART_MARK_V1 tag naming its chart and role, and import consumes the tagged shapes (they are the chart's defaults, not content);
 // the chart itself imports without an option for them (chart-direct-labels.js `directLabelDefaults`, chart-options.js).
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
-import {chartBandColor} from '@openpresentation/opf/composition';
 
 export const CHART_MARK_TAG = 'OPF_CHART_MARK_V1';
 const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
@@ -61,7 +59,6 @@ export function addChartMarks(slide, layer, phase, {chart, paint, font, size, sc
   };
   const start = rtl ? 'right' : 'left', end = rtl ? 'left' : 'right';
   if (phase === 'under') {
-    for (const band of layer.references?.bands ?? []) rect(band.box, 'band', chartBandColor(paint.surface, `#${paint.text}`));
     // LH-182: a doughnut's hole in the surface color, under the chart frame (whose plot core pinned to the doughnut's square), so a
     // watermark or a background motif does not show through it.
     const hole = layer.doughnut?.hole;
@@ -71,10 +68,6 @@ export function addChartMarks(slide, layer, phase, {chart, paint, font, size, sc
       tag(objectName, 'hole');
     }
     return;
-  }
-  for (const entry of layer.references?.lines ?? []) {
-    line(entry.x1, entry.y, entry.x2, entry.y, 'reference', paint.chartText, true);
-    text(entry.text, entry.label, 'reference-label', {color: paint.text, bold: true, align: start});
   }
   const list = layer.valueList;
   if (list) {
@@ -132,8 +125,8 @@ export function applyStackValueDeletes(xml, values) {
 }
 
 /** Import: the shapes of a slide that carry a valid chart mark tag (consumed: not content) and the names of the charts they belong to. */
-export function importChartMarks(shapes, relationships, entries) {
-  const consumed = new Set(), charts = new Set();
+export function importChartMarks(shapes, relationships, entries, report) {
+  const consumed = new Set(), charts = new Set(), preserved=new Set();
   for (const shape of shapes) {
     for (const link of array(shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
       const rel = relationships.get(link['r:id']);
@@ -143,6 +136,7 @@ export function importChartMarks(shapes, relationships, entries) {
           if (String(tag.name ?? '').toUpperCase() !== CHART_MARK_TAG) continue;
           const record = decodeTextTag(tag.val);
           if (record?.v === 1 && typeof record.chart === 'string' && typeof record.role === 'string') {
+            if(['reference','reference-label','band'].includes(record.role)){preserved.add(shape);report?.({code:'legacy-chart-reference-overlay',message:'A legacy inferred chart reference/band remains visible ordinary content; no explicit reference value is inferred from its title or old tag.'});continue;}
             consumed.add(shape);
             // A surface-only hole does not imply default direct labels or a missing legend: explicit options must still import.
             if (record.role !== 'hole') charts.add(record.chart);
@@ -151,5 +145,5 @@ export function importChartMarks(shapes, relationships, entries) {
       } catch { /* an unreadable tag leaves the shape as ordinary content */ }
     }
   }
-  return {consumed, charts};
+  return {consumed, charts, preserved};
 }

@@ -4334,11 +4334,41 @@
         }
       }
     },
+    "ChartReferenceStroke": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Independent reference-line styling. Width uses reference pixels at a 720px short edge, as Stroke; unsupported arrows, gradients and compound strokes are not exposed.",
+      "properties": {
+        "color": { "$ref": "#/$defs/ColorRef", "description": "Defaults to the chart-text neutral." },
+        "width": { "type": "number", "minimum": 0, "maximum": 64, "default": 1.3333333333333333, "description": "Reference pixels at a 720px short edge. Zero hides only the stroke; the value still affects bounds and its optional label remains." },
+        "dash": { "type": "string", "enum": ["solid", "dash", "dot"], "default": "dash" }
+      }
+    },
+    "ChartReferenceLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value"],
+      "description": "One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement.",
+      "properties": {
+        "value": { "type": "number", "minimum": -1.7976931348623157e308, "maximum": 1.7976931348623157e308, "description": "Finite value in the associated data-axis units. With format 0%, 0.25 means 25%; 25 means 2500%. Every reference expands automatic bounds when needed." },
+        "axis": { "type": "string", "enum": ["value", "secondary"], "default": "value", "description": "Secondary requires a combo chart with an actual secondary line series." },
+        "label": { "type": "string", "minLength": 1, "pattern": "\\S", "description": "Optional nonblank plain text, shown verbatim. Omission draws no label." },
+        "labelPosition": { "type": "string", "enum": ["start", "end"], "default": "end", "description": "Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label." },
+        "stroke": { "$ref": "#/$defs/ChartReferenceStroke" }
+      },
+      "dependentRequired": { "labelPosition": ["label"] }
+    },
     "Chart": {
       "type": "object",
       "description": "Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ \"type\": \"column\", \"data\": { \"columns\": [\"Quarter\", \"Decks\"], \"rows\": [[\"Q1\", 3], [\"Q2\", 8], [\"Q3\", 21]] } }`.",
       "additionalProperties": false,
       "required": ["type", "data"],
+      "allOf": [
+        {
+          "if": { "required": ["referenceLines"], "properties": { "referenceLines": { "minItems": 1 } } },
+          "then": { "properties": { "type": { "enum": ["column", "bar", "line", "line-with-markers", "area", "combo"] } } }
+        }
+      ],
       "properties": {
         "type": {
           "type": "string",
@@ -4372,6 +4402,11 @@
           "uniqueItems": true,
           "description": "Combo charts only: line series, by column name, plotted against a secondary value axis at the right of the plot. That axis has its own scale, and its tick labels use the number format of the first secondary series' column (DataColumn.format), for example '0%' for a margin. Absent: every series shares the primary value axis at the left. A name that is not a line series (see 'line') stays on the primary axis with a 'chart-mapping-adapted' warning; an unknown column is a 'chart-mapping-unknown-column' error. On any other chart type it is ignored with a 'chart-option-adapted' warning.",
           "examples": [["Margin"]]
+        },
+        "referenceLines": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ChartReferenceLine" },
+          "description": "Explicit numeric references, supported on column, bar, line, line-with-markers, area and combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or more categories span first-to-last category centers; bars/single-category charts span the full plot. Titles/subtitles never create references or period bands."
         },
         "axisTitles": {
           "$ref": "#/$defs/ChartAxisTitles",

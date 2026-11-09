@@ -121,7 +121,7 @@ export interface ChartLayer {
   doughnut?: ChartLayerDoughnut;
   /** LH-109: a stacked column or area chart's values inside its segments and series names beside its last column (chart-marks.ts). */
   stack?: ChartLayerStack;
-  /** LH-110: the reference line and the period band the slide title names (chart-marks.ts). */
+  /** Explicit numeric references and their independent authored strokes (chart-references.ts). */
   references?: ChartLayerReferences;
   /** LH-160: a histogram's bin count and edge decimals, and whether its data labels fit (chart-histogram.ts). */
   histogram?: ChartLayerHistogram;

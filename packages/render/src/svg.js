@@ -1878,7 +1878,7 @@ function renderDiagram(item, box, bound, options) {
 function renderChart(item, box, bound, options) {
   // Catalog chart types preview the native
   // construct opf-pptx exports; other ids keep the legacy single-series preview.
-  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic });
+  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic, resolveColorRef: (value, fallback) => resolveColorRef(value, bound, fallback) });
   if (rendered) return rendered;
   const chart = item.value ?? {};
   const chartType = chart.type ?? engineDefaults.chartType;
