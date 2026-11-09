@@ -1,0 +1,14 @@
+{
+  "firstCommand": "node recovery-suite03/archive.mjs --create --originals",
+  "exitCode": 1,
+  "error": "Imported original archive creator retained its exact b623 HEAD guard and refused HEAD5975 instead of recreating old archives",
+  "correction": "Give only new recovery creator the distinct --create-recovery flag; keep all original source and guards byte-exact",
+  "deltaOrManifestWrittenBeforeRefusal": false,
+  "originalOutputChanges": false,
+  "secondRefusal": {
+    "exitCode": 1,
+    "error": "Unexpected output kind fonts/roboto/400Regular/Roboto_400Regular.ttf",
+    "writesBeforeRefusal": false,
+    "correction": "Allow only the exact7 pinned @expo-google-fonts/roboto0.4.3 faces plus exactOFL-1.1 license named by the unchanged renderer font manifest; retain strict general whitelist"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "archives": [
+    {
+      "bytes": 2414557,
+      "file": "generic-recovery-delta.zip",
+      "sha256": "865b758951dab08a06ee10c4d1baa7f36eec575691808d9478a669ce9590e868",
+      "members": 59
+    }
+  ],
+  "reader": "Windows .NET System.IO.Compression.ZipArchive",
+  "result": "PASS",
+  "preparationSeal": true,
+  "source": "2400d38bf549cdb661c31725776df25e497d364c",
+  "nativeStatus": "pending",
+  "members": 59,
+  "packageSource": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "expandedBytes": 4112797,
+  "nativeAcceptance": false
+}

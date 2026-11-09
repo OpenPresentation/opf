@@ -1,0 +1,3793 @@
+{
+  "schema": 1,
+  "publication": "PUBLIC-SAFE evidence-only NEVER MERGE",
+  "source": "2400d38bf549cdb661c31725776df25e497d364c",
+  "packageSource": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "sourceRoot": "C:/opf-work/n034-suite03",
+  "nativeAcceptance": false,
+  "nativeStatus": "pending",
+  "preparationStatus": "Fresh generic prepare completed and sealed; original partial historical failure remains unchanged",
+  "expectedCases": 59,
+  "logicalFiles": 340,
+  "logicalBytes": 49552300,
+  "reusedFiles": 281,
+  "reusedBytes": 45439503,
+  "delta": {
+    "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+    "bytes": 2414557,
+    "sha256": "865b758951dab08a06ee10c4d1baa7f36eec575691808d9478a669ce9590e868",
+    "files": [
+      {
+        "path": "chart-modes/all-seven-auto-imported.opf.json",
+        "bytes": 3552,
+        "sha256": "a18a1661add20ae553be179685ed927d10575b504b264477eca21fd3ed663878",
+        "originalMtimeUTC": "2026-11-09T14:55:58.500Z"
+      },
+      {
+        "path": "chart-modes/all-seven-auto.pptx",
+        "bytes": 189797,
+        "sha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1",
+        "originalMtimeUTC": "2026-11-09T14:55:58.376Z"
+      },
+      {
+        "path": "chart-modes/all-seven-fallback-imported.opf.json",
+        "bytes": 3536,
+        "sha256": "5cb700ff78d45e5bdf7ab103e5bd6f0c05e69670abdd87c6a08026ecb33b2f19",
+        "originalMtimeUTC": "2026-11-09T14:55:57.861Z"
+      },
+      {
+        "path": "chart-modes/all-seven-native-imported.opf.json",
+        "bytes": 3552,
+        "sha256": "a18a1661add20ae553be179685ed927d10575b504b264477eca21fd3ed663878",
+        "originalMtimeUTC": "2026-11-09T14:55:59.098Z"
+      },
+      {
+        "path": "chart-modes/all-seven-native.pptx",
+        "bytes": 189797,
+        "sha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1",
+        "originalMtimeUTC": "2026-11-09T14:55:58.981Z"
+      },
+      {
+        "path": "chart-modes/box-multi-auto-imported.opf.json",
+        "bytes": 592,
+        "sha256": "8de263d266f2fc36c3caf371b3716c578097a917c5bb664df57d8a2fd210f4fb",
+        "originalMtimeUTC": "2026-11-09T14:55:54.868Z"
+      },
+      {
+        "path": "chart-modes/box-multi-auto.pptx",
+        "bytes": 111396,
+        "sha256": "f0b7a7f4a2b50ebe8bbd048c543f638a80bbb9c570fceb9f0bda40debd3db4b2",
+        "originalMtimeUTC": "2026-11-09T14:55:54.802Z"
+      },
+      {
+        "path": "chart-modes/box-multi-fallback-imported.opf.json",
+        "bytes": 610,
+        "sha256": "af4941c358d121ea90724a84412a0e3ae03ae55d8fb4d1b2767d6c4273b67c50",
+        "originalMtimeUTC": "2026-11-09T14:55:54.595Z"
+      },
+      {
+        "path": "chart-modes/box-multi-native-imported.opf.json",
+        "bytes": 592,
+        "sha256": "8de263d266f2fc36c3caf371b3716c578097a917c5bb664df57d8a2fd210f4fb",
+        "originalMtimeUTC": "2026-11-09T14:55:55.113Z"
+      },
+      {
+        "path": "chart-modes/box-multi-native.pptx",
+        "bytes": 111396,
+        "sha256": "f0b7a7f4a2b50ebe8bbd048c543f638a80bbb9c570fceb9f0bda40debd3db4b2",
+        "originalMtimeUTC": "2026-11-09T14:55:55.054Z"
+      },
+      {
+        "path": "chart-modes/funnel-category-auto-imported.opf.json",
+        "bytes": 521,
+        "sha256": "687f8d4874a5b4c788d155078b8cd25d96ca94de7138cc821d4e8ef779d88f30",
+        "originalMtimeUTC": "2026-11-09T14:55:56.282Z"
+      },
+      {
+        "path": "chart-modes/funnel-category-auto.pptx",
+        "bytes": 110494,
+        "sha256": "5fab47abd2af883156bc1cac7b6b650aebe31b5ab70addab8e8b3078468078bf",
+        "originalMtimeUTC": "2026-11-09T14:55:56.226Z"
+      },
+      {
+        "path": "chart-modes/funnel-category-fallback-imported.opf.json",
+        "bytes": 521,
+        "sha256": "bd2a377f42d57e934d062d799d3197daece6db462502d0e53313200247e6f387",
+        "originalMtimeUTC": "2026-11-09T14:55:56.050Z"
+      },
+      {
+        "path": "chart-modes/funnel-category-native-imported.opf.json",
+        "bytes": 521,
+        "sha256": "687f8d4874a5b4c788d155078b8cd25d96ca94de7138cc821d4e8ef779d88f30",
+        "originalMtimeUTC": "2026-11-09T14:55:56.514Z"
+      },
+      {
+        "path": "chart-modes/funnel-category-native.pptx",
+        "bytes": 110494,
+        "sha256": "5fab47abd2af883156bc1cac7b6b650aebe31b5ab70addab8e8b3078468078bf",
+        "originalMtimeUTC": "2026-11-09T14:55:56.457Z"
+      },
+      {
+        "path": "chart-modes/histogram-category-auto-imported.opf.json",
+        "bytes": 527,
+        "sha256": "1a8142cc8c8139409a5093d969173b614a15486887f3c7cfa59523256a53692d",
+        "originalMtimeUTC": "2026-11-09T14:55:53.394Z"
+      },
+      {
+        "path": "chart-modes/histogram-category-auto.pptx",
+        "bytes": 110508,
+        "sha256": "902ceb0c306cfa36bd5510b94a42985b53be0501ede399aa0402b159081d30c9",
+        "originalMtimeUTC": "2026-11-09T14:55:53.333Z"
+      },
+      {
+        "path": "chart-modes/histogram-category-fallback-imported.opf.json",
+        "bytes": 524,
+        "sha256": "384f09a67cd2e32f28d11c8211e4e407002059b2704f81f46f8b2c51fccae3cf",
+        "originalMtimeUTC": "2026-11-09T14:55:53.150Z"
+      },
+      {
+        "path": "chart-modes/histogram-category-native-imported.opf.json",
+        "bytes": 527,
+        "sha256": "1a8142cc8c8139409a5093d969173b614a15486887f3c7cfa59523256a53692d",
+        "originalMtimeUTC": "2026-11-09T14:55:53.632Z"
+      },
+      {
+        "path": "chart-modes/histogram-category-native.pptx",
+        "bytes": 110508,
+        "sha256": "902ceb0c306cfa36bd5510b94a42985b53be0501ede399aa0402b159081d30c9",
+        "originalMtimeUTC": "2026-11-09T14:55:53.575Z"
+      },
+      {
+        "path": "chart-modes/histogram-single-auto-imported.opf.json",
+        "bytes": 505,
+        "sha256": "0f3476c4376a35a3abc0fac414c4b8a1f3aacb75f3e896c87cefc6eebb850eaa",
+        "originalMtimeUTC": "2026-11-09T14:55:52.681Z"
+      },
+      {
+        "path": "chart-modes/histogram-single-auto.pptx",
+        "bytes": 110563,
+        "sha256": "5eed8536ae3a05f2b0e85755e0eb2e19f13faf82be958df0b383fa106dba4708",
+        "originalMtimeUTC": "2026-11-09T14:55:52.621Z"
+      },
+      {
+        "path": "chart-modes/histogram-single-fallback-imported.opf.json",
+        "bytes": 534,
+        "sha256": "ce6d9860837c82ab11589a0b25362d2bb8378bb4d10acaf5da063e96a939ed91",
+        "originalMtimeUTC": "2026-11-09T14:55:52.436Z"
+      },
+      {
+        "path": "chart-modes/histogram-single-native-imported.opf.json",
+        "bytes": 505,
+        "sha256": "0f3476c4376a35a3abc0fac414c4b8a1f3aacb75f3e896c87cefc6eebb850eaa",
+        "originalMtimeUTC": "2026-11-09T14:55:52.915Z"
+      },
+      {
+        "path": "chart-modes/histogram-single-native.pptx",
+        "bytes": 110563,
+        "sha256": "5eed8536ae3a05f2b0e85755e0eb2e19f13faf82be958df0b383fa106dba4708",
+        "originalMtimeUTC": "2026-11-09T14:55:52.858Z"
+      },
+      {
+        "path": "chart-modes/pareto-multi-auto-imported.opf.json",
+        "bytes": 586,
+        "sha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+        "originalMtimeUTC": "2026-11-09T14:55:54.118Z"
+      },
+      {
+        "path": "chart-modes/pareto-multi-fallback-imported.opf.json",
+        "bytes": 586,
+        "sha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+        "originalMtimeUTC": "2026-11-09T14:55:53.871Z"
+      },
+      {
+        "path": "chart-modes/pareto-multi-native-imported.opf.json",
+        "bytes": 586,
+        "sha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+        "originalMtimeUTC": "2026-11-09T14:55:54.363Z"
+      },
+      {
+        "path": "chart-modes/pareto-single-auto-imported.opf.json",
+        "bytes": 402,
+        "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+        "originalMtimeUTC": "2026-11-09T14:55:59.342Z"
+      },
+      {
+        "path": "chart-modes/pareto-single-auto.pptx",
+        "bytes": 110521,
+        "sha256": "ce3bc0ec80c641e3c8d915118357d02d50119b12913e0999448607d0b190d87d",
+        "originalMtimeUTC": "2026-11-09T14:55:59.341Z"
+      },
+      {
+        "path": "chart-modes/pareto-single-fallback-imported.opf.json",
+        "bytes": 402,
+        "sha256": "e9494860d3d36a953584892e8f0be6e70b8c3e976e9db0e8f077b3508078ad98",
+        "originalMtimeUTC": "2026-11-09T14:55:59.560Z"
+      },
+      {
+        "path": "chart-modes/pareto-single-fallback.pptx",
+        "bytes": 107517,
+        "sha256": "50d3792f202959f25f836f1d1b56e6ac282c878daa15293b2b760bd5d6b8b06d",
+        "originalMtimeUTC": "2026-11-09T14:55:59.559Z"
+      },
+      {
+        "path": "chart-modes/pareto-single-native-imported.opf.json",
+        "bytes": 402,
+        "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+        "originalMtimeUTC": "2026-11-09T14:55:59.782Z"
+      },
+      {
+        "path": "chart-modes/pareto-single-native.pptx",
+        "bytes": 110521,
+        "sha256": "ce3bc0ec80c641e3c8d915118357d02d50119b12913e0999448607d0b190d87d",
+        "originalMtimeUTC": "2026-11-09T14:55:59.781Z"
+      },
+      {
+        "path": "chart-modes/treemap-category-auto-imported.opf.json",
+        "bytes": 523,
+        "sha256": "68f375443a145333bba796936d1469e4db3a86a9bc3cb39283c2af1309e6e66d",
+        "originalMtimeUTC": "2026-11-09T14:55:51.967Z"
+      },
+      {
+        "path": "chart-modes/treemap-category-auto.pptx",
+        "bytes": 110642,
+        "sha256": "984e83d7f4df796f12b65b695240175009d5cf8a97cb91945badfffae3c8c2a7",
+        "originalMtimeUTC": "2026-11-09T14:55:51.916Z"
+      },
+      {
+        "path": "chart-modes/treemap-category-native-imported.opf.json",
+        "bytes": 523,
+        "sha256": "68f375443a145333bba796936d1469e4db3a86a9bc3cb39283c2af1309e6e66d",
+        "originalMtimeUTC": "2026-11-09T14:55:52.201Z"
+      },
+      {
+        "path": "chart-modes/treemap-category-native.pptx",
+        "bytes": 110642,
+        "sha256": "984e83d7f4df796f12b65b695240175009d5cf8a97cb91945badfffae3c8c2a7",
+        "originalMtimeUTC": "2026-11-09T14:55:52.147Z"
+      },
+      {
+        "path": "chart-modes/waterfall-single-auto-imported.opf.json",
+        "bytes": 505,
+        "sha256": "3752da82d2e8306bde6265f337ad672c88d4e0caa41f682c521b608f2424c640",
+        "originalMtimeUTC": "2026-11-09T14:55:55.584Z"
+      },
+      {
+        "path": "chart-modes/waterfall-single-auto.pptx",
+        "bytes": 111310,
+        "sha256": "f7648a7febf9fe4d6dd5a30b528d71003e0ab20c7cfa4575dbc38737a30571b1",
+        "originalMtimeUTC": "2026-11-09T14:55:55.526Z"
+      },
+      {
+        "path": "chart-modes/waterfall-single-fallback-imported.opf.json",
+        "bytes": 502,
+        "sha256": "9e00406cbad92d428a980908b762886c94df4a442d9e570de164a8768bd8f3e4",
+        "originalMtimeUTC": "2026-11-09T14:55:55.348Z"
+      },
+      {
+        "path": "chart-modes/waterfall-single-native-imported.opf.json",
+        "bytes": 505,
+        "sha256": "3752da82d2e8306bde6265f337ad672c88d4e0caa41f682c521b608f2424c640",
+        "originalMtimeUTC": "2026-11-09T14:55:55.823Z"
+      },
+      {
+        "path": "chart-modes/waterfall-single-native.pptx",
+        "bytes": 111310,
+        "sha256": "f7648a7febf9fe4d6dd5a30b528d71003e0ab20c7cfa4575dbc38737a30571b1",
+        "originalMtimeUTC": "2026-11-09T14:55:55.762Z"
+      },
+      {
+        "path": "chart-modes/world-category-native-imported.opf.json",
+        "bytes": 572,
+        "sha256": "fdf6f12efa0d8bbf903d9cef8e232930c0d9a29d74bdfdf049c294246684d395",
+        "originalMtimeUTC": "2026-11-09T14:55:57.263Z"
+      },
+      {
+        "path": "chart-modes/world-category-native.pptx",
+        "bytes": 109369,
+        "sha256": "5a68433827021732d9d4978398209aaae984dcea1fb134d1058d974ce8666ec7",
+        "originalMtimeUTC": "2026-11-09T14:55:57.209Z"
+      },
+      {
+        "path": "fonts/roboto/400Regular/Roboto_400Regular.ttf",
+        "bytes": 159108,
+        "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459",
+        "originalMtimeUTC": "2026-11-09T14:55:59.915Z"
+      },
+      {
+        "path": "fonts/roboto/400Regular_Italic/Roboto_400Regular_Italic.ttf",
+        "bytes": 165268,
+        "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793",
+        "originalMtimeUTC": "2026-11-09T14:55:59.922Z"
+      },
+      {
+        "path": "fonts/roboto/500Medium/Roboto_500Medium.ttf",
+        "bytes": 159296,
+        "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38",
+        "originalMtimeUTC": "2026-11-09T14:55:59.916Z"
+      },
+      {
+        "path": "fonts/roboto/600SemiBold/Roboto_600SemiBold.ttf",
+        "bytes": 159876,
+        "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab",
+        "originalMtimeUTC": "2026-11-09T14:55:59.919Z"
+      },
+      {
+        "path": "fonts/roboto/700Bold/Roboto_700Bold.ttf",
+        "bytes": 159900,
+        "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6",
+        "originalMtimeUTC": "2026-11-09T14:55:59.920Z"
+      },
+      {
+        "path": "fonts/roboto/700Bold_Italic/Roboto_700Bold_Italic.ttf",
+        "bytes": 166256,
+        "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee",
+        "originalMtimeUTC": "2026-11-09T14:55:59.922Z"
+      },
+      {
+        "path": "fonts/roboto/800ExtraBold/Roboto_800ExtraBold.ttf",
+        "bytes": 160012,
+        "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5",
+        "originalMtimeUTC": "2026-11-09T14:55:59.920Z"
+      },
+      {
+        "path": "fonts/roboto/LICENSE",
+        "bytes": 4394,
+        "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41",
+        "originalMtimeUTC": "2026-11-09T14:55:59.923Z"
+      },
+      {
+        "path": "inspection/chart-modes.json",
+        "bytes": 27583,
+        "sha256": "f328adf1fd3f265ee8c6f33491bff25309b85c3b518c622bb5a7616ec725e834",
+        "originalMtimeUTC": "2026-11-09T14:55:59.783Z"
+      },
+      {
+        "path": "sources/chart-pareto-single.opf.json",
+        "bytes": 402,
+        "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+        "originalMtimeUTC": "2026-11-09T14:55:59.103Z"
+      },
+      {
+        "path": "sources/table-colors.opf.json",
+        "bytes": 5941,
+        "sha256": "e5706ff7f2a493da1c22ab90e672904442972e579dbe2203d042ad688ef3e6ba",
+        "originalMtimeUTC": "2026-11-09T14:55:59.908Z"
+      },
+      {
+        "path": "suite.json",
+        "bytes": 551804,
+        "sha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+        "originalMtimeUTC": "2026-11-09T14:56:00.012Z"
+      },
+      {
+        "path": "table-colors/generation.json",
+        "bytes": 183107,
+        "sha256": "80be00fcfd823c561fd2f9b2cff67a09498c0e9e65ef4413889616ab3f52c4b2",
+        "originalMtimeUTC": "2026-11-09T14:55:59.912Z"
+      },
+      {
+        "path": "table-colors/table-colors.pptx",
+        "bytes": 39289,
+        "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb",
+        "originalMtimeUTC": "2026-11-09T14:55:59.910Z"
+      }
+    ]
+  },
+  "producerInventory": {
+    "file": "producer-recovery-inventory.json",
+    "bytes": 120401,
+    "sha256": "f511ad59ea28115379c986d40d9286c84b25bcd9a978e0d9af956df062952013"
+  },
+  "verifierFiles": [
+    {
+      "file": "archive.mjs",
+      "sha256": "c5b79563a6b94d9788c052e0ac623e51c6d8767511edadb64f8cdb42acd254ad"
+    },
+    {
+      "file": "archive-format.mjs",
+      "sha256": "1aa10db2d7d221be2fd116cdfdb7811ec478926fffd1cfe26448bc75f8a2aead"
+    }
+  ],
+  "files": [
+    {
+      "path": "actions/chart-all-seven.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:36.187Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-box-multi.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:32.660Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-funnel-category.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:33.309Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-histogram-category.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:32.006Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-histogram-single.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:31.651Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-all-seven-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.933Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-all-seven-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.932Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-all-seven-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.933Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-box-multi-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.928Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-box-multi-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.928Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-box-multi-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.928Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-funnel-category-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.930Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-funnel-category-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.930Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-funnel-category-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.931Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-histogram-category-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.926Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-histogram-category-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.926Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-histogram-category-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.926Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-histogram-single-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.925Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-histogram-single-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.925Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-histogram-single-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.925Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-pareto-multi-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.927Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-pareto-multi-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.927Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-pareto-multi-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.927Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-pareto-single-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.934Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-pareto-single-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.934Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-pareto-single-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.934Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-treemap-category-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.924Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-treemap-category-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.924Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-treemap-category-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.924Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-waterfall-single-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.929Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-waterfall-single-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.929Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-waterfall-single-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.930Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-world-category-auto.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.931Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-world-category-fallback.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.931Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-mode-world-category-native.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:59.932Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-pareto-multi.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:32.331Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-treemap-category.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:31.274Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-waterfall-single.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:33.000Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/chart-world-category.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:33.654Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/feature-catalog-timeline.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:37.288Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/feature-custom-roadmap.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:41.070Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/feature-dense-events.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:38.849Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/feature-list.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:48.120Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/feature-long-labels.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:42.757Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/feature-metrics.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:44.494Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/feature-quote.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:46.558Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/feature-table.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:49.756Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/furniture-flags.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:25.288Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/furniture-inherited.json",
+      "bytes": 323,
+      "sha256": "d27a96bea4513368205453999e9a2d53a50f27c029ad2d7b67dedfaaacc5fedd",
+      "originalMtimeUTC": "2026-11-09T14:55:24.665Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/furniture-inherited.json"
+      }
+    },
+    {
+      "path": "actions/furniture-layouts.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:30.751Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/layout-bleed-card.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:28.937Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/layout-empty-custom.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:23.548Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/layout-media-regions.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:22.956Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/layout-title-auto.json",
+      "bytes": 153,
+      "sha256": "d3d06764f433a91c50ca5e08fa413e51e2412760d61989220a76d58e9997bfda",
+      "originalMtimeUTC": "2026-11-09T14:55:21.244Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/layout-title-auto.json"
+      }
+    },
+    {
+      "path": "actions/list-description-native-edit.json",
+      "bytes": 154,
+      "sha256": "9557a7ae564d0e0928eb2d3beda71976c081f00c3aa1dea13ac4c15fc05692ff",
+      "originalMtimeUTC": "2026-11-09T14:55:25.755Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/list-description-native-edit.json"
+      }
+    },
+    {
+      "path": "actions/list-description-native-save.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:27.406Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/picture-control.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:30.467Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "actions/table-save.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "originalMtimeUTC": "2026-11-09T14:55:24.069Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "actions/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "chart-modes/all-seven-auto-imported.opf.json",
+      "bytes": 3552,
+      "sha256": "a18a1661add20ae553be179685ed927d10575b504b264477eca21fd3ed663878",
+      "originalMtimeUTC": "2026-11-09T14:55:58.500Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/all-seven-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/all-seven-auto.pptx",
+      "bytes": 189797,
+      "sha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1",
+      "originalMtimeUTC": "2026-11-09T14:55:58.376Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/all-seven-auto.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/all-seven-fallback-imported.opf.json",
+      "bytes": 3536,
+      "sha256": "5cb700ff78d45e5bdf7ab103e5bd6f0c05e69670abdd87c6a08026ecb33b2f19",
+      "originalMtimeUTC": "2026-11-09T14:55:57.861Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/all-seven-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/all-seven-fallback.pptx",
+      "bytes": 171762,
+      "sha256": "b8d9448f8b8a09aca2d5cc3d19432b1c29d875bd227cd617879467fca9d0afde",
+      "originalMtimeUTC": "2026-11-09T14:55:57.741Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "all-seven.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/all-seven-native-imported.opf.json",
+      "bytes": 3552,
+      "sha256": "a18a1661add20ae553be179685ed927d10575b504b264477eca21fd3ed663878",
+      "originalMtimeUTC": "2026-11-09T14:55:59.098Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/all-seven-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/all-seven-native.pptx",
+      "bytes": 189797,
+      "sha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1",
+      "originalMtimeUTC": "2026-11-09T14:55:58.981Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/all-seven-native.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/box-multi-auto-imported.opf.json",
+      "bytes": 592,
+      "sha256": "8de263d266f2fc36c3caf371b3716c578097a917c5bb664df57d8a2fd210f4fb",
+      "originalMtimeUTC": "2026-11-09T14:55:54.868Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/box-multi-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/box-multi-auto.pptx",
+      "bytes": 111396,
+      "sha256": "f0b7a7f4a2b50ebe8bbd048c543f638a80bbb9c570fceb9f0bda40debd3db4b2",
+      "originalMtimeUTC": "2026-11-09T14:55:54.802Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/box-multi-auto.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/box-multi-fallback-imported.opf.json",
+      "bytes": 610,
+      "sha256": "af4941c358d121ea90724a84412a0e3ae03ae55d8fb4d1b2767d6c4273b67c50",
+      "originalMtimeUTC": "2026-11-09T14:55:54.595Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/box-multi-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/box-multi-fallback.pptx",
+      "bytes": 108226,
+      "sha256": "b3aa657940d76070d05e9474ebffaa230c334e706671830503d2db10c754a0ab",
+      "originalMtimeUTC": "2026-11-09T14:55:54.545Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "box-multi.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/box-multi-native-imported.opf.json",
+      "bytes": 592,
+      "sha256": "8de263d266f2fc36c3caf371b3716c578097a917c5bb664df57d8a2fd210f4fb",
+      "originalMtimeUTC": "2026-11-09T14:55:55.113Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/box-multi-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/box-multi-native.pptx",
+      "bytes": 111396,
+      "sha256": "f0b7a7f4a2b50ebe8bbd048c543f638a80bbb9c570fceb9f0bda40debd3db4b2",
+      "originalMtimeUTC": "2026-11-09T14:55:55.054Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/box-multi-native.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/funnel-category-auto-imported.opf.json",
+      "bytes": 521,
+      "sha256": "687f8d4874a5b4c788d155078b8cd25d96ca94de7138cc821d4e8ef779d88f30",
+      "originalMtimeUTC": "2026-11-09T14:55:56.282Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/funnel-category-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/funnel-category-auto.pptx",
+      "bytes": 110494,
+      "sha256": "5fab47abd2af883156bc1cac7b6b650aebe31b5ab70addab8e8b3078468078bf",
+      "originalMtimeUTC": "2026-11-09T14:55:56.226Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/funnel-category-auto.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/funnel-category-fallback-imported.opf.json",
+      "bytes": 521,
+      "sha256": "bd2a377f42d57e934d062d799d3197daece6db462502d0e53313200247e6f387",
+      "originalMtimeUTC": "2026-11-09T14:55:56.050Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/funnel-category-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/funnel-category-fallback.pptx",
+      "bytes": 107591,
+      "sha256": "a497c583b3bdf5544a274667b428f8d268cf9470adf5c9a545512d8aa736974f",
+      "originalMtimeUTC": "2026-11-09T14:55:55.995Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "funnel-category.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/funnel-category-native-imported.opf.json",
+      "bytes": 521,
+      "sha256": "687f8d4874a5b4c788d155078b8cd25d96ca94de7138cc821d4e8ef779d88f30",
+      "originalMtimeUTC": "2026-11-09T14:55:56.514Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/funnel-category-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/funnel-category-native.pptx",
+      "bytes": 110494,
+      "sha256": "5fab47abd2af883156bc1cac7b6b650aebe31b5ab70addab8e8b3078468078bf",
+      "originalMtimeUTC": "2026-11-09T14:55:56.457Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/funnel-category-native.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-category-auto-imported.opf.json",
+      "bytes": 527,
+      "sha256": "1a8142cc8c8139409a5093d969173b614a15486887f3c7cfa59523256a53692d",
+      "originalMtimeUTC": "2026-11-09T14:55:53.394Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-category-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-category-auto.pptx",
+      "bytes": 110508,
+      "sha256": "902ceb0c306cfa36bd5510b94a42985b53be0501ede399aa0402b159081d30c9",
+      "originalMtimeUTC": "2026-11-09T14:55:53.333Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-category-auto.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-category-fallback-imported.opf.json",
+      "bytes": 524,
+      "sha256": "384f09a67cd2e32f28d11c8211e4e407002059b2704f81f46f8b2c51fccae3cf",
+      "originalMtimeUTC": "2026-11-09T14:55:53.150Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-category-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-category-fallback.pptx",
+      "bytes": 107592,
+      "sha256": "b1dacc5a077cafa4d6f1c7e895c4a1dfb00f5675a012f9b9987b5ebea6756a3f",
+      "originalMtimeUTC": "2026-11-09T14:55:53.092Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "histogram-category.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-category-native-imported.opf.json",
+      "bytes": 527,
+      "sha256": "1a8142cc8c8139409a5093d969173b614a15486887f3c7cfa59523256a53692d",
+      "originalMtimeUTC": "2026-11-09T14:55:53.632Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-category-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-category-native.pptx",
+      "bytes": 110508,
+      "sha256": "902ceb0c306cfa36bd5510b94a42985b53be0501ede399aa0402b159081d30c9",
+      "originalMtimeUTC": "2026-11-09T14:55:53.575Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-category-native.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-single-auto-imported.opf.json",
+      "bytes": 505,
+      "sha256": "0f3476c4376a35a3abc0fac414c4b8a1f3aacb75f3e896c87cefc6eebb850eaa",
+      "originalMtimeUTC": "2026-11-09T14:55:52.681Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-single-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-single-auto.pptx",
+      "bytes": 110563,
+      "sha256": "5eed8536ae3a05f2b0e85755e0eb2e19f13faf82be958df0b383fa106dba4708",
+      "originalMtimeUTC": "2026-11-09T14:55:52.621Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-single-auto.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-single-fallback-imported.opf.json",
+      "bytes": 534,
+      "sha256": "ce6d9860837c82ab11589a0b25362d2bb8378bb4d10acaf5da063e96a939ed91",
+      "originalMtimeUTC": "2026-11-09T14:55:52.436Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-single-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-single-fallback.pptx",
+      "bytes": 107606,
+      "sha256": "909e7a7c8a0c7b363c9e76102f943308aed577285e776d4ff523779309ecddf1",
+      "originalMtimeUTC": "2026-11-09T14:55:52.377Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "histogram-single.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-single-native-imported.opf.json",
+      "bytes": 505,
+      "sha256": "0f3476c4376a35a3abc0fac414c4b8a1f3aacb75f3e896c87cefc6eebb850eaa",
+      "originalMtimeUTC": "2026-11-09T14:55:52.915Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-single-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/histogram-single-native.pptx",
+      "bytes": 110563,
+      "sha256": "5eed8536ae3a05f2b0e85755e0eb2e19f13faf82be958df0b383fa106dba4708",
+      "originalMtimeUTC": "2026-11-09T14:55:52.858Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/histogram-single-native.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-multi-auto-imported.opf.json",
+      "bytes": 586,
+      "sha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+      "originalMtimeUTC": "2026-11-09T14:55:54.118Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-multi-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-multi-auto.pptx",
+      "bytes": 108353,
+      "sha256": "27332eb5dc21f204a9974fc5f4c94782e6255e6cd8ea8f95592e93151761cbf3",
+      "originalMtimeUTC": "2026-11-09T14:55:54.058Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "pareto-multi.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-multi-fallback-imported.opf.json",
+      "bytes": 586,
+      "sha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+      "originalMtimeUTC": "2026-11-09T14:55:53.871Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-multi-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-multi-fallback.pptx",
+      "bytes": 108353,
+      "sha256": "27332eb5dc21f204a9974fc5f4c94782e6255e6cd8ea8f95592e93151761cbf3",
+      "originalMtimeUTC": "2026-11-09T14:55:53.810Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "pareto-multi.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-multi-native-imported.opf.json",
+      "bytes": 586,
+      "sha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+      "originalMtimeUTC": "2026-11-09T14:55:54.363Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-multi-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-multi-native.pptx",
+      "bytes": 108353,
+      "sha256": "27332eb5dc21f204a9974fc5f4c94782e6255e6cd8ea8f95592e93151761cbf3",
+      "originalMtimeUTC": "2026-11-09T14:55:54.306Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "pareto-multi.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-single-auto-imported.opf.json",
+      "bytes": 402,
+      "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+      "originalMtimeUTC": "2026-11-09T14:55:59.342Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-single-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-single-auto.pptx",
+      "bytes": 110521,
+      "sha256": "ce3bc0ec80c641e3c8d915118357d02d50119b12913e0999448607d0b190d87d",
+      "originalMtimeUTC": "2026-11-09T14:55:59.341Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-single-auto.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-single-fallback-imported.opf.json",
+      "bytes": 402,
+      "sha256": "e9494860d3d36a953584892e8f0be6e70b8c3e976e9db0e8f077b3508078ad98",
+      "originalMtimeUTC": "2026-11-09T14:55:59.560Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-single-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-single-fallback.pptx",
+      "bytes": 107517,
+      "sha256": "50d3792f202959f25f836f1d1b56e6ac282c878daa15293b2b760bd5d6b8b06d",
+      "originalMtimeUTC": "2026-11-09T14:55:59.559Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-single-fallback.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-single-native-imported.opf.json",
+      "bytes": 402,
+      "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+      "originalMtimeUTC": "2026-11-09T14:55:59.782Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-single-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/pareto-single-native.pptx",
+      "bytes": 110521,
+      "sha256": "ce3bc0ec80c641e3c8d915118357d02d50119b12913e0999448607d0b190d87d",
+      "originalMtimeUTC": "2026-11-09T14:55:59.781Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/pareto-single-native.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/treemap-category-auto-imported.opf.json",
+      "bytes": 523,
+      "sha256": "68f375443a145333bba796936d1469e4db3a86a9bc3cb39283c2af1309e6e66d",
+      "originalMtimeUTC": "2026-11-09T14:55:51.967Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/treemap-category-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/treemap-category-auto.pptx",
+      "bytes": 110642,
+      "sha256": "984e83d7f4df796f12b65b695240175009d5cf8a97cb91945badfffae3c8c2a7",
+      "originalMtimeUTC": "2026-11-09T14:55:51.916Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/treemap-category-auto.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/treemap-category-fallback-imported.opf.json",
+      "bytes": 522,
+      "sha256": "5b5c7d1499f3ad2fa5185daadac29bdccabdbafcf6f7e35294e86c9ab7a750ad",
+      "originalMtimeUTC": "2026-11-09T14:55:51.732Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "chart-modes/treemap-category-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/treemap-category-fallback.pptx",
+      "bytes": 107591,
+      "sha256": "c844c8abe2f223546f9a735e27f16cb0e036dd7c519b01992e02df5c22639079",
+      "originalMtimeUTC": "2026-11-09T14:55:51.660Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "chart-modes/treemap-category-fallback.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/treemap-category-native-imported.opf.json",
+      "bytes": 523,
+      "sha256": "68f375443a145333bba796936d1469e4db3a86a9bc3cb39283c2af1309e6e66d",
+      "originalMtimeUTC": "2026-11-09T14:55:52.201Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/treemap-category-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/treemap-category-native.pptx",
+      "bytes": 110642,
+      "sha256": "984e83d7f4df796f12b65b695240175009d5cf8a97cb91945badfffae3c8c2a7",
+      "originalMtimeUTC": "2026-11-09T14:55:52.147Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/treemap-category-native.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/waterfall-single-auto-imported.opf.json",
+      "bytes": 505,
+      "sha256": "3752da82d2e8306bde6265f337ad672c88d4e0caa41f682c521b608f2424c640",
+      "originalMtimeUTC": "2026-11-09T14:55:55.584Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/waterfall-single-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/waterfall-single-auto.pptx",
+      "bytes": 111310,
+      "sha256": "f7648a7febf9fe4d6dd5a30b528d71003e0ab20c7cfa4575dbc38737a30571b1",
+      "originalMtimeUTC": "2026-11-09T14:55:55.526Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/waterfall-single-auto.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/waterfall-single-fallback-imported.opf.json",
+      "bytes": 502,
+      "sha256": "9e00406cbad92d428a980908b762886c94df4a442d9e570de164a8768bd8f3e4",
+      "originalMtimeUTC": "2026-11-09T14:55:55.348Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/waterfall-single-fallback-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/waterfall-single-fallback.pptx",
+      "bytes": 108033,
+      "sha256": "be6e0cdace0e905efce8d1df59bca66e2e6e64370fcf5a5acad59aacf747c66e",
+      "originalMtimeUTC": "2026-11-09T14:55:55.292Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "waterfall-single.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/waterfall-single-native-imported.opf.json",
+      "bytes": 505,
+      "sha256": "3752da82d2e8306bde6265f337ad672c88d4e0caa41f682c521b608f2424c640",
+      "originalMtimeUTC": "2026-11-09T14:55:55.823Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/waterfall-single-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/waterfall-single-native.pptx",
+      "bytes": 111310,
+      "sha256": "f7648a7febf9fe4d6dd5a30b528d71003e0ab20c7cfa4575dbc38737a30571b1",
+      "originalMtimeUTC": "2026-11-09T14:55:55.762Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/waterfall-single-native.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/world-category-auto-imported.opf.json",
+      "bytes": 573,
+      "sha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "originalMtimeUTC": "2026-11-09T14:55:57.017Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-world-category-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/world-category-auto.pptx",
+      "bytes": 106514,
+      "sha256": "f33103aca9e84add9d05cd672092e20fd73521cdcb4447aa9a4defb45ddf58cc",
+      "originalMtimeUTC": "2026-11-09T14:55:56.957Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "world-category.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/world-category-fallback-imported.opf.json",
+      "bytes": 573,
+      "sha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "originalMtimeUTC": "2026-11-09T14:55:56.754Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-world-category-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/world-category-fallback.pptx",
+      "bytes": 106514,
+      "sha256": "f33103aca9e84add9d05cd672092e20fd73521cdcb4447aa9a4defb45ddf58cc",
+      "originalMtimeUTC": "2026-11-09T14:55:56.702Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/nine-diagnostics.zip",
+        "member": "world-category.pptx"
+      }
+    },
+    {
+      "path": "chart-modes/world-category-native-imported.opf.json",
+      "bytes": 572,
+      "sha256": "fdf6f12efa0d8bbf903d9cef8e232930c0d9a29d74bdfdf049c294246684d395",
+      "originalMtimeUTC": "2026-11-09T14:55:57.263Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/world-category-native-imported.opf.json"
+      }
+    },
+    {
+      "path": "chart-modes/world-category-native.pptx",
+      "bytes": 109369,
+      "sha256": "5a68433827021732d9d4978398209aaae984dcea1fb134d1058d974ce8666ec7",
+      "originalMtimeUTC": "2026-11-09T14:55:57.209Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "chart-modes/world-category-native.pptx"
+      }
+    },
+    {
+      "path": "fonts/roboto/400Regular/Roboto_400Regular.ttf",
+      "bytes": 159108,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459",
+      "originalMtimeUTC": "2026-11-09T14:55:59.915Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "fonts/roboto/400Regular/Roboto_400Regular.ttf"
+      }
+    },
+    {
+      "path": "fonts/roboto/400Regular_Italic/Roboto_400Regular_Italic.ttf",
+      "bytes": 165268,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793",
+      "originalMtimeUTC": "2026-11-09T14:55:59.922Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "fonts/roboto/400Regular_Italic/Roboto_400Regular_Italic.ttf"
+      }
+    },
+    {
+      "path": "fonts/roboto/500Medium/Roboto_500Medium.ttf",
+      "bytes": 159296,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38",
+      "originalMtimeUTC": "2026-11-09T14:55:59.916Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "fonts/roboto/500Medium/Roboto_500Medium.ttf"
+      }
+    },
+    {
+      "path": "fonts/roboto/600SemiBold/Roboto_600SemiBold.ttf",
+      "bytes": 159876,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab",
+      "originalMtimeUTC": "2026-11-09T14:55:59.919Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "fonts/roboto/600SemiBold/Roboto_600SemiBold.ttf"
+      }
+    },
+    {
+      "path": "fonts/roboto/700Bold/Roboto_700Bold.ttf",
+      "bytes": 159900,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6",
+      "originalMtimeUTC": "2026-11-09T14:55:59.920Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "fonts/roboto/700Bold/Roboto_700Bold.ttf"
+      }
+    },
+    {
+      "path": "fonts/roboto/700Bold_Italic/Roboto_700Bold_Italic.ttf",
+      "bytes": 166256,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee",
+      "originalMtimeUTC": "2026-11-09T14:55:59.922Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "fonts/roboto/700Bold_Italic/Roboto_700Bold_Italic.ttf"
+      }
+    },
+    {
+      "path": "fonts/roboto/800ExtraBold/Roboto_800ExtraBold.ttf",
+      "bytes": 160012,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5",
+      "originalMtimeUTC": "2026-11-09T14:55:59.920Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "fonts/roboto/800ExtraBold/Roboto_800ExtraBold.ttf"
+      }
+    },
+    {
+      "path": "fonts/roboto/LICENSE",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41",
+      "originalMtimeUTC": "2026-11-09T14:55:59.923Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "fonts/roboto/LICENSE"
+      }
+    },
+    {
+      "path": "inputs/chart-all-seven.pptx",
+      "bytes": 189742,
+      "sha256": "d14f8a9489d4a4f3a99f0a6ff23cd0e5cc0d847d2389a0e96fb3886b5a05649b",
+      "originalMtimeUTC": "2026-11-09T14:55:36.856Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-all-seven.pptx"
+      }
+    },
+    {
+      "path": "inputs/chart-box-multi.pptx",
+      "bytes": 111420,
+      "sha256": "2a6bf10820673c1f6a9bbdd9244e9c9b687825bfa86caf9d4057a9ad62dee923",
+      "originalMtimeUTC": "2026-11-09T14:55:32.896Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-box-multi.pptx"
+      }
+    },
+    {
+      "path": "inputs/chart-funnel-category.pptx",
+      "bytes": 110510,
+      "sha256": "68e436a3c0356a4aaec5ac1ee36c673d1b8733380226bf6d8f228e63e80b97fd",
+      "originalMtimeUTC": "2026-11-09T14:55:33.531Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-funnel-category.pptx"
+      }
+    },
+    {
+      "path": "inputs/chart-histogram-category.pptx",
+      "bytes": 110523,
+      "sha256": "f8cbd947327f35379795af1174150d9ba7a08f0ef88178e8bd7fda2a44c77241",
+      "originalMtimeUTC": "2026-11-09T14:55:32.245Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-histogram-category.pptx"
+      }
+    },
+    {
+      "path": "inputs/chart-histogram-single.pptx",
+      "bytes": 110589,
+      "sha256": "69e2f1022f11d3b5fdafb69d07124163c00eb97d815ab3cd16f76d3a6d8c4977",
+      "originalMtimeUTC": "2026-11-09T14:55:31.904Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-histogram-single.pptx"
+      }
+    },
+    {
+      "path": "inputs/chart-pareto-multi.pptx",
+      "bytes": 108372,
+      "sha256": "5557b74239b11517d71b4a609b7458aa274c25084474e83fcf5b9f9654dd8f6a",
+      "originalMtimeUTC": "2026-11-09T14:55:32.562Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-pareto-multi.pptx"
+      }
+    },
+    {
+      "path": "inputs/chart-treemap-category.pptx",
+      "bytes": 110658,
+      "sha256": "a578e072df14d00fcc4105f60be8ccba10bf5464e59d6064ac3032d200e1b7da",
+      "originalMtimeUTC": "2026-11-09T14:55:31.544Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-treemap-category.pptx"
+      }
+    },
+    {
+      "path": "inputs/chart-waterfall-single.pptx",
+      "bytes": 111335,
+      "sha256": "83a01144694d526ffa7399c8142a150b29cd7e42784b00fa9d67a1766f84a170",
+      "originalMtimeUTC": "2026-11-09T14:55:33.228Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-waterfall-single.pptx"
+      }
+    },
+    {
+      "path": "inputs/chart-world-category.pptx",
+      "bytes": 106544,
+      "sha256": "5330e1a6e7a90265e0a03df8a202e0b2419817f59ab4be4c8612e49518b0a708",
+      "originalMtimeUTC": "2026-11-09T14:55:33.904Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/chart-world-category.pptx"
+      }
+    },
+    {
+      "path": "inputs/feature-catalog-timeline.pptx",
+      "bytes": 105990,
+      "sha256": "2aa8ffa8c9370f078808453ca6a0152919ffb858de9d53a61e297f3dc95c38a5",
+      "originalMtimeUTC": "2026-11-09T14:55:37.544Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/feature-catalog-timeline.pptx"
+      }
+    },
+    {
+      "path": "inputs/feature-custom-roadmap.pptx",
+      "bytes": 108183,
+      "sha256": "cb51862837f03929dfdccbcc5352e8b833ed08d51cb23ee224c795b1145b3945",
+      "originalMtimeUTC": "2026-11-09T14:55:41.382Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/feature-custom-roadmap.pptx"
+      }
+    },
+    {
+      "path": "inputs/feature-dense-events.pptx",
+      "bytes": 123356,
+      "sha256": "dcbaec0f1889997af5f21ea67ad5aa10d8865eb99eb5149ce624e316a50730c4",
+      "originalMtimeUTC": "2026-11-09T14:55:39.479Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/feature-dense-events.pptx"
+      }
+    },
+    {
+      "path": "inputs/feature-list.pptx",
+      "bytes": 100976,
+      "sha256": "6f0eac67859085e2ba04a293ac67a63c133538ad5a0bc79577e358f1a384cda6",
+      "originalMtimeUTC": "2026-11-09T14:55:48.371Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/feature-list.pptx"
+      }
+    },
+    {
+      "path": "inputs/feature-long-labels.pptx",
+      "bytes": 113560,
+      "sha256": "b2f8158f850cfe4f870f6b9622d9378ee73fc12816fe5eccaff6f7424f769826",
+      "originalMtimeUTC": "2026-11-09T14:55:43.096Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/feature-long-labels.pptx"
+      }
+    },
+    {
+      "path": "inputs/feature-metrics.pptx",
+      "bytes": 107010,
+      "sha256": "9d68dd0820805d1462027091e33f94e21f516d329e91d95a0f6fe203944b2ecc",
+      "originalMtimeUTC": "2026-11-09T14:55:44.907Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/feature-metrics.pptx"
+      }
+    },
+    {
+      "path": "inputs/feature-quote.pptx",
+      "bytes": 101714,
+      "sha256": "ef7a22560be327ca993de7f6a54141df6b16d8f577788cd63ca09ab028a332b5",
+      "originalMtimeUTC": "2026-11-09T14:55:46.792Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/feature-quote.pptx"
+      }
+    },
+    {
+      "path": "inputs/feature-table.pptx",
+      "bytes": 102950,
+      "sha256": "d69512faf6f4b292527204215c60a5b11b2f1d07781dec53f9f325771883871a",
+      "originalMtimeUTC": "2026-11-09T14:55:50.098Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/feature-table.pptx"
+      }
+    },
+    {
+      "path": "inputs/furniture-flags.pptx",
+      "bytes": 110306,
+      "sha256": "f72a63a98e356d87e58513592584312e6b961d5101dddee9f1200b044c1407d2",
+      "originalMtimeUTC": "2026-11-09T14:55:25.547Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/furniture-flags.pptx"
+      }
+    },
+    {
+      "path": "inputs/furniture-inherited.pptx",
+      "bytes": 120801,
+      "sha256": "534752506fcba148ce75c70a7fde6e96ab91185f39367b43b01bb177ae50e45e",
+      "originalMtimeUTC": "2026-11-09T14:55:25.004Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/furniture-inherited.pptx"
+      }
+    },
+    {
+      "path": "inputs/furniture-layouts.pptx",
+      "bytes": 124329,
+      "sha256": "2434367db71fac47c9818149bd6de2b8bd27c3d0e8c47be6ce51dc70327a2214",
+      "originalMtimeUTC": "2026-11-09T14:55:31.056Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/furniture-layouts.pptx"
+      }
+    },
+    {
+      "path": "inputs/layout-bleed-card.pptx",
+      "bytes": 103683,
+      "sha256": "ee16b8b3c81150f25b9e46ecce9a737f06c0dfe69f8dc60ee6b7c874042a2533",
+      "originalMtimeUTC": "2026-11-09T14:55:29.171Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/layout-bleed-card.pptx"
+      }
+    },
+    {
+      "path": "inputs/layout-empty-custom.pptx",
+      "bytes": 117836,
+      "sha256": "1ec8301b3ea012360a057b250bd494c47d358be5ca1d00d127814d82f9bba54d",
+      "originalMtimeUTC": "2026-11-09T14:55:23.906Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/layout-empty-custom.pptx"
+      }
+    },
+    {
+      "path": "inputs/layout-media-regions.pptx",
+      "bytes": 116989,
+      "sha256": "66045a856f8788028fcbee657cc60423b4ac96071da39b6a5ad7334d9d61e61d",
+      "originalMtimeUTC": "2026-11-09T14:55:23.323Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/layout-media-regions.pptx"
+      }
+    },
+    {
+      "path": "inputs/layout-title-auto.pptx",
+      "bytes": 108891,
+      "sha256": "e803970281c809194c5a87542dd75a26803180695ea2570007b6d5086905f4ad",
+      "originalMtimeUTC": "2026-11-09T14:55:21.628Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/layout-title-auto.pptx"
+      }
+    },
+    {
+      "path": "inputs/list-description-native-edit.pptx",
+      "bytes": 100913,
+      "sha256": "e4daad6b6089ae22b87352ca0340cc373c40dab85d748cb2d989044b8c9e5d6d",
+      "originalMtimeUTC": "2026-11-09T14:55:26.087Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/list-description-native-edit.pptx"
+      }
+    },
+    {
+      "path": "inputs/list-description-native-save.pptx",
+      "bytes": 100913,
+      "sha256": "e4daad6b6089ae22b87352ca0340cc373c40dab85d748cb2d989044b8c9e5d6d",
+      "originalMtimeUTC": "2026-11-09T14:55:27.622Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/list-description-native-edit.pptx"
+      }
+    },
+    {
+      "path": "inputs/picture-control.pptx",
+      "bytes": 101795,
+      "sha256": "75b9413aebd821085a8069ce0f210da0d7ce32caae3432dd7b1b03fb1b161ea5",
+      "originalMtimeUTC": "2026-11-09T14:55:30.658Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/picture-control.pptx"
+      }
+    },
+    {
+      "path": "inputs/table-save.pptx",
+      "bytes": 110645,
+      "sha256": "63800e02b5fba61005226230a990dadcf8fcb9e243db56a5415b16b18d4d3fc7",
+      "originalMtimeUTC": "2026-11-09T14:55:24.391Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inputs/table-save.pptx"
+      }
+    },
+    {
+      "path": "inspection/chart-all-seven-imported.opf.json",
+      "bytes": 3683,
+      "sha256": "cda7ccdcb48452457a35d73702dbc3cdbe6939536f970fd9a615f5e1d64566e7",
+      "originalMtimeUTC": "2026-11-09T14:55:36.857Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-all-seven-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-all-seven.json",
+      "bytes": 16114,
+      "sha256": "97653cbec816e75a92606dcb2d9ad7425344f63f3986f2b375113b6c0dd62b1c",
+      "originalMtimeUTC": "2026-11-09T14:55:36.859Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-all-seven.json"
+      }
+    },
+    {
+      "path": "inspection/chart-box-multi-imported.opf.json",
+      "bytes": 723,
+      "sha256": "4145e6f567e3d62bb2c031fe137db43d4368dd90d8083f9cddd5086f88021e1a",
+      "originalMtimeUTC": "2026-11-09T14:55:32.897Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-box-multi-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-box-multi.json",
+      "bytes": 15353,
+      "sha256": "45f094884fed54c06d0696e700370a4b5ec001b9af6c7dbff05be6c87d949b71",
+      "originalMtimeUTC": "2026-11-09T14:55:32.898Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-box-multi.json"
+      }
+    },
+    {
+      "path": "inspection/chart-funnel-category-imported.opf.json",
+      "bytes": 652,
+      "sha256": "6004041521d1dcc449575aa89c940350cad9a062a535d6bf53d8359249321d5b",
+      "originalMtimeUTC": "2026-11-09T14:55:33.531Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-funnel-category-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-funnel-category.json",
+      "bytes": 15016,
+      "sha256": "213dd0a0c9b93a5ca3430cc70180e2c8bfc7f903b21bc7aecc3fbd0b3e75e33f",
+      "originalMtimeUTC": "2026-11-09T14:55:33.533Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-funnel-category.json"
+      }
+    },
+    {
+      "path": "inspection/chart-histogram-category-imported.opf.json",
+      "bytes": 658,
+      "sha256": "011175db7ebde4d39c17b956f894ba78cd7b566070d214b25ce4e04199d4a03d",
+      "originalMtimeUTC": "2026-11-09T14:55:32.247Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-histogram-category-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-histogram-category.json",
+      "bytes": 15016,
+      "sha256": "213dd0a0c9b93a5ca3430cc70180e2c8bfc7f903b21bc7aecc3fbd0b3e75e33f",
+      "originalMtimeUTC": "2026-11-09T14:55:32.247Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-funnel-category.json"
+      }
+    },
+    {
+      "path": "inspection/chart-histogram-single-imported.opf.json",
+      "bytes": 636,
+      "sha256": "9a2f074634865c87c149490e73820ffe70f4c6731cb8db12abbacff071abdcb6",
+      "originalMtimeUTC": "2026-11-09T14:55:31.905Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-histogram-single-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-histogram-single.json",
+      "bytes": 15016,
+      "sha256": "213dd0a0c9b93a5ca3430cc70180e2c8bfc7f903b21bc7aecc3fbd0b3e75e33f",
+      "originalMtimeUTC": "2026-11-09T14:55:31.906Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-funnel-category.json"
+      }
+    },
+    {
+      "path": "inspection/chart-modes.json",
+      "bytes": 27583,
+      "sha256": "f328adf1fd3f265ee8c6f33491bff25309b85c3b518c622bb5a7616ec725e834",
+      "originalMtimeUTC": "2026-11-09T14:55:59.783Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "inspection/chart-modes.json"
+      }
+    },
+    {
+      "path": "inspection/chart-pareto-multi-imported.opf.json",
+      "bytes": 717,
+      "sha256": "16d80535f924b25b2da11a0f0b13282a04bc1a2648b01cb646b9692f55ad5dcb",
+      "originalMtimeUTC": "2026-11-09T14:55:32.563Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-pareto-multi-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-pareto-multi.json",
+      "bytes": 15387,
+      "sha256": "05ef0de2f02a80fdab96971a6cf81ec31a1006c09e2db17eecd0fcbde2342011",
+      "originalMtimeUTC": "2026-11-09T14:55:32.564Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-pareto-multi.json"
+      }
+    },
+    {
+      "path": "inspection/chart-treemap-category-imported.opf.json",
+      "bytes": 654,
+      "sha256": "e89d66af7f2a86af9ab2298a8ca93d10b87ac450da7717a2c93952289758b01f",
+      "originalMtimeUTC": "2026-11-09T14:55:31.544Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-treemap-category-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-treemap-category.json",
+      "bytes": 15016,
+      "sha256": "213dd0a0c9b93a5ca3430cc70180e2c8bfc7f903b21bc7aecc3fbd0b3e75e33f",
+      "originalMtimeUTC": "2026-11-09T14:55:31.546Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-funnel-category.json"
+      }
+    },
+    {
+      "path": "inspection/chart-waterfall-single-imported.opf.json",
+      "bytes": 636,
+      "sha256": "eaf8dafc17cdf88949f76c72bb5c71bfa429db34ae8c22c98f48f4acbebc0be7",
+      "originalMtimeUTC": "2026-11-09T14:55:33.228Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-waterfall-single-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-waterfall-single.json",
+      "bytes": 15272,
+      "sha256": "fc7aadcded24d7b3e9426a138e91e1132805485732ec15fe21990074740720d0",
+      "originalMtimeUTC": "2026-11-09T14:55:33.229Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-waterfall-single.json"
+      }
+    },
+    {
+      "path": "inspection/chart-world-category-imported.opf.json",
+      "bytes": 573,
+      "sha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "originalMtimeUTC": "2026-11-09T14:55:33.905Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-world-category-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/chart-world-category.json",
+      "bytes": 15122,
+      "sha256": "2cec61d8c1b252104a43c42659ff12040b142f2f3053eb0c21c4a39033dbac9e",
+      "originalMtimeUTC": "2026-11-09T14:55:33.906Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/chart-world-category.json"
+      }
+    },
+    {
+      "path": "inspection/feature-catalog-timeline-imported.opf.json",
+      "bytes": 4557,
+      "sha256": "1690a2df07f13aa34f680888701ef6623de59834a98c37566121453ba1f40291",
+      "originalMtimeUTC": "2026-11-09T14:55:37.544Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-catalog-timeline-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/feature-catalog-timeline.json",
+      "bytes": 14683,
+      "sha256": "66e333f5e996c641166a023d928f7cdbfed26b6441d23a13b32f70440a59c3bb",
+      "originalMtimeUTC": "2026-11-09T14:55:37.545Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-catalog-timeline.json"
+      }
+    },
+    {
+      "path": "inspection/feature-custom-roadmap-imported.opf.json",
+      "bytes": 4769,
+      "sha256": "5a9728518967b4086562c046e8bbf354131e056e00e343e93c0ac518aa204493",
+      "originalMtimeUTC": "2026-11-09T14:55:41.383Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-custom-roadmap-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/feature-custom-roadmap.json",
+      "bytes": 15118,
+      "sha256": "fbe472d4e675bc56a229d62a2eebafcd54751b97e9403c82c7573513b34cc7f7",
+      "originalMtimeUTC": "2026-11-09T14:55:41.384Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-custom-roadmap.json"
+      }
+    },
+    {
+      "path": "inspection/feature-dense-events-imported.opf.json",
+      "bytes": 5522,
+      "sha256": "f8c97ab3721326636f71b97a7e46ee1818e9d5e3fc2c432930ba6895fe0d1963",
+      "originalMtimeUTC": "2026-11-09T14:55:39.480Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-dense-events-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/feature-dense-events.json",
+      "bytes": 15118,
+      "sha256": "81d70e532481f041b9e3fa64ce6e5afd480744ce884ca3e87e8457894c5e5f8a",
+      "originalMtimeUTC": "2026-11-09T14:55:39.481Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-dense-events.json"
+      }
+    },
+    {
+      "path": "inspection/feature-list-imported.opf.json",
+      "bytes": 1880,
+      "sha256": "c9980797eae83ed1c6405d1f30666b4bae4a87b0c6e042df929b89b9f4d4324e",
+      "originalMtimeUTC": "2026-11-09T14:55:48.372Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-list-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/feature-list.json",
+      "bytes": 14726,
+      "sha256": "1e7828ea8be6fbff4acaa83c3f29d899a9c40dcb8268074d8b7ad4ede928000a",
+      "originalMtimeUTC": "2026-11-09T14:55:48.372Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-list.json"
+      }
+    },
+    {
+      "path": "inspection/feature-long-labels-imported.opf.json",
+      "bytes": 5116,
+      "sha256": "87977d97e3fc5f1e0f602ecf0f773907f3f930e9e4fad6d9789e457a27a166db",
+      "originalMtimeUTC": "2026-11-09T14:55:43.097Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-long-labels-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/feature-long-labels.json",
+      "bytes": 15118,
+      "sha256": "a55b812f63790aa2f9caca08dd16db4846501dfefb6294429df206a89b0d9227",
+      "originalMtimeUTC": "2026-11-09T14:55:43.098Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-long-labels.json"
+      }
+    },
+    {
+      "path": "inspection/feature-metrics-imported.opf.json",
+      "bytes": 2502,
+      "sha256": "d707033329d20c5ddeede463ca5a3b735c27f778f0741740cbf9e2b3a92a1ea0",
+      "originalMtimeUTC": "2026-11-09T14:55:44.908Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-metrics-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/feature-metrics.json",
+      "bytes": 14977,
+      "sha256": "9b9b4604d7805551cbe8d571ee93ae9ea3732ed5ec1e56657468406a4ca90f43",
+      "originalMtimeUTC": "2026-11-09T14:55:44.909Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-metrics.json"
+      }
+    },
+    {
+      "path": "inspection/feature-quote-imported.opf.json",
+      "bytes": 1539,
+      "sha256": "854e4fe6dcb20aac750e4829d23af01b737bad614d7fa370539521dae2e4e3b7",
+      "originalMtimeUTC": "2026-11-09T14:55:46.793Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-quote-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/feature-quote.json",
+      "bytes": 14725,
+      "sha256": "1573f4dfb5eb2e4b173c211ef13898b090ce949d1019b7d1cb2966019d24be56",
+      "originalMtimeUTC": "2026-11-09T14:55:46.794Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-quote.json"
+      }
+    },
+    {
+      "path": "inspection/feature-table-imported.opf.json",
+      "bytes": 2367,
+      "sha256": "ec9d3e095e486b3a78eee2bcfae19fff87d58d88872621b05075987736f75f8c",
+      "originalMtimeUTC": "2026-11-09T14:55:50.099Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-table-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/feature-table.json",
+      "bytes": 14725,
+      "sha256": "34f8ddfe4c04d1d85ef82607d404b38108fe312e801c60854346b4306c33e6ad",
+      "originalMtimeUTC": "2026-11-09T14:55:50.101Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/feature-table.json"
+      }
+    },
+    {
+      "path": "inspection/furniture-flags-imported.opf.json",
+      "bytes": 834,
+      "sha256": "ea785c9cdf6918bcee185896f8c2d287e63244a268133d9cee6df99223e878c3",
+      "originalMtimeUTC": "2026-11-09T14:55:25.549Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/furniture-flags-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/furniture-flags.json",
+      "bytes": 15167,
+      "sha256": "0e5bbbe2df613247f98e7dcaf5d94ada2f9276a745c6af97fb63c8844d61f271",
+      "originalMtimeUTC": "2026-11-09T14:55:25.549Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/furniture-flags.json"
+      }
+    },
+    {
+      "path": "inspection/furniture-inherited-imported.opf.json",
+      "bytes": 2256,
+      "sha256": "a6afad8014cdfd33f09d16b5094d89309a4c10d97813f4b6b6beaf5cfaaafcab",
+      "originalMtimeUTC": "2026-11-09T14:55:25.005Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/furniture-inherited-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/furniture-inherited.json",
+      "bytes": 15497,
+      "sha256": "1ae64b79a00966cd511d60ff5cc20b48ef9f3ab846ba49b3e742326a7e999578",
+      "originalMtimeUTC": "2026-11-09T14:55:25.007Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/furniture-inherited.json"
+      }
+    },
+    {
+      "path": "inspection/furniture-layouts-imported.opf.json",
+      "bytes": 2340,
+      "sha256": "3166203dc2e50d3efecb3dd2b4a020ad763542e88cd40eda71d047d99d4488ed",
+      "originalMtimeUTC": "2026-11-09T14:55:31.057Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/furniture-layouts-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/furniture-layouts.json",
+      "bytes": 16084,
+      "sha256": "dcc6e3571867d269b7f9c98e4b83dd670df11698be654b57c879b860bd7880d3",
+      "originalMtimeUTC": "2026-11-09T14:55:31.059Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/furniture-layouts.json"
+      }
+    },
+    {
+      "path": "inspection/layout-bleed-card-imported.opf.json",
+      "bytes": 1791,
+      "sha256": "438932173a65ec797793008294f4cf0d9ee74e9c11bc276e066e68fa4d69f838",
+      "originalMtimeUTC": "2026-11-09T14:55:29.171Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-bleed-card-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/layout-bleed-card.json",
+      "bytes": 15320,
+      "sha256": "555e81a4a3e1cc330ad5389c8710760fb993fd3aca88ab7e2a24a8f1357d23a9",
+      "originalMtimeUTC": "2026-11-09T14:55:29.173Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-bleed-card.json"
+      }
+    },
+    {
+      "path": "inspection/layout-empty-custom-imported.opf.json",
+      "bytes": 30172,
+      "sha256": "c33e60c3ab655f7e38dfd174b32992fd98a5d6489b12252a00ecbe57f59a47b4",
+      "originalMtimeUTC": "2026-11-09T14:55:23.907Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-empty-custom-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/layout-empty-custom.json",
+      "bytes": 21658,
+      "sha256": "7c725dd04d76ed5dc764aba57450cca4c8ea195f64a9124bf970ee1e302cfc0f",
+      "originalMtimeUTC": "2026-11-09T14:55:23.908Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-empty-custom.json"
+      }
+    },
+    {
+      "path": "inspection/layout-media-regions-imported.opf.json",
+      "bytes": 1952,
+      "sha256": "0608772f15d80038af1461277bdf429daedc47eca1884abf22e37bed309e6b68",
+      "originalMtimeUTC": "2026-11-09T14:55:23.324Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-media-regions-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/layout-media-regions.json",
+      "bytes": 15114,
+      "sha256": "3f089ee5056b85a7cc6b470d40dcde6b4f1a96389a21ed455e56f28737764a0b",
+      "originalMtimeUTC": "2026-11-09T14:55:23.326Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-media-regions.json"
+      }
+    },
+    {
+      "path": "inspection/layout-title-auto-imported.opf.json",
+      "bytes": 566,
+      "sha256": "c800598f8fe9957ab2e33b88f51868602d8f89e30d1fa33090605f36dcf195ab",
+      "originalMtimeUTC": "2026-11-09T14:55:21.629Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-title-auto-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/layout-title-auto.json",
+      "bytes": 15154,
+      "sha256": "7dfc8d4d61ecd7087102365864861d020b21c3022db300126d6a9683ed2eab38",
+      "originalMtimeUTC": "2026-11-09T14:55:21.631Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-title-auto.json"
+      }
+    },
+    {
+      "path": "inspection/list-description-native-edit-imported.opf.json",
+      "bytes": 371,
+      "sha256": "345beee8d4f73507eb4c5fc6d19eeafe58ca7e842721eac307edfd423c30ebb6",
+      "originalMtimeUTC": "2026-11-09T14:55:26.088Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/list-description-native-edit-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/list-description-native-edit.json",
+      "bytes": 15016,
+      "sha256": "aad4ca14a662f586d70e09d24ea555d59f9c099a061b902020ca6eb489025632",
+      "originalMtimeUTC": "2026-11-09T14:55:26.089Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/list-description-native-edit.json"
+      }
+    },
+    {
+      "path": "inspection/list-description-native-save-imported.opf.json",
+      "bytes": 371,
+      "sha256": "345beee8d4f73507eb4c5fc6d19eeafe58ca7e842721eac307edfd423c30ebb6",
+      "originalMtimeUTC": "2026-11-09T14:55:27.623Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/list-description-native-edit-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/list-description-native-save.json",
+      "bytes": 15016,
+      "sha256": "aad4ca14a662f586d70e09d24ea555d59f9c099a061b902020ca6eb489025632",
+      "originalMtimeUTC": "2026-11-09T14:55:27.625Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/list-description-native-edit.json"
+      }
+    },
+    {
+      "path": "inspection/picture-control-imported.opf.json",
+      "bytes": 938,
+      "sha256": "4189902ce081ea6a334786a17d46710838718106461b81af9d1562db57b43f3a",
+      "originalMtimeUTC": "2026-11-09T14:55:30.659Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/picture-control-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/picture-control.json",
+      "bytes": 15016,
+      "sha256": "c632c61caf72b7bed0dd76f440be7f0c480994cfaab987007220be057f45fb8b",
+      "originalMtimeUTC": "2026-11-09T14:55:30.660Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/picture-control.json"
+      }
+    },
+    {
+      "path": "inspection/table-save-imported.opf.json",
+      "bytes": 1155,
+      "sha256": "cbe938612927a98ae39c9f3998b81121ec4108ee06aabdfeb5e4fb58289ec38d",
+      "originalMtimeUTC": "2026-11-09T14:55:24.391Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/table-save-imported.opf.json"
+      }
+    },
+    {
+      "path": "inspection/table-save.json",
+      "bytes": 15154,
+      "sha256": "7dfc8d4d61ecd7087102365864861d020b21c3022db300126d6a9683ed2eab38",
+      "originalMtimeUTC": "2026-11-09T14:55:24.394Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "inspection/layout-title-auto.json"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-01.png",
+      "bytes": 16856,
+      "sha256": "3de137c1ce540e86a7be2f069472d26c4de0947d3a7024250a86f5dbbbf1d3a7",
+      "originalMtimeUTC": "2026-11-09T14:55:37.269Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-01.png"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-01.svg",
+      "bytes": 431577,
+      "sha256": "c435c7526b67ce117539b0514763c0f92b1fb6e8248b5c4c5420b91e8f24e292",
+      "originalMtimeUTC": "2026-11-09T14:55:37.018Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-01.svg"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-02.png",
+      "bytes": 18753,
+      "sha256": "a87f6bf407924d8e446abcd22a54ad34bd7db15ee1dba251b820a6958a592d01",
+      "originalMtimeUTC": "2026-11-09T14:55:37.271Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-02.png"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-02.svg",
+      "bytes": 433264,
+      "sha256": "ed5faeb646aaa7e41e7f30ce03cde1dbcd7a09b3392cf05ca386e33630649881",
+      "originalMtimeUTC": "2026-11-09T14:55:37.019Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-02.svg"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-03.png",
+      "bytes": 28409,
+      "sha256": "90a130e486641f014964d157d36de317c07b03177717060dfa59de06149d7473",
+      "originalMtimeUTC": "2026-11-09T14:55:37.272Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-03.png"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-03.svg",
+      "bytes": 434929,
+      "sha256": "79ddb76b8b52be6e7ad929d748d4788500ea002312f9eacea8dbaa4fc6ab0a14",
+      "originalMtimeUTC": "2026-11-09T14:55:37.020Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-03.svg"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-04.png",
+      "bytes": 18295,
+      "sha256": "4fb5471dbb6467d2a93b3f4c29972df076baf127ced2c84ad5a7ee74c3370fb3",
+      "originalMtimeUTC": "2026-11-09T14:55:37.273Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-04.png"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-04.svg",
+      "bytes": 432969,
+      "sha256": "ec82c328bdff51020b5aff9b1a028916778324c4b0ed47e8975bfd92495f4f81",
+      "originalMtimeUTC": "2026-11-09T14:55:37.021Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-04.svg"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-05.png",
+      "bytes": 17988,
+      "sha256": "18ee1a7bca0351af1a02a0c7d79513b435cdba33d700b3f5468c13caf8a7ada3",
+      "originalMtimeUTC": "2026-11-09T14:55:37.273Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-05.png"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-05.svg",
+      "bytes": 433389,
+      "sha256": "35a53e840ad8489baf96ba45edb6ae72ee39b74eae412ee136b06dba4961cbd6",
+      "originalMtimeUTC": "2026-11-09T14:55:37.022Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-05.svg"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-06.png",
+      "bytes": 15019,
+      "sha256": "016c9bf800cd44edf42dc9a32caadf388a63a0e3d8870e8ba4e022da1d9d5d27",
+      "originalMtimeUTC": "2026-11-09T14:55:37.273Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-06.png"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-06.svg",
+      "bytes": 432388,
+      "sha256": "ff331ecd74df362168127a074eeacae334949053ec79e697b74055f8ee0e26d8",
+      "originalMtimeUTC": "2026-11-09T14:55:37.023Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-06.svg"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-07.png",
+      "bytes": 18480,
+      "sha256": "7bd00ac691235a4f8587cd2cc68d699f9155a59aee9e3a6eb202bba35cacf43a",
+      "originalMtimeUTC": "2026-11-09T14:55:37.274Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-07.png"
+      }
+    },
+    {
+      "path": "previews/chart-all-seven-07.svg",
+      "bytes": 433009,
+      "sha256": "56797e00da828c3ff5ec8054d8a7fb1e32841d4db52133e5a7de081e8c5b31aa",
+      "originalMtimeUTC": "2026-11-09T14:55:37.023Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-07.svg"
+      }
+    },
+    {
+      "path": "previews/chart-box-multi-01.png",
+      "bytes": 17487,
+      "sha256": "1b73010f225af33e7f395cad315faed49229063a1e6de790e4172b4af4d278e1",
+      "originalMtimeUTC": "2026-11-09T14:55:32.998Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-box-multi-01.png"
+      }
+    },
+    {
+      "path": "previews/chart-box-multi-01.svg",
+      "bytes": 435236,
+      "sha256": "f90202f2a782ccaa9aa78cf4d1ed972aa4d22f1de4265a51f7af7ec77410ed5d",
+      "originalMtimeUTC": "2026-11-09T14:55:32.961Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-box-multi-01.svg"
+      }
+    },
+    {
+      "path": "previews/chart-funnel-category-01.png",
+      "bytes": 15019,
+      "sha256": "016c9bf800cd44edf42dc9a32caadf388a63a0e3d8870e8ba4e022da1d9d5d27",
+      "originalMtimeUTC": "2026-11-09T14:55:33.635Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-06.png"
+      }
+    },
+    {
+      "path": "previews/chart-funnel-category-01.svg",
+      "bytes": 432388,
+      "sha256": "ff331ecd74df362168127a074eeacae334949053ec79e697b74055f8ee0e26d8",
+      "originalMtimeUTC": "2026-11-09T14:55:33.596Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-06.svg"
+      }
+    },
+    {
+      "path": "previews/chart-histogram-category-01.png",
+      "bytes": 18753,
+      "sha256": "a87f6bf407924d8e446abcd22a54ad34bd7db15ee1dba251b820a6958a592d01",
+      "originalMtimeUTC": "2026-11-09T14:55:32.329Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-02.png"
+      }
+    },
+    {
+      "path": "previews/chart-histogram-category-01.svg",
+      "bytes": 433264,
+      "sha256": "ed5faeb646aaa7e41e7f30ce03cde1dbcd7a09b3392cf05ca386e33630649881",
+      "originalMtimeUTC": "2026-11-09T14:55:32.298Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-02.svg"
+      }
+    },
+    {
+      "path": "previews/chart-histogram-single-01.png",
+      "bytes": 17333,
+      "sha256": "9baa04437bf948651ce6900c6fca6ef3ec31c8d7efb18c346c2d9d5fd1420af6",
+      "originalMtimeUTC": "2026-11-09T14:55:32.004Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-histogram-single-01.png"
+      }
+    },
+    {
+      "path": "previews/chart-histogram-single-01.svg",
+      "bytes": 433257,
+      "sha256": "e231b76a39c0bd237ab77670e8ee49e91fbf3d800a784030260c73d24a21e825",
+      "originalMtimeUTC": "2026-11-09T14:55:31.967Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-histogram-single-01.svg"
+      }
+    },
+    {
+      "path": "previews/chart-pareto-multi-01.png",
+      "bytes": 22387,
+      "sha256": "a92d10795517bcd7725376adda10481d6c94c32eed29b29cf8b7d4a589697bd4",
+      "originalMtimeUTC": "2026-11-09T14:55:32.657Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-pareto-multi-01.png"
+      }
+    },
+    {
+      "path": "previews/chart-pareto-multi-01.svg",
+      "bytes": 434283,
+      "sha256": "d9bfa5506757ce8448cf4371b9556cbabbedefab966c93649795af6b967f4fb0",
+      "originalMtimeUTC": "2026-11-09T14:55:32.620Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-pareto-multi-01.svg"
+      }
+    },
+    {
+      "path": "previews/chart-treemap-category-01.png",
+      "bytes": 16856,
+      "sha256": "3de137c1ce540e86a7be2f069472d26c4de0947d3a7024250a86f5dbbbf1d3a7",
+      "originalMtimeUTC": "2026-11-09T14:55:31.647Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-01.png"
+      }
+    },
+    {
+      "path": "previews/chart-treemap-category-01.svg",
+      "bytes": 431577,
+      "sha256": "c435c7526b67ce117539b0514763c0f92b1fb6e8248b5c4c5420b91e8f24e292",
+      "originalMtimeUTC": "2026-11-09T14:55:31.606Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-all-seven-01.svg"
+      }
+    },
+    {
+      "path": "previews/chart-waterfall-single-01.png",
+      "bytes": 17957,
+      "sha256": "3a6e2c8aea04413b102fcb9f3d312785cd5e8c7b6c3b654998e020171df99816",
+      "originalMtimeUTC": "2026-11-09T14:55:33.306Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-waterfall-single-01.png"
+      }
+    },
+    {
+      "path": "previews/chart-waterfall-single-01.svg",
+      "bytes": 434703,
+      "sha256": "462449bc064a6d62bff04432da87038a71c4641206c6dc8291a80b6791f533d6",
+      "originalMtimeUTC": "2026-11-09T14:55:33.273Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-waterfall-single-01.svg"
+      }
+    },
+    {
+      "path": "previews/chart-world-category-01.png",
+      "bytes": 14976,
+      "sha256": "016033deffe1ae726a92d9b55c59df6323831b6bcbe466980472c84a48e80e8b",
+      "originalMtimeUTC": "2026-11-09T14:55:36.184Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-world-category-01.png"
+      }
+    },
+    {
+      "path": "previews/chart-world-category-01.svg",
+      "bytes": 16125697,
+      "sha256": "afd77eb0272f6dd0b766a6b83bc2a07b20c37811736d124b60f12d9b3afaa8e4",
+      "originalMtimeUTC": "2026-11-09T14:55:35.866Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/chart-world-category-01.svg"
+      }
+    },
+    {
+      "path": "previews/feature-catalog-timeline-01.png",
+      "bytes": 49150,
+      "sha256": "675a3541d3d0d3c873782f25065828ce5fb48e5cdd4c0482abbad0fefbef7271",
+      "originalMtimeUTC": "2026-11-09T14:55:38.847Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-catalog-timeline-01.png"
+      }
+    },
+    {
+      "path": "previews/feature-catalog-timeline-01.svg",
+      "bytes": 859420,
+      "sha256": "e52aa261f0874aadfde89f4c433b795cd568b7819b1f513ef86e4bfe46fd6474",
+      "originalMtimeUTC": "2026-11-09T14:55:38.792Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-catalog-timeline-01.svg"
+      }
+    },
+    {
+      "path": "previews/feature-custom-roadmap-01.png",
+      "bytes": 43656,
+      "sha256": "071efa94c5f12ec60fea55c38baada32e0835e459b83743090d72368175702e5",
+      "originalMtimeUTC": "2026-11-09T14:55:42.754Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-custom-roadmap-01.png"
+      }
+    },
+    {
+      "path": "previews/feature-custom-roadmap-01.svg",
+      "bytes": 1073087,
+      "sha256": "7f707d3662417784ed493e452ac642c55c04fdaf51afab9ed7a29a771b0dfbbf",
+      "originalMtimeUTC": "2026-11-09T14:55:42.680Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-custom-roadmap-01.svg"
+      }
+    },
+    {
+      "path": "previews/feature-dense-events-01.png",
+      "bytes": 80726,
+      "sha256": "40283c54d3590985aa3abe126b60b68dc757f4ddc187a93e21075c0ac6480554",
+      "originalMtimeUTC": "2026-11-09T14:55:41.068Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-dense-events-01.png"
+      }
+    },
+    {
+      "path": "previews/feature-dense-events-01.svg",
+      "bytes": 1082296,
+      "sha256": "8eb5ce3c80684dbbca45e97166469755eb04e01c0f5ac1b731e5f1e3724d46d0",
+      "originalMtimeUTC": "2026-11-09T14:55:40.857Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-dense-events-01.svg"
+      }
+    },
+    {
+      "path": "previews/feature-list-01.png",
+      "bytes": 64878,
+      "sha256": "40d9c09c30a774b7d12a6e8962165d09374efba2315b4038912c0d2df1fdc6e4",
+      "originalMtimeUTC": "2026-11-09T14:55:49.753Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-list-01.png"
+      }
+    },
+    {
+      "path": "previews/feature-list-01.svg",
+      "bytes": 434308,
+      "sha256": "ea09e781c4a6830615356bdd3a5e1a8683c11b49f50edd8b84c4027297ff62b2",
+      "originalMtimeUTC": "2026-11-09T14:55:49.679Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-list-01.svg"
+      }
+    },
+    {
+      "path": "previews/feature-long-labels-01.png",
+      "bytes": 71653,
+      "sha256": "a00893906d8afe17b7a27c264c81cefaf0bf3d88b4c60f87443708cfafb10f7c",
+      "originalMtimeUTC": "2026-11-09T14:55:44.487Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-long-labels-01.png"
+      }
+    },
+    {
+      "path": "previews/feature-long-labels-01.svg",
+      "bytes": 1076387,
+      "sha256": "5dd4db5aa5851b5e0508ef9f26b8967f552d50df8fb12d34ab2a1e9298e8639f",
+      "originalMtimeUTC": "2026-11-09T14:55:44.402Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-long-labels-01.svg"
+      }
+    },
+    {
+      "path": "previews/feature-metrics-01.png",
+      "bytes": 62817,
+      "sha256": "4372f8589aae0facbce4b54609e064c7f1230ddf68e2a7ca95dc7d9c642c25b9",
+      "originalMtimeUTC": "2026-11-09T14:55:46.556Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-metrics-01.png"
+      }
+    },
+    {
+      "path": "previews/feature-metrics-01.svg",
+      "bytes": 860215,
+      "sha256": "5507c279cdc1dccb449ea87875d992ba6ecef1c11a8caf13abc779cea71b6f61",
+      "originalMtimeUTC": "2026-11-09T14:55:46.341Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-metrics-01.svg"
+      }
+    },
+    {
+      "path": "previews/feature-quote-01.png",
+      "bytes": 47062,
+      "sha256": "3ee0de8e4132460def756d81d0f6dea00c0ba5fd8caf094ef81cfd228299192b",
+      "originalMtimeUTC": "2026-11-09T14:55:48.118Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-quote-01.png"
+      }
+    },
+    {
+      "path": "previews/feature-quote-01.svg",
+      "bytes": 857450,
+      "sha256": "eed7de06a0b5d5401533560a914361fb1cb56e387084f15ac395e213381ee6be",
+      "originalMtimeUTC": "2026-11-09T14:55:48.065Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-quote-01.svg"
+      }
+    },
+    {
+      "path": "previews/feature-table-01.png",
+      "bytes": 56861,
+      "sha256": "a3002dce9bff7904a3d99f1772e05fd0c531b137d13f8882fb8473e3d2ba1062",
+      "originalMtimeUTC": "2026-11-09T14:55:51.464Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-table-01.png"
+      }
+    },
+    {
+      "path": "previews/feature-table-01.svg",
+      "bytes": 437212,
+      "sha256": "6b1345fa2d2db7bb893cf20cdda98d58d94f03be7ec382c76f66ad7adf45dbc1",
+      "originalMtimeUTC": "2026-11-09T14:55:51.378Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/feature-table-01.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-flags-01.png",
+      "bytes": 21770,
+      "sha256": "634836098a4808b3bd7af48983323b72c131aa29d432501c22b4321a3ab07e19",
+      "originalMtimeUTC": "2026-11-09T14:55:25.753Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-flags-01.png"
+      }
+    },
+    {
+      "path": "previews/furniture-flags-01.svg",
+      "bytes": 430863,
+      "sha256": "f4a632930d51cb084733be2a1ccde3ff7cb5e8b0547cf6c917a5fb4d1d306573",
+      "originalMtimeUTC": "2026-11-09T14:55:25.643Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-flags-01.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-flags-02.png",
+      "bytes": 21235,
+      "sha256": "54e588ca6b51b6faf78346863b00a34dd257fd9d544967555a6a57318ffc538e",
+      "originalMtimeUTC": "2026-11-09T14:55:25.753Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-flags-02.png"
+      }
+    },
+    {
+      "path": "previews/furniture-flags-02.svg",
+      "bytes": 430863,
+      "sha256": "de967cf7c82b175116e0f13928536e42d5bafc5d0835d54219de3a5dc9e7814a",
+      "originalMtimeUTC": "2026-11-09T14:55:25.644Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-flags-02.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-flags-03.png",
+      "bytes": 23891,
+      "sha256": "9b3bf9ad0d290a21f283d70e35b66b2a3414675ea136f97139a2caebe8312d1b",
+      "originalMtimeUTC": "2026-11-09T14:55:25.754Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-flags-03.png"
+      }
+    },
+    {
+      "path": "previews/furniture-flags-03.svg",
+      "bytes": 431314,
+      "sha256": "54912901318796c77dd6f3fe7464c9248263383cd62534b3fc603fa84f48e57c",
+      "originalMtimeUTC": "2026-11-09T14:55:25.645Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-flags-03.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-inherited-01.png",
+      "bytes": 29753,
+      "sha256": "27f6b5d04eb974323247f025a7a566d9e8e15e7a4ae7d9eb87dd9eca57b10693",
+      "originalMtimeUTC": "2026-11-09T14:55:25.285Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-inherited-01.png"
+      }
+    },
+    {
+      "path": "previews/furniture-inherited-01.svg",
+      "bytes": 433036,
+      "sha256": "3ac110d7a129c3e70bbc451ef5c23698cffc998e4f16f274e240a6838106e8f1",
+      "originalMtimeUTC": "2026-11-09T14:55:25.140Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-inherited-01.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-inherited-02.png",
+      "bytes": 26649,
+      "sha256": "228aea34fb6ea7403cd2e93730dc80d631967c894b8e14d208a83cf0015df706",
+      "originalMtimeUTC": "2026-11-09T14:55:25.286Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-inherited-02.png"
+      }
+    },
+    {
+      "path": "previews/furniture-inherited-02.svg",
+      "bytes": 433145,
+      "sha256": "5339af91021561e6f07cd1f4abb72c914a8843fb216f498ccdd0a4ee8775de41",
+      "originalMtimeUTC": "2026-11-09T14:55:25.141Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-inherited-02.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-inherited-03.png",
+      "bytes": 31448,
+      "sha256": "ceda9180c38d12a92de78c8fa2a811dfbbe9b34c968569d49e90066180ffdfd0",
+      "originalMtimeUTC": "2026-11-09T14:55:25.286Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-inherited-03.png"
+      }
+    },
+    {
+      "path": "previews/furniture-inherited-03.svg",
+      "bytes": 433037,
+      "sha256": "d198035225cae57de39608cc6ef677adea6f6c7553772d332f9d518264eb1308",
+      "originalMtimeUTC": "2026-11-09T14:55:25.141Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-inherited-03.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-layouts-01.png",
+      "bytes": 29753,
+      "sha256": "27f6b5d04eb974323247f025a7a566d9e8e15e7a4ae7d9eb87dd9eca57b10693",
+      "originalMtimeUTC": "2026-11-09T14:55:31.270Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-inherited-01.png"
+      }
+    },
+    {
+      "path": "previews/furniture-layouts-01.svg",
+      "bytes": 433036,
+      "sha256": "3ac110d7a129c3e70bbc451ef5c23698cffc998e4f16f274e240a6838106e8f1",
+      "originalMtimeUTC": "2026-11-09T14:55:31.152Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-inherited-01.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-layouts-02.png",
+      "bytes": 27614,
+      "sha256": "2c8932cb1c5017bf7e5cce5238be0dbe56cad3e08be2a89c002baa3fa84ae78e",
+      "originalMtimeUTC": "2026-11-09T14:55:31.271Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-layouts-02.png"
+      }
+    },
+    {
+      "path": "previews/furniture-layouts-02.svg",
+      "bytes": 433273,
+      "sha256": "bd344076d7ed5442122a5c2d23d43a48478b5bd93e45a12907c933fb84148d49",
+      "originalMtimeUTC": "2026-11-09T14:55:31.154Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-layouts-02.svg"
+      }
+    },
+    {
+      "path": "previews/furniture-layouts-03.png",
+      "bytes": 32781,
+      "sha256": "ad56a6b885f7cedab8653ea8af088bc6c51601bc2ad4090421bb0f9cac220c93",
+      "originalMtimeUTC": "2026-11-09T14:55:31.271Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-layouts-03.png"
+      }
+    },
+    {
+      "path": "previews/furniture-layouts-03.svg",
+      "bytes": 433165,
+      "sha256": "78ccd1fb4aa936fbff1f1035a0a2ed965ab518acb598702868339b308e7342ed",
+      "originalMtimeUTC": "2026-11-09T14:55:31.155Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/furniture-layouts-03.svg"
+      }
+    },
+    {
+      "path": "previews/layout-bleed-card-01.png",
+      "bytes": 110445,
+      "sha256": "fc0e4f2fbf941c381b102c7601c3b25fdd665e4641f23aaa2dba8b443191aa42",
+      "originalMtimeUTC": "2026-11-09T14:55:30.466Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-bleed-card-01.png"
+      }
+    },
+    {
+      "path": "previews/layout-bleed-card-01.svg",
+      "bytes": 218502,
+      "sha256": "3b24da7420545a9169ddf710f9142c7f4c8ce6cfc284c78ddce9770f1a576438",
+      "originalMtimeUTC": "2026-11-09T14:55:30.406Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-bleed-card-01.svg"
+      }
+    },
+    {
+      "path": "previews/layout-empty-custom-01.png",
+      "bytes": 14322,
+      "sha256": "9367248a99b5b8f5d7d711fbdd6b937da5d866282cbb625372311352ab09c095",
+      "originalMtimeUTC": "2026-11-09T14:55:24.065Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-empty-custom-01.png"
+      }
+    },
+    {
+      "path": "previews/layout-empty-custom-01.svg",
+      "bytes": 218320,
+      "sha256": "ea0c78d678a99000ff451cb198be08d379fb2be4eda7fc5e073990bf3acc5175",
+      "originalMtimeUTC": "2026-11-09T14:55:23.970Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-empty-custom-01.svg"
+      }
+    },
+    {
+      "path": "previews/layout-empty-custom-02.png",
+      "bytes": 68608,
+      "sha256": "304e4a0410fcb26c39f61a0d4e311e323598562f33ff65330b05f6b1b68be753",
+      "originalMtimeUTC": "2026-11-09T14:55:24.066Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-empty-custom-02.png"
+      }
+    },
+    {
+      "path": "previews/layout-empty-custom-02.svg",
+      "bytes": 431673,
+      "sha256": "6830eb695ad3375e85e29c30986f1017fc18d3d38bf72c3bde5b9c9474b2e0ef",
+      "originalMtimeUTC": "2026-11-09T14:55:23.971Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-empty-custom-02.svg"
+      }
+    },
+    {
+      "path": "previews/layout-empty-custom-03.png",
+      "bytes": 13933,
+      "sha256": "459b12f4865a793a113e459a1b44ac5c3389ce5033340713ebfc78fb99cadc7a",
+      "originalMtimeUTC": "2026-11-09T14:55:24.066Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-empty-custom-03.png"
+      }
+    },
+    {
+      "path": "previews/layout-empty-custom-03.svg",
+      "bytes": 218318,
+      "sha256": "8cb05c50ae9c087b7f9083568d7c7e1bbf8f35247d9b480d26afd33dc24f025b",
+      "originalMtimeUTC": "2026-11-09T14:55:23.972Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-empty-custom-03.svg"
+      }
+    },
+    {
+      "path": "previews/layout-media-regions-01.png",
+      "bytes": 37870,
+      "sha256": "ffe5632d4ad4ec1d546c6940199ee7f42d8265f08c3aade59cf3415bd8f07067",
+      "originalMtimeUTC": "2026-11-09T14:55:23.541Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-media-regions-01.png"
+      }
+    },
+    {
+      "path": "previews/layout-media-regions-01.svg",
+      "bytes": 431653,
+      "sha256": "298b0b17dcd6d73eb2a97ad82a44a78f168a0e8e1d2e2c5ab5efeb86a6ea6787",
+      "originalMtimeUTC": "2026-11-09T14:55:23.428Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-media-regions-01.svg"
+      }
+    },
+    {
+      "path": "previews/layout-media-regions-02.png",
+      "bytes": 19569,
+      "sha256": "e50f9ebfbb35563d6e1c3b3244bbba6b8e0f73c6b9ef70c28066e4f0a8b83d5f",
+      "originalMtimeUTC": "2026-11-09T14:55:23.541Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-media-regions-02.png"
+      }
+    },
+    {
+      "path": "previews/layout-media-regions-02.svg",
+      "bytes": 432342,
+      "sha256": "2b13debb0da0c00b54d6350866eedafe4c6d3eb7e105e221444473a71812b522",
+      "originalMtimeUTC": "2026-11-09T14:55:23.430Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-media-regions-02.svg"
+      }
+    },
+    {
+      "path": "previews/layout-media-regions-03.png",
+      "bytes": 13727,
+      "sha256": "11e7f6f7165d7bd46a3c2ae1ee1c03d50fb19bfc0d66849c97e7a56af69c1785",
+      "originalMtimeUTC": "2026-11-09T14:55:23.542Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-media-regions-03.png"
+      }
+    },
+    {
+      "path": "previews/layout-media-regions-03.svg",
+      "bytes": 433363,
+      "sha256": "328406c9b225f2e67aeb8759f15e24104e4a4931bee0b84b5a044e5530364e2a",
+      "originalMtimeUTC": "2026-11-09T14:55:23.430Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-media-regions-03.svg"
+      }
+    },
+    {
+      "path": "previews/layout-title-auto-01.png",
+      "bytes": 23302,
+      "sha256": "7ef14ff7306f3faedd18a96446bc7cc2bf989558e7545cc88e814b750bf2a646",
+      "originalMtimeUTC": "2026-11-09T14:55:22.945Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-title-auto-01.png"
+      }
+    },
+    {
+      "path": "previews/layout-title-auto-01.svg",
+      "bytes": 430855,
+      "sha256": "e4d342cf12f92e8d91c204d64296c6d790da14cbbe0ba613f460bea469796b12",
+      "originalMtimeUTC": "2026-11-09T14:55:22.727Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-title-auto-01.svg"
+      }
+    },
+    {
+      "path": "previews/layout-title-auto-02.png",
+      "bytes": 23476,
+      "sha256": "3c228c63caa1a29dcff03212d6977321d49c36d7538495cfb69db9433a5dc8c1",
+      "originalMtimeUTC": "2026-11-09T14:55:22.946Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-title-auto-02.png"
+      }
+    },
+    {
+      "path": "previews/layout-title-auto-02.svg",
+      "bytes": 430854,
+      "sha256": "3d663dd15acd41f5b7a5762d3a3810f64f548d7d8820ec488cc2d255c1f7438e",
+      "originalMtimeUTC": "2026-11-09T14:55:22.728Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-title-auto-02.svg"
+      }
+    },
+    {
+      "path": "previews/layout-title-auto-03.png",
+      "bytes": 22100,
+      "sha256": "35350226f6f7d97614a87297a78938c17b9b10a1394bf7c8c499de205fdb5ad9",
+      "originalMtimeUTC": "2026-11-09T14:55:22.947Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-title-auto-03.png"
+      }
+    },
+    {
+      "path": "previews/layout-title-auto-03.svg",
+      "bytes": 431037,
+      "sha256": "6b8df94dac7c1969fd47ac2407b5666a5e8b909b9e82f6d3261dbfc242e4ca51",
+      "originalMtimeUTC": "2026-11-09T14:55:22.729Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/layout-title-auto-03.svg"
+      }
+    },
+    {
+      "path": "previews/list-description-native-edit-01.png",
+      "bytes": 29104,
+      "sha256": "982e3eb2ec146d239b196b3b0b09c6363f66f7755d077eb296170750feb22399",
+      "originalMtimeUTC": "2026-11-09T14:55:27.404Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/list-description-native-edit-01.png"
+      }
+    },
+    {
+      "path": "previews/list-description-native-edit-01.svg",
+      "bytes": 431421,
+      "sha256": "e1e8d7df5271346ccdf4dcfa59a1cdfdd9da176c09dad772b4f8a20e59aff162",
+      "originalMtimeUTC": "2026-11-09T14:55:27.370Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/list-description-native-edit-01.svg"
+      }
+    },
+    {
+      "path": "previews/list-description-native-save-01.png",
+      "bytes": 29104,
+      "sha256": "982e3eb2ec146d239b196b3b0b09c6363f66f7755d077eb296170750feb22399",
+      "originalMtimeUTC": "2026-11-09T14:55:28.935Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/list-description-native-edit-01.png"
+      }
+    },
+    {
+      "path": "previews/list-description-native-save-01.svg",
+      "bytes": 431421,
+      "sha256": "e1e8d7df5271346ccdf4dcfa59a1cdfdd9da176c09dad772b4f8a20e59aff162",
+      "originalMtimeUTC": "2026-11-09T14:55:28.904Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/list-description-native-edit-01.svg"
+      }
+    },
+    {
+      "path": "previews/picture-control-01.png",
+      "bytes": 70154,
+      "sha256": "0bdf3a599538ddaecdbdfc738105857ddea690900f3e2c007c1403d19e8e5aa9",
+      "originalMtimeUTC": "2026-11-09T14:55:30.749Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/picture-control-01.png"
+      }
+    },
+    {
+      "path": "previews/picture-control-01.svg",
+      "bytes": 219132,
+      "sha256": "f9fb1e704d2c0fc18543aed3fb30ca938a08dbcd4914d990dbc095a2a081ebe0",
+      "originalMtimeUTC": "2026-11-09T14:55:30.705Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/picture-control-01.svg"
+      }
+    },
+    {
+      "path": "previews/table-save-01.png",
+      "bytes": 13884,
+      "sha256": "1dca8905c1b8aa4051f9445b10c007a6e9a4fffa812b0b855f72b5fde9a01fa6",
+      "originalMtimeUTC": "2026-11-09T14:55:24.660Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/table-save-01.png"
+      }
+    },
+    {
+      "path": "previews/table-save-01.svg",
+      "bytes": 433313,
+      "sha256": "39b2348a2a10380f99006382d928dc58a6a3b3c61c44c669150c682e901d7545",
+      "originalMtimeUTC": "2026-11-09T14:55:24.522Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/table-save-01.svg"
+      }
+    },
+    {
+      "path": "previews/table-save-02.png",
+      "bytes": 19318,
+      "sha256": "f4c66156acb31845befb01ebad45f21bd66bd0c3c3c0b0e325fb4f15957db8bd",
+      "originalMtimeUTC": "2026-11-09T14:55:24.660Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/table-save-02.png"
+      }
+    },
+    {
+      "path": "previews/table-save-02.svg",
+      "bytes": 433428,
+      "sha256": "539213b02b37a9f4fd5dfa8c0eed086176018c0ac17fd409556ff77939224215",
+      "originalMtimeUTC": "2026-11-09T14:55:24.523Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/table-save-02.svg"
+      }
+    },
+    {
+      "path": "previews/table-save-03.png",
+      "bytes": 11949,
+      "sha256": "7ec30235bc56ce7c1017d6e1b689121e87b7d65c592725b93e6fc6960851d2e2",
+      "originalMtimeUTC": "2026-11-09T14:55:24.661Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/table-save-03.png"
+      }
+    },
+    {
+      "path": "previews/table-save-03.svg",
+      "bytes": 432465,
+      "sha256": "8d2c68289e640976289faa6845758d96f584ba9ae233629800edad0efb45ea03",
+      "originalMtimeUTC": "2026-11-09T14:55:24.524Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "previews/table-save-03.svg"
+      }
+    },
+    {
+      "path": "sources/chart-all-seven.opf.json",
+      "bytes": 3682,
+      "sha256": "d5132b17c5ddece1445c800459de876ff3dd4ff57b1db6d786bff6adb8efc630",
+      "originalMtimeUTC": "2026-11-09T14:55:36.186Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-all-seven.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-box-multi.opf.json",
+      "bytes": 723,
+      "sha256": "06fdd5f22d8913e95045c18854cf96e20cea4ca619d430ee47c9d117dc6d6817",
+      "originalMtimeUTC": "2026-11-09T14:55:32.660Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-box-multi.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-funnel-category.opf.json",
+      "bytes": 652,
+      "sha256": "849ab3203f136785e25d785c5eae22d48ba90d6fb1982f5b6ef01adccf13cbf3",
+      "originalMtimeUTC": "2026-11-09T14:55:33.307Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-funnel-category.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-histogram-category.opf.json",
+      "bytes": 658,
+      "sha256": "feacbc02309d0af1e0c9c9ddfc92465f1f6ac13e1359c0a4e4fb15bc5de70344",
+      "originalMtimeUTC": "2026-11-09T14:55:32.006Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-histogram-category.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-histogram-single.opf.json",
+      "bytes": 636,
+      "sha256": "3e69609acf2246bd89b07305c9fa07e678294f6cb91a8cd91ea0e1435ec0cf02",
+      "originalMtimeUTC": "2026-11-09T14:55:31.650Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-histogram-single.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-pareto-multi.opf.json",
+      "bytes": 717,
+      "sha256": "4db7470546a03356353197643d381292327af8de10650fe0b6b64c9d06906c82",
+      "originalMtimeUTC": "2026-11-09T14:55:32.331Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-pareto-multi.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-pareto-single.opf.json",
+      "bytes": 402,
+      "sha256": "5ba7b0aa80f224a5607a224eb7ffb7ac1f33addf736005379919117e5fcdbb7a",
+      "originalMtimeUTC": "2026-11-09T14:55:59.103Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "sources/chart-pareto-single.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-treemap-category.opf.json",
+      "bytes": 654,
+      "sha256": "e4d664cec9e3f30cf0d11d17cf99e14803c8906be3b25634a4c15b7f0cf776ff",
+      "originalMtimeUTC": "2026-11-09T14:55:31.273Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-treemap-category.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-waterfall-single.opf.json",
+      "bytes": 636,
+      "sha256": "5ec4195815120c895ceb27bc8fc9ba7b2ff4955cf2aeab346edc387ffaca404d",
+      "originalMtimeUTC": "2026-11-09T14:55:33.000Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-waterfall-single.opf.json"
+      }
+    },
+    {
+      "path": "sources/chart-world-category.opf.json",
+      "bytes": 572,
+      "sha256": "8316c6aca2b0a6f7fee45a1384763999bbd265bf4ed19d1150f44eed1a2c1724",
+      "originalMtimeUTC": "2026-11-09T14:55:33.653Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/chart-world-category.opf.json"
+      }
+    },
+    {
+      "path": "sources/feature-catalog-timeline.opf.json",
+      "bytes": 4557,
+      "sha256": "23a3a96178aeb135868d4b727bbd2ea781f6611186aa1465f80c51a734fdc980",
+      "originalMtimeUTC": "2026-11-09T14:55:37.288Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/feature-catalog-timeline.opf.json"
+      }
+    },
+    {
+      "path": "sources/feature-custom-roadmap.opf.json",
+      "bytes": 4769,
+      "sha256": "48aefe2dc61fe59ea07e4c5f9767b639c7722ee3d25840216693cf7b4f9a6daf",
+      "originalMtimeUTC": "2026-11-09T14:55:41.069Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/feature-custom-roadmap.opf.json"
+      }
+    },
+    {
+      "path": "sources/feature-dense-events.opf.json",
+      "bytes": 5522,
+      "sha256": "9661195f8e6b2153853741fbfed236f30cb5ec5ae731abde46830808459bfa90",
+      "originalMtimeUTC": "2026-11-09T14:55:38.848Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/feature-dense-events.opf.json"
+      }
+    },
+    {
+      "path": "sources/feature-list.opf.json",
+      "bytes": 1880,
+      "sha256": "c620dab889359cf9615c8cc96eb368164f72b0ba0ed657ad02a910f9445cae92",
+      "originalMtimeUTC": "2026-11-09T14:55:48.119Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/feature-list.opf.json"
+      }
+    },
+    {
+      "path": "sources/feature-long-labels.opf.json",
+      "bytes": 5116,
+      "sha256": "26c8f3bbf4008eb35cff64c09ad50998f3443a9b35e52acf8a50e57ba78c687f",
+      "originalMtimeUTC": "2026-11-09T14:55:42.756Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/feature-long-labels.opf.json"
+      }
+    },
+    {
+      "path": "sources/feature-metrics.opf.json",
+      "bytes": 2502,
+      "sha256": "82999006e57f697afe40fa0e10ad3b54cc3798954627d41d9e6cb6aacf1765ea",
+      "originalMtimeUTC": "2026-11-09T14:55:44.492Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/feature-metrics.opf.json"
+      }
+    },
+    {
+      "path": "sources/feature-quote.opf.json",
+      "bytes": 1539,
+      "sha256": "8447b46cd33e6135e22475c5c12e7f373de5a013024247357ea8c39f8239ec06",
+      "originalMtimeUTC": "2026-11-09T14:55:46.558Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/feature-quote.opf.json"
+      }
+    },
+    {
+      "path": "sources/feature-table.opf.json",
+      "bytes": 2367,
+      "sha256": "bd3e6dc5f6da8cac8b1bd8725b2395e078bf61bdda0d3d5e1fbb3f21d37fe0dd",
+      "originalMtimeUTC": "2026-11-09T14:55:49.755Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/feature-table.opf.json"
+      }
+    },
+    {
+      "path": "sources/furniture-flags.opf.json",
+      "bytes": 1033,
+      "sha256": "83f770365ca96159af0cbbcab1a9e1b31ba870069c2744a032708f78504021dc",
+      "originalMtimeUTC": "2026-11-09T14:55:25.288Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/furniture-flags.opf.json"
+      }
+    },
+    {
+      "path": "sources/furniture-inherited.opf.json",
+      "bytes": 2256,
+      "sha256": "25e65643b2a0ff228c4683f15e4fd7b600eeeb3cd00cb21c4e80176a2be672b0",
+      "originalMtimeUTC": "2026-11-09T14:55:24.665Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/furniture-inherited.opf.json"
+      }
+    },
+    {
+      "path": "sources/furniture-layouts.opf.json",
+      "bytes": 2340,
+      "sha256": "8c31074be7e2512a0ecc64481c0c8adead21263a656833e443ac67d2e12e1d79",
+      "originalMtimeUTC": "2026-11-09T14:55:30.751Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/furniture-layouts.opf.json"
+      }
+    },
+    {
+      "path": "sources/layout-bleed-card.opf.json",
+      "bytes": 1791,
+      "sha256": "2a38d881e5aaace58b884ff90db51d127bd4e7925e599a96b1056f017c39f6a1",
+      "originalMtimeUTC": "2026-11-09T14:55:28.936Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/layout-bleed-card.opf.json"
+      }
+    },
+    {
+      "path": "sources/layout-empty-custom.opf.json",
+      "bytes": 30172,
+      "sha256": "90c61e2a283125d733de49b198dad2e45451a9f9bcc963032b5d8f2b1f79e480",
+      "originalMtimeUTC": "2026-11-09T14:55:23.547Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/layout-empty-custom.opf.json"
+      }
+    },
+    {
+      "path": "sources/layout-media-regions.opf.json",
+      "bytes": 1952,
+      "sha256": "669ea76e92e0e6766042a722e4b2d014b1162b6f025776caa255636722a85174",
+      "originalMtimeUTC": "2026-11-09T14:55:22.955Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/layout-media-regions.opf.json"
+      }
+    },
+    {
+      "path": "sources/layout-title-auto.opf.json",
+      "bytes": 566,
+      "sha256": "874555a8f30d571f4b65b8e9dd0ab211820069169e21711b42dbd8bf018c1859",
+      "originalMtimeUTC": "2026-11-09T14:55:21.243Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/layout-title-auto.opf.json"
+      }
+    },
+    {
+      "path": "sources/list-description-native-edit.opf.json",
+      "bytes": 371,
+      "sha256": "062a48a4863cba489a7b8bba1a321a78f3a4f450d502c7551a07e2e058b89b85",
+      "originalMtimeUTC": "2026-11-09T14:55:25.755Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/list-description-native-edit.opf.json"
+      }
+    },
+    {
+      "path": "sources/list-description-native-save.opf.json",
+      "bytes": 371,
+      "sha256": "062a48a4863cba489a7b8bba1a321a78f3a4f450d502c7551a07e2e058b89b85",
+      "originalMtimeUTC": "2026-11-09T14:55:27.405Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/list-description-native-edit.opf.json"
+      }
+    },
+    {
+      "path": "sources/picture-control.opf.json",
+      "bytes": 938,
+      "sha256": "fe9d8b19add43083d1ed878d35af95fcf71c6812f007c5728aa096e484cc7340",
+      "originalMtimeUTC": "2026-11-09T14:55:30.467Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/picture-control.opf.json"
+      }
+    },
+    {
+      "path": "sources/table-colors.opf.json",
+      "bytes": 5941,
+      "sha256": "e5706ff7f2a493da1c22ab90e672904442972e579dbe2203d042ad688ef3e6ba",
+      "originalMtimeUTC": "2026-11-09T14:55:59.908Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "sources/table-colors.opf.json"
+      }
+    },
+    {
+      "path": "sources/table-save.opf.json",
+      "bytes": 1155,
+      "sha256": "93c11350b14c0e46f5256b037eb5dc12b3dddc6062bd6c5caf36ba86d72424af",
+      "originalMtimeUTC": "2026-11-09T14:55:24.069Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-partial-unsealed.zip",
+        "member": "sources/table-save.opf.json"
+      }
+    },
+    {
+      "path": "suite.json",
+      "bytes": 551804,
+      "sha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+      "originalMtimeUTC": "2026-11-09T14:56:00.012Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "suite.json"
+      }
+    },
+    {
+      "path": "table-colors/generation.json",
+      "bytes": 183107,
+      "sha256": "80be00fcfd823c561fd2f9b2cff67a09498c0e9e65ef4413889616ab3f52c4b2",
+      "originalMtimeUTC": "2026-11-09T14:55:59.912Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "table-colors/generation.json"
+      }
+    },
+    {
+      "path": "table-colors/table-colors.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb",
+      "originalMtimeUTC": "2026-11-09T14:55:59.910Z",
+      "storage": {
+        "archivePath": "docs/evidence/native-current-b623-20261109/generic-recovery-delta.zip",
+        "member": "table-colors/table-colors.pptx"
+      }
+    }
+  ]
+}
