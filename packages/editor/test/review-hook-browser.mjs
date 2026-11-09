@@ -19,7 +19,9 @@ await build({
     contents: `
 import { createEditorSession } from ${src('index.js')};
 import { createReviewPanel } from ${src('review-panel.js')};
-window.harness = { createEditorSession, createReviewPanel };`,
+import { createOpfEditor } from ${src('workspace.js')};
+import { validate } from '@openpresentation/opf';
+window.harness = { createEditorSession, createReviewPanel, createOpfEditor, validate };`,
   },
   outfile: path.join(output, 'harness.js'), bundle: true, platform: 'browser', format: 'esm', logLevel: 'error',
 });
@@ -97,6 +99,21 @@ try {
   assert.equal(await tab.evaluate(() => state.checks), 2, 'one check for the whole burst, not six');
   checks.push('a burst of edits runs the full check once');
 
+  // Core/list idle is distinct from workspace redraw and from a potentially slow hosted review.
+  const idle = await tab.evaluate(async () => {
+    const before = state.checks;
+    editor.set('slides.1.title', 'Awaited review');
+    let settled = false;
+    const pending = panel.whenIdle().then(() => { settled = true; });
+    await Promise.resolve();
+    const waited = !settled && state.checks === before;
+    // Rescheduling the burst must keep the existing waiter pending until the final deck/list is current.
+    editor.set('slides.1.title', 'Final awaited review');
+    await pending;
+    return { waited, checks: state.checks - before, latest: editor.get('slides.1.title'), unavailable: !panel.validation };
+  });
+  assert.deepEqual(idle, { waited: true, checks: 1, latest: 'Final awaited review', unavailable: false });
+  checks.push('whenIdle includes the rescheduled debounce, full core audit and list update');
   // --- the hook: hosted findings join core's, keyed by source --------------------------------------------------------------------------------
   await panel.locator('[data-action="run-review"]').click();
   await tab.waitForFunction(() => document.querySelectorAll('.opf-review-item[data-source="pptx.dev/review"]').length === 2);
@@ -144,6 +161,55 @@ try {
   assert.doesNotMatch(await panel.locator('.opf-review-meta[role="status"]').textContent(), /Running/, 'the run was dropped, not left spinning');
   checks.push('an edit during a hosted review drops that run');
 
+  const released = await tab.evaluate(async () => {
+    panel.schedule();
+    const pending = panel.whenIdle();
+    panel.destroy();
+    await pending;
+    await panel.whenIdle();
+    return !document.querySelector('.opf-review');
+  });
+  assert.equal(released, true, 'destroy releases pending core-idle waiters without running a stale audit');
+  checks.push('destroy releases a pending idle waiter and removes the panel');
+  // The real workspace resource gate invalidates geometry for every pending resource class, even though
+  // the host measurement/catalog identity and earlier slides stay unchanged. This managed handle models
+  // prepared resource completion; it does not claim real font/icon/diagram fidelity.
+  const resourceEpochs = await tab.evaluate(async () => {
+    const host = document.createElement('div'), slot = document.createElement('div');
+    document.body.append(host, slot);
+    let pending = [], factor = 0.2, nextFactor = factor;
+    const loaded = [], events = [];
+    const fonts = {
+      textMeasurement: { measure: (text, size) => text.length * size * factor },
+      pending: () => [...pending],
+      ensure: async () => { await Promise.resolve(); loaded.push(...pending); pending = []; factor = nextFactor; },
+    };
+    const documentValue = { name: 'Resource epochs', language: 'en-US', slides: [
+      { id: 'unchanged-first', title: 'Long earlier content', subtitle: 'Same input', composition: { minFontSize: 24, maxFontSize: 24 }, blocks: [{ text: 'Complete authored word '.repeat(130) }, { text: 'Second complete block' }] },
+      { id: 'changed-last', title: 'Later slide', subtitle: 'Gate trigger', text: 'Content' },
+    ] };
+    const workspace = window.harness.createOpfEditor(host, { document: documentValue, fonts, catalogs: [], slots: { review: slot }, panels: { canvas: false }, review: { delay: 1 }, on: { fonts: event => events.push(event.state) } });
+    await workspace.ready;
+    await workspace.whenIdle();
+    await workspace.review.whenIdle();
+    const rows = [{ resource: 'initial', actual: workspace.review.validation, cold: window.harness.validate(workspace.session.snapshot().presentation, { catalogs: [], fonts }) }];
+    for (const [resource, width] of [['icons:test', 3], ['shape:presets', 0.2], ['diagram:flowchart', 4]]) {
+      pending = [resource]; nextFactor = width;
+      workspace.session.set('slides.1.title', resource);
+      await workspace.whenIdle();
+      await workspace.review.whenIdle();
+      rows.push({ resource, actual: workspace.review.validation, cold: window.harness.validate(workspace.session.snapshot().presentation, { catalogs: [], fonts }) });
+    }
+    workspace.destroy(); host.remove(); slot.remove();
+    return { rows, loaded, events };
+  });
+  assert.deepEqual(resourceEpochs.loaded, ['icons:test', 'shape:presets', 'diagram:flowchart']);
+  assert.deepEqual(resourceEpochs.events, ['loading', 'ready', 'loading', 'ready', 'loading', 'ready']);
+  for (const row of resourceEpochs.rows) assert.deepEqual(row.actual, row.cold, `${row.resource}: full settled report equals fresh review`);
+  const firstSlideFacts = row => row.actual.findings.filter(finding => finding.slide === 0);
+  assert.notDeepEqual(firstSlideFacts(resourceEpochs.rows[0]), firstSlideFacts(resourceEpochs.rows[1]), 'the resource epoch materially changes earlier geometry-dependent findings');
+  assert.notDeepEqual(firstSlideFacts(resourceEpochs.rows[1]), firstSlideFacts(resourceEpochs.rows[2]), 'returning to narrow measurement restores the corresponding fresh findings');
+  checks.push('workspace invalidates unchanged earlier geometry after icons, shapes and diagram resource preparation');
   assert.deepEqual(problems, [], 'no page errors');
   console.log(`Review hook (browser): ${checks.length} checks. ${checks.join('; ')}.`);
 } finally {
