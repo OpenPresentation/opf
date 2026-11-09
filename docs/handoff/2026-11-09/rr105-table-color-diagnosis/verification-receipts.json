@@ -1,0 +1,15 @@
+{
+  "scope": "Retained verifier setup refusal and exact successful recovery; no Office invoked",
+  "files": [
+    {
+      "path": "verifier-source-anchor-refusal.log.gz",
+      "bytes": 4317,
+      "sha256": "8ee44fcb5028a8bf05ecfdedcfc711a20c7024e273eb3cabe7073174883c108a"
+    },
+    {
+      "path": "verifier-success.log.gz",
+      "bytes": 376,
+      "sha256": "fb6422696315c5491077403bc5de322f4c5193f41d5d9a1695df581252df1f00"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "exitCode": 1,
+  "phase": "final-reviewed-source-anchor",
+  "cause": "Expected source regexp omitted existing whitespace between baseFill and context.roles; all archive/terminal/mapping/24cell36run/two-mismatch assertions before this anchor passed. Parser/verifier setup error only; no source/native defect."
+}

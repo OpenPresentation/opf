@@ -1,0 +1,11 @@
+# Failed table run and source-color cause evidence
+
+NEVER MERGE this evidence-only branch. The raw ZIP preserves all29 authorized files byte-for-byte: original n034-native10 driver/preflight/exit/later process inventory, all18 original profile02 inputs/envelope/runner/worker/failure/stages/logs/three original PNGs, initial pure source diagnosis, and four reviewed source files. No Office executable/font binaries, credentials or unrelated files are included. Inputs are repository-authored synthetic/public qualification tables.
+
+The original worker exited1 at original.slide.4.cell.1.1.character.1.color. cleanupConfirmed:false and officeOperationsStopped:true remain literal. No save/edit/reopen occurred. Although the prior phase report is empty because it was assigned only when complete, the first three PNGs and full stage transcript are retained. The original native RGB was not persisted and remains UNKNOWN. The later read-only process inventory count0 is not evidence of successful owned Quit/cleanup.
+
+The offline verifier checks every archived hash, input/envelope/terminal bindings and actual slide→layout→master→theme mappings. Across24cells/36runs it proves exactly two stale inherited-white header expectations against tx1→dk1→000000 in the unchanged source archive. Reviewed RR96 actual-export tests explicitly require black on#767676, choosing the higher contrast rather than retaining white merely because it exceeds4.5. This supports correcting the qualification expectation, not changing the exporter or claiming an unrecorded native color.
+
+Run Node24 verify.mjs from an installed repository checkout (fflate and fast-xml-parser are existing PPTX dependencies). It performs no export, build, network or Office call and does not modify evidence. Source repair, new generation/profile binding and any future physical pass are separate.
+
+The first offline verifier reached its final reviewed-source regexp and rejected existing whitespace. That setup refusal, original verifier source and exact successful recovery are retained separately; only the source-anchor whitespace matcher changed. Raw archive bytes and all source/terminal/24cell36run assertions are unchanged. Required evidence metadata checks are recorded separately, never a product/native qualification.

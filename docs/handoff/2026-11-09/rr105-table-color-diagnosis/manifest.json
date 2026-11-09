@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "scope": "Original unsuccessful table native attempt and pure source diagnosis; no new Office calls or native acceptance",
+  "originalSource": "f9897413098c01d14c0c38e813790bd6897365ea",
+  "sourceIdentity": [
+    {
+      "path": "scripts/native-acceptance/table-colors.mjs",
+      "oid": "076c458c4dac51492e72313934aa61afe4c9768b"
+    },
+    {
+      "path": "packages/pptx/test/styled-table.mjs",
+      "oid": "aafafc8aa08d0781faaef23ee7afbbc5a8650f8c"
+    },
+    {
+      "path": "packages/javascript/src/color.ts",
+      "oid": "886da3d37a6eab5f064fc59b0928eabe05d78f84"
+    },
+    {
+      "path": "packages/pptx/src/index.js",
+      "oid": "792c6abe83dd1c233b67f4e70c32f50a28ae614d"
+    }
+  ],
+  "archive": {
+    "path": "raw.zip",
+    "bytes": 572926,
+    "sha256": "2e472290c3d8d0b8baf7d1df6bddeb10181a8a578b664a80e2789b87d25070f3"
+  },
+  "files": [
+    {
+      "path": "initial-source-diagnosis/source-color-comparison.json",
+      "bytes": 13618,
+      "sha256": "7ceb6add92e124c67a48f8a6dabd8928a58f5afe4f4e7c540881bd0457e0b6ee"
+    },
+    {
+      "path": "initial-source-diagnosis/source-ooxml.json",
+      "bytes": 86558,
+      "sha256": "15e2c2318d6c264eb64e5b2a03a93c4bc5bdb876eba442e57584dec5c52aa64a"
+    },
+    {
+      "path": "initial-source-diagnosis/theme-trace.json",
+      "bytes": 4439,
+      "sha256": "8bec1bb8f929001767545ff6319921c12d185024b287a72ea00d2bd56add09b5"
+    },
+    {
+      "path": "original-driver/driver-exit.json",
+      "bytes": 159,
+      "sha256": "6c51cfff092c959f99e48160387d8837fae1bb2288fe739e7a028b600dd37fe0"
+    },
+    {
+      "path": "original-driver/driver.log",
+      "bytes": 773,
+      "sha256": "ccd4cc384a991ac8482d18c64c3207731f2b3a7a86e19e02db2e1b72819f4d6f"
+    },
+    {
+      "path": "original-driver/postfailure-process-inventory.json",
+      "bytes": 236,
+      "sha256": "470943068e075e5ac340987bb7414dea020b509eba7761198be989f0daff4b62"
+    },
+    {
+      "path": "original-driver/preflight.json",
+      "bytes": 340,
+      "sha256": "cd51a6edf3689e54250a84e0d0c952ba383351fb72270f8083e745321808acf7"
+    },
+    {
+      "path": "original-profile02/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "original-profile02/inputs/native-table-colors-v2.ps1",
+      "bytes": 20122,
+      "sha256": "384ba8d49a53793a15228675b0e2da91caaedc827cdc7225af7288a8d451b4c7"
+    },
+    {
+      "path": "original-profile02/inputs/suite.json",
+      "bytes": 551804,
+      "sha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65"
+    },
+    {
+      "path": "original-profile02/inputs/table-colors.opf.json",
+      "bytes": 5941,
+      "sha256": "e5706ff7f2a493da1c22ab90e672904442972e579dbe2203d042ad688ef3e6ba"
+    },
+    {
+      "path": "original-profile02/runner.json",
+      "bytes": 487718,
+      "sha256": "237c1bff4f885f6b9507c05dfa807f8013c95bdc429f6cf3f98c43c56af72712"
+    },
+    {
+      "path": "original-profile02/table-colors/failure.json",
+      "bytes": 548628,
+      "sha256": "23870dd14bc726bb16bf5ef1f9a6d73c6eab0eca0657c88ea23959bf72f9d4e7"
+    },
+    {
+      "path": "original-profile02/table-colors/generation.json",
+      "bytes": 183107,
+      "sha256": "80be00fcfd823c561fd2f9b2cff67a09498c0e9e65ef4413889616ab3f52c4b2"
+    },
+    {
+      "path": "original-profile02/table-colors/original-1.png",
+      "bytes": 7414,
+      "sha256": "6db576afce37f856aceda63615d0d0201926b6c2855cc6045c9468990de080c2"
+    },
+    {
+      "path": "original-profile02/table-colors/original-2.png",
+      "bytes": 7415,
+      "sha256": "641855fd5f202373d6150e51ac8887cb6c7b6bd5336282fb890c712ba859d3eb"
+    },
+    {
+      "path": "original-profile02/table-colors/original-3.png",
+      "bytes": 7414,
+      "sha256": "0acecf07b2e606c9d5cdb8b9a45fcbef1ced49402b632222fa9634ea00e1dd68"
+    },
+    {
+      "path": "original-profile02/table-colors/progress.json",
+      "bytes": 369,
+      "sha256": "7ab47b2010df1a432771fedfd0471fb55f89c3634a435dbbf663d976ba88e17a"
+    },
+    {
+      "path": "original-profile02/table-colors/stages.jsonl",
+      "bytes": 129103,
+      "sha256": "c421731181a62a355e6cea457102e65574f35822210b7dbfcf8ec174ca5ae022"
+    },
+    {
+      "path": "original-profile02/table-colors/supervisor.json",
+      "bytes": 223,
+      "sha256": "9f9568914c5b6c00c37101286da8f412c94622dc5a772479f44a3bc77d82394d"
+    },
+    {
+      "path": "original-profile02/table-colors/table-colors.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "original-profile02/table-colors/worker.json",
+      "bytes": 341,
+      "sha256": "845e1dc582f00cefa9ed0729f8b7515bb169ca6d175dcfb161f4b5924dfffa54"
+    },
+    {
+      "path": "original-profile02/table-colors/worker.stderr.log",
+      "bytes": 350,
+      "sha256": "8a7e66c031b949a4c725a5d1f009ec10d3a20c4d30412ef6b51e29758d9b1042"
+    },
+    {
+      "path": "original-profile02/table-colors/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "original-profile02/table-profile.json",
+      "bytes": 180729,
+      "sha256": "69d4e170a6c017dd28abbe25a1b61769d68d335426dcd3c6efd399842d785246"
+    },
+    {
+      "path": "reviewed-source/packages/javascript/src/color.ts",
+      "bytes": 97451,
+      "sha256": "cab52e083be96f24fd5d7075a7dd668fee36dc3e7baed317c61577b663aef76a"
+    },
+    {
+      "path": "reviewed-source/packages/pptx/src/index.js",
+      "bytes": 473625,
+      "sha256": "e27fc6c281640e3ce86e7b5ecf6533e7f0a9c4a576fed222e7dcb87c3fb33667"
+    },
+    {
+      "path": "reviewed-source/packages/pptx/test/styled-table.mjs",
+      "bytes": 8368,
+      "sha256": "8e1bfb17918e45bbc76cb19eaddd80f819be7df0cf304b34bdf605487f23d86d"
+    },
+    {
+      "path": "reviewed-source/scripts/native-acceptance/table-colors.mjs",
+      "bytes": 3031,
+      "sha256": "705dcef2df00f2267703acabd38185b6e5bb6cac43eaa09ab5679fbd09d5885e"
+    }
+  ],
+  "actualNativeRGB": null,
+  "originalWorkerOutcome": {
+    "exitCode": 1,
+    "timedOut": false,
+    "cleanupConfirmed": false,
+    "officeOperationsStopped": true
+  },
+  "laterProcessInventoryIsNotCleanupProof": true
+}
