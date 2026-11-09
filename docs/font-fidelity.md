@@ -5,7 +5,7 @@
 Use the coordinated versions in the [quickstart](quickstart.md). Load fonts once per worker with
 `loadFonts({pack: 'office', scripts: 'auto', presentation})` from `@openpresentation/opf-render/fonts-node`,
 and pass the same handle as `{fonts}` to preview and export. When reusing a worker for another deck,
-ensure its required faces are loaded before rendering, and bound concurrency. The renderer's
+await `fonts.ensure(nextPresentation, { renderOptions: { catalogs, date } })` before rendering with the same catalogs/date, and bound concurrency. Supplying `presentation` selects only the actual family/weight/style and needed glyph fallback files; omitting it keeps deliberate whole-pack loading. A no-text deck holds no faces, while explicit supplied faces stay loaded. Selection uses the complete allowed metadata, so loading fewer files does not change weight selection or native typeface names. Reused handles retain previously used faces; bound their lifetime as well as worker count. The renderer's
 [soak benchmark](https://github.com/OpenPresentation/opf-render#long-lived-workers-measured-memory-and-latency-opf-render171)
 (`npm run bench:soak`) measured no memory growth over 500 jobs per worker. A worker holds about 1 GiB, peaking near
 2 GiB on script-heavy decks, and its output is byte-identical on every repeat. Measure your own decks the same way.

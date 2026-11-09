@@ -224,14 +224,14 @@ test('unused optional packages are never resolved; missing needed faces fail hon
   const moduleURL = new URL('../dist/fonts-node.js', import.meta.url).href,
     galleryURL = new URL('../../gallery/dist/index.js', import.meta.url).href;
   const code = String.raw`
-import fs from 'node:fs/promises';import{registerHooks,syncBuiltinESMExports}from'node:module';
+import fs from 'node:fs/promises';import{registerHooks,syncBuiltinESMExports}from'node:module';import{createHash}from'node:crypto';
 const mode=process.argv[1],moduleURL=process.argv[2],galleryURL=process.argv[3],calls=[];
 if(mode==='optional')registerHooks({resolve(specifier,context,next){if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(specifier==='@expo-google-fonts/roboto-mono/package.json')throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
 if(mode==='required')registerHooks({resolve(specifier,context,next){if(specifier==='@expo-google-fonts/roboto/package.json')throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
 const {loadFonts}=await import(moduleURL),{gallery}=await import(galleryURL),renderOptions={catalogs:[gallery]},doc={slides:[{title:'Title',text:'Body'}]},opts={pack:'office',substitutionPolicy:'visual',presentation:doc,scripts:'auto',renderOptions};
 if(mode==='optional'){const fonts=await loadFonts(opts);console.log(JSON.stringify({faces:fonts.fontFiles.length,unneeded:calls.filter(s=>s.includes('roboto-mono')).length}));}
 else if(mode==='required'){let result;try{await loadFonts({...opts,presentation:{design:{fontScheme:'roboto'},slides:[{text:'Body'}]}});}catch(error){result={code:error.code,packages:error.details?.packages,message:error.message};}console.log(JSON.stringify(result??{unexpectedSuccess:true}));}
-else{const fonts=await loadFonts(opts),before=fonts.fontFiles.length,original=fs.readFile;fs.readFile=async function(file,...args){const data=await original.call(this,file,...args);if(String(file).endsWith('Intos-Italic.ttf')){const copy=Buffer.from(data);copy[copy.length-1]^=1;return copy;}return data;};syncBuiltinESMExports();const edit={slides:[{title:'Title',text:[{text:'Italic',italic:true}]}]};let refused;try{await fonts.ensure(edit,{renderOptions});}catch(error){refused=error.code;}const afterFailure=fonts.fontFiles.length;fs.readFile=original;syncBuiltinESMExports();const retried=await fonts.ensure(edit,{renderOptions});console.log(JSON.stringify({before,refused,afterFailure,added:retried.lazy.length,after:fonts.fontFiles.length,pending:fonts.pending(edit,renderOptions)}));}
+else{const fonts=await loadFonts(opts),before=fonts.fontFiles.length,original=fs.readFile;let protectedFile,protectedBefore;fs.readFile=async function(file,...args){const data=await original.call(this,file,...args);if(String(file).endsWith('Intos-Italic.ttf')){protectedFile=file;protectedBefore=createHash('sha256').update(data).digest('hex');const copy=Buffer.from(data);copy[copy.length-1]^=1;return copy;}return data;};syncBuiltinESMExports();const edit={slides:[{title:'Title',text:[{text:'Italic',italic:true}]}]};let refused;try{await fonts.ensure(edit,{renderOptions});}catch(error){refused=error.code;}const afterFailure=fonts.fontFiles.length;fs.readFile=original;syncBuiltinESMExports();const retried=await fonts.ensure(edit,{renderOptions});const protectedAfter=createHash('sha256').update(await original(protectedFile)).digest('hex');console.log(JSON.stringify({before,refused,afterFailure,added:retried.lazy.length,after:fonts.fontFiles.length,pending:fonts.pending(edit,renderOptions),protectedBefore,protectedAfter}));}
 `;
   const child = (mode) =>
     JSON.parse(
@@ -249,6 +249,12 @@ else{const fonts=await loadFonts(opts),before=fonts.fontFiles.length,original=fs
   assert.deepEqual(required.packages, ['@expo-google-fonts/roboto']);
   const retry = child('integrity');
   assert.equal(retry.refused, 'font-integrity-mismatch');
+  assert.match(retry.protectedBefore, /^[a-f0-9]{64}$/);
+  assert.equal(
+    retry.protectedAfter,
+    retry.protectedBefore,
+    'resolution/read hooks never mutate pinned package bytes',
+  );
   assert.equal(retry.afterFailure, retry.before);
   assert.equal(retry.added, 1);
   assert.equal(retry.after, retry.before + 1);
@@ -311,4 +317,89 @@ test('style-only metadata keeps absent roles cheap and exact while unprepared me
       fontWeight: 500,
     }),
   );
+});
+
+test('optional script absence retains bounded fallback ordering and all-unavailable diagnostics without weakening real measurement', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const moduleURL = new URL('../dist/fonts-node.js', import.meta.url).href;
+  const rendererURL = new URL('../dist/index.js', import.meta.url).href;
+  const galleryURL = new URL('../../gallery/dist/index.js', import.meta.url)
+    .href;
+  const code = String.raw`
+import {registerHooks} from 'node:module';
+const mode=process.argv[1],calls=[];
+registerHooks({resolve(specifier,context,next){if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(mode==='jp'?specifier==='@expo-google-fonts/noto-sans-jp/package.json':/^@expo-google-fonts\/noto-(sans|serif)-(jp|sc|tc|hk|kr)\//.test(specifier))throw Object.assign(Error('Simulated absent optional package'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
+const {loadFonts}=await import(process.argv[2]),{toSvg}=await import(process.argv[3]),{gallery}=await import(process.argv[4]);
+const presentation={language:'ja',slides:[{title:'日本語',text:'こんにちは'}]},renderOptions={catalogs:[gallery]},options={pack:'office',substitutionPolicy:'visual',scripts:'auto',renderOptions};
+async function run(demand){const diagnostics=[];const fonts=await loadFonts({...options,...(demand?{presentation}:{scripts:[]}),onDiagnostic:d=>diagnostics.push(d)});if(!demand)await fonts.ensure(presentation,{renderOptions,onDiagnostic:d=>diagnostics.push(d)});let output;try{output={svg:toSvg(presentation,1,{...renderOptions,fonts,text:'paths'})};}catch(error){output={code:error.code};}return {diagnostics:diagnostics.filter(d=>d.code.startsWith('script-')).map(d=>[d.code,d.package??d.characters]),output,pending:fonts.pending(presentation,renderOptions),selection:fonts.registry.scriptSelection};}
+console.log(JSON.stringify({eager:await run(false),demand:await run(true),calls}));
+`;
+  for (const mode of ['jp', 'all']) {
+    const result = JSON.parse(
+      execFileSync(
+        process.execPath,
+        [
+          '--input-type=module',
+          '-e',
+          code,
+          mode,
+          moduleURL,
+          rendererURL,
+          galleryURL,
+        ],
+        { encoding: 'utf8', timeout: 20000, maxBuffer: 4000000 },
+      ).trim(),
+    );
+    assert.deepEqual(result.demand.output, result.eager.output, mode);
+    assert.ok(
+      result.demand.diagnostics.some(
+        ([code, pkg]) =>
+          code === 'script-font-not-installed' &&
+          pkg === '@expo-google-fonts/noto-sans-jp',
+      ),
+    );
+    assert.deepEqual(result.demand.pending, []);
+    if (mode === 'jp') {
+      assert.ok(result.demand.output.svg);
+      assert.ok(
+        result.demand.selection.packages.includes(
+          '@expo-google-fonts/noto-sans-sc',
+        ),
+      );
+      assert.equal(
+        result.demand.selection.packages.filter((pkg) =>
+          /noto-sans-(sc|tc|hk|kr)$/.test(pkg),
+        ).length,
+        1,
+      );
+    } else {
+      assert.equal(result.demand.output.code, 'missing-glyph');
+      assert.ok(
+        result.demand.diagnostics.some(
+          ([code]) => code === 'script-glyph-uncovered',
+        ),
+      );
+    }
+  }
+});
+
+test('explicit aliases and fallbackFamily select the same single actual face as the whole base pack', async () => {
+  for (const substitution of [
+    { aliases: { 'Owned Alias': 'Roboto' } },
+    { fallbackFamily: 'Roboto' },
+  ]) {
+    const doc = {
+        slides: [{ text: [{ text: 'Alias body', fontFamily: 'Owned Alias' }] }],
+      },
+      config = { pack: 'base', substitutionPolicy: 'visual', ...substitution };
+    const baseline = await loadFonts(config),
+      fonts = await loadFonts({ ...config, presentation: doc, renderOptions });
+    assert.equal(fonts.fontFiles.length, 1);
+    for (const text of ['system', 'fonts', 'paths'])
+      assert.equal(
+        toSvg(doc, 1, { ...renderOptions, fonts, text }),
+        toSvg(doc, 1, { ...renderOptions, fonts: baseline, text }),
+        text,
+      );
+  }
 });

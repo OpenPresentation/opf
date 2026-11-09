@@ -1,3 +1,4 @@
+import { fontCoverageProbe } from './script-fonts.js';
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { pickFace } from "./font-registry.js";
 import { toSvg } from "./svg.js";
@@ -116,11 +117,15 @@ function recordingMeasurement(settle, into, coverage) {
           if (!record.into.has(key)) record.into.set(key, { family, weight, italic });
         }
         // Demand loaders know coverage only after selected bytes are verified. Unknown faces are optimistic for one round.
-        coverage?.(String(text), size, settled);
+        try { coverage?.(String(text), size, settled); }
+        catch(error) { if(error?.code !== 'missing-glyph')throw error; }
+        // Recording cannot stop on an uncovered glyph: ensure must still run its bounded optional fallback chain.
+        // Actual rendering has no recording hook and retains its original missing-glyph refusal.
       }
       return String(text).length * size * RECORDED_EM;
     },
     resolveStyle: settle,
+    ...(coverage ? { [fontCoverageProbe](text,size,style) { coverage(String(text),size,settle(style)); } } : {}),
   };
   return record;
 }
