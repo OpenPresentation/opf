@@ -1,0 +1,93 @@
+{
+  "source": "6b522ccf547f60dafd3621910e7c032de7764e64",
+  "tree": "ee29738fedd737911c0cfdd1b03bf88c3d238f8e",
+  "runtimeSource": "58e0d7939fc318119f5f81a8ba1455bbfab7f1cd",
+  "unchangedRuntimeInputs": true,
+  "bundleSha256": "ea3e84e0519263bd539f660da0bdeafd365102918a61cafce9487b7b5816d382",
+  "bundleInputs": 572,
+  "bundleInputBytesStillExact": 572,
+  "packagePins": [
+    {
+      "file": "package.json",
+      "gitBlob": "846e509ef00827a8efe72c059ca3238f88be6fbb",
+      "bytes": 13093,
+      "sha256": "6fbaac685fe76f992f246084ab4b58cc15b20122babae2cbc674f64056566ff0"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "gitBlob": "3432ab613e493c84d6eea74cb68d30be08720102",
+      "bytes": 136778,
+      "sha256": "9be05789786c8388b63ab6f85e154815eb3f04dcd9bdb99748639abe4d8956f4"
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "gitBlob": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+      "bytes": 1651,
+      "sha256": "a4c126fc53ef833e4b5d36e373efe8c6138b8a98b04fb2b079536f97ade693b1"
+    },
+    {
+      "file": "packages/editor/package.json",
+      "gitBlob": "345b5c4d35f4b7ac1af94b2ebd420ac318d8e10e",
+      "bytes": 19257,
+      "sha256": "90f0aca9801f9ac7012b782160106726bbc06a2f32e51194d43d686a42ca01b1"
+    },
+    {
+      "file": "packages/render/package.json",
+      "gitBlob": "07ad8b819a6897bf4d7881fda22917ad98deeb4f",
+      "bytes": 15524,
+      "sha256": "a2546b881d2688f54e63351a840c8d65a1537201245a6b76a5dda7a00e710181"
+    },
+    {
+      "file": "packages/javascript/package.json",
+      "gitBlob": "be6618457fafaddbd723ec212692429e2fb1046c",
+      "bytes": 7090,
+      "sha256": "71b011cc61e67bbb7ffb2b6d5235d27311375b8a2fbc48391785d3b5c05da0fe"
+    }
+  ],
+  "toolTerminal": {
+    "sessionId": 38536,
+    "exitCode": 0,
+    "reportedText": "formal browser matrix exit=0",
+    "noRestart": true
+  },
+  "logFileSpan": {
+    "created": "2026-11-09T19:45:56.878Z",
+    "lastWritten": "2026-11-09T20:05:02.753Z"
+  },
+  "fontPolicy": "maintained split-fonts browser lazy loader, visual with Roboto fallback and matching HarfBuzz WASM",
+  "browserFaces": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false
+    },
+    {
+      "family": "Intos",
+      "weight": 400,
+      "italic": false
+    },
+    {
+      "family": "Intos",
+      "weight": 700,
+      "italic": false
+    },
+    {
+      "family": "Intos Display",
+      "weight": 700,
+      "italic": false
+    }
+  ],
+  "serverMemoryContext": "Root reports office default131faces.36 batch-fonts setup RSS187.7MiB/setup peak219.9/first-render436.1/overall436.8; batch-system setup187.2/renderpeak338.5. These are whole-process checkpoints, not isolated font-only attribution.",
+  "pendingReview": {
+    "delayMs": 300,
+    "whenIdleExcludesReview": true,
+    "observedDesktopCpu4x36Round1ChartValueTimerMs": 7477.63,
+    "sourceFiles": [
+      "packages/editor/src/review-panel.js:27",
+      "packages/editor/src/review-panel.js:180",
+      "packages/editor/src/review-panel.js:403",
+      "packages/editor/src/workspace.js:498",
+      "packages/editor/src/workspace.js:1925"
+    ]
+  }
+}
