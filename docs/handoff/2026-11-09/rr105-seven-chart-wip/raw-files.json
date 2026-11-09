@@ -1,0 +1,119 @@
+{
+  "scope": "UNQUALIFIED WIP diagnostics; no package/native acceptance",
+  "count": 14,
+  "bytes": 13011,
+  "files": [
+    {
+      "path": "install.exit.json",
+      "bytes": 134,
+      "sha256": "45c8c39523eca211953578d6c5400c17f50aeeaaf2e01835f1d73db4b1b9f5fa",
+      "archive": "raw/000.gz",
+      "compressedBytes": 138,
+      "compressedSha256": "b3ef7e2dde95f10c84415968fa16422dce068c8f31e8efa1e88248c4214181d3"
+    },
+    {
+      "path": "install.log",
+      "bytes": 4242,
+      "sha256": "fe2edec998c214bd0594b7d1514f09cf1de311c84939a2e5dd912f594997c268",
+      "archive": "raw/001.gz",
+      "compressedBytes": 568,
+      "compressedSha256": "542803d7412858c8463d5e1956e4e851d2cc00bd4a0e6e6f784f9a17328c4428"
+    },
+    {
+      "path": "parse-four-01.exit.json",
+      "bytes": 451,
+      "sha256": "ae0c16905a71022d345708393c2edb8fd16d0e8474843191f232dd62f37a5854",
+      "archive": "raw/002.gz",
+      "compressedBytes": 311,
+      "compressedSha256": "0ce205642f36e80e26f4b8792fee18e41bd1de23675172af978fd67d12ee9c06"
+    },
+    {
+      "path": "parse-four-01.log",
+      "bytes": 1125,
+      "sha256": "e8b282a9403071d697b03eba3bd0dc943b4854955234077b5807d56de583cd4b",
+      "archive": "raw/003.gz",
+      "compressedBytes": 479,
+      "compressedSha256": "fbd00f02b70bda6f50dd64e4402abf32a4ab69b0dd07a268caa9746933a91a1c"
+    },
+    {
+      "path": "parse-four-02.exit.json",
+      "bytes": 450,
+      "sha256": "bd55fe3b66e4ee13b33210777ec823a159784ae07dfa3999f223afd0b5121945",
+      "archive": "raw/004.gz",
+      "compressedBytes": 310,
+      "compressedSha256": "6f3421983364ea921b423edb4da75c11514f6a895993f7077f6786ebbed3db1a"
+    },
+    {
+      "path": "parse-four-02.log",
+      "bytes": 949,
+      "sha256": "51924013ef6cf9c2ab09a453dd8d095633b4ca209ae5fb32141090552f9fc2cc",
+      "archive": "raw/005.gz",
+      "compressedBytes": 477,
+      "compressedSha256": "99ec97b5efab1552441052a69c2ed298c7b5e2243b7f89d74529d3b6443db70e"
+    },
+    {
+      "path": "parse-four-03.exit.json",
+      "bytes": 451,
+      "sha256": "bc28abaff75bd615f7e81d9769f9eda721aad8e9731c7cc8a96abe982b15dd20",
+      "archive": "raw/006.gz",
+      "compressedBytes": 309,
+      "compressedSha256": "391dd2b4a312954eaa3d7662a4a4c3480903c986b6188e2a965e86eb57ef1e07"
+    },
+    {
+      "path": "parse-four-03.log",
+      "bytes": 1101,
+      "sha256": "f98a7fcbdb46302e67da40070b0b4e9b527293b6c3b0fb8f268a5e9ae3876e6d",
+      "archive": "raw/007.gz",
+      "compressedBytes": 464,
+      "compressedSha256": "b49b6487854a7186c3eb73c689544739a25d641b3e2596e14859f492f19ab588"
+    },
+    {
+      "path": "parse-four-04.exit.json",
+      "bytes": 450,
+      "sha256": "88feb1afee79f82534db1257521b136b47fcc808b5b3bed8c54f98c9f9ad6ded",
+      "archive": "raw/008.gz",
+      "compressedBytes": 311,
+      "compressedSha256": "d42692f9f89ea023aa2c21d5d0bbc0141b57d8aca50dd76434ffbd45d89d4ef1"
+    },
+    {
+      "path": "parse-four-04.log",
+      "bytes": 856,
+      "sha256": "d40b649b090bb1c1af2fd3f79709abbb8f1a14596f5df3f06456b07e998264d2",
+      "archive": "raw/009.gz",
+      "compressedBytes": 470,
+      "compressedSha256": "5f8dedd443ed27559456042643a2b018dcdb6801c0e8d8c12d4baf9f502cad5b"
+    },
+    {
+      "path": "parse-four-05.exit.json",
+      "bytes": 451,
+      "sha256": "cf584d0c1ed12d91ef38d6bdfa48855f8a60964550e5375f87cc60f0189c2d32",
+      "archive": "raw/010.gz",
+      "compressedBytes": 311,
+      "compressedSha256": "c7e6ace0c8bf9b3237d27d6e1ff2c67c0180ea823ae03012af8da64e49f6e13c"
+    },
+    {
+      "path": "parse-four-05.log",
+      "bytes": 804,
+      "sha256": "8332a199cc0ca8cd901652dd34d5d79d896342a700acf487dda264d58f7c7e79",
+      "archive": "raw/011.gz",
+      "compressedBytes": 148,
+      "compressedSha256": "37bde271258bafbba343dacd5bc501b932c8ec9d1ba4a4fb2f8ddd496e461b92"
+    },
+    {
+      "path": "parse-four.mjs",
+      "bytes": 621,
+      "sha256": "df66af9be48cd5a8cceecd76c14ecd8e4dcca52c5773f8e55a46d3e0cf626d1a",
+      "archive": "raw/012.gz",
+      "compressedBytes": 367,
+      "compressedSha256": "726470e0caf0ea2e6139ac63a3dd6f20389dea5b03ec45abfb54b28029319168"
+    },
+    {
+      "path": "run.mjs",
+      "bytes": 926,
+      "sha256": "c8232590ae883892adf22d0ac314224d9e9a932e1a0e1651b3ec0771bc007c8b",
+      "archive": "raw/013.gz",
+      "compressedBytes": 523,
+      "compressedSha256": "7e284c89a35d468ee4e34d7afad2fa9f355ecfcc001fae3ad56e39ef9c52e9a2"
+    }
+  ]
+}
