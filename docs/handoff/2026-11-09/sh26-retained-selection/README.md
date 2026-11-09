@@ -14,7 +14,7 @@ The inherited default whole-block floor remains16px. Without an explicit floor, 
 
 Original experimental test setup failures are retained: passing `wholeBlocks` to the presentation-level `paginate` API had no effect; the maintained whole-block API is `continueOverfull` (or slide-level `paginateSlide`). An18px cap also leaves the first settled list at21.3px, so the exact equal-font control correctly uses22px. The original raw-six font failures remain evidence of the selector defect.
 
-Final source identity, check outcomes and review captures will be added after the scoped checks finish. Local raw evidence is under `artifacts/sh26-tie-baseline`; the baseline install/build receipts are under `C:/opf-work/release-033-artifacts/sh26-tie-*`. Required checks are not yet claimed green; pinned golden outputs must be regenerated only by the managed workflow.
+The final source identity, actual check outcomes and review captures are recorded below. Local raw evidence is under `artifacts/sh26-tie-baseline`; the baseline install/build receipts are under `C:/opf-work/release-033-artifacts/sh26-tie-*`. The original required aggregate remains RED; pinned golden outputs must be regenerated only by the managed workflow.
 
 ## Sealed local result
 
