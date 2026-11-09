@@ -1,6 +1,9 @@
 # Current two-release handoff — 2026-11-08
 
 
+Current continuation: [November9 source assembly, merged Org207, Gallery176 and remaining holds](../2026-11-09/README.md). This supersedes the immediate-state/observer wording below.
+
+
 Latest coordinator state: [published1216/1217 and Org207, combined local green checks, observer52422 and unchanged holds](coordinator-checkpoint-1217-org207.md). This supersedes older immediate-state/no-observer wording below.
 
 This is the current entry point. Historical checkpoints are preserved in [scope-closure-review/current-before-c973.md](scope-closure-review/current-before-c973.md). The full original scope is [November7 README](../2026-11-07/README.md), its rules/COM/sites inventories and [issue1139](https://github.com/OpenPresentation/opf/issues/1139). Do not shrink the goal to the work already built.

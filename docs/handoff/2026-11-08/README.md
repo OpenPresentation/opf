@@ -1,6 +1,9 @@
 # Release continuation: 2026-11-08
 
 
+Current continuation: [November9 source assembly, merged Org207, Gallery176 and remaining holds](../2026-11-09/README.md). This supersedes the immediate-state/observer wording below.
+
+
 Latest coordinator state: [published1216/1217 and Org207, combined local green checks, observer52422 and unchanged holds](coordinator-checkpoint-1217-org207.md). This supersedes older immediate-state/no-observer wording below.
 
 **Start with [CURRENT.md](CURRENT.md)** for the unified status, exact active heads, dependency order and approval boundaries. Dated checkpoints below preserve history and are superseded where CURRENT.md says otherwise.
