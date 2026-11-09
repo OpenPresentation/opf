@@ -21,6 +21,11 @@ if(Object.keys(entries).length!==manifest.records.length||total!==manifest.rawBy
 if(git('rev-parse',manifest.source+'^{tree}')!==manifest.sourceTree)throw Error('Historical source tree mismatch');
 const summary=JSON.parse(strFromU8(entries['witness/summary.json']));
 if(summary.source!==manifest.source||summary.sourceTree!==manifest.sourceTree||summary.pairs.some(pair=>!pair.exact||pair.actual!==pair.expected)||summary.protectedFiles.some(file=>file.sha256!==file.expected))throw Error('Witness mismatch');
+if(entries['source/prior-fonts-node.js']){
+  const prior=execFileSync('git',['show','324c9cbab26eb62a47a8de0805212a7dce3d7f4c:packages/render/src/fonts-node.js'],{cwd:root});
+  const current=execFileSync('git',['show',manifest.source+':packages/render/src/fonts-node.js'],{cwd:root});
+  if(digest(prior)!==digest(entries['source/prior-fonts-node.js'])||digest(current)!==digest(entries['source/current-fonts-node.js']))throw Error('Partial-failure source binding mismatch');
+}
 let currentSourceMatches=true;
 for(const {file,blob} of summary.sourceFiles){if(git('rev-parse',manifest.source+':'+file)!==blob)throw Error('Historical source blob mismatch '+file);if(git('rev-parse','HEAD:'+file)!==blob)currentSourceMatches=false;}
 console.log(JSON.stringify({verified:true,source:manifest.source,sourceTree:manifest.sourceTree,records:manifest.records.length,rawBytes:total,exactPairs:summary.pairs.length,protectedFiles:summary.protectedFiles.length,currentSourceMatches},null,2));
