@@ -623,8 +623,9 @@ export function shapeRole(drawn, {hasText} = {}) {
 }
 
 /** A shape's text from the native body reader's paragraphs: OPF text with the run emphasis, links and colors; sizes and faces are the composition's. */
-export function shapeText(paragraphs) {
+export function shapeText(paragraphs, report = () => {}) {
   if (!paragraphs?.length) return undefined;
+  if (paragraphs.some(paragraph => paragraph.nativeFontScale !== undefined)) report({code: 'scaled-shape-text-reflow', message: 'The native shape has saved fontScale. Shape text retains its words and supported emphasis, but uses OPF composition sizes instead of the saved effective native points; review the imported shape.'});
   const runs = paragraphs.flatMap((paragraph, index) => [...(index ? ['\n'] : []), ...(Array.isArray(paragraph.richText) ? paragraph.richText : [paragraph.richText ?? paragraph.text])]);
   const cleaned = runs.map(run => {
     if (typeof run === 'string') return run;

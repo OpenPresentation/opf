@@ -77,7 +77,7 @@ await copyFile(new URL('src/image-import.js', root), new URL('image-import.js', 
 await copyFile(new URL('src/import-signals.js', root), new URL('import-signals.js', dist));
 
 await copyFile(new URL('src/table-import.js', root), new URL('table-import.js', dist));
-for (const name of ['native-text-style.js', 'body-text-import.js', 'font-weights.js']) await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
+for (const name of ['native-text-style.js', 'native-autofit.js', 'body-text-import.js', 'font-weights.js']) await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
 await copyFile(new URL('src/table-cell-import.js', root), new URL('table-cell-import.js', dist));
 await copyFile(new URL('src/table-border-import.js', root), new URL('table-border-import.js', dist));
 await copyFile(new URL('src/color-ref.js', root), new URL('color-ref.js', dist));

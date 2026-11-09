@@ -5,6 +5,7 @@ import {unbindNoBreak} from '@openpresentation/opf/composition';
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
 import {nativeRunStyle, mergeNativeRunProperties, nativeTypeface} from './native-text-style.js';
+import {nativeAutofit, scaledNativeRun, reportNativeAutofit} from './native-autofit.js';
 
 const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', preserveOrder:true, parseAttributeValue:false, parseTagValue:false, trimValues:false, htmlEntities:true});
 const nodes = (tree, tag) => (tree ?? []).filter(node => Object.hasOwn(node, tag));
@@ -27,9 +28,9 @@ function bodyInheritedStyles(shape, context, archive, slidePath) {
   const placeholder = (root, reference) => {
     const candidates = array(root?.['p:cSld']?.['p:spTree']?.['p:sp']).filter(shape => {
       const current = shape['p:nvSpPr']?.['p:nvPr']?.['p:ph'];
-      return current && !Array.isArray(current) && current.type === 'body' && String(current.idx ?? '0') === String(reference.idx ?? '0');
+      return current && !Array.isArray(current) && String(current.idx ?? '0') === String(reference.idx ?? '0');
     });
-    return candidates.length === 1 ? candidates[0] : undefined;
+    return candidates.length === 1 && candidates[0]['p:nvSpPr']['p:nvPr']['p:ph'].type === 'body' ? candidates[0] : undefined;
   };
   const related = (part, type) => [...archive.relationships(part).values()].filter(rel => rel.type.endsWith('/' + type));
   const layouts = related(slidePath, 'slideLayout');
@@ -43,7 +44,8 @@ function bodyInheritedStyles(shape, context, archive, slidePath) {
   if (!layoutShape) return null;
   const masterShape = placeholder(master, layoutShape['p:nvSpPr']['p:nvPr']['p:ph']);
   if (!masterShape) return null;
-  return [layoutShape['p:txBody']?.['a:lstStyle'], masterShape?.['p:txBody']?.['a:lstStyle'], master['p:txStyles']?.['p:bodyStyle']];
+  return {styles: [layoutShape['p:txBody']?.['a:lstStyle'], masterShape?.['p:txBody']?.['a:lstStyle'], master['p:txStyles']?.['p:bodyStyle']],
+    bodyProperties: [layoutShape['p:txBody']?.['a:bodyPr'], masterShape['p:txBody']?.['a:bodyPr']]};
 }
 
 function inheritedRunDefaults(styles, level) {
@@ -115,7 +117,7 @@ function bodyRunStyle(properties, context, relationships, report, extras = {}) {
 
 export function nativeBodyReader(slidePath, archive, relationships, report, extras = {}) {
   let bodies, context, inheritedStyles;
-  return (index, {languageOnly = false} = {}) => {
+  return (index, {languageOnly = false, onlyScaled = false} = {}) => {
     if (!bodies) {
       const tree = archive.part(slidePath, parser);
       const currentShapes = shapes(child(child(child(tree, 'p:sld'), 'p:cSld'), 'p:spTree'));
@@ -126,15 +128,21 @@ export function nativeBodyReader(slidePath, archive, relationships, report, extr
     const body = bodies[index];
     if (!body) return undefined;
     const listStyle = drawingObject(child(body, 'a:lstStyle'));
+    const bodyReport = (code, message) => report({code, message, path: `shapes.${index}.body`});
+    const pending = [];
+    const fit = nativeAutofit([drawingObject(body)['a:bodyPr'], ...(inheritedStyles[index]?.bodyProperties ?? [])], (code, message) => pending.push({code, message}));
+    if (onlyScaled && fit.scale === 1) return undefined;
+    for (const {code, message} of pending) bodyReport(code, message);
+    if (!languageOnly) reportNativeAutofit(fit, bodyReport);
     return nodes(body, 'a:p').map((paragraph, paragraphIndex) => {
       const content = paragraph['a:p'], pPr = drawingObject(child(content, 'a:pPr'));
       const level = Number(nodes(content, 'a:pPr')[0]?.[':@']?.lvl ?? 0) + 1;
       const inheritedBody = inheritedStyles[index] !== undefined;
-      const defaults = mergeNativeRunProperties(inheritedRunDefaults(inheritedStyles[index], level), listStyle['a:defPPr']?.['a:defRPr'], listStyle[`a:lvl${level}pPr`]?.['a:defRPr'], pPr['a:defRPr']);
+      const defaults = mergeNativeRunProperties(inheritedRunDefaults(inheritedStyles[index]?.styles, level), listStyle['a:defPPr']?.['a:defRPr'], listStyle[`a:lvl${level}pPr`]?.['a:defRPr'], pPr['a:defRPr']);
       // Membership alone follows native paragraph/shape/layout/master precedence.
       // A local buNone cancels all
       // inherited bullets; missing bindings never recover stored source words.
-      const inherited = Number.isInteger(level) && level >= 1 && level <= 9 ? inheritedStyles[index] ?? [] : [];
+      const inherited = Number.isInteger(level) && level >= 1 && level <= 9 ? inheritedStyles[index]?.styles ?? [] : [];
       const bulletProperties = [pPr, listStyle[`a:lvl${level}pPr`], listStyle['a:defPPr'],
         ...inherited.flatMap(style => [style?.[`a:lvl${level}pPr`], style?.['a:defPPr']])]
         .find(properties => properties && !Array.isArray(properties) && bulletKeys.some(key => Object.hasOwn(properties, key)));
@@ -155,7 +163,8 @@ export function nativeBodyReader(slidePath, archive, relationships, report, extr
         // The legacy splitter writes no alternate language. Unowned alternate pairs stay observed; owned pairs were normalized in the read view.
         const phrase = (nodes(content, 'a:pPr')[0]?.[':@']?.rtl === '1' || letterless) && properties.lang === 'en-US' && properties.altLang === undefined && LATIN_ONLY.test(current);
         const runExtras = {...extras, inheritedBody, ...(phrase ? {deckLang: undefined} : {})};
-        const style = languageOnly ? nativeRunLanguage(properties, runExtras) : bodyRunStyle(properties, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); }, runExtras);
+        const effective = !languageOnly && current && (tag !== 'a:br' || Number(properties.sz) > 0) ? scaledNativeRun(properties, fit, (code, message) => report({code, message, path})) : properties;
+        const style = languageOnly ? nativeRunLanguage(properties, runExtras) : bodyRunStyle(effective, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); }, runExtras);
         // Supported canonical forms may intentionally omit a resolved family
         // (code:true) or the resolved theme hyperlink color (link without color).
         const resolvedFill = style.color !== undefined || style.link && properties['a:solidFill'] && readBackgroundColor(properties['a:solidFill'], context);
@@ -163,7 +172,7 @@ export function nativeBodyReader(slidePath, archive, relationships, report, extr
           message: 'The current Body font family, point size or fill could not be fully resolved from its explicit styles and unambiguous layout/master cascade; current text was retained.'});
         if (current) runs.push(Object.keys(style).length ? {text:current,...style} : current);
       }
-      return {text:runs.map(run => typeof run === 'string' ? run : run.text).join(''), richText:value(runs), ...membership};
+      return {text:runs.map(run => typeof run === 'string' ? run : run.text).join(''), richText:value(runs), ...membership, ...(fit.scale !== 1 ? {nativeFontScale: fit.scale} : {})};
     });
   };
 }

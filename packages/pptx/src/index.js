@@ -1311,14 +1311,24 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const drawnShape = drawnShapes.get(index);
     const shapeKind = drawnShape ? shapeRole(drawnShape, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) : 'text';
     if (shapeKind !== 'text') {
-      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index))});
+      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.shapes.${index}.text`}))});
       roles.set(shapeKeys.get(shape), shapeKind === 'block' ? 'shape' : 'overlay');
       if (imported) items.push({...imported, sources: [`sp:${index}`]});
       continue;
     }
     const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && (!shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'] || onlyNativeLanguageTags(shape, relationships, entries));
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
-    if (item && ordinaryBody) item.readNativeBody = () => readBody(index);
+    if (item && ordinaryBody) {
+      const currentBody = readBody(index, {onlyScaled: true});
+      item.readNativeBody = () => currentBody ?? readBody(index);
+      // A saved scale also governs native heading/list size comparisons. Only
+      // scaled bodies use resolved sizes here; ordinary classification is unchanged.
+      if (currentBody?.some(paragraph => paragraph.nativeFontScale !== undefined)) {
+        const pointSize = paragraph => Math.max(0, ...asArray(paragraph?.richText).filter(run => run && typeof run === 'object' && run.text?.trim()).map(run => run.fontSize ?? 0));
+        item.paragraphs = item.paragraphs.map((paragraph, paragraphIndex) => ({...paragraph, maxFontSize: pointSize(currentBody[paragraphIndex])}));
+        item.maxFontSize = Math.max(0, ...item.paragraphs.map(paragraph => paragraph.maxFontSize));
+      }
+    }
     if (item && !item.bounds && nativeContext.layoutBounds) item.bounds = nativeContext.layoutBounds(shape) ?? item.bounds;
     // A damaged/edited furniture group falls back to current native text,
     // including cleared text boxes, without inventing a title or shape label.
