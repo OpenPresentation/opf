@@ -1,6 +1,6 @@
 # RR-114 font compatibility follow-up
 
-Final tested runtime `b698482f4c20d68b38e442beffce00c0fb099fd6` (coordinator review pending): ASCII-only text in an Emoji role exposed that the first chosen-mode recorder also fed chosen names to the inner script planner. Actual native export keeps that inner resolver physical and applies chosen-family resolution outside it. The private binding now mirrors both boundaries; seven expanded native controls pass, including plain Aptos plus rich Latin/monospace, safe/selected mode switching, exact whole-pack XML, unchanged outlined preview and unchanged document/catalog data. The original actual RED and the first 66-record archive remain immutable; an append-only packet records this correction. Coordinator review and the coherent gate remain owed.
+Final tested runtime `b698482f4c20d68b38e442beffce00c0fb099fd6` (coordinator critical source review passed; combined gates remain open): ASCII-only text in an Emoji role exposed that the first chosen-mode recorder also fed chosen names to the inner script planner. Actual native export keeps that inner resolver physical and applies chosen-family resolution outside it. The private binding now mirrors both boundaries; seven expanded native controls pass, including plain Aptos plus rich Latin/monospace, safe/selected mode switching, exact whole-pack XML, unchanged outlined preview and unchanged document/catalog data. The original actual RED and the first 66-record archive remain immutable; an append-only packet records this correction. Coordinator review and the coherent gate remain owed.
 
 ## Historical first checkpoint — 19d9
 
@@ -32,3 +32,7 @@ ASCII-only Emoji-role text takes the script planner's Latin fast path. Feeding c
 ## Final append-only qualification
 
 `final.json.gz` adds 52 lossless records without changing the initial66-record archive. It retains the actual4802 ASCII-only failure, final build, all seven expanded native controls, original glyph fallback replay (7 decks plus3 symbol schemes, previewGaps0), three final changed-file syntax checks and four actual full/demand outlined-SVG pairs plus16 native slide/theme XML pairs. Both selected/safe native PPTX inputs are retained. Run `node docs/handoff/2026-11-09/rr114-font-compatibility/verify-final.mjs` to check both historical and final packets; it reports exact current-source/build matches separately from historical validity. No aggregate, CI, Office, golden or release action ran in this lane.
+
+## Final affected neighbors
+
+Actual session53164 terminated0 on unchanged runtimeb698: demand11 andfault3 tests, lazy558-resolution parity and CE20 cache/error/style controls all pass. `neighbors.json.gz` adds the four final raw logs; both prior archives remain immutable. Run `node docs/handoff/2026-11-09/rr114-font-compatibility/verify-neighbors.mjs` for all three packets and exact current-source/build/output checks. The coordinator owns normal folding and the single combined mapped/CI/native gate. This contribution is frozen after its final pushed metadata head; do not push after folding.
