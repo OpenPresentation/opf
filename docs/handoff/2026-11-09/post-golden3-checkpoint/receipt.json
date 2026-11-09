@@ -1,0 +1,108 @@
+{
+  "source": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "sourceTree": "0d45431440e1b3150a31e8eee4a220a86908fa1e",
+  "scope": "Metadata-only qualification for two authored checkpoint files; outputs generated after the run, not claimed as pre-run inputs.",
+  "check": {
+    "base": "b623a3674037f29d68496e96a3f5b6da55d73470",
+    "startedAt": "2026-11-09T14:26:40.459Z",
+    "finishedAt": "2026-11-09T14:27:14.417Z",
+    "exitCode": 0,
+    "signal": null,
+    "inputs": [
+      {
+        "file": "docs/handoff/2026-11-09/POST-GOLDEN3.md",
+        "bytes": 10538,
+        "sha256": "3c0cbd99ab11b1e1184d7049a3b8534892f1f0a688f80f24f09257e2419c1dcb",
+        "mtime": "2026-11-09T14:25:01.893Z"
+      },
+      {
+        "file": "docs/handoff/2026-11-09/post-golden3-observations.json",
+        "bytes": 2354,
+        "sha256": "0e53cb697adbbcb84a369d09245070c8884109b84627ff1b2d9961bdad8a7a70",
+        "mtime": "2026-11-09T14:25:01.893Z"
+      }
+    ],
+    "stepsPassed": 5,
+    "scope": "Two authored handoff files only; package suites and physical native acceptance are not selected."
+  },
+  "measuredSeconds": 31.6,
+  "files": [
+    {
+      "name": "driver.log.gz",
+      "rawBytes": 895,
+      "rawSHA256": "6cccb5e33f1ff8f1a0565ec40923aa16c75d797eb799297a9b2064937f1b6ecb",
+      "gzipBytes": 400,
+      "gzipSHA256": "585fb7636eb4063024ecb80ae82e17fed4d13f550a02b6a06582a7cd438bbbe9"
+    },
+    {
+      "name": "driver.exit.json.gz",
+      "rawBytes": 778,
+      "rawSHA256": "c79a568151140c6582a835d5d6b1169387ec4f256170c1775c3ff647b8dca84a",
+      "gzipBytes": 449,
+      "gzipSHA256": "ad3a9543ef54e2dd7f2e6ad3038f534436998a98201bf74ad4c72466dc0ef821"
+    },
+    {
+      "name": "inputs.json.gz",
+      "rawBytes": 429,
+      "rawSHA256": "cc6f70d8b9ad2f020b70528603a242fd1451d9e7f21a2aa4b27084d8c143eef4",
+      "gzipBytes": 262,
+      "gzipSHA256": "5c2ac933d4f21e3d7c40496f359fe3a0047b9020b5c110e18c318f7a40121b0b"
+    },
+    {
+      "name": "build.log.gz",
+      "rawBytes": 14560,
+      "rawSHA256": "536faf47aa5d34b01b872307347c2ebbcbe06076b065558b0620199382dacd92",
+      "gzipBytes": 2975,
+      "gzipSHA256": "0b6eae6954e67939f9588d1a528cb89d5f274d2e269ace5d74e92d21e7c79baa"
+    },
+    {
+      "name": "biome.log.gz",
+      "rawBytes": 695,
+      "rawSHA256": "f6d5078517134fe33564436b2875311d309e56ef9a07d1bfcb7f8ab2d1128e3c",
+      "gzipBytes": 320,
+      "gzipSHA256": "570a7096413282e318bb6fddc8cf17c2e25416f05e50fc4f4c3e2f2f7770d5ff"
+    },
+    {
+      "name": "pnpm_run_check_changes.log.gz",
+      "rawBytes": 2631,
+      "rawSHA256": "dfd5eeb0c68a1d5b130456b83145ff60377d86c356036ea7a8f1f500a97dda51",
+      "gzipBytes": 1164,
+      "gzipSHA256": "82a6eb000d1447e74c9c3e41d52eb00126d759a29f12ca1421e1eb821cd4d75d"
+    },
+    {
+      "name": "pnpm_run_check_skill-commands.log.gz",
+      "rawBytes": 1034,
+      "rawSHA256": "a37200345d663556d942caa59f05e312e5fe3b47bf5a809d7b86cf9cb7969d91",
+      "gzipBytes": 581,
+      "gzipSHA256": "3529353ab91e45192af29ce99315b438969008f7550c6dde93dab06d17e0f735"
+    },
+    {
+      "name": "pnpm_run_check_text.log.gz",
+      "rawBytes": 1068,
+      "rawSHA256": "a5e97ada289115c5e615c42da198064ffa47aab28d423f3c71c6f889acd98567",
+      "gzipBytes": 591,
+      "gzipSHA256": "55237021f584455ea8ca9752aed790b412fcecb585513ade5f0ba0ffd7aa7baf"
+    },
+    {
+      "name": "offline-install.log.gz",
+      "rawBytes": 4267,
+      "rawSHA256": "723e0daeaf291cbe950ec3991d476a70b0047adc58fc643575bb5d9f7c25832d",
+      "gzipBytes": 565,
+      "gzipSHA256": "edb038064269c013c09f0a86bab436a6fb675004c200628d11f8fa18c67d75a8"
+    },
+    {
+      "name": "offline-install.exit.json.gz",
+      "rawBytes": 582,
+      "rawSHA256": "6fd311297a2b3e127431add70eaff6421dfe6e6f73855cab1da5b91bf4738bde",
+      "gzipBytes": 365,
+      "gzipSHA256": "da5f6f2d8130161dadb0f99102273dc606b959d533193c492ef976b5068e0d46"
+    },
+    {
+      "name": "hydration.json.gz",
+      "rawBytes": 821002,
+      "rawSHA256": "ff418dafcb7cd25e900d458f74f53f2609df2bc895e1b213f37e7d8f4aab86f1",
+      "gzipBytes": 140184,
+      "gzipSHA256": "ebbbb9b4383f48639431377a1006a25707a28d6e3c657e1b529d989414825ea4"
+    }
+  ]
+}

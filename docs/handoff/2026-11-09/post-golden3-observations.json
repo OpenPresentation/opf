@@ -1,0 +1,65 @@
+{
+  "format": 1,
+  "scope": "Authored checkpoint from observed filtered Cloudflare tool metadata, repository source, and independently replayed pushed evidence; not raw API transport or native certification.",
+  "integration": {
+    "head": "b623a3674037f29d68496e96a3f5b6da55d73470",
+    "tree": "0d45431440e1b3150a31e8eee4a220a86908fa1e",
+    "sourceCheckpoint": "69f1be2b1e9d640157561297df23f2ddee496882",
+    "goldenRun": 42630131544,
+    "goldenEvidence": "86bccf248f8d8716e2f667e27d48d5b8811d180d",
+    "coreEntries": 480,
+    "coreChanges": 0,
+    "rendererEntries": 728,
+    "rendererChanges": 3,
+    "rendererAdded": 0,
+    "rendererRemoved": 0,
+    "exampleChanges": 0,
+    "sourceMatches": true,
+    "referenceFontPx": 24,
+    "orderedEntries": 35,
+    "continuationCharactersBefore": 78,
+    "continuationCharactersAfter": 68,
+    "ordinaryGate": {
+      "session": 14282,
+      "merge": false,
+      "status": "live at checkpoint; latest terminal outcome must be read from same handle"
+    }
+  },
+  "org": {
+    "source": "7deb27f331d551769a6ab1054fa3347811058b77",
+    "productionRun": 42621298144,
+    "deployedCasesPassed": 92,
+    "independentCanonicalPassed": 5,
+    "evidence": "1015a12dcf71b47b4c1522d0a17fa7a3e1dd599a",
+    "rootVerifierPassed": true,
+    "rootImagesReviewed": 3
+  },
+  "devPreviewBase": {
+    "observedAt": "2026-11-09T14:16:14.536Z",
+    "worker": "pptx-dev",
+    "workerId": "dee96f3be47449839bee79e9008d2dd7",
+    "operation": "One GET of Worker metadata; filtered secret names only",
+    "basePresent": false,
+    "baseKeys": [],
+    "baseSecretNames": [],
+    "secretValuesReadOrReturned": false,
+    "mutation": false,
+    "login": false,
+    "inspectedSource": "889e4d103375ab69530ba7eaeb1546c60ef2014f",
+    "nativeCommandIgnoresBaseConfig": true,
+    "docs": "https://developers.cloudflare.com/workers/previews/configuration/",
+    "scope": "No configured Base-secret shortcut found; original backend-to-GitHub transfer remains held and unexecuted."
+  },
+  "chart": {
+    "proposal": "https://github.com/OpenPresentation/opf/issues/1139#issuecomment-6741885524",
+    "approvalReceived": false,
+    "implementationStarted": false
+  },
+  "office": {
+    "pid": 6584,
+    "session": 1,
+    "calls": 0,
+    "readOnlyInputTitle": true,
+    "readiness": "Owner closure still needed; never attach or kill."
+  }
+}
