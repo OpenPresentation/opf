@@ -1,0 +1,65 @@
+{
+  "format": 1,
+  "branch": "codex/rr-111-source-paint-diagnosis",
+  "source": "cf0a9d40e3516f39626509e555da592b5b8e0ef7",
+  "sourceTree": "c4d22993b4c3f5cb6cc7ac03db7adef52e8bcc7d",
+  "base": "6d5d61edc5c78a5c92128dd517c7dd6257d52331",
+  "baseTree": "4270c4111b41a1681a7af2088ec20f4986b1720b",
+  "protectedObjects": [
+    {
+      "file": "packages/editor/src",
+      "object": "6f0236f5d12da1c87f35cad6dba7c9b22f1c17da"
+    },
+    {
+      "file": "packages/mcp/app/view.css",
+      "object": "51d14c4c64a103a73cd541c88666c38b952ad98b"
+    },
+    {
+      "file": "packages/mcp/app/index.html",
+      "object": "26e765bb789927a11259ad7945c18315c269c5ea"
+    },
+    {
+      "file": "packages/mcp/package.json",
+      "object": "20af184da9033a4d66f8a63d0d8c2ecf10a2748d"
+    },
+    {
+      "file": "packages/mcp/scripts/build-app.mjs",
+      "object": "77fbcf038474f442685357a7b8616d3234616692"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "object": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "file": ".github",
+      "object": "99970ce6bce01b23b6b34b390afa1e3f27562a16"
+    },
+    {
+      "file": "spec",
+      "object": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5"
+    }
+  ],
+  "artifacts": 63,
+  "uniqueTransports": 58,
+  "rawBytes": 19193643,
+  "storedBytes": 5003660,
+  "baselineHtmlSha256": "9dd2198042e122c5a62aeea24615ab408cbaf9e940749cf70f344b524f86471e",
+  "candidateHtmlSha256": "10d6b3bcbc93e9590205b8363e6c0e427223d8cbe40032c8681c7f48d36741a0",
+  "originalPngSha256": "3904f0dc68cccf10f074a14ea30d19d35529cb6e0ccf303de1092a87ce517d22",
+  "browser": "156.0.4314.50",
+  "boundedSequenceCount": 2,
+  "sourceChanged": false,
+  "noticeLayoutShiftObserved": false,
+  "partialPaintReproduced": false,
+  "originalPaintCauseResolved": false,
+  "generalVisualAcceptance": false,
+  "scope": {
+    "providerCalls": 0,
+    "remoteMcpRpc": 0,
+    "officeCalls": 0,
+    "pushes": 0,
+    "ciDispatches": 0,
+    "release": false
+  },
+  "createdUtc": "2026-11-09T06:23:39.680Z"
+}
