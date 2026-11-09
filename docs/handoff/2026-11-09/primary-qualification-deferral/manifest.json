@@ -1,0 +1,42 @@
+{
+  "file": "raw.json.gz",
+  "bytes": 6543,
+  "sha256": "13cc32f8a83ae24b64a8a96769f1f08850d9f12069c3b17a85d5c0a31af69e4c",
+  "rawBytes": 14225,
+  "rawSHA256": "85733538c42ffe32eca15d4a512c0562e6f16ed1d8dfa42e734b9b9deda08d00",
+  "files": [
+    {
+      "file": "constructor.mjs",
+      "bytes": 6813,
+      "sha256": "a51b78e57e15fee7fcfaa5cbdb244f77c1e868f60f7da116e904ef5f6517f1e5"
+    },
+    {
+      "file": "first-failure.log",
+      "bytes": 941,
+      "sha256": "e14a9efdd7e6a6f3c3c12ed546c23a7355e86d4be50f6d769ba8928ce2ff7c9b"
+    },
+    {
+      "file": "receipt.json",
+      "bytes": 1421,
+      "sha256": "d4206aca53eaf8c426134cdea32f4b84c6121cd6023e76b818a8524f7a92dcb7"
+    },
+    {
+      "file": "ci/1240.json",
+      "bytes": 309,
+      "sha256": "380ae421e411439af5dafff018870616f3d4168925e86da71bb3b28504662bc3"
+    },
+    {
+      "file": "ci/1247.json",
+      "bytes": 309,
+      "sha256": "47f5f2084f3a9550dc9099fe915b46e5b19a9bc9744fdc17292094f0737b761a"
+    },
+    {
+      "file": "ci/1248.json",
+      "bytes": 309,
+      "sha256": "f9364099c26668dc10a1cc112cf3f15de14e8edf554422b9ca113020ef05386a"
+    }
+  ],
+  "suiteCreated": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}

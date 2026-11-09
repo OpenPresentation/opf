@@ -1,0 +1,27 @@
+{
+  "archive": "check-and-ci-receipts.json.gz",
+  "bytes": 2583,
+  "sha256": "d6e343895770cc5c26475414cac05df901f211623fb7ff3991a90e2f14e36178",
+  "files": [
+    {
+      "file": "integration034-four-repairs-all-gate-01.log",
+      "bytes": 6440,
+      "sha256": "2adaf42f7f2cc73be174142f4efb3c8f6db48335fde8b8b78ef4b09bba1ad6bf"
+    },
+    {
+      "file": "integration034-four-repairs-all-gate-01-exit.json",
+      "bytes": 283,
+      "sha256": "c61ab1ca5fac25ae2b17cb6fe49d293f2a4545428dc6e7f81d5e52454610aae2"
+    },
+    {
+      "file": "primary-deferral-evidence-metadata-01.log",
+      "bytes": 925,
+      "sha256": "d191c8349b08be7165e9fa7dcc8eca4a7b44b9610928f85a9b3c8931655cd5a9"
+    },
+    {
+      "file": "primary-deferral-evidence-metadata-01-exit.json",
+      "bytes": 273,
+      "sha256": "bb7c5ad06d176100913fc65da57980d78de2c5fe1aa5dba3c3265d9cb565570d"
+    }
+  ]
+}
