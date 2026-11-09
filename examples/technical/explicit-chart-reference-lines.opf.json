@@ -1,0 +1,240 @@
+{
+  "name": "Explicit chart reference lines",
+  "description": "Illustrative data: independent target styling, raw percentage values, multiple axes, and fixed PowerPoint overlay fallbacks. References come only from chart.referenceLines.",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "roboto",
+    "variant": "light1"
+  },
+  "slides": [
+    {
+      "title": "Service reliability",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Month",
+            "Availability"
+          ],
+          "rows": [
+            [
+              "Jan",
+              92
+            ],
+            [
+              "Feb",
+              96
+            ],
+            [
+              "Mar",
+              97
+            ],
+            [
+              "Apr",
+              96
+            ],
+            [
+              "May",
+              98
+            ]
+          ]
+        },
+        "referenceLines": [
+          {
+            "value": 95,
+            "label": "Target 95",
+            "stroke": {
+              "color": "accent2",
+              "width": 2,
+              "dash": "dash"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Margin benchmarks",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            {
+              "name": "Margin",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "Q1",
+              0.18
+            ],
+            [
+              "Q2",
+              0.24
+            ],
+            [
+              "Q3",
+              0.27
+            ]
+          ]
+        },
+        "referenceLines": [
+          {
+            "value": 0.2,
+            "label": "Minimum 20%",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "accent3",
+              "dash": "dot"
+            }
+          },
+          {
+            "value": 0.3,
+            "label": "Target 30%",
+            "stroke": {
+              "color": "accent2",
+              "width": 2,
+              "dash": "dash"
+            }
+          },
+          {
+            "value": 0.25,
+            "stroke": {
+              "color": "accent4",
+              "dash": "solid"
+            }
+          }
+        ],
+        "dataLabels": false
+      }
+    },
+    {
+      "title": "Revenue and margin",
+      "chart": {
+        "type": "combo",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue",
+            {
+              "name": "Margin",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "Q1",
+              120,
+              0.2
+            ],
+            [
+              "Q2",
+              140,
+              0.24
+            ],
+            [
+              "Q3",
+              160,
+              0.27
+            ]
+          ]
+        },
+        "line": [
+          "Margin"
+        ],
+        "secondaryAxis": [
+          "Margin"
+        ],
+        "referenceLines": [
+          {
+            "value": 0.25,
+            "axis": "secondary",
+            "label": "Margin 25%",
+            "stroke": {
+              "color": "accent3",
+              "dash": "dash"
+            }
+          },
+          {
+            "value": 150,
+            "label": "Revenue 150",
+            "stroke": {
+              "color": "accent2",
+              "dash": "dot"
+            },
+            "labelPosition": "start"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Regional target",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": [
+            "Region",
+            "Revenue"
+          ],
+          "rows": [
+            [
+              "North",
+              120
+            ],
+            [
+              "South",
+              140
+            ],
+            [
+              "East",
+              160
+            ],
+            [
+              "West",
+              135
+            ]
+          ]
+        },
+        "referenceLines": [
+          {
+            "value": 150,
+            "label": "Target 150",
+            "stroke": {
+              "color": "accent2",
+              "dash": "dash"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "One category",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Actual"
+          ],
+          "rows": [
+            [
+              "Q1",
+              18
+            ]
+          ]
+        },
+        "referenceLines": [
+          {
+            "value": 20,
+            "label": "Target 20",
+            "stroke": {
+              "color": "accent2",
+              "dash": "dash"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

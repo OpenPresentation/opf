@@ -55,11 +55,13 @@ export function placeReferences(refs:readonly ChartReference[],data:ResolvedChar
     if(ref.label!==undefined){
       const parts=ref.label.split(/\r\n|\r|\n/u),width=Math.max(...parts.map(text=>geometry.measure(text,font)))+font*0.5,height=lineHeight*parts.length;
       const endpointX=(ref.labelPosition==='start')!==rtl?a:b,endpointY=ref.labelPosition==='start'?plot.y:plot.y+plot.height;
-      const preferred:Box=horizontal?{x:position+gap,y:ref.labelPosition==='start'?endpointY:endpointY-height,width,height}:{x:endpointX-width/2,y:position-gap-height,width,height};
+      const startSide=(ref.labelPosition==='start')!==rtl;
+      const labelX=native?endpointX-width/2:startSide?endpointX:endpointX-width;
+      const preferred:Box=horizontal?{x:position+gap,y:ref.labelPosition==='start'?endpointY:endpointY-height,width,height}:{x:labelX,y:position-gap-height,width,height};
       const alternate:Box=horizontal?{...preferred,x:position-gap-width}:{...preferred,y:position+gap};
       const fits=(candidate:Box)=>inside(candidate,box)&&boxes.every(other=>!overlap(candidate,other));
       const alternative=!fits(preferred)&&fits(alternate),labelBox=alternative?alternate:preferred;
-      line.labelBox=labelBox;line.labelSide=horizontal?(alternative?'left':'right'):(alternative?'below':'above');line.labelAlign='center';boxes.push(labelBox);
+      line.labelBox=labelBox;line.labelSide=horizontal?(alternative?'left':'right'):(alternative?'below':'above');line.labelAlign=!horizontal&&!native?(startSide?'left':'right'):'center';boxes.push(labelBox);
       if(!inside(labelBox,box))diagnostics.push({index,code:'chart-reference-label-overflow',message:'The explicit reference label extends beyond its chart; enlarge the chart or use a shorter label. Its value and text are retained.'});
       if(boxes.slice(0,-1).some(other=>overlap(labelBox,other)))diagnostics.push({index,code:'chart-reference-label-collision',message:'The explicit reference label collides after both adjacent placements; its preferred position, text and value are retained.'});
     }

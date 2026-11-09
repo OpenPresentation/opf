@@ -1,5 +1,5 @@
 // LH-107 to LH-110 in the preview: a waterfall's role colors, signed labels and dashed connectors; the value list beside a pie; values
-// inside stacked segments with the series named beside the last column; the reference line and period band the title names. Composition
+// inside stacked segments with the series named beside the last column. Composition
 // decides them (core chart-marks.ts); this asserts what the preview draws from them.
 import assert from 'node:assert/strict';
 import { chartBandColor, chartWaterfallColors } from '@openpresentation/opf/composition';
@@ -10,7 +10,6 @@ const tags = (svg, name) => [...svg.matchAll(new RegExp(`<${name}\\b([^>]*)>`, '
 const texts = (svg) => [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].map(([, a, body]) => ({ ...attributesOf(a), body: body.replace(/<[^>]*>/g, '') }));
 // A light deck: dark2 reads on it, so the totals take it.
 const deck = (slide) => ({ design: { fontScheme: 'roboto', colorScheme: 'cool-horizon', variant: 'light1' }, slides: [slide] });
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 let checks = 0;
 
 // 1. Waterfall: totals in the strong color, gains in the accent, losses in the light context gray; signed labels (U+2212), bold totals;

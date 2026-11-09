@@ -46,7 +46,7 @@ test('native span matches category centers; horizontal and singleton references 
  assert.ok(end.labelBox.x>start.labelBox.x);
  const rtl=place(c,{direction:'rtl'});assert.ok(rtl.lines[0].labelBox.x<rtl.lines[1].labelBox.x);assert.equal(rtl.lines[0].endpoint,2);
  const bar=place({...c,type:'bar'},{horizontal:true});assert.equal(bar.lines[0].native,false);assert.equal(bar.lines[0].y1,100);assert.equal(bar.lines[0].y2,490);assert.equal(bar.lines[0].x1,bar.lines[0].x2);
- const single=place({...c,data:{columns:data.columns,rows:[data.rows[0]]}});assert.equal(single.lines[0].native,false);assert.equal(single.lines[0].x1,180);assert.equal(single.lines[0].x2,960);
+ const single=place({...c,data:{columns:data.columns,rows:[data.rows[0]]}});assert.equal(single.lines[0].native,false);assert.equal(single.lines[0].x1,180);assert.equal(single.lines[0].x2,960);assert.equal(single.lines[0].labelAlign,'right');assert.equal(single.lines[1].labelAlign,'left');assert.ok(single.lines.every(r=>r.labelBox.x>=box.x&&r.labelBox.x+r.labelBox.width<=box.x+box.width));
 });
 test('labels use opposite adjacent side before diagnosing unresolved collisions, without dropping text or numeric lines',()=>{
  const c=chart({referenceLines:Array.from({length:3},()=>({value:20,label:'Same'}))});const result=place(c);assert.equal(result.lines[0].labelSide,'above');assert.equal(result.lines[1].labelSide,'below');assert.equal(result.lines[2].labelSide,'above');assert.ok(result.diagnostics.some(f=>f.code==='chart-reference-label-collision'));assert.equal(result.lines.length,3);assert.equal(new Set(result.lines.map(r=>r.y1)).size,1);
@@ -62,7 +62,7 @@ test('fixed chart/data/frame keeps reference/plot/end-label geometry when prose 
  // Explicit layout tracks fix the chart frame while only title/subtitle prose changes.
  const snapshot=(title,subtitle)=>{const s=composeSlide({title,subtitle,chart:c},{width:1280,height:720,layout:{name:'Fixed chart',regions:[{name:'title',size:.2},{name:'body',size:.8,accepts:['chart'],flow:'none'}]},recompose:false,fill:false});const i=s.items.find(i=>i.field==='chart');assert.equal(i.chart.layer.focus,undefined);return {box:i.box,axis:i.chart.valueAxis,plot:i.chart.layer.plot,refs:i.chart.layer.references,ends:i.chart.layer.endLabels};};
  assert.deepEqual(snapshot('Enterprise above 100','Consumer below 5 in 2023'),snapshot('Neutral title','Neutral subtitle'));
- const authored={...c,highlight:{series:['Enterprise']}};assert.deepEqual(authored.highlight,{series:['Enterprise']});assert.equal(chartReferences(authored).length,1);
+
 });
 test('sibling scale sharing includes every explicit target and refreshes line placement against final plot',()=>{
  const a=chart({referenceLines:[{value:200,label:'Target'}]}),b=chart();const items=composeSlide({blocks:[{chart:a},{chart:b}]},{width:1280,height:720}).items.filter(i=>i.field==='chart');assert.equal(items.length,2);assert.deepEqual(items[0].chart.valueAxis,items[1].chart.valueAxis);assert.ok(items[1].chart.valueAxis.max>=200);

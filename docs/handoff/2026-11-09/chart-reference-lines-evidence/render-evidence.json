@@ -1,0 +1,354 @@
+{
+  "source": "examples/technical/explicit-chart-reference-lines.opf.json",
+  "method": "actual local toSvg + pinned bundled loadFonts() + toPng; no Office or golden regeneration",
+  "validation": [],
+  "slides": [
+    {
+      "slide": 1,
+      "name": "solid-main-dashed-target",
+      "pngSha256": "295f359ee283539b2ba672f74c284c1a8a8e05673d12011c5bc22eef3b8855f3",
+      "box": {
+        "x": 57.6,
+        "y": 148.122461,
+        "width": 1164.8,
+        "height": 514.277539
+      },
+      "valueAxis": {
+        "min": 90,
+        "max": 99,
+        "majorUnit": 2
+      },
+      "plot": {
+        "left": 19.999999999999993,
+        "top": 80,
+        "right": 20,
+        "bottom": 40
+      },
+      "referenceLines": {
+        "lines": [
+          {
+            "value": 95,
+            "axis": "value",
+            "label": "Target 95",
+            "labelPosition": "end",
+            "stroke": {
+              "color": "accent2",
+              "width": 2,
+              "dash": "dash"
+            },
+            "index": 0,
+            "x1": 190.07999999999998,
+            "y1": 403.3569227430555,
+            "x2": 1089.9199999999998,
+            "y2": 403.3569227430555,
+            "strokeWidth": 2,
+            "native": true,
+            "endpoint": 4,
+            "labelBox": {
+              "x": 1042.8594531249998,
+              "y": 371.3569227430555,
+              "width": 94.12109375,
+              "height": 30
+            },
+            "labelSide": "above",
+            "labelAlign": "center"
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "slide": 2,
+      "name": "multiple-percent-targets",
+      "pngSha256": "5273d45d05b11152ca7a060601b80325e4a10f8f3a648d21f31eba9cd41b5848",
+      "box": {
+        "x": 57.6,
+        "y": 147.832422,
+        "width": 1164.8,
+        "height": 514.567578
+      },
+      "valueAxis": {
+        "min": 0,
+        "max": 0.35,
+        "majorUnit": 0.1
+      },
+      "plot": {
+        "left": 57.12890624999999,
+        "top": 65,
+        "right": 20,
+        "bottom": 40
+      },
+      "referenceLines": {
+        "lines": [
+          {
+            "value": 0.2,
+            "axis": "value",
+            "label": "Minimum 20%",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "accent3",
+              "width": 1.3333333333333333,
+              "dash": "dot"
+            },
+            "index": 0,
+            "x1": 296.007421875,
+            "y1": 388.3613839285714,
+            "x2": 1021.121484375,
+            "y2": 388.3613839285714,
+            "strokeWidth": 1.3333333333333333,
+            "native": true,
+            "endpoint": 0,
+            "labelBox": {
+              "x": 227.79453124999998,
+              "y": 356.3613839285714,
+              "width": 136.42578125,
+              "height": 30
+            },
+            "labelSide": "above",
+            "labelAlign": "center"
+          },
+          {
+            "value": 0.3,
+            "axis": "value",
+            "label": "Target 30%",
+            "labelPosition": "end",
+            "stroke": {
+              "color": "accent2",
+              "width": 2,
+              "dash": "dash"
+            },
+            "index": 1,
+            "x1": 296.007421875,
+            "y1": 271.3420758928571,
+            "x2": 1021.121484375,
+            "y2": 271.3420758928571,
+            "strokeWidth": 2,
+            "native": true,
+            "endpoint": 2,
+            "labelBox": {
+              "x": 966.73671875,
+              "y": 239.3420758928571,
+              "width": 108.76953125,
+              "height": 30
+            },
+            "labelSide": "above",
+            "labelAlign": "center"
+          },
+          {
+            "value": 0.25,
+            "axis": "value",
+            "labelPosition": "end",
+            "stroke": {
+              "color": "accent4",
+              "width": 1.3333333333333333,
+              "dash": "solid"
+            },
+            "index": 2,
+            "x1": 296.007421875,
+            "y1": 329.85172991071425,
+            "x2": 1021.121484375,
+            "y2": 329.85172991071425,
+            "strokeWidth": 1.3333333333333333,
+            "native": true,
+            "endpoint": 2
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "slide": 3,
+      "name": "secondary-combo",
+      "pngSha256": "4c134f690bf7fed3ad0b70b580aa5bb7b79b0b5d69e73f77dda33ad5bf2f9f84",
+      "box": {
+        "x": 57.6,
+        "y": 147.832422,
+        "width": 1164.8,
+        "height": 514.567578
+      },
+      "valueAxis": {
+        "min": 0,
+        "max": 200,
+        "majorUnit": 50
+      },
+      "secondaryValueAxis": {
+        "min": 0,
+        "max": 0.3,
+        "majorUnit": 0.05
+      },
+      "plot": {
+        "left": 53.72070312499999,
+        "top": 65,
+        "right": 57.12890625,
+        "bottom": 40
+      },
+      "referenceLines": {
+        "lines": [
+          {
+            "value": 0.25,
+            "axis": "secondary",
+            "label": "Margin 25%",
+            "labelPosition": "end",
+            "stroke": {
+              "color": "accent3",
+              "width": 1.3333333333333333,
+              "dash": "dash"
+            },
+            "index": 0,
+            "x1": 286.9791015625,
+            "y1": 281.0936848958333,
+            "x2": 989.6126953125,
+            "y2": 281.0936848958333,
+            "strokeWidth": 1.3333333333333333,
+            "native": true,
+            "endpoint": 2,
+            "labelBox": {
+              "x": 932.5326171875,
+              "y": 249.0936848958333,
+              "width": 114.16015625,
+              "height": 30
+            },
+            "labelSide": "above",
+            "labelAlign": "center"
+          },
+          {
+            "value": 150,
+            "axis": "value",
+            "label": "Revenue 150",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "accent2",
+              "width": 1.3333333333333333,
+              "dash": "dot"
+            },
+            "index": 1,
+            "x1": 286.9791015625,
+            "y1": 315.22431640624995,
+            "x2": 989.6126953125,
+            "y2": 315.22431640624995,
+            "strokeWidth": 1.3333333333333333,
+            "native": true,
+            "endpoint": 0,
+            "labelBox": {
+              "x": 224.81601562499998,
+              "y": 283.22431640624995,
+              "width": 124.326171875,
+              "height": 30
+            },
+            "labelSide": "above",
+            "labelAlign": "center"
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "slide": 4,
+      "name": "bar-overlay",
+      "pngSha256": "a6c6da876200d43f2b510b0f976aea2b3b456bc9024287bc550dd74ceb09722d",
+      "box": {
+        "x": 57.6,
+        "y": 147.832422,
+        "width": 1164.8,
+        "height": 514.567578
+      },
+      "valueAxis": {
+        "min": 0,
+        "max": 200,
+        "majorUnit": 50
+      },
+      "plot": {
+        "left": 76.865234375,
+        "top": 65,
+        "right": 73.720703125,
+        "bottom": 10
+      },
+      "referenceLines": {
+        "lines": [
+          {
+            "value": 150,
+            "axis": "value",
+            "label": "Target 150",
+            "labelPosition": "end",
+            "stroke": {
+              "color": "accent2",
+              "width": 1.3333333333333333,
+              "dash": "dash"
+            },
+            "index": 0,
+            "x1": 895.1257812499999,
+            "y1": 212.832421875,
+            "x2": 895.1257812499999,
+            "y2": 652.4,
+            "strokeWidth": 1.3333333333333333,
+            "native": false,
+            "endpoint": 3,
+            "labelBox": {
+              "x": 897.1257812499999,
+              "y": 622.4,
+              "width": 105.361328125,
+              "height": 30
+            },
+            "labelSide": "right",
+            "labelAlign": "center"
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "slide": 5,
+      "name": "singleton-overlay",
+      "pngSha256": "19dda42daf7182030368f19ddea4db5f879046cb773f544db983468a653d0482",
+      "box": {
+        "x": 57.6,
+        "y": 148.122461,
+        "width": 1164.8,
+        "height": 514.277539
+      },
+      "valueAxis": {
+        "min": 17.5,
+        "max": 20.5,
+        "majorUnit": 0.5
+      },
+      "plot": {
+        "left": 19.999999999999993,
+        "top": 80,
+        "right": 20,
+        "bottom": 40
+      },
+      "referenceLines": {
+        "lines": [
+          {
+            "value": 20,
+            "axis": "value",
+            "label": "Target 20",
+            "labelPosition": "end",
+            "stroke": {
+              "color": "accent2",
+              "width": 1.3333333333333333,
+              "dash": "dash"
+            },
+            "index": 0,
+            "x1": 77.6,
+            "y1": 293.83538411458335,
+            "x2": 1202.3999999999999,
+            "y2": 293.83538411458335,
+            "strokeWidth": 1.3333333333333333,
+            "native": false,
+            "endpoint": 0,
+            "labelBox": {
+              "x": 1108.2789062499999,
+              "y": 261.83538411458335,
+              "width": 94.12109375,
+              "height": 30
+            },
+            "labelSide": "above",
+            "labelAlign": "right"
+          }
+        ],
+        "diagnostics": []
+      }
+    }
+  ]
+}
