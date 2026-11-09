@@ -8176,6 +8176,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       return smaller.some(column => column.text.overflow) ? columns : smaller;
     };
     if (layoutFirst) {
+      // LH-10: below the role size, a retained cap can make one column fit only by leaving overlong lines.
+      // An equally sized column layout is then useful: compare actual lines at that cap, keeping all entries and type.
+      if (cap < start - FONT_GRID_EPSILON) {
+        const withinMeasure = (fit: ListFit) => fit.listEntries.every(entry => !blockCutsWord(entry) && entry.text.lines.every(line => line.trim().length <= PROSE_MEASURE_CHARS));
+        const whole = fitList(values, box, cap, cap, listOptions);
+        if (!whole.overflow && !withinMeasure(whole)) {
+          for (const count of counts) {
+            const columns = split(count, cap, cap);
+            if (columns.some(column => column.text.overflow || !withinMeasure(column.text) || column.box.width < LIST_COLUMN_MEASURE * AVERAGE_CHARACTER_EM * cap - .5)) continue;
+            fire('layout-first');
+            return columns;
+          }
+        }
+      }
       // LH-186: the list's one column, on the type scale (half steps) and under the cap, more than one step under its role size, is dealt into
       // the count (2 or 3) that sets it largest, on the scale, with no overflow; kept when that is at least one step larger (the fewer columns
       // on a tie). As LH-144's columns, the choice is made without composition.maxFontSize, which then caps the columns (a page of a paginated
@@ -10440,7 +10454,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // its card (or beside its level) and is set at one size for all: the largest from ARRANGEMENT_GROWTH times the role size down to the
   // smallest of the lists' own sizes at which every block fits. When none does, the blocks keep the region's own composition and
   // `arrangement-adapted` says why. PowerPoint's SmartArt nodes do not hold a list, so these are always native shapes.
-  const blockCutsWord = (entry: ListEntryLayout): boolean => {
+  function blockCutsWord(entry: ListEntryLayout): boolean {
     const word = /[\p{L}\p{N}]/u, everywhere = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
     return entry.text.richLines.slice(1).some((line, index) => {
       const last = entry.text.richLines[index]!.fragments.filter(fragment => fragment.kind === undefined).at(-1), first = line.fragments.find(fragment => fragment.kind === undefined);
@@ -10448,7 +10462,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const before = [...last.text].at(-1) ?? '', after = [...first.text][0] ?? '';
       return word.test(before) && word.test(after) && !everywhere.test(before) && !everywhere.test(after);
     });
-  };
+  }
   const arrangedBlocks = (members: ComposedItem[], kind: Arrangement, area: LayoutBox, pyramidDirection: 'up' | 'down' = 'up'): ComposedArrangement | undefined => {
     const count = members.length, role = LIST_NOMINAL_SIZE * scale, step = 4 / 3 * scale, primaryLine = ARRANGEMENT_LINE_POINTS / .75 * scale, radius = CARD_RADIUS * scale;
     const bases = members.map(member => (member.text as ListFit).fontSize), floor = Math.min(role, ...bases), top = Math.min(...members.map(member=>capOf(member.composition)),Math.max(...bases, snapFontSizeDown(role * ARRANGEMENT_GROWTH)));
@@ -11203,7 +11217,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // Read the requested template here too, retaining the exact settled type and style before strict overflow and pagination inspect it.
   const readingTemplate = recordTemplate ?? (recomposing && isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined);
   const readingRegion = (region: LayoutRegion) => ['org-chart', 'hierarchy', 'venn'].includes(region.arrangement ?? '') || region.arrangement === 'pyramid' && region.pyramidDirection === 'down';
-  if (readingTemplate?.regions.some(readingRegion)) {
+  const cappedListFallback = (item: ComposedItem) => fallbackListAreas.has(item.path) && ruleOn('layout-first') && item.payload.columns === undefined
+    && Array.isArray(item.value) && item.value.length > LIST_WHOLE_ENTRIES && !ownRunSizes(item.value) && capOf(item.composition) < contentNominalSize(item.field) * scale - FONT_GRID_EPSILON;
+  // LH-10: a failed arrangement is ordinary list text too. Its retained cap must not leave an automatic fallback over the measure.
+  if (readingTemplate && (readingTemplate.regions.some(readingRegion) || items.some(cappedListFallback))) {
     // layoutTemplate defaults listColumns to 1; only an authored region count constrains this fallback trial.
     const regionColumns = new Map<string, 'auto' | 1>();
     const collectColumns = (entries: unknown): void => {
@@ -11220,7 +11237,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!['items', 'bullets'].includes(item.field) || !item.text || !('listEntries' in item.text) || item.text.overflow || item.caption || stepPaths.has(item.path) || stepFlows.has(item.path)) continue;
       const listRegions = readingTemplate.regions.filter(region => region.accepts.includes('list'));
       const region = readingTemplate.regions.find(region => region.name === (item.region ?? item.payload.region)) ?? (listRegions.length === 1 ? listRegions[0] : undefined);
-      if (region ? !readingRegion(region) : readingTemplate.regions.some(region => region.accepts.includes('list') && !readingRegion(region))) continue;
+      const requiredMeasure = region ? readingRegion(region) : !readingTemplate.regions.some(region => region.accepts.includes('list') && !readingRegion(region));
+      if (!requiredMeasure && !(cappedListFallback(item) && (!region || regionColumns.get(region.name) !== 1))) continue;
       if (arrangements.some(arrangement => arrangement.path === item.path || arrangement.nodes.some(node => node.path === item.path || node.path?.startsWith(item.path + '.')))) continue;
       const current = item.text as ListFit;
       if (readable(current)) continue;
@@ -11270,7 +11288,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         item.text = kept.length === 1 ? kept[0]!.text : mergeListColumns(kept);
         item.box = kept.length === 1 ? kept[0]!.box : {...area};
         if (kept.length > 1) item.listColumns = kept; else delete item.listColumns;
-      } else {
+      } else if (requiredMeasure) {
         item.text = {...current, overflow: true};
         diagnostics.push({code: 'text-overflow', path: item.path, message: 'The complete diagram fallback cannot wrap whole words to 70 characters per line at its retained type size within this body. Paginate the slide; strict composition refuses this unfit fallback.'});
       }
