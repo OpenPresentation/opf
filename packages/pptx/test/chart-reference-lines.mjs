@@ -39,7 +39,10 @@ async function imported(bytes) {
 }
 const rewrite = (e, path, fn) => {
   const copy = { ...e };
-  copy[path] = strToU8(fn(strFromU8(copy[path])));
+  const before = strFromU8(copy[path]),
+    after = fn(before);
+  assert.notEqual(after, before, 'control actually edits ' + path);
+  copy[path] = strToU8(after);
   return zipSync(copy);
 };
 const series = (xml) => [...xml.matchAll(/<c:ser>[\s\S]*?<\/c:ser>/g)].map((m) => m[0]);
@@ -712,4 +715,43 @@ test('divergent ordinary group category caches are diagnosed without losing nume
       (d) => d.option === 'category' && /first series.*labels/.test(d.message) && /numeric.*retained/.test(d.message),
     ),
   );
+});
+
+test('current native auto-label, leader-line and manual-placement edits remain ordinary data rather than lose visible labels', async () => {
+  for (const mode of ['auto-value', 'auto-category', 'leader', 'manual']) {
+    const e = await exported(doc('line', mode === 'auto-value' ? [{ value: 25, stroke: ref.stroke }] : [ref])),
+      out = await imported(
+        rewrite(e.entries, 'ppt/charts/chart1.xml', (xml) =>
+          editHelpers(xml, (s) =>
+            mode === 'auto-value'
+              ? s.replace('<c:delete val="1"/>', '<c:delete val="0"/>').replace('<c:showVal val="0"/>', '<c:showVal val="1"/>')
+              : mode === 'auto-category'
+                ? s.replace('<c:showCatName val="0"/>', '<c:showCatName val="1"/>')
+                : mode === 'leader'
+                  ? s.replace(
+                      '</c:dLbls>',
+                      '<c:showLeaderLines val="1"/><c:leaderLines><c:spPr><a:ln w="9525"/></c:spPr></c:leaderLines></c:dLbls>',
+                    )
+                  : s.replace(
+                      /<c:dLblPos val="[tb]"\/>/,
+                      '<c:layout><c:manualLayout><c:x val="0.25"/><c:y val="0.25"/></c:manualLayout></c:layout><c:dLblPos val="t"/>',
+                    ),
+          ),
+        ),
+      );
+    assert.equal(out.chart.referenceLines, undefined, mode);
+    assert.equal(out.chart.type, 'line');
+    assert.deepEqual(
+      out.chart.data.rows.map((r) => r.slice(1)),
+      [
+        [10, 25],
+        [20, 25],
+        [30, 25],
+      ],
+    );
+    assert.ok(
+      out.diagnostics.some((d) => d.code === 'chart-reference-ownership-uncertain' && /auto-label|leader|manual/.test(d.message)),
+      mode,
+    );
+  }
 });

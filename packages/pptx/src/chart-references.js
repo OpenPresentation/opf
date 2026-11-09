@@ -279,6 +279,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
       label = labels[0],
       idx = Number(label?.['c:idx']?.val),
       side = label?.['c:dLblPos']?.val;
+    const unsupportedLabels = unsupportedReferenceLabels(e?.ser?.['c:dLbls']);
     const valid =
       matches.length === 1 &&
       uniqueIndexes &&
@@ -298,6 +299,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
       !e.ser['c:dPt'] &&
       !e.ser['c:trendline'] &&
       !e.ser['c:errBars'] &&
+      !unsupportedLabels &&
       labels.length <= 1 &&
       (!label ||
         ((idx === 0 || idx === values.length - 1) &&
@@ -309,7 +311,10 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
         code: 'chart-reference-ownership-uncertain',
         option: 'referenceLines',
         message:
-          'A structurally identified reference helper was edited into unsupported or nonconstant data, or its ownership/axes/categories are ambiguous; all of its current data remains ordinary chart data.',
+          'A structurally identified reference helper was edited into unsupported or nonconstant data, or its ownership/axes/categories are ambiguous; all of its current data remains ordinary chart data.' +
+          (unsupportedLabels
+            ? ' Current auto-label, leader-line or manual label-placement constructs cannot be represented by a plain reference label.'
+            : ''),
       });
       continue;
     }
@@ -736,4 +741,16 @@ function currentLabelText(nodes) {
     output.push(text);
   }
   return output.join('\n');
+}
+
+function unsupportedReferenceLabels(node) {
+  const on = (n) => ['1', 1, true, 'true'].includes(n?.val);
+  if (on(node?.['c:delete'])) return false;
+  const flags = ['showVal', 'showCatName', 'showSerName', 'showPercent', 'showBubbleSize', 'showLegendKey'];
+  const unsupported = (n) =>
+    flags.some((f) => on(n?.['c:' + f])) ||
+    on(n?.['c:showLeaderLines']) ||
+    n?.['c:leaderLines'] !== undefined ||
+    !!n?.['c:layout']?.['c:manualLayout'];
+  return unsupported(node) || arr(node?.['c:dLbl']).some((label) => !on(label['c:delete']) && unsupported(label));
 }
