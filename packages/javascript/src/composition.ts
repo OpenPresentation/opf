@@ -16,7 +16,8 @@ import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
-import {chartDoughnut,restackForRows,chartStack,chartTitleReferences,chartValueList,chartWaterfall,placeReferences,refreshChartMarks} from './chart-marks.js';
+import {chartComboAxes} from './chart-axis.js';
+import {chartDoughnut,restackForRows,chartStack,chartReferences,chartValueList,chartWaterfall,horizontalBarPlot,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartHistogram} from './chart-histogram.js';
 import {chartNumericAxes} from './chart-numeric-axes.js';
 import {chartDrawPlan} from './chart-fallback.js';
@@ -348,6 +349,7 @@ function translateListFit(fit: ListFit, dy: number): ListFit {
 /** RR-92: what composition computes for a chart item beyond its box. */
 export interface ComposedChart {
   valueAxis?: ChartValueAxis;
+  secondaryValueAxis?: ChartValueAxis;
   /** LH-03, LH-81, LH-92, LH-93: the small-chart treatment, the header row, the ring names and a shared plot box (chart-layer.ts, chart-plot.ts). */
   layer?: ChartLayer;
 }
@@ -7780,17 +7782,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats}} : {chart: node.value, data: resolved};
     const geometry = {box, scale, minFontSize: settings.minFontSize, measure, direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {}), captioned: node.caption !== undefined};
     let layer = drawn.data.ok ? chartLayer(drawn.chart, drawn.data, geometry) : undefined;
-    const titleText = [annotationText(slide.title), annotationText(slide.subtitle)].filter(Boolean).join('. ');
-    // LH-110: the reference values the title names; the value axis holds them.
-    const references = drawn.data.ok ? chartTitleReferences(drawn.chart, drawn.data, {text: titleText, ...(language !== undefined ? {language} : {})}) : undefined;
-    const include = references?.lines.map(line => line.value);
+    const references = drawn.data.ok ? chartReferences(drawn.chart) : [];
+    const include = references.filter(ref=>ref.axis==='value').map(ref=>ref.value);
     // LH-119: a small chart without its value axis labels every point with its value, so a line's scale drops zero sooner (niceScale).
     const hiddenAxis = layer?.small?.valueAxis === false;
     const axisFor = (headerHeight: number) => chartValueAxis(node.value, resolved, {width: box.width, height: Math.max(1, box.height - headerHeight), scale, minFontSize: settings.minFontSize, language, ...(hiddenAxis ? {labeled: true} : {}), ...(include?.length ? {include} : {})});
     let valueAxis = axisFor(layer?.header?.height ?? 0);
     // LH-105, LH-113: the series or categories the slide names are the chart's focus (chart-focus.ts): the title's, else what its other
     // texts, list entries, quotes and chart alts name together; a focus replaces the small chart's last-point emphasis.
-    const focus = drawn.data.ok ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
+    const focus = drawn.data.ok && !references.length ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
     if (focus) {
       const small = layer?.small ? (({emphasis: _emphasis, ...rest}) => rest)(layer.small) : undefined;
       layer = {...layer, ...(small ? {small} : {}), focus};
@@ -7822,12 +7822,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const data = drawn.data;
       const stack = chartStack(drawn.chart, data, layer, geometry, axisFor, legend => chartHeader(drawn.chart, data, geometry, {legend}));
       if (stack) ({layer, valueAxis} = stack);
-      // LH-110: the reference line and band, placed against the chart's plot (pinned here when nothing else pinned it).
-      if (references && valueAxis) {
+      // Explicit references use the same primary/secondary scales and plot in both engines.
+      if (references.length && valueAxis) {
         const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
-        const plot = layer?.plot ?? chartPlotInset(drawn.chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...plotGeometry, box});
-        const placed = plot ? placeReferences({lines: references.lines, rows: references.rows}, data, valueAxis, box, plot, {...plotGeometry, bold: (text, size) => measure(text, size, 700)}) : undefined;
-        if (placed && plot) layer = {...layer, plot, references: placed};
+        const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
+        const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+        const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar'}) : undefined;
+        if (placed && plot) {
+          layer = {...layer, plot, references: placed};
+          for(const finding of placed.diagnostics) diagnostics.push({code:'text-overflow',path:node.path+'.referenceLines.'+finding.index+'.label',message:finding.message});
+        }
       }
     }
     // LH-105: the context of a focus may be a light neutral when every context mark carries its text (value labels, names at the line
@@ -7837,7 +7841,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const labeled = Boolean(layer.small?.labels || layer.endLabels || layer.slices || layer.valueList || layer.stack?.names || (record?.dataLabels !== undefined && record.dataLabels !== false));
       layer = {...layer, focus: {...layer.focus, ...(labeled ? {labeled} : {})}};
     }
-    return valueAxis || layer ? {...(valueAxis ? {valueAxis} : {}), ...(layer ? {layer} : {})} : undefined;
+    const secondaryValueAxis=chartComboAxes(drawn.chart,drawn.data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
+    if(drawn.data.ok&&drawn.data.combo&&valueAxis&&!layer?.plot){const plot=chartPlotInset(drawn.chart,drawn.data,{valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}),...(layer?{layer}:{})},geometry);if(plot)layer={...layer,plot};}
+    return valueAxis || layer ? {...(valueAxis ? {valueAxis} : {}),...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})} : undefined;
   };
   // WI-3: a contained picture and a video frame sit at the region's anchor inside the cell the flow gave them (top by default),
   // and the caption band closes up under a top-anchored frame.
@@ -11428,9 +11434,10 @@ export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightM
 export {groupNumber,groupsThousands,groupsAxisTicks,groupsDataRange,NUMBER_GROUPING_MIN,GROUPED_LABEL_CODE} from './number-grouping.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 export {horizontalBarPlot} from './chart-marks.js';
-export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
-export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
-export {titleReferenceNumbers,titleReferenceLanguage,englishWordNumber,TITLE_REFERENCE_LANGUAGES} from './chart-title-numbers.js';
+export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
+export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartLayerReferences} from './chart-marks.js';
+export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
+export {CHART_REFERENCE_TYPES} from './chart-references.js';
 export type {TitleReferenceNumber} from './chart-title-numbers.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';

@@ -6,6 +6,7 @@
 import { chartOptionTarget, resolveChartOptions } from './chart-options.js';
 import { chartNumber, resolveChartData, type ResolvedChartData } from './chart-data.js';
 import { chartDrawPlan } from './chart-fallback.js';
+import {chartReferences} from './chart-references.js';
 
 /** The ticks of an automatic value axis: `ticks` runs from `min` to `max` in steps of `step`. */
 export interface ChartScale {
@@ -347,7 +348,8 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   // LH-60: the drawn construct (a map over categories that are not places is drawn as columns, and takes their axis).
   const id = resolved.ok ? chartDrawPlan(chart, resolved, { language: geometry.language }).type : authored;
   const spec = Object.hasOwn(CATEGORY_CHARTS, id) ? CATEGORY_CHARTS[id] : undefined;
-  if (!spec || !resolved.ok || resolved.combo) return undefined;
+  if (resolved.ok && resolved.combo) return chartComboAxes(chart,resolved,geometry)?.value;
+  if (!spec || !resolved.ok) return undefined;
   const { scale, width, height } = geometry;
   if (![width, height, scale].every(Number.isFinite) || width <= 0 || height <= 0 || scale <= 0) return undefined;
   const series = resolved.columns.slice(1).map((_, offset) => ({ values: resolved.rows.map((row) => chartNumber(row[offset + 1])) }));
@@ -362,7 +364,7 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const stackedGrouping = spec.grouping === 'stacked' || percent;
   const extents = stacks.flat().flatMap((point) => (point === null ? [] : spec.kind === 'line' || !stackedGrouping ? [point.to] : [point.from, point.to]));
   const anchor = spec.kind === 'bar' || spec.kind === 'area' ? [0] : [];
-  const include = (geometry.include ?? []).filter(Number.isFinite);
+  const include = [...geometry.include ?? [], ...chartReferences(chart).filter(ref=>ref.axis==='value').map(ref=>ref.value)].filter(Number.isFinite);
   const dataMin = extents.length ? Math.min(...extents, ...anchor, ...include) : 0;
   const dataMax = extents.length ? Math.max(...extents, ...anchor, ...include) : 1;
   const pad = 10 * scale;
@@ -374,6 +376,25 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const length = spec.horizontal ? width * 0.7 - 2 * pad - fontPx : height - 2 * pad - lineHeight * 1.5 - legendBand - titleBand;
   const fitted = niceScale(dataMin, dataMax, chartIntervalsFor(Math.max(1, length), spec.horizontal ? 4 * fontPx : lineHeight * 1.2, scale), { percent, labeled: geometry.labeled === true && spec.kind === 'line' });
   return { min: fitted.min, max: fitted.max, majorUnit: fitted.step, ...(percent ? { percent: true as const } : {}) };
+}
+
+/** Shared scales for a combo. References affect only their own axis; both engines consume these exact bounds. */
+export function chartComboAxes(chart:unknown,resolved:ResolvedChartData,geometry:ChartAxisGeometry):{value:ChartValueAxis;secondary?:ChartValueAxis}|undefined {
+  if(!resolved.ok||!resolved.combo||!resolved.rows.length)return undefined;
+  const {width,height,scale}=geometry;if(![width,height,scale].every(Number.isFinite)||width<=0||height<=0||scale<=0)return undefined;
+  const font=chartTextSize(geometry)*scale,lineHeight=font*1.5,pad=10*scale,options=resolveChartOptions(chart,chartOptionTarget('combo'));
+  const legend=options.legend==='top'||options.legend==='bottom'?lineHeight+pad:0;
+  const length=height-2*pad-lineHeight*1.5-legend-(options.axisTitles.category?lineHeight:0);
+  const intervals=chartIntervalsFor(Math.max(1,length),lineHeight*1.2,scale),refs=chartReferences(chart);
+  const forAxis=(axis:'primary'|'secondary'):ChartValueAxis=>{
+    const columns=resolved.combo!.flatMap((entry,index)=>entry.axis===axis?[index+1]:[]);
+    const values=resolved.rows.flatMap(row=>columns.map(column=>chartNumber(row[column]))).filter((v):v is number=>v!==null);
+    if(axis==='primary'&&resolved.combo!.some(entry=>entry.role==='bar'))values.push(0);
+    values.push(...refs.filter(ref=>ref.axis===(axis==='primary'?'value':'secondary')).map(ref=>ref.value));
+    const fitted=niceScale(values.length?Math.min(...values):0,values.length?Math.max(...values):1,intervals,{endOnTick:true});
+    return {min:fitted.min,max:fitted.max,majorUnit:fitted.step};
+  };
+  return {value:forAxis('primary'),...(resolved.combo.some(entry=>entry.axis==='secondary')?{secondary:forAxis('secondary')}:{})};
 }
 
 /** LH-33: a chart whose value axis {@link shareSiblingChartAxes} may share: the chart object and the axis composition gave it. */

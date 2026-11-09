@@ -34,6 +34,7 @@ const VERTICAL: Readonly<Record<string, {key?: 'line'; percent?: boolean}>> = {
   column: {}, 'stacked-column': {}, '100pct-stacked-column': {percent: true},
   line: {key: 'line'}, 'line-with-markers': {key: 'line'}, 'stacked-line': {key: 'line'}, 'stacked-line-with-markers': {key: 'line'},
   area: {}, 'stacked-area': {}, '100pct-stacked-area': {percent: true},
+  combo: {key:'line'},
 };
 
 // Whitespace that may split a category label; no-break spaces stay inside their word (the preview's rule).
@@ -122,8 +123,8 @@ function categoryLabelReserve(labels: readonly string[], plot: {x: number; width
  * its value axis), left of a side legend. `composed` is the chart's composed value axis and layer; without a usable axis (none, or one of
  * more than 1000 intervals) there is no inset.
  */
-export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, composed: {valueAxis?: ChartValueAxis; layer?: ChartLayer}, geometry: ChartPlotGeometry): ChartPlotInset | undefined {
-  if (!record(chart) || !resolved.ok || resolved.combo) return undefined;
+export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, composed: {valueAxis?: ChartValueAxis; secondaryValueAxis?:ChartValueAxis; layer?: ChartLayer}, geometry: ChartPlotGeometry): ChartPlotInset | undefined {
+  if (!record(chart) || !resolved.ok) return undefined;
   const axis = composed.valueAxis, layer = composed.layer;
   if (!axis || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
   const authored = typeof chart.type === 'string' ? chart.type.trim().toLowerCase() : '';
@@ -166,7 +167,8 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     }
   }
   if (options.active) {
-    if (options.axisTitles.value) cut('left', lineHeight);
+    if (options.axisTitles.value) cut(resolved.combo&&rtl?'right':'left', lineHeight);
+    if (resolved.combo&&composed.secondaryValueAxis&&options.axisTitles.secondary) cut(rtl?'left':'right',lineHeight);
     if (options.axisTitles.category) cut('bottom', lineHeight);
   }
   const hidden = layer?.small?.valueAxis === false;
@@ -188,7 +190,16 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const edge = layer?.stack?.edge === true && labels.length >= 2;
   const half = (text: string | undefined) => edge ? Math.min(width(text ?? '') / 2, box.width * 0.15) : 0;
   // The value axis side keeps its tick labels, the other side the end gutter; the plot's edge is that room past the padding.
-  const leftRoom = Math.max(rtl ? end : tickWidth, half(labels[0]) - pad), rightRoom = Math.max(rtl ? tickWidth : end, half(labels.at(-1)) - pad);
+  let secondaryWidth=0;
+  const secondary=composed.secondaryValueAxis;
+  if(resolved.combo&&secondary){
+    const index=resolved.combo.findIndex(entry=>entry.axis==='secondary')+1,format=plan.formats[index];
+    const count=Math.min(1000,Math.floor((secondary.max-secondary.min)/secondary.majorUnit+1e-9));
+    const labels=Array.from({length:count+1},(_,i)=>tickLabel(secondary.min+i*secondary.majorUnit,false,format,!format&&groupsAxisTicks(secondary)?{language:geometry.language}:undefined));
+    secondaryWidth=Math.max(...labels.map(width))+fontPx*0.5;
+  }
+  const far=Math.max(end,secondaryWidth);
+  const leftRoom = Math.max(rtl ? far : tickWidth, half(labels[0]) - pad), rightRoom = Math.max(rtl ? tickWidth : far, half(labels.at(-1)) - pad);
   const x = inner.x + pad + leftRoom;
   const plotWidth = Math.max(1, right - rightRoom - x);
   const cap = Math.max(lineHeight + fontPx * 1.22, inner.height * 0.4);

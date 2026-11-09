@@ -239,7 +239,6 @@ export function renderCatalogChart(item, box, bound, options, svg) {
     c.waterfallSigned = true;
   }
   // LH-110: the period band lies under the marks, the reference lines over them.
-  for (const band of layer?.references?.bands ?? []) c.mark("rect", { ...band.box, fill: chartBandColor(c.surface, c.labelColor) }, `${c.path}.data.rows.${band.row}.0`);
   render(c, spec);
   drawReferenceLines(c, layer?.references?.lines);
   drawStackNames(c, layer?.stack?.names);
@@ -340,6 +339,7 @@ const neutrals = bound.design.roles.neutrals;
     strongColors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }),
     // RR-92: the value axis core composed for a column, bar, line or area chart ({ min, max, majorUnit }); absent for the other types.
     valueAxis: item.chart?.valueAxis,
+    secondaryValueAxis:item.chart?.secondaryValueAxis,
     numericAxes: item.chart?.layer?.numericAxes,
     gridColor: neutrals.gridline.hex,
     axisColor: neutrals.axisLine.hex,
@@ -984,8 +984,10 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
 // where core placed the label (the plot's start, under or over the line).
 function drawReferenceLines(c, lines) {
   for (const line of lines ?? []) {
-    c.mark("line", { x1: line.x1, y1: line.y, x2: line.x2, y2: line.y, stroke: c.chartTextColor, "stroke-width": c.pt, "stroke-dasharray": `${c.num(4 * c.pt)} ${c.num(3 * c.pt)}` });
-    c.text(line.text, line.label, c.path, rtl(c) ? "right" : "left", c.labelColor, 700);
+    const color=line.stroke.color===undefined?c.chartTextColor:coreChartSeriesPalette(c.bound.design.colorScheme,[line.stroke.color],{accents:c.bound.design.roles.map.accents,roles:c.bound.design.colors,variables:c.bound.design.variables})[0]??c.chartTextColor;
+    const width=line.strokeWidth,dash=line.stroke.dash==='dash'?[4*width,3*width]:line.stroke.dash==='dot'?[width,2*width]:undefined;
+    if(width>0)c.mark('line',{x1:line.x1,y1:line.y1,x2:line.x2,y2:line.y2,stroke:color,'stroke-width':width,...(dash?{'stroke-dasharray':dash.map(c.num).join(' ')}:{})},c.path+'.referenceLines.'+line.index);
+    if(line.label!==undefined&&line.labelBox)c.text(line.label,line.labelBox,c.path+'.referenceLines.'+line.index+'.label',line.labelAlign??'center',c.labelColor);
   }
 }
 
@@ -1105,15 +1107,16 @@ function renderComboChart(c, spec) {
     const height = Math.max(1, box.y + box.height - pad - reserve - top);
     const intervals = chartIntervalsFor(height, c.lineHeight * 1.2, c.u);
     // The two axes share the gridlines, so each ends on a tick (LH-59 endOnTick).
-    const scale = niceScale(primaryMin, primaryMax, intervals, { endOnTick: true });
-    const secondary = secondaryLines.length ? niceScale(secondaryMin, secondaryMax, intervals, { endOnTick: true }) : null;
+    const scale = composedScale(c.valueAxis) ?? niceScale(primaryMin, primaryMax, intervals, { endOnTick: true });
+    const secondary = secondaryLines.length ? composedScale(c.secondaryValueAxis) ?? niceScale(secondaryMin, secondaryMax, intervals, { endOnTick: true }) : null;
     const primaryWidth = tickWidthOf(scale, primaryFormat, primaryGroup), secondaryWidth = secondary ? tickWidthOf(secondary, secondaryFormat, secondaryGroup) : 0;
     const leftWidth = rtl ? secondaryWidth : primaryWidth, rightWidth = rtl ? primaryWidth : secondaryWidth;
     const x = box.x + pad + (leftWidth || fontPx / 2);
     const plotRight = right - (rightWidth || fontPx / 2);
     return { scale, secondary, primaryWidth, secondaryWidth, plot: { x, y: top, width: Math.max(1, plotRight - x), height } };
   });
-  const { plot, scale, secondary } = axis;
+  const { scale, secondary } = axis;
+  const plot=c.plotBox??axis.plot;
   drawBottomLabels(c, axis.plan, plot, entries);
   c.plotArea = plot;
   const valueAt = (axisScale) => (value) => plot.y + axisFraction(value, axisScale, true) * plot.height;
