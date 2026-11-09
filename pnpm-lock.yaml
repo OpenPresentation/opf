@@ -145,8 +145,8 @@ importers:
         specifier: 0.4.1
         version: 0.4.1
       '@expo-google-fonts/noto-color-emoji':
-        specifier: 0.4.7
-        version: 0.4.7
+        specifier: 0.4.8
+        version: 0.4.8
       '@expo-google-fonts/noto-emoji':
         specifier: 0.4.8
         version: 0.4.8
@@ -532,8 +532,8 @@ importers:
         specifier: 0.4.1
         version: 0.4.1
       '@expo-google-fonts/noto-color-emoji':
-        specifier: 0.4.7
-        version: 0.4.7
+        specifier: 0.4.8
+        version: 0.4.8
       '@expo-google-fonts/noto-naskh-arabic':
         specifier: 0.4.5
         version: 0.4.5
@@ -608,8 +608,8 @@ importers:
         specifier: 0.4.1
         version: 0.4.1
       '@expo-google-fonts/noto-color-emoji':
-        specifier: 0.4.7
-        version: 0.4.7
+        specifier: 0.4.8
+        version: 0.4.8
       '@expo-google-fonts/noto-emoji':
         specifier: 0.4.8
         version: 0.4.8
@@ -1070,8 +1070,8 @@ packages:
   '@expo-google-fonts/gelasio@0.4.1':
     resolution: {integrity: sha512-mqSxj6OCIHnyRxqYYd3HSgDyWw9bI+DBWdyQRw9sNrqoceEh+3f43mY6yTrCKrBXqq0a1q9z76IvAp3HKHZQBw==}
 
-  '@expo-google-fonts/noto-color-emoji@0.4.7':
-    resolution: {integrity: sha512-0jZUhh9r92VouxJ5z59Vxw1BGjbaat7EEEasmsLI+doe5hXS1/d4oZUyfyv/TFvkwuZjqvbDh6WdYM9q0ZhiyA==}
+  '@expo-google-fonts/noto-color-emoji@0.4.8':
+    resolution: {integrity: sha512-4hKX1ZYEfsq2a5VjNJ/4CMlpkBbS7CDiIGBuyMDWhCJeXNof6IF79eFEuyHo+K11gHcsRkRaPz5Eac29R6H9wQ==}
 
   '@expo-google-fonts/noto-emoji@0.4.8':
     resolution: {integrity: sha512-zuq8xBS8nfdgqHXIwfdotQNObA22aMLdPJbFmzJt1AUjbBE4hP/K3az/GftD3e2/JTzRnX30C5lmpuNkVewRlA==}
@@ -2895,7 +2895,7 @@ snapshots:
 
   '@expo-google-fonts/gelasio@0.4.1': {}
 
-  '@expo-google-fonts/noto-color-emoji@0.4.7': {}
+  '@expo-google-fonts/noto-color-emoji@0.4.8': {}
 
   '@expo-google-fonts/noto-emoji@0.4.8': {}
 
