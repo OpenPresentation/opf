@@ -337,7 +337,8 @@ try {
 			return { stageBottom: stage.bottom, sourceTop: source.top };
 		});
 		assert.ok(stacked.sourceTop >= stacked.stageBottom - 1, "the slide is above the source");
-		// The user asked for Both in a narrow frame: the view asks the host for full screen.
+		// The user asked for Both in a narrow frame: the view asks the host for full screen (a message, so it arrives a moment later).
+		await page.waitForFunction(() => window.host.displayModes.length > 0, null, { timeout: 15000 });
 		assert.deepEqual((await hostState()).displayModes, ["fullscreen"]);
 		await shoot("chat-dark-both-fullscreen");
 		await view().locator(".opf-source-action-download").click();
