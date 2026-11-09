@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import './archive.mjs';
+const here=path.dirname(fileURLToPath(import.meta.url));
+const root=path.resolve(here,'../../../..');
+const prefix='docs/handoff/2026-11-09/native-output-archives-b623/';
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+const list=()=>readdirSync(here,{withFileTypes:true}).filter(f=>f.isFile()&&f.name!=='packet-files.json').map(f=>({file:f.name,bytes:readFileSync(path.join(here,f.name)).length,sha256:sha(readFileSync(path.join(here,f.name)))})).sort((a,b)=>a.file.localeCompare(b.file,'en'));
+if(process.argv.includes('--seal'))writeFileSync(path.join(here,'packet-files.json'),JSON.stringify({source:'b623a3674037f29d68496e96a3f5b6da55d73470',files:list()},null,2)+'\n',{flag:'wx'});
+const inventory=JSON.parse(readFileSync(path.join(here,'packet-files.json'),'utf8'));
+assert.equal(inventory.source,'b623a3674037f29d68496e96a3f5b6da55d73470');assert.deepEqual(list(),inventory.files);
+const receipt=JSON.parse(readFileSync(path.join(here,'receipt.json'),'utf8'));
+assert.equal(receipt.requiredCheck.exitCode,1);assert.equal(receipt.onlyFailedTextRecovery.exitCode,0);assert.equal(receipt.nativeAcceptance,false);assert.equal(receipt.suiteSealed,false);
+const checks=JSON.parse(readFileSync(path.join(here,'checks.files.json'),'utf8'));
+const zip=readFileSync(path.join(here,'checks.zip'));assert.equal(zip.length,checks.bytes);assert.equal(sha(zip),checks.sha256);
+const changed=execFileSync('git',['diff','--name-only','b623a3674037f29d68496e96a3f5b6da55d73470'],{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean);
+for(const file of changed)assert.ok(file.startsWith(prefix)||file.startsWith('docs/evidence/native-current-b623-20261109/'),`Unexpected tracked change: ${file}`);
+console.log(JSON.stringify({result:'PASS',metadataFiles:inventory.files.length+1,metadataBytes:inventory.files.reduce((sum,f)=>sum+f.bytes,0),archives:3,files:464,rawBytes:62403385,zipBytes:38757463,nativeAcceptance:false,suiteSealed:false,metadataAggregate:'RED preserved; exact sparse text recovery PASS'}));

@@ -1,0 +1,90 @@
+{
+  "source": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "files": [
+    {
+      "file": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "archive.mjs",
+      "bytes": 17579,
+      "sha256": "df7a155eca7b12b31e86e437a8f737c9a55003e0491eb72205bb2c1f6619bea7"
+    },
+    {
+      "file": "authored-text-setup.json",
+      "bytes": 279,
+      "sha256": "cab99ae08a8c4cd284718e08d1cb8ae5b5c6c0d91d9acbce27e3af4d8b24a7cf"
+    },
+    {
+      "file": "checks.files.json",
+      "bytes": 2395,
+      "sha256": "b7dea842b1bafae817f6831a942b38a8f1563033761ccf30fc5a54ea991d2466"
+    },
+    {
+      "file": "checks.zip",
+      "bytes": 14345,
+      "sha256": "cf56f960fd62807fbd86110a1c160b9c205ebffdf3c2c86dd2f5ab408d92610c"
+    },
+    {
+      "file": "independent-reader-original-refusal.json",
+      "bytes": 396,
+      "sha256": "a7db8c5d65088bb542896622b51d9ddc7f02ab9d902e355f6b2b1ac905db59c4"
+    },
+    {
+      "file": "independent-reader-unavailable.json",
+      "bytes": 413,
+      "sha256": "ee74a1a2fc5f868754148a2c1dd61beae722c6db8d77bf2ec21695411f0f93b7"
+    },
+    {
+      "file": "independent-zip-audit.json",
+      "bytes": 866,
+      "sha256": "4e26d8d3001d405fc60f528606ce5b3083ad4d0aef7486364d03676893ea340f"
+    },
+    {
+      "file": "independent-zip-audit.ps1",
+      "bytes": 3247,
+      "sha256": "6e9d4bcfe89a8aed2550b0b37dccb217272d53912f9595ad8073fb267f8fbff2"
+    },
+    {
+      "file": "independent-zip-audit.py",
+      "bytes": 1982,
+      "sha256": "6d206b0c896e6483c579da4a5110c9e3903267f295cff817ecf5444655dbf9c8"
+    },
+    {
+      "file": "manifest.json",
+      "bytes": 119527,
+      "sha256": "36e9d6603159ad1d43468742fff60694cb7f8f5d927bd717b1b091ebbaa9f605"
+    },
+    {
+      "file": "producer-files.json",
+      "bytes": 7189,
+      "sha256": "1426e46b9f1720b47ca6dea804ee46108db5fd7caf1a319d5459def56efdf9be"
+    },
+    {
+      "file": "producer-raw.zip",
+      "bytes": 241202,
+      "sha256": "ae54dcf9d24abb668f9001d7bfd12ad7c9a02bef193c7b45f9e9cd846ec62546"
+    },
+    {
+      "file": "producer-receipt.json",
+      "bytes": 2445,
+      "sha256": "7ac0e22e4fd03b261f861da909954018969c3abb3d7b7149ecbf975421d331b5"
+    },
+    {
+      "file": "README.md",
+      "bytes": 5315,
+      "sha256": "602f89d5250db441fa3eaf47596435da381e1dd46158aee1fe86a08744d4dc88"
+    },
+    {
+      "file": "receipt.json",
+      "bytes": 2469,
+      "sha256": "503d6d3699f997e36787060fe10d78184875ac919a52afaa4c37237505cb96ac"
+    },
+    {
+      "file": "verify.mjs",
+      "bytes": 2344,
+      "sha256": "72c3ab8d43a02dd8aacc4b4b068edd8bfabb52d9ef41aaa74eddb5742f9fa88c"
+    }
+  ]
+}

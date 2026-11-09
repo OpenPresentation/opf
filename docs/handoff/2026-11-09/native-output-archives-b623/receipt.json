@@ -1,0 +1,61 @@
+{
+  "publication": "PUBLIC-SAFE evidence-only NEVER MERGE; OPEN for separately authorized suite03 recovery append",
+  "producerSource": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "testedArchiveHead": "7860e66f6e304ba2d6aa4db89aa99f155c615dbb",
+  "node": "24.20.0",
+  "pnpm": "10.33.2",
+  "install": {
+    "command": "pnpm install --frozen-lockfile --offline --ignore-scripts",
+    "exitCode": 0,
+    "scope": "own new archive checkout"
+  },
+  "requiredCheck": {
+    "testedHead": "7860e66f6e304ba2d6aa4db89aa99f155c615dbb",
+    "command": "pnpm check:changed --base b623a3674037f29d68496e96a3f5b6da55d73470",
+    "endedUTC": "2026-11-09T14:55:34.2222014Z",
+    "exitCode": 1,
+    "scope": "standard maintained metadata selection, including its ordinary package build only in this archive worktree",
+    "startedUTC": "2026-11-09T14:55:01.5198075Z",
+    "aggregate": "RED retained",
+    "passed": [
+      "default package build 10.5s",
+      "Biome 1.1s",
+      "check:changes 0.7s",
+      "check:skill-commands 20.6s"
+    ],
+    "failed": "check:text: missing sparse painting-Linux.json.gz",
+    "typecheck": "SKIPPED: no TypeScript changes",
+    "totalSeconds": 31.8
+  },
+  "onlyFailedTextRecovery": {
+    "endedUTC": "2026-11-09T14:56:31.4660214Z",
+    "command": "pnpm check:text",
+    "testedHead": "7860e66f6e304ba2d6aa4db89aa99f155c615dbb",
+    "exitCode": 0,
+    "scope": "ONLY the unchanged failed text check after exact 16102-byte tracked fixture restoration; original aggregate RED retained",
+    "startedUTC": "2026-11-09T14:56:28.4157378Z",
+    "tests": 7,
+    "passed": 7,
+    "scannedFiles": 9060,
+    "restoredBytes": 16102,
+    "restorationReceipt": "checks.zip:raw/restore-one-painting.json"
+  },
+  "archives": {
+    "files": 464,
+    "rawBytes": 62403385,
+    "zipBytes": 38757463,
+    "allMembersCRCAndSHA256": true,
+    "originalBytesAndMtimesUnchanged": true,
+    "independentDotNetReader": "PASS all464",
+    "pythonReader": "UNRUN: unavailable; original setup refusal preserved",
+    "dotNetOriginalAdapterRefusal": "signed Int32 external-attribute decoding; corrected with exact16-bit mask; no archive change"
+  },
+  "corpusOrGenericPreparationRunsInThisTask": 0,
+  "physicalOfficeRuns": 0,
+  "providerCalls": 0,
+  "deployments": 0,
+  "releases": 0,
+  "nativeAcceptance": false,
+  "suiteSealed": false,
+  "scope": "Archival integrity only. Normal metadata-driver package build is not independent corpus rebuilding or native qualification."
+}

@@ -1,0 +1,77 @@
+{
+  "file": "checks.zip",
+  "bytes": 14345,
+  "sha256": "cf56f960fd62807fbd86110a1c160b9c205ebffdf3c2c86dd2f5ab408d92610c",
+  "members": [
+    {
+      "file": "raw/check-changed.exit.json",
+      "bytes": 386,
+      "sha256": "6ec40ededb0b08f61f9ff4a5630955cd4c792ca13f8d3d3ba5a638832d35d84a"
+    },
+    {
+      "file": "raw/check-changed.log",
+      "bytes": 2925,
+      "sha256": "1745c70e1e38cb7eb87acaac9f7077a52ce2bc6183eb6b91e6c77b4c5068e228"
+    },
+    {
+      "file": "raw/install.exit.json",
+      "bytes": 219,
+      "sha256": "2cd159e189b502a066fae7a819a8c31f49c35cdbfcf44bc4146a8833261f3c2e"
+    },
+    {
+      "file": "raw/install.log",
+      "bytes": 2674,
+      "sha256": "360fc25f8e972e73f57afc9a6970a31ed890c7b6cb49313df4db3ec891627619"
+    },
+    {
+      "file": "raw/only-failed-text.exit.json",
+      "bytes": 349,
+      "sha256": "80c13791ce0b505a9096ea8fb48a5255e00e50e758b9857d8242f24657ec7b56"
+    },
+    {
+      "file": "raw/only-failed-text.log",
+      "bytes": 1096,
+      "sha256": "82a152158241ac77465dd73f5a490e530e07642730eb963a8937186e6e9bb5f3"
+    },
+    {
+      "file": "raw/restore-one-painting.json",
+      "bytes": 603,
+      "sha256": "46cb9560968b62a3eec44e45519d106a890cbe2b305c08b20f2eb0ec8266cf18"
+    },
+    {
+      "file": "raw/restore-one-painting.mjs",
+      "bytes": 2028,
+      "sha256": "1a56ba74efd53e9cdc54bb7ace9408fc23f2c13157f030cb335130c895c6a516"
+    },
+    {
+      "file": "raw/seal-initial.mjs",
+      "bytes": 5489,
+      "sha256": "0f46ea79b0150ada8d1b4b187e1cf60eb9df5ae4a5b03a88fb7950668429afc6"
+    },
+    {
+      "file": "selection/biome.log",
+      "bytes": 691,
+      "sha256": "f33f07ca96c6bb266e0674997404812d2346a417c66539cf068b9f1732b4bc7a"
+    },
+    {
+      "file": "selection/build.log",
+      "bytes": 14569,
+      "sha256": "77d6dc7c99c1acbafc2064bc06928f16add7bbdb41697daf85cbb3be61bb6710"
+    },
+    {
+      "file": "selection/pnpm_run_check_changes.log",
+      "bytes": 2634,
+      "sha256": "0ce83dc99d128522a02ec26ebaa97fb135f11b8ed1395dc47b7613cfb6e11cb8"
+    },
+    {
+      "file": "selection/pnpm_run_check_skill-commands.log",
+      "bytes": 1036,
+      "sha256": "c207dc2775ed885d922ffea0f024c0f1ab83fc57c1b5fc6c256db3d7ac999d5c"
+    },
+    {
+      "file": "selection/pnpm_run_check_text.log",
+      "bytes": 1829,
+      "sha256": "1942951a90f5601910dfb212de71b8fe6dd81d7bfdeb16af43a27a5d40103b02"
+    }
+  ]
+}
