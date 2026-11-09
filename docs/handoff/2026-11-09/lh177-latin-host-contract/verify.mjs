@@ -1,0 +1,42 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {createRequire} from 'node:module';
+const here=path.dirname(fileURLToPath(import.meta.url));
+const root=execFileSync('git',['rev-parse','--show-toplevel'],{cwd:here,encoding:'utf8',env:{...process.env,GIT_NO_LAZY_FETCH:'1'}}).trim();
+const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8',env:{...process.env,GIT_NO_LAZY_FETCH:'1'}}).trim();
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+const require=createRequire(path.join(root,'packages/pptx/package.json'));
+const {unzipSync}=require('fflate');
+const receipt=JSON.parse(fs.readFileSync(path.join(here,'checks.json'),'utf8'));
+assert.equal(git('rev-parse',receipt.source+'^{tree}'),receipt.sourceTree);
+git('merge-base','--is-ancestor',receipt.source,'HEAD');
+for(const {file,object} of receipt.protectedObjects){
+ assert.equal(git('rev-parse',`${receipt.base}:${file}`),object,'base protected '+file);
+ assert.equal(git('rev-parse',`${receipt.source}:${file}`),object,'source protected '+file);
+ assert.equal(git('rev-parse',`HEAD:${file}`),object,'current protected '+file);
+}
+for(const {file,object} of receipt.shipping)assert.equal(git('rev-parse',`HEAD:${file}`),object,'frozen test payload '+file);
+assert.deepEqual(git('diff','--name-only',receipt.base,receipt.source).split('\n').sort(),receipt.sourceChangedPaths);
+const prefix=path.relative(root,here).split(path.sep).join('/')+'/';
+for(const file of git('diff','--name-only',receipt.source,'HEAD').split('\n').filter(Boolean))assert.ok(file.startsWith(prefix),'Only this handoff may change after source freeze: '+file);
+const zipped=fs.readFileSync(path.join(here,'checks.zip'));
+assert.equal(zipped.length,receipt.archiveBytes);
+assert.equal(sha(zipped),receipt.archiveSha256);
+const entries=unzipSync(zipped);
+assert.deepEqual(Object.keys(entries).sort(),receipt.files.map(f=>f.name));
+let total=0;
+for(const {name,bytes,sha256} of receipt.files){const actual=Buffer.from(entries[name]);assert.equal(actual.length,bytes,name+' length');assert.equal(sha(actual),sha256,name+' SHA256');total+=bytes;}
+assert.equal(total,receipt.rawBytes);
+assert.equal(Object.keys(entries).length,receipt.rawFiles);
+for(const [name,exit] of Object.entries(receipt.expectedExits))assert.equal(JSON.parse(Buffer.from(entries['attempts/'+name]).toString('utf8')).exitCode,exit,name);
+assert.equal(sha(entries['browser-host/Segoe-UI-Light.png']),receipt.representativePngSha256);
+assert.equal(sha(entries['browser-host/Segoe-UI-Semilight.png']),receipt.representativePngSha256);
+const node=JSON.parse(Buffer.from(entries['node-host/node.json']).toString('utf8'));
+const browser=JSON.parse(Buffer.from(entries['browser-host/browser.json']).toString('utf8'));
+assert.equal(node.families,87);assert.equal(node.styleChecks,348);assert.equal(node.paintChecks,333);
+assert.equal(browser.families,87);assert.equal(browser.filesFetchedInTotal,94);
+console.log(JSON.stringify({source:receipt.source,protectedObjects:receipt.protectedObjects.length,rawFiles:receipt.rawFiles,rawBytes:total,retainedMappedExit:receipt.expectedExits['mapped-01.exit.json'],result:'offline source and lossless evidence verification PASS; mapped status is separate'}));
