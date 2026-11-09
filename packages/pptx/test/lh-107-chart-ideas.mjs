@@ -1,5 +1,5 @@
 // LH-107 to LH-110 in the PPTX export and import: the native waterfall's roles, signed labels, hidden value axis and caption (chartex);
-// a pie's value list, a stacked chart's series names and the title's reference marks as tagged native shapes over (or, the band, under)
+// a pie's value list, a stacked chart's series names and explicit references as owned native helper series, and other marks over
 // the chart frame; the values inside stacked segments as the chart's own labels, hidden per point where they do not fit; and fromPptx
 // consuming the shapes and writing none of these defaults back as options.
 import assert from 'node:assert/strict';
@@ -68,22 +68,20 @@ let checks = 0;
   checks += 5;
 }
 
-// 4. Reference line and band: the band under the chart frame, the dashed line and its label over it; import consumes them.
+// 4. Explicit reference series only; title prose no longer creates thresholds or bands.
 {
-  const delivery = {type: 'line', data: {columns: ['Month', {name: 'On-time delivery', format: '0.0%'}], rows: months.map((month, i) => [month, [0.934, 0.941, 0.928, 0.952, 0.961, 0.957, 0.944, 0.936, 0.949, 0.968, 0.972, 0.979][i]])}};
-  const {slideXml, blocks, chart} = await exported({title: 'On-time delivery stayed above 92% all year', chart: delivery});
-  const frame = slideXml.indexOf('<p:graphicFrame>'), line = slideXml.indexOf('reference"');
-  assert.ok(line > frame, 'the reference line over the chart');
-  assert.match(slideXml, /name="OPF chart 1 mark over \d+ reference"[\s\S]*?<a:prstDash val="dash"\/>/, 'dashed');
-  assert.match(slideXml, /<a:t>92%<\/a:t>/);
-  assert.equal(blocks.length, 1);
-  assert.equal(chart.type, 'line');
-  const spend = {type: 'line', data: {columns: ['Year', 'Cloud ($B)', 'On-premises ($B)'], rows: [['2020', 3.1, 8.4], ['2021', 4.2, 7.9], ['2022', 5.6, 7.3], ['2023', 7.3, 6.5], ['2024', 9.4, 5.6], ['2025', 11.8, 4.8]]}};
-  const banded = await exported({title: 'Cloud spend overtook on-premises in 2023', chart: spend});
-  const band = banded.slideXml.indexOf(' band"'), bandFrame = banded.slideXml.indexOf('<p:graphicFrame>');
-  assert.ok(band > 0 && band < bandFrame, 'the band under the chart frame');
-  assert.equal(banded.blocks.length, 1);
-  checks += 4;
+  const delivery = {type:'line',data:{columns:['Month',{name:'On-time delivery',format:'0.0%'}],rows:months.map((month,i)=>[month,[0.934,0.941,0.928,0.952,0.961,0.957,0.944,0.936,0.949,0.968,0.972,0.979][i]])},referenceLines:[{value:.92,label:'92%'}]};
+  const {slideXml,chartXml,blocks,chart}=await exported({title:'On-time delivery stayed above92% all year',chart:delivery});
+  assert.doesNotMatch(slideXml,/mark over \d+ reference/,'native helpers are not detached overlays');
+  assert.match(chartXml,/<a:prstDash val="dash"/);
+  assert.match(chartXml,/<a:t>92%<\/a:t>/);
+  assert.equal(blocks.length,1);assert.equal(chart.type,'line');assert.equal(chart.referenceLines[0].value,.92);
+  const {referenceLines:_references,...plain}=delivery;
+  const inferred=await exported({title:'Stayed above92% since2023',chart:plain});
+  assert.equal(inferred.chart.referenceLines,undefined);
+  assert.doesNotMatch(inferred.slideXml,/ reference"| band"/,'prose creates neither lines nor bands');
+  assert.equal([...inferred.chartXml.matchAll(/<c:ser>/g)].length,1);
+  checks+=8;
 }
 
 console.log(`LH-107 to LH-110 PPTX passed: ${checks} checks; chartex waterfall roles and labels, value list, stacked values and names, reference marks; import consumes the marks.`);

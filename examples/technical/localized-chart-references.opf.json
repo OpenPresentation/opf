@@ -1,6 +1,6 @@
 {
   "name": "Localized chart references",
-  "description": "One unchanged English control and six localized title messages: cardinal percent words draw the target line; the named year draws its band. Integer cardinal words are read in the effective slide language. All numbers are illustrative.",
+  "description": "Illustrative localized messages and explicit, verbatim target labels. Neither title numbers nor named periods create reference marks; every target is authored in chart.referenceLines.",
   "language": "en-US",
   "design": {
     "theme": "minimal",
@@ -43,7 +43,16 @@
               0.961
             ]
           ]
-        }
+        },
+        "referenceLines": [
+          {
+            "value": 0.92,
+            "label": "Target 92%",
+            "stroke": {
+              "dash": "dash"
+            }
+          }
+        ]
       }
     },
     {
@@ -82,7 +91,16 @@
               0.961
             ]
           ]
-        }
+        },
+        "referenceLines": [
+          {
+            "value": 0.92,
+            "label": "Ziel 92%",
+            "stroke": {
+              "dash": "dash"
+            }
+          }
+        ]
       }
     },
     {
@@ -121,7 +139,16 @@
               0.961
             ]
           ]
-        }
+        },
+        "referenceLines": [
+          {
+            "value": 0.92,
+            "label": "Objectif 92%",
+            "stroke": {
+              "dash": "dash"
+            }
+          }
+        ]
       }
     },
     {
@@ -160,7 +187,16 @@
               0.961
             ]
           ]
-        }
+        },
+        "referenceLines": [
+          {
+            "value": 0.92,
+            "label": "Objetivo 92%",
+            "stroke": {
+              "dash": "dash"
+            }
+          }
+        ]
       }
     },
     {
@@ -199,7 +235,16 @@
               0.961
             ]
           ]
-        }
+        },
+        "referenceLines": [
+          {
+            "value": 0.92,
+            "label": "Obiettivo 92%",
+            "stroke": {
+              "dash": "dash"
+            }
+          }
+        ]
       }
     },
     {
@@ -238,7 +283,16 @@
               0.961
             ]
           ]
-        }
+        },
+        "referenceLines": [
+          {
+            "value": 0.92,
+            "label": "Meta 92%",
+            "stroke": {
+              "dash": "dash"
+            }
+          }
+        ]
       }
     },
     {
@@ -277,7 +331,16 @@
               0.961
             ]
           ]
-        }
+        },
+        "referenceLines": [
+          {
+            "value": 0.92,
+            "label": "Doel 92%",
+            "stroke": {
+              "dash": "dash"
+            }
+          }
+        ]
       }
     }
   ],

@@ -46,8 +46,8 @@ imply universal Office or full-catalog visual parity.
 
 ## Current source inventory
 
-This checkout's v0.34 source contains **147 JSON** example decks (101 gallery,
-46 technical), **40 default layouts** and a **53-slide sampler** (40 layouts plus
+This checkout's v0.34 source contains **148 JSON** example decks (101 gallery,
+47 technical), **40 default layouts** and a **53-slide sampler** (40 layouts plus
 13 dynamic compositions). Two Markdown decks and the quickstart fixture are
 outside the JSON catalog. These counts describe source, not an already-published
 v0.34 registry set. The recorded 0.33 release contains 137 JSON examples,

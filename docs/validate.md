@@ -245,6 +245,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/dataset-field-unknown`](#opfdataset-field-unknown) | Format | error | structure | A table asks a dataset for a column it does not have. |
 | [`opf/data-column-duplicate`](#opfdata-column-duplicate) | Format | error | structure | A dataset or table has two columns with the same name. |
 | [`opf/chart-mapping-unknown-column`](#opfchart-mapping-unknown-column) | Format | error | structure | A chart mapping names a column the data does not have. |
+| [`opf/chart-reference-axis-unavailable`](#opfchart-reference-axis-unavailable) | Format | error | structure | A reference names a value axis the chart does not have. |
 | [`opf/number-format-invalid`](#opfnumber-format-invalid) | Format | error | structure | A number format cannot be read. |
 | [`opf/variable-invalid-value`](#opfvariable-invalid-value) | Format | error | structure | A variable value does not match its declared type. |
 | [`opf/variable-unknown-builtin`](#opfvariable-unknown-builtin) | Format | error | structure | A token names a built-in variable that does not exist. |
@@ -490,6 +491,14 @@ Default severity: **error**. Cost: structure. A dataset or table has two columns
 Default severity: **error**. Cost: structure. A chart mapping names a column the data does not have.
 
 **Why.** The series cannot be built from a column that is not there.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/chart-reference-axis-unavailable`
+
+Default severity: **error**. Cost: structure. A reference names a value axis the chart does not have.
+
+**Why.** Secondary references require an actual secondary line series on a combo chart.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

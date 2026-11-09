@@ -891,6 +891,9 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
     textEntries(node.items, pathFor(path, "items"));
     textEntries(node.bullets, pathFor(path, "bullets"));
     table(node.table, pathFor(path, "table"));
+    if (isRecord(node.chart) && Array.isArray(node.chart.referenceLines)) node.chart.referenceLines.forEach((line, index) => {
+      if (isRecord(line) && isRecord(line.stroke)) colorRef(line.stroke.color, `${path}/chart/referenceLines/${index}/stroke/color`);
+    });
   };
 
   value.slides.forEach((slide, index) => {
