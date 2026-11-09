@@ -1,0 +1,242 @@
+{
+  "item": "CE-20-PORTRAIT",
+  "branch": "codex/ce-20-portrait-thumbnail-fit",
+  "base": "9545016583ccfa151077cda4d51043ac6505a140",
+  "prerequisite": "49da7ea85e6bf70bcba62ee8c3a43ef7aa6646a8",
+  "prerequisiteMerge": "b00d275c4d230d2d77d529a21898a1dd8a79e30a",
+  "source": "1ef603961af054e1071a031349de19963eb8fd25",
+  "sourceTree": "af549353429a055dd6423b6e20095d1fb67eb0c9",
+  "node": "24.20.0",
+  "pnpm": "10.33.2",
+  "sourceFiles": [
+    {
+      "file": "packages/editor/src/styles/panels.css",
+      "sha256": "f4506507f6fa216c91559c6df28276e0ff90109ea791636aeffb756abfe02433"
+    },
+    {
+      "file": "packages/editor/test/support/thumbnail-painted-fit.mjs",
+      "sha256": "ce8480911732bff08b93c3a365c55dcb7ca2868f8d79da14fe6b49a3d61ed1b1"
+    },
+    {
+      "file": "packages/editor/test/workspace-browser.mjs",
+      "sha256": "9c902f92eda8e4209cb9d106f0cbeed2717ab5f679de0f65bdb0091f828f43a9"
+    }
+  ],
+  "unchanged": [
+    {
+      "file": "packages/editor/src/workspace.js",
+      "gitBlob": "ae9e4dbf4c3b484e2e34a3eb1a34a2cf9f3b3465"
+    },
+    {
+      "file": "packages/editor/src/thumbnail-cache.js",
+      "gitBlob": "3b55f90f9cb6411473b401eb7f9474d0a21a7ceb"
+    },
+    {
+      "file": "packages/editor/src/thumbnail-strip.js",
+      "gitBlob": "fb53862c6a7281a5bd6e39113068cf6df46df80d"
+    },
+    {
+      "file": "packages/editor/src/canvas.js",
+      "gitBlob": "6be04c0ea57a38f756e5cdbac1bf492a456cae5a"
+    },
+    {
+      "file": "packages/editor/test/support/workspace-page.mjs",
+      "gitBlob": "5d34a05eefc2d2c33291d9adf60a768e7b679865"
+    },
+    {
+      "file": "packages/editor/test/codemirror-guard.mjs",
+      "gitBlob": "fece0c710ff52127d04633fbe1e99180e0d67d53"
+    },
+    {
+      "file": "scripts/check-text-integrity.test.mjs",
+      "gitBlob": "53a738e3917577f2316849a3de53ac3f42f573d6"
+    },
+    {
+      "file": "package.json",
+      "gitBlob": "88d10438bf85e0131f824c5ec2b9787b97ef39cb"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "gitBlob": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "file": "spec/schemas/opf.schema.json",
+      "gitBlob": "6d5b00e2d4cb6980f1500d41216eada50de017f1"
+    }
+  ],
+  "scope": "One runtime CSS height value and its explanatory comment. Separate browser helper/runner hook, fragment and internal program/handoff metadata. No existing fixture, schema, chart, catalog, golden, package pin or CI changes beyond the cache prerequisite.",
+  "decision": "CE20-THUMBNAIL-CONTAIN: preserve fixed grid frames; native SVG xMidYMid meet contains the complete slide with letterboxing.",
+  "results": {
+    "install": "offline frozen pass; initial missing prebuild bin warnings retained",
+    "baselineEditorDependencyBuild": "pass",
+    "before": {
+      "exit": 1,
+      "expectedFailure": "manager-portrait: complete painted slide fits thumbnail frame",
+      "completedPhases": 1,
+      "failedPhase": "manager-portrait",
+      "testDifferenceFromForward": "Only an unused fileURLToPath import was removed; assertion/measurement logic is unchanged."
+    },
+    "after": {
+      "exit": 0,
+      "phases": 7,
+      "thumbnailsPerPhase": 3,
+      "checks": [
+        "real renderer",
+        "screen CTM is uniform and unskewed",
+        "actual preserveAspectRatio xMidYMid meet",
+        "complete transformed viewBox inside frame",
+        "actual title/body getBBox transformed inside frame",
+        "widescreen,4:3,portrait metadata edits",
+        "later sorter opening after exact same-title source edits",
+        "current canvas/strip dimensions and source verdict"
+      ]
+    },
+    "mapped": {
+      "command": "pnpm check:changed",
+      "steps": 9,
+      "passed": 7,
+      "failed": 2,
+      "failures": [
+        {
+          "step": "pnpm run check:text",
+          "reason": "Existing compressed-evidence test ENOENT: standard sparse worktree omits docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz; test and fixture unchanged."
+        },
+        {
+          "step": "tests editor",
+          "reason": "Existing codemirror-guard symlink EPERM at19/144;18passed,125notrun. Guard unchanged."
+        }
+      ],
+      "fullLocalGreen": false
+    },
+    "formatterAttempt": {
+      "exit": 1,
+      "result": "No files processed: helper is ignored by existing Biome policy; no fixes applied. CLI/config schema notice retained as a transcribed diagnostic."
+    },
+    "screenshotsInspected": [
+      "before-manager-portrait.png",
+      "after-manager-portrait.png",
+      "after-later-sorter-portrait.png"
+    ],
+    "textSetupCorrection": {
+      "head": "1ef603961af054e1071a031349de19963eb8fd25",
+      "exactTrackedInputs": 4097,
+      "bytes": 109233812,
+      "scope": "Missing exact tracked sparse JSON/Markdown/text inputs and the named compressed text fixture only; no generated substitutes or index changes",
+      "indexAndSourceChanges": false,
+      "helperSha256": "7df62ef4f3464775c3a8762a3f7a77ff8a1b552cf07a6a9b4c82d66c6654cd45",
+      "command": "pnpm check:text",
+      "exit": 0,
+      "maintainedTestsPassed": 6,
+      "scannedFiles": 10890,
+      "compressedText": 61,
+      "originalMappedRedPreserved": true
+    }
+  },
+  "geometryWitness": {
+    "beforePortrait": {
+      "index": 0,
+      "clip": {
+        "left": 35,
+        "top": 10,
+        "right": 291,
+        "bottom": 154
+      },
+      "viewBox": {
+        "width": 720,
+        "height": 960
+      },
+      "paintedSlide": {
+        "left": 35.00195312500001,
+        "top": -88.65625,
+        "right": 290.998046875,
+        "bottom": 252.671875
+      },
+      "matrix": {
+        "a": 0.3555501302083333,
+        "b": 0,
+        "c": 0,
+        "d": 0.3555501302083333
+      },
+      "preserveAspectRatio": {
+        "align": 6,
+        "meetOrSlice": 1
+      },
+      "labels": [
+        {
+          "text": "Slide 1",
+          "bounds": {
+            "left": 55.48164008247356,
+            "top": -67.10991265190145,
+            "right": 114.43078397897384,
+            "bottom": -43.99915418835978
+          }
+        },
+        {
+          "text": "Words on slide 1",
+          "bounds": {
+            "left": 55.48164008247356,
+            "top": 82.60869308809438,
+            "right": 252.21036562509835,
+            "bottom": 114.60820480684438
+          }
+        }
+      ]
+    },
+    "afterPortrait": {
+      "index": 0,
+      "clip": {
+        "left": 35,
+        "top": 10,
+        "right": 291,
+        "bottom": 154
+      },
+      "viewBox": {
+        "width": 720,
+        "height": 960
+      },
+      "paintedSlide": {
+        "left": 109,
+        "top": 10,
+        "right": 217,
+        "bottom": 154
+      },
+      "matrix": {
+        "a": 0.15,
+        "b": 0,
+        "c": 0,
+        "d": 0.15
+      },
+      "preserveAspectRatio": {
+        "align": 6,
+        "meetOrSlice": 1
+      },
+      "labels": [
+        {
+          "text": "Slide 1",
+          "bounds": {
+            "left": 117.63999977111817,
+            "top": 19.089999771118165,
+            "right": 142.50954933166503,
+            "bottom": 28.839999771118162
+          }
+        },
+        {
+          "text": "Words on slide 1",
+          "bounds": {
+            "left": 117.63999977111817,
+            "top": 82.25350036621093,
+            "right": 200.63619728088378,
+            "bottom": 95.75350036621093
+          }
+        }
+      ]
+    }
+  },
+  "qualificationLimits": [
+    "No timing/performance attribution",
+    "No full editor green claim;125-case remainder not repeated after coordinator stop instruction",
+    "The full workspace-browser runner was not rerun here; it invokes this standalone-tested helper. Sibling cache task owns its earlier lifecycle/cache controls.",
+    "No hosted/native qualification, provider/API/CI/push/Office/release actions"
+  ],
+  "artifacts": 29
+}
