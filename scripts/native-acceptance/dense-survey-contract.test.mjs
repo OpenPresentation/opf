@@ -126,3 +126,38 @@ test('ZIP entry-count and expanded-entry refusals happen before XML/native handl
  const parts=deps.unzipSync(input);for(let index=0;index<4097;index++)parts['extra-part-'+index+'.txt']=new Uint8Array([1]);assert.throws(()=>inspectDenseArchive(deps.zipSync(parts),deps),/4096 ZIP entries/);
  const expanded=deps.unzipSync(input);expanded['oversized.xml']=new Uint8Array(8*1024*1024+1);assert.throws(()=>inspectDenseArchive(deps.zipSync(expanded),deps),/expansion bound/);
 });
+
+const cliReceipts=fs.mkdtempSync(path.join(root,'artifacts','dense-public-cli-receipts-'));let cliSequence=0;
+function publicCli(a,label,args){
+ const script=path.join(a.controller,'scripts/native-acceptance/dense-survey-contract.mjs'),result=spawnSync(process.execPath,[script,...args],{encoding:'utf8',timeout:60000,maxBuffer:8*1024*1024});
+ const name=String(++cliSequence).padStart(3,'0')+'-'+label;fs.writeFileSync(path.join(cliReceipts,name+'.stdout.log'),result.stdout??'');fs.writeFileSync(path.join(cliReceipts,name+'.stderr.log'),result.stderr??'');
+ fs.writeFileSync(path.join(cliReceipts,name+'.json'),JSON.stringify({scope:'Real child public CLI against a frozen copied controller and synthetic pure authority; no Office',command:process.execPath,args:[script,...args],status:result.status,signal:result.signal,error:result.error?.message,controllerCodeSha256:digest(fs.readFileSync(script))},null,2)+'\n');
+ assert.ifError(result.error);return result;
+}
+function publicAuthority(){
+ const a=authority(),link=path.join(a.controller,'node_modules');fs.writeFileSync(path.join(a.controller,'.gitignore'),'node_modules\n');fs.symlinkSync(path.join(root,'node_modules'),link,process.platform==='win32'?'junction':'dir');
+ git(a.controller,['add','.gitignore']);git(a.controller,['-c','user.name=OPF pure fixture','-c','user.email=pure@example.invalid','commit','-qm','Freeze copied public CLI dependency resolution']);
+ const envelope=path.join(a.folder,'public-envelope.json'),manifest=digest(fs.readFileSync(path.join(a.suiteDirectory,'suite.json')));
+ const create=['create','--suite',a.suiteDirectory,'--expected-manifest-sha256',manifest,'--preparation-repository',a.preparation,'--worker-repository',a.worker,'--consumer',a.consumer,'--output',envelope];
+ return {...a,link,envelopeFile:envelope,manifest,create,release(){assert.ok(fs.lstatSync(link).isSymbolicLink());fs.unlinkSync(link);}};
+}
+test('public CLI children accept every declared sha256 flag through create, verify and modeled observe',()=>{
+ const a=publicAuthority();try{
+  const created=publicCli(a,'create-valid',a.create);assert.equal(created.status,0,created.stderr);const createdRecord=JSON.parse(created.stdout);assert.equal(createdRecord.profile,DENSE_PROFILE);const envelope=JSON.parse(fs.readFileSync(a.envelopeFile));assert.equal(createdRecord.sha256,digest(fs.readFileSync(a.envelopeFile)));
+  const verified=publicCli(a,'verify-valid',['verify','--envelope',a.envelopeFile,'--expected-envelope-sha256',createdRecord.sha256]);assert.equal(verified.status,0,verified.stderr);assert.equal(JSON.parse(verified.stdout).envelopeSha256,createdRecord.sha256);
+  const modeled=modeledObservation({...a,envelope});const observed=publicCli(a,'observe-valid',['observe','--envelope',modeled.envelopeFile,'--expected-envelope-sha256',modeled.envelopeSha,'--output',modeled.output]);assert.equal(observed.status,0,observed.stderr);assert.equal(JSON.parse(observed.stdout).nativeAcceptance,false);assert.equal(JSON.parse(fs.readFileSync(path.join(modeled.output,'dense-survey-observation.json'))).shapesPerPhase,50);
+ }finally{a.release();}
+});
+test('public CLI children refuse malformed, missing, duplicate and unknown options for every mode',()=>{
+ const a=publicAuthority();try{
+  for(const mode of ['create','verify','observe'])for(const suffix of [['--invalid_flag','value'],['--1invalid','value'],['--bad--flag','value'],['--envelope'],['--envelope','one','--envelope','two'],['--unknown-option','value']]){const result=publicCli(a,mode+'-reject-option',[mode,...suffix]);assert.notEqual(result.status,0,JSON.stringify(suffix));}
+  for(const [mode,args]of [['create',a.create.slice(1)],['verify',['--envelope','unused','--expected-envelope-sha256','a'.repeat(64)]],['observe',['--envelope','unused','--expected-envelope-sha256','a'.repeat(64),'--output','unused']]]){const result=publicCli(a,mode+'-unknown-with-valid-flags',[mode,...args,'--unexpected-option','value']);assert.notEqual(result.status,0);assert.match(result.stderr,/deepEqual|deeply|Expected values/u);}
+ }finally{a.release();}
+});
+test('public CLI children reach and retain real manifest/envelope digest refusals',()=>{
+ const a=publicAuthority();try{
+  for(const value of ['b'.repeat(64),'not-a-digest']){const args=[...a.create];args[args.indexOf('--expected-manifest-sha256')+1]=value;const result=publicCli(a,'create-bad-digest',args);assert.notEqual(result.status,0);assert.match(result.stderr,value.length===64?/Expected suite digest differs/u:/explicit SHA256/u);assert.equal(fs.existsSync(a.envelopeFile),false);}
+  const created=publicCli(a,'create-for-digest-controls',a.create);assert.equal(created.status,0,created.stderr);
+  for(const mode of ['verify','observe'])for(const value of ['b'.repeat(64),'not-a-digest']){const args=[mode,'--envelope',a.envelopeFile,'--expected-envelope-sha256',value,...(mode==='observe'?['--output',path.join(a.folder,'uncreated-observation')]:[])];const result=publicCli(a,mode+'-bad-digest',args);assert.notEqual(result.status,0);assert.match(result.stderr,value.length===64?/Execution envelope digest changed/u:/explicit SHA256/u);}
+ }finally{a.release();}
+});
