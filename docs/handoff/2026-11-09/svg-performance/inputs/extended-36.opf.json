@@ -1,0 +1,3425 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "iPhone 18 Pro — keynote-style concept deck — 36-slide performance test",
+  "description": "A concept keynote deck for the iPhone 18 Pro and iPhone 18 Pro Max as announced on September 9, 2026. Figures come from launch coverage cited in references; the phone, aperture and Dynamic Island are drawn from OPF shapes. Not affiliated with Apple Inc.",
+  "author": "Zack Mazzoncini",
+  "language": "en-US",
+  "organization": {
+    "id": "concept",
+    "name": "Concept deck",
+    "tagline": "Not affiliated with Apple Inc."
+  },
+  "speaker": {
+    "id": "zack",
+    "name": "Zack Mazzoncini",
+    "title": "Founder, OpenPresentation",
+    "organizationId": "concept"
+  },
+  "design": {
+    "theme": "classic",
+    "variant": "dark1",
+    "fontScheme": "aptos",
+    "colorScheme": {
+      "id": "cool-horizon",
+      "dark1": "#000000",
+      "dark2": "#111114",
+      "light1": "#FFFFFF",
+      "light2": "#F5F5F7",
+      "accent1": "#0A84FF",
+      "accent2": "#BF5AF2",
+      "accent3": "#FF9F0A",
+      "accent4": "#30D158",
+      "accent5": "#FF375F",
+      "accent6": "#64D2FF"
+    },
+    "titleAlignment": "left",
+    "footer": {
+      "left": {
+        "text": "{{organization.name}} · {{organization.tagline}}"
+      },
+      "right": {
+        "text": "{{slide.number}} / {{deck.slideCount}}"
+      }
+    }
+  },
+  "datasets": {
+    "video-playback": {
+      "columns": [
+        "Model",
+        {
+          "name": "Video playback (hours)",
+          "format": "0"
+        }
+      ],
+      "rows": [
+        [
+          "iPhone 17 Pro",
+          33
+        ],
+        [
+          "iPhone 18 Pro",
+          36
+        ],
+        [
+          "iPhone 17 Pro Max",
+          39
+        ],
+        [
+          "iPhone 18 Pro Max",
+          45
+        ]
+      ]
+    }
+  },
+  "references": [
+    {
+      "id": "macrumors",
+      "text": "MacRumors, “Apple Announces iPhone 18 Pro and iPhone 18 Pro Max”, September 9, 2026.",
+      "url": "https://www.macrumors.com/2026/09/09/apple-announces-iphone-18-pro-and-iphone-18-pro-max/"
+    },
+    {
+      "id": "thurrott",
+      "text": "Thurrott, “Apple's iPhone 18 Pro and Pro Max Are Coming on September 18 With a $1,199 Starting Price”, September 9, 2026.",
+      "url": "https://www.thurrott.com/apple/341444/apples-iphone-18-pro-and-pro-max-are-coming-on-september-18-with-a-1199-starting-price"
+    },
+    {
+      "id": "mactrast",
+      "text": "MacTrast, “Apple Unveils the New iPhone 18 Pro and iPhone 18 Pro Max” (press-release coverage), September 9, 2026.",
+      "url": "https://www.mactrast.com/2026/09/apple-unveils-the-new-iphone-18-pro-and-iphone-18-pro-max-available-for-pre-order-sept-12/amp/"
+    },
+    {
+      "id": "notebookcheck",
+      "text": "Notebookcheck, “Apple unveils iPhone 18 Pro (Max) with pro camera upgrades at higher price”, September 9, 2026.",
+      "url": "https://www.notebookcheck.net/Apple-unveils-iPhone-18-Pro-Max-with-pro-camera-upgrades-at-higher-price.1395031.0.html"
+    },
+    {
+      "id": "techadvisor",
+      "text": "Tech Advisor, “iPhone 18 News, Release Dates, Price & Specs” (lineup timing), 2026.",
+      "url": "https://www.techadvisor.com/article/2582644/apple-iphone-18-release-date-price-specs.html"
+    },
+    {
+      "id": "ktai",
+      "text": "Keitai Watch (Impress), iPhone 18 Pro announcement coverage: A20 Pro architecture and storage tiers, September 10, 2026.",
+      "url": "https://k-tai.watch.impress.co.jp/docs/news/2139670.html"
+    }
+  ],
+  "slides": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "section": "Opening",
+      "design": {
+        "footer": false
+      },
+      "tag": "Concept keynote deck · Surprise and Shine, September 9, 2026",
+      "title": "iPhone 18 Pro",
+      "subtitle": "Variable aperture. A20 Pro on 2 nanometers. The biggest battery leap on iPhone.",
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.5,
+          "y": 0.05,
+          "width": 0.42,
+          "height": 0.75,
+          "fill": {
+            "color": "accent2",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.45,
+          "softEdge": 60
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.68,
+          "y": 0.4,
+          "width": 0.34,
+          "height": 0.6,
+          "fill": {
+            "color": "accent1",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.45,
+          "softEdge": 60
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.16
+          },
+          "x": 0.72,
+          "y": 0.05,
+          "width": 0.18,
+          "height": 0.66,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.12
+          },
+          "stroke": {
+            "color": "light1",
+            "width": 1.5
+          },
+          "layer": "back",
+          "alt": "Phone outline"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.14
+          },
+          "x": 0.729,
+          "y": 0.0665,
+          "width": 0.162,
+          "height": 0.627,
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 160,
+              "stops": [
+                {
+                  "color": "accent2",
+                  "position": 0
+                },
+                {
+                  "color": "accent1",
+                  "position": 0.55
+                },
+                {
+                  "color": "dark1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "x": 0.7794,
+          "y": 0.0863,
+          "width": 0.061200000000000004,
+          "height": 0.026400000000000003,
+          "fill": "dark1",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Dynamic Island"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.78779475,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent4",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 1"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.8053965,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent3",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 2"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.8229982499999999,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent1",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 3"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "text": "Fan-made concept · not affiliated with Apple",
+          "x": 0.045,
+          "y": 0.06,
+          "width": 0.34,
+          "height": 0.058,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.15
+          },
+          "stroke": "none",
+          "alt": "Disclaimer: fan-made concept, not affiliated with Apple"
+        }
+      ],
+      "notes": "This is a concept deck in the style of a product keynote. Every figure on the following slides comes from the launch coverage cited at the end, and the phone you see here is drawn from shapes, not a photograph. Let's start with what Apple actually announced."
+    },
+    {
+      "id": "lineup",
+      "layout": "statement",
+      "section": "Opening",
+      "design": {
+        "variant": "dark1"
+      },
+      "title": "Pro first. The rest follows in spring.",
+      "text": [
+        {
+          "text": "On September 9, 2026 Apple announced the iPhone 18 Pro, iPhone 18 Pro Max and the foldable iPhone Duo, with no standard iPhone 18 beside them.",
+          "cite": "macrumors"
+        },
+        {
+          "text": " The iPhone 18 and 18e are expected in spring 2027.",
+          "cite": "techadvisor"
+        }
+      ],
+      "notes": "The cycle changed this year. Only the Pro models and the foldable shipped in the fall; the standard iPhone 18 and the 18e are expected in spring 2027. So when we say iPhone 18 today, we mean the Pro."
+    },
+    {
+      "id": "headlines",
+      "section": "Opening",
+      "title": "Four headlines",
+      "items": [
+        {
+          "text": "Camera",
+          "description": "48MP Fusion Main camera with a variable aperture and new Pro controls.",
+          "icon": "lucide:aperture"
+        },
+        {
+          "text": "Performance",
+          "description": "A20 Pro, Apple's first 2nm chip, with a redesigned vapor chamber.",
+          "icon": "lucide:cpu"
+        },
+        {
+          "text": "Battery",
+          "description": "Up to 45 hours of video playback on the Pro Max, Apple's largest leap yet.",
+          "icon": "lucide:battery-charging"
+        },
+        {
+          "text": "Intelligence",
+          "description": "Siri AI on Apple Intelligence, shipping with iOS 27 on September 14.",
+          "icon": "lucide:sparkles"
+        }
+      ],
+      "notes": "Four headlines carry the launch: the camera, the chip, the battery, and Siri AI. One slide each."
+    },
+    {
+      "id": "a20-numbers",
+      "layout": "metrics",
+      "section": "Performance",
+      "title": "A20 Pro by the numbers",
+      "blocks": [
+        {
+          "metric": {
+            "value": 2,
+            "unit": "nm",
+            "label": "Process node, a first for Apple",
+            "icon": "lucide:cpu"
+          }
+        },
+        {
+          "metric": {
+            "value": "40%",
+            "label": "Faster 7-core GPU vs A19 Pro",
+            "icon": "lucide:gauge"
+          }
+        },
+        {
+          "metric": {
+            "value": "50%",
+            "label": "More memory bandwidth",
+            "icon": "lucide:arrow-left-right"
+          }
+        },
+        {
+          "metric": {
+            "value": "2×",
+            "label": "On-device AI processing",
+            "icon": "lucide:brain"
+          }
+        }
+      ],
+      "notes": "A20 Pro is Apple's first 2 nanometer chip. The new 7-core GPU is up to 40 percent faster than A19 Pro, memory bandwidth is up 50 percent, and dual 16-core Neural Engines double on-device AI processing."
+    },
+    {
+      "id": "a20-inside",
+      "section": "Performance",
+      "title": "Packaged like M-series silicon",
+      "subtitle": [
+        {
+          "text": "Die and memory sit side by side, bonded to a next-generation vapor chamber",
+          "cite": "ktai"
+        }
+      ],
+      "top+middle:left+center+right": {
+        "composition": {
+          "mode": "row",
+          "gap": 0.07
+        },
+        "blocks": [
+          {
+            "id": "cpu",
+            "shape": "roundRect",
+            "adjust": {
+              "adj": 0.18
+            },
+            "aspectRatio": 1.4,
+            "text": "6-core CPU",
+            "fill": {
+              "gradient": {
+                "type": "linear",
+                "angle": 135,
+                "stops": [
+                  {
+                    "color": "accent1",
+                    "position": 0
+                  },
+                  {
+                    "color": {
+                      "color": "accent1",
+                      "darken": 0.45
+                    },
+                    "position": 1
+                  }
+                ]
+              }
+            },
+            "stroke": "none"
+          },
+          {
+            "id": "gpu",
+            "shape": "roundRect",
+            "adjust": {
+              "adj": 0.18
+            },
+            "aspectRatio": 1.4,
+            "text": "7-core GPU",
+            "fill": {
+              "gradient": {
+                "type": "linear",
+                "angle": 135,
+                "stops": [
+                  {
+                    "color": "accent2",
+                    "position": 0
+                  },
+                  {
+                    "color": {
+                      "color": "accent2",
+                      "darken": 0.45
+                    },
+                    "position": 1
+                  }
+                ]
+              }
+            },
+            "stroke": "none"
+          },
+          {
+            "id": "npu",
+            "shape": "roundRect",
+            "adjust": {
+              "adj": 0.18
+            },
+            "aspectRatio": 1.4,
+            "text": "Dual 16-core Neural Engine",
+            "fill": {
+              "gradient": {
+                "type": "linear",
+                "angle": 135,
+                "stops": [
+                  {
+                    "color": "accent3",
+                    "position": 0
+                  },
+                  {
+                    "color": {
+                      "color": "accent3",
+                      "darken": 0.45
+                    },
+                    "position": 1
+                  }
+                ]
+              }
+            },
+            "stroke": "none"
+          }
+        ]
+      },
+      "bottom:left+center+right": {
+        "id": "vapor",
+        "shape": "roundRect",
+        "adjust": {
+          "adj": 0.5
+        },
+        "aspectRatio": 7.5,
+        "text": "Next-generation vapor chamber: up to 40% higher sustained performance",
+        "fill": {
+          "color": "dark1",
+          "lighten": 0.14
+        },
+        "stroke": {
+          "color": {
+            "color": "light1",
+            "darken": 0.5
+          },
+          "width": 1.5
+        }
+      },
+      "notes": "Apple borrowed the packaging idea from M-series Macs: the die and the memory sit side by side so memory is off the main heat path, and the chip bonds straight to a redesigned vapor chamber. Apple quotes up to 40 percent higher sustained performance. The CPU has two performance and four efficiency cores."
+    },
+    {
+      "id": "camera",
+      "section": "Camera",
+      "title": "The first variable aperture on an iPhone",
+      "subtitle": "Six laser-cut blades on the 48MP Fusion Main camera",
+      "left": {
+        "items": [
+          {
+            "text": "Control depth of field and light with a physical iris, not only software",
+            "icon": "lucide:aperture"
+          },
+          {
+            "text": "New Pro controls in the Camera app surface manual settings",
+            "icon": "lucide:sliders-horizontal"
+          },
+          {
+            "text": "ProRes RAW, Apple Log 2 and Genlock for video",
+            "icon": "lucide:film"
+          }
+        ]
+      },
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.57,
+          "y": 0.2666666666666667,
+          "width": 0.33,
+          "height": 0.5866666666666667,
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": {
+                    "color": "accent6",
+                    "lighten": 0.2
+                  },
+                  "position": 0
+                },
+                {
+                  "color": {
+                    "color": "accent1",
+                    "darken": 0.6
+                  },
+                  "position": 0.45
+                },
+                {
+                  "color": "dark1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": {
+            "color": {
+              "color": "light1",
+              "darken": 0.45
+            },
+            "width": 2
+          },
+          "alt": "Lens barrel"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 0,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.27
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 1"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 60,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.34
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 2"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 120,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.27
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 3"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 180,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.34
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 4"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 240,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.27
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 5"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 300,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.34
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 6"
+        }
+      ],
+      "notes": "The headline camera change is mechanical: a six-blade variable aperture on the 48 megapixel Fusion Main camera, so depth of field and light are controlled by a physical iris. New Pro controls expose those settings in the Camera app, and video gains ProRes RAW, Apple Log 2 and Genlock. The iris on this slide is six rotated shapes; select one and move it."
+    },
+    {
+      "id": "island",
+      "section": "Display",
+      "title": "Smaller island, three Live Activities",
+      "left": {
+        "items": [
+          {
+            "text": "The cutout shrinks by relocating Face ID components",
+            "icon": "lucide:scan-face"
+          },
+          {
+            "text": "Three Live Activities at once, up from two",
+            "icon": "lucide:layout-list"
+          },
+          {
+            "text": "6.3-inch Pro and 6.9-inch Pro Max displays",
+            "icon": "lucide:smartphone"
+          }
+        ]
+      },
+      "shapes": [
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.16
+          },
+          "x": 0.66,
+          "y": 0.2,
+          "width": 0.17,
+          "height": 0.7,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.12
+          },
+          "stroke": {
+            "color": "light1",
+            "width": 1.5
+          },
+          "layer": "front",
+          "alt": "Phone outline"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.14
+          },
+          "x": 0.6685,
+          "y": 0.2175,
+          "width": 0.15300000000000002,
+          "height": 0.6649999999999999,
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 180,
+              "stops": [
+                {
+                  "color": {
+                    "color": "accent6",
+                    "darken": 0.1
+                  },
+                  "position": 0
+                },
+                {
+                  "color": "dark1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "layer": "front",
+          "decorative": true
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "x": 0.7161000000000001,
+          "y": 0.23850000000000002,
+          "width": 0.05780000000000001,
+          "height": 0.027999999999999997,
+          "fill": "dark1",
+          "stroke": "none",
+          "layer": "front",
+          "alt": "Dynamic Island"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.7232262500000001,
+          "y": 0.24382,
+          "width": 0.009764999999999998,
+          "height": 0.017359999999999997,
+          "fill": "accent4",
+          "stroke": "none",
+          "layer": "front",
+          "alt": "Live Activity 1"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.7401175000000001,
+          "y": 0.24382,
+          "width": 0.009764999999999998,
+          "height": 0.017359999999999997,
+          "fill": "accent3",
+          "stroke": "none",
+          "layer": "front",
+          "alt": "Live Activity 2"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.7570087500000001,
+          "y": 0.24382,
+          "width": 0.009764999999999998,
+          "height": 0.017359999999999997,
+          "fill": "accent1",
+          "stroke": "none",
+          "layer": "front",
+          "alt": "Live Activity 3"
+        },
+        {
+          "shape": "wedgeRectCallout",
+          "text": "Three at once",
+          "x": 0.845,
+          "y": 0.22,
+          "width": 0.13,
+          "height": 0.07,
+          "fill": "accent3",
+          "stroke": "none",
+          "adjust": {
+            "adj1": -0.72,
+            "adj2": 0.35
+          },
+          "alt": "Callout pointing at the Dynamic Island"
+        }
+      ],
+      "notes": "The most visible change: a smaller Dynamic Island that now tracks three Live Activities at once. The displays stay at 6.3 and 6.9 inches. The phone here is five shapes; the three dots are the Live Activities."
+    },
+    {
+      "id": "battery",
+      "layout": "chart-beside",
+      "section": "Battery",
+      "title": "Pro Max makes the biggest battery leap yet",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "dataset": "video-playback"
+            },
+            "alt": "Video playback rises from 33 to 36 hours on the Pro and from 39 to 45 hours on the Pro Max.",
+            "highlight": {
+              "categories": [
+                "iPhone 18 Pro Max"
+              ]
+            }
+          },
+          "caption": "Video playback, hours; eSIM-only iPhone 18 Pro models with the larger battery"
+        },
+        {
+          "blocks": [
+            {
+              "metric": {
+                "value": 45,
+                "unit": "h",
+                "label": "Pro Max video playback",
+                "icon": "lucide:battery-full"
+              }
+            },
+            {
+              "metric": {
+                "value": "50%",
+                "label": "Charge in about 15 minutes",
+                "icon": "lucide:zap"
+              }
+            }
+          ],
+          "composition": {
+            "mode": "column"
+          }
+        }
+      ],
+      "notes": "Battery is the other headline. eSIM-only models carry a larger battery: 36 hours of video playback on the Pro, matching last year's Pro Max, and 45 hours on the Pro Max, which Apple calls the largest generational increase ever on iPhone. Fast charging reaches 50 percent in about 15 minutes. The 17 Pro figures are Apple's 2025 numbers."
+    },
+    {
+      "id": "changes",
+      "layout": "table",
+      "section": "Summary",
+      "title": "What changed from iPhone 17 Pro",
+      "subtitle": [
+        {
+          "text": "As announced on September 9, 2026",
+          "cite": "thurrott"
+        }
+      ],
+      "table": {
+        "columns": [
+          {
+            "value": "",
+            "style": {
+              "bold": true,
+              "align": "left",
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          },
+          {
+            "value": "iPhone 17 Pro",
+            "style": {
+              "bold": true,
+              "align": "left",
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          },
+          {
+            "value": "iPhone 18 Pro",
+            "style": {
+              "bold": true,
+              "align": "left",
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "Chip",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "A19 Pro, 3nm",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "A20 Pro, 2nm",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Main camera",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "48MP Fusion, fixed aperture",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "48MP Fusion, variable aperture",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Dynamic Island",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "Two Live Activities",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "Smaller; three Live Activities",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Modem",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "C1X",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "C2, 15% less energy, adds mmWave",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Pro Max video playback",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "39 hours",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "45 hours",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "2TB storage",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "Pro Max only",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "Pro and Pro Max",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Starting price (US)",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "$1,099",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "$1,199",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ]
+        ],
+        "alt": "Side-by-side changes from iPhone 17 Pro to iPhone 18 Pro: chip, camera, Dynamic Island, modem, battery, storage and price."
+      },
+      "notes": "Side by side with last year's Pro. The outside looks the same; the inside is new: 2 nanometer chip, variable aperture, smaller island, C2 modem with mmWave in the US, longer battery, 2 terabytes on both models, and a hundred dollars more."
+    },
+    {
+      "id": "finishes",
+      "section": "Design",
+      "title": "Four finishes. One new.",
+      "subtitle": "Colors are approximate; Burgundy is the new hero finish",
+      "blocks": [
+        {
+          "shape": "ellipse",
+          "text": "Black",
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "#3A3A3C",
+                  "position": 0
+                },
+                {
+                  "color": "#121214",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": {
+            "color": {
+              "color": "light1",
+              "darken": 0.6
+            },
+            "width": 1.5
+          }
+        },
+        {
+          "shape": "ellipse",
+          "text": "Silver",
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "#F2F2F4",
+                  "position": 0
+                },
+                {
+                  "color": "#B9BBC0",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none"
+        },
+        {
+          "shape": "ellipse",
+          "text": "Glacier",
+          "padding": 2,
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "#DCEBF5",
+                  "position": 0
+                },
+                {
+                  "color": "#9DBFD6",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none"
+        },
+        {
+          "shape": "ellipse",
+          "text": "Burgundy",
+          "padding": 2,
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "#8A2A3C",
+                  "position": 0
+                },
+                {
+                  "color": "#4A1420",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "glow": {
+            "color": "#8A2A3C",
+            "opacity": 0.5,
+            "radius": 18
+          }
+        }
+      ],
+      "notes": "Four finishes: Black, Silver, Glacier and the new Burgundy. The swatches are approximations drawn as shapes, not Apple's color values."
+    },
+    {
+      "id": "pro-vs-max",
+      "layout": "comparison",
+      "section": "Summary",
+      "title": "Pro or Pro Max: same chip, same camera",
+      "blocks": [
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "iPhone 18 Pro",
+                  "bold": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "text": "6.3-inch display",
+                  "icon": "lucide:smartphone"
+                },
+                {
+                  "text": "Up to 36 hours of video playback",
+                  "icon": "lucide:battery-medium"
+                },
+                {
+                  "text": "From $1,199, 256GB to 2TB",
+                  "icon": "lucide:tag"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "iPhone 18 Pro Max",
+                  "bold": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "text": "6.9-inch display",
+                  "icon": "lucide:tablet-smartphone"
+                },
+                {
+                  "text": "Up to 45 hours of video playback",
+                  "icon": "lucide:battery-full"
+                },
+                {
+                  "text": "From $1,299, 256GB to 2TB",
+                  "icon": "lucide:tag"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Verdict: the extra $100 buys screen and battery; A20 Pro, the variable-aperture camera and the smaller Dynamic Island are on both."
+        }
+      ],
+      "notes": "The decision between the two is simple this year. Same chip, same camera system, same island. The Max adds six tenths of an inch and nine hours of video playback for a hundred dollars."
+    },
+    {
+      "id": "siri",
+      "layout": "statement",
+      "section": "Intelligence",
+      "design": {
+        "variant": "accent2"
+      },
+      "title": "Siri AI knows what is on screen",
+      "text": [
+        {
+          "text": "Built on Apple Intelligence and Apple Foundation Models, Siri AI draws on personal context, on-screen content and third-party apps such as calendars, notes and mail. It ships with iOS 27 on September 14.",
+          "cite": "mactrast"
+        }
+      ],
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.87,
+          "y": 0.06,
+          "width": 0.1,
+          "height": 0.18,
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.25
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.9
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.85,
+          "y": 0.58,
+          "width": 0.1,
+          "height": 0.18,
+          "fill": {
+            "color": "accent1",
+            "lighten": 0.1
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.8
+        }
+      ],
+      "notes": "The software half of the launch. Siri AI, built on Apple Foundation Models, understands personal context and what is on screen, and reaches into third-party apps. It arrives with iOS 27 on September 14, five days after the keynote."
+    },
+    {
+      "id": "timeline",
+      "layout": "timeline",
+      "section": "Availability",
+      "title": "From keynote to shelves in nine days",
+      "timeline": [
+        {
+          "when": "Sep 9",
+          "what": "Surprise and Shine keynote",
+          "status": "done"
+        },
+        {
+          "when": "Sep 12",
+          "what": "Pre-orders open, 5 a.m. PT",
+          "status": "done"
+        },
+        {
+          "when": "Sep 14",
+          "what": "iOS 27 and Apple Intelligence",
+          "status": "done"
+        },
+        {
+          "when": "Sep 18",
+          "what": "In stores, first wave",
+          "status": "done"
+        },
+        {
+          "when": "Sep 25",
+          "what": "20 more countries",
+          "status": "current"
+        },
+        {
+          "when": "Spring 2027",
+          "what": "iPhone 18 and 18e expected",
+          "status": "planned"
+        }
+      ],
+      "notes": "Nine days from keynote to shelves: announced the ninth, pre-orders the twelfth, iOS 27 the fourteenth, in stores the eighteenth, twenty more countries on the twenty-fifth. The standard iPhone 18 and 18e are expected in spring."
+    },
+    {
+      "id": "price",
+      "layout": "metrics",
+      "section": "Availability",
+      "title": "Pricing and trade-in, United States",
+      "blocks": [
+        {
+          "metric": {
+            "value": "$1,199",
+            "label": "iPhone 18 Pro, from (256GB)",
+            "icon": "lucide:smartphone"
+          }
+        },
+        {
+          "metric": {
+            "value": "$1,299",
+            "label": "iPhone 18 Pro Max, from (256GB)",
+            "icon": "lucide:tablet-smartphone"
+          }
+        },
+        {
+          "metric": {
+            "value": "$1,200",
+            "label": "Up to, in carrier credits for iPhone 14 or later",
+            "icon": "lucide:badge-dollar-sign"
+          }
+        },
+        {
+          "text": [
+            {
+              "text": "Both models start at $100 more than iPhone 17 Pro and are offered in 256GB, 512GB, 1TB and 2TB.",
+              "cite": "notebookcheck"
+            }
+          ]
+        }
+      ],
+      "notes": "Pricing moved up a hundred dollars: eleven ninety-nine for the Pro, twelve ninety-nine for the Pro Max, both from 256 gigabytes up to 2 terabytes. Carrier deals offer up to twelve hundred dollars in credits for an iPhone 14 or later in any condition."
+    },
+    {
+      "id": "closing",
+      "layout": "closing",
+      "section": "Closing",
+      "design": {
+        "footer": false
+      },
+      "title": "iPhone 18 Pro. Available now.",
+      "text": "From $1,199 · Black, Silver, Glacier, Burgundy · 256GB to 2TB\nConcept deck by {{speaker.name}} · {{organization.tagline}}",
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.55,
+          "y": 0,
+          "width": 0.45,
+          "height": 0.8,
+          "fill": {
+            "color": "accent1",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.4,
+          "softEdge": 60
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.16
+          },
+          "x": 0.72,
+          "y": 0.04,
+          "width": 0.16,
+          "height": 0.6,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.12
+          },
+          "stroke": {
+            "color": "light1",
+            "width": 1.5
+          },
+          "layer": "back",
+          "alt": "Phone outline"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.14
+          },
+          "x": 0.728,
+          "y": 0.055,
+          "width": 0.14400000000000002,
+          "height": 0.57,
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 200,
+              "stops": [
+                {
+                  "color": "#8A2A3C",
+                  "position": 0
+                },
+                {
+                  "color": "#2A0A12",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "x": 0.7727999999999999,
+          "y": 0.07300000000000001,
+          "width": 0.054400000000000004,
+          "height": 0.024,
+          "fill": "dark1",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Dynamic Island"
+        }
+      ],
+      "notes": "That's the iPhone 18 Pro as announced. Sources follow on the last slide."
+    },
+    {
+      "id": "sources",
+      "layout": "list",
+      "section": "Closing",
+      "title": "Sources",
+      "items": [
+        {
+          "text": "MacRumors, “Apple Announces iPhone 18 Pro and iPhone 18 Pro Max”, September 9, 2026.",
+          "description": "https://www.macrumors.com/2026/09/09/apple-announces-iphone-18-pro-and-iphone-18-pro-max/"
+        },
+        {
+          "text": "Thurrott, “Apple's iPhone 18 Pro and Pro Max Are Coming on September 18 With a $1,199 Starting Price”, September 9, 2026.",
+          "description": "https://www.thurrott.com/apple/341444/apples-iphone-18-pro-and-pro-max-are-coming-on-september-18-with-a-1199-starting-price"
+        },
+        {
+          "text": "MacTrast, “Apple Unveils the New iPhone 18 Pro and iPhone 18 Pro Max” (press-release coverage), September 9, 2026.",
+          "description": "https://www.mactrast.com/2026/09/apple-unveils-the-new-iphone-18-pro-and-iphone-18-pro-max-available-for-pre-order-sept-12/amp/"
+        },
+        {
+          "text": "Notebookcheck, “Apple unveils iPhone 18 Pro (Max) with pro camera upgrades at higher price”, September 9, 2026.",
+          "description": "https://www.notebookcheck.net/Apple-unveils-iPhone-18-Pro-Max-with-pro-camera-upgrades-at-higher-price.1395031.0.html"
+        },
+        {
+          "text": "Tech Advisor, “iPhone 18 News, Release Dates, Price & Specs” (lineup timing), 2026.",
+          "description": "https://www.techadvisor.com/article/2582644/apple-iphone-18-release-date-price-specs.html"
+        },
+        {
+          "text": "Keitai Watch (Impress), iPhone 18 Pro announcement coverage: A20 Pro architecture and storage tiers, September 10, 2026.",
+          "description": "https://k-tai.watch.impress.co.jp/docs/news/2139670.html"
+        }
+      ],
+      "notes": "Every figure in this deck traces to one of these reports on the September 9, 2026 announcement."
+    },
+    {
+      "id": "cover--perf-17",
+      "layout": "cover",
+      "section": "Opening",
+      "design": {
+        "footer": false
+      },
+      "tag": "Concept keynote deck · Surprise and Shine, September 9, 2026",
+      "title": "iPhone 18 Pro (01)",
+      "subtitle": "Variable aperture. A20 Pro on 2 nanometers. The biggest battery leap on iPhone.",
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.5,
+          "y": 0.05,
+          "width": 0.42,
+          "height": 0.75,
+          "fill": {
+            "color": "accent2",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.45,
+          "softEdge": 60
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.68,
+          "y": 0.4,
+          "width": 0.34,
+          "height": 0.6,
+          "fill": {
+            "color": "accent1",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.45,
+          "softEdge": 60
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.16
+          },
+          "x": 0.72,
+          "y": 0.05,
+          "width": 0.18,
+          "height": 0.66,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.12
+          },
+          "stroke": {
+            "color": "light1",
+            "width": 1.5
+          },
+          "layer": "back",
+          "alt": "Phone outline"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.14
+          },
+          "x": 0.729,
+          "y": 0.0665,
+          "width": 0.162,
+          "height": 0.627,
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 160,
+              "stops": [
+                {
+                  "color": "accent2",
+                  "position": 0
+                },
+                {
+                  "color": "accent1",
+                  "position": 0.55
+                },
+                {
+                  "color": "dark1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "x": 0.7794,
+          "y": 0.0863,
+          "width": 0.061200000000000004,
+          "height": 0.026400000000000003,
+          "fill": "dark1",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Dynamic Island"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.78779475,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent4",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 1"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.8053965,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent3",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 2"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.8229982499999999,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent1",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 3"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "text": "Fan-made concept · not affiliated with Apple",
+          "x": 0.045,
+          "y": 0.06,
+          "width": 0.34,
+          "height": 0.058,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.15
+          },
+          "stroke": "none",
+          "alt": "Disclaimer: fan-made concept, not affiliated with Apple"
+        }
+      ],
+      "notes": "This is a concept deck in the style of a product keynote. Every figure on the following slides comes from the launch coverage cited at the end, and the phone you see here is drawn from shapes, not a photograph. Let's start with what Apple actually announced.\n\nPerformance clone 1 of original slide 1."
+    },
+    {
+      "id": "lineup--perf-18",
+      "layout": "statement",
+      "section": "Opening",
+      "design": {
+        "variant": "dark1"
+      },
+      "title": "Pro first. The rest follows in spring. (02)",
+      "text": [
+        {
+          "text": "On September 9, 2026 Apple announced the iPhone 18 Pro, iPhone 18 Pro Max and the foldable iPhone Duo, with no standard iPhone 18 beside them.",
+          "cite": "macrumors"
+        },
+        {
+          "text": " The iPhone 18 and 18e are expected in spring 2027.",
+          "cite": "techadvisor"
+        }
+      ],
+      "notes": "The cycle changed this year. Only the Pro models and the foldable shipped in the fall; the standard iPhone 18 and the 18e are expected in spring 2027. So when we say iPhone 18 today, we mean the Pro.\n\nPerformance clone 2 of original slide 2."
+    },
+    {
+      "id": "headlines--perf-19",
+      "section": "Opening",
+      "title": "Four headlines (03)",
+      "items": [
+        {
+          "text": "Camera",
+          "description": "48MP Fusion Main camera with a variable aperture and new Pro controls.",
+          "icon": "lucide:aperture"
+        },
+        {
+          "text": "Performance",
+          "description": "A20 Pro, Apple's first 2nm chip, with a redesigned vapor chamber.",
+          "icon": "lucide:cpu"
+        },
+        {
+          "text": "Battery",
+          "description": "Up to 45 hours of video playback on the Pro Max, Apple's largest leap yet.",
+          "icon": "lucide:battery-charging"
+        },
+        {
+          "text": "Intelligence",
+          "description": "Siri AI on Apple Intelligence, shipping with iOS 27 on September 14.",
+          "icon": "lucide:sparkles"
+        }
+      ],
+      "notes": "Four headlines carry the launch: the camera, the chip, the battery, and Siri AI. One slide each.\n\nPerformance clone 3 of original slide 3."
+    },
+    {
+      "id": "a20-numbers--perf-20",
+      "layout": "metrics",
+      "section": "Performance",
+      "title": "A20 Pro by the numbers (04)",
+      "blocks": [
+        {
+          "metric": {
+            "value": 2,
+            "unit": "nm",
+            "label": "Process node, a first for Apple",
+            "icon": "lucide:cpu"
+          }
+        },
+        {
+          "metric": {
+            "value": "40%",
+            "label": "Faster 7-core GPU vs A19 Pro",
+            "icon": "lucide:gauge"
+          }
+        },
+        {
+          "metric": {
+            "value": "50%",
+            "label": "More memory bandwidth",
+            "icon": "lucide:arrow-left-right"
+          }
+        },
+        {
+          "metric": {
+            "value": "2×",
+            "label": "On-device AI processing",
+            "icon": "lucide:brain"
+          }
+        }
+      ],
+      "notes": "A20 Pro is Apple's first 2 nanometer chip. The new 7-core GPU is up to 40 percent faster than A19 Pro, memory bandwidth is up 50 percent, and dual 16-core Neural Engines double on-device AI processing.\n\nPerformance clone 4 of original slide 4."
+    },
+    {
+      "id": "a20-inside--perf-21",
+      "section": "Performance",
+      "title": "Packaged like M-series silicon (05)",
+      "subtitle": [
+        {
+          "text": "Die and memory sit side by side, bonded to a next-generation vapor chamber",
+          "cite": "ktai"
+        }
+      ],
+      "top+middle:left+center+right": {
+        "composition": {
+          "mode": "row",
+          "gap": 0.07
+        },
+        "blocks": [
+          {
+            "id": "cpu--perf-21",
+            "shape": "roundRect",
+            "adjust": {
+              "adj": 0.18
+            },
+            "aspectRatio": 1.4,
+            "text": "6-core CPU",
+            "fill": {
+              "gradient": {
+                "type": "linear",
+                "angle": 135,
+                "stops": [
+                  {
+                    "color": "accent1",
+                    "position": 0
+                  },
+                  {
+                    "color": {
+                      "color": "accent1",
+                      "darken": 0.45
+                    },
+                    "position": 1
+                  }
+                ]
+              }
+            },
+            "stroke": "none"
+          },
+          {
+            "id": "gpu--perf-21",
+            "shape": "roundRect",
+            "adjust": {
+              "adj": 0.18
+            },
+            "aspectRatio": 1.4,
+            "text": "7-core GPU",
+            "fill": {
+              "gradient": {
+                "type": "linear",
+                "angle": 135,
+                "stops": [
+                  {
+                    "color": "accent2",
+                    "position": 0
+                  },
+                  {
+                    "color": {
+                      "color": "accent2",
+                      "darken": 0.45
+                    },
+                    "position": 1
+                  }
+                ]
+              }
+            },
+            "stroke": "none"
+          },
+          {
+            "id": "npu--perf-21",
+            "shape": "roundRect",
+            "adjust": {
+              "adj": 0.18
+            },
+            "aspectRatio": 1.4,
+            "text": "Dual 16-core Neural Engine",
+            "fill": {
+              "gradient": {
+                "type": "linear",
+                "angle": 135,
+                "stops": [
+                  {
+                    "color": "accent3",
+                    "position": 0
+                  },
+                  {
+                    "color": {
+                      "color": "accent3",
+                      "darken": 0.45
+                    },
+                    "position": 1
+                  }
+                ]
+              }
+            },
+            "stroke": "none"
+          }
+        ]
+      },
+      "bottom:left+center+right": {
+        "id": "vapor--perf-21",
+        "shape": "roundRect",
+        "adjust": {
+          "adj": 0.5
+        },
+        "aspectRatio": 7.5,
+        "text": "Next-generation vapor chamber: up to 40% higher sustained performance",
+        "fill": {
+          "color": "dark1",
+          "lighten": 0.14
+        },
+        "stroke": {
+          "color": {
+            "color": "light1",
+            "darken": 0.5
+          },
+          "width": 1.5
+        }
+      },
+      "notes": "Apple borrowed the packaging idea from M-series Macs: the die and the memory sit side by side so memory is off the main heat path, and the chip bonds straight to a redesigned vapor chamber. Apple quotes up to 40 percent higher sustained performance. The CPU has two performance and four efficiency cores.\n\nPerformance clone 5 of original slide 5."
+    },
+    {
+      "id": "camera--perf-22",
+      "section": "Camera",
+      "title": "The first variable aperture on an iPhone (06)",
+      "subtitle": "Six laser-cut blades on the 48MP Fusion Main camera",
+      "left": {
+        "items": [
+          {
+            "text": "Control depth of field and light with a physical iris, not only software",
+            "icon": "lucide:aperture"
+          },
+          {
+            "text": "New Pro controls in the Camera app surface manual settings",
+            "icon": "lucide:sliders-horizontal"
+          },
+          {
+            "text": "ProRes RAW, Apple Log 2 and Genlock for video",
+            "icon": "lucide:film"
+          }
+        ]
+      },
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.57,
+          "y": 0.2666666666666667,
+          "width": 0.33,
+          "height": 0.5866666666666667,
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": {
+                    "color": "accent6",
+                    "lighten": 0.2
+                  },
+                  "position": 0
+                },
+                {
+                  "color": {
+                    "color": "accent1",
+                    "darken": 0.6
+                  },
+                  "position": 0.45
+                },
+                {
+                  "color": "dark1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": {
+            "color": {
+              "color": "light1",
+              "darken": 0.45
+            },
+            "width": 2
+          },
+          "alt": "Lens barrel"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 0,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.27
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 1"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 60,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.34
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 2"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 120,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.27
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 3"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 180,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.34
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 4"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 240,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.27
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 5"
+        },
+        {
+          "path": "M0.041 0.36 A0.48 0.48 0 0 1 0.959 0.36 Z",
+          "x": 0.58155,
+          "y": 0.2872,
+          "width": 0.3069,
+          "height": 0.5456000000000001,
+          "rotate": 300,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.34
+          },
+          "stroke": {
+            "color": "dark1",
+            "width": 2
+          },
+          "alt": "Aperture blade 6"
+        }
+      ],
+      "notes": "The headline camera change is mechanical: a six-blade variable aperture on the 48 megapixel Fusion Main camera, so depth of field and light are controlled by a physical iris. New Pro controls expose those settings in the Camera app, and video gains ProRes RAW, Apple Log 2 and Genlock. The iris on this slide is six rotated shapes; select one and move it.\n\nPerformance clone 6 of original slide 6."
+    },
+    {
+      "id": "island--perf-23",
+      "section": "Display",
+      "title": "Smaller island, three Live Activities (07)",
+      "left": {
+        "items": [
+          {
+            "text": "The cutout shrinks by relocating Face ID components",
+            "icon": "lucide:scan-face"
+          },
+          {
+            "text": "Three Live Activities at once, up from two",
+            "icon": "lucide:layout-list"
+          },
+          {
+            "text": "6.3-inch Pro and 6.9-inch Pro Max displays",
+            "icon": "lucide:smartphone"
+          }
+        ]
+      },
+      "shapes": [
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.16
+          },
+          "x": 0.66,
+          "y": 0.2,
+          "width": 0.17,
+          "height": 0.7,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.12
+          },
+          "stroke": {
+            "color": "light1",
+            "width": 1.5
+          },
+          "layer": "front",
+          "alt": "Phone outline"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.14
+          },
+          "x": 0.6685,
+          "y": 0.2175,
+          "width": 0.15300000000000002,
+          "height": 0.6649999999999999,
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 180,
+              "stops": [
+                {
+                  "color": {
+                    "color": "accent6",
+                    "darken": 0.1
+                  },
+                  "position": 0
+                },
+                {
+                  "color": "dark1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "layer": "front",
+          "decorative": true
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "x": 0.7161000000000001,
+          "y": 0.23850000000000002,
+          "width": 0.05780000000000001,
+          "height": 0.027999999999999997,
+          "fill": "dark1",
+          "stroke": "none",
+          "layer": "front",
+          "alt": "Dynamic Island"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.7232262500000001,
+          "y": 0.24382,
+          "width": 0.009764999999999998,
+          "height": 0.017359999999999997,
+          "fill": "accent4",
+          "stroke": "none",
+          "layer": "front",
+          "alt": "Live Activity 1"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.7401175000000001,
+          "y": 0.24382,
+          "width": 0.009764999999999998,
+          "height": 0.017359999999999997,
+          "fill": "accent3",
+          "stroke": "none",
+          "layer": "front",
+          "alt": "Live Activity 2"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.7570087500000001,
+          "y": 0.24382,
+          "width": 0.009764999999999998,
+          "height": 0.017359999999999997,
+          "fill": "accent1",
+          "stroke": "none",
+          "layer": "front",
+          "alt": "Live Activity 3"
+        },
+        {
+          "shape": "wedgeRectCallout",
+          "text": "Three at once",
+          "x": 0.845,
+          "y": 0.22,
+          "width": 0.13,
+          "height": 0.07,
+          "fill": "accent3",
+          "stroke": "none",
+          "adjust": {
+            "adj1": -0.72,
+            "adj2": 0.35
+          },
+          "alt": "Callout pointing at the Dynamic Island"
+        }
+      ],
+      "notes": "The most visible change: a smaller Dynamic Island that now tracks three Live Activities at once. The displays stay at 6.3 and 6.9 inches. The phone here is five shapes; the three dots are the Live Activities.\n\nPerformance clone 7 of original slide 7."
+    },
+    {
+      "id": "battery--perf-24",
+      "layout": "chart-beside",
+      "section": "Battery",
+      "title": "Pro Max makes the biggest battery leap yet (08)",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "dataset": "video-playback"
+            },
+            "alt": "Video playback rises from 33 to 36 hours on the Pro and from 39 to 45 hours on the Pro Max.",
+            "highlight": {
+              "categories": [
+                "iPhone 18 Pro Max"
+              ]
+            }
+          },
+          "caption": "Video playback, hours; eSIM-only iPhone 18 Pro models with the larger battery"
+        },
+        {
+          "blocks": [
+            {
+              "metric": {
+                "value": 45,
+                "unit": "h",
+                "label": "Pro Max video playback",
+                "icon": "lucide:battery-full"
+              }
+            },
+            {
+              "metric": {
+                "value": "50%",
+                "label": "Charge in about 15 minutes",
+                "icon": "lucide:zap"
+              }
+            }
+          ],
+          "composition": {
+            "mode": "column"
+          }
+        }
+      ],
+      "notes": "Battery is the other headline. eSIM-only models carry a larger battery: 36 hours of video playback on the Pro, matching last year's Pro Max, and 45 hours on the Pro Max, which Apple calls the largest generational increase ever on iPhone. Fast charging reaches 50 percent in about 15 minutes. The 17 Pro figures are Apple's 2025 numbers.\n\nPerformance clone 8 of original slide 8."
+    },
+    {
+      "id": "changes--perf-25",
+      "layout": "table",
+      "section": "Summary",
+      "title": "What changed from iPhone 17 Pro (09)",
+      "subtitle": [
+        {
+          "text": "As announced on September 9, 2026",
+          "cite": "thurrott"
+        }
+      ],
+      "table": {
+        "columns": [
+          {
+            "value": "",
+            "style": {
+              "bold": true,
+              "align": "left",
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          },
+          {
+            "value": "iPhone 17 Pro",
+            "style": {
+              "bold": true,
+              "align": "left",
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          },
+          {
+            "value": "iPhone 18 Pro",
+            "style": {
+              "bold": true,
+              "align": "left",
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "Chip",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "A19 Pro, 3nm",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "A20 Pro, 2nm",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Main camera",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "48MP Fusion, fixed aperture",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "48MP Fusion, variable aperture",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Dynamic Island",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "Two Live Activities",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "Smaller; three Live Activities",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Modem",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "C1X",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "C2, 15% less energy, adds mmWave",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Pro Max video playback",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "39 hours",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "45 hours",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "2TB storage",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "Pro Max only",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "Pro and Pro Max",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ],
+          [
+            {
+              "value": "Starting price (US)",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            },
+            {
+              "value": "$1,099",
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "$1,199",
+                  "bold": true,
+                  "color": "accent1"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                },
+                "bold": true
+              }
+            }
+          ]
+        ],
+        "alt": "Side-by-side changes from iPhone 17 Pro to iPhone 18 Pro: chip, camera, Dynamic Island, modem, battery, storage and price."
+      },
+      "notes": "Side by side with last year's Pro. The outside looks the same; the inside is new: 2 nanometer chip, variable aperture, smaller island, C2 modem with mmWave in the US, longer battery, 2 terabytes on both models, and a hundred dollars more.\n\nPerformance clone 9 of original slide 9."
+    },
+    {
+      "id": "finishes--perf-26",
+      "section": "Design",
+      "title": "Four finishes. One new. (10)",
+      "subtitle": "Colors are approximate; Burgundy is the new hero finish",
+      "blocks": [
+        {
+          "shape": "ellipse",
+          "text": "Black",
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "#3A3A3C",
+                  "position": 0
+                },
+                {
+                  "color": "#121214",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": {
+            "color": {
+              "color": "light1",
+              "darken": 0.6
+            },
+            "width": 1.5
+          }
+        },
+        {
+          "shape": "ellipse",
+          "text": "Silver",
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "#F2F2F4",
+                  "position": 0
+                },
+                {
+                  "color": "#B9BBC0",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none"
+        },
+        {
+          "shape": "ellipse",
+          "text": "Glacier",
+          "padding": 2,
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "#DCEBF5",
+                  "position": 0
+                },
+                {
+                  "color": "#9DBFD6",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none"
+        },
+        {
+          "shape": "ellipse",
+          "text": "Burgundy",
+          "padding": 2,
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "#8A2A3C",
+                  "position": 0
+                },
+                {
+                  "color": "#4A1420",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "glow": {
+            "color": "#8A2A3C",
+            "opacity": 0.5,
+            "radius": 18
+          }
+        }
+      ],
+      "notes": "Four finishes: Black, Silver, Glacier and the new Burgundy. The swatches are approximations drawn as shapes, not Apple's color values.\n\nPerformance clone 10 of original slide 10."
+    },
+    {
+      "id": "pro-vs-max--perf-27",
+      "layout": "comparison",
+      "section": "Summary",
+      "title": "Pro or Pro Max: same chip, same camera (11)",
+      "blocks": [
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "iPhone 18 Pro",
+                  "bold": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "text": "6.3-inch display",
+                  "icon": "lucide:smartphone"
+                },
+                {
+                  "text": "Up to 36 hours of video playback",
+                  "icon": "lucide:battery-medium"
+                },
+                {
+                  "text": "From $1,199, 256GB to 2TB",
+                  "icon": "lucide:tag"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "iPhone 18 Pro Max",
+                  "bold": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "text": "6.9-inch display",
+                  "icon": "lucide:tablet-smartphone"
+                },
+                {
+                  "text": "Up to 45 hours of video playback",
+                  "icon": "lucide:battery-full"
+                },
+                {
+                  "text": "From $1,299, 256GB to 2TB",
+                  "icon": "lucide:tag"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Verdict: the extra $100 buys screen and battery; A20 Pro, the variable-aperture camera and the smaller Dynamic Island are on both."
+        }
+      ],
+      "notes": "The decision between the two is simple this year. Same chip, same camera system, same island. The Max adds six tenths of an inch and nine hours of video playback for a hundred dollars.\n\nPerformance clone 11 of original slide 11."
+    },
+    {
+      "id": "siri--perf-28",
+      "layout": "statement",
+      "section": "Intelligence",
+      "design": {
+        "variant": "accent2"
+      },
+      "title": "Siri AI knows what is on screen (12)",
+      "text": [
+        {
+          "text": "Built on Apple Intelligence and Apple Foundation Models, Siri AI draws on personal context, on-screen content and third-party apps such as calendars, notes and mail. It ships with iOS 27 on September 14.",
+          "cite": "mactrast"
+        }
+      ],
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.87,
+          "y": 0.06,
+          "width": 0.1,
+          "height": 0.18,
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.25
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.9
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.85,
+          "y": 0.58,
+          "width": 0.1,
+          "height": 0.18,
+          "fill": {
+            "color": "accent1",
+            "lighten": 0.1
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.8
+        }
+      ],
+      "notes": "The software half of the launch. Siri AI, built on Apple Foundation Models, understands personal context and what is on screen, and reaches into third-party apps. It arrives with iOS 27 on September 14, five days after the keynote.\n\nPerformance clone 12 of original slide 12."
+    },
+    {
+      "id": "timeline--perf-29",
+      "layout": "timeline",
+      "section": "Availability",
+      "title": "From keynote to shelves in nine days (13)",
+      "timeline": [
+        {
+          "when": "Sep 9",
+          "what": "Surprise and Shine keynote",
+          "status": "done"
+        },
+        {
+          "when": "Sep 12",
+          "what": "Pre-orders open, 5 a.m. PT",
+          "status": "done"
+        },
+        {
+          "when": "Sep 14",
+          "what": "iOS 27 and Apple Intelligence",
+          "status": "done"
+        },
+        {
+          "when": "Sep 18",
+          "what": "In stores, first wave",
+          "status": "done"
+        },
+        {
+          "when": "Sep 25",
+          "what": "20 more countries",
+          "status": "current"
+        },
+        {
+          "when": "Spring 2027",
+          "what": "iPhone 18 and 18e expected",
+          "status": "planned"
+        }
+      ],
+      "notes": "Nine days from keynote to shelves: announced the ninth, pre-orders the twelfth, iOS 27 the fourteenth, in stores the eighteenth, twenty more countries on the twenty-fifth. The standard iPhone 18 and 18e are expected in spring.\n\nPerformance clone 13 of original slide 13."
+    },
+    {
+      "id": "price--perf-30",
+      "layout": "metrics",
+      "section": "Availability",
+      "title": "Pricing and trade-in, United States (14)",
+      "blocks": [
+        {
+          "metric": {
+            "value": "$1,199",
+            "label": "iPhone 18 Pro, from (256GB)",
+            "icon": "lucide:smartphone"
+          }
+        },
+        {
+          "metric": {
+            "value": "$1,299",
+            "label": "iPhone 18 Pro Max, from (256GB)",
+            "icon": "lucide:tablet-smartphone"
+          }
+        },
+        {
+          "metric": {
+            "value": "$1,200",
+            "label": "Up to, in carrier credits for iPhone 14 or later",
+            "icon": "lucide:badge-dollar-sign"
+          }
+        },
+        {
+          "text": [
+            {
+              "text": "Both models start at $100 more than iPhone 17 Pro and are offered in 256GB, 512GB, 1TB and 2TB.",
+              "cite": "notebookcheck"
+            }
+          ]
+        }
+      ],
+      "notes": "Pricing moved up a hundred dollars: eleven ninety-nine for the Pro, twelve ninety-nine for the Pro Max, both from 256 gigabytes up to 2 terabytes. Carrier deals offer up to twelve hundred dollars in credits for an iPhone 14 or later in any condition.\n\nPerformance clone 14 of original slide 14."
+    },
+    {
+      "id": "closing--perf-31",
+      "layout": "closing",
+      "section": "Closing",
+      "design": {
+        "footer": false
+      },
+      "title": "iPhone 18 Pro. Available now. (15)",
+      "text": "From $1,199 · Black, Silver, Glacier, Burgundy · 256GB to 2TB\nConcept deck by {{speaker.name}} · {{organization.tagline}}",
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.55,
+          "y": 0,
+          "width": 0.45,
+          "height": 0.8,
+          "fill": {
+            "color": "accent1",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.4,
+          "softEdge": 60
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.16
+          },
+          "x": 0.72,
+          "y": 0.04,
+          "width": 0.16,
+          "height": 0.6,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.12
+          },
+          "stroke": {
+            "color": "light1",
+            "width": 1.5
+          },
+          "layer": "back",
+          "alt": "Phone outline"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.14
+          },
+          "x": 0.728,
+          "y": 0.055,
+          "width": 0.14400000000000002,
+          "height": 0.57,
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 200,
+              "stops": [
+                {
+                  "color": "#8A2A3C",
+                  "position": 0
+                },
+                {
+                  "color": "#2A0A12",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "x": 0.7727999999999999,
+          "y": 0.07300000000000001,
+          "width": 0.054400000000000004,
+          "height": 0.024,
+          "fill": "dark1",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Dynamic Island"
+        }
+      ],
+      "notes": "That's the iPhone 18 Pro as announced. Sources follow on the last slide.\n\nPerformance clone 15 of original slide 15."
+    },
+    {
+      "id": "sources--perf-32",
+      "layout": "list",
+      "section": "Closing",
+      "title": "Sources (16)",
+      "items": [
+        {
+          "text": "MacRumors, “Apple Announces iPhone 18 Pro and iPhone 18 Pro Max”, September 9, 2026.",
+          "description": "https://www.macrumors.com/2026/09/09/apple-announces-iphone-18-pro-and-iphone-18-pro-max/"
+        },
+        {
+          "text": "Thurrott, “Apple's iPhone 18 Pro and Pro Max Are Coming on September 18 With a $1,199 Starting Price”, September 9, 2026.",
+          "description": "https://www.thurrott.com/apple/341444/apples-iphone-18-pro-and-pro-max-are-coming-on-september-18-with-a-1199-starting-price"
+        },
+        {
+          "text": "MacTrast, “Apple Unveils the New iPhone 18 Pro and iPhone 18 Pro Max” (press-release coverage), September 9, 2026.",
+          "description": "https://www.mactrast.com/2026/09/apple-unveils-the-new-iphone-18-pro-and-iphone-18-pro-max-available-for-pre-order-sept-12/amp/"
+        },
+        {
+          "text": "Notebookcheck, “Apple unveils iPhone 18 Pro (Max) with pro camera upgrades at higher price”, September 9, 2026.",
+          "description": "https://www.notebookcheck.net/Apple-unveils-iPhone-18-Pro-Max-with-pro-camera-upgrades-at-higher-price.1395031.0.html"
+        },
+        {
+          "text": "Tech Advisor, “iPhone 18 News, Release Dates, Price & Specs” (lineup timing), 2026.",
+          "description": "https://www.techadvisor.com/article/2582644/apple-iphone-18-release-date-price-specs.html"
+        },
+        {
+          "text": "Keitai Watch (Impress), iPhone 18 Pro announcement coverage: A20 Pro architecture and storage tiers, September 10, 2026.",
+          "description": "https://k-tai.watch.impress.co.jp/docs/news/2139670.html"
+        }
+      ],
+      "notes": "Every figure in this deck traces to one of these reports on the September 9, 2026 announcement.\n\nPerformance clone 16 of original slide 16."
+    },
+    {
+      "id": "cover--perf-33",
+      "layout": "cover",
+      "section": "Opening",
+      "design": {
+        "footer": false
+      },
+      "tag": "Concept keynote deck · Surprise and Shine, September 9, 2026",
+      "title": "iPhone 18 Pro (17)",
+      "subtitle": "Variable aperture. A20 Pro on 2 nanometers. The biggest battery leap on iPhone.",
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 0.5,
+          "y": 0.05,
+          "width": 0.42,
+          "height": 0.75,
+          "fill": {
+            "color": "accent2",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.45,
+          "softEdge": 60
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.68,
+          "y": 0.4,
+          "width": 0.34,
+          "height": 0.6,
+          "fill": {
+            "color": "accent1",
+            "darken": 0.2
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true,
+          "opacity": 0.45,
+          "softEdge": 60
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.16
+          },
+          "x": 0.72,
+          "y": 0.05,
+          "width": 0.18,
+          "height": 0.66,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.12
+          },
+          "stroke": {
+            "color": "light1",
+            "width": 1.5
+          },
+          "layer": "back",
+          "alt": "Phone outline"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.14
+          },
+          "x": 0.729,
+          "y": 0.0665,
+          "width": 0.162,
+          "height": 0.627,
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 160,
+              "stops": [
+                {
+                  "color": "accent2",
+                  "position": 0
+                },
+                {
+                  "color": "accent1",
+                  "position": 0.55
+                },
+                {
+                  "color": "dark1",
+                  "position": 1
+                }
+              ]
+            }
+          },
+          "stroke": "none",
+          "layer": "back",
+          "decorative": true
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "x": 0.7794,
+          "y": 0.0863,
+          "width": 0.061200000000000004,
+          "height": 0.026400000000000003,
+          "fill": "dark1",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Dynamic Island"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.78779475,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent4",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 1"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.8053965,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent3",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 2"
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.8229982499999999,
+          "y": 0.09131600000000001,
+          "width": 0.009207,
+          "height": 0.016368,
+          "fill": "accent1",
+          "stroke": "none",
+          "layer": "back",
+          "alt": "Live Activity 3"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.5
+          },
+          "text": "Fan-made concept · not affiliated with Apple",
+          "x": 0.045,
+          "y": 0.06,
+          "width": 0.34,
+          "height": 0.058,
+          "fill": {
+            "color": "dark1",
+            "lighten": 0.15
+          },
+          "stroke": "none",
+          "alt": "Disclaimer: fan-made concept, not affiliated with Apple"
+        }
+      ],
+      "notes": "This is a concept deck in the style of a product keynote. Every figure on the following slides comes from the launch coverage cited at the end, and the phone you see here is drawn from shapes, not a photograph. Let's start with what Apple actually announced.\n\nPerformance clone 17 of original slide 1."
+    },
+    {
+      "id": "lineup--perf-34",
+      "layout": "statement",
+      "section": "Opening",
+      "design": {
+        "variant": "dark1"
+      },
+      "title": "Pro first. The rest follows in spring. (18)",
+      "text": [
+        {
+          "text": "On September 9, 2026 Apple announced the iPhone 18 Pro, iPhone 18 Pro Max and the foldable iPhone Duo, with no standard iPhone 18 beside them.",
+          "cite": "macrumors"
+        },
+        {
+          "text": " The iPhone 18 and 18e are expected in spring 2027.",
+          "cite": "techadvisor"
+        }
+      ],
+      "notes": "The cycle changed this year. Only the Pro models and the foldable shipped in the fall; the standard iPhone 18 and the 18e are expected in spring 2027. So when we say iPhone 18 today, we mean the Pro.\n\nPerformance clone 18 of original slide 2."
+    },
+    {
+      "id": "headlines--perf-35",
+      "section": "Opening",
+      "title": "Four headlines (19)",
+      "items": [
+        {
+          "text": "Camera",
+          "description": "48MP Fusion Main camera with a variable aperture and new Pro controls.",
+          "icon": "lucide:aperture"
+        },
+        {
+          "text": "Performance",
+          "description": "A20 Pro, Apple's first 2nm chip, with a redesigned vapor chamber.",
+          "icon": "lucide:cpu"
+        },
+        {
+          "text": "Battery",
+          "description": "Up to 45 hours of video playback on the Pro Max, Apple's largest leap yet.",
+          "icon": "lucide:battery-charging"
+        },
+        {
+          "text": "Intelligence",
+          "description": "Siri AI on Apple Intelligence, shipping with iOS 27 on September 14.",
+          "icon": "lucide:sparkles"
+        }
+      ],
+      "notes": "Four headlines carry the launch: the camera, the chip, the battery, and Siri AI. One slide each.\n\nPerformance clone 19 of original slide 3."
+    },
+    {
+      "id": "a20-numbers--perf-36",
+      "layout": "metrics",
+      "section": "Performance",
+      "title": "A20 Pro by the numbers (20)",
+      "blocks": [
+        {
+          "metric": {
+            "value": 2,
+            "unit": "nm",
+            "label": "Process node, a first for Apple",
+            "icon": "lucide:cpu"
+          }
+        },
+        {
+          "metric": {
+            "value": "40%",
+            "label": "Faster 7-core GPU vs A19 Pro",
+            "icon": "lucide:gauge"
+          }
+        },
+        {
+          "metric": {
+            "value": "50%",
+            "label": "More memory bandwidth",
+            "icon": "lucide:arrow-left-right"
+          }
+        },
+        {
+          "metric": {
+            "value": "2×",
+            "label": "On-device AI processing",
+            "icon": "lucide:brain"
+          }
+        }
+      ],
+      "notes": "A20 Pro is Apple's first 2 nanometer chip. The new 7-core GPU is up to 40 percent faster than A19 Pro, memory bandwidth is up 50 percent, and dual 16-core Neural Engines double on-device AI processing.\n\nPerformance clone 20 of original slide 4."
+    }
+  ]
+}
