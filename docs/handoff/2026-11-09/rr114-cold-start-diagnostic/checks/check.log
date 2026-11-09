@@ -1,0 +1,61 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\rr114-cold
+> node scripts/check-changed.mjs "--base" "3857ff1bbc467ddb0d0031bc400e159d120b67b9"
+
+check-changed: 19 changed files since 3857ff1bb (plus uncommitted and untracked)
+ok  build (10.6 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.8 s)
+FAILED  pnpm run check:text (0.5 s)
+ok  pnpm run check:skill-commands (20.1 s)
+-  typecheck
+
+--- pnpm run check:text failed (exit 1); last 36 lines of artifacts\check-changed\pnpm_run_check_text.log:
+
+> openpresentation-workspace@ check:text C:\opf-work\rr114-cold
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (1.5572ms)
+✖ real compressed evidence is scanned as its text, preserving input bytes (2.2796ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (1.4061ms)
+✔ existing recognized binary evidence remains distinct from text (0.122ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.612ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.3452ms)
+✔ ZIP evidence is binary by signature while plain text under ZIP names stays checked (0.2932ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 145.0108
+
+✖ failing tests:
+
+test at scripts\check-text-integrity.test.mjs:17:1
+✖ real compressed evidence is scanned as its text, preserving input bytes (2.2796ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\rr114-cold\docs\evidence\rich-input-and-platform-ci-20260915\painting-Linux.json.gz'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///C:/opf-work/rr114-cold/scripts/check-text-integrity.test.mjs:18:17)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\rr114-cold\\docs\\evidence\\rich-input-and-platform-ci-20260915\\painting-Linux.json.gz'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+step                           status     time
+build                          passed   10.6 s
+biome                          passed    0.1 s  12 files
+pnpm run check:changes         passed    0.8 s
+pnpm run check:skill-commands  passed   20.1 s
+pnpm run check:text            FAILED    0.5 s
+typecheck                      skipped       -  no .ts, .mts or tsconfig change
+total                                   30.8 s
+
+check-changed: 1 of 6 steps failed: pnpm run check:text
+ ELIFECYCLE  Command failed with exit code 1.

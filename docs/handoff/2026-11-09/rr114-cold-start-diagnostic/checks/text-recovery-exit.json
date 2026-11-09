@@ -1,0 +1,12 @@
+{
+  "originalAggregateUnchanged": "RED sparse ENOENT",
+  "command": [
+    "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+    "C:/Users/micha/AppData/Roaming/npm/node_modules/pnpm/bin/pnpm.cjs",
+    "check:text"
+  ],
+  "exitCode": 0,
+  "finished": "2026-11-09T23:18:35.1172988Z",
+  "started": "2026-11-09T23:18:30.6782446Z",
+  "source": "b92dd543c2093880835678f3c4bd284cece0385b"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "b92dd543c2093880835678f3c4bd284cece0385b",
+  "path": "docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz",
+  "absoluteTarget": "C:\\opf-work\\rr114-cold\\docs\\evidence\\rich-input-and-platform-ci-20260915\\painting-Linux.json.gz",
+  "absentBefore": true,
+  "gitBlob": "2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6",
+  "bytes": 16102,
+  "sha256": "0b7ef1b73bbd4f31c5ac67716bea08f22a64df066f4ad343765c0d3d74511e56",
+  "exactTrackedBytes": true,
+  "sourceOrTestEdited": false
+}

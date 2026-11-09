@@ -1,0 +1,14 @@
+{
+  "finished": "2026-11-09T23:17:10.5661622Z",
+  "command": [
+    "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+    "C:/Users/micha/AppData/Roaming/npm/node_modules/pnpm/bin/pnpm.cjs",
+    "check:changed",
+    "--base",
+    "3857ff1bbc467ddb0d0031bc400e159d120b67b9"
+  ],
+  "source": "b92dd543c2093880835678f3c4bd284cece0385b",
+  "exitCode": 1,
+  "started": "2026-11-09T23:16:38.7661525Z",
+  "tree": "81db47772252a10a9542c1fbdf53850c39cc7287"
+}
