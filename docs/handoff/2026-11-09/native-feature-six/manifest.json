@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "generation": {
+    "manifestSHA256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+    "producer": "2400d38bf549cdb661c31725776df25e497d364c",
+    "worker": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283"
+  },
+  "archive": {
+    "path": "observations.json.gz",
+    "bytes": 6721403,
+    "sha256": "90a87b816c8bb4e7f74bebb5a1237deab2dd826b05292b115a58766c08e0aeb6",
+    "rawBytes": 24089192,
+    "rawSHA256": "601bd07b6b1434abbdee131f7244449e1665b3d997d0bc20ea991ee070ce85a3",
+    "logicalFiles": 949,
+    "logicalBytes": 17934788
+  },
+  "cases": [
+    {
+      "id": "feature-catalog-timeline",
+      "inputSha256": "2aa8ffa8c9370f078808453ca6a0152919ffb858de9d53a61e297f3dc95c38a5",
+      "textGeometryPassed": true,
+      "originalAndSavedSourceEqual": true,
+      "phasePNGsIdentical": true,
+      "fontOutcome": "Metrics-only comparator refused unsupported case; original errors retained. No broader font pass."
+    },
+    {
+      "id": "feature-custom-roadmap",
+      "inputSha256": "cb51862837f03929dfdccbcc5352e8b833ed08d51cb23ee224c795b1145b3945",
+      "textGeometryPassed": true,
+      "originalAndSavedSourceEqual": true,
+      "phasePNGsIdentical": true,
+      "fontOutcome": "Metrics-only comparator refused unsupported case; original errors retained. No broader font pass."
+    },
+    {
+      "id": "feature-long-labels",
+      "inputSha256": "b2f8158f850cfe4f870f6b9622d9378ee73fc12816fe5eccaff6f7424f769826",
+      "textGeometryPassed": true,
+      "originalAndSavedSourceEqual": true,
+      "phasePNGsIdentical": true,
+      "fontOutcome": "Metrics-only comparator refused unsupported case; original errors retained. No broader font pass."
+    },
+    {
+      "id": "feature-quote",
+      "inputSha256": "ef7a22560be327ca993de7f6a54141df6b16d8f577788cd63ca09ab028a332b5",
+      "textGeometryPassed": true,
+      "originalAndSavedSourceEqual": true,
+      "phasePNGsIdentical": true,
+      "fontOutcome": "Metrics-only comparator refused unsupported case; original errors retained. No broader font pass."
+    },
+    {
+      "id": "feature-list",
+      "inputSha256": "6f0eac67859085e2ba04a293ac67a63c133538ad5a0bc79577e358f1a384cda6",
+      "textGeometryPassed": true,
+      "originalAndSavedSourceEqual": true,
+      "phasePNGsIdentical": true,
+      "fontOutcome": "Metrics-only comparator refused unsupported case; original errors retained. No broader font pass."
+    },
+    {
+      "id": "feature-table",
+      "inputSha256": "d69512faf6f4b292527204215c60a5b11b2f1d07781dec53f9f325771883871a",
+      "textGeometryPassed": true,
+      "originalAndSavedSourceEqual": true,
+      "phasePNGsIdentical": true,
+      "fontOutcome": "Metrics-only comparator refused unsupported case; original errors retained. No broader font pass."
+    }
+  ],
+  "rootVisualReview": [
+    "feature-catalog-timeline",
+    "feature-long-labels",
+    "feature-quote"
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "remaining": "All native edit, broader font/glyph, finite feature and final release/site criteria remain separate.",
+  "peerVisualReview": {
+    "file": "peer-visual-review.json",
+    "bytes": 3583,
+    "sha256": "94378bd45ba80638acbca5c132e57b2d4ebfeb18692d23125e5bf5c807fceb70",
+    "cases": 3
+  },
+  "metadataQualification": {
+    "file": "metadata.json.gz",
+    "bytes": 9535,
+    "sha256": "50f762677af7ae83112ef56510f6b2c08ed9ab1a6aec148bfeec7728f1c62178",
+    "rawBytes": 30275,
+    "rawSHA256": "ae084a413b986d7786f316134ff71eb0d1e09c2bb2155c374fe10427c2c6a992",
+    "stepsPassed": 5,
+    "typecheckSkipped": true,
+    "secondsIncludingSlotWait": 222.5
+  }
+}

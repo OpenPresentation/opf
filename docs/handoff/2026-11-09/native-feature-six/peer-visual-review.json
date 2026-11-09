@@ -1,0 +1,47 @@
+{
+  "scope": "Read-only visual review of three existing original native PNGs against source-sealed previews and authored words. No new render/Office operation, comparator change, pixel acceptance, font-identity or point-size certification.",
+  "suiteSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+  "nativeAcceptance": false,
+  "fontComparatorRefusalsPreserved": true,
+  "cases": [
+    {
+      "id": "feature-custom-roadmap",
+      "source": "sources/feature-custom-roadmap.opf.json",
+      "sourceSha256": "48aefe2dc61fe59ea07e4c5f9767b639c7722ee3d25840216693cf7b4f9a6daf",
+      "preview": "C:/opf-work/n034-suite03/previews/feature-custom-roadmap-01.png",
+      "previewSha256": "071efa94c5f12ec60fea55c38baada32e0835e459b83743090d72368175702e5",
+      "nativeOriginal": "C:/opf-work/n034-native07/feature-custom-roadmap-01/native/original-slide-01.png",
+      "nativeOriginalSha256": "924b80d069b9adec8a850e35a49c28da2ea950120fd37868e345651ccf68d24f",
+      "selectedInputSha256": "cb51862837f03929dfdccbcc5352e8b833ed08d51cb23ee224c795b1145b3945",
+      "runnerSha256": "f99b60e001007b9f22b8da001609948ebb9440e20029aeab020e77516d5d147c",
+      "workerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "visualFinding": "All three event labels/descriptions, complete two-line note, metric3 and Phases visibly retained in the corresponding grid regions. No clipping/overlap found; small raster/baseline differences remain."
+    },
+    {
+      "id": "feature-list",
+      "source": "sources/feature-list.opf.json",
+      "sourceSha256": "c620dab889359cf9615c8cc96eb368164f72b0ba0ed657ad02a910f9445cae92",
+      "preview": "C:/opf-work/n034-suite03/previews/feature-list-01.png",
+      "previewSha256": "40d9c09c30a774b7d12a6e8962165d09374efba2315b4038912c0d2df1fdc6e4",
+      "nativeOriginal": "C:/opf-work/n034-native07/feature-list-01/native/original-slide-01.png",
+      "nativeOriginalSha256": "0189128fdc24740a0e8bd83de1d393c33e5be644061f5272ac339f27a9eba16a",
+      "selectedInputSha256": "6f0eac67859085e2ba04a293ac67a63c133538ad5a0bc79577e358f1a384cda6",
+      "runnerSha256": "e5255e1c8d777f3b283d448d42938945b57c800117993d4f0f2f9d3e8751f4f6",
+      "workerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "visualFinding": "All nine authored items and bullets visible in the same three-column order and wrapping, with title/subtitle retained. No clipped right-column words, overlap or obvious visual text-size reduction."
+    },
+    {
+      "id": "feature-table",
+      "source": "sources/feature-table.opf.json",
+      "sourceSha256": "bd3e6dc5f6da8cac8b1bd8725b2395e078bf61bdda0d3d5e1fbb3f21d37fe0dd",
+      "preview": "C:/opf-work/n034-suite03/previews/feature-table-01.png",
+      "previewSha256": "a3002dce9bff7904a3d99f1772e05fd0c531b137d13f8882fb8473e3d2ba1062",
+      "nativeOriginal": "C:/opf-work/n034-native07/feature-table-01/native/original-slide-01.png",
+      "nativeOriginalSha256": "02cbca0df851e47bb30819ae6831853e6158567739908d3991191a1b33575a27",
+      "selectedInputSha256": "d69512faf6f4b292527204215c60a5b11b2f1d07781dec53f9f325771883871a",
+      "runnerSha256": "87b39d9e126eab3cbb5dc244e4ce691d4d44b16fab862379dfe8992ee21a3a47",
+      "workerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "visualFinding": "All four headers, both data rows A28/89%/5.8 and B24/79%/6.7, title/subtitle and complete two-line note visible. No cell/footer clipping found; small raster/baseline differences remain."
+    }
+  ]
+}
