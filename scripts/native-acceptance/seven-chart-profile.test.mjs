@@ -20,6 +20,7 @@ import {
   assertSevenStages,
   compareSevenBindings,
   compareSevenImports,
+  importSevenPublic,
   plainLocalPath,
   assertSevenOutput,
 } from './seven-chart-profile.mjs';
@@ -350,7 +351,7 @@ test('actual worker definitions stop after managed getter/method/primitive/owner
     );
     assert.equal(facts.mockOnly, true);
     assert.equal(facts.officeInvoked, false);
-    assert.equal(facts.cases, 50);
+    assert.equal(facts.cases, 55);
     assert.ok(facts.results.every((x) => x.passed));
     assert.ok(!facts.baselineCalls.some((x) => x.startsWith('FORBIDDEN.')));
     const report = JSON.parse(
@@ -411,4 +412,38 @@ test('controller paths reject aliases and output overlap with every immutable so
     assert.ok(path.resolve(root).startsWith(path.resolve(os.tmpdir()) + path.sep));
     fs.rmSync(root, { recursive: true, force: true });
   }
+});
+
+test('the public-import adapter passes the named Gallery catalog and preserves actual diagnostics', async () => {
+  const catalog = { source: 'https://synthetic.example/catalog' },
+    calls = [],
+    warning = { code: 'synthetic-visible-finding' };
+  const engines = {
+    gallery: catalog,
+    pptx: {
+      fromPptx(bytes, options) {
+        calls.push({ bytes, options });
+        options.onDiagnostic(warning);
+        return structuredClone(source);
+      },
+    },
+  };
+  const bytes = Buffer.from('synthetic adapter contract');
+  const result = await importSevenPublic(bytes, { engines });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].bytes, bytes);
+  assert.deepEqual(calls[0].options.catalogs, [catalog]);
+  assert.deepEqual(result.diagnostics, [warning]);
+  assert.deepEqual(result.document, source);
+  await assert.rejects(
+    () => importSevenPublic(bytes, { engines: { ...engines, gallery: { gallery: catalog } } }),
+    /named registered Gallery/u,
+  );
+  await assert.rejects(
+    () =>
+      importSevenPublic(bytes, {
+        engines: { ...engines, pptx: { fromPptx: () => ({ slides: [] }) } },
+      }),
+    /lost a slide/u,
+  );
 });

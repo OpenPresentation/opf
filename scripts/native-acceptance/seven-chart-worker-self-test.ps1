@@ -15,16 +15,16 @@ function global:New-Object {
     if($ComObject) { if($ComObject -cne 'PowerPoint.Application') {throw 'Unexpected factory'};[SevenFake]::Hit('application.factory');return $script:mockApp }
     return Microsoft.PowerShell.Utility\New-Object @PSBoundParameters
 }
-function global:Get-Process { param([string]$Name);if($Name -cne 'POWERPNT'){throw 'Unexpected process query'};[SevenFake]::Hit('global.preflight') }
+function global:Get-Process { param([string]$Name);if($Name -cne 'POWERPNT'){throw 'Unexpected process query'};[SevenFake]::Hit('global.preflight');if([SevenFake]::Mutant -ceq 'busyOffice'){return [pscustomobject]@{Id=12345}} }
 
 function global:Stop-Process { throw 'Mock test forbids process termination' }
 function global:Start-Process { throw 'Mock test forbids native child processes' }
 Add-Type -TypeDefinition @"
 using System; using System.IO; using System.Collections.Generic;
 public static class SevenFake {
- public static List<string> Calls = new List<string>(); public static string Fault; public static string Mutant; public static string Directory; public static int UnexpectedReads;
+ public static List<string> Calls = new List<string>(); public static string Fault; public static string Mutant; public static string Directory; public static int UnexpectedReads; public static int PresentationCountReads;
  public static void Hit(string name) { Calls.Add(name); if(name == Fault) throw new InvalidOperationException("managed fault: " + name); }
- public static void Reset(string dir,string fault,string mutant) { Calls.Clear();Fault=fault;Mutant=mutant;Directory=dir;UnexpectedReads=0; }
+ public static void Reset(string dir,string fault,string mutant) { Calls.Clear();Fault=fault;Mutant=mutant;Directory=dir;UnexpectedReads=0;PresentationCountReads=0; }
 }
 public sealed class SevenUnexpected { public int ForbiddenGetter { get { SevenFake.UnexpectedReads++; return 42; } } }
 public sealed class SevenApp {
@@ -37,7 +37,7 @@ public sealed class SevenApp {
 public sealed class SevenPresentations {
  public SevenApp App;public SevenPresentation Current;
  public SevenPresentations(SevenApp app) { App=app; }
- public int Count { get { SevenFake.Hit("presentations.count");return Current==null?0:1; } }
+ public int Count { get { SevenFake.Hit("presentations.count");SevenFake.PresentationCountReads++;if(SevenFake.Mutant=="busyApplication"||(SevenFake.Mutant=="foreignBeforeOpen"&&SevenFake.PresentationCountReads>=2)||(SevenFake.Mutant=="foreignBeforeQuit"&&SevenFake.PresentationCountReads>=4))return 1;return Current==null?0:1; } }
  public SevenPresentation Open(string path,int readOnly,int untitled,int withWindow) { SevenFake.Hit("open."+(path.EndsWith("saved.pptx")?"saved":"original"));if(readOnly!=-1||untitled!=0||withWindow!=0)throw new Exception("incorrect open flags");if(Current!=null)throw new Exception("nonempty open");Current=new SevenPresentation(this,path);return Current; }
 }
 public sealed class SevenPresentation {
@@ -79,7 +79,7 @@ public sealed class SevenShape {
  public double Width {get {SevenFake.Hit(K+".width");return SevenFake.Mutant=="nonfinite"?Double.PositiveInfinity:800;}}
  public double Height {get {SevenFake.Hit(K+".height");return 300;}}
  public double Rotation {get {SevenFake.Hit(K+".rotation");return 0;}}
- public int HasTextFrame {get {SevenFake.Hit(K+".hasTextFrame");return N==1?-1:0;}}
+ public int HasTextFrame {get {SevenFake.Hit(K+".hasTextFrame");return SevenFake.Mutant=="badTriState"?2:N==1?-1:0;}}
  public string AlternativeText {get {SevenFake.Hit(K+".alternativeText");return "";}}
  public SevenTextFrame TextFrame {get {SevenFake.Hit(K+".textFrame");return new SevenTextFrame(K);}}
  public object Chart {get {SevenFake.Hit("FORBIDDEN.Chart");throw new Exception("forbidden Chart getter");}}
@@ -121,15 +121,20 @@ foreach($fault in $faults) {
     if(-not $caught -or -not $script:stopped -or $script:cleanup -or [SevenFake]::Calls.Count -ne $before -or [SevenFake]::Calls[-1] -cne $fault) {throw "Actual worker made a later operation after $fault"}
     $results+=@([ordered]@{name=$fault;calls=$before;laterOperations=0;passed=$true})
 }
-foreach($mutant in @('foreignFullName','writable','countObject','slideCount','shapeCount','nonfinite')) {
+foreach($mutant in @('foreignFullName','writable','countObject','slideCount','shapeCount','nonfinite','busyApplication','foreignBeforeOpen','foreignBeforeQuit','badTriState')) {
     Initialize-SevenMock ('mutant-'+$mutant) '' $mutant
     $caught=$false;try {Invoke-SevenLifecycle}catch{$caught=$true}
     $before=[SevenFake]::Calls.Count;try {Read-SevenProperty $script:mockApp 'Presentations' 'after-failed-probe'}catch{}
     if(-not $caught -or -not $script:stopped -or $script:cleanup -or [SevenFake]::Calls.Count -ne $before -or [SevenFake]::UnexpectedReads -ne 0 -or $script:report.probes[-1].matched) {throw "Primitive/ownership refusal failed: $mutant"}
+    if($mutant -eq 'badTriState' -and [SevenFake]::Calls[-1] -cne 'original.slide.1.shape.1.hasTextFrame') {throw 'A later getter ran after the invalid tri-state'}
     $persisted=Get-Content -LiteralPath (Join-Path $script:root 'report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if($persisted.probes[-1].matched -ne $false) {throw 'Primitive refusal was not persisted before validation'}
     $results+=@([ordered]@{name=$mutant;probe=$persisted.probes[-1];laterOperations=0;unexpectedGetterReads=[SevenFake]::UnexpectedReads;passed=$true})
 }
+Initialize-SevenMock 'global-busy' '' 'busyOffice'
+$caught=$false;try {Invoke-SevenLifecycle}catch{$caught=$true}
+if(-not $caught -or -not $script:stopped -or [SevenFake]::Calls.Count -ne 1 -or [SevenFake]::Calls[0] -cne 'global.preflight') {throw 'Existing global PowerPoint did not refuse before the owned factory'}
+$results+=@([ordered]@{name='existing global PowerPoint';factoryCalls=0;passed=$true})
 foreach($operation in @('Read-SevenPhase','Save-SevenCopy','Close-SevenOwned','Quit-SevenOwned')) {
     Initialize-SevenMock ('ownership-'+$operation) '' ''
     $script:app=$script:mockApp;$script:ownedApp=New-Object SevenApp;$script:presentation=New-Object object;$script:ownedPresentation=New-Object object;$script:ownedPath='foreign'

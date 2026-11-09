@@ -99,10 +99,10 @@ function Read-SevenPhase([string]$Phase) {
             foreach($pair in @(@('Id','id'),@('Name','name'),@('Type','type'),@('Left','left'),@('Top','top'),@('Width','width'),@('Height','height'),@('Rotation','rotation'),@('HasTextFrame','hasTextFrame'),@('AlternativeText','alternativeText'))) {
                 $value=Read-SevenProperty $shape $pair[0] "$Phase.slide.$index.shape.$position.$($pair[1])";$item[$pair[1]]=Get-SevenPrimitive $value;Write-SevenReport
                 if($pair[1] -in @('name','alternativeText')) {Assert-SevenProbe ($value -is [string]) "$Phase.slide.$index.shape.$position.$($pair[1])" 'string' $value}
-                elseif($pair[1] -in @('id','type','hasTextFrame')) {Assert-SevenProbe ((Test-SevenInteger $value) -and ($pair[1] -eq 'hasTextFrame' -or $value -gt 0)) "$Phase.slide.$index.shape.$position.$($pair[1])" 'integer identity/type or tri-state' $value}
+                elseif($pair[1] -eq 'hasTextFrame') {Assert-SevenProbe ((Test-SevenInteger $value) -and $value -in @(-1,0)) "$Phase.slide.$index.shape.$position.$($pair[1])" '0 or -1' $value}
+                elseif($pair[1] -in @('id','type')) {Assert-SevenProbe ((Test-SevenInteger $value) -and $value -gt 0) "$Phase.slide.$index.shape.$position.$($pair[1])" 'positive integer identity/type' $value}
                 else {Assert-SevenProbe (Test-SevenFiniteNumber $value) "$Phase.slide.$index.shape.$position.$($pair[1])" 'finite numeric descriptor' $value}
             }
-            Assert-SevenProbe ($item.hasTextFrame -in @(-1,0)) "$Phase.slide.$index.shape.$position.hasTextFrame" '0 or-1' $item.hasTextFrame
             $item.text=$null
             if($item.hasTextFrame -eq -1) {$frame=Read-SevenProperty $shape 'TextFrame' "$Phase.slide.$index.shape.$position.textFrame";$range=Read-SevenProperty $frame 'TextRange' "$Phase.slide.$index.shape.$position.textRange";$actualText=Read-SevenProperty $range 'Text' "$Phase.slide.$index.shape.$position.text";$item.text=Get-SevenPrimitive $actualText;Write-SevenReport;Assert-SevenProbe ($actualText -is [string]) "$Phase.slide.$index.shape.$position.text" 'string' $item.text}
             Write-SevenReport

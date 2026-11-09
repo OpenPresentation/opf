@@ -601,6 +601,26 @@ export function compareSevenImports(source, imported) {
     });
   return findings;
 }
+export async function importSevenPublic(bytes, { consumer, engines } = {}) {
+  const req = engines ? null : createRequire(path.join(consumer, 'package.json'));
+  const { pptx, gallery } = engines ?? {
+    pptx: await import(pathToFileURL(req.resolve('@openpresentation/opf-pptx')).href),
+    gallery: (await import(pathToFileURL(req.resolve('@openpresentation/gallery')).href)).gallery,
+  };
+  assert.equal(typeof pptx?.fromPptx, 'function', 'Missing bound public PPTX import');
+  assert.equal(
+    typeof gallery?.source,
+    'string',
+    'Use the named registered Gallery catalog, not its module namespace',
+  );
+  const diagnostics = [];
+  const document = await pptx.fromPptx(bytes, {
+    catalogs: [gallery],
+    onDiagnostic: (d) => diagnostics.push(d),
+  });
+  assert.equal(document.slides.length, 7, 'Public import lost a slide');
+  return { document, diagnostics };
+}
 export async function bindSevenObservation({
   envelopeFile,
   expectedEnvelopeSha256,
@@ -692,24 +712,15 @@ export async function bindSevenObservation({
       assert.equal(digest(png), record.sha256);
       pngs.push({ phase, slide: index + 1, sha256: record.sha256 });
     }
-  const req = createRequire(path.join(binding.envelope.generation.consumer, 'package.json'));
-  const { pptx, gallery } = engines ?? {
-    pptx: await import(pathToFileURL(req.resolve('@openpresentation/opf-pptx')).href),
-    gallery: await import(pathToFileURL(req.resolve('@openpresentation/gallery')).href),
-  };
   const imported = {};
   for (const [phase, bytes] of [
     ['original', binding.input],
     ['saved-reopened', saved],
-  ]) {
-    const diagnostics = [];
-    const document = await pptx.fromPptx(bytes, {
-      catalogs: [gallery],
-      onDiagnostic: (d) => diagnostics.push(d),
+  ])
+    imported[phase] = await importSevenPublic(bytes, {
+      consumer: binding.envelope.generation.consumer,
+      engines,
     });
-    assert.equal(document.slides.length, 7, 'Public import lost a slide');
-    imported[phase] = { document, diagnostics };
-  }
   findings.push(...compareSevenImports(binding.source.deck, imported));
   readSevenEnvelope(envelopeFile, expectedEnvelopeSha256, { root });
   return {
