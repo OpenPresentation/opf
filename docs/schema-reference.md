@@ -1150,13 +1150,13 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `source`
-- Purpose: A diagram written as text (Mermaid, Graphviz DOT or PlantUML). Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { "source": value }.
+- Purpose: A diagram written as text (Mermaid, Graphviz DOT or PlantUML), laid out with the deck's measured fonts and resolved colors at the largest type size that fits. PPTX export defaults to editable native shapes, connectors and text in one group for qualified families; unsupported families or drawing constructs use an SVG picture with a PNG fallback. The diagrams: "picture" option always uses that picture form. A string diagram is shorthand for { "source": value }.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `source` | yes | `string` | The diagram source. With syntax 'mermaid' (the default) it is Mermaid 12.1 text whose first line names the diagram type (flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timel... |
 | `syntax` | no | `enum:mermaid \| dot \| plantuml` | The language of 'source': 'mermaid' (Mermaid 12.1, the default), 'dot' (Graphviz DOT, drawn with the layered layout) or 'plantuml' (PlantUML, drawn as the Mermaid family of the same kind). OPF reads all three itself;... |
-| `alt` | no | `string` | Text alternative that says what the diagram shows. Exported as the picture's description. Without it, engines derive one from the diagram's labels. |
+| `alt` | no | `string` | Text alternative that says what the diagram shows. Exported as the description of the native shape group or picture. Without it, engines derive one from the diagram's labels. |
 
 
 ### Timeline
