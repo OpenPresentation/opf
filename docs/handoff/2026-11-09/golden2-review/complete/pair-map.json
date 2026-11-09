@@ -1,0 +1,643 @@
+{
+  "pairs": [
+    {
+      "index": 0,
+      "key": "inverted-pyramid 5 long",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0002.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "inverted-pyramid 5 long",
+        "sha256": "69c702cb26db634bde3ba0b83fbd7464c3366d79ecf68ff8ae652832f87aecf6",
+        "bytes": 23196
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0000.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "1143cd73dc2c335dc199c1946a7ab86f7fdfbf6f6f95820cdc813ca171b0059f",
+        "bytes": 18043
+      }
+    },
+    {
+      "index": 1,
+      "key": "org-chart 5 long",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0006.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "org-chart 5 long",
+        "sha256": "87503dc46e55d116c57dbea1be558bf6f69d7b224021db418f7837d417aa810b",
+        "bytes": 23329
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0001.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "b750aa101c9e108008973521bf381635b5483774157216a50db681167630bc2f",
+        "bytes": 20503
+      }
+    },
+    {
+      "index": 2,
+      "key": "hierarchy 5 long",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0010.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "hierarchy 5 long",
+        "sha256": "02779855459ed8c717a23ff10bc3fe45dc9b73a7f8636da92daae97147cd64f7",
+        "bytes": 22813
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0002.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "bdd2cd4f7f575b49af2c679be0453158406e4e0f23266b7267d693382eeb6a59",
+        "bytes": 19981
+      }
+    },
+    {
+      "index": 3,
+      "key": "venn 5 long",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42498350968/extracted/templates/0051.png",
+        "artifact": 13624413246,
+        "run": 42498350968,
+        "producer": "545067d7be36df86b82be9c38b324ddf1bb2e887",
+        "bot": "348fd323b31302b5a3cdd7af2db8bb8bf6fffa2a",
+        "sourceKey": "venn 5 long",
+        "sha256": "a8d5780000915a89162fa2fee0472401c17bfe0db31a11656be558ed4872809e",
+        "bytes": 22527
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0003.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "5c66f057d91501b952807b76e48d5b708285b3e60b0538300cb5c75eaa96dfc6",
+        "bytes": 17375
+      }
+    },
+    {
+      "index": 4,
+      "key": "paginated pyramid 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/pyramid-page-2.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated pyramid 5 long page 2",
+        "sha256": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+        "svgSHA256": "7b4e6676d8db805e0b375a4df24c16c668275dbc06a6e2bb2f1de1ec4a2a0640",
+        "bytes": 11760
+      },
+      "expectedBefore": {
+        "svg": "7b4e6676d8db805e0b375a4df24c16c668275dbc06a6e2bb2f1de1ec4a2a0640",
+        "png": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+        "bytes": 11760
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0004.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+        "bytes": 8554
+      }
+    },
+    {
+      "index": 5,
+      "key": "paginated pyramid 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/pyramid-page-3.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated pyramid 5 long page 3",
+        "sha256": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+        "svgSHA256": "e7572dd8b1bf092e6fa26c26222aca841ad9e88430b339560a53985269caa06d",
+        "bytes": 11760
+      },
+      "expectedBefore": {
+        "svg": "e7572dd8b1bf092e6fa26c26222aca841ad9e88430b339560a53985269caa06d",
+        "png": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+        "bytes": 11760
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0005.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+        "bytes": 8554
+      }
+    },
+    {
+      "index": 6,
+      "key": "paginated pyramid 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/pyramid-page-4.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated pyramid 5 long page 4",
+        "sha256": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+        "svgSHA256": "ed37cf7380e8b7ee47d05436bdc0080383661be73020516171b1ec187d9414ed",
+        "bytes": 11760
+      },
+      "expectedBefore": {
+        "svg": "ed37cf7380e8b7ee47d05436bdc0080383661be73020516171b1ec187d9414ed",
+        "png": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+        "bytes": 11760
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0006.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+        "bytes": 8554
+      }
+    },
+    {
+      "index": 7,
+      "key": "paginated inverted-pyramid 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0019.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "paginated inverted-pyramid 5 long page 2",
+        "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+        "bytes": 14828
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0007.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
+        "bytes": 12404
+      }
+    },
+    {
+      "index": 8,
+      "key": "paginated inverted-pyramid 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0020.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "paginated inverted-pyramid 5 long page 3",
+        "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+        "bytes": 14828
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0008.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
+        "bytes": 12404
+      }
+    },
+    {
+      "index": 9,
+      "key": "paginated inverted-pyramid 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0021.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "paginated inverted-pyramid 5 long page 4",
+        "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+        "bytes": 14828
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0009.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
+        "bytes": 12404
+      }
+    },
+    {
+      "index": 10,
+      "key": "paginated matrix 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/matrix-page-2.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated matrix 5 long page 2",
+        "sha256": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+        "svgSHA256": "b5e524a9fbcf7174d56910ba648ed39fba915af87f8bba02ea83e8775fa04fe3",
+        "bytes": 17202
+      },
+      "expectedBefore": {
+        "svg": "b5e524a9fbcf7174d56910ba648ed39fba915af87f8bba02ea83e8775fa04fe3",
+        "png": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+        "bytes": 17202
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0010.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
+        "bytes": 12892
+      }
+    },
+    {
+      "index": 11,
+      "key": "paginated matrix 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/matrix-page-3.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated matrix 5 long page 3",
+        "sha256": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+        "svgSHA256": "b7d31ae8fafc12994c51774720b838eb5f906f48189857de3d0d3481cfb173a3",
+        "bytes": 17202
+      },
+      "expectedBefore": {
+        "svg": "b7d31ae8fafc12994c51774720b838eb5f906f48189857de3d0d3481cfb173a3",
+        "png": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+        "bytes": 17202
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0011.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
+        "bytes": 12892
+      }
+    },
+    {
+      "index": 12,
+      "key": "paginated matrix 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/matrix-page-4.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated matrix 5 long page 4",
+        "sha256": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+        "svgSHA256": "2ade921893e8cfcb84cf4c6971d5bffd3c7d2fae02046ff989141ab1a7857812",
+        "bytes": 17202
+      },
+      "expectedBefore": {
+        "svg": "2ade921893e8cfcb84cf4c6971d5bffd3c7d2fae02046ff989141ab1a7857812",
+        "png": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+        "bytes": 17202
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0012.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
+        "bytes": 12892
+      }
+    },
+    {
+      "index": 13,
+      "key": "paginated cycle 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/cycle-page-2.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated cycle 5 long page 2",
+        "sha256": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+        "svgSHA256": "d59965b8c02f30b6da37222ed227306c42c601a8f4ced37abf304fe250e91de2",
+        "bytes": 17203
+      },
+      "expectedBefore": {
+        "svg": "d59965b8c02f30b6da37222ed227306c42c601a8f4ced37abf304fe250e91de2",
+        "png": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+        "bytes": 17203
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0013.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
+        "bytes": 12891
+      }
+    },
+    {
+      "index": 14,
+      "key": "paginated cycle 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/cycle-page-3.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated cycle 5 long page 3",
+        "sha256": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+        "svgSHA256": "a116b2a4774625a995eedfa29abf249f4db42d4ca354236df9516c63ea44def0",
+        "bytes": 17203
+      },
+      "expectedBefore": {
+        "svg": "a116b2a4774625a995eedfa29abf249f4db42d4ca354236df9516c63ea44def0",
+        "png": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+        "bytes": 17203
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0014.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
+        "bytes": 12891
+      }
+    },
+    {
+      "index": 15,
+      "key": "paginated cycle 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/cycle-page-4.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated cycle 5 long page 4",
+        "sha256": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+        "svgSHA256": "b9064e7d1f5f53779aa6b4d78cbeb43e73e25c073b96e3d97fa28c97e228ac5c",
+        "bytes": 17203
+      },
+      "expectedBefore": {
+        "svg": "b9064e7d1f5f53779aa6b4d78cbeb43e73e25c073b96e3d97fa28c97e228ac5c",
+        "png": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+        "bytes": 17203
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0015.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
+        "bytes": 12891
+      }
+    },
+    {
+      "index": 16,
+      "key": "paginated chevrons 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/chevrons-page-2.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated chevrons 5 long page 2",
+        "sha256": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+        "svgSHA256": "ea22740e6cb166d16946b81c0a5f7fe5ad50a26a35cae8975d51d41b201d3203",
+        "bytes": 14695
+      },
+      "expectedBefore": {
+        "svg": "ea22740e6cb166d16946b81c0a5f7fe5ad50a26a35cae8975d51d41b201d3203",
+        "png": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+        "bytes": 14695
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0016.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
+        "bytes": 18534
+      }
+    },
+    {
+      "index": 17,
+      "key": "paginated chevrons 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/chevrons-page-3.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated chevrons 5 long page 3",
+        "sha256": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+        "svgSHA256": "6a402339e3c7c3d725d02a2042c0a24b1253e5fe6f76263385eaf5c9537539ba",
+        "bytes": 14695
+      },
+      "expectedBefore": {
+        "svg": "6a402339e3c7c3d725d02a2042c0a24b1253e5fe6f76263385eaf5c9537539ba",
+        "png": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+        "bytes": 14695
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0017.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
+        "bytes": 18534
+      }
+    },
+    {
+      "index": 18,
+      "key": "paginated chevrons 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/chevrons-page-4.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated chevrons 5 long page 4",
+        "sha256": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+        "svgSHA256": "4743dbe659cf8048b070a9747b81270ec6c56296ed200521ba1985a12a882e45",
+        "bytes": 14695
+      },
+      "expectedBefore": {
+        "svg": "4743dbe659cf8048b070a9747b81270ec6c56296ed200521ba1985a12a882e45",
+        "png": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+        "bytes": 14695
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0018.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
+        "bytes": 18534
+      }
+    },
+    {
+      "index": 19,
+      "key": "paginated vertical-flow 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/vertical-flow-page-2.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated vertical-flow 5 long page 2",
+        "sha256": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+        "svgSHA256": "7b81200d56a90d0441c0032bfd425eb5d5118b55894e0e3a9f0d38addb62384e",
+        "bytes": 17325
+      },
+      "expectedBefore": {
+        "svg": "7b81200d56a90d0441c0032bfd425eb5d5118b55894e0e3a9f0d38addb62384e",
+        "png": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+        "bytes": 17325
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0019.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
+        "bytes": 12955
+      }
+    },
+    {
+      "index": 20,
+      "key": "paginated vertical-flow 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/vertical-flow-page-3.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated vertical-flow 5 long page 3",
+        "sha256": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+        "svgSHA256": "40ca6b0e266e65dd54f5786edb2ec429d6ab0617eec0f257ecfaf41163c4cbb5",
+        "bytes": 17325
+      },
+      "expectedBefore": {
+        "svg": "40ca6b0e266e65dd54f5786edb2ec429d6ab0617eec0f257ecfaf41163c4cbb5",
+        "png": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+        "bytes": 17325
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0020.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
+        "bytes": 12955
+      }
+    },
+    {
+      "index": 21,
+      "key": "paginated vertical-flow 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/reconstruction-before-01/vertical-flow-page-4.png",
+        "kind": "exact historical source reconstruction",
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "sourceKey": "paginated vertical-flow 5 long page 4",
+        "sha256": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+        "svgSHA256": "b936f50807b027254af6e222404767ec490de8a7b66f5a3b83a74ed72af40add",
+        "bytes": 17325
+      },
+      "expectedBefore": {
+        "svg": "b936f50807b027254af6e222404767ec490de8a7b66f5a3b83a74ed72af40add",
+        "png": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+        "bytes": 17325
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0021.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
+        "bytes": 12955
+      }
+    },
+    {
+      "index": 22,
+      "key": "paginated venn 5 long page 2",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0058.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "paginated venn 5 long page 2",
+        "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+        "bytes": 14152
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0022.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
+        "bytes": 13916
+      }
+    },
+    {
+      "index": 23,
+      "key": "paginated venn 5 long page 3",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0059.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "paginated venn 5 long page 3",
+        "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+        "bytes": 14152
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0023.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
+        "bytes": 13916
+      }
+    },
+    {
+      "index": 24,
+      "key": "paginated venn 5 long page 4",
+      "before": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/previous-42587651918/extracted/templates/0060.png",
+        "artifact": 13659872214,
+        "run": 42587651918,
+        "producer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+        "bot": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+        "sourceKey": "paginated venn 5 long page 4",
+        "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+        "bytes": 14152
+      },
+      "after": {
+        "path": "C:/opf-work/golden2-review-raw-20261109-01/extracted/templates/0024.png",
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "sha256": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
+        "bytes": 13916
+      }
+    }
+  ],
+  "missing": [],
+  "added": [],
+  "removed": [],
+  "coverage": "25 exact before/after pairs:10 prior managed artifact images plus15 strict historical SVG+PNG+byte-length matches; preliminary missing state preserved separately"
+}

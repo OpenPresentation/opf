@@ -1,0 +1,973 @@
+{
+  "format": 1,
+  "files": [
+    {
+      "name": "clarify-metrics-parts.mjs",
+      "bytes": 1131,
+      "sha256": "4a0398aeee50835a26ed8f07dcdc6e0206dee03820de8827f17b843a95812cc2"
+    },
+    {
+      "name": "complete-sheets-01.exit.json",
+      "bytes": 392,
+      "sha256": "95342cfb6942a65cb221da0f770bb7a2ca51defd6662adc942f1711697157ed2"
+    },
+    {
+      "name": "complete-sheets-01.log",
+      "bytes": 1828,
+      "sha256": "22bba63976c3fa1014f8f238816f9322132d94701d8b41069de9cf0061fa65af"
+    },
+    {
+      "name": "complete-sheets.json",
+      "bytes": 22152,
+      "sha256": "e81747d0b69dca0db0c68d713135436769e7698197fdb5842485f5289ecdd5f9"
+    },
+    {
+      "name": "correct-metrics-selector.mjs",
+      "bytes": 362,
+      "sha256": "a82b76d6565efe74df28246e5b9cedcaebcf3d035106bb60a88f4ccd90ea691d"
+    },
+    {
+      "name": "correct-metrics-serialization.mjs",
+      "bytes": 364,
+      "sha256": "5196e02ec8516eb67bb67ce1d567bc0faf4be527db8efdd88b04b479bf2b5cfd"
+    },
+    {
+      "name": "derive-exact-metrics-before.mjs",
+      "bytes": 3711,
+      "sha256": "044b93a1c2d1d9277a786876f7f2e361f4e713cd2bd63f603eb539f5f9d275ce"
+    },
+    {
+      "name": "derive-exact-metrics-selector-only.mjs",
+      "bytes": 3703,
+      "sha256": "d39e6d7874454a5917bd6995678172aa44e36d933980c5a8d7a1d0b195ef5a73"
+    },
+    {
+      "name": "derive-exact-metrics-v3.mjs",
+      "bytes": 3722,
+      "sha256": "7deab03c069e7db168b853aaa9a44ff1f992fb776168620d0c4d92949b6b5429"
+    },
+    {
+      "name": "derive-exact-metrics.mjs",
+      "bytes": 3813,
+      "sha256": "2165c7547630c25809d2e3f05c45e5e26e06ef1e32ee6d5c494b60b21c05fcd0"
+    },
+    {
+      "name": "exact-metrics-01.exit.json",
+      "bytes": 392,
+      "sha256": "eeb668fb395771086ed27185a0885f526bbbdcc2f2bf4e9cbf008cc73eb67e6d"
+    },
+    {
+      "name": "exact-metrics-01.log",
+      "bytes": 655,
+      "sha256": "d79666797379dc0117a196c03d1a3e5aa297eea4f3a678893fc1ee841218bc74"
+    },
+    {
+      "name": "exact-metrics-02.exit.json",
+      "bytes": 392,
+      "sha256": "134329103862927a44be2e688668478d2761d5db7d3c7665d042f8f07e3e6350"
+    },
+    {
+      "name": "exact-metrics-02.log",
+      "bytes": 655,
+      "sha256": "7ae0f44b8e2b14e6d579cc0058c80763a1c071c53edad1284d84676b122c51fa"
+    },
+    {
+      "name": "exact-metrics-03.exit.json",
+      "bytes": 392,
+      "sha256": "be4b4cf6a9d890e0c6242eb43438c72d260b982416e11f918189a5121887661c"
+    },
+    {
+      "name": "exact-metrics-03.log",
+      "bytes": 3877,
+      "sha256": "d3aa81f0dff5cb5e2e07b49f51f3cfc389c1f9b404ecd70b2d8ce197cc6ed59d"
+    },
+    {
+      "name": "exact-metrics-04.exit.json",
+      "bytes": 392,
+      "sha256": "9602445b454b6f6ab56eaf4be50464003abaac2a34e64127c7974637ca818cb0"
+    },
+    {
+      "name": "exact-metrics-04.log",
+      "bytes": 4178,
+      "sha256": "71d95be44fe6528c52147985de305fc22edfca2143d9f57cc829796971ed18fd"
+    },
+    {
+      "name": "exact-pagination-metrics-v2.json",
+      "bytes": 218508,
+      "sha256": "6091fc0bc375ea8cec5e8b630d7fa627128dce081799fdefe9f28d0355bbb34b"
+    },
+    {
+      "name": "exact-pagination-metrics.json",
+      "bytes": 195986,
+      "sha256": "3f2ccef284efd28af2c872715e92f5123aa6f620f6978b83a3d94f947c63a755"
+    },
+    {
+      "name": "historical-build-01.exit.json",
+      "bytes": 665,
+      "sha256": "82d92c055878406f6b46248dcfc03e54c9024166aeca19798fb01a54ee77b541"
+    },
+    {
+      "name": "historical-build-01.log",
+      "bytes": 11725,
+      "sha256": "9cf8c1784ac161a9dadeafd3e4f5f34d67662f58636b9cbc0163313c9ae2ffe4"
+    },
+    {
+      "name": "make-complete-sheets.mjs",
+      "bytes": 3786,
+      "sha256": "984e3553885a277768a44cef739e57272eabd6f09ebc8c8fee295e63d9668a64"
+    },
+    {
+      "name": "packet-hydration-01.json",
+      "bytes": 821002,
+      "sha256": "22c8ac2fc5bc7068e1370bc2df355b3c29c4bd18bda2e0e47e5def95d4690bd6"
+    },
+    {
+      "name": "pair-map-complete.json",
+      "bytes": 28291,
+      "sha256": "d5d9942be424cc0a83e4f5a3df7d9ccc125df776dcebf31386b4ac4d0dc70cf8"
+    },
+    {
+      "name": "preliminary-check-01.exit.json",
+      "bytes": 500,
+      "sha256": "1150c604d207415f38db0e66345eafbadcde6624b86e051f4dea1b3748e070ee"
+    },
+    {
+      "name": "preliminary-check-01.log",
+      "bytes": 900,
+      "sha256": "6b24f18346e8177750d62a87bdd6b67358b5ca73393a50681d136fc6db1ca9e9"
+    },
+    {
+      "name": "prepare-after-script.mjs",
+      "bytes": 1010,
+      "sha256": "08fdaf35b73a375636b96a044247468ca3687b9378e8809466d4f1390fff20e3"
+    },
+    {
+      "name": "prepare-complete-sheets.mjs",
+      "bytes": 2163,
+      "sha256": "3dccad7d8cfac490de85995c63e3bf7899e3c324871ff7ed1dedeabefa423dc0"
+    },
+    {
+      "name": "reconstruct-after.mjs",
+      "bytes": 4271,
+      "sha256": "a5de79171b7a3e02a63de512621a6bc58b0ac68fd4769a3acefa16d04c9d95bf"
+    },
+    {
+      "name": "reconstruct-before.mjs",
+      "bytes": 4221,
+      "sha256": "0f28d310e187101cd6aebcdbe7fcce40db910df0c066f9ee238a385fc1b0078d"
+    },
+    {
+      "name": "reconstruction-after-01.exit.json",
+      "bytes": 529,
+      "sha256": "fe60e37cb18ef0371fc1e20e17d288cac858e7b54b64405ea03bd76e5c335a7b"
+    },
+    {
+      "name": "reconstruction-after-01.log",
+      "bytes": 11206,
+      "sha256": "5863b6b594e098f940b25e8c23644474dffcb58f40d497aeb7df8e6b03f2e937"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-geometry.json",
+      "bytes": 540053,
+      "sha256": "34d5faa434ba7dea16bb9f45fd7eb2bdfaa4075da0ae86352334167e8f485b88"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-page-1.png",
+      "bytes": 19835,
+      "sha256": "42b040423a7e4aeff4e8518eabbc180aeeee1f8002f1864e15d20f289990dbcf"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-page-1.svg",
+      "bytes": 18465,
+      "sha256": "33e00a2e28c097f9de664d7811de15951e7980779b181c436d99b65496c36d91"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-page-2.png",
+      "bytes": 18534,
+      "sha256": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-page-2.svg",
+      "bytes": 23768,
+      "sha256": "74fda63cb8c3072d0fca1d2eb7cc00b738c8b726c1afc9433d4764078de875d6"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-page-3.png",
+      "bytes": 18534,
+      "sha256": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-page-3.svg",
+      "bytes": 23768,
+      "sha256": "2a4955a4da90b80ea4f7987b0dd120cf9b05a2fad57342fa7d81fa93640e84cb"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-page-4.png",
+      "bytes": 18534,
+      "sha256": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-page-4.svg",
+      "bytes": 23768,
+      "sha256": "65ccdd96a478507a02c4e8e7d430eab5b7a8a07505bc86859c002e96eb37c3b0"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-returned.json",
+      "bytes": 7348,
+      "sha256": "0f277dc25559f969d3d1560c7f91c625777cf48de862e30d550a9d059fb48a4b"
+    },
+    {
+      "name": "reconstruction-after-01/chevrons-source.json",
+      "bytes": 4649,
+      "sha256": "94b92f37e35e2bd46a2e06579bb9d1d612a5863c02e46017b39650e7e19f1245"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-geometry.json",
+      "bytes": 228244,
+      "sha256": "a8102bb7a09f0aa0f4cba4879c710e4d32a34f3f5f815fef79a4254dba730e1d"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-page-1.png",
+      "bytes": 19691,
+      "sha256": "db68e901388f865cfb6abd0a3a97e13968ace9744ccebb24eb71516296696d81"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-page-1.svg",
+      "bytes": 18394,
+      "sha256": "1a0a741b941bf2f21e8ae96a2b1b02c97cee985f69b27dc85802f3f1470536dd"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-page-2.png",
+      "bytes": 12891,
+      "sha256": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-page-2.svg",
+      "bytes": 10405,
+      "sha256": "36375f7db421038feb79696ab21a9c85603e392cf66c3d836379af3c79cd0e5a"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-page-3.png",
+      "bytes": 12891,
+      "sha256": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-page-3.svg",
+      "bytes": 10405,
+      "sha256": "a4ecdf66a08662ffe035dbc406e7379fd572ebafcf572c3c4a41f4da889fec0a"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-page-4.png",
+      "bytes": 12891,
+      "sha256": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-page-4.svg",
+      "bytes": 10405,
+      "sha256": "e7e8e917391f97c7da13452f0bde02e8b13b4bb973b8ce1a54ae732e2fdce4ca"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-returned.json",
+      "bytes": 7493,
+      "sha256": "d278f3e659422967df8635d7458042ec58228265b83bcc4fddfa8e4712710fa1"
+    },
+    {
+      "name": "reconstruction-after-01/cycle-source.json",
+      "bytes": 4808,
+      "sha256": "964008b0b11f433cdae72e4b42393da63024041352f53ac123be6b59d984a557"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-geometry.json",
+      "bytes": 231327,
+      "sha256": "a987327a4200f5b8fafbde5c30e03b3aeb6c8f2eda06e51fd360374694614b71"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-page-1.png",
+      "bytes": 20214,
+      "sha256": "ad3553b9644766cc4c60801f2a0376d1ec99b35cbc38b910814be26d562da409"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-page-1.svg",
+      "bytes": 18483,
+      "sha256": "6dbd4b02cd0d61e6ee5e5b25253bb607ca68e39d26cf40b6caaa1f1e9920f79e"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-page-2.png",
+      "bytes": 12404,
+      "sha256": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-page-2.svg",
+      "bytes": 10055,
+      "sha256": "576cea670b07e76ac2b28f9a62cdae8fc4b44a981a9d4ce62cbbbdbc6f905625"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-page-3.png",
+      "bytes": 12404,
+      "sha256": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-page-3.svg",
+      "bytes": 10055,
+      "sha256": "2f92aa7c186dbde8373408201d089f71b19afbc54b93e39b875ccf6eb1aa80d1"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-page-4.png",
+      "bytes": 12404,
+      "sha256": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-page-4.svg",
+      "bytes": 10055,
+      "sha256": "6cd0387c465d5db7c00ef6d068d199209f3886d4bb8d700f4feeb95416711051"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-returned.json",
+      "bytes": 7555,
+      "sha256": "692e4388d96892b4d4208e2120772d918555d2d0745c53478364170295933e27"
+    },
+    {
+      "name": "reconstruction-after-01/inverted-pyramid-source.json",
+      "bytes": 4806,
+      "sha256": "dee37906b2b96693d668594a11e0b7a9966dda33388211c2e155a2556630e18e"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-geometry.json",
+      "bytes": 228819,
+      "sha256": "601b67d6479bd8d62e6ad31e316c8815309882f4d8b2d5a73202d48e659e4751"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-page-1.png",
+      "bytes": 19683,
+      "sha256": "c11aaca8491fe6a43570f82f283c3f7d5d57db867865401bdf2baea406275600"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-page-1.svg",
+      "bytes": 18396,
+      "sha256": "a1f452ace563241b2026228f9d1673a57aa31bc87f52eb7286fa7da8dd502572"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-page-2.png",
+      "bytes": 12892,
+      "sha256": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-page-2.svg",
+      "bytes": 10405,
+      "sha256": "8baf39d6e43497252fd8bc3b2011dc82f697365b94e71c04f393b37a98a96a58"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-page-3.png",
+      "bytes": 12892,
+      "sha256": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-page-3.svg",
+      "bytes": 10405,
+      "sha256": "cb64273c0c4e2b0f9064046d398a0ce4f0001cc2eceaf40c7ce8203745d32921"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-page-4.png",
+      "bytes": 12892,
+      "sha256": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-page-4.svg",
+      "bytes": 10405,
+      "sha256": "87bd09ab58cf6080985698e0b6c92c3b2dc49d0a78b7a472abb737f7d9e605b7"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-returned.json",
+      "bytes": 7487,
+      "sha256": "e28b3cc1b007580703d8e884c07eb30cd43870f5cac74eeefb5f7cb37aa6311e"
+    },
+    {
+      "name": "reconstruction-after-01/matrix-source.json",
+      "bytes": 4787,
+      "sha256": "659eef27539b88d7a3e536aeda2c76b17ded51fab544ff0a583bed6c1c876b89"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-geometry.json",
+      "bytes": 205213,
+      "sha256": "1e951e6eacb1e7d923a70397dd6d7cf0619ea76b86e7c098205cb8b154b16a21"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-page-1.png",
+      "bytes": 19759,
+      "sha256": "8f5d728258a9cad73a41a963f0a051698ee16908182ac6008abf5d894c93f5a7"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-page-1.svg",
+      "bytes": 18462,
+      "sha256": "cca42a49599799677cde86ed664589f65619dc759f76370936fe72e8253d0a5e"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-page-2.png",
+      "bytes": 8554,
+      "sha256": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-page-2.svg",
+      "bytes": 6862,
+      "sha256": "87b20e42f2f8ef3d76a4e73f61caa561d0a6e164b99b336513ff2f1efa5f0540"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-page-3.png",
+      "bytes": 8554,
+      "sha256": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-page-3.svg",
+      "bytes": 6862,
+      "sha256": "6780c295596124de3fc5d746b335e2802c18f31dfd60f481cef24f2561e9eb9e"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-page-4.png",
+      "bytes": 8554,
+      "sha256": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-page-4.svg",
+      "bytes": 6862,
+      "sha256": "4d37fe75fa76c72336b6287ec2ba73a6be1ce871dc095876d4d549aa3cae3f01"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-returned.json",
+      "bytes": 7393,
+      "sha256": "d71a3a15f454d0912a756e97aaa2f00e3cb8ce30b04a67be6d5ef2eb6ad2293d"
+    },
+    {
+      "name": "reconstruction-after-01/pyramid-source.json",
+      "bytes": 4700,
+      "sha256": "d2e99d26676e761467fd49453ba66ba9ddbdc13b7bb525f9c7c613abf6165fe3"
+    },
+    {
+      "name": "reconstruction-after-01/receipt.json",
+      "bytes": 325811,
+      "sha256": "43133248c5b2f7f3b6a53bd50cff8983162515bba4a07387f3f32e4002b3eb9b"
+    },
+    {
+      "name": "reconstruction-after-01/venn-geometry.json",
+      "bytes": 498594,
+      "sha256": "c55697c3095f4399e43151a9236bf96798a091e1bf5005690f4c9ced544330e5"
+    },
+    {
+      "name": "reconstruction-after-01/venn-page-1.png",
+      "bytes": 19539,
+      "sha256": "c107fa7fc363353ef6827b449c0cc61740212b8d8bbc5a0e372098d549824a5c"
+    },
+    {
+      "name": "reconstruction-after-01/venn-page-1.svg",
+      "bytes": 18452,
+      "sha256": "6d950325a2ebd6e339f14c32b41998270659bbb846d22724c5507fea36a76921"
+    },
+    {
+      "name": "reconstruction-after-01/venn-page-2.png",
+      "bytes": 13916,
+      "sha256": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7"
+    },
+    {
+      "name": "reconstruction-after-01/venn-page-2.svg",
+      "bytes": 21608,
+      "sha256": "310cd90f3a2816d99a7a2308f2e92ad2e83aa6d9eb3996b91326b87afb000f3e"
+    },
+    {
+      "name": "reconstruction-after-01/venn-page-3.png",
+      "bytes": 13916,
+      "sha256": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7"
+    },
+    {
+      "name": "reconstruction-after-01/venn-page-3.svg",
+      "bytes": 21608,
+      "sha256": "ccce69f4013e7eb40b05526016403ec5745704599157b608522e9608d1e1a521"
+    },
+    {
+      "name": "reconstruction-after-01/venn-page-4.png",
+      "bytes": 13916,
+      "sha256": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7"
+    },
+    {
+      "name": "reconstruction-after-01/venn-page-4.svg",
+      "bytes": 21608,
+      "sha256": "03d66d5100511c2e2e3a23c231c01ac8caa7624968b3764c78f28c6daa3fb676"
+    },
+    {
+      "name": "reconstruction-after-01/venn-returned.json",
+      "bytes": 7487,
+      "sha256": "021244b234e20bc4edaf67413292d1ee5cfc4a4a879502d26f90e3b6a6131461"
+    },
+    {
+      "name": "reconstruction-after-01/venn-source.json",
+      "bytes": 4818,
+      "sha256": "ae87c054492ee3c202853a7ac4b4f5c6fe14e28df29e5e0e11c35c4ffe0827b0"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-geometry.json",
+      "bytes": 229588,
+      "sha256": "edd936de707c54fa882a8f86fabdb9c669e3138cfe0dcf4969fa0c41e180d964"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-page-1.png",
+      "bytes": 20074,
+      "sha256": "e953f5965f135561a0e334e136ba3f57fca6ddd432b587abf8b43e957b395597"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-page-1.svg",
+      "bytes": 18413,
+      "sha256": "1c8e75040a87eb07efd9bb2dbe998b638a4c25a358371344be6984dd30bc44f7"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-page-2.png",
+      "bytes": 12955,
+      "sha256": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-page-2.svg",
+      "bytes": 10750,
+      "sha256": "21371f06d253ebb63824108a515528b17561f3342c1f422af9d684b38ce7cc5e"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-page-3.png",
+      "bytes": 12955,
+      "sha256": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-page-3.svg",
+      "bytes": 10750,
+      "sha256": "1c6433e7a1d05784cbb7251dc1493b33d430d609a8cb309568d52dab11c49c2d"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-page-4.png",
+      "bytes": 12955,
+      "sha256": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-page-4.svg",
+      "bytes": 10750,
+      "sha256": "b22eeaf4426a7f6a1d6c3e8dd3451b8d161ded8e15ec3b6075ba43f4007c4f06"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-returned.json",
+      "bytes": 7494,
+      "sha256": "6c6d980362d2c60a21d269e7f474e741f4ff1bd099527e16f6db5ecbe594db0e"
+    },
+    {
+      "name": "reconstruction-after-01/vertical-flow-source.json",
+      "bytes": 4761,
+      "sha256": "4ad0d5b4d2f46532170a468d5b8464eca8aa14daf8c8ca3c988e6dcd23fe90a7"
+    },
+    {
+      "name": "reconstruction-before-01.exit.json",
+      "bytes": 535,
+      "sha256": "80ac8d2a738091ceaab0aa2ecf1d1314e70be0479d955895ae1406b742ebcb30"
+    },
+    {
+      "name": "reconstruction-before-01.log",
+      "bytes": 11212,
+      "sha256": "15a7c621fc612b5dc19f15ba2187b9fcf8faaaf2663f7a9b44f90f8f1ba1d01d"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-geometry.json",
+      "bytes": 443051,
+      "sha256": "e5fc9e7f43fcfb312f484f926c714065fba9949d7cd274fe808bd896a10f35b3"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-page-1.png",
+      "bytes": 19835,
+      "sha256": "42b040423a7e4aeff4e8518eabbc180aeeee1f8002f1864e15d20f289990dbcf"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-page-1.svg",
+      "bytes": 18465,
+      "sha256": "33e00a2e28c097f9de664d7811de15951e7980779b181c436d99b65496c36d91"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-page-2.png",
+      "bytes": 14695,
+      "sha256": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-page-2.svg",
+      "bytes": 17971,
+      "sha256": "ea22740e6cb166d16946b81c0a5f7fe5ad50a26a35cae8975d51d41b201d3203"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-page-3.png",
+      "bytes": 14695,
+      "sha256": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-page-3.svg",
+      "bytes": 17971,
+      "sha256": "6a402339e3c7c3d725d02a2042c0a24b1253e5fe6f76263385eaf5c9537539ba"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-page-4.png",
+      "bytes": 14695,
+      "sha256": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-page-4.svg",
+      "bytes": 17971,
+      "sha256": "4743dbe659cf8048b070a9747b81270ec6c56296ed200521ba1985a12a882e45"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-returned.json",
+      "bytes": 7348,
+      "sha256": "0f277dc25559f969d3d1560c7f91c625777cf48de862e30d550a9d059fb48a4b"
+    },
+    {
+      "name": "reconstruction-before-01/chevrons-source.json",
+      "bytes": 4649,
+      "sha256": "94b92f37e35e2bd46a2e06579bb9d1d612a5863c02e46017b39650e7e19f1245"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-geometry.json",
+      "bytes": 232138,
+      "sha256": "5e39a4bce91d0ad15bf7470bc465fd3be577e092c540b7d6f65aec65bfe36eaf"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-page-1.png",
+      "bytes": 19691,
+      "sha256": "db68e901388f865cfb6abd0a3a97e13968ace9744ccebb24eb71516296696d81"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-page-1.svg",
+      "bytes": 18394,
+      "sha256": "1a0a741b941bf2f21e8ae96a2b1b02c97cee985f69b27dc85802f3f1470536dd"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-page-2.png",
+      "bytes": 17203,
+      "sha256": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-page-2.svg",
+      "bytes": 10800,
+      "sha256": "d59965b8c02f30b6da37222ed227306c42c601a8f4ced37abf304fe250e91de2"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-page-3.png",
+      "bytes": 17203,
+      "sha256": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-page-3.svg",
+      "bytes": 10800,
+      "sha256": "a116b2a4774625a995eedfa29abf249f4db42d4ca354236df9516c63ea44def0"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-page-4.png",
+      "bytes": 17203,
+      "sha256": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-page-4.svg",
+      "bytes": 10800,
+      "sha256": "b9064e7d1f5f53779aa6b4d78cbeb43e73e25c073b96e3d97fa28c97e228ac5c"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-returned.json",
+      "bytes": 7493,
+      "sha256": "d278f3e659422967df8635d7458042ec58228265b83bcc4fddfa8e4712710fa1"
+    },
+    {
+      "name": "reconstruction-before-01/cycle-source.json",
+      "bytes": 4808,
+      "sha256": "964008b0b11f433cdae72e4b42393da63024041352f53ac123be6b59d984a557"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-geometry.json",
+      "bytes": 375297,
+      "sha256": "c5943c6c3e2bc96224b0f6432d8eb1bf4a3199dbc2b1fcd37f43c4ffdbe06ac4"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-page-1.png",
+      "bytes": 20214,
+      "sha256": "ad3553b9644766cc4c60801f2a0376d1ec99b35cbc38b910814be26d562da409"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-page-1.svg",
+      "bytes": 18483,
+      "sha256": "6dbd4b02cd0d61e6ee5e5b25253bb607ca68e39d26cf40b6caaa1f1e9920f79e"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-page-2.png",
+      "bytes": 14828,
+      "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-page-2.svg",
+      "bytes": 13442,
+      "sha256": "5b0b684a55aef4b6825c4f20ce768dc2057730b68c7f3ac2ffa1fe2850257b3f"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-page-3.png",
+      "bytes": 14828,
+      "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-page-3.svg",
+      "bytes": 13442,
+      "sha256": "a800fbd66dccaa2490ec7a2cb2c3fc2f7976b39e3c209250790b1c23a117884e"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-page-4.png",
+      "bytes": 14828,
+      "sha256": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-page-4.svg",
+      "bytes": 13442,
+      "sha256": "d240dc7fb8fd1ef3b8fb7fa36abf1c3b59ee5e2c7a6a9c701340061de12298dd"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-returned.json",
+      "bytes": 7555,
+      "sha256": "692e4388d96892b4d4208e2120772d918555d2d0745c53478364170295933e27"
+    },
+    {
+      "name": "reconstruction-before-01/inverted-pyramid-source.json",
+      "bytes": 4806,
+      "sha256": "dee37906b2b96693d668594a11e0b7a9966dda33388211c2e155a2556630e18e"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-geometry.json",
+      "bytes": 232713,
+      "sha256": "216ded55af0bf431bf1452357f38044bf36df726e23b0c49e5defdc59fd4f16d"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-page-1.png",
+      "bytes": 19683,
+      "sha256": "c11aaca8491fe6a43570f82f283c3f7d5d57db867865401bdf2baea406275600"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-page-1.svg",
+      "bytes": 18396,
+      "sha256": "a1f452ace563241b2026228f9d1673a57aa31bc87f52eb7286fa7da8dd502572"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-page-2.png",
+      "bytes": 17202,
+      "sha256": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-page-2.svg",
+      "bytes": 10800,
+      "sha256": "b5e524a9fbcf7174d56910ba648ed39fba915af87f8bba02ea83e8775fa04fe3"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-page-3.png",
+      "bytes": 17202,
+      "sha256": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-page-3.svg",
+      "bytes": 10800,
+      "sha256": "b7d31ae8fafc12994c51774720b838eb5f906f48189857de3d0d3481cfb173a3"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-page-4.png",
+      "bytes": 17202,
+      "sha256": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-page-4.svg",
+      "bytes": 10800,
+      "sha256": "2ade921893e8cfcb84cf4c6971d5bffd3c7d2fae02046ff989141ab1a7857812"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-returned.json",
+      "bytes": 7487,
+      "sha256": "e28b3cc1b007580703d8e884c07eb30cd43870f5cac74eeefb5f7cb37aa6311e"
+    },
+    {
+      "name": "reconstruction-before-01/matrix-source.json",
+      "bytes": 4787,
+      "sha256": "659eef27539b88d7a3e536aeda2c76b17ded51fab544ff0a583bed6c1c876b89"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-geometry.json",
+      "bytes": 205219,
+      "sha256": "9415f6b983d458b25371c924b7e7d70878553799cdadcacad1f5249009d12a27"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-page-1.png",
+      "bytes": 19759,
+      "sha256": "8f5d728258a9cad73a41a963f0a051698ee16908182ac6008abf5d894c93f5a7"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-page-1.svg",
+      "bytes": 18462,
+      "sha256": "cca42a49599799677cde86ed664589f65619dc759f76370936fe72e8253d0a5e"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-page-2.png",
+      "bytes": 11760,
+      "sha256": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-page-2.svg",
+      "bytes": 6890,
+      "sha256": "7b4e6676d8db805e0b375a4df24c16c668275dbc06a6e2bb2f1de1ec4a2a0640"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-page-3.png",
+      "bytes": 11760,
+      "sha256": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-page-3.svg",
+      "bytes": 6890,
+      "sha256": "e7572dd8b1bf092e6fa26c26222aca841ad9e88430b339560a53985269caa06d"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-page-4.png",
+      "bytes": 11760,
+      "sha256": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-page-4.svg",
+      "bytes": 6890,
+      "sha256": "ed37cf7380e8b7ee47d05436bdc0080383661be73020516171b1ec187d9414ed"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-returned.json",
+      "bytes": 7393,
+      "sha256": "d71a3a15f454d0912a756e97aaa2f00e3cb8ce30b04a67be6d5ef2eb6ad2293d"
+    },
+    {
+      "name": "reconstruction-before-01/pyramid-source.json",
+      "bytes": 4700,
+      "sha256": "d2e99d26676e761467fd49453ba66ba9ddbdc13b7bb525f9c7c613abf6165fe3"
+    },
+    {
+      "name": "reconstruction-before-01/receipt.json",
+      "bytes": 315895,
+      "sha256": "197c72b501cae95ca70045bd18aa70a76235fcd4a48a9139dcf9c56bb78d85bc"
+    },
+    {
+      "name": "reconstruction-before-01/venn-geometry.json",
+      "bytes": 374703,
+      "sha256": "0bbe6d81e2d398612b24dea140fdb5aff769457a2cc2abc4247640e0fdb59615"
+    },
+    {
+      "name": "reconstruction-before-01/venn-page-1.png",
+      "bytes": 19539,
+      "sha256": "c107fa7fc363353ef6827b449c0cc61740212b8d8bbc5a0e372098d549824a5c"
+    },
+    {
+      "name": "reconstruction-before-01/venn-page-1.svg",
+      "bytes": 18452,
+      "sha256": "6d950325a2ebd6e339f14c32b41998270659bbb846d22724c5507fea36a76921"
+    },
+    {
+      "name": "reconstruction-before-01/venn-page-2.png",
+      "bytes": 14152,
+      "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987"
+    },
+    {
+      "name": "reconstruction-before-01/venn-page-2.svg",
+      "bytes": 13413,
+      "sha256": "d57ce68411d0f8d5682492b216accf52d7f2e66b951091a73aa29af641f262db"
+    },
+    {
+      "name": "reconstruction-before-01/venn-page-3.png",
+      "bytes": 14152,
+      "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987"
+    },
+    {
+      "name": "reconstruction-before-01/venn-page-3.svg",
+      "bytes": 13413,
+      "sha256": "c9e67666a0e856313673f86e7ae121efefe1a79dfa2cf3bc18fe64da5b6dabe5"
+    },
+    {
+      "name": "reconstruction-before-01/venn-page-4.png",
+      "bytes": 14152,
+      "sha256": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987"
+    },
+    {
+      "name": "reconstruction-before-01/venn-page-4.svg",
+      "bytes": 13413,
+      "sha256": "46996892998ed096ed9d758dc7627b7e9345731a1117cd5a731a9faacd711415"
+    },
+    {
+      "name": "reconstruction-before-01/venn-returned.json",
+      "bytes": 7487,
+      "sha256": "021244b234e20bc4edaf67413292d1ee5cfc4a4a879502d26f90e3b6a6131461"
+    },
+    {
+      "name": "reconstruction-before-01/venn-source.json",
+      "bytes": 4818,
+      "sha256": "ae87c054492ee3c202853a7ac4b4f5c6fe14e28df29e5e0e11c35c4ffe0827b0"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-geometry.json",
+      "bytes": 233482,
+      "sha256": "d3f5225e2ad65f974a030b2fcaa0414b3c96ec591a7ef1ef6cefc8cbd09467fc"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-page-1.png",
+      "bytes": 20074,
+      "sha256": "e953f5965f135561a0e334e136ba3f57fca6ddd432b587abf8b43e957b395597"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-page-1.svg",
+      "bytes": 18413,
+      "sha256": "1c8e75040a87eb07efd9bb2dbe998b638a4c25a358371344be6984dd30bc44f7"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-page-2.png",
+      "bytes": 17325,
+      "sha256": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-page-2.svg",
+      "bytes": 11145,
+      "sha256": "7b81200d56a90d0441c0032bfd425eb5d5118b55894e0e3a9f0d38addb62384e"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-page-3.png",
+      "bytes": 17325,
+      "sha256": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-page-3.svg",
+      "bytes": 11145,
+      "sha256": "40ca6b0e266e65dd54f5786edb2ec429d6ab0617eec0f257ecfaf41163c4cbb5"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-page-4.png",
+      "bytes": 17325,
+      "sha256": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-page-4.svg",
+      "bytes": 11145,
+      "sha256": "b936f50807b027254af6e222404767ec490de8a7b66f5a3b83a74ed72af40add"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-returned.json",
+      "bytes": 7494,
+      "sha256": "6c6d980362d2c60a21d269e7f474e741f4ff1bd099527e16f6db5ecbe594db0e"
+    },
+    {
+      "name": "reconstruction-before-01/vertical-flow-source.json",
+      "bytes": 4761,
+      "sha256": "4ad0d5b4d2f46532170a468d5b8464eca8aa14daf8c8ca3c988e6dcd23fe90a7"
+    },
+    {
+      "name": "seal-complete.mjs",
+      "bytes": 1868,
+      "sha256": "fa8b171bff7822cf3bff28bdd1d29c15491523c4663fa89730e9725625ff96c4"
+    },
+    {
+      "name": "seal-preliminary-check.mjs",
+      "bytes": 1545,
+      "sha256": "8702be3d071b8405efa292b6cbf7490261e3a0a5db7f09bcb27a172a0286d88c"
+    }
+  ],
+  "rawBytes": 8111948,
+  "archiveBytes": 1457647,
+  "archiveSHA256": "8e667953ffbbacc4d6b8414ec90c9b4d32ca23ed6ab8b9b4886c51772104f37b"
+}

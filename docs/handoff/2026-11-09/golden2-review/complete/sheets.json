@@ -1,0 +1,533 @@
+{
+  "sheets": [
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/raw-00.png",
+      "title": "inverted-pyramid 5 long",
+      "keys": [
+        "inverted-pyramid 5 long"
+      ],
+      "sha256": "862cc923e8a5132cb3bf3d3e3b400bd2bee29695dcabc6dfec92b05d055b4511",
+      "width": 1320,
+      "height": 474,
+      "panels": [
+        {
+          "key": "inverted-pyramid 5 long",
+          "side": "before",
+          "source": "69c702cb26db634bde3ba0b83fbd7464c3366d79ecf68ff8ae652832f87aecf6",
+          "upsampledSHA256": "91ea437512097e30f28ef88beaebcff58fd108529b0ae797940d93dac1696b7c",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "inverted-pyramid 5 long",
+          "side": "after",
+          "source": "1143cd73dc2c335dc199c1946a7ab86f7fdfbf6f6f95820cdc813ca171b0059f",
+          "upsampledSHA256": "fac0f8b9ba56b474aedec84daeb2b1af4080fecd87453225839dbd88c49eb17d",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/raw-01.png",
+      "title": "org-chart 5 long",
+      "keys": [
+        "org-chart 5 long"
+      ],
+      "sha256": "b419f6d02f5b19d96f03fe15830434b59c750c30a521e620e74e1453e41b093d",
+      "width": 1320,
+      "height": 474,
+      "panels": [
+        {
+          "key": "org-chart 5 long",
+          "side": "before",
+          "source": "87503dc46e55d116c57dbea1be558bf6f69d7b224021db418f7837d417aa810b",
+          "upsampledSHA256": "5a587e196c8b2ccc9e45fe9c127f8f70ce07eb3d7809b9095b8b5f844bef7173",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "org-chart 5 long",
+          "side": "after",
+          "source": "b750aa101c9e108008973521bf381635b5483774157216a50db681167630bc2f",
+          "upsampledSHA256": "b6a055f1b0893483857516573e26305dfbb02d9905826fa3471a5b24b5363570",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/raw-02.png",
+      "title": "hierarchy 5 long",
+      "keys": [
+        "hierarchy 5 long"
+      ],
+      "sha256": "26436bad491dd7c925a8dc8a8619d236fe03ce48fb352fd35226553811ab11f5",
+      "width": 1320,
+      "height": 474,
+      "panels": [
+        {
+          "key": "hierarchy 5 long",
+          "side": "before",
+          "source": "02779855459ed8c717a23ff10bc3fe45dc9b73a7f8636da92daae97147cd64f7",
+          "upsampledSHA256": "065d1e59506697fb4eecaa129b4d13e46c993e48300118d06804ffe70194c34a",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "hierarchy 5 long",
+          "side": "after",
+          "source": "bdd2cd4f7f575b49af2c679be0453158406e4e0f23266b7267d693382eeb6a59",
+          "upsampledSHA256": "05622359354ab0ae58373d0a2bb56243b27ce2037390856ceb392eaa160160dc",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/raw-03.png",
+      "title": "venn 5 long",
+      "keys": [
+        "venn 5 long"
+      ],
+      "sha256": "1a1e0c879a3f79c6460e9e43594f270e9ec827b60fbcc6047dd4fc2c1cc26493",
+      "width": 1320,
+      "height": 474,
+      "panels": [
+        {
+          "key": "venn 5 long",
+          "side": "before",
+          "source": "a8d5780000915a89162fa2fee0472401c17bfe0db31a11656be558ed4872809e",
+          "upsampledSHA256": "62c61c9c96f461a8798d444010802a6ef53047a6ef875cd5097ea063434fa834",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "venn 5 long",
+          "side": "after",
+          "source": "5c66f057d91501b952807b76e48d5b708285b3e60b0538300cb5c75eaa96dfc6",
+          "upsampledSHA256": "ec84faec6c19283a525cf86b8df9ee47db3eb6908d78b70ad7e458f387e6512f",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/pages-01.png",
+      "title": "paginated pyramid 5 long",
+      "keys": [
+        "paginated pyramid 5 long page 2",
+        "paginated pyramid 5 long page 3",
+        "paginated pyramid 5 long page 4"
+      ],
+      "sha256": "bd45c01ff592ffe1edb5be44fb1a1d04d3f7fcef9c0f3ff3e4d0c872d826ee78",
+      "width": 1320,
+      "height": 1302,
+      "panels": [
+        {
+          "key": "paginated pyramid 5 long page 2",
+          "side": "before",
+          "source": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+          "upsampledSHA256": "3279cb9383cd514d649f94835c46f240c9fca30784c35aeb4ecc7e37184a5423",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated pyramid 5 long page 2",
+          "side": "after",
+          "source": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+          "upsampledSHA256": "d601e7faae85b79e61456c15a2ec43f06556b64241110a203d825c163f30ee0a",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated pyramid 5 long page 3",
+          "side": "before",
+          "source": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+          "upsampledSHA256": "3279cb9383cd514d649f94835c46f240c9fca30784c35aeb4ecc7e37184a5423",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated pyramid 5 long page 3",
+          "side": "after",
+          "source": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+          "upsampledSHA256": "d601e7faae85b79e61456c15a2ec43f06556b64241110a203d825c163f30ee0a",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated pyramid 5 long page 4",
+          "side": "before",
+          "source": "0d50000b9b7a6312d063f0d7f3a9cf3be1c02314a62779fa404575b74676d85a",
+          "upsampledSHA256": "3279cb9383cd514d649f94835c46f240c9fca30784c35aeb4ecc7e37184a5423",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated pyramid 5 long page 4",
+          "side": "after",
+          "source": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+          "upsampledSHA256": "d601e7faae85b79e61456c15a2ec43f06556b64241110a203d825c163f30ee0a",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/pages-02.png",
+      "title": "paginated inverted-pyramid 5 long",
+      "keys": [
+        "paginated inverted-pyramid 5 long page 2",
+        "paginated inverted-pyramid 5 long page 3",
+        "paginated inverted-pyramid 5 long page 4"
+      ],
+      "sha256": "f636e806682bb6c23a47122253cd6d27f354aa7fbc04eb224859535c58d0c50a",
+      "width": 1320,
+      "height": 1302,
+      "panels": [
+        {
+          "key": "paginated inverted-pyramid 5 long page 2",
+          "side": "before",
+          "source": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+          "upsampledSHA256": "dd3214858d5a795055002dea42457bb1d945e283befc1d590a537b70dd78b2f1",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated inverted-pyramid 5 long page 2",
+          "side": "after",
+          "source": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
+          "upsampledSHA256": "bf99635629e5e04fbe8abb9c362cc6580dd3d719b9c1f2738b21a81226898482",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated inverted-pyramid 5 long page 3",
+          "side": "before",
+          "source": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+          "upsampledSHA256": "dd3214858d5a795055002dea42457bb1d945e283befc1d590a537b70dd78b2f1",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated inverted-pyramid 5 long page 3",
+          "side": "after",
+          "source": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
+          "upsampledSHA256": "bf99635629e5e04fbe8abb9c362cc6580dd3d719b9c1f2738b21a81226898482",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated inverted-pyramid 5 long page 4",
+          "side": "before",
+          "source": "224bc767c7e8a4cbdb795fbfd219a9a27a325e33d077b65197079de30f043512",
+          "upsampledSHA256": "dd3214858d5a795055002dea42457bb1d945e283befc1d590a537b70dd78b2f1",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated inverted-pyramid 5 long page 4",
+          "side": "after",
+          "source": "a55e3ceadf75f93957c32b5ed95d86138ecd8dc08e7f15a4af7ac536628e3522",
+          "upsampledSHA256": "bf99635629e5e04fbe8abb9c362cc6580dd3d719b9c1f2738b21a81226898482",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/pages-03.png",
+      "title": "paginated matrix 5 long",
+      "keys": [
+        "paginated matrix 5 long page 2",
+        "paginated matrix 5 long page 3",
+        "paginated matrix 5 long page 4"
+      ],
+      "sha256": "f92d935af825d2fa92b73d5816fe4939afbbaea435f83cab8c6daaaf95c80763",
+      "width": 1320,
+      "height": 1302,
+      "panels": [
+        {
+          "key": "paginated matrix 5 long page 2",
+          "side": "before",
+          "source": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+          "upsampledSHA256": "b7285a545bb45bfc75d16af3c797702d89fd68f1e4d25800d84d06eab414e84c",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated matrix 5 long page 2",
+          "side": "after",
+          "source": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
+          "upsampledSHA256": "f7dada0729c2d7a8dc402a8574aba5d8f8e96448cb0bab7d6d8a1b398b38207d",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated matrix 5 long page 3",
+          "side": "before",
+          "source": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+          "upsampledSHA256": "b7285a545bb45bfc75d16af3c797702d89fd68f1e4d25800d84d06eab414e84c",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated matrix 5 long page 3",
+          "side": "after",
+          "source": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
+          "upsampledSHA256": "f7dada0729c2d7a8dc402a8574aba5d8f8e96448cb0bab7d6d8a1b398b38207d",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated matrix 5 long page 4",
+          "side": "before",
+          "source": "adeef9fc8b2ffa526c9281a5ae87e3862b5a4986c8a200180807477492cf7fb0",
+          "upsampledSHA256": "b7285a545bb45bfc75d16af3c797702d89fd68f1e4d25800d84d06eab414e84c",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated matrix 5 long page 4",
+          "side": "after",
+          "source": "dca7bdb8a584ae6fb56c3e46bd8e324aa6ccf5eeafe453f4ab00180847575638",
+          "upsampledSHA256": "f7dada0729c2d7a8dc402a8574aba5d8f8e96448cb0bab7d6d8a1b398b38207d",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/pages-04.png",
+      "title": "paginated cycle 5 long",
+      "keys": [
+        "paginated cycle 5 long page 2",
+        "paginated cycle 5 long page 3",
+        "paginated cycle 5 long page 4"
+      ],
+      "sha256": "cd380bcdc00645c0494b5281893864c1e7c5e9dfbd63dbe3bc4709b3fa3055a0",
+      "width": 1320,
+      "height": 1302,
+      "panels": [
+        {
+          "key": "paginated cycle 5 long page 2",
+          "side": "before",
+          "source": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+          "upsampledSHA256": "d8e7d79680cd9822f2a825a47b04d5fabf869e8881b80414c99adb76020c711e",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated cycle 5 long page 2",
+          "side": "after",
+          "source": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
+          "upsampledSHA256": "70b120778702af82a2b044d2e879e238f8853521896939ce080caa85e84ad6e4",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated cycle 5 long page 3",
+          "side": "before",
+          "source": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+          "upsampledSHA256": "d8e7d79680cd9822f2a825a47b04d5fabf869e8881b80414c99adb76020c711e",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated cycle 5 long page 3",
+          "side": "after",
+          "source": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
+          "upsampledSHA256": "70b120778702af82a2b044d2e879e238f8853521896939ce080caa85e84ad6e4",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated cycle 5 long page 4",
+          "side": "before",
+          "source": "0b7f447ca7bb9683d4ef865805dcf8fa0165687c535d492ecc41e29b5a4a1abe",
+          "upsampledSHA256": "d8e7d79680cd9822f2a825a47b04d5fabf869e8881b80414c99adb76020c711e",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated cycle 5 long page 4",
+          "side": "after",
+          "source": "e3a0fe0567d02712cd473e3e353429bc82237d4fe1a37828320d77bc2cf72ab4",
+          "upsampledSHA256": "70b120778702af82a2b044d2e879e238f8853521896939ce080caa85e84ad6e4",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/pages-05.png",
+      "title": "paginated chevrons 5 long",
+      "keys": [
+        "paginated chevrons 5 long page 2",
+        "paginated chevrons 5 long page 3",
+        "paginated chevrons 5 long page 4"
+      ],
+      "sha256": "c1104af1898b50a7b040b3180dcfdd0b199d190a98314fbb17dbf2b8bffb72a9",
+      "width": 1320,
+      "height": 1302,
+      "panels": [
+        {
+          "key": "paginated chevrons 5 long page 2",
+          "side": "before",
+          "source": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+          "upsampledSHA256": "7ef8746a8d3a188b1c9f6ead75db382738ff994bb1b8c4bc8cc5739ac1a5fe60",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated chevrons 5 long page 2",
+          "side": "after",
+          "source": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
+          "upsampledSHA256": "cf1127e6c7aed6e4a9f7d9fb564bdfb02634a779f2abfaacd0d79f6d1b73288c",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated chevrons 5 long page 3",
+          "side": "before",
+          "source": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+          "upsampledSHA256": "7ef8746a8d3a188b1c9f6ead75db382738ff994bb1b8c4bc8cc5739ac1a5fe60",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated chevrons 5 long page 3",
+          "side": "after",
+          "source": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
+          "upsampledSHA256": "cf1127e6c7aed6e4a9f7d9fb564bdfb02634a779f2abfaacd0d79f6d1b73288c",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated chevrons 5 long page 4",
+          "side": "before",
+          "source": "9151f96d9bf6320e55544671f60ac8f445a7bb6209a6ca5e9f5fdda9050a9637",
+          "upsampledSHA256": "7ef8746a8d3a188b1c9f6ead75db382738ff994bb1b8c4bc8cc5739ac1a5fe60",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated chevrons 5 long page 4",
+          "side": "after",
+          "source": "510f9846d7e4dba824342b6653153f51853384c019b81f47dd6c7b01627ec218",
+          "upsampledSHA256": "cf1127e6c7aed6e4a9f7d9fb564bdfb02634a779f2abfaacd0d79f6d1b73288c",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/pages-06.png",
+      "title": "paginated vertical-flow 5 long",
+      "keys": [
+        "paginated vertical-flow 5 long page 2",
+        "paginated vertical-flow 5 long page 3",
+        "paginated vertical-flow 5 long page 4"
+      ],
+      "sha256": "3923a5eb8d5f26ae94cc4b29d32c931680afebcbdbb1a5c6a9d62d5151909a3c",
+      "width": 1320,
+      "height": 1302,
+      "panels": [
+        {
+          "key": "paginated vertical-flow 5 long page 2",
+          "side": "before",
+          "source": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+          "upsampledSHA256": "5b61a27d8eaf7c54d7b434d14c826962e13947f266a4fa1e539dc8bd5e0f0941",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated vertical-flow 5 long page 2",
+          "side": "after",
+          "source": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
+          "upsampledSHA256": "a7cdc9e9cdcd334f12ba2716df4d6e0a5f82fa3b83ea829e8f2cc2b23e59c184",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated vertical-flow 5 long page 3",
+          "side": "before",
+          "source": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+          "upsampledSHA256": "5b61a27d8eaf7c54d7b434d14c826962e13947f266a4fa1e539dc8bd5e0f0941",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated vertical-flow 5 long page 3",
+          "side": "after",
+          "source": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
+          "upsampledSHA256": "a7cdc9e9cdcd334f12ba2716df4d6e0a5f82fa3b83ea829e8f2cc2b23e59c184",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated vertical-flow 5 long page 4",
+          "side": "before",
+          "source": "0bcef2e234bf579be8958c67eb993bad130460ebd9dc456b1bcd024975342c84",
+          "upsampledSHA256": "5b61a27d8eaf7c54d7b434d14c826962e13947f266a4fa1e539dc8bd5e0f0941",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated vertical-flow 5 long page 4",
+          "side": "after",
+          "source": "cfaee6ec2871788e6f2eea66efa30150d86962e4d22e0e018ba634cedf4864ca",
+          "upsampledSHA256": "a7cdc9e9cdcd334f12ba2716df4d6e0a5f82fa3b83ea829e8f2cc2b23e59c184",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    },
+    {
+      "file": "C:/opf-work/golden2-review-raw-20261109-01/pairs-complete/pages-07.png",
+      "title": "paginated venn 5 long",
+      "keys": [
+        "paginated venn 5 long page 2",
+        "paginated venn 5 long page 3",
+        "paginated venn 5 long page 4"
+      ],
+      "sha256": "a90b545587e3899e19c6300bfd7d3ffcc17f45c92d4ae44f3cdf350ba23b997b",
+      "width": 1320,
+      "height": 1302,
+      "panels": [
+        {
+          "key": "paginated venn 5 long page 2",
+          "side": "before",
+          "source": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+          "upsampledSHA256": "68f3b4f405bcb7dfd3a78a8b5627bd8bd6cf68ec09c3b5b0858f938a0dca786f",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated venn 5 long page 2",
+          "side": "after",
+          "source": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
+          "upsampledSHA256": "d17ac657c03f213fc743739fc6f350cfa10b5dc1da5641ab4169fe515ada3b28",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated venn 5 long page 3",
+          "side": "before",
+          "source": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+          "upsampledSHA256": "68f3b4f405bcb7dfd3a78a8b5627bd8bd6cf68ec09c3b5b0858f938a0dca786f",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated venn 5 long page 3",
+          "side": "after",
+          "source": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
+          "upsampledSHA256": "d17ac657c03f213fc743739fc6f350cfa10b5dc1da5641ab4169fe515ada3b28",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated venn 5 long page 4",
+          "side": "before",
+          "source": "49b2583a2e54c14501cc6e80994ccbf4f62be1dae04544d1c49c47889cc68987",
+          "upsampledSHA256": "68f3b4f405bcb7dfd3a78a8b5627bd8bd6cf68ec09c3b5b0858f938a0dca786f",
+          "upsample": "2x nearest; no rerender"
+        },
+        {
+          "key": "paginated venn 5 long page 4",
+          "side": "after",
+          "source": "2fcc5bb1fdabd4d77fcb9ffb2d213f467ffdad558ba548d3f6e9dd371f8fc7d7",
+          "upsampledSHA256": "d17ac657c03f213fc743739fc6f350cfa10b5dc1da5641ab4169fe515ada3b28",
+          "upsample": "2x nearest; no rerender"
+        }
+      ]
+    }
+  ],
+  "sharp": {
+    "aom": "3.15.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.6",
+    "cgif": "0.5.4",
+    "exif": "0.6.26",
+    "expat": "2.8.5",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.17",
+    "glib": "2.90.0",
+    "harfbuzz": "14.5.0",
+    "heif": "1.23.5",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.63.2",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.7",
+    "webp": "1.6.0",
+    "xml2": "2.15.4",
+    "zlib-ng": "2.3.3",
+    "sharp": "0.35.5"
+  },
+  "method": "Composite original verified artifact PNGs, 2x nearest upsampling; only exact-hash historical reconstruction; no golden update or tolerance change",
+  "scope": "Portable quarter-scale stress samples only; cannot certify full-size/native usability or real E1/E3 comparisons"
+}

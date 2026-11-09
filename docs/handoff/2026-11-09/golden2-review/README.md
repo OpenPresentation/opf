@@ -39,3 +39,7 @@ Integrity PASS does not mean visual acceptance. Required evidence-only metadata 
 ## Preliminary metadata qualification
 
 The required evidence-only pnpm check:changed --base b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b is TERMINAL0: build, Biome, changes, text and skill-command checks all PASS (29.4s maintained table;31.453s outer wrapper). Typecheck correctly SKIPs because no TypeScript changed, and no package suite is selected. qualification.json/zip retain the original terminal driver/exit, selected step logs, exact-HEAD hydration and frozen offline install receipts. These are metadata/source-integrity checks; visual acceptance remains pending. This evidence-only sealing tail does not change any tested implementation or golden.
+
+## Completed strict reconstruction follow-up
+
+The published preliminary state above is preserved unchanged. See complete/README.md for the subsequent25 complete pairs,56 exact before/current SVG+PNG+byte-length triplets and actual cap/content metrics. The visible continuation reduction is explicit enforcement of the already returned24px cap, not a universal font-growth claim; unchanged Pyramid78-character lines remain a stated limitation. The coordinator owns final visual acceptance. No source or tracked golden was regenerated locally.
