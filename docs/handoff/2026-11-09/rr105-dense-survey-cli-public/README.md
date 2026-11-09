@@ -19,3 +19,5 @@ node docs/handoff/2026-11-09/rr105-dense-survey-cli-public/verify.mjs <repositor
 ```
 
 The controller stays at `C:/opf-work/n034-dense`, HEAD `623e4dbc`. Actual envelope: `C:/opf-work/n034-dense-public-pure02/execution-envelope.json`. Root exclusively reviews any future fresh-output `-RunOffice` execution, bounded to the unchanged 5–60 second worker policy. The intact-seven worker remains unimplemented pending its separate property-allowlist review; charts and release work are outside this correction.
+
+The separate evidence-worktree metadata check at `8955624538e246fbe1cef384f8663430e06f7820` is also retained RED: 31.4 seconds, 4 passing checks, the same missing `painting-Linux.json.gz` failure, and typecheck skipped. Exact offline frozen-lock installation passed. Eleven additional lossless metadata files (31,401 raw bytes) bind the six original packet inputs before this results-only tail. No package suite or Office execution was selected. A corrected draft verifier expectation is recorded separately; original raw evidence stayed byte-exact throughout.
