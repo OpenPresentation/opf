@@ -19,6 +19,7 @@ import {XMLParser} from 'fast-xml-parser';
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
 import {mergeNativeRunProperties} from './native-text-style.js';
+import {nativeAutofit, scaledNativeRun} from './native-autofit.js';
 import {rasterMetadata} from './image-geometry.js';
 import {FONT_WEIGHT_WORDS} from './font-weights.js';
 import {readThemeSlotColors} from './theme-colors.js';
@@ -136,6 +137,11 @@ function buildContext(slidePath, archive) {
     themeName: themePath ? theme.parsedPart(themePath)?.value?.['a:theme']?.name : undefined,
     colors: theme.colors, mapping: theme.mapping, fonts: theme.fonts, format: theme.format,
     layoutPath, masterPath, layout, master,
+    autofitBindingsKnown: [ [slidePath, 'slideLayout'], [layoutPath, 'slideMaster'] ].every(([path, type]) => {
+      if (!path) return false;
+      const matches = [...archive.relationships(path).values()].filter(rel => rel.type.endsWith('/' + type));
+      return matches.length === 1 && matches[0].targetMode !== 'External' && archive.bytes(matches[0].path);
+    }),
     layoutPlaceholders: placeholdersOf(layout), masterPlaceholders: placeholdersOf(master),
     defaultTextStyle: presentation?.['p:defaultTextStyle'], txStyles: master?.['p:txStyles']
   };
@@ -284,6 +290,17 @@ function readTextBody(txBody, shape, context, relationships, limits, budget, rep
     masterPh?.sp?.['p:txBody']?.['a:lstStyle'], layoutPh?.sp?.['p:txBody']?.['a:lstStyle'], lstStyle
   ];
 
+  const bodyPr = propsOf(findKid(bodyKids, 'a:bodyPr')) ?? {};
+  // New cached-size recovery requires the same unambiguous Body/idx binding as
+  // ordinary body import; the older display/style heuristics never select a factor.
+  const exactBody = (list, reference) => {
+    if (reference?.type !== 'body') return undefined;
+    const matches = list.filter(entry => String(entry.ph?.idx ?? '0') === String(reference.idx ?? '0'));
+    return matches.length === 1 && matches[0].ph?.type === 'body' ? matches[0] : undefined;
+  };
+  const fitLayout = context.autofitBindingsKnown ? exactBody(context.layoutPlaceholders, ph) : undefined;
+  const fitMaster = fitLayout ? exactBody(context.masterPlaceholders, fitLayout.ph) : undefined;
+  const fit = nativeAutofit([bodyPr, ...(fitLayout && fitMaster ? [fitLayout.sp?.['p:txBody']?.['a:bodyPr'], fitMaster.sp?.['p:txBody']?.['a:bodyPr']] : [])]);
   const paragraphs = [];
   let chars = 0, monoChars = 0, maxSize = 0, bullets = 0, emitted = 0;
   const sizeCounts = new Map(), fontCounts = new Map();
@@ -303,7 +320,7 @@ function readTextBody(txBody, shape, context, relationships, limits, budget, rep
       const value = tag === 'a:br' ? '\n' : textOf(kidsOf(findKid(kidsOf(node), 'a:t')));
       if (tag !== 'a:br' && value === '') continue;
       const extra = tag === 'a:fld' ? {field: attrsOf(node).type ?? 'field'} : tag === 'a:br' ? {lineBreak: true} : {};
-      const signal = runSignal(value, properties, context, relationships, extra);
+      const signal = runSignal(value, tag === 'a:br' && !(Number(properties.sz) > 0) ? properties : scaledNativeRun(properties, fit), context, relationships, extra);
       // Fall back to the theme body font when no part of the chain names a Latin face.
       if (signal.font === undefined) {
         const fallback = context.fonts?.['a:minorFont']?.['a:latin']?.typeface;
@@ -334,6 +351,8 @@ function readTextBody(txBody, shape, context, relationships, limits, budget, rep
       ...spacing(merged['a:lnSpc'], 'lineSpacing'), ...spacing(merged['a:spcBef'], 'spaceBefore'), ...spacing(merged['a:spcAft'], 'spaceAfter'),
       runs
     };
+    // OOXML subtracts percentage points; point spacing and before/after are unchanged.
+    if (fit.reduction && paragraph.lineSpacingPct !== undefined && paragraph.lineSpacingPct >= fit.reduction * 100) paragraph.lineSpacingPct = round(paragraph.lineSpacingPct - fit.reduction * 100, 3);
     if (emitted < limits.maxParagraphsPerShape && budget.chars > 0) {
       emitted += 1;
       let remaining = Math.min(limits.maxTextCharsPerShape - paragraphs.reduce((sum, item) => sum + item.text.length, 0), budget.chars);
@@ -349,7 +368,6 @@ function readTextBody(txBody, shape, context, relationships, limits, budget, rep
   }
 
   const dominant = counts => [...counts].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))[0]?.[0];
-  const bodyPr = propsOf(findKid(bodyKids, 'a:bodyPr')) ?? {};
   const inheritedBodyPr = key => [bodyPr, layoutPh?.sp?.['p:txBody']?.['a:bodyPr'], masterPh?.sp?.['p:txBody']?.['a:bodyPr']].map(item => item?.[key]).find(value => value !== undefined);
   const fitSource = [bodyPr, layoutPh?.sp?.['p:txBody']?.['a:bodyPr'], masterPh?.sp?.['p:txBody']?.['a:bodyPr']].find(item => item?.['a:normAutofit'] || item?.['a:spAutoFit'] || item?.['a:noAutofit']);
   const autofit = fitSource?.['a:normAutofit'] ? 'shrink' : fitSource?.['a:spAutoFit'] ? 'resize' : fitSource?.['a:noAutofit'] ? 'none' : undefined;
@@ -366,6 +384,8 @@ function readTextBody(txBody, shape, context, relationships, limits, budget, rep
     ...(bullets ? {bulletedParagraphs: bullets} : {}),
     ...(anchor ? {anchor: {t: 'top', ctr: 'middle', b: 'bottom'}[anchor] ?? anchor} : {}),
     ...(autofit ? {autofit} : {}),
+    ...(fit.scale !== 1 ? {fontScalePct: round(fit.scale * 100, 3)} : {}),
+    ...(fit.reduction ? {lineSpacingReductionPct: round(fit.reduction * 100, 3)} : {}),
     ...(inheritedBodyPr('wrap') === 'none' ? {wrap: 'none'} : {}),
     ...(inheritedBodyPr('vert') && inheritedBodyPr('vert') !== 'horz' ? {vertical: inheritedBodyPr('vert')} : {}),
     ...(number(inheritedBodyPr('numCol')) > 1 ? {columns: number(inheritedBodyPr('numCol'))} : {})
