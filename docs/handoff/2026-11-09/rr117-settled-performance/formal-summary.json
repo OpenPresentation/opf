@@ -1,0 +1,346 @@
+{
+  "scope": "Bounded same-candidate cache-control comparison; not original-v0.33 or uninstrumented production",
+  "source": "d8116ee38e363d2a933d4a70ce50b0e88efa59de",
+  "sourceTree": "8f8807454c3b2aa87da93e444567903b34c772f0",
+  "bundleSha256": "2003813a3533b8bb09192630d4c5ec4a01de8c24dd69197ff72bc295cc45ccc8",
+  "node": "v24.20.0",
+  "browserVersions": [
+    "156.0.4314.50"
+  ],
+  "startedUtc": "2026-11-09T22:39:08.6176442Z",
+  "endedUtc": "2026-11-09T23:04:07.2492082Z",
+  "actualExitCode": 0,
+  "primaryOperations": 72,
+  "phasePairs": 36,
+  "exactSvgPairs": 204,
+  "rows": [
+    {
+      "size": 16,
+      "cpu": 1,
+      "edit": "local-title0",
+      "cold": {
+        "samples": 3,
+        "settledMs": 1167.1000000238419,
+        "coreValidateMs": 744.4000000953674,
+        "cdpTaskDurationMs": 857.8800000000015,
+        "cdpScriptDurationMs": 755.7290000000005,
+        "longTaskOverlapMs": 829.7000000476837
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 1161.2000000476837,
+        "coreValidateMs": 756.7000000476837,
+        "cdpTaskDurationMs": 850.4970000000008,
+        "cdpScriptDurationMs": 767.2360000000004,
+        "longTaskOverlapMs": 816.7000000476837
+      },
+      "settledChangePercent": -0.5055265166684642,
+      "coreChangePercent": 1.6523374463649265
+    },
+    {
+      "size": 16,
+      "cpu": 1,
+      "edit": "shared-datum",
+      "cold": {
+        "samples": 3,
+        "settledMs": 1346,
+        "coreValidateMs": 744.3999999761581,
+        "cdpTaskDurationMs": 1130.7139999999977,
+        "cdpScriptDurationMs": 841.7849999999997,
+        "longTaskOverlapMs": 1106.9000000953674
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 1159.1000000238419,
+        "coreValidateMs": 532,
+        "cdpTaskDurationMs": 939.3079999999969,
+        "cdpScriptDurationMs": 630.236,
+        "longTaskOverlapMs": 911.7999999523163
+      },
+      "settledChangePercent": -13.885586922448601,
+      "coreChangePercent": -28.533046746770687
+    },
+    {
+      "size": 16,
+      "cpu": 1,
+      "edit": "global-name",
+      "cold": {
+        "samples": 3,
+        "settledMs": 1377.5,
+        "coreValidateMs": 752.3000000715256,
+        "cdpTaskDurationMs": 1159.6249999999984,
+        "cdpScriptDurationMs": 857.1290000000005,
+        "longTaskOverlapMs": 1144.7999999523163
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 1418.7000000476837,
+        "coreValidateMs": 781.3999999761581,
+        "cdpTaskDurationMs": 1192.7140000000022,
+        "cdpScriptDurationMs": 881.2129999999999,
+        "longTaskOverlapMs": 1176.5999999046326
+      },
+      "settledChangePercent": 2.990925593298277,
+      "coreChangePercent": 3.8681376979749826
+    },
+    {
+      "size": 16,
+      "cpu": 4,
+      "edit": "local-title0",
+      "cold": {
+        "samples": 3,
+        "settledMs": 4425.699999928474,
+        "coreValidateMs": 3666.399999976158,
+        "cdpTaskDurationMs": 4111.4960000000165,
+        "cdpScriptDurationMs": 3719.2679999999996,
+        "longTaskOverlapMs": 4027.7999999523163
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 4529.300000071526,
+        "coreValidateMs": 3701.399999976158,
+        "cdpTaskDurationMs": 4131.138000000007,
+        "cdpScriptDurationMs": 3757.558000000003,
+        "longTaskOverlapMs": 4049.7000000476837
+      },
+      "settledChangePercent": 2.3408726335884866,
+      "coreChangePercent": 0.954614881088478
+    },
+    {
+      "size": 16,
+      "cpu": 4,
+      "edit": "shared-datum",
+      "cold": {
+        "samples": 3,
+        "settledMs": 5537.399999976158,
+        "coreValidateMs": 3657.2000000476837,
+        "cdpTaskDurationMs": 5540.179999999992,
+        "cdpScriptDurationMs": 4135.675000000007,
+        "longTaskOverlapMs": 5490
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 4353.800000071526,
+        "coreValidateMs": 2547.600000023842,
+        "cdpTaskDurationMs": 4368.030000000004,
+        "cdpScriptDurationMs": 3036.930999999999,
+        "longTaskOverlapMs": 4308.800000071526
+      },
+      "settledChangePercent": -21.374652362295098,
+      "coreChangePercent": -30.34015093539797
+    },
+    {
+      "size": 16,
+      "cpu": 4,
+      "edit": "global-name",
+      "cold": {
+        "samples": 3,
+        "settledMs": 5688.899999976158,
+        "coreValidateMs": 3626.100000023842,
+        "cdpTaskDurationMs": 5687.902000000008,
+        "cdpScriptDurationMs": 4163.871999999998,
+        "longTaskOverlapMs": 5643.700000047684
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 5823.799999952316,
+        "coreValidateMs": 3768.100000023842,
+        "cdpTaskDurationMs": 5821.561000000002,
+        "cdpScriptDurationMs": 4309.594000000005,
+        "longTaskOverlapMs": 5776.799999952316
+      },
+      "settledChangePercent": 2.371284430675935,
+      "coreChangePercent": 3.916053059735436
+    },
+    {
+      "size": 36,
+      "cpu": 1,
+      "edit": "local-title0",
+      "cold": {
+        "samples": 3,
+        "settledMs": 2007.7999999523163,
+        "coreValidateMs": 1545.3000000715256,
+        "cdpTaskDurationMs": 1711.3689999999976,
+        "cdpScriptDurationMs": 1559.657999999999,
+        "longTaskOverlapMs": 1661.7999999523163
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 1982.1000000238419,
+        "coreValidateMs": 1523.5,
+        "cdpTaskDurationMs": 1665.179000000002,
+        "cdpScriptDurationMs": 1536.308,
+        "longTaskOverlapMs": 1640.7999999523163
+      },
+      "settledChangePercent": -1.2800079653892182,
+      "coreChangePercent": -1.410729312788228
+    },
+    {
+      "size": 36,
+      "cpu": 1,
+      "edit": "shared-datum",
+      "cold": {
+        "samples": 3,
+        "settledMs": 2431.5,
+        "coreValidateMs": 1545.1000000238419,
+        "cdpTaskDurationMs": 2260.87600000001,
+        "cdpScriptDurationMs": 1675.0339999999965,
+        "longTaskOverlapMs": 2226.7999999523163
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 1990.8000000715256,
+        "coreValidateMs": 1104.0999999046326,
+        "cdpTaskDurationMs": 1787.2900000000059,
+        "cdpScriptDurationMs": 1229.6789999999974,
+        "longTaskOverlapMs": 1775.8000000715256
+      },
+      "settledChangePercent": -18.124614432592,
+      "coreChangePercent": -28.54184195925211
+    },
+    {
+      "size": 36,
+      "cpu": 1,
+      "edit": "global-name",
+      "cold": {
+        "samples": 3,
+        "settledMs": 2506.7999999523163,
+        "coreValidateMs": 1532.2000000476837,
+        "cdpTaskDurationMs": 2315.190999999999,
+        "cdpScriptDurationMs": 1662.3389999999993,
+        "longTaskOverlapMs": 2295.6999999284744
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 2508.1999999284744,
+        "coreValidateMs": 1538.2999999523163,
+        "cdpTaskDurationMs": 2314.3699999999967,
+        "cdpScriptDurationMs": 1668.937999999999,
+        "longTaskOverlapMs": 2302.6999999284744
+      },
+      "settledChangePercent": 0.055848092236510105,
+      "coreChangePercent": 0.39812034358717163
+    },
+    {
+      "size": 36,
+      "cpu": 4,
+      "edit": "local-title0",
+      "cold": {
+        "samples": 3,
+        "settledMs": 8740.899999976158,
+        "coreValidateMs": 7552.899999976158,
+        "cdpTaskDurationMs": 8316.802000000023,
+        "cdpScriptDurationMs": 7615.972,
+        "longTaskOverlapMs": 8173.800000071526
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 8749.900000095367,
+        "coreValidateMs": 7862.699999928474,
+        "cdpTaskDurationMs": 8587.118999999973,
+        "cdpScriptDurationMs": 7920.841999999993,
+        "longTaskOverlapMs": 8445.900000095367
+      },
+      "settledChangePercent": 0.10296422701592256,
+      "coreChangePercent": 4.101735756508029
+    },
+    {
+      "size": 36,
+      "cpu": 4,
+      "edit": "shared-datum",
+      "cold": {
+        "samples": 3,
+        "settledMs": 11053.600000023842,
+        "coreValidateMs": 7549.5,
+        "cdpTaskDurationMs": 11078.300999999981,
+        "cdpScriptDurationMs": 8180.483000000009,
+        "longTaskOverlapMs": 10998.200000047684
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 8540.400000095367,
+        "coreValidateMs": 5106.899999976158,
+        "cdpTaskDurationMs": 8553.285999999956,
+        "cdpScriptDurationMs": 5719.749999999991,
+        "longTaskOverlapMs": 8484.700000047684
+      },
+      "settledChangePercent": -22.736484040702155,
+      "coreChangePercent": -32.35446056061782
+    },
+    {
+      "size": 36,
+      "cpu": 4,
+      "edit": "global-name",
+      "cold": {
+        "samples": 3,
+        "settledMs": 11506.599999904633,
+        "coreValidateMs": 7743.899999976158,
+        "cdpTaskDurationMs": 11513.35899999998,
+        "cdpScriptDurationMs": 8391.329999999982,
+        "longTaskOverlapMs": 11457.599999904633
+      },
+      "cached": {
+        "samples": 3,
+        "settledMs": 11301.899999976158,
+        "coreValidateMs": 7603.100000023842,
+        "cdpTaskDurationMs": 11312.422999999995,
+        "cdpScriptDurationMs": 8283.399999999987,
+        "longTaskOverlapMs": 11255.899999976158
+      },
+      "settledChangePercent": -1.7789790201290678,
+      "coreChangePercent": -1.8182052964623718
+    }
+  ],
+  "retention": [
+    {
+      "mode": "cold",
+      "edits": 20,
+      "mountDestroyCycles": 4,
+      "baselinePostGcBytes": 28177128,
+      "after20EditsPostGcBytes": 36127164,
+      "afterDestroyPostGcBytes": [
+        31170608,
+        31454292,
+        31513200,
+        31608616
+      ],
+      "finalMinusBaselineBytes": 3431488,
+      "preparedFaces": 4,
+      "allDestroyedCachesEmpty": true,
+      "allDestroyedWorkspaceDomEmpty": true
+    },
+    {
+      "mode": "cached",
+      "edits": 20,
+      "mountDestroyCycles": 4,
+      "baselinePostGcBytes": 28203676,
+      "after20EditsPostGcBytes": 36054672,
+      "afterDestroyPostGcBytes": [
+        31054720,
+        31346364,
+        31409204,
+        31496916
+      ],
+      "finalMinusBaselineBytes": 3293240,
+      "preparedFaces": 4,
+      "allDestroyedCachesEmpty": true,
+      "allDestroyedWorkspaceDomEmpty": true
+    }
+  ],
+  "maxEntries": 34,
+  "maxLogicalBytes": 3177762,
+  "limits": {
+    "setupMs": 90000,
+    "phaseMs": 30000,
+    "traceEndMs": 15000
+  },
+  "limitations": [
+    "One fresh browser process per mode/cell and3 repeated edit rounds; descriptive medians, no population confidence claim.",
+    "Cold control also constructs fresh cache snapshots; this is not historical plain validate or absolute v0.33 comparison.",
+    "Oracle work primes global font/renderer state outside intervals symmetrically.",
+    "Local title0 and global metadata conservatively miss retained composition; report them even without a win.",
+    "Settled elapsed includes unchanged debounce and DOM update; CDP TaskDuration/ScriptDuration are browser counters, not OS-process CPU measurement.",
+    "Fixed desktop normal/CPU4; no physical-mobile or cloud-provider generalization.",
+    "During-edit heap includes intentional undo and text/font caches. Post-GC V8 heap differs from total process RSS;20/4 soak cannot prove absence of leaks."
+  ]
+}

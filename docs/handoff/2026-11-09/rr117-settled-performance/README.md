@@ -1,3 +1,17 @@
+# RR-117 settled browser comparison — completed formal evidence
+
+Evidence-only branch codex/evidence-rr117-settled-performance: NEVER MERGE. Formal child70527 actually exited0, once, on frozen sourced8116ee38 and the byte-identical qualified build-02. All8cases/72primaryedits/36complete-report phase pairs and204actual emitted-SVG byte pairs pass. Both20-edit/4mount-destroy modes completed. No source edit, retry or deadline change occurred during measurement. Production/source acceptance remains coordinator-owned.
+
+Read [the full result table and limits](FORMAL-RESULTS.md). Shared-dataset edits show about14–23% lower settled medians and28–32% lower core validation medians in this fixed same-candidate trial; first-title0/global-name conservatively miss and show no general speed gain. Cold control constructs fresh cache snapshots, unlike historical plain validate; this is not an absolute v0.33 comparison. Oracle work primes shared font/renderer state outside intervals symmetrically. Three rounds in one fresh browser process per mode/cell are descriptive, not a universal/physical-mobile/cloud guarantee.
+
+The short retention observation clears all captured cache entries/bytes and workspace DOM, with stable prepared faces. Final post-GC V8 heap remains about3.1–3.3MiB above post-warm/dispose baseline in BOTH modes. During-edit heap includes intentional undo and text/font caches. No leak-free or process-RSS saving is claimed from this20/4 observation.
+
+Run verify-preparation.mjs for the immutable39-record functional packet, then verify-formal.mjs for every formal case, trace, screenshot, source/build identity, raw stdout/stderr and actual exit. Original root functional artifacts/attestation stay unchanged. The append-only archives preserve original inputs and exact bundle reuse; no failed formal case was discarded. Root owns coherent mapper/CI/native/release gates and post-terminal compatibility fixes discovered independently.
+
+## Historical preparation notes (preserved)
+
+The following entries describe their original checkpoints; their pending statements are historical. Current truth is above.
+
 # RR-117 settled browser comparison — preparation only
 
 Evidence-only branch `codex/evidence-rr117-settled-performance`: NEVER MERGE. Production source is the reviewed RR117 correction at bee8d855, runtime5f5a, with the original d764 cache implementation. No formal timing has run from this driver yet. The coordinator reviews the frozen driver and grants the quiet execution window; user P0 work takes priority.

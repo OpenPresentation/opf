@@ -1,0 +1,229 @@
+{
+  "scope": "Fixed same-candidate public-invalidation control; not v0.33/plain-validate/mobile/leak/native/release acceptance",
+  "source": "d8116ee38e363d2a933d4a70ce50b0e88efa59de",
+  "sourceTree": "8f8807454c3b2aa87da93e444567903b34c772f0",
+  "sourceFiles": [
+    {
+      "file": "docs/handoff/2026-11-09/rr117-settled-performance/build.mjs",
+      "blob": "f2559acc94a1c23d9c01fb1dc9f84d7e6c8f306e"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr117-settled-performance/browser-entry.mjs",
+      "blob": "9f5e1852c43246f3148add47d7e8ccc963b8ded0"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr117-settled-performance/run.mjs",
+      "blob": "3eba0a31a5841b13e172f33ac988105082b6bb9a"
+    }
+  ],
+  "bundleReuse": {
+    "archive": "preparation.json.gz",
+    "record": "candidate-functional/build/app.js",
+    "sha256": "2003813a3533b8bb09192630d4c5ec4a01de8c24dd69197ff72bc295cc45ccc8"
+  },
+  "raw": {
+    "file": "formal.json.gz",
+    "size": 21203653,
+    "sha256": "53d265912960199b5aac6dd753febcb9395d353c98ec2dd35bbf965809f0ffeb",
+    "decodedBytes": 35693259,
+    "entries": [
+      {
+        "name": "formal/desktop-cpu1-16-cached-trace.json.gz",
+        "size": 1969017,
+        "sha256": "1cc73260a002d0ba08871e7aeec9da6108a22aecfa5e39b0171384cadcd00334"
+      },
+      {
+        "name": "formal/desktop-cpu1-16-cached-warmup.png",
+        "size": 173758,
+        "sha256": "5bf859fde4936c219dfaa4280ea3a0bb242886e3f88d2dca31d979a8e15a63d9"
+      },
+      {
+        "name": "formal/desktop-cpu1-16-cached.json",
+        "size": 1540853,
+        "sha256": "7323288a9f2d71f478f57bb6ff6056d24ef604dda3672419e32b73b8aa61f82b"
+      },
+      {
+        "name": "formal/desktop-cpu1-16-cold-trace.json.gz",
+        "size": 2025235,
+        "sha256": "570011670a150ca454c8588e317d0b90e8bb42a4e3ea414427d049088aea9ccf"
+      },
+      {
+        "name": "formal/desktop-cpu1-16-cold-warmup.png",
+        "size": 173758,
+        "sha256": "5bf859fde4936c219dfaa4280ea3a0bb242886e3f88d2dca31d979a8e15a63d9"
+      },
+      {
+        "name": "formal/desktop-cpu1-16-cold.json",
+        "size": 1572071,
+        "sha256": "f8c988b2eb6be66af71b3f100b1a709b64087bb9f7c8b014c85eb6f3a64aaf9e"
+      },
+      {
+        "name": "formal/desktop-cpu1-36-cached-trace.json.gz",
+        "size": 2316482,
+        "sha256": "3247c17214ee0cf454e904b82482eddb5e3fad8bb3e8ee7eab9f37b6f0014ad1"
+      },
+      {
+        "name": "formal/desktop-cpu1-36-cached-warmup.png",
+        "size": 175801,
+        "sha256": "c40c37fd18d6bc6fb7e02fb5bc01d5e63849a2dd67664487157df04081a274c7"
+      },
+      {
+        "name": "formal/desktop-cpu1-36-cached.json",
+        "size": 2476561,
+        "sha256": "5329c4d4d3a0c2c2677a4e98ab10abf0a6ed50958ed88487ebcec3fbdc2b5e91"
+      },
+      {
+        "name": "formal/desktop-cpu1-36-cold-trace.json.gz",
+        "size": 2610244,
+        "sha256": "0e104c5b012b13df2204d7a48f87530dd1e9116da1da865e4d6337223c7b0094"
+      },
+      {
+        "name": "formal/desktop-cpu1-36-cold-warmup.png",
+        "size": 175801,
+        "sha256": "c40c37fd18d6bc6fb7e02fb5bc01d5e63849a2dd67664487157df04081a274c7"
+      },
+      {
+        "name": "formal/desktop-cpu1-36-cold.json",
+        "size": 2539330,
+        "sha256": "4651bff95be8facaa19eab8262643cf13b072749471a6337838402da3ced3b08"
+      },
+      {
+        "name": "formal/desktop-cpu4-16-cached-trace.json.gz",
+        "size": 1829254,
+        "sha256": "5b2b7fe36bb03b9fa76959bc63594ca263adc1a0a0c908c5cd49a883b8a21b2e"
+      },
+      {
+        "name": "formal/desktop-cpu4-16-cached-warmup.png",
+        "size": 173758,
+        "sha256": "5bf859fde4936c219dfaa4280ea3a0bb242886e3f88d2dca31d979a8e15a63d9"
+      },
+      {
+        "name": "formal/desktop-cpu4-16-cached.json",
+        "size": 1542135,
+        "sha256": "5cc99bcc354d012af518a4468cbfefacec18c857369d77b5769bf2c5d8cf4d53"
+      },
+      {
+        "name": "formal/desktop-cpu4-16-cold-trace.json.gz",
+        "size": 1923053,
+        "sha256": "c355733fa51c6fa25e129482a3e876c22d7301c8537dd56584d9f8036c361345"
+      },
+      {
+        "name": "formal/desktop-cpu4-16-cold-warmup.png",
+        "size": 173758,
+        "sha256": "5bf859fde4936c219dfaa4280ea3a0bb242886e3f88d2dca31d979a8e15a63d9"
+      },
+      {
+        "name": "formal/desktop-cpu4-16-cold.json",
+        "size": 1573319,
+        "sha256": "6fb7e4fbaefc12f05ff878b453fbf8d333ae2d88d8a8cf90d4ed0b921a8e5728"
+      },
+      {
+        "name": "formal/desktop-cpu4-36-cached-trace.json.gz",
+        "size": 2465693,
+        "sha256": "bf21c553f9aef08c0239bfe9d3a187b4cad74370041b76fe6b5279a938c400e1"
+      },
+      {
+        "name": "formal/desktop-cpu4-36-cached-warmup.png",
+        "size": 175801,
+        "sha256": "c40c37fd18d6bc6fb7e02fb5bc01d5e63849a2dd67664487157df04081a274c7"
+      },
+      {
+        "name": "formal/desktop-cpu4-36-cached.json",
+        "size": 2477760,
+        "sha256": "a57a5212b67bbdc2fb92c8c2ed98a5273940e200a8cb93ba2540474415e88180"
+      },
+      {
+        "name": "formal/desktop-cpu4-36-cold-trace.json.gz",
+        "size": 2686179,
+        "sha256": "d61520472477bac15473d81bf4f115ec0230db30d1b32e21e1a8e2a1a16339b5"
+      },
+      {
+        "name": "formal/desktop-cpu4-36-cold-warmup.png",
+        "size": 175801,
+        "sha256": "c40c37fd18d6bc6fb7e02fb5bc01d5e63849a2dd67664487157df04081a274c7"
+      },
+      {
+        "name": "formal/desktop-cpu4-36-cold.json",
+        "size": 2540520,
+        "sha256": "def498557f41c703e351eab31f5041c17d59625b2ff93435e5893532fcae1991"
+      },
+      {
+        "name": "formal/receipt.json",
+        "size": 30699,
+        "sha256": "f6f8a7e828eaf0157f7b59d292f0f186430f9e7caadfd14b3c7c9f81d82e0206"
+      },
+      {
+        "name": "formal/retained-heap-cached.json",
+        "size": 4696,
+        "sha256": "18b49399c23d99ba9163e3e95a99073a1bf52f835dbd2e775546b697b24dc0a4"
+      },
+      {
+        "name": "formal/retained-heap-cold.json",
+        "size": 4692,
+        "sha256": "1ec6db178b623d0ca645d618834f97e6384070a957cd37de252007d615509f22"
+      },
+      {
+        "name": "raw/rr117-formal01-start.json",
+        "size": 429,
+        "sha256": "6e354ec3973589c4785cc4a9a22306db2311b8a50cd8e8b4fefd88c62bdbd7bc"
+      },
+      {
+        "name": "raw/rr117-formal01-exit.json",
+        "size": 261,
+        "sha256": "0996c97a6cdde055f1a71709bcb68e53025489c7ac6b89606b27c8390ea7822c"
+      },
+      {
+        "name": "raw/rr117-formal01.stdout.log",
+        "size": 24538,
+        "sha256": "5075921074f174da99b9bfbc97dc620a2ca121e0c7f3bb1f174ef2002d437445"
+      },
+      {
+        "name": "raw/rr117-formal01.stderr.log",
+        "size": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "raw/rr117-formal01-analysis.log",
+        "size": 3287,
+        "sha256": "e31e0c3a1f488ccf9369c6d8e7ac04d494927111ca09a4f1389dc61098ab5f61"
+      },
+      {
+        "name": "build/build-receipt.json",
+        "size": 115391,
+        "sha256": "5a5aa0cd6f044cfa50e44b9fef9a660a9bcd8a84b923e803b78c110453397829"
+      },
+      {
+        "name": "derived/formal-summary.json",
+        "size": 11174,
+        "sha256": "07720231e30d868e7bc6de7dc2070d5583c39c906b904e92007703c2dc9ba277"
+      },
+      {
+        "name": "derived/FORMAL-RESULTS.md",
+        "size": 3226,
+        "sha256": "9aa90b4b6f32b27596940f5578abe5199dd06cb5ef5a099c69051d0ee3bd7c45"
+      },
+      {
+        "name": "derived/analyze-formal.mjs",
+        "size": 8476,
+        "sha256": "43b0eba78f09f90d8721d7a658ee4b931abdf633146b4ac44ea1d06be92808fd"
+      },
+      {
+        "name": "raw/observed-terminal.json",
+        "size": 448,
+        "sha256": "c4e49f5aef7b46615e37226b3cbfd14905dd3f220ceb9ec50faca59e901e5149"
+      }
+    ]
+  },
+  "actual": {
+    "session": 70527,
+    "exitCode": 0,
+    "startedUtc": "2026-11-09T22:39:08.6176442Z",
+    "endedUtc": "2026-11-09T23:04:07.2492082Z",
+    "cases": 8,
+    "primaryEdits": 72,
+    "phasePairs": 36,
+    "svgPairs": 204,
+    "retentionEditsPerMode": 20,
+    "retentionCyclesPerMode": 4
+  }
+}
