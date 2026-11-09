@@ -4,11 +4,13 @@
 
 It also shows decks: `show_deck` opens the OPF viewer inside a client that supports MCP Apps (Claude on the web and desktop), with Preview, Source and Both, where the user can edit the deck and the edits come back to the model ([The OPF viewer](#the-opf-viewer-show_deck)).
 
-It keeps no state, reads no file (everything it serves is bundled in the package, and tools work on the text you pass in; the one exception is the renderer's font files, which `opf-mcp` hands to the viewer), fetches nothing and has no network access. It runs two ways: locally over stdio (this page), and hosted on an edge runtime (the same server definition over Streamable HTTP; a hosted URL at `openpresentation.org/mcp` is coming). The local server is the only one that can measure layout with the real fonts, when `@openpresentation/opf-render` is installed.
+It keeps no state, reads no file (everything it serves is bundled in the package, and tools work on the text you pass in; the one exception is the renderer's font files, which `opf-mcp` hands to the viewer), fetches nothing and has no network access. It runs two ways: locally over stdio (this page), and hosted on an edge runtime (the same server definition over Streamable HTTP, hosted at `https://openpresentation.org/mcp`). The local server is the only one that can measure layout with the real fonts, when `@openpresentation/opf-render` is installed.
 
 ## Set it up
 
-Any MCP client that starts a local server takes a command and arguments:
+**Hosted, nothing to install.** `https://openpresentation.org/mcp` is this server over Streamable HTTP: no account, no key, read-only, and it keeps nothing. In Claude (web or desktop): Settings, Connectors, Add custom connector, name it `OPF` and paste the URL; other clients take the same URL as a remote MCP server. Then ask for a deck ("make a five-slide OPF deck about our Q3 results and show it to me") and the OPF viewer opens in the conversation. A deck you pass to `validate_deck`, `convert` or `show_deck` is read in memory for that one call and not stored; the viewer itself edits, checks, draws and exports the deck on your machine. The hosted server allows 600 requests a minute per address and bodies up to 4 MB.
+
+**Local.** Any MCP client that starts a local server takes a command and arguments:
 
 ```json
 {
