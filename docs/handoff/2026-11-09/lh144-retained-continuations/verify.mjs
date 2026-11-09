@@ -34,3 +34,13 @@ const before=json('lh144-qa-portable-02/receipt.json').report[0],after=json('lh1
 assert.deepEqual(before.pages.map(row=>row.blocks),[3,2]);assert.deepEqual(after.pages.map(row=>row.blocks),[2,2,1]);assert.deepEqual(before.pages.map(row=>row.sizes),[[17],[22.667]]);assert.deepEqual(after.pages.map(row=>row.sizes),[[24],[24],[24]]);
 const header=json('attempts/header-pixel-proof.json').rows;assert.equal(header[0].headerRawSha256,header[1].headerRawSha256);assert.equal(header[0].headerSvgSha256,header[1].headerSvgSha256);assert.ok(header.every(row=>row.brightHeaderPixels>0));
 console.log(JSON.stringify({source:receipt.source,protectedObjects:receipt.protectedObjects.length,rawFiles:receipt.rawFiles,rawBytes:count,compositionBase:overlap.baselineObject,initialMappedExit:1,peerMappedExit:1,result:'Offline source/overlap and lossless evidence PASS; qualification aggregates remain RED until managed goldens/combined CI'}));
+
+const finalPath=path.join(here,'final-docs-checks.json');
+if(fs.existsSync(finalPath)){
+ const final=JSON.parse(fs.readFileSync(finalPath,'utf8'));git('merge-base','--is-ancestor',final.source,'HEAD');assert.equal(git('rev-parse',final.source+'^{tree}'),final.sourceTree);
+ const bytes=fs.readFileSync(path.join(here,'final-docs-checks.zip'));assert.equal(bytes.length,final.archiveBytes);assert.equal(sha(bytes),final.archiveSha256);
+ const entries=unzipSync(bytes);assert.deepEqual(Object.keys(entries).sort(),final.files.map(row=>row.name));let total=0;
+ for(const row of final.files){assert.equal(entries[row.name].length,row.bytes);assert.equal(sha(entries[row.name]),row.sha256);total+=row.bytes;}
+ assert.equal(total,final.rawBytes);assert.equal(final.rawFiles,7);assert.equal(JSON.parse(Buffer.from(entries['run.exit.json']).toString('utf8')).exitCode,0);
+ console.log(JSON.stringify({finalDocsSource:final.source,rawFiles:7,passedSteps:5,typecheckSkipped:1,result:'Final handoff-only qualification PASS; original runtime aggregates remain RED'}));
+}
