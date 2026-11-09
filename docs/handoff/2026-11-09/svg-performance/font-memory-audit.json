@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "runtimeSource": "58e0d7939fc318119f5f81a8ba1455bbfab7f1cd",
+  "method": "Read-only derivation from archived formal cases and the exact baseline source; no benchmark rerun.",
+  "fontSelection": {
+    "options": {
+      "pack": "office",
+      "substitutionPolicy": "visual"
+    },
+    "groups": [
+      {
+        "pack": "office",
+        "packages": [
+          "carlito",
+          "@expo-google-fonts/caladea",
+          "@expo-google-fonts/arimo",
+          "@expo-google-fonts/tinos",
+          "@expo-google-fonts/cousine",
+          "@expo-google-fonts/gelasio",
+          "intos"
+        ],
+        "faces": 40
+      },
+      {
+        "pack": "open",
+        "packages": [
+          "@expo-google-fonts/open-sans",
+          "@expo-google-fonts/montserrat",
+          "@expo-google-fonts/poppins",
+          "@expo-google-fonts/bebas-neue",
+          "pt-serif",
+          "lora",
+          "merriweather-sans",
+          "source-sans-3",
+          "@expo-google-fonts/red-hat-display",
+          "@expo-google-fonts/red-hat-text",
+          "raleway",
+          "playfair-display",
+          "barlow",
+          "anton",
+          "@expo-google-fonts/figtree",
+          "@expo-google-fonts/work-sans",
+          "@expo-google-fonts/eb-garamond",
+          "@expo-google-fonts/archivo-narrow",
+          "@expo-google-fonts/libre-caslon-text",
+          "@expo-google-fonts/bitter"
+        ],
+        "faces": 78
+      },
+      {
+        "pack": "base",
+        "packages": [
+          "@expo-google-fonts/roboto",
+          "@expo-google-fonts/roboto-mono"
+        ],
+        "faces": 9
+      },
+      {
+        "pack": "scripts",
+        "packages": [
+          "@expo-google-fonts/noto-sans"
+        ],
+        "faces": 4
+      }
+    ],
+    "totalFaces": 131
+  },
+  "cases": [
+    {
+      "mode": "batch-fonts",
+      "fontLoadMs": 112.22809999999998,
+      "setupAfterGc": {
+        "rss": 196796416,
+        "heapTotal": 67940352,
+        "heapUsed": 31199840,
+        "external": 150815645,
+        "arrayBuffers": 76009560,
+        "peakRssBytes": 230535168
+      },
+      "firstRender": {
+        "rss": 457248768,
+        "heapTotal": 260542464,
+        "heapUsed": 160218816,
+        "external": 153413688,
+        "arrayBuffers": 77441936,
+        "peakRssBytes": 457248768
+      },
+      "renderPeakRssBytes": 458014720,
+      "finalAfterGc": {
+        "rss": 419262464,
+        "heapTotal": 257499136,
+        "heapUsed": 104800568,
+        "external": 164071596,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 458014720
+      }
+    },
+    {
+      "mode": "batch-system",
+      "fontLoadMs": 99.20740000000004,
+      "setupAfterGc": {
+        "rss": 196313088,
+        "heapTotal": 68464640,
+        "heapUsed": 31180952,
+        "external": 150815645,
+        "arrayBuffers": 76009560,
+        "peakRssBytes": 230244352
+      },
+      "firstRender": {
+        "rss": 349917184,
+        "heapTotal": 201555968,
+        "heapUsed": 89344232,
+        "external": 152031525,
+        "arrayBuffers": 76059773,
+        "peakRssBytes": 349917184
+      },
+      "renderPeakRssBytes": 354897920,
+      "finalAfterGc": {
+        "rss": 352350208,
+        "heapTotal": 199127040,
+        "heapUsed": 48968912,
+        "external": 153958587,
+        "arrayBuffers": 76301863,
+        "peakRssBytes": 354897920
+      }
+    }
+  ],
+  "sources": [
+    {
+      "file": "packages/render/src/fonts-node.js",
+      "sha256": "9e99ae8aa21e5927bc9ede011fb3bb7dbbb43a049372b6f4d836c85c8e4ed049"
+    },
+    {
+      "file": "packages/render/src/font-registry.js",
+      "sha256": "0402fa8c0373406153e284f1955f6f1a91f7aeeac420ef385792300d89e7aab0"
+    },
+    {
+      "file": "packages/render/src/font-manifest.js",
+      "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+    }
+  ],
+  "limitations": [
+    "Process RSS is not font-only allocation. Setup includes imported modules, the font registry, and shaping/subset engines.",
+    "The formal run did not capture a same-process checkpoint immediately before font loading, so it cannot isolate the font-loader RSS delta.",
+    "arrayBuffers is included within external; memory counters must not be added together.",
+    "Both cases load the same font pack; batch-system skips font embedding, not font measurement or loading.",
+    "Separate sequential cases establish an observed difference, not an exact causal allocation breakdown.",
+    "No physical-mobile, isolated-cloud-worker or production optimization claim."
+  ]
+}
