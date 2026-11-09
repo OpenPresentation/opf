@@ -1,0 +1,76 @@
+{
+  "format": 1,
+  "scope": "actual maintained21 review; unchanged current archives not newly retained; no promotion",
+  "baseline": "c9732accd41cfffa27b8893251f33868c6b0514e",
+  "candidate": "5b9e4386c00319da1fa4370dcc0b3eb6e93c9578",
+  "previous": "5e89a184ffc8a38539f5fb5e573f403066bcca17",
+  "zip": {
+    "name": "actual-21-review.zip",
+    "bytes": 79915,
+    "sha256": "efcd09e5e90cc3e8814b896a122bc19d13bc5bbab576daab3e37b689ee1c3b4d"
+  },
+  "rawFiles": 12,
+  "rawBytes": 401279,
+  "files": [
+    {
+      "name": "outputs/candidate-fixture.json",
+      "bytes": 58125,
+      "sha256": "3d9ff329dba6aac7e0f9d4c2c3136277944c97e3e1dd86300634efc270877f24"
+    },
+    {
+      "name": "outputs/review.json",
+      "bytes": 8143,
+      "sha256": "a821e88d7bca370d07da7554356b2d8613ab9af88eb1de6a60a52a5623f58b3c"
+    },
+    {
+      "name": "run/audit-twenty-one-results.mjs",
+      "bytes": 6855,
+      "sha256": "46566875b64d0d0f6d5faf9dfaa539069b5db0982195e02924cc1beb771a96c4"
+    },
+    {
+      "name": "run/baseline-build.exit.json",
+      "bytes": 382,
+      "sha256": "f25e8f6aa396c1f14019ea991bc938125a2cc8c3447da297a030dcd5d64ccb48"
+    },
+    {
+      "name": "run/baseline-build.log",
+      "bytes": 12016,
+      "sha256": "a93f6510e3d81605c987d38598679537771c53b7a5cdbcc630e8adb83a48480a"
+    },
+    {
+      "name": "run/current-build.exit.json",
+      "bytes": 381,
+      "sha256": "0b6f7fcc230d5d745ac7dc4db811db1396c9eedce0ef910d8a8045042f7dfb5d"
+    },
+    {
+      "name": "run/current-build.log",
+      "bytes": 12014,
+      "sha256": "0558e92a5ddf3790e55ff5f6ba89f3a65b932a472491ca6359259cc62cf1d9cb"
+    },
+    {
+      "name": "run/pack-evidence.mjs",
+      "bytes": 1973,
+      "sha256": "a1991e6d9fefd4e546cc70f75d162dc577484cb58ff5b913c8ddfa8799be22bf"
+    },
+    {
+      "name": "run/producer-provenance-from-nine.json",
+      "bytes": 110552,
+      "sha256": "d5993b4eb087993a3e62da758d9f6eb5e09338470246474848a3bddc7388b4a1"
+    },
+    {
+      "name": "run/review.exit.json",
+      "bytes": 575,
+      "sha256": "abb4d603ec72cf052330893b5d572eb2feb88e1ff36575ae55514d328e7260c3"
+    },
+    {
+      "name": "run/review.log",
+      "bytes": 95,
+      "sha256": "795a8718d624ced0a8112685c6bc102858e3ab5b4720d4eb67ca8b081036db08"
+    },
+    {
+      "name": "run/twenty-one-audit.json",
+      "bytes": 190168,
+      "sha256": "c85912b4257b6f50a4b261217d78f0354fa0da7f1270437efcbd76a6fe739136"
+    }
+  ]
+}
