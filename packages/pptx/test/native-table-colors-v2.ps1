@@ -115,6 +115,19 @@ function Read-TableObject($Presentation,[int]$Index,[string]$Phase) {
     Assert-TableCondition ($rows -eq 2 -and $columns -eq 2) 'Native table dimensions differ'
     return [ordered]@{slide=$slide;table=$table}
 }
+function Get-TableCharacterProbe([string]$Phase,[int]$Slide,[int]$Row,[int]$Column,[int]$CharacterIndex,[string]$Character,[string]$ExpectedColor,$Rgb) {
+    $integer=($Rgb -is [int] -or $Rgb -is [long]);$valid=$integer -and $Rgb -ge 0 -and $Rgb -le 16777215
+    $hex=$null;if($valid) {$hex='#{0:X2}{1:X2}{2:X2}' -f ([long]$Rgb -band 255),(([long]$Rgb -shr 8) -band 255),(([long]$Rgb -shr 16) -band 255)}
+    $actual=$null;if($integer) {$actual=$Rgb};$type=$null;if($null -ne $Rgb) {$type=$Rgb.GetType().FullName}
+    return [ordered]@{phase=$Phase;slide=$Slide;row=$Row;column=$Column;characterIndex=$CharacterIndex;character=$Character;expectedColor=$ExpectedColor;actualRgb=$actual;actualType=$type;actualHex=$hex;rgbValid=$valid}
+}
+function Write-TableCharacterProbe($Probe) {
+    # Pure I/O after the single guarded RGB read, before either validation. Never
+    # enumerate an unavailable/foreign COM object to serialize a diagnostic.
+    $script:report.currentCellProbe=$Probe
+    try {$Probe | ConvertTo-Json -Compress -Depth 4 | Add-Content -LiteralPath (Join-Path $script:root 'character-probes.jsonl') -Encoding UTF8}
+    catch {Stop-TableLifecycle ('Cannot persist native table character probe: '+$_.Exception.Message)}
+}
 function Read-TablePhase([string]$Phase) {
     $count=Invoke-TableCom "$Phase.slides.count" {$script:presentation.Slides.Count}
     Assert-TableCondition ($count -eq 6) 'Native table must retain all six slides'
@@ -132,8 +145,10 @@ function Read-TablePhase([string]$Phase) {
             $characters=@()
             for($character=1;$character -le $text.Length;$character++) {
                 $rgb=Invoke-TableCom "$prefix.character.$character.color" {$range.Characters($character,1).Font.Color.RGB}
-                Assert-TableCondition (($rgb -is [int] -or $rgb -is [long]) -and $rgb -ge 0 -and $rgb -le 16777215) 'Native character RGB probe unavailable or invalid'
-                $hex='#{0:X2}{1:X2}{2:X2}' -f ([long]$rgb -band 255),(([long]$rgb -shr 8) -band 255),(([long]$rgb -shr 16) -band 255)
+                $probe=Get-TableCharacterProbe $Phase $index $expected.row $expected.column $character ($text.Substring($character-1,1)) $wantedColors[$character-1] $rgb
+                Write-TableCharacterProbe $probe
+                Assert-TableCondition $probe.rgbValid 'Native character RGB probe unavailable or invalid'
+                $hex=$probe.actualHex
                 Assert-TableCondition ($hex -ceq $wantedColors[$character-1]) 'Native table character color differs'
                 $characters+=@([ordered]@{character=$text.Substring($character-1,1);color=$hex})
             }
@@ -216,7 +231,7 @@ Assert-TableWorkerAuthorization $authorization $profile $EnvelopeSha256
 $script:sourcePath=Assert-TablePlainPath (Join-Path $script:root 'table-colors.pptx');$script:savedPath=Join-Path $script:root 'table-colors-saved.pptx';$script:editedPath=Join-Path $script:root 'table-colors-edited.pptx'
 $generationPath=Join-Path $script:root 'generation.json';$script:generation=Get-Content -LiteralPath $generationPath -Raw -Encoding UTF8 | ConvertFrom-Json
 if($script:generation.expected.Count -ne 6 -or $script:generation.pptxSha256 -cne (Get-TableHash $script:sourcePath)) { throw 'Table generation contract differs' }
-foreach($relative in @('native.json','failure.json','stages.jsonl','progress.json','table-colors-saved.pptx','table-colors-edited.pptx')) { if(Test-Path -LiteralPath (Join-Path $script:root $relative)) { throw 'Preserve stale table worker output' } }
+foreach($relative in @('native.json','failure.json','stages.jsonl','progress.json','character-probes.jsonl','table-colors-saved.pptx','table-colors-edited.pptx')) { if(Test-Path -LiteralPath (Join-Path $script:root $relative)) { throw 'Preserve stale table worker output' } }
 Assert-TableArchive $script:sourcePath
 $script:sequence=0;$script:stopped=$false;$script:cleanup=$true;$script:ownedPath=$null;$script:presentation=$null;$script:app=$null;$script:archiveHashes=@{};$script:archiveHashes[$script:sourcePath]=Get-TableHash $script:sourcePath
 $script:report=[ordered]@{schemaVersion=2;profile='table-colors-v2';envelopeSha256=$EnvelopeSha256;generationSha256=(Get-TableHash $generationPath);generationIdentity=$profile.generationIdentity;executionIdentity=$profile.controller;savedSha256=$null;editedSha256=$null;original=@();reopened=@();edited=@();edits=@();opens=@();inputs=[ordered]@{sourcePath=$script:sourcePath;sourceSha256=(Get-TableHash $script:sourcePath);generationPath=$generationPath;workerPath=$PSCommandPath;workerSha256=(Get-TableHash $PSCommandPath);envelopePath=$profileFile};nativeAcceptance=$false;registryAcceptance=$false}

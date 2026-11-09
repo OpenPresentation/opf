@@ -1,0 +1,13 @@
+# RR-105 native table color expectation and diagnostic
+
+The first genuine table-v2 run at frozen f989/profile02 failed at original slide4, cell1.1, character1. It exited1 with cleanupConfirmed:false and officeOperationsStopped:true; no later Office or cleanup was attempted. The actual RGB was not retained by that worker and remains unknown. A later read-only global process inventory counted zero; it does not prove owned Quit/cleanup.
+
+Pure source inspection of the unchanged original archive485236f3 and generation80be00fc covers24cells/36runs. Two slide4 inherited header runs alone conflict with the old expected white: the actual slide/layout/master chain maps tx1 to dk1=000000. Existing RR-96 styled-table tests require black on fill#767676; black contrast4.62328 exceeds white4.54222. Explicit white overrides, red rich runs, alpha and body colors retain their existing contracts. This explains stale qualification expectations, without claiming the unrecorded native RGB.
+
+Vetoable decision RR105-TABLE-CONTRAST: change only the current generator expectation to the maintained maximum-contrast contract; retain historical expectations and all old source/profile/output bytes unchanged. No exporter/schema/palette/tolerance or archive lock changes. New actual-OOXML regression covers all24cells/36runs and boundary/alpha/explicit/rich-run controls; a stale expectation is explicitly refused.
+
+The new worker retains its single guarded COM RGB read. Before validity/equality validation it writes a pure JSONL probe containing phase/cell/character, expected color, actual numeric RGB/type/hex (or honest null/invalid), and retains the latest probe in the report. Diagnostic-write failure latches Office operations too. Managed controls test wrong color, null RGB and I/O failure without Office. The stale-output guards include the probe journal. No cleanup call is added.
+
+Qualification is pending. One coherent required changed check follows source review. There is no Office, native PASS, registry PASS or release acceptance here.
+
+Fresh execution requires genuine new generator/worker/controller identities and a new output root/profile; the old fd13 suite/generation and profile02 must fail the corrected contract rather than be relabeled. Proposed Office-free preparation: maintained current59-case preparation with the unchanged installed consumer and separately bound legacy supervisor, then a fresh table profile. The table authored OPF and original PPTX must remain byte-identical; only current expected metadata and genuine producer/execution provenance change. The coordinator must review the new binding before any physical run. No automatic retry is authorized.
