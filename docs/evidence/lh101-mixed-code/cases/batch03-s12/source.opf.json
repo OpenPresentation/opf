@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Layout harvest batch-03",
+  "language": "en",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "title": "Decision Options",
+      "composition": {
+        "mode": "row"
+      },
+      "blocks": [
+        {
+          "code": {
+            "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
+            "language": "ts",
+            "filename": "boutique-hotel-revenue-recovery-rule.ts"
+          }
+        },
+        {
+          "text": "Oaktrail Animal Health should focus the next cycle on balance appointment access with staff retention while making the operating tradeoffs clear to veterinary care stakeholders."
+        }
+      ],
+      "id": "s12"
+    }
+  ]
+}

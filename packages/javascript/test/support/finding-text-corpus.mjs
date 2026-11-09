@@ -132,6 +132,7 @@ export const CASES = [
 	{ name: 'code-highlight-out-of-range', rule: 'opf/code-highlight-out-of-range', input: deck([{ title: 'Code', code: { source: 'a\nb\nc', highlight: [2, 7, [3, 1]] } }]) },
 	{ name: 'code-highlight-range-reversed', rule: 'opf/code-highlight-range-reversed', input: deck([{ title: 'Code', code: { source: 'a\nb\nc', highlight: [2, 7, [3, 1]] } }]) },
 	{ name: 'variable-builtin-missing', rule: 'opf/variable-builtin-missing', input: deck([{ title: '{{speaker.name}}', text: 'x' }]) },
+	{ name: 'variable-group-omitted', rule: 'opf/variable-group-omitted', input: deck([{ title: 'Customers', blocks: [{ blocks: [{ image: { src: 'https://example.com/portrait.jpg', alt: 'A customer' } }, { text: 'var:quote' }] }] }], { template: true, variables: { quote: { type: 'text', required: false } } }) },
 	{ name: 'duration-outside-narrative', rule: 'opf/duration-outside-narrative', input: narrativeDeck({ duration: 5 }) },
 	{ name: 'narrative-duration-range', rule: 'opf/narrative-duration-range', input: narrativeDeck({ catalogs: { custom: { narratives: { arc: record({ duration: { min: 30, max: 10 } }) } } } }) },
 	{ name: 'placeholder-text', rule: 'opf/placeholder-text', input: deck([{ title: 'T', text: 'Lorem ipsum dolor sit amet' }]) },

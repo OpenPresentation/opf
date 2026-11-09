@@ -1,0 +1,104 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\lh-110-localized
+> node scripts/check-changed.mjs "--base" "bb696b6820acb8dc08edf2da0a144a759794046b"
+
+check-changed: 85 changed files since bb696b682 (plus uncommitted and untracked)
+ok  build (10.6 s)
+ok  biome (0.1 s)
+FAILED  pnpm run check:catalog-free (3.1 s)
+ok  pnpm run check:changes (0.8 s)
+ok  pnpm run check:browser-safe (4.5 s)
+ok  pnpm run check:diagram-doc-images (2.3 s)
+ok  pnpm run check:font-hotlinks (7.0 s)
+ok  pnpm run check:text (2.5 s)
+ok  pnpm run check:skill-commands (21.3 s)
+ok  typecheck (24.0 s)
+FAILED  tests opf (90.5 s)
+
+--- pnpm run check:catalog-free failed (exit 1); last 7 lines of artifacts\check-changed\pnpm_run_check_catalog-free.log:
+
+> openpresentation-workspace@ check:catalog-free C:\opf-work\lh-110-localized
+> node scripts/check-catalog-free.mjs
+
+catalog-free check failed:
+  composition: 260168 bytes gzipped, over the budget of 256668; check what grew, then run --update if it is intended
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- tests opf failed (exit 1); last 60 lines of artifacts\check-changed\tests_opf.log:
+      'cover 5 short',        'cover 6 short',        'cover 1 long',         'cover 2 long',
+      'cover 3 long',         'cover 4 long',         'cover 5 long',         'cover 6 long',
+      'section 1 short',      'section 2 short',      'section 3 short',      'section 4 short',
+      'section 5 short',      'section 6 short',      'section 1 long',       'section 2 long',
+      'section 3 long',       'section 4 long',       'section 5 long',       'section 6 long',
+      'agenda 1 short',       'agenda 2 short',       'agenda 3 short',       'agenda 4 short',
+      'agenda 5 short',       'agenda 6 short',       'agenda 1 long',        'agenda 2 long',
+      'agenda 3 long',        'agenda 4 long',        'agenda 5 long',        'agenda 6 long',
+      'agenda-split 1 short', 'agenda-split 2 short', 'agenda-split 3 short', 'agenda-split 4 short',
+      'agenda-split 5 short', 'agenda-split 6 short', 'agenda-split 1 long',  'agenda-split 2 long',
+      'agenda-split 3 long',  'agenda-split 4 long',  'agenda-split 5 long',  'agenda-split 6 long',
+      'statement 1 short',    'statement 2 short',    'statement 3 short',    'statement 4 short',
+      'statement 5 short',    'statement 6 short',    'statement 1 long',     'statement 2 long',
+      'statement 3 long',     'statement 4 long',     'statement 5 long',     'statement 6 long',
+      'closing 1 short',      'closing 2 short',      'closing 3 short',      'closing 4 short',
+      'closing 5 short',      'closing 6 short',      'closing 1 long',       'closing 2 long',
+      'closing 3 long',       'closing 4 long',       'closing 5 long',       'closing 6 long',
+      'text 1 short',         'text 2 short',         'text 3 short',         'text 4 short',
+      'text 5 short',         'text 6 short',         'text 1 long',          'text 2 long',
+      'text 3 long',          'text 4 long',          'text 5 long',          'text 6 long',
+      'list 1 short',         'list 2 short',         'list 3 short',         'list 4 short',
+      'list 5 short',         'list 6 short',         'list 1 long',          'list 2 long',
+      'list 3 long',          'list 4 long',          'list 5 long',          'list 6 long',
+      'quote 1 short',        'quote 2 short',        'quote 3 short',        'quote 4 short',
+      ... 344 more items
+    ],
+    expected: [
+      'cover 1 short',        'cover 2 short',        'cover 3 short',        'cover 4 short',
+      'cover 5 short',        'cover 6 short',        'cover 1 long',         'cover 2 long',
+      'cover 3 long',         'cover 4 long',         'cover 5 long',         'cover 6 long',
+      'section 1 short',      'section 2 short',      'section 3 short',      'section 4 short',
+      'section 5 short',      'section 6 short',      'section 1 long',       'section 2 long',
+      'section 3 long',       'section 4 long',       'section 5 long',       'section 6 long',
+      'agenda 1 short',       'agenda 2 short',       'agenda 3 short',       'agenda 4 short',
+      'agenda 5 short',       'agenda 6 short',       'agenda 1 long',        'agenda 2 long',
+      'agenda 3 long',        'agenda 4 long',        'agenda 5 long',        'agenda 6 long',
+      'agenda-split 1 short', 'agenda-split 2 short', 'agenda-split 3 short', 'agenda-split 4 short',
+      'agenda-split 5 short', 'agenda-split 6 short', 'agenda-split 1 long',  'agenda-split 2 long',
+      'agenda-split 3 long',  'agenda-split 4 long',  'agenda-split 5 long',  'agenda-split 6 long',
+      'statement 1 short',    'statement 2 short',    'statement 3 short',    'statement 4 short',
+      'statement 5 short',    'statement 6 short',    'statement 1 long',     'statement 2 long',
+      'statement 3 long',     'statement 4 long',     'statement 5 long',     'statement 6 long',
+      'closing 1 short',      'closing 2 short',      'closing 3 short',      'closing 4 short',
+      'closing 5 short',      'closing 6 short',      'closing 1 long',       'closing 2 long',
+      'closing 3 long',       'closing 4 long',       'closing 5 long',       'closing 6 long',
+      'text 1 short',         'text 2 short',         'text 3 short',         'text 4 short',
+      'text 5 short',         'text 6 short',         'text 1 long',          'text 2 long',
+      'text 3 long',          'text 4 long',          'text 5 long',          'text 6 long',
+      'list 1 short',         'list 2 short',         'list 3 short',         'list 4 short',
+      'list 5 short',         'list 6 short',         'list 1 long',          'list 2 long',
+      'list 3 long',          'list 4 long',          'list 5 long',          'list 6 long',
+      'quote 1 short',        'quote 2 short',        'quote 3 short',        'quote 4 short',
+      ... 332 more items
+    ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+C:\opf-work\lh-110-localized\packages\javascript:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf@0.32.1 test: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs`
+Exit status 1
+
+step                               status    time
+build                              passed  10.6 s
+biome                              passed   0.1 s  19 files
+pnpm run check:browser-safe        passed   4.5 s
+pnpm run check:catalog-free        FAILED   3.1 s
+pnpm run check:changes             passed   0.8 s
+pnpm run check:diagram-doc-images  passed   2.3 s
+pnpm run check:font-hotlinks       passed   7.0 s
+pnpm run check:skill-commands      passed  21.3 s
+pnpm run check:text                passed   2.5 s
+typecheck                          passed  24.0 s
+tests opf                          FAILED  90.5 s
+total                                      152.8 s
+
+check-changed: 2 of 11 steps failed: pnpm run check:catalog-free, tests opf
+ ELIFECYCLE  Command failed with exit code 1.

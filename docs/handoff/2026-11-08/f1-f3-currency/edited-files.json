@@ -1,0 +1,14 @@
+[
+  "packages/javascript/src/chart-fallback.ts",
+  "skills/opf-layout/SKILL.md",
+  "packages/editor/README.md",
+  "llms.txt",
+  "README.md",
+  "docs/quickstart.md",
+  "docs/agent-skills.md",
+  "docs/compatibility-matrix.md",
+  "docs/mcp.md",
+  "packages/mcp/README.md",
+  "docs/diagrams.md",
+  "docs/chart-options.md"
+]

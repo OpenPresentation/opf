@@ -1,0 +1,46 @@
+{
+  "node": "24.20.0",
+  "scope": "LH-34 review",
+  "changedScope": {
+    "seconds": 1212,
+    "build": "pass",
+    "typecheck": "pass",
+    "semanticConversionAndSchemaChecks": "pass",
+    "render": {
+      "pass": true,
+      "seconds": 810.3,
+      "slides": 905,
+      "templateGoldenSlides": 624
+    },
+    "initialFailures": [
+      "review tool callback lint error: fixed and rechecked",
+      "maintained Windows browser-safe path assertion: production audit passes",
+      "missing sparse text/corpus baseline inputs: restored; targeted checks pass",
+      "workerd spawn UNKNOWN controls",
+      "native determinism lost a dist module during my overlapping build: rerun alone passes"
+    ]
+  },
+  "final": {
+    "workspaceTypecheck": "pass",
+    "biome": "pass",
+    "coreCases": 4,
+    "svg": "pass",
+    "nativeGeometryEditsAndFallbacks": "pass",
+    "textIntegrity": "pass",
+    "scriptCorpusTests": 35,
+    "productionBrowserSafe": "pass",
+    "nativeDeterminism": {
+      "pass": true,
+      "children": 45,
+      "cases": 43,
+      "seconds": 206,
+      "scope": "local Windows Node24 only"
+    }
+  },
+  "review": "review.json",
+  "remaining": [
+    "0.34 integration golden workflow/full CI",
+    "final native application qualification",
+    "genuine site registry/preview gates"
+  ]
+}

@@ -1,3 +1,4 @@
+import {isArrangement,type Arrangement} from './arrangements.js';
 /**
  * OPF layout templates (`opf-layout/v2`, FA-33): a layout record is one ordered list of regions, nested for two
  * dimensions. `direction` says whether the record's `regions` are placed side by side (`row`) or stacked (`column`); an
@@ -62,7 +63,9 @@ export interface LayoutRegion {
    * entries as the steps of a loop, nodes on a ring with an arrow to the next). SH-17: `chevrons` (a row of chevrons), `flow` (a row of
    * boxes with arrows between them) or `vertical-flow` (a column of them). Absent: a list.
    */
-  arrangement?: 'pyramid' | 'matrix' | 'cycle' | 'chevrons' | 'flow' | 'vertical-flow';
+  arrangement?: Arrangement;
+  /** Narrow tip at the top (up, default) or bottom (down); authored entry order stays top to bottom. */
+  pyramidDirection?: 'up' | 'down';
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -160,7 +163,8 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
-    ...(entry.arrangement === 'pyramid' || entry.arrangement === 'matrix' || entry.arrangement === 'cycle' || entry.arrangement === 'chevrons' || entry.arrangement === 'flow' || entry.arrangement === 'vertical-flow' ? { arrangement: entry.arrangement } : {}),
+    ...(isArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
+    ...(entry.arrangement === 'pyramid' && entry.pyramidDirection === 'down' ? {pyramidDirection: 'down' as const} : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

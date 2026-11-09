@@ -1,0 +1,203 @@
+{
+  "baseline": "a09bc09bbf26e16405ab847e19cd5244b8b1da96",
+  "candidate": "71379d0dbf620d2fa764010ea2e5a0bb15240bd1",
+  "route": "maintained CLI convert; --date2026-11-08; PNG --scale0.5; fonts prepared by CLI office/visual/scripts:auto",
+  "cases": [
+    {
+      "id": "localized-chart-references-en-US",
+      "inputSha256": "ab4bc75e1a800daf9414a5e31e949fedd25333cb405ad41e27f3f3901b62e672",
+      "before": {
+        "pptx": {
+          "sha256": "958f0abeb9afe4ab3bce05a99485af0fc6a8f1b26198d0c8eef3776e2dd8dab3",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-en-US.pptx"
+        },
+        "png": {
+          "sha256": "2b1cdb52d1394431ea0bde9cafd87d3312c8096884ce2f9661521a473ee8a817",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-en-US.png",
+          "width": 640,
+          "height": 360
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "958f0abeb9afe4ab3bce05a99485af0fc6a8f1b26198d0c8eef3776e2dd8dab3",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-en-US.pptx"
+        },
+        "png": {
+          "sha256": "2b1cdb52d1394431ea0bde9cafd87d3312c8096884ce2f9661521a473ee8a817",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-en-US.png",
+          "width": 640,
+          "height": 360
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-de-DE",
+      "inputSha256": "7f914d3c865448acbe1c60fd5717a506e52bb2a9892a6d2dd13ced6f0ff1d810",
+      "before": {
+        "pptx": {
+          "sha256": "32bd7fc7bdf1eb7d6a61c6045ac6a35e426db38467661b190c8a23bd5821ddb4",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-de-DE.pptx"
+        },
+        "png": {
+          "sha256": "14db06006d9262170d289a70841814827d2417c8fef3cf29fdb3e082146151d2",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-de-DE.png",
+          "width": 640,
+          "height": 360
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "826fb9fa650a8bd1b0de60ca7dbb869c01ab726caf0e1761b913c505e6b357b1",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-de-DE.pptx"
+        },
+        "png": {
+          "sha256": "6c618ecac5f3cb2420a169cb0cff12c2c85db9ff86ce97a0d75df6a309dd96f3",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-de-DE.png",
+          "width": 640,
+          "height": 360
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-fr-FR",
+      "inputSha256": "01ba2bead103d4c2d009d6cf56df59581ce41be3447ab926a49e5bb72515e0d3",
+      "before": {
+        "pptx": {
+          "sha256": "295ed3c4b2be0d92b92d1ac8ec3b4ec2979843986a38f564ac57378b1668d46c",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-fr-FR.pptx"
+        },
+        "png": {
+          "sha256": "4d17e04151034516333b8ba3a4ec96941f30df4f01e813d9dabfbdb6d59ec462",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-fr-FR.png",
+          "width": 640,
+          "height": 360
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "9407a2dd6837cbacbc7332b570ba8f3575bfc14fab18cbccc788cb809a3ac1da",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-fr-FR.pptx"
+        },
+        "png": {
+          "sha256": "c42669337528cd0ca3c13da6076273478d2a0a547a41087bfa9fe87c25ba2eed",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-fr-FR.png",
+          "width": 640,
+          "height": 360
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-es-ES",
+      "inputSha256": "a4dc544d31cbf10839f51d11c0583ecac06cf24f940a1eae87b01467bb0e7510",
+      "before": {
+        "pptx": {
+          "sha256": "c27ef87f03dc98ff54fabe325fb37e21a83653536668ce27689aa90df9760a13",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-es-ES.pptx"
+        },
+        "png": {
+          "sha256": "5f9f50522ec55ad83d299cd796161ca030fa93e71d87ca46bd08e70b4dd9dc34",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-es-ES.png",
+          "width": 640,
+          "height": 360
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "6ae3fd620e3b7ac63cd48c6ffddd38c09ec4721bc3b0387fecf7f746a680e372",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-es-ES.pptx"
+        },
+        "png": {
+          "sha256": "938a018b6775e1c1f47c4f542ca34aa531f49f8d329982234973408a0d4fdb24",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-es-ES.png",
+          "width": 640,
+          "height": 360
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-it-IT",
+      "inputSha256": "01561362e7bee8bd91bd876b822f6f6c188e32895a954cfe8d76936d4fbd92f6",
+      "before": {
+        "pptx": {
+          "sha256": "25ee4865b8fd1663c9953b33c281fd730e74115a71f9a7ba5a77e2e134c3a1af",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-it-IT.pptx"
+        },
+        "png": {
+          "sha256": "df9291300b449740bc158810530b0f805850ad3924f7e45ccdb8b64df8b93013",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-it-IT.png",
+          "width": 640,
+          "height": 360
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "cd43aa61dbd95a352d6c49be26013cbd8440ecef9ca959f904ed1345083e5b89",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-it-IT.pptx"
+        },
+        "png": {
+          "sha256": "86a3b3e70de8716351ef03845fc05161b8ffe725b5bffd2c1605cbbeb1e13d36",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-it-IT.png",
+          "width": 640,
+          "height": 360
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-pt-PT",
+      "inputSha256": "35d547455bf48b97b05cb2190590c17e503ad63f30fb55d0d4eb1b5bf10b1a19",
+      "before": {
+        "pptx": {
+          "sha256": "a8268e3b5d5c8b92ffbc74bf03245e58388e2e3f6775a759ddf550e04187df93",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-pt-PT.pptx"
+        },
+        "png": {
+          "sha256": "f37a33eb2e0e0a2c1a19a74ca5774310d734a6065958ade7056f81efb7a62dae",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-pt-PT.png",
+          "width": 640,
+          "height": 360
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "128fdc4c7faf42ef46cac9d5b138a0a51596ebd1fc79d2d0d82b0caf8568f9dc",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-pt-PT.pptx"
+        },
+        "png": {
+          "sha256": "1007bd2e17adb6509f927e9e0d5e6e489cea7de1ca1b38deeecd8f3bc570d646",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-pt-PT.png",
+          "width": 640,
+          "height": 360
+        }
+      }
+    },
+    {
+      "id": "localized-chart-references-nl-NL",
+      "inputSha256": "5c59d5153b2e32fce2967de29dbbb52ed19d77674759e708dff322ccffe5bd9c",
+      "before": {
+        "pptx": {
+          "sha256": "987106bb0bcfb63d76a474dde5d9685f11928fc6e774042923cc2ffedfa87a5b",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-nl-NL.pptx"
+        },
+        "png": {
+          "sha256": "27cfc621cce5c101ae681f0539749694af73e869056289e4fd3d9d4be7de02b8",
+          "file": "C:\\opf-work\\lh110-cli-review\\before\\localized-chart-references-nl-NL.png",
+          "width": 640,
+          "height": 360
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "6634f0f87bbae8169dca7336e591b2f5088f918c3eebe83321e302ff502eeea9",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-nl-NL.pptx"
+        },
+        "png": {
+          "sha256": "0394726de6b037c394e8fb6b741a12c207e355c4bd39cf8b8d0bdd916208577d",
+          "file": "C:\\opf-work\\lh110-cli-review\\after\\localized-chart-references-nl-NL.png",
+          "width": 640,
+          "height": 360
+        }
+      }
+    }
+  ]
+}
