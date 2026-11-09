@@ -51,8 +51,13 @@ for (const mode of modes) {
     assert.deepEqual(points(chart, 'val'), data.rows.map(([, value], index) => [index, String(value)]));
     assert.deepEqual(workbookRows(parts), [data.columns, ...data.rows]);
     const axis = chart.match(/<c:valAx>[\s\S]*?<\/c:valAx>/)?.[0] ?? '';
-    assert.match(axis, /<c:min val="-20"\/>/, 'axis includes the negative bar');
-    assert.match(axis, /<c:max val="50"\/>/, 'axis includes every positive value');
+    // The existing classic fallback uses automatic bounds. If a bound is ever explicit, it must enclose every value.
+    assert.match(axis, /<c:scaling>/);
+    const minimum = axis.match(/<c:min val="([^"]+)"\/>/)?.[1];
+    const maximum = axis.match(/<c:max val="([^"]+)"\/>/)?.[1];
+    assert.ok(minimum === undefined || Number(minimum) <= -8, 'no lower bound clips the negative category');
+    assert.ok(maximum === undefined || Number(maximum) >= 42, 'no upper bound clips the positive categories');
+    assert.match(axis, /<c:crosses val="autoZero"\/>/);
     const slide = xml(parts, 'ppt/slides/slide1.xml');
     assert.equal([...slide.matchAll(/<p:graphicFrame>/g)].length, 1, 'one chart, without a second representation');
     assert.doesNotMatch(slide, /AlternateContent|chartEx/);
