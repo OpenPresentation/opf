@@ -2,7 +2,7 @@
 
 Evidence-only branch `codex/evidence-rr117-settled-performance`: NEVER MERGE. Production source is the reviewed RR117 correction at bee8d855, runtime5f5a, with the original d764 cache implementation. No formal timing has run from this driver yet. The coordinator reviews the frozen driver and grants the quiet execution window; user P0 work takes priority.
 
-The successful original root harness under `artifacts/review-trial` stays unchanged. Preserve its build/entry/smoke driver, compiled bundle/receipt, HTML and smoke-01 JSON/screenshots as functional evidence. Coordinator observed actual exec75986 terminal0 through write_stdin; there is no external stdout log for that run and none may be invented. It proves full workspace/cache activity and complete cold-oracle equality across11 operations, not a timing baseline.
+The successful original root harness under `artifacts/review-trial` stays unchanged. Preserve its build/entry/smoke driver, compiled bundle/receipt, HTML and smoke-01 JSON/screenshots as functional evidence. Coordinator observed actual exec75986 terminal0 through write_stdin; there is no external stdout log for that run and none may be invented. It proves full workspace/cache activity and complete cold-oracle equality across11 receipt rows (10 actual workspace phases plus a chart-control-definition row), not a timing baseline.
 
 ## Fixed comparison
 
@@ -20,3 +20,9 @@ Separate36-slide CPU1 cold/cached sessions, outside primary timings: warm resour
 Setup/mount has a fixed90s deadline, phases30s and trace completion15s. Forwarder/observer/trace overhead is symmetric and disclosed; no unperturbed-production claim. Hashing, oracle work, controlled GC, screenshots and storage/compression remain outside primary intervals. Timeline traces are retained for formal cases; setup and warm-up remain distinct from primary edits.
 
 `build.mjs --out=artifacts/review-paired-build-01` creates a fresh independent harness. `run.mjs --smoke --build=... --out=...` is functional only, with one edit round and a shortened3-edit/1-cycle retention check. It must not be summarized as a performance result. Formal `--measure` runs only in the coordinator-authorized quiet window after review. Fresh output directories are required. All completed source/results must be pushed and sealed on this evidence-only branch.
+
+## Current functional qualification
+
+Frozen driver source40978a5094ca46e8d3c87dd803d05896aec3a52e built a5,955,518-byte bundle with572 hashed inputs. Actual exec2085 terminated0: two16/CPU1 cold/cached functional cases, three exact edit-phase report/SVG-byte pairs, and shortened36-slide retention checks (3 edits/1 destroy per mode) pass. These are FUNCTIONAL_NOT_TIMING. The39-record lossless packet preserves18,757,243 raw bytes, original root build/driver/bundle/smoke/screenshots and its explicit observed-terminal receipt, new functional build/driver/outputs/log/exit, exact inputs and served resources. No original root stdout was invented. Run verify-preparation.mjs offline.
+
+The coordinator approved the fixed formal protocol, but formal execution remains held for the coordinated quiet window. The cold control also constructs fresh cache snapshots; it is not historical plain validate or an absolute v0.33 comparison. Public cold-oracle work primes shared font/renderer caches outside primary intervals symmetrically. During-edit heap includes intentional undo history and text/font caches; interpret after-destroy samples separately. A short soak cannot establish absence of leaks. No formal measurement or speed conclusion exists at this checkpoint.
