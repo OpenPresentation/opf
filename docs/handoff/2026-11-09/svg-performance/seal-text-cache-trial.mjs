@@ -1,0 +1,28 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {gzipSync} from 'node:zlib';
+import {createHash} from 'node:crypto';
+const own=path.join(process.cwd(),'docs/handoff/2026-11-09/svg-performance');
+const out=path.join(own,'results/text-cache-01'),control='C:/opf-work/text-cache/packages/render/artifacts/rr116-control';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const files=[];
+const add=(file,source)=>{const b=fs.readFileSync(source);files.push({file,bytes:b.length,sha256:hash(b),data:b.toString('base64')});};
+const raw=fs.readdirSync(out).sort();assert.equal(raw.length,25);for(const file of raw)add('results/'+file,path.join(out,file));
+for(const file of fs.readdirSync(control).sort())add('control/'+file,path.join(control,file));
+for(const file of ['text-cache-install01.log','text-cache-build01.log','text-cache-build01-exit.json','text-cache-focused01.log','text-cache-focused01-exit.json','text-cache-existing01.log','text-cache-existing01-exit.json','text-cache-fragments01.log'])add('checks/'+file,path.join('C:/opf-work',file));
+files.sort((a,b)=>a.file.localeCompare(b.file,'en'));
+const archive=gzipSync(Buffer.from(JSON.stringify({schema:1,files})),{level:9});
+const manifest={schema:1,archive:'text-cache-01.raw.json.gz',bytes:archive.length,sha256:hash(archive),files:files.map(({data,...f})=>f)};
+fs.writeFileSync(path.join(own,manifest.archive),archive);fs.writeFileSync(path.join(own,'text-cache-01.manifest.json'),JSON.stringify(manifest,null,2)+'\n');
+const summary=JSON.parse(fs.readFileSync(path.join(out,'summary.json')));assert.equal(summary.status,'PASS');fs.writeFileSync(path.join(own,'text-cache-01.summary.json'),JSON.stringify(summary,null,2)+'\n');
+const avg=values=>values.reduce((sum,n)=>sum+n,0)/values.length;
+let text='# RR-116 metric-cache comparison\n\n';
+text+='Eight serial fresh Node24.20 children ran in an explicit team quiet window from '+summary.started+' to '+summary.finished+'. Both variants use the same frozen a9ad390a17c9d55d84e727e4489b37bc81915ad4 core/gallery/renderer build, pinned eager office fonts and input decks. Symmetric font-module copies differ only in the metrics-cache implementation: exact eeb Git source before, exact a9 built source after. Only import locations are adapted. Each child records one first render and two warm runs; mirrored order includes two children for each size/variant. All208 per-child slide hashes equal the original standalone baseline, and every repeated render is byte-stable.\n\n';
+text+='| Slides | Before warm ms, two child medians | After warm ms, two child medians | Reduction in mean child median | Before/after warm CPU ms, mean |\n| --- | --- | --- | --- | --- |\n';
+for(const size of [16,36]){const before=summary.rows.filter(r=>r.size===size&&r.variant==='before'),after=summary.rows.filter(r=>r.size===size&&r.variant==='after');assert.equal(before.length,2);assert.equal(after.length,2);text+='| '+size+' | '+before.map(r=>r.warmMedianMs.toFixed(1)).join(' / ')+' | '+after.map(r=>r.warmMedianMs.toFixed(1)).join(' / ')+' | '+(100*(1-avg(after.map(r=>r.warmMedianMs))/avg(before.map(r=>r.warmMedianMs)))).toFixed(1)+'% | '+avg(before.map(r=>r.warmMedianCpuMs)).toFixed(1)+' / '+avg(after.map(r=>r.warmMedianCpuMs)).toFixed(1)+' |\n';}
+text+='\nThese results support the narrow CPU optimization on the supplied text/shape-heavy decks. They are not a universal throughput guarantee or physical-mobile/cloud-instance result. Peak RSS varies in both directions across sizes; no memory-reduction claim is made. Post-GC JS heap is essentially unchanged, and the per-face cache remains bounded at512 entries with strings above2048 characters unretained. Automatic/explicit requests have distinct keys and can consume separate entries; exact semantic/output controls remain required.\n\n';
+text+='The production patch moves Unicode direction and OpenType language analysis behind a successful unit-metrics cache lookup. Face/policy resolution stays outside the cache, and an outline request still upgrades a width-only entry. New public-handle semantic controls cover direction/paragraph/isolate/language/size/face/outline/eviction/engine-reset behavior. Existing real-font99 outline combinations and127-face preparation/integrity controls pass. Original install/build/check logs are included, with their dirty-source hashes bound to the eventual exact a9 source blob. The final coherent mapped/CI/native/release gates are still owed.\n\n';
+text+='Vetoable decision: retain the measured speed change with byte-identical output; do not label it a font-memory fix. RR-114 demand loading is separate. This branch is evidence only and MUST NOT MERGE. Run `node docs/handoff/2026-11-09/svg-performance/verify-text-cache-trial.mjs` from this checkout for the38 raw members, exact source adaptation and208 SVG comparisons.\n';
+fs.writeFileSync(path.join(own,'TEXT-CACHE-RESULTS.md'),text);
+console.log(JSON.stringify({status:'SEALED',members:files.length,bytes:archive.length,source:'a9ad390a17c9d55d84e727e4489b37bc81915ad4'}));

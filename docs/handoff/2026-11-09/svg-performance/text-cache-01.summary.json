@@ -1,0 +1,186 @@
+{
+  "schema": 1,
+  "started": "2026-11-09T20:45:49.518Z",
+  "status": "PASS",
+  "protocol": "Explicit team quiet window; fixed mirrored order of eight fresh Node24 children, first render plus two warm runs each, identical eager office fonts and runtime. Symmetric adapted modules differ only at the metric-cache boundary. All SVG hashes must equal the accepted baseline; compression/GC/hashing outside render timing.",
+  "rows": [
+    {
+      "order": 1,
+      "size": 16,
+      "variant": "before",
+      "started": "2026-11-09T20:45:49.519Z",
+      "finished": "2026-11-09T20:45:54.713Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "firstRenderMs": 2373.5926999999997,
+      "warmMedianMs": 1164.42105,
+      "warmMedianCpuMs": 1313,
+      "renderPeakRssBytes": 445566976,
+      "finalMemory": {
+        "rss": 406405120,
+        "heapTotal": 243896320,
+        "heapUsed": 100480104,
+        "external": 157305049,
+        "arrayBuffers": 76991090,
+        "peakRssBytes": 445566976
+      }
+    },
+    {
+      "order": 2,
+      "size": 16,
+      "variant": "after",
+      "started": "2026-11-09T20:45:54.717Z",
+      "finished": "2026-11-09T20:45:59.470Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "firstRenderMs": 2204.8397,
+      "warmMedianMs": 1020.6903500000001,
+      "warmMedianCpuMs": 1250,
+      "renderPeakRssBytes": 479461376,
+      "finalMemory": {
+        "rss": 404054016,
+        "heapTotal": 246255616,
+        "heapUsed": 100465824,
+        "external": 157305782,
+        "arrayBuffers": 76991090,
+        "peakRssBytes": 479461376
+      }
+    },
+    {
+      "order": 3,
+      "size": 36,
+      "variant": "before",
+      "started": "2026-11-09T20:45:59.472Z",
+      "finished": "2026-11-09T20:46:08.625Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "firstRenderMs": 3665.4925000000003,
+      "warmMedianMs": 2437.08575,
+      "warmMedianCpuMs": 2664,
+      "renderPeakRssBytes": 498208768,
+      "finalMemory": {
+        "rss": 412426240,
+        "heapTotal": 258027520,
+        "heapUsed": 104156264,
+        "external": 164074356,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 498208768
+      }
+    },
+    {
+      "order": 4,
+      "size": 36,
+      "variant": "after",
+      "started": "2026-11-09T20:46:08.626Z",
+      "finished": "2026-11-09T20:46:16.786Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "firstRenderMs": 3357.4829,
+      "warmMedianMs": 2131.17535,
+      "warmMedianCpuMs": 2390.5,
+      "renderPeakRssBytes": 466092032,
+      "finalMemory": {
+        "rss": 416710656,
+        "heapTotal": 253571072,
+        "heapUsed": 104225720,
+        "external": 164074356,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 466092032
+      }
+    },
+    {
+      "order": 5,
+      "size": 36,
+      "variant": "after",
+      "started": "2026-11-09T20:46:16.787Z",
+      "finished": "2026-11-09T20:46:24.872Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "firstRenderMs": 3340.6488,
+      "warmMedianMs": 2101.6214499999996,
+      "warmMedianCpuMs": 2344,
+      "renderPeakRssBytes": 494391296,
+      "finalMemory": {
+        "rss": 410578944,
+        "heapTotal": 255143936,
+        "heapUsed": 104154320,
+        "external": 164074356,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 494391296
+      }
+    },
+    {
+      "order": 6,
+      "size": 36,
+      "variant": "before",
+      "started": "2026-11-09T20:46:24.874Z",
+      "finished": "2026-11-09T20:46:34.110Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "firstRenderMs": 3619.8279,
+      "warmMedianMs": 2536.875,
+      "warmMedianCpuMs": 2774,
+      "renderPeakRssBytes": 495874048,
+      "finalMemory": {
+        "rss": 413216768,
+        "heapTotal": 257241088,
+        "heapUsed": 104162616,
+        "external": 164074356,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 495874048
+      }
+    },
+    {
+      "order": 7,
+      "size": 16,
+      "variant": "after",
+      "started": "2026-11-09T20:46:34.111Z",
+      "finished": "2026-11-09T20:46:38.904Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "firstRenderMs": 2236.7806,
+      "warmMedianMs": 1035.2032000000002,
+      "warmMedianCpuMs": 1219,
+      "renderPeakRssBytes": 474791936,
+      "finalMemory": {
+        "rss": 401625088,
+        "heapTotal": 246517760,
+        "heapUsed": 100473680,
+        "external": 157305782,
+        "arrayBuffers": 76991090,
+        "peakRssBytes": 474791936
+      }
+    },
+    {
+      "order": 8,
+      "size": 16,
+      "variant": "before",
+      "started": "2026-11-09T20:46:38.905Z",
+      "finished": "2026-11-09T20:46:44.138Z",
+      "exitCode": 0,
+      "signal": null,
+      "allSvgEquivalent": true,
+      "firstRenderMs": 2371.2267,
+      "warmMedianMs": 1184.5506500000001,
+      "warmMedianCpuMs": 1343.5,
+      "renderPeakRssBytes": 482250752,
+      "finalMemory": {
+        "rss": 402661376,
+        "heapTotal": 245207040,
+        "heapUsed": 100473272,
+        "external": 157305049,
+        "arrayBuffers": 76991090,
+        "peakRssBytes": 482250752
+      }
+    }
+  ],
+  "finished": "2026-11-09T20:46:44.139Z",
+  "childSha256": "005f286b0f5816e238e29816ba1ccc3ffeb21fac646322d7f7132ca247ce9927"
+}
