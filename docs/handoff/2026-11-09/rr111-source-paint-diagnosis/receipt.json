@@ -47,7 +47,7 @@
   "candidateHtmlSha256": "10d6b3bcbc93e9590205b8363e6c0e427223d8cbe40032c8681c7f48d36741a0",
   "originalPngSha256": "3904f0dc68cccf10f074a14ea30d19d35529cb6e0ccf303de1092a87ce517d22",
   "browser": "156.0.4314.50",
-  "boundedSequenceCount": 2,
+  "boundedSequenceCount": 3,
   "sourceChanged": false,
   "noticeLayoutShiftObserved": false,
   "partialPaintReproduced": false,
@@ -61,5 +61,13 @@
     "ciDispatches": 0,
     "release": false
   },
-  "createdUtc": "2026-11-09T06:23:39.680Z"
+  "createdUtc": "2026-11-09T06:23:39.680Z",
+  "unsupportedPathSequenceCount": 2,
+  "editedBothSequenceCount": 1,
+  "screenshotInterpretationsRetracted": true,
+  "originalEditedPngSha256": "b68dcd8cbb4377fb31bab91bcf2caf1acf376f3aac86435e40f44bd6979b2af7",
+  "matchedEditedPngSha256": "da12a6f3ba1db50d8e0e042189cc60e5d7cbcc4291aa2b87cf699f77c8fccfa9",
+  "first12SourceRowsRgbSha256": "85b645d8ba5d283ef9239b5b5e8b345803d8a97980e55f21f2330250d76c202d",
+  "matchedEditedBothWholePngEqual": true,
+  "productPaintDefectEstablished": false
 }

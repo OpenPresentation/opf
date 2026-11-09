@@ -1,0 +1,139 @@
+{
+  "format": 1,
+  "files": [
+    {
+      "source": "edited-driver.mjs",
+      "file": "evidence/supplement-0-edited-driver.mjs.gz",
+      "encoding": "gzip",
+      "rawBytes": 11184,
+      "rawSha256": "866db66808007c6eaf3048800f5a5ce936fe015d5867a8408a20fe3350e338d6",
+      "storedBytes": 4402,
+      "storedSha256": "fa5bb6da2ccfd95827423a1300fe1e1688b98e7c4060f24cf8b725adda5d5fd7"
+    },
+    {
+      "source": "observations-05-edited-both.log",
+      "file": "evidence/supplement-1-observations-05-edited-both.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 4624,
+      "rawSha256": "3cdbd72c2bbd73ee94f0dfa16985b3b51149f3b0be63fe1f8c49289c01b38007",
+      "storedBytes": 954,
+      "storedSha256": "42dcb1ff86eac0b729af5f32f78be164359a9690daa31546686860a82a4081b2"
+    },
+    {
+      "source": "observations-05-edited-both.exit.json",
+      "file": "evidence/supplement-2-observations-05-edited-both.exit.json.gz",
+      "encoding": "gzip",
+      "rawBytes": 377,
+      "rawSha256": "2586ee36ef892f8ddd9d2dabebe3da3f4ed3046be44c7c296e7b3929f9505fe7",
+      "storedBytes": 270,
+      "storedSha256": "f03a4f7754637ba6003e19b7f3de2c53e2c20de9df2f4ce91d3f0c6d4097c7b7"
+    },
+    {
+      "source": "pixel-row-analysis.mjs",
+      "file": "evidence/supplement-3-pixel-row-analysis.mjs.gz",
+      "encoding": "gzip",
+      "rawBytes": 2067,
+      "rawSha256": "ba9f77b38ada75bfabe849c2f956fea358c3789e92a4001ddef97bb2a746a62d",
+      "storedBytes": 1021,
+      "storedSha256": "2b406e9d8f56f42229675ab1f1dc2e88baaa8b7f345d292570406f52f14887be"
+    },
+    {
+      "source": "pixel-row-analysis.json",
+      "file": "evidence/supplement-4-pixel-row-analysis.json.gz",
+      "encoding": "gzip",
+      "rawBytes": 11036,
+      "rawSha256": "e175e4268d45a4222540b56a5674db1c6fb1faf4fa3a5ec6e83201a760242af8",
+      "storedBytes": 1069,
+      "storedSha256": "a9ff797f5628079baceef4eb123ecddd98b849a7d9d5c97772e9fc3ac6e9b473"
+    },
+    {
+      "source": "pixel-row-analysis.log",
+      "file": "evidence/supplement-5-pixel-row-analysis.log.gz",
+      "encoding": "gzip",
+      "rawBytes": 5385,
+      "rawSha256": "38c20bbcda4b489eadde9f2c7f12998704beaa02f06272498686b23a30194cf3",
+      "storedBytes": 949,
+      "storedSha256": "8bc64f0ca2d1ce0861f6a765bcb1a810db7925b8093f6c22b129ea885cff1ec9"
+    },
+    {
+      "source": "observations-05-edited-both/baseline-original-capture.png",
+      "file": "captures/supplement-6-baseline-original-capture.png",
+      "encoding": "identity",
+      "rawBytes": 45680,
+      "rawSha256": "da12a6f3ba1db50d8e0e042189cc60e5d7cbcc4291aa2b87cf699f77c8fccfa9",
+      "storedBytes": 45680,
+      "storedSha256": "da12a6f3ba1db50d8e0e042189cc60e5d7cbcc4291aa2b87cf699f77c8fccfa9"
+    },
+    {
+      "source": "observations-05-edited-both/baseline-post-original-capture.json",
+      "file": "evidence/supplement-7-baseline-post-original-capture.json.gz",
+      "encoding": "gzip",
+      "rawBytes": 68438,
+      "rawSha256": "8d9ded5c998d999ec5b2cecbc3dd414e4272e74e803e191e9a59cfd4f78d32cc",
+      "storedBytes": 3044,
+      "storedSha256": "31ff6fe9d80f4446e6d04083944ceeb4e793de2ebf8b685716dca33fd7eb7c5c"
+    },
+    {
+      "source": "observations-05-edited-both/candidate-original-capture.png",
+      "file": "captures/supplement-6-baseline-original-capture.png",
+      "encoding": "identity",
+      "rawBytes": 45680,
+      "rawSha256": "da12a6f3ba1db50d8e0e042189cc60e5d7cbcc4291aa2b87cf699f77c8fccfa9",
+      "storedBytes": 45680,
+      "storedSha256": "da12a6f3ba1db50d8e0e042189cc60e5d7cbcc4291aa2b87cf699f77c8fccfa9"
+    },
+    {
+      "source": "observations-05-edited-both/candidate-post-original-capture.json",
+      "file": "evidence/supplement-9-candidate-post-original-capture.json.gz",
+      "encoding": "gzip",
+      "rawBytes": 68437,
+      "rawSha256": "5998cf563028f475ab57884996ba9e194a079d3fbc35a4d1a0bdcdcfe234c9a4",
+      "storedBytes": 3042,
+      "storedSha256": "5d1df0aad4a11ee89ee58fb2698a0634fd02ad0b49bcaeb6737e9d91ed86f969"
+    },
+    {
+      "source": "observations-05-edited-both/receipt.json",
+      "file": "evidence/supplement-10-receipt.json.gz",
+      "encoding": "gzip",
+      "rawBytes": 17503,
+      "rawSha256": "6a9258cdc6b1be54cf233d0e26cc71d7572911e9bb2402eabbd9822c95b2976e",
+      "storedBytes": 2462,
+      "storedSha256": "731fe0cb4a8405b92ad1f64d0d6d3bc0b9fe41dd27d6e728c79c78358108b56b"
+    },
+    {
+      "source": "original/host-download-edited-json.png",
+      "file": "captures/supplement-11-host-download-edited-json.png",
+      "encoding": "identity",
+      "rawBytes": 45842,
+      "rawSha256": "b68dcd8cbb4377fb31bab91bcf2caf1acf376f3aac86435e40f44bd6979b2af7",
+      "storedBytes": 45842,
+      "storedSha256": "b68dcd8cbb4377fb31bab91bcf2caf1acf376f3aac86435e40f44bd6979b2af7"
+    }
+  ],
+  "uniqueTransports": 11,
+  "corrections": [
+    {
+      "priorHead": "c242ee74eca57c5faae35c10c4d58bf4a0a8e65b",
+      "claim": "Original unsupported PNG has missing Source prefix.",
+      "status": "retracted; actual retained prefix RGB equal to all other controls"
+    },
+    {
+      "claim": "Original partial was edited Both rather than unsupported.",
+      "status": "retracted; conflicting preview interpretation, actual prefix RGB equal"
+    },
+    {
+      "claim": "Matched baseline was partial and candidate complete.",
+      "status": "retracted; both PNG files byte-identical"
+    }
+  ],
+  "conclusion": {
+    "unsupportedPathPairs": 2,
+    "editedBothPairs": 1,
+    "matchedEditedBothWholePngEqual": true,
+    "first12SourceRowsRgbEqualAcrossAllFourImages": true,
+    "productPaintDefectEstablished": false,
+    "originalPaintCauseResolved": false,
+    "generalVisualAcceptance": false,
+    "noFurtherBrowserRuns": true
+  }
+}
