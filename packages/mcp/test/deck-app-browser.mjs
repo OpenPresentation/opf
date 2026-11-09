@@ -317,11 +317,12 @@ try {
 			const style = (selector) => getComputedStyle(document.querySelector(selector));
 			const strip = document.querySelector("#deck-thumbs .opf-thumbs").getBoundingClientRect();
 			const current = document.querySelector('#deck-thumbs [aria-current="true"]').getBoundingClientRect();
-			return { shell: style("#opf-deck").backgroundColor, text: style("#opf-deck").color, title: style(".deck-foot").color, design: style(".opf-design-menu-trigger").color, send: document.getElementById("deck-send").textContent, strip: [strip.left, strip.right], current: [current.left, current.right], height: document.getElementById("opf-deck").getBoundingClientRect().height };
+			return { shell: style("#opf-deck").backgroundColor, text: style("#opf-deck").color, title: style(".deck-foot").color, counter: style(".opf-nav-counter").color, design: style(".opf-design-menu-trigger").color, send: document.getElementById("deck-send").textContent, strip: [strip.left, strip.right], current: [current.left, current.right], height: document.getElementById("opf-deck").getBoundingClientRect().height };
 		});
 		assert.equal(seen.shell, "rgb(38, 38, 36)", "the view's surface is the host's background");
 		assert.equal(seen.text, "rgb(250, 249, 245)");
-		assert.equal(seen.design, "rgb(250, 249, 245)", "the editor's own parts take the same text colour");
+		assert.equal(seen.counter, "rgb(250, 249, 245)", "the editor's own parts take the same text colour");
+		assert.equal(seen.design, "rgb(194, 192, 182)", "and its quiet icon buttons the same muted colour as the viewer's");
 		assert.equal(seen.title, "rgb(194, 192, 182)", "muted text is the host's secondary text");
 		assert.equal(seen.send, "Send to Claude");
 		assert.ok(seen.current[0] >= seen.strip[0] && seen.current[1] <= seen.strip[1] + 1, `the open slide's thumbnail is in the strip's view (${seen.current} in ${seen.strip})`);
