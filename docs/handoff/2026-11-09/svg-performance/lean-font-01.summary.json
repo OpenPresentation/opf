@@ -1,0 +1,245 @@
+{
+  "schema": 1,
+  "started": "2026-11-09T20:15:01.927Z",
+  "runtimeSource": "58e0d7939fc318119f5f81a8ba1455bbfab7f1cd",
+  "protocol": "Explicit team quiet window; serial fresh Node24 children; fixed mirrored order; first render plus two warm runs per child; same deck and pinned fonts; exact accepted SVG hashes required. Existing loader knobs only. No production code change.",
+  "rows": [
+    {
+      "order": 1,
+      "mode": "batch-fonts",
+      "started": "2026-11-09T20:15:01.928Z",
+      "finished": "2026-11-09T20:15:11.106Z",
+      "exitCode": 0,
+      "signal": null,
+      "outputEquivalent": true,
+      "faces": 131,
+      "fontInputBytes": 37705276,
+      "fontLoadMs": 154.8793,
+      "beforeFontMemory": {
+        "rss": 97300480,
+        "heapTotal": 63221760,
+        "heapUsed": 36448960,
+        "external": 6426132,
+        "arrayBuffers": 1167743,
+        "peakRssBytes": 99143680
+      },
+      "setupMemory": {
+        "rss": 192057344,
+        "heapTotal": 66891776,
+        "heapUsed": 31227208,
+        "external": 150815685,
+        "arrayBuffers": 76009560,
+        "peakRssBytes": 192057344
+      },
+      "renderPeakRssBytes": 497385472,
+      "postGc": {
+        "rss": 412545024,
+        "heapTotal": 257499136,
+        "heapUsed": 104137992,
+        "external": 164071596,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 497385472
+      },
+      "warmMedianMs": 2428.0955000000004,
+      "firstRenderMs": 3675.0009000000005
+    },
+    {
+      "order": 2,
+      "mode": "batch-no-open",
+      "started": "2026-11-09T20:15:11.108Z",
+      "finished": "2026-11-09T20:15:18.782Z",
+      "exitCode": 0,
+      "signal": null,
+      "outputEquivalent": true,
+      "faces": 53,
+      "fontInputBytes": 23645516,
+      "fontLoadMs": 60.19199999999998,
+      "beforeFontMemory": {
+        "rss": 98050048,
+        "heapTotal": 63221760,
+        "heapUsed": 36432400,
+        "external": 6426132,
+        "arrayBuffers": 1167743,
+        "peakRssBytes": 99069952
+      },
+      "setupMemory": {
+        "rss": 150364160,
+        "heapTotal": 65056768,
+        "heapUsed": 29671288,
+        "external": 122695445,
+        "arrayBuffers": 47889528,
+        "peakRssBytes": 171012096
+      },
+      "renderPeakRssBytes": 427511808,
+      "postGc": {
+        "rss": 367468544,
+        "heapTotal": 232243200,
+        "heapUsed": 83820384,
+        "external": 135960232,
+        "arrayBuffers": 51318007,
+        "peakRssBytes": 427511808
+      },
+      "warmMedianMs": 2066.59445,
+      "firstRenderMs": 3038.3371
+    },
+    {
+      "order": 3,
+      "mode": "batch-office-only",
+      "started": "2026-11-09T20:15:18.783Z",
+      "finished": "2026-11-09T20:15:26.272Z",
+      "exitCode": 0,
+      "signal": null,
+      "outputEquivalent": true,
+      "faces": 44,
+      "fontInputBytes": 22340564,
+      "fontLoadMs": 45.67439999999999,
+      "beforeFontMemory": {
+        "rss": 97964032,
+        "heapTotal": 62697472,
+        "heapUsed": 36556800,
+        "external": 6426132,
+        "arrayBuffers": 1167743,
+        "peakRssBytes": 98762752
+      },
+      "setupMemory": {
+        "rss": 145575936,
+        "heapTotal": 64794624,
+        "heapUsed": 29448784,
+        "external": 120085541,
+        "arrayBuffers": 45279624,
+        "peakRssBytes": 169476096
+      },
+      "renderPeakRssBytes": 403927040,
+      "postGc": {
+        "rss": 357994496,
+        "heapTotal": 229408768,
+        "heapUsed": 81877160,
+        "external": 133350328,
+        "arrayBuffers": 47475527,
+        "peakRssBytes": 403927040
+      },
+      "warmMedianMs": 2031.6004500000001,
+      "firstRenderMs": 2939.0762999999997
+    },
+    {
+      "order": 4,
+      "mode": "batch-office-only",
+      "started": "2026-11-09T20:15:26.272Z",
+      "finished": "2026-11-09T20:15:33.814Z",
+      "exitCode": 0,
+      "signal": null,
+      "outputEquivalent": true,
+      "faces": 44,
+      "fontInputBytes": 22340564,
+      "fontLoadMs": 45.44540000000001,
+      "beforeFontMemory": {
+        "rss": 98234368,
+        "heapTotal": 63483904,
+        "heapUsed": 36402944,
+        "external": 6426132,
+        "arrayBuffers": 1167743,
+        "peakRssBytes": 99115008
+      },
+      "setupMemory": {
+        "rss": 145350656,
+        "heapTotal": 64794624,
+        "heapUsed": 29453080,
+        "external": 120085749,
+        "arrayBuffers": 45279624,
+        "peakRssBytes": 168947712
+      },
+      "renderPeakRssBytes": 431349760,
+      "postGc": {
+        "rss": 360509440,
+        "heapTotal": 232554496,
+        "heapUsed": 81869400,
+        "external": 133350328,
+        "arrayBuffers": 47475527,
+        "peakRssBytes": 431349760
+      },
+      "warmMedianMs": 2042.6105,
+      "firstRenderMs": 2962.5567
+    },
+    {
+      "order": 5,
+      "mode": "batch-no-open",
+      "started": "2026-11-09T20:15:33.815Z",
+      "finished": "2026-11-09T20:15:41.525Z",
+      "exitCode": 0,
+      "signal": null,
+      "outputEquivalent": true,
+      "faces": 53,
+      "fontInputBytes": 23645516,
+      "fontLoadMs": 54.523000000000025,
+      "beforeFontMemory": {
+        "rss": 98078720,
+        "heapTotal": 62435328,
+        "heapUsed": 36475904,
+        "external": 6426132,
+        "arrayBuffers": 1167743,
+        "peakRssBytes": 99045376
+      },
+      "setupMemory": {
+        "rss": 152551424,
+        "heapTotal": 65056768,
+        "heapUsed": 29649424,
+        "external": 122251051,
+        "arrayBuffers": 47889528,
+        "peakRssBytes": 170504192
+      },
+      "renderPeakRssBytes": 424398848,
+      "postGc": {
+        "rss": 363409408,
+        "heapTotal": 231194624,
+        "heapUsed": 83820056,
+        "external": 135960232,
+        "arrayBuffers": 50085431,
+        "peakRssBytes": 424398848
+      },
+      "warmMedianMs": 2082.5308999999997,
+      "firstRenderMs": 3032.7607000000003
+    },
+    {
+      "order": 6,
+      "mode": "batch-fonts",
+      "started": "2026-11-09T20:15:41.526Z",
+      "finished": "2026-11-09T20:15:50.751Z",
+      "exitCode": 0,
+      "signal": null,
+      "outputEquivalent": true,
+      "faces": 131,
+      "fontInputBytes": 37705276,
+      "fontLoadMs": 99.75799999999998,
+      "beforeFontMemory": {
+        "rss": 98217984,
+        "heapTotal": 63483904,
+        "heapUsed": 36438184,
+        "external": 6426132,
+        "arrayBuffers": 1167743,
+        "peakRssBytes": 99377152
+      },
+      "setupMemory": {
+        "rss": 191754240,
+        "heapTotal": 66891776,
+        "heapUsed": 31247224,
+        "external": 150815685,
+        "arrayBuffers": 76009560,
+        "peakRssBytes": 191754240
+      },
+      "renderPeakRssBytes": 494239744,
+      "postGc": {
+        "rss": 412524544,
+        "heapTotal": 257499136,
+        "heapUsed": 104099992,
+        "external": 164071596,
+        "arrayBuffers": 78205463,
+        "peakRssBytes": 494239744
+      },
+      "warmMedianMs": 2477.0942500000006,
+      "firstRenderMs": 3714.7906000000003
+    }
+  ],
+  "status": "PASS",
+  "finished": "2026-11-09T20:15:50.751Z",
+  "harnessSha256": "700e809ef0c1570ecd2fe47d08ff2f03738952f7ac9fdf24423f2b6b14266ce8"
+}

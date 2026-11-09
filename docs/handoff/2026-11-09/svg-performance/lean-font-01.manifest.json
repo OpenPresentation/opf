@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "archive": "lean-font-01.raw.json.gz",
+  "bytes": 53241,
+  "sha256": "3522fd3f9f0be861a6f23c48a36b707d0e87ba7f559649029d9901c08c17a26c",
+  "files": [
+    {
+      "file": "01-batch-fonts.json",
+      "bytes": 63647,
+      "sha256": "6150cc4cda20eb4a978a3a185d185de6d0541b97ed9934cc49f9d446c2350857"
+    },
+    {
+      "file": "01-batch-fonts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "01-batch-fonts.stdout",
+      "bytes": 320,
+      "sha256": "9282c5f876e8e90906de127e1f06828c930200a7130491db4e03787ef4f149d7"
+    },
+    {
+      "file": "02-batch-no-open.json",
+      "bytes": 56967,
+      "sha256": "87c9c5cb14f54c2904a4234e4921e0cc50fb1d769e1524640175a451742d1ca2"
+    },
+    {
+      "file": "02-batch-no-open.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "02-batch-no-open.stdout",
+      "bytes": 316,
+      "sha256": "1faa5779f02c5ff4226438ba1522d370180c56ea3890155044dc82d64068ee57"
+    },
+    {
+      "file": "03-batch-office-only.json",
+      "bytes": 56214,
+      "sha256": "431d10de536e9469c70e35e9e87ba8db8816a53f9fe25426106b16439be3423a"
+    },
+    {
+      "file": "03-batch-office-only.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "03-batch-office-only.stdout",
+      "bytes": 341,
+      "sha256": "86fe3bed05932fe2f41a19a740d67ed63738ba146e463b33266e2aeb7ce681ab"
+    },
+    {
+      "file": "04-batch-office-only.json",
+      "bytes": 56225,
+      "sha256": "101a37ea9b7835d13d4e68d074b9f38de863e1daf4a5d5afc9214b2e5dd4eb0c"
+    },
+    {
+      "file": "04-batch-office-only.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "04-batch-office-only.stdout",
+      "bytes": 323,
+      "sha256": "62ab67dd3c9c88e6a537529c02467e203c6ef7b55c16e93180eebc79a770939f"
+    },
+    {
+      "file": "05-batch-no-open.json",
+      "bytes": 56952,
+      "sha256": "9f01e318af566950577355dc0b2440d46edc0cc53b00ab7006d6037eb2600e45"
+    },
+    {
+      "file": "05-batch-no-open.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "05-batch-no-open.stdout",
+      "bytes": 334,
+      "sha256": "f70d6741f9730faee2896eab702671fa3a2dae3619d751477ee9e8870b144985"
+    },
+    {
+      "file": "06-batch-fonts.json",
+      "bytes": 63667,
+      "sha256": "28a6aeb51ccac104d2889c5167fa5bc7dedce8e8f87cdf093fed782e2fc4542f"
+    },
+    {
+      "file": "06-batch-fonts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "06-batch-fonts.stdout",
+      "bytes": 329,
+      "sha256": "d37280ddf224f8bfb690454c26f5aabb6bd1b50736c24f8467c25ee5fe1123df"
+    },
+    {
+      "file": "summary.json",
+      "bytes": 7069,
+      "sha256": "eb22539d5e9645b581dc2b2be246622a7f3d3edeb80d48a7417ccd3025d3daf9"
+    }
+  ]
+}
