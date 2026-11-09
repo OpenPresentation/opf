@@ -18,3 +18,8 @@ Focused controls pass: real CLI and seven drift refusals, an actually copied har
 - Existing completion ranges 20..40 currently admit this source; their UI/materialization semantics are outside this narrow repair.
 
 No runtime, catalogue, chart, schema, fixture, golden, preview, package pin or CI definition is changed. No provider/API/push/Office/release action is made. This records source and copied-harness evidence, not an npm packed/registry or hosted/native qualification. Required mapped checks and the final evidence seal remain pending; coordinator owns publication and integration.
+
+
+## First mapped outcome retained
+
+The first mapped run on source115e4f8b was red: a new qualification sentence was accidentally appended after the RR-105 row closing delimiter, creating a seventh column. Only that metadata placement is corrected. The CLI Node batch passed237/238; the remaining test needed two exact tracked XML oracle files omitted by the standard sparse checkout. Those two inputs are restored byte-for-byte from Git with a separate receipt, never regenerated. The failed run is retained; corrected metadata checks and the failed maintained CLI package step will run with identical package/test source.
