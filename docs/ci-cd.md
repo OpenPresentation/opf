@@ -1,8 +1,8 @@
 # CI/CD contract
 
-Current operating authority, 2026-11-08. GitHub Actions owns validation, package releases, native Worker previews and production deployment. Cloudflare owns runtime, Preview/version/deployment identities and observability. Do not enable Workers Builds as a second automatic deployer. Implementation and observed rollout status are tracked in [the unified checklist](https://github.com/OpenPresentation/opf/issues/1139) and the [Cloudflare program](programs/cloudflare-hosting/burndown.md); this contract does not claim that pending workflows are merged or deployed.
+Current operating authority, 2026-11-09. GitHub Actions owns validation, package releases, native Worker previews and production deployment. Cloudflare owns runtime, Preview/version/deployment identities and observability. Do not enable Workers Builds as a second automatic deployer. Implementation and observed rollout status are tracked in [the unified checklist](https://github.com/OpenPresentation/opf/issues/1139) and the [Cloudflare program](programs/cloudflare-hosting/burndown.md); this contract does not claim that pending workflows are merged or deployed.
 
-The owner now authorizes agents to create deployments, use native `wrangler preview`, and replace the separate `pptx-dev-preview` Worker. This supersedes older no-deploy instructions for this work. New logins, DNS changes, account-plan purchases or visibility changes remain owner actions. Claude connector setup, local extension removal, LibreOffice promotion and D2 retain their separate owner decisions. Dated handoffs remain historical evidence; use this contract for current operation.
+The owner now authorizes agents to create deployments, use native `wrangler preview`, and remove the separate `pptx-dev-preview` Worker. This supersedes older no-deploy instructions for this work. New logins, DNS changes, account-plan purchases or visibility changes remain owner actions. Claude connector setup, local extension removal, LibreOffice promotion and D2 retain their separate owner decisions. Dated handoffs remain historical evidence; use this contract for current operation.
 
 ## Repositories and gates
 
@@ -53,7 +53,7 @@ Org and gallery previews are public read-only product previews. Do not expose pr
 
 Do not copy `WORKER_SELF_REFERENCE` into a Preview when that service would call production. Prefer preview-local same-Worker calls where supported, or omit the binding only after proving the site's required flows work without it. Dev uses its explicitly qualified development Clerk/Convex configuration and separate Preview data. A reachable URL does not prove binding isolation or authentication.
 
-The owner-requested legacy removal is only the `pptx-dev-preview` Worker, after its native replacement is verified. Preserve `pptx-dev-user-preview` R2 data and historical test evidence. Do not delete `pptx-dev`, production routes, other Workers or shared storage.
+The owner-requested legacy `pptx-dev-preview` Worker was removed on 2026-11-09 without force. The earlier coordinator-only condition to wait for a native replacement was superseded by the explicit removal request. Production `pptx-dev`, its four custom domains and shared `pptx-dev-user-preview` R2 bucket were verified unchanged; no R2 objects were accessed or mutated. The legacy Worker's three secret bindings were removed with it, without reading or transferring their values. The separate development-secret transfer and native replacement/auth/service qualification remain held. Preserve shared storage and historical evidence; do not recreate a standalone preview Worker.
 
 ## Credentials and settings inventory
 
