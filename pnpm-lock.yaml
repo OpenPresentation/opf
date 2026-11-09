@@ -464,6 +464,9 @@ importers:
       '@openpresentation/opf-editor':
         specifier: workspace:*
         version: link:../editor
+      '@openpresentation/opf-pptx':
+        specifier: workspace:*
+        version: link:../pptx
       '@openpresentation/opf-render':
         specifier: workspace:*
         version: link:../render

@@ -798,8 +798,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				inputSchema: {
 					document: documentSchema,
 					format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."),
-					view: view.optional().describe("What the viewer shows first: preview (the slides, the default), source (the text) or both."),
-					slide: z.number().int().min(1).optional().describe("The slide to open on, from 1."),
+					view: view.optional().describe("What the viewer shows first: preview (the slides, the default), source (the text) or both. Leave it out unless the user asked to see the source: the user can switch in the viewer, and a chat column is narrow for both."),
+					slide: z.number().int().min(1).optional().describe("The slide to open on, from 1. Leave it out to open on the first slide, unless the conversation is about one slide."),
 				},
 				outputSchema: {
 					opened: z.boolean(),
