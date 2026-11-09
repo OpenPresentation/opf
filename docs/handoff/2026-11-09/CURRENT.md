@@ -1,3 +1,5 @@
+Latest native continuation: [sequential current cases and rejected proofing contrast](native-sequential-qualification/README.md). No release or full native acceptance is claimed.
+
 Latest continuation: [native resumption and actual CI failures](native-resume-and-ci/README.md). This supersedes the Office-closure and CI-running observations below.
 
 # Current integration checkpoint — November 9 UTC

@@ -1,0 +1,353 @@
+{
+  "schemaVersion": 1,
+  "created": "2026-11-09T16:43:48.572Z",
+  "currentSuite": {
+    "sha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+    "producer": "2400d38bf549cdb661c31725776df25e497d364c",
+    "worker": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283"
+  },
+  "historicalProofing": {
+    "suiteSha256": "50dc947be9220127c2a18f6b3e47d47479a275bf3563144b00b27c38fa18e097",
+    "runner": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+    "worker": "b8461d48b193e32dee4e6e1bb60896823f2303ff",
+    "scope": "Historical exact A/B/C serialization diagnostic, not current-candidate whole-suite acceptance"
+  },
+  "archive": {
+    "path": "observations.json.gz",
+    "bytes": 3190080,
+    "sha256": "858fc0373829c823c7ac4704253f4b69b12ec9773bc5fd4ae6342c1b113de9d9",
+    "rawBytes": 13775501,
+    "rawSha256": "c7ae26eb9d17d45fd3afc70502350ccd22a342b1c0dce9cd198b4221b8edf03e",
+    "logicalFiles": 1213,
+    "logicalBytes": 10152997
+  },
+  "cases": [
+    {
+      "id": "treemap",
+      "folder": "n034-native04/chart-treemap-category-01",
+      "runnerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "manifestSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+      "terminal": {
+        "timestamp": "2026-11-09T15:57:29.8968302Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "phasePngs": [
+        {
+          "phase": "original",
+          "bytes": 7958,
+          "sha256": "ae09aa6dfd7c10039f63584640fe5dd34786600422f0fc938bf10e8c4b60835f"
+        },
+        {
+          "phase": "edited",
+          "bytes": 7958,
+          "sha256": "ae09aa6dfd7c10039f63584640fe5dd34786600422f0fc938bf10e8c4b60835f"
+        },
+        {
+          "phase": "reopened",
+          "bytes": 7958,
+          "sha256": "ae09aa6dfd7c10039f63584640fe5dd34786600422f0fc938bf10e8c4b60835f"
+        }
+      ]
+    },
+    {
+      "id": "list-style-edit",
+      "folder": "n034-native04/list-description-native-edit-01",
+      "runnerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "manifestSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+      "terminal": {
+        "timestamp": "2026-11-09T16:01:05.2953211Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "phasePngs": [
+        {
+          "phase": "original",
+          "bytes": 10928,
+          "sha256": "29bc9902fd582e296f8cdd8731c2a010d691227f80a6196b3d689e809f36a359"
+        },
+        {
+          "phase": "edited",
+          "bytes": 11354,
+          "sha256": "df31db4d9e7b645061616100983b964ec8f17bf200a66c69279a82ac1bd360e1"
+        },
+        {
+          "phase": "reopened",
+          "bytes": 11354,
+          "sha256": "df31db4d9e7b645061616100983b964ec8f17bf200a66c69279a82ac1bd360e1"
+        }
+      ]
+    },
+    {
+      "id": "histogram-raw",
+      "folder": "n034-native05/chart-histogram-single-01",
+      "runnerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "manifestSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+      "terminal": {
+        "timestamp": "2026-11-09T16:14:19.2435028Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "phasePngs": [
+        {
+          "phase": "original",
+          "bytes": 7481,
+          "sha256": "132ca168c34d99e658831f6287a20447f1541e58bee1b2632e389957e37e7d05"
+        },
+        {
+          "phase": "edited",
+          "bytes": 7481,
+          "sha256": "132ca168c34d99e658831f6287a20447f1541e58bee1b2632e389957e37e7d05"
+        },
+        {
+          "phase": "reopened",
+          "bytes": 7481,
+          "sha256": "132ca168c34d99e658831f6287a20447f1541e58bee1b2632e389957e37e7d05"
+        }
+      ]
+    },
+    {
+      "id": "histogram-category-auto",
+      "folder": "n034-native05/chart-histogram-category-01",
+      "runnerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "manifestSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+      "terminal": {
+        "timestamp": "2026-11-09T16:14:33.4703147Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "phasePngs": [
+        {
+          "phase": "original",
+          "bytes": 8648,
+          "sha256": "0dc105ad9c3fb5210981dcca8c74fd20da104ac016222fb3086da56123065b3c"
+        },
+        {
+          "phase": "edited",
+          "bytes": 8648,
+          "sha256": "0dc105ad9c3fb5210981dcca8c74fd20da104ac016222fb3086da56123065b3c"
+        },
+        {
+          "phase": "reopened",
+          "bytes": 8648,
+          "sha256": "0dc105ad9c3fb5210981dcca8c74fd20da104ac016222fb3086da56123065b3c"
+        }
+      ]
+    },
+    {
+      "id": "histogram-category-fallback",
+      "folder": "n034-native06/chart-mode-histogram-category-fallback-01",
+      "runnerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "manifestSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+      "terminal": {
+        "timestamp": "2026-11-09T16:31:04.8690490Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "phasePngs": [
+        {
+          "phase": "original",
+          "bytes": 8862,
+          "sha256": "6d20a1023ace67e167bc5d750d15c6059b82ea2c35543ec8e22d08fc23ab4371"
+        },
+        {
+          "phase": "edited",
+          "bytes": 8862,
+          "sha256": "6d20a1023ace67e167bc5d750d15c6059b82ea2c35543ec8e22d08fc23ab4371"
+        },
+        {
+          "phase": "reopened",
+          "bytes": 8862,
+          "sha256": "6d20a1023ace67e167bc5d750d15c6059b82ea2c35543ec8e22d08fc23ab4371"
+        }
+      ]
+    },
+    {
+      "id": "proofing-A",
+      "folder": "qualification034-proofing-A-03",
+      "runnerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "manifestSha256": "50dc947be9220127c2a18f6b3e47d47479a275bf3563144b00b27c38fa18e097",
+      "terminal": {
+        "timestamp": "2026-11-09T16:05:22.1082868Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "phasePngs": [
+        {
+          "phase": "original",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        },
+        {
+          "phase": "edited",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        },
+        {
+          "phase": "reopened",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        }
+      ]
+    },
+    {
+      "id": "proofing-B",
+      "folder": "qualification034-proofing-B-01",
+      "runnerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "manifestSha256": "50dc947be9220127c2a18f6b3e47d47479a275bf3563144b00b27c38fa18e097",
+      "terminal": {
+        "timestamp": "2026-11-09T16:06:20.8511642Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "phasePngs": [
+        {
+          "phase": "original",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        },
+        {
+          "phase": "edited",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        },
+        {
+          "phase": "reopened",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        }
+      ]
+    },
+    {
+      "id": "proofing-C",
+      "folder": "qualification034-proofing-C-01",
+      "runnerStatus": "native-observation-completed; acceptance-requires-supervisor-review",
+      "manifestSha256": "50dc947be9220127c2a18f6b3e47d47479a275bf3563144b00b27c38fa18e097",
+      "terminal": {
+        "timestamp": "2026-11-09T16:10:46.2405916Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "phasePngs": [
+        {
+          "phase": "original",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        },
+        {
+          "phase": "edited",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        },
+        {
+          "phase": "reopened",
+          "bytes": 10442,
+          "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+        }
+      ]
+    }
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "findings": {
+    "treemap": "Original and native-saved imports exactly match sealed source; root viewed native and preview.",
+    "listStyleEdit": "Maintained comparison passed actual36pt red edit and exact saved source; visualFitAcceptance false.",
+    "histogramRaw": "Source/save import exact; inspected native counts4and2 in bins [3,8],(8,13].",
+    "histogramCategory": "Source/save import exact but native auto paints3of4 categories, omittingEast-8; classic fallback paintsall4. Allcaches/workbooks retainall4. Runtimeguardfix is a separate new PR.",
+    "proofing": "27actualLanguageID1025 readings; all9phasePNGs identicaladd522... and retainreversal. Inheritance-placement hypothesis rejected; glyph acceptance false."
+  },
+  "processTiming": "The first treemap/list and allthree proofing outer shells retained failed immediate post-Quit process-inventory guards despite successful workers. Later read-only inventories confirmedglobalzero before subsequentdifferentcases. Native05/06 used a passive3secondwait only after successfulQuit, then requiredglobalzero; no retries/attach/kill/UI or changedworkerlimit.",
+  "metadataQualification": {
+    "path": "metadata-checks.json.gz",
+    "bytes": 9611,
+    "sha256": "29315424cb3a8aa8592439ac6996a8fcfc1bbd33227a4cfcc36e935136960521",
+    "rawBytes": 31474,
+    "rawSha256": "5c9a8e5e11121fd647a85db942ec96652653ba5f880ffc303f5d03cea0433fcc",
+    "files": [
+      {
+        "path": "driver.log",
+        "bytes": 925,
+        "sha256": "e24c874bdb92244e6932922479612a5f227a18c118e0193a0c01e989cb964b65"
+      },
+      {
+        "path": "exit.json",
+        "bytes": 213,
+        "sha256": "ab4d7ca00bcf1b46da1a7143ab72d84f1c73435e49f57109de5783a6703f499b"
+      },
+      {
+        "path": "steps/biome.log",
+        "bytes": 679,
+        "sha256": "41a039a68fca9747aa85c47a0e1f98faf8fa4ecf45f79a7d0e8eecb0fa85f5bc"
+      },
+      {
+        "path": "steps/build.log",
+        "bytes": 14600,
+        "sha256": "e8765ac96d115707f9bbb24db50e3d07f54fe8801ca58cb592a6cea601b40eb3"
+      },
+      {
+        "path": "steps/install.log",
+        "bytes": 248,
+        "sha256": "8611abbd2b659eb485243fceaa5a8fa47019277eab8ccbdb270f891dc3836bf5"
+      },
+      {
+        "path": "steps/pnpm_run_check_changes.log",
+        "bytes": 2642,
+        "sha256": "f6e9e2e7769f1109d01730b808e90f63c9afd618aa6c5e13e0bf5d2ebb73d984"
+      },
+      {
+        "path": "steps/pnpm_run_check_skill-commands.log",
+        "bytes": 1041,
+        "sha256": "4056eb7900c8c50f503ab179e93ac85bcf55a993063c768a1abf4d8ff0ac6f11"
+      },
+      {
+        "path": "steps/pnpm_run_check_text.log",
+        "bytes": 1076,
+        "sha256": "871175ba34fc8460dcdb1bf2d21996bec60900de65ace192633d964a3defcde9"
+      },
+      {
+        "path": "final-driver.log",
+        "bytes": 925,
+        "sha256": "d36aeb876540898d98eef2ee1c60535e912eb8c042ee7435ec4d4f5e29f04aef"
+      },
+      {
+        "path": "final-exit.json",
+        "bytes": 197,
+        "sha256": "730c90c5283ca56b208c4efa7c2419b745f9d013774c5aebce334ec3f9287daf"
+      }
+    ],
+    "stepsPassed": 5,
+    "typecheckSkipped": true,
+    "seconds": 33.5,
+    "sourceQualification": "Metadata only, no Office/engine/native retry",
+    "finalMetadataCheck": {
+      "stepsPassed": 5,
+      "typecheckSkipped": true,
+      "seconds": 32.2,
+      "receiptsAddedAfterRun": true
+    }
+  }
+}
