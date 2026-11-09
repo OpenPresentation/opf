@@ -65,8 +65,8 @@ export function createOverlayTools(root, options) {
     const W = lastGeometry.width;
     const H = lastGeometry.height;
     const box = entry.shape.box;
-    // The deck's direction: x counts from the right edge in a right-to-left deck (the entry's x tells which way it is drawn).
-    const rtl = raw.x !== undefined ? Math.abs(box.x - raw.x * W) > 1 && Math.abs(box.x - (W - (raw.x + (raw.width ?? 0)) * W)) < 1 : slideIsRtl(editor.presentation, Number(path.split(".")[1]));
+    // A centered box looks identical in either direction; never infer direction from its position.
+    const rtl = slideIsRtl(editor.presentation, Number(path.split(".")[1]));
     return { path, box: { ...box }, W, H, scale: Math.min(W, H) / 720, rtl, placement: raw.at ? "at" : "fractions", at: raw.at, edge: entry.attachedTo?.edge, base: signature(path) };
   }
 

@@ -19,3 +19,27 @@ test('RTL mirrors the signed origin without pulling it inside',()=>{
  const result=composeSlide(doc.slides[0],{width:1280,height:720,presentation:doc,direction:'rtl'});
  assert.deepEqual(result.overlayShapes[0].box,{x:1152,y:-72,width:256,height:540});
 });
+
+test('finite but unrepresentable origins refuse at the coordinate, before invalid geometry or native output',()=>{
+ for(const key of ['x','y'])for(const value of [1e300,-1e300,1e20,-1e20]) {
+  const doc=deck([{...shape,[key]:value}]);const result=validate(doc,{only:['format']});
+  assert.ok(result.findings.some(f=>f.severity==='error'&&f.path==='/slides/0/shapes/0/'+key&&/safe integer native coordinate/.test(f.message)),key+' '+value);
+  assert.throws(()=>composeSlide(doc.slides[0],{presentation:doc}),error=>error instanceof RangeError&&error.message.includes('slides.0.shapes.0.'+key));
+ }
+ for(const value of [-1000,1000]){const doc=deck([{...shape,x:value,y:value}]);assert.equal(validate(doc,{only:['format']}).valid,true);const box=composeSlide(doc.slides[0],{presentation:doc}).overlayShapes[0].box;assert.ok(Object.values(box).every(Number.isFinite));}
+ for(const value of [NaN,Infinity,-Infinity]){const doc=deck([{...shape,x:value}]);assert.throws(()=>composeSlide(doc.slides[0],{presentation:doc}),RangeError);}
+});
+test('representability uses actual deck/theme dimensions and deck size overrides',()=>{
+ const doc=deck([{...shape,x:1e9}]);doc.design={dimensions:{widthInches:5,heightInches:7.5}};
+ assert.equal(validate(doc,{only:['format']}).valid,true);
+ doc.design.dimensions.widthInches=10;assert.equal(validate(doc,{only:['format']}).valid,false);
+ doc.design={theme:'narrow'};doc.catalogs={custom:{themes:{narrow:{name:'Narrow',dimensions:{widthInches:5,heightInches:7.5}}}}};
+ assert.equal(validate(doc,{only:['format']}).valid,true);
+ doc.design.dimensions={widthInches:10,heightInches:7.5};assert.equal(validate(doc,{only:['format']}).valid,false);
+});
+
+test('fractional format validation resolves dimensions without layout or font requests',()=>{
+ let requests=0;const doc=deck([{...shape,x:-.2,y:1.1}]);
+ const report=validate(doc,{only:['format'],fonts:{textMeasurement:()=>{requests++;throw Error('format-only must stay lazy');}}});
+ assert.equal(report.valid,true);assert.equal(report.checks.layout,'not-run');assert.equal(requests,0);
+});

@@ -1,14 +1,16 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate';
 import {composeSlide} from '@openpresentation/opf/composition';
-import {toPptx,fromPptx} from '../dist/index.js';
+import {validate} from '@openpresentation/opf';
+import {toPptx,fromPptx,OPFPptxError} from '../dist/index.js';
 const shapes=[
  {id:'glow',shape:'ellipse',x:0.2692,y:-0.1,width:0.42,height:0.75,fill:'#8000CC',stroke:'none',layer:'back',decorative:true,opacity:0.45,softEdge:60},
  {id:'left',shape:'rect',x:-0.1,y:0.3,width:0.2,height:0.2,fill:'#FF0000',stroke:'none'},
  {id:'right',shape:'rect',x:1.05,y:0.3,width:0.2,height:0.2,fill:'#00FF00',stroke:'none'}
 ];
 for(const direction of ['ltr','rtl']){
- const doc={name:'Bleed',language:direction==='rtl'?'ar-SA':'en-US',design:{direction},slides:[{title:'Slide',shapes}]};
+ const doc={name:'Bleed',language:direction==='rtl'?'ar-SA':'en-US',slides:[{title:'Slide',shapes}]};
+ assert.equal(validate(doc).findings.filter(f=>f.severity==='error').length,0,'native control is valid OPF');
  const diagnostics=[],bytes=await toPptx(doc,{typefaces:'safe'}),parts=unzipSync(bytes),xml=strFromU8(parts['ppt/slides/slide1.xml']);
  const composition=composeSlide(doc.slides[0],{presentation:doc});
  for(const overlay of composition.overlayShapes){
@@ -29,3 +31,8 @@ for(const direction of ['ltr','rtl']){
  assert.equal(changed.slides[0].shapes.find(s=>s.shape==='ellipse').y,-0.2,'current native position is authoritative');
 }
 console.log('SH-27 signed native shape export/import passed');
+
+for(const value of [1e300,-1e300,1e20,-1e20]){
+ const doc={slides:[{shapes:[{shape:'rect',x:value,y:0,width:.2,height:.2}]}]};
+ await assert.rejects(()=>toPptx(doc),error=>error instanceof OPFPptxError&&error.code==='invalid-opf'&&error.findings.some(f=>f.path==='/slides/0/shapes/0/x'&&/safe integer native coordinate/.test(f.message)),'no archive with an unrepresentable transform');
+}

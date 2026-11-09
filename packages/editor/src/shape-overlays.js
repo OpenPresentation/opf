@@ -4,7 +4,7 @@
 // as for any other edit; the `prepare...` forms return the patch without a session. Stacking is the array order (later is on top). A connector end names a
 // block or overlay by its `id`: connecting two things that have none gives them one, in the same patch, so one undo takes both back. Editing a shape's own
 // properties (fill, line, text) is shape-options.js, which also takes an overlay shape's path. Plain JS with no DOM and no Node imports.
-import { SHAPE_PRESETS, presetAspect, resolveChartData, chartDrawPlan } from "@openpresentation/opf/composition";
+import { SHAPE_PRESETS, presetAspect, resolveChartData, chartDrawPlan, resolveSlideDirection } from "@openpresentation/opf/composition";
 import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
@@ -15,11 +15,9 @@ const isObject = (value) => Boolean(value) && typeof value === "object" && !Arra
 const bad = (message, details) => fail("invalid-overlay", message, details);
 const rounded = (value) => Math.round(value * 10000) / 10000;
 
-const RTL_LANGUAGES = new Set(["ar", "he", "fa", "ur", "yi", "ps", "sd", "ug", "dv", "ckb", "iw"]);
-/** Whether a slide is drawn right to left (its language, else the deck's, is Arabic, Hebrew, Persian, Urdu and the like): its overlays' `x` counts from the right edge. */
+/** The authoritative language/script direction, including inline and slide overrides. Overlay x counts from that start edge. */
 export function slideIsRtl(presentation, slideIndex) {
-  const language = presentation.slides?.[slideIndex]?.language ?? presentation.language;
-  return typeof language === "string" && RTL_LANGUAGES.has(language.toLowerCase().split(/[-_]/)[0]);
+  return resolveSlideDirection(presentation, slideIndex) === "rtl";
 }
 
 /** How a connector draws between its ends. */

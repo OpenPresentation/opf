@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createEditorSession } from "../src/index.js";
 import { setShapeProperties } from "../src/shape-options.js";
-import { CONNECTOR_ROUTES, OVERLAY_LAYER_MOVES, connectShapes, detachOverlay, insertOverlayShape, listConnectionEnds, moveOverlayLayer, overlayPathForSelection, prepareConnect, readOverlay, removeOverlay, setConnector, setOverlayFrame } from "../src/shape-overlays.js";
+import { CONNECTOR_ROUTES, OVERLAY_LAYER_MOVES, connectShapes, detachOverlay, insertOverlayShape, listConnectionEnds, moveOverlayLayer, overlayPathForSelection, prepareConnect, readOverlay, slideIsRtl, removeOverlay, setConnector, setOverlayFrame } from "../src/shape-overlays.js";
 
 // SH-06 part B: overlay shapes and connectors as one undoable step each: insert, move and resize (fractions, or an anchored shape keeps its `at`),
 // restack (array order), remove, connect two blocks or overlays (ends without an id get one), change a connector.
@@ -196,3 +196,18 @@ const fails = (action, code) => assert.throws(action, (error) => error.code === 
  assert.equal(editor.presentation.slides[0].shapes[1].at.block,'alpha');
 }
 console.log("shape overlays ok");
+
+// Use the same direction as composition, including inline/slide overrides.
+{
+  for (const [language, expected] of [['ar-SA', true], ['en-US', false], [{bcp47: 'ar-SA', direction: 'rtl'}, true], [{bcp47: 'ar-SA', direction: 'ltr'}, false], [{bcp47: 'en-US', direction: 'rtl'}, true]]) {
+    const editor = createEditorSession({...deck(), language});
+    assert.equal(slideIsRtl(editor.presentation, 0), expected, JSON.stringify(language));
+  }
+  const document = {...deck(), language: {bcp47: 'ar-SA', direction: 'rtl'}};
+  document.slides[1].language = {bcp47: 'en-US', direction: 'ltr'};
+  assert.equal(slideIsRtl(document, 0), true); assert.equal(slideIsRtl(document, 1), false);
+  const editor = createEditorSession(document);
+  setOverlayFrame(editor, 'slides.0.shapes.0', {x: -0.1, y: -0.2});
+  assert.equal(editor.presentation.slides[0].shapes[0].x, -0.1);
+  editor.undo(); assert.equal(editor.presentation.slides[0].shapes[0].x, 0.1);
+}

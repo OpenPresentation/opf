@@ -728,3 +728,5 @@ Default frame is the proportion a shape takes when the block sets no `aspectRati
 | `wedgeRoundRectCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any), `adj3` 0.16667 (any) |
 
 Organization charts, hierarchies and set overlap use the `org-chart`, `hierarchy` and `venn` arrangement layouts. Trees preserve one root and list-entry depths; Venn supports one to seven flat sets. Both engines share their measured connectors, paired cards, opacity and label rectangles. See [Trees and set overlap](smartart.md#trees-and-set-overlap-sh-21) for authoring and export fidelity.
+
+Signed overlay origins remain subject to representability: their scaled and rounded geometry must stay finite and its native EMU values must be exact JavaScript integers. An unrepresentable coordinate is a located error; it is never clamped or moved. This is engine number safety, not a PowerPoint coordinate maximum or a different OPF unit.

@@ -344,6 +344,27 @@ try {
   await step('select another chart series', async () => {await field('Chart series').selectOption('1');}, current => current.slides[0].shapes[0].at?.series === 1, {single: true});
   await step('select a point edge', async () => {await field('Point edge').selectOption('center');}, current => current.slides[0].shapes[0].at?.edge === 'center', {single: true});
   await shot('chart-point-controls');
+  // Direction comes from the document, never inferred from a symmetric box.
+  await page.evaluate(() => globalThis.host.session.applyPatch([
+    {op:'add',path:'/language',value:{bcp47:'en-US',direction:'rtl'}},
+    {op:'replace',path:'/slides',value:[{title:'RTL position',blocks:[{id:'body',text:'Body'}],shapes:[
+      {id:'centered',shape:'rect',x:.4,y:.2,width:.2,height:.2},
+      {id:'attached-rtl',shape:'ellipse',at:{block:'body',edge:'end',offset:150,width:48,height:48}}
+    ]}]}
+  ]));
+  await settle(); await select('slides.0.shapes.0');
+  const centeredBefore=await frameBox(),rtlSlideBox=await svgBox();
+  const moveGrip=await page.locator('[data-overlay-handle="move"]').boundingBox();
+  await step('a centered inline-RTL overlay follows a physical right drag',async()=>{
+    await drag({x:moveGrip.x+moveGrip.width/2,y:moveGrip.y+moveGrip.height/2},{x:moveGrip.x+moveGrip.width/2+80,y:moveGrip.y+moveGrip.height/2});
+  },current=>current.slides[0].shapes[0].x<.4,{single:true});
+  const centeredAfter=await frameBox();assert.ok(Math.abs(centeredAfter.x-centeredBefore.x-80)<2,'the rendered box moved right, not its mirrored opposite');
+  await step('negative inline-RTL x is retained as a logical start-edge coordinate',async()=>{await field('X').fill('-10');await field('X').press('Enter');},current=>current.slides[0].shapes[0].x===-.1,{single:true});
+  assert.ok((await frameBox()).x>rtlSlideBox.x+rtlSlideBox.width*.85,'negative RTL origin is beyond the physical right start edge');
+  await shot('overlay-inline-rtl-negative-x');
+  await select('slides.0.shapes.1');const attachedBefore=await frameBox();
+  await step('freeing an inline-RTL attached shape preserves its physical box',async()=>{await selection.locator('[data-role="shape-free"]').click();},current=>current.slides[0].shapes[1].at===undefined,{single:true});
+  const attachedAfter=await frameBox();for(const key of ['x','y','width','height'])assert.ok(Math.abs(attachedAfter[key]-attachedBefore[key])<1,'detach preserves '+key);
   assert.deepEqual(errors, [], 'no page errors');
   console.log(`shape overlays browser test ok: ${checks.length} checks`);
   for (const name of checks) console.log(`  - ${name}`);
