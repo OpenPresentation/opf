@@ -95,7 +95,7 @@ test('external profile pin and stale-attempt guards fail before execution withou
     await assert.rejects(() => bindTableProfile({envelopeFile, envelopeSha256: '0'.repeat(64)}), /External profile hash differs/u);
     await assert.rejects(() => bindTableProfile({envelopeFile, envelopeSha256: ''}), /External profile SHA/u);
     await assertTableFreshOutput(root);
-    for (const relative of ['runner.json', 'table-colors/worker.stdout.log', 'table-colors/native.json', 'table-colors/table-colors-edited.pptx', 'table-colors/reopened-6.png']) {
+    for (const relative of ['runner.json', 'table-colors/worker.stdout.log', 'table-colors/native.json', 'table-colors/character-probes.jsonl', 'table-colors/table-colors-edited.pptx', 'table-colors/reopened-6.png']) {
       await writeFile(path.join(root, relative), 'protected prior bytes');
       await assert.rejects(() => assertTableFreshOutput(root), /Preserve prior attempt/u);
       assert.equal(await readFile(path.join(root, relative), 'utf8'), 'protected prior bytes');
@@ -219,4 +219,11 @@ test('output separation checks both directions, sibling boundaries and Windows c
   for (const output of [root, path.join(root, 'child'), path.dirname(root)]) assert.throws(() => assertTableOutputSeparate(output, [root]), /overlaps/u);
   assert.throws(() => assertTableOutputSeparate('relative', [root]), /absolute/u);
   if (process.platform === 'win32') for (const output of [root.toUpperCase(), path.join(root.toUpperCase(), 'new-output')]) assert.throws(() => assertTableOutputSeparate(output, [root.toLowerCase()]), /overlaps/u);
+});
+
+test('historical preferred-white native expectation is refused without changing its authored source or archive', () => {
+  const fixture = sourceFixture();
+  validateTableGeneration(fixture.suite, fixture.generation, fixture.source, fixture.input);
+  fixture.generation.expected[3].cells[0].runs[0].color = '#FFFFFF';
+  assert.throws(() => validateTableGeneration(fixture.suite, fixture.generation, fixture.source, fixture.input), /Table text\/color contract differs/u);
 });

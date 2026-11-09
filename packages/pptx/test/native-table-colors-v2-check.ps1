@@ -3,7 +3,7 @@ $ErrorActionPreference='Stop'
 if(Test-Path -LiteralPath $ReportPath) { throw 'Preserve the pure table control report' }
 $tokens=$null;$errors=$null;$ast=[Management.Automation.Language.Parser]::ParseFile($WorkerPath,[ref]$tokens,[ref]$errors)
 if($errors.Count) { throw ($errors | Out-String) }
-foreach($name in @('Get-TableHash','Assert-TableArchive','Assert-TablePlainPath','Read-TableEnvironment','Assert-TableWorkerAuthorization','Write-TableStage','Stop-TableLifecycle','Assert-TableCondition','Invoke-TableCom','Own-TableApplication','Open-TableOwned','Read-TableObject','Read-TablePhase','Edit-TablePrefixes','Save-TableCopy','Close-TableOwned','Quit-TableOwned','Invoke-TableLifecycle')) {
+foreach($name in @('Get-TableHash','Assert-TableArchive','Assert-TablePlainPath','Read-TableEnvironment','Assert-TableWorkerAuthorization','Write-TableStage','Stop-TableLifecycle','Assert-TableCondition','Invoke-TableCom','Own-TableApplication','Open-TableOwned','Read-TableObject','Get-TableCharacterProbe','Write-TableCharacterProbe','Read-TablePhase','Edit-TablePrefixes','Save-TableCopy','Close-TableOwned','Quit-TableOwned','Invoke-TableLifecycle')) {
     $definition=$ast.Find({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -ceq $name},$true)
     if($null -eq $definition) { throw "Missing actual source helper: $name" };Invoke-Expression $definition.Extent.Text
 }
@@ -81,6 +81,12 @@ public class TFPresentations {
 }
 public class TFApplication {public TFApplication(){TableFake.Touch();}public string Version{get{TableFake.Touch();return "managed.fake";}}public string Path{get{TableFake.Touch();return TableFake.BinaryDirectory;}}TFPresentations p=new TFPresentations();public TFPresentations Presentations {get{TableFake.Touch();return p;}}public void Quit(){TableFake.Touch();if(p.Opened!=null)throw new Exception("quit nonempty");TableFake.Quits++;}}
 "@
+# Other lifecycle controls keep diagnostics in memory; the color/null and I/O
+# fault controls below exercise the actual durable writer before refusal.
+$actualProbeWriter=(Get-Command Write-TableCharacterProbe).ScriptBlock
+function Write-TableCharacterProbe($Probe) {
+    if($script:durableProbes) {& $actualProbeWriter $Probe} else {$script:report.currentCellProbe=$Probe}
+}
 function Write-TableStage([string]$Name,[string]$Status,[string]$ErrorMessage=$null) {
     $script:sequence++;$script:lastStage=$Name;$script:lastStatus=$Status;[TableFake]::Stage=$Name
     $script:stages.Add([pscustomobject]@{stage=$Name;status=$Status;error=$ErrorMessage})
@@ -94,7 +100,7 @@ $parent=Split-Path -Parent ([IO.Path]::GetFullPath($ReportPath));$scratch=Join-P
 $results=New-Object 'System.Collections.Generic.List[object]'
 foreach($result in $archiveResults) {$results.Add($result)}
 function Setup-TableCase([string]$Name) {
-    [TableFake]::Reset();$script:root=Join-Path $scratch $Name;[void](New-Item -ItemType Directory -Path $script:root)
+    [TableFake]::Reset();$script:durableProbes=$false;$script:root=Join-Path $scratch $Name;[void](New-Item -ItemType Directory -Path $script:root)
     $script:sourcePath=Join-Path $script:root 'input.pptx';$script:savedPath=Join-Path $script:root 'saved.pptx';$script:editedPath=Join-Path $script:root 'edited.pptx';[IO.File]::WriteAllText($script:sourcePath,'synthetic source')
     $script:sequence=0;$script:stopped=$false;$script:cleanup=$true;$script:ownedPath=$null;$script:presentation=$null;$script:app=$null;$script:report=[ordered]@{original=@();reopened=@();edited=@();edits=@();opens=@()};$script:generation=$generation
     [TableFake]::BinaryDirectory=$script:root;[IO.File]::WriteAllText((Join-Path $script:root 'POWERPNT.EXE'),'Not an executable; managed-only table control fixture')
@@ -120,7 +126,7 @@ $failStages=@('application.version','application.path','application.create','ori
 foreach($phase in @('original','reopened','edited')) { for($i=1;$i -le 6;$i++) {$failStages+=@("$phase.slide.$i.capture")} }
 for($i=1;$i -le 6;$i++) {$failStages+=@("edit.slide.$i.prefix")}
 $failStages+=@('original.slide.1.cell.1.1.character.1.color','original.close.discard','reopened.close.discard','edited.close.discard')
-$mutants=@('idle','foreign-initial','foreign-original','foreign-reopened','foreign-edited','foreign-final','path','readonly','text','color','edit','slides','dimensions','shapes','stale-save','stale-capture','rgb-null','rgb-getter-throws')
+$mutants=@('idle','foreign-initial','foreign-original','foreign-reopened','foreign-edited','foreign-final','path','readonly','text','color','edit','slides','dimensions','shapes','stale-save','stale-capture','rgb-null','rgb-getter-throws','probe-write-failure')
 foreach($name in @($failStages)+$mutants) {
     $safe=$name -replace '[^A-Za-z0-9-]','-';Setup-TableCase $safe
     if($failStages -ccontains $name) {[TableFake]::Fail=$name}
@@ -134,12 +140,13 @@ foreach($name in @($failStages)+$mutants) {
       'path' {[TableFake]::BadPath=$true}
       'readonly' {[TableFake]::BadReadonly=$true}
       'text' {[TableFake]::BadText=$true}
-      'color' {[TableFake]::BadColor=$true}
+      'color' {[TableFake]::BadColor=$true;$script:durableProbes=$true}
       'edit' {[TableFake]::BadEdit=$true}
       'slides' {[TableFake]::BadSlides=$true}
       'dimensions' {[TableFake]::BadDimensions=$true}
       'shapes' {[TableFake]::BadShapes=$true}
-      'rgb-null' {[TableFake]::NullRgb=$true}
+      'rgb-null' {[TableFake]::NullRgb=$true;$script:durableProbes=$true}
+      'probe-write-failure' {$script:durableProbes=$true;[void](New-Item -ItemType Directory -Path (Join-Path $script:root 'character-probes.jsonl'))}
       'rgb-getter-throws' {[TableFake]::ThrowRgb=$true}
       'stale-save' {[IO.File]::WriteAllText($script:savedPath,'old attempt')}
       'stale-capture' {[IO.File]::WriteAllText((Join-Path $script:root 'original-1.png'),'old capture')}
@@ -147,6 +154,13 @@ foreach($name in @($failStages)+$mutants) {
     $caught=$false;try {Invoke-TableLifecycle} catch {$caught=$true}
     if(-not $caught -or -not $script:stopped -or $script:cleanup) { throw "Failure did not latch: $name" }
     if($name -in @('rgb-null','rgb-getter-throws') -and $script:lastStage -cne 'original.slide.1.cell.1.1.character.1.color') {throw 'Unavailable RGB was converted to black or Office continued after the first failed color probe'}
+    if($name -in @('color','rgb-null')) {
+        $probe=Get-Content -LiteralPath (Join-Path $script:root 'character-probes.jsonl') -Raw -Encoding UTF8 | ConvertFrom-Json
+        if($probe.phase -cne 'original' -or $probe.slide -ne 1 -or $probe.row -ne 1 -or $probe.column -ne 1 -or $probe.characterIndex -ne 1 -or $probe.character -cne 'H' -or $probe.expectedColor -cne '#000000' -or ($probe | ConvertTo-Json -Compress) -cne ($script:report.currentCellProbe | ConvertTo-Json -Compress)) {throw 'Color refusal lost the exact current-cell diagnostic'}
+        if($name -ceq 'color' -and ($probe.actualRgb -ne 123456 -or $probe.actualType -cne 'System.Int32' -or $probe.actualHex -cne '#40E201' -or -not $probe.rgbValid)) {throw 'Wrong-color observation was not persisted before validation'}
+        if($name -ceq 'rgb-null' -and ($null -ne $probe.actualRgb -or $null -ne $probe.actualType -or $null -ne $probe.actualHex -or $probe.rgbValid)) {throw 'Unavailable color was fabricated in durable diagnostic'}
+    }
+    if($name -ceq 'probe-write-failure' -and $script:lastStage -cne 'original.slide.1.cell.1.1.character.1.color') {throw 'Office continued after diagnostic write failure'}
     $calls=[TableFake]::Calls;$stageCount=$script:stages.Count
     try {Invoke-TableCom 'forbidden-after-failure' {[TableFake]::Touch()};throw 'Unexpected call after latch'} catch {if($_.Exception.Message -cne 'Table Office operations stopped after failure') {throw}}
     if([TableFake]::Calls -ne $calls -or $script:stages.Count -ne $stageCount) { throw "Office/cleanup continued after failure: $name" }
