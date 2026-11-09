@@ -1,0 +1,6 @@
+{
+  "scope": "Evidence verifier draft only; no product/runtime/test/raw evidence changes",
+  "initialResult": "FAIL before first seal: draft expected the option literal in focused before stdout, but Node assertion prints its regex; actual child command receipt independently contains --expected-manifest-sha256",
+  "correction": "Bind the actual assertion and child argv. Child command JSON has no per-channel digest fields; each raw stream remains independently size/SHA-bound by the immutable raw manifest.",
+  "rawEvidenceUnchanged": true
+}
