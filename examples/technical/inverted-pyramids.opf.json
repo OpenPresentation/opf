@@ -1,0 +1,98 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Inverted pyramids",
+  "description": "Narrow an ordered set from the broad starting pool to a final decision. The same geometry draws in the preview and as editable PowerPoint shapes; live Inverted Pyramid SmartArt is not qualified.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "shortlist",
+      "layout": "inverted-pyramid",
+      "title": "From possibilities to a decision",
+      "items": [
+        "Possibilities",
+        "Qualified options",
+        "Shortlist",
+        "Decision"
+      ]
+    },
+    {
+      "id": "evidence",
+      "layout": "inverted-pyramid",
+      "title": "Narrow the next investment",
+      "items": [
+        "Gather proposals from every team",
+        "Check the evidence and delivery capacity",
+        "Compare the qualified options",
+        "Choose the next pilot"
+      ]
+    },
+    {
+      "id": "workstreams",
+      "layout": "inverted-pyramid",
+      "title": "Keep the work behind each decision",
+      "blocks": [
+        {
+          "items": [
+            "Gather proposals",
+            "Keep every team in the starting pool"
+          ]
+        },
+        {
+          "items": [
+            "Test the assumptions",
+            "Check delivery capacity"
+          ]
+        },
+        {
+          "items": [
+            "Compare the shortlist",
+            "Record the tradeoffs"
+          ]
+        },
+        {
+          "items": [
+            "Choose the pilot",
+            "Name the owner"
+          ]
+        }
+      ]
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "inverted-pyramid": {
+          "name": "Inverted pyramid",
+          "summary": "Levels that narrow to a point, with the widest first.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "levels",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "pyramid",
+              "pyramidDirection": "down"
+            }
+          ],
+          "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes; live Inverted Pyramid SmartArt is not yet qualified.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/inverted-pyramid.svg"
+          }
+        }
+      }
+    }
+  }
+}

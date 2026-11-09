@@ -79,7 +79,7 @@ The gallery tracker (`docs/programs/release-readiness/gallery-tracker.*`) and th
 
 ### Releases
 
-Only maintainers cut releases, with one click: Actions, **Release**, **Run workflow**. The workflow runs the slow gate, assembles the changelogs from `changes/`, tags `vX.Y.Z`, and `npm-publish.yml` publishes all six packages with npm trusted publishing and provenance, then verifies them. The owner has authorized agents to run it when a release is required (authorized 2026-09-29). See [`docs/release-process.md`](./docs/release-process.md) for the procedure, retry and the version rules. After a release, the three sites receive "bump to vX.Y.Z" pull requests automatically.
+Only maintainers cut releases, with one click: Actions, **Release**, **Run workflow**. The workflow runs the slow gate, assembles the changelogs from `changes/`, tags `vX.Y.Z`, and `npm-publish.yml` publishes all seven packages with npm trusted publishing and provenance, then verifies them. The owner has authorized agents to run it when a release is required (authorized 2026-09-29). See [`docs/release-process.md`](./docs/release-process.md) for the procedure, retry and the version rules. After a release, the three sites receive "bump to vX.Y.Z" pull requests automatically.
 
 ### Dependencies
 

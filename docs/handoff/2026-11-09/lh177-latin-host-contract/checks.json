@@ -1,0 +1,794 @@
+{
+  "format": 1,
+  "base": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+  "source": "b9a7f46a75e244b60dc2c3e09f4e2e3b9a3f4172",
+  "sourceTree": "13af232bdf1da4564441fba3b0b42f56190653ef",
+  "shipping": [
+    {
+      "file": "packages/render/test/latin-family-fixture.mjs",
+      "object": "fe186cc50cbd9f49447c0f5e7941fada33dfa7e7"
+    },
+    {
+      "file": "packages/render/test/lh-177-latin-family-contract.mjs",
+      "object": "60d82473a3bc68089601f64dfd7fc2b250ee4ea6"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "file": "packages/render/src",
+      "object": "afc9aff76ce525790544010cff6aed78e053c314"
+    },
+    {
+      "file": "packages/render/fonts",
+      "object": "4bba4ad486e95ecb304249042f36836863caaeb0"
+    },
+    {
+      "file": "packages/render/package.json",
+      "object": "07ad8b819a6897bf4d7881fda22917ad98deeb4f"
+    },
+    {
+      "file": "packages/render/test/latin-family-hosts.mjs",
+      "object": "cfc5f06ac73a5b3100fd8e8a7dc75d16296cd5c2"
+    },
+    {
+      "file": "packages/render/test/latin-family-hosts-browser.mjs",
+      "object": "1c41688093378f4387e99058029839d630c517a4"
+    },
+    {
+      "file": "packages/render/test/lh-177-light-fonts.mjs",
+      "object": "f32dbbfbb4cdd20e592acd47bf7fd4225281d968"
+    },
+    {
+      "file": "packages/javascript",
+      "object": "25ecc33f83c5072e2d6f2b03be416a222ae88c1a"
+    },
+    {
+      "file": "packages/gallery",
+      "object": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "file": "packages/pptx",
+      "object": "8741a85db280010f23ecc9c1e518a2a612cdba58"
+    },
+    {
+      "file": "packages/editor",
+      "object": "266c2c31e64c72ae296af111c595ea57e5f56dcf"
+    },
+    {
+      "file": "packages/mcp",
+      "object": "ad1f23d229af3d70adc272f109a4b059d85d11d4"
+    },
+    {
+      "file": "packages/cli",
+      "object": "80693fbb3f29304337506d564654c552b1dd201e"
+    },
+    {
+      "file": "spec",
+      "object": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5"
+    },
+    {
+      "file": ".github",
+      "object": "99970ce6bce01b23b6b34b390afa1e3f27562a16"
+    },
+    {
+      "file": "scripts",
+      "object": "fee63b0ee5c22dfe1dcd76fb6675b28a1d206225"
+    },
+    {
+      "file": "skills",
+      "object": "4040bb9ade2171afa18429ed4726ae675de895f3"
+    },
+    {
+      "file": "examples",
+      "object": "72225a836ede0efb9015b95b047ebbd6d715c72e"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "object": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "object": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "file": "package.json",
+      "object": "0d5eec02984fea0ef0b564a4b83658cc35a1bbf0"
+    }
+  ],
+  "sourceChangedPaths": [
+    "changes/lh-177-latin-host-contract.md",
+    "docs/handoff/2026-11-09/lh177-latin-host-contract/README.md",
+    "docs/programs/layout-harvest/burndown.md",
+    "packages/render/test/latin-family-fixture.mjs",
+    "packages/render/test/lh-177-latin-family-contract.mjs"
+  ],
+  "expectedExits": {
+    "before-browser.exit.json": 1,
+    "regression-before.exit.json": 1,
+    "regression-after.exit.json": 0,
+    "lh177-before.exit.json": 0,
+    "probe-before.exit.json": 1,
+    "probe-before-02.exit.json": 1,
+    "probe-before-03.exit.json": 0,
+    "after-node.exit.json": 0,
+    "after-browser.exit.json": 0,
+    "mapped-01.exit.json": 1
+  },
+  "rawFiles": 134,
+  "rawBytes": 4124948,
+  "archiveBytes": 2883949,
+  "archiveSha256": "c0273c1bb2715458f85a7766eb7085c8f082a0a093e0e5b9a18821156dc27a7d",
+  "representativePngSha256": "4a8ab43be8b7148fb2fd19cda2963ced9b983f8dbfdcb54b472a230edb488b70",
+  "files": [
+    {
+      "name": "attempts/after-browser.exit.json",
+      "bytes": 183,
+      "sha256": "10e3a08f33c6f328d680f9e27ee4a2678d0abafb38acf92fbb3f59b25d6ba0ad"
+    },
+    {
+      "name": "attempts/after-browser.log",
+      "bytes": 7527,
+      "sha256": "b76a9c4747f2ff8d44c40639cc85ca0e0395f9af673992bcd0690bacc4ab5d29"
+    },
+    {
+      "name": "attempts/after-node.exit.json",
+      "bytes": 144,
+      "sha256": "5c19eae1af961e20016d28574ae6672241f20254d9296ad54a330371e6e1a409"
+    },
+    {
+      "name": "attempts/after-node.log",
+      "bytes": 162,
+      "sha256": "ef92a3c9e8e71196c362baefca46cecb031e66d769ac8e4bddb81c572776b389"
+    },
+    {
+      "name": "attempts/baseline-build.exit.json",
+      "bytes": 129,
+      "sha256": "2bca7b24f7643605193a127ddc594f4e6bc63cba8b976eeda52323f1616e3506"
+    },
+    {
+      "name": "attempts/baseline-build.log",
+      "bytes": 11844,
+      "sha256": "4a1a7aa0739287beeb7dc9f480532117629effb0a3579ce498f8c792bdedf32d"
+    },
+    {
+      "name": "attempts/baseline-font-registry.js",
+      "bytes": 32901,
+      "sha256": "a15f6f44437436856171c03e19c0897272bf53be72122c281d6c3272f75b03c5"
+    },
+    {
+      "name": "attempts/baseline-latin-family-fixture.mjs",
+      "bytes": 5862,
+      "sha256": "f9e0ef120947e0341c14362d07cf819a097bcb0bad98e0c0a720fe0ec7ab971c"
+    },
+    {
+      "name": "attempts/before-browser.exit.json",
+      "bytes": 173,
+      "sha256": "336972032fd59d9046023b96a47fe72eee63ae1df2215bdf9302204fd26fd9b4"
+    },
+    {
+      "name": "attempts/before-browser.log",
+      "bytes": 7821,
+      "sha256": "9f71a1b970223831bc9d599a8e7c4dc874d97cc7be0e2431495e4e30aa1f7122"
+    },
+    {
+      "name": "attempts/hydration.exit.json",
+      "bytes": 80,
+      "sha256": "2ac5dfc72351c3f6441b34ef737cadd14a508e03995ca77cb119371edf50ddfd"
+    },
+    {
+      "name": "attempts/hydration.json",
+      "bytes": 821002,
+      "sha256": "0fdb0025a2edcf56c32797b3c68deb41926d952c8bd8de018329b1e5eb53b268"
+    },
+    {
+      "name": "attempts/hydration.log",
+      "bytes": 157,
+      "sha256": "01c6571a7cbca1505f45d772a10f4dc534f52e9eb5d8109c9fbeb9409e408179"
+    },
+    {
+      "name": "attempts/install.exit.json",
+      "bytes": 80,
+      "sha256": "3518cb8b076d4ba638b1c43c70e99ac62e7673c0dc38a0891e64594e06018af3"
+    },
+    {
+      "name": "attempts/install.log",
+      "bytes": 4601,
+      "sha256": "94173c0d4692b060bb77a3fd7ac9b726d5723f7d9fc3583a4f4b94979dcaf34c"
+    },
+    {
+      "name": "attempts/lh177-before.exit.json",
+      "bytes": 80,
+      "sha256": "2ac5dfc72351c3f6441b34ef737cadd14a508e03995ca77cb119371edf50ddfd"
+    },
+    {
+      "name": "attempts/lh177-before.log",
+      "bytes": 100,
+      "sha256": "b4bc7f6e7b9a8a218b739cbdae2d3c5eff0f7bd34cb03dc6d5189da056fa2f41"
+    },
+    {
+      "name": "attempts/mapped-01.exit.json",
+      "bytes": 295,
+      "sha256": "96c3a2255e84d0dc70bf28f209d47f454ce19836cc9c3e02cb0395cdc6cf4cd7"
+    },
+    {
+      "name": "attempts/mapped-01.log",
+      "bytes": 4446,
+      "sha256": "709f5376d53bb44f5e76d92f89127b24abb70a2ae6628cd4232649d538f8a993"
+    },
+    {
+      "name": "attempts/probe-02.mjs",
+      "bytes": 3667,
+      "sha256": "eef9cbe5dce513fcf7b737f78c3b14fdceec135abd6504fa9bda6964a069bcea"
+    },
+    {
+      "name": "attempts/probe-03.mjs",
+      "bytes": 3665,
+      "sha256": "f172d0c68c82ec33dff5cb3c700dc637d810855d947e950af1c059fff4b23d26"
+    },
+    {
+      "name": "attempts/probe-before-02.exit.json",
+      "bytes": 123,
+      "sha256": "fa7222a8dc2c2007c94be88b249f8f0c30fdb5413b8d2880e10dd512690018f8"
+    },
+    {
+      "name": "attempts/probe-before-02.log",
+      "bytes": 1114,
+      "sha256": "c70dec74e3ba8581eb9d9624c5dc1567a356fd0d4bc0ceae4f2178808db8fe64"
+    },
+    {
+      "name": "attempts/probe-before-03.exit.json",
+      "bytes": 180,
+      "sha256": "3e73bbed2c3c16eb5530363e5547ba159b9edc199afc8f28de14f7cc8bec25d7"
+    },
+    {
+      "name": "attempts/probe-before-03.log",
+      "bytes": 2947,
+      "sha256": "e5ac8621818639009415629ee3de19257f75f5fdcb0ae5a1215b4e22be883e6f"
+    },
+    {
+      "name": "attempts/probe-before.exit.json",
+      "bytes": 80,
+      "sha256": "0a67f60c129939c52dbc2bf6218c7ea0980275cd529cb22fb976fb2596a5e8e3"
+    },
+    {
+      "name": "attempts/probe-before.log",
+      "bytes": 5800,
+      "sha256": "869386897847fbb6fc8ab81c20950e7e7f12c6b26ca78d44c683ea1ce398a23a"
+    },
+    {
+      "name": "attempts/probe.mjs",
+      "bytes": 3267,
+      "sha256": "373e73a9471e3d11f7308450617abd42075aed7f6d8e433791a3c044531f1237"
+    },
+    {
+      "name": "attempts/regression-after.exit.json",
+      "bytes": 152,
+      "sha256": "4529dedb174e7c4e3a927f937958d0399fbd063276dc17ab630f44646002c6e7"
+    },
+    {
+      "name": "attempts/regression-after.log",
+      "bytes": 159,
+      "sha256": "847b609ebccfa379f210c406ca42b38d6e608281ea5c5048b347d86a46f6f44a"
+    },
+    {
+      "name": "attempts/regression-before.exit.json",
+      "bytes": 178,
+      "sha256": "edc1defa8af9ad7057e76849cfab7363e27f79db94854b9da35152ff1283a4a4"
+    },
+    {
+      "name": "attempts/regression-before.log",
+      "bytes": 574,
+      "sha256": "f04d2d6bec0e48b6576c4d0ed3717bb6a6ff2143f1480eb21b87bd43d95dbfca"
+    },
+    {
+      "name": "attempts/restore-tracked-evidence-inputs.mjs",
+      "bytes": 2611,
+      "sha256": "7df62ef4f3464775c3a8762a3f7a77ff8a1b552cf07a6a9b4c82d66c6654cd45"
+    },
+    {
+      "name": "attempts/seal-driver.mjs",
+      "bytes": 4142,
+      "sha256": "2c4334200a448d476e98acbe85c7059795272c3e2a417f2a12a080e74aaade68"
+    },
+    {
+      "name": "attempts/setup.json",
+      "bytes": 335,
+      "sha256": "92ce4663cf71336ec0f9cddf0e85a200e58b24151ff3bd9301323a7bb72c8416"
+    },
+    {
+      "name": "attempts/verify-driver.mjs",
+      "bytes": 3403,
+      "sha256": "35af8f029dc16994bbaadeb7a5b8e9a75317354861c96d72be51ceea6862c009"
+    },
+    {
+      "name": "browser-host/Anton.png",
+      "bytes": 24177,
+      "sha256": "d1cb1e58ec3c206e25ae91691b253f778aa62dda0de3123190233cfa8cfcaafe"
+    },
+    {
+      "name": "browser-host/Aptos-Display.png",
+      "bytes": 33286,
+      "sha256": "f73e5ca06a2fbdf72d997abb2b7e304172f4be9b2cf8b71ff99bd0253e8cf2fa"
+    },
+    {
+      "name": "browser-host/Aptos-Mono.png",
+      "bytes": 37023,
+      "sha256": "4af21f2facbc1c954462e30d4d1f55d8e19ecf48819751f0e8cb5df3a29230e1"
+    },
+    {
+      "name": "browser-host/Aptos-Narrow.png",
+      "bytes": 33453,
+      "sha256": "5ca38f2ced613e4628b535d8d45d5d427d69f2e9b02bd996f6a4c093694d1be8"
+    },
+    {
+      "name": "browser-host/Aptos-Serif.png",
+      "bytes": 38008,
+      "sha256": "caca81662db531aa495a0b53648b4017a39e097ab55159fc70bcb8ee1e81d397"
+    },
+    {
+      "name": "browser-host/Aptos.png",
+      "bytes": 33990,
+      "sha256": "99345e60a445bfb9884d754f9f41594405e48e6f94c2b607f58d11eb8866ede1"
+    },
+    {
+      "name": "browser-host/Archivo-Narrow.png",
+      "bytes": 33236,
+      "sha256": "738f886f97761cbb6de5db8357eeff9ffb195d770d1478ca3171ae016051c647"
+    },
+    {
+      "name": "browser-host/Arial-Black.png",
+      "bytes": 33663,
+      "sha256": "4d48695cc3c57e4ed238736d50beec40dbc868af972758afd3b505e99c99f5d0"
+    },
+    {
+      "name": "browser-host/Arial-Narrow.png",
+      "bytes": 33236,
+      "sha256": "738f886f97761cbb6de5db8357eeff9ffb195d770d1478ca3171ae016051c647"
+    },
+    {
+      "name": "browser-host/Arial.png",
+      "bytes": 36614,
+      "sha256": "1d0671b242fbee8a3da4b89b437fa312f0851ae3fd8c3d44dfb57eeab9ce2d22"
+    },
+    {
+      "name": "browser-host/Arimo.png",
+      "bytes": 36614,
+      "sha256": "1d0671b242fbee8a3da4b89b437fa312f0851ae3fd8c3d44dfb57eeab9ce2d22"
+    },
+    {
+      "name": "browser-host/Barlow.png",
+      "bytes": 31750,
+      "sha256": "b6eb0bd6ad0792a9c689bf5e1f512ab9776564b7ae73f62906ef353028c04a86"
+    },
+    {
+      "name": "browser-host/Baskerville-Old-Face.png",
+      "bytes": 43177,
+      "sha256": "efddff0fe368f50ca1f73f88b78e87db16d91296a0aa4b40650366177d094cc7"
+    },
+    {
+      "name": "browser-host/Bebas-Neue.png",
+      "bytes": 21302,
+      "sha256": "6404b3577b5f509924b8f057a820eefa86afceca684b771aed57a07a317ecbcf"
+    },
+    {
+      "name": "browser-host/Bitter.png",
+      "bytes": 39739,
+      "sha256": "626a3fa7655b8ae554a70c31ed7a0a4f9835b955c7dffd7e45ec0f29989881b8"
+    },
+    {
+      "name": "browser-host/Bodoni-MT.png",
+      "bytes": 35096,
+      "sha256": "e8af10cdaae7f653f2dbd7c96c8ec179c187271a4881a38df0c04c1edcf4f6d6"
+    },
+    {
+      "name": "browser-host/Book-Antiqua.png",
+      "bytes": 39224,
+      "sha256": "76701a609f1c7838db1d11d4bd6a6098708fd6cf862c5bc572548adde3332b98"
+    },
+    {
+      "name": "browser-host/Bookman-Old-Style.png",
+      "bytes": 43177,
+      "sha256": "efddff0fe368f50ca1f73f88b78e87db16d91296a0aa4b40650366177d094cc7"
+    },
+    {
+      "name": "browser-host/Caladea.png",
+      "bytes": 37857,
+      "sha256": "635daf7ff73d9e78f67866c7c722fbf878e7954683de09c36374f111b77b0ed5"
+    },
+    {
+      "name": "browser-host/Calibri-Light.png",
+      "bytes": 32987,
+      "sha256": "481ff76152522c70615b1d1ce47e23106439fea64e1aad2779c729d4dd1c8d95"
+    },
+    {
+      "name": "browser-host/Calibri.png",
+      "bytes": 32987,
+      "sha256": "481ff76152522c70615b1d1ce47e23106439fea64e1aad2779c729d4dd1c8d95"
+    },
+    {
+      "name": "browser-host/Cambria.png",
+      "bytes": 37857,
+      "sha256": "635daf7ff73d9e78f67866c7c722fbf878e7954683de09c36374f111b77b0ed5"
+    },
+    {
+      "name": "browser-host/Candara.png",
+      "bytes": 33060,
+      "sha256": "6b5063d2772cba5d70b092e0d4ff76e2127be1fe8180408d85565f3e6de20457"
+    },
+    {
+      "name": "browser-host/Carlito.png",
+      "bytes": 32987,
+      "sha256": "481ff76152522c70615b1d1ce47e23106439fea64e1aad2779c729d4dd1c8d95"
+    },
+    {
+      "name": "browser-host/Century-Gothic.png",
+      "bytes": 37522,
+      "sha256": "ef84769260b352b900c385c0532ee64ef9680aafadcdde816f0d0c380fded5a9"
+    },
+    {
+      "name": "browser-host/Century-Schoolbook.png",
+      "bytes": 41521,
+      "sha256": "dbadeb8794ca2c96f529f60dec3d6fb224f6044a11ef5d2d72a7d2c6dee2b645"
+    },
+    {
+      "name": "browser-host/Consolas.png",
+      "bytes": 37023,
+      "sha256": "4af21f2facbc1c954462e30d4d1f55d8e19ecf48819751f0e8cb5df3a29230e1"
+    },
+    {
+      "name": "browser-host/Constantia.png",
+      "bytes": 39224,
+      "sha256": "76701a609f1c7838db1d11d4bd6a6098708fd6cf862c5bc572548adde3332b98"
+    },
+    {
+      "name": "browser-host/Corbel.png",
+      "bytes": 33060,
+      "sha256": "6b5063d2772cba5d70b092e0d4ff76e2127be1fe8180408d85565f3e6de20457"
+    },
+    {
+      "name": "browser-host/Courier-New.png",
+      "bytes": 37023,
+      "sha256": "4af21f2facbc1c954462e30d4d1f55d8e19ecf48819751f0e8cb5df3a29230e1"
+    },
+    {
+      "name": "browser-host/Cousine.png",
+      "bytes": 37023,
+      "sha256": "4af21f2facbc1c954462e30d4d1f55d8e19ecf48819751f0e8cb5df3a29230e1"
+    },
+    {
+      "name": "browser-host/Didot.png",
+      "bytes": 35096,
+      "sha256": "e8af10cdaae7f653f2dbd7c96c8ec179c187271a4881a38df0c04c1edcf4f6d6"
+    },
+    {
+      "name": "browser-host/EB-Garamond.png",
+      "bytes": 40187,
+      "sha256": "051c37254cf74583b397292d8b17606150109b5f4253536f685d5e5f87018ac2"
+    },
+    {
+      "name": "browser-host/Figtree.png",
+      "bytes": 33970,
+      "sha256": "3526a1a31c51c97b774e123a3e0326a5d21991fd91d6cf74aef2fe5a841e7dfc"
+    },
+    {
+      "name": "browser-host/Franklin-Gothic-Book.png",
+      "bytes": 31750,
+      "sha256": "b6eb0bd6ad0792a9c689bf5e1f512ab9776564b7ae73f62906ef353028c04a86"
+    },
+    {
+      "name": "browser-host/Franklin-Gothic-Medium.png",
+      "bytes": 31750,
+      "sha256": "b6eb0bd6ad0792a9c689bf5e1f512ab9776564b7ae73f62906ef353028c04a86"
+    },
+    {
+      "name": "browser-host/Garamond.png",
+      "bytes": 40187,
+      "sha256": "051c37254cf74583b397292d8b17606150109b5f4253536f685d5e5f87018ac2"
+    },
+    {
+      "name": "browser-host/Gelasio.png",
+      "bytes": 41521,
+      "sha256": "dbadeb8794ca2c96f529f60dec3d6fb224f6044a11ef5d2d72a7d2c6dee2b645"
+    },
+    {
+      "name": "browser-host/Georgia.png",
+      "bytes": 41521,
+      "sha256": "dbadeb8794ca2c96f529f60dec3d6fb224f6044a11ef5d2d72a7d2c6dee2b645"
+    },
+    {
+      "name": "browser-host/Gill-Sans-MT.png",
+      "bytes": 33060,
+      "sha256": "6b5063d2772cba5d70b092e0d4ff76e2127be1fe8180408d85565f3e6de20457"
+    },
+    {
+      "name": "browser-host/Grandview-Display.png",
+      "bytes": 31750,
+      "sha256": "b6eb0bd6ad0792a9c689bf5e1f512ab9776564b7ae73f62906ef353028c04a86"
+    },
+    {
+      "name": "browser-host/Grandview.png",
+      "bytes": 31750,
+      "sha256": "b6eb0bd6ad0792a9c689bf5e1f512ab9776564b7ae73f62906ef353028c04a86"
+    },
+    {
+      "name": "browser-host/Impact.png",
+      "bytes": 24177,
+      "sha256": "d1cb1e58ec3c206e25ae91691b253f778aa62dda0de3123190233cfa8cfcaafe"
+    },
+    {
+      "name": "browser-host/Intos-Display.png",
+      "bytes": 33286,
+      "sha256": "f73e5ca06a2fbdf72d997abb2b7e304172f4be9b2cf8b71ff99bd0253e8cf2fa"
+    },
+    {
+      "name": "browser-host/Intos-Narrow.png",
+      "bytes": 33453,
+      "sha256": "5ca38f2ced613e4628b535d8d45d5d427d69f2e9b02bd996f6a4c093694d1be8"
+    },
+    {
+      "name": "browser-host/Intos-Serif.png",
+      "bytes": 38008,
+      "sha256": "caca81662db531aa495a0b53648b4017a39e097ab55159fc70bcb8ee1e81d397"
+    },
+    {
+      "name": "browser-host/Intos.png",
+      "bytes": 33990,
+      "sha256": "99345e60a445bfb9884d754f9f41594405e48e6f94c2b607f58d11eb8866ede1"
+    },
+    {
+      "name": "browser-host/Liberation-Mono.png",
+      "bytes": 37023,
+      "sha256": "4af21f2facbc1c954462e30d4d1f55d8e19ecf48819751f0e8cb5df3a29230e1"
+    },
+    {
+      "name": "browser-host/Liberation-Sans.png",
+      "bytes": 36614,
+      "sha256": "1d0671b242fbee8a3da4b89b437fa312f0851ae3fd8c3d44dfb57eeab9ce2d22"
+    },
+    {
+      "name": "browser-host/Liberation-Serif.png",
+      "bytes": 34100,
+      "sha256": "fbc042729d1e9eac5543ee4873d3f850b2f4465c5fd9cc06fa316dc8292a5161"
+    },
+    {
+      "name": "browser-host/Libre-Caslon-Text.png",
+      "bytes": 43177,
+      "sha256": "efddff0fe368f50ca1f73f88b78e87db16d91296a0aa4b40650366177d094cc7"
+    },
+    {
+      "name": "browser-host/Lora.png",
+      "bytes": 40435,
+      "sha256": "35576ecc752b55fd8b3d5bd9744bc2887c3dda39e8840a4867039f6baa65e338"
+    },
+    {
+      "name": "browser-host/Lucida-Console.png",
+      "bytes": 37023,
+      "sha256": "4af21f2facbc1c954462e30d4d1f55d8e19ecf48819751f0e8cb5df3a29230e1"
+    },
+    {
+      "name": "browser-host/Lucida-Sans-Unicode.png",
+      "bytes": 37522,
+      "sha256": "ef84769260b352b900c385c0532ee64ef9680aafadcdde816f0d0c380fded5a9"
+    },
+    {
+      "name": "browser-host/Lucida-Sans.png",
+      "bytes": 37522,
+      "sha256": "ef84769260b352b900c385c0532ee64ef9680aafadcdde816f0d0c380fded5a9"
+    },
+    {
+      "name": "browser-host/Merriweather-Sans.png",
+      "bytes": 35935,
+      "sha256": "e85078d56520d63286d5f39ca52d4dad0d07999e023bf417be052c85d1cb4c91"
+    },
+    {
+      "name": "browser-host/Microsoft-Sans-Serif.png",
+      "bytes": 36614,
+      "sha256": "1d0671b242fbee8a3da4b89b437fa312f0851ae3fd8c3d44dfb57eeab9ce2d22"
+    },
+    {
+      "name": "browser-host/Montserrat.png",
+      "bytes": 34712,
+      "sha256": "c5121d8553b16c2657559f106c552115e1a35a59756bb89ac5023006a1d1333f"
+    },
+    {
+      "name": "browser-host/Open-Sans.png",
+      "bytes": 35426,
+      "sha256": "2efa3a94d39d2c91bade5b5d3f2972eede03e2c5fd2fa2cb1207e0dc5bee451e"
+    },
+    {
+      "name": "browser-host/PT-Serif.png",
+      "bytes": 39224,
+      "sha256": "76701a609f1c7838db1d11d4bd6a6098708fd6cf862c5bc572548adde3332b98"
+    },
+    {
+      "name": "browser-host/Palatino-Linotype.png",
+      "bytes": 39224,
+      "sha256": "76701a609f1c7838db1d11d4bd6a6098708fd6cf862c5bc572548adde3332b98"
+    },
+    {
+      "name": "browser-host/Playfair-Display.png",
+      "bytes": 35096,
+      "sha256": "e8af10cdaae7f653f2dbd7c96c8ec179c187271a4881a38df0c04c1edcf4f6d6"
+    },
+    {
+      "name": "browser-host/Poppins.png",
+      "bytes": 35629,
+      "sha256": "d23308f0c34720345c74814866080ea3b34e3414fb9ccdf45895ae5168521b14"
+    },
+    {
+      "name": "browser-host/Raleway.png",
+      "bytes": 36819,
+      "sha256": "611936658a1d185dff82b50e523286f2fb3772ffaad1d2baece2b687e2bc7d56"
+    },
+    {
+      "name": "browser-host/Red-Hat-Display.png",
+      "bytes": 34929,
+      "sha256": "49a543ab1a12e155ead2dbc5ac40b2fc6feae3657787ca4a5551885fffa2d53d"
+    },
+    {
+      "name": "browser-host/Red-Hat-Text.png",
+      "bytes": 35595,
+      "sha256": "33715a1845f706d6109802c4c1290c23106fc397422bc4cd92fb425db95960cb"
+    },
+    {
+      "name": "browser-host/Roboto-Mono.png",
+      "bytes": 33443,
+      "sha256": "f87f0077947c36134557a00071827ed50da7d63308b27bf927947559736a24e7"
+    },
+    {
+      "name": "browser-host/Roboto.png",
+      "bytes": 34500,
+      "sha256": "3f72587add9abeae267a9714f3705fc2ef5d4f28ba1fd6443c733ace8b3ef42f"
+    },
+    {
+      "name": "browser-host/Rockwell.png",
+      "bytes": 39739,
+      "sha256": "626a3fa7655b8ae554a70c31ed7a0a4f9835b955c7dffd7e45ec0f29989881b8"
+    },
+    {
+      "name": "browser-host/Seaford-Display.png",
+      "bytes": 33060,
+      "sha256": "6b5063d2772cba5d70b092e0d4ff76e2127be1fe8180408d85565f3e6de20457"
+    },
+    {
+      "name": "browser-host/Seaford.png",
+      "bytes": 33060,
+      "sha256": "6b5063d2772cba5d70b092e0d4ff76e2127be1fe8180408d85565f3e6de20457"
+    },
+    {
+      "name": "browser-host/Segoe-UI-Light.png",
+      "bytes": 34898,
+      "sha256": "4a8ab43be8b7148fb2fd19cda2963ced9b983f8dbfdcb54b472a230edb488b70"
+    },
+    {
+      "name": "browser-host/Segoe-UI-Semibold.png",
+      "bytes": 35059,
+      "sha256": "c4b2a8126d33e23907b67461911cc59343043d65efade1899c4e8873d8280ae8"
+    },
+    {
+      "name": "browser-host/Segoe-UI-Semilight.png",
+      "bytes": 34898,
+      "sha256": "4a8ab43be8b7148fb2fd19cda2963ced9b983f8dbfdcb54b472a230edb488b70"
+    },
+    {
+      "name": "browser-host/Segoe-UI.png",
+      "bytes": 34929,
+      "sha256": "49a543ab1a12e155ead2dbc5ac40b2fc6feae3657787ca4a5551885fffa2d53d"
+    },
+    {
+      "name": "browser-host/Skeena-Display.png",
+      "bytes": 35426,
+      "sha256": "2efa3a94d39d2c91bade5b5d3f2972eede03e2c5fd2fa2cb1207e0dc5bee451e"
+    },
+    {
+      "name": "browser-host/Skeena.png",
+      "bytes": 35426,
+      "sha256": "2efa3a94d39d2c91bade5b5d3f2972eede03e2c5fd2fa2cb1207e0dc5bee451e"
+    },
+    {
+      "name": "browser-host/Source-Sans-3.png",
+      "bytes": 33060,
+      "sha256": "6b5063d2772cba5d70b092e0d4ff76e2127be1fe8180408d85565f3e6de20457"
+    },
+    {
+      "name": "browser-host/Source-Sans-Pro.png",
+      "bytes": 33060,
+      "sha256": "6b5063d2772cba5d70b092e0d4ff76e2127be1fe8180408d85565f3e6de20457"
+    },
+    {
+      "name": "browser-host/Tahoma.png",
+      "bytes": 35595,
+      "sha256": "33715a1845f706d6109802c4c1290c23106fc397422bc4cd92fb425db95960cb"
+    },
+    {
+      "name": "browser-host/Tenorite-Display.png",
+      "bytes": 33970,
+      "sha256": "3526a1a31c51c97b774e123a3e0326a5d21991fd91d6cf74aef2fe5a841e7dfc"
+    },
+    {
+      "name": "browser-host/Tenorite.png",
+      "bytes": 33970,
+      "sha256": "3526a1a31c51c97b774e123a3e0326a5d21991fd91d6cf74aef2fe5a841e7dfc"
+    },
+    {
+      "name": "browser-host/Times-New-Roman.png",
+      "bytes": 34100,
+      "sha256": "fbc042729d1e9eac5543ee4873d3f850b2f4465c5fd9cc06fa316dc8292a5161"
+    },
+    {
+      "name": "browser-host/Tinos.png",
+      "bytes": 34100,
+      "sha256": "fbc042729d1e9eac5543ee4873d3f850b2f4465c5fd9cc06fa316dc8292a5161"
+    },
+    {
+      "name": "browser-host/Trebuchet-MS.png",
+      "bytes": 33970,
+      "sha256": "3526a1a31c51c97b774e123a3e0326a5d21991fd91d6cf74aef2fe5a841e7dfc"
+    },
+    {
+      "name": "browser-host/Verdana.png",
+      "bytes": 34712,
+      "sha256": "c5121d8553b16c2657559f106c552115e1a35a59756bb89ac5023006a1d1333f"
+    },
+    {
+      "name": "browser-host/Work-Sans.png",
+      "bytes": 37522,
+      "sha256": "ef84769260b352b900c385c0532ee64ef9680aafadcdde816f0d0c380fded5a9"
+    },
+    {
+      "name": "browser-host/browser.json",
+      "bytes": 25346,
+      "sha256": "534de561399eaa37a5b2e934866ddda18898427ffec6fbbf539779db5d22c528"
+    },
+    {
+      "name": "mapped-steps/biome.log",
+      "bytes": 695,
+      "sha256": "70d4481addf59ba4d86e1a5a518fd7662594da848cbf0fb5579d4a47959a42c8"
+    },
+    {
+      "name": "mapped-steps/build.log",
+      "bytes": 14569,
+      "sha256": "8736d2036dcbd0a29dc35a3da993885f682bbce309e51a54aa068d2f2afd97ad"
+    },
+    {
+      "name": "mapped-steps/pnpm_run_check_changes.log",
+      "bytes": 2639,
+      "sha256": "9b3b993d5ef828fc73f8281a428eb596d4c14c2200741c1c794f43a2c7bd7e65"
+    },
+    {
+      "name": "mapped-steps/pnpm_run_check_diagram-doc-images.log",
+      "bytes": 168,
+      "sha256": "87f8a548aeb78b3c2b0c553cad04b312ecaeb052e6355e94b73ac10f160e70d3"
+    },
+    {
+      "name": "mapped-steps/pnpm_run_check_font-hotlinks.log",
+      "bytes": 883,
+      "sha256": "5617f4c5877a369cf9e9365d7dcdcd950e40c3a40951d4ecdd11d34804ececcc"
+    },
+    {
+      "name": "mapped-steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1035,
+      "sha256": "1ee6a7457573cb5aff186487dcfe4e9d2d996c31b0440be9328b776da4b6091b"
+    },
+    {
+      "name": "mapped-steps/pnpm_run_check_stability.log",
+      "bytes": 3963,
+      "sha256": "01e176b8a68308b89817afc1744c487a267f53c39a3b72b9c78bc09a6ec6cd21"
+    },
+    {
+      "name": "mapped-steps/pnpm_run_check_text.log",
+      "bytes": 1068,
+      "sha256": "81954fe98174c5e0a97c00947392c1786782a61ab9b533b11018f78016f0a11c"
+    },
+    {
+      "name": "mapped-steps/tests_render.log",
+      "bytes": 16012,
+      "sha256": "546b42270dd35d2f5d9e4e7a5471a188c58b76ff8ecb1b6cbc7c114c8679fef0"
+    },
+    {
+      "name": "node-host/node.json",
+      "bytes": 45118,
+      "sha256": "9183d5feaebe2e0b04a56ec7b05452023248550650cd3cfdff8689bd91c04c76"
+    }
+  ]
+}

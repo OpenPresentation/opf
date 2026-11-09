@@ -1,0 +1,51 @@
+✔ LH-110: standalone seven-language example uses the same located reference geometry in SVG and native PPTX (2105.8773ms)
+✔ de: complete cardinal references and percentages, with locale-family tags (9.415ms)
+✔ fr: complete cardinal references and percentages, with locale-family tags (6.4868ms)
+✔ es: complete cardinal references and percentages, with locale-family tags (5.4513ms)
+✔ it: complete cardinal references and percentages, with locale-family tags (2.7385ms)
+✔ pt: complete cardinal references and percentages, with locale-family tags (6.2528ms)
+✔ nl: complete cardinal references and percentages, with locale-family tags (3.9796ms)
+✔ cardinal orthography, genders, regional forms, compound boundaries and the integer upper bound (0.6756ms)
+✔ a malformed phrase, spoken fraction, negative or unsupported scale never becomes a shorter positive reference (0.4684ms)
+✔ en: local multiword/contraction time phrases name one year or localized month (34.9657ms)
+✔ de: local multiword/contraction time phrases name one year or localized month (4.7596ms)
+✔ fr: local multiword/contraction time phrases name one year or localized month (6.7943ms)
+✔ es: local multiword/contraction time phrases name one year or localized month (4.0734ms)
+✔ it: local multiword/contraction time phrases name one year or localized month (3.8513ms)
+✔ pt: local multiword/contraction time phrases name one year or localized month (3.4587ms)
+✔ nl: local multiword/contraction time phrases name one year or localized month (3.2076ms)
+✔ period bands remain conservative and preserve authored highlight and effective slide language (8.1199ms)
+✔ explicit localized year/month phrases match the complete suffix, without requiring English words (3.447ms)
+▶ English number words
+  ✔ values (0.6247ms)
+  ✔ only after a comparison word, labeled in digits (4.9169ms)
+  ✔ draws the line (34.7799ms)
+✔ English number words (40.9541ms)
+▶ European titles
+  ✔ de: Die Pünktlichkeit lag das ganze Jahr über 92 % (5.2488ms)
+  ✔ de: Mindestens 92,5 Prozent pünktlich (0.2462ms)
+  ✔ de: Tickets blieben unter dem Zielwert von 30 (0.3844ms)
+  ✔ fr: La ponctualité est restée au-dessus de 92 % (7.2669ms)
+  ✔ fr: Moins de 30 tickets par semaine (0.3154ms)
+  ✔ fr: L'équipe a dépassé l'objectif de 30 (0.2154ms)
+  ✔ es: La puntualidad se mantuvo por encima del 92 % (4.2744ms)
+  ✔ es: Superó la meta de 30 tickets (0.397ms)
+  ✔ it: La puntualità è rimasta sopra il 92% (2.4124ms)
+  ✔ it: Meno di 30 ticket a settimana (0.2574ms)
+  ✔ pt: A pontualidade ficou acima de 92 % (6.5953ms)
+  ✔ pt: Superou a meta de 30 chamados (0.1329ms)
+  ✔ nl: De stiptheid bleef boven 92 % (3.5846ms)
+  ✔ nl: Minder dan 30 tickets per week (0.0708ms)
+  ✔ a number without a comparison word is not a reference (0.096ms)
+  ✔ a decimal comma and thousands separators (0.0686ms)
+  ✔ languages: the six European ones and English; others are not read (0.139ms)
+  ✔ German and French titles draw the line (7.9937ms)
+✔ European titles (40.3266ms)
+ℹ tests 39
+ℹ suites 2
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2601.3234

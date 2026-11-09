@@ -1,0 +1,90 @@
+{
+  "source": "af2fd88e70dccd5a444bea976d3feee908720081",
+  "scope": "Current canonical composition/export predicates against every immutable original diagnostic observation; no current native sweep, render or Office run",
+  "gate": {
+    "path": "C:/opf-work/sh20-final-gate-01/gate.json",
+    "sha256": "150ee0416a18e6491a349fdbee44c6bd5b5c7a8feab4f3388e33a5b008337df1",
+    "observations": 516,
+    "live": 465,
+    "pass": 201,
+    "fail": 264
+  },
+  "currentEligible": 132,
+  "currentEligibleFailures": 0,
+  "builtinEligible": 102,
+  "opfEligible": 30,
+  "allMeasuredFailuresRefused": true,
+  "sharedCapsWithoutDesignCountOrCompactRestriction": 30,
+  "newlySafeCandidates": [],
+  "scripts": [
+    {
+      "script": "latin",
+      "total": 432,
+      "live": 399,
+      "pass": 193,
+      "eligible": 132
+    },
+    {
+      "script": "blocks",
+      "total": 12,
+      "live": 0,
+      "pass": 0,
+      "eligible": 0
+    },
+    {
+      "script": "cjk",
+      "total": 18,
+      "live": 18,
+      "pass": 0,
+      "eligible": 0
+    },
+    {
+      "script": "he",
+      "total": 18,
+      "live": 15,
+      "pass": 4,
+      "eligible": 0
+    },
+    {
+      "script": "rtl",
+      "total": 18,
+      "live": 15,
+      "pass": 4,
+      "eligible": 0
+    },
+    {
+      "script": "zh",
+      "total": 18,
+      "live": 18,
+      "pass": 0,
+      "eligible": 0
+    }
+  ],
+  "sources": [
+    {
+      "path": "packages/javascript/src/arrangements.ts",
+      "sha256": "a67f6a8bcde6ef7443b25cca740b3fb4d83dd43671d0a706740f0eae4e2686b3"
+    },
+    {
+      "path": "packages/javascript/src/smart-art-layout.ts",
+      "sha256": "7797d00621dc5318f9767f357171658be645018b0c5343678dca55ee1fa5a510"
+    },
+    {
+      "path": "packages/pptx/src/smart-art.js",
+      "sha256": "ab9f4561d17b9eb44dab62811ef9ca7e4b4590ee4517651fdde708649c0874cb"
+    },
+    {
+      "path": "packages/pptx/src/smart-art-layouts.js",
+      "sha256": "d6450e4e610a1b91793e78274ca13cf2fa0064bb8b7c11fe9aef1ae28774c722"
+    },
+    {
+      "path": "packages/render/src/svg.js",
+      "sha256": "5ce6c0471e4c38c6aea60e3ea01ff470c2d8e32065b9847190b609b713e991f7"
+    },
+    {
+      "path": "tools/shapes/sh-20/gate.mjs",
+      "sha256": "74a3d86ba5ac574a2ea042fbeb567f208bbad1cbf6a9eef965dc77587df2cf57"
+    }
+  ],
+  "decision": "No additional safe live domain under unchanged full-gate/text-density/wrap/line-width bounds; preserve native-shape fallback and explicit refusal reasons"
+}

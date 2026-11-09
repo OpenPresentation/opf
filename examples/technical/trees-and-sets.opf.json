@@ -1,0 +1,171 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Trees and overlapping sets",
+  "description": "Three shared-geometry diagram layouts: reporting lines, a hierarchy, and overlapping sets. All examples are illustrative.",
+  "design": {
+    "background": "light1",
+    "footer": {
+      "left": {
+        "text": "Illustrative example • fictional data"
+      }
+    }
+  },
+  "slides": [
+    {
+      "layout": "org-chart",
+      "title": "Give the pilot a clear reporting structure",
+      "blocks": [
+        {
+          "region": "people",
+          "items": [
+            {
+              "text": "Pilot lead",
+              "level": 0
+            },
+            {
+              "text": "Delivery",
+              "level": 1
+            },
+            {
+              "text": "Evidence",
+              "level": 1
+            }
+          ]
+        }
+      ],
+      "id": "layout-org-chart"
+    },
+    {
+      "layout": "hierarchy",
+      "title": "Break the pilot into focused workstreams",
+      "blocks": [
+        {
+          "region": "nodes",
+          "items": [
+            {
+              "text": "Pilot",
+              "level": 0
+            },
+            {
+              "text": "Delivery",
+              "level": 1
+            },
+            {
+              "text": "Design",
+              "level": 2
+            },
+            {
+              "text": "Build",
+              "level": 2
+            },
+            {
+              "text": "Evidence",
+              "level": 1
+            }
+          ]
+        }
+      ],
+      "id": "layout-hierarchy"
+    },
+    {
+      "layout": "venn",
+      "title": "Three conditions for a useful pilot",
+      "blocks": [
+        {
+          "region": "sets",
+          "items": [
+            "Clear scope",
+            "Evidence",
+            "Shared goal"
+          ]
+        }
+      ],
+      "id": "layout-venn"
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "org-chart": {
+          "name": "Organization chart",
+          "summary": "A single-root team structure, with reporting lines and child depths.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "people",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "org-chart"
+            }
+          ],
+          "description": "Show one organization or reporting tree with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before their children, without skipping a depth. Assistants and separate roots need a diagram instead; unsupported trees retain the complete list with a finding.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/org-chart.svg"
+          }
+        },
+        "hierarchy": {
+          "name": "Hierarchy",
+          "summary": "A single-root hierarchy drawn as connected pairs of rounded cards.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "nodes",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "hierarchy"
+            }
+          ],
+          "description": "Show a classification or work breakdown with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before children and do not skip a depth. Unsupported forests, jumps, descriptions or long labels retain the complete list with a finding instead of changing relationships or shrinking text.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/hierarchy.svg"
+          }
+        },
+        "venn": {
+          "name": "Venn",
+          "summary": "One to seven overlapping sets, with one short label per set.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "sets",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "venn"
+            }
+          ],
+          "description": "Show overlap among 1 to 7 sets using one flat list of short labels. The list order identifies the sets; no overlap values are implied. One to four sets have labels inside the circles, and five to seven beside them. Long labels, nested entries or unsupported counts retain the complete list with a finding instead of shrinking the text.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/venn.svg"
+          }
+        }
+      }
+    }
+  }
+}

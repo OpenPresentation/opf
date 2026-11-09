@@ -1,0 +1,291 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\sh24-inverted
+> node scripts/check-changed.mjs "--base" "e8064d1e3fcb04222a814d1ff39901efaedd9ff4"
+
+check-changed: 35 changed files since e8064d1e3 (plus uncommitted and untracked)
+ok  build (39.5 s)
+ok  biome (0.7 s)
+ok  pnpm run check:catalog (4.3 s)
+ok  pnpm run check:browser-safe (6.5 s)
+ok  pnpm run check:changes (0.9 s)
+ok  pnpm run check:catalog-free (3.0 s)
+ok  pnpm run check:diagram-doc-images (2.4 s)
+ok  pnpm run check:examples (49.6 s)
+ok  pnpm run check:font-hotlinks (8.3 s)
+ok  pnpm run check:palette (0.7 s)
+ok  pnpm run check:registry-golden (2.9 s)
+FAILED  pnpm run check:schema-docs (0.4 s)
+ok  pnpm run check:examples-convert (62.6 s)
+ok  pnpm run check:schema-strict (1.0 s)
+ok  pnpm run check:schema-examples (3.6 s)
+ok  pnpm run check:skill-glossary (0.4 s)
+ok  pnpm run check:spec (0.6 s)
+ok  pnpm run check:skill-commands (20.3 s)
+FAILED  pnpm run check:text (0.4 s)
+ok  pnpm run check:stability (54.2 s)
+ok  typecheck (65.7 s)
+FAILED  tests opf (96.6 s)
+FAILED  tests pptx (55.1 s)
+FAILED  tests gallery (4.1 s)
+
+--- pnpm run check:schema-docs failed (exit 1); last 7 lines of artifacts\check-changed\pnpm_run_check_schema-docs.log:
+
+> openpresentation-workspace@ check:schema-docs C:\opf-work\sh24-inverted
+> node scripts/generate-schema-docs.mjs --check
+
+generated docs differ from scripts/generate-schema-docs.mjs: docs/catalog-schema-reference.md
+These files are generated. Change the generator or the schemas, then run node scripts/generate-schema-docs.mjs
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- pnpm run check:text failed (exit 1); last 35 lines of artifacts\check-changed\pnpm_run_check_text.log:
+
+> openpresentation-workspace@ check:text C:\opf-work\sh24-inverted
+> node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs
+
+✔ compressed reports retain the same text checks and original line/column (1.5324ms)
+✖ real compressed evidence is scanned as its text, preserving input bytes (2.1418ms)
+✔ names alone cannot bypass checks and broken/oversized compressed text fails (1.3247ms)
+✔ existing recognized binary evidence remains distinct from text (0.0853ms)
+✔ MR-11: other raster images and gzip archives are binary by signature, never by name (0.3796ms)
+✔ MR-11: an imported package is scanned once its package.json exists, and not before (0.2608ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 68.8016
+
+✖ failing tests:
+
+test at scripts\check-text-integrity.test.mjs:17:1
+✖ real compressed evidence is scanned as its text, preserving input bytes (2.1418ms)
+  Error: ENOENT: no such file or directory, open 'C:\opf-work\sh24-inverted\docs\evidence\rich-input-and-platform-ci-20260915\painting-Linux.json.gz'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async TestContext.<anonymous> (file:///C:/opf-work/sh24-inverted/scripts/check-text-integrity.test.mjs:18:17)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\opf-work\\sh24-inverted\\docs\\evidence\\rich-input-and-platform-ci-20260915\\painting-Linux.json.gz'
+  }
+ ELIFECYCLE  Command failed with exit code 1.
+
+--- tests opf failed (exit 1); last 60 lines of artifacts\check-changed\tests_opf.log:
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 37,
+    expected: 36,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\layout-templates.test.mjs:19:3
+✖ there are 36, in six groups, and every one has a title area (1.4665ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  37 !== 36
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/sh24-inverted/packages/javascript/test/layout-templates.test.mjs:20:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at node:internal/test_runner/test:1887:71
+      at node:internal/per_context/primordials:504:82
+      at new Promise (<anonymous>)
+      at new SafePromise (node:internal/per_context/primordials:478:3)
+      at node:internal/per_context/primordials:504:9
+      at Array.map (<anonymous>) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 37,
+    expected: 36,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\script-width-estimates.test.mjs:1:1
+✖ test\script-width-estimates.test.mjs (496.3135ms)
+  'test failed'
+
+test at test\template-goldens.test.mjs:27:1
+✖ composition goldens: 36 templates x 1 to 6 blocks x short and long content (1.496ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  444 !== 432
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/sh24-inverted/packages/javascript/test/template-goldens.test.mjs:28:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 444,
+    expected: 432,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+C:\opf-work\sh24-inverted\packages\javascript:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf@0.32.1 test: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs`
+Exit status 1
+
+--- tests pptx failed (exit 1); last 60 lines of artifacts\check-changed\tests_pptx.log:
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1940.0905
+[8/242] node test/chart-colors.mjs
+Native chart colors passed: 38 charts, no chart panel, axis/legend colors legible on the background and exact data reimport.
+[9/242] node test/chart-correctness.mjs
+Chart correctness (PPTX) passed: 7 checks; bar categories top to bottom, axis max within 1.25 x the data, waterfall total as a subtotal.
+[10/242] node test/chart-fallbacks.mjs
+pptx chart fallbacks ok
+[11/242] node test/chart-followups.mjs
+Chart follow-ups export passed: 14 checks (ring names, one plot height).
+[12/242] node test/chart-highlight.mjs
+Chart highlight passed: series and point fills, accent1 scheme colour, muted literal, schema order, label contrast, unsupported constructs, preview parity, provenance round trip.
+[13/242] node test/chart-layer.mjs
+Chart layer export passed: 37 checks (small charts, explicit options, emphasis parity, header row, legend option).
+[14/242] node test/chart-options.mjs
+Chart options: native c:title, c:legendPos and c:dLbls (and the chartex equivalents) in schema order, read back by fromPptx, unchanged without the fields, and in agreement with the preview.
+[15/242] node test/chart-palette-axis.mjs
+Chart palette and value axis passed: 15 checks (scheme-following series, theme colours, chart.colors, pinned slides, core value axis).
+[16/242] node test/chart-series-order.mjs
+Chart series schema order passed: 131 checks (every classic type in dml-chart.xsd sequence, the line, radar and scatter repairs, the stable rewrite, native import).
+[17/242] node test/chart-series-paint-import.mjs
+Chart-series solid paint import: current scheme/direct first/second series paths, no/empty/non-solid controls, unchanged data/design/highlight/provenance and unrelated slide. No native or pixel claim.
+[18/242] node test/chart-text-size.mjs
+Chart text size passed: 627 checks; axis, data label and legend text at the preview's size for 22 chart types on 8 slide and font-size settings, classic and chartex parts and the chartex style part.
+[19/242] node test/chart-types.mjs
+Chart types passed: 56 exports (19 classic chart types, rejected retired ids) with exact constructs and same-id reimport.
+[20/242] node test/chart-workbook-ranges.mjs
+Chart workbook ranges: 56 workbooks checked (PptxGenJS 10 families incl. bubble, every OPF chart type, anchored-table rule).
+[21/242] node test/chart-workbook-values.mjs
+Chart workbook values: 9 checks passed (8 OPF chart types and the engine's category, scatter and bubble workbooks keep 0; gaps are blank cells).
+[22/242] node test/chart-workbook.mjs
+Chart workbook checks passed: 37 bounded heading/preservation cases, Unicode/whitespace, rich shared strings, unsupported/external/corrupt metadata and deterministic actual export/reimport.
+[23/242] node test/chartex.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: treemap-category (fallback): bytes identical to the reviewed archive fixture
++ actual - expected
+
++ '54a212bf70b3bd8cdd20454315fbdf42fa021344d49c91ce3631727ebc61c3b1'
+- '8434325bbaf1c97c4efc4fe2977a679b72023a986e807f8e5b02f63998c0b125'
+
+    at file:///C:/opf-work/sh24-inverted/packages/pptx/test/chartex.mjs:433:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '54a212bf70b3bd8cdd20454315fbdf42fa021344d49c91ce3631727ebc61c3b1',
+  expected: '8434325bbaf1c97c4efc4fe2977a679b72023a986e807f8e5b02f63998c0b125',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
+run-tests: test/chartex.mjs failed (exit 1); 219 test(s) not run
+C:\opf-work\sh24-inverted\packages\pptx:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/opf-pptx@0.32.1 test:contract: `pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check`
+Exit status 1
+
+--- tests gallery failed (exit 1); last 60 lines of artifacts\check-changed\tests_gallery.log:
+test at test\records.test.mjs:44:1
+✖ the layouts are the 36 intent templates, in six groups, each passing core's template rules (17.4041ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      'cover',
+      'section',
+      'agenda',
+      'agenda-split',
+  ...
+      'pyramid',
+  +   'inverted-pyramid',
+      'matrix',
+      'cycle',
+      'chevrons',
+      'flow',
+      'vertical-flow',
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/sh24-inverted/packages/gallery/test/records.test.mjs:46:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [
+      'cover',        'section',       'agenda',
+      'agenda-split', 'statement',     'closing',
+      'text',         'list',          'quote',
+      'two-column',   'three-column',  'pillars',
+      'comparison',   'process',       'timeline',
+      'faq',          'pyramid',       'inverted-pyramid',
+      'matrix',       'cycle',         'chevrons',
+      'flow',         'vertical-flow', 'metrics',
+      'scorecard',    'image',         'image-beside',
+      'gallery',      'chart',         'chart-beside',
+      'table',        'table-beside',  'code',
+      'hero',         'dashboard',     'team',
+      'logos'
+    ],
+    expected: [
+      'cover',         'section',      'agenda',
+      'agenda-split',  'statement',    'closing',
+      'text',          'list',         'quote',
+      'two-column',    'three-column', 'pillars',
+      'comparison',    'process',      'timeline',
+      'faq',           'pyramid',      'matrix',
+      'cycle',         'chevrons',     'flow',
+      'vertical-flow', 'metrics',      'scorecard',
+      'image',         'image-beside', 'gallery',
+      'chart',         'chart-beside', 'table',
+      'table-beside',  'code',         'hero',
+      'dashboard',     'team',         'logos'
+    ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+C:\opf-work\sh24-inverted\packages\gallery:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @openpresentation/gallery@0.32.1 test: `pnpm run build:engines && node --test test/*.test.mjs`
+Exit status 1
+
+step                               status    time
+build                              passed  39.5 s
+
+biome                              passed   0.7 s  17 files
+pnpm run check:browser-safe        passed   6.5 s
+pnpm run check:catalog             passed   4.3 s
+pnpm run check:catalog-free        passed   3.0 s
+pnpm run check:changes             passed   0.9 s
+pnpm run check:diagram-doc-images  passed   2.4 s
+pnpm run check:examples            passed  49.6 s
+pnpm run check:examples-convert    passed  62.6 s
+pnpm run check:font-hotlinks       passed   8.3 s
+pnpm run check:palette             passed   0.7 s
+pnpm run check:registry-golden     passed   2.9 s
+pnpm run check:schema-docs         FAILED   0.4 s
+pnpm run check:schema-examples     passed   3.6 s
+pnpm run check:schema-strict       passed   1.0 s
+pnpm run check:skill-commands      passed  20.3 s
+pnpm run check:skill-glossary      passed   0.4 s
+pnpm run check:spec                passed   0.6 s
+pnpm run check:stability           passed  54.2 s
+check-changed: 5 of 24 steps failed: pnpm run check:schema-docs, pnpm run check:text, tests opf, tests pptx, tests gallery
+pnpm run check:text                FAILED   0.4 s
+typecheck                          passed  65.7 s
+tests opf                          FAILED  96.6 s
+tests pptx                         FAILED  55.1 s
+tests gallery                      FAILED   4.1 s
+total                                      389.5 s
+ ELIFECYCLE  Command failed with exit code 1.

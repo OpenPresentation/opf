@@ -1,0 +1,61 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\sh21-production-native-inputs-01\\inputs\\venn-6.opf.json",
+    "sha256": "12bdc64b9f838b26384a0f7c55e82bea4fc92ca08298121dc3846f88c808b763",
+    "bytes": 642
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\sh21-production-native-inputs-01\\preview\\venn-6\\slide-1.png",
+      "sha256": "96193b402d3ae5a934d95293f22121e3593551c6d6316b8e56fc5398f55631fa",
+      "bytes": 19717,
+      "mediaType": "image/png",
+      "slide": 1,
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

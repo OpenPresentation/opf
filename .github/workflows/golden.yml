@@ -11,7 +11,7 @@ name: golden
 #   regenerate (contents: read, pinned Playwright image): installs the workspace, runs `pnpm golden:update` (builds core, the
 #     gallery and the renderer, renders every slide of every example, rewrites only the per-deck files whose hashes differ),
 #     and uploads the patch, diff.json and the review sheets of the changed slides;
-#   push (contents: write, no branch code): applies the patch if it touches only packages/render/test/golden/, pushes one
+#   push (contents: write, no branch code): applies only renderer goldens and the exact core template fixture, then pushes one
 #     commit to the branch, runs ci.yml on it (a push made with GITHUB_TOKEN starts no workflow) and answers on the pull request.
 # Review stays human: the commit is evidence, not an approval. Look at the changed slides in the artifact before approving.
 # The comparison is never changed here (exact hashes, no tolerance, the baseline's own scale and font policy).
@@ -71,6 +71,17 @@ jobs:
       - name: pnpm golden:update
         run: pnpm golden:update
 
+      # RR-108: templates share the same pinned environment and review/patch boundary as example rasters.
+      - name: Regenerate core composition and renderer template goldens
+        run: |
+          OPF_UPDATE_GOLDENS=1 node --test packages/javascript/test/template-goldens.test.mjs
+          OPF_TEMPLATE_GOLDEN_OUT=packages/render/artifacts/golden/templates node packages/render/test/layout-template-goldens.mjs --update --promote
+
+      # RR-108: preserve the strict traced-SVG lock alongside the other generated renderer goldens.
+      - name: Regenerate reviewed chart and table SVG digests
+        run: |
+          RR54_PRINT_DIGESTS=1 node packages/render/test/chart-table-data.mjs > packages/render/test/golden/chart-table-data/reviewed-svg-digests.json
+
       - name: Summarize and write the patch
         id: patch
         shell: bash
@@ -78,15 +89,17 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           artifacts=packages/render/artifacts/golden
           mkdir -p "$artifacts"
-          git add -A -- packages/render/test/golden
-          git diff --cached --binary -- packages/render/test/golden > "$artifacts/golden.patch"
-          outside="$(git status --porcelain | grep -v ' packages/render/test/golden/' | grep -v ' packages/render/artifacts/' || true)"
-          if [ -n "$outside" ]; then echo "Unexpected changes outside packages/render/test/golden/:" >&2; echo "$outside" >&2; exit 1; fi
+          git add -A -- packages/render/test/golden packages/javascript/test/fixtures/template-goldens-0.19.json
+          git diff --cached --binary -- packages/render/test/golden packages/javascript/test/fixtures/template-goldens-0.19.json > "$artifacts/golden.patch"
+          outside="$(git status --porcelain | grep -Ev '^.. (packages/render/test/golden/|packages/javascript/test/fixtures/template-goldens-0[.]19[.]json$|packages/render/artifacts/)' || true)"
+          if [ -n "$outside" ]; then echo "Unexpected changes outside the generated golden allowlist:" >&2; echo "$outside" >&2; exit 1; fi
           if [ -s "$artifacts/golden.patch" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; else echo "changed=false" >> "$GITHUB_OUTPUT"; fi
           {
             echo "### golden"
             echo
             node -e "const d=require('./$artifacts/diff.json'); console.log(d.changedSlides.length + ' slides in ' + d.changedDecks.length + ' decks changed' + (d.sourceMatches ? '' : '; the corpus digest changed'))"
+            echo
+            node -e "const d=require('./$artifacts/templates/diff.json'); console.log(d.changedSlides.length + ' template slides changed')"
             echo
             echo 'Changed decks:'
             node -e "for (const d of require('./$artifacts/diff.json').changedDecks) console.log('- ' + d)"
@@ -103,6 +116,7 @@ jobs:
             packages/render/artifacts/golden/index.html
             packages/render/artifacts/golden/sheet-*.png
             packages/render/artifacts/golden/[0-9]*.png
+            packages/render/artifacts/golden/templates/
           retention-days: 14
           if-no-files-found: warn
 
@@ -129,19 +143,20 @@ jobs:
           name: regenerated-goldens
           path: regenerated
 
-      - name: Apply the patch (only packages/render/test/golden/) and push
+      - name: Apply only the allowed golden patch and push
         shell: bash
         run: |
           paths="$(git apply --numstat regenerated/golden.patch | cut -f3)"
           [ -n "$paths" ] || { echo "empty patch" >&2; exit 1; }
-          bad="$(printf '%s\n' "$paths" | grep -v '^packages/render/test/golden/' || true)"
-          if [ -n "$bad" ]; then echo "The patch touches paths outside packages/render/test/golden/:" >&2; echo "$bad" >&2; exit 1; fi
+          bad="$(printf '%s\n' "$paths" | grep -Ev '^(packages/render/test/golden/|packages/javascript/test/fixtures/template-goldens-0[.]19[.]json$)' || true)"
+          unsafe="$(printf '%s\n' "$paths" | grep -E '(^|/)[.][.]?(/|$)' || true)"
+          if [ -n "$bad$unsafe" ]; then echo "The patch touches paths outside the generated golden allowlist:" >&2; printf '%s\n' "$bad" "$unsafe" >&2; exit 1; fi
           git apply --index regenerated/golden.patch
           decks="$(node -e "console.log(require('./regenerated/diff.json').changedDecks.length)")"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -q -m "Regenerate goldens: $decks decks (golden run $GITHUB_RUN_ID)" \
-            -m "Generated by pnpm golden:update in the pinned Playwright image. Evidence (diff.json and the review sheets) is attached to the run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. A human reviews the changed slides before approving."
+          git commit -q -m "Regenerate example and template goldens (golden run $GITHUB_RUN_ID)" \
+            -m "Generated by the maintained example and template generators in the pinned Playwright image. Evidence (diff.json and the review sheets) is attached to the run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. A human reviews the changed slides before approving."
           git push origin "HEAD:refs/heads/$BRANCH"
 
       # A push made with GITHUB_TOKEN starts no pull_request workflow; workflow_dispatch is the documented exception.
@@ -152,5 +167,5 @@ jobs:
           pr="${{ github.event.pull_request.number }}"
           if [ -n "$pr" ]; then
             gh pr edit "$pr" --remove-label regenerate-goldens || true
-            gh pr comment "$pr" --body "golden pushed one commit that rewrites only the decks that moved. Review diff.json and the sheets in the run artifacts before approving: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. CI was dispatched on the new commit."
+            gh pr comment "$pr" --body "golden pushed one commit containing only generated example and template baselines. Review diff.json and the sheets in the run artifacts before approving: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. CI was dispatched on the new commit."
           fi

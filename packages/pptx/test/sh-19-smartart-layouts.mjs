@@ -48,7 +48,10 @@ const live = await exported({slides});
     assert.ok((layout.match(/<dgm:if name="c\d" func="cnt" axis="ch" ptType="node" op="equ" val="\d"><dgm:alg type="composite"\/>/g) ?? []).length >= 4);
     assert.match(layout, /<dgm:shape type="rect" hideGeom="1">/);
     // The composed count's entries start where OPF's composition sets their first line (anchored at the top at that inset).
-    assert.match(layout, /<dgm:alg type="tx"><dgm:param type="txAnchorVert" val="t"\/><\/dgm:alg>/);
+    const algorithms=[...layout.matchAll(/<dgm:alg type="tx">([\s\S]*?)<\/dgm:alg>/g)].map(match=>match[1]);
+    assert.ok(algorithms.some(params=>params.includes('<dgm:param type="txAnchorVert" val="t"/>')),'the composed count keeps its native top anchor');
+    const alignment=/<a:pPr algn="([^"]+)"/.exec(data)?.[1];assert.ok(['l','ctr'].includes(alignment));
+    for(const params of algorithms){assert.ok(params.includes('<dgm:param type="parTxLTRAlign" val="'+alignment+'"/>'),'native LTR paragraph alignment is explicit');assert.ok(params.includes('<dgm:param type="parTxRTLAlign" val="'+(alignment==='l'?'r':'ctr')+'"/>'),'native RTL paragraph alignment is explicit');}
     assert.match(data, new RegExp(`loTypeId="${id.replace(/[./]/g, '\\$&')}"`));
     assert.match(xml, /<mc:Choice [^>]*Requires="dgm1612"><p:graphicFrame>[\s\S]*?r:lo="rId\d+"[\s\S]*?<\/mc:Choice><mc:Fallback><p:pic>/, 'the frame names its layout part, the fallback stays');
     const rels = text(`ppt/slides/_rels/slide${number}.xml.rels`);

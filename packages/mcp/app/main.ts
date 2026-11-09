@@ -254,6 +254,30 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		catalogs,
 		fit: "contain",
 		theme: { colorScheme: context.theme ?? "auto" },
+		source: {
+			onDownload: async (file) => {
+				status("");
+				if (!app.getHostCapabilities()?.downloadFile) {
+					const error = new Error("This host does not support source downloads. Select the source text to save it.");
+					status(error.message);
+					throw error;
+				}
+				let result: Awaited<ReturnType<typeof app.downloadFile>>;
+				try {
+					result = await app.downloadFile({
+						contents: [{ type: "resource", resource: { uri: `file:///${encodeURIComponent(file.filename)}`, mimeType: file.mime, text: file.text } }],
+					});
+				} catch (error) {
+					status("Download failed. The host could not save this source file. Select the source text to save it.");
+					throw error;
+				}
+				if (result.isError) {
+					const error = new Error("Download failed. The source download was cancelled or denied by the host.");
+					status(error.message);
+					throw error;
+				}
+			},
+		},
 		// The editor's own parts, each in the viewer's element: Undo and Redo, the review pill and the Review panel (in a drawer the
 		// pill opens), the Design quick menu (theme, colours, fonts and this slide's layout) and Find and replace (Ctrl/Cmd F).
 		slots: {
