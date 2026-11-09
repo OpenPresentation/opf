@@ -23,7 +23,7 @@
 // @openpresentation/gallery package, RR-78) when no `catalogs` option is given. The browser build registers none (FA-21).
 import type { Presentation } from "./core.js";
 import type { Catalog } from "./catalog-refs.js";
-import { continueOverfull as continueDeck, edit as editDeck, embed as embedRecords, paginate as paginateDeck, stats as deckStats, validate as validateDeck } from "./core.js";
+import { continueOverfull as continueDeck, edit as editDeck, embed as embedRecords, paginate as paginateDeck, stats as deckStats, validate as validateDeck, createValidator as createDeckValidator } from "./core.js";
 import { OPFApiError, asApiError } from "./api-errors.js";
 import type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, OpenOptions, SaveOptions, SaveResult } from "./node/conversion.js";
 import { defaultCatalogs } from "./node/catalogs.js";
@@ -46,6 +46,15 @@ const withDefaultCatalog = <T extends { catalogs?: readonly Catalog[] }>(options
 
 /** `validate` with the gallery registered when `catalogs` is omitted, as `opf validate` does. */
 export const validate: typeof validateDeck = (input, options) => validateDeck(input, withDefaultCatalog(options));
+/** A session validator with the same default gallery as Node validate(). Its clear() invalidates retained geometry. */
+export const createValidator: typeof createDeckValidator = () => {
+	const checker = createDeckValidator();
+	return {
+		validate: (input, options) => checker.validate(input, withDefaultCatalog(options)),
+		clear: () => checker.clear(),
+		get cache() { return checker.cache; },
+	};
+};
 /** `stats` with the gallery registered when `catalogs` is omitted, as `opf stats` does. */
 export const stats: typeof deckStats = (presentation, options) => deckStats(presentation, withDefaultCatalog(options));
 /** `paginate` with the gallery registered when `catalogs` is omitted, as `opf paginate` does. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks. */

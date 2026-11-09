@@ -1,0 +1,15 @@
+{
+  "base": "766f1be19366924fd164040ada299910d4f9a637",
+  "prior": "c2bee28714578af8d3e72475a5cdbaa37fdf9bf6",
+  "incoming": "bee8d855894111b10389d3d1a84ed938ba378fb8",
+  "file": "docs/programs/release-readiness/burndown.md",
+  "priorSha256": "cd708de58a029364261eb07b3bef6f103a499c629663f10ea1da85fade9a5a97",
+  "incomingSha256": "ddda7bfade88e2d04b3e3a7729ef30af2f63d7dce24eba4927507c4f49d5be08",
+  "resolvedSha256": "b0f41489355dcbddbb5f97d089a83ed39df5feaad8189417a423de31ab72db0d",
+  "insertedRow": "| RR-117 | Small editor edits preserve complete review diagnostics while reusing equivalent bounded derived geometry; settled review includes debounce and list work | opf, editor | CE-14 | in-progress | Cold validation remains the oracle; shared-data/context parity and bounded 300-slide retention controls plus review-idle browser controls are in focused qualification. Paired CPU/retained-heap benchmark and combined gates are coordinator-owned and pending. |\n",
+  "appendedTailUtf8": "\n- 2026-11-09: RR-117 source work started from fresh main normally aligned to reviewed 766f1be1. Vetoable RR117-DERIVED-ONLY: rerun schema/global/sequence/a11y/content/layout rules and recreate findings/fixes/locations; retain only detached equivalent compositions under 64-entry / 8 MiB logical and 2 MiB shared-key limits. Explicit resource invalidation and core review.whenIdle preserve normal debounce and hosted stale-result guards. Focused qualification underway; no speed/heap/native/release acceptance claimed.\n\n- 2026-11-09 RR-117: independent source review identified missing review invalidation after partial resource failure. Actual maintained browser control reproduces stale zero findings versus public/explicit-cold overflow after a different pending=[] recovery document. Original ten controls remain; narrow failed-callback invalidation is prepared in an isolated normal descendant, with candidate browser replay/combined gates pending. Original RED retained; no core/schema/rendering/debounce or release change.\n\n- 2026-11-09 RR-117: exact partial-failure correction5f5a1af8 passes11 maintained browser controls after the genuine stale-geometry RED. Source-only failed-callback invalidation preserves error/gating/debounce behavior. Ten lossless records with exact source/exit bindings and seven protected trees/objects verify; original RR117 archive unchanged. Root review/fold, coherent gate and paired retained-heap/CPU acceptance remain separate.\n",
+  "insertedRowBytes": 462,
+  "appendedTailBytes": 1469,
+  "priorBytesPreserved": true,
+  "initialGuardRefusal": "Generic RR-20 marker occurred three times; stopped before mutation. Refined to unique existing full row prefix."
+}
