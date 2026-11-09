@@ -7,6 +7,32 @@ OPF 0.15 has two places for a picture, with one fit vocabulary:
 
 opf-render draws both as SVG and opf-pptx exports them as native PowerPoint DrawingML, from the same core geometry. This page also maps each of the 15 [pptx.gallery image treatments](https://www.pptx.gallery/image-treatments) to OPF, with its support status and the reason. The reference deck [`fixtures/image-treatments.opf.json`](fixtures/image-treatments.opf.json) has one slide per gallery treatment. Core's `test/image-blocks.test.mjs` checks it against core 0.14's frozen picture geometry, and `pnpm test:image-treatments` checks it across core, SVG and PPTX.
 
+## Editable labels on an image
+
+An image payload accepts `callouts`, plain text panels over its visible frame. This is supported on a root `image` or a block's `image` object, not on logos, videos, reusable asset records or backgrounds. For example:
+
+```json
+{
+  "slides": [{
+    "image": {
+      "src": "./images/pump.png",
+      "alt": "Pump housing with the inlet at the left.",
+      "callouts": [{"text": "Inlet", "x": -0.08, "y": 0.1, "width": 0.4, "height": 0.25}]
+    }
+  }]
+}
+```
+
+Coordinates are fractions of the displayed image frame, from its physical top-left, including in RTL. `x` and `y` are finite signed origins and may be negative or greater than 1; `width` and `height` are greater than 0 and at most 1. All four and a plain string `text` are required. Empty text is retained. Nonfinite origins, nonpositive or oversized dimensions, unknown fields and rich text are invalid. A panel may intentionally straddle or sit outside the image frame: it keeps its authored position without clipping to the image, shrinking or moving content. The fixed slide viewport crops any off-slide portion. Crossing an image or slide edge alone is not text overflow; unrepresentable derived coordinates are refused.
+
+The frame follows `cover`, focus, aspect ratio and placement. With `contain` and known source dimensions it is the visible contained picture, excluding letterbox padding. When composition cannot read the source dimensions, it uses the available composed frame; resolve external/local assets to embedded bytes before composition to anchor inside the contained pixels. Labels refer to the visible frame, not original source pixels: changing a crop changes the pixels under them. A mask, pixel recolor, opacity or overlay affects the picture beneath the labels. Callout panels and text are above those effects, including outside a nonrectangular mask. An unavailable image keeps its labels over the placeholder.
+
+Panels use the theme background and text colors. Text starts at the body's role size (or a larger inherited minimum), grows up to twice that size within the authored maximum, and centers in its panel. It never shrinks below that role; a small panel reports overflow. The text measure is capped at 32 em, about 70 ordinary Latin characters, and text is not clipped to its panel or image mask. Slide canvas bounds still apply to the visible output. Enlarge the panel or shorten the label when it overflows.
+
+SVG keeps real text. PPTX writes native panel rectangles and editable measured line boxes: editing a line does not reflow into the next line. An unchanged picture owner and panel geometry import with fractional coordinates and **current** native text, including cleared lines. Missing or changed panel/picture geometry falls back to ordinary current native content with a finding rather than resurrecting old labels. Text edits and measured size/position changes report reflow; other native styling is not reconstructed. With unavailable pixels, labels import as ordinary text because there is no trustworthy picture owner. Markdown preserves callouts losslessly in an embedded block; promoting an image to a background/watermark reports the dropped callouts.
+
+Runnable deck: [image callouts](../examples/technical/image-callouts.opf.json).
+
 ## Backgrounds
 
 ```json

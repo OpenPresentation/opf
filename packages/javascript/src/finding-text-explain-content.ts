@@ -43,6 +43,11 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { slides: [{ title: "{{speaker.name}}" }] },
     { speaker: { name: "Ada Lovelace" }, slides: [{ title: "{{speaker.name}}" }] },
   ),
+  "opf/variable-group-omitted": ex(
+    "Give one of the group's optional variables a value to draw the group, or move what should always show out of the group. Unfilled, the whole group is left out, its picture and card with it.",
+    { template: true, variables: { quote: { type: "text", required: false } }, slides: [{ title: "Customers", blocks: [{ blocks: [{ image: { src: "https://example.com/portrait.jpg", alt: "A customer" } }, { text: "var:quote" }] }] }] },
+    { template: true, variables: { quote: { type: "text", required: false, value: "It just works." } }, slides: [{ title: "Customers", blocks: [{ blocks: [{ image: { src: "https://example.com/portrait.jpg", alt: "A customer" } }, { text: "var:quote" }] }] }] },
+  ),
   "opf/duration-outside-narrative": ex(
     "Change `duration`, or choose a narrative that suits it. The range describes the narrative, so nothing is drawn differently.",
     { duration: 5, narrative: "arc", catalogs: { custom: { narratives: { arc: ARC({ min: 10, max: 20 }) } } }, slides: [{ title: "Intro", beat: "hook" }] },

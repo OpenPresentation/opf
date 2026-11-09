@@ -505,7 +505,7 @@ function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
 const HELP: Record<string, string> = {
 	'chart-value-not-numeric':
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
-	'chart-mapping-adapted': 'The mapping entry is ignored. Remove it, or name a different column.',
+	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
 	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasise, or remove the entry.',
 	'slide-theme-dimensions': 'A PPTX has one slide size. Set design.dimensions on the deck, or give every slide the same theme dimensions.',
@@ -515,6 +515,7 @@ const HELP: Record<string, string> = {
 	'variable-unknown': "Declare the variable in the top-level variables map, or write '\\{{' for literal braces.",
 	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
 	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
+	'variable-group-omitted': 'Give one of the variables a value to draw the group, make one of them required, or move the content that should always show out of the group.',
 	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another colour.',
 	'run-color-unrecognized': 'Use a #RRGGBB hex colour, a colour-scheme name or a var: reference to a declared colour variable.',
 	'numbering-start-ignored': "Add a 'numbering' field to the payload, or remove 'start'.",
@@ -588,7 +589,7 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 				continue;
 			}
 		}
-		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', 'warning');
+		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', code === 'variable-group-omitted' ? 'info' : 'warning');
 		const help = HELP[code];
 		if (help) found.help = help;
 		findings.push(found);

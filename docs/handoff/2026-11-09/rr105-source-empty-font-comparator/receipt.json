@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "base": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+  "testedSource": "c0f4b932ff93ad2e550d503e30b4b9127841753c",
+  "raw": {
+    "file": "raw.zip",
+    "bytes": 170504,
+    "sha256": "3c26537e42ee35cc9cb0e38631ebaf1a48c120080bb4106d41e7951ae10fb7b3",
+    "entries": 24
+  },
+  "focused": {
+    "tests": 23,
+    "status": "PASS"
+  },
+  "mapped": {
+    "passed": 10,
+    "typeSkipped": 1,
+    "seconds": 78.2,
+    "nativeControls": 69,
+    "status": "PASS"
+  },
+  "replay": {
+    "attempts": 1,
+    "passed": true,
+    "observations": 42,
+    "findings": 0,
+    "result": {
+      "file": "C:/opf-work/n034-font-compare01/text-font-comparison.json",
+      "bytes": 19073,
+      "sha256": "92fa7772d08f64e16baec9188d5d8fd14b1be1e0f48baad2ecaef02ff5956b7a",
+      "passed": true,
+      "observations": 42,
+      "findings": []
+    },
+    "comparisonCode": {
+      "repositoryHead": "c0f4b932ff93ad2e550d503e30b4b9127841753c",
+      "dirty": false,
+      "comparator": {
+        "file": "scripts/native-acceptance/compare-text-fonts.mjs",
+        "sha256": "af6e76296b1af62beebe9966a2a08f095c6bd583860db971af610f64343c7f4b"
+      },
+      "binder": {
+        "file": "scripts/native-acceptance/compare-text.mjs",
+        "sha256": "b5f1828c98f8364abc7f06e39ee257844212f3f09f42c17991b54eff3a9077ee",
+        "unchangedFromProducer": true
+      },
+      "driverSha256": "49a771cb04fd42de6b981d066a8be5ac26c37bda452aff28a50e0d9a7c22b1a2"
+    },
+    "originalEvidenceUnchanged": true,
+    "producerIdentities": [
+      {
+        "directory": "C:\\opf-work\\n034-fix",
+        "revision": "2400d38bf549cdb661c31725776df25e497d364c",
+        "dirty": false
+      },
+      {
+        "directory": "C:\\opf-work\\rr105-readonly-survey\\packages\\pptx",
+        "revision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+        "dirty": false
+      }
+    ],
+    "suiteSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65"
+  },
+  "officeConstructed": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "metadataCheck": {
+    "passed": 7,
+    "typeSkipped": 1,
+    "status": "PASS",
+    "seconds": 29.2,
+    "scope": "docs/evidence only; no test or replayrepeat",
+    "archive": {
+      "file": "metadata-checks.zip",
+      "bytes": 9004,
+      "sha256": "07f1245e45b43436bda7e615a21195e022796aa4373628ff37c92bb2e3b7d5e8",
+      "entries": 9
+    }
+  }
+}

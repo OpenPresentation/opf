@@ -1,0 +1,67 @@
+{
+  "revision": "08c16ddc6aa03f96b351d4aa1a6c7ff01a9f56d4",
+  "opfVersion": "0.32.1",
+  "scope": "Same authored content upright control versus new downward geometry; not an old-source export.",
+  "decks": [
+    {
+      "id": "inverted-pyramids",
+      "source": "examples/technical/inverted-pyramids.opf.json",
+      "sourceSha256": "c680780c756bc125a44163863e05a559cd582e3b146958dad1822e2bc0617ac0",
+      "previewOk": true,
+      "previewSlides": 3,
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/inverted-pyramids.pptx",
+          "ok": true,
+          "sha256": "ee7061bf5b72efd9508554d9652a9b4561707dcfc46a0e90108bccb23b3904e9",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "category": "pptx",
+              "path": "/slides/0/items",
+              "scope": "document",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain.",
+              "help": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",
+              "reason": "its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain"
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "category": "pptx",
+              "path": "/slides/1/items",
+              "scope": "document",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain.",
+              "help": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",
+              "reason": "its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain"
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "category": "pptx",
+              "path": "/slides/2/blocks/0/items",
+              "scope": "document",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain.",
+              "help": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",
+              "reason": "its entries are lists, which a SmartArt node does not hold, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

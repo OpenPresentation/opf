@@ -1,0 +1,113 @@
+{
+  "base": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+  "source": "2fe3cc0c539dcb001b89bd3cfe2f705ac7e4ed7e",
+  "sourceTree": "62cbac59fb8a3929b669e5010a6b6692bd5f2807",
+  "bindings": [
+    {
+      "file": "changes/lh-121-renderer-status-controls.md",
+      "oid": "c56e80b03f94de32d8105ac6fd62785ac2fbe0a9",
+      "bytes": 219,
+      "sha256": "28ae3fba22e2f1531e8751d55ef5a8de4523617a522c17ea77229eac1aec6a27"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/lh121-renderer-status-controls/README.md",
+      "oid": "d5fd422b0ef6fb6d2d7dea4e6c5a14f143d1e596",
+      "bytes": 2372,
+      "sha256": "4e47c12a6590f9fc63d76fa55767c3524e643205b1c7f5c94e34caa0c03ad87f"
+    },
+    {
+      "file": "docs/programs/layout-harvest/burndown.md",
+      "oid": "bb3c5073166b7692fe3cc9447e1fd3cb98fbcf05",
+      "bytes": 161871,
+      "sha256": "71e5eca04349d19f17c20c605f28fcd4748dd529d7324faf9918cb230631c9a4"
+    },
+    {
+      "file": "packages/render/test/timeline-status.mjs",
+      "oid": "f5b48ac9334a681a9bdf2313306729fa0a3ac569",
+      "bytes": 6655,
+      "sha256": "1b5d4ee327e96ad30633f9878da5ca62dd7adbaf291cc4c92058b8659c650572"
+    }
+  ],
+  "protectedTrees": {
+    "packages/javascript/src": "d30736df79f2041afabf8d7a3d2f82334c4ec3f9",
+    "packages/render/src": "afc9aff76ce525790544010cff6aed78e053c314",
+    "packages/pptx/src": "d3f6bc8ab9e874813d947ccfbbb10cfb5da3cdec",
+    "packages/editor/src": "34c15e9130048c867761d8a0013889ce9400b8f0",
+    "packages/mcp/src": "011b9ef84289707d537b59eda6f7182dcae6e720",
+    "packages/cli/src": "4a69c07eae0ff09225f92d6c1d71408dd85a7978",
+    "packages/gallery/catalog": "8599f501cae1c9b4c986a627e2746581b641cc16",
+    "spec": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5",
+    "pnpm-lock.yaml": "3432ab613e493c84d6eea74cb68d30be08720102"
+  },
+  "originalCI": {
+    "run": "42615508499",
+    "job": "129154560607",
+    "bytes": 93545,
+    "sha256": "73dc2390f8a0b8c808409d080482550cdfe997f8e34bb09cd5348e9ec79b4ae1"
+  },
+  "tools": {
+    "node": "v24.20.0",
+    "pnpm": "10.33.2"
+  },
+  "focused": {
+    "before": 1,
+    "after": 0,
+    "final": 0,
+    "originalCy": [
+      383.9398632812499,
+      402.1503124999999
+    ]
+  },
+  "mapped": {
+    "initial": {
+      "exitCode": 1,
+      "passed": 8,
+      "failed": 1,
+      "skipped": 1,
+      "seconds": 83.6,
+      "soleFailure": "Sparse omitted existing painting-Linux.json.gz"
+    },
+    "recovery": {
+      "exitCode": 0,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 1,
+      "seconds": 80.6
+    },
+    "runtimeChanged": false,
+    "assertionsChangedForRecovery": false
+  },
+  "exactInputRecovery": {
+    "source": "2fe3cc0c539dcb001b89bd3cfe2f705ac7e4ed7e",
+    "file": "docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz",
+    "bytes": 16102,
+    "sha256": "0b7ef1b73bbd4f31c5ac67716bea08f22a64df066f4ad343765c0d3d74511e56",
+    "blob": "2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6",
+    "actual": "2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6",
+    "scope": "Restore one existing exact tracked fixture omitted by agent-worktree sparse profile; no index/source/test/assertion change"
+  },
+  "archive": {
+    "bytes": 49765,
+    "sha256": "e7595ba4022b36734358f68cd994bdc03ee87ca1a28c52ca92b12b5f02d8a09f",
+    "members": 37
+  },
+  "runtimeChanges": 0,
+  "schemaChanges": 0,
+  "goldenChanges": 0,
+  "toleranceChanges": 0,
+  "officeCalls": 0,
+  "ciDispatches": 0,
+  "networkVerifierCalls": 0,
+  "pushed": false,
+  "qualificationScope": "Test-only renderer repair; focused and required mapped source checks. No full native/release/current-wave acceptance.",
+  "finalDocs": {
+    "exitCode": 0,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 1,
+    "seconds": 31.2,
+    "base": "2fe3cc0c539dcb001b89bd3cfe2f705ac7e4ed7e",
+    "packageTestsSelected": [],
+    "scope": "Evidence documents/archive/verifier only; final raw receipts appended losslessly without product changes"
+  }
+}

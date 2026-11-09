@@ -1,0 +1,63 @@
+{
+  "base": "58cb3d541a8a12cf5bf46701b111d4cf24264da3",
+  "sourceChanges": "Only output preservation guards/tests and review receipts; no metric/predicate/geometry change",
+  "seconds": 103.8,
+  "result": "pass",
+  "typecheck": "skipped:noTypeScript",
+  "newCliControls": "14CLIand7pure refusals",
+  "domainBoundary": "all516controls pass",
+  "fullGate": "all516valid records deeply identical",
+  "originalInputHashes": 3099,
+  "archive": {
+    "path": "output-guard-mapped.zip",
+    "size": 9688,
+    "sha256": "14ff6cfb0f1ef7b712368ae931534ec6464a7a0b99970c8b38eda871cdaf3cc4"
+  },
+  "files": [
+    {
+      "path": "sh20-output-guard-changed.log",
+      "size": 1175,
+      "sha256": "88222a7aba844a2f389259fc2a963045ff7e7f570eb8d3d062a6a8100f8ddf0c"
+    },
+    {
+      "path": "artifacts/check-changed/biome.log",
+      "size": 679,
+      "sha256": "b4b6e1ce2b4e277c387cebe1a054dcf1d9445765032a2f48037bdb5071e83727"
+    },
+    {
+      "path": "artifacts/check-changed/build.log",
+      "size": 14599,
+      "sha256": "92162a3f009dce6ebe5b67e9c9df76f75e26789fff4d0033c91e3fc431129d4c"
+    },
+    {
+      "path": "artifacts/check-changed/pnpm_run_check_changes.log",
+      "size": 2641,
+      "sha256": "1348737ce436a7b0fc4e0d89c53970470d763c2bf3e0d92603a44e433517d900"
+    },
+    {
+      "path": "artifacts/check-changed/pnpm_run_check_font-hotlinks.log",
+      "size": 889,
+      "sha256": "ca4a4b36e348b3f24485793ebe69b8228391bc41b6b2e53418b4d00f1a841b56"
+    },
+    {
+      "path": "artifacts/check-changed/pnpm_run_check_skill-commands.log",
+      "size": 1040,
+      "sha256": "cd92e82dc8a483264f0744407d1d4ef4b258121f8cc8481542a1e07672e874a2"
+    },
+    {
+      "path": "artifacts/check-changed/pnpm_run_check_stability.log",
+      "size": 3969,
+      "sha256": "50f67a0213198e34a2b14998d02fc58a0a6299a07218762158e67b0a601ab228"
+    },
+    {
+      "path": "artifacts/check-changed/pnpm_run_check_text.log",
+      "size": 1073,
+      "sha256": "0e215b4c18839cccfd3657cc5db56e2118bf74994f00a022baf85e61ad27d7a3"
+    },
+    {
+      "path": "artifacts/check-changed/tests_pptx.log",
+      "size": 113,
+      "sha256": "d0f0e6a181ad1766c66e743843b6e33bcff019bd9d2188c3d92052437e69c023"
+    }
+  ]
+}

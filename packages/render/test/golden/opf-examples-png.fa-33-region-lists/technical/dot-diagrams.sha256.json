@@ -1,0 +1,25 @@
+{
+  "deck": "technical/dot-diagrams.opf.json",
+  "entries": {
+    "technical/dot-diagrams.opf.json#0": {
+      "sha256": "715cd3e795fe2648d3ac5338cc68d30e9f04cdc556ece0d45b843172bd89af39",
+      "bytes": 8090
+    },
+    "technical/dot-diagrams.opf.json#1": {
+      "sha256": "ed29c6ad05c6bd58cfafab665f24ac8b42465651ea237634f4657026050be675",
+      "bytes": 12707
+    },
+    "technical/dot-diagrams.opf.json#2": {
+      "sha256": "26f5b2139a2bbaa7dcb7e9c81762f251ae15540179a034bf829f480b2707b71e",
+      "bytes": 9062
+    },
+    "technical/dot-diagrams.opf.json#3": {
+      "sha256": "740764e7820e09eed45cf6454b05ad58ba1f8673c2fc16f2270d8ce386a92c96",
+      "bytes": 10013
+    },
+    "technical/dot-diagrams.opf.json#4": {
+      "sha256": "c0ab78fae59932734f5bd941a5b8c37f57f8736861d66b472e615814acd1ce91",
+      "bytes": 6949
+    }
+  }
+}

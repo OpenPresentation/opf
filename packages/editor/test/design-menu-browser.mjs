@@ -63,7 +63,10 @@ try {
   assert.deepEqual(await page.getByRole('group').evaluateAll((nodes) => nodes.map((node) => node.dataset.section)), ['theme', 'colors', 'fonts', 'layout']);
   assert.equal(await group('Theme').getByRole('menuitemradio').count(), 3, 'the three gallery themes');
   assert.equal(await group('Colors').getByRole('menuitemradio').count(), 14);
-  assert.equal(await group('This slide: Layout').getByRole('menuitemradio').count(), 36, 'the 36 gallery layouts (SH-09 added pyramid and matrix, SH-18 cycle, SH-17 chevrons, flow and vertical-flow)');
+  const layoutIds = await ev(() => Object.keys(window.opfWs.gallery.layouts));
+  const layoutChoices = await group('This slide: Layout').getByRole('menuitemradio').evaluateAll(nodes => nodes.map(node => node.dataset.value));
+  assert.deepEqual(layoutChoices, layoutIds, 'every matching-source gallery layout appears in catalog order');
+  assert.equal(new Set(layoutChoices).size, layoutChoices.length, 'no duplicate layout choices');
   assert.equal(await page.getByRole('menuitem', { name: 'More design options…' }).count(), 1);
   mark('structure and ARIA');
 
@@ -354,6 +357,22 @@ try {
   await page.keyboard.press('Escape');
   await page.setViewportSize({ width: 1280, height: 860 });
   mark('bottom sheet at 390px');
+
+  // Added intents are ordinary owned choices: only the current layout changes.
+  for (const id of ['inverted-pyramid', 'org-chart', 'hierarchy', 'venn']) {
+    const value = source();
+    Object.assign(value.slides[0], { subtitle: 'Keep subtitle', notes: 'Keep notes' });
+    await mount({ deck: value });
+    const before = await doc();
+    await trigger().click();
+    await group('This slide: Layout').locator('[data-value="' + id + '"]').click();
+    assert.deepEqual(await doc(), { ...before, slides: before.slides.map((slide, index) => index === 0 ? { ...slide, layout: id } : slide) }, id + ': only the current layout changes');
+    assert.deepEqual(await ev(() => window.t.sources), ['design-menu'], id + ': one owned edit');
+    assert.deepEqual(await checkedIn('layout'), [id], id + ': current menu choice');
+    await ev(() => window.t.session.undo());
+    assert.deepEqual(await doc(), before, id + ': one undo restores every authored field');
+  }
+  mark('new catalog layouts preserve content and owned undo');
 
   // ---- destroy ----------------------------------------------------------------------------------------------------------------------------------------------
   await mount();

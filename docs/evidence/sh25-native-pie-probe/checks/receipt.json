@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "base": "1e454053c154877a8314fac19429b48ad889c16c",
+  "node": "v24.20.0",
+  "scope": "Probe and AST/object mocks only; no product drawing/input or actual Office change",
+  "sources": [
+    {
+      "path": "packages/pptx/test/native-furniture-control.ps1",
+      "bytes": 47330,
+      "sha256": "93538e5e91bbae0eed04f3896d598fc39e717b7886fd7e7f47898796d4aa747f"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-harness-check.ps1",
+      "bytes": 41975,
+      "sha256": "2fdf5b2a566f6c453c8ed36d5b40528d25205c79e7b000d96c061d897e4b6fde"
+    },
+    {
+      "path": "packages/pptx/test/native-furniture-style-controls.mjs",
+      "bytes": 4858,
+      "sha256": "c78ceee146c1ea7b5825d5ebc2c4d8a35546fa91debeb68ff921fbd4090bbc35"
+    }
+  ],
+  "checks": {
+    "before": {
+      "result": "FAIL expected",
+      "reason": "Old worker invokes doughnut-only index8 for pie start; strengthened pure fixture rejects it"
+    },
+    "focused": {
+      "result": "PASS",
+      "acceptedPlans": 12,
+      "rejectedPlans": 81,
+      "pointControls": 43,
+      "lifecycleControls": 14,
+      "fontControls": 15,
+      "officeConstructed": false
+    },
+    "changed": {
+      "command": "pnpm check:changed --base 1e454053c154877a8314fac19429b48ad889c16c",
+      "seconds": 166.2,
+      "result": "FAIL at inherited archive lock",
+      "passed": [
+        "build",
+        "biome",
+        "changes",
+        "font-hotlinks",
+        "skill-commands",
+        "stability",
+        "text"
+      ],
+      "skipped": [
+        "typecheck: no TypeScript/config changes"
+      ],
+      "failure": {
+        "path": "packages/pptx/test/chartex.mjs:433",
+        "case": "treemap-category (fallback)",
+        "actual": "d1e56048a3953d90d9f81232afd6f8f6ba79e66a286eb9c28873e065cbb21394",
+        "expected": "8434325bbaf1c97c4efc4fe2977a679b72023a986e807f8e5b02f63998c0b125",
+        "laterTestsUnrun": 236,
+        "inherited": "Same baseline/candidate archive failure is preserved by frozen SH25 source receipt; this branch changes no runtime source or fixtures."
+      }
+    }
+  },
+  "rawReceipts": [
+    {
+      "path": "checks/before.log.gz",
+      "bytes": 602,
+      "sha256": "ac0333645fdc1c69f160731c4fd0e8ea930a4748c21a28d049e307b39b2992b6",
+      "rawBytes": 1041,
+      "rawSha256": "ab7161db9b1529197791e161bf42cf48ea29b4de9f25d96774912808a4482852"
+    },
+    {
+      "path": "checks/after-initial.log.gz",
+      "bytes": 117,
+      "sha256": "eb800465be662f7d7b14d4c11c770d7381a86fc019d9082b43955009f44499bf",
+      "rawBytes": 110,
+      "rawSha256": "9a36cb38ee09a4f8956947c3a3a09acd153b891dd48a185d9f1ab3e553f6e555"
+    },
+    {
+      "path": "checks/after-models.log.gz",
+      "bytes": 117,
+      "sha256": "eb800465be662f7d7b14d4c11c770d7381a86fc019d9082b43955009f44499bf",
+      "rawBytes": 110,
+      "rawSha256": "9a36cb38ee09a4f8956947c3a3a09acd153b891dd48a185d9f1ab3e553f6e555"
+    },
+    {
+      "path": "checks/focused-final.log.gz",
+      "bytes": 117,
+      "sha256": "eb800465be662f7d7b14d4c11c770d7381a86fc019d9082b43955009f44499bf",
+      "rawBytes": 110,
+      "rawSha256": "9a36cb38ee09a4f8956947c3a3a09acd153b891dd48a185d9f1ab3e553f6e555"
+    },
+    {
+      "path": "checks/pure-controls.log.gz",
+      "bytes": 115,
+      "sha256": "405f5bf8bcdf41e45b1cffaf314d8c94df316d8f7a9f8dac137b164d0e96bd36",
+      "rawBytes": 113,
+      "rawSha256": "02f2ceae1047e656805d8b78fba2897424e392cd0618b203eb62a340421077ce"
+    },
+    {
+      "path": "checks/pure-controls.json.gz",
+      "bytes": 7676,
+      "sha256": "cb6e410eaba0bd503a110402418bbc7b39925ef38c3502c049c0e7c9ae788a14",
+      "rawBytes": 288404,
+      "rawSha256": "790ec0557620b794924309325ec28f8d326d2e8ab20f2b790e8c19be4630b95f"
+    },
+    {
+      "path": "checks/check-changed.log.gz",
+      "bytes": 2377,
+      "sha256": "e759de1997ef350cf148139b8b1d89fb624ec189611a889f97f61488fcad4589",
+      "rawBytes": 5457,
+      "rawSha256": "f651cc589b3b5f17ffd7f8513143a1899b515f4b20d3ff1da6c3f8c3bac335f9"
+    }
+  ],
+  "native": {
+    "attemptsByThisAgent": 0,
+    "qualification": "Owed. Mocks do not qualify API availability, source chart type, four-pixel criterion, edit/save/reopen, or exact font fidelity."
+  }
+}
