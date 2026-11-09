@@ -46,9 +46,23 @@ const RECORDED_EM = 0.01;
 /** The registry's view with faces added: what a registry holding `faces` resolves families to (`pickFace`, its own selection). */
 function registryView({ faces, policy = "none", aliases = new Map(), fallbackFamily }) {
   const pool = [...faces].map(face => ({ ...face, familyGroup: face.familyGroup ?? face.family }));
+  // Fitting asks about the same styles many times. This view owns one fixed pool
+  // and selection policy: keep only successful choices, never full styles or
+  // failures (their paths belong to the current request), for this call only.
+  const selected = new Map();
+  let selections = 0;
   return style => {
-    const family = style?.fontFamily;
-    const { face } = pickFace(pool, family, style, { policy, aliases, fallbackFamily });
+    const family = style?.fontFamily, weight = style?.fontWeight ?? 400, italic = !!style?.italic;
+    let weights = selected.get(family), variants = weights?.get(weight), face = variants?.get(italic);
+    if (face === undefined) {
+      ({ face } = pickFace(pool, family, style, { policy, aliases, fallbackFamily }));
+      // Bound memory even for a host with hundreds of distinct requested styles.
+      if (selections >= 512) { selected.clear(); selections = 0; weights = undefined; variants = undefined; }
+      if (!weights) selected.set(family, weights = new Map());
+      if (!variants) weights.set(weight, variants = new Map());
+      variants.set(italic, face);
+      selections++;
+    }
     return { ...style, fontFamily: face.family, fontWeight: face.weight, italic: face.italic };
   };
 }
