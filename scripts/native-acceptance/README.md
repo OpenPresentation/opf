@@ -136,3 +136,54 @@ This fixture stresses semantic edit preservation: 36 pt exceeds its original
 text-box height. A pass does not establish visual fit, physical glyph-font
 selection, baseline parity, or overall native release acceptance. Preserve any
 failure and investigate its actual cause before changing expectations.
+
+## Explicit dense-events survey profile
+
+The generic furniture runner still refuses cases whose automaticControlEligible
+flag is false. The dense-events profile is a separate controller for the exact
+feature-dense-events case: one original slide, exactly50 source shapes, no actions.
+It delegates to the recorded worker's unchanged ReadOnlySurvey mode (one slide,
+at most100 shapes,16MiB/4096 ZIP entries and a60-second maximum). It does not
+change the generic3-slide/30-shape/20-action contract or edit the suite.
+
+Freeze and review the NEW controller checkout before creating an execution
+envelope. Generation retains its original suite digest, preparation/worker Git
+identities and installed consumer receipts; controller HEAD/code hashes and
+Node24 executable identity are recorded separately. Supply the reviewed manifest
+digest explicitly; no workstation path or frozen release SHA is built into the
+controller. All roots must remain clean and all original file/runtime identities
+are rechecked before and after execution. Moving the controller HEAD invalidates
+its envelope even when a later commit changes only documentation. Keep later
+results on a separate evidence branch.
+
+Create the envelope without opening Office:
+
+```sh
+node scripts/native-acceptance/dense-survey-contract.mjs create --suite /absolute/prepared-suite --expected-manifest-sha256 REVIEWED_MANIFEST_SHA256 --preparation-repository /absolute/frozen-preparation --worker-repository /absolute/frozen-pptx-package --consumer /absolute/installed-consumer --output /absolute/new-execution-envelope.json
+```
+
+The command prints the exact envelope SHA256. The supervisor reviews that file
+and pins its digest when invoking the Windows PowerShell launcher:
+
+```powershell
+& /absolute/WindowsPowerShell/powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/run-dense-survey-windows.ps1 -ExecutionEnvelope /absolute/new-execution-envelope.json -ExpectedEnvelopeSha256 REVIEWED_ENVELOPE_SHA256 -NodeExecutable /absolute/node.exe -OutputDirectory /absolute/new-attempt
+```
+
+Without RunOffice, only the bound Office-free process/worker harness checks and
+snapshot validation run. Only the supervisor adds -RunOffice after source and
+envelope review and the ordinary idle/ownership safety checks. The launcher
+creates one fresh attempt, never retries, never evaluates a generic or worker
+entrypoint during helper imports, and delegates all COM to the unchanged worker.
+
+The output binder requires all50 ordered named shapes and their visible words
+in original, no-op edited and reopened observations; the original/snapshot,
+worker, saved archive and all three1280x720 PNG identities remain bound to that
+attempt. Saved OOXML must retain the same source words/shape identities. These
+are structural observations, not font, glyph, spacing, raster equivalence, actual
+editing or native acceptance. Both nativeAcceptance and registryAcceptance stay
+false pending supervisor review. The generic text binder remains unchanged.
+
+The retained test PNG is a prepared renderer preview used only in explicitly
+modeled Office-free output tests; it is not a native screenshot. No Office
+execution follows from a passing pure contract. Intact seven-slide chart controls
+and the retired six-slide table-helper replacement remain separate work.
