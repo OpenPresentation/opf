@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "suiteSHA256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+  "producer": "2400d38bf549cdb661c31725776df25e497d364c",
+  "worker": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "archive": {
+    "file": "observations.json.gz",
+    "bytes": 14567998,
+    "sha256": "14149911ef35cb5386453a9ab4755641b7502bed89a565a23596b9fb9be4585c",
+    "rawBytes": 34340084,
+    "rawSHA256": "7692b85d11a1a5aad368b20c96061805bb24560dac81642fbe5a9abb692b147f",
+    "logicalFiles": 791,
+    "logicalBytes": 25643807
+  },
+  "cases": [
+    {
+      "id": "chart-pareto-multi",
+      "textGeometryPassed": true,
+      "imports": [
+        {
+          "phase": "original",
+          "bytes": 108372,
+          "sha256": "5557b74239b11517d71b4a609b7458aa274c25084474e83fcf5b9f9654dd8f6a",
+          "exactSource": false,
+          "authoredType": "pareto",
+          "importedType": "column",
+          "completeAuthoredData": true
+        },
+        {
+          "phase": "saved",
+          "bytes": 112229,
+          "sha256": "6458be34b6187efde3abe0bf9ef119451a6fe106db7c413a80935431ac4baf06",
+          "exactSource": false,
+          "authoredType": "pareto",
+          "importedType": "column",
+          "completeAuthoredData": true
+        }
+      ],
+      "savedEqualsOriginalImport": true,
+      "phasePNGsIdentical": true
+    },
+    {
+      "id": "chart-box-multi",
+      "textGeometryPassed": true,
+      "imports": [
+        {
+          "phase": "original",
+          "bytes": 111420,
+          "sha256": "2a6bf10820673c1f6a9bbdd9244e9c9b687825bfa86caf9d4057a9ad62dee923",
+          "exactSource": true,
+          "authoredType": "box-and-whisker",
+          "importedType": "box-and-whisker",
+          "completeAuthoredData": true
+        },
+        {
+          "phase": "saved",
+          "bytes": 120642,
+          "sha256": "ad831265979e9f60c47d444cc17659823ca0d4dc65a21b0caeaa3be09ca2e0a2",
+          "exactSource": true,
+          "authoredType": "box-and-whisker",
+          "importedType": "box-and-whisker",
+          "completeAuthoredData": true
+        }
+      ],
+      "savedEqualsOriginalImport": true,
+      "phasePNGsIdentical": true
+    },
+    {
+      "id": "chart-waterfall-single",
+      "textGeometryPassed": true,
+      "imports": [
+        {
+          "phase": "original",
+          "bytes": 111335,
+          "sha256": "83a01144694d526ffa7399c8142a150b29cd7e42784b00fa9d67a1766f84a170",
+          "exactSource": true,
+          "authoredType": "waterfall",
+          "importedType": "waterfall",
+          "completeAuthoredData": true
+        },
+        {
+          "phase": "saved",
+          "bytes": 120517,
+          "sha256": "845aaa463f1ef7116e5da88193143d855878742f88cd47dc1ab33a58c989b1c5",
+          "exactSource": false,
+          "authoredType": "waterfall",
+          "importedType": "waterfall",
+          "completeAuthoredData": false
+        }
+      ],
+      "savedEqualsOriginalImport": false,
+      "phasePNGsIdentical": true
+    },
+    {
+      "id": "chart-funnel-category",
+      "textGeometryPassed": true,
+      "imports": [
+        {
+          "phase": "original",
+          "bytes": 110510,
+          "sha256": "68e436a3c0356a4aaec5ac1ee36c673d1b8733380226bf6d8f228e63e80b97fd",
+          "exactSource": true,
+          "authoredType": "funnel",
+          "importedType": "funnel",
+          "completeAuthoredData": true
+        },
+        {
+          "phase": "saved",
+          "bytes": 119643,
+          "sha256": "c4401abcfe7d4893c249ac85bb34e2d272f115d4a6f3d983ea6445d7dc280ea6",
+          "exactSource": true,
+          "authoredType": "funnel",
+          "importedType": "funnel",
+          "completeAuthoredData": true
+        }
+      ],
+      "savedEqualsOriginalImport": true,
+      "phasePNGsIdentical": true
+    },
+    {
+      "id": "chart-world-category",
+      "textGeometryPassed": true,
+      "imports": [
+        {
+          "phase": "original",
+          "bytes": 106544,
+          "sha256": "5330e1a6e7a90265e0a03df8a202e0b2419817f59ab4be4c8612e49518b0a708",
+          "exactSource": false,
+          "authoredType": "world",
+          "importedType": "column",
+          "completeAuthoredData": true
+        },
+        {
+          "phase": "saved",
+          "bytes": 110855,
+          "sha256": "e748fddf30629cf1169c50dd3a74d167c14a309940e527d1fac3f215cc1d5a05",
+          "exactSource": false,
+          "authoredType": "world",
+          "importedType": "column",
+          "completeAuthoredData": true
+        }
+      ],
+      "savedEqualsOriginalImport": true,
+      "phasePNGsIdentical": true
+    }
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "waterfallFinding": "Unexpected new synthetic Row column after actual no-op PowerPoint save; all six numeric values survive. Original exact-source import is retained. Separate causal importer diagnosis pending.",
+  "metadataQualification": {
+    "file": "metadata.json.gz",
+    "bytes": 9291,
+    "sha256": "fed4fb5c94f2807169fdda2f66a3c41f008e1e00a2a126edf8224ed560edc434",
+    "rawBytes": 29498,
+    "rawSHA256": "1366c8d9efd6c9f8531725233d9e16493fa1136eacc9f884e8f89903e3c109fc",
+    "stepsPassed": 5,
+    "typecheckSkipped": true,
+    "seconds": 29.6
+  }
+}

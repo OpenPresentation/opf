@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "controller": "623e4dbc1c958132ae055b2c544e8f3b986fe85d",
+  "envelopeSHA256": "bbdb04137845ec16b2bdfc0bee4acf6e6e9ace57075f67c8bd09ddcea99a5040",
+  "suiteSHA256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+  "archive": {
+    "file": "observations.json.gz",
+    "bytes": 1779791,
+    "sha256": "28b70dadd33e76966b5b9120ccf979b0502e0a5dc6bbb96b45c6740b39b6b896",
+    "rawBytes": 7350489,
+    "rawSHA256": "5f0a917b14792ffaf5416d7165cc1af34d4b1385d127e67e97e5a40365e6beb7",
+    "logicalFiles": 164,
+    "logicalBytes": 5490813
+  },
+  "imports": [
+    {
+      "phase": "original",
+      "sha256": "dcbaec0f1889997af5f21ea67ad5aa10d8865eb99eb5149ce624e316a50730c4",
+      "bytes": 123356,
+      "exactSource": true
+    },
+    {
+      "phase": "saved",
+      "sha256": "cd9bd3a0d999317dcfc3d9270c43383e4fccd4d4cea8d7365758964ccd5036e1",
+      "bytes": 128005,
+      "exactSource": true
+    }
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "metadataQualification": {
+    "file": "metadata.json.gz",
+    "bytes": 9291,
+    "sha256": "fed4fb5c94f2807169fdda2f66a3c41f008e1e00a2a126edf8224ed560edc434",
+    "rawBytes": 29498,
+    "rawSHA256": "1366c8d9efd6c9f8531725233d9e16493fa1136eacc9f884e8f89903e3c109fc",
+    "stepsPassed": 5,
+    "typecheckSkipped": true,
+    "seconds": 29.6
+  }
+}
