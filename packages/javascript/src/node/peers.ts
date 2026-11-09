@@ -57,6 +57,8 @@ export interface RenderFonts {
 	loadSystemFonts?: boolean;
 }
 export interface FontRegistry {
+	/** Private demand-loader metadata capability; role names require no font bytes. */
+	fontNames?: object;
 	scriptSelection?: { detected: string[]; scripts: string[]; unavailable: string[]; packages?: string[]; notInstalled?: string[]; uncovered?: string[] };
 }
 /** The handle `loadFonts()` of opf-render `/fonts-node` returns: pass it as `{ fonts }` to every deck-level call. */

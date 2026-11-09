@@ -226,7 +226,7 @@ export function createFontAnalysis() {
     const view = registry ? registryView(registry) : undefined;
     const settle = style => {
       if (!view) return { ...style };
-      try { return view(style); } catch { return { ...style }; }
+      try { return view(style); } catch (error) { if(registry?.coverage)throw error; return { ...style }; }
     };
     const keys = deckKeys(presentation);
     if (!keys) {

@@ -159,6 +159,8 @@ test('caller faces stay explicit and take precedence while unknown/policy-disall
 test('CJK, Arabic and Greek fallback retain exact eager SVG and actual weight/style choices', async () => {
   for (const [language, scheme, title, text] of [
     ['ja', 'aptos', 'Q3 レビュー', 'Revenue 日本語です'],
+    ['ja', 'aptos', '日本語', 'こんにちは'],
+    ['ar', 'aptos', 'مراجعة', 'ارتفعت المبيعات'],
     ['ar', 'aptos', 'مراجعة ربع سنوية', 'ارتفعت المبيعات by 12%'],
     ['en', 'georgia', 'Greek review', 'Ἀθήνα — Привет'],
   ]) {
@@ -215,4 +217,98 @@ test('the generated preferred-family companion exactly matches every pinned phys
     assert.equal(selection.face.familyGroup, 'Roboto');
   }
   assert.ok(actual.every((face) => descriptor(face).length === 4));
+});
+
+test('unused optional packages are never resolved; missing needed faces fail honestly and failed ensure retries', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const moduleURL = new URL('../dist/fonts-node.js', import.meta.url).href,
+    galleryURL = new URL('../../gallery/dist/index.js', import.meta.url).href;
+  const code = String.raw`
+import fs from 'node:fs/promises';import{registerHooks,syncBuiltinESMExports}from'node:module';
+const mode=process.argv[1],moduleURL=process.argv[2],galleryURL=process.argv[3],calls=[];
+if(mode==='optional')registerHooks({resolve(specifier,context,next){if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(specifier==='@expo-google-fonts/roboto-mono/package.json')throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
+if(mode==='required')registerHooks({resolve(specifier,context,next){if(specifier==='@expo-google-fonts/roboto/package.json')throw Object.assign(Error('Not installed'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
+const {loadFonts}=await import(moduleURL),{gallery}=await import(galleryURL),renderOptions={catalogs:[gallery]},doc={slides:[{title:'Title',text:'Body'}]},opts={pack:'office',substitutionPolicy:'visual',presentation:doc,scripts:'auto',renderOptions};
+if(mode==='optional'){const fonts=await loadFonts(opts);console.log(JSON.stringify({faces:fonts.fontFiles.length,unneeded:calls.filter(s=>s.includes('roboto-mono')).length}));}
+else if(mode==='required'){let result;try{await loadFonts({...opts,presentation:{design:{fontScheme:'roboto'},slides:[{text:'Body'}]}});}catch(error){result={code:error.code,packages:error.details?.packages,message:error.message};}console.log(JSON.stringify(result??{unexpectedSuccess:true}));}
+else{const fonts=await loadFonts(opts),before=fonts.fontFiles.length,original=fs.readFile;fs.readFile=async function(file,...args){const data=await original.call(this,file,...args);if(String(file).endsWith('Intos-Italic.ttf')){const copy=Buffer.from(data);copy[copy.length-1]^=1;return copy;}return data;};syncBuiltinESMExports();const edit={slides:[{title:'Title',text:[{text:'Italic',italic:true}]}]};let refused;try{await fonts.ensure(edit,{renderOptions});}catch(error){refused=error.code;}const afterFailure=fonts.fontFiles.length;fs.readFile=original;syncBuiltinESMExports();const retried=await fonts.ensure(edit,{renderOptions});console.log(JSON.stringify({before,refused,afterFailure,added:retried.lazy.length,after:fonts.fontFiles.length,pending:fonts.pending(edit,renderOptions)}));}
+`;
+  const child = (mode) =>
+    JSON.parse(
+      execFileSync(
+        process.execPath,
+        ['--input-type=module', '-e', code, mode, moduleURL, galleryURL],
+        { encoding: 'utf8', timeout: 20000, maxBuffer: 1000000 },
+      ).trim(),
+    );
+  const unused = child('optional');
+  assert.equal(unused.faces, 2);
+  assert.equal(unused.unneeded, 0);
+  const required = child('required');
+  assert.equal(required.code, 'font-resource-unavailable');
+  assert.deepEqual(required.packages, ['@expo-google-fonts/roboto']);
+  const retry = child('integrity');
+  assert.equal(retry.refused, 'font-integrity-mismatch');
+  assert.equal(retry.afterFailure, retry.before);
+  assert.equal(retry.added, 1);
+  assert.equal(retry.after, retry.before + 1);
+  assert.deepEqual(retry.pending, []);
+});
+
+test('style-only metadata keeps absent roles cheap and exact while unprepared measured weights still refuse', async () => {
+  const doc = {
+      design: { fontScheme: 'roboto' },
+      slides: [{ title: 'Weight metadata', text: 'Body' }],
+    },
+    fonts = await loadFonts(request(doc)),
+    before = fonts.fontFiles.length;
+  assert.equal(
+    fonts.registry.resolveFont({ fontFamily: 'Roboto', fontWeight: 500 })
+      .resolvedWeight,
+    500,
+  );
+  assert.equal(fonts.fontFiles.length, before);
+  assert.throws(
+    () =>
+      fonts.textMeasurement.measure('Measured', 20, {
+        fontFamily: 'Roboto',
+        fontWeight: 500,
+      }),
+    (error) =>
+      error.code === 'font-unavailable' && /ensure/.test(error.message),
+  );
+  assert.throws(
+    () =>
+      fonts.textMeasurement.measure('Measured', 20, {
+        fontFamily: 'Roboto',
+        fontWeight: NaN,
+      }),
+    { code: 'invalid-font-weight' },
+  );
+  const edit = {
+    design: doc.design,
+    slides: [
+      {
+        title: 'Weight metadata',
+        text: [{ text: 'Medium', fontFamily: 'Roboto Medium' }],
+      },
+    ],
+  };
+  await fonts.ensure(edit, { renderOptions });
+  assert.ok(
+    fonts.registry
+      .describeFaces()
+      .some((face) => face.family === 'Roboto Medium' && face.weight === 500),
+  );
+  const baseline = await full();
+  assert.equal(
+    fonts.textMeasurement.measure('Measured', 20, {
+      fontFamily: 'Roboto',
+      fontWeight: 500,
+    }),
+    baseline.textMeasurement.measure('Measured', 20, {
+      fontFamily: 'Roboto',
+      fontWeight: 500,
+    }),
+  );
 });

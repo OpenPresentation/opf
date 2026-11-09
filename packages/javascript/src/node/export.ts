@@ -318,7 +318,7 @@ export async function runExport(presentation: unknown, options: ResolvedExportOp
 	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) });
 	try {
 		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) })).handle;
-		if(options.fonts)await handle.ensure?.(presentation,{renderOptions:{catalogs,...(date?{date}:{})}});
+		if(options.fonts && handle.registry?.fontNames)await handle.ensure?.(presentation,{renderOptions:{catalogs,...(date?{date}:{})}});
 		return await drawWith(presentation, handle, options, ctx, { reporter, catalogs, date, renderer, ...(pptx ? { pptx } : {}), userFonts, resolver });
 	} finally {
 		lease?.release();
@@ -388,7 +388,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 		}
 	}
 	// Continuations can add generated labels; prepare their actual faces before drawing the final pages.
-	if(deck!==presentation)await handle.ensure?.(deck,{renderOptions:{catalogs,...(date?{date}:{})}});
+	if(deck!==presentation && handle.registry?.fontNames)await handle.ensure?.(deck,{renderOptions:{catalogs,...(date?{date}:{})}});
 	// LH-145: the picture backgrounds are measured once, after pagination (which copies a slide's design), and both engines get the same sampler.
 	const pictureLuminance = options.measurePictures === false ? undefined : await measurePictureBackgrounds(renderer, deck, resolver, catalogs, reporter);
 	const slideCount = (deck as { slides?: unknown[] }).slides?.length ?? 0;

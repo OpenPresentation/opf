@@ -291,6 +291,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
   let ensureQueue = Promise.resolve();
   // `pending` is asked before every render: each string is scanned once and each slide's families resolved once (see createScriptAnalysis).
   const scriptMemory = createScriptAnalysis();
+  const renderOptionsFor = callOptions => {const {renderOptions,onDiagnostic,mapFamily,signal,...inline}=callOptions??{};return {...options.renderOptions,...inline,...renderOptions};};
   const refresh = () => { embeddedFonts = undefined; fontFiles = [...registry.fontFiles]; };
   const [subsetter, shaper] = await Promise.all([nodeHarfbuzz("subsets"), nodeHarfbuzz("shaper")]);
   for (const [kind, engine] of [["subsets", subsetter], ["shaper", shaper]]) if (!engine) {
@@ -314,7 +315,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     ensure(presentation, callOptions = {}) {
       const result = ensureQueue.then(async () => {
         const prepare = demand ? (_registry,_loaded,presentation,opts)=>demand.ensure(presentation,opts) : ensureFonts;
-        const prepared = await prepare(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: {...options.renderOptions, ...callOptions.renderOptions}, ...(callOptions.mapFamily ? {mapFamily:callOptions.mapFamily} : {})});
+        const prepared = await prepare(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: renderOptionsFor(callOptions), ...(callOptions.mapFamily ? {mapFamily:callOptions.mapFamily} : {})});
         if(demand)registry.lazyFonts=lazyOf(registry);
         refresh();
         return prepared;
@@ -324,7 +325,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     },
     /** Synchronous: the script packages the presentation needs that are not loaded yet. Empty means `ensure` loads nothing. */
     pending(presentation, renderOptions) {
-      if(demand)return demand.pending(presentation,{...options.renderOptions,...renderOptions});
+      if(demand)return demand.pending(presentation,renderOptionsFor(renderOptions));
       const held = new Set([...loaded.packages, ...(loaded.selection?.notInstalled ?? [])]);
       const analysis = analyzePresentationScripts(presentation, undefined, {...options.renderOptions, ...renderOptions}, scriptMemory);
       const primary = scriptFontPackages(scriptSelectionOf(analysis).scripts).map(pkg => pkg.name).filter(name => !held.has(name));

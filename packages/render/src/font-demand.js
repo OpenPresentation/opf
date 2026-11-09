@@ -1,7 +1,7 @@
 // RR-114: Node face-level preparation. The complete allowed metadata decides selection; only selected bytes are read.
 import { BUNDLED_FONT_MANIFEST } from './font-manifest.js';
 import { FONT_SELECTION_METADATA } from './font-selection-metadata.js';
-import { createFontRegistry, OPFFontError } from './font-registry.js';
+import { createFontRegistry, pickFace, OPFFontError } from './font-registry.js';
 import { createFontAnalysis } from './lazy-fonts.js';
 import { scriptFontAliases } from './script-fonts.js';
 import {
@@ -91,7 +91,112 @@ export async function createNodeDemand(
       if (!order.has(key(face))) order.set(key(face), order.size);
   };
   remember(registry.describeFaces());
-  let generation = 0;
+  let generation = 0,
+    metadata;
+  const selections = new Map();
+  const pickMetadata = (style) => {
+    const requested = style?.fontFamily,
+      weight = style?.fontWeight ?? 400;
+    if (
+      typeof requested !== 'string' ||
+      !requested.trim() ||
+      /[\u0000-\u001f"'\\<>;]/.test(requested)
+    )
+      throw new OPFFontError(
+        'invalid-font-family',
+        'Font family must be a nonempty plain name.',
+      );
+    if (!Number.isFinite(weight) || weight < 1 || weight > 1000)
+      throw new OPFFontError(
+        'invalid-font-weight',
+        'Font weight must be between 1 and 1000.',
+      );
+    const theme = {
+      '+mj-lt': 'majorLatin',
+      '+mn-lt': 'minorLatin',
+      '+mj-ea': 'majorEastAsia',
+      '+mn-ea': 'minorEastAsia',
+      '+mj-cs': 'majorComplexScript',
+      '+mn-cs': 'minorComplexScript',
+    }[requested.toLowerCase()];
+    if (requested.startsWith('+') && !theme)
+      throw new OPFFontError(
+        'unresolved-theme-font',
+        "Unknown theme font '" + requested + "'.",
+        { path: style.path },
+      );
+    const family = theme ? registryOptions.themeFonts?.[theme] : requested;
+    if (!family || family.startsWith('+'))
+      throw new OPFFontError(
+        'unresolved-theme-font',
+        "Supply a concrete theme family for '" + requested + "'.",
+        { path: style.path },
+      );
+    const id = key({ family, weight, italic: !!style.italic });
+    let selected = selections.get(id);
+    if (!selected) {
+      selected = pickFace(metadata.faces, family, style, {
+        policy: registryOptions.substitutionPolicy ?? 'none',
+        aliases: metadata.aliases,
+        fallbackFamily: registryOptions.fallbackFamily,
+      });
+      if (selections.size >= 512) selections.clear();
+      selections.set(id, selected);
+    }
+    return selected;
+  };
+  // Role names need selection metadata, not physical glyphs. Actual drawing always keeps the real byte-backed measurement.
+  Object.defineProperty(registry, 'fontNames', {
+    value: {
+      resolveStyle(style) {
+        try {
+          const { face } = pickMetadata(style);
+          const resolved = {
+            ...style,
+            fontFamily: face.family,
+            fontWeight: face.weight,
+            italic: face.italic,
+          };
+          delete resolved.fontFace;
+          return resolved;
+        } catch (error) {
+          if (
+            ![
+              'font-unavailable',
+              'font-style-unavailable',
+              'font-encoding-required',
+            ].includes(error.code)
+          )
+            throw error;
+          return { ...style };
+        }
+      },
+      resolveFont(style) {
+        try {
+          const { face, via } = pickMetadata(style);
+          return {
+            requestedFamily: style.fontFamily,
+            resolvedFamily: face.family,
+            substitute: via !== 'family',
+          };
+        } catch (error) {
+          if (
+            ![
+              'font-unavailable',
+              'font-style-unavailable',
+              'font-encoding-required',
+            ].includes(error.code)
+          )
+            throw error;
+          return {
+            requestedFamily: style.fontFamily,
+            resolvedFamily: style.fontFamily,
+            substitute: false,
+          };
+        }
+      },
+    },
+  });
   function context(presentation, renderOptions, initial = false, mapFamily) {
     const empty =
       Array.isArray(presentation.slides) && presentation.slides.length === 0;
@@ -206,6 +311,7 @@ export async function createNodeDemand(
       mode,
       required,
       orderedPackages: packages,
+      metadata: { faces, aliases },
       universe,
       needed: universe.filter(
         (face) =>
@@ -263,11 +369,18 @@ export async function createNodeDemand(
             onDiagnostic,
           );
       }
-      controls.activateScriptFamilies?.(
-        plan.universe
-          .filter((face) => face.scripts && !face.fallbackOnly)
-          .map((face) => face.family),
-      );
+      if (
+        controls.activateScriptFamilies?.(
+          plan.universe
+            .filter((face) => face.scripts && !face.fallbackOnly)
+            .map((face) => face.family),
+        )
+      ) {
+        generation++;
+        continue;
+      }
+      metadata = plan.metadata;
+      selections.clear();
       if (plan.needed.length) {
         const selected = [];
         for (const face of plan.needed) {
@@ -390,6 +503,81 @@ export async function createNodeDemand(
     return next ? [next.name] : [];
   }
   await ensure(options.presentation, { initial: true });
+  // Style lookup is metadata-only. Never silently substitute a held weight when the full pack would select an unprepared face.
+  const real = { ...registry.textMeasurement },
+    realFont = registry.resolveFont;
+  let heldKeys = new Set(registry.describeFaces().map(key));
+  const add = registry.addFaces;
+  registry.addFaces = (entries) => {
+    const result = add(entries);
+    heldKeys = new Set(registry.describeFaces().map(key));
+    return result;
+  };
+  const prepared = (style) => {
+    let selected;
+    try {
+      selected = pickMetadata(style);
+    } catch (error) {
+      if (
+        error.code !== 'font-unavailable' &&
+        error.code !== 'font-style-unavailable'
+      )
+        throw error;
+      return undefined;
+    }
+    if (!heldKeys.has(key(selected.face)))
+      throw new OPFFontError(
+        'font-unavailable',
+        'The selected face is not prepared; await fonts.ensure(presentation) before measuring this style.',
+        {
+          path: style.path,
+          fontFamily: style.fontFamily,
+          fontWeight: selected.face.weight,
+          italic: selected.face.italic,
+        },
+      );
+    return selected;
+  };
+  registry.textMeasurement.resolveStyle = (style) => {
+    let selected;
+    try {
+      selected = pickMetadata(style);
+    } catch (error) {
+      return real.resolveStyle(style);
+    }
+    return heldKeys.has(key(selected.face))
+      ? real.resolveStyle(style)
+      : registry.fontNames.resolveStyle(style);
+  };
+  registry.textMeasurement.measure = (text, size, style) => {
+    prepared(style);
+    return real.measure(text, size, style);
+  };
+  registry.textMeasurement.outlineBounds = (text, size, style) => {
+    prepared(style);
+    return real.outlineBounds(text, size, style);
+  };
+  const resolveFont = (style) => {
+    let selected;
+    try {
+      selected = pickMetadata(style);
+    } catch (error) {
+      return realFont(style);
+    }
+    if (heldKeys.has(key(selected.face))) return realFont(style);
+    return {
+      ...registry.fontNames.resolveFont(style),
+      sourceFamily: style.fontFamily,
+      requestedWeight: style.fontWeight ?? 400,
+      resolvedWeight: selected.face.weight,
+      italic: selected.face.italic,
+      compatibility: selected.compatibility,
+      ...(style.path ? { path: style.path } : {}),
+    };
+  };
+  registry.textMeasurement.resolveFont = resolveFont;
+  registry.resolveFont = resolveFont;
+
   return {
     registry,
     loaded,
