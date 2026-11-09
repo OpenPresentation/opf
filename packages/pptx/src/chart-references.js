@@ -341,7 +341,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
   return result;
 }
 /** Fallbacks use full-plot native shapes. They cannot track independent chart moves or edits. */
-export function addReferenceOverlays(slide, lines, { key, tags, context, color, font, size }) {
+export function addReferenceOverlays(slide, lines, { key, tags, context, color, labelColor = color, font, size }) {
   for (const l of lines.filter((l) => !l.native)) {
     const id = `${key}:${l.index}`,
       name = id + ' line',
@@ -371,7 +371,7 @@ export function addReferenceOverlays(slide, lines, { key, tags, context, color, 
         h: b.height / 96,
         fontFace: font,
         fontSize: size,
-        color,
+        color: labelColor,
         margin: 0,
         wrap: false,
         fit: 'none',

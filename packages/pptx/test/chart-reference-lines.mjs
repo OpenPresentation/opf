@@ -660,3 +660,36 @@ test('native stroke above the mathematically rounded schema maximum remains ordi
     [10, 20, 30],
   );
 });
+
+test('actual bar and singleton labels use full native label paint while default stroke stays quiet', async () => {
+  for (const background of ['#FFFFFF', '#101820']) {
+    const design = {
+        background,
+        colorScheme: {
+          id: 'cool-horizon',
+          dark1: background === '#FFFFFF' ? '#101820' : '#FFFFFF',
+          light1: background === '#FFFFFF' ? '#101820' : '#FFFFFF',
+          text: background === '#FFFFFF' ? '#101820' : '#FFFFFF',
+          dark2: background,
+          light2: background,
+        },
+      },
+      line = doc('line', [{ value: 20, label: 'Target' }]);
+    Object.assign(line.design, design);
+    const native = await exported(line),
+      nativeRich = parser.parse(series(native.xml).find(helper))['c:ser']['c:dLbls']['c:dLbl']['c:tx']['c:rich'],
+      expected = arr(nativeRich['a:p'])[0]['a:r']['a:rPr']['a:solidFill'];
+    for (const type of ['bar', 'column']) {
+      const d = doc(type, [{ value: 20, label: 'Target' }]);
+      Object.assign(d.design, design);
+      if (type === 'column') d.slides[0].chart.data.rows = [['Only', 25]];
+      const e = await exported(d),
+        shapes = arr(parser.parse(strFromU8(e.entries['ppt/slides/slide1.xml']))['p:sld']['p:cSld']['p:spTree']['p:sp']),
+        label = shapes.find((s) => s['p:nvSpPr']?.['p:cNvPr']?.name === 'OPF chart 1:0 label'),
+        paint = arr(label['p:txBody']['a:p'])[0]['a:r']['a:rPr']['a:solidFill'],
+        stroke = shapes.find((s) => s['p:nvSpPr']?.['p:cNvPr']?.name === 'OPF chart 1:0 line')['p:spPr']['a:ln']['a:solidFill'];
+      assert.deepEqual(paint, expected);
+      assert.notDeepEqual(stroke, paint, 'default stroke remains chart-neutral, independent from full label text');
+    }
+  }
+});
