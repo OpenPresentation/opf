@@ -10,7 +10,7 @@ function percentage(value, fallback, minimum, maximum, name, report) {
   const percent = /^\+?(?:\d+(?:\.\d+)?|\.\d+)%$/.test(token);
   const result = numeric ? Number(token) / 100000 : percent ? Number(token.slice(0, -1)) / 100 : NaN;
   if (!Number.isFinite(result) || result < minimum || result > maximum) {
-    report('unsupported-native-autofit', `The saved ${name} is not a supported ${minimum * 100}–${maximum * 100}% value; it was not applied. Current text and unscaled sizes were retained for review.`);
+    report('unsupported-native-autofit', `The saved ${name} is not a supported ${minimum * 100}–${maximum * 100}% value; it was not applied. Current text was retained for review; this cache property was not applied.`);
     return fallback;
   }
   return result;

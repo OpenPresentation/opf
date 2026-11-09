@@ -300,7 +300,7 @@ function readTextBody(txBody, shape, context, relationships, limits, budget, rep
   };
   const fitLayout = context.autofitBindingsKnown ? exactBody(context.layoutPlaceholders, ph) : undefined;
   const fitMaster = fitLayout ? exactBody(context.masterPlaceholders, fitLayout.ph) : undefined;
-  const fit = nativeAutofit([bodyPr, ...(fitLayout && fitMaster ? [fitLayout.sp?.['p:txBody']?.['a:bodyPr'], fitMaster.sp?.['p:txBody']?.['a:bodyPr']] : [])]);
+  const fit = nativeAutofit([drawingObject(filterKids(bodyKids, 'a:bodyPr'))['a:bodyPr'], ...(fitLayout && fitMaster ? [fitLayout.sp?.['p:txBody']?.['a:bodyPr'], fitMaster.sp?.['p:txBody']?.['a:bodyPr']] : [])]);
   const paragraphs = [];
   let chars = 0, monoChars = 0, maxSize = 0, bullets = 0, emitted = 0;
   const sizeCounts = new Map(), fontCounts = new Map();
@@ -352,7 +352,11 @@ function readTextBody(txBody, shape, context, relationships, limits, budget, rep
       runs
     };
     // OOXML subtracts percentage points; point spacing and before/after are unchanged.
-    if (fit.reduction && paragraph.lineSpacingPct !== undefined && paragraph.lineSpacingPct >= fit.reduction * 100) paragraph.lineSpacingPct = round(paragraph.lineSpacingPct - fit.reduction * 100, 3);
+    if (fit.reduction && paragraph.lineSpacingPct !== undefined) {
+      const effective = paragraph.lineSpacingPct - fit.reduction * 100;
+      if (effective >= 0) paragraph.lineSpacingPct = round(effective, 3);
+      else delete paragraph.lineSpacingPct; // No negative/clamped/unchanged value is claimed effective.
+    }
     if (emitted < limits.maxParagraphsPerShape && budget.chars > 0) {
       emitted += 1;
       let remaining = Math.min(limits.maxTextCharsPerShape - paragraphs.reduce((sum, item) => sum + item.text.length, 0), budget.chars);

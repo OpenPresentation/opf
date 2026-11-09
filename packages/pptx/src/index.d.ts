@@ -498,7 +498,7 @@ export interface PptxTextSignal {
   autofit?: "shrink" | "resize" | "none";
   /** Saved body scale in percent when below 100; run sizes already include it. */
   fontScalePct?: number;
-  /** Saved percentage-point reduction; percentage lineSpacingPct already includes it. */
+  /** Saved percentage-point reduction; lineSpacingPct includes it, or is omitted if the result would be negative. */
   lineSpacingReductionPct?: number;
   wrap?: "none";
   vertical?: string;
