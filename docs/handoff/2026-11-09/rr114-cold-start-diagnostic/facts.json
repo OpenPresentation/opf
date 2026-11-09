@@ -1,0 +1,516 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "scope": "Instrumented attribution, not replacement performance statistics. Nested/concurrent spans are inclusive and not additive.",
+  "source": "6e862542059efacffcd45b1ffa44e71011b18a74",
+  "tree": "f9bfa17c08d50b211bae4041a221e4e0630ed0e4",
+  "children": 4,
+  "perConfigurationSlideHashes": 104,
+  "verifiedRenderHashes": 312,
+  "rows": [
+    {
+      "name": "01-16-whole",
+      "size": 16,
+      "variant": "whole",
+      "fontPreparationMs": 307.88579999999996,
+      "firstSvgBatchMs": 2095.044,
+      "firstUseSumMs": 2402.9298,
+      "faces": 131,
+      "contexts": [],
+      "disjointContextMs": 0,
+      "prepGroups": {
+        "font.read": {
+          "count": 162,
+          "inclusiveMs": 60.842700000000036
+        },
+        "font.verifyHash": {
+          "count": 162,
+          "inclusiveMs": 15.688999999999623
+        },
+        "font.parse": {
+          "count": 131,
+          "inclusiveMs": 6.2604999999998086
+        },
+        "harfbuzz.initialize": {
+          "count": 1,
+          "inclusiveMs": 4.565999999999974
+        },
+        "analysis.scripts": {
+          "count": 2,
+          "inclusiveMs": 184.53659999999996
+        }
+      },
+      "analysisCache": [],
+      "shaperHandoff": {
+        "engine": "harfbuzz",
+        "faces": 131,
+        "cachedEntries": 0
+      },
+      "coverageProbes": 0,
+      "coverageCharacters": 0,
+      "fontkitShapesDuringPreparation": 0,
+      "firstRenderMetrics": {
+        "calls": 72792,
+        "misses": 24129,
+        "hits": 48663,
+        "harfbuzzShapes": 24333,
+        "outlineUpgrades": 204
+      },
+      "firstRenderSpans": [
+        {
+          "name": "svg.compose",
+          "elapsedMs": 1229.8365
+        },
+        {
+          "name": "svg.draw",
+          "elapsedMs": 124.37599999999975
+        }
+      ],
+      "scriptAnalysis": [
+        {
+          "elapsedMs": 179.46430000000004,
+          "before": {
+            "strings": 0,
+            "fonts": {
+              "decks": 0,
+              "slides": 0,
+              "designs": 0
+            }
+          },
+          "after": {
+            "strings": 207,
+            "fonts": {
+              "decks": 1,
+              "slides": 0,
+              "designs": 16
+            }
+          }
+        },
+        {
+          "elapsedMs": 5.072299999999927,
+          "before": {
+            "strings": 0,
+            "fonts": {
+              "decks": 0,
+              "slides": 0,
+              "designs": 0
+            }
+          },
+          "after": {
+            "strings": 207,
+            "fonts": {
+              "decks": 1,
+              "slides": 0,
+              "designs": 16
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02-16-demand",
+      "size": 16,
+      "variant": "demand",
+      "fontPreparationMs": 1202.3591999999999,
+      "firstSvgBatchMs": 1047.1344,
+      "firstUseSumMs": 2249.4936,
+      "faces": 3,
+      "contexts": [
+        {
+          "generation": 0,
+          "held": 0,
+          "elapsedMs": 621.6901,
+          "analysisStats": {
+            "decks": 2,
+            "slides": 16,
+            "designs": 16
+          },
+          "scriptStats": {
+            "strings": 207
+          }
+        },
+        {
+          "generation": 1,
+          "held": 3,
+          "elapsedMs": 567.3116,
+          "analysisStats": {
+            "decks": 3,
+            "slides": 32,
+            "designs": 16
+          },
+          "scriptStats": {
+            "strings": 207
+          }
+        }
+      ],
+      "disjointContextMs": 1189.0017,
+      "prepGroups": {
+        "demand.context": {
+          "count": 2,
+          "inclusiveMs": 1189.0017
+        },
+        "analysis.scripts": {
+          "count": 2,
+          "inclusiveMs": 158.21909999999997
+        },
+        "analysis.faces": {
+          "count": 2,
+          "inclusiveMs": 1029.5296
+        },
+        "analysis.compose": {
+          "count": 2,
+          "inclusiveMs": 973.6306999999999
+        },
+        "analysis.draw": {
+          "count": 2,
+          "inclusiveMs": 46.75350000000003
+        },
+        "font.read": {
+          "count": 5,
+          "inclusiveMs": 2.517600000000016
+        },
+        "font.verifyHash": {
+          "count": 5,
+          "inclusiveMs": 0.9331999999999425
+        },
+        "font.parse": {
+          "count": 3,
+          "inclusiveMs": 0.7401999999999589
+        },
+        "harfbuzz.initialize": {
+          "count": 1,
+          "inclusiveMs": 5.144999999999982
+        }
+      },
+      "analysisCache": [
+        {
+          "coverageKey": 0,
+          "slides": 16,
+          "missing": 16
+        },
+        {
+          "coverageKey": 1,
+          "slides": 16,
+          "missing": 16
+        }
+      ],
+      "shaperHandoff": {
+        "engine": "harfbuzz",
+        "faces": 3,
+        "cachedEntries": 844
+      },
+      "coverageProbes": 135320,
+      "coverageCharacters": 5255688,
+      "fontkitShapesDuringPreparation": 2442,
+      "firstRenderMetrics": {
+        "calls": 72792,
+        "misses": 24129,
+        "hits": 48663,
+        "harfbuzzShapes": 24333,
+        "outlineUpgrades": 204
+      },
+      "firstRenderSpans": [
+        {
+          "name": "svg.compose",
+          "elapsedMs": 922.8373999999999
+        },
+        {
+          "name": "svg.draw",
+          "elapsedMs": 74.8411000000001
+        }
+      ],
+      "scriptAnalysis": [
+        {
+          "elapsedMs": 156.85129999999998,
+          "before": {
+            "strings": 0,
+            "fonts": {
+              "decks": 0,
+              "slides": 0,
+              "designs": 0
+            }
+          },
+          "after": {
+            "strings": 207,
+            "fonts": {
+              "decks": 1,
+              "slides": 0,
+              "designs": 16
+            }
+          }
+        },
+        {
+          "elapsedMs": 1.3677999999999884,
+          "before": {
+            "strings": 207,
+            "fonts": {
+              "decks": 2,
+              "slides": 16,
+              "designs": 16
+            }
+          },
+          "after": {
+            "strings": 207,
+            "fonts": {
+              "decks": 2,
+              "slides": 16,
+              "designs": 16
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03-36-whole",
+      "size": 36,
+      "variant": "whole",
+      "fontPreparationMs": 276.9101,
+      "firstSvgBatchMs": 3332.0167,
+      "firstUseSumMs": 3608.9268,
+      "faces": 131,
+      "contexts": [],
+      "disjointContextMs": 0,
+      "prepGroups": {
+        "font.read": {
+          "count": 162,
+          "inclusiveMs": 34.02789999999993
+        },
+        "font.verifyHash": {
+          "count": 162,
+          "inclusiveMs": 15.302900000000307
+        },
+        "font.parse": {
+          "count": 131,
+          "inclusiveMs": 6.535900000000311
+        },
+        "harfbuzz.initialize": {
+          "count": 1,
+          "inclusiveMs": 3.400699999999972
+        },
+        "analysis.scripts": {
+          "count": 2,
+          "inclusiveMs": 182.4384
+        }
+      },
+      "analysisCache": [],
+      "shaperHandoff": {
+        "engine": "harfbuzz",
+        "faces": 131,
+        "cachedEntries": 0
+      },
+      "coverageProbes": 0,
+      "coverageCharacters": 0,
+      "fontkitShapesDuringPreparation": 0,
+      "firstRenderMetrics": {
+        "calls": 156809,
+        "misses": 48527,
+        "hits": 108282,
+        "harfbuzzShapes": 48955,
+        "outlineUpgrades": 428
+      },
+      "firstRenderSpans": [
+        {
+          "name": "svg.compose",
+          "elapsedMs": 2414.4204
+        },
+        {
+          "name": "svg.draw",
+          "elapsedMs": 164.70920000000024
+        }
+      ],
+      "scriptAnalysis": [
+        {
+          "elapsedMs": 174.04730000000006,
+          "before": {
+            "strings": 0,
+            "fonts": {
+              "decks": 0,
+              "slides": 0,
+              "designs": 0
+            }
+          },
+          "after": {
+            "strings": 227,
+            "fonts": {
+              "decks": 1,
+              "slides": 0,
+              "designs": 36
+            }
+          }
+        },
+        {
+          "elapsedMs": 8.391099999999938,
+          "before": {
+            "strings": 0,
+            "fonts": {
+              "decks": 0,
+              "slides": 0,
+              "designs": 0
+            }
+          },
+          "after": {
+            "strings": 227,
+            "fonts": {
+              "decks": 1,
+              "slides": 0,
+              "designs": 36
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04-36-demand",
+      "size": 36,
+      "variant": "demand",
+      "fontPreparationMs": 2168.7509,
+      "firstSvgBatchMs": 1942.6766999999995,
+      "firstUseSumMs": 4111.427599999999,
+      "faces": 3,
+      "contexts": [
+        {
+          "generation": 0,
+          "held": 0,
+          "elapsedMs": 1022.4365,
+          "analysisStats": {
+            "decks": 2,
+            "slides": 36,
+            "designs": 36
+          },
+          "scriptStats": {
+            "strings": 227
+          }
+        },
+        {
+          "generation": 1,
+          "held": 3,
+          "elapsedMs": 1131.3611999999998,
+          "analysisStats": {
+            "decks": 3,
+            "slides": 72,
+            "designs": 36
+          },
+          "scriptStats": {
+            "strings": 227
+          }
+        }
+      ],
+      "disjointContextMs": 2153.7977,
+      "prepGroups": {
+        "demand.context": {
+          "count": 2,
+          "inclusiveMs": 2153.7977
+        },
+        "analysis.scripts": {
+          "count": 2,
+          "inclusiveMs": 159.38719999999995
+        },
+        "analysis.faces": {
+          "count": 2,
+          "inclusiveMs": 1993.3924000000002
+        },
+        "analysis.compose": {
+          "count": 2,
+          "inclusiveMs": 1908.5387999999998
+        },
+        "analysis.draw": {
+          "count": 2,
+          "inclusiveMs": 75.79640000000018
+        },
+        "font.read": {
+          "count": 5,
+          "inclusiveMs": 2.136899999999514
+        },
+        "font.verifyHash": {
+          "count": 5,
+          "inclusiveMs": 0.9278999999999087
+        },
+        "font.parse": {
+          "count": 3,
+          "inclusiveMs": 0.7506000000000768
+        },
+        "harfbuzz.initialize": {
+          "count": 1,
+          "inclusiveMs": 7.221399999999903
+        }
+      },
+      "analysisCache": [
+        {
+          "coverageKey": 0,
+          "slides": 36,
+          "missing": 36
+        },
+        {
+          "coverageKey": 1,
+          "slides": 36,
+          "missing": 36
+        }
+      ],
+      "shaperHandoff": {
+        "engine": "harfbuzz",
+        "faces": 3,
+        "cachedEntries": 880
+      },
+      "coverageProbes": 326100,
+      "coverageCharacters": 12665406,
+      "fontkitShapesDuringPreparation": 5079,
+      "firstRenderMetrics": {
+        "calls": 156809,
+        "misses": 48527,
+        "hits": 108282,
+        "harfbuzzShapes": 48955,
+        "outlineUpgrades": 428
+      },
+      "firstRenderSpans": [
+        {
+          "name": "svg.compose",
+          "elapsedMs": 1788.1710000000003
+        },
+        {
+          "name": "svg.draw",
+          "elapsedMs": 104.03830000000016
+        }
+      ],
+      "scriptAnalysis": [
+        {
+          "elapsedMs": 156.9848,
+          "before": {
+            "strings": 0,
+            "fonts": {
+              "decks": 0,
+              "slides": 0,
+              "designs": 0
+            }
+          },
+          "after": {
+            "strings": 227,
+            "fonts": {
+              "decks": 1,
+              "slides": 0,
+              "designs": 36
+            }
+          }
+        },
+        {
+          "elapsedMs": 2.4023999999999432,
+          "before": {
+            "strings": 227,
+            "fonts": {
+              "decks": 2,
+              "slides": 36,
+              "designs": 36
+            }
+          },
+          "after": {
+            "strings": 227,
+            "fonts": {
+              "decks": 2,
+              "slides": 36,
+              "designs": 36
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

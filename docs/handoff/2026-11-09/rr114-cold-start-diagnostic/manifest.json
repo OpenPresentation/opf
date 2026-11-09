@@ -1,0 +1,214 @@
+{
+  "schema": 1,
+  "format": "opf-cold-start-diagnostic-v1",
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "source": "6e862542059efacffcd45b1ffa44e71011b18a74",
+  "tree": "f9bfa17c08d50b211bae4041a221e4e0630ed0e4",
+  "runtimeSource": "ed29f47f092aeefbde5fabac26d395f92c6b7823",
+  "builtSource": "3857ff1bbc467ddb0d0031bc400e159d120b67b9",
+  "originalEvidence": "4d1ffa78440c47d955d9883575d347996325bf40",
+  "process": {
+    "session": 45612,
+    "exitCode": 0,
+    "started": "2026-11-09T23:11:18.3110236Z",
+    "finished": "2026-11-09T23:11:44.4950783Z"
+  },
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 79639,
+    "sha256": "960b0fb5242e6d629231a2e6dc8d4c8591426628dee1dc680381fcc7724a5b5a",
+    "expandedBytes": 670393,
+    "members": 16,
+    "decodedBytes": 501097
+  },
+  "entries": [
+    {
+      "name": "results/01-16-whole.json",
+      "size": 211128,
+      "sha256": "404b182dd0dcb1c2f68ec4b3b28e63bfa47d675099fb609f7ce791b2dde4e2ea"
+    },
+    {
+      "name": "results/01-16-whole.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/01-16-whole.stdout",
+      "size": 187,
+      "sha256": "dda63cbade9e68760acaa8773c9fdbc5a63e5067b1ac6029785c894ffa495233"
+    },
+    {
+      "name": "results/02-16-demand.json",
+      "size": 30304,
+      "sha256": "e8e635df1da53976f48aa21bd729d87dc74a7c78ce8cb88c1f2e1c65384116c0"
+    },
+    {
+      "name": "results/02-16-demand.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/02-16-demand.stdout",
+      "size": 188,
+      "sha256": "208ab4c8780b16635d9e6682707c0333fdc8bff066a96824bf9fd86fce152536"
+    },
+    {
+      "name": "results/03-36-whole.json",
+      "size": 215722,
+      "sha256": "0b3caef1413d73466e7b021f011fd5280a1f9777988d9975d2298d6de5f9b6f4"
+    },
+    {
+      "name": "results/03-36-whole.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/03-36-whole.stdout",
+      "size": 178,
+      "sha256": "1a5c0ce4c1fb2e6bbe12fb3f799cde8afc4703b58d1d5808eace49d5d3f3de19"
+    },
+    {
+      "name": "results/04-36-demand.json",
+      "size": 34918,
+      "sha256": "3c5ca93cb4a950373aadd4e99484562623069fdbbd5456d63dbda88f15766a4f"
+    },
+    {
+      "name": "results/04-36-demand.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "results/04-36-demand.stdout",
+      "size": 188,
+      "sha256": "c73f619bd8fa272d1e46ea5408beb4570cb3192e05d90cc82c691794a39e01a6"
+    },
+    {
+      "name": "results/expected-svg-hashes.json",
+      "size": 3775,
+      "sha256": "1a1db414d143f6bab24dd77c3e32949803b2641667608b76617da25a0bd0e918"
+    },
+    {
+      "name": "results/summary.json",
+      "size": 2842,
+      "sha256": "3f8ebb782e3d30c70e77beda31b01e7ca4fd3dab014408cba0820c4b8e87d91a"
+    },
+    {
+      "name": "execution/process-exit.json",
+      "size": 626,
+      "sha256": "42e8840d8bfd85a68e87d7c6121b7193bf352e19de6578c73e7bade74d3f8f9c"
+    },
+    {
+      "name": "execution/run.log",
+      "size": 1041,
+      "sha256": "0850d48e8da290ed7ddd4f19e53b021a07aa640157255e91d285d898224df8c4"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/.gitattributes",
+      "bytes": 25,
+      "sha256": "00982727bf7fadf58391738c657b897e5e8777a1fd79ef2e3644adbc60dcfb33",
+      "blob": "22b1a3af2921bcbbd2962a0ddfe717c08e1fdcfc"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/PROTOCOL.md",
+      "bytes": 5092,
+      "sha256": "29654a77f93e6dda40afab94c4a8f3d8e7d164819612b7933d403e9c27a93aab",
+      "blob": "079b8587b0ce1887794c13d382ae10b90ebb36a7"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/README.md",
+      "bytes": 2032,
+      "sha256": "0cd02f9a158d06a8f0fdab2111d39beac2952030210e869dd8463332b33ee5ba",
+      "blob": "ce12659e1f62ae0f870a82a2cd1abad4c0a17d3a"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/build-binding.json",
+      "bytes": 2090,
+      "sha256": "505dbe95f9699392fe41d8b23e37626acb575a895791c5a722b4dc9d6570d417",
+      "blob": "6fb4c2da310c2d9386a2a24a8e71400774ab9b7b"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/build-exit.json",
+      "bytes": 658,
+      "sha256": "441d78652b906a750d89ede5c3daffb80188edc8bc63e02031b4d212905006ec",
+      "blob": "ceba9026d38472bd635b93c7c57adb807a46cc4d"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/build.log",
+      "bytes": 11840,
+      "sha256": "bc7509144c9d1d375c9fe54f2158ce70b2cb3025f3049b90839031226e32f9df",
+      "blob": "92344f7bb4fd8e119b6ebc30bb41871975762074"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/diagnostic-case.mjs",
+      "bytes": 5182,
+      "sha256": "1a0ede657d9c6de73fecd50c2991f798fc2b7d827c4110487df6acf02c409424",
+      "blob": "cdb8de70aa864b83b08e6bdd7821b604b9506df4"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/diagnostic-loader.mjs",
+      "bytes": 12252,
+      "sha256": "6764f19e73922420f1d7444eaa7500cc1f575988a04173052cf6529b77f2c4f6",
+      "blob": "ac53012644c88d987b9ce86ca82543c80df361e0"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/install-exit.json",
+      "bytes": 525,
+      "sha256": "50db2b97200eaaad48d0b4e3a9e4e2c56bc6771b4bf1843b9e085c15de520486",
+      "blob": "a0ae611591fd0c6c9339798a139b6970c2326c9d"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/install.log",
+      "bytes": 4544,
+      "sha256": "556a47f40d60ab77ab7087404d474ccc203cc715d71909c4d8684ebed538c07f",
+      "blob": "e07736fcc2d1cc3f64b1739e4eb8a5f709cf39a4"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/preflight-01.json",
+      "bytes": 4479,
+      "sha256": "be53eecab8a0a61105e335fe500ca1c4a82019fdd913ed8c2dfa689e07f44448",
+      "blob": "6771d88d509d1a5e944670f0652597af6e00dde3"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/preflight.mjs",
+      "bytes": 2789,
+      "sha256": "706df47d61393921a695624608e98060d9e26b4701be7dfb9b7a6642f3b81cdc",
+      "blob": "5edadc05679ffd78e6f6685f3ed5c97ab44c59df"
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr114-cold-start-diagnostic/run-diagnostic.mjs",
+      "bytes": 6836,
+      "sha256": "0f057cc22c6ec796ede0c25fac37c2c0e17a600b4409159fd08163cc5f97d8ed",
+      "blob": "55a6d0b78a620447b66908dcdb766e9d00221c2e"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "file": "packages",
+      "runtime": "fd81fc6d8be2cd10022aa3d3ec921595f2579852",
+      "tested": "fd81fc6d8be2cd10022aa3d3ec921595f2579852"
+    },
+    {
+      "file": "spec",
+      "runtime": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274",
+      "tested": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "runtime": "3432ab613e493c84d6eea74cb68d30be08720102",
+      "tested": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "runtime": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+      "tested": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    }
+  ],
+  "facts": {
+    "file": "facts.json",
+    "bytes": 12162,
+    "sha256": "2e8f8b7317bcb5a33b259f003d25179020a020ae84e2ee84bf433257225c3a0e"
+  }
+}
