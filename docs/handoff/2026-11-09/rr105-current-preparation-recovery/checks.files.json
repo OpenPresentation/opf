@@ -1,0 +1,52 @@
+[
+  {
+    "path": "biome.log",
+    "bytes": 695,
+    "sha256": "5c35ce734ea719e62ecdc1db4e95a96ab49ac86ee89cd8e7f61d104ff8403183"
+  },
+  {
+    "path": "build.log",
+    "bytes": 14560,
+    "sha256": "f7a8d2f49882b427d46eaf03654317c4c486760ed69491394a7ce06c71dff0f3"
+  },
+  {
+    "path": "hydration.json",
+    "bytes": 409,
+    "sha256": "bea3692593864c4f13693af9d1d1d8ea35b951cd4d5107d1e56b5bb4b5accae5"
+  },
+  {
+    "path": "install.log",
+    "bytes": 4243,
+    "sha256": "97db38764a931a18acc0916e401d2c95a6763d8aa195398d7491b39c38251fa4"
+  },
+  {
+    "path": "mapped.exit.json",
+    "bytes": 433,
+    "sha256": "dceeec8e5cfbb2eae9aca579de13be55b289a98473f219689eadbedec3369291"
+  },
+  {
+    "path": "mapped.log",
+    "bytes": 895,
+    "sha256": "e96ed1ef04cfa4bb8ecec2ad9ac59673339d7371346a7e806ee6a18753c48b63"
+  },
+  {
+    "path": "pnpm_run_check_changes.log",
+    "bytes": 2636,
+    "sha256": "03aeac417554e4a6034b6ece4b319f7cf63f087e97c2c1913179216d18455f01"
+  },
+  {
+    "path": "pnpm_run_check_skill-commands.log",
+    "bytes": 1034,
+    "sha256": "4c3a01b0400ec90cf722f3195fd06eb36abda0a5eb28a6ac3a2ba7ab9d1b4a5f"
+  },
+  {
+    "path": "pnpm_run_check_text.log",
+    "bytes": 1068,
+    "sha256": "0ef041f550c522180daac2e917dd0b3d881919c6354ed3367e5795f8a7634060"
+  },
+  {
+    "path": "preflight-01-error.json",
+    "bytes": 206,
+    "sha256": "ef3d2e84bac06cd000b8f2dbb3d5a57394fe3d5e0ca9d7af8d10c1584ca76e37"
+  }
+]

@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "scope": "Office-free preparation; NEVER MERGE",
+  "testedSource": "2400d38bf549cdb661c31725776df25e497d364c",
+  "testedTree": "e743982ec9990431046681947609064564a22656",
+  "packageSource": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "producerWorktree": "C:/opf-work/n034-fix",
+  "producerRemainsFrozen": true,
+  "raw": {
+    "file": "raw.zip",
+    "bytes": 492366,
+    "sha256": "9088c19fa3089e097708d31e93f0c09af714a4514ce00d29c0d2318295100bc0",
+    "entries": 47
+  },
+  "suite": {
+    "bytes": 551804,
+    "sha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+    "files": 339,
+    "physicalFiles": 340,
+    "totalBytes": 49552300
+  },
+  "cases": 59,
+  "primary": 28,
+  "chartModes": 30,
+  "table": 1,
+  "structurallyEligible": 53,
+  "ineligible": [
+    {
+      "id": "chart-all-seven",
+      "input": "inputs/chart-all-seven.pptx",
+      "slides": 7,
+      "xmlShapeCounts": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "genericStructurallyEligible": false,
+      "actions": 0,
+      "roundTripEqual": false,
+      "archiveSha256": "d14f8a9489d4a4f3a99f0a6ff23cd0e5cc0d847d2389a0e96fb3886b5a05649b"
+    },
+    {
+      "id": "feature-dense-events",
+      "input": "inputs/feature-dense-events.pptx",
+      "slides": 1,
+      "xmlShapeCounts": [
+        50
+      ],
+      "genericStructurallyEligible": false,
+      "actions": 0,
+      "roundTripEqual": true,
+      "archiveSha256": "dcbaec0f1889997af5f21ea67ad5aa10d8865eb99eb5149ce624e316a50730c4"
+    },
+    {
+      "id": "chart-mode-all-seven-fallback",
+      "input": "chart-modes/all-seven-fallback.pptx",
+      "slides": 7,
+      "xmlShapeCounts": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "genericStructurallyEligible": false,
+      "actions": 0,
+      "roundTripEqual": false,
+      "archiveSha256": "b8d9448f8b8a09aca2d5cc3d19432b1c29d875bd227cd617879467fca9d0afde"
+    },
+    {
+      "id": "chart-mode-all-seven-auto",
+      "input": "chart-modes/all-seven-auto.pptx",
+      "slides": 7,
+      "xmlShapeCounts": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "genericStructurallyEligible": false,
+      "actions": 0,
+      "roundTripEqual": false,
+      "archiveSha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1"
+    },
+    {
+      "id": "chart-mode-all-seven-native",
+      "input": "chart-modes/all-seven-native.pptx",
+      "slides": 7,
+      "xmlShapeCounts": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "genericStructurallyEligible": false,
+      "actions": 0,
+      "roundTripEqual": false,
+      "archiveSha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1"
+    },
+    {
+      "id": "table-colors",
+      "input": "table-colors/table-colors.pptx",
+      "slides": 6,
+      "xmlShapeCounts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "genericStructurallyEligible": false,
+      "actions": null,
+      "archiveSha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    }
+  ],
+  "primaryRoundTripDifferences": [
+    "furniture-flags",
+    "chart-pareto-multi",
+    "chart-world-category",
+    "chart-all-seven"
+  ],
+  "protectedObjects": [
+    {
+      "path": "packages/javascript",
+      "current": "d911644138198f587fda072a3f2ddaa0b95839ee",
+      "baseline": "d911644138198f587fda072a3f2ddaa0b95839ee"
+    },
+    {
+      "path": "packages/pptx",
+      "current": "1967611fb7dfe70dc0f76d4f50904b865352190e",
+      "baseline": "1967611fb7dfe70dc0f76d4f50904b865352190e"
+    },
+    {
+      "path": "packages/render",
+      "current": "27995ecb062dfe1107d56dd900232294d04c6fd5",
+      "baseline": "27995ecb062dfe1107d56dd900232294d04c6fd5"
+    },
+    {
+      "path": "packages/gallery",
+      "current": "609eb292785d0103295a7a2d9eb2fd09c6fbf835",
+      "baseline": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "path": "packages/cli",
+      "current": "80693fbb3f29304337506d564654c552b1dd201e",
+      "baseline": "80693fbb3f29304337506d564654c552b1dd201e"
+    },
+    {
+      "path": "packages/editor",
+      "current": "266c2c31e64c72ae296af111c595ea57e5f56dcf",
+      "baseline": "266c2c31e64c72ae296af111c595ea57e5f56dcf"
+    },
+    {
+      "path": "packages/mcp",
+      "current": "ad1f23d229af3d70adc272f109a4b059d85d11d4",
+      "baseline": "ad1f23d229af3d70adc272f109a4b059d85d11d4"
+    },
+    {
+      "path": "spec",
+      "current": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5",
+      "baseline": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "current": "3432ab613e493c84d6eea74cb68d30be08720102",
+      "baseline": "3432ab613e493c84d6eea74cb68d30be08720102"
+    }
+  ],
+  "checks": {
+    "original": {
+      "source": "827c49b2760edcb0e91a2c48fccab8e8598b90d2",
+      "passed": 7,
+      "failed": 3,
+      "typeSkipped": 1,
+      "seconds": 85.5,
+      "status": "RED retained; sparse inputs"
+    },
+    "delta": {
+      "source": "2400d38bf549cdb661c31725776df25e497d364c",
+      "base": "827c49b2760edcb0e91a2c48fccab8e8598b90d2",
+      "passed": 5,
+      "typeSkipped": 1,
+      "seconds": 20.8,
+      "nativeControls": 65,
+      "status": "PASS"
+    },
+    "targeted": {
+      "galleryTracker": "18/18 plus strict freshness PASS",
+      "text": "7/7 plus hydrated-tree scan PASS"
+    }
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "workerExecution": false,
+  "proofMetadata": {
+    "scope": "docs-only versus2400; no product suite",
+    "passed": 5,
+    "typeSkipped": 1,
+    "seconds": 30.8,
+    "status": "PASS",
+    "archive": {
+      "file": "checks.zip",
+      "bytes": 8445,
+      "sha256": "d2da325f7dd5e7c3b2e3db63b399dc884f6af75022b5317c18d04dd929c50f73",
+      "entries": 10
+    }
+  }
+}
