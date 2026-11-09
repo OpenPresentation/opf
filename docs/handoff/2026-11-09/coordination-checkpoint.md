@@ -1,6 +1,6 @@
 # Current continuation: cold-start cause measured; recovery test correction pushed
 
-v0.33.0 is published; v0.34.0 remains UNPUBLISHED. All31 original issue1139 checkbox lines and requirements remain intact (21checked/10open); none of the work below substitutes for original native/site/release acceptance. Canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa. Product staging remains e7dc37096a7332a65ae2af8c37e2283790408650 before this metadata-only update. Folded leaves are frozen; evidence branches NEVER MERGE.
+v0.33.0 is published; v0.34.0 remains UNPUBLISHED. All31 original issue1139 checkbox lines and requirements remain intact (21checked/10open); none of the work below substitutes for original native/site/release acceptance. Canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa. Product staging now includes the reviewed chart-conformance follow-up as1b81e6131b340e6bc4f5fdddbc4d684c2ec7d1ac; earlier e7 remains its reviewed baseline. Folded leaves are frozen; evidence branches NEVER MERGE.
 
 ## Owner cold-start question: checked, independently replayed, pushed
 
@@ -25,7 +25,7 @@ ONEpush421aa6a663d8f0b8f2f1d3ba25364715672c0043/treeed86ea48b5b6e85b2f4af7cf7ed9
 | RR114 cold overhead | A; diagnostic accepted | Review bounded recording/coverage replay proposal, then meaningful parity/memory/timing qualification before any optimization |
 | RR114 compatibility CI | Lead; exact42707671494 four font failures reproduced | Fix real mixed-emoji glyph fallback; inspect missing-catalog ensure adoption and obsolete eager-face counts without weakening actual glyph/output assertions |
 | CLI/MCP invalid reports | B; new C:/opf-work/v034-report from freshmain+e7 | Reproduce invalid-doc report becoming internalfontpreflight error; narrow validation-only recovery of verified renderer invalid-opf report, preserving canonical located reports and strict export behavior |
-| Chart conformance CI | Root; new C:/opf-work/chart-conformance | Actual localeCompare/textbox failures reproduced; existing text-box flag+code-unit order repair passes43references and148example/965slide nativeXMLconformance; full determinism grid stilllive, then review/push/fold NEWbranch |
+| Chart conformance CI | Root; peer-reviewed NEWleaf5a8816bb8 | Normally folded as1b81e6131b340e6bc4f5fdddbc4d684c2ec7d1ac with all4feature blobs EXACT;43reference controls,148example/965slide nativeXMLconformance and45child/43case WindowsdeterminismPASS. Root and independent A replay10records/29306B PASS. Leaf nowFROZEN; combined mapped/CI/actualOffice/goldens remain owed |
 | RR117 | Root; source/functional/boundedperformance reviewed | DraftsourcePR/normalfold of sourcebee8 only; NEVER foldf760 evidence |
 | Recovery site214 | Root; exact421gateLIVE | CurrentCI+maintainedNativePreview then actualdeployed checks/rootimages, merge+production only after acceptance |
 | Original native/glyph/SH21/E1/E3 | Root, separate queued lanes | Preserve original59/fullinputs; actual glyph05/06/09/10 remainOPEN, SH21liveSmartArt acceptance distinct; qualify seven/table/histogram/newexplicit-reference witnesses with reviewed safe controllers/currentgenuine consumers |
