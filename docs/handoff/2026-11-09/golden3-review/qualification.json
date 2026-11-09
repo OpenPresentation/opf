@@ -1,0 +1,56 @@
+{
+  "format": 1,
+  "producer": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "tested": "21 evidence working-payload paths only, no implementation changes",
+  "command": "pnpm check:changed --base b623a3674037f29d68496e96a3f5b6da55d73470",
+  "result": "TERMINAL0;5PASS/30.0s +TypeScript SKIP; no package suite selected",
+  "archiveBytes": 7831,
+  "archiveSHA256": "7a30a090a078a73d175faf69f9adc4314135b6e02d4d6eb8e0d6b54463328983",
+  "files": [
+    {
+      "name": "driver.log",
+      "bytes": 900,
+      "sha256": "61c615d5836dd63afea316c8b5cbb851fbaf2c08140ccd60e6a08d04cda22af0"
+    },
+    {
+      "name": "driver.exit.json",
+      "bytes": 500,
+      "sha256": "2d31c4da96bdc906f37b5729704fd3bc9741468f64db1e8d083d54ad907379e4"
+    },
+    {
+      "name": "seal.log",
+      "bytes": 173,
+      "sha256": "8e7062146bdd8b724bef55253225696f466da77cf425e16c31bcebed79a03bb5"
+    },
+    {
+      "name": "seal.exit.json",
+      "bytes": 379,
+      "sha256": "16b333a3bb2e827c44100f165763c5f5d403af904170779a13c849c88a93f672"
+    },
+    {
+      "name": "steps/build.log",
+      "bytes": 14579,
+      "sha256": "e4e972034c5fadbf5d76f0662c443d1f27bab37b917027a5fec1ccce289790d4"
+    },
+    {
+      "name": "steps/biome.log",
+      "bytes": 687,
+      "sha256": "96854828edd541a5437056063e7a694bf6d774bd7d5429e9fc5ce03c777ef05e"
+    },
+    {
+      "name": "steps/pnpm_run_check_changes.log",
+      "bytes": 2636,
+      "sha256": "d7dd34e48e160f39c0be829254538c57acf2f2e6e9231e0d5abe51966ca1e20c"
+    },
+    {
+      "name": "steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1037,
+      "sha256": "5e5b6cadfc1ef709d4ae0fe84b20bd2db5cbe51ba9728be0a192fb4b69b0827d"
+    },
+    {
+      "name": "steps/pnpm_run_check_text.log",
+      "bytes": 1071,
+      "sha256": "df36193fe583e9d5af554952f2688e34bc1666c0fffbce103ecbeb341bdda8b0"
+    }
+  ]
+}

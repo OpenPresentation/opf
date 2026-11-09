@@ -1,0 +1,31 @@
+# Golden3: complete managed moved-image evidence
+
+PUBLIC-SAFE synthetic evidence in the public OpenPresentation/opf repository. NEVER MERGE this evidence-only branch. No visibility change, private source, secret value, Office call, provider action or chart implementation is part of this packet. Chart representation agreement and the original release/native/E1 scope remain open.
+
+Managed workflow42630131544 produced artifact13680104339 from source69f1be2b1e9d640157561297df23f2ddee496882. The maintained root gate70236 was reported TERMINAL0; root owns that gate receipt and subsequent CI. Bot b623a3674037f29d68496e96a3f5b6da55d73470 has that exact parent and changes ONE renderer fixture. Metadata and ZIP used2 of3 authorized API calls via authenticated tokenless gh endpoints, binary stdout directly to Node Buffer. No signed URL was persisted and no observer/polling loop was started.
+
+ZIP identity:136,208 bytes, SHA-2564016646989d5b5af7d3f738b3ac0f427e8e5287d0302dd23fd62ad338e5a47a2. Strict extraction validates path/case collisions, local headers, methods, entry/expanded-size limits, CRC/SHA and absence of symlinks before fresh writes. It has8 regular entries/240,967 expanded bytes/0symlinks. raw.zip retains both original managed ZIPs, original metadata/diffs/patch, all preparation scripts and the published1234 qualification archive byte-exact. The original source qualification's11/12 mapped RED and sparse-only35-test recovery remain literal; managed goldens do not relabel those outcomes green.
+
+## Every actual change
+
+The complete core fixture is byte-exact:480 keys,0 changed/added/removed. Renderer keys remain728, with EXACTLY3 moved keys: paginated pyramid5long pages2,3,4;0 additions/removals. The artifact candidate is byte-exact to bot's fixture and its patch is byte-exact to the single bot delta. Every other Git path is exact to the source producer. Examples report sourceMatches:true and all4 changedSlides/changedDecks/filesWritten/filesRemoved arrays empty. Template sourceMatches:true is recorded literally. All raw5/6long stress-case hashes, refusals and earlier negative evidence stay unchanged; this does not turn refused slides into usable defaults.
+
+pairs.png displays ALL3 genuine managed before/after pairs, with individual originals and traced SVGs in pairs/. Before PNGs are from managed42614819492/artifact13671827630, exactly matching b8/current producer's baseline entries. After PNGs are from the new managed artifact. All3 new PNGs are SHA-25604369680abdeb1bc1c31eed6716fa61d9c76aded7e0f67323898b24ad2a93e40 /11,953bytes, replacing8,554-byte images. SVG traces differ by actual page source paths, so all3 keys are retained despite identical pixels. Saved before SVGs come from frozen golden2 exact-hash reconstruction; saved after SVGs come from published PR1234's representative output. Each SVG hash, PNG hash and PNG byte length was independently checked against its managed fixture before use. No new reconstruction, raster or golden generation was required.
+
+## Bounded interpretation and retained limits
+
+The source OPF remains identical, and all35 entries stay in order with exact0..7 whole-list mappings for blocks0..4. Published source-bound geometry/visible-text evidence retains24px actual body type on every page; the existing min24/max24 continuation cap stays unchanged. The3 moved pages wrap78-character lines to68 characters(trimmed), with word-safe reflow and no fit finding. Initial-page SVG/PNG hashes remain exact. Heading proof and returned OPF are included from the published qualification archive. The body uses more height while preserving title and text. Root visually inspected all3 rows and accepted this bounded retained-size reading-measure change; that decision is distinct from CI and broad release acceptance.
+
+The image sheet enlarges original320x180(scale0.25) rasters2x nearest for review. It does not establish full-size usability, actual Office/native fonts or a real Claude Design/E1 comparison. Existing synthetic stress/refusal scope, explicit counts/styles/opt-outs and optional-no-fit limitations are not expanded into universal70-character support. No local tracked golden, tolerance, policy, runtime or schema was changed by this evidence branch. Golden2 evidence71afed stays frozen and is never merged.
+
+One sealing setup attempt compared a Uint8Array and Buffer with different prototypes; its original script and explicitly labeled observation summary are retained, not called a content mismatch. The corrected packer compares exact Buffer bytes and permits only already-identical partial owned outputs. The raw packet's empty self-log snapshot is not treated as terminal qualification; the actual terminal packer log/exit and required metadata checks are retained separately. No failed diagnostic is relabeled a passing source test.
+
+Run the offline verifier with pinned Node24:
+
+    node docs/handoff/2026-11-09/golden3-review/verify.mjs
+
+The evidence worktree is C:/opf-work/golden3-review, branch codex/evidence-golden3-review-20261109 from the exact managed bot. Source/fixture code stays untouched. Required metadata qualification is recorded in its separate receipt; full exact-head CI/full/slow/native/release acceptance remains the coordinator's responsibility.
+
+## Metadata qualification and publication
+
+The required evidence-only check:changed --baseb623a3674037f29d68496e96a3f5b6da55d73470 is TERMINAL0:5 selected metadata steps PASS/30.0s (outer30.767s), typecheck SKIP for no TypeScript change, no package suite selected. The ordinary maintained build step is metadata setup, not a new golden/visual render. qualification.json/zip retain exactly9 current terminal driver/sealer/step files. The initial51-file raw packet remains unchanged; its partial self-log is not substituted for the actual terminal seal receipt. All authored metadata uses LF. The final receipt-only additions change this handoff alone, and the offline verifier checks both packets. Root already inspected all3 actual managed pairs and approved their bounded retained24px wrapping; exact-head CI/full/slow/native/release gates remain separate. Publish this PUBLIC-SAFE evidence branch for review, NEVER MERGE it; no pull request or visibility change is required.

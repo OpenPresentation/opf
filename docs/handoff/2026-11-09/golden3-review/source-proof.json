@@ -1,0 +1,19 @@
+{
+  "format": 1,
+  "publicSafe": true,
+  "neverMerge": true,
+  "producer": "69f1be2b1e9d640157561297df23f2ddee496882",
+  "bot": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "before": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+  "qualifiedLH10": "0148004081402ebd37288bc1109509fc476df6c1",
+  "qualifiedArchive": {
+    "path": "docs/handoff/2026-11-09/lh10-capped-list-measure/qualification.zip",
+    "object": "ef133090c441ceb1947bedaf0d8fefd55c81c5ff",
+    "bytes": 1333142,
+    "sha256": "06a82bbf986685011aad953cead2f3ab4f54556d326b7d168acce889b45c0ab1"
+  },
+  "golden2Evidence": "71afed600e917e6e8bc4a8edd21dcb1567da93b9",
+  "apiCalls": 2,
+  "baselineFailures": "Original B mapped11/12 RED +sparse-only35-test recovery remain in published1234 qualification archive; no replacement green claim",
+  "scope": "PUBLIC-SAFE synthetic evidence only; NEVER MERGE. Root owns image acceptance and integration CI; no native/full-size/E1/release acceptance."
+}

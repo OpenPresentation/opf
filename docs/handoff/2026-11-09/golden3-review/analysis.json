@@ -1,0 +1,220 @@
+{
+  "producer": "69f1be2b1e9d640157561297df23f2ddee496882",
+  "producerTree": "6ebcbefbb4e93846a44fadc5483d72242cb3d318",
+  "bot": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "botTree": "0d45431440e1b3150a31e8eee4a220a86908fa1e",
+  "beforeHead": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+  "changedFiles": [
+    "packages/render/test/golden/layout-templates-rr96-color-variants.json"
+  ],
+  "core": {
+    "before": 480,
+    "after": 480,
+    "changed": 0,
+    "added": 0,
+    "removed": 0,
+    "byteExact": true
+  },
+  "renderer": {
+    "before": 728,
+    "after": 728,
+    "changed": [
+      "paginated pyramid 5 long page 2",
+      "paginated pyramid 5 long page 3",
+      "paginated pyramid 5 long page 4"
+    ],
+    "added": [],
+    "removed": []
+  },
+  "examples": {
+    "baseline": "test/golden/opf-examples-png.fa-33-region-lists",
+    "sourceMatches": true,
+    "changedSlides": [],
+    "changedDecks": [],
+    "filesWritten": [],
+    "filesRemoved": []
+  },
+  "templateSourceMatches": true,
+  "rasterPolicy": {
+    "scale": 0.25,
+    "systemFonts": false,
+    "trace": true
+  },
+  "pairs": [
+    {
+      "key": "paginated pyramid 5 long page 2",
+      "page": 2,
+      "before": {
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "entry": {
+          "svg": "87b20e42f2f8ef3d76a4e73f61caa561d0a6e164b99b336513ff2f1efa5f0540",
+          "png": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+          "bytes": 8554
+        },
+        "png": "before-2.png",
+        "svg": "before-2.svg",
+        "svgSource": "Frozen71afed source-bound exact b8 reconstruction"
+      },
+      "after": {
+        "artifact": 13680104339,
+        "run": 42630131544,
+        "producer": "69f1be2b1e9d640157561297df23f2ddee496882",
+        "bot": "b623a3674037f29d68496e96a3f5b6da55d73470",
+        "entry": {
+          "svg": "aaa11b113509ea91b97096f11b7d8c18d4cd4e09a62b077197d7fc87aa20f293",
+          "png": "04369680abdeb1bc1c31eed6716fa61d9c76aded7e0f67323898b24ad2a93e40",
+          "bytes": 11953
+        },
+        "png": "after-2.png",
+        "svg": "after-2.svg",
+        "svgSource": "Published1234 representative after SVG, exact managed b623 hash"
+      }
+    },
+    {
+      "key": "paginated pyramid 5 long page 3",
+      "page": 3,
+      "before": {
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "entry": {
+          "svg": "6780c295596124de3fc5d746b335e2802c18f31dfd60f481cef24f2561e9eb9e",
+          "png": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+          "bytes": 8554
+        },
+        "png": "before-3.png",
+        "svg": "before-3.svg",
+        "svgSource": "Frozen71afed source-bound exact b8 reconstruction"
+      },
+      "after": {
+        "artifact": 13680104339,
+        "run": 42630131544,
+        "producer": "69f1be2b1e9d640157561297df23f2ddee496882",
+        "bot": "b623a3674037f29d68496e96a3f5b6da55d73470",
+        "entry": {
+          "svg": "8bb76a69903ebc088ac73ab30f04e3894045e78a35662bd28e38eeacdd5ea175",
+          "png": "04369680abdeb1bc1c31eed6716fa61d9c76aded7e0f67323898b24ad2a93e40",
+          "bytes": 11953
+        },
+        "png": "after-3.png",
+        "svg": "after-3.svg",
+        "svgSource": "Published1234 representative after SVG, exact managed b623 hash"
+      }
+    },
+    {
+      "key": "paginated pyramid 5 long page 4",
+      "page": 4,
+      "before": {
+        "artifact": 13671827630,
+        "run": 42614819492,
+        "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+        "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+        "entry": {
+          "svg": "4d37fe75fa76c72336b6287ec2ba73a6be1ce871dc095876d4d549aa3cae3f01",
+          "png": "d160076175276c9787b1ba6c0df8c35cb78479440bdf232f798ac1073ce5448e",
+          "bytes": 8554
+        },
+        "png": "before-4.png",
+        "svg": "before-4.svg",
+        "svgSource": "Frozen71afed source-bound exact b8 reconstruction"
+      },
+      "after": {
+        "artifact": 13680104339,
+        "run": 42630131544,
+        "producer": "69f1be2b1e9d640157561297df23f2ddee496882",
+        "bot": "b623a3674037f29d68496e96a3f5b6da55d73470",
+        "entry": {
+          "svg": "24b69f61359e19a44ec11218dfb431255a1ee90843d1b28fc596235414215863",
+          "png": "04369680abdeb1bc1c31eed6716fa61d9c76aded7e0f67323898b24ad2a93e40",
+          "bytes": 11953
+        },
+        "png": "after-4.png",
+        "svg": "after-4.svg",
+        "svgSource": "Published1234 representative after SVG, exact managed b623 hash"
+      }
+    }
+  ],
+  "initialPageControl": {
+    "unchanged": true,
+    "entry": {
+      "svg": "cca42a49599799677cde86ed664589f65619dc759f76370936fe72e8253d0a5e",
+      "png": "8f5d728258a9cad73a41a963f0a051698ee16908182ac6008abf5d894c93f5a7",
+      "bytes": 19759
+    }
+  },
+  "sourceContent": {
+    "sameAuthoredSource": true,
+    "orderedEntries": 35,
+    "mappings": [
+      {
+        "sourcePath": "slides.0.blocks.0.items",
+        "outputPath": "slides.0.blocks.0.items",
+        "range": {
+          "unit": "items",
+          "start": 0,
+          "end": 7
+        }
+      },
+      {
+        "sourcePath": "slides.0.blocks.1.items",
+        "outputPath": "slides.0.blocks.1.items",
+        "range": {
+          "unit": "items",
+          "start": 0,
+          "end": 7
+        }
+      },
+      {
+        "sourcePath": "slides.0.blocks.2.items",
+        "outputPath": "slides.1.blocks.0.items",
+        "range": {
+          "unit": "items",
+          "start": 0,
+          "end": 7
+        }
+      },
+      {
+        "sourcePath": "slides.0.blocks.3.items",
+        "outputPath": "slides.2.blocks.0.items",
+        "range": {
+          "unit": "items",
+          "start": 0,
+          "end": 7
+        }
+      },
+      {
+        "sourcePath": "slides.0.blocks.4.items",
+        "outputPath": "slides.3.blocks.0.items",
+        "range": {
+          "unit": "items",
+          "start": 0,
+          "end": 7
+        }
+      }
+    ],
+    "composition": [
+      {
+        "minFontSize": 24
+      },
+      {
+        "minFontSize": 24,
+        "maxFontSize": 24
+      },
+      {
+        "minFontSize": 24,
+        "maxFontSize": 24
+      },
+      {
+        "minFontSize": 24,
+        "maxFontSize": 24
+      }
+    ]
+  },
+  "allOtherGitPathsExact": true,
+  "apiCalls": 2,
+  "scope": "Actual managed PNG pairs; saved SVGs accepted only after exact hash comparison. No local golden generation/promotion, no native/full-size/E1/release acceptance."
+}
