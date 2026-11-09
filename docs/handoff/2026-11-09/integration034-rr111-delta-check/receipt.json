@@ -1,0 +1,105 @@
+{
+  "format": 1,
+  "branch": "codex/evidence-integration034-rr111-delta-20261109",
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "coordinatorExecSession": 22442,
+  "source": "5b9e4386c00319da1fa4370dcc0b3eb6e93c9578",
+  "sourceTree": "04060222a7f1d892f7ac1bb368e1d8af020ee775",
+  "run": {
+    "startedAt": "2026-11-09T06:56:45.9273461Z",
+    "endedAt": "2026-11-09T06:59:59.9109219Z",
+    "exitCode": 1,
+    "head": "5b9e4386c00319da1fa4370dcc0b3eb6e93c9578",
+    "base": "af541289f9fb5d3273a17caf7b9f66f029f9afc4",
+    "log": "C:/opf-work/release-033-artifacts/integration034-rr111-delta-check-01.log"
+  },
+  "printedElapsedSeconds": 193.7,
+  "steps": [
+    {
+      "step": "build",
+      "status": "passed",
+      "seconds": 12.9
+    },
+    {
+      "step": "biome",
+      "status": "passed",
+      "seconds": 0.1,
+      "note": "6 files"
+    },
+    {
+      "step": "pnpm run check:changes",
+      "status": "passed",
+      "seconds": 1.1
+    },
+    {
+      "step": "pnpm run check:gallery-tracker",
+      "status": "FAILED",
+      "seconds": 0.9
+    },
+    {
+      "step": "pnpm run check:release-report",
+      "status": "FAILED",
+      "seconds": 0.8
+    },
+    {
+      "step": "pnpm run check:skill-commands",
+      "status": "passed",
+      "seconds": 20.7
+    },
+    {
+      "step": "pnpm run check:stability",
+      "status": "passed",
+      "seconds": 63.8
+    },
+    {
+      "step": "pnpm run check:text",
+      "status": "FAILED",
+      "seconds": 0.8
+    },
+    {
+      "step": "typecheck",
+      "status": "passed",
+      "seconds": 26.2
+    },
+    {
+      "step": "tests mcp",
+      "status": "passed",
+      "seconds": 89
+    }
+  ],
+  "passed": 7,
+  "failed": 3,
+  "selectedDeltaStepLogs": 10,
+  "copiedDirectoryLogs": 44,
+  "priorRunLeftovers": 34,
+  "priorFiveEvidenceHead": "6eeb6bf6427164d766e950131a52174fe6a2eaf7",
+  "priorFiveManifestSha256": "4bf1d94d78835023b7a42c27464bd7b095f0eca850339509a2d52d6f02ac185c",
+  "artifacts": 60,
+  "rawBytes": 1505966,
+  "storedBytes": 480171,
+  "sourceChanged": false,
+  "fixturesChanged": false,
+  "originalAggregateGreen": false,
+  "recoveriesIncluded": true,
+  "trackerFreshnessEstablished": false,
+  "workingMetadata": {
+    "files": [
+      "docs/handoff/2026-11-09/README.md",
+      "docs/programs/release-readiness/burndown.md"
+    ],
+    "sourceHeadRR111Status": "review",
+    "capturedWorkingRR111Status": "implemented",
+    "invalidWorkingEnum": true,
+    "sixAssemblyFilesUntracked": true
+  },
+  "docsQualificationOwed": true,
+  "ciOwed": true,
+  "nativeOwed": true,
+  "releaseAccepted": false,
+  "snapshot": "C:/opf-work/i034-rr111-snapshot-20261109-01",
+  "snapshotBoundary": "Terminal explicit permission; all logs and working metadata copied before coordinator status repair/hydration/recovery. Current selected logs are distinguished from34 unchanged prior-run leftovers.",
+  "originalRunIncludesRecoveries": false,
+  "recoveryStageDirectory": "recovery-01",
+  "recoveryAggregateGreen": false
+}

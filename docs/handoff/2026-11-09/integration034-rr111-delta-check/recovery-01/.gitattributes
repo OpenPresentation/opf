@@ -1,0 +1,2 @@
+logs/*.gz -text
+original-table.txt -text -diff

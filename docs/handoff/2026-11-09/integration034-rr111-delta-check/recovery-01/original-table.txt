@@ -1,0 +1,12 @@
+step                            status     time
+build                           passed   11.8 s
+biome                           passed    0.1 s  2 files
+pnpm run check:changes          passed    1.1 s
+pnpm run check:gallery-tracker  FAILED    2.8 s
+pnpm run check:release-report   passed    0.8 s
+pnpm run check:skill-commands   passed   20.5 s
+pnpm run check:text             passed    5.5 s
+typecheck                       skipped       -  no .ts, .mts or tsconfig change
+total                                    34.2 s
+
+check-changed: 1 of 8 steps failed: pnpm run check:gallery-tracker

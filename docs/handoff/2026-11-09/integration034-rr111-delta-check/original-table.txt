@@ -1,0 +1,14 @@
+step                            status    time
+build                           passed  12.9 s
+biome                           passed   0.1 s  6 files
+pnpm run check:changes          passed   1.1 s
+pnpm run check:gallery-tracker  FAILED   0.9 s
+pnpm run check:release-report   FAILED   0.8 s
+pnpm run check:skill-commands   passed  20.7 s
+pnpm run check:stability        passed  63.8 s
+pnpm run check:text             FAILED   0.8 s
+typecheck                       passed  26.2 s
+tests mcp                       passed  89.0 s
+total                                   193.7 s
+
+check-changed: 3 of 10 steps failed: pnpm run check:gallery-tracker, pnpm run check:release-report, pnpm run check:text

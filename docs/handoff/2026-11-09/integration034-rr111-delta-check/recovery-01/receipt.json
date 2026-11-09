@@ -1,0 +1,79 @@
+{
+  "format": 1,
+  "coordinatorExecSession": 87653,
+  "run": {
+    "startedAt": "2026-11-09T07:03:01.7863496Z",
+    "endedAt": "2026-11-09T07:03:36.0549454Z",
+    "exitCode": 1,
+    "head": "5b9e4386c00319da1fa4370dcc0b3eb6e93c9578",
+    "scope": "four metadata files after original delta source/type tests",
+    "log": "C:/opf-work/release-033-artifacts/integration034-rr111-metadata-recovery-01.log"
+  },
+  "steps": [
+    {
+      "step": "build",
+      "status": "passed",
+      "seconds": 11.8
+    },
+    {
+      "step": "biome",
+      "status": "passed",
+      "seconds": 0.1,
+      "note": "2 files"
+    },
+    {
+      "step": "pnpm run check:changes",
+      "status": "passed",
+      "seconds": 1.1
+    },
+    {
+      "step": "pnpm run check:gallery-tracker",
+      "status": "FAILED",
+      "seconds": 2.8
+    },
+    {
+      "step": "pnpm run check:release-report",
+      "status": "passed",
+      "seconds": 0.8
+    },
+    {
+      "step": "pnpm run check:skill-commands",
+      "status": "passed",
+      "seconds": 20.5
+    },
+    {
+      "step": "pnpm run check:text",
+      "status": "passed",
+      "seconds": 5.5
+    },
+    {
+      "step": "typecheck",
+      "status": "skipped",
+      "seconds": null,
+      "note": "no .ts, .mts or tsconfig change"
+    }
+  ],
+  "printedElapsedSeconds": 34.2,
+  "passed": 6,
+  "failed": 1,
+  "skipped": 1,
+  "executedStepLogs": 7,
+  "copiedDirectoryLogs": 44,
+  "inheritedLogCount": 37,
+  "artifacts": 61,
+  "rawBytes": 2318613,
+  "storedBytes": 620936,
+  "hydratedInputFiles": 4356,
+  "hydratedInputBytes": 113711152,
+  "correctedWorkingRR111Status": "review",
+  "trackerTests": {
+    "passed": 17,
+    "failed": 1,
+    "soleFailure": "strict freshness"
+  },
+  "recoveryAggregateGreen": false,
+  "originalAggregateStillRed": true,
+  "noOverrides": true,
+  "noRegeneration": true,
+  "noSourceOrFixtureChange": true
+}
