@@ -1,0 +1,57 @@
+{
+  "publication": "PUBLIC-SAFE evidence-only NEVER MERGE",
+  "producerSource": "2400d38bf549cdb661c31725776df25e497d364c",
+  "packageSource": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "requiredCheck": {
+    "scope": "standard maintained check for the additional recovery evidence; default package build only, no preparation/render/export/native invocation",
+    "exitCode": 0,
+    "endedUTC": "2026-11-09T15:06:39.2912766Z",
+    "command": "pnpm check:changed --base 5975b8bda8dd471783ffd2b68ea97790008de19f",
+    "startedUTC": "2026-11-09T15:06:08.1511059Z",
+    "testedHead": "df6c82bf76ef0df3de3cd7cba84b74cdc87afdd8",
+    "passed": [
+      "default package build 10.5s",
+      "Biome 0.1s",
+      "check:changes 0.8s",
+      "check:text 2.8s",
+      "check:skill-commands 19.4s"
+    ],
+    "typecheck": "SKIPPED: no TypeScript changes",
+    "totalSeconds": 30
+  },
+  "originalInitialAggregate": "RED retained; exact sparse-only text recovery PASS",
+  "initialEvidenceHead": "5975b8bda8dd471783ffd2b68ea97790008de19f",
+  "recovery": {
+    "cases": 59,
+    "files": 340,
+    "rawBytes": 49552300,
+    "reusedFiles": 281,
+    "reusedBytes": 45439503,
+    "deltaFiles": 59,
+    "deltaRawBytes": 4112797,
+    "deltaZipBytes": 2414557,
+    "suiteSHA256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+    "eligibleWithinGenericStructuralLimits": 53,
+    "outsideGenericStructuralLimits": 6,
+    "allOriginalBytesAndMtimesUnchanged": true,
+    "allSourceAuditHashesMatch": true,
+    "independentDotNetDeltaMemberAudit": "59/59 PASS",
+    "fontPolicy": "Only renderer-pinned Roboto0.4.3 seven faces and exactOFL-1.1 license; no system/private font reads"
+  },
+  "allResultGroups": {
+    "logicalFiles": 804,
+    "rawBytes": 111955685,
+    "zipMembers": 523,
+    "zipBytes": 41172020,
+    "allFourBelow50MiB": true,
+    "totalZipBytesBelow100MiB": true
+  },
+  "preparationSeal": true,
+  "nativeAcceptance": false,
+  "nativeStatus": "pending",
+  "nativeOfficeRunsInArchiveTask": 0,
+  "preparationOrRenderOrExportRunsInArchiveTask": 0,
+  "providerCalls": 0,
+  "deployments": 0,
+  "releases": 0
+}

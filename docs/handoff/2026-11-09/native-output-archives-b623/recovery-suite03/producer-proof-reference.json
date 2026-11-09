@@ -1,0 +1,8 @@
+{
+  "source": "2400d38bf549cdb661c31725776df25e497d364c",
+  "producerEvidence": "c85df052daa6faaaa7d0e672f2d68d4c29711708",
+  "branch": "codex/evidence-rr105-current-preparation",
+  "path": "docs/handoff/2026-11-09/rr105-current-preparation-recovery",
+  "publication": "Root confirmed pushed and independently replayed; evidence-only NEVER MERGE",
+  "nativeAcceptance": false
+}

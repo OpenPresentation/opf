@@ -1,0 +1,81 @@
+{
+  "source": "2400d38bf549cdb661c31725776df25e497d364c",
+  "packageSource": "b623a3674037f29d68496e96a3f5b6da55d73470",
+  "files": [
+    {
+      "file": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "archive-format.mjs",
+      "bytes": 8104,
+      "sha256": "1aa10db2d7d221be2fd116cdfdb7811ec478926fffd1cfe26448bc75f8a2aead"
+    },
+    {
+      "file": "archive.mjs",
+      "bytes": 9222,
+      "sha256": "c5b79563a6b94d9788c052e0ac623e51c6d8767511edadb64f8cdb42acd254ad"
+    },
+    {
+      "file": "checks.files.json",
+      "bytes": 1438,
+      "sha256": "3f357d957a5a8d25fc55d53e0c0399861e7466292c1b25ece5eaaffe853d7736"
+    },
+    {
+      "file": "checks.zip",
+      "bytes": 8331,
+      "sha256": "b6284f8ab32d41129655092c3eaf9a02ab24d9debd9465ca96ec5e201f0eec58"
+    },
+    {
+      "file": "independent-zip-audit.json",
+      "bytes": 538,
+      "sha256": "43574ac441fed5b9cb7e6eac03a34bdb61701c8e8c269e62cd8b711333633305"
+    },
+    {
+      "file": "independent-zip-audit.ps1",
+      "bytes": 3481,
+      "sha256": "04e572d62f766801df7ccb4497d4fc63d4f94d9c92e08a26dbf94cc5f5237164"
+    },
+    {
+      "file": "manifest.json",
+      "bytes": 154559,
+      "sha256": "377d64d3107804647c7f47e5ce67f5a3a6496900dc9393eddd22424404de3494"
+    },
+    {
+      "file": "originals-verification.log",
+      "bytes": 997,
+      "sha256": "34bade20eccb73b0b9fbd31d61123ea69ad9566e758825bb93414f8650436007"
+    },
+    {
+      "file": "producer-proof-reference.json",
+      "bytes": 378,
+      "sha256": "fb2eec051a54232f027354862888e89496742ff8b95eee421d193b725250b751"
+    },
+    {
+      "file": "producer-recovery-inventory.json",
+      "bytes": 120401,
+      "sha256": "f511ad59ea28115379c986d40d9286c84b25bcd9a978e0d9af956df062952013"
+    },
+    {
+      "file": "README.md",
+      "bytes": 4666,
+      "sha256": "e49b61d5772d59c6be4d0358757dd61d95475e4a5d0548ef028f131f373796b9"
+    },
+    {
+      "file": "receipt.json",
+      "bytes": 2116,
+      "sha256": "0894ebe3c84dd267148cb4db5fa425b876680b72e1aab22e209673bddbfc9f45"
+    },
+    {
+      "file": "setup-history.json",
+      "bytes": 806,
+      "sha256": "5ee0238adec9ff3a51a3ddc7797e2da165474665167c55de286dfef630d77591"
+    },
+    {
+      "file": "verify.mjs",
+      "bytes": 2259,
+      "sha256": "68c5c3c6195288c34e259706aecadb2b4344d6f70583352155d87cc7fc46be46"
+    }
+  ]
+}

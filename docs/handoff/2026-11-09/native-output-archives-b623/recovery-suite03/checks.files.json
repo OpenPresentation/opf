@@ -1,0 +1,47 @@
+{
+  "file": "checks.zip",
+  "bytes": 8331,
+  "sha256": "b6284f8ab32d41129655092c3eaf9a02ab24d9debd9465ca96ec5e201f0eec58",
+  "members": [
+    {
+      "file": "raw/check-changed.exit.json",
+      "bytes": 418,
+      "sha256": "5301702edfe752e786f60d3ec8fdded8593daa5694c1ae8421f2189648d774d9"
+    },
+    {
+      "file": "raw/check-changed.log",
+      "bytes": 920,
+      "sha256": "fa229f3152d917965245b2641ddaf7e59d80d005f4ecc117c1e6394afe9b655c"
+    },
+    {
+      "file": "raw/seal-checks.mjs",
+      "bytes": 2600,
+      "sha256": "ec0c73025968ece2d7d3231d3b1f0f2ae06f24730ccfb50f26390f87b83c6352"
+    },
+    {
+      "file": "selection/biome.log",
+      "bytes": 691,
+      "sha256": "f33f07ca96c6bb266e0674997404812d2346a417c66539cf068b9f1732b4bc7a"
+    },
+    {
+      "file": "selection/build.log",
+      "bytes": 14569,
+      "sha256": "f266dc457c2bd6d918f4e2e2e4fa65a42125b11c867dd5a37a14dccacde734bf"
+    },
+    {
+      "file": "selection/pnpm_run_check_changes.log",
+      "bytes": 2637,
+      "sha256": "28252a0fcdfeeab6f4edd8bc0c2d19ed8e5f9520f91656e52b733099acb1d793"
+    },
+    {
+      "file": "selection/pnpm_run_check_skill-commands.log",
+      "bytes": 1034,
+      "sha256": "15b4786a85edc26e8170573bd3de957046d8565167837d3dade9bf4effdaa5cb"
+    },
+    {
+      "file": "selection/pnpm_run_check_text.log",
+      "bytes": 1069,
+      "sha256": "963a93680e80b53b4e6a6608b61c8b1bd6635149144aed72af1019252d8bf260"
+    }
+  ]
+}
