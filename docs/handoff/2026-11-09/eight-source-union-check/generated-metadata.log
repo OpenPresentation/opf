@@ -1,0 +1,24 @@
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ '8741a85db280010f23ecc9c1e518a2a612cdba58'
+- '7bf7dad3aa66ed2aa2114540e31f43ebdd3184f5'
+
+    at file:///C:/opf-work/integration-034/docs/handoff/2026-11-09/rr111-wave-generated-metadata/verify.mjs:4:268
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '8741a85db280010f23ecc9c1e518a2a612cdba58',
+  expected: '7bf7dad3aa66ed2aa2114540e31f43ebdd3184f5',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.20.0
