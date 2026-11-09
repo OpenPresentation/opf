@@ -1,3 +1,42 @@
+# Current continuation: cold-start cause measured; recovery test correction pushed
+
+v0.33.0 is published; v0.34.0 remains UNPUBLISHED. All31 original issue1139 checkbox lines and requirements remain intact (21checked/10open); none of the work below substitutes for original native/site/release acceptance. Canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa. Product staging remains e7dc37096a7332a65ae2af8c37e2283790408650 before this metadata-only update. Folded leaves are frozen; evidence branches NEVER MERGE.
+
+## Owner cold-start question: checked, independently replayed, pushed
+
+Original uninstrumented36-slide preparation+firstSVG is3487→3960ms, about473ms/13.6%slower. The explicitly quiet diagnostic ACTUALLY exited0 (session45612), four fresh children once, no retry/profile/runtime optimization. All312 per-render slide SHA comparisons match the accepted SVG baseline. Root replayPASS:16raw records/501097B/13protected sources. [Pushed results697100785](https://github.com/OpenPresentation/opf/blob/697100785cc10bb21d03dce13907a926baf64935/docs/handoff/2026-11-09/rr114-cold-start-diagnostic/RESULTS.md), NEVER MERGE.
+
+36-demand preparation2168.75ms contains two disjoint full36-slide recording contexts1022.44+1131.36ms (99.3%of preparation), with face-analysis misses36→72. Recording composition totals1908.54ms. The two passes issue326100coverage probes; the post-load pass performs5079fontkit shapes, then HarfBuzz attachment discards880cached entries. Real firstSVG shaping counts are identical whole/demand48955. Script cache works (227strings/36designs; second scan2.40ms). Verified local reads/hash total about3ms; direct font-create timing excludes later lazy decoding. Inclusive/nested timings are NOT additive; the diagnostic is attribution, not replacement benchmark statistics. A owns a SOURCE-ONLY bounded replay/deduplication proposal; no coverage removal, wrong-engine metric reuse, unbounded probe retention or production optimization is approved yet.
+
+## Reviewed derived-cache measurement completed
+
+RR117 formal session70527 ACTUALLY exited0,8cases/72primary edits/36complete-report phase pairs/204exact emitted-SVG pairs, no retry/source/deadline change. Root independently replayed37records/35,693,259B/currentDriverMatches=true. [Resultsf7602da8](https://github.com/OpenPresentation/opf/blob/f7602da8f9c3acc456faae7763668d91d56d8e5f/docs/handoff/2026-11-09/rr117-settled-performance/FORMAL-RESULTS.md), NEVER MERGE. Shared-data settled medians14–23%lower; deliberate title0/global misses show no universal gain. Both short20edit/4destroy controls clear captured cache/DOM, but retained V8heap is3.1–3.3MiB above baseline in BOTH modes; no leak-free/mobile/native claim. Reviewed sourcebee8d855 remains UNFOLDED; actual aggregate acceptance is owed.
+
+## Recovery P0: shipping source unchanged; new exact-head observer active
+
+PR214 final runtimee1403bb0/source+evidence58219d15 fixes sample/Open flushing, exact-source async guards, YAML/Markdown sample/Undo and rawJSON CRLF downloads. Root-reviewed local31unit/10browser/types/build PASS remain bound to that runtime. CI run42713543972 was ACTUAL RED:122PASS/1existing LayoutStudio failure. Retained trace proves old innerText read ends after59virtualized lines at1078pxCodeMirror gap; no complete model was read by that old control. Minimal test-only7409 uses maintained readJson plus exactconfiguredorigin, preserving every semantic assertion/deadline. New actual4/4handoff cases plus typesPASS include fullmodelJSON.parse, exact customlayout/regions/two-slides and both content renders.
+
+ONEpush421aa6a663d8f0b8f2f1d3ba25364715672c0043/treeed86ea48b5b6e85b2f4af7cf7ed93e94a738097c is current. Root replayPASS20lossless files/17,329,347B/46production+historicalobjects unchanged. [Append packet](https://github.com/Data-Advantage/openpresentation-site/tree/421aa6a663d8f0b8f2f1d3ba25364715672c0043/docs/handoff/2026-11-09-playground-recovery/ci-handoff). No successful fullmodel file is invented where traces omit evaluate returns. Old582/e140 evidence remains unchanged. Sole root CI observer1586 is LIVE, exact421 --required all --interval180; logs C:/opf-work/site214-gate04.log and eventual-exit JSON. Previous88528 is terminal1; no other CI observer. Fresh CI/maintained source-bound NativePreview/deployed dark+recovery/rootimage review and production adoption remain owed. Do not merge an old green head or manually duplicate uploads.
+
+## Unified next work and owners
+
+| Work | Owner/current acceptance | Next concrete action |
+| --- | --- | --- |
+| RR114 cold overhead | A; diagnostic accepted | Review bounded recording/coverage replay proposal, then meaningful parity/memory/timing qualification before any optimization |
+| RR114 compatibility CI | Lead; exact42707671494 four font failures reproduced | Fix real mixed-emoji glyph fallback; inspect missing-catalog ensure adoption and obsolete eager-face counts without weakening actual glyph/output assertions |
+| CLI/MCP invalid reports | B; new C:/opf-work/v034-report from freshmain+e7 | Reproduce invalid-doc report becoming internalfontpreflight error; narrow validation-only recovery of verified renderer invalid-opf report, preserving canonical located reports and strict export behavior |
+| Chart conformance CI | Root; new C:/opf-work/chart-conformance | Actual localeCompare/textbox failures reproduced; existing text-box flag+code-unit order repair passes43references and148example/965slide nativeXMLconformance; full determinism grid stilllive, then review/push/fold NEWbranch |
+| RR117 | Root; source/functional/boundedperformance reviewed | DraftsourcePR/normalfold of sourcebee8 only; NEVER foldf760 evidence |
+| Recovery site214 | Root; exact421gateLIVE | CurrentCI+maintainedNativePreview then actualdeployed checks/rootimages, merge+production only after acceptance |
+| Original native/glyph/SH21/E1/E3 | Root, separate queued lanes | Preserve original59/fullinputs; actual glyph05/06/09/10 remainOPEN, SH21liveSmartArt acceptance distinct; qualify seven/table/histogram/newexplicit-reference witnesses with reviewed safe controllers/currentgenuine consumers |
+| Future034 sites/docs/catalog | Root queues distinct new leaves | G2 explicit-reference charts lesson stillUNIMPLEMENTED; H3 hierarchy/org-chart/venn/inverted-pyramid overlays stillUNIMPLEMENTED; never push frozenG1/H2 leaves |
+| Final integration/release/sites | Root | Finalcoherent mapped/defaultmain/Full/Slow, ONEmanagedgolden+allmovedsheets/archivecausalreview, trackers/bundles/catalog-free/currentnative, Release dryrun+trustedpublish then allthree034site inventory/docs/examples/gallery/MCP/E3 |
+| DEV033 adoption/owner boundaries | Owner exactsecrettransfer remainsheld | No valuesread/copied, no workaround; login/DNS/accountvisibility,D2,LOpromotion,Claudeconnector/localextension remainowner-only |
+
+Vetoable decisions: explain cold regression with exact measured work before selecting another optimization; retain every RED/setup failure and source-bound output control; fix confirmed export/report/test boundaries on NEWbranches; preserve one coherent engine gate rather than repeat aggregate suites. Later explicit deployment/Preview permission remains effective. Org033 and gallery033 already accepted production are not reopened. No Office, managedgolden,034release or production deploy occurred in this continuation.
+
+## Earlier checkpoint retained verbatim
+
 # Latest owner P0 continuation: first corrected head pushed; exact-source Open follow-up in progress
 
 PR214 source df0635e9/metadata7725ce20c4652787147f94bdf58b13dcb6101cd3 was pushed once. Root independently replayed the new owner-switch verifier:1135lossless members/116,598,317B/21protected objects, exact working source and public0.33font manifest PASS. Original7bdf and new7725 evidence packets remain immutable historical. Local actual28unit/types/build04/fontlint and9finalaffectedbrowser controls pass on that source, including both owner timing variants, exact-source font race, two real handoff refusals and two normal transfers.
