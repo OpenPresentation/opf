@@ -1,3 +1,14 @@
+# RR-114 validation font boundary — qualified leaf
+
+Frozen reviewed source `3ef13409c6fb6d49b0aa47bbb809b6f2100f13cf`, tree `679691c7759ba4793aab0afaa6ab251c6fca7507`, remains exact reviewed staginge7 plus this narrow repair. Root critically reviewed all runtime/test paths and lease cleanup with no blocker. No maina52/MCP-viewer alignment occurred mid-qualification; the coordinator owns normal integration.
+
+Actual local qualification: unchanged baseline build and candidate package/declaration build passed; all8new focused groups passed. The same three raw-source CLI/stdio probes changed from genuine baseline errors to canonical invalid reports. CLI now exits1 with no stderr, while the stdio adapter/tool returns normal located findings. Existing CLI validate+multi-input scripts passed14/14. The selected MCP stdio neighbors passed4/4: the three validation controls plus an existing convert case matching the same phrase. The full example corpus/tool suite was not run here. Root requested only these focused neighbors; the required coherent mapped/CI gate remains explicitly deferred to the combined source batch, not waived or reported green.
+
+The8new groups cover real renderer-class direct and actual prepareFonts-wrapped errors, wrong class/code/report/cause/wrapper/missing-constructor negatives, generic strict measurement and valid measured behavior, exact canonical JSON/YAML/Markdown/duplicate-key locations, mixed files/format-only status, actual official-SDK MCP stdio calls, and a host-only Roboto Mono font catalog. All defaults, source assertions, generic error mapping and schema/renderer semantics remain strict. This is a report-boundary fix, not physical font/native qualification.
+
+Run `node docs/handoff/2026-11-09/rr114-validation-reports/verify.mjs` from a clean checkout. The small lossless packet retains every baseline/candidate log, raw error/report JSON, unchanged probe driver, focused/neighbor receipts and exact source/build hashes. Installation's prebuild bin-link warnings and all original baseline failures remain literal. Renderer/PPTX/editor/gallery/spec/scripts/workflows/package/pins are protected againste7. No local release, CI dispatch, golden update, Office, provider or folded-branch push was performed.
+
+## Initial source checkpoint (retained)
 # RR-114 validation font boundary — source checkpoint
 
 Isolated worktree `C:/opf-work/v034-report`, branch `codex/rr-114-validation-reports`, freshly fetched main `9545016583ccfa151077cda4d51043ac6505a140` then normal fast-forward to reviewed staging `e7dc37096a7332a65ae2af8c37e2283790408650`. Node24.20/pnpm10.33.2 offline provisioning and the one unchanged baseline package build passed. Missing prebuild bin-link warnings are retained; no pin or cache policy changed.
