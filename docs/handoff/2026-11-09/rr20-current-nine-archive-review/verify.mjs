@@ -1,0 +1,71 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
+const directory = fileURLToPath(new URL('./', import.meta.url));
+const root = fileURLToPath(new URL('../../../../', import.meta.url));
+const {unzipSync} = createRequire(path.resolve(process.argv[2] ?? path.join(root,'packages/pptx/package.json')))('fflate');
+const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+const manifest = JSON.parse(fs.readFileSync(path.join(directory,'manifest.json')));
+const archive = fs.readFileSync(path.join(directory,manifest.zip.name));
+assert.equal(archive.length,manifest.zip.bytes); assert.equal(hash(archive),manifest.zip.sha256);
+const raws = unzipSync(archive), get = name => {assert(raws[name],name);return Buffer.from(raws[name]);}, json = name => JSON.parse(get(name));
+assert.equal(Object.keys(raws).length,manifest.rawFiles);
+for(const row of manifest.files){assert(!row.name.startsWith('/')&&!row.name.split('/').includes('..'));const bytes=get(row.name);assert.equal(bytes.length,row.bytes);assert.equal(hash(bytes),row.sha256);}
+assert.equal(manifest.files.reduce((sum,row)=>sum+row.bytes,0),manifest.rawBytes);
+const git=(...args)=>execFileSync('git',args,{cwd:root,maxBuffer:16*1024*1024});
+const scope='docs/handoff/2026-11-09/rr20-current-nine-archive-review/';
+assert(git('diff','--name-only',manifest.candidate,'HEAD').toString().trim().split(/\r?\n/).filter(Boolean).every(file=>file.startsWith(scope)));
+const report=json('outputs/review.json'),audit=json('run/nine-audit.json'),workbooks=json('run/nine-workbook-inventories.json');
+assert.equal(report.baseline.head,manifest.baseline);assert.equal(report.candidate.head,manifest.candidate);assert.equal(report.entries.length,9);
+assert.equal(report.node,'v24.20.0');assert.equal(report.platform,'win32');
+assert.equal(report.fixture.sha256,'73cea56b226a75d785c2d00d980776743bc412e18f723717ee7e61cab5549d68');
+assert.equal(report.fixture.baselineSha256,report.fixture.sha256);
+for(const name of ['baseline-install','current-install','baseline-build','current-build','review'])assert.equal(json('run/'+name+'.exit.json').exitCode,0);
+assert.equal(json('run/review.exit.json').invocation,1);
+assert.match(get('run/review.log').toString(),/9 exact baseline locks reproduced; 9 archive differences require review/);
+const fixturePath='packages/pptx/test/fixtures/chartex-fallback-main.json';
+const lockedBytes=git('show',manifest.candidate+':'+fixturePath),locked=JSON.parse(lockedBytes),candidate=json('outputs/candidate-fixture.json');
+assert.equal(hash(lockedBytes),report.fixture.sha256);
+assert.deepEqual(candidate.decks,locked.decks);
+const oldReviews=locked.source.rr20FallbackArchiveReviews??[],nextReviews=candidate.source.rr20FallbackArchiveReviews;
+assert.equal(nextReviews.length,oldReviews.length+1);assert.deepEqual(nextReviews.slice(0,-1),oldReviews);
+assert.deepEqual({...candidate.source,rr20FallbackArchiveReviews:null},{...locked.source,rr20FallbackArchiveReviews:null});
+assert.equal(nextReviews.at(-1).baseline.head,manifest.baseline);assert.equal(nextReviews.at(-1).candidate.head,manifest.candidate);
+assert.equal(nextReviews.at(-1).evidence.sha256,hash(get('outputs/review.json')));
+let parts=0,books=0,bookParts=0;
+for(const entry of report.entries){
+ const aBytes=get('outputs/'+entry.name+'/before.pptx'),bBytes=get('outputs/'+entry.name+'/after.pptx');
+ assert.equal(hash(aBytes),entry.baseline.sha256);assert.equal(hash(bBytes),entry.candidate.sha256);
+ const previousPath='docs/evidence/rr105-034-archive-review/nine/'+entry.name+'.zip';
+ const previous=unzipSync(git('show',manifest.publishedPrevious+':'+previousPath));
+ assert.deepEqual(Buffer.from(previous['after.pptx']),aBytes);
+ const a=unzipSync(aBytes),b=unzipSync(bBytes),names=Object.keys(a).sort();assert.deepEqual(Object.keys(b).sort(),names);parts+=names.length;
+ const changed=names.filter(file=>!Buffer.from(a[file]).equals(Buffer.from(b[file])));
+ assert.deepEqual(changed,['ppt/tags/opfLayout18.xml']);assert.deepEqual(entry.parts.changed.map(row=>row.file),changed);
+ const decode=bytes=>JSON.parse(Buffer.from(/name="OPF_LAYOUT_V1" val="([0-9A-F]+)"/.exec(Buffer.from(bytes).toString())[1],'hex').toString());
+ const aa=decode(a[changed[0]]),bb=decode(b[changed[0]]);
+ assert.equal(aa.id,'inverted-pyramid');assert.equal(aa.hash,'4baa264255f9f66b');assert.equal(bb.hash,'22f5fe00efa7a1f8');assert.deepEqual({...aa,hash:null},{...bb,hash:null});
+ assert.equal(a[changed[0]].length,519);assert.equal(b[changed[0]].length,519);
+ assert.equal([...a[changed[0]]].filter((byte,i)=>byte!==b[changed[0]][i]).length,21);
+ assert.deepEqual(entry.baseline.diagnostics,entry.candidate.diagnostics);assert.equal(entry.baseline.layoutParts,entry.candidate.layoutParts);assert.equal(entry.baseline.layoutTagParts,entry.candidate.layoutTagParts);
+ const next=candidate.entries[entry.name],old=locked.entries[entry.name];
+ for(const key of Object.keys(entry.candidate))assert.deepEqual(next[key],entry.candidate[key]);
+ assert.deepEqual(next.rr20ArchivePrevious,[...(old.rr20ArchivePrevious??[]),entry.baseline]);
+ const ignore=['sha256','bytes','diagnostics','layoutParts','layoutTagParts','rr20ArchivePrevious'];
+ assert.deepEqual(Object.fromEntries(Object.entries(next).filter(([key])=>!ignore.includes(key))),Object.fromEntries(Object.entries(old).filter(([key])=>!ignore.includes(key))));
+ for(const file of names.filter(file=>/\.xlsx$/.test(file))){
+  books++;assert.deepEqual(Buffer.from(a[file]),Buffer.from(b[file]));
+  const wa=unzipSync(a[file]),wb=unzipSync(b[file]),files=Object.keys(wa).sort();assert.deepEqual(Object.keys(wb).sort(),files);
+  const recorded=workbooks.find(row=>row.deck===entry.name&&row.file===file);assert(recorded);assert.equal(hash(a[file]),recorded.sha256);
+  assert.equal(recorded.parts.length,files.length);
+  for(const name of files){bookParts++;assert.deepEqual(Buffer.from(wa[name]),Buffer.from(wb[name]));const part=recorded.parts.find(row=>row.file===name);assert(part);assert.equal(hash(wa[name]),part.beforeSha256);assert.equal(hash(wb[name]),part.afterSha256);}
+ }
+}
+assert.equal(parts,1407);assert.equal(books,15);assert.equal(bookParts,180);
+assert.equal(audit.allNineMatchImmutable513ArchivesBefore,true);assert.equal(audit.nonmetadataDifferenceObserved,false);assert.equal(audit.fixturePromoted,false);assert.equal(audit.twentyOneFamilyQualified,false);
+assert.equal(report.entries[0].candidate.sha256,'c844c8abe2f223546f9a735e27f16cb0e036dd7c519b01992e02df5c22639079');
+console.log(JSON.stringify({verified:true,rawFiles:manifest.rawFiles,rawBytes:manifest.rawBytes,baseline:manifest.baseline,candidate:manifest.candidate,decks:9,pptxFiles:18,parts,metadataChanges:9,unchangedParts:parts-9,embeddedWorkbooks:books,nestedParts:bookParts,previous513ArchivesByteExact:true,nonmetadataDifferenceObserved:false,promoted:false,twentyOneQualified:false,nativeAcceptance:false}));
