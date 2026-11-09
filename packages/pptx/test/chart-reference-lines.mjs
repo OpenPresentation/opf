@@ -755,3 +755,12 @@ test('current native auto-label, leader-line and manual-placement edits remain o
     );
   }
 });
+
+for(const grouping of ['stacked','percentStacked'])test('edited '+grouping+' multi-helper groups retain ordinary data instead of restoring raw thresholds',async()=>{
+ const refs=[{value:5,label:'Low',stroke:ref.stroke},{value:10,label:'High',stroke:ref.stroke}],e=await exported(doc('line',refs)),out=await imported(rewrite(e.entries,'ppt/charts/chart1.xml',xml=>xml.replace(/<c:lineChart>[\s\S]*?<\/c:lineChart>/g,g=>helper(g)?g.replace('<c:grouping val="standard"/>','<c:grouping val="'+grouping+'"/>'):g)));
+ assert.equal(out.chart.referenceLines,undefined);assert.deepEqual(out.chart.data.rows.map(r=>r.slice(1)),[[10,5,10],[20,5,10],[30,5,10]]);assert.ok(out.diagnostics.some(d=>d.code==='chart-reference-ownership-uncertain'&&/grouping/.test(d.message)));
+});
+
+test('explicit helpers still restore under an omitted standard/default native grouping',async()=>{
+ const e=await exported(doc('line',[ref,{value:15,label:'Low',stroke:ref.stroke}])),out=await imported(rewrite(e.entries,'ppt/charts/chart1.xml',xml=>xml.replace(/<c:lineChart>[\s\S]*?<\/c:lineChart>/g,g=>helper(g)?g.replace('<c:grouping val="standard"/>',''):g)));assert.deepEqual(out.chart.referenceLines.map(r=>r.value),[25,15]);assert.deepEqual(out.chart.data,data);
+});
