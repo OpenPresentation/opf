@@ -403,6 +403,7 @@ export function addReferenceOverlays(slide, lines, { key, tags, context, color, 
       const n = id + ' label',
         b = l.labelBox;
       slide.addText(l.label, {
+        isTextBox: true,
         objectName: n,
         x: b.x / 96,
         y: b.y / 96,
@@ -475,7 +476,7 @@ function overlayHash(doc, frame, members, value) {
     ),
     shapes: members
       .map((m) => ({ role: m.tag.role, properties: m.shape['p:spPr'], orderedProperties: m.style, text: m.shape['p:txBody'] }))
-      .sort((a, b) => a.role.localeCompare(b.role)),
+      .sort((a, b) => a.role < b.role ? -1 : a.role > b.role ? 1 : 0),
   };
   const canonical = JSON.stringify(state, (_k, v) =>
     v && typeof v === 'object' && !Array.isArray(v)

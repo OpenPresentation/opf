@@ -274,6 +274,42 @@ for (const type of ['bar', 'column'])
       assert.deepEqual(changed.chart.data, d.slides[0].chart.data);
     }
   });
+test('overlay labels are native text boxes with explicit zero insets', async () => {
+  for (const type of ['bar', 'column']) {
+    const d = doc(type);
+    if (type === 'column') d.slides[0].chart.data.rows = [['Only', 20]];
+    const e = await exported(d);
+    const slide = strFromU8(e.entries['ppt/slides/slide1.xml']);
+    const labels = [...slide.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)]
+      .map(match => match[0]).filter(shape => /name="OPF chart 1:0 label"/.test(shape));
+    assert.equal(labels.length, 1, type + ': exactly one generated reference label');
+    assert.match(labels[0], /<p:cNvSpPr\b[^>]*\btxBox="1"/, type + ': native accessible text box');
+    const body = /<a:bodyPr\b[^>]*>/.exec(labels[0])?.[0];
+    assert.ok(body, type + ': explicit body properties');
+    for (const inset of ['lIns', 'tIns', 'rIns', 'bIns'])
+      assert.match(body, new RegExp('\\b' + inset + '="0"'), type + ': ' + inset);
+    const out = await imported(e.bytes);
+    assert.deepEqual(out.chart.referenceLines, [nref(ref)]);
+    assert.deepEqual(out.chart.data, d.slides[0].chart.data);
+    assert.equal(out.document.slides[0].shapes?.length ?? 0, 0);
+  }
+});
+test('overlay ownership does not depend on host locale collation', async () => {
+  const compare = String.prototype.localeCompare;
+  String.prototype.localeCompare = function () { throw new Error('Host locale collation is forbidden for reference ownership'); };
+  try {
+    for (const type of ['bar', 'column']) {
+      const d = doc(type);
+      if (type === 'column') d.slides[0].chart.data.rows = [['Only', 20]];
+      const e = await exported(d), out = await imported(e.bytes);
+      assert.deepEqual(out.chart.referenceLines, [nref(ref)]);
+      assert.deepEqual(out.chart.data, d.slides[0].chart.data);
+      assert.equal(out.document.slides[0].shapes?.length ?? 0, 0);
+    }
+  } finally {
+    String.prototype.localeCompare = compare;
+  }
+});
 test('structural identification is retained with provenance false/references', async () => {
   for (const provenance of [false, 'references-only'])
     for (const type of ['line', 'bar']) {
