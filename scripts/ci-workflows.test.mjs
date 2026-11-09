@@ -216,6 +216,24 @@ test('nightly.yml: schedule, dispatch and call; never a pull request or push; ev
   assert.doesNotMatch(job(nightly, 'npm12-consumer').text, /ignore-scripts|allow-scripts|dangerously/u, 'the leg never re-enables scripts');
 });
 
+test('Windows browser shards install every default mobile audit engine without narrowing coverage', () => {
+  const windows = job(nightly, 'editor-windows').text;
+  const browserTests = JSON.parse(read('packages/editor/test/browser-suites.json')).suites.browser.tests;
+  const touchIndex = browserTests.findIndex((entry) => entry.id === 'browser:mobile-touch');
+  assert.ok(touchIndex >= 0, 'the mobile audit is selected by the maintained browser suite');
+  const touch = read('packages/editor/test/mobile-touch-browser.mjs');
+  const defaults = touch.match(/process\.env\.OPF_TOUCH_ENGINES\s*\?\?\s*'([^']+)'/u)?.[1].split(',');
+  assert.ok(defaults?.length > 1, 'inspect the real multi-engine mobile default');
+  const browserShards = [...windows.matchAll(/suite: browser, shard: (\d+)\/(\d+)/gu)];
+  const owner = browserShards.filter(([, index, count]) => touchIndex % Number(count) === Number(index) - 1);
+  assert.equal(owner.length, 1, 'one Windows shard owns the mobile audit');
+  assert.doesNotMatch(windows, /OPF_TOUCH_ENGINES/u, 'CI retains the audit default engines');
+  for (const engine of defaults) assert.match(windows, new RegExp('playwright install[^\\n]*\\b' + engine + '\\b', 'u'), 'provision default mobile engine ' + engine);
+  const webkitStep = windows.match(/^ {6}- name: Install WebKit[^\n]*\n([\s\S]*?)(?=^ {6}- name:)/mu)?.[1];
+  assert.ok(webkitStep, 'WebKit has an explicit installation step');
+  assert.ok(webkitStep.includes("matrix.suite == 'browser' && matrix.shard == '" + owner[0][1] + '/' + owner[0][2] + "'"), 'install WebKit in the actual mobile shard');
+});
+
 test('nightly flake measurement uses Bash and routes every matrix suite to its exact measurement directory', () => {
   const flake = job(nightly, 'flake').text;
   assert.match(flake, /^ {4}continue-on-error: true$/mu, 'measurement stays advisory');

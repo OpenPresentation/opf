@@ -312,6 +312,12 @@ jobs:
         working-directory: packages/editor
         run: pnpm exec playwright install chromium
 
+      # The mobile audit belongs to browser shard 1/3 and keeps its Chromium + WebKit defaults.
+      - name: Install WebKit for the mobile audit
+        if: ${{ matrix.suite == 'browser' && matrix.shard == '1/3' }}
+        working-directory: packages/editor
+        run: pnpm exec playwright install webkit
+
       - name: ${{ matrix.suite }} browser suite (shard ${{ matrix.shard }})
         working-directory: packages/editor
         run: node ../../scripts/quarantine.mjs run-suite "${{ matrix.suite }}" --shard "${{ matrix.shard }}"
