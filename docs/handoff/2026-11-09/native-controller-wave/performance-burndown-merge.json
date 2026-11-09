@@ -1,0 +1,15 @@
+{
+  "file": "docs/programs/release-readiness/burndown.md",
+  "base": "6bab6ecec20f89a79e7a6065288cafa207999a0457139a45f28c5c51b431fd3b",
+  "ours": "4bd54fd22c909342d87b94de2e29147da742c02cafbeebbf4308ec3ee810e125",
+  "incoming": "b93ec1feb3955076e0549d16fa811f7cf8b26faf00057ff43a992233cf6b4e7c",
+  "result": "f51870feb72e4e46a42f9272384d8973d31b453b89eae242104c618902dce9d6",
+  "assignedIncomingRow": 115,
+  "existingIntegrationBytesPreserved": true,
+  "incomingProgressBytes": 758,
+  "priorConservativeRefusals": [
+    "The first model also needed to account for an existing reviewed RR105 chart suffix.",
+    "The second model found an inherited pass23/23 to pass 23/23 whitespace correction; this final model preserves ALL ours bytes and proves only incoming row/progress are added."
+  ],
+  "proof": "Incoming minus its new RR115 row is exactly base plus an append-only progress tail. Result minus that same row/tail is byte-for-byte the complete prior integration."
+}

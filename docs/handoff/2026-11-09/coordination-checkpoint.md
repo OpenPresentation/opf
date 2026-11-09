@@ -1,3 +1,5 @@
+Latest source continuation: root independently reviewed RR-115 controller/UI changes, all five public tests and its25-record verifier, then normally folded ec1fed2c as2d9107ee657e7e4b6ee7b98cae643ce06bea7090. All four runtime/test blobs equal the reviewed leaf. The sole burndown conflict adds only the real RR-115 row and758-byte progress tail while preserving every prior integration byte; [proof and replay](native-controller-wave/verify-performance-burndown-merge.mjs) retain the conservative first refusals. Full persistence-browser and coherent aggregate remain owed. All folded leaves are frozen.
+
 # Current wave: measured speed fix folded; recovery preview gate active
 
 v0.33.0 remains published and v0.34.0 unpublished. All31 original issue1139 checklist lines remain intact. The canonical PR1225 is still e5; this is the separately pushed staging wave.
