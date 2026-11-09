@@ -1,3 +1,5 @@
+Latest continuation: [native resumption and actual CI failures](native-resume-and-ci/README.md). This supersedes the Office-closure and CI-running observations below.
+
 # Current integration checkpoint — November 9 UTC
 
 Resume from the [original handoff](../2026-11-07/README.md), its binding working rules, [issue #1139](https://github.com/OpenPresentation/opf/issues/1139), and the [earlier b623 checkpoint](https://github.com/OpenPresentation/opf/blob/b623a3674037f29d68496e96a3f5b6da55d73470/docs/handoff/2026-11-09/CURRENT.md). All original requirements and 31 checkboxes remain in scope. Seven 0.33 packages are published; 0.34 is unpublished. No release ran in this continuation.

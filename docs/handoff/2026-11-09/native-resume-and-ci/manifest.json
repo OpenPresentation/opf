@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "created": "2026-11-09T15:44:45.486Z",
+  "source": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+  "suiteSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+  "nativeProducer": "2400d38bf549cdb661c31725776df25e497d364c",
+  "worker": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "publicSafeScan": {
+    "suspiciousCredentialOrSignedUrlPatterns": 0,
+    "scope": "Eight already public GitHub job logs; no secret values retrieved, no provider credentials or signed artifact URLs persisted"
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "records": [
+    {
+      "path": "job-129248234648.log.gz",
+      "bytes": 45548,
+      "sha256": "ba5dccb8034bcdeea91bdf29016c15e399ca6c98bc8c7362b8b60dcf2772d92e",
+      "rawBytes": 388016,
+      "rawSha256": "cfb68ce35753a087139dbd6bda385ea3c7936b7a7f6ff2e835349f95cb2cc721",
+      "jobId": 129248234648,
+      "source": "GitHub connector decoded log string, exact UTF-8 including original line endings/BOM; separate normalized inspection copies are not these raw bytes"
+    },
+    {
+      "path": "job-129248453015.log.gz",
+      "bytes": 19433,
+      "sha256": "1c106d3cc255681d4f3c2a5ac2fc8e44878e8969e50c8f4372b70ab43d34b2f7",
+      "rawBytes": 91998,
+      "rawSha256": "eb23c604dbd80fd60b185fb7f6ff9769762f71149629140d02331fb055722965",
+      "jobId": 129248453015,
+      "source": "GitHub connector decoded log string, exact UTF-8 including original line endings/BOM; separate normalized inspection copies are not these raw bytes"
+    },
+    {
+      "path": "job-129248501733.log.gz",
+      "bytes": 7876,
+      "sha256": "1861092c0051918acb1a363b4c984d05fea2eb9c9a094bb3480978570ccd2dde",
+      "rawBytes": 34913,
+      "rawSha256": "800c96eb963e7b396e986c255bceeb45695281067a9c82d7a37a0c4142388452",
+      "jobId": 129248501733,
+      "source": "GitHub connector decoded log string, exact UTF-8 including original line endings/BOM; separate normalized inspection copies are not these raw bytes"
+    },
+    {
+      "path": "job-129248453244.log.gz",
+      "bytes": 45228,
+      "sha256": "3fb7df17582327f81867eb75364e9ca2b9554cabf6990ae432852ec0e92888f2",
+      "rawBytes": 401595,
+      "rawSha256": "66bbe2865bb5b421ca426df848acd665ed929b2e2f2e2c0cbb65185384cdce8b",
+      "jobId": 129248453244,
+      "source": "GitHub connector decoded log string, exact UTF-8 including original line endings/BOM; separate normalized inspection copies are not these raw bytes"
+    },
+    {
+      "path": "job-129248453283.log.gz",
+      "bytes": 51624,
+      "sha256": "1695869241bd265ab8a81b345f8ef5ebf0bf2b09fb1b7d892c98ef42a5946c90",
+      "rawBytes": 430015,
+      "rawSha256": "fa933cb99b8ec92295736dafd26ab91b8c58d81697f3d5b005571e215eff6b81",
+      "jobId": 129248453283,
+      "source": "GitHub connector decoded log string, exact UTF-8 including original line endings/BOM; separate normalized inspection copies are not these raw bytes"
+    },
+    {
+      "path": "job-129248501670.log.gz",
+      "bytes": 8170,
+      "sha256": "949f8b56aeb9bd159aea86e0058bcdfc4dd79cc8a36225522cd9ef9bdd331c31",
+      "rawBytes": 37381,
+      "rawSha256": "d4a92d5ee2495b33d0f1051e46862bc3320f224c01bf5dfafe7be9065b7e4f1f",
+      "jobId": 129248501670,
+      "source": "GitHub connector decoded log string, exact UTF-8 including original line endings/BOM; separate normalized inspection copies are not these raw bytes"
+    },
+    {
+      "path": "job-129248502069.log.gz",
+      "bytes": 8166,
+      "sha256": "f16c9d29f993d11b0afefcd7fc3963d785853565c4e9b86d5ec94909cf1ff2b8",
+      "rawBytes": 37575,
+      "rawSha256": "a0d59ac87f1cff3d0bead0145b42a74ab7f653057a8a7e1e876a743b39c3aa97",
+      "jobId": 129248502069,
+      "source": "GitHub connector decoded log string, exact UTF-8 including original line endings/BOM; separate normalized inspection copies are not these raw bytes"
+    },
+    {
+      "path": "job-129254470941.log.gz",
+      "bytes": 6563,
+      "sha256": "e19577c0d0e03279f268a10e73916943f7ddef6167351ade85fcd9616c7c206e",
+      "rawBytes": 27466,
+      "rawSha256": "85a4112b79d350816de8c4026ca484820c929ec71a3c73a0a8fe2130d45165a6",
+      "jobId": 129254470941,
+      "source": "GitHub connector decoded log string, exact UTF-8 including original line endings/BOM; separate normalized inspection copies are not these raw bytes"
+    },
+    {
+      "path": "native-metrics-attempt.json.gz",
+      "bytes": 499974,
+      "sha256": "d999e4dbb65ea6bfe72153ff933944eb132d054b9623e20b63c4969112dbfe70",
+      "rawBytes": 2965621,
+      "rawSha256": "bf6a7c82d1a78a95868566402659f2a17b94149b00b2678ab10e8e9fdf7c3030",
+      "logicalFiles": 163,
+      "logicalBytes": 2203004
+    },
+    {
+      "path": "run-42642820889-jobs-1539.json.gz",
+      "bytes": 12240,
+      "sha256": "9d7a97db95b222d4845e977e06fd0c55c8c8b9c330caba06fcc029bda689bfc9",
+      "rawBytes": 297154,
+      "rawSha256": "6b47e6aadeb84b4476a2ece949182343f3be1b14b796f54020d374dd6189376e",
+      "workflowRunId": 42642820889
+    },
+    {
+      "path": "run-42642923443-jobs-1539.json.gz",
+      "bytes": 6540,
+      "sha256": "b5611ef2ad62ac213edc94476f354b1a22a34750295ada53b44c4a382e925cd5",
+      "rawBytes": 94398,
+      "rawSha256": "3f9be6cbda113c6b6880bb11d0ce12f68096cc449053450feae5477a4b5273db",
+      "workflowRunId": 42642923443
+    },
+    {
+      "path": "run-42642938002-jobs-1539.json.gz",
+      "bytes": 2640,
+      "sha256": "fc6210c799878899e2371a39d976ddaed10621bf2819a1b00047b12f74ca48bb",
+      "rawBytes": 29614,
+      "rawSha256": "cc57bee069091e99b42f83e23524e6f8a8125b7eec00e689791a2034790dd3ca",
+      "workflowRunId": 42642938002
+    }
+  ],
+  "metadataValidation": {
+    "path": "metadata-validation.json.gz",
+    "bytes": 226565,
+    "sha256": "993aa4c7291f221e09ec4eba313a36b29ce2e47a31eed588292d2654b6c3d76a",
+    "rawBytes": 1134665,
+    "rawSha256": "bee2e63710b370fcb56eef4651b2218b5de4fb2b83c578c7da847ce4547203bc",
+    "members": [
+      {
+        "path": "evidence-check-changed-01.log",
+        "bytes": 782,
+        "sha256": "478b5c857bb03d706dcd51d26810c5cfaf5d8118a3bec78a80cd3719fb9523b6"
+      },
+      {
+        "path": "evidence-check-changed-01-exit.json",
+        "bytes": 194,
+        "sha256": "de6e92584ee40b0879332110efae4a794edae30408ef477b9fa501913234a532"
+      },
+      {
+        "path": "evidence-owned-install-01.log",
+        "bytes": 4525,
+        "sha256": "fe4be5b4855398bafbac412d137d3904ab001ab7100eafa9db7ed1658919eac7"
+      },
+      {
+        "path": "evidence-owned-install-01-exit.json",
+        "bytes": 171,
+        "sha256": "b0516e79b4dbc6b80500b384eb38db45ecd8aedbc2094896530310ef9b84f7b1"
+      },
+      {
+        "path": "evidence-check-changed-02.log",
+        "bytes": 926,
+        "sha256": "a445d60a7d6394cf660df004aa75f95bb7a24968d17d339922585932e3ddda7d"
+      },
+      {
+        "path": "evidence-check-changed-02-exit.json",
+        "bytes": 286,
+        "sha256": "6b68b540a71f42f7726b819f33c61778297775192e9d5d43eaa122806d296b5e"
+      },
+      {
+        "path": "evidence-hydration.json",
+        "bytes": 821002,
+        "sha256": "7e5b48d0519109d5e16dea34c735c0c82b3ca7a57b6a4c06a5733f360a83f755"
+      },
+      {
+        "path": "mapped/biome.log",
+        "bytes": 679,
+        "sha256": "c25bb453b181b21a19bba13e50fca136002648a19fb5096b3f02775b1ae3fd2d"
+      },
+      {
+        "path": "mapped/build.log",
+        "bytes": 14600,
+        "sha256": "4b449d685d633d7681bd349909a81659fdf4be26c87f75231d9153b98a0fc055"
+      },
+      {
+        "path": "mapped/install.log",
+        "bytes": 248,
+        "sha256": "8611abbd2b659eb485243fceaa5a8fa47019277eab8ccbdb270f891dc3836bf5"
+      },
+      {
+        "path": "mapped/pnpm_run_check_changes.log",
+        "bytes": 2645,
+        "sha256": "35d44a886275b265f63712f716e4dbce675e5b7020fc9a145d77fc9ad39c1f86"
+      },
+      {
+        "path": "mapped/pnpm_run_check_skill-commands.log",
+        "bytes": 1040,
+        "sha256": "0e89246167e3e395a82efa5d1d8b7ab5729ca28751e71431323fcd15663fbad7"
+      },
+      {
+        "path": "mapped/pnpm_run_check_text.log",
+        "bytes": 1076,
+        "sha256": "a8f712a181ab46aff76221428be04472becf6fa1ac13f1b7f80cafbdbe2ae10c"
+      },
+      {
+        "path": "evidence-final-docs-01.log",
+        "bytes": 925,
+        "sha256": "760774ac22794073452809e1326cbe23a4f30a1987ff378e5f8d2c59a96c4e27"
+      },
+      {
+        "path": "evidence-final-docs-01-exit.json",
+        "bytes": 180,
+        "sha256": "86fe226f7e64a1f6778c044f4999dfc458cb7b200bb9834964aa17cc654d91dc"
+      }
+    ],
+    "mapped": {
+      "original": "install failed0.3s with no test/build executed",
+      "recovery": "5PASS/typecheckSKIP31.3s",
+      "scope": "16 evidence/handoff files, no package tests selected"
+    },
+    "finalDocCheck": {
+      "status": "5PASS/typecheckSKIP",
+      "seconds": 28.3,
+      "scope": "18 final evidence and handoff files",
+      "receiptsAddedAfterRun": true
+    }
+  }
+}
