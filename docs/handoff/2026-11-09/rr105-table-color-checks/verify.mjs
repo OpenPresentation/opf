@@ -6,6 +6,8 @@ import {createRequire} from 'node:module';
 const require = createRequire(new URL('../../../../packages/pptx/package.json', import.meta.url)), {unzipSync} = require('fflate');
 const own = import.meta.dirname, manifest = JSON.parse(fs.readFileSync(path.join(own, 'manifest.json')));
 const hash = b => createHash('sha256').update(b).digest('hex');
+const meta = JSON.parse(fs.readFileSync(path.join(own, 'metadata-checks.json'))), metaBytes = fs.readFileSync(path.join(own, meta.archive.path)); assert.equal(metaBytes.length, meta.archive.bytes); assert.equal(hash(metaBytes), meta.archive.sha256);
+const metaRaw = unzipSync(metaBytes); assert.deepEqual(Object.keys(metaRaw).sort(), meta.files.map(f => f.path).sort()); for (const f of meta.files) {assert.equal(metaRaw[f.path].length, f.bytes); assert.equal(hash(metaRaw[f.path]), f.sha256);}
 const zip = fs.readFileSync(path.join(own, manifest.archive.path)); assert.equal(zip.length, manifest.archive.bytes); assert.equal(hash(zip), manifest.archive.sha256);
 const raw = unzipSync(zip); assert.deepEqual(Object.keys(raw).sort(), manifest.files.map(f => f.path).sort());
 for (const f of manifest.files) {assert.equal(raw[f.path].length, f.bytes); assert.equal(hash(raw[f.path]), f.sha256);}

@@ -1,0 +1,58 @@
+{
+  "testedHead": "8faf6c0f4443562bd9800b3613f2c46b1afe2ba1",
+  "base": "7ece2739f1fa1e629c47e71c464832e024917efb",
+  "outcome": {
+    "passed": 4,
+    "failed": 1,
+    "typeSkipped": 1,
+    "seconds": 33.9,
+    "reason": "missing tracked sparse painting-Linux.json.gz fixture"
+  },
+  "archive": {
+    "path": "metadata-checks.zip",
+    "bytes": 8576,
+    "sha256": "14b88cca0c86bcd66a0b0af81ec9ea2fa82d00cd2139a943c4b3da290d9d9a85"
+  },
+  "files": [
+    {
+      "path": "driver/driver.log",
+      "bytes": 2884,
+      "sha256": "b7408dfa06dc502207e150024295179e0a22095ab28f4dd0d6fe44ff67b35030"
+    },
+    {
+      "path": "driver/exit.json",
+      "bytes": 125,
+      "sha256": "ba074fc6639ab5ca46d77690f8c2e1387f88bc524b89defcd81a9ba7b365d9d5"
+    },
+    {
+      "path": "driver/preflight.json",
+      "bytes": 348,
+      "sha256": "5721dd45a2e6c66204168baeb1bdc764bd193c6d2c08efe1bbe183d46d2822cf"
+    },
+    {
+      "path": "steps/biome.log",
+      "bytes": 684,
+      "sha256": "29cc26b12eda026282fc3cf43cc1ab9d6a162a5df982fd7e0cd494113bbedc1e"
+    },
+    {
+      "path": "steps/build.log",
+      "bytes": 14590,
+      "sha256": "b4df3da6fef1cf971b511049093d02fd5ef82e2849afd54a82be6895502314a1"
+    },
+    {
+      "path": "steps/pnpm_run_check_changes.log",
+      "bytes": 2642,
+      "sha256": "ad549e877b550ebb2b75a23fd11711856260793a2c1cedfc78d60af432141776"
+    },
+    {
+      "path": "steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1040,
+      "sha256": "1443c7de75d9afc961882957945cc7c5c0c0c5ea7374c10c644a3ec79a7d8b0f"
+    },
+    {
+      "path": "steps/pnpm_run_check_text.log",
+      "bytes": 1846,
+      "sha256": "e2747bb2c0de5ae5e796e6d2cee9b28a9b86eb37623bf9a58e9af743cdfe33d5"
+    }
+  ]
+}
