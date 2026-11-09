@@ -1,0 +1,50 @@
+[
+  {
+    "original": "C:/opf-work/sh26-tie/artifacts/sh26-tie-baseline/venn5long-audit.json",
+    "transport": "venn5long-audit.json.gz",
+    "rawBytes": 8549,
+    "rawSha256": "c79f49cfd67217dfe01def87daa3553922e29d01cc94c347c121b5ed17061dd6",
+    "transportBytes": 875,
+    "transportSha256": "47b4da00cd55a27e8978a263c2b87c7355523b8129f39ed71ae95f1252f15ec5"
+  },
+  {
+    "original": "C:/opf-work/sh26-tie/artifacts/sh26-tie-baseline/audit.mjs",
+    "transport": "audit.mjs.gz",
+    "rawBytes": 2337,
+    "rawSha256": "82efbdd369543842444eae7cba2b93b36a196f3d2f1ba086a29b7b36a4646040",
+    "transportBytes": 993,
+    "transportSha256": "9f20d40a22db33cd0e4208640e2e2fd333610f4af45f77731fe167cdd3d8f45a"
+  },
+  {
+    "original": "C:/opf-work/sh26-tie/artifacts/sh26-tie-baseline/audit.log",
+    "transport": "audit.log.gz",
+    "rawBytes": 220,
+    "rawSha256": "2104259fe79fad80f46d89db57a5e2068b9c56d453c09ef09da0cf464353b5f1",
+    "transportBytes": 162,
+    "transportSha256": "30d2ab5c9ca922af134da356e7f6ed513c9b3197b012e5706a05c968f531eb0c"
+  },
+  {
+    "original": "C:/opf-work/release-033-artifacts/sh26-tie-baseline-build-01.preflight.json",
+    "transport": "baseline-build.preflight.json.gz",
+    "rawBytes": 315,
+    "rawSha256": "930da0bbfe616d53399a3ec193eac04537a717d434f7824d515592299007e021",
+    "transportBytes": 241,
+    "transportSha256": "104bb6855f630a4a1bea06485853d56b05de8a00aa06d3a1d1e462e48d393be5"
+  },
+  {
+    "original": "C:/opf-work/release-033-artifacts/sh26-tie-baseline-build-01.log",
+    "transport": "baseline-build.log.gz",
+    "rawBytes": 11836,
+    "rawSha256": "7a1f099ea4f59fcd9e714f7d9fb901e948a4dc92b175e57d29be18af897fff03",
+    "transportBytes": 2445,
+    "transportSha256": "a7a80da40bc4261d73bf25710abddb821afdb590a092c2d7e9444642f0635642"
+  },
+  {
+    "original": "C:/opf-work/release-033-artifacts/sh26-tie-baseline-build-01.log.exit.json",
+    "transport": "baseline-build.log.exit.json.gz",
+    "rawBytes": 378,
+    "rawSha256": "7155732a71dbd9c1dadd9daec83ee55bcb56f5b8bf9756b2386ef16017ec9dc2",
+    "transportBytes": 273,
+    "transportSha256": "08c32762bee508fff772358ab60c0c875d1ace66efe943658803cab47569108f"
+  }
+]

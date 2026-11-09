@@ -1,0 +1,165 @@
+{
+  "schema": 1,
+  "source": {
+    "head": "f32f7ea982a3bf41edd7e31064ea9a5d779ea5db",
+    "tree": "8b48eb8cc6d851ec612f2592af39ab6852f68432",
+    "fixtureSHA256": "de95b78ed5121c5a362e4c4a2304d511f0ad5dac19fc330939440d7b64dc4fec",
+    "compositionSHA256": "38faba74af8913df1210c2964220c9dd567b121e6e13795dd797e299eb4e5603",
+    "coreDistSHA256": "39660c74ddea50313e832a7eca9a3583f15711f0e832840b4c297f93fc2e6cbe",
+    "rendererDistSHA256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+  },
+  "method": "One maintained paginatedDecks invocation; no rendering or golden writes",
+  "sourceKey": "venn 5 long",
+  "inputLabelCount": 35,
+  "outputLabelCount": 35,
+  "exactLabelValuesAndOrder": true,
+  "pageCount": 4,
+  "labels": [
+    "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 7: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 7: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 7: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 7: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+    "Item 7: Customers told us onboarding took too long, so we rebuilt it around th"
+  ],
+  "pages": [
+    {
+      "page": 1,
+      "blocks": 2,
+      "labels": [
+        "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 7: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 7: Customers told us onboarding took too long, so we rebuilt it around th"
+      ],
+      "fonts": [
+        {
+          "path": "slides.0.blocks.0.items",
+          "size": 24
+        },
+        {
+          "path": "slides.0.blocks.1.items",
+          "size": 24
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "page": 2,
+      "blocks": 1,
+      "labels": [
+        "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 7: Customers told us onboarding took too long, so we rebuilt it around th"
+      ],
+      "fonts": [
+        {
+          "path": "slides.1.blocks.0.items",
+          "size": 28
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "arrangement-adapted",
+          "path": "slides.1.blocks.0.items",
+          "message": "The entries of the venn do not fit its sets at the list's size, so they are drawn as a list."
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "blocks": 1,
+      "labels": [
+        "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 7: Customers told us onboarding took too long, so we rebuilt it around th"
+      ],
+      "fonts": [
+        {
+          "path": "slides.2.blocks.0.items",
+          "size": 28
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "arrangement-adapted",
+          "path": "slides.2.blocks.0.items",
+          "message": "The entries of the venn do not fit its sets at the list's size, so they are drawn as a list."
+        }
+      ]
+    },
+    {
+      "page": 4,
+      "blocks": 1,
+      "labels": [
+        "Item 1: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 2: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 3: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 4: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 5: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 6: Customers told us onboarding took too long, so we rebuilt it around th",
+        "Item 7: Customers told us onboarding took too long, so we rebuilt it around th"
+      ],
+      "fonts": [
+        {
+          "path": "slides.3.blocks.0.items",
+          "size": 28
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "arrangement-adapted",
+          "path": "slides.3.blocks.0.items",
+          "message": "The entries of the venn do not fit its sets at the list's size, so they are drawn as a list."
+        }
+      ]
+    }
+  ]
+}

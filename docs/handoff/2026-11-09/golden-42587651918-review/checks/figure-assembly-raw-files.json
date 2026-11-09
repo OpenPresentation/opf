@@ -1,0 +1,16 @@
+[
+  {
+    "transport": "figure-assembly/paired-sheets-assembly.log.gz",
+    "rawBytes": 176,
+    "rawSha256": "f5b9b0df8c12d3e825dc29625c39b2cd071d79278b26a7606b22085255a76ea5",
+    "transportBytes": 160,
+    "transportSha256": "326bb8f19ad4f891977b33ca4a552c6b5524b65c8d27ee082965acc18bfa820e"
+  },
+  {
+    "transport": "figure-assembly/paired-sheets-assembly.log.exit.json.gz",
+    "rawBytes": 430,
+    "rawSha256": "48cd4bb5fc49570be542eecb16cb2f4e8163efd8e58be8e540ccb329ea5b8f0b",
+    "transportBytes": 298,
+    "transportSha256": "4ea340a94af22f98343ae8006e7eda5b4cbd049e94277b402fbbe415d42e9dfc"
+  }
+]

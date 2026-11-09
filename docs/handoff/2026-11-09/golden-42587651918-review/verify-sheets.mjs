@@ -1,0 +1,18 @@
+// Offline verification of derivative figures; no OPF runtime, rasterization or file writes.
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {sha,pngPixels,zipEntries} from './read-only.mjs';
+const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+export function verifySheets(root,archives){
+ const json=n=>JSON.parse(readFileSync(path.join(root,n))),m=json('pair-manifest.json'),manifest=json('paired-sheets/sheet-manifest.json');
+ assert.equal(manifest.derivativeOnly,true);assert.equal(manifest.authoritativeGolden,false);assert.equal(manifest.waveAccepted,false);assert.equal(manifest.sheetCount,17);assert.equal(manifest.sheets.length,17);assert.equal(manifest.pairCount,67);assert.equal(manifest.panelCount,134);assert.deepEqual(manifest.rejectedIndices,[2,3,6,7,10,11]);const seen=[];
+ for(const sheet of manifest.sheets){const png=readFileSync(path.join(root,'paired-sheets',sheet.png)),svg=readFileSync(path.join(root,'paired-sheets',sheet.svg));assert.equal(png.length,sheet.pngBytes);assert.equal(sha(png),sheet.pngSHA256);assert.equal(sha(svg),sheet.svgSHA256);const decoded=pngPixels(png);assert.equal(decoded.w,sheet.width);assert.equal(decoded.h,sheet.height);const images=[...svg.toString().matchAll(/<image x="(\d+)" y="(\d+)" width="320" height="180" href="data:image\/png;base64,([A-Za-z0-9+/=]+)"\/>/g)];assert.equal(images.length,sheet.panels.length);assert.equal(sheet.panels.length,sheet.rows.length*2);
+  for(const row of sheet.rows){assert.equal(row.key,m.pairs[row.index].key);assert.equal(row.rejected,manifest.rejectedIndices.includes(row.index));assert(svg.toString().includes(esc(row.header)));assert(svg.toString().includes(esc(row.status)));seen.push(row.index);}
+  for(const [n,panel]of sheet.panels.entries()){const pair=m.pairs[panel.index],source=archives.get(panel.sourceRun).get(panel.sourceMember);assert.equal(panel.key,pair.key);assert.equal(panel.sourcePngSHA256,pair[panel.side].sha256);assert.equal(panel.sourcePngSHA256,sha(source));assert.equal(panel.sourceMember,pair[panel.side].archiveMember);assert.equal(Number(images[n][1]),panel.x);assert.equal(Number(images[n][2]),panel.y);assert.deepEqual(Buffer.from(images[n][3],'base64'),source);assert.equal(panel.width,320);assert.equal(panel.height,180);const original=pngPixels(source),crop=Buffer.alloc(320*180*4);assert.equal(original.w,320);assert.equal(original.h,180);for(let y=0;y<180;y++)decoded.pixels.copy(crop,y*320*4,((panel.y+y)*sheet.width+panel.x)*4,((panel.y+y)*sheet.width+panel.x+320)*4);assert.deepEqual(crop,original.pixels,`source panel pixels${panel.index}/${panel.side}`);assert.equal(sha(crop),panel.sourceRgbaSHA256);assert.equal(sha(crop),panel.embeddedRgbaSHA256);assert.equal(panel.pixelDifferences,0);}
+ }
+ assert.deepEqual(seen,Array.from({length:67},(_,i)=>i));assert(readFileSync(path.join(root,'paired-sheets/index.html'),'utf8').includes('WAVE NOT ACCEPTED'));
+ return {sheets:17,pairs:67,panels:134,changedOriginalPixelBytes:0};
+}
+if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){const root=path.dirname(fileURLToPath(import.meta.url)),m=JSON.parse(readFileSync(path.join(root,'pair-manifest.json'))),archives=new Map(m.archives.map(a=>[a.run,zipEntries(readFileSync(path.join(root,a.path)))]));console.log(JSON.stringify(verifySheets(root,archives)));}

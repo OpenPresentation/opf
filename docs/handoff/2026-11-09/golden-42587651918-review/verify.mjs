@@ -3,6 +3,7 @@ import {readFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {gunzipSync} from 'node:zlib';
+import {verifySheets} from './verify-sheets.mjs';
 import {sha,zipEntries,bodyObservation} from './read-only.mjs';
 const root=path.dirname(fileURLToPath(import.meta.url));
 const read=name=>readFileSync(path.join(root,name));const json=name=>JSON.parse(read(name));
@@ -10,7 +11,7 @@ const manifest=json('pair-manifest.json'),inventory=json('artifact-inventory.jso
 assert.equal(manifest.neverMerge,true);assert.equal(manifest.scope.visualAcceptance,false);
 for(const binding of json('baseline-bindings.json')){const bytes=read(binding.local);assert.equal(bytes.length,binding.bytes);assert.equal(sha(bytes),binding.sha256);}
 for(const receipt of json('download-receipts-raw.json')){const gzip=read(receipt.transport);assert.equal(gzip.length,receipt.transportBytes);assert.equal(sha(gzip),receipt.transportSha256);const raw=gunzipSync(gzip);assert.equal(raw.length,receipt.rawBytes);assert.equal(sha(raw),receipt.rawSha256);assert.deepEqual(JSON.parse(raw),json(receipt.path));}
-for(const name of ['initial-raw-files.json','recovery-raw-files.json','final-raw-files.json']){let files;try{files=json('checks/'+name);}catch(error){if(name==='final-raw-files.json'&&error.code==='ENOENT')continue;throw error;}for(const f of files){const gzip=read('checks/'+f.transport);assert.equal(gzip.length,f.transportBytes);assert.equal(sha(gzip),f.transportSha256);const raw=gunzipSync(gzip);assert.equal(raw.length,f.rawBytes);assert.equal(sha(raw),f.rawSha256);}}
+for(const name of ['initial-raw-files.json','recovery-raw-files.json','final-raw-files.json','figure-assembly-raw-files.json','figures-mapped-raw-files.json']){let files;try{files=json('checks/'+name);}catch(error){if(['final-raw-files.json','figures-mapped-raw-files.json'].includes(name)&&error.code==='ENOENT')continue;throw error;}for(const f of files){const gzip=read('checks/'+f.transport);assert.equal(gzip.length,f.transportBytes);assert.equal(sha(gzip),f.transportSha256);const raw=gunzipSync(gzip);assert.equal(raw.length,f.rawBytes);assert.equal(sha(raw),f.rawSha256);}}
 const proof=json('source-proof.json');for(const tree of Object.values(proof.trees))assert.equal(tree.actual,tree.expected);assert.equal(proof.base,manifest.bot);
 const qualification=json('checks/qualification.json');assert.equal(qualification.initial.exitCode,1);assert.equal(qualification.narrowTextRecovery.exitCode,0);assert.equal(qualification.final.exitCode,0);assert.equal(qualification.final.packageTestsSelected.length,0);
 const archives=new Map();
@@ -26,4 +27,8 @@ const coreBefore=json('before-core-baseline.json'),coreAfter=json('after-core-ba
 const changed=Object.keys(coreAfter).filter(k=>JSON.stringify(coreBefore[k])!==JSON.stringify(coreAfter[k])).map(key=>({key,before:coreBefore[key],after:coreAfter[key]}));assert.deepEqual(changed,manifest.changedCore);assert.equal(changed.length,10);
 const patch=current.get('golden.patch').toString();const paths=[...patch.matchAll(/^diff --git a\/(.+) b\/(.+)$/gm)].map(x=>{assert.equal(x[1],x[2]);return x[1];});assert.deepEqual(paths,['packages/javascript/test/fixtures/template-goldens-0.19.json','packages/render/test/golden/layout-templates-rr96-color-variants.json']);
 assert.deepEqual(JSON.parse(current.get('diff.json')),manifest.examples);assert.equal(manifest.examples.changedSlides.length,0);assert.equal(manifest.examples.changedDecks.length,0);
+for(const f of json('venn5long-evidence/raw-files.json')){const gzip=read('venn5long-evidence/'+f.transport);assert.equal(sha(gzip),f.transportSha256);assert.equal(gzip.length,f.transportBytes);const raw=gunzipSync(gzip);assert.equal(sha(raw),f.rawSha256);assert.equal(raw.length,f.rawBytes);}
+const audit=json('venn5long-evidence/venn5long-audit.json');assert.equal(audit.source.head,manifest.bot);assert.equal(audit.inputLabelCount,35);assert.equal(audit.outputLabelCount,35);assert.equal(audit.exactLabelValuesAndOrder,true);assert.equal(audit.pageCount,4);assert.deepEqual(audit.pages.map(p=>p.labels.length),[14,7,7,7]);assert.deepEqual(audit.pages.flatMap(p=>p.labels),audit.labels);assert(!audit.pages.some(p=>p.diagnostics.some(d=>d.code==='text-overflow')));
+const review=json('root-review.json');assert.equal(review.waveGoldenAccepted,false);assert.equal(review.all67PairsIndividuallyViewed,true);assert.deepEqual(review.rejectedIndices,[2,3,6,7,10,11]);assert.deepEqual(review.pairs.map(p=>p.key),manifest.pairs.map(p=>p.key));for(const p of review.pairs){assert.equal(p.beforePngSHA256,manifest.pairs[p.index].before.sha256);assert.equal(p.afterPngSHA256,manifest.pairs[p.index].after.sha256);}
+verifySheets(root,archives);
 console.log('PASS: both original ZIP identities and260CRC-verifiedmembers; all67before/current PNGpairs+3removedkeys;480corekeys/10changes; exact2-filepatch; noexamples changed. Pixelbody checks prove only nonblank bright content, not words/type/design/native acceptance.');
