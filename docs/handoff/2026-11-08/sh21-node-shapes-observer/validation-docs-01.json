@@ -1,0 +1,14 @@
+{
+  "command": "node scripts/check-changed.mjs --files <handoff and mapped receipt/log>",
+  "exitCode": 0,
+  "finishedAt": "2026-11-09T00:08:14.4454867Z",
+  "officeConstructed": false,
+  "seconds": 28.2,
+  "log": {
+    "path": "validation-docs-01.log.gz",
+    "decodedBytes": 756,
+    "decodedSha256": "8e15bec8592a9a842960833fc9a968845d0dcd7487c84931c90178d6d2230b21"
+  },
+  "sourceReceiptSha256": "8842a3aac48d45a3b4f51a4a78242196adf76c2db0c8ae319c6fdb0f686373eb",
+  "nativeAcceptance": false
+}

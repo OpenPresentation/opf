@@ -1,0 +1,48 @@
+{
+  "observerManifestVersion": 1,
+  "diagnosticOnly": true,
+  "nativeAcceptance": false,
+  "sourcePacket": "docs/programs/shapes/sh-live-2026-11-07/native/sh21-product-full-02/result",
+  "originalManifestRevision": "77cbe3b41f2fb647cf014cfd1008d053165f7b3b",
+  "originalManifestSha256": "35b60a43766a1c15ef01491e2b26ee0b3d8928460f61e33e0f338c4be4b40c26",
+  "baselineWorkerSha256": "9a9211b055bc46e3989621a6b2a8d8dd13e8cb0f1df140353fac8f58d294f564",
+  "cases": [
+    {
+      "id": "venn-1",
+      "kind": "venn",
+      "count": 1,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-1.pptx",
+        "sha256": "bcf90fc7447075b8938bb0c51d27d458ec185a262f95a8febcf756ccb9f3cbad"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-1.pptx",
+        "sha256": "440b81dd31258d534bd6ed5c9aa8a131d5d8aa60b00a285d90f2a66340efcdd4"
+      }
+    },
+    {
+      "id": "venn-2",
+      "kind": "venn",
+      "count": 2,
+      "layoutId": "urn:microsoft.com/office/officeart/2005/8/layout/venn1",
+      "items": [
+        "N1",
+        "N2"
+      ],
+      "fontSize": 36,
+      "live": {
+        "file": "pptx/venn-2.pptx",
+        "sha256": "1f055af76d369c341f4cfd46d33e928f38f8ad12e6e0136b8a51d480579f6e87"
+      },
+      "native": {
+        "file": "pptx-shapes/venn-2.pptx",
+        "sha256": "5df748361e43cfde88e5f38c569a3fb6a2a6980e2c1a1c75650fd3ffe041e048"
+      }
+    }
+  ]
+}

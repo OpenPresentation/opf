@@ -1,0 +1,15 @@
+{
+  "command": "node scripts/check-changed.mjs --base 447df3121c4c64b7e6d58bc3116e8ee7ac2fc487",
+  "exitCode": 0,
+  "finishedAt": "2026-11-09T00:06:38.0002951Z",
+  "officeConstructed": false,
+  "seconds": 70.4,
+  "sourceReceiptSha256": "8842a3aac48d45a3b4f51a4a78242196adf76c2db0c8ae319c6fdb0f686373eb",
+  "workerSha256": "51439c085e65c168b99424b5355338e6c6b77febb747629bf51ce8aa6a439df5",
+  "log": {
+    "path": "validation-02.log.gz",
+    "decodedBytes": 1008,
+    "decodedSha256": "70daeeb487a32818e3296d47ecba35f5b5f78cc5d01d67041d3e301fc77221ed"
+  },
+  "scope": "All selected build/lint/root checks plus the new PPTX package test; no typecheck selected; no Office/native qualification"
+}
