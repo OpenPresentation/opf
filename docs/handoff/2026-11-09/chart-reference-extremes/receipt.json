@@ -122,5 +122,11 @@
       "path": "packages/render/test/chart-reference-lines.mjs",
       "sha256": "91b10acc59a9a7d48ec530153ca6ebfe323985929fc83268ba1000b7fd98f015"
     }
-  ]
+  ],
+  "archive": {
+    "name": "raw.zip",
+    "bytes": 10802,
+    "sha256": "decccb0c88bdf6d14497c979ed34d9a83f7c595f2c33b2d0893d03cefd2f21a3",
+    "expandedBytes": 25272
+  }
 }
