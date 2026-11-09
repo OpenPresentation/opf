@@ -1,0 +1,49 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "SH21 org-chart-5",
+  "language": "en-US",
+  "catalogs": {
+    "custom": {
+      "fontSchemes": {
+        "source-sans-3": {
+          "name": "Source Sans 3",
+          "major": "Source Sans 3",
+          "minor": "Source Sans 3",
+          "type": "sans-serif"
+        }
+      }
+    }
+  },
+  "design": {
+    "dimensions": "16:9",
+    "fontScheme": "source-sans-3"
+  },
+  "slides": [
+    {
+      "layout": "org-chart",
+      "title": "Measured org-chart geometry",
+      "items": [
+        {
+          "text": "Root",
+          "level": 0
+        },
+        {
+          "text": "Build",
+          "level": 1
+        },
+        {
+          "text": "Web",
+          "level": 2
+        },
+        {
+          "text": "App",
+          "level": 2
+        },
+        {
+          "text": "Ship",
+          "level": 1
+        }
+      ]
+    }
+  ]
+}

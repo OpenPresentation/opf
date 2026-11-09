@@ -1,0 +1,71 @@
+[
+  {
+    "id": "overview-dynamic",
+    "slide": {
+      "id": "dynamic-code-text",
+      "title": "How the running total works",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          3,
+          2
+        ]
+      },
+      "blocks": [
+        {
+          "code": {
+            "language": "javascript",
+            "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+          }
+        },
+        {
+          "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+        }
+      ]
+    }
+  },
+  {
+    "id": "batch02-s34",
+    "slide": {
+      "title": "Signal Trend",
+      "composition": {
+        "mode": "row"
+      },
+      "blocks": [
+        {
+          "code": {
+            "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
+            "language": "ts",
+            "filename": "kiosk-orientation-deck-rule.ts"
+          }
+        },
+        {
+          "text": "Novara Therapeutics should focus the next cycle on restore patient enrollment momentum across priority sites while making the operating tradeoffs clear to pharmaceuticals stakeholders."
+        }
+      ],
+      "id": "s34"
+    }
+  },
+  {
+    "id": "batch03-s12",
+    "slide": {
+      "title": "Decision Options",
+      "composition": {
+        "mode": "row"
+      },
+      "blocks": [
+        {
+          "code": {
+            "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
+            "language": "ts",
+            "filename": "boutique-hotel-revenue-recovery-rule.ts"
+          }
+        },
+        {
+          "text": "Oaktrail Animal Health should focus the next cycle on balance appointment access with staff retention while making the operating tradeoffs clear to veterinary care stakeholders."
+        }
+      ],
+      "id": "s12"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "node": "v24.20.0",
+  "baseline": "afac3f7fc07539667fe9298f8efc08c967aacb0d",
+  "candidate": "f2c135f6692900ce5b916655278159f79ba47843",
+  "source": "Exact plainDocuments pie/doughnut payloads and same catalog harness/trace:true",
+  "cause": "LH182 optioned/nested-ring hole gains exactly one surface-fill circle. Removing that complete token reproduces the prior SVG byte-for-byte.",
+  "cases": [
+    {
+      "type": "pie",
+      "beforeSha256": "2dd37f8451ec0eb2f9813714924e1657575d1c76915f2967ca34ca2c0d834881",
+      "afterSha256": "eca35020ba20d082cefcde6264b4816604b46922e25331af7d976e78e1595e9e",
+      "beforeDigest": "2dd37f8451ec0eb2f9813714",
+      "afterDigest": "eca35020ba20d082cefcde62",
+      "removed": "",
+      "added": "<circle cx=\"607.6\" cy=\"404.94\" fill=\"#011842\" r=\"111.357\"/>\n",
+      "allOtherBytesIdentical": true
+    },
+    {
+      "type": "doughnut",
+      "beforeSha256": "f11809c870197d9502bf6e6261878b09fdb8a457a5dc85916efdbc9efba3407c",
+      "afterSha256": "a9bcd46555aa535a126a72b91443c088d4401041e5519fab2baf46c24e1f64fb",
+      "beforeDigest": "f11809c870197d9502bf6e62",
+      "afterDigest": "a9bcd46555aa535a126a72b9",
+      "removed": "",
+      "added": "<circle cx=\"607.6\" cy=\"404.94\" fill=\"#011842\" r=\"111.357\"/>\n",
+      "allOtherBytesIdentical": true
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "scope": "Actual failed1183doughnut top receipt; native observations preserved, not product-derived center",
+  "report": "C:/opf-work/sh25-curved-native-doughnut-01/native/report.json",
+  "reportSha256": "9299dbd6b72fefa3eadc1310ed6dcf1b67730053c93d7ecfbf367c580c0d355c",
+  "probe": {
+    "stage": "action-3-measure-chart-point",
+    "chartName": "OPF chart 1",
+    "shapeName": "OPF shape slides.0.shapes.2",
+    "seriesIndex": 1,
+    "pointIndex": 3,
+    "edge": "top",
+    "strategy": "native-point-bounds",
+    "sliceCoordinates": [
+      {
+        "index": 1,
+        "location": 1,
+        "rawValue": "315.806929133858",
+        "value": 315.80692913385826
+      },
+      {
+        "index": 1,
+        "location": 2,
+        "rawValue": "96.3074015748032",
+        "value": 96.30740157480315
+      },
+      {
+        "index": 2,
+        "location": 1,
+        "rawValue": "280.488346456693",
+        "value": 280.4883464566929
+      },
+      {
+        "index": 2,
+        "location": 2,
+        "rawValue": "242.725511811024",
+        "value": 242.7255118110236
+      },
+      {
+        "index": 3,
+        "location": 1,
+        "rawValue": "411.463779527559",
+        "value": 411.46377952755904
+      },
+      {
+        "index": 3,
+        "location": 2,
+        "rawValue": "317.096850393701",
+        "value": 317.0968503937008
+      },
+      {
+        "index": 7,
+        "location": 1,
+        "rawValue": "406.091732283465",
+        "value": 406.0917322834646
+      },
+      {
+        "index": 7,
+        "location": 2,
+        "rawValue": "275.718818897638",
+        "value": 275.7188188976378
+      },
+      {
+        "index": 8,
+        "location": 1,
+        "rawValue": "318.774803149606",
+        "value": 318.77480314960627
+      },
+      {
+        "index": 8,
+        "location": 2,
+        "rawValue": "226.137952755906",
+        "value": 226.1379527559055
+      },
+      {
+        "index": 9,
+        "location": 1,
+        "rawValue": "342.320472440945",
+        "value": 342.32047244094485
+      },
+      {
+        "index": 9,
+        "location": 2,
+        "rawValue": "128.525905511811",
+        "value": 128.52590551181103
+      }
+    ],
+    "pieCenterLocalPoints": null,
+    "curvedBoundsLocalPoints": null,
+    "plotCenterLocalPoints": [
+      391.3476771653543,
+      188.962874015748
+    ]
+  },
+  "chart": {
+    "left": 43.2,
+    "top": 110.874329
+  },
+  "overlay": {
+    "left": 372.043,
+    "top": 195.172836,
+    "width": 24,
+    "height": 24
+  }
+}

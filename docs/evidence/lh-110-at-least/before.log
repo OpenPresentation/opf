@@ -1,0 +1,101 @@
+✖ fr: complete at-least phrase keeps word/digit meaning and reference line (13.763ms)
+✖ es: complete at-least phrase keeps word/digit meaning and reference line (7.387ms)
+✖ pt: complete at-least phrase keeps word/digit meaning and reference line (11.9632ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 181.5055
+
+✖ failing tests:
+
+test at packages\javascript\test\lh-110-at-least.test.mjs:6:73
+✖ fr: complete at-least phrase keeps word/digit meaning and reference line (13.763ms)
+  AssertionError [ERR_ASSERTION]: complete at-least words equal the existing digit form
+  + actual - expected
+  
+  + []
+  - [
+  -   {
+  -     decimals: 0,
+  -     percent: false,
+  -     text: '5',
+  -     value: 5
+  -   }
+  - ]
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/lh-110-at-least/packages/javascript/test/lh-110-at-least.test.mjs:7:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ { value: 5, decimals: 0, percent: false, text: '5' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at packages\javascript\test\lh-110-at-least.test.mjs:6:73
+✖ es: complete at-least phrase keeps word/digit meaning and reference line (7.387ms)
+  AssertionError [ERR_ASSERTION]: complete at-least words equal the existing digit form
+  + actual - expected
+  
+  + []
+  - [
+  -   {
+  -     decimals: 0,
+  -     percent: false,
+  -     text: '5',
+  -     value: 5
+  -   }
+  - ]
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/lh-110-at-least/packages/javascript/test/lh-110-at-least.test.mjs:7:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ { value: 5, decimals: 0, percent: false, text: '5' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at packages\javascript\test\lh-110-at-least.test.mjs:6:73
+✖ pt: complete at-least phrase keeps word/digit meaning and reference line (11.9632ms)
+  AssertionError [ERR_ASSERTION]: complete at-least words equal the existing digit form
+  + actual - expected
+  
+  + []
+  - [
+  -   {
+  -     decimals: 0,
+  -     percent: false,
+  -     text: '5',
+  -     value: 5
+  -   }
+  - ]
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/lh-110-at-least/packages/javascript/test/lh-110-at-least.test.mjs:7:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ { value: 5, decimals: 0, percent: false, text: '5' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

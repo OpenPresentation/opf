@@ -1,0 +1,314 @@
+{
+  "sourceCommit": "3cf859bc578691f7df6aa43253b5d4d89173d949",
+  "acceptedSource": "24cc31f78f781bd60bde581004f6b1d6d583bbc0",
+  "cases": [
+    {
+      "name": "01-demand-generation-campaign-brief-s1",
+      "accepted": "84d75ee3af5d2c0fd8fc0cd2090c2986944c70a6e0a5145d4f25cf665fad39ab",
+      "candidate": "84d75ee3af5d2c0fd8fc0cd2090c2986944c70a6e0a5145d4f25cf665fad39ab",
+      "identical": true
+    },
+    {
+      "name": "02-employee-town-hall-run-of-show-s1",
+      "accepted": "29e67f5a849bb6d5cd882e354c2580ab8f5858447689edd2e31b7d2574667f92",
+      "candidate": "29e67f5a849bb6d5cd882e354c2580ab8f5858447689edd2e31b7d2574667f92",
+      "identical": true
+    },
+    {
+      "name": "03-engineering-capacity-planning-s1",
+      "accepted": "b1ac07f9c10f664adce68976a83029fdcc35b204ba01d7b1fbca37329b77bd22",
+      "candidate": "b1ac07f9c10f664adce68976a83029fdcc35b204ba01d7b1fbca37329b77bd22",
+      "identical": true
+    },
+    {
+      "name": "04-onboarding-experience-redesign-s1",
+      "accepted": "786bff39db7c543f065850ba207b00613c532505616b08181c650f57f96d4ec4",
+      "candidate": "786bff39db7c543f065850ba207b00613c532505616b08181c650f57f96d4ec4",
+      "identical": true
+    },
+    {
+      "name": "05-partner-ecosystem-launch-kit-s1",
+      "accepted": "927709774900e4661588e6de0849e69714d17e774d565512ec31fa7de2aa56ce",
+      "candidate": "927709774900e4661588e6de0849e69714d17e774d565512ec31fa7de2aa56ce",
+      "identical": true
+    },
+    {
+      "name": "06-pricing-and-packaging-decision-s1",
+      "accepted": "2ddf34fa902d50a5d92bc58b0fe257916852eabea17b7a435ceaab57a153b127",
+      "candidate": "2ddf34fa902d50a5d92bc58b0fe257916852eabea17b7a435ceaab57a153b127",
+      "identical": true
+    },
+    {
+      "name": "07-product-roadmap-decision-review-s1",
+      "accepted": "f46fbca4c43653149cc1a47b931dae77f3a5018dd9dc7cc9c2b50ab5dd25b266",
+      "candidate": "f46fbca4c43653149cc1a47b931dae77f3a5018dd9dc7cc9c2b50ab5dd25b266",
+      "identical": true
+    },
+    {
+      "name": "08-revenue-forecast-inspection-s1",
+      "accepted": "85651078237a4fdc381a3b5bb373ed25057783b21663ebdb98c3b1c26bd021af",
+      "candidate": "85651078237a4fdc381a3b5bb373ed25057783b21663ebdb98c3b1c26bd021af",
+      "identical": true
+    },
+    {
+      "name": "09-scope-3-reporting-readiness-s1",
+      "accepted": "fe8b23abb5e50a4bf16f93ce5c718ea931ab1a710b31d9244ee199a3aa86acf6",
+      "candidate": "fe8b23abb5e50a4bf16f93ce5c718ea931ab1a710b31d9244ee199a3aa86acf6",
+      "identical": true
+    },
+    {
+      "name": "10-visual-brand-system-sampler-s1",
+      "accepted": "7c4e3c5cf308464d0ab68c23f80d5dd26123d4feeb48d9a118ab03facf37b041",
+      "candidate": "7c4e3c5cf308464d0ab68c23f80d5dd26123d4feeb48d9a118ab03facf37b041",
+      "identical": true
+    },
+    {
+      "name": "11-apprenticeship-partnership-deck-s1",
+      "accepted": "1d1b4a99aa287874c75a37222e01c478cf6b1634f0cb8543dcd861cf4b44f85a",
+      "candidate": "1d1b4a99aa287874c75a37222e01c478cf6b1634f0cb8543dcd861cf4b44f85a",
+      "identical": true
+    },
+    {
+      "name": "12-campus-energy-action-brief-s1",
+      "accepted": "ed5d6164198749de2e58f7192bc73f777da7b7c2c64e440f7039b7baec807ea0",
+      "candidate": "ed5d6164198749de2e58f7192bc73f777da7b7c2c64e440f7039b7baec807ea0",
+      "identical": true
+    },
+    {
+      "name": "13-district-literacy-acceleration-plan-s1",
+      "accepted": "e6697b7c92d20dddcd24d87624d7c622a18317d7da543752ca0c6e5e5b079882",
+      "candidate": "e6697b7c92d20dddcd24d87624d7c622a18317d7da543752ca0c6e5e5b079882",
+      "identical": true
+    },
+    {
+      "name": "14-school-safety-preparedness-brief-s1",
+      "accepted": "40c09fd65d5543e54548ffcdc44419e6b98de533109677ad84fee73f20cead53",
+      "candidate": "40c09fd65d5543e54548ffcdc44419e6b98de533109677ad84fee73f20cead53",
+      "identical": true
+    },
+    {
+      "name": "15-student-mental-health-capacity-review-s1",
+      "accepted": "c6c2caa25237de74a123bd38ee5a727fe78fcf2ddef12e7badf4fb12a549aeb5",
+      "candidate": "c6c2caa25237de74a123bd38ee5a727fe78fcf2ddef12e7badf4fb12a549aeb5",
+      "identical": true
+    },
+    {
+      "name": "16-workforce-pathway-partnership-s1",
+      "accepted": "86b0c940f4d80839b55b13c88797a8184056c0862e55c9e25aed941dc7e4ba0a",
+      "candidate": "86b0c940f4d80839b55b13c88797a8184056c0862e55c9e25aed941dc7e4ba0a",
+      "identical": true
+    },
+    {
+      "name": "17-digital-services-modernization-s1",
+      "accepted": "92cb59a79cfee35520d92bd8371babab71febc9227455b4d9b68dfe2509dfc3c",
+      "candidate": "92cb59a79cfee35520d92bd8371babab71febc9227455b4d9b68dfe2509dfc3c",
+      "identical": true
+    },
+    {
+      "name": "18-police-training-program-update-s1",
+      "accepted": "50ab0a232d832e233b81442aaacbaede938f39e8a359a723b06bde2b273fac01",
+      "candidate": "50ab0a232d832e233b81442aaacbaede938f39e8a359a723b06bde2b273fac01",
+      "identical": true
+    },
+    {
+      "name": "19-vaccination-outreach-briefing-s1",
+      "accepted": "064702527e9b93d0902e1db7bae612f6cfc02b6a2e0c9b04dace6a84880a0089",
+      "candidate": "064702527e9b93d0902e1db7bae612f6cfc02b6a2e0c9b04dace6a84880a0089",
+      "identical": true
+    },
+    {
+      "name": "20-workforce-reskilling-initiative-s1",
+      "accepted": "7601c6e13109c5a785200474378b88718222d776ec610ad6f5894d7a61a2dec4",
+      "candidate": "7601c6e13109c5a785200474378b88718222d776ec610ad6f5894d7a61a2dec4",
+      "identical": true
+    },
+    {
+      "name": "21-airline-disruption-recovery-review-s1",
+      "accepted": "c1b7dd683bf1406a8cc3d86ee469e3a429146bfb255d513402a1ae45608ced78",
+      "candidate": "c1b7dd683bf1406a8cc3d86ee469e3a429146bfb255d513402a1ae45608ced78",
+      "identical": true
+    },
+    {
+      "name": "22-ambulatory-access-recovery-plan-s1",
+      "accepted": "0ba2b8028330169c4bf02d95db1665aa956d714a16fc9af4231851ec8165a6b2",
+      "candidate": "0ba2b8028330169c4bf02d95db1665aa956d714a16fc9af4231851ec8165a6b2",
+      "identical": true
+    },
+    {
+      "name": "23-battery-line-supplier-readiness-s1",
+      "accepted": "a16abc0a97d2fcf1d03fe14aec82e9b1905b9a991b36d8dd6479c22eb7eb676e",
+      "candidate": "a16abc0a97d2fcf1d03fe14aec82e9b1905b9a991b36d8dd6479c22eb7eb676e",
+      "identical": true
+    },
+    {
+      "name": "24-boutique-hotel-revenue-recovery-s1",
+      "accepted": "a211966169301347bea237a68a66bf5a8db4b1fac7539fed083d78cbe2cb76a0",
+      "candidate": "a211966169301347bea237a68a66bf5a8db4b1fac7539fed083d78cbe2cb76a0",
+      "identical": true
+    },
+    {
+      "name": "25-branch-modernization-investment-case-s1",
+      "accepted": "13335989ea3856f6042b60e5e39287ce4a0997aeb30766173adf12e9edbcd5f3",
+      "candidate": "13335989ea3856f6042b60e5e39287ce4a0997aeb30766173adf12e9edbcd5f3",
+      "identical": true
+    },
+    {
+      "name": "26-claims-triage-operating-model-s1",
+      "accepted": "93a776e338d994437ed0fb7c4be1186c7376be898bf33e807cc9cc61f0233387",
+      "candidate": "93a776e338d994437ed0fb7c4be1186c7376be898bf33e807cc9cc61f0233387",
+      "identical": true
+    },
+    {
+      "name": "27-cold-chain-waste-reduction-review-s1",
+      "accepted": "4294592a8f70226d45c1245847bd4ffb1d0392ab432e2d4282024452e67e0444",
+      "candidate": "4294592a8f70226d45c1245847bd4ffb1d0392ab432e2d4282024452e67e0444",
+      "identical": true
+    },
+    {
+      "name": "28-construction-safety-stand-down-s1",
+      "accepted": "0a00321c7a8fc4cf9bc6dbb99123616bb3c9176d9f0e50c2a53aeb42d1dfe053",
+      "candidate": "0a00321c7a8fc4cf9bc6dbb99123616bb3c9176d9f0e50c2a53aeb42d1dfe053",
+      "identical": true
+    },
+    {
+      "name": "29-consulting-margin-recovery-plan-s1",
+      "accepted": "995119b72cf8aac2df8d159300f113d4cba891ac801b73fdf4f1bac63a3cbd06",
+      "candidate": "995119b72cf8aac2df8d159300f113d4cba891ac801b73fdf4f1bac63a3cbd06",
+      "identical": true
+    },
+    {
+      "name": "30-fan-experience-operations-brief-s1",
+      "accepted": "2ab448db543e8754318deeaa84f0dbdb8f8ad4243549daa8469e59d768415d66",
+      "candidate": "2ab448db543e8754318deeaa84f0dbdb8f8ad4243549daa8469e59d768415d66",
+      "identical": true
+    },
+    {
+      "name": "31-food-bank-distribution-capacity-plan-s1",
+      "accepted": "5eb22fdeff03e24dff2c9ca00a0b7e88f17443f36b4e6c0b2337105c504bb3a9",
+      "candidate": "5eb22fdeff03e24dff2c9ca00a0b7e88f17443f36b4e6c0b2337105c504bb3a9",
+      "identical": true
+    },
+    {
+      "name": "32-grid-resilience-capital-plan-s1",
+      "accepted": "62c9170839483475baf6c938e5db0d7e667b6bfe2472bc5ebb5bf1c2efe2711d",
+      "candidate": "62c9170839483475baf6c938e5db0d7e667b6bfe2472bc5ebb5bf1c2efe2711d",
+      "identical": true
+    },
+    {
+      "name": "33-managed-detection-market-update-s1",
+      "accepted": "9eaa2c1c96a7db08fd84e48cf21ef4d6f8e818a4ebfde8e93bbb7ce3e853920c",
+      "candidate": "9eaa2c1c96a7db08fd84e48cf21ef4d6f8e818a4ebfde8e93bbb7ce3e853920c",
+      "identical": true
+    },
+    {
+      "name": "34-mixed-use-leasing-pipeline-review-s1",
+      "accepted": "b4909f0b37ae23923a651dc8217cb2e0005eda5f8b5f3905e9178c61e778928b",
+      "candidate": "b4909f0b37ae23923a651dc8217cb2e0005eda5f8b5f3905e9178c61e778928b",
+      "identical": true
+    },
+    {
+      "name": "35-rural-broadband-expansion-proposal-s1",
+      "accepted": "1e259b05e765994bd67d08c19e3b7d3759f97bceff8cd2ed56e6f3b0f59b160b",
+      "candidate": "1e259b05e765994bd67d08c19e3b7d3759f97bceff8cd2ed56e6f3b0f59b160b",
+      "identical": true
+    },
+    {
+      "name": "36-satellite-maintenance-readiness-review-s1",
+      "accepted": "7b6a7592c46bfe3d993e347521d17793ee05db1607ef77cbc3ce65952aed8685",
+      "candidate": "7b6a7592c46bfe3d993e347521d17793ee05db1607ef77cbc3ce65952aed8685",
+      "identical": true
+    },
+    {
+      "name": "37-streaming-churn-winback-strategy-s1",
+      "accepted": "cb9af57a3048ca0343bf179b1bf9b1ebd509d2e07508a14c42cc7d65d5c9cb9c",
+      "candidate": "cb9af57a3048ca0343bf179b1bf9b1ebd509d2e07508a14c42cc7d65d5c9cb9c",
+      "identical": true
+    },
+    {
+      "name": "38-veterinary-staffing-stabilization-s1",
+      "accepted": "3c97c16c6f870201d444abf7e4c1acd92c9345f837775976d02d7d17496ee9f7",
+      "candidate": "3c97c16c6f870201d444abf7e4c1acd92c9345f837775976d02d7d17496ee9f7",
+      "identical": true
+    },
+    {
+      "name": "39-arabic-digital-services-brief-s1",
+      "accepted": "a9bf18573f905cc305e07d8cddd6b34d605421730d68caff35f4c2b5f0c8a0e3",
+      "candidate": "a9bf18573f905cc305e07d8cddd6b34d605421730d68caff35f4c2b5f0c8a0e3",
+      "identical": true
+    },
+    {
+      "name": "40-brazil-climate-adaptation-brief-s1",
+      "accepted": "51a07a13a0dbfcf7d525755f6d85f3e49f130606a147b4a625f6ac7a7eb7fa65",
+      "candidate": "51a07a13a0dbfcf7d525755f6d85f3e49f130606a147b4a625f6ac7a7eb7fa65",
+      "identical": true
+    },
+    {
+      "name": "41-customer-qbr-renewal-deck-s1",
+      "accepted": "5877cd03e3b431e53feab49a6ac729554b4bb534003a1b05ce4a096b0c7892ef",
+      "candidate": "5877cd03e3b431e53feab49a6ac729554b4bb534003a1b05ce4a096b0c7892ef",
+      "identical": true
+    },
+    {
+      "name": "42-seed-pitch-for-climate-risk-api-s1",
+      "accepted": "be0cb9249a364a42930007ec72ad2be10ac267013fae0b536b9e49c3167dfd06",
+      "candidate": "be0cb9249a364a42930007ec72ad2be10ac267013fae0b536b9e49c3167dfd06",
+      "identical": true
+    },
+    {
+      "name": "43-icons-and-arrangements-s6",
+      "accepted": "8b88e443b0a512f7b99d53d247d29fe7a1f5000147c3d87ac3bc118704a6e37a",
+      "candidate": "8b88e443b0a512f7b99d53d247d29fe7a1f5000147c3d87ac3bc118704a6e37a",
+      "identical": true
+    },
+    {
+      "name": "44-icons-and-arrangements-s9",
+      "accepted": "e05c702c7489c23efc173aae6eada8d8dd1aa4cc5a025bffd5b321ad4ac00c50",
+      "candidate": "e05c702c7489c23efc173aae6eada8d8dd1aa4cc5a025bffd5b321ad4ac00c50",
+      "identical": true
+    },
+    {
+      "name": "45-layout-sampler-s1",
+      "accepted": "439210a343e604da7eeb903fac6106c7771a48c43052a0461ae211cf088bddc6",
+      "candidate": "439210a343e604da7eeb903fac6106c7771a48c43052a0461ae211cf088bddc6",
+      "identical": true
+    },
+    {
+      "name": "46-layout-sampler-s4",
+      "accepted": "989919464ce3e2b5b2b34df41c31d3bdeaa041e9f19a5825b326647dab20297f",
+      "candidate": "989919464ce3e2b5b2b34df41c31d3bdeaa041e9f19a5825b326647dab20297f",
+      "identical": true
+    },
+    {
+      "name": "47-layout-sampler-s32",
+      "accepted": "93209f56c65e61e643c2c2c117e73ceec28116c2f56b76c019de70b2827853c2",
+      "candidate": "93209f56c65e61e643c2c2c117e73ceec28116c2f56b76c019de70b2827853c2",
+      "identical": true
+    },
+    {
+      "name": "48-layout-sampler-s33",
+      "accepted": "31a2844e184023079d63dfdd68536004bbf4940c5dcaf01b42b6535be81efccf",
+      "candidate": "31a2844e184023079d63dfdd68536004bbf4940c5dcaf01b42b6535be81efccf",
+      "identical": true
+    },
+    {
+      "name": "49-layout-sampler-s36",
+      "accepted": "fa8dfbd1f253d706330f3a25694581ed2bdfd68736cf20a251398aeabd0688b5",
+      "candidate": "fa8dfbd1f253d706330f3a25694581ed2bdfd68736cf20a251398aeabd0688b5",
+      "identical": true
+    },
+    {
+      "name": "50-slide-design-overrides-s4",
+      "accepted": "375f14120b713bcb2d28ab0dec66fab0db8a9e2ce73ac0597b7bd458d12c5f95",
+      "candidate": "375f14120b713bcb2d28ab0dec66fab0db8a9e2ce73ac0597b7bd458d12c5f95",
+      "identical": true
+    }
+  ],
+  "total": 50,
+  "identical": 50,
+  "sourceHashes": {
+    "packages/pptx/src/index.js": "fc87ae68d3b6f006aae0aa95546080be188b728a3e46637e54c113782cf29c42",
+    "packages/pptx/src/native-body.js": "4e6975110fd201b39d3fd9a8ee4ff0e8b1941781d9b2b109ff7f65d3b64139d7",
+    "packages/pptx/dist/index.js": "fc87ae68d3b6f006aae0aa95546080be188b728a3e46637e54c113782cf29c42",
+    "packages/pptx/dist/native-body.js": "4e6975110fd201b39d3fd9a8ee4ff0e8b1941781d9b2b109ff7f65d3b64139d7"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "deck": "technical/chart-point-overlays.opf.json",
+  "entries": {
+    "technical/chart-point-overlays.opf.json#0": {
+      "sha256": "29ccce1c97801d827811c07dbe1f43d6f11aea3904d2d39a78db49e0215b3290",
+      "bytes": 5946
+    },
+    "technical/chart-point-overlays.opf.json#1": {
+      "sha256": "28de6033dff96ae54d671ab631fb3a873a60bc10c736ecc2a71dd44c0359f142",
+      "bytes": 4192
+    },
+    "technical/chart-point-overlays.opf.json#2": {
+      "sha256": "d1eade529b8555261a19232ece479fabe66d4687c1ff5ddf7df6463a44c732f8",
+      "bytes": 7815
+    }
+  }
+}

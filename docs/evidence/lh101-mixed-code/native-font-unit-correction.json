@@ -1,0 +1,12 @@
+{
+  "expectedPixels": 56,
+  "expectedPoints": 42,
+  "expectedHundredthsOfPoint": 4200,
+  "serializedSizes": [
+    "4050",
+    "1200",
+    "4200",
+    "2100"
+  ],
+  "firstVerifierFailure": "Compared pixels directly to hundredths of points; failed packet is preserved, no native acceptance was made."
+}

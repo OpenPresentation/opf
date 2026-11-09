@@ -1,0 +1,256 @@
+{
+  "auditKind": "read-only exact integration fold; not qualification or acceptance of later heads",
+  "baseline": "6d5d61edc5c78a5c92128dd517c7dd6257d52331",
+  "target": "84641cfd92fff38c52a3f6b98dfe850a31ae3bb4",
+  "targetTree": "63fff27fee57fdad34372998d716569405e28ce0",
+  "sourceAncestors": [
+    {
+      "pr": 1216,
+      "head": "237645bb0c22364af9060a01ff080b599f20a391",
+      "isAncestor": true
+    },
+    {
+      "pr": 1217,
+      "head": "fc4f4380f36e77971a3666f629920e50fd99ea79",
+      "isAncestor": true
+    },
+    {
+      "pr": 1218,
+      "head": "ca5ef93b857611922d9d75e4733dd99e98232c03",
+      "isAncestor": true
+    },
+    {
+      "pr": 1219,
+      "head": "261024588590c1ec9b787af4b9fb420445b603a1",
+      "isAncestor": true
+    }
+  ],
+  "codeUnionExact": true,
+  "changedPackageToolPaths": [
+    {
+      "path": "packages/cli/test/catalog-contract.test.mjs",
+      "blob": "893f6f2e831b9dca528d4b0e6131ccd0c6ad561f",
+      "owners": [
+        1219
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/cli/test/cli.mjs",
+      "blob": "5c7e09481ace5d5aa86368fda7058e24b10c7aca",
+      "owners": [
+        1219
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/cli/test/cli.test.mjs",
+      "blob": "1f6da27491c312fa12701005def1a872a70e9136",
+      "owners": [
+        1219
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/cli/test/helpers/catalog-contract.mjs",
+      "blob": "3bf40c874f32c68f120a6e87a0cb018d656c36d2",
+      "owners": [
+        1219
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/editor/src/styles/panels.css",
+      "blob": "d74abbde74edef8dec2e3445849504eada2f8d96",
+      "owners": [
+        1217
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/editor/src/workspace.js",
+      "blob": "ae9e4dbf4c3b484e2e34a3eb1a34a2cf9f3b3465",
+      "owners": [
+        1217
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/editor/test/design-menu-browser.mjs",
+      "blob": "699a1e7448b012dff10c910b9e391e9b97ff3a71",
+      "owners": [
+        1219
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/editor/test/support/counted-svg.mjs",
+      "blob": "3f4dbc91f3ae2809d53279ceb934691cd37bb0a1",
+      "owners": [
+        1217
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/editor/test/support/thumbnail-painted-fit.mjs",
+      "blob": "3af9e7a4cac8a75b2f65d3482d1afe0acd8c78f8",
+      "owners": [
+        1217
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/editor/test/support/unused-thumbnail-cache.mjs",
+      "blob": "f8dc219ac025b4bbb712a734f0eb2f8e0f91a26e",
+      "owners": [
+        1217
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/editor/test/workspace-browser.mjs",
+      "blob": "02c30f2c99298a5bd10fd535119801b5eb1c746c",
+      "owners": [
+        1217
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/gallery/catalog/layouts/index.json",
+      "blob": "7bebc21015cb3bb5e13b7046064d6ee097756bcb",
+      "owners": [
+        1216
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/gallery/catalog/layouts/inverted-pyramid.json",
+      "blob": "12c4e2e8cd0825adcf418de08994102a1964e547",
+      "owners": [
+        1216
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/gallery/catalog/manifest.json",
+      "blob": "28226dcdbd9d0da9cc67519953ce9c79fb86033a",
+      "owners": [
+        1216
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "packages/pptx/test/sh20-layout-xml.mjs",
+      "blob": "2833b3e227d92b6939d1edc47ea34b1d6ec9432b",
+      "owners": [
+        1218
+      ],
+      "sourceEntriesExact": true
+    },
+    {
+      "path": "tools/shapes/sh-20/layout-xml.mjs",
+      "blob": "84b82878dd9e4b2be84a46432cd0bb4f82b9dc77",
+      "owners": [
+        1218
+      ],
+      "sourceEntriesExact": true
+    }
+  ],
+  "codeSourceCounts": {
+    "1216": 3,
+    "1217": 6,
+    "1218": 2,
+    "1219": 5
+  },
+  "noCodeOutsideUnion": true,
+  "protectedTrees": [
+    {
+      "path": "spec",
+      "base": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5",
+      "target": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5",
+      "unchanged": true
+    },
+    {
+      "path": "packages/javascript/src",
+      "base": "ccd82f4d419433555b8cfbe365bb3843b06d0932",
+      "target": "ccd82f4d419433555b8cfbe365bb3843b06d0932",
+      "unchanged": true
+    },
+    {
+      "path": "packages/render/src",
+      "base": "9563e380730758208e5ce47c4380cae4042ed72c",
+      "target": "9563e380730758208e5ce47c4380cae4042ed72c",
+      "unchanged": true
+    },
+    {
+      "path": "packages/pptx/src",
+      "base": "fa00c31a7be8467984db2c0a98cefb2df35a7191",
+      "target": "fa00c31a7be8467984db2c0a98cefb2df35a7191",
+      "unchanged": true
+    },
+    {
+      "path": ".github",
+      "base": "99970ce6bce01b23b6b34b390afa1e3f27562a16",
+      "target": "99970ce6bce01b23b6b34b390afa1e3f27562a16",
+      "unchanged": true
+    },
+    {
+      "path": "scripts",
+      "base": "fee63b0ee5c22dfe1dcd76fb6675b28a1d206225",
+      "target": "fee63b0ee5c22dfe1dcd76fb6675b28a1d206225",
+      "unchanged": true
+    }
+  ],
+  "protectedFilenameCount": 5249,
+  "protectedChangedPaths": [],
+  "programChecks": [
+    {
+      "pr": 1216,
+      "path": "docs/programs/shapes/burndown.md",
+      "addedNonblankLines": 2,
+      "allSourceAdditionsPreserved": true,
+      "missing": []
+    },
+    {
+      "pr": 1217,
+      "path": "docs/programs/cloud-editor/burndown.md",
+      "addedNonblankLines": 9,
+      "allSourceAdditionsPreserved": true,
+      "missing": []
+    },
+    {
+      "pr": 1218,
+      "path": "docs/programs/shapes/burndown.md",
+      "addedNonblankLines": 4,
+      "allSourceAdditionsPreserved": true,
+      "missing": []
+    },
+    {
+      "pr": 1219,
+      "path": "docs/programs/release-readiness/burndown.md",
+      "addedNonblankLines": 3,
+      "allSourceAdditionsPreserved": true,
+      "missing": []
+    }
+  ],
+  "rr105Rows": [
+    {
+      "row": "| RR-105 | v0.33.0 and v0.34.0 qualification: one platform-neutral corpus (decks, manifest of every change since v0.32.1, the never-shrink batch included) run in PowerPoint for Windows (COM), PowerPoint for Mac and Keynote, and LibreOffice on Linux (experimental); a first pass on main and a final pass on the release candidate; blockers are defects in Windows or Mac PowerPoint for supported features | opf | — | in-progress | Corpus, manifest and COM runner: [opf#1085](https://github.com/OpenPresentation/opf/pull/1085) (`scripts/native-acceptance/qualification/`). The macOS semantic catalog-label completion-readiness wait shipped with033; native Mac application qualification is separate. Windows directory-link fixture1196 retains all actual reparse-refusal assertions using an explicit junction, focused4/4 and native-tooling44/44 pass. Windows pass 1 recorded in [qualification-0.33-windows.md](qualification-0.33-windows.md) (no blocker; findings opf#1089 to opf#1094, fix opf#1086); v0.34 native wrapped-title follow-up [opf#1127](https://github.com/OpenPresentation/opf/issues/1127) in review (38 safe native boxes and 12 measured fallbacks across the example corpus; all50actual native witnesses accepted;11corrected witnesses and39identical reusable inputs); to come: Windows pass 2 on the release candidate, the Mac (PowerPoint and Keynote) results and the LibreOffice results ([opf#926](https://github.com/OpenPresentation/opf/issues/926), [opf#925](https://github.com/OpenPresentation/opf/issues/925)) **2026-11-08 Mono qualification:** separate pinned two-face Roboto Mono profile and mocked owned lifecycle are in review; existing Roboto tooling unchanged, real registration/Office still coordinator-owned ([handoff](../../handoff/2026-11-08/rr105-roboto-mono-profile.md)).  Latest 2026-11-08: [derived RTL Latin-digit native correction](../../handoff/2026-11-08/rr105-ltr-latin-native.md) is in source review; the actual reversed-glyph witness remains a native blocker until the coordinator verifies exact corrected output. Scalar list continuation from67dd retains source form after actual RTL splits using bounded full provenance;12new/36combined controls pass, mapped/native gates owed.  Native tag-part rename continuation: actual saved11 source identity restored through validated current-slide ownership; legacy code fallback retained;22new/55combined controls pass, seven full archives exact after569 integration; official gate red185/279 on unrelated sampler QA, diagnostic tail92/94 pass, separate QA owed ([handoff](../../handoff/2026-11-08/rr105-tag-ownership.md)). Baseline QA contract repairs pass official focused5/5 and required test-only mapped gates and await coordinator review before push; full native fidelity remains open ([handoff](../../handoff/2026-11-08/rr105-baseline-qa.md)). **Current catalogue contract repair:** exact installed-authority CLI IDs/order/records and actual Design-menu choices/owned edits are locally implemented for review; stale 36 assertions reproduced, current 40 producer unchanged ([handoff](../../handoff/2026-11-08/rr105-catalog-contracts/README.md)). |",
+      "cells": [
+        "RR-105",
+        "v0.33.0 and v0.34.0 qualification: one platform-neutral corpus (decks, manifest of every change since v0.32.1, the never-shrink batch included) run in PowerPoint for Windows (COM), PowerPoint for Mac and Keynote, and LibreOffice on Linux (experimental); a first pass on main and a final pass on the release candidate; blockers are defects in Windows or Mac PowerPoint for supported features",
+        "opf",
+        "—",
+        "in-progress",
+        "Corpus, manifest and COM runner: [opf#1085](https://github.com/OpenPresentation/opf/pull/1085) (`scripts/native-acceptance/qualification/`). The macOS semantic catalog-label completion-readiness wait shipped with033; native Mac application qualification is separate. Windows directory-link fixture1196 retains all actual reparse-refusal assertions using an explicit junction, focused4/4 and native-tooling44/44 pass. Windows pass 1 recorded in [qualification-0.33-windows.md](qualification-0.33-windows.md) (no blocker; findings opf#1089 to opf#1094, fix opf#1086); v0.34 native wrapped-title follow-up [opf#1127](https://github.com/OpenPresentation/opf/issues/1127) in review (38 safe native boxes and 12 measured fallbacks across the example corpus; all50actual native witnesses accepted;11corrected witnesses and39identical reusable inputs); to come: Windows pass 2 on the release candidate, the Mac (PowerPoint and Keynote) results and the LibreOffice results ([opf#926](https://github.com/OpenPresentation/opf/issues/926), [opf#925](https://github.com/OpenPresentation/opf/issues/925)) **2026-11-08 Mono qualification:** separate pinned two-face Roboto Mono profile and mocked owned lifecycle are in review; existing Roboto tooling unchanged, real registration/Office still coordinator-owned ([handoff](../../handoff/2026-11-08/rr105-roboto-mono-profile.md)).  Latest 2026-11-08: [derived RTL Latin-digit native correction](../../handoff/2026-11-08/rr105-ltr-latin-native.md) is in source review; the actual reversed-glyph witness remains a native blocker until the coordinator verifies exact corrected output. Scalar list continuation from67dd retains source form after actual RTL splits using bounded full provenance;12new/36combined controls pass, mapped/native gates owed.  Native tag-part rename continuation: actual saved11 source identity restored through validated current-slide ownership; legacy code fallback retained;22new/55combined controls pass, seven full archives exact after569 integration; official gate red185/279 on unrelated sampler QA, diagnostic tail92/94 pass, separate QA owed ([handoff](../../handoff/2026-11-08/rr105-tag-ownership.md)). Baseline QA contract repairs pass official focused5/5 and required test-only mapped gates and await coordinator review before push; full native fidelity remains open ([handoff](../../handoff/2026-11-08/rr105-baseline-qa.md)). **Current catalogue contract repair:** exact installed-authority CLI IDs/order/records and actual Design-menu choices/owned edits are locally implemented for review; stale 36 assertions reproduced, current 40 producer unchanged ([handoff](../../handoff/2026-11-08/rr105-catalog-contracts/README.md))."
+      ],
+      "columns": 6
+    }
+  ],
+  "shapesConflictMarkers": [],
+  "allChecksPassed": true,
+  "testsRun": 0,
+  "providerApiCalls": 0,
+  "trackedWrites": 0,
+  "futureHeadClaim": false
+}

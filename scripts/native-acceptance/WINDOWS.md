@@ -230,3 +230,22 @@ imports. Historical classification does not establish fresh native visual
 acceptance. Every case needs linked evidence and a disposition; pure controls,
 serialization, generated previews or comparator existence never close native
 acceptance. Preserve the existing tolerances and supervisor evidence review.
+
+## Bounded read-only survey
+
+An explicitly reviewed one-slide witness with more than 30 top-level shapes may
+use `-ReadOnlySurvey`. It requires an empty validated action list and exactly one
+integer declared slide, one physical slide part and one actual native slide. The
+source must be at most 16 MiB and contain at most 4096 ZIP directory entries. The
+survey observes at most 100 top-level shapes; it does not expand editing or
+nested-group coverage. Pass the switch to this runner, including during
+`-ValidateOnly`, so preflight and the worker bind the same mode.
+
+The default edit mode keeps its 3-slide/30-shape/20-action limits. Both modes keep
+the same maximum 60 seconds, owned read-only Open, derivative SaveCopyAs,
+read-only reopen, failure latch and no-UI/no-kill/no-retry rules. A timeout or
+failed native call requires preserved evidence and supervisor inspection.
+
+Run the Office-free actual boundary regression with
+`node packages/pptx/test/native-readonly-survey.mjs`. Passing it does not run Office
+or establish native acceptance.

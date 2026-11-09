@@ -456,8 +456,10 @@ export function createOpfEditor(element, options = {}) {
   }
   // ---- navigation and the refresh loop ----------------------------------------------------------------------------------------
   function renderViews(deck) {
+    // Only the slide manager and active sorter consume this cache. A slots host
+    // can have a canvas and lazy strip without either; the strip owns its cache.
     // The Studio's filmstrip draws the thumbnails it shows itself, as they scroll in.
-    if (!studioLayout) thumbnailCache?.prepare(deck);
+    if (!studioLayout && (slideManager || (activeView === "sorter" && sorter))) thumbnailCache?.prepare(deck);
     slideManager?.render();
     if (activeView === "sorter") sorter?.render();
     if (activeView === "outline") outline?.render();

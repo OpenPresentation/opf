@@ -13,6 +13,7 @@
  * The text fitter comes from composition (`composeOverlayShapes`' `item` callback), so this module imports composition's types only.
  */
 import type { ComposedItem, LayoutBox, SlideComposition } from './composition.js';
+import {selectChartPoint,type ChartPointGeometry,type ChartPointMissing} from './chart-point-anchors.js';
 import { composeShape, composeStroke, isPresetShape, pathEnds, presetAspect, sketchStroke, type ComposedShape, type ComposedShapePath, type ComposedStroke, type ShapeEnd } from './shape-block.js';
 import type { ShapePathCommand } from './shape-geometry.js';
 import { shapeGeometry } from '#shape-engine';
@@ -289,7 +290,7 @@ export interface ComposedOverlayShape extends ComposedItem {
   index: number;
   id?: string;
   /** For a shape placed by `at`: the block it follows (its id, the composed path of what it attaches to) and the physical edge. */
-  attachedTo?: { id: string; ref: string; edge: 'top' | 'bottom' | 'left' | 'right' | 'center' };
+  attachedTo?: { id: string; ref: string; edge: 'top' | 'bottom' | 'left' | 'right' | 'center'; chartPoint?: Omit<ChartPointGeometry,'ok'> };
   /** `front` (the default): over the slide, after its content and furniture; `back`: behind it, after the background and watermark, before the content. */
   layer: OverlayLayer;
 }
@@ -367,7 +368,7 @@ export function slideBlockIds(slide: unknown, slidePath: string): Map<string, st
 }
 
 /** A composed block an overlay attaches to: the item path (or group path), its visible box and its connection sites. */
-interface BlockTarget { ref: string; target: 'block' | 'group'; box: LayoutBox; sites: () => ConnectionSite[] | undefined }
+interface BlockTarget { chart?: ComposedItem; ref: string; target: 'block' | 'group'; box: LayoutBox; sites: () => ConnectionSite[] | undefined }
 function blockTarget(composition: SlideComposition, blockPath: string): BlockTarget | undefined {
   const group = composition.groups.find(entry => entry.path === blockPath);
   const prefix = `${blockPath}.`;
@@ -383,7 +384,8 @@ function blockTarget(composition: SlideComposition, blockPath: string): BlockTar
   }
   const boxes = items.map(visible), x = Math.min(...boxes.map(box => box.x)), y = Math.min(...boxes.map(box => box.y));
   const box = { x: round(x), y: round(y), width: round(Math.max(...boxes.map(entry => entry.x + entry.width)) - x), height: round(Math.max(...boxes.map(entry => entry.y + entry.height)) - y) };
-  return { ref: first.path, target: 'block', box, sites: () => rectSites(box) };
+  const chart = items.find(item => item.field === 'chart' && item.chart);
+  return { ref: first.path, target: 'block', box, sites: () => rectSites(box), ...(chart ? {chart} : {}) };
 }
 
 /** What composition gives an overlay shape item besides its geometry: the fitted text (in `shape.textBox`), its style and the composition settings. */
@@ -395,7 +397,7 @@ export type OverlayShapeItemFields = Pick<ComposedItem, 'text' | 'textStyle' | '
  * the slide is left out (validation reports opf/shape-anchor-missing and opf/connector-end-missing). `item` fits an overlay shape's text
  * as composition fits a shape block's.
  */
-export function composeOverlayShapes(slide: unknown, composition: SlideComposition, context: { path: string; scale: number; rtl: boolean; item: (host: Rec, shape: ComposedShape, path: string) => OverlayShapeItemFields }): ComposedOverlayEntry[] {
+export function composeOverlayShapes(slide: unknown, composition: SlideComposition, context: { path: string; scale: number; rtl: boolean; point: (item: ComposedItem, reference: unknown) => ChartPointGeometry | ChartPointMissing; item: (host: Rec, shape: ComposedShape, path: string) => OverlayShapeItemFields }): ComposedOverlayEntry[] {
   const entries = Array.isArray(record(slide).shapes) ? record(slide).shapes as unknown[] : [];
   if (!entries.length) return [];
   const { scale, rtl } = context, width = composition.width, height = composition.height;
@@ -411,7 +413,11 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
     const host = record(entry);
     if (!Object.keys(host).length || isOverlayConnector(host)) return;
     const path = `${context.path}.shapes.${index}`;
-    const placed = overlayBox(host, { width, height, scale, rtl, blockOf });
+    const placed = overlayBox(host, { width, height, scale, rtl, blockOf, point: (block, at) => {
+      const result = block.chart ? context.point(block.chart, at) : {ok: false as const, field: 'point' as const, reason: 'The referenced block has no composed chart.'};
+      if (!result.ok) composition.diagnostics.push({code: 'shape-anchor-missing', path: `${path}.at.${result.field}`, message: result.reason});
+      return result.ok ? result : undefined;
+    } });
     if (!placed) return;
     const shape = composeShape(host, placed.box, { scale, aspect: 0 });
     const item: ComposedOverlayShape = {
@@ -461,7 +467,7 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
  * An overlay shape's frame in slide pixels: `x`, `y`, `width`, `height` as fractions of the slide (`x` from the right edge in a right-to-left
  * deck), or `at` against a composed block. Undefined when the entry has neither placement, both, or a block that is not composed.
  */
-function overlayBox(host: Rec, context: { width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
+function overlayBox(host: Rec, context: { width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined; point: (block: BlockTarget, at: Rec) => ChartPointGeometry | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
   const { width, height, scale, rtl } = context;
   const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], 0, 1));
   const hasFractions = ['x', 'y', 'width', 'height'].some(key => host[key] !== undefined), hasAt = host.at !== undefined;
@@ -475,17 +481,23 @@ function overlayBox(host: Rec, context: { width: number; height: number; scale: 
   if (!nonEmpty(at.block) || !(OVERLAY_EDGES as readonly unknown[]).includes(at.edge)) return undefined;
   const block = context.blockOf(at.block);
   if (!block) return undefined;
-  const target = block.box;
+  const point = at.point !== undefined || at.series !== undefined ? context.point(block, at) : undefined;
+  if ((at.point !== undefined || at.series !== undefined) && !point) return undefined;
+  const target = point?.box ?? block.box;
   const preset = typeof host.shape === 'string' && isPresetShape(host.shape) ? host.shape : host.path !== undefined ? undefined : 'rect';
   const aspect = presetAspect(preset);
   const size = (value: unknown, along: number): number | undefined => { const own = finite(value, Number.MIN_VALUE, 1280); return own === undefined ? undefined : own <= 1 ? own * along : own * scale; };
   let w = size(at.width, target.width), h = size(at.height, target.height);
   if (w === undefined && h === undefined) {
-    const short = OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height);
+    const short = point ? Math.max(12 * scale, OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height)) : OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height);
     if (aspect >= 1) { h = short; w = short * aspect; } else { w = short; h = short / aspect; }
   } else if (w === undefined) w = h! * aspect;
   else if (h === undefined) h = w / aspect;
   const offset = (finite(at.offset, -720, 720) ?? 0) * scale;
+  if (point) {
+    const {ok: _ok, ...chartPoint} = point;
+    return {box: {x: round(point.position.x + point.normal.x * offset - w! / 2), y: round(point.position.y + point.normal.y * offset - h! / 2), width: round(w!), height: round(h!)}, attachedTo: {id: at.block, ref: block.chart!.path, edge: 'center', chartPoint}};
+  }
   const edge = at.edge === 'start' ? (rtl ? 'right' : 'left') : at.edge === 'end' ? (rtl ? 'left' : 'right') : at.edge as 'top' | 'bottom' | 'center';
   const middleX = target.x + (target.width - w!) / 2, middleY = target.y + (target.height - h!) / 2;
   const [x, y] = edge === 'top' ? [middleX, target.y - offset - h!] : edge === 'bottom' ? [middleX, target.y + target.height + offset]
@@ -524,12 +536,18 @@ function siteCount(id: string, slide: Rec, blockPaths: Map<string, string>, over
  * (opf/shape-anchor-missing), a connector end that names no block or overlay shape of the slide (opf/connector-end-missing) and a site index
  * the end's shape does not have (opf/schema). `slidePath` is the slide's JSON Pointer (`/slides/0`).
  */
-export function overlayIssues(slide: unknown, slidePath: string): OverlayIssue[] {
+export function overlayIssues(slide: unknown, slidePath: string, presentation?: unknown): OverlayIssue[] {
   const value = record(slide), entries = Array.isArray(value.shapes) ? value.shapes as unknown[] : [];
   if (!entries.length) return [];
   const issues: OverlayIssue[] = [];
   const dotted = slidePath.replace(/^\//, '').replaceAll('/', '.');
   const blockPaths = slideBlockIds(value, dotted);
+  const payloadOf = (id: string): Rec => {
+    const path = blockPaths.get(id); if (!path) return {};
+    let payload: unknown = value;
+    for (const key of path.slice(dotted.length + 1).split('.')) payload = payload !== null && typeof payload === 'object' ? Reflect.get(payload, key) : undefined;
+    return record(payload);
+  };
   const overlays = new Map<string, Rec>(), connectors = new Set<string>();
   for (const entry of entries) {
     const host = record(entry);
@@ -564,6 +582,10 @@ export function overlayIssues(slide: unknown, slidePath: string): OverlayIssue[]
     else if (!fractions.length && !anchored) issues.push({ path: at, message: "an overlay shape needs a placement: 'x', 'y', 'width' and 'height' (fractions of the slide), or 'at' (against a block)", params: {} });
     const block = record(host.at).block;
     if (anchored && nonEmpty(block) && !blockPaths.has(block)) issues.push({ path: `${at}/at/block`, code: 'shape-anchor-missing', message: `at.block '${block}' names no block on this slide; the shape is not drawn`, params: { id: block, known: [...blockPaths.keys()] } });
+    else if (anchored && nonEmpty(block) && (record(host.at).point !== undefined || record(host.at).series !== undefined)) {
+      const source = payloadOf(block), selected = selectChartPoint(source.chart, host.at, presentation);
+      if (!selected.ok) issues.push({ path: `${at}/at/${selected.field}`, code: 'shape-anchor-missing', message: selected.reason, params: { id: block, point: record(host.at).point, series: record(host.at).series } });
+    }
   });
   return issues;
 }

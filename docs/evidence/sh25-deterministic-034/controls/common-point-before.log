@@ -1,0 +1,7 @@
+point-common-op-array was unexpectedly accepted
+At C:\opf-work\sh25-chart-points\packages\pptx\test\native-furniture-harness-check.ps1:36 char:30
++ ...    if($null -eq $message) { throw "$Name was unexpectedly accepted" }
++                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (point-common-op...ctedly accepted:String) [], RuntimeException
+    + FullyQualifiedErrorId : point-common-op-array was unexpectedly accepted
+ 
