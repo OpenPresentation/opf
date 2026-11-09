@@ -1,0 +1,37 @@
+[
+  {
+    "path": "steps/biome.log",
+    "bytes": 683,
+    "sha256": "49c9c43492aa23435a9384cd4c5d90fba3cc8a2aae2bf52750ca203cde3ae8f5"
+  },
+  {
+    "path": "steps/build.log",
+    "bytes": 14589,
+    "sha256": "dee48b210e4df8495d8e0c096457781b0ed75ae1b1f328f24e8f73445b2018c2"
+  },
+  {
+    "path": "steps/pnpm_run_check_changes.log",
+    "bytes": 2639,
+    "sha256": "b8ee6bf640a40f99e304f5d90dabf974e092ee0386aab0339c65a794d9388c88"
+  },
+  {
+    "path": "steps/pnpm_run_check_skill-commands.log",
+    "bytes": 1039,
+    "sha256": "a0bc169dd0dc4c000c3f06ea21aa03e507383cf1d00382630f4febdd72d66f0d"
+  },
+  {
+    "path": "steps/pnpm_run_check_text.log",
+    "bytes": 1845,
+    "sha256": "67ff182b2e12acf731f4a5f9576fb1817f3c9c9682fe8a3c6f2885075e15c47b"
+  },
+  {
+    "path": "proof-check-changed-01.log",
+    "bytes": 2944,
+    "sha256": "0c17f091fb46e0138b9f8c3cd7959b99d3f9834a80d2dd0ea6d0536bf5902835"
+  },
+  {
+    "path": "proof-check-changed-01.exit.json",
+    "bytes": 330,
+    "sha256": "161902b73f6334dc7a333e60f82f1185cf385c49793741275efe98f7873daa7b"
+  }
+]
