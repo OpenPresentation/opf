@@ -78,3 +78,9 @@ test('table-aligned bars recompute references against final row plot and publish
 test('reference labels choose the other adjacent side when an ordinary data line crosses the preferred box',()=>{
  const c=chart({referenceLines:[{value:28,label:'Target'}]});const placed=place(c);assert.equal(placed.lines[0].labelSide,'below');assert.equal(placed.diagnostics.length,0);
 });
+
+test('wide reference strokes leave their own labels clear without moving numeric lines',()=>{
+ const c=chart({referenceLines:[{value:20,label:'Target',stroke:{width:64}}]}),line=place(c).lines[0];assert.ok(line.labelBox.y+line.labelBox.height<=line.y1-line.strokeWidth/2);assert.equal(line.y1,line.y2);
+ const bar=place({...c,type:'bar'},{horizontal:true}).lines[0];assert.ok(bar.labelBox.x>=bar.x1+bar.strokeWidth/2);assert.equal(bar.x1,bar.x2);
+ const hidden=place(chart({referenceLines:[{value:20,label:'Target',stroke:{width:0}}]})).lines[0];assert.ok(hidden.labelBox);assert.equal(hidden.strokeWidth,0);assert.equal(hidden.y1,line.y1);
+});

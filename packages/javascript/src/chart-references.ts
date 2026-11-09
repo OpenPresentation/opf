@@ -81,12 +81,13 @@ export function placeReferences(refs:readonly ChartReference[],data:ResolvedChar
     const endpoint=ref.labelPosition==='start'?0:Math.max(0,count-1);
     const line:ChartReferenceLine={...ref,index,x1:horizontal?position:a,y1:horizontal?plot.y:position,x2:horizontal?position:b,y2:horizontal?plot.y+plot.height:position,strokeWidth:ref.stroke.width*geometry.scale,native,endpoint};
     if(ref.label!==undefined){
+      const clearance=gap+line.strokeWidth/2;
       const parts=ref.label.split(/\r\n|\r|\n/u),width=Math.max(...parts.map(text=>geometry.measure(text,font)))+font*0.5,height=lineHeight*parts.length;
       const endpointX=(ref.labelPosition==='start')!==rtl?a:b,endpointY=ref.labelPosition==='start'?plot.y:plot.y+plot.height;
       const startSide=(ref.labelPosition==='start')!==rtl;
       const labelX=native?endpointX-width/2:startSide?endpointX:endpointX-width;
-      const preferred:Box=horizontal?{x:position+gap,y:ref.labelPosition==='start'?endpointY:endpointY-height,width,height}:{x:labelX,y:position-gap-height,width,height};
-      const alternate:Box=horizontal?{...preferred,x:position-gap-width}:{...preferred,y:position+gap};
+      const preferred:Box=horizontal?{x:position+clearance,y:ref.labelPosition==='start'?endpointY:endpointY-height,width,height}:{x:labelX,y:position-clearance-height,width,height};
+      const alternate:Box=horizontal?{...preferred,x:position-clearance-width}:{...preferred,y:position+clearance};
       const fits=(candidate:Box)=>inside(candidate,box)&&boxes.every(other=>!overlap(candidate,other))&&segments.every(segment=>!crosses(segment,candidate));
       const alternative=!fits(preferred)&&fits(alternate),labelBox=alternative?alternate:preferred;
       line.labelBox=labelBox;line.labelSide=horizontal?(alternative?'left':'right'):(alternative?'below':'above');line.labelAlign=!horizontal&&!native?(startSide?'left':'right'):'center';boxes.push(labelBox);
