@@ -35,6 +35,24 @@ pair. Historical fixtures retain their original export options and explicitly
 record that preview/export equivalence is unproven. Native font installation
 and visual comparison remain explicit acceptance steps.
 
+## Current chart archive authority
+
+Preparation loads the authoritative package fixture at
+`packages/pptx/test/fixtures/chartex-fallback-main.json`. Its strict whole-archive
+hashes, sizes, ordered diagnostics and layout/tag counts are current-output checks.
+The older `fixtures/chartex-fallback-main.json` remains an authentic historical
+native witness, not an alternate accepted output. Both file hashes and source
+metadata are bound in `suite.json`, and the package fixture is part of the suite
+repository input inventory. Native and registry acceptance remain false.
+
+There are 28 primary inputs, 30 positive chart-mode inputs and one six-slide
+table-colour input: 59 positive prepared cases. Multi-series Pareto uses the
+current clustered-column fallback in every mode with all three series. A world
+chart over nonplace categories uses columns, while an actual country map keeps
+its separate native/auto contract. All-seven inputs still contain seven slides:
+neither they nor the table input fit the generic three-slide worker. Select a
+separately reviewed bounded plan; preparation never widens the worker limits.
+
 ## Opt-in font-route subset
 
 Prepare only the versioned Traditional Arabic and Nirmala Telugu/Kannada/Gujarati/Malayalam fixtures with `--font-routes all`, or pass comma-separated exact case IDs from `fixtures/font-routes.json`:
