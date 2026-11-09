@@ -28,7 +28,7 @@ export interface ScriptPackOptions {
    * is reported through `onDiagnostic` instead of failing.
    */
   scripts?: ScriptSelection | "auto";
-  /** The presentation whose text decides `scripts: "auto"`. */
+  /** With a presentation, load only the faces its actual styles/glyphs need; omission preserves whole-pack loading. Also decides scripts: "auto". */
   presentation?: unknown;
   /** The `toSvg` options the presentation resolves with (`catalogs`, ...), for the font schemes `scripts: "auto"` reads (FF-41). */
   renderOptions?: Partial<ToSvgOptions>;
@@ -85,13 +85,13 @@ export interface NodeFontsHandle extends FontsHandle {
   /** System fonts never load: the output does not depend on the machine. */
   readonly loadSystemFonts: false;
   /**
-   * Load the script faces the presentation's text needs that this handle does not hold (what `scripts: "auto"` does at load, for another
+   * Load the ordinary and script faces the presentation's text needs that this handle does not hold (what `scripts: "auto"` does at load, for another
    * presentation), including the CJK face a glyph fallback needs. Cheap when nothing is missing; `embeddedFonts` and `fontFiles` then include
    * the new faces. A package that is not installed or a script no pinned font serves is reported once through `onDiagnostic`.
-   * Resolves with the packages this call added (`scripts`; `lazy` is empty: Node loads every vendored face with its pack).
+   * Resolves with the script packages and exact face descriptors this call added (`scripts` and `lazy`).
    */
-  ensure(presentation: unknown, options?: { onDiagnostic?: ScriptPackOptions["onDiagnostic"]; renderOptions?: Partial<ToSvgOptions> }): Promise<EnsureResult>;
-  /** Synchronous: the script packages the presentation needs that are not loaded yet. */
+  ensure(presentation: unknown, options?: Partial<ToSvgOptions> & { onDiagnostic?: ScriptPackOptions["onDiagnostic"]; renderOptions?: Partial<ToSvgOptions>; /** Additional preparation for an exporter that maps source families, such as safe PPTX typefaces. Does not rewrite the document. */ mapFamily?: (family: string) => string }): Promise<EnsureResult>;
+  /** Synchronous: the missing face resources and script packages the presentation needs. */
   pending(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
 }
 export interface LoadFontsOptions extends FontRegistryOptions, ScriptPackOptions {

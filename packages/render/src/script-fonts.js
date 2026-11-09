@@ -438,6 +438,8 @@ const scriptMeasurement = Symbol.for("@openpresentation/opf-render/script-measur
  * receives each new substitution note `{fontFamily, fallbackFamily, scripts,
  * characters, path?}` once; `fallbacks` lists them all.
  */
+// Internal recording planners need strict coverage probes but may finish recording unsupported text before optional fonts arrive.
+export const fontCoverageProbe = Symbol('opf.font-analysis-coverage');
 export function createScriptFonts(profile = {}, measurement, options = {}) {
   const wrapped = measurement?.[scriptMeasurement];
   const inner = wrapped?.inner ?? measurement;
@@ -474,7 +476,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     const key = `${family}\u0000${style.fontWeight ?? 400}\u0000${!!style.italic}\u0000${text}`;
     if (coverage.has(key)) return coverage.get(key);
     let result = true;
-    try { inner.measure(text, 1, {...style, fontFamily: family}); }
+    try { if (inner[fontCoverageProbe]) inner[fontCoverageProbe](text, 1, {...style, fontFamily: family}); else inner.measure(text, 1, {...style, fontFamily: family}); }
     catch (error) { if (error?.code !== "missing-glyph" && !softErrors.has(error?.code)) throw error; result = false; }
     if (coverage.size >= 8192) coverage.delete(coverage.keys().next().value);
     coverage.set(key, result);

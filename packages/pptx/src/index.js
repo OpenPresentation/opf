@@ -299,7 +299,7 @@ export async function toPptx(input, options = {}) {
   // LH-14: and the icon sets it names (the gallery loads each set on first use) and the SVG files of its icons, when the host reads files.
   await ensureIcons(presentation, {catalogs: options.catalogs, ...(options.readIconSource ? {readSource: options.readIconSource} : {})});
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
-  if (options.as === 'images') return pictureSlidesPptx(presentation, options);
+  if (options.as === 'images') { if(options.fonts?.registry?.fontNames)await options.fonts?.ensure?.(presentation,{catalogs:options.catalogs,...(options.date?{date:options.date}:{}),renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})}}); return pictureSlidesPptx(presentation, options); }
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
   // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
   options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map()};
@@ -322,6 +322,8 @@ export async function toPptx(input, options = {}) {
     };
     return Object.assign(safe, {replaced});
   })() : undefined;
+  // Demand handles prepare the families this export actually measures, including an explicit Office-safe mapping.
+  if(options.fonts?.registry?.fontNames)await options.fonts?.ensure?.(presentation,{catalogs:options.catalogs,...(options.date?{date:options.date}:{}),renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})},...(safeTypeface?{mapFamily:safeTypeface}:{})});
   if (safeTypeface) options = {...options, safeTypeface, textMeasurement: safeMeasurement(options.textMeasurement, safeTypeface)};
   // The renderer remains optional for custom measurement providers. Its public script planner supplies the same
   // shaping/measurement segmentation as preview when installed; the selected native family wrapper stays outside it.
@@ -2355,7 +2357,9 @@ function resolvePresentationContext(presentation, options, core = coreContext({.
   const dimensions = {widthInches: core.options.width / 96, heightInches: core.options.height / 96};
   const variables = resolveVariableColors(presentation.variables);
   const definition = design.background ?? theme?.background;
-  const fonts = exportFonts(core, options.textMeasurement);
+  const metadata = options.fonts?.registry?.fontNames;
+  const roleNames = metadata ? chosenFamilyMeasurement(metadata) : options.textMeasurement;
+  const fonts = exportFonts(core, metadata && options.safeTypeface ? safeMeasurement(roleNames, options.safeTypeface) : roleNames);
   // One resolution for every color role, shared with the SVG preview and the audit: core's, which maps the roles through the slide's
   // variant (RR-96: bg1, tx1, bg2, tx2 and the accent order over the one scheme, the neutrals as slot plus luminance transform).
   // A core older than the variants has no `resolved.roles`; its roles are resolved from the background as before.
