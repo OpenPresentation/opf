@@ -1,0 +1,254 @@
+{
+  "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+  "producerTree": "82454f83c4903ce9d9ee6ee2d26ce9d95b40f317",
+  "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+  "botTree": "8db99418b4555d3fdc740babad0c4f0ad479ad93",
+  "changedFiles": [
+    "packages/javascript/test/fixtures/template-goldens-0.19.json",
+    "packages/render/test/golden/layout-templates-rr96-color-variants.json"
+  ],
+  "patchSHA256": "7061f7f0168b17aea69001392021e4a7c3d6717f34b636424a8bb4ab6cab2944",
+  "patchExact": true,
+  "candidateExact": true,
+  "core": {
+    "before": 480,
+    "after": 480,
+    "added": [],
+    "removed": [],
+    "changed": [
+      "inverted-pyramid 5 long",
+      "inverted-pyramid 6 long",
+      "org-chart 5 long",
+      "org-chart 6 long",
+      "hierarchy 5 long",
+      "hierarchy 6 long",
+      "venn 5 long",
+      "venn 6 long"
+    ]
+  },
+  "renderer": {
+    "before": 728,
+    "after": 728,
+    "added": [],
+    "removed": [],
+    "changed": [
+      "inverted-pyramid 5 long",
+      "org-chart 5 long",
+      "hierarchy 5 long",
+      "venn 5 long",
+      "paginated pyramid 5 long page 2",
+      "paginated pyramid 5 long page 3",
+      "paginated pyramid 5 long page 4",
+      "paginated inverted-pyramid 5 long page 2",
+      "paginated inverted-pyramid 5 long page 3",
+      "paginated inverted-pyramid 5 long page 4",
+      "paginated matrix 5 long page 2",
+      "paginated matrix 5 long page 3",
+      "paginated matrix 5 long page 4",
+      "paginated cycle 5 long page 2",
+      "paginated cycle 5 long page 3",
+      "paginated cycle 5 long page 4",
+      "paginated chevrons 5 long page 2",
+      "paginated chevrons 5 long page 3",
+      "paginated chevrons 5 long page 4",
+      "paginated vertical-flow 5 long page 2",
+      "paginated vertical-flow 5 long page 3",
+      "paginated vertical-flow 5 long page 4",
+      "paginated venn 5 long page 2",
+      "paginated venn 5 long page 3",
+      "paginated venn 5 long page 4"
+    ]
+  },
+  "rendererEntryChanges": [
+    {
+      "key": "inverted-pyramid 5 long",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 23196,
+      "bytesAfter": 18043
+    },
+    {
+      "key": "org-chart 5 long",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 23329,
+      "bytesAfter": 20503
+    },
+    {
+      "key": "hierarchy 5 long",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 22813,
+      "bytesAfter": 19981
+    },
+    {
+      "key": "venn 5 long",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 22527,
+      "bytesAfter": 17375
+    },
+    {
+      "key": "paginated pyramid 5 long page 2",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 11760,
+      "bytesAfter": 8554
+    },
+    {
+      "key": "paginated pyramid 5 long page 3",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 11760,
+      "bytesAfter": 8554
+    },
+    {
+      "key": "paginated pyramid 5 long page 4",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 11760,
+      "bytesAfter": 8554
+    },
+    {
+      "key": "paginated inverted-pyramid 5 long page 2",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14828,
+      "bytesAfter": 12404
+    },
+    {
+      "key": "paginated inverted-pyramid 5 long page 3",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14828,
+      "bytesAfter": 12404
+    },
+    {
+      "key": "paginated inverted-pyramid 5 long page 4",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14828,
+      "bytesAfter": 12404
+    },
+    {
+      "key": "paginated matrix 5 long page 2",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17202,
+      "bytesAfter": 12892
+    },
+    {
+      "key": "paginated matrix 5 long page 3",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17202,
+      "bytesAfter": 12892
+    },
+    {
+      "key": "paginated matrix 5 long page 4",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17202,
+      "bytesAfter": 12892
+    },
+    {
+      "key": "paginated cycle 5 long page 2",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17203,
+      "bytesAfter": 12891
+    },
+    {
+      "key": "paginated cycle 5 long page 3",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17203,
+      "bytesAfter": 12891
+    },
+    {
+      "key": "paginated cycle 5 long page 4",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17203,
+      "bytesAfter": 12891
+    },
+    {
+      "key": "paginated chevrons 5 long page 2",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14695,
+      "bytesAfter": 18534
+    },
+    {
+      "key": "paginated chevrons 5 long page 3",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14695,
+      "bytesAfter": 18534
+    },
+    {
+      "key": "paginated chevrons 5 long page 4",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14695,
+      "bytesAfter": 18534
+    },
+    {
+      "key": "paginated vertical-flow 5 long page 2",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17325,
+      "bytesAfter": 12955
+    },
+    {
+      "key": "paginated vertical-flow 5 long page 3",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17325,
+      "bytesAfter": 12955
+    },
+    {
+      "key": "paginated vertical-flow 5 long page 4",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 17325,
+      "bytesAfter": 12955
+    },
+    {
+      "key": "paginated venn 5 long page 2",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14152,
+      "bytesAfter": 13916
+    },
+    {
+      "key": "paginated venn 5 long page 3",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14152,
+      "bytesAfter": 13916
+    },
+    {
+      "key": "paginated venn 5 long page 4",
+      "svgChanged": true,
+      "pngChanged": true,
+      "bytesBefore": 14152,
+      "bytesAfter": 13916
+    }
+  ],
+  "examples": {
+    "baseline": "test/golden/opf-examples-png.fa-33-region-lists",
+    "sourceMatches": true,
+    "changedSlides": [],
+    "changedDecks": [],
+    "filesWritten": [],
+    "filesRemoved": []
+  },
+  "sourceMatches": true,
+  "renderPolicy": {
+    "scale": 0.25,
+    "systemFonts": false,
+    "trace": true
+  },
+  "unchanged": "Every other Git path, including all example golden files and chart/table SVG locks, is exact to producer; no local golden generation or tolerance change."
+}

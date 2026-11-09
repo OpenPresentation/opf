@@ -1,0 +1,39 @@
+{
+  "format": 1,
+  "producer": "c8fab20131b742329d45482f2ea6818008f45fb1",
+  "bot": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+  "historicalProducer": "a1126f6b7d08a24ca9b76303e22ac9316685c301",
+  "evidenceOnly": "NEVER MERGE",
+  "references": [
+    {
+      "path": "docs/handoff/2026-11-09/eleven-source-combined-check/raw/37-tests_opf.log.gz",
+      "blob": "a725f7064038f565ee714aa5644f601011f7be5d",
+      "bytes": 123576,
+      "sha256": "35874aca7a0086b49571a2a06ada70c88d6b5e75f9ad7df875e095efc226099c"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/eleven-source-combined-check/raw/40-tests_render.log.gz",
+      "blob": "9ffc25439ee0b518cf0ac04f7adc3fa2705fba25",
+      "bytes": 6543,
+      "sha256": "66c4d5630a7e5d3f5c54048fc302c82e802ead58d7da1cfe6e3bc4d9d34b3082"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/eleven-source-combined-check/receipt.json",
+      "blob": "d04062ea9f08cae1006bd6b26b38a1a1c2713ae6",
+      "bytes": 8651,
+      "sha256": "05631417c4d4c00bf8353fd1884a76735f491c480cf85c9151fb01d4928e11d1"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/lh144-retained-continuations/README.md",
+      "blob": "b63e957c1ef97d8559d0825f72a74b1dbcdff138",
+      "bytes": 10052,
+      "sha256": "b3ca7f7557570f119fa2987ca17442781537cd315f4bce6d6d18589ff94ecf23"
+    },
+    {
+      "path": "docs/handoff/2026-11-09/sh26-retained-selection/README.md",
+      "blob": "188777ab24c27dbd94a8037e3cd990d79bad91ab",
+      "bytes": 5821,
+      "sha256": "a6709deab355f986dc7217bf05e3e9eb2ecc4d1808a0c485a74b43ce1c263e61"
+    }
+  ]
+}

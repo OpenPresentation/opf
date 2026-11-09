@@ -1,0 +1,60 @@
+{
+  "archiveBytes": 166824,
+  "archiveSHA256": "a58b11d96f33cd5c6cafadd65badfc8532c81e31a3aa6b3a5f0df612e2aff86a",
+  "source": "b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+  "tested": "preliminary evidence working payload; 21 files",
+  "command": "pinned Node24 pnpm10.33.2 check:changed --base b8fdd1cb88273a4f9963c9c01b89fbf1d5d5cc1b",
+  "outcome": "TERMINAL0; 5 steps PASS/29.4s; typecheck SKIP no TypeScript change; no package suite selected",
+  "files": [
+    {
+      "name": "steps/biome.log",
+      "bytes": 687,
+      "sha256": "3450c99214ff8e157cd0735f5817f39156d05c27b488709289a0a85317a353c9"
+    },
+    {
+      "name": "steps/build.log",
+      "bytes": 14579,
+      "sha256": "3af1c1dc0fa20ba3ed2f81733dbd279c750ab8ac99267c6ac0a5b5557ff0fd01"
+    },
+    {
+      "name": "steps/pnpm_run_check_changes.log",
+      "bytes": 2640,
+      "sha256": "66af9adf1bdca4f95db06e3982155424fcabbce38ca0f75b404e7ba876e1267c"
+    },
+    {
+      "name": "steps/pnpm_run_check_skill-commands.log",
+      "bytes": 1036,
+      "sha256": "52a05d2cac9b3a28f882722aeecd01848bfc5b4476c169b8a01bea1c898f377b"
+    },
+    {
+      "name": "steps/pnpm_run_check_text.log",
+      "bytes": 1069,
+      "sha256": "bdfc3096bc197c07bc758a192083c5327b77dfd584dfaa1bb9753a3d0686c2a4"
+    },
+    {
+      "name": "preliminary-check-01.log",
+      "bytes": 900,
+      "sha256": "6b24f18346e8177750d62a87bdd6b67358b5ca73393a50681d136fc6db1ca9e9"
+    },
+    {
+      "name": "preliminary-check-01.exit.json",
+      "bytes": 500,
+      "sha256": "1150c604d207415f38db0e66345eafbadcde6624b86e051f4dea1b3748e070ee"
+    },
+    {
+      "name": "packet-hydration-01.json",
+      "bytes": 821002,
+      "sha256": "22c8ac2fc5bc7068e1370bc2df355b3c29c4bd18bda2e0e47e5def95d4690bd6"
+    },
+    {
+      "name": "packet-install-01.log",
+      "bytes": 4439,
+      "sha256": "8e441fb0ed5e2f865265e6f990ea37800d2c0631f4d786995d464393c8438b99"
+    },
+    {
+      "name": "packet-install-01.exit.json",
+      "bytes": 522,
+      "sha256": "325311a1aeb1ad94d26f83ead5783e807aebbbbf1e40210fa01b795874be05e9"
+    }
+  ]
+}
