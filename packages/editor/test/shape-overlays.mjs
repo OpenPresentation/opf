@@ -58,21 +58,21 @@ const fails = (action, code) => assert.throws(action, (error) => error.code === 
   fails(() => insertOverlayShape(editor, { slideIndex: 7, shape: "rect" }), "invalid-overlay");
 }
 
-// move and resize: fractions, kept on the slide
+// move and resize: signed positions, without pulling an intentional bleed onto the slide
 {
   const editor = session();
   setOverlayFrame(editor, "slides.0.shapes.0.shape", { x: 0.4, y: 0.3 });
   assert.deepEqual(Object.fromEntries(["x", "y", "width", "height"].map((key) => [key, editor.presentation.slides[0].shapes[0][key]])), { x: 0.4, y: 0.3, width: 0.2, height: 0.12 });
   setOverlayFrame(editor, "slides.0.shapes.0", { x: 5, y: -3 });
-  assert.deepEqual([editor.presentation.slides[0].shapes[0].x, editor.presentation.slides[0].shapes[0].y], [0.8, 0], "kept on the slide");
+  assert.deepEqual([editor.presentation.slides[0].shapes[0].x, editor.presentation.slides[0].shapes[0].y], [5, -3], "signed positions are preserved");
   setOverlayFrame(editor, "slides.0.shapes.0", { width: 0.5 });
-  assert.equal(editor.presentation.slides[0].shapes[0].x, 0.5, "a wider shape is pulled back onto the slide");
+  assert.equal(editor.presentation.slides[0].shapes[0].x, 5, "resizing preserves the authored origin");
   setOverlayFrame(editor, "slides.0.shapes.0", { x: 0.12345678 });
   assert.equal(editor.presentation.slides[0].shapes[0].x, 0.1235, "four places");
   const same = setOverlayFrame(editor, "slides.0.shapes.0", { x: 0.1235 });
   assert.equal(same.changed, false);
   editor.undo();
-  assert.equal(editor.presentation.slides[0].shapes[0].x, 0.5);
+  assert.equal(editor.presentation.slides[0].shapes[0].x, 5);
   fails(() => setOverlayFrame(editor, "slides.0.shapes.0", { offset: 3 }), "invalid-overlay");
   fails(() => setOverlayFrame(editor, "slides.0.shapes.0", { z: 1 }), "invalid-overlay");
   fails(() => setOverlayFrame(editor, "slides.0.shapes.2", { x: 0.1 }), "not-an-overlay");
@@ -182,4 +182,17 @@ const fails = (action, code) => assert.throws(action, (error) => error.code === 
   assert.deepEqual([editor.presentation.slides[0].shapes[0].fill, editor.presentation.slides[0].shapes[0].rotate], ["accent2", 10]);
 }
 
+// Off-slide insertion, detachment and ordinary editing keep the signed origin and remain undoable.
+{
+ const editor=session();
+ insertOverlayShape(editor,{slideIndex:1,shape:'ellipse',frame:{x:-0.1,y:-0.1,width:0.4,height:0.7}});
+ assert.equal(editor.presentation.slides[1].shapes[0].y,-0.1);
+ detachOverlay(editor,'slides.0.shapes.1',{x:-0.05,y:-0.1,width:0.1,height:0.1});
+ assert.equal(editor.presentation.slides[0].shapes[1].y,-0.1);
+ setOverlayFrame(editor,'slides.0.shapes.1',{width:0.3});
+ assert.equal(editor.presentation.slides[0].shapes[1].x,-0.05);
+ assert.equal(editor.presentation.slides[0].shapes[1].y,-0.1);
+ editor.undo();editor.undo();
+ assert.equal(editor.presentation.slides[0].shapes[1].at.block,'alpha');
+}
 console.log("shape overlays ok");

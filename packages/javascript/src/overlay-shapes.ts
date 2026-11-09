@@ -463,7 +463,7 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
  */
 function overlayBox(host: Rec, context: { width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
   const { width, height, scale, rtl } = context;
-  const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], 0, 1));
+  const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], key === 'x' || key === 'y' ? -Number.MAX_VALUE : 0, key === 'x' || key === 'y' ? Number.MAX_VALUE : 1));
   const hasFractions = ['x', 'y', 'width', 'height'].some(key => host[key] !== undefined), hasAt = host.at !== undefined;
   if (hasFractions === hasAt) return undefined;
   if (hasFractions) {
@@ -559,6 +559,7 @@ export function overlayIssues(slide: unknown, slidePath: string): OverlayIssue[]
     }
     const fractions = ['x', 'y', 'width', 'height'].filter(key => host[key] !== undefined), anchored = host.at !== undefined;
     const missing = fractions.length ? ['x', 'y', 'width', 'height'].filter(key => host[key] === undefined) : [];
+    for (const key of ['x', 'y']) if (typeof host[key] === 'number' && !Number.isFinite(host[key])) issues.push({ path: `${at}/${key}`, message: `an overlay shape's ${key} must be a finite fraction of the slide`, params: { key } });
     if (missing.length && !anchored) issues.push({ path: at, message: `an overlay shape placed by fractions of the slide needs all of 'x', 'y', 'width' and 'height'; add ${missing.map(key => `'${key}'`).join(', ')}`, params: { missing } });
     if (fractions.length && anchored) issues.push({ path: at, message: "an overlay shape takes one placement: 'x', 'y', 'width' and 'height', or 'at', not both", params: { placements: [...fractions, 'at'] } });
     else if (!fractions.length && !anchored) issues.push({ path: at, message: "an overlay shape needs a placement: 'x', 'y', 'width' and 'height' (fractions of the slide), or 'at' (against a block)", params: {} });

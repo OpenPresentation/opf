@@ -150,7 +150,16 @@ try {
   assert.equal(await selection.locator('.opf-shape-controls [data-role="shape-stack-group"]').count(), 1, 'and Stacking');
   mark('a selected overlay shape shows its frame, and the section its place and stacking');
 
-  // --- move by dragging its outline; the fractions are written, kept on the slide, one undo step
+  // --- signed positions are available through the ordinary controls and remain undoable
+  const yField=selection.getByLabel("Y",{exact:true});
+  assert.equal(await yField.getAttribute("min"),null);
+  assert.equal(await yField.getAttribute("max"),null);
+  await step("a negative Y percent positions the shape above the slide",async()=>{await yField.fill("-10");await yField.press("Enter");},current=>current.slides[0].shapes[0].y===-0.1,{single:true});
+  await shot('overlay-negative-y');
+  await undo();
+  await waitDoc(current=>canon(current.slides[0].shapes[0])===canon(inserted));
+
+  // --- move by dragging its outline; one undo step
   const svgBox = async () => page.locator('#preview svg').first().boundingBox();
   const drag = async (from, to, { steps = 8, keep = false } = {}) => {
     await page.mouse.move(from.x, from.y);
@@ -167,14 +176,14 @@ try {
   const expectedDx = 120 / slideBox.width;
   assert.ok(Math.abs(moved.slides[0].shapes[0].x - inserted.x - expectedDx) < 0.01, `x moved by the pointer's travel: ${moved.slides[0].shapes[0].x - inserted.x} against ${expectedDx}`);
   await shot('overlay-moved');
-  // Kept on the slide, however far it is dragged.
+  // Dragging past the slide preserves the pointer-derived origin.
   const now = await frameBox();
   await drag({ x: now.x + now.width / 2, y: now.y + now.height * 0.62 }, { x: slideBox.x + slideBox.width + 400, y: slideBox.y + slideBox.height + 400 });
   const edge = (await shapes())[0];
-  assert.ok(edge.x + edge.width <= 1 + 1e-9 && edge.y + edge.height <= 1 + 1e-9, `kept on the slide: ${JSON.stringify(edge)}`);
+  assert.ok(edge.x + edge.width > 1 && edge.y + edge.height > 1, `off-slide origin retained: ${JSON.stringify(edge)}`);
   await undo();
   await waitDoc(current => canon(current.slides[0].shapes[0]) === canon(moved.slides[0].shapes[0]), 'undo the far drag');
-  mark('a move is kept on the slide');
+  mark('a move may cross the slide edge and undo restores it');
   // A press that does not travel is a click: it selects and nothing is written.
   const quiet = await doc();
   const there = await frameBox();

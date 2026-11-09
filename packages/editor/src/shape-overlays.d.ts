@@ -45,7 +45,7 @@ export declare function prepareOverlayInsert(presentation: unknown, options: Ove
 /** Add an overlay shape on top of a slide as one undoable step; the change's `path` is the new entry. */
 export declare function insertOverlayShape(editor: EditorSession, options: OverlayInsertOptions, meta?: Record<string, unknown>): OverlayChange & { shape: string; frame: OverlayFrame };
 
-/** A frame change: fractions for a shape placed by `x`, `y`, `width` and `height`; `offset` (pixels), `width` and `height` for one attached to a block. */
+/** A frame change: signed x/y fractions and width/height fractions for a shape placed by `x`, `y`, `width` and `height`; `offset` (pixels), `width` and `height` for one attached to a block. */
 export interface OverlayFrameChange { x?: number; y?: number; width?: number; height?: number; offset?: number }
 export declare function prepareOverlayFrame(presentation: unknown, path: string, change: OverlayFrameChange): PreparedOverlayChange;
 /** Move or resize an overlay shape as one undoable step. An attached shape keeps its `at`; `x` or `y` on it throws `overlay-anchored`. */

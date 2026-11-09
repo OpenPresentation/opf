@@ -860,8 +860,8 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'. |
-| `x` | no | `number` | Left edge as a fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. With 'y', 'width' and 'height'. |
-| `y` | no | `number` | Top edge as a fraction of the slide height, from the top edge. |
+| `x` | no | `number` | Left edge as a signed fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. Negative values or values greater than 1 place the shape outsi... |
+| `y` | no | `number` | Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape outside the slide. |
 | `width` | no | `number` | Width as a fraction of the slide width. |
 | `height` | no | `number` | Height as a fraction of the slide height. |
 | `at` | no | `ref:OverlayAnchor` |  |

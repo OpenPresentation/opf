@@ -129,7 +129,7 @@ const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
 
 /**
  * Compute the patch that places an overlay shape. A shape placed by fractions takes `{ x, y, width, height }` (any of them, fractions of the slide: the
- * frame is kept on the slide and at least 0.5% wide and high). A shape attached to a block (`at`) keeps its anchor: it takes `{ offset, width, height }`
+ * position may cross the slide edge; the frame stays at least 0.5% wide and high). A shape attached to a block (`at`) keeps its anchor: it takes `{ offset, width, height }`
  * (reference pixels for the offset; the sizes in the unit the anchor already uses, a fraction of the block up to 1, else pixels), and asking it for `x` or `y`
  * is refused (`overlay-anchored`): detach it first (`detachOverlay`).
  */
@@ -161,8 +161,8 @@ export function prepareOverlayFrame(presentation, path, change) {
     const height = clamp(change.height !== undefined ? number("height") : (entry.height ?? 0.2), 0.005, 1);
     if (change.width !== undefined) write([], "width", rounded(width));
     if (change.height !== undefined) write([], "height", rounded(height));
-    if (change.x !== undefined || change.width !== undefined) write([], "x", rounded(clamp(change.x !== undefined ? number("x") : (entry.x ?? 0), 0, 1 - width)));
-    if (change.y !== undefined || change.height !== undefined) write([], "y", rounded(clamp(change.y !== undefined ? number("y") : (entry.y ?? 0), 0, 1 - height)));
+    if (change.x !== undefined) write([], "x", rounded(number("x")));
+    if (change.y !== undefined) write([], "y", rounded(number("y")));
   }
   return prepared(presentation, patches, found.path);
 }
@@ -187,8 +187,8 @@ export function prepareOverlayDetach(presentation, path, frame) {
   const at = (key) => opfPathToJsonPointer([...parts, key]);
   const patches = [
     { op: "remove", path: at("at") },
-    { op: "add", path: at("x"), value: rounded(clamp(frame.x, 0, 1 - width)) },
-    { op: "add", path: at("y"), value: rounded(clamp(frame.y, 0, 1 - height)) },
+    { op: "add", path: at("x"), value: rounded(frame.x) },
+    { op: "add", path: at("y"), value: rounded(frame.y) },
     { op: "add", path: at("width"), value: rounded(width) },
     { op: "add", path: at("height"), value: rounded(height) },
   ];
