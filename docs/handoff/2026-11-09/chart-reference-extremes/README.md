@@ -1,0 +1,9 @@
+# Finite extreme reference values
+
+Parent requested a pure Node child bounded to three seconds after discovering other finite geometry edge cases. The initial child took 128 ms. Direct axis/placement math stayed finite, but real composition silently omitted references at -Number.MAX_VALUE or both finite endpoints. A separate 543 ms actual SVG child reproduced zero references for line/bar/combo. Its built runtime was not sealed against a historical source commit; the original guard is independently visible in Git ccb43034. These logs are diagnostic evidence, not a historical full-package qualification.
+
+Source 5006a625 adds shared chartAxisScale reconstruction. It keeps ordinary arithmetic byte-for-byte, divides before subtraction only when the finite endpoints overflow their span, and divides before multiplying only when an intermediate tick product overflows. Core plot labels, horizontal bar plots, sibling interval selection and SVG scales now retain every finite reference. Existing 1,000-interval work bounds remain. No value cap, tolerance change or golden regeneration was introduced.
+
+The source-only diagnostic bundles composition in memory, redirects only the composition and SVG entries to that source, and runs the actual focused test files. Final 23/23 passed in a 1,052 ms child with a 2,500 ms hard timeout. Eighteen actual SVG cases cover all six supported types with +MAX, -MAX and both endpoints; focused controls also cover secondary/sibling bounds and ordinary data using the same huge scale. The earlier missing esbuild dependency setup refusal is retained. Original scripts and logs are preserved exactly; their paths describe the historical local diagnostic layout.
+
+Run node docs/handoff/2026-11-09/chart-reference-extremes/verify.mjs to check file hashes and historical source objects without rebuilding. One normal combined mapped package gate is still required. This receipt claims no native Office or release acceptance.

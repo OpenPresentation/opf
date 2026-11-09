@@ -1,0 +1,20 @@
+{"type":"column","values":[1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"column","values":[-1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"column","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":2,"ticks":4,"nonfinite":false}
+{"type":"bar","values":[1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"bar","values":[-1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"bar","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":2,"ticks":4,"nonfinite":false}
+{"type":"line","values":[1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"line","values":[-1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"line","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":2,"ticks":4,"nonfinite":false}
+{"type":"line-with-markers","values":[1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"line-with-markers","values":[-1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"line-with-markers","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":2,"ticks":4,"nonfinite":false}
+{"type":"area","values":[1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"area","values":[-1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"area","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":2,"ticks":4,"nonfinite":false}
+{"type":"combo","values":[1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"combo","values":[-1.7976931348623157e+308],"referenceCount":1,"ticks":4,"nonfinite":false}
+{"type":"combo","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":2,"ticks":4,"nonfinite":false}
+bounded source control PASS (18 actual SVG/composition cases; source-only diagnostic bundle, not a normal package qualification)
+childMs=716

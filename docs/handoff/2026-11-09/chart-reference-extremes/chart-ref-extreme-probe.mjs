@@ -1,0 +1,3 @@
+import {execFileSync} from 'node:child_process';
+const start=performance.now();
+try{const out=execFileSync('C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe',['C:/Users/micha/.codex/worktrees/5b0a/opf/.tmp/chart-ref-extreme-child.mjs'],{timeout:2500,maxBuffer:1000000,encoding:'utf8'});process.stdout.write(out);console.log('childMs='+Math.round(performance.now()-start));}catch(e){console.log(JSON.stringify({status:'FAILED',code:e.code,signal:e.signal,stdout:String(e.stdout??''),stderr:String(e.stderr??''),childMs:Math.round(performance.now()-start)}));process.exitCode=1;}

@@ -1,0 +1,220 @@
+[
+  {
+    "type": "column",
+    "name": "max",
+    "axis": {
+      "min": 0,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 5e+307
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "column",
+    "name": "min",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 2.0000000000000002e+307,
+      "majorUnit": 5e+307
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "column",
+    "name": "both",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 1e+308
+    },
+    "lines": 2,
+    "allFinite": true
+  },
+  {
+    "type": "bar",
+    "name": "max",
+    "axis": {
+      "min": 0,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 5e+307
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "bar",
+    "name": "min",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 2.0000000000000002e+307,
+      "majorUnit": 5e+307
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "bar",
+    "name": "both",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 1e+308
+    },
+    "lines": 2,
+    "allFinite": true
+  },
+  {
+    "type": "line",
+    "name": "max",
+    "axis": {
+      "min": 0,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 5e+307
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "line",
+    "name": "min",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 2.0000000000000002e+307,
+      "majorUnit": 5e+307
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "line",
+    "name": "both",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 1e+308
+    },
+    "lines": 2,
+    "allFinite": true
+  },
+  {
+    "type": "area",
+    "name": "max",
+    "axis": {
+      "min": 0,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 5e+307
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "area",
+    "name": "min",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 2.0000000000000002e+307,
+      "majorUnit": 5e+307
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "area",
+    "name": "both",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 1e+308
+    },
+    "lines": 2,
+    "allFinite": true
+  },
+  {
+    "type": "combo",
+    "name": "max",
+    "axis": {
+      "min": 0,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 5e+307
+    },
+    "secondary": {
+      "min": 0,
+      "max": 0.4,
+      "majorUnit": 0.1
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "combo",
+    "name": "min",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 2.0000000000000002e+307,
+      "majorUnit": 5e+307
+    },
+    "secondary": {
+      "min": 0,
+      "max": 0.4,
+      "majorUnit": 0.1
+    },
+    "lines": 1,
+    "allFinite": true
+  },
+  {
+    "type": "combo",
+    "name": "both",
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 1e+308
+    },
+    "secondary": {
+      "min": 0,
+      "max": 0.4,
+      "majorUnit": 0.1
+    },
+    "lines": 2,
+    "allFinite": true
+  },
+  {
+    "compose": true,
+    "values": [
+      1.7976931348623157e+308
+    ],
+    "axis": {
+      "min": 0,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 5e+307
+    },
+    "lines": 1
+  },
+  {
+    "compose": true,
+    "values": [
+      -1.7976931348623157e+308
+    ],
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 2.0000000000000002e+307,
+      "majorUnit": 5e+307
+    },
+    "lines": 0
+  },
+  {
+    "compose": true,
+    "values": [
+      -1.7976931348623157e+308,
+      1.7976931348623157e+308
+    ],
+    "axis": {
+      "min": -1.7976931348623157e+308,
+      "max": 1.7976931348623157e+308,
+      "majorUnit": 1e+308
+    },
+    "lines": 0
+  }
+]
+childMs=128

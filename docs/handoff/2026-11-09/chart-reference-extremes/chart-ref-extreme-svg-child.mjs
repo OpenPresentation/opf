@@ -1,0 +1,5 @@
+import {toSvg,resolvePresentation} from 'file:///C:/opf-work/chart-ref-impl/packages/render/test/catalog-harness.mjs';
+for(const type of ['line','bar','combo'])for(const values of [[Number.MAX_VALUE],[-Number.MAX_VALUE],[-Number.MAX_VALUE,Number.MAX_VALUE]]){
+ const chart={type,data:{columns:['Q','Actual',...(type==='combo'?['Rate']:[])],rows:[['Q1',1,...(type==='combo'?[.2]:[])],['Q2',2,...(type==='combo'?[.3]:[])]]},...(type==='combo'?{line:['Rate'],secondaryAxis:['Rate']}:{}),referenceLines:values.map(value=>({value,label:'Target'}))};
+ const doc={slides:[{chart}]};try{const svg=toSvg(doc,1,{trace:true}),item=resolvePresentation(doc).slides[0].geometry.items.find(i=>i.field==='chart');console.log(JSON.stringify({type,values,referenceCount:(svg.match(/data-opf-path="slides\.0\.chart\.referenceLines\.\d+"/g)??[]).length,composedCount:item.chart.layer?.references?.lines.length,axis:item.chart.valueAxis,nonfinite:/NaN|Infinity/.test(svg),bytes:svg.length}));}catch(error){console.log(JSON.stringify({type,values,error:String(error)}));}
+}

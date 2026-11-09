@@ -1,0 +1,10 @@
+{"type":"line","values":[1.7976931348623157e+308],"referenceCount":1,"composedCount":1,"axis":{"min":0,"max":1.7976931348623157e+308,"majorUnit":5e+307},"nonfinite":false,"bytes":3956}
+{"type":"line","values":[-1.7976931348623157e+308],"referenceCount":0,"axis":{"min":-1.7976931348623157e+308,"max":2.0000000000000002e+307,"majorUnit":5e+307},"nonfinite":false,"bytes":3245}
+{"type":"line","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":0,"axis":{"min":-1.7976931348623157e+308,"max":1.7976931348623157e+308,"majorUnit":1e+308},"nonfinite":false,"bytes":3245}
+{"type":"bar","values":[1.7976931348623157e+308],"referenceCount":1,"composedCount":1,"axis":{"min":0,"max":1.7976931348623157e+308,"majorUnit":5e+307},"nonfinite":false,"bytes":4027}
+{"type":"bar","values":[-1.7976931348623157e+308],"referenceCount":0,"axis":{"min":-1.7976931348623157e+308,"max":2.0000000000000002e+307,"majorUnit":5e+307},"nonfinite":false,"bytes":3322}
+{"type":"bar","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":0,"axis":{"min":-1.7976931348623157e+308,"max":1.7976931348623157e+308,"majorUnit":1e+308},"nonfinite":false,"bytes":3322}
+{"type":"combo","values":[1.7976931348623157e+308],"referenceCount":1,"composedCount":1,"axis":{"min":0,"max":1.7976931348623157e+308,"majorUnit":5e+307},"nonfinite":false,"bytes":9363}
+{"type":"combo","values":[-1.7976931348623157e+308],"referenceCount":0,"axis":{"min":-1.7976931348623157e+308,"max":2.0000000000000002e+307,"majorUnit":5e+307},"nonfinite":false,"bytes":9787}
+{"type":"combo","values":[-1.7976931348623157e+308,1.7976931348623157e+308],"referenceCount":0,"axis":{"min":-1.7976931348623157e+308,"max":1.7976931348623157e+308,"majorUnit":1e+308},"nonfinite":false,"bytes":9787}
+childMs=543

@@ -1,0 +1,32 @@
+✔ schema: six types, optional empty array, finite values, labels, styles and located axis errors (144.8947ms)
+✔ normalization retains ordered duplicate/data-equal values, defaults and width zero (2.0199ms)
+✔ all explicit values expand own-axis bounds; percentages are raw units without clamping or label inference (0.8022ms)
+✔ null-only valid data still includes explicit bounds and combo zero anchoring follows only bars on the same axis (0.9683ms)
+✔ native span matches category centers; horizontal and singleton references span full plot (24.4013ms)
+✔ labels use opposite adjacent side before diagnosing unresolved collisions, without dropping text or numeric lines (0.3533ms)
+✔ titles/subtitles never synthesize lines or period bands in any language (33.5165ms)
+✔ fixed chart/data/frame keeps reference/plot/end-label geometry when prose matches a series (8.4913ms)
+✔ sibling scale sharing includes every explicit target and refreshes line placement against final plot (2.9175ms)
+✔ table-aligned bars recompute references against final row plot and publish final label diagnostics once (20.3252ms)
+✔ reference labels choose the other adjacent side when an ordinary data line crosses the preferred box (0.1618ms)
+✔ wide reference strokes leave their own labels clear without moving numeric lines (0.1645ms)
+✔ finite endpoint references survive real composition on every supported chart and own combo axis (6.7279ms)
+✔ shared axis reconstruction keeps ordinary ticks and bounds overflow-sized tick work (0.1095ms)
+✔ main line stays solid while independent reference styles, optional labels and width zero render explicitly (23.9076ms)
+✔ multiple raw percentage targets remain distinct and title/subtitle edits change no traced reference geometry (24.8931ms)
+✔ secondary combo target uses composed secondary bounds and shared plot, independent of primary units (16.9951ms)
+✔ bar and singleton fallback draw full-plot references; prose without properties draws none (32.3ms)
+✔ explicit author highlight still controls data colors with reference lines (10.7467ms)
+✔ table-aligned bars draw their reference on the final row plot (28.481ms)
+✔ area and markerful line references retain normal data marks and category-center spans (19.1847ms)
+✔ reference ColorRefs preserve alpha, transforms, variables and the textSecondary role (11.9312ms)
+✔ finite extreme references and data share composed scales instead of disappearing or falling back to ordinary bounds (189.5487ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 662.0164
+source-only diagnostic childMs=1023
