@@ -1,0 +1,16 @@
+[
+  {
+    "transport": "recovery/text-recovery.log.gz",
+    "rawBytes": 1069,
+    "rawSha256": "328e684f4a5fbb198d390fb8a7adebf59e1bcd69f9172f5d55ae42952e984a7e",
+    "transportBytes": 594,
+    "transportSha256": "5112fafd9675155842f7de352fc818fc9a8b9f9d2528409ff5324e689069a817"
+  },
+  {
+    "transport": "recovery/text-recovery.exit.json.gz",
+    "rawBytes": 433,
+    "rawSha256": "f5e3f43e75d573e40ca9ac307706904860b8425ea735468a809f447be8b38d82",
+    "transportBytes": 284,
+    "transportSha256": "d43c153cc901817f53b81e4c203ba8307030f2035cc68d6189ed82c6018edaa1"
+  }
+]
