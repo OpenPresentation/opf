@@ -29,3 +29,7 @@ Exact-HEAD hydration restored4356 tracked files/113,711,152 bytes. The known pai
 Run the portable offline verifier with pinned Node24 from this checkout:
 
     node docs/handoff/2026-11-09/lh121-pull-line-localization/verify.mjs
+
+## Final handoff-only result
+
+The final dated handoff/source-proof payload1f9dc878ddce9becdd15f5e5fc2c377e5e731eba passes check:changed --base9450:5 selected steps PASS/64.5s (outer67.236s), typecheck SKIP, no package test selected. final-docs.json/zip retain exactly the7 current driver/step files, excluding stale original package/stability/font logs. The original35-file packet remains unchanged. The final receipt-only tail changes this handoff alone; test source9450 and all protected objects remain exact. Offline verifier passes both packets. No source push or PR creation by this agent; coordinator owns publication, normal fold and combined CI. The original CI/local Arabic RED and ignored-file manual Biome RED remain explicit historical results, never relabeled green.
