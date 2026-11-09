@@ -227,7 +227,7 @@ The seven kept chart types with no ECMA-376 construct are written as Office 2016
 | OPF id | `cx:series layoutId` | Data (category-major) | Notes |
 |---|---|---|---|
 | `treemap` | `treemap` | `[Category, Value]`, first series | one tile per category, category data labels, one palette colour per tile |
-| `histogram` | `clusteredColumn` | `[Value]` or `[Category, Value]`, first series | a lone value column is binned by PowerPoint with an explicit automatic bin count (Scott's rule, `cx:binCount`); a category column bins by category (`cx:aggregation`) |
+| `histogram` | `clusteredColumn` | `[Value]` or `[Category, Value]`, first series | a lone value column is binned by PowerPoint with an explicit automatic bin count (Scott's rule, `cx:binCount`); a category column bins by category (`cx:aggregation`) when its values are nonnegative; negative category values use an editable clustered-column fallback in every mode with a `chartex-fallback` diagnostic (all rows/series retained; imports as `column`). Negative raw samples in a lone value column still bin natively |
 | `pareto` | `clusteredColumn` owning a `paretoLine` | as histogram | the Office Pareto chart: sorted columns plus the cumulative-percentage line on a percentage axis |
 | `box-and-whisker` | `boxWhisker` | `[Category, S1, S2, ...]`, every series | rows with the same category form one box per series; exclusive quartiles, mean markers, outliers |
 | `waterfall` | `waterfall` | `[Category, Value]`, first series | connector lines; increases and decreases in the first two palette colours; no subtotals |

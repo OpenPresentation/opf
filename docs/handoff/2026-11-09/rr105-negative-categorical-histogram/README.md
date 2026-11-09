@@ -1,0 +1,9 @@
+# RR-105: negative categorical histogram
+
+Work in progress on `codex/rr-105-histogram-negative-categories`, based on fresh main normally aligned to reviewed integration `00a828777342e4e7339472dcccc1b4b3bc265204`. No chart-reference representation is approved or changed.
+
+Vetoable decision: prefer data preservation to native histogram identity for category/value data containing a negative plotted value. Every ChartEx mode uses the existing editable clustered-column fallback and an explicit data-domain diagnostic. Import truthfully returns one column chart with all rows/series; histogram type is not restored. Negative raw observations in one numeric column retain native binning. No schema, renderer, axis-policy, pin, tolerance, golden or canonical archive fixture changes.
+
+The exact original/save/reopen native images omit East -8 while both ChartEx/classic caches and workbooks retain it. Existing sealed explicit-fallback original/save/reopen images show all four categories including East below zero. These are supervisor-produced existing observations, not new agent Office runs or blanket native qualification. The first new regression assumption of explicit classic -20/50 XML bounds was incorrect: the existing fallback leaves the bounds automatic. Both initial failures are retained; the corrected check rejects an explicit bound that clips any value and preserves exact fallback archive bytes.
+
+Regression-only sources: `d2ec265648625de037267f71f85cc1ebcf4903ab`, followed by corrected-bounds baseline `a7cd9f34f`. Original baseline has 6 PASS/4 FAIL; corrected baseline still has 6 PASS/4 FAIL (three native-selection failures and the truthful-diagnostic failure in explicit fallback). Before changing maintained native-positive controls, their first candidate failure is retained. Required checks and final source/evidence receipt remain pending.

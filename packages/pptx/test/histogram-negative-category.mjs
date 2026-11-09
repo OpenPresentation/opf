@@ -81,15 +81,15 @@ for (const mode of modes) {
 
 for (const mode of [undefined, 'auto', 'native']) {
   test((mode ?? 'default') + ': nonnegative category values retain native aggregation', async () => {
-    const positive = {columns: data.columns, rows: data.rows.map(([label, value]) => [label, Math.abs(value)])};
-    const {parts, diagnostics} = await exported(mode, positive);
+    const positive = {columns: data.columns, rows: data.rows.map(([label, value]) => [label, Math.max(0, value)])};
+    const {bytes, parts, diagnostics} = await exported(mode, positive);
     assert.deepEqual(chartParts(parts), ['ppt/charts/chart1.xml', 'ppt/charts/chartEx1.xml']);
     const chart = xml(parts, 'ppt/charts/chartEx1.xml');
     assert.match(chart, /<cx:aggregation\/>/);
     assert.doesNotMatch(chart, /<cx:binning/);
     assert.deepEqual([...chart.matchAll(/<cx:numDim type="val">[\s\S]*?<cx:lvl[^>]*>([\s\S]*?)<\/cx:lvl>/g)].flatMap(([, block]) => [...block.matchAll(/<cx:pt idx="\d+">([^<]*)<\/cx:pt>/g)].map(([, value]) => Number(value))), positive.rows.map(([, value]) => value));
     assert.deepEqual(diagnostics.filter((entry) => entry.code === 'chart-data-adapted'), []);
-    assert.deepEqual(chartsIn((await fromPptx(await toPptx({slides: [{chart: {type: 'histogram', data: positive}}]}, {chartex: mode ?? 'auto'})))).map((chart) => chart.type), ['histogram']);
+    assert.deepEqual(chartsIn(await fromPptx(bytes)).map((chart) => chart.type), ['histogram']);
   });
   test((mode ?? 'default') + ': negative raw samples retain native histogram binning', async () => {
     const samples = {columns: ['Sample'], rows: [[-8], [-3], [0], [4], [19]]};
@@ -105,3 +105,27 @@ for (const mode of [undefined, 'auto', 'native']) {
     assert.deepEqual(charts[0].data, samples);
   });
 }
+
+
+test('resolved decimal values trigger the guard and null gaps remain gaps', async () => {
+  const source = {columns: data.columns, rows: [['North', '42'], ['South', 31], ['East', '-8'], ['West', null]]};
+  const {bytes, parts} = await exported('native', source);
+  assert.deepEqual(chartParts(parts), ['ppt/charts/chart1.xml']);
+  const chart = xml(parts, 'ppt/charts/chart1.xml');
+  assert.deepEqual(points(chart, 'cat'), source.rows.map(([label], index) => [index, label]));
+  assert.deepEqual(points(chart, 'val'), [[0, '42'], [1, '31'], [2, '-8']]);
+  assert.deepEqual(chartsIn(await fromPptx(bytes))[0].data, {columns: source.columns, rows: [['North', 42], ['South', 31], ['East', -8], ['West', null]]});
+});
+
+test('a negative resolved value in a later series preserves every series through the fallback', async () => {
+  const source = {columns: ['Region', 'Observed', 'Comparison'], rows: [['North', 42, 15], ['East', 8, -8], ['West', 19, 0]]};
+  const {bytes, parts, diagnostics} = await exported('native', source);
+  assert.deepEqual(chartParts(parts), ['ppt/charts/chart1.xml']);
+  assert.equal([...xml(parts, 'ppt/charts/chart1.xml').matchAll(/<c:ser>/g)].length, 2);
+  assert.deepEqual(workbookRows(parts), [source.columns, ...source.rows]);
+  const imported = chartsIn(await fromPptx(bytes));
+  assert.equal(imported.length, 1);
+  assert.equal(imported[0].type, 'column');
+  assert.deepEqual(imported[0].data, source);
+  assert.deepEqual(diagnostics.filter((entry) => entry.code === 'chart-data-adapted').map((entry) => entry.adaptation), ['chartex-fallback']);
+});

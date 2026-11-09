@@ -417,7 +417,8 @@ export async function toPptx(input, options = {}) {
   context.imageFormat = options.imageFormat ?? "compatible";
   // Chartex export mode (FF-22b): 'auto' (default) writes native chartex parts for the constructs the native PowerPoint
   // check confirmed (treemap, histogram, pareto, box-and-whisker, waterfall, funnel) and the clustered column fallback
-  // for the unconfirmed map; 'native' writes every chartex part; 'fallback' writes clustered columns only.
+  // for the unconfirmed map; 'native' writes every supported chartex part; 'fallback' writes clustered columns only.
+  // Data-domain fallbacks still apply in every mode (negative categorical histograms and core's multi-series Pareto).
   if (options.chartex !== undefined && !['auto', 'native', 'fallback'].includes(options.chartex)) {
     throw new OPFPptxError('invalid-chartex-mode', 'chartex must be auto, native or fallback.', {path: 'options.chartex'});
   }
@@ -5018,19 +5019,24 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   const columnCodes = (plan.formats ?? []).map(excelCode);
   const diagnostics = resolvedData.diagnostics.filter((entry) => entry.severity === 'warning' && entry.code !== 'chart-value-not-numeric');
   const rejected = resolvedData.diagnostics.filter((entry) => entry.code === 'chart-value-not-numeric');
-  const {spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
+  const {id: resolvedType, spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
   // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
   // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
   // (src/chartex.js). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
   // the unconfirmed map on the clustered column chart alone; 'fallback' keeps every chartex id there. The fallback is
   // reported as chartex-fallback, never silent. LH-175: a Pareto chart of several series is core's pareto-as-columns fallback (a
   // clustered column chart of every series, as the preview draws it), so it reaches here as a column chart in every mode.
-  const native = chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed);
+  // RR-105: native category aggregation omits negative categories in PowerPoint, even though its cache retains them.
+  // Keep the editable classic representation in every mode; negative raw samples in one column still use native binning.
+  const negativeCategoricalHistogram = resolvedType === 'histogram' && data.columns.length > 1 && data.rows.some(row => row.slice(1).some(value => typeof value === 'number' && value < 0));
+  const native = !negativeCategoricalHistogram && (chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed));
   const chartex = resolved.family === 'chartex' && native ? resolved : null;
   const spec = resolved.family === 'chartex' ? CHARTEX_FALLBACK : resolved;
   const typeName = stringifyText(chart.type);
   const adaptations = [];
-  if (resolved.family === 'chartex' && !native) {
+  if (negativeCategoricalHistogram) {
+    adaptations.push({adaptation: "chartex-fallback", message: "PowerPoint's native categorical histogram aggregation does not display negative category values; every category and value is exported as an editable native clustered column chart instead. This data-domain fallback applies in every chartex mode."});
+  } else if (resolved.family === 'chartex' && !native) {
     const reason = chartexMode === 'fallback'
       ? 'that this exporter does not write'
       : 'that PowerPoint has not yet accepted natively from this exporter (pass chartex: \'native\' to write its chartex part)';
