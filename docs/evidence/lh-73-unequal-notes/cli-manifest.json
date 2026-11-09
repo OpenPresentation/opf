@@ -1,0 +1,55 @@
+{
+  "baseline": "924a302ef10bf20d37eead5c4724e3f4a9535fe1",
+  "candidate": "30aed8a3c83d3167806cb1ebb61efe3c1e8d41eb",
+  "route": "maintained CLI convert; --date2026-11-08; PNG --scale0.5; fonts prepared by CLI office/visual/scripts:auto",
+  "cases": [
+    {
+      "id": "batch-06-s50",
+      "inputSha256": "81b535e3c34bef1e06b01ba602d90aa0a57b88ac150b519a2e8debcea263e7f1",
+      "before": {
+        "pptx": {
+          "sha256": "5b1a34fee705a272a6d074ff8900530c07b75eb2d37d27268fe798e3325f028d",
+          "file": "C:\\opf-work\\lh73-cli-review\\before\\batch-06-s50.pptx"
+        },
+        "png": {
+          "sha256": "88446dae74a9ddebba022f9d2d21d0c0ae108b51a26f356c8f50222922a3634f",
+          "file": "C:\\opf-work\\lh73-cli-review\\before\\batch-06-s50.png"
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "a579a520d2c21f61af6373c6e7a94bb318eb01824216b83e7e4454020bde2ca6",
+          "file": "C:\\opf-work\\lh73-cli-review\\after\\batch-06-s50.pptx"
+        },
+        "png": {
+          "sha256": "72c96a1c4b5940b8757f691335892b340159d978471fb3b0173e6f8e1ce99532",
+          "file": "C:\\opf-work\\lh73-cli-review\\after\\batch-06-s50.png"
+        }
+      }
+    },
+    {
+      "id": "batch-17-s41",
+      "inputSha256": "9b733509f0fd11472cc6543b9c272baca4ab4e82354a908f737f5ab81707baff",
+      "before": {
+        "pptx": {
+          "sha256": "9fa9c5d4cdc4bff11b3342e5c054d11a483ec80ca2aab218a4ca446bb3c01cb9",
+          "file": "C:\\opf-work\\lh73-cli-review\\before\\batch-17-s41.pptx"
+        },
+        "png": {
+          "sha256": "08fe7fb38dab63f43fd6b837aa5d4af068aaa0d7bd9e517159ddc3da4006c673",
+          "file": "C:\\opf-work\\lh73-cli-review\\before\\batch-17-s41.png"
+        }
+      },
+      "after": {
+        "pptx": {
+          "sha256": "30e3bd3dec7984b1f129de3e9a60ec7bba58fc3a695458fd43502230746ac3ff",
+          "file": "C:\\opf-work\\lh73-cli-review\\after\\batch-17-s41.pptx"
+        },
+        "png": {
+          "sha256": "f398e994a6e5ed8d820b0830b4bcb8515dbf19fc0a975275cc774dd70219f964",
+          "file": "C:\\opf-work\\lh73-cli-review\\after\\batch-17-s41.png"
+        }
+      }
+    }
+  ]
+}

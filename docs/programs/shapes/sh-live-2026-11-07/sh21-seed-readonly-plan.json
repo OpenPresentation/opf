@@ -1,0 +1,19 @@
+{
+    "scope":  "Plan only. No output directory or COM object.",
+    "sha256":  "2828b8a66920a24ccaecd4f661c790955944ac3cf09403acfb4eda22d5752c2a",
+    "source":  "C:\\opf-work\\_supervisor\\com-jobs\\sh-08\\smartart-seeds.pptx",
+    "jobs":  [
+                 {
+                     "kind":  "orgChart1",
+                     "slide":  14
+                 },
+                 {
+                     "kind":  "hierarchy1",
+                     "slide":  15
+                 },
+                 {
+                     "kind":  "venn1",
+                     "slide":  12
+                 }
+             ]
+}

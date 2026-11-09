@@ -1,0 +1,100 @@
+{
+  "source": "401d9f9f03f7c293cdcee8e7d14ec7e5161bde63",
+  "sourceTree": "6a3ae8ff852107dc351856f3e53b2ecaed68d782",
+  "exit": {
+    "base": "401d9f9f03f7c293cdcee8e7d14ec7e5161bde63",
+    "startedAt": "2026-11-09T12:05:38.909Z",
+    "finishedAt": "2026-11-09T12:06:15.335Z",
+    "exitCode": 0,
+    "signal": null,
+    "node": "v24.20.0",
+    "pnpm": "10.33.2",
+    "scope": "Metadata and strict tracker qualification only; original combined41/44RED and separately qualified RR112 source remain distinct."
+  },
+  "passedSteps": 7,
+  "typecheckSkipped": 1,
+  "measuredSeconds": 35.7,
+  "steps": [
+    "build",
+    "biome",
+    "pnpm_run_check_changes",
+    "pnpm_run_check_gallery-tracker",
+    "pnpm_run_check_release-report",
+    "pnpm_run_check_skill-commands",
+    "pnpm_run_check_text"
+  ],
+  "files": [
+    {
+      "name": "driver.log.gz",
+      "rawBytes": 1089,
+      "rawSHA256": "f51f0cf349befe116a89a774a5d3f807f2dbe1c26f9f4b0682cbb16a38db5e2f",
+      "gzipBytes": 446,
+      "gzipSHA256": "525f6372d626d8fa191223d93646f2927ef37c4561dec0610294e007ac51a4a3"
+    },
+    {
+      "name": "driver.exit.json.gz",
+      "rawBytes": 365,
+      "rawSHA256": "7de25760dfb1820586939112e28dc8de32bb128f4755a38c5204b2c475264f34",
+      "gzipBytes": 265,
+      "gzipSHA256": "da3fda43e9903a02ed779a99d9b5666059bc78148f8e60188caa72ca9e7ab4d7"
+    },
+    {
+      "name": "build.log.gz",
+      "rawBytes": 14584,
+      "rawSHA256": "1d37311212ef76b2f7bdcf3037235b4afeea120814d643b20b947c6253a47cca",
+      "gzipBytes": 3031,
+      "gzipSHA256": "bea3eb3175c7bc16fd755e059e8f0bdfda3ffaee46b8209659ece18912eb1cc3"
+    },
+    {
+      "name": "biome.log.gz",
+      "rawBytes": 685,
+      "rawSHA256": "810dbe4054133f1fe567d6c2f66c191322d433851d7a640ca1490ce72db6b815",
+      "gzipBytes": 321,
+      "gzipSHA256": "8ae90716862ee19f444bebd56a3d182a9f8ee408ef6b7267db6de6e0ef44af79"
+    },
+    {
+      "name": "pnpm_run_check_changes.log.gz",
+      "rawBytes": 2637,
+      "rawSHA256": "6169cd7495ec20ed80e1d1f181ec69a03872cb124402f289e525e2b4a4a67dff",
+      "gzipBytes": 1166,
+      "gzipSHA256": "611291ff123cd60d26bc9e37962a7c1c6474e8e434a649e259108ef94048c621"
+    },
+    {
+      "name": "pnpm_run_check_gallery-tracker.log.gz",
+      "rawBytes": 1992,
+      "rawSHA256": "d224413184ff7e51f074ed576133b71f718b07a5874374458ea4eba515c821e7",
+      "gzipBytes": 1060,
+      "gzipSHA256": "5586d79576b8f73fbce4f5c6949d4594ff7c6937589b2dd7b0ce1363206eb472"
+    },
+    {
+      "name": "pnpm_run_check_release-report.log.gz",
+      "rawBytes": 812,
+      "rawSHA256": "a91c9af6a2c337e75f31054fc3e01d6a8f8faecdcd13f4bf5afa909bc8c3c094",
+      "gzipBytes": 464,
+      "gzipSHA256": "abd80289889135178bd1180ec1cb5a85ea24de6608a37636d9ac0a03e43f0784"
+    },
+    {
+      "name": "pnpm_run_check_skill-commands.log.gz",
+      "rawBytes": 1039,
+      "rawSHA256": "75451ca2fbcb7a6574d1a4a87c818bdd7cb620ddf825ff8da114e06295bcf826",
+      "gzipBytes": 580,
+      "gzipSHA256": "80a455b8789b74a5b0e6e93a1c46bb45bcefee4f4864d9270de666990f8de60c"
+    },
+    {
+      "name": "pnpm_run_check_text.log.gz",
+      "rawBytes": 1071,
+      "rawSHA256": "05517875dbf26e522cabcf75947cff6f72f7f26b5e9597bc15427e4a608b49f3",
+      "gzipBytes": 593,
+      "gzipSHA256": "0b5bb45d23446afbb4c57a90fb0da8cb2441d981d84681a1fcb13b9fd23883e5"
+    }
+  ],
+  "independentSourceReview": {
+    "result": "PASS",
+    "packageToolPaths": 42,
+    "protectedObjects": 10,
+    "pptxChanged": 7,
+    "pptxUnchanged": 79,
+    "chartDefinitionSha256": "5a760f3b5b53489ea292e949a81521bfc8c4d13fedf1c8019eb0a73f1d98f147"
+  },
+  "scope": "Parent metadata and strict tracker qualification. Original606 combined41/44RED, expected generated goldens and native/owner gates remain separate."
+}

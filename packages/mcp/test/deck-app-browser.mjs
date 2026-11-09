@@ -41,7 +41,7 @@ assert.equal(resource._meta?.ui?.csp, undefined, "the view declares no CSP domai
 const HOST_PAGE = `<!doctype html><meta charset="utf-8"><title>host</title><style>body{margin:0}iframe{border:0;width:960px;height:640px}</style>
 <iframe id="view" sandbox="allow-scripts allow-same-origin"></iframe>
 <script>
-window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [] };
+window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [], downloads: [] };
 const frame = document.getElementById("view");
 const send = (message) => frame.contentWindow.postMessage({ jsonrpc: "2.0", ...message }, "*");
 let initialized = false;
@@ -61,7 +61,7 @@ window.addEventListener("message", async (event) => {
       return reply({
         protocolVersion: "2026-01-26",
         hostInfo: { name: "test-host", version: "1.0.0" },
-        hostCapabilities: { serverTools: {}, serverResources: {}, logging: {}, openLinks: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} } },
+        hostCapabilities: { serverTools: {}, serverResources: {}, logging: {}, openLinks: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} }, ...(setup.downloadMode ? { downloadFile: {} } : {}) },
         hostContext: { theme: setup.theme, displayMode: "inline", availableDisplayModes: ["inline", "fullscreen"], containerDimensions: { width: 960, maxHeight: 640 }, platform: "web" },
       });
     case "ui/notifications/initialized":
@@ -80,6 +80,10 @@ window.addEventListener("message", async (event) => {
     case "ui/update-model-context":
       host.context.push(message.params);
       return reply({});
+    case "ui/download-file":
+      host.downloads.push(message.params);
+      if (setup.downloadMode === "rpc-error") return send({ id: message.id, error: { code: -32000, message: "Download denied by the test host" } });
+      return reply(setup.downloadMode === "denied" || setup.downloadMode === "cancelled" ? { isError: true } : {});
     case "ui/message":
       host.messages.push(message.params);
       return reply({});
@@ -111,6 +115,8 @@ const failures = [];
 try {
 	const page = await browser.newPage({ viewport: { width: 1000, height: 700 } });
 	const problems = [];
+	const browserDownloads = [];
+	page.on("download", (download) => browserDownloads.push(download.suggestedFilename()));
 	page.on("console", (message) => {
 		if (message.type() === "error" || /Content Security Policy|Refused to/.test(message.text())) problems.push(message.text());
 	});
@@ -125,13 +131,25 @@ try {
 		if (shots) await page.locator("#view").screenshot({ path: path.join(shots, `${name}.png`) });
 	};
 
-	const open = async (args, theme = "light") => {
+	const open = async (args, theme = "light", downloadMode) => {
 		const result = await client.callTool({ name: "show_deck", arguments: args });
 		await page.evaluate((setup) => {
-			window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [] };
+			window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [], downloads: [] };
 			window.startView(setup);
-		}, { viewUrl, arguments: args, result, theme });
+		}, { viewUrl, arguments: args, result, theme, downloadMode });
 		await page.waitForFunction(() => window.host.context.length > 0, null, { timeout: 60000 });
+	};
+	const probeIframeDownload = async () => page.frame({ url: /\/view$/ }).evaluate(() => {
+		window.downloadProbe = { blobs: 0, anchors: 0 };
+		const create = URL.createObjectURL.bind(URL);
+		URL.createObjectURL = (...args) => { window.downloadProbe.blobs++; return create(...args); };
+		document.addEventListener("click", (event) => {
+			if (event.target.closest?.("a[download]")) window.downloadProbe.anchors++;
+		}, true);
+	});
+	const noIframeDownload = async () => {
+		assert.deepEqual(await page.frame({ url: /\/view$/ }).evaluate(() => window.downloadProbe), { blobs: 0, anchors: 0 }, "source downloads never use an iframe Blob/anchor fallback");
+		assert.deepEqual(browserDownloads, [], "the iframe never directly downloads a file");
 	};
 
 	const run = async (name, body) => {
@@ -278,6 +296,88 @@ try {
 		assert.equal(await page.frame({ url: /\/view$/ }).evaluate(() => document.documentElement.dataset.theme), "dark");
 		assert.match((await hostState()).context[0].content[0].text, /2 slides, slide 2 open, both view/);
 		await shoot("both-dark");
+	});
+
+	const downloadDeck = {
+		name: "Download witness", language: "en-US", design: { fontScheme: "roboto" },
+		slides: [{ id: "current", title: "Current content", blocks: [{ text: "Original body." }] }],
+	};
+	await run("Download source sends the exact edited JSON, MIME and filename through the capable host", async () => {
+		await open({ document: downloadDeck, view: "both" }, "light", "accepted");
+		const expected = structuredClone(downloadDeck);
+		expected.slides[0].blocks[0].text = "The source body was edited and all of its words remain.";
+		const text = JSON.stringify(expected, null, 2);
+		const source = view().locator("#deck-source .cm-content");
+		await source.click();
+		await source.press("ControlOrMeta+A");
+		await page.keyboard.insertText(text);
+		await page.waitForFunction((body) => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === body, expected.slides[0].blocks[0].text, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, expected);
+		assert.equal(await source.innerText(), text, "the current authored source is retained exactly");
+		// Only visual line boundaries may change: every word and interior space must remain.
+		const painted = (await view().locator("#deck-canvas").innerText()).split(/\r?\n/u).map((line) => line.trim()).filter(Boolean).join(" ");
+		assert.equal(painted, expected.slides[0].title + " " + expected.slides[0].blocks[0].text);
+		await view().getByRole("button", { name: "Rename deck", exact: true }).click();
+		const filename = view().getByRole("textbox", { name: "File name", exact: true });
+		await filename.fill("Q3#1 100%");
+		await filename.press("Enter");
+		await probeIframeDownload();
+		await view().getByRole("button", { name: "Download source", exact: true }).click();
+		await noIframeDownload();
+		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
+		assert.deepEqual((await hostState()).downloads, [{ contents: [{ type: "resource", resource: { uri: "file:///Q3%231-100%25.opf.json", mimeType: "application/json", text } }] }]);
+		assert.equal(await view().locator("#deck-notice").isHidden(), true, "host acknowledgement does not invent a saved-file success notice");
+		await shoot("host-download-edited-json");
+		await view().locator('#deck-history [data-opf-action="undo"]').click();
+		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === "Original body.", null, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, downloadDeck);
+		await view().locator('#deck-history [data-opf-action="redo"]').click();
+		await page.waitForFunction((body) => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === body, expected.slides[0].blocks[0].text, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, expected);
+	});
+
+	await run("host downloads preserve untouched JSON, YAML and Markdown source text and MIME", async () => {
+		for (const [format, text, mimeType, extension] of [
+			["json", '{\r\n  "name" : "Raw JSON",\r\n  "slides" : [{"title":"Raw source"}]\r\n}\r\n', "application/json", "json"],
+			["yaml", '# Keep this YAML comment\nname: Raw YAML\nslides:\n  - title: Raw source\n', "text/yaml", "yaml"],
+			["markdown", '---\nname: Raw Markdown\n---\n\n# Raw source\n\nKeep this Markdown sentence.\n', "text/markdown", "md"],
+		]) {
+			await open({ document: text, format, view: "source" }, "light", "accepted");
+			await view().locator("#deck-source .cm-editor").waitFor();
+			await probeIframeDownload();
+			await view().getByRole("button", { name: "Download source", exact: true }).click();
+			await noIframeDownload();
+			await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
+			assert.deepEqual((await hostState()).downloads, [{ contents: [{ type: "resource", resource: { uri: `file:///deck.opf.${extension}`, mimeType, text } }] }], format + ": exact source bytes and metadata");
+		}
+	});
+
+	await run("a host without download capability gets no request or iframe fallback and a visible error", async () => {
+		await open({ document: downloadDeck, view: "source" });
+		await view().locator("#deck-source .cm-editor").waitFor();
+		await probeIframeDownload();
+		await view().getByRole("button", { name: "Download source", exact: true }).click();
+		await noIframeDownload();
+		await view().locator("#deck-notice").waitFor();
+		assert.match(await view().locator("#deck-notice").innerText(), /host does not support.*download/i);
+		assert.deepEqual((await hostState()).downloads, []);
+		assert.equal((await hostState()).requests.includes("ui/download-file"), false);
+		await shoot("host-download-unsupported");
+	});
+
+	await run("host denial, cancellation and protocol errors remain visible failures without fallback", async () => {
+		for (const mode of ["denied", "cancelled", "rpc-error"]) {
+			await open({ document: downloadDeck, view: "source" }, "light", mode);
+			await view().locator("#deck-source .cm-editor").waitFor();
+			await probeIframeDownload();
+			await view().getByRole("button", { name: "Download source", exact: true }).click();
+			await noIframeDownload();
+			await view().locator("#deck-notice").waitFor();
+			assert.match(await view().locator("#deck-notice").innerText(), /download failed/i);
+			assert.equal((await hostState()).downloads.length, 1);
+			if (mode !== "rpc-error") assert.match(await view().locator("#deck-notice").innerText(), /cancelled or denied/i);
+			await shoot("host-download-" + mode);
+		}
 	});
 
 	await run("runs without a CSP violation or a page error", async () => {

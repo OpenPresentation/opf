@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "hierarchy",
+  "name": "Hierarchy",
+  "summary": "A single-root hierarchy drawn as connected pairs of rounded cards.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "nodes",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "hierarchy"
+    }
+  ],
+  "description": "Show a classification or work breakdown with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before children and do not skip a depth. Unsupported forests, jumps, descriptions or long labels retain the complete list with a finding instead of changing relationships or shrinking text.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/hierarchy.svg"
+  }
+}

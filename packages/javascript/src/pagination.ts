@@ -1,3 +1,4 @@
+import {continuationFonts,continuationFontKey,continuationFontCohort} from './continuation-fonts.js';
 import {isShapeBlock} from "./shape-block.js";
 import {isOverlayConnector, slideBlockIds} from "./overlay-shapes.js";
 import { codeHighlightSlice } from './code-highlight.js';
@@ -29,7 +30,8 @@ export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasur
   minFontSize?: number;
   /**
    * LH-90: break only between the slide's block units (`blockUnits`: a lead block and the blocks that follow it; each root block
-   * alone when the slide has none), never inside one, over the fewest pages that hold them, with the units spread evenly over
+   * alone when the slide has none), never inside one. Retain settled source sizes for comparable automatic body roles, then
+   * use the fewest pages that hold them, with the units spread evenly over
    * those pages when every page still fits (eight timelines that fit five to a page are four and four, not five and three).
    * The slide is composed first as the engines draw it: a strict (`overflow: "error"`) composition throws its
    * `OPFCompositionError`, and a slide with no `text-overflow` or `small-cell` is returned unchanged. A unit that overflows on a
@@ -162,18 +164,14 @@ function leafFor(path: string, field: string, value: any): Leaf {
  * LH-144: the largest size a composed slide draws for each kind of body block, in reference pixels: a paragraph's or list's text
  * (`text`, `list`), a quote's, metric's or timeline's largest part. Tables, code and charts are not capped (composition.maxFontSize).
  */
-function bodySizes(composed: SlideComposition): Map<string, number> {
-  const scale = Math.min(composed.width, composed.height) / 720, sizes = new Map<string, number>();
-  const add = (kind: string, size: number | undefined) => { if (size !== undefined && Number.isFinite(size) && size > 0) sizes.set(kind, Math.max(sizes.get(kind) ?? 0, Math.round(size / scale * 100) / 100)); };
-  for (const item of composed.items) {
-    if (headingFields.has(item.field) || item.eyebrow) continue;
-    const layout = item.quoteLayout ?? item.metricLayout ?? item.timelineLayout;
-    if (layout) add(item.field, Math.max(0, ...(layout.parts as readonly { fit?: { fontSize: number }; visible?: boolean }[]).flatMap(part => part.visible === false || !part.fit ? [] : [part.fit.fontSize])));
-    else if (item.text && !item.codeLayout && (item.field === 'text' || item.field === 'items' || item.field === 'bullets')) add(item.field === 'text' ? 'text' : 'list', item.text.fontSize);
+function bodySizes(composed: SlideComposition, options: ComposeSlideOptions = {}): Map<string, number> {
+  const sizes = new Map<string,number>();
+  for (const font of continuationFonts(composed,options)) {
+    if (!font.automatic || !['text','list','quote','metric','timeline'].includes(font.kind)) continue;
+    sizes.set(font.kind,Math.max(sizes.get(font.kind)??0,font.size));
   }
   return sizes;
 }
-
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
 export function paginateSlide(input: unknown, options: PaginationOptions = {}): PaginationResult {
   // RR-34: a slide that cites references validates only with the deck's references list (RR-54: and its datasets).
@@ -400,7 +398,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const cap = firstSizes && Math.max(0, ...[...selected.values()].map(portion => firstSizes!.get(kindOf(portion.leaf.field)) ?? 0));
     if (cap) slide.composition = {...slide.composition, maxFontSize: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSize ?? Infinity)};
     const drawn = geometry(slide,slides.length), issues = fit(drawn.diagnostics);
-    if (!firstSizes) firstSizes = bodySizes(drawn);
+    if (!firstSizes) firstSizes = bodySizes(drawn,composeOptions);
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
     assignPageIds(slide,slides.length);
     // RR-34: a page that cites references validates only with the deck's references list (RR-54: and its datasets).
@@ -424,20 +422,47 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
       previous = unit;
     }
     const portions = (from: number, to: number) => new Map(units.slice(from,to).flat().map(leaf=>[leaf.path,{leaf,start:0,end:(leaf.boundaries ?? [0,1]).at(-1)!,value:leaf.value} as Portion]));
-    const issuesOf = (from: number, to: number, pageIndex: number) => fit(geometry(project(portions(from,to),pageIndex).slide,pageIndex).diagnostics);
-    // The fewest pages: each page takes as many of the next blocks as fit.
+    const originalFonts=continuationFonts(initial,composeOptions);
+    const cohorts=new Map<string,number>();
+    for(const font of originalFonts)if(font.automatic)cohorts.set(continuationFontCohort(font),Math.max(cohorts.get(continuationFontCohort(font))??0,font.size));
+    const retained=originalFonts.map(font=>({...font,size:font.automatic?cohorts.get(continuationFontCohort(font))!:font.size}));
+    const inspect = (from: number,to: number,pageIndex: number,caps?: Map<string,number>) => {
+      const selected=portions(from,to),projection=project(selected,pageIndex);
+      const cap=caps&&Math.max(0,...[...selected.values()].map(portion=>caps.get(kindOf(portion.leaf.field))??0));
+      if(cap)projection.slide.composition={...projection.slide.composition,maxFontSize:Math.min(Math.max(8,cap),200,projection.slide.composition?.maxFontSize??Infinity)};
+      const drawn=geometry(projection.slide,pageIndex),issues=fit(drawn.diagnostics);
+      const mappings=projection.mappings;
+      // composeSlide keeps the source slide index; projection mappings carry output page indexes.
+      const composedPath=(output:string)=>sourceBase+output.slice(output.indexOf('.',7));
+      const sourcePath=(path:string)=>{
+        const mapping=mappings.find(entry=>{const output=composedPath(entry.outputPath);return path===output||path.startsWith(output+'.');});
+        return mapping?mapping.sourcePath+path.slice(composedPath(mapping.outputPath).length):path;
+      };
+      const fonts=new Map(continuationFonts(drawn,composeOptions,sourcePath).map(font=>[continuationFontKey(font),font.size]));
+      for(const font of retained)if(mappings.some(mapping=>font.path===mapping.sourcePath)&&((fonts.get(continuationFontKey(font))??0)<font.size-1e-6)){
+        issues.push({code:'text-overflow',path:font.path,message:`Continuation would reduce retained ${font.role} text below ${font.size} reference pixels. Use more whole-block pages or change the authored constraint.`});
+      }
+      return {drawn,issues};
+    };
+    let planningCaps: Map<string,number>|undefined;
+    const issuesOf = (from: number,to: number,pageIndex: number) => inspect(from,to,pageIndex,planningCaps).issues;
+    // Readability precedes page count: take as many whole units as fit without reducing
+    // retained automatic-role or explicitly styled source text, including final page caps.
     const greedy: [number,number][] = [];
     for (let start = 0; start < units.length;) {
       const alone = issuesOf(start,start+1,greedy.length);
       if (alone.length) throw new OPFPaginationError(`The block at ${units[start]![0]!.path} cannot fit on an otherwise empty slide.`,alone);
       let end = start+1;
       while (end < units.length && !issuesOf(start,end+1,greedy.length).length) end++;
+      if(!planningCaps)planningCaps=bodySizes(inspect(start,end,greedy.length).drawn,composeOptions);
       greedy.push([start,end]); start = end;
     }
     // The same number of pages with the blocks spread evenly (the earlier pages take the remainder), when every page fits.
     const count = greedy.length, base = Math.floor(units.length/count), extra = units.length%count;
     const balanced = Array.from({length:count},(_,page)=>{ const start = page*base+Math.min(page,extra); return [start,start+base+(page<extra?1:0)] as [number,number]; });
-    const ranges = balanced.every(([from,to],page)=>!issuesOf(from,to,page).length) ? balanced : greedy;
+    planningCaps=undefined;
+    const balancedFits=balanced.every(([from,to],page)=>{const candidate=inspect(from,to,page,planningCaps);if(!planningCaps)planningCaps=bodySizes(candidate.drawn,composeOptions);return !candidate.issues.length;});
+    const ranges = balancedFits ? balanced : greedy;
     for (const [from,to] of ranges) { selected = portions(from,to); finish(); }
     splitDiagnostics();
     return {slides,pages};

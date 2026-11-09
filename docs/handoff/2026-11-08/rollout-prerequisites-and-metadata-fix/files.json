@@ -1,0 +1,181 @@
+{
+  "format": 1,
+  "artifacts": [
+    {
+      "file": "dev200-f18-gate-02.log.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\dev200-f18-gate-02.log",
+      "rawBytes": 445,
+      "rawSha256": "462b7da69dac10c2ec24d19d131619dc1c1e3bac2ad135551b76dadf9fef80f8",
+      "storedBytes": 188,
+      "storedSha256": "8a899c38596203855116e255fa4cb3e2f3181b0752d1381f21f661a76cce3fe2"
+    },
+    {
+      "file": "dev200-f18-gate-02.log.exit.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\dev200-f18-gate-02.log.exit.json",
+      "rawBytes": 332,
+      "rawSha256": "cbbcb81d3deefb086a57e85edfa5a883f48f4f2cb99b876f894a28068bc8787c",
+      "storedBytes": 255,
+      "storedSha256": "199ae74b7b6a0d05ad09fa98bd3e5ef071e64ebfcccc3b6e95681d27b4d9c280"
+    },
+    {
+      "file": "org033-production-gate-01.log.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org033-production-gate-01.log",
+      "rawBytes": 180,
+      "rawSha256": "5f8b4b0b8c6051424d02e350510835243c9f5141ad81a48f70c7259a859bf795",
+      "storedBytes": 154,
+      "storedSha256": "0f5aa6621b85fdae4a610ce7551ba57b92a8d38c6bea9703e500ea494c4fd1e8"
+    },
+    {
+      "file": "org033-production-gate-01.log.exit.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org033-production-gate-01.log.exit.json",
+      "rawBytes": 345,
+      "rawSha256": "e2213711b0af9bf0e4cd381e5ab907285a50cec22aa1e369bb62ce78184aa7ae",
+      "storedBytes": 261,
+      "storedSha256": "f132b549ece47e4168404c5229fbd0dd77b592c071683d0d76410ca521182879"
+    },
+    {
+      "file": "g1-assessment.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\assessment.json",
+      "rawBytes": 958,
+      "rawSha256": "d99a6243aa256c3cdaf417de44f59904982d94cf2e8674df56b086161f899211",
+      "storedBytes": 613,
+      "storedSha256": "59962228d94c932360373a57b04f7d11b5634874bb51c71a454a628709b2641b"
+    },
+    {
+      "file": "g1-build.log.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\build.log",
+      "rawBytes": 31102,
+      "rawSha256": "85d1c21e94cb9fad6db394f27b788e24cd05e5481bf7b1430a449be2b93818cd",
+      "storedBytes": 7410,
+      "storedSha256": "3404032316dd501570efc072f2dc80a599332a680ee0f16d5da9204b61c402be"
+    },
+    {
+      "file": "g1-final-assessment.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\final-assessment.json",
+      "rawBytes": 1269,
+      "rawSha256": "7424b14653d457aecf53ce39b5a9bb842bed86a4ab66249b28b77f2005523724",
+      "storedBytes": 733,
+      "storedSha256": "c4a37f4dd219844631e6357158330620a16b7c1ebebf39d125210c3a474b6a71"
+    },
+    {
+      "file": "g1-generated-drift.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\generated-drift.json",
+      "rawBytes": 3,
+      "rawSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "storedBytes": 23,
+      "storedSha256": "858ce9c035384bc4f31d7895b470bc72809b733274d960eabeca130df6c3bb1a"
+    },
+    {
+      "file": "g1-index-refresh.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\index-refresh.json",
+      "rawBytes": 1224,
+      "rawSha256": "5436a7328690387f62fe1188ce01d0963802720cd4bd6087e4d460020a5c87fd",
+      "storedBytes": 471,
+      "storedSha256": "8d9baa83244c83bbfe35f35c64fc06667547e6249da4dbe8669af06f4c1e75e7"
+    },
+    {
+      "file": "g1-index-refresh.log.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\index-refresh.log",
+      "rawBytes": 628,
+      "rawSha256": "4c03930821cc569e7eb1ff24c4695b42a62cb0c76a18dcda0906660abed35c12",
+      "storedBytes": 197,
+      "storedSha256": "818df8df59f94e4495edc6fbd42d5d3edccbd2880a1ac5e0a30952632806b07c"
+    },
+    {
+      "file": "g1-oid-audit.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\oid-audit.json",
+      "rawBytes": 8214,
+      "rawSha256": "ed61b8c1fe10bef212d10fa0909299bb0e84aff9201cbe9c3ece35f5b5d6a5ef",
+      "storedBytes": 1530,
+      "storedSha256": "d45797934abf6cf9e7ebfebe7f0ae82e1c00c0ce078211fee164b38494854159"
+    },
+    {
+      "file": "g1-postbuild-byte-audit.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\postbuild-byte-audit.json",
+      "rawBytes": 3922,
+      "rawSha256": "f76176f4b62a9405f32aaf4e2b9607934001696c94a8f0050c9869e03d81cbd2",
+      "storedBytes": 831,
+      "storedSha256": "e8bd74cae7d514cc535086e786f81221410a46b4374c6a7d4f72640115bf6c9d"
+    },
+    {
+      "file": "g1-postbuild-tracked.diff.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\postbuild-tracked.diff",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storedBytes": 20,
+      "storedSha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+    },
+    {
+      "file": "g1-preflight.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\preflight.json",
+      "rawBytes": 734,
+      "rawSha256": "d4d8a192e65e53cff7617a4c768144f3709a169a3de98985ee4c3c3696c7f3d1",
+      "storedBytes": 484,
+      "storedSha256": "2f562774eed64d28afebdb46c2e4d5cdae500b058b185af8eba9b92cf20e375f"
+    },
+    {
+      "file": "g1-README.md.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\README.md",
+      "rawBytes": 1843,
+      "rawSha256": "be561378fdad8a0e1396b9b989e1d7d51de3fb8b5b8fdee6c2e58d113d6c06ed",
+      "storedBytes": 1020,
+      "storedSha256": "e111ce321505ead363385992817da23d7bad1a8b3d4b0f5c1671d481cca02e9c"
+    },
+    {
+      "file": "g1-receipt.json.gz",
+      "source": "C:\\opf-work\\release-033-artifacts\\org-g1-df0-build-20261108-attempt01\\receipt.json",
+      "rawBytes": 1895,
+      "rawSha256": "255a97beb2fa6566f4621e7503599c5f7ebb7668c8fc03eaae0a59661f325165",
+      "storedBytes": 841,
+      "storedSha256": "5edf7548b9c14eff08b7ccef1bcdf3b923086ba16f6126ddc7560a9969de3146"
+    },
+    {
+      "file": "org206-git-identity-gate-01.log.gz",
+      "source": "C:/opf-work/release-033-artifacts/org206-git-identity-gate-01.log",
+      "rawBytes": 936,
+      "rawSha256": "a5cab5bfd45e4427189e145ec351894028b74d135a6a90a5ff8e3c549eb44008",
+      "storedBytes": 234,
+      "storedSha256": "0c24a58f74daa2a2c0ac9c422a4f1468a1c2e87ba5e1a447476da2087783fced"
+    },
+    {
+      "file": "org206-git-identity-gate-01.log.exit.json.gz",
+      "source": "C:/opf-work/release-033-artifacts/org206-git-identity-gate-01.log.exit.json",
+      "rawBytes": 346,
+      "rawSha256": "9349f12ee35e3dd2dd3bd4f33ef48d1eef4e869cd2ed1b40d7a315160bf22e62",
+      "storedBytes": 261,
+      "storedSha256": "8fc086fa5a54281a512534fab542208efaf6b76e3cb5038203b71eb3657c6155"
+    },
+    {
+      "file": "integration-rollout-prerequisites-check-01.log.gz",
+      "source": "C:/opf-work/release-033-artifacts/integration-rollout-prerequisites-check-01.log",
+      "rawBytes": 923,
+      "rawSha256": "ceef746dc4ebc919195f3596d35da71190caf500cecdc9fa32da888f7fd9c460",
+      "storedBytes": 414,
+      "storedSha256": "a4fc763469b1a66b1ee10f4e1b738021371cd35df4eb69e56ed7d1542ddd6b76"
+    },
+    {
+      "file": "integration-rollout-prerequisites-check-01.log.exit.json.gz",
+      "source": "C:/opf-work/release-033-artifacts/integration-rollout-prerequisites-check-01.log.exit.json",
+      "rawBytes": 230,
+      "rawSha256": "060157ef9d8c312fbef0b9423b9ee143e9cc6c3133abb765d66d297a8b691335",
+      "storedBytes": 178,
+      "storedSha256": "ba6881bb67e33f184256ed1d58121e8426d635159d00417389e0983e293c160f"
+    },
+    {
+      "file": "integration-rollout-prerequisites-check-02.log.gz",
+      "source": "C:/opf-work/release-033-artifacts/integration-rollout-prerequisites-check-02.log",
+      "rawBytes": 922,
+      "rawSha256": "47fd77b486cc4afa40eb3879738c4d33b241ebca44d9d42ff1d401e62b9b29c6",
+      "storedBytes": 414,
+      "storedSha256": "c9330b6b45e73289ad80c6a3ccaa6aafe8556655cba889698361991c7bc3394c"
+    },
+    {
+      "file": "integration-rollout-prerequisites-check-02.log.exit.json.gz",
+      "source": "C:/opf-work/release-033-artifacts/integration-rollout-prerequisites-check-02.log.exit.json",
+      "rawBytes": 230,
+      "rawSha256": "205bf6d149ea1c64f6e0221ef08c18493104a1b98d2ceb80ffe513037eaec15b",
+      "storedBytes": 176,
+      "storedSha256": "89f83c234a7fa1d5ffb02955142877b9d3b15814635d2474d8f2bf75f0046b8e"
+    }
+  ]
+}

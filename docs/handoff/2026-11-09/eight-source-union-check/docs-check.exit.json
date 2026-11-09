@@ -1,0 +1,11 @@
+{
+  "status": 0,
+  "signal": null,
+  "ms": 31904,
+  "args": [
+    "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/pnpm/bin/pnpm.cjs",
+    "check:changed",
+    "--base",
+    "be65fa941edbd191a72db2f8d74742309ba9dd68"
+  ]
+}

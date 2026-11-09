@@ -1,0 +1,175 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\rr-20-f1-f3-currency\\packages\\javascript\\test\\fixtures\\chart-report-boundaries.opf.json",
+    "sha256": "e75564aa805c14f1be86ff8a8260743c8d6120b0551508d9e764c6069b034eac",
+    "bytes": 3782
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\rr-20-f1-f3-currency\\docs\\handoff\\2026-11-08\\f1-f3-currency\\chart-convert-witness\\after-corrected\\svg\\slide-1.svg",
+      "sha256": "2a5d3d5729e32846b27aaf2ab00fb66181c2ab6a32b7cc7c42a5bd851bd03847",
+      "bytes": 2069122,
+      "mediaType": "image/svg+xml",
+      "slide": 1,
+      "id": "s13",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "C:\\opf-work\\rr-20-f1-f3-currency\\docs\\handoff\\2026-11-08\\f1-f3-currency\\chart-convert-witness\\after-corrected\\svg\\slide-2.svg",
+      "sha256": "6eeb91c418b9b872e3658699d6c2c05c886ec1c534caf214194b8e61ce795b53",
+      "bytes": 2066348,
+      "mediaType": "image/svg+xml",
+      "slide": 2,
+      "id": "s07",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "C:\\opf-work\\rr-20-f1-f3-currency\\docs\\handoff\\2026-11-08\\f1-f3-currency\\chart-convert-witness\\after-corrected\\svg\\slide-3.svg",
+      "sha256": "2475172b22786d9e43e3c1bb0dc89c353c4713db72fc6ff73676a36f8fa66f53",
+      "bytes": 2064865,
+      "mediaType": "image/svg+xml",
+      "slide": 3,
+      "id": "s36",
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "opf/chart-series-dropped",
+      "severity": "warning",
+      "category": "content",
+      "scope": "document",
+      "path": "/slides/0/blocks/1/chart/type",
+      "message": "a 'waterfall' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series",
+      "help": "The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.",
+      "definition": "packages/javascript/src/schema-check.ts",
+      "lookup": [
+        "opf",
+        "schema",
+        "presentation",
+        ""
+      ],
+      "validation": {
+        "path": "/slides/0/blocks/1/chart/type",
+        "message": "a 'waterfall' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series",
+        "keyword": "opf",
+        "schemaPath": "#/x-opf-semantics",
+        "params": {
+          "code": "chart-series-dropped"
+        }
+      },
+      "slide": 0,
+      "slideId": "s13"
+    },
+    {
+      "ruleId": "opf/chart-series-dropped",
+      "severity": "warning",
+      "category": "content",
+      "scope": "document",
+      "path": "/slides/1/blocks/0/chart/type",
+      "message": "a 'funnel' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series",
+      "help": "The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.",
+      "definition": "packages/javascript/src/schema-check.ts",
+      "lookup": [
+        "opf",
+        "schema",
+        "presentation",
+        ""
+      ],
+      "validation": {
+        "path": "/slides/1/blocks/0/chart/type",
+        "message": "a 'funnel' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series",
+        "keyword": "opf",
+        "schemaPath": "#/x-opf-semantics",
+        "params": {
+          "code": "chart-series-dropped"
+        }
+      },
+      "slide": 1,
+      "slideId": "s07"
+    },
+    {
+      "ruleId": "opf/chart-mapping-adapted",
+      "severity": "warning",
+      "category": "content",
+      "scope": "document",
+      "path": "/slides/2/blocks/0/chart/type",
+      "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart",
+      "help": "Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.",
+      "definition": "packages/javascript/src/schema-check.ts",
+      "lookup": [
+        "opf",
+        "schema",
+        "presentation",
+        ""
+      ],
+      "validation": {
+        "path": "/slides/2/blocks/0/chart/type",
+        "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart",
+        "keyword": "opf",
+        "schemaPath": "#/x-opf-semantics",
+        "params": {
+          "code": "chart-mapping-adapted"
+        }
+      },
+      "slide": 2,
+      "slideId": "s36"
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 3,
+    "info": 0
+  },
+  "format": "svg",
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.33.0"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "metric"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

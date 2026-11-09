@@ -3,6 +3,7 @@ import {readFile, readdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {digest, installedIdentity, repositoryIdentity} from './identity.mjs';
+import {CHART_FIXTURE_PATHS,loadChartFixtureSource} from './fixture-source.mjs';
 import {fontRouteSourcePaths,selectFontRoutes} from './font-routes.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -31,15 +32,21 @@ async function trackedInputs(directory, prefix = '') {
   return files.sort();
 }
 
+export async function preparationInputPaths(fontRoutes=false){
+  return [...new Set([...await trackedInputs(here),...CHART_FIXTURE_PATHS,...(fontRoutes?[fontRouteSourcePaths()[1]]:[])])];
+}
+
 export async function prepare(args) {
   const options = parseArguments(args);
   const output = options['--output'];
   for (const source of [repository, options['--consumer'], options['--pptx-repo']]) {
     assert.ok(output !== source && !source.startsWith(output + path.sep), 'Output must not contain a source directory');
   }
+  const {chartBaselines}=await loadChartFixtureSource();
   const provenance = {
+    chartBaselines,
     packages: installedIdentity(options['--consumer']),
-    suiteRepository: repositoryIdentity(repository, [...await trackedInputs(here),...(options['--font-routes']?[fontRouteSourcePaths()[1]]:[])]),
+    suiteRepository: repositoryIdentity(repository, await preparationInputPaths(!!options['--font-routes'])),
     workerRepository: repositoryIdentity(options['--pptx-repo'], [
       'test/native-process.ps1', 'test/native-process-check.ps1', 'test/native-furniture-control.ps1',
       'test/native-furniture-harness-check.ps1', 'test/native-picture-control.ps1',

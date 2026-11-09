@@ -1,0 +1,778 @@
+{
+  "base": "e5de880999235872f4c44fe646e78fec49c16baa",
+  "source": "169055e9b5431aab58d3cf16199bf9d2bc38af97",
+  "tree": "d4c03d05fd70edf29d990848354d2758a1fa0196",
+  "leaves": [
+    {
+      "pr": 1247,
+      "base": "00a828777342e4e7339472dcccc1b4b3bc265204",
+      "head": "62e41b41451758458f532f06b0ca2085131de492",
+      "merge": "47a0bbcde55d80ecc47cb1da2d0caeeab5c439ba",
+      "parents": [
+        "e5de880999235872f4c44fe646e78fec49c16baa",
+        "62e41b41451758458f532f06b0ca2085131de492"
+      ],
+      "paths": [
+        "changes/rr105-negative-categorical-histogram.md",
+        "docs/chart-options.md",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/README.md",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/manifest.json",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/metadata-check.json",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/metadata-checks.zip",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/observed-auto.png",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/observed-fallback.png",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/raw.zip",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/source-preview.png",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/verifier-setup.json",
+        "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/verify.mjs",
+        "docs/programs/release-readiness/burndown.md",
+        "packages/pptx/README.md",
+        "packages/pptx/src/index.js",
+        "packages/pptx/test/chartex.mjs",
+        "packages/pptx/test/histogram-negative-category.mjs",
+        "packages/pptx/test/native-fallback-contracts.mjs",
+        "scripts/native-acceptance/chart-modes.mjs",
+        "scripts/native-acceptance/chart-modes.test.mjs"
+      ]
+    },
+    {
+      "pr": 1240,
+      "base": "1ef0e17a58198defa34cd515ad7078d56a7d97d0",
+      "head": "623e4dbc1c958132ae055b2c544e8f3b986fe85d",
+      "merge": "81d1d5cce1f8230209035afed14fd0162373b1a3",
+      "parents": [
+        "47a0bbcde55d80ecc47cb1da2d0caeeab5c439ba",
+        "623e4dbc1c958132ae055b2c544e8f3b986fe85d"
+      ],
+      "paths": [
+        "changes/rr-105-dense-survey-cli.md",
+        "changes/rr-105-dense-survey-controller.md",
+        "docs/handoff/2026-11-09/rr105-dense-survey-cli-correction/README.md",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/.gitattributes",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/README.md",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata-files.json",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/000.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/001.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/002.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/003.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/004.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/005.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/006.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/007.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/qualification.json",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw-files.json",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/000.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/001.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/002.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/003.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/004.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/005.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/006.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/007.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/008.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/009.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/010.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/011.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/012.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/013.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/014.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/015.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/016.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/017.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/018.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/019.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/020.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/021.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/022.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/023.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/024.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/025.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/026.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/027.gz",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/source-proof.json",
+        "docs/handoff/2026-11-09/rr105-dense-survey-controller/verify.mjs",
+        "docs/programs/release-readiness/burndown.md",
+        "scripts/native-acceptance/README.md",
+        "scripts/native-acceptance/dense-survey-contract.mjs",
+        "scripts/native-acceptance/dense-survey-contract.test.mjs",
+        "scripts/native-acceptance/fixtures/dense-survey/.gitattributes",
+        "scripts/native-acceptance/fixtures/dense-survey/action-plan.json",
+        "scripts/native-acceptance/fixtures/dense-survey/input.pptx",
+        "scripts/native-acceptance/fixtures/dense-survey/preview.png",
+        "scripts/native-acceptance/fixtures/dense-survey/receipt.json",
+        "scripts/native-acceptance/fixtures/dense-survey/source.opf.json",
+        "scripts/native-acceptance/run-dense-survey-self-test.ps1",
+        "scripts/native-acceptance/run-dense-survey-windows.ps1"
+      ]
+    },
+    {
+      "pr": 1248,
+      "base": "00a828777342e4e7339472dcccc1b4b3bc265204",
+      "head": "f9897413098c01d14c0c38e813790bd6897365ea",
+      "merge": "169055e9b5431aab58d3cf16199bf9d2bc38af97",
+      "parents": [
+        "81d1d5cce1f8230209035afed14fd0162373b1a3",
+        "f9897413098c01d14c0c38e813790bd6897365ea"
+      ],
+      "paths": [
+        "changes/rr-105-owned-table-colors.md",
+        "docs/handoff/2026-11-09/rr105-owned-table-colors/README.md",
+        "docs/programs/release-readiness/burndown.md",
+        "packages/pptx/test/native-table-colors-v2-check.ps1",
+        "packages/pptx/test/native-table-colors-v2.mjs",
+        "packages/pptx/test/native-table-colors-v2.ps1",
+        "scripts/native-acceptance/compare-table-profile.mjs",
+        "scripts/native-acceptance/run-table-profile.ps1",
+        "scripts/native-acceptance/table-profile.mjs",
+        "scripts/native-acceptance/table-profile.test.mjs"
+      ]
+    }
+  ],
+  "paths": [
+    {
+      "path": "changes/rr105-negative-categorical-histogram.md",
+      "oid": "4aca47e63952e1008bed277fcc44eba9dbf166dc",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/chart-options.md",
+      "oid": "a5c50c6b17c852706963a0c98a1e947a9deb881d",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/README.md",
+      "oid": "4db3c4fdf8229043f85ebd6fcf405d00ecd54608",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/manifest.json",
+      "oid": "9e53b0c200532597e4d79e60e1b1884a45993d67",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/metadata-check.json",
+      "oid": "f13c719c5319f4c04659411e38cdeaf4cdf9c5c7",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/metadata-checks.zip",
+      "oid": "0f9e2e05fd2072022c05eac467c2f5741bc2c62a",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/observed-auto.png",
+      "oid": "031b296bf1b3b597eee65b6c945730fd003d73ca",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/observed-fallback.png",
+      "oid": "99eaa13251c8eedf6390bddfae666818bab22d0b",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/raw.zip",
+      "oid": "e571ae2bcf4a89f21833a5f9e9f2a7015f0838dd",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/source-preview.png",
+      "oid": "2159e0a029021c7bc5ed44a037498fe8dcd91ed3",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/verifier-setup.json",
+      "oid": "22fefafa374f3a9946fbaff32dfe31971ed987d3",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-negative-categorical-histogram/verify.mjs",
+      "oid": "98a159a24a4ca449bdb3ceb6192df2c2599d4037",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "packages/pptx/README.md",
+      "oid": "1b62ce26ca87fbaed1511fca4dd33932e101b418",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "packages/pptx/src/index.js",
+      "oid": "cd61c53489a50c53c8ef90b94538af8155332c9f",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "packages/pptx/test/chartex.mjs",
+      "oid": "e23e33b72c8dfbe3713b13ec74ccf93b37456f63",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "packages/pptx/test/histogram-negative-category.mjs",
+      "oid": "65c7a26b3ba4f2ad4193a684aeeac2a11be3ba20",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "packages/pptx/test/native-fallback-contracts.mjs",
+      "oid": "a4b936ce6db3c58cfcc6f671f628945de6f9c18f",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/chart-modes.mjs",
+      "oid": "9acf3f2e0af9e2555a4b057e33fed5c7aaf16e41",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/chart-modes.test.mjs",
+      "oid": "a8f078f6e5c4f6d586f9db5f5c552ae25a6eb377",
+      "sourcePRs": [
+        1247
+      ]
+    },
+    {
+      "path": "changes/rr-105-dense-survey-cli.md",
+      "oid": "3b663be5f18925515c68e34c64f391f609d5006a",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "changes/rr-105-dense-survey-controller.md",
+      "oid": "9318281cc7351e11c598c17388f4b8011bdeb1e4",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-cli-correction/README.md",
+      "oid": "b7235b534dcd8209e7226c2921fa55ab8b9b6af1",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/.gitattributes",
+      "oid": "718f89d508c05ff9e8f9ed142fcb505e459e2b04",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/README.md",
+      "oid": "c00ac74c03946d2e589e13e85d27c2350ecc00e5",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata-files.json",
+      "oid": "5e1e29b58399b8185d9c684a775b5ad0deed278a",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/000.gz",
+      "oid": "8c0f4c6d02157c89d611fc753ee872634722aac1",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/001.gz",
+      "oid": "57bfd4364b764b64c493aea1609c4dadb9c99fec",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/002.gz",
+      "oid": "e05dccbf77e9c025fb80f35bf7c045a045c77c9c",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/003.gz",
+      "oid": "70215743175542d3aed4b9ff7f3617b7dbfbb8c5",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/004.gz",
+      "oid": "2f3961c4f5227405ab2e292ed1e35b9e72e8580f",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/005.gz",
+      "oid": "b05e0fcef10fe1268814a81072eb10a448b25d59",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/006.gz",
+      "oid": "3c8b52336eef04d9365cc01011acb7a93d25b5d2",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/metadata/007.gz",
+      "oid": "86be12ef5a8b379789010e357125f0ba93afce36",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/qualification.json",
+      "oid": "2dbb7b1d0fdd023f00bd481eb9b9abc3f3a1f220",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw-files.json",
+      "oid": "afb4d4d72958767fefb11e61f2c36278c46e2b55",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/000.gz",
+      "oid": "bd93fc61d5999ed74ac33f8375127d37f2b87723",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/001.gz",
+      "oid": "7702daa7fd67bf41b815ac6ca1d84887b5b62c5d",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/002.gz",
+      "oid": "da3db066f0f5d1ec9d37b88dc7cebda6d3485301",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/003.gz",
+      "oid": "4597b238e5c810d939a0117912b78f562633fb95",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/004.gz",
+      "oid": "e94e1ae3e48e13205211817e315c9acc8eeac426",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/005.gz",
+      "oid": "157bee9475059db049fc666c7bb66cb8bba9e2a1",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/006.gz",
+      "oid": "b6cc67feb2fffdcdeb0738f208579ed50725a255",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/007.gz",
+      "oid": "544031c41c8728d24e556fecab3ddba41b10bc17",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/008.gz",
+      "oid": "7280713c762f367d533cf580f6707bd1f13353ff",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/009.gz",
+      "oid": "51d403befa53c79f3178fc0a8176263d70fbb70c",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/010.gz",
+      "oid": "106627fec40810f1d211c608f980fff8272b81f3",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/011.gz",
+      "oid": "b99e4d275775d1c4a7b4abe49b516cd2f4f296d2",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/012.gz",
+      "oid": "bed6732d8f504cfb07524f3195f991e39e8888a5",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/013.gz",
+      "oid": "c89e694582f6016d0bb0476b8157c6c72ce0f828",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/014.gz",
+      "oid": "4113fe5986c20d253a7482e056562168d5465a14",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/015.gz",
+      "oid": "3335c84b72725c2003015fea8ca6159a87bc90dc",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/016.gz",
+      "oid": "d05cf0b4f4aba75f59053ada39df9eebfb4c1671",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/017.gz",
+      "oid": "a5a3f34b032359c0d676c137f4c38da2bcf897c4",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/018.gz",
+      "oid": "e2318d30c7fc45881dab64f4d843aaa87ec7239c",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/019.gz",
+      "oid": "9f0dfd4fc80871afafd8b667e3332c8fb4d0ae65",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/020.gz",
+      "oid": "38ab21e986609183edafb9b617026f346a8edb7a",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/021.gz",
+      "oid": "834a80f310e934ad3851eebdbaeed4205f55903e",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/022.gz",
+      "oid": "d205ce2af005088812953f2fb20b090c562c0a88",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/023.gz",
+      "oid": "5a7241e21c146ec9f28bd6c76ff023a307721a5d",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/024.gz",
+      "oid": "6e4abafa7f3d0363ecc4683c801f5b1f810684e4",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/025.gz",
+      "oid": "3c6a6cc8afbbfd7f2a8e92c6418fbe965d052267",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/026.gz",
+      "oid": "aba69deba2651f7f956c77c7d37be13f4ba359c5",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/raw/027.gz",
+      "oid": "3e1e751660386950aa7aa196688813dcb9fdb79f",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/source-proof.json",
+      "oid": "f677615ba7ca51ae946ab2339a86c43dc5274ac6",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-dense-survey-controller/verify.mjs",
+      "oid": "d5c810e2f1b9fddfa50281c8170abc8cbfb473cc",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/README.md",
+      "oid": "92cbc1a4c246c6eeb56fc7c1a40afe3b7750f3a7",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/dense-survey-contract.mjs",
+      "oid": "8be262fe7bf405393fbe2f258d479b71db9d4b5e",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/dense-survey-contract.test.mjs",
+      "oid": "aec565e43e4054f6cbe1db00b5076846f911ff7d",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/fixtures/dense-survey/.gitattributes",
+      "oid": "fa1385d99a319b43c06f5309d1aae9fdd3adea46",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/fixtures/dense-survey/action-plan.json",
+      "oid": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/fixtures/dense-survey/input.pptx",
+      "oid": "c746abc191c175a4aa8d1bfba5f24265ce55f3e5",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/fixtures/dense-survey/preview.png",
+      "oid": "eb1e81ec59691c84563099b2fafa912710166679",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/fixtures/dense-survey/receipt.json",
+      "oid": "d1a03dd68d73267bb7aef61963b81e6c33d28fec",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/fixtures/dense-survey/source.opf.json",
+      "oid": "51c3ad227227b8470c17ea096d33c29d65b6ff3f",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/run-dense-survey-self-test.ps1",
+      "oid": "2101172f9960617b445fe0c0f0651acae512b695",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/run-dense-survey-windows.ps1",
+      "oid": "90331309b015f05344fef3daad188af4565c1809",
+      "sourcePRs": [
+        1240
+      ]
+    },
+    {
+      "path": "changes/rr-105-owned-table-colors.md",
+      "oid": "c19e0beef243806fa745d75d85798946019f3504",
+      "sourcePRs": [
+        1248
+      ]
+    },
+    {
+      "path": "docs/handoff/2026-11-09/rr105-owned-table-colors/README.md",
+      "oid": "e4958c584f0b56efdf1d1704b77823a26477a620",
+      "sourcePRs": [
+        1248
+      ]
+    },
+    {
+      "path": "packages/pptx/test/native-table-colors-v2-check.ps1",
+      "oid": "cf30495e8350b2324e6f6a4ae54a0f7287be5d28",
+      "sourcePRs": [
+        1248
+      ]
+    },
+    {
+      "path": "packages/pptx/test/native-table-colors-v2.mjs",
+      "oid": "37623b9954f152b31a6b3b710b2596756e775829",
+      "sourcePRs": [
+        1248
+      ]
+    },
+    {
+      "path": "packages/pptx/test/native-table-colors-v2.ps1",
+      "oid": "f134703dae9e5d20202af7cdf910657996c76b6a",
+      "sourcePRs": [
+        1248
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/compare-table-profile.mjs",
+      "oid": "6616cd764059127ff90eb8b8da8f3a0b6e418f1d",
+      "sourcePRs": [
+        1248
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/run-table-profile.ps1",
+      "oid": "da9a361e9f8405952aca76323d9a8acab7eeeb50",
+      "sourcePRs": [
+        1248
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/table-profile.mjs",
+      "oid": "250e43f029adf766df06323da8a6ff236b073877",
+      "sourcePRs": [
+        1248
+      ]
+    },
+    {
+      "path": "scripts/native-acceptance/table-profile.test.mjs",
+      "oid": "f43cbfed517bbae5d29bb25eb0b73535d3138d4f",
+      "sourcePRs": [
+        1248
+      ]
+    }
+  ],
+  "controlled": "docs/programs/release-readiness/burndown.md",
+  "receipts": [
+    {
+      "file": "next-wave-burndown-62e41b414517.json",
+      "bytes": 3152,
+      "sha256": "c9f9f287ae3063c426fb4e5bd94111fea22fdaee5bab5828a78dc1c9d5857e50"
+    },
+    {
+      "file": "next-wave-burndown-623e4dbc1c95.json",
+      "bytes": 10038,
+      "sha256": "3eba559ba4f91139960b957613e0a7a117cdbb5fe8b163d7be38f3861d93e161"
+    },
+    {
+      "file": "next-wave-burndown-f9897413098c.json",
+      "bytes": 5632,
+      "sha256": "983600bddfa692eefb0d2433a6b80d5c082f9b47ca33f5c78688640248acab8c"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "path": "spec",
+      "oid": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5"
+    },
+    {
+      "path": "packages/javascript/src",
+      "oid": "2ede77fd4b6d59c2adf687fac5fc5abd17bd6e69"
+    },
+    {
+      "path": "packages/render/src",
+      "oid": "afc9aff76ce525790544010cff6aed78e053c314"
+    },
+    {
+      "path": "packages/render/test/golden",
+      "oid": "68dd38c05ba762f104515c4b5a35fe847c91059d"
+    },
+    {
+      "path": "packages/pptx/test/fixtures",
+      "oid": "c1889d397872a5fdae5194601ca08db8c83df085"
+    },
+    {
+      "path": "packages/pptx/vendor",
+      "oid": "7ea25333b0de29b0aba2b180c7080fe3fa789ff2"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "oid": "3432ab613e493c84d6eea74cb68d30be08720102"
+    }
+  ],
+  "combinedQualification": "PENDING; leaf source checks remain literal, not a combined pass",
+  "nativeTable": "FAILED originalslide4headercolor; no save/edit/cleanup/retry; laterprocesszero"
+}

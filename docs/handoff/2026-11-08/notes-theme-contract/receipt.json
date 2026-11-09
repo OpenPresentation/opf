@@ -1,0 +1,237 @@
+{
+  "schema": 1,
+  "base": "e79043da0f13c7ed9101456736fea7a116538408",
+  "testedSource": "b42a491538408632246d806449b0d232acf58497",
+  "artifactCommit": "77b92bdcb3783863316fcaf56f4d2e5f9039d4bc",
+  "node": "v24.20.0",
+  "execPath": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+  "source": [
+    {
+      "path": "packages/pptx/test/notes-master-theme.mjs",
+      "sha256": "5c736f2a654b6611136b473ef0f872d8682f437b2055af7f11fe50fc9c258f91"
+    },
+    {
+      "path": "packages/render/AGENTS.md",
+      "sha256": "7832c5e58db710797854f6907dacb2877c5e837bbd44ae3919978d37a87b44bc"
+    },
+    {
+      "path": "scripts/release-workflows.test.mjs",
+      "sha256": "24e560032614853c99906189edfc17476bceedb5ae8a77e3f5a536530f975b32"
+    },
+    {
+      "path": "changes/rr-20-notes-theme-contract.md",
+      "sha256": "63e240775ef666fc2fcd61b78ad8c5b7c145fc4fe5cbad45804f41ff0feea0a2"
+    }
+  ],
+  "protected": [
+    {
+      "path": "packages/pptx/src",
+      "gitObject": "a887f9ce73ebafd3eb93e667dfe90dc028c97e42"
+    },
+    {
+      "path": "packages/pptx/vendor",
+      "gitObject": "7ea25333b0de29b0aba2b180c7080fe3fa789ff2"
+    },
+    {
+      "path": "packages/pptx/test/fixtures",
+      "gitObject": "cc2650784e53cd81cca1709746fbe0c68823be3e"
+    },
+    {
+      "path": "packages/render/src",
+      "gitObject": "9563e380730758208e5ce47c4380cae4042ed72c"
+    },
+    {
+      "path": "packages/render/test/golden",
+      "gitObject": "d22134aca77cd760b2dab4f1a2da8ae0b340dd22"
+    },
+    {
+      "path": "packages/javascript",
+      "gitObject": "25ecc33f83c5072e2d6f2b03be416a222ae88c1a"
+    },
+    {
+      "path": "packages/gallery",
+      "gitObject": "0299af51fc1866552ba6d6022e7caddeb0f2bf4f"
+    },
+    {
+      "path": "packages/cli",
+      "gitObject": "410bcb89e14daca2b4d6856c53c28843f7511550"
+    },
+    {
+      "path": "packages/editor",
+      "gitObject": "c7867c167bdb00bdb804c4649c01147c3544fdcd"
+    },
+    {
+      "path": "packages/mcp",
+      "gitObject": "0a1749c9e7cb79aebf7c3158d6c431edaf2ead5a"
+    },
+    {
+      "path": "spec",
+      "gitObject": "eead5477c84895367abc9d909866b23ba77e35ac"
+    },
+    {
+      "path": "examples",
+      "gitObject": "72225a836ede0efb9015b95b047ebbd6d715c72e"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "gitObject": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "path": ".github",
+      "gitObject": "99970ce6bce01b23b6b34b390afa1e3f27562a16"
+    },
+    {
+      "path": "scripts/release.mjs",
+      "gitObject": "2ab4d53376ff0a15eadd8bd172205259577c667f"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rr105-list-scalar-import/theme67-c2da-identical.pptx",
+      "gitObject": "ddc73fc21ded37db9c9809a14d8e4ac26d644564"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/before-provenance.json",
+      "bytes": 565,
+      "sha256": "38ff9a5b4e98bfcb36f768b97c46d54410e01fbc93c2653b7b991c9abc1a7cf4"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-b42a49153.log.gz",
+      "bytes": 579,
+      "sha256": "a24c1d2522b6c008c72a013e46ead8dc859d40b9b7f9950c47c4bef8b3a4be44",
+      "rawSha256": "1240e764ae11ce688d7b2e905c34529c4463ac757dfa6b81b97c20862b2058c7"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-biome.log.gz",
+      "bytes": 321,
+      "sha256": "af38c0a1715376a401d3d4d217174266d6c9335ff28fc0aecbeef0d4d4459edd",
+      "rawSha256": "83c8b02371108c8ea06bfdafd298e81922bb54c31d4911c5636c458cd193d59d"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-build.log.gz",
+      "bytes": 3044,
+      "sha256": "46c1e1af152c3d5371598bc9630c78d3f40f9226afbb815a5dea4dae019b5427",
+      "rawSha256": "388124e381d0e915a8d5fc25490ca3ead0d185a764328cff002a5b739757ac6a"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_changes.log.gz",
+      "bytes": 1161,
+      "sha256": "715c07426502ebf7c2fbdfd5e954f9fdc8f23c0198a9a636374883013300c503",
+      "rawSha256": "c6609abfabf7d38d73d3e190e5324ce5c81680440f51bf32a3556071e8f1c81c"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_ci-workflows.log.gz",
+      "bytes": 3800,
+      "sha256": "331dd651eee9c277bc947710385a8cbafbc6d93abe9635a3fb3b60560007ac9a",
+      "rawSha256": "dc233314c560eb776bb603378df38d7d5b6a423c96690f1351933fda20a9cd71"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_diagram-doc-images.log.gz",
+      "bytes": 142,
+      "sha256": "2947e39c09260601db030a1b9bcc16100c5992750af57364318dcac5f4d0344b",
+      "rawSha256": "e336970834215b00e0f4c75db2f3eab6f52133e12a6c7ee4fc0d69fbc120a526"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_font-hotlinks.log.gz",
+      "bytes": 532,
+      "sha256": "06e8cab469e29763454b5dff80a0cc3b1cfb797c7b319d1a748961c3fa3af714",
+      "rawSha256": "93190e3271a81efd43f828a5bea3a871aeff2eca57b66dc22e1e7442e07d344c"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_gallery-tracker.log.gz",
+      "bytes": 1063,
+      "sha256": "fbb88e9c019e43f98f481f6d33432d5cdee573b11304469728e6c845947ee564",
+      "rawSha256": "54a1c24254847a536e0710d87b4f442a82e30081e72cdc0a99b46d71f4bc2aa4"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_release-report.log.gz",
+      "bytes": 464,
+      "sha256": "48fd9187432672cbdfc974cdc4a57b567a72da817120d8736d368d9a379479ca",
+      "rawSha256": "467f0ab261a4ef683355b377f2a885ceb2c64c7524507e8862cbbe260f83ee34"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_release.log.gz",
+      "bytes": 2347,
+      "sha256": "be71e795e82722e41dbb74aed382326df438f0424b15cd12dca5920f8ccfebef",
+      "rawSha256": "5f69a2e73cbd543fe8fe1cc6280944ac815327a023e2151442dddc27c5499a81"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_skill-commands.log.gz",
+      "bytes": 579,
+      "sha256": "315803e336d5ea60d5c24d26821ba80e41f54989a6a1891897b632678ccb0f9c",
+      "rawSha256": "c62cd5183bbc8e28720675cc8c0f1511b4b7af45ec9277a0b4c702e4772745fd"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_stability.log.gz",
+      "bytes": 1362,
+      "sha256": "33f5d6ad6dc75e86fde1b81417fc396e1dd4aad45d45b72e8ae414f3bd07b6d1",
+      "rawSha256": "af99da9546d6f5b39be89846d2ab885d37b983e025882089f7e927541652ca50"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-pnpm_run_check_text.log.gz",
+      "bytes": 598,
+      "sha256": "c837266503ae1ada591cea441c8711641e25ed2571384f320f09a38f10f6cc6d",
+      "rawSha256": "5b5a3728a05dbd2fc1bcca7f48b05d2da3d13037653810824892b83413dd237e"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/mapped-tests_pptx.log.gz",
+      "bytes": 448,
+      "sha256": "fbe502561285e62deed448ca1603428a4ccae07495e2fc9d16f29a486dca7a48",
+      "rawSha256": "eabcbe0da666fbfc893e8416fe9e7f1b98ce289979efd3343ce5e2e8f7d104f3"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/notes-master-67dd-baseline.log.gz",
+      "bytes": 929,
+      "sha256": "d1b36b06f8f4465a79057cc64a761568fcc72e543189ab431583548605cb5e3a",
+      "rawSha256": "44e81b90172017d71fc4b39c598bbea3c404acbcf5dd61b13e7551b1f6c97ef5"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/notes-master-q473-baseline.log.gz",
+      "bytes": 932,
+      "sha256": "7304ea065d778570dea56bd7c4733cd22447ed9890c184527cbd043d8cab702a",
+      "rawSha256": "fa8f3160d65d690b5064b71b119e43052eed1abd1d7c3f72aa0d2077a9671cab"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/release-doc-after.log.gz",
+      "bytes": 1334,
+      "sha256": "ae23c6ad4ce013539bcbb0cbd2781ea1decb7bda5fa10c26b45705677b568374",
+      "rawSha256": "79f39b6573a0dca8db3df5f21e09fc19602fc24a4c4bc2a30c607684c965df49"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/release-doc-before.log.gz",
+      "bytes": 1758,
+      "sha256": "be8a686788a03ebcc22dbaf515c84c6639fa228bdf6e2e9d4d1d7cfba4cce46c",
+      "rawSha256": "f674b3a1392863c015983e56b75154cc3185a1404409a2e188b639723955b721"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/notes-theme-contract/sparse-restore.json.gz",
+      "bytes": 145118,
+      "sha256": "dbf363ccc1bb8e8af3e81b0ad8132b7f2145088ab0ea828fe4d945a971db95d7",
+      "rawSha256": "335705d9b35204a1379e2d4dff71c5dc0b7545bf0d7330c1ada7d3897bacb76c"
+    }
+  ],
+  "verifierSha256": "4adcd0cbd78d1f1ed49cefc9a3746e0dea7b2756cf34ad54fcf2d882e0b9a144",
+  "mapped": {
+    "command": "pnpm check:changed --base e79043da0f13c7ed9101456736fea7a116538408",
+    "exitCode": 0,
+    "seconds": 110.6,
+    "passed": 13,
+    "correctTypecheckSkip": 1,
+    "failed": 0,
+    "pptx": {
+      "handDecks": 3,
+      "corpus": 147,
+      "expectedThemeCounts": [
+        2,
+        4
+      ],
+      "memoryOnlyNegativeControls": 6
+    },
+    "releaseWorkflowControls": 26
+  },
+  "limits": [
+    "QA/runbook correction only; no exporter behavior fix.",
+    "No fixture/archive/golden/runtime/tolerance edits or baseline re-export.",
+    "Final combined full suite/CI/native/release/sites remain separate."
+  ]
+}

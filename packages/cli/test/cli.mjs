@@ -5,6 +5,8 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL('../dist/index.js', import.meta.url));
+const { installedLayoutAuthority, assertLayoutCatalog } = await import(new URL('./helpers/catalog-contract.mjs', import.meta.url));
+const layoutAuthority = await installedLayoutAuthority(executable);
 const temp = await mkdtemp(path.join(tmpdir(),'opf-cli-test-'));
 let checks = 0;
 function run(args, {input, status=0}={}) {
@@ -27,8 +29,8 @@ try {
   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:warning,status:1}).json.valid,true);
   assert.equal(run(['validate','-'],{input:'{"slides":"bad"}',status:1}).json.valid,false);
   // The CLI registers the default catalog (OPF 0.15, FA-21): the full gallery catalog, so every layout id it lists resolves.
-  // (Read from the CLI itself: this file also runs, copied, against an installed CLI with no checkout beside it.)
-  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.equal(layouts.length,run(['catalogs']).json.find(kind=>kind.kind==='layouts').count);assert.equal(layouts.length,36,'the full v2 gallery catalog');
+  // The expected IDs come from the public gallery API installed beside this executable; the copied harness needs no checkout.
+  {const records=run(['catalog','layouts']).json,summary=run(['catalogs']).json.find(kind=>kind.kind==='layouts');const layouts=assertLayoutCatalog(records,summary,layoutAuthority);
    for(const id of ['cover','two-column','process','comparison','dashboard','statement'])assert.ok(layouts.includes(id),id);
    const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Template layouts',slides:layouts.map((layout,index)=>({title:`Slide ${index+1}`,layout}))})}).json;
    assert.equal(legacy.valid,true);assert.deepEqual(legacy.findings,[]);
