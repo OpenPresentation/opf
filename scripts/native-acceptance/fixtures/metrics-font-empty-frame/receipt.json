@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "source": "2400d38bf549cdb661c31725776df25e497d364c",
+  "suiteSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+  "case": "feature-metrics",
+  "input": {
+    "file": "input.pptx",
+    "bytes": 107010,
+    "sha256": "9d68dd0820805d1462027091e33f94e21f516d329e91d95a0f6fe203944b2ecc"
+  },
+  "nativeReport": {
+    "file": "native-report.json.gz",
+    "decodedBytes": 174219,
+    "sha256": "4ea405500557de21f946cb2d17c45be7c062668c080c2ece2579212040156b38",
+    "kind": "exactPowerShell UTF8 reportbytes; BOM/CRLF preserved insidegzip"
+  },
+  "sourceTextShapes": 14,
+  "sourceEmptyTextFrameNames": [
+    "OPF card slides.0.blocks.3"
+  ],
+  "nativeFramesPerPhase": 15,
+  "witnessCommit": "c900ebb7610c72e7e65329e77a04850e0f837852",
+  "scope": "public/synthetic retainedmetricsfixture; reportedwhole-rangefontdescriptors only; notphysicalglyph/nativefidelityacceptance"
+}

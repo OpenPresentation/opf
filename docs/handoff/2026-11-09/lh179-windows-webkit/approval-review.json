@@ -1,0 +1,17 @@
+{
+  "scope": "Original automatic-approval review rejections retained as reported by tools, no rejected command executed.",
+  "attempts": [
+    {
+      "action": "Broad restore-tracked-evidence-inputs.mjs helper",
+      "result": "Rejected",
+      "reason": "This executes an opaque external restoration script that may overwrite tracked files from an evidence archive; its scope and payload are not established as necessary for the WebKit repair, and the user/root instructions specifically preserve frozen evidence and forbid unrelated mutations."
+    },
+    {
+      "action": "Derived exact tracker input closure:1843files/45340055bytes with exclusive writes and index/status guards",
+      "result": "Rejected",
+      "reason": "Despite integrity guards, this writes 1,843 evidence files totaling about 45 MB and runs an unrelated gallery-tracker check; that broad sparse-checkout hydration exceeds the narrowly authorized repair scope and conflicts with preserving evidence without unrelated mutations."
+    }
+  ],
+  "acceptedNarrowAlternative": "Only the16,102B compressed fixture directly required by selected check:text was restored viawx from exact trackedOID2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6; originalindex/status unchanged. No tracker closure restoration, regeneration, override or indirect retry occurred.",
+  "parentDisposition": "Root instructed stop all denied hydration attempts; source qualification can later run in the already fully hydrated integration checkout."
+}

@@ -1,0 +1,873 @@
+{
+  "baseline": "519740e2f17e6f1787590f913916a17de0668e8c",
+  "candidate": "ce730e447560af44b0c654bd72d9f2156b681b66",
+  "route": "Genuine maintained CLI office/visual/scripts:auto; original PNG bytes embedded",
+  "rows": [
+    {
+      "id": "inverted-pyramid-continuation",
+      "kind": "affected",
+      "sheet": {
+        "file": "01-inverted-pyramid-continuation.png",
+        "bytes": 486235,
+        "sha256": "9149d1061f3119fd0ac40e8097adf3aab785474e1c6b5db020a03947b20b1468"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/inverted-pyramid-continuation/slide-1.png",
+            "bytes": 102347,
+            "sha256": "cde6536545458b6e3faa3fbe4f609f0f9e812a6beb656d611bd73a8313721750"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-pyramid-continuation/slide-1.png",
+            "bytes": 49730,
+            "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 2,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/inverted-pyramid-continuation/slide-1.png",
+            "bytes": 102347,
+            "sha256": "cde6536545458b6e3faa3fbe4f609f0f9e812a6beb656d611bd73a8313721750"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-pyramid-continuation/slide-2.png",
+            "bytes": 49799,
+            "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 3,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/inverted-pyramid-continuation/slide-1.png",
+            "bytes": 102347,
+            "sha256": "cde6536545458b6e3faa3fbe4f609f0f9e812a6beb656d611bd73a8313721750"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-pyramid-continuation/slide-3.png",
+            "bytes": 49849,
+            "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 4,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/inverted-pyramid-continuation/slide-1.png",
+            "bytes": 102347,
+            "sha256": "cde6536545458b6e3faa3fbe4f609f0f9e812a6beb656d611bd73a8313721750"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-pyramid-continuation/slide-4.png",
+            "bytes": 35520,
+            "sha256": "934f197bcf04996d6a73da42453aa24fc589c96c9324ae2d56d8bc5e03dd3e15"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "org-chart-continuation",
+      "kind": "affected",
+      "sheet": {
+        "file": "02-org-chart-continuation.png",
+        "bytes": 487888,
+        "sha256": "c841f447b3d636696022cd25614afbdd329b8fceb7586811a937a3684cd1c92b"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-chart-continuation/slide-1.png",
+            "bytes": 102874,
+            "sha256": "7e5ca21201a3b4556b081fe0dad5a40b8336db6094954b22ebf8e875d1772236"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-continuation/slide-1.png",
+            "bytes": 50422,
+            "sha256": "2ca5edd84831ec34087a47f1a45b905c6b9ec22cdaeee80762ae5465bdeb8bab"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 2,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-chart-continuation/slide-1.png",
+            "bytes": 102874,
+            "sha256": "7e5ca21201a3b4556b081fe0dad5a40b8336db6094954b22ebf8e875d1772236"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-continuation/slide-2.png",
+            "bytes": 50488,
+            "sha256": "153689e875401e0fb3f9876fe55a2e821f17f2f203f8b8978a7bb9f023158a6d"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 3,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-chart-continuation/slide-1.png",
+            "bytes": 102874,
+            "sha256": "7e5ca21201a3b4556b081fe0dad5a40b8336db6094954b22ebf8e875d1772236"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-continuation/slide-3.png",
+            "bytes": 50538,
+            "sha256": "2cccc7d72f0fb0345844dd5d5885cf705de928ae351d7619568c6dff085502e0"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 4,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-chart-continuation/slide-1.png",
+            "bytes": 102874,
+            "sha256": "7e5ca21201a3b4556b081fe0dad5a40b8336db6094954b22ebf8e875d1772236"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-continuation/slide-4.png",
+            "bytes": 36229,
+            "sha256": "ce518f3cf1e176ab9836e79daaa9613dab64841df0f24f8628fb57c16e7b06fe"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "hierarchy-continuation",
+      "kind": "affected",
+      "sheet": {
+        "file": "03-hierarchy-continuation.png",
+        "bytes": 479747,
+        "sha256": "463ca49f2fafe51e0f753da86e8e89da5e761dff149d008df8f49866bb70a0ab"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/hierarchy-continuation/slide-1.png",
+            "bytes": 101647,
+            "sha256": "237ed9057734ff8fbb973f82ea5fcd919c232bd34cb1f0cfb442b4b58f75621e"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-continuation/slide-1.png",
+            "bytes": 49313,
+            "sha256": "afd502335b86a512b5def0a9a9e69d66296eda8c6a6609f68810e55a4cc0cd28"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 2,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/hierarchy-continuation/slide-1.png",
+            "bytes": 101647,
+            "sha256": "237ed9057734ff8fbb973f82ea5fcd919c232bd34cb1f0cfb442b4b58f75621e"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-continuation/slide-2.png",
+            "bytes": 49409,
+            "sha256": "a701f7c92fa16e41da802557168be9f21571ad46c6334c71a879c12702ebbba5"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 3,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/hierarchy-continuation/slide-1.png",
+            "bytes": 101647,
+            "sha256": "237ed9057734ff8fbb973f82ea5fcd919c232bd34cb1f0cfb442b4b58f75621e"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-continuation/slide-3.png",
+            "bytes": 49466,
+            "sha256": "2a0fb6110704be662d707af789182e67ae4322f9397761d2918b8b34eec86ffd"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 4,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/hierarchy-continuation/slide-1.png",
+            "bytes": 101647,
+            "sha256": "237ed9057734ff8fbb973f82ea5fcd919c232bd34cb1f0cfb442b4b58f75621e"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-continuation/slide-4.png",
+            "bytes": 35248,
+            "sha256": "218e5bd828e3e3a06de90cf44e1621f4d22e06ad9c4e11bd4695e912330cc4ac"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "venn-continuation",
+      "kind": "affected",
+      "sheet": {
+        "file": "04-venn-continuation.png",
+        "bytes": 485180,
+        "sha256": "790aa0e7b9af7f64a1c7b2e024f0745c43284d6369116becf8e8f217cba791b2"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/venn-continuation/slide-1.png",
+            "bytes": 101627,
+            "sha256": "bd8bdaf4275a319af3016e2a8d26d30409b68a198fc0f34ed3d12644b143131e"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-continuation/slide-1.png",
+            "bytes": 49813,
+            "sha256": "3c34b2cd01bea8976bee71411980c798408dab26bfbb3a9bb35e58c1fa6d9780"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 2,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/venn-continuation/slide-1.png",
+            "bytes": 101627,
+            "sha256": "bd8bdaf4275a319af3016e2a8d26d30409b68a198fc0f34ed3d12644b143131e"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-continuation/slide-2.png",
+            "bytes": 49892,
+            "sha256": "93faf886da923d73fbb2c3d0b9fc6c2fec89d7c100574a97df6a9f3b6d8d17c6"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 3,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/venn-continuation/slide-1.png",
+            "bytes": 101627,
+            "sha256": "bd8bdaf4275a319af3016e2a8d26d30409b68a198fc0f34ed3d12644b143131e"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-continuation/slide-3.png",
+            "bytes": 49916,
+            "sha256": "5878508214fa39d55734aa93308b9ce3bb6e3d4b195bbb740be9e9968824ec33"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 4,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/venn-continuation/slide-1.png",
+            "bytes": 101627,
+            "sha256": "bd8bdaf4275a319af3016e2a8d26d30409b68a198fc0f34ed3d12644b143131e"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-continuation/slide-4.png",
+            "bytes": 35584,
+            "sha256": "3c46c61aabdac3d26838fbbd2732ef36917e0643f960838a187bbfd822bcbe08"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "inverted-growth-six",
+      "kind": "affected",
+      "sheet": {
+        "file": "05-inverted-growth-six.png",
+        "bytes": 346822,
+        "sha256": "96ce30e6c0be48a5ae88dca6378a4ff7317bc88f53f1851ba6ca3407750aff84"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/inverted-growth-six/slide-1.png",
+            "bytes": 92709,
+            "sha256": "2b6e7381b220853842c1b98fc1bf2b1f8bd7f11d0f3778a109e95cfc51af1c72"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-growth-six/slide-1.png",
+            "bytes": 49730,
+            "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 2,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/inverted-growth-six/slide-1.png",
+            "bytes": 92709,
+            "sha256": "2b6e7381b220853842c1b98fc1bf2b1f8bd7f11d0f3778a109e95cfc51af1c72"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-growth-six/slide-2.png",
+            "bytes": 49799,
+            "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 3,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/inverted-growth-six/slide-1.png",
+            "bytes": 92709,
+            "sha256": "2b6e7381b220853842c1b98fc1bf2b1f8bd7f11d0f3778a109e95cfc51af1c72"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-growth-six/slide-3.png",
+            "bytes": 49849,
+            "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "org-described-columns",
+      "kind": "affected",
+      "sheet": {
+        "file": "06-org-described-columns.png",
+        "bytes": 203467,
+        "sha256": "bc128704f64dd942408ab73df48498126f4690b024c209f2c3a50a24b9fdcf89"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-described-columns/slide-1.png",
+            "bytes": 66696,
+            "sha256": "fb635e88460e0446db7df021e376d38600d1f88ffff1febbd10bf33a56a4fcca"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-described-columns/slide-1.png",
+            "bytes": 57515,
+            "sha256": "4196b4cf74d1966267d242b1e3f355b36dd6114bab5589d2bfb781906d294ca1"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 66,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 2,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-described-columns/slide-1.png",
+            "bytes": 66696,
+            "sha256": "fb635e88460e0446db7df021e376d38600d1f88ffff1febbd10bf33a56a4fcca"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-described-columns/slide-2.png",
+            "bytes": 57600,
+            "sha256": "f9bf296ab703a3ed114a4a9d144db494c710e4d773deb449f52c2587defa7505"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 66,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "org-rtl-numbering",
+      "kind": "affected",
+      "sheet": {
+        "file": "07-org-rtl-numbering.png",
+        "bytes": 489841,
+        "sha256": "3858f43af2a3e23c566b6886234b7f0a7a574661142a69e19ed6fca5155f33e3"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-rtl-numbering/slide-1.png",
+            "bytes": 102993,
+            "sha256": "321393eb2e3fbf2cb3dca15949cac2d237a84617892d5a8bb34f1910a80d3cec"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-rtl-numbering/slide-1.png",
+            "bytes": 50252,
+            "sha256": "9e2cbf6e8d29ae3d27c4d55af6dbaafe436c23993b152b9da7b2b186b8575b08"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 2,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-rtl-numbering/slide-1.png",
+            "bytes": 102993,
+            "sha256": "321393eb2e3fbf2cb3dca15949cac2d237a84617892d5a8bb34f1910a80d3cec"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-rtl-numbering/slide-2.png",
+            "bytes": 50673,
+            "sha256": "3b991613a55fe4165a9dd954e94bd4aa5a240579101f2cfa3192bc9a928a7a2e"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 3,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-rtl-numbering/slide-1.png",
+            "bytes": 102993,
+            "sha256": "321393eb2e3fbf2cb3dca15949cac2d237a84617892d5a8bb34f1910a80d3cec"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-rtl-numbering/slide-3.png",
+            "bytes": 50884,
+            "sha256": "38c57174036c7b8e2e3526124f345c614aebc1955ed10b09c8265f11046373a5"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        },
+        {
+          "page": 4,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-rtl-numbering/slide-1.png",
+            "bytes": 102993,
+            "sha256": "321393eb2e3fbf2cb3dca15949cac2d237a84617892d5a8bb34f1910a80d3cec"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-rtl-numbering/slide-4.png",
+            "bytes": 36227,
+            "sha256": "df3b69646a2d5d8a5e6ed779ab68e7a464ba2ff1f5036259a4c96d0a9590d061"
+          },
+          "metrics": {
+            "fonts": [
+              37
+            ],
+            "maxLineCharacters": 68,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "ordinary-list-control",
+      "kind": "control",
+      "sheet": {
+        "file": "08-ordinary-list-control.png",
+        "bytes": 115254,
+        "sha256": "6eb5ddc43a2e3eb380a765ca6ec70cd84ee26d297154555c8664b2d3424d8be5"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/ordinary-list-control/slide-1.png",
+            "bytes": 102335,
+            "sha256": "7650c97f926d2ac0dd1049c294e799cc1a95c248af0780740bc453b8c71d2b1f"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/ordinary-list-control/slide-1.png",
+            "bytes": 102335,
+            "sha256": "7650c97f926d2ac0dd1049c294e799cc1a95c248af0780740bc453b8c71d2b1f"
+          },
+          "metrics": {
+            "fonts": [
+              32
+            ],
+            "maxLineCharacters": 78,
+            "diagnostics": [],
+            "columns": [
+              1
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "pyramid-native-control",
+      "kind": "control",
+      "sheet": {
+        "file": "09-pyramid-native-control.png",
+        "bytes": 46599,
+        "sha256": "9abe9c78292e68d109a743311d54be6c29977a0fdd94e11812eab70cca452be8"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/pyramid-native-control/slide-1.png",
+            "bytes": 35314,
+            "sha256": "b3d3362f4865f22eb120d8eae693a7f4c50e6bfb79acfbbc56d213c58f319abb"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/pyramid-native-control/slide-1.png",
+            "bytes": 35314,
+            "sha256": "b3d3362f4865f22eb120d8eae693a7f4c50e6bfb79acfbbc56d213c58f319abb"
+          },
+          "metrics": {
+            "fonts": [
+              48,
+              48,
+              48
+            ],
+            "maxLineCharacters": 6,
+            "diagnostics": [],
+            "arrangements": [
+              "pyramid"
+            ],
+            "columns": [
+              3
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "venn-native-control",
+      "kind": "control",
+      "sheet": {
+        "file": "10-venn-native-control.png",
+        "bytes": 51035,
+        "sha256": "2c3c354c9288239933cf42217634b897c7fabafdb3081326169e2e95f9764319"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/venn-native-control/slide-1.png",
+            "bytes": 40386,
+            "sha256": "d052137bf634d098a8859c527f79d5a4251f942be61225ed13e4c5a123905cc3"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-native-control/slide-1.png",
+            "bytes": 40386,
+            "sha256": "d052137bf634d098a8859c527f79d5a4251f942be61225ed13e4c5a123905cc3"
+          },
+          "metrics": {
+            "fonts": [
+              48,
+              48,
+              48
+            ],
+            "maxLineCharacters": 6,
+            "diagnostics": [],
+            "arrangements": [
+              "venn"
+            ],
+            "columns": [
+              3
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "org-chart-native-control",
+      "kind": "control",
+      "sheet": {
+        "file": "11-org-chart-native-control.png",
+        "bytes": 42106,
+        "sha256": "f961dcd0385252a257f6fe3b62798150b35129b6d77869391dd6571b1ee842fe"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/org-chart-native-control/slide-1.png",
+            "bytes": 28334,
+            "sha256": "c48befc6c62dd24d63241c379bbde3da1797e63da71e7ee7a5bef3b2555eac85"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-native-control/slide-1.png",
+            "bytes": 28334,
+            "sha256": "c48befc6c62dd24d63241c379bbde3da1797e63da71e7ee7a5bef3b2555eac85"
+          },
+          "metrics": {
+            "fonts": [
+              48,
+              48,
+              48
+            ],
+            "maxLineCharacters": 6,
+            "diagnostics": [],
+            "arrangements": [
+              "org-chart"
+            ],
+            "columns": [
+              3
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    },
+    {
+      "id": "hierarchy-native-control",
+      "kind": "control",
+      "sheet": {
+        "file": "12-hierarchy-native-control.png",
+        "bytes": 46221,
+        "sha256": "3beae5db795f7f8f87a26113fa22f9efaf477b2179d6893a3b400fbbb5d191ee"
+      },
+      "panels": [
+        {
+          "page": 1,
+          "before": {
+            "path": "C:/opf-work/sh26-before-cli-02/preview/hierarchy-native-control/slide-1.png",
+            "bytes": 33735,
+            "sha256": "3cd49a5f77a89b947529126aa0e8c9349d0e14d8d29df5f2f35cb768d4c1af0c"
+          },
+          "after": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-native-control/slide-1.png",
+            "bytes": 33735,
+            "sha256": "3cd49a5f77a89b947529126aa0e8c9349d0e14d8d29df5f2f35cb768d4c1af0c"
+          },
+          "metrics": {
+            "fonts": [
+              48,
+              48,
+              48
+            ],
+            "maxLineCharacters": 6,
+            "diagnostics": [],
+            "arrangements": [
+              "hierarchy"
+            ],
+            "columns": [
+              3
+            ]
+          }
+        }
+      ],
+      "claudeAvailable": false,
+      "viewed": false
+    }
+  ]
+}

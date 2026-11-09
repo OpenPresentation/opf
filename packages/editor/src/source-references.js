@@ -13,7 +13,7 @@ import { listBuiltinVariables } from "@openpresentation/opf";
  * names whose description contains one of the phrases. `item`: the field is a list (or a string or a list) and every entry is a reference.
  */
 export const REFERENCE_RULES = Object.freeze([
-  { kind: "asset", definitions: ["Asset", "LogoSource", "ImageSource"], keys: ["src", "logo", "watermark"], phrases: ["asset:<id>", "or Asset"] },
+  { kind: "asset", definitions: ["Asset", "LogoSource", "ImageSource", "ImagePayload"], keys: ["src", "logo", "watermark"], phrases: ["asset:<id>", "or Asset"] },
   { kind: "dataset", definitions: ["DatasetId"], keys: [], phrases: [] },
   { kind: "datasetColumn", definitions: ["DatasetFields"], keys: ["category", "x", "series", "line", "secondaryAxis"], phrases: ["column"], item: true },
   { kind: "cite", definitions: [], keys: ["cite"], phrases: ["references"], item: true },

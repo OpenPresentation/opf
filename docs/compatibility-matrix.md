@@ -5,13 +5,14 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-**Published set (0.33.0):** core, renderer, PPTX, editor, CLI, Gallery and MCP,
-all at the shared version 0.33.0. `node scripts/registry-plan.mjs` prints the
-six-package consumer set (core, renderer, PPTX, editor, CLI and Gallery) with
-each registry `gitHead`; it does not query MCP. The [release workflow](release-process.md)
-verifies all seven packages, including MCP, separately from the consumer checks.
-Earlier matrices and native observations retain their historical identities.
-The [2026-11-08 registry and maintained quickstart receipts](handoff/2026-11-08/core-033-currency/post-publication/receipt.json) bind this set to release commit 26fd4de9. Complete native compatibility remains a separate gate.
+Core, renderer, PPTX, editor, CLI, Gallery and MCP use one shared release.
+`node scripts/registry-plan.mjs` prints the six-package consumer set (excluding
+MCP) with each registry `gitHead`; the [release workflow](release-process.md)
+verifies all seven packages. Retain the exact installed versions and lockfile.
+The [2026-11-08 registry and quickstart receipts](handoff/2026-11-08/core-033-currency/post-publication/receipt.json)
+record the genuine 0.33.0 set at release commit 26fd4de9. Earlier observations
+retain their historical identities; source support below is separate from
+registry publication and native Office acceptance.
 
 ## Published layout contract and the 0.20 engines
 
@@ -31,17 +32,27 @@ registered catalogs during PPTX import. PPTX preserves stretch images with
 zero crop through native save/re-import. These published contracts do not
 imply universal Office or full-catalog visual parity.
 
-## Current published package contracts
+## Shared package contracts
 
 | Package | Version | Dependency contract |
 | --- | --- | --- |
-| Core | 0.33.0 | Gallery ^0.33.0; optional renderer/PPTX ^0.33.0 |
-| CLI | 0.33.0 | Core ^0.33.0, Gallery ^0.33.0; optional renderer/PPTX ^0.33.0 |
-| Renderer | 0.33.0 | Core ^0.33.0; optional pinned font/converter peers |
-| PPTX | 0.33.0 | Core ^0.33.0, Gallery ^0.33.0; optional renderer ^0.33.0 |
-| Editor | 0.33.0 | Core ^0.33.0; optional renderer ^0.33.0 |
-| Gallery | 0.33.0 | Owner of every default catalog record; 36 intent layouts |
-| MCP | 0.33.0 | Core ^0.33.0, Gallery ^0.33.0; bundled deck viewer |
+| Core | Shared release | Matching Gallery; optional renderer/PPTX in the same release line |
+| CLI | Shared release | Matching core/Gallery; optional renderer/PPTX in the same release line |
+| Renderer | Shared release | Matching core; optional pinned font/converter peers |
+| PPTX | Shared release | Matching core/Gallery; optional renderer in the same release line |
+| Editor | Shared release | Matching core; optional renderer in the same release line |
+| Gallery | Shared release | Owner of every default catalog record; use the catalog matching the installed release |
+| MCP | Shared release | Matching core/Gallery; packaged deck viewer, with hosted availability determined separately |
+
+## Current source inventory
+
+This checkout's v0.34 source contains **147 JSON** example decks (101 gallery,
+46 technical), **40 default layouts** and a **53-slide sampler** (40 layouts plus
+13 dynamic compositions). Two Markdown decks and the quickstart fixture are
+outside the JSON catalog. These counts describe source, not an already-published
+v0.34 registry set. The recorded 0.33 release contains 137 JSON examples,
+36 layouts and a 49-slide sampler; install a matching set rather than mixing
+a source catalog with an older engine.
 
 ## Runtime
 
@@ -133,9 +144,7 @@ and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
-ColorRef preview/export support. The selected renderer, PPTX and editor 0.33.0 require core ^0.33.0;
-CLI 0.33.0 accepts core ^0.33.0 (CLI 0.25.0 and earlier accept only their own minor). Pin core 0.33.0 alongside them and
-verify one installed Core so preview and export use the same composition.
+ColorRef preview/export support. Install renderer, PPTX, editor, CLI and core from one completed shared release, using the dependency ranges recorded in that release’s manifests (CLI 0.25.0 and earlier accept only their own minor). Retain exact pins and verify one installed core so preview and export use the same composition.
 Core 0.20.2 and later center metrics when alignment is omitted; explicit alignment remains
 authoritative.
 
@@ -220,12 +229,12 @@ minor release ([release process](release-process.md)). From OPF 0.19 core and th
 CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), and core has no `/catalog` subpath; up to 0.18 core ships the same records as
 `@openpresentation/opf/catalog`.
 
-## Supported in this set
+## Current source capabilities
 
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
-| Bundled examples catalog | `@openpresentation/opf/examples` | **137 JSON** decks (101 gallery, 36 technical); the two Markdown decks and quickstart JSON are outside this catalog |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **147 JSON** decks in this source (101 gallery, 46 technical); published counts follow the installed release; two Markdown decks and quickstart JSON are outside this catalog |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Supported theme-slot colors write native `schemeClr` references; arbitrary native Office recoloring and full visual fidelity remain separately scoped. |
 | Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |
@@ -240,6 +249,11 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 | PNG | `toPng` (opf-render 0.18; `svgToPng` before) | Node raster of a deck or of SVG slides |
 | PDF | `toPdf` (opf-render 0.18; `svgToPdf` before) | opf-render 0.12.0 and later (RR-12, opf-render#90): **vector with selectable text by default** (embedded TrueType subsets of the supplied/bundled fonts, ToUnicode, links, metadata, tagged structure); `raster: true` keeps the image-per-slide output (`mode: "raster"` before 0.18). Renderers up to 0.11.9: raster-backed, not selectable text. Not a PDF/UA or PDF/A claim; see the renderer's `docs/evidence/rr-12-vector-pdf.md` for reader limits |
 | Editable PPTX export | `toPptx` | OPF → PPTX serialization. Text is one editable box per wrapped line, so edited text does not reflow in PowerPoint or Keynote, and a wrapped title is not the Title placeholder; the opt-in `bodyText: "native"` mode (CLI `--body-text native`, from opf-pptx and CLI 0.22.0) writes whole paragraphs, a wrapped title as the Title placeholder. Shared furniture is written on the master or layout; supported footer placeholders and tagged parts retain controlled re-import provenance. General native Office behavior remains separately scoped |
+| Shapes and connectors | Shape blocks and overlays; shared preset geometry | 187 DrawingML presets, custom outlines, fills/lines/effects and connectors; renderer/editor/PPTX support is described per property in [shapes](shapes.md). |
+| Diagrams | Mermaid, Graphviz DOT and PlantUML source, drawn through Pele | This source accepts all three syntax values; DOT/PlantUML are supported subsets read by OPF, without external renderer execution. Editable native shapes are conditional; unsupported drawings use an SVG/PNG picture and report the limit. See [diagrams](diagrams.md). |
+| SmartArt and diagram layouts | Shared composition and qualified native export | Live SmartArt is limited to measured eligible instances. Other supported arrangements use editable shapes or the reported picture fallback; semantic import and native editing retain explicit limits. See [SmartArt](smartart.md). |
+| Video | Preview placeholder/play badge, caption and HTTP(S) hyperlink | No embedded playback, remote video fetch or external player is promised; see [video references](content-payloads.md#video-references). |
+| LibreOffice | Experimental compatibility checks | Font resolution and bounded saved-file evidence do not promote it to full-fidelity support. See [LibreOffice](libreoffice.md). |
 | Agent skills | `opf skills install` | Offline after the CLI is installed |
 | Browser canvas | `@openpresentation/opf-editor/canvas` | Host must supply font bytes |
 
@@ -455,7 +469,7 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | Public-surface acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Shipping features does not establish every acceptance item; use the checklist and deployment receipts |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Shipped in opf-render 0.12.0 (opf-render#90; the browser download entry `@openpresentation/opf-render/export-browser` ships there too); PDF/UA, PDF/A and viewer coverage beyond pdf.js, PDFium and poppler remain open |
-| Mermaid `diagram` as native editable PowerPoint shapes; canvas editing of diagram nodes | [diagrams](diagrams.md#native-shapes-in-powerpoint), [diagrams plan](plans/diagrams-svg.md) | Shipped: `diagram` payloads (Mermaid 12.1 via pele) in the SVG, PNG and PDF preview, and in PPTX (SH-07) by default as one group of native shapes, text and connectors (`diagrams: "shapes"`; `"picture"` gives the native SVG picture with a PNG fallback, `alt` as description; both round-trip through `fromPptx`). The shapes cover the 32 families of core `DIAGRAM_SHAPE_FAMILIES` as one group of native shapes, text and connectors from the preview's geometry, each family compared with the preview in PowerPoint 365 in five designs; straight edges without arrowheads are glued connectors, other edges exact freeforms (PowerPoint refuses freeform connectors). Not shipped: editing nodes on the canvas |
+| Mermaid, Graphviz DOT and PlantUML `diagram` as native editable PowerPoint shapes; canvas editing of diagram nodes | [diagrams](diagrams.md#native-shapes-in-powerpoint), [diagrams plan](plans/diagrams-svg.md) | Shipped: `diagram` payloads (Mermaid 12.1 via pele, plus OPF's bounded Graphviz DOT and PlantUML readers) in the SVG, PNG and PDF preview, and in PPTX (SH-07) by default as one group of native shapes, text and connectors (`diagrams: "shapes"`; `"picture"` gives the native SVG picture with a PNG fallback, `alt` as description; both round-trip through `fromPptx`). The shapes cover the 32 families of core `DIAGRAM_SHAPE_FAMILIES` as one group of native shapes, text and connectors from the preview's geometry, each family compared with the preview in PowerPoint 365 in five designs; straight edges without arrowheads are glued connectors, other edges exact freeforms (PowerPoint refuses freeform connectors). Not shipped: editing nodes on the canvas |
 | Full visual editor / IME / bidi / repair loop | [developer adoption](plans/developer-adoption-20260915.md) | Schema support ≠ WYSIWYG coverage |
 
 CLI 0.9.2 and earlier do not render or export PPTX; CLI 0.10.0 adds `opf render`, `opf export` and `opf import`

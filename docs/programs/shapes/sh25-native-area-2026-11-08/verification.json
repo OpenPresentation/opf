@@ -1,0 +1,35 @@
+{
+  "source": "9b20bdf8f588e1e44c0c8a306b0ff3c1c5cf1a17",
+  "workerSha256": "354c4351e1a8e62ff38eb7d338de43f5920361e2ec23127fdfe43b80a4e04140",
+  "node": "v24.20.0",
+  "controls": {
+    "area": 58,
+    "actualCoordinateCases": 30,
+    "existingPoint": 45,
+    "circle": 20,
+    "curve": 26
+  },
+  "firstFailure": "Actual native area tip still uses midpoint:117.100051005631px",
+  "mapped": {
+    "seconds": 155.4,
+    "pass": 6,
+    "skipped": 1,
+    "failed": [
+      "Sparse painting-Linux.json.gz omitted, exact tracked bytes restored; affected text check passes",
+      "Inherited fallback PPTX archive digest lock; see raw unrun count"
+    ]
+  },
+  "signedWitness": {
+    "root": "C:/opf-work/sh25-area-signed-inputs-02",
+    "producer": "9b20bdf8f588e1e44c0c8a306b0ff3c1c5cf1a17",
+    "slides": 3,
+    "actions": 12,
+    "planValidation": true,
+    "sourceSha256": "c4ce5ce4727b61abd5e41444333949a72ee132f93bd9f7b96c414011abd31312",
+    "pptxSha256": "934816484ef51904993ffe91d555100753281ff72fb649ff8e001118461259e1",
+    "native": "Not yet run; actual getter/negative/stacked/zero semantics remain owed"
+  },
+  "firstWitnessFailure": "Duplicate chart ids across slides; schema correctly refuses without output. Fresh02uses unique ids/references, all values/content unchanged.",
+  "archiveFiles": 915,
+  "native": "No Office by agent. Original30native failures retained. New actual Series.Values getter and endpoint witness qualification are coordinator-owned; no product/source overlay movement."
+}

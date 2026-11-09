@@ -1,0 +1,128 @@
+{
+  "format": 1,
+  "base": "de693209caf392e3b86c30cc810a7fe9078a8ec9",
+  "baseTree": "6329fe9a452473fea224b2b900732bb7b99a49d9",
+  "freshMain": "9545016583ccfa151077cda4d51043ac6505a140",
+  "changedGenerated": [
+    {
+      "file": "packages/gallery/previews/layouts/hierarchy.svg",
+      "gitObject": "53db2cfb138210bbe2dcb982bfc156f06795ceaf",
+      "sha256": "7c20af7525b616d867caa69491ce1bb7f66dead783d0114509118fdce3ae6d90",
+      "bytes": 5034,
+      "afterSha256": "d0b03510e7aff665bf3d89e850504d5c010f7ba07329155e8af87fbf5ceae2c0",
+      "afterBytes": 5034
+    },
+    {
+      "file": "packages/gallery/previews/layouts/org-chart.svg",
+      "gitObject": "cf840cf0049666ec783b410292f488fcad3e29d7",
+      "sha256": "2eaba9f1a14e26f8fb911ede862ddeb5a82c1b728aa3b8cd61ec48620077dad0",
+      "bytes": 2575,
+      "afterSha256": "27c08b86821a536c6823f40caba45c43c63cc50ad14b4ca3b93da82c922a62fc",
+      "afterBytes": 2575
+    },
+    {
+      "file": "docs/programs/release-readiness/gallery-tracker.json",
+      "gitObject": "449d6ff2d26472d1a0f9e38dcca5252a0cc6cf17",
+      "sha256": "353ca9393ea7582be5439242ecddcf4229b6eb5093b73f7626d6c1d01be6c198",
+      "bytes": 516659,
+      "afterSha256": "8d9b9dfe9d9d2cd37433112338dab975231fdab6bd5a6fbbcf1bdc8267cc8ea9",
+      "afterBytes": 516659
+    },
+    {
+      "file": "docs/programs/release-readiness/gallery-tracker.md",
+      "gitObject": "ba629fd378ae5d42b002e820ed1ff35e47e7b99a",
+      "sha256": "891a6d28c2b30fc7cfcf1080b3871c0f74531f6bf61b8d90addf30e860b86734",
+      "bytes": 50665,
+      "afterSha256": "1fe518bbae4baa17df5199bbf3bed5e068d1be682af4e53cbcccfd3ae27f19c0",
+      "afterBytes": 50665
+    }
+  ],
+  "protectedObjects": [
+    {
+      "file": "spec",
+      "object": "46e1f16a3d7f644e6b9a574608bd80fd8e82aba5"
+    },
+    {
+      "file": "packages/javascript/src",
+      "object": "ccd82f4d419433555b8cfbe365bb3843b06d0932"
+    },
+    {
+      "file": "packages/javascript/test/fixtures",
+      "object": "3a1bb0cfd35cea2124e923a6a2390b1302860ff4"
+    },
+    {
+      "file": "packages/render/src",
+      "object": "afc9aff76ce525790544010cff6aed78e053c314"
+    },
+    {
+      "file": "packages/render/fonts",
+      "object": "4bba4ad486e95ecb304249042f36836863caaeb0"
+    },
+    {
+      "file": "packages/render/test/golden",
+      "object": "d22134aca77cd760b2dab4f1a2da8ae0b340dd22"
+    },
+    {
+      "file": "packages/pptx",
+      "object": "7bf7dad3aa66ed2aa2114540e31f43ebdd3184f5"
+    },
+    {
+      "file": "packages/editor",
+      "object": "266c2c31e64c72ae296af111c595ea57e5f56dcf"
+    },
+    {
+      "file": "packages/mcp",
+      "object": "ad1f23d229af3d70adc272f109a4b059d85d11d4"
+    },
+    {
+      "file": "packages/gallery/catalog",
+      "object": "8599f501cae1c9b4c986a627e2746581b641cc16"
+    },
+    {
+      "file": "packages/gallery/scripts",
+      "object": "878e93ecac2715ae9646853886ca2e9ae3e91bcf"
+    },
+    {
+      "file": "packages/gallery/package.json",
+      "object": "91c981102379fb111a056941ed45a5f88c4b2107"
+    },
+    {
+      "file": "scripts",
+      "object": "fee63b0ee5c22dfe1dcd76fb6675b28a1d206225"
+    },
+    {
+      "file": ".github",
+      "object": "99970ce6bce01b23b6b34b390afa1e3f27562a16"
+    },
+    {
+      "file": "package.json",
+      "object": "0d5eec02984fea0ef0b564a4b83658cc35a1bbf0"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "object": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "object": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/font-tracker.overrides.json",
+      "object": "818a983c611293c0209a0082c967a16709e9c5ce"
+    },
+    {
+      "file": "docs/programs/release-readiness/gallery-tracker.overrides.json",
+      "object": "863b3f546f8cead8802c5ea301cc4eae120c6632"
+    }
+  ],
+  "relatedRegenerationEligibility": {
+    "file": "docs/programs/font-fidelity-everywhere/font-tracker.overrides.json",
+    "mainObject": "af59420372f2ca32d6361a8db75e2cc114f99a6d",
+    "integrationObject": "818a983c611293c0209a0082c967a16709e9c5ce"
+  },
+  "artifacts": 39,
+  "rawBytes": 1706490,
+  "storedBytes": 417977,
+  "sourceOrPolicyChanged": false,
+  "declaredNativeQualification": false
+}

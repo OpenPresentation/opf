@@ -31,9 +31,10 @@ window.harness = { deck, mount, scrims, convert, defaultCatalog };
 `;
 await build({ stdin: { contents: source, resolveDir: repo, loader: 'js' }, outfile: path.join(output, 'harness.js'), bundle: true, platform: 'browser', format: 'esm', logLevel: 'error' });
 const server = createServer(async (req, res) => {
+  if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
   const url = new URL(req.url, 'http://localhost');
   if (url.pathname === '/') { res.writeHead(200, { 'Content-Type': 'text/html' }).end('<!doctype html><meta charset="utf-8"><title>Picture luminance</title><script type="module" src="./harness.js"></script>'); return; }
-  try { res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(await readFile(path.join(output, 'harness.js'))); } catch { res.writeHead(404).end(); }
+  try { const body = await readFile(path.join(output, 'harness.js')); res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(body); } catch { res.writeHead(404).end(); }
 });
 await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 const browser = await chromium.launch({ channel: process.platform === 'win32' ? 'msedge' : undefined }), errors = [];

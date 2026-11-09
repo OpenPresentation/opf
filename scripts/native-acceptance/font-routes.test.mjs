@@ -117,7 +117,7 @@ test('selected generation seals all files, shares measured handle and refuses re
   const other=fakeEngines();other.engines.fontManifest.packages[0].faces[0].sha256='0'.repeat(64);
   const source=await loadFontRouteSource(names);
   assert.throws(()=>previewRoutePins(source.fontRoutes[names[0]],other.fonts,other.engines.fontManifest),/loaded preview bytes differ/);
-  const linked=path.join(scratch,'linked');await mkdir(linked);await symlink(consumer,path.join(linked,'foreign'));
+  const linked=path.join(scratch,'linked');await mkdir(linked);await symlink(consumer,path.join(linked,'foreign'),process.platform==='win32'?'junction':'dir');
   await assert.rejects(()=>sealSuite(linked,{schemaVersion:1}),/symlink/);
  }finally{await rm(scratch,{recursive:true,force:true});}
 });

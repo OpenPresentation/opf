@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "producer": "239b1f2996ea1aa80d644e2a6e0addf1cc351273",
+  "base": "9545016583ccfa151077cda4d51043ac6505a140",
+  "node": "v24.20.0",
+  "scope": "Existing offline qualification fixtures only",
+  "before": {
+    "firstDirectoryAlias": "EPERM reproduced",
+    "secondDirectoryAlias": "EPERM independently reproduced after only first was corrected",
+    "editor": "Get-FileHash failure reproduced under inherited PS7 module path"
+  },
+  "after": {
+    "keynoteExistingFullGuardFixture": "pass",
+    "editorOriginalFakeOfficeCases": 7,
+    "editorExistingFixture": "pass",
+    "sharedEnvironmentRefusalTests": 2,
+    "parentPSModulePathUnchanged": true,
+    "parentPSModulePathSha256": "3ababd3b936c5c0f7b2e023c1da160ac79e31ed6ecbf2954461b8d78338e01fe"
+  },
+  "mapped": {
+    "seconds": 68.5,
+    "passedSteps": 11,
+    "skippedTypecheck": true,
+    "failedSteps": 0,
+    "selectedPptxFixtureSeconds": 0.7,
+    "selectedEditorFixtureSeconds": 1.8,
+    "full235SuiteRepeated": false
+  },
+  "productionAndControlHelpersUnchanged": 5,
+  "actualOfficeRun": false,
+  "fontRegistration": false,
+  "privilegeChange": false,
+  "skipsAdded": false,
+  "archiveOrGoldenOrBudgetChanged": false,
+  "logs": [
+    {
+      "file": "build-before-01.log",
+      "bytes": 14746,
+      "sha256": "426d97942e5f81ea0144be5a8188f3c1098f1fec6e56f18b3a64bf5245e53006"
+    },
+    {
+      "file": "mapped/biome.log",
+      "bytes": 673,
+      "sha256": "dda063650bf81779e9cb3e36f2fc4913b150caf2673a644cf327eac1226ec9b6"
+    },
+    {
+      "file": "mapped/build.log",
+      "bytes": 14461,
+      "sha256": "679731367caf2f214dc0a38f75b3cffb0c0503e149f14ec2e6d18e19d2678ca6"
+    },
+    {
+      "file": "mapped/pnpm_run_check_changes.log",
+      "bytes": 2639,
+      "sha256": "f17d279477bb5e773d6f9c5bc39d8ec4250dee1ae86af3cdfd4a9d7faaa9822a"
+    },
+    {
+      "file": "mapped/pnpm_run_check_font-hotlinks.log",
+      "bytes": 892,
+      "sha256": "a938bda492ea0087ba12f9d23242114b56610413226b9856dff12fe5241601e2"
+    },
+    {
+      "file": "mapped/pnpm_run_check_gallery-tracker.log",
+      "bytes": 1995,
+      "sha256": "6def6c7f85fb2373bf566ba06d77b998f79fe23ad9d6ab43ff7bddf8866cd19c"
+    },
+    {
+      "file": "mapped/pnpm_run_check_release-report.log",
+      "bytes": 819,
+      "sha256": "53de7e9d0a0d21c41cfb8cba170cba7ff2d1b9f149a079bd87c5e19f13927d19"
+    },
+    {
+      "file": "mapped/pnpm_run_check_skill-commands.log",
+      "bytes": 1044,
+      "sha256": "f29ff34e13446b7355a84026babb16f7185ecf007694425b6129ffcc4c338c53"
+    },
+    {
+      "file": "mapped/pnpm_run_check_stability.log",
+      "bytes": 3966,
+      "sha256": "566175b711d4a7dac44fa115a513a973ed92fcec391f1956830346fc3e8d1cdb"
+    },
+    {
+      "file": "mapped/pnpm_run_check_text.log",
+      "bytes": 974,
+      "sha256": "cf822913b0919872abb0e9219f19a1ea464d3a9df2ca92d9afd3044dcfa77a4b"
+    },
+    {
+      "file": "mapped/tests_editor.log",
+      "bytes": 157,
+      "sha256": "97baca7eb1c1157a8f36d82997b6974010fb2d521a386f7927cc5e5724a2d963"
+    },
+    {
+      "file": "mapped/tests_pptx.log",
+      "bytes": 137,
+      "sha256": "e275e0b6875a09f4de5f85633e647a5b83e8a387198e7ac615deb4b72b5b278f"
+    },
+    {
+      "file": "check-changed-01.log",
+      "bytes": 1447,
+      "sha256": "cd3aebe67a56e9668683069e3826496b545b60640bac71104b31726499f91e85"
+    },
+    {
+      "file": "editor-after-01.json",
+      "bytes": 90,
+      "sha256": "5ce565e77a70ca04db21017adfab6f285a1d4e4bcb33af7c470d117fff465e94"
+    },
+    {
+      "file": "editor-after-01.log",
+      "bytes": 158,
+      "sha256": "7be802c7fc4053a43fd9542a9eba87d61f64df9cefe9c731b7c492b41fa8c0f5"
+    },
+    {
+      "file": "editor-before-01.json",
+      "bytes": 90,
+      "sha256": "03987f12557808f7e43afbe42945a6f98bda18ca318b883d217462263e32ff6d"
+    },
+    {
+      "file": "editor-before-01.log",
+      "bytes": 952,
+      "sha256": "0682d972e7d461d0b23354b6b4e73758796c443d55c08d9638488a29307ba320"
+    },
+    {
+      "file": "keynote-after-01.json",
+      "bytes": 88,
+      "sha256": "1cd1ad0cee70c88ef872c15179aba3c45dee3c21b55c488267a87d83ff256afa"
+    },
+    {
+      "file": "keynote-after-01.log",
+      "bytes": 138,
+      "sha256": "c23cc929475cc510e14914cfc6d9d09bd780817fadc8f5085fd2ddabb5c65ac8"
+    },
+    {
+      "file": "keynote-before-01.json",
+      "bytes": 88,
+      "sha256": "23d515a4ac49dee25fcfc7b63bc9595b5d3075913bfe9ec5c7c91e95c170a338"
+    },
+    {
+      "file": "keynote-before-01.log",
+      "bytes": 688,
+      "sha256": "b4c3e04ebcfb96c4eaf48500af92536d173b21d6b510ed4f659eae78e96ecdb6"
+    },
+    {
+      "file": "keynote-before-second-alias-01.json",
+      "bytes": 167,
+      "sha256": "1a774d721d2b4d1659d7bfed4130cd6cbd47d782b9d0f36fbdd741c777c88345"
+    },
+    {
+      "file": "keynote-before-second-alias-01.log",
+      "bytes": 876,
+      "sha256": "73eea9b4d75fa37c5a693e41f205d46f80d4da4ccdbb67dd08d131e54505aba8"
+    },
+    {
+      "file": "original-root-editor-check.json",
+      "bytes": 321,
+      "sha256": "37f3b45790aaddc344dd9394f8d28cffe7fd783b812e2d232e3bdcc245c7df38"
+    },
+    {
+      "file": "original-root-editor-check.log",
+      "bytes": 13246,
+      "sha256": "d98f7c61100b0cbc28a8258db8c4c51d17261dc6b2d3a46bf5dbae5f6f15233b"
+    },
+    {
+      "file": "parent-environment-after.json",
+      "bytes": 440,
+      "sha256": "5d396b2aeb28af2d1ac704751c3063a3b538edbc16a76b05f7fe9c4d028d02a7"
+    },
+    {
+      "file": "parent-environment.json",
+      "bytes": 419,
+      "sha256": "2f0879c392b07d9acbcd40a69b691e84c741109b7fbbe234b70db304a056b923"
+    },
+    {
+      "file": "protected-helpers.json",
+      "bytes": 873,
+      "sha256": "8ec5353b66c1691bf7230ee3b5c886d2b5719e9ab263b331474b956a603c4e10"
+    },
+    {
+      "file": "shared-environment-controls-01.log",
+      "bytes": 335,
+      "sha256": "70850664f904f28d7f01fa9d9a269857245da6a923577ea4873e79ec320a5db2"
+    }
+  ]
+}

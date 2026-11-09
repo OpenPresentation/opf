@@ -1,0 +1,64 @@
+{
+  "head": "be65fa941edbd191a72db2f8d74742309ba9dd68",
+  "records": [
+    {
+      "name": "font-tracker",
+      "args": [
+        "scripts/build-font-tracker.mjs",
+        "--check"
+      ],
+      "status": 0,
+      "signal": null,
+      "ms": 128
+    },
+    {
+      "name": "gallery-tracker",
+      "args": [
+        "scripts/build-gallery-tracker.mjs",
+        "--check"
+      ],
+      "status": 0,
+      "signal": null,
+      "ms": 427
+    },
+    {
+      "name": "catalog-previews",
+      "args": [
+        "packages/gallery/scripts/render-previews.mjs",
+        "--check"
+      ],
+      "status": 0,
+      "signal": null,
+      "ms": 930
+    },
+    {
+      "name": "release-report",
+      "args": [
+        "--test",
+        "docs/programs/release-readiness/report.test.mjs"
+      ],
+      "status": 0,
+      "signal": null,
+      "ms": 127
+    },
+    {
+      "name": "archive-ownership",
+      "args": [
+        "docs/handoff/2026-11-09/rr20-sh24-nine-archive-promotion/verify.mjs"
+      ],
+      "status": 1,
+      "signal": null,
+      "ms": 357
+    },
+    {
+      "name": "generated-metadata",
+      "args": [
+        "docs/handoff/2026-11-09/rr111-wave-generated-metadata/verify.mjs"
+      ],
+      "status": 1,
+      "signal": null,
+      "ms": 685
+    }
+  ],
+  "scope": "Exact eight-source metadata union only; not golden, full CI, native or release acceptance"
+}

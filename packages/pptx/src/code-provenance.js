@@ -76,6 +76,19 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
       if (!records.has(name)) return shape;
       if (seen.has(name)) throw new Error(`Duplicate generated ${kind} shape.`);
       seen.add(name);
+      const tag = `<p:tag name="${tagName}" val="${hex(signed && shape.startsWith('<p:sp>') ? {...records.get(name), sig: exportedSignature(shape)} : records.get(name))}"/>`;
+      const existing = /<p:custDataLst>\s*<p:tags r:id="([^"]+)"\s*\/>\s*<\/p:custDataLst>/.exec(shape);
+      if (existing) {
+        // CT_CustomerDataList permits one p:tags reference: join its tag list.
+        const relation = array(parser.parse(rels).Relationships?.Relationship).find(item => item.Id === existing[1]);
+        const target = typeof relation?.Target === 'string' && /^\.\.\/tags\/[A-Za-z0-9_-]+\.xml$/.test(relation.Target) ? 'ppt/' + relation.Target.slice(3) : undefined;
+        if (relation?.Type !== REL || relation.TargetMode === 'External' || !target || !entries[target]) throw Error('Generated shape tag relationship is missing or invalid.');
+        const current = dec.decode(entries[target]), list = parser.parse(current)['p:tagLst'];
+        if (!list || !current.includes('</p:tagLst>') || array(list['p:tag']).some(item => String(item.name).toUpperCase() === tagName.toUpperCase())) throw Error('Generated shape tag list is invalid or colliding.');
+        entries[target] = enc.encode(current.replace('</p:tagLst>', tag + '</p:tagLst>'));
+        return shape;
+      }
+      if (/<p:custDataLst\b/.test(shape)) throw Error('Generated shape has unsupported customer data.');
       const part = `ppt/tags/${prefix}${++count}.xml`;
       let id = `rId${prefix[0].toUpperCase()+prefix.slice(1)}${count}`;
       while (ids.has(id)) id += '_';

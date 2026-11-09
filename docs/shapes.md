@@ -15,7 +15,7 @@ A shape block draws one of PowerPoint's 187 preset shapes, or an outline of your
 
 The full reference deck is [`examples/technical/shapes.opf.json`](../examples/technical/shapes.opf.json): one slide per group of properties.
 
-This page covers [shape blocks](#a-shape-block) and their properties, [overlay shapes and connectors](#overlay-shapes-and-connectors) drawn over a composed slide, [importing shapes](#importing-shapes-from-powerpoint) from PowerPoint, [editing shapes](#editing-shapes) in the editor, and [native diagrams](#native-diagrams), Mermaid diagrams written as PowerPoint shapes; then validation, loading in browsers, the preset geometry and the property map.
+This page covers [shape blocks](#a-shape-block) and their properties, [overlay shapes and connectors](#overlay-shapes-and-connectors) drawn over a composed slide, [importing shapes](#importing-shapes-from-powerpoint) from PowerPoint, [editing shapes](#editing-shapes) in the editor, and [native diagrams](#native-diagrams), Mermaid, DOT and PlantUML diagrams written as PowerPoint shapes; then validation, loading in browsers, the preset geometry and the property map.
 
 ## A shape block
 
@@ -185,6 +185,24 @@ A picture's box is its frame; a block on a card is its card. A shape with both p
 
 The PPTX export writes an overlay shape as a shape block, a native `p:sp` named `OPF shape slides.N.shapes.I`.
 
+### Chart point anchors
+
+Add `point` to `at` to follow a chart mark instead of the whole block. For example:
+
+```json
+{"shape":"ellipse","fill":"none","stroke":{"color":"accent2","width":3},"at":{"block":"costs","series":"Cost ($B)","point":"United States","edge":"end","width":80,"height":80}}
+```
+
+`point` is an exact unique category name or a zero-based plotted-row index. `series` is an exact unique value-column name or a zero-based plotted-series index; omission selects the first series. Indexes disambiguate repeated or empty labels. Scatter X columns are not series. References resolve against the data the chart draws, including its maintained draw plan.
+
+The **center** of the shape sits on the chosen point. For bars and columns, `start` and `end` mean the segment baseline and value end, including signed and stacked values; `top`, `bottom` and `center` use the mark bounds. Line/area/scatter anchors use the plotted marker; their edge supplies the offset direction. On a slice, `end` is the outer arc midpoint, `start` the inner arc midpoint (the pie center), `center` the middle of its radial band, and `top`/`bottom` the sector bounds. Slice offsets are radial, and other mark offsets follow the chosen edge's outward direction. A zero offset centers the ring exactly on its target.
+
+Explicit dimensions up to 1 are fractions of the mark bounds; larger numbers are reference pixels. The default retains the preset's proportions and uses 15% of the mark's shorter side, with a 12 reference-pixel floor. Whole-block anchor sizing and outside-edge placement are unchanged. Physical bar value ends do not reverse in RTL; vertical category positions follow the chart's category order.
+
+The classic two-dimensional category, scatter, pie and doughnut planners share a pinned native inner plot with SVG. Unsupported 3-D, combo, radar, chartex and table-aligned-row plots are explicit `opf/shape-anchor-missing` findings and draw no attached shape. Missing/ambiguous series or categories and null/unplotted values produce the same located finding. Qualification against actual native point coordinates is required before release; source agreement alone does not prove native placement. See [the portable example](../examples/technical/chart-point-overlays.opf.json).
+
+The editor's `setOverlayAnchor(editor, path, at)` and `prepareOverlayAnchor(presentation, path, at)` replace the placement atomically. `listChartPointTargets` supplies indexed choices. The selected-shape controls expose chart, point, series and edge; every change supports Undo/Redo. A native scatter chart does not carry source category names: use a numeric point index when that attachment must survive native import. Native import restores an attachment only when its current chart point still resolves; otherwise it keeps the current native shape position and reports the lost attachment.
+
 ### Layers
 
 `layer` puts an overlay shape in front of the slide (the default) or behind it:
@@ -310,7 +328,7 @@ The editor edits shape blocks in the playground, the workspace and the Studio (`
 
 ## Native diagrams
 
-A [diagram](diagrams.md) (Mermaid source in a `diagram` block) is drawn with the same shapes in PowerPoint. The PPTX export writes it as native shapes, connectors and text by default (`diagrams: "shapes"`; `"picture"` writes one SVG picture, `--diagrams picture` in the CLI), built from the diagram engine's own laid-out drawing, the geometry the preview draws:
+A [diagram](diagrams.md) (Mermaid, DOT or PlantUML source in a `diagram` block) is drawn with the same shapes in PowerPoint. The PPTX export writes it as native shapes, connectors and text by default (`diagrams: "shapes"`; `"picture"` writes one SVG picture, `--diagrams picture` in the CLI), built from the diagram engine's own laid-out drawing, the geometry the preview draws:
 
 - a node whose outline is a preset is that preset (`rect`, `roundRect`, `ellipse`, `diamond`, `hexagon` and the others, checked against the [preset geometry](#preset-geometry)); any other outline is a custom geometry of its exact path, with the four connection sites of a rectangle;
 - a straight edge without arrowheads is a connector glued to the connection sites of the nodes it touches, written as an [overlay connector](#connectors) is (one `p:cxnSp` with `a:stCxn` and `a:endCxn` on the native shape ids and the sites' indexes), so it follows a node moved in PowerPoint; every other edge is one shape of custom geometry holding its line and its arrowheads, because PowerPoint opens no connector of custom geometry and its line ends are shorter than the diagram's arrowheads;
@@ -319,7 +337,7 @@ A [diagram](diagrams.md) (Mermaid source in a `diagram` block) is drawn with the
 
 A family is written as shapes once PowerPoint's drawing of it has passed the comparison with the preview (all 32 families have; the list is core's `DIAGRAM_SHAPE_FAMILIES`). A diagram whose family is not in the list, or whose drawing needs what PowerPoint has no native form for (a clip path, a mask, a filter, an embedded image, text on a path, right-to-left text), stays a picture and is reported as `pptx/diagram-shapes-unavailable`.
 
-On import an unchanged group is its diagram again (the Mermaid source and `alt`), and none of its members become overlay shapes or connectors. An edited group (a member moved, resized, retyped, added or removed) imports as its shapes, [as PowerPoint's shapes do](#a-deck-powerpoint-wrote): the nodes as overlay shapes with their presets, fills, lines and text, the glued edges as connectors between them; `invalid-diagram-provenance` reports that the source is not reconstructed. See [native shapes in PowerPoint](diagrams.md#native-shapes-in-powerpoint) for the comparison and the families.
+On import an unchanged group is its diagram again (the Mermaid, DOT or PlantUML source and `alt`), and none of its members become overlay shapes or connectors. An edited group (a member moved, resized, retyped, added or removed) imports as its shapes, [as PowerPoint's shapes do](#a-deck-powerpoint-wrote): the nodes as overlay shapes with their presets, fills, lines and text, the glued edges as connectors between them; `invalid-diagram-provenance` reports that the source is not reconstructed. See [native shapes in PowerPoint](diagrams.md#native-shapes-in-powerpoint) for the comparison and the families.
 
 ## Pyramids, matrices, chevrons and flows
 
@@ -335,7 +353,7 @@ The `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` and `vertical-flow` layouts
 | `opf/text-overflow` | The text does not fit inside the shape at the readable minimum size. |
 | `opf/shape-link-hidden` | A hidden shape has a link nobody can click. |
 | `opf/shape-option-unsupported-payload` | A shape-only property (`fill`, `style`, `rotate` and the others) is on a block that is not a shape. |
-| `opf/shape-anchor-missing` | An overlay shape's `at.block` names no block on the slide; the shape is not drawn. |
+| `opf/shape-anchor-missing` | An overlay's block, chart point or series does not resolve, or its native plot is unqualified; the shape is not drawn. |
 | `opf/connector-end-missing` | A connector's `from` or `to` names no block or overlay shape on the slide (or names a connector); the connector is not drawn. |
 | `opf/schema` | An overlay shape has both placements or none, or only some of `x`, `y`, `width` and `height`; a connector has a shape-only key; a `fromSite` or `toSite` is an index the shape does not have. |
 
@@ -708,3 +726,5 @@ Default frame is the proportion a shape takes when the block sets no `aspectRati
 | `wedgeEllipseCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any) |
 | `wedgeRectCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any) |
 | `wedgeRoundRectCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any), `adj3` 0.16667 (any) |
+
+Organization charts, hierarchies and set overlap use the `org-chart`, `hierarchy` and `venn` arrangement layouts. Trees preserve one root and list-entry depths; Venn supports one to seven flat sets. Both engines share their measured connectors, paired cards, opacity and label rectangles. See [Trees and set overlap](smartart.md#trees-and-set-overlap-sh-21) for authoring and export fidelity.

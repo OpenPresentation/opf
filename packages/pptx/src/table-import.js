@@ -1,5 +1,6 @@
 import {unbindNoBreak} from '@openpresentation/opf/composition';
 import {nativeRunStyle as runStyle, mergeNativeRunProperties as mergeProperties} from './native-text-style.js';
+import {nativeAutofit, scaledNativeRun, reportNativeAutofit} from './native-autofit.js';
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
 import {nativeCellStyle, nativeTableGrid, nativeStyleFill} from './table-cell-import.js';
@@ -14,6 +15,8 @@ const boolean = value => ['1','true','on'].includes(value) ? true : ['0','false'
 
 
 function cellText(body, context, relationships, report, header, tableDefaults) {
+  const fit = nativeAutofit([drawingObject(body)['a:bodyPr']], report);
+  reportNativeAutofit(fit, report);
   const listStyle = drawingObject(child(body, 'a:lstStyle'));
   const paragraphs = nodes(body, 'a:p');
   const runs = [];
@@ -31,7 +34,7 @@ function cellText(body, context, relationships, report, header, tableDefaults) {
       const tag = ['a:r', 'a:fld', 'a:br'].find(tag => Object.hasOwn(node, tag));
       if (!tag) continue;
       const properties = mergeProperties(defaults, drawingObject(node[tag])['a:rPr']);
-      append(tag === 'a:br' ? '\n' : text(child(node[tag], 'a:t')), runStyle(properties, context, relationships, report));
+      append(tag === 'a:br' ? '\n' : text(child(node[tag], 'a:t')), runStyle(tag === 'a:br' && !(Number(properties.sz) > 0) ? properties : scaledNativeRun(properties, fit, report), context, relationships, report));
     }
   });
   return runs.some(run => typeof run !== 'string') ? runs : runs.join('');

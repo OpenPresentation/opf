@@ -1,3 +1,4 @@
+import { trackPairBounds } from './studio-track-geometry.js';
 // CE-20: the Studio's canvas. The slide is drawn by the existing canvas (`createCanvasEditor`, with passive targets: it keeps its text editing,
 // crop and properties, while selection is drawn here) inside the kit viewport (zoom steps, fit, fit width, pinch, Space and the hand tool).
 // Over it, the kit overlay: the hover outline, the outline of the selection's container, one box per selected node with a label chip above the
@@ -223,11 +224,12 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
       const draggable = container.resizable && !studio.readOnly && Boolean(flow);
       container.tracks.slice(0, -1).forEach((track, index) => {
         const next = container.tracks[index + 1];
-        const at = (track.start + track.length + next.start) / 2;
+        const pair = trackPairBounds(track, next);
+        const at = pair.at;
         const node = pass.ensure(`d:${owner.key}:${index}`, makeDivider);
         const share = track.length / (track.length + next.length);
         const weights = drawn && !drawn.drawn ? [drawn.weights[index], drawn.weights[index + 1]] : null;
-        node._info = { key: owner.key, index, draggable, row, pairStart: track.start, pairLength: next.start + next.length - track.start, box: row ? { x: at, y: box.y, w: 0, h: box.h } : { x: box.x, y: at, w: box.w, h: 0 } };
+        node._info = { key: owner.key, index, draggable, row, pairStart: pair.pairStart, pairLength: pair.pairLength, box: row ? { x: at, y: box.y, w: 0, h: box.h } : { x: box.x, y: at, w: box.w, h: 0 } };
         node.dataset.active = resize?.node === node ? "true" : "false";
         paintDivider(node, {
           box: node._info.box, orientation: row ? "vertical" : "horizontal", draggable, tabbable: tool !== "text",
