@@ -45,3 +45,7 @@ node docs/handoff/2026-11-09/svg-browser-performance/verify.mjs
 ```
 
 The archive preserves the original setup failure and exact source identities. The maintained metadata-check outcome is recorded separately; no new browser run is required to replay this packet.
+
+Metadata qualification: the standard check at `b8d75baab2d16114e6d44243840116939526065a` passed build, Biome, changes and skill commands; its original aggregate remains RED because `check:text` could not read the sparse historical `painting-Linux.json.gz` fixture. Only the exact tracked 16,102-byte blob was restored (no source change); the maintained text check then passed. Typecheck was correctly unselected. See `qualification.json` and the lossless check archive. This is composed metadata coverage, not a repeated green aggregate.
+
+All nine distinct screenshot hashes were inspected (twelve captures total). The 16-case edited capture is taken after reset/append and therefore correctly shows the source value 33 at 36 slides; the 36-case edited capture retains the shared-data edit to 34.

@@ -126,3 +126,23 @@ assert.equal(summary.nativeAcceptance, false);
 assert.equal(summary.totalOperations, operations);
 assert.equal(summary.exactBrowserServerSystemSvgComparisons, comparisonCount);
 console.log(JSON.stringify({ status: 'PASS', files: members.size, bytes: total, formalCases: cases.length, operations, timedMarks: marks, browserServerExactComparisons: comparisonCount, screenshotCount: 12, localhostOrigins: [...traceOrigins], earlierSetupFailurePreserved: true, nativeAcceptance: false }));
+const checksManifest = JSON.parse(readFileSync(new URL('./checks.manifest.json', import.meta.url)));
+const checksBytes = readFileSync(new URL(checksManifest.archive, import.meta.url));
+assert.equal(checksBytes.length, checksManifest.bytes);
+assert.equal(sha(checksBytes), checksManifest.sha256);
+const checks = JSON.parse(gunzipSync(checksBytes, { maxOutputLength: 2 * 1024 * 1024 })).files;
+assert.equal(checks.length, checksManifest.files.length);
+const checkMap = new Map();
+for (const [index, file] of checks.entries()) {
+  const bytes = Buffer.from(file.data, 'base64');
+  assert.deepEqual({ file: file.file, bytes: bytes.length, sha256: sha(bytes) }, checksManifest.files[index]);
+  checkMap.set(file.file, bytes);
+}
+assert.equal(JSON.parse(checkMap.get('artifacts/browser/check-changed-01.exit.json')).exitCode, 1);
+assert.equal(JSON.parse(checkMap.get('artifacts/browser/check-text-recovery.exit.json')).exitCode, 0);
+assert.equal(JSON.parse(checkMap.get('artifacts/browser/text-fixture-restoration.json')).gitBlob, '2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6');
+const qualification = JSON.parse(readFileSync(new URL('./qualification.json', import.meta.url)));
+assert.equal(qualification.originalAggregate.exitCode, 1);
+assert.equal(qualification.recovery.checkTextExitCode, 0);
+assert.equal(qualification.shippingPathsUnchanged, true);
+console.log(JSON.stringify({ status: 'PASS', checkRecords: checks.length, originalAggregateRedPreserved: true, narrowTextRecoveryPassed: true, nativeAcceptance: false }));

@@ -1,0 +1,62 @@
+{
+  "archive": "checks.raw.json.gz",
+  "bytes": 12383,
+  "sha256": "24a891a730958b2b03550643db62e4c34c9181b7d44846ecb986a9acb0628729",
+  "files": [
+    {
+      "file": "artifacts/browser/check-changed-01.log",
+      "bytes": 2916,
+      "sha256": "5fd8e64b6385ad1c6eae7fd26036964063473fd1a54026d169fe4a62cae5e9e5"
+    },
+    {
+      "file": "artifacts/browser/check-changed-01.exit.json",
+      "bytes": 214,
+      "sha256": "80450b679cb84d2fffc6320593b06579ce34aa511924c255e7f1847c50303a49"
+    },
+    {
+      "file": "artifacts/browser/text-fixture-restoration.json",
+      "bytes": 565,
+      "sha256": "f04d254ccceb64663a7ea6ec0da90e94aedb24186bb6d2528a67bf6d2955c58b"
+    },
+    {
+      "file": "artifacts/browser/restore-text-fixture.mjs",
+      "bytes": 1303,
+      "sha256": "be57943a4e90ae0033786b3fd6f6a3775ae2fd0d9f48f52d40b094a93fe27bd8"
+    },
+    {
+      "file": "artifacts/browser/check-text-recovery.log",
+      "bytes": 1095,
+      "sha256": "bfc908dd5f4e5f405c59cf39730e55c61b8a8c2098c03c4b623665d204e6c334"
+    },
+    {
+      "file": "artifacts/browser/check-text-recovery.exit.json",
+      "bytes": 163,
+      "sha256": "ded74065522a307a9cd40ef407b8adc866494b4bd8ebffee3af98decc5e7d4bd"
+    },
+    {
+      "file": "artifacts/check-changed/biome.log",
+      "bytes": 693,
+      "sha256": "90a12cb242b19482bb871098870e588e6ed0632ecb9028496c37c8865bb9a6df"
+    },
+    {
+      "file": "artifacts/check-changed/build.log",
+      "bytes": 14565,
+      "sha256": "9da9841fae12d32c7fe64a12e80d8c4064986bd48c8e1013494838ade09c1201"
+    },
+    {
+      "file": "artifacts/check-changed/pnpm_run_check_changes.log",
+      "bytes": 2632,
+      "sha256": "3583f337a6020bb8e5818c0c7f8ca5910306ac5b3b09e82134fe2ea348d1c2f8"
+    },
+    {
+      "file": "artifacts/check-changed/pnpm_run_check_skill-commands.log",
+      "bytes": 1035,
+      "sha256": "2d617ceae837bc9927efc363bfdb79bdad4a640dd2a41569e1cc9c822d0661ba"
+    },
+    {
+      "file": "artifacts/check-changed/pnpm_run_check_text.log",
+      "bytes": 1822,
+      "sha256": "5b2b991c0438c632e01732366b05f347efddd57dcda1692d3ce74d34b8ae310c"
+    }
+  ]
+}

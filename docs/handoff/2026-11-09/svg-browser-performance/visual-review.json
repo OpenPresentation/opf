@@ -1,0 +1,78 @@
+{
+  "scope": "All9 distinct image hashes reviewed via view_image;12 captures total",
+  "groups": [
+    {
+      "sha256": "4149f07b70eea2ea5aecaa2d1c1ec0419bde5db597257aa8054ba504cc311f7e",
+      "files": [
+        "desktop-cpu4-16-edited.png"
+      ],
+      "reviewed": true
+    },
+    {
+      "sha256": "7cf1a41c24f6a20923fab0e6b5171731ab3c01694fd856bb5ddfdaa96acc3f4a",
+      "files": [
+        "desktop-cpu4-16-sorter.png",
+        "desktop-normal-16-sorter.png"
+      ],
+      "reviewed": true
+    },
+    {
+      "sha256": "4a8483024249a065fbf35bd5a20b80652366fac2b39a58ca08eecd48331e5d7f",
+      "files": [
+        "desktop-cpu4-36-edited.png",
+        "desktop-normal-36-edited.png"
+      ],
+      "reviewed": true
+    },
+    {
+      "sha256": "934b1f17bc76e72b1dc98924ba5c970d3c15118b1a01049a3e32a26f19ab8a57",
+      "files": [
+        "desktop-cpu4-36-sorter.png",
+        "desktop-normal-36-sorter.png"
+      ],
+      "reviewed": true
+    },
+    {
+      "sha256": "8b03c4ac4ec86a5bc41a568203a963e355418f49dba757029019e3294aade8a9",
+      "files": [
+        "desktop-normal-16-edited.png"
+      ],
+      "reviewed": true
+    },
+    {
+      "sha256": "384ca042a5d50325e2a61a550b3726b272cff1e32d23bf1cf3768226ffc2fc1d",
+      "files": [
+        "mobile-cpu4-16-edited.png"
+      ],
+      "reviewed": true
+    },
+    {
+      "sha256": "aca87bdc1389acc7805aa22b4e6019c9e0482684ac4b1575a681d0a439aded3d",
+      "files": [
+        "mobile-cpu4-16-sorter.png"
+      ],
+      "reviewed": true
+    },
+    {
+      "sha256": "03f572b6d52621b8b65adc10a7686002e2886bb51c8793a384364a18865b6126",
+      "files": [
+        "mobile-cpu4-36-edited.png"
+      ],
+      "reviewed": true
+    },
+    {
+      "sha256": "c99ee98bf512e39da9938865cf974998efa8a01a085adbb79429df2b9c6b574a",
+      "files": [
+        "mobile-cpu4-36-sorter.png"
+      ],
+      "reviewed": true
+    }
+  ],
+  "findings": [
+    "Full editor/source panel, sorter and chart are visible at1440x900 and390x844.",
+    "36-case edited screenshots show chartvalue34;16-case edited screenshots occur AFTER reset/append20 and correctly show unedited sourcevalue33 at36slides.",
+    "16-slide sorter shows19warnings+1note;36-slide shows46warnings+2notes for original missing-icon/other source issues.",
+    "Authored footer placeholders remain visible; no slide-content/native acceptance."
+  ],
+  "pixelEqualityClaim": false
+}

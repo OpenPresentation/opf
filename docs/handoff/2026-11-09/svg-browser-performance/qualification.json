@@ -1,0 +1,30 @@
+{
+  "testedSource": "b8d75baab2d16114e6d44243840116939526065a",
+  "testedTree": "fb6fe77d4d6ac96deaf75a537a7be14dcfc917af",
+  "originalAggregate": {
+    "exitCode": 1,
+    "passed": [
+      "build",
+      "biome",
+      "check:changes",
+      "check:skill-commands"
+    ],
+    "failed": [
+      "check:text"
+    ],
+    "skipped": [
+      "typecheck"
+    ],
+    "failure": "ENOENT exact sparse historical painting-Linux.json.gz fixture",
+    "elapsedSeconds": 31.8
+  },
+  "recovery": {
+    "exactTrackedBlobOnly": true,
+    "sourceChange": false,
+    "checkTextExitCode": 0,
+    "source": "b8d75baab2d16114e6d44243840116939526065a",
+    "fullAggregateRepeated": false
+  },
+  "shippingPathsUnchanged": true,
+  "claim": "Composed metadata coverage; original aggregate remains RED. Not a blanket aggregate/native/release pass."
+}
