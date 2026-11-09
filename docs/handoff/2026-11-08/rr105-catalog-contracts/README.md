@@ -22,4 +22,13 @@ No runtime, catalogue, chart, schema, fixture, golden, preview, package pin or C
 
 ## First mapped outcome retained
 
-The first mapped run on source115e4f8b was red: a new qualification sentence was accidentally appended after the RR-105 row closing delimiter, creating a seventh column. Only that metadata placement is corrected. The CLI Node batch passed237/238; the remaining test needed two exact tracked XML oracle files omitted by the standard sparse checkout. Those two inputs are restored byte-for-byte from Git with a separate receipt, never regenerated. The failed run is retained; corrected metadata checks and the failed maintained CLI package step will run with identical package/test source.
+The first mapped run on source 115e4f8b was red: a new qualification sentence was accidentally appended after the RR-105 row closing delimiter, creating a seventh column. Only that metadata placement is corrected. The CLI Node batch passed 237/238; the remaining test needed two exact tracked XML oracle files omitted by the standard sparse checkout. Those two inputs are restored byte-for-byte from Git with a separate receipt, never regenerated. The failed run is retained; corrected metadata checks and the failed maintained CLI package step will run with identical package/test source.
+
+
+## Final local qualification
+
+Test source `115e4f8b237f43bb0d603b025b920b1f86cc7cd7` (tree `5ceacd5a23ee399a1d2afbd0cb8aac3c1f3db31f`) is unchanged by metadata correction `5d51d8f238c61690ae6cd3f66cab7018a17bd962` (tree `e0961e8fb3c1ebe2126efbe3b5b4ad2aee392adb`). The corrected metadata-only maintained selection passed all six applicable steps, including report, gallery tracker and text. The failed CLI package step then passed on the same package inputs: 238/238 Node tests, 94 command checks and 82 drawing/conversion checks (30 Node test files and two scripts). The actual Design-menu suite passed 18 sections, including exact choices and four added intents' owned content-preserving edit/undo.
+
+This is **composed local coverage**. The original aggregate mapped run remains red and its raw logs remain sealed. The original Windows file-symlink and historical-version SVG-digest conditions are unchanged and are recorded in the receipt. Copied-harness evidence is not a genuine tarball/npm-registry qualification. No unrelated startup/performance or unread PPTX failure is attributed or repaired here.
+
+`receipt.json` records source identity, scope and limits; `files.json` hashes every compressed original log, input-restoration receipt and proof. The sparse text inputs and two XML oracles were restored from exact Git objects only, without overwriting, staging, substituting or regenerating data. Verify with `node docs/handoff/2026-11-08/rr105-catalog-contracts/verify.mjs`. Coordinator review/publication and final combined CI remain required.
