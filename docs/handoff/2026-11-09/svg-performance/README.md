@@ -13,4 +13,4 @@ The source has no image/src assets; it is mostly text and decorative shapes, wit
 - Update/storage lane: full JSON versus one-slide change/patch bytes, changed SVG hashes and re-rendered/cached slide counts. Include metadata and append-20 updates because their dependencies differ from a local edit.
 - Profile the measured expensive phase before changing production code. Any optimization must retain output equivalence, correct invalidation and bounded cache behavior, with a meaningful regression test.
 
-State: extended test deck and plan prepared. Performance numbers are not yet measured. Full local SH-27 mapped check is still running elsewhere; benchmark execution waits for a quiet machine. No release, deployment or production optimization performed.
+State: both inputs validate; the coordinated eight-case server baseline passed with exact standalone SVG equivalence. See RESULTS.md and the sealed raw archive. Browser/mobile-proxy and update measurements are being prepared. No release, deployment or production optimization performed.
