@@ -241,7 +241,8 @@ export function addNativeBody(slide, plan, context, options, helpers) {
   const {item, values, list, box, anchor} = plan;
   const base = item.textStyle;
   const baseFont = helpers.nativeFontOptions(base);
-  const paragraphs = [];
+  const paragraphs = [], latinFragments = [];
+  let sourceRun = 0;
   for (const value of values) {
     let paragraph = [];
     paragraphs.push(paragraph);
@@ -257,10 +258,14 @@ export function addNativeBody(slide, plan, context, options, helpers) {
         hyperlink: run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url: run.link} : undefined, ...helpers.langOptions(context, run.lang)};
       // LH-11: PowerPoint wraps the body itself, so the spaces core's line breaker never breaks at are no-break spaces (import writes them back).
       const pieces = bindNoBreak(run.text).split(/\r\n|\r|\n/);
+      let sourceOffset = 0;
       pieces.forEach((text, index) => {
         if (index) { paragraph = []; paragraphs.push(paragraph); }
         paragraph.push({text, options: {...runOptions}});
+        latinFragments.push({text,source:run.text,start:sourceOffset,end:sourceOffset+text.length,sourceRun,style:{...style,...(run.lang?{lang:run.lang}:{})}});
+        sourceOffset += text.length + (/^(?:\r\n|\r|\n)/.exec(run.text.slice(sourceOffset+text.length))?.[0].length ?? 0);
       });
+      sourceRun++;
     }
   }
   const indent = list ? item.text.listEntries[0].marker.indent * .75 : undefined;
@@ -283,6 +288,7 @@ export function addNativeBody(slide, plan, context, options, helpers) {
       breakLine: position === paragraph.length - 1 && index < paragraphs.length - 1}}));
   });
   const objectName = `OPF native body ${item.path}`;
+  context.nativeLatinSlots.remember(context.slideIndex,objectName,latinFragments,item.path);
   // RR-105: the box wraps where core wrapped (nativeWrapBox), at the item's columns (a region can be wider than core's measure).
   const {x, width} = plan.wrap;
   slide.addText(runs, {...helpers.textBoxOptions({x: x / 96, y: box.y / 96, w: width / 96, h: box.height / 96}, context, item.text.fontSize * .75),

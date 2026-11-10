@@ -1,0 +1,13 @@
+# RR-105: native Latin font-slot consistency
+
+Source worktree: C:/opf-work/latin-cs-slots, branch codex/rr-105-native-latin-slots, fresh origin/main normally aligned to 863b83b902eaad7a2c614b353c0379f269146441. Source review, the required coherent gate and actual current native qualification are still pending. No Office, deployment or release was performed.
+
+The exact original05 source public export reproduced Latin Aptos with CS Arabic Typesetting before the repair. The source-selected ASCII span now repeats the final chosen Latin typeface in CS. The separately completed one-slot native experiment supports a digit-size component only: word order remains wrong. This branch does not claim a bidirectional or physical-font-selection fix.
+
+Vetoable decisions:
+
+- Extract the existing pure renderer itemizer into core composition, preserving its API/algorithm and re-exporting the same function from renderer. PPTX needs no optional renderer, registry or font-pack load to classify source text.
+- Select ASCII Latin ranges from original source runs before wrapping/native adapters; preserve genuine Arabic-context digits, other scripts, non-ASCII characters, symbol encodings and emoji faces. Copy only the final post-safe Latin typeface, preserving every other native property.
+- Extend the existing OPF_NATIVE_LANGUAGE_V1 structural record with bounded original-source span groups. Bind the current ordered paragraph XML and group identity/boundaries; coalesce only unchanged members of the same source run in an import read view. Never replay source text or merge separate authored identical runs. Edited/foreign/tampered/reordered groups keep current native content. Hashes are change detection, not authentication. The original ZIP parts and full provenance fingerprints remain authoritative and unmodified by the read view.
+
+Qualification retained under C:/opf-work/latin-cs-slots-qualification01: original public RED, the earlier exact-document mixed-boundary RED before the span extension, all setup/fixture/type failures, final 11 focused groups PASS, strict core types PASS, and 1,248 original-renderer differential cases / 95 scalar classifications PASS. A no-renderer/font-pack-denial child records zero optional import attempts. The differential uses exact Git 863 renderer bytes with only its relative symbol-font module URL rebound to the same installed dependency graph. A build that reused old core dist was explicitly identified and followed by a fresh normal build token. More required checks and source-bound durable receipts will be appended after critical review; these statements do not qualify a release.
