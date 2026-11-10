@@ -35,8 +35,8 @@
   "workerFiles": [
     {
       "path": "test/native-furniture-control.ps1",
-      "bytes": 90059,
-      "sha256": "d460945c9cb82f8ddcf101438c625c8d7e991167882e35286aa930070524180d"
+      "bytes": 90099,
+      "sha256": "528b18d4af829a51ffbb288be0120d62a4a0cb9e9bd2b8ad2e0e36faf3414afa"
     },
     {
       "path": "test/native-process.ps1",
@@ -155,5 +155,6 @@
       ]
     }
   ],
-  "scope": "API character range geometry only; no glyph/font-file/causal/clipping/native-acceptance assertion"
+  "scope": "API character range geometry only; no glyph/font-file/causal/clipping/native-acceptance assertion",
+  "shapeCoordinateEncoding": "Native numeric values promoted to Double before JSON to retain Single precision; no geometry edit or tolerance"
 }

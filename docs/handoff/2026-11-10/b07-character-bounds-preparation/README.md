@@ -1,5 +1,11 @@
 # B07 unmodified09 character-bounds preparation
 
+## Current correction / original proof held
+
+The original3b52source and66bba32-record packet below are preserved unchanged and **not accepted**: the original offline verifier correctly rejects a PS5 Single-to-JSON precision loss in copied shape coordinates. See [append01](append01/README.md) for the narrow report-only Double promotion and genuine zero-tolerance JSON roundtrip RED→GREEN. No source/input/native geometry changed; no epsilon or hidden controls. Current pure controls23managed/4Node pass. Native approval remains withheld until root reviews the corrected frozen worker/adapter/proof.
+
+## Historical initial preparation
+
 NEVER MERGE this diagnostic source/evidence branch. Fresh origin/main normally aligned to reviewed coordinator `e2fc890d8d8e0776b27a6bfecdd08b690ec96608`, in `C:/opf-work/b07-char`, branch `codex/evidence-b07-character-bounds`.
 
 Source: [tools/rr105-character-bounds](../../../../tools/rr105-character-bounds/README.md). One observation-only discriminator, no mutant or product fix. Exact original473 archive remains SHA4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2,101027bytes/147parts. Its source, zero-action plan and historical CLI preview remain exact. Current24tag-only evidence and every prior rejected native experiment remain separate and immutable.
