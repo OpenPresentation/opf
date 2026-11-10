@@ -673,5 +673,18 @@
     "checked": 21,
     "open": 10
   },
-  "release034Published": false
+  "release034Published": false,
+  "metadata": {
+    "source": "c6ade3d18741cac5144da5ec04c806546e887b4c",
+    "base": "cba166d72e6a306733ac747af65e8cf0d7a57a14",
+    "exitCode": 0,
+    "stepsPassed": 5,
+    "typecheck": "skipped-no-types",
+    "seconds": 27.9,
+    "file": "metadata-checks.json.gz",
+    "records": 9,
+    "decodedBytes": 21408,
+    "bytes": 9292,
+    "sha256": "c88c241eda8fe95b4b335f0fd683ee36ff3d9843add9385d9c52d9f941b707cb"
+  }
 }

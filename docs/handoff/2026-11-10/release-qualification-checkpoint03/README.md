@@ -13,3 +13,5 @@ Automatic approval review initially rejected the font agent's combined local-sea
 Vetoable decisions: fold the four narrowly reviewed repairs while preserving original REDs and all scope; merge217 only after its own current preview acceptance; keep production/current-consumer/native/global acceptance separate. Preserve demand-loading memory gains and hold the startup replay candidate because48slides regress. All31 original issue1139 checkbox lines remain21checked/10open. v0.34 remains unpublished.
 
 Replay: node docs/handoff/2026-11-10/release-qualification-checkpoint03/verify.mjs. This is an offline source/record audit, not combined CI, registry, native or release acceptance.
+
+Required metadata-only check at c6ade3d1 passed5steps in27.9s (build/Biome/changes/text/skills; typecheck skipped, no package tests). Its9raw records are retained in metadata-checks.json.gz. This is not final combined-source acceptance. Current site preview/merge evidence is independently replayed at [0d98188d](https://github.com/Data-Advantage/openpresentation-site/tree/0d98188daece0f1db2f1fa06bf311cd2605fd9ee/docs/handoff/2026-11-10-pr217-preview); production remains separate.

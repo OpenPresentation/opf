@@ -4,10 +4,10 @@
 
 ## Latest coordinator checkpoint — November 10, 08:05 UTC
 
-[Current repair batch, complete original combined-gate logs and source guards](release-qualification-checkpoint03/README.md). Working staging now cba166d72e6a306733ac747af65e8cf0d7a57a14; canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa. v0.34 is unpublished; all31original issue checkbox lines remain21checked/10open.
+[Current repair batch, complete original combined-gate logs and source guards](release-qualification-checkpoint03/README.md). Reviewed repair source cba166d72e6a306733ac747af65e8cf0d7a57a14; checkpoint-only descendants carry the same package code; canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa. v0.34 is unpublished; all31original issue checkbox lines remain21checked/10open.
 
 - Four critically reviewed leaves1260/1261/1262/1263 are normally folded, with 104exact incoming blobs and all burndown additions retained. Bar targets, demand encoded-weight coverage, entrypoint tests and strict continuation assertions are repaired. Never push those folded leaves again.
-- Original full519 gate is41PASS/10RED/1162.1s, preserved literally. Windows registry corrections pass9focused tests on a separate leaf; MCP oversized serialized resource is a genuine product defect now under bounded diagnosis. Seven golden differences and all remaining coherent/native/platform/registry gates stay open.
+- Current checkpoint-only mapper c6ade3d1 passed5steps/27.9s, typeSKIP/no package tests. Original full519 gate is41PASS/10RED/1162.1s, preserved literally. Windows registry corrections pass9focused tests on a separate leaf; MCP oversized serialized resource is a genuine product defect now under bounded diagnosis. Seven golden differences and all remaining coherent/native/platform/registry gates stay open.
 - Site217 current preview and realJ2 pass, scoped root visual acceptance complete; managed gate merged b68acc03 at07:59:20Z. Sole live root commit observer45117 watches exactb68 required-all/180s. Production remains unaccepted; original625RED retained.
 - Table069 observed packet03e and current24 RTL packet1e2 root independently replayed; limited table/edit/save/reopen facet accepted, glyph05/06/09/10 remainOPEN. New final consumer/reference/native generation remains owed after source repairs.
 - Initial font publication rejection was resolved by critical payload review plus trusted original GitHub authorization in a newly reviewed action; normalpush accepted and PR1262 exists. DEV credential-transfer rejection remains held.
