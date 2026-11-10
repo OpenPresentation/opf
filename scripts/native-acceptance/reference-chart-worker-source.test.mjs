@@ -20,7 +20,7 @@ const windowsOnly = {
 };
 test("separate worker/wrapper/managed-test sources are exact mechanical derivatives; original sources unchanged", () => {
   for (const item of referenceControllerDerivation())
-    assert.deepEqual(fs.readFileSync(path.join(folder, item.file)), Buffer.from(item.source));
+    assert.deepEqual(fs.readFileSync(path.join(folder, item.file)), Buffer.from(item.source), item.file + ": complete approved derivation");
 });
 test(
   "private worker refuses a direct invocation before any native bootstrap or output creation",
