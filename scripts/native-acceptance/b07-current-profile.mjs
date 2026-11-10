@@ -17,6 +17,8 @@ export const B07_REVIEWED_WORKER='3deb9cfbf3ab7a9fae8acabc2f139fd58dacc1c5';
 export const B07_WORKER_FILES=['native-furniture-control.ps1','native-process.ps1','native-process-check.ps1','native-furniture-harness-check.ps1','native-text-probes-check.ps1'].map(name=>'packages/pptx/test/'+name);
 export const B07_LIMITS={slides:1,topLevelShapes:16,targets:3,ranges:8,sampledUtf16:32,textUtf16:4096,archiveBytes:16777216,zipParts:4096,phases:3,pngs:3,timeoutSecondsMax:60};
 const root=fileURLToPath(new URL('../../',import.meta.url));
+// Match repositoryIdentity's canonical directory; do not normalize untrusted envelope values.
+export function assertB07ControllerDirectory(directory){assert.equal(directory,fs.realpathSync(root),'Wrong canonical B07 controller directory');}
 const json=value=>Buffer.from(JSON.stringify(value,null,2)+'\n');
 const hex=value=>assert.match(value??'',/^[a-f0-9]{64}$/u,'Explicit reviewed SHA256 required');
 const exact=(object,keys)=>{assert.ok(object&&typeof object==='object'&&!Array.isArray(object));assert.deepEqual(Object.keys(object).sort(),[...keys].sort(),'Unexpected or missing keys');};
@@ -115,7 +117,7 @@ export async function prepareB07Profile(spec,output){
 }
 export async function bindB07Profile(file,sha){
   assertB07Node();const {value:envelope}=await pinnedJson(file,sha);exact(envelope,['schemaVersion','profile','spec','output','controllerRepository','workerRepository','node','selectedCase','counts','limits','snapshots','nativeAcceptance','registryAcceptance']);assert.equal(envelope.schemaVersion,1);assert.equal(envelope.profile,B07_PROFILE);assert.equal(envelope.nativeAcceptance,false);assert.equal(envelope.registryAcceptance,false);exact(envelope.spec,SPEC_KEYS);
-  assert.equal(file,path.join(envelope.output,'execution-envelope.json'));assert.equal(envelope.controllerRepository.directory,root);assert.equal(envelope.controllerRepository.revision,envelope.spec.controllerRevision);assert.deepEqual(envelope.controllerRepository.files.map(item=>item.path),await b07ControllerFiles());await tableRepository(root,envelope.controllerRepository);
+  assert.equal(file,path.join(envelope.output,'execution-envelope.json'));assertB07ControllerDirectory(envelope.controllerRepository.directory);assert.equal(envelope.controllerRepository.revision,envelope.spec.controllerRevision);assert.deepEqual(envelope.controllerRepository.files.map(item=>item.path),await b07ControllerFiles());await tableRepository(root,envelope.controllerRepository);
   assert.deepEqual(envelope.node,{path:process.execPath,version:process.version,identity:fileIdentity(process.execPath)});assert.deepEqual(envelope.limits,B07_LIMITS);
   const source=await loadB07ProfileSource(envelope.spec);assert.deepEqual(envelope.selectedCase,source.selected);assert.deepEqual(envelope.counts,source.counts);assert.deepEqual(envelope.workerRepository,source.worker);assertTableOutputSeparate(envelope.output,[root,...['suiteDirectory','producerRepository','consumer','workerRepository','packedProof','probePlan','sourceMapping'].map(key=>envelope.spec[key])]);
   assert.deepEqual(envelope.snapshots.map(item=>item.path),['inputs/suite.json','inputs/case.pptx','inputs/source.opf.json','inputs/action-plan.json','inputs/text-probe-plan.json','inputs/source-mapping.json']);await tableFileRecords(envelope.output,envelope.snapshots);
