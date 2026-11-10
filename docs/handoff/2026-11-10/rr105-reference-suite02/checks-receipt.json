@@ -1,0 +1,68 @@
+{
+  "source": "1ef2bb1d473c8b68887ba9c466b0d8a811a1194d",
+  "sourceTree": "87f9c3abc240570564a0cb38523b7f6223ee49a3",
+  "mappedExit": 0,
+  "sourceOnlyMetadata": true,
+  "generationRetried": false,
+  "producerBuild": false,
+  "raw": {
+    "file": "checks.json.gz",
+    "bytes": 10664,
+    "sha256": "8628948bdd2152a08929e5279753959a6aebd77313edd42316fbe3836756c179",
+    "expandedBytes": 36994,
+    "records": 10,
+    "decodedBytes": 26719
+  },
+  "records": [
+    {
+      "name": "install.exit.json",
+      "bytes": 507,
+      "sha256": "a5f4e7f3c497079b5ce4874c725e02e36454ae757e3e521180f296f2f9be1687"
+    },
+    {
+      "name": "install.log",
+      "bytes": 4347,
+      "sha256": "b871cb04db5d51f5f3854d56d1978ef099a395b02447b6fed90b1d423cc6e059"
+    },
+    {
+      "name": "mapped.exit.json",
+      "bytes": 632,
+      "sha256": "6086578f494477d283b50981b72730b77b904f932c4b9a0bcdc8a300ecee8fa1"
+    },
+    {
+      "name": "mapped.log",
+      "bytes": 899,
+      "sha256": "8e138125ca78a6329f90fe25c957c8853b2c712d57434514930b0153ebd34635"
+    },
+    {
+      "name": "prerequisite-recovery.json",
+      "bytes": 317,
+      "sha256": "a3cd5bb1c551959b099a52d464b16991c9f759498436e8ba83c85fdc63afde66"
+    },
+    {
+      "name": "mapped/biome.log",
+      "bytes": 685,
+      "sha256": "db0aa298ab9d9f5ab8e944975bfd4c2adebc7b89b06e899c4cc950a1356d13e3"
+    },
+    {
+      "name": "mapped/build.log",
+      "bytes": 14587,
+      "sha256": "ec16dcee32dd1b01dbae68a97b810d95df36467eb2d3df510186ee28675ce318"
+    },
+    {
+      "name": "mapped/pnpm_run_check_changes.log",
+      "bytes": 2638,
+      "sha256": "1b7236e5e36e81704806a3239376fefd06ac78e96fe4c65eb1353659a5be9a84"
+    },
+    {
+      "name": "mapped/pnpm_run_check_skill-commands.log",
+      "bytes": 1037,
+      "sha256": "50574043a8d25218be5de939fa5a957c4b94e209ebb58dd244cd5d831de7cc73"
+    },
+    {
+      "name": "mapped/pnpm_run_check_text.log",
+      "bytes": 1070,
+      "sha256": "f7d7f5302b8b4895798eccf0f28ed847f6f3ef0c3737a3d8558e8cecc0bceb09"
+    }
+  ]
+}
