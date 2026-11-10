@@ -17,7 +17,7 @@ function wholeWords(geometry,svg,source){
   for(const line of lines)for(const word of line.trim().split(/\s+/).filter(Boolean))assert.ok(words.includes(word),`${where}: "${line}" breaks inside a word`);
  };
  check(label.fit.lines,'core lines');
- check([...svg.matchAll(/<text\b[^>]*data-opf-path="design\.header\.left\.text"[^>]*>([^<]*)<\/text>/g)].map(match=>match[1]),'drawn lines');
+ check([...svg.matchAll(/<text\b[^>]*data-opf-path="design\.header\.start\.text"[^>]*>([^<]*)<\/text>/g)].map(match=>match[1]),'drawn lines');
 }
 for(const measured of [false,true])for(const floor of [16,32])for(const [width,height]of [[1280,720],[720,1280]]){
  const deck={organization:{id:'opf',name:'Organization'},design:{fontScheme:'roboto',imageFit:'cover',dimensions:{widthInches:width/96,heightInches:height/96},header:{start:{image,text:'Keep both'},center:{text:'{{organization.name}}'},end:{text:'{{slide.section}}'}},footer:{start:{date:'Literal date'},end:{text:'{{slide.number}}'}}},slides:[{section:'Section',title:'Furniture',text:'Body',composition:{minFontSize:floor,overflow:'error'}}]};

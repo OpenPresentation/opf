@@ -1,0 +1,570 @@
+{
+  "source": "4e03508b64e3e83e9bbdc33b2e4cd597b8a22985",
+  "node": "24.21.0",
+  "pnpm": "10.33.2",
+  "playwright": "1.65.0",
+  "browser": "158.0.8127.18",
+  "mapper": {
+    "passed": 39,
+    "failed": 6,
+    "seconds": 432.3,
+    "steps": [
+      {
+        "step": "build",
+        "status": "passed",
+        "seconds": 9.6
+      },
+      {
+        "step": "biome",
+        "status": "passed",
+        "seconds": 1.4
+      },
+      {
+        "step": "pnpm run check:browser-safe",
+        "status": "passed",
+        "seconds": 2.6
+      },
+      {
+        "step": "pnpm run check:catalog",
+        "status": "passed",
+        "seconds": 1.3
+      },
+      {
+        "step": "pnpm run check:catalog-free",
+        "status": "passed",
+        "seconds": 3.4
+      },
+      {
+        "step": "pnpm run check:catalog-schema",
+        "status": "passed",
+        "seconds": 0.4
+      },
+      {
+        "step": "pnpm run check:changes",
+        "status": "passed",
+        "seconds": 0.7
+      },
+      {
+        "step": "pnpm run check:ci-scope",
+        "status": "passed",
+        "seconds": 8.1
+      },
+      {
+        "step": "pnpm run check:ci-workflows",
+        "status": "passed",
+        "seconds": 12.8
+      },
+      {
+        "step": "pnpm run check:diagram-doc-images",
+        "status": "passed",
+        "seconds": 2.4
+      },
+      {
+        "step": "pnpm run check:e1-current-after",
+        "status": "passed",
+        "seconds": 0.4
+      },
+      {
+        "step": "pnpm run check:engines-range",
+        "status": "passed",
+        "seconds": 0.9
+      },
+      {
+        "step": "pnpm run check:examples",
+        "status": "passed",
+        "seconds": 62.6
+      },
+      {
+        "step": "pnpm run check:examples-convert",
+        "status": "passed",
+        "seconds": 68.2
+      },
+      {
+        "step": "pnpm run check:first-deck",
+        "status": "passed",
+        "seconds": 4.6
+      },
+      {
+        "step": "pnpm run check:font-hotlinks",
+        "status": "passed",
+        "seconds": 7.9
+      },
+      {
+        "step": "pnpm run check:font-tracker",
+        "status": "passed",
+        "seconds": 2.5
+      },
+      {
+        "step": "pnpm run check:gallery-editor-imports",
+        "status": "passed",
+        "seconds": 0.4
+      },
+      {
+        "step": "pnpm run check:gallery-tracker",
+        "status": "passed",
+        "seconds": 2.2
+      },
+      {
+        "step": "pnpm run check:golden-update",
+        "status": "passed",
+        "seconds": 1.8
+      },
+      {
+        "step": "pnpm run check:libreoffice",
+        "status": "passed",
+        "seconds": 0.5
+      },
+      {
+        "step": "pnpm run check:native-acceptance",
+        "status": "FAILED",
+        "seconds": 25.0
+      },
+      {
+        "step": "pnpm run check:palette",
+        "status": "passed",
+        "seconds": 1.1
+      },
+      {
+        "step": "pnpm run check:playwright-pin",
+        "status": "passed",
+        "seconds": 1.0
+      },
+      {
+        "step": "pnpm run check:registry-golden",
+        "status": "passed",
+        "seconds": 2.8
+      },
+      {
+        "step": "pnpm run check:release",
+        "status": "passed",
+        "seconds": 1.0
+      },
+      {
+        "step": "pnpm run check:release-report",
+        "status": "passed",
+        "seconds": 0.5
+      },
+      {
+        "step": "pnpm run check:runners",
+        "status": "passed",
+        "seconds": 1.1
+      },
+      {
+        "step": "pnpm run check:schema-docs",
+        "status": "passed",
+        "seconds": 0.3
+      },
+      {
+        "step": "pnpm run check:schema-examples",
+        "status": "passed",
+        "seconds": 4.2
+      },
+      {
+        "step": "pnpm run check:schema-strict",
+        "status": "passed",
+        "seconds": 1.3
+      },
+      {
+        "step": "pnpm run check:skill-commands",
+        "status": "passed",
+        "seconds": 14.7
+      },
+      {
+        "step": "pnpm run check:skill-glossary",
+        "status": "passed",
+        "seconds": 0.2
+      },
+      {
+        "step": "pnpm run check:spec",
+        "status": "passed",
+        "seconds": 0.4
+      },
+      {
+        "step": "pnpm run check:stability",
+        "status": "passed",
+        "seconds": 50.4
+      },
+      {
+        "step": "pnpm run check:text",
+        "status": "passed",
+        "seconds": 3.0
+      },
+      {
+        "step": "pnpm run check:works-percent",
+        "status": "passed",
+        "seconds": 0.3
+      },
+      {
+        "step": "typecheck",
+        "status": "passed",
+        "seconds": 14.7
+      },
+      {
+        "step": "tests opf",
+        "status": "FAILED",
+        "seconds": 121.6
+      },
+      {
+        "step": "tests mcp",
+        "status": "FAILED",
+        "seconds": 87.4
+      },
+      {
+        "step": "tests render",
+        "status": "FAILED",
+        "seconds": 12.2
+      },
+      {
+        "step": "tests pptx",
+        "status": "FAILED",
+        "seconds": 4.7
+      },
+      {
+        "step": "tests editor",
+        "status": "FAILED",
+        "seconds": 5.2
+      },
+      {
+        "step": "tests gallery",
+        "status": "passed",
+        "seconds": 3.2
+      },
+      {
+        "step": "tests integration",
+        "status": "passed",
+        "seconds": 5.5
+      }
+    ]
+  },
+  "browserReplay": {
+    "nativeMeasurementCasesPassed": 3,
+    "mcpScenariosPassed": 16,
+    "firstAttempts": "missing exact revision1254; retained; official install then actual replay"
+  },
+  "files": [
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-build.log.gz",
+      "bytes": 14717,
+      "sha256": "e0bfe6e694ec0cd212e3ee9116ec77f1dea926de2252dc534ce52c98a7e74642",
+      "gzipSha256": "bde409b43f0a2064859249a3e4efc18f8ce2fdb9b572e018087529544b1ebe8f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-biome.log.gz",
+      "bytes": 70622,
+      "sha256": "df273ee567dee3742c5547f842adb33bcaccdcd8a446cc0b357e801cd994df08",
+      "gzipSha256": "ac5d19914c7689814cb57a13872eb97cc4e48b8ff2eb930dd884c1d97d432f09"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_browser-safe.log.gz",
+      "bytes": 1167,
+      "sha256": "7cc84725333dbb604556f42c3a4a1cd2e61539a8ec7eed3c9832536882042126",
+      "gzipSha256": "6f89acd8b2c1c508e047d88668c7cfd9d92f083bc84a63cae9bbeb80657404dc"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_catalog.log.gz",
+      "bytes": 1155,
+      "sha256": "67fbab73098ea61e148bc1f05bf366088ffafce3d6f35723f78435235ba1ea6b",
+      "gzipSha256": "51bb240e3c195902e3d514c74904bce148ad8e808b8d3d2c806c64e09ebd37af"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_catalog-free.log.gz",
+      "bytes": 203,
+      "sha256": "03a0d85cc9f33fa86d318c85cded9cc4f68d49da568268ec23ac41f67c2cb791",
+      "gzipSha256": "fa34ff67966ecea30dffda1c2f491b2e9735f965a211b3f9fb9028e81e7e65ab"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_catalog-schema.log.gz",
+      "bytes": 807,
+      "sha256": "8290caca9a6a082a602455b35ec8ff98a9f38c67699d4f8ca3a745d023d316b2",
+      "gzipSha256": "c744b9a1b1d260fa08a9604f75bb8be39df1affa818a2e84bed307f67a762bc7"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_changes.log.gz",
+      "bytes": 2683,
+      "sha256": "b476f04b932bd821b21c4ef3085f6981aed09d991deaed507e43e262ea981578",
+      "gzipSha256": "495e6faa9e28e6e6d98c1c6fb97d0189f5b41a6418d6f63889a0957a41c99755"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_ci-scope.log.gz",
+      "bytes": 3127,
+      "sha256": "dfc07d14997a9d407a7f71a5f4d65fd188c136bf8ced47f0bac23848432b9796",
+      "gzipSha256": "cbf1070682e1525204dfba1964d2324805dc5efafb588dae5c40773da316e50e"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_ci-workflows.log.gz",
+      "bytes": 10526,
+      "sha256": "1879b3e05f6dbb2bbcb1333aa1bbeefa47caed975644a1d19bb1cfcabe597848",
+      "gzipSha256": "108405ee12a8ecb296be4a3dcbdeb5ae222343f4c6283ee63c45883bd7561a84"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_diagram-doc-images.log.gz",
+      "bytes": 174,
+      "sha256": "1079c3836ee4634f9949336a46b6f89b074ca948298f218cd86479967d265e97",
+      "gzipSha256": "222273d88e3556f04d174a491694acfd1ce7b2da1986ff75124cf392258d700c"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_e1-current-after.log.gz",
+      "bytes": 3306,
+      "sha256": "fc7c347dd35e96a39705d11a9ec219c1fac4fbce06321343af68f9c2be720e0e",
+      "gzipSha256": "7c0dc115352c915c97f5d577799b31e0bdf6e32a4f55bf590897dfaca85a31b5"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_engines-range.log.gz",
+      "bytes": 860,
+      "sha256": "7dba88fc91257c42a147240b2f818fadfd97e3631c1d58db204f64d392c39c10",
+      "gzipSha256": "dee6a61f56430e2115e144398908bd0ba3f8a9bb6da5175cd6a071821973f582"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_examples.log.gz",
+      "bytes": 516,
+      "sha256": "f5fb148078bdb5bdd0b80c148e9097ae5c01e5089c64035e883f4f63af5b5190",
+      "gzipSha256": "29b5ba13dc972b9ea780f6f498e7c758b214bbfc82209e2a46b8eadf5c582498"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_examples-convert.log.gz",
+      "bytes": 999,
+      "sha256": "ba62a0de064ef925a2e1f2df8d184a1f477b458690216be4c1e722975e221014",
+      "gzipSha256": "093f1495ab6ccd0bdbb86969b9e84c2f363b5328b88807d5c49f0bbd12aea06f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_first-deck.log.gz",
+      "bytes": 403,
+      "sha256": "cf8785807dfa5a531fa744e8845b6d5a87b7fdaf5a6af7d3f66596403b5c3f95",
+      "gzipSha256": "1cc066bcfe69ec667e80cc01073294ba1fdeca59538d0efd6bdb49c10bccf34b"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_font-hotlinks.log.gz",
+      "bytes": 866,
+      "sha256": "fac0197ccc6e44eb551fdfdd26ca92ac835d38b6d93f04f4b5a57c125b10e9ee",
+      "gzipSha256": "82bb8c9699162faf7dfe8a6537fd139431a2eb69c66d25648609df5fcdcdb49a"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_font-tracker.log.gz",
+      "bytes": 4659,
+      "sha256": "0e24ad05914412627277fc53404afa196039d85674686413162c3430e8b4e510",
+      "gzipSha256": "b785a0a50f1d97e9d47561daac92ece1d347c4b1e8693d5500a3f2ff9afe188f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_gallery-editor-imports.log.gz",
+      "bytes": 653,
+      "sha256": "c82b946cdd0402b95e6728a70cafd6da4ff47bdca854289776091782e6426c64",
+      "gzipSha256": "00583a46644774c925b3f9c99eacb63e2e76b20831bef553ccc62e6b27a4591d"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_gallery-tracker.log.gz",
+      "bytes": 2017,
+      "sha256": "68808abef8292e33b82ad236532c81433e02103bea3944bde8def485033feb8b",
+      "gzipSha256": "73bc07a3b07198594b1b6de0bd1037091061a5d38fb366470a90b054a1311c58"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_golden-update.log.gz",
+      "bytes": 1015,
+      "sha256": "bc072cee1de917be0ff58365cd19820a198dc1a26c4f1f3a7c2973970eab0552",
+      "gzipSha256": "e5465a8cd82a450ce86ae6f248d70d97a405fded9365556869496a2456aef45f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_libreoffice.log.gz",
+      "bytes": 1438,
+      "sha256": "d12fba4e0e953575ee29b18adc6c0e798a201d132b11f0db19aee7645be1d71f",
+      "gzipSha256": "ba96c4125e52d47e1c06786a66e9d5bea59da1fa0e8f6b29e2ae47b542db6497"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_native-acceptance.log.gz",
+      "bytes": 19106,
+      "sha256": "c4cec757f434b7cb547a848e7d5c098c7ec2732546fdf679efa7ed9691f3f1a6",
+      "gzipSha256": "2e3e421bfe8cb827bd79657690dfb4458a3594741669e730dfe2aa136b33f83d"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_palette.log.gz",
+      "bytes": 1428,
+      "sha256": "75a93d4a78243d342af245212138bfd4427332a703bf97b3242c73babe0d18ee",
+      "gzipSha256": "fa72ae0248a4690860178a9bca21182dabd79a1885540325a13da7c3ca126eeb"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_playwright-pin.log.gz",
+      "bytes": 793,
+      "sha256": "c73fa6735b09d932e228df6b98dccc512acefe60638f9b24074bc170d36429cf",
+      "gzipSha256": "f6924aa9e069fd8dd352d1ca969210da623db13f919a088e3c9af089c04cc068"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_registry-golden.log.gz",
+      "bytes": 700,
+      "sha256": "cff740568473e9ed6d49357488ad484a18bff926d6c76f1badf3a0279a19f0ec",
+      "gzipSha256": "8edfe2e377839bc7cffe73a056f2b89c1fdff99ca7c0dc834ed3c708da12a8d4"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_release.log.gz",
+      "bytes": 5615,
+      "sha256": "d8641b4c9cc99ea0eba56edec541d9c7caca4d19cfddbe4143a57f263695061d",
+      "gzipSha256": "3f51b1482b0bc1c921399ac4d75d9bff5ef079d2108c6e70297bc58ce41e3462"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_release-report.log.gz",
+      "bytes": 836,
+      "sha256": "c98d5b63405350b84717dfe2afd18716a4761bcc94fbe364ce86d7bb7085cb50",
+      "gzipSha256": "4555ad997e0f1950e55590d6817b42cd4c539eaa2521aa7792c6220995d5e237"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_runners.log.gz",
+      "bytes": 1774,
+      "sha256": "5a635d8416d2db19bd19eed318bc0bb2ba1cf40991c0b637b36dbf17578a63cd",
+      "gzipSha256": "2bf1f40fefb825452ac969fe0ad3ea21ee78f9c18906f633ffe7d54e818a8f92"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_schema-docs.log.gz",
+      "bytes": 193,
+      "sha256": "3afd2af937b9833703768a9579361acf1957cf8ef0b62815f1ddb4275276d877",
+      "gzipSha256": "8b317634ded6a4d6b7bdbdf9f98d30943e1af655f5e06fc43a101cd98abb6e29"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_schema-examples.log.gz",
+      "bytes": 1083,
+      "sha256": "72f05e5738e4ba1e690f065d27e152c2f3b4b3f8405d58ebecb8966a8829f757",
+      "gzipSha256": "9b60824ec68ee50fbe533ef15f9a40827deaa84956bddeb8f67b7ea1bebbb84b"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_schema-strict.log.gz",
+      "bytes": 506,
+      "sha256": "a03daabe8b126cc7799fd9b921a3cab937e88f1e0b04f1bd89f063a716ea2a8e",
+      "gzipSha256": "aa2e9806eec95c981ddd141e40d021e37f88be507f549c62c5b41c3f40cba4c0"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_skill-commands.log.gz",
+      "bytes": 1052,
+      "sha256": "02e5f3c66179c466d01ff3c0d6c9d80a958be4d10b11b90b249f573cf8a87d6e",
+      "gzipSha256": "21978e100cac94750d33c173f1f00827ba631d79ae3fcae73a57fc3d483611c8"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_skill-glossary.log.gz",
+      "bytes": 422,
+      "sha256": "02906e9b118b0b0b2fbede5e82c2342e7ee5944a7fb07fc20ae9cbbdf460c097",
+      "gzipSha256": "f0077a6951cca303b97505cefac358e32183dcdf834daf52f8d72ed45232343f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_spec.log.gz",
+      "bytes": 1052,
+      "sha256": "4e304ad2cfe73fdae877cfbea72646fa7db18aa184c4a85c8333e541e21edbf7",
+      "gzipSha256": "15596d689abf7c3d44ec304aa100000251767f70f38c10f0308e2d282d395748"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_stability.log.gz",
+      "bytes": 4006,
+      "sha256": "21dd1bfa1afe5f4eee8fa07f24680a9bb990d77a06e5d1a70083c4c8a499d83f",
+      "gzipSha256": "12e159c0b632d7c440442e0563b0548131a7e5c5d8909cae284e86125b6f0d09"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_text.log.gz",
+      "bytes": 1090,
+      "sha256": "6cb2265bd00811ae387fd48a3f518135ecb94f988c7584cc8e40fa9bbd070fc2",
+      "gzipSha256": "2fc84e65ab416740839b3b42f09f566be3b956dda38ec54aac0143d7f04ff4c3"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-pnpm_run_check_works-percent.log.gz",
+      "bytes": 554,
+      "sha256": "26c800d2f8e47aa70267d229487dd861c9dc5ae624a83a28f365a4f14e2c50eb",
+      "gzipSha256": "711f15cfabdd151d1c1e3570813e9925fe18f09fdfe1198bbce54bd8553a17b1"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-typecheck.log.gz",
+      "bytes": 5298,
+      "sha256": "de2ba7af659d2bf9619cd1f84fbbcee633a465459cbc04eef08914144948874d",
+      "gzipSha256": "28ff8def69e678352d8aba5a7b796a6df81092f79ec2153a2b710d1fed8a9ab6"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-tests_opf.log.gz",
+      "bytes": 429534,
+      "sha256": "c0ff63ec84102c7282b8572afd57814a692c297150574d73da947bd5085233b7",
+      "gzipSha256": "ae85d07566bb06ebe6e2dcda5f10badadf5e58c609ff20b30a6a9a9fe7c3ef83"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-tests_mcp.log.gz",
+      "bytes": 10325,
+      "sha256": "060ee8c78ce898d34c76fde7d75ceb8440b6d621c504c57e4a192ee5bd0be4ac",
+      "gzipSha256": "77b1552d7c3b80fadb576927f51b0dda95bfc31af7ecc494e0702cbd87a44a2f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-tests_render.log.gz",
+      "bytes": 3737,
+      "sha256": "9a2d920098e5b54a6950922a7a2cd891817d8d23cd003bf492dac7a9c32477c5",
+      "gzipSha256": "1347c685384c9f941641ebed61a0ad8bc480f9e06ed5b6a2efdf3b749e152276"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-tests_pptx.log.gz",
+      "bytes": 3242,
+      "sha256": "38ddf8bc1846b3976b5eeeaaf35ac6d721dfe1330f438e931a9c81d91fcfe1af",
+      "gzipSha256": "f1b63805bb4ef635b3c647977dbc8dec75ca1e554513a455383a64e4986f0adb"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-tests_editor.log.gz",
+      "bytes": 3257,
+      "sha256": "f3287469d6ef1183f802a56e89dbcdfa39739263dbc34ed8c683941ca1e8bb6d",
+      "gzipSha256": "18cae21af9fa7e08f227477890e451d59cee570e364dc7baddad57d1b3d54cfe"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-tests_gallery.log.gz",
+      "bytes": 28595,
+      "sha256": "44764e95ed3ceba5b644be82e960ca92b1d54d2524e2b2126095432f770223f1",
+      "gzipSha256": "d4179435bcc8cedf3b7dde3cb3c2810716b9b86f471f32f630611082868a150b"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/mapped-tests_integration.log.gz",
+      "bytes": 4015,
+      "sha256": "f46c65c66de7a29de748cecca34db408ee30ea1a2571d242e18e945afedd329e",
+      "gzipSha256": "f412332dbbe0139a0c6ca45764f1f20e855380205a611cf16ecd010c45fc4252"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-final-changed.log.gz",
+      "bytes": 24441,
+      "sha256": "d5b597818727be755b452021267d6f1724fa7a87b0be5c4e10d6908670bde370",
+      "gzipSha256": "d8de25db83866133b06403bc72a951f140678e544b3c8ee5730e617f915fd527"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-final-install.log.gz",
+      "bytes": 402,
+      "sha256": "ddf8b765235bbfeb64c93a427cd0d4055c072c574676d35b7e6bd19333762ac6",
+      "gzipSha256": "bb114c10ee74844885e3bfaece9c7d09f69ad1bd11eee1495b4cba6785acf8bd"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-final-browser-install.log.gz",
+      "bytes": 2360,
+      "sha256": "04f2534be4b686c208e583b6360a44cc6f5d8f7af25adf2a8f2233c3f08768bb",
+      "gzipSha256": "82fc0ced23ca61eeb6d2897734ea106a9ad75fe5feb898ff570d41dc2cf85ea7"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-final-native-measurements-browser.log.gz",
+      "bytes": 8773,
+      "sha256": "0a54a45523071b764a64e95ba365a0a8eabe07a415dc65a7218a6ba2f66ea186",
+      "gzipSha256": "6f1966c4750b305679defa8a6419de23b75bbde65cf69beff3a057e4547afb6b"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-final-deck-app-browser.log.gz",
+      "bytes": 1193,
+      "sha256": "4b22f1930cc9b84fd5eddf3a652e5d0e83b01d149e2a29656d0eaa1112fcb7a3",
+      "gzipSha256": "f51c3f1501557e7e739f1e5737d7adf3a9d6615fb498aaba18c7c612d6c06249"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-final-native-measurements-browser02.log.gz",
+      "bytes": 7880,
+      "sha256": "c48f25093d80b9e134855ab18114a0e11abd4e8c7c369e9b3065577fb8a4c692",
+      "gzipSha256": "f3b7a1fbdc9cb05600b792ef8af80f9bfc681920e85e8e086b3260d574c15c59"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-final-deck-app-browser02.log.gz",
+      "bytes": 1429,
+      "sha256": "b031c00e68c066e0028ee55cf9d204e1840a839a2643bd5903196e8e871f51da",
+      "gzipSha256": "8e6cf8b2b3bccffe10de2c479e998b43fc534b9fcfed2b4c45b8427ff1bcb634"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-hydration.json.gz",
+      "bytes": 322576,
+      "sha256": "93f317377dc7afeffd9a04229fcdcaade28ef35974d55f2a4721ef3f796e0e14",
+      "gzipSha256": "e463464c39462274175043c4e01a51ddba64a6006b6e4dea09628b9ff6cca314"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/schema-decision-packet/checks/final-4e/opf-schema-font-hydration.json.gz",
+      "bytes": 5028,
+      "sha256": "2c8c9e81f260f7d3971f9b3dd826270637b573ddc3666fa3ccf7981599d967fb",
+      "gzipSha256": "e38b397337570c6123f147ff28986fd5d72f706452524aaeb7d8125bb9162b46"
+    }
+  ]
+}

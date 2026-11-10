@@ -74,7 +74,7 @@ const deck = () => ({
   assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.0", { placement: { edge: "start" } }), (error) => error.code === "placement-edge-taken");
   assert.equal(prepareImageTreatment(presentation, "slides.0.blocks.0", { placement: { edge: "top", size: 0.3 } }).changed, true);
   assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.2.blocks.0", { placement: { edge: "end" } }), (error) => error.code === "placement-not-top-level");
-  assert.deepEqual(readImageTreatments(presentation, "slides.0.blocks.0").usedEdges, ["left"]);
+  assert.deepEqual(readImageTreatments(presentation, "slides.0.blocks.0").usedEdges, ["start"]);
   assert.equal(readImageTreatments(presentation, "slides.0.blocks.2.blocks.0").placeable, false);
   for (const [fields, message] of [
     [{ fit: "crop" }, /cover, contain, stretch/],
