@@ -50,3 +50,17 @@ The physical entry always requires exactly3complete slides. A distinct fixed1sli
 Actual generation is still UNRUN and coordinator-gated. It requires a clean explicit reviewed source revision, exact externally expected SHA256 of the complete strict six-package installed identity, unchanged ce92 supervisor, fresh external output, pinned Node24/date/seed/full provenance and actual font-file hashes. The generator inspects all real exported shape counts BEFORE any case is sealed, requires exact source data/references without duplicate shapes through public import, and writes the pure title comparison. A cap violation stops preparation; no cap widening or label omission is allowed. Use a separate clean controller worktree for envelope creation so it never impersonates the generation repository.
 
 No current-consumer generation, preview render, product export, Office/COM/process inventory or native acceptance has occurred in this lane. Original59/fd13/four-WHOLE source/outputs and their producers remain untouched. This source is not a native editability or release-support claim. One final focused source/managed run and parent review are pending at this checkpoint; the combined required changed gate remains parent-scheduled.
+
+## Exact source/pure checkpoint after wiring
+
+Committed/tested source: `6bdd823a9ee2d6120c187f17df7ac023717b11ed`, tree `644acf3d21cfc3ec8990fabc16544280760b8de2`. The single final focused run was ACTUALLY terminal0: **18PASS,0FAIL,0SKIP in12.18seconds**, including55actual-function MANAGEDFAKE faults, the lifecycle journal, and actual child create/verify/default-pure checks. Removing each of the six mandatory installed package manifests (including Gallery) and changing controller source are refused. All packages in that child fixture are explicitly synthetic identity records, not a product consumer or engine build. The unchanged supervisor is copied/hash-checked only; `RunOffice` is absent and no native output directory exists.
+
+The append-only `wiring/` packet preserves293records/2,210,456decoded bytes (305,484byte gzip), including initial setup/source refusals, formatter diagnostics, final tests, all managed fake outputs and both public pure-child attempts. It binds19native source files and proves the entire packages/spec/workflows/lock/manifests plus original generator/seven files unchanged from276. The original fd13 suite hash was verified read-only. The original WIP raw packet and the failed outcomes remain unchanged.
+
+Offline verifier (does not rerun tests or require an installed product consumer):
+
+```sh
+node docs/handoff/2026-11-09/rr105-reference-witnesses/wiring/verify.mjs
+```
+
+Actual consumer generation/export/render, exported shape-count and real frame/XML proof, combined required check, peer review, CI and Office/native acceptance remain owed. The generator source exists, but **do not execute it until the coordinator approves a fresh genuine six-package current consumer and explicit source/runtime identities**. The profile can be exercised in pure verification mode against a separately prepared hash-bound suite; it grants no generic automatic launch. There is no native editability, saved-PPTX parity, physical font or release claim here.
