@@ -1,0 +1,272 @@
+{
+  "kind": "RR114_PREVIOUS_OWNED_VALUE_SOURCE_QUALIFICATION",
+  "base": "bcc7d76d7eeeca8cd6102ef6a54a27fd9d4cce38",
+  "source": "de1015ba743dae7561652c9329bfd001c3bdc0d0",
+  "tree": "8b8022c5decd7e175c40a0300b1e8c3ab4c10f72",
+  "sourcePaths": [
+    "changes/rr114-replay-values.md",
+    "docs/handoff/2026-11-10/rr114-replay-values/README.md",
+    "docs/programs/release-readiness/burndown.md",
+    "packages/render/src/font-preparation-replay.js",
+    "packages/render/test/node-demand-replay-values.mjs"
+  ],
+  "sourceFiles": [
+    {
+      "file": "changes/rr114-replay-values.md",
+      "blob": "222af916391ddaa1fd9acdc8bab77efa0cef07b4",
+      "bytes": 250,
+      "sha256": "9589ce14433979e69cc93063236debe4dc1568c71eca6e2ea23216dfca815249"
+    },
+    {
+      "file": "docs/handoff/2026-11-10/rr114-replay-values/README.md",
+      "blob": "55f95a672dd54e5884a3feb19e096e384fadcd03",
+      "bytes": 1956,
+      "sha256": "2d1631a82fe3eb6ffddc6297eff519a7ec78cf0ccda1c21f4dc16119c619fdd7"
+    },
+    {
+      "file": "docs/programs/release-readiness/burndown.md",
+      "blob": "556810504191f32f9535d9f94f8b93105f31e1b1",
+      "bytes": 436039,
+      "sha256": "0bcb68edaf7bb53212f7c5379b2d24c886b2976c941c058b8b07a3da35cdc6ff"
+    },
+    {
+      "file": "packages/render/src/font-preparation-replay.js",
+      "blob": "ca357d4e6138c8293ba17b4e4cdbd8aa6e209c99",
+      "bytes": 14555,
+      "sha256": "e55ac889efd93a260b794e4f163ae94e26c0a969b7f0660c82441738b6b997a7"
+    },
+    {
+      "file": "packages/render/test/node-demand-replay-values.mjs",
+      "blob": "ad2974c1716e04eb104d3d44fdeb2a8ddb62e9bc",
+      "bytes": 5106,
+      "sha256": "00cbc974b1208707d01ae5bad4486a3f898e6ea0706d7737f3dedc75b61ea022"
+    },
+    {
+      "file": "packages/render/test/node-demand-replay.mjs",
+      "blob": "0379e8907b707dc4f93d3ed55365f4d16007cb96",
+      "bytes": 30408,
+      "sha256": "b2bef6873b34d8cc2829c7d66887d92600b78ea67f56ab91751dada2a86bd607"
+    },
+    {
+      "file": "packages/render/src/font-demand.js",
+      "blob": "43797fc43db254d7cf0bd1eaeefbd1288b5e1504",
+      "bytes": 20695,
+      "sha256": "b909a71f3a88099be6f040277689ce6321593a3263676261022a03ce155d66a9"
+    },
+    {
+      "file": "packages/render/src/lazy-fonts.js",
+      "blob": "aa602b7914b1010177ce3992235a0a083b90299b",
+      "bytes": 28042,
+      "sha256": "685da6dca08eb8964fe3ed69046bda2b042960580aedee453a1a3c24b24b0e43"
+    },
+    {
+      "file": "packages/render/src/font-preparation-context.js",
+      "blob": "dc8cca8b99f42417cb2f1913389c0abeaab6e0b4",
+      "bytes": 2423,
+      "sha256": "e932dafb28742997df6bd727e02e7349508edc595108184a44884a86ffff6ba1"
+    },
+    {
+      "file": "packages/render/src/fonts-node.js",
+      "blob": "cfb775a76938b163730a3e79bf5d4491cc13a258",
+      "bytes": 26164,
+      "sha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "file": "spec",
+      "blob": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "file": "packages/javascript",
+      "blob": "565ae965fe79042c1c081cd72c48afd4a4e76248"
+    },
+    {
+      "file": "packages/gallery",
+      "blob": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "file": "packages/pptx",
+      "blob": "18e200482c23ff7e272e8c4de68d9131d24aec91"
+    },
+    {
+      "file": "packages/editor",
+      "blob": "1b1362e5d8f9813135a5426b167397afe5d16a79"
+    },
+    {
+      "file": "packages/cli",
+      "blob": "74c6c57b2d099d88eb4e85f969a3f52ee8267908"
+    },
+    {
+      "file": "packages/mcp",
+      "blob": "4615620db7103deb684d39d8582bf28ceb23912f"
+    },
+    {
+      "file": "scripts",
+      "blob": "c75be32ff561d9ee5e6e4a15b78b356ec2eaa7de"
+    },
+    {
+      "file": ".github",
+      "blob": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "blob": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "blob": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "file": "package.json",
+      "blob": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    },
+    {
+      "file": "packages/render/package.json",
+      "blob": "07ad8b819a6897bf4d7881fda22917ad98deeb4f"
+    },
+    {
+      "file": "packages/render/test/golden",
+      "blob": "68dd38c05ba762f104515c4b5a35fe847c91059d"
+    },
+    {
+      "file": "packages/render/test/node-demand-replay.mjs",
+      "blob": "0379e8907b707dc4f93d3ed55365f4d16007cb96"
+    },
+    {
+      "file": "packages/render/src/font-demand.js",
+      "blob": "43797fc43db254d7cf0bd1eaeefbd1288b5e1504"
+    },
+    {
+      "file": "packages/render/src/lazy-fonts.js",
+      "blob": "aa602b7914b1010177ce3992235a0a083b90299b"
+    },
+    {
+      "file": "packages/render/src/font-preparation-context.js",
+      "blob": "dc8cca8b99f42417cb2f1913389c0abeaab6e0b4"
+    },
+    {
+      "file": "packages/render/src/fonts-node.js",
+      "blob": "cfb775a76938b163730a3e79bf5d4491cc13a258"
+    }
+  ],
+  "runtimeChanges": [
+    "packages/render/src/font-preparation-replay.js"
+  ],
+  "existingReplayTestsChanged": false,
+  "limits": {
+    "entries": 4096,
+    "bytes": 524288,
+    "previousIdAllowanceBytes": 16
+  },
+  "checks": {
+    "install": {
+      "exitCode": 0,
+      "offline": true
+    },
+    "build": {
+      "exitCode": 0,
+      "packages": [
+        "opf",
+        "gallery",
+        "render",
+        "pptx"
+      ]
+    },
+    "focused": {
+      "pass": 38,
+      "fail": 0,
+      "skipped": 0
+    },
+    "neighbors": {
+      "pass": 23,
+      "fail": 0,
+      "skipped": 0,
+      "lazyResolutions": 558
+    },
+    "syntax": {
+      "files": 338,
+      "failed": 0
+    }
+  },
+  "performanceResult": false,
+  "aggregateChangedCheck": "UNRUN_ROOT_COORDINATED_COMBINED_GATE",
+  "officeRun": false,
+  "nativeAcceptance": false,
+  "renderTrialRun": false,
+  "notes": [
+    "Existing neighbor suite includes normal in-process PPTX export/XML checks; this is not Office or native-suite generation.",
+    "Install warnings retained; the original install exit receipt did not include a source field.",
+    "No new before-failure is claimed for this transparent optimization."
+  ],
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 47603,
+    "sha256": "f576a6d5b572f48ac759cc062eedac70f56e9f510d5f3c811ef66bff2f4e20b0",
+    "expandedBytes": 197887,
+    "records": 12,
+    "decodedBytes": 147113
+  },
+  "records": [
+    {
+      "name": "qualification/install.log",
+      "bytes": 4325,
+      "sha256": "b21fea3550e2ea16b745683e6f2e8597a9d1a2e4d229b98a8ef2ee7427f90b09"
+    },
+    {
+      "name": "qualification/install.exit.json",
+      "bytes": 14,
+      "sha256": "6041df3e9b345d68be886f995c452395674ea950cd3ca9992c13b64f3aa9cbd0"
+    },
+    {
+      "name": "qualification/build.log",
+      "bytes": 12006,
+      "sha256": "abcc4ba918ea21a0448beeedb43dc84e0ffa78fa3354c109351bae648776038f"
+    },
+    {
+      "name": "qualification/build.exit.json",
+      "bytes": 66,
+      "sha256": "137694d3eb4d78e6b95c02318680dd6e997e1b38165127c8fcd3fd90bc4035a5"
+    },
+    {
+      "name": "qualification/focused.log",
+      "bytes": 4592,
+      "sha256": "5e6056def0f53bb7d4ba0fd244de758e572a1aa73fba1f7201096116a260cd84"
+    },
+    {
+      "name": "qualification/focused.exit.json",
+      "bytes": 66,
+      "sha256": "137694d3eb4d78e6b95c02318680dd6e997e1b38165127c8fcd3fd90bc4035a5"
+    },
+    {
+      "name": "qualification/neighbors.log",
+      "bytes": 2897,
+      "sha256": "465f6c52591c8cd2a8eee39302d806cfa755ab8b92bb97aefba214d4683b0dc3"
+    },
+    {
+      "name": "qualification/neighbors.exit.json",
+      "bytes": 66,
+      "sha256": "137694d3eb4d78e6b95c02318680dd6e997e1b38165127c8fcd3fd90bc4035a5"
+    },
+    {
+      "name": "qualification/syntax.log",
+      "bytes": 29,
+      "sha256": "117dfe6c511e08542b7451288b4d65c9b828195b54b048a7c1ac924e48b4e86f"
+    },
+    {
+      "name": "qualification/syntax.exit.json",
+      "bytes": 66,
+      "sha256": "137694d3eb4d78e6b95c02318680dd6e997e1b38165127c8fcd3fd90bc4035a5"
+    },
+    {
+      "name": "source/diff.patch",
+      "bytes": 18850,
+      "sha256": "d440ba152b90eaf22926586ec77f3feceb99d2372ca290e43162bdeb28081b15"
+    },
+    {
+      "name": "qualification/build-byte-audit.json",
+      "bytes": 104136,
+      "sha256": "3342b5cbbb13b99997f93af7015834fb0149fce2dc631819e31e08a813f7739b"
+    }
+  ]
+}
