@@ -7826,7 +7826,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (references.length && valueAxis) {
         const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
         const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
-        const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+        const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) ?? chartPlotInset(drawn.chart,data,{valueAxis,...(layer?{layer}:{})},{...plotGeometry,box}) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
         const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
         if (placed && plot) {
           layer = {...layer, plot, references: placed};
