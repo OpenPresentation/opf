@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {mkdtempSync,mkdirSync,writeFileSync,rmSync,symlinkSync,realpathSync} from 'node:fs';
+import {mkdtempSync,mkdirSync,writeFileSync,rmSync,symlinkSync,realpathSync,statSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import test from 'node:test';
-import {registryBindings} from './registry-toolchain.mjs';
+import {registryBindings,registryFile} from './registry-toolchain.mjs';
 import {packageManagerInvocation} from './package-manager.mjs';
 
 test('real installed imports and browser entries stay inside consumer; ancestor and symlink escapes refuse',async()=>{
@@ -29,11 +29,21 @@ test('real installed imports and browser entries stay inside consumer; ancestor 
   const ancestor=path.join(root,'node_modules/@openpresentation/ancestor');mkdirSync(ancestor,{recursive:true});writeFileSync(path.join(ancestor,'package.json'),JSON.stringify({...manifest,name:'@openpresentation/ancestor'}));writeFileSync(path.join(ancestor,'index.js'),'export const leaked=true;');writeFileSync(path.join(ancestor,'browser.js'),'export const leaked=true;');
   await assert.rejects(tools.import('@openpresentation/ancestor'),/outside the installed consumer/);
   assert.throws(()=>onResolve({path:'@openpresentation/ancestor'}),/outside the installed consumer/);
-  rmSync(path.join(installed,'exact-source.js'));symlinkSync(path.join(ancestor,'index.js'),path.join(installed,'exact-source.js'));
+  const escape=(name,target)=>{
+   const entry=path.join(installed,name);rmSync(entry);
+   // Windows directory junctions need no file-symlink privilege. The same final containment guards must refuse them.
+   // POSIX retains the actual file-symlink cases; the Windows nested control also resolves an existing JavaScript file.
+   symlinkSync(process.platform==='win32'?ancestor:path.join(ancestor,target),entry,process.platform==='win32'?'junction':undefined);
+   if(process.platform==='win32'){
+    const file=path.join(entry,'index.js');assert.ok(statSync(file).isFile());assert.equal(realpathSync(file),path.join(ancestor,'index.js'));
+    assert.throws(()=>registryFile(modules,pathToFileURL(file)),/outside the installed consumer/);
+   }
+  };
+  escape('exact-source.js','index.js');
   assert.throws(()=>fallback({path:'@openpresentation/opf-editor/exact-source'}),/outside the installed consumer/);
-  rmSync(path.join(installed,'browser.js'));symlinkSync(path.join(ancestor,'browser.js'),path.join(installed,'browser.js'));
+  escape('browser.js','browser.js');
   assert.throws(()=>onResolve({path:'@openpresentation/probe'}),/outside the installed consumer/);
-  rmSync(path.join(installed,'index.js'));symlinkSync(path.join(ancestor,'index.js'),path.join(installed,'index.js'));
+  escape('index.js','index.js');
   await assert.rejects(tools.import('@openpresentation/probe'),/outside the installed consumer/);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
