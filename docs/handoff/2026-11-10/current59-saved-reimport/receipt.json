@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "source": "bf928505ac230c56e1bd35b1477da8fdc229c267",
+  "records": 89,
+  "rawBytes": 17021555,
+  "compressedBytes": 3586224,
+  "archiveSha256": "6d9016f87826c304bf276515075722a78d03fd53a05ec9778dba824692995b77",
+  "counts": {
+    "rows": 19,
+    "uniqueImports": 17,
+    "equal": 14,
+    "unequal": 5,
+    "importErrors": 0
+  },
+  "protocolCompleted": true,
+  "priorMatrixSha256": "40dde532d6c67d08841c63dd3030f97b5659c64b5e7aaed1878dc37e6b3522f5",
+  "priorPacketSha256": "c33ed09136a6d8b4d3a0ecaf9a700fc0b40d69f30453fc499c57f3d658333c18",
+  "nativeAcceptance": false,
+  "neverMerge": true
+}

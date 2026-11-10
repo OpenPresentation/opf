@@ -1,0 +1,385 @@
+{
+  "schema": 1,
+  "kind": "CURRENT_INSTALLED_PUBLIC_FROMPPTX_OFFICE_FREE_SAVED_REIMPORT",
+  "started": "2026-11-10T06:23:20.857Z",
+  "rows": [
+    {
+      "case": "list-description-native-edit",
+      "import": "S01",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "list-description-native-edit-comparison.json"
+    },
+    {
+      "case": "chart-treemap-category",
+      "import": "S02",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-treemap-category-comparison.json"
+    },
+    {
+      "case": "chart-histogram-single",
+      "import": "S03",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-histogram-single-comparison.json"
+    },
+    {
+      "case": "chart-pareto-multi",
+      "import": "S04",
+      "equal": false,
+      "differenceCount": 1,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-pareto-multi-comparison.json"
+    },
+    {
+      "case": "chart-box-multi",
+      "import": "S05",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-box-multi-comparison.json"
+    },
+    {
+      "case": "chart-waterfall-single",
+      "import": "S06",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-waterfall-single-comparison.json"
+    },
+    {
+      "case": "chart-funnel-category",
+      "import": "S07",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-funnel-category-comparison.json"
+    },
+    {
+      "case": "chart-world-category",
+      "import": "S08",
+      "equal": false,
+      "differenceCount": 1,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-world-category-comparison.json"
+    },
+    {
+      "case": "feature-catalog-timeline",
+      "import": "S09",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 1,
+      "output": "feature-catalog-timeline-comparison.json"
+    },
+    {
+      "case": "feature-dense-events",
+      "import": "S10",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 1,
+      "output": "feature-dense-events-comparison.json"
+    },
+    {
+      "case": "feature-custom-roadmap",
+      "import": "S11",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 1,
+      "output": "feature-custom-roadmap-comparison.json"
+    },
+    {
+      "case": "feature-long-labels",
+      "import": "S12",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 1,
+      "output": "feature-long-labels-comparison.json"
+    },
+    {
+      "case": "feature-metrics",
+      "import": "S13",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 1,
+      "output": "feature-metrics-comparison.json"
+    },
+    {
+      "case": "feature-quote",
+      "import": "S14",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "feature-quote-comparison.json"
+    },
+    {
+      "case": "feature-list",
+      "import": "S15",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "feature-list-comparison.json"
+    },
+    {
+      "case": "feature-table",
+      "import": "S16",
+      "equal": true,
+      "differenceCount": 0,
+      "error": null,
+      "diagnostics": 0,
+      "output": "feature-table-comparison.json"
+    },
+    {
+      "case": "chart-mode-histogram-category-fallback",
+      "import": "S17",
+      "equal": false,
+      "differenceCount": 1,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-mode-histogram-category-fallback-comparison.json"
+    },
+    {
+      "case": "chart-mode-histogram-category-auto",
+      "import": "S17",
+      "equal": false,
+      "differenceCount": 1,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-mode-histogram-category-auto-comparison.json"
+    },
+    {
+      "case": "chart-mode-histogram-category-native",
+      "import": "S17",
+      "equal": false,
+      "differenceCount": 1,
+      "error": null,
+      "diagnostics": 0,
+      "output": "chart-mode-histogram-category-native-comparison.json"
+    }
+  ],
+  "imports": [
+    {
+      "id": "S01",
+      "path": "C:\\opf-work\\n034-native04\\list-description-native-edit-01\\native\\native-furniture-control.pptx",
+      "sha256": "e9cb69f2e4fa5d9fbb4208ddc23e76a419e87c35113131f45637f8b9e04d486c",
+      "rows": [
+        "list-description-native-edit"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S01-import.json"
+    },
+    {
+      "id": "S02",
+      "path": "C:\\opf-work\\n034-native04\\chart-treemap-category-01\\native\\native-furniture-control.pptx",
+      "sha256": "51a8653528ae40a26b954c00ec08f2c628cf7ecf5d0e1d21cd7a0fbda5eb62b3",
+      "rows": [
+        "chart-treemap-category"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S02-import.json"
+    },
+    {
+      "id": "S03",
+      "path": "C:\\opf-work\\n034-native05\\chart-histogram-single-01\\native\\native-furniture-control.pptx",
+      "sha256": "75ab92c117980668965750b8f2fda244b9c9a545bfa933c923a3dc76bbac4cfe",
+      "rows": [
+        "chart-histogram-single"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S03-import.json"
+    },
+    {
+      "id": "S04",
+      "path": "C:\\opf-work\\n034-native08\\chart-pareto-multi-01\\native\\native-furniture-control.pptx",
+      "sha256": "6458be34b6187efde3abe0bf9ef119451a6fe106db7c413a80935431ac4baf06",
+      "rows": [
+        "chart-pareto-multi"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S04-import.json"
+    },
+    {
+      "id": "S05",
+      "path": "C:\\opf-work\\n034-native08\\chart-box-multi-01\\native\\native-furniture-control.pptx",
+      "sha256": "ad831265979e9f60c47d444cc17659823ca0d4dc65a21b0caeaa3be09ca2e0a2",
+      "rows": [
+        "chart-box-multi"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S05-import.json"
+    },
+    {
+      "id": "S06",
+      "path": "C:\\opf-work\\n034-native08\\chart-waterfall-single-01\\native\\native-furniture-control.pptx",
+      "sha256": "845aaa463f1ef7116e5da88193143d855878742f88cd47dc1ab33a58c989b1c5",
+      "rows": [
+        "chart-waterfall-single"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S06-import.json"
+    },
+    {
+      "id": "S07",
+      "path": "C:\\opf-work\\n034-native08\\chart-funnel-category-01\\native\\native-furniture-control.pptx",
+      "sha256": "c4401abcfe7d4893c249ac85bb34e2d272f115d4a6f3d983ea6445d7dc280ea6",
+      "rows": [
+        "chart-funnel-category"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S07-import.json"
+    },
+    {
+      "id": "S08",
+      "path": "C:\\opf-work\\n034-native08\\chart-world-category-01\\native\\native-furniture-control.pptx",
+      "sha256": "e748fddf30629cf1169c50dd3a74d167c14a309940e527d1fac3f215cc1d5a05",
+      "rows": [
+        "chart-world-category"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S08-import.json"
+    },
+    {
+      "id": "S09",
+      "path": "C:\\opf-work\\n034-native07\\feature-catalog-timeline-01\\native\\native-furniture-control.pptx",
+      "sha256": "ed97362b1c3b9a880ff094ccb0e33e429c95b04609047d9a3e783a9b5168ab83",
+      "rows": [
+        "feature-catalog-timeline"
+      ],
+      "diagnostics": 1,
+      "error": null,
+      "output": "S09-import.json"
+    },
+    {
+      "id": "S10",
+      "path": "C:\\opf-work\\n034-native09\\dense-events-01\\native\\native-furniture-control.pptx",
+      "sha256": "cd9bd3a0d999317dcfc3d9270c43383e4fccd4d4cea8d7365758964ccd5036e1",
+      "rows": [
+        "feature-dense-events"
+      ],
+      "diagnostics": 1,
+      "error": null,
+      "output": "S10-import.json"
+    },
+    {
+      "id": "S11",
+      "path": "C:\\opf-work\\n034-native07\\feature-custom-roadmap-01\\native\\native-furniture-control.pptx",
+      "sha256": "378bc187244517b79fd7a72044474d17c00fa981fce5c967bd3ec775c7c2c70a",
+      "rows": [
+        "feature-custom-roadmap"
+      ],
+      "diagnostics": 1,
+      "error": null,
+      "output": "S11-import.json"
+    },
+    {
+      "id": "S12",
+      "path": "C:\\opf-work\\n034-native07\\feature-long-labels-01\\native\\native-furniture-control.pptx",
+      "sha256": "b0399da362bf524b3560f2416c84145e9d1046a491002bbc195bc46bbe4ec694",
+      "rows": [
+        "feature-long-labels"
+      ],
+      "diagnostics": 1,
+      "error": null,
+      "output": "S12-import.json"
+    },
+    {
+      "id": "S13",
+      "path": "C:\\opf-work\\n034-native03\\feature-metrics-01\\native\\native-furniture-control.pptx",
+      "sha256": "f8af5581d72839f72cab3412589147b6a0cb703da666d271beb53fc4a3719251",
+      "rows": [
+        "feature-metrics"
+      ],
+      "diagnostics": 1,
+      "error": null,
+      "output": "S13-import.json"
+    },
+    {
+      "id": "S14",
+      "path": "C:\\opf-work\\n034-native07\\feature-quote-01\\native\\native-furniture-control.pptx",
+      "sha256": "7e205e8fa2321a2b068acf4e4d37be1f3eb8cda55b7b246e1e5a6d3bc5ee52e9",
+      "rows": [
+        "feature-quote"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S14-import.json"
+    },
+    {
+      "id": "S15",
+      "path": "C:\\opf-work\\n034-native07\\feature-list-01\\native\\native-furniture-control.pptx",
+      "sha256": "1f1c0d36c2849777c64a5b14d07442c36cf5bae47375c8387dda629140198e2e",
+      "rows": [
+        "feature-list"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S15-import.json"
+    },
+    {
+      "id": "S16",
+      "path": "C:\\opf-work\\n034-native07\\feature-table-01\\native\\native-furniture-control.pptx",
+      "sha256": "3f5e04418f5c47fbc2f6664b44f4c679b7588a5e4977d910d6f87358b614dcf3",
+      "rows": [
+        "feature-table"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S16-import.json"
+    },
+    {
+      "id": "S17",
+      "path": "C:\\opf-work\\n034-native06\\chart-mode-histogram-category-fallback-01\\native\\native-furniture-control.pptx",
+      "sha256": "3645a9f3321863c8f62df62b56c46ebc6bdbf6861511c5cf52f16a0bfe49222c",
+      "rows": [
+        "chart-mode-histogram-category-fallback",
+        "chart-mode-histogram-category-auto",
+        "chart-mode-histogram-category-native"
+      ],
+      "diagnostics": 0,
+      "error": null,
+      "output": "S17-import.json"
+    }
+  ],
+  "failures": [],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "officeRuns": 0,
+  "builds": 0,
+  "fontPreparationCalls": 0,
+  "githubApiCalls": 0,
+  "finished": "2026-11-10T06:23:22.984Z",
+  "protocolCompleted": true,
+  "counts": {
+    "rows": 19,
+    "uniqueImports": 17,
+    "equal": 14,
+    "unequal": 5,
+    "importErrors": 0
+  }
+}
