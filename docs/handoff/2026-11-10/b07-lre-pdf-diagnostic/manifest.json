@@ -57,12 +57,6 @@
   ],
   "unchangedParentFiles": [
     {
-      "path": "tools/rr105-native-segment-observer/.gitattributes",
-      "bytes": 42,
-      "sha256": "9cb1513f02ae8f9e475437641b70f055770cc15bbd4d444a23df739eb22d553d",
-      "gitBlob": "513e7f1171915347a703e0f51eeb95b488701325"
-    },
-    {
       "path": "tools/rr105-native-segment-observer/README.md",
       "bytes": 532,
       "sha256": "115f5b9b35163696aef695dcdd0248834bf35b9ba5100ad3a91a90f754eadd52",
@@ -521,6 +515,11 @@
   ],
   "files": [
     {
+      "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
       "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/inputs/prior05-cs-only.pptx",
       "bytes": 100889,
       "sha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7"
@@ -547,8 +546,8 @@
     },
     {
       "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/README.md",
-      "bytes": 4315,
-      "sha256": "1c3c53695b9c2f312c70bc733a0d762cd8c6f7dac0d8ff6ea23dfe2721f722da"
+      "bytes": 4824,
+      "sha256": "4258f1ddffde651c2cdd323d59b979089090267e0b8cc09960e51dfe1919c74b"
     },
     {
       "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/variant.mjs",
@@ -557,8 +556,8 @@
     },
     {
       "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/verify.mjs",
-      "bytes": 5696,
-      "sha256": "4ab62968c7734b1aaf1109729b31a2f45b941e071ec6d87552c95a9a9d1bd1aa"
+      "bytes": 6315,
+      "sha256": "a67053598dec4c909a382247e773481dfae707ea10dd44ebe0aa8ceb5386aec0"
     },
     {
       "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/zip-tools.mjs",
@@ -567,8 +566,8 @@
     },
     {
       "path": "tools/rr105-native-segment-observer/.gitattributes",
-      "bytes": 42,
-      "sha256": "9cb1513f02ae8f9e475437641b70f055770cc15bbd4d444a23df739eb22d553d"
+      "bytes": 59,
+      "sha256": "a17b1665a27d015ddde4540b75485c16c6bf992302f00e5fcf16cf0a95edc43b"
     },
     {
       "path": "tools/rr105-native-segment-observer/data-tools.mjs",
@@ -734,6 +733,39 @@
       "path": "tools/rr105-native-segment-observer/test.mjs",
       "bytes": 7805,
       "sha256": "4e4e116ceedf58d4a87ed2569983e790ea278d48e1e1d8dee5db0230708094b7"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/git-byte-audit-before.json",
+      "bytes": 707,
+      "sha256": "537dd5624eafccfcb95394c4f2423d48b53d332a027f4f510a7b88cc046a8f7b"
     }
-  ]
+  ],
+  "evidenceBytePreservation": {
+    "originalCommit": "36657df446ca54152a87b7b92897757c52d5bb4c",
+    "gitByteDifferences": [
+      {
+        "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/zip-tools.mjs",
+        "worktreeBytes": 6991,
+        "worktreeSha256": "b8196b349751751df8c7f0dff63268433ae1ccd7c4de73655abc8121a043792b",
+        "gitBytes": 6990,
+        "gitSha256": "368a223118379871dd95ea249f984b7cdee77ead6c4d528bbf3da24180943230"
+      },
+      {
+        "path": "tools/rr105-native-segment-observer/README.md",
+        "worktreeBytes": 532,
+        "worktreeSha256": "115f5b9b35163696aef695dcdd0248834bf35b9ba5100ad3a91a90f754eadd52",
+        "gitBytes": 531,
+        "gitSha256": "f49316d60d0d7aa9dfbe64881818d1ca9922493bd2054f6406ac3deb3e4d9fe2"
+      }
+    ],
+    "ownedFolderAttributes": {
+      "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/.gitattributes",
+      "text": "* -text\n"
+    },
+    "parentAttributePath": "tools/rr105-native-segment-observer/.gitattributes",
+    "parentAttributeSha256": "9cb1513f02ae8f9e475437641b70f055770cc15bbd4d444a23df739eb22d553d",
+    "exactAppendedAttributeBytes": "ClJFQURNRS5tZCAtdGV4dAo=",
+    "purpose": "Retain original CRLF source/evidence bytes, never normalize archived artifacts",
+    "workerWrapperSupervisorOrPptxChanged": false
+  }
 }

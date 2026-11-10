@@ -1,3 +1,5 @@
 *.ps1 -text
 *.pptx -text
 *.opf.json -text
+
+README.md -text

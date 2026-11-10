@@ -1,0 +1,19 @@
+{
+  "head": "36657df446ca54152a87b7b92897757c52d5bb4c",
+  "differences": [
+    {
+      "path": "docs/handoff/2026-11-10/b07-lre-pdf-diagnostic/zip-tools.mjs",
+      "worktreeBytes": 6991,
+      "worktreeSha256": "b8196b349751751df8c7f0dff63268433ae1ccd7c4de73655abc8121a043792b",
+      "gitBytes": 6990,
+      "gitSha256": "368a223118379871dd95ea249f984b7cdee77ead6c4d528bbf3da24180943230"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/README.md",
+      "worktreeBytes": 532,
+      "worktreeSha256": "115f5b9b35163696aef695dcdd0248834bf35b9ba5100ad3a91a90f754eadd52",
+      "gitBytes": 531,
+      "gitSha256": "f49316d60d0d7aa9dfbe64881818d1ca9922493bd2054f6406ac3deb3e4d9fe2"
+    }
+  ]
+}
