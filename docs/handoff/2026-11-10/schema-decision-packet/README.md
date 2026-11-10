@@ -2,7 +2,11 @@
 
 This packet advances W05 / FA-34 with executed schema examples and a narrower adoption plan. It changes no product schema or runtime. The existing [full review](https://github.com/OpenPresentation/opf/blob/5b7c64225e2100539deacb270cb266b68820b116/docs/handoff/2026-11-10/schema-consistency-review/README.md) and its 17-schema inventory remain the detailed reference. PR #1269 remains review-only and must never be merged. The 552-path implementation branch is also not an integration candidate as a whole.
 
-## Decision requested
+## Owner decision — November 10, 2026
+
+The owner approved **all S1–S4** in the takeover coordinator's asynchronous scope question: strict typed objects, explicit anchor pixel units, logical start/end vocabulary, rich-run `lang` → `language`, and shared basic `Line`. Implementation and qualification now proceed without requesting the same design permission again. The original review-only branch still must not be merged wholesale. The recommendations and pre-approval execution results below remain a dated review record, not a claim that implementation has passed.
+
+## Original decision packet
 
 The original request calls for recommendations and concrete JSON before adoption. Its transcript does not establish approval of the later branch's complete M/H/O implementation. The coordinator should obtain one explicit scope choice: **approve the recommended S1 and S2 scope below, approve all S1–S4, or retain the current vocabulary and accept only existing-contract correctness fixes.** The first option is recommended. An answer authorizes implementation and qualification, not release acceptance.
 
@@ -66,4 +70,4 @@ This is a read-only Git/schema/pure-module probe. It neither fetches dependencie
 3. For each approved schema group, update authoritative schemas, generated outputs through maintained builds, core, SVG, editor edits/undo, PPTX export/import, CLI/SDK/source formats, docs, examples, catalogs and all three site consumers. Keep per-group fragments and acceptance accounting.
 4. Run mapped checks and exact examples on the final implementation; inspect geometry changes with before/after images and maintained pinned goldens. Obtain native PowerPoint Save/reopen/edit qualification for affected provenance and geometry. No cross-engine or native acceptance was run in this packet.
 
-W05 is therefore **review packet executed; owner scope decision pending; implementation and cross-engine acceptance pending**. The vocabulary branch is not adopted or shipped. Vetoable recommendation: select S1+S2, leave S3+S4 out unless the owner wants them now, and never use the existence of old implementation commits as an acceptance shortcut.
+W05 is now **review packet executed; all S1–S4 approved; selective implementation and cross-engine acceptance pending**. The vocabulary branch is not adopted or shipped. The original recommendation to select S1+S2 and defer S3+S4 was superseded by the owner's all-four choice. Never use the existence of old implementation commits as an acceptance shortcut.
