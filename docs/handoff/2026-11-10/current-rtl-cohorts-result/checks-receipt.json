@@ -1,0 +1,66 @@
+{
+  "source": "a7381bf093efa1d4efdf4804eabac386931e2ba1",
+  "mappedExit": 0,
+  "generationRetried": false,
+  "scope": "Only evidence checkout metadata; no frozen producer/consumer rebuild",
+  "raw": {
+    "file": "checks.json.gz",
+    "bytes": 10735,
+    "sha256": "2bee4cc1e00ff4761240c1d624db70edab9470452a34b094dbc7316340079869",
+    "expandedBytes": 37066,
+    "records": 10,
+    "decodedBytes": 26776
+  },
+  "records": [
+    {
+      "name": "install.exit.json",
+      "bytes": 507,
+      "sha256": "c14a3005e877a828c2ea73dd11dd188b2ab335cf69cdc1cf715f14e8374b4459"
+    },
+    {
+      "name": "install.log",
+      "bytes": 4403,
+      "sha256": "b5199decd2aa00a5e62bb09ebd0d84720f39d2a10a61e6fd37af6032e2b9691f"
+    },
+    {
+      "name": "mapped.exit.json",
+      "bytes": 614,
+      "sha256": "4874c526ca0bd2023a8702176b4d431b3bf874b39655ac7fee5a5e99dee6ad46"
+    },
+    {
+      "name": "mapped.log",
+      "bytes": 902,
+      "sha256": "8f754cdff39881d25631066eaa195fb4f7ea436ff9399157f2ca14074dbf7a17"
+    },
+    {
+      "name": "prerequisite-recovery.json",
+      "bytes": 318,
+      "sha256": "186e21aec34e8635078521b194f96a470d03e535129b6890ca6cb2f0af5d5cc4"
+    },
+    {
+      "name": "mapped/biome.log",
+      "bytes": 681,
+      "sha256": "2e33aae6cd925a5807106c55481a48142a1ed5c93e83b13bbbd005c64dde4353"
+    },
+    {
+      "name": "mapped/build.log",
+      "bytes": 14597,
+      "sha256": "ae3638cfff493535623d540b0a32b73c7344f74eb224a7f2c2a3e7d9a53e3ec0"
+    },
+    {
+      "name": "mapped/pnpm_run_check_changes.log",
+      "bytes": 2641,
+      "sha256": "ee8e27320da9b54ad522e43ad66bb2ebfc5c61d8c03db4137aad96e8aee3e3c9"
+    },
+    {
+      "name": "mapped/pnpm_run_check_skill-commands.log",
+      "bytes": 1040,
+      "sha256": "b4144c28db034576bcabcadecfdc46227e0b7720ffadad387e7f867cc3f07fc1"
+    },
+    {
+      "name": "mapped/pnpm_run_check_text.log",
+      "bytes": 1073,
+      "sha256": "420b7e1f7803769ebf0c441aefaf876e1cb16818f3ecc9b5bcdb86fc24d11cff"
+    }
+  ]
+}
