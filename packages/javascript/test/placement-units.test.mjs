@@ -25,6 +25,6 @@ test('duplicate units and nonpositive anchor sizes refuse, while dimensions can 
   for (const at of [{width: 1.01}, {width: 9}, {width: 50, heightPx: 1280}])
     assert.equal(validate(document([shape(at)]), {only: ['format']}).valid, true, JSON.stringify(at));
   const conflict = compose([shape({width: 0.5, widthPx: 40})]);
-  assert.equal(conflict.overlayShapes.length, 0, 'composition does not silently select a unit when validation was skipped');
+  assert.equal((conflict.overlayShapes ?? []).length, 0, 'composition does not silently select a unit when validation was skipped');
   assert.throws(() => compose([shape({width: 1e300, height: 0.5})]), /safe integer native coordinate/);
 });

@@ -345,7 +345,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 // omitted; import then keeps observed values instead of treating them as unstated.
 {
   const issues = [];
-  const bytes = await toPptx({name: 'Sizes', design: {fontScheme: 'arial', colorScheme: {id: 'boost', name: 'x'.repeat(300 * 1024)}},
+  const bytes = await toPptx({name: 'Sizes', design: {fontScheme: 'arial', colorScheme: {id: 'x'.repeat(300 * 1024)}},
     slides: [{layout: 'cover', beat: ['y'.repeat(300 * 1024)], title: 'One', subtitle: 'Two'}]}, {onDiagnostic: issue => issues.push(issue)});
   assert.deepEqual(issues.filter(issue => issue.code === 'document-provenance-omitted').map(issue => issue.path), ['design.colorScheme', 'slides.0.beat']);
   const entries = unzipSync(bytes);

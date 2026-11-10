@@ -44,13 +44,13 @@ test('en-UK as the deck language is the schema rule, not reported twice; a run i
 	assert.deepEqual(result.findings.map((entry) => entry.ruleId).filter((id) => id === 'opf/language-tag'), []);
 	const run = only(deck({}, { title: 'T', text: ['The ', { text: 'colour', language: 'en-UK' }] }));
 	assert.equal(run.length, 1);
-	assert.equal(run[0].path, '/slides/0/text/1/lang');
+	assert.equal(run[0].path, '/slides/0/text/1/language');
 	assert.equal(run[0].fixes[0].patch[0].value, 'en-GB');
 });
 
 test('wrong case is a spelling-only suggestion of the canonical form', () => {
 	const [finding] = only(deck({}, { title: [{ text: 'Bonjour', language: 'FR-ca' }] }));
-	assert.equal(finding.path, '/slides/0/title/0/lang');
+	assert.equal(finding.path, '/slides/0/title/0/language');
 	assert.match(finding.message, /canonical form is 'fr-CA'/);
 	assert.equal(finding.fixes[0].safe, true);
 	assert.deepEqual(only(deck({ language: 'EN-us' })).map((entry) => entry.fixes[0].patch[0].value), ['en-US']);
@@ -58,7 +58,7 @@ test('wrong case is a spelling-only suggestion of the canonical form', () => {
 
 test('a tag that is not well formed has no suggestion', () => {
 	const [finding] = only(deck({}, { title: 'T', items: [['a ', { text: 'b', language: 'en-a' }]] }));
-	assert.equal(finding.path, '/slides/0/items/0/1/lang');
+	assert.equal(finding.path, '/slides/0/items/0/1/language');
 	assert.match(finding.message, /not a well-formed BCP 47/);
 	assert.equal(finding.fixes, undefined);
 });
@@ -80,7 +80,7 @@ test('runs in lists, tables, quotes and blocks are checked, and slides report th
 	);
 	assert.deepEqual(
 		found.map((entry) => entry.path).sort(),
-		['/slides/0/blocks/0/bullets/0/text/0/lang', '/slides/0/blocks/1/table/columns/0/0/lang', '/slides/0/blocks/1/table/rows/0/0/0/lang', '/slides/0/blocks/2/quote/text/0/lang'],
+		['/slides/0/blocks/0/bullets/0/text/0/language', '/slides/0/blocks/1/table/columns/0/0/language', '/slides/0/blocks/1/table/rows/0/0/0/language', '/slides/0/blocks/2/quote/text/0/language'],
 	);
 });
 

@@ -676,8 +676,10 @@ export function importNativeShape(entry, role, context) {
     if (frame.cy > 0 && Math.abs(aspect / expected - 1) > 0.01) payload.aspectRatio = round(aspect, 3);
     return {kind: 'shape', bounds: {x: frame.x / EMU_PER_INCH, y: frame.y / EMU_PER_INCH, w: frame.cx / EMU_PER_INCH, h: frame.cy / EMU_PER_INCH}, payload};
   }
-  // A filled shape across the whole slide is a background; an overlay is drawn over the content, so it would hide the slide.
-  if (frame.cx >= context.width * 0.98 && frame.cy >= context.height * 0.98 && drawsLook(entry.props).filled) {
+  // A known exported overlay can deliberately bleed across the slide and retain
+  // its back layer. Apply the foreign-background heuristic only to unclaimed
+  // native shapes, never to an explicit overlay identified by the existing reader.
+  if (!exportedShape(name) && frame.cx >= context.width * 0.98 && frame.cy >= context.height * 0.98 && drawsLook(entry.props).filled) {
     context.report({code: 'shape-not-imported', path: `slides.${context.slideIndex}`, shape: name, message: `The native shape ${JSON.stringify(name)} fills the whole slide; an overlay shape is drawn over the content, so it was not imported (set the slide's background instead).`});
     return undefined;
   }

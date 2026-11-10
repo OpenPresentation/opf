@@ -115,7 +115,6 @@ const slideRecord = (value, depth) => fields(value, {
   supplement: (supplement, at) => fields(supplement, {design}, at),
 }, depth);
 const dataRecord = (value, depth) => {
-  if (value?.kind === 'chart') return fields(value, {data: table}, depth);
   if (value?.kind !== 'table') return value;
   return fields(value, {
     table, authored: table,
@@ -142,14 +141,11 @@ const furnitureRecord = (value, depth) => fields(value, {
   zone: side, slot,
 }, depth);
 const readers = {document: documentRecord, slide: slideRecord, data: dataRecord,
-  datasets: (datasets, depth) => keyed(datasets, table, depth),
+  datasets: datasets => datasets,
   image: imageRecord, annotation: annotationRecord, furniture: furnitureRecord};
 const regionOrders = new WeakMap();
-const originals = new WeakMap();
 /** Legacy color-slot ordering is internal evidence, never an authored property. */
 export const legacyRegionOrder = record => regionOrders.get(record);
-/** Original stored values remain available for their pre-migration hash checks. */
-export const legacyOriginal = record => originals.get(record);
 /** A path already identified structurally by an owned native-name reader. */
 export const logicalProvenancePath = path;
 
@@ -166,7 +162,6 @@ export function upgradeTag(record, family) {
     if (record.vocabulary !== undefined) throw Error('Unsupported native provenance vocabulary.');
   }
   const upgraded = readers[family](record, 0);
-  if (upgraded !== record) originals.set(upgraded, record);
   if (family === 'slide' && record.content?.form === 'regions' && object(record.content.regions))
     regionOrders.set(upgraded, Object.keys(record.content.regions).sort().map(region));
   return upgraded;

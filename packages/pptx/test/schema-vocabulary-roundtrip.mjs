@@ -3,7 +3,6 @@ import {test} from 'node:test';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {fromPptx, toPptx} from '../dist/index.js';
 import {decodeTextTag, encodeTextTag} from '../src/code-provenance.js';
-import {chartDataRecord} from '../src/data-provenance.js';
 
 const literal = 'slides.0.left';
 const note = {text: literal, titleAlignment: 'left', [literal]: 'literal key'};
@@ -86,8 +85,8 @@ test('legacy typed tags migrate logical words and pixel anchors; current native 
   assert.equal(back.slides[1].table.rows[1][0].value[0].language, 'fr-FR');
 });
 
-test('a legacy dataset keeps rich language and chart/table references after its typed migration changes the stored hash input', async () => {
-  const dataset = {columns: ['Category', 'Value', 'Note'], rows: [['A', 10, [{text: literal, language: 'fr-FR'}]], ['B', 20, [{text: 'Bonjour', language: 'fr-FR'}]]]};
+test('legacy scalar datasets stay exact while chart/table references recover and native cache edits win', async () => {
+  const dataset = {columns: ['Category', 'Value', 'Note'], rows: [['A', 10, literal], ['B', 20, 'Bonjour']]};
   const chart = {type: 'column', data: {dataset: 'vocabulary', fields: ['Category', 'Value']}};
   const table = {dataset: 'vocabulary', fields: ['Category', 'Note']};
   const source = {design: {fontScheme: 'roboto'}, datasets: {vocabulary: dataset}, slides: [{title: 'Values', chart}, {title: 'Notes', table}]};
@@ -97,15 +96,9 @@ test('a legacy dataset keeps rich language and chart/table references after its 
   assert.deepEqual(current.slides[1].table, table);
   assert.deepEqual(current.datasets.vocabulary, dataset);
 
-  const legacyDataset = structuredClone(dataset);
-  for (const row of legacyDataset.rows) row[2] = row[2].map(({language, ...run}) => ({...run, lang: language}));
-  const legacyHash = chartDataRecord(chart, {vocabulary: legacyDataset}).dataset;
-  assert.notEqual(legacyHash, chartDataRecord(chart, {vocabulary: dataset}).dataset, 'the regression must exercise different legacy/current fingerprints');
   const entries = rewriteTags(bytes, (record, kind) => {
-    if (kind === 'OPF_DATASETS_V1') return {vocabulary: legacyDataset};
     if (kind === 'OPF_DATA_V1') {
       const {vocabulary: _marker, ...old} = record;
-      if (old.kind === 'chart') old.dataset = legacyHash;
       return old;
     }
     return record;
@@ -113,7 +106,7 @@ test('a legacy dataset keeps rich language and chart/table references after its 
   const diagnostics = [];
   const back = await fromPptx(zipSync(entries), {onDiagnostic: finding => diagnostics.push(finding)});
   assert.deepEqual(back.datasets.vocabulary, dataset);
-  assert.deepEqual(back.slides[0].chart.data, chart.data, 'legacy hash binding survives only the known typed transformation');
+  assert.deepEqual(back.slides[0].chart.data, chart.data, 'legacy dataset hash binding remains exact because datasets are opaque');
   assert.deepEqual(back.slides[1].table, table);
   assert.equal(diagnostics.some(finding => finding.code === 'chart-dataset-unavailable'), false);
 

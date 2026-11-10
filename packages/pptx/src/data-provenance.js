@@ -1,7 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {checkFormat, isValidFormat} from './format-check.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
-import {currentTag, legacyOriginal, upgradeTag} from './legacy-tags.js';
+import {currentTag, upgradeTag} from './legacy-tags.js';
 import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableData, tableCellDisplayValue} from './chart-data.js';
 
 // RR-54: chart and table data survive a PPTX round trip (core docs/chart-table-data.md).
@@ -430,7 +430,7 @@ export function restoreChartData(chart, record, evidence, {datasets, report}) {
     report({code: 'chart-dataset-unavailable', message: `The chart referenced dataset '${record.data.dataset}', which this package's datasets record does not hold (a slide pasted from another deck, or a missing record); the chart imports its values inline.`});
     return chart;
   }
-  if (isDatasetRef(record.data) && record.dataset !== undefined && datasetHash(record.vocabulary === 2 ? datasets : legacyOriginal(datasets) ?? datasets, record.data.dataset) !== record.dataset) {
+  if (isDatasetRef(record.data) && record.dataset !== undefined && datasetHash(datasets, record.data.dataset) !== record.dataset) {
     report({code: 'chart-dataset-unavailable', message: `The chart referenced dataset '${record.data.dataset}', but this package's dataset of that id holds other data than at export (a slide pasted from another deck); the chart imports its values inline.`});
     return chart;
   }

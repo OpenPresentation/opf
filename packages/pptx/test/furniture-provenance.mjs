@@ -78,7 +78,7 @@ const flags = {design: {fontScheme: 'roboto', header: {start: {text: 'Inherited'
   {title: 'Disabled', text: 'Body', design: {header: false}},
   {title: 'Empty', text: 'Body', design: {header: {}}},
   {title: 'Inherited', text: 'Body'},
-  {title: 'Inactive flags', text: 'Body', design: {header: {left: {}, center: {date: false}}}},
+  {title: 'Inactive flags', text: 'Body', design: {header: {start: {}, center: {date: false}}}},
 ]};
 const flagBytes = await exportDeck(flags), flagResult = (await read(flagBytes)).deck;
 assert.deepEqual(flagResult.design.header, flags.design.header);
@@ -87,7 +87,7 @@ for (const index of [0, 1, 3]) assert.deepEqual(flagResult.slides[index].design.
 const missingDisabled = (await read(modify(flagBytes, entries => {delete entries[manifestFile];}))).deck;
 assert.equal(missingDisabled.design.header, undefined, 'Missing false marker cannot enable a global inherited header.');
 assert.equal(effective(missingDisabled, 0, 'header'), undefined);
-assert.equal(effective(missingDisabled, 2, 'header').left.text, 'Inherited');
+assert.equal(effective(missingDisabled, 2, 'header').start.text, 'Inherited');
 
 // RR-72: furniture drawn the same on several slides is written once, on the slide master (test/master-furniture.mjs has its edit and
 // damage controls). A live slide number keeps this header a shape on each slide, so the per-slide edits and damage below act on slide shapes.
@@ -97,12 +97,12 @@ const fixture = {design: {fontScheme: 'roboto', header: {start: {text: numbered}
 ]};
 const bytes = await exportDeck(fixture);
 const changed = (await read(modify(bytes, entries => xml(entries, content => content.replace('Native header', 'Edited header'))))).deck;
-assert.equal(effective(changed, 0, 'header').left.text, numbered.replace('Native header', 'Edited header'));
-assert.equal(effective(changed, 1, 'header').left.text, numbered);
+assert.equal(effective(changed, 0, 'header').start.text, numbered.replace('Native header', 'Edited header'));
+assert.equal(effective(changed, 1, 'header').start.text, numbered);
 assert.equal(changed.design.header, undefined, 'Disagreeing current literals stay local.');
 const cleared = (await read(modify(bytes, entries => xml(entries, content => furnitureShapes(content, shape => shape.includes('part 0 line') ? shape.replace(/<a:t>[\s\S]*?<\/a:t>/g, '<a:t></a:t>') : shape))))).deck;
 // The words are gone; the native slide-number field is still there, so it stays a field.
-assert.equal(effective(cleared, 0, 'header').left.text, '\r\n\r\n{{slide.number}}');
+assert.equal(effective(cleared, 0, 'header').start.text, '\r\n\r\n{{slide.number}}');
 assert.ok(!JSON.stringify(cleared.slides[0]).includes('Native header'));
 const renamed = (await read(modify(bytes, entries => xml(entries, content => content.replace(/name="OPF furniture [^"]+"/g, 'name="Renamed by the user"'))))).deck;
 assert.equal(renamed.design.header.start.text, numbered, 'Roles rely on tags, not current shape names.');
@@ -144,7 +144,7 @@ const corruptions = {
 for (const [name, mutate] of Object.entries(corruptions)) {
   const {deck, issues} = await read(modify(bytes, mutate));
   assert.equal(effective(deck, 0, 'header'), undefined, `${name}: ambiguous furniture is not consumed`);
-  assert.equal(effective(deck, 1, 'header').left.text, numbered, `${name}: valid slides remain recoverable`);
+  assert.equal(effective(deck, 1, 'header').start.text, numbered, `${name}: valid slides remain recoverable`);
   for (const word of ['Native header', 'words', 'second line', 'First body']) assert.ok(JSON.stringify(deck.slides[0]).includes(word), `${name}: current ${word}`);
   assert.ok(!JSON.stringify(deck).includes('STALE_INJECTED_WORDS'), name);
   assert.ok(issues.some(issue => issue.code === 'invalid-furniture-provenance'), name);
@@ -166,8 +166,8 @@ const imageChanged = (await read(modify(imageBytes, entries => {
   assert.ok(file); entries[file] = new Uint8Array(replacement);
   xml(entries, content => content.replace('current picture alt', 'edited picture alt'));
 }))).deck;
-assert.equal(effective(imageChanged, 0, 'header').left.image.src, `data:image/png;base64,${replacement.toString('base64')}`);
-assert.equal(effective(imageChanged, 0, 'header').left.image.alt, '  edited picture alt  ');
+assert.equal(effective(imageChanged, 0, 'header').start.image.src, `data:image/png;base64,${replacement.toString('base64')}`);
+assert.equal(effective(imageChanged, 0, 'header').start.image.alt, '  edited picture alt  ');
 for (const damage of ['tag', 'media', 'picture']) {
   const {deck, issues} = await read(modify(imageBytes, entries => {
     if (damage === 'tag') delete entries[tagFiles(entries).find(path => tagData(entries[path]).role === 'image')];
@@ -201,13 +201,13 @@ assert.ok(!JSON.stringify(organizationChanged.design).includes('Original organiz
 // Retyped section words are the words as they stand, and the section itself comes from the native list, which wins.
 const sectionChanged = (await read(modify(metadataBytes, entries => xml(entries, content => content.replaceAll('First section', 'Current section'))))).deck;
 assert.equal(sectionChanged.slides[0].section, 'First section');
-for (const kind of ['header', 'footer']) assert.equal(effective(sectionChanged, 0, kind).right.text, 'Current section');
-assert.equal(effective(sectionChanged, 1, 'footer').right.text, '{{slide.section}}');
+for (const kind of ['header', 'footer']) assert.equal(effective(sectionChanged, 0, kind).end.text, 'Current section');
+assert.equal(effective(sectionChanged, 1, 'footer').end.text, '{{slide.section}}');
 const sectionConflict = (await read(modify(metadataBytes, entries => xml(entries, content => content.replace('First section', 'Different section'))))).deck;
 assert.equal(sectionConflict.slides[0].section, 'First section');
 assert.equal((await read(modify(metadataBytes, entries => { xml(entries, content => content.replace('First section', 'Different section')); entries['ppt/presentation.xml'] = enc.encode(dec.decode(entries['ppt/presentation.xml']).replace(/<p:extLst>[\s\S]*<\/p:extLst>/, '')); }))).deck.slides[0].section, 'First section', 'Without the list, the stored value is the fallback.');
-assert.equal(effective(sectionConflict, 0, 'header').right.text, 'Different section');
-assert.equal(effective(sectionConflict, 0, 'footer').right.text, '{{slide.section}}');
+assert.equal(effective(sectionConflict, 0, 'header').end.text, 'Different section');
+assert.equal(effective(sectionConflict, 0, 'footer').end.text, '{{slide.section}}');
 
 const native = new PptxGenJS(), nativeSlide = native.addSlide();
 nativeSlide.addText('Ordinary title', {x: .4, y: .3, w: 8, h: .4, fontSize: 28});

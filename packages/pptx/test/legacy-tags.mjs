@@ -1,6 +1,6 @@
 // Typed legacy provenance adaptation. Literal data is not a structural path.
 import assert from 'node:assert/strict';
-import {currentTag, currentTags, legacyOriginal, legacyRegionOrder, upgradeTag} from '../src/legacy-tags.js';
+import {currentTag, currentTags, legacyRegionOrder, upgradeTag} from '../src/legacy-tags.js';
 
 const literal = 'slides.0.left';
 const arbitrary = {
@@ -60,8 +60,7 @@ assert.deepEqual(upgradeTag({[literal]: {columns: [literal], rows: [[literal]]}}
 assert.deepEqual(upgradeTag({vocabulary: {columns: ['Field'], rows: [[literal]]}}, 'datasets'), {vocabulary: {columns: ['Field'], rows: [[literal]]}});
 const legacyDatasets = {sample: {columns: ['Field'], rows: [[{value: [{text: literal, lang: 'fr-FR'}], style: {align: 'left'}}]]}};
 const adaptedDatasets = upgradeTag(legacyDatasets, 'datasets');
-assert.equal(legacyOriginal(adaptedDatasets), legacyDatasets, 'original dataset hash input remains available for source bindings');
-assert.equal(adaptedDatasets.sample.rows[0][0].value[0].language, 'fr-FR');
+assert.equal(adaptedDatasets, legacyDatasets, 'datasets are opaque scalar tables, not authored rich-table payloads');
 assert.equal(legacyDatasets.sample.rows[0][0].value[0].lang, 'fr-FR');
 
 assert.deepEqual(upgradeTag({v: 1, role: 'caption', path: literal, field: literal + '.caption', align: 'right', text: literal, extension: arbitrary}, 'annotation'),
