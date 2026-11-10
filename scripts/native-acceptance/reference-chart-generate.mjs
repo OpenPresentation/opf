@@ -147,7 +147,7 @@ export async function generateReferenceWitnesses({
       findings = compareReferenceWitnessImports(deck, {
         original: imported,
         "saved-reopened": imported,
-      });
+      }, archive.canvas);
     await put(
       "inspection/" + source.id + ".json",
       json({

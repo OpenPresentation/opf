@@ -127,20 +127,22 @@ test("native binding resolves exact IDs and words, never a same-name duplicate o
   }
 });
 test("public import comparison exposes helper data, dropped references, current edits and duplicate visible overlays", async () => {
-  const document = clone(sources[0].document);
+  const document = clone(sources[0].document),
+    sourceCanvas = inspectReferenceArchive(syntheticCase(sources[0]), deps).canvas,
+    scale = Math.min(sourceCanvas.cx, sourceCanvas.cy) / 6858000;
   for (const slide of document.slides)
     for (const ref of slide.chart.referenceLines ?? [])
       ref.stroke = {
         color: "#123456",
         ...ref.stroke,
-        width: ref.stroke?.width ?? 4 / 3,
+        width: Math.min(64, Math.round(((ref.stroke?.width ?? 4 / 3) * scale) * 9525) / (9525 * scale)),
         dash: ref.stroke?.dash ?? "dash",
       };
   const imported = {
     original: { document: clone(document), diagnostics: [] },
     "saved-reopened": { document: clone(document), diagnostics: [] },
   };
-  assert.deepEqual(compareReferenceWitnessImports(sources[0].document, imported), []);
+  assert.deepEqual(compareReferenceWitnessImports(sources[0].document, imported, sourceCanvas), []);
   for (const mutate of [
     (d) => d.slides[0].chart.data.columns.push("Unintended helper"),
     (d) => d.slides[0].chart.referenceLines.pop(),
@@ -149,7 +151,7 @@ test("public import comparison exposes helper data, dropped references, current 
   ]) {
     const changed = clone(imported);
     mutate(changed["saved-reopened"].document);
-    assert.ok(compareReferenceWitnessImports(sources[0].document, changed).length);
+    assert.ok(compareReferenceWitnessImports(sources[0].document, changed, sourceCanvas).length);
   }
   const gallery = { source: "https://synthetic.invalid/catalog" },
     warning = { code: "synthetic-uncertainty" },
