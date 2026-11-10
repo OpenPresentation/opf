@@ -1,4 +1,4 @@
-Current continuation: [2026-11-09 coordinator checkpoint and unified next work](../2026-11-09/coordination-checkpoint.md). The original rules and evidence below remain historical context.
+Current continuation: [2026-11-10 current state and unified task list](../2026-11-10/README.md). The original rules and evidence below remain historical context.
 
 # Handoff of 2026-11-07: v0.33.0 and v0.34.0
 
