@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {mkdir,readFile,writeFile,lstat,realpath,readdir} from 'node:fs/promises';
+import path from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const repo='C:/opf-work/table069-proof',out='C:/opf-work/table069-check01',relative='docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const git=args=>{const r=spawnSync('git',['-C',repo,...args],{windowsHide:true,maxBuffer:16*1024*1024});assert.equal(r.status,0,r.stderr.toString());return r.stdout;};
+await mkdir(out+'/original-step-logs');for(const name of await readdir(repo+'/artifacts/check-changed')){const bytes=await readFile(repo+'/artifacts/check-changed/'+name);await writeFile(out+'/original-step-logs/'+name,bytes,{flag:'wx'});}
+const head=git(['rev-parse','HEAD']).toString().trim(),status=git(['status','--porcelain']).toString();assert.equal(head,'69c66894cec53208b28f970d4b4be41f00ac6187');assert.equal(status,'');const indexBefore=hash(git(['ls-files','--stage','-z']));
+const line=git(['ls-tree','HEAD','--',relative]).toString().trim(),oid=/^100644 blob ([a-f0-9]{40})\t/u.exec(line)?.[1];assert.equal(oid,'2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6');const bytes=git(['cat-file','blob',oid]);assert.equal(bytes.length,16102);
+const target=path.resolve(repo,relative);assert.ok(target.startsWith(path.resolve(repo)+path.sep));try{await lstat(target);assert.fail('Target already exists');}catch(error){if(error.code!=='ENOENT')throw error;}
+await mkdir(path.dirname(target),{recursive:true});assert.equal(await realpath(path.dirname(target)),path.dirname(target));await writeFile(target,bytes,{flag:'wx'});const actual=await readFile(target);assert.equal(hash(actual),hash(bytes));assert.equal(git(['hash-object',target]).toString().trim(),oid);assert.equal(hash(git(['ls-files','--stage','-z'])),indexBefore);assert.equal(git(['status','--porcelain']).toString(),'');
+await writeFile(out+'/hydration.json',JSON.stringify({sourceHead:head,relative,gitBlob:oid,bytes:bytes.length,sha256:hash(bytes),exclusiveWrite:true,withinWorkspace:true,indexBefore,indexAfter:hash(git(['ls-files','--stage','-z'])),sourceClean:true,regeneration:false},null,2)+'\n',{flag:'wx'});
+const node='C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe',args=['C:/Users/micha/AppData/Local/npm-cache/_npx/334030cfead2389c/node_modules/pnpm/bin/pnpm.cjs','run','check:text'];const startedAt=new Date().toISOString(),r=spawnSync(node,args,{cwd:repo,env:{...process.env,PATH:'C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin;'+process.env.PATH},windowsHide:true,timeout:120000,maxBuffer:32*1024*1024});
+await writeFile(out+'/text-recovery.stdout.log',r.stdout??Buffer.alloc(0),{flag:'wx'});await writeFile(out+'/text-recovery.stderr.log',r.stderr??Buffer.alloc(0),{flag:'wx'});const receipt={executable:node,args,cwd:repo,startedAt,endedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?{name:r.error.name,message:r.error.message,code:r.error.code}:null,onlyFailedStep:true};await writeFile(out+'/text-recovery.exit.json',JSON.stringify(receipt,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(receipt));if(r.status!==0)process.exitCode=1;

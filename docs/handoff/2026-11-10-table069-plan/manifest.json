@@ -270,8 +270,134 @@
       "original": "C:/opf-work/n034-current/scripts/native-acceptance/windows-powershell-env.mjs",
       "bytes": 495,
       "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+    },
+    {
+      "path": "raw/checks/hydration.json",
+      "original": "C:/opf-work/table069-check01/hydration.json",
+      "bytes": 578,
+      "sha256": "e792ac3a469ee75298817b08ccf0620805a160eb6b8a0cc8ee671ba4ff0fe013"
+    },
+    {
+      "path": "raw/checks/install.exit.json",
+      "original": "C:/opf-work/table069-check01/install.exit.json",
+      "bytes": 511,
+      "sha256": "db08c6511446dc368aa3fdb3554c16b14fca4673c32df1e495236c3bc12dfda8"
+    },
+    {
+      "path": "raw/checks/install.stderr.log",
+      "original": "C:/opf-work/table069-check01/install.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/checks/install.stdout.log",
+      "original": "C:/opf-work/table069-check01/install.stdout.log",
+      "bytes": 4439,
+      "sha256": "4317e0177877dceba1ea789b224aef6350fad2c163a08ea3db59a291290c348c"
+    },
+    {
+      "path": "raw/checks/mapped.exit.json",
+      "original": "C:/opf-work/table069-check01/mapped.exit.json",
+      "bytes": 555,
+      "sha256": "413018a5bfeb80f6a256561c7b818335e2c11b82ea6f7f1583427e9403e9e91a"
+    },
+    {
+      "path": "raw/checks/mapped.stderr.log",
+      "original": "C:/opf-work/table069-check01/mapped.stderr.log",
+      "bytes": 2004,
+      "sha256": "fe4e41153abb11445efd3a1c33d31296054eafc361423c23f5401420abbab16c"
+    },
+    {
+      "path": "raw/checks/mapped.stdout.log",
+      "original": "C:/opf-work/table069-check01/mapped.stdout.log",
+      "bytes": 873,
+      "sha256": "983d82e4ad3d85b70c54a0ba7809bf14ed9bb00a5afef28630b702a67eb7a3cb"
+    },
+    {
+      "path": "raw/checks/original-step-logs/biome.log",
+      "original": "C:/opf-work/table069-check01/original-step-logs/biome.log",
+      "bytes": 688,
+      "sha256": "30b0ed93359408619bc28d2c846dd65344f2f2150f23a56253cfc92075c32dd0"
+    },
+    {
+      "path": "raw/checks/original-step-logs/build.log",
+      "original": "C:/opf-work/table069-check01/original-step-logs/build.log",
+      "bytes": 14582,
+      "sha256": "de4e132f435feaef37b27bce49f477e159f41ab877b4d4b30bd63b70057cb43f"
+    },
+    {
+      "path": "raw/checks/original-step-logs/pnpm_run_check_changes.log",
+      "original": "C:/opf-work/table069-check01/original-step-logs/pnpm_run_check_changes.log",
+      "bytes": 2634,
+      "sha256": "04dd1fbaef61c2ce76d38f651ce3ac6bd81ea982caa75ddf113b389052095418"
+    },
+    {
+      "path": "raw/checks/original-step-logs/pnpm_run_check_skill-commands.log",
+      "original": "C:/opf-work/table069-check01/original-step-logs/pnpm_run_check_skill-commands.log",
+      "bytes": 1037,
+      "sha256": "e49b8dfb1b2463b9ed057cc09244bbd2469dcb639b9732be3bc5c39acf9ff47f"
+    },
+    {
+      "path": "raw/checks/original-step-logs/pnpm_run_check_text.log",
+      "original": "C:/opf-work/table069-check01/original-step-logs/pnpm_run_check_text.log",
+      "bytes": 1839,
+      "sha256": "cd787a2c0755d46ba4470c793ecf220803cf303c5b799c84322f7797ce449e70"
+    },
+    {
+      "path": "raw/checks/text-recovery.exit.json",
+      "original": "C:/opf-work/table069-check01/text-recovery.exit.json",
+      "bytes": 459,
+      "sha256": "d999dc7affa1231cb677441cd9b4eb81efdb5adc40c4f17ff31b56d6b75b0bb4"
+    },
+    {
+      "path": "raw/checks/text-recovery.stderr.log",
+      "original": "C:/opf-work/table069-check01/text-recovery.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/checks/text-recovery.stdout.log",
+      "original": "C:/opf-work/table069-check01/text-recovery.stdout.log",
+      "bytes": 1071,
+      "sha256": "c7cc2afb6ebf4a9af9bf7d4c92881a8adf8b2b1515de5c055e23e19136cf1b56"
+    },
+    {
+      "path": "raw/checks/drivers/install-check.mjs",
+      "original": "C:/opf-work/table069-plan/install-check.mjs",
+      "bytes": 1374,
+      "sha256": "0376063be5af4d80b4ef2335ae2337ba902e7946df6ea1a83ff7ac34a0662727"
+    },
+    {
+      "path": "raw/checks/drivers/mapped-check.mjs",
+      "original": "C:/opf-work/table069-plan/mapped-check.mjs",
+      "bytes": 1365,
+      "sha256": "dadf041429b8cf9814886f1d2e9aadadd7d9fad38d58725f077d3fef38f92081"
+    },
+    {
+      "path": "raw/checks/drivers/recover-text.mjs",
+      "original": "C:/opf-work/table069-plan/recover-text.mjs",
+      "bytes": 3358,
+      "sha256": "35d1e111daf78f081d2dc4f7bed0c1aa36be04562b8a3ed74c2d2cbebf90ca13"
     }
   ],
   "ValidateOnlyExit": 0,
-  "envelopeSha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751"
+  "envelopeSha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751",
+  "requiredCheck": {
+    "testedEvidenceHead": "69c66894cec53208b28f970d4b4be41f00ac6187",
+    "base": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+    "originalAggregateExit": 1,
+    "passed": [
+      "build",
+      "biome",
+      "check:changes",
+      "check:skill-commands"
+    ],
+    "failed": [
+      "check:text"
+    ],
+    "typecheck": "skipped-no-types",
+    "failure": "omitted-exact-HEAD-16102B-compressed-fixture",
+    "onlyFailedTextRecoveryExit": 0,
+    "originalAggregateRemainsRed": true
+  }
 }

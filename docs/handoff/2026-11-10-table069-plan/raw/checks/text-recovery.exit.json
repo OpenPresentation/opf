@@ -1,0 +1,15 @@
+{
+  "executable": "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+  "args": [
+    "C:/Users/micha/AppData/Local/npm-cache/_npx/334030cfead2389c/node_modules/pnpm/bin/pnpm.cjs",
+    "run",
+    "check:text"
+  ],
+  "cwd": "C:/opf-work/table069-proof",
+  "startedAt": "2026-11-10T07:14:29.811Z",
+  "endedAt": "2026-11-10T07:14:32.423Z",
+  "exitCode": 0,
+  "signal": null,
+  "error": null,
+  "onlyFailedStep": true
+}
