@@ -274,6 +274,10 @@
           "command": "node test/workspace-browser.mjs"
         },
         {
+          "id": "browser:workspace-review-navigation",
+          "command": "node test/workspace-review-navigation-browser.mjs"
+        },
+        {
           "id": "browser:workspace-react",
           "command": "node test/workspace-react-browser.mjs"
         },

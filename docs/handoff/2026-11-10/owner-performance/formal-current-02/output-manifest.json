@@ -1,0 +1,102 @@
+[
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu1-16-cached-trace.json.gz",
+    "bytes": 3335468,
+    "sha256": "63fea463c93d9ce98fc8c7191c72e3ca4354d1f5232710c7d4da5e8143053a67"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu1-16-cached-warmup.png",
+    "bytes": 294870,
+    "sha256": "2bbaa147d0137e22452f2710d86fd1613aeb7c5635d087b9c685b2977b6b49a6"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu1-16-cached.json",
+    "bytes": 3803604,
+    "sha256": "7a68d0530534eef1c0c1a695ddfab069013a6a93f3d2b29cd4757dffd5790954"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu1-36-cached-trace.json.gz",
+    "bytes": 3770636,
+    "sha256": "c3ad77dc3c4766c9719b07789f1c28036f7933aecc650250ff9080c5d8fd29e5"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu1-36-cached-warmup.png",
+    "bytes": 298656,
+    "sha256": "8d8a2ff0b7502c49727ef94553c45c3cb638dfa43d15fb9fa06f4cc9465e4653"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu1-36-cached.json",
+    "bytes": 5507211,
+    "sha256": "78576583ebe15335a58d474eb1d32902667436711431c8a0fbcd542754e0a911"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu4-16-cached-trace.json.gz",
+    "bytes": 3183704,
+    "sha256": "07ef27f9893fce98fbd06cf3606feb672a8e3432277e276ee11d4195751cf063"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu4-16-cached-warmup.png",
+    "bytes": 294803,
+    "sha256": "65e8691bf817a8954ef60984a228a8026fbc552b7a92f9baf715d38c84afac89"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu4-16-cached.json",
+    "bytes": 3806702,
+    "sha256": "19f6478bbcfb7dda195b438af8f5ead6ef061b0a7a050caf8ad9553e628a81bb"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu4-36-cached-trace.json.gz",
+    "bytes": 4032524,
+    "sha256": "49391dda066ade59d1a9538db27a5fa899a84d95e2b4d11019287f974ad69436"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu4-36-cached-warmup.png",
+    "bytes": 298651,
+    "sha256": "7a04e5ee4ada73344a292efdc0ae72e52aee191ca626d1da5f29cff3ce314f50"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/desktop-cpu4-36-cached.json",
+    "bytes": 5510711,
+    "sha256": "4ab0e59643ebdfaa82fa807d1e1426a3a99b46b6c58ae60e1cbd0884c8da6cb0"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/receipt.json",
+    "bytes": 73537,
+    "sha256": "c70100dfef1c608acbd7fefd2a592384fa680c2082fbd808995b74d940242c2a"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/retained-heap-cached.json",
+    "bytes": 8896,
+    "sha256": "a73f5c81779d4252dcc350bdd18c69c0e1851d9e82e57ccf186a624b21babb71"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/viewport390-cpu4-16-cached-trace.json.gz",
+    "bytes": 3170321,
+    "sha256": "8897ec9af9e702723c91c1033c7c18fbabecd1b7d9b80f8a1b40392fb40cf4d0"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/viewport390-cpu4-16-cached-warmup.png",
+    "bytes": 72322,
+    "sha256": "d24ccb6adce1ac741607fe8bf5a152f43d8c3ab466f38426ee0dde608db8f043"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/viewport390-cpu4-16-cached.json",
+    "bytes": 3774624,
+    "sha256": "2f0f4d26833dd3a73f5b75d2483fbe1a6cf6b26edaf6a2b3313d1ebdba937469"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/viewport390-cpu4-36-cached-trace.json.gz",
+    "bytes": 3858795,
+    "sha256": "c6d57baf66ff78ef5d4b2d61755d726ed594c53d8d2372c1169054652557734f"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/viewport390-cpu4-36-cached-warmup.png",
+    "bytes": 71631,
+    "sha256": "0be22d8040021204a828fe75429619d32747cc20a5a0ca9359e527301e235bad"
+  },
+  {
+    "path": "/tmp/opf-owner-current/artifacts/owner-current-formal-02/viewport390-cpu4-36-cached.json",
+    "bytes": 5482631,
+    "sha256": "97a0fb8616adb5e7a57e4e525c3bbd9617cb54bf24dfe1c8a39b3ceff1610574"
+  }
+]

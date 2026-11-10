@@ -1,4 +1,5 @@
 import { inlineDatasets } from './chart-data.js';
+import { HALF_STEPPED } from './composition-metadata.js';
 import type { Composed, CompositionMemo } from './rule-slides.js';
 import type { Rec } from './rule-design.js';
 import type { ValidateOptions } from './validation-types.js';
@@ -61,10 +62,26 @@ function key(value: unknown, opaque?: unknown[]): string {
 /** Plain snapshots only: no measurements, getters, functions, or shared references into a prior document. */
 function snapshotValue(value: Composed): { value: Composed; bytes: number } | undefined {
 	try {
-		const encoded = key(value);
+		// Arrangement comparisons need this private marker while composing (including across shallow copies).
+		// Review rules consume only the finished public geometry. Omit exactly that engine-owned descriptor;
+		// every other symbol/accessor/prototype remains visible to the strict plain-data guard below.
+		let candidate = value;
+		const rootDescriptors = Object.getOwnPropertyDescriptors(value);
+		const composition = rootDescriptors.composition;
+		if (composition && 'value' in composition && composition.value && Object.hasOwn(composition.value, HALF_STEPPED)) {
+			const marker = Object.getOwnPropertyDescriptor(composition.value, HALF_STEPPED);
+			const paths = marker && 'value' in marker ? marker.value : undefined;
+			if (marker?.enumerable && paths && typeof paths === 'object' && Object.getPrototypeOf(paths) === Set.prototype && Reflect.ownKeys(paths).length === 0 && Array.from(Set.prototype.values.call(paths)).every(path => typeof path === 'string')) {
+				const descriptors = Object.getOwnPropertyDescriptors(composition.value);
+				Reflect.deleteProperty(descriptors, HALF_STEPPED);
+				rootDescriptors.composition = { ...composition, value: Object.create(Object.getPrototypeOf(composition.value), descriptors) };
+				candidate = Object.create(Object.getPrototypeOf(value), rootDescriptors) as Composed;
+			}
+		}
+		const encoded = key(candidate);
 		// Allow overhead for the detached objects/arrays/slots as well as their strings. This is a bounded logical
 		// policy, not engine-specific retained-heap measurement. Oversized compositions simply stay uncached.
-		return { value: structuredClone(value), bytes: encoded.length * 4 + 256 };
+		return { value: structuredClone(candidate), bytes: encoded.length * 4 + 256 };
 	} catch { return undefined; }
 }
 

@@ -1,0 +1,163 @@
+{
+  "scope": "focused correctness and work-count controls, not formal performance or final-source acceptance",
+  "base": "89a9a74a6968848b81c49a396e72f56bc65ff6ca",
+  "sourceBranch": "codex/rr-117-navigation-review",
+  "install": "PASS frozen Node24.21/pnpm10.33.2",
+  "build": "one build:packages PASS",
+  "cacheNew": {
+    "pass": 2,
+    "fail": 0
+  },
+  "coreExisting": {
+    "pass": 33,
+    "fail": 0,
+    "milliseconds": 29214.771041
+  },
+  "browser01": "RED prebrowser exact import alias erroneously prefix-mapped package subpaths; original log retained",
+  "browser02": "RED actual navigation count3 vs initial2; synchronous canvas onRender called unconditional refresh before go updated index; original log retained",
+  "browser03": "PASS original full assertions after exact test-import correction and onRender private navigation-token route repair; no product rebuild",
+  "neighbors": [
+    {
+      "name": "workspace-browser.mjs",
+      "args": [
+        "test/workspace-browser.mjs"
+      ],
+      "scope": "explicit root-approved focused real browser",
+      "exit": 0,
+      "signal": null,
+      "seconds": 7.851,
+      "log": "/tmp/opf-navigation-neighbors-01/workspace-browser.mjs.log"
+    },
+    {
+      "name": "font-gate.mjs",
+      "args": [
+        "test/font-gate.mjs"
+      ],
+      "scope": "maintained full script selection",
+      "exit": 0,
+      "signal": null,
+      "seconds": 0.119,
+      "log": "/tmp/opf-navigation-neighbors-01/font-gate.mjs.log"
+    },
+    {
+      "name": "font-gate-registry.mjs",
+      "args": [
+        "test/font-gate-registry.mjs"
+      ],
+      "scope": "maintained full script selection",
+      "exit": 0,
+      "signal": null,
+      "seconds": 0.326,
+      "log": "/tmp/opf-navigation-neighbors-01/font-gate-registry.mjs.log"
+    },
+    {
+      "name": "catalogs.mjs",
+      "args": [
+        "test/catalogs.mjs"
+      ],
+      "scope": "maintained full script selection",
+      "exit": 0,
+      "signal": null,
+      "seconds": 0.25,
+      "log": "/tmp/opf-navigation-neighbors-01/catalogs.mjs.log"
+    },
+    {
+      "name": "review.mjs",
+      "args": [
+        "test/review.mjs"
+      ],
+      "scope": "maintained full script selection",
+      "exit": 0,
+      "signal": null,
+      "seconds": 0.243,
+      "log": "/tmp/opf-navigation-neighbors-01/review.mjs.log"
+    }
+  ],
+  "actualBrowserCounts": {
+    "initial": 2,
+    "navigation": 2,
+    "sameSlide": 2,
+    "invalid": 3,
+    "valid": 4,
+    "catalog": 5,
+    "explicit": 6,
+    "resource": 7,
+    "afterResourceNavigation": 7,
+    "failedResource": 7,
+    "recoveredResource": 8
+  },
+  "limits": [
+    "Empty-title invalid control is a semantic warning, not a schema-invalid document.",
+    "New browser control awaits actual review idle and complete cold report equality; no elapsed-time threshold.",
+    "Core cache source was built once; actual final workspace.js source was bundled by browser helper after onRender source correction. Final combined package rebuild/typecheck/changed-scope checks remain owed.",
+    "No new formal timing trial; original source89a9 formal results remain immutable.",
+    "Residual heap is not attributed or accepted as leak-free."
+  ],
+  "logs": [
+    {
+      "path": "install-01.log",
+      "bytes": 4248,
+      "sha256": "bbadc9e0b7ae2e06d8ee5ff75afef7e6f34d380335f77bc22fc2f3bc558e8cfe"
+    },
+    {
+      "path": "build-01.log",
+      "bytes": 14737,
+      "sha256": "6f3864562b7c622ac2322050b5305d966117549e7593e4604d6d366f333591e4"
+    },
+    {
+      "path": "halfstep-01.log",
+      "bytes": 291,
+      "sha256": "a9b045b815fb842f6ec92f63fddb81f1b8e0f214e53b463e0f162c97c4cc8841"
+    },
+    {
+      "path": "core-controls-01.log",
+      "bytes": 3812,
+      "sha256": "c4c5d02781050d1071bc256882ddac48b8857666d26b4bc39efc6100599a0d99"
+    },
+    {
+      "path": "browser-01-setup-red.log",
+      "bytes": 66260,
+      "sha256": "375c05ad827c2a67a63f7e35600083255ecc09bfb7d8d0b9c9af64efe5db4213"
+    },
+    {
+      "path": "browser-02-navigation-red.log",
+      "bytes": 420,
+      "sha256": "9417216c7b02bc15d9fcd66c8f1196c0fb4495dd8529f4558198c6c6f1e949bf"
+    },
+    {
+      "path": "browser-03-pass.log",
+      "bytes": 791,
+      "sha256": "55840ff9a65ad6623b50a44e00c759b4a5b7b22b52d38ce9b93d0bc191413739"
+    },
+    {
+      "path": "neighbors-results.json",
+      "bytes": 1332,
+      "sha256": "280037f67f8ceb4f52551e2ee5940c8b04c5467bc6fa835910523871786d5a69"
+    },
+    {
+      "path": "neighbor-font-gate-registry.mjs.log",
+      "bytes": 170,
+      "sha256": "1ee913eedea582631f1b15ccb9700c642013b81dcb9d5815b4d52dd6c566561c"
+    },
+    {
+      "path": "neighbor-font-gate.mjs.log",
+      "bytes": 123,
+      "sha256": "ec12ab658a167fb403db8f147f41c8889e9fad4b59c49f74d8673217f8da4c3e"
+    },
+    {
+      "path": "neighbor-catalogs.mjs.log",
+      "bytes": 338,
+      "sha256": "4c305aeb56909e547993a393d7021fd8dd889d51317a47aecb4725aeffbed4e3"
+    },
+    {
+      "path": "neighbor-review.mjs.log",
+      "bytes": 31,
+      "sha256": "f71eb0d3029c9f4b49b7ae6935a4a31983509206383dae659e0874872962f9cd"
+    },
+    {
+      "path": "neighbor-workspace-browser.mjs.log",
+      "bytes": 7164,
+      "sha256": "2335a280def3eeeece33f230b82c5d2874af909d9b59d0f82d5f3d4e0e74f63e"
+    }
+  ]
+}
