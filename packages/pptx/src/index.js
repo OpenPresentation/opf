@@ -303,7 +303,7 @@ export async function toPptx(input, options = {}) {
   if (options.as === 'images') { if(options.fonts?.registry?.fontNames)await options.fonts?.ensure?.(presentation,{catalogs:options.catalogs,...(options.date?{date:options.date}:{}),renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})}}); return pictureSlidesPptx(presentation, options); }
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
   // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
-  options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map(), nativeMeasurementRequests: new Set()};
+  options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement,options.fonts?.registry?.fontNames), svgRasters: new Map(), nativeMeasurementRequests: new Set()};
   // LH-28: safe mode measures each Latin text family as the Office-safe family it is written as, so composition lays out the
   // text PowerPoint draws on any machine. The design class of a family (sans-serif, serif, monospace) comes from the font
   // scheme records the slides resolve.
@@ -4901,7 +4901,7 @@ function slideTextMeasurement(presentation, index, options) {
   if (typeof measurement.resolveStyle === 'function') adapted.resolveStyle = style => measurement.resolveStyle(style);
   if (typeof measurement.resolveFont === 'function') adapted.resolveFont = style => measurement.resolveFont(style);
   if (typeof base.outlineBounds === 'function') adapted.outlineBounds = (text, size, style) => pick(style).outlineBounds(text, size, style);
-  return options.safeTypeface ? safeMeasurement(chosenFamilyMeasurement(adapted), options.safeTypeface) : chosenFamilyMeasurement(adapted);
+  return options.safeTypeface ? safeMeasurement(chosenFamilyMeasurement(adapted,options.fonts?.registry?.fontNames), options.safeTypeface) : chosenFamilyMeasurement(adapted,options.fonts?.registry?.fontNames);
 }
 
 // DrawingML has only a bold flag: a run written for the chosen family (no provider face such as Roboto SemiBold) draws that
@@ -4935,9 +4935,17 @@ function missingFaceError(error, style, measurement, drawn) {
   return improved;
 }
 
-function chosenFamilyMeasurement(measurement) {
+function chosenFamilyMeasurement(measurement,metadata) {
   if (!measurement || typeof measurement.resolveStyle !== 'function') return measurement;
-  const resolveFont = typeof measurement.resolveFont === 'function' ? style => measurement.resolveFont(style) : undefined;
+  // An official demand handle can name an undrawn role before its actual
+  // measurement dependency is prepared. Keep this fallback inside the exporter;
+  // ordinary SVG measurement and custom providers retain their own behavior.
+  const unresolved=error=>['font-unavailable','font-style-unavailable'].includes(error?.code);
+  // A nominal resolver may return the unchanged request when it has no match.
+  // That is not a prepared-name result: preserve the existing drawn-weight retry.
+  const nominal=style=>{const found=metadata?.resolveFont?.(style);return Number.isFinite(found?.resolvedWeight)?found:undefined;};
+  const resolveStyle=style=>{try{return measurement.resolveStyle(style);}catch(error){if(unresolved(error)&&nominal(style))return metadata.resolveStyle(style);throw error;}};
+  const resolveFont = typeof measurement.resolveFont === 'function' ? style => {try{return measurement.resolveFont(style);}catch(error){if(unresolved(error)){const found=nominal(style);if(found)return found;}throw error;}} : undefined;
   const wrapped = {
     measure: (text, size, style) => measurement.measure(text, size, style),
     resolveStyle: input => {
@@ -4947,12 +4955,12 @@ function chosenFamilyMeasurement(measurement) {
       // draws it in, which the policy does resolve. A family the policy cannot resolve at that weight either still fails, and
       // a style that resolves keeps its own resolution, so no output that exported before changes.
       let style = input, resolved;
-      try { resolved = measurement.resolveStyle(style); }
+      try { resolved = resolveStyle(style); }
       catch (error) {
         const weight = style?.fontWeight ?? 400, drawn = nativeDrawnWeight(weight);
         if (error?.code !== 'font-unavailable' || drawn === weight) throw missingFaceError(error, style, measurement);
         style = {...style, fontWeight: drawn};
-        try { resolved = measurement.resolveStyle(style); }
+        try { resolved = resolveStyle(style); }
         catch { throw missingFaceError(error, input, measurement, drawn); }
       }
       const requested = style?.fontFamily;
