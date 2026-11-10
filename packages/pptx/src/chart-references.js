@@ -497,6 +497,53 @@ function overlayHash(doc, frame, members, value) {
   return (a >>> 0).toString(16).padStart(8, '0') + (b >>> 0).toString(16).padStart(8, '0');
 }
 
+// V1 bound lexical XML artifacts too. Reconstruct only the observed nonrendering Office serialization,
+// then require the same complete stored digest. Frame, paint, visible text and numeric changes stay bound.
+function overlayOfficeHash(doc, frame, members, value) {
+  const space = doc?.['c:chartSpace'], chart = space?.['c:chart'], plot = chart?.['c:plotArea'];
+  const layout = plot?.['c:layout']?.['c:manualLayout'];
+  if (!layout || typeof layout !== 'object' || Array.isArray(layout)) return;
+  const manual = {...layout};
+  for (const key of ['c:x', 'c:y', 'c:w', 'c:h']) {
+    const entry = layout[key];
+    if (!entry || Object.keys(entry).join() !== 'val' || typeof entry.val !== 'string') return;
+    const number = finiteCacheValue(entry.val);
+    if (number === undefined) return;
+    // Shortest exact round-trip spelling, never rounding/clipping to an exported layout.
+    manual[key] = {...entry, val: Object.is(number, -0) ? '-0' : String(number)};
+  }
+  const axes = [];
+  for (const axis of arr(plot['c:valAx'])) {
+    const scale = axis?.['c:scaling'];
+    if (!scale || Object.keys(scale).filter(k => k !== '#text').sort().join() !== 'c:max,c:min,c:orientation') return;
+    if (Object.hasOwn(scale, '#text')) {
+      if (scale['#text'] !== '  ') return;
+      axes.push(axis);
+    } else {
+      // Exact whitespace written by the V1 generated value-axis scaling; no recursive text removal.
+      axes.push({...axis, 'c:scaling': {...scale, '#text': '  '}});
+    }
+  }
+  const normalizedMembers = [];
+  for (const member of members) {
+    const body = member.shape['p:txBody'];
+    if (member.tag.role !== 'line' || body === undefined) {
+      normalizedMembers.push(member);
+      continue;
+    }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) return;
+    const paragraph = body['a:p'], end = paragraph?.['a:endParaRPr'];
+    if (Object.keys(body).sort().join() !== 'a:bodyPr,a:lstStyle,a:p' || body['a:bodyPr'] !== '' || body['a:lstStyle'] !== '' ||
+        !paragraph || Array.isArray(paragraph) || Object.keys(paragraph).join() !== 'a:endParaRPr' ||
+        !end || Object.keys(end).join() !== 'lang' || typeof end.lang !== 'string' || !/^[A-Za-z0-9-]+$/.test(end.lang)) return;
+    const {'p:txBody': _empty, ...shape} = member.shape;
+    normalizedMembers.push({...member, shape});
+  }
+  // Shallow copies only: never copy chart data caches or mutate caller-owned shape/frame objects.
+  const normalizedPlot = {...plot, 'c:layout': {...plot['c:layout'], 'c:manualLayout': manual}, 'c:valAx': axes};
+  const normalizedDoc = {...doc, 'c:chartSpace': {...space, 'c:chart': {...chart, 'c:plotArea': normalizedPlot}}};
+  return overlayHash(normalizedDoc, frame, normalizedMembers, value);
+}
 /** Recover explicit fallbacks only when CURRENT chart/shape evidence can express the line faithfully. Otherwise preserve visible shapes. */
 export function importReferenceOverlays(shapes, frames, rels, entries, { scale = 1, colors = {}, report, slideXml } = {}) {
   const consumed = new Set(),
@@ -598,7 +645,7 @@ export function importReferenceOverlays(shapes, frames, rels, entries, { scale =
         Number.isFinite(o.value) &&
         ['start', 'end'].includes(o.labelPosition) &&
         typeof o.binding === 'string' &&
-        o.binding === overlayHash(doc, frame, members, value);
+        (o.binding === overlayHash(doc, frame, members, value) || o.binding === overlayOfficeHash(doc, frame, members, value));
       const label = labels.length
         ? arr(labels[0].shape['p:txBody']?.['a:p'])
             .map((p) =>
