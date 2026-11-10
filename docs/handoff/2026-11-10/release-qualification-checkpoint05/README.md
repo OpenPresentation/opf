@@ -13,3 +13,5 @@ This records closed observations without advancing canonical PR1225 or publishin
 Vetoable decisions: retain the established demand-font memory/warm gains while fixing unnecessary preparation work; hold replay candidates with unexplained48-slide regression. Accept the narrow linear cluster-boundary repair source after exact equivalence, with broader gates still owed. Group reviewed repairs before the next coherent source run. Preserve every original RED/UNRUN and avoid inferring native/production/release acceptance.
 
 The JSON files retain actual root verifier outputs and exact closed CLI/main observer receipts. This checkpoint's required metadata-only check is separate and pending at initial write.
+
+The maintained metadata-only check at472f0343d actually passed five selected steps in26.9s, with typecheck skipped by selection and no package/full suites. Its exact log and terminal receipt are retained separately. A small metadata-only delivery delta remains distinct from combined product qualification.
