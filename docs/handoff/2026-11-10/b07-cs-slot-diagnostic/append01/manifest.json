@@ -1,0 +1,2708 @@
+{
+  "schema": 1,
+  "neverMerge": true,
+  "diagnosticOnly": true,
+  "nativeAcceptance": false,
+  "officeInvoked": false,
+  "testedHead": "46249cd98f9ee210113fc2d7f5ee48026600a5cc",
+  "testedTree": "7568c62f1fe6b8ffbb5e92353eeefd687bf9c487",
+  "baselineHead": "3f7edd0c54717d4bf0630541bafe73d034baad7f",
+  "purePacketHead": "140fc4275bf9726eafff6fceb9a5836e8b9ec8b3",
+  "previousPacket": {
+    "file": "../raw.json.gz",
+    "bytes": 352146,
+    "sha256": "bbdf14d9d28bee244810f440f5b1f8d59054acc0cec302377a2a77faac386572"
+  },
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 2591025,
+    "sha256": "1e46e8f30e0b574c95891984f2c3175aa53cd1c1bbf36d91163458eb0a914f65",
+    "expandedBytes": 8477831,
+    "records": 447,
+    "logicalBytes": 6263151
+  },
+  "records": [
+    {
+      "name": "admission-tool-terminal.json",
+      "bytes": 333,
+      "sha256": "5ea283cea29b777460f83e56b0ed9e1c6ab80ef24ffde0564c0b3f3ebca76793",
+      "source": "tool:write_stdin35910"
+    },
+    {
+      "name": "admission/admission/execution-envelope.json",
+      "bytes": 3315,
+      "sha256": "1ae85f2aafc2a1d00cf4fcb181ee98c82f620d1fc08bf7c328ad64e4f9087aa1",
+      "source": "C:\\opf-work\\b07-cs-admission01\\admission\\execution-envelope.json"
+    },
+    {
+      "name": "admission/aliased.link-record.json",
+      "bytes": 174,
+      "sha256": "02e3a0a6094806df3790a123ee8a0963c85452dd36db07afa00b27b69c942bf6",
+      "source": "C:\\opf-work\\b07-cs-admission01\\aliased"
+    },
+    {
+      "name": "admission/mutant-1.json",
+      "bytes": 2697,
+      "sha256": "0d50be17c0938776c8738e6894641c608cc8b6ee14781e2536aa4cbaeb4c463d",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-1.json"
+    },
+    {
+      "name": "admission/mutant-10.json",
+      "bytes": 2680,
+      "sha256": "078cc6e51a16d5f8325da6b3a66d10fdacfce861bc5214523e6afed6c6bb3d10",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-10.json"
+    },
+    {
+      "name": "admission/mutant-11.json",
+      "bytes": 2679,
+      "sha256": "0b5c0b839cd1d04f6294d777341b0060f748d2b788b0e8610e39ef9c9b8ab288",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-11.json"
+    },
+    {
+      "name": "admission/mutant-12.json",
+      "bytes": 2679,
+      "sha256": "980d990d20037b9ef7a33a75090555ea8d50b5d5191eea1233c87b893dd4ce33",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-12.json"
+    },
+    {
+      "name": "admission/mutant-13.json",
+      "bytes": 2679,
+      "sha256": "0934fd160e6d329fd8b5a4942c63fb513e5db43d635b5fe2329f15c846118552",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-13.json"
+    },
+    {
+      "name": "admission/mutant-14.json",
+      "bytes": 2680,
+      "sha256": "f21faf62832a92dcd5331d5951a27ee13a5c97d5784dce9f87d578de5d1ac9cf",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-14.json"
+    },
+    {
+      "name": "admission/mutant-15.json",
+      "bytes": 2531,
+      "sha256": "5e58a87b26fd1d2827b400198124edc6e4a8ced92895c00b329973561f125f51",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-15.json"
+    },
+    {
+      "name": "admission/mutant-16.json",
+      "bytes": 2680,
+      "sha256": "617604176585535dc2e05f6b37933de0842d4dcbbae2778902219b12cd12e466",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-16.json"
+    },
+    {
+      "name": "admission/mutant-17.json",
+      "bytes": 2679,
+      "sha256": "7adfd65babd9417f93bc1cea25a61ceb3d2beb259b408c6c51808cf1e856ead1",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-17.json"
+    },
+    {
+      "name": "admission/mutant-2.json",
+      "bytes": 2680,
+      "sha256": "f3243a15d2c41bfcfad78c3e59ba6b22d32a0de9363491e7367f7957f7bee2c4",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-2.json"
+    },
+    {
+      "name": "admission/mutant-3.json",
+      "bytes": 2680,
+      "sha256": "f80ce49ba22cdd4e78b61d984a8f1112f0a6207b1e281604655277add4603961",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-3.json"
+    },
+    {
+      "name": "admission/mutant-4.json",
+      "bytes": 2680,
+      "sha256": "7717d472e539f574bd4d5b40d2e9a42d940d41bb1e4dfac83b74418800bef2dd",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-4.json"
+    },
+    {
+      "name": "admission/mutant-5.json",
+      "bytes": 2680,
+      "sha256": "a6f212c5d41b54b703991633c4183476a1782968e07e1e3303ed9acd9be56881",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-5.json"
+    },
+    {
+      "name": "admission/mutant-6.json",
+      "bytes": 2637,
+      "sha256": "0db04b7cf9e94f3b8de7b7588c444db077bd5cb5506192390a88d2426d8af127",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-6.json"
+    },
+    {
+      "name": "admission/mutant-7.json",
+      "bytes": 2679,
+      "sha256": "b3ef381536ac82d75ecd95e8e1d9834d68c5b1dcf87b4bf76afc50947ccdda1f",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-7.json"
+    },
+    {
+      "name": "admission/mutant-8.json",
+      "bytes": 2680,
+      "sha256": "e5ffb6fc9f4b7cd36a820b8281af12cc655f53d0707d922979f2859318571fbb",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-8.json"
+    },
+    {
+      "name": "admission/mutant-9.json",
+      "bytes": 2680,
+      "sha256": "f6471051374aea650dc4618388e877b5a78298ad73b5e756b55511e81e5a27d6",
+      "source": "C:\\opf-work\\b07-cs-admission01\\mutant-9.json"
+    },
+    {
+      "name": "admission/results.json",
+      "bytes": 4321,
+      "sha256": "4001830c50191b067adbfd568c4a7ed64a4362f83bd440026443e4911dd7b017",
+      "source": "C:\\opf-work\\b07-cs-admission01\\results.json"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic-admission/execution-envelope.json",
+      "bytes": 3321,
+      "sha256": "8ebb3c927e4812e1c34097e290aec4726f42c103f5f6c88fbdf2b0c796e83f45",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic-admission\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic-execution/execution-envelope.json",
+      "bytes": 3321,
+      "sha256": "8ebb3c927e4812e1c34097e290aec4726f42c103f5f6c88fbdf2b0c796e83f45",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic-execution\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic-execution/inputs/case.pptx",
+      "bytes": 100889,
+      "sha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic-execution\\inputs\\case.pptx"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic-execution/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic-execution\\inputs\\native-process.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic-execution/inputs/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic-execution\\inputs\\segment-worker.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic-execution/runner.json",
+      "bytes": 6331,
+      "sha256": "64cf3b43b9a26c489f4159462586f9a3abfb2cc8d6afcf4f69ef3ad73fb98481",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic-execution\\runner.json"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic-wrapper-terminal.json",
+      "bytes": 775,
+      "sha256": "dafd7e1289114e7d972d8485600efd01829cd7971a46c102ed5220680ead07f6",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic-wrapper-terminal.json"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic.stderr.log"
+    },
+    {
+      "name": "admission/rtl-contrast-05-mixed-explicit-arabic.stdout.log",
+      "bytes": 4724,
+      "sha256": "24f86e2f510335058ade761352f598852b1af61b580534e1e4fe3d61341fbd42",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-05-mixed-explicit-arabic.stdout.log"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic-admission/execution-envelope.json",
+      "bytes": 3321,
+      "sha256": "eff8ae9f55e01f9a9f0e563bcaf05542432f8f7fa80e0bda7b09edb2531f6d44",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic-admission\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic-execution/execution-envelope.json",
+      "bytes": 3321,
+      "sha256": "eff8ae9f55e01f9a9f0e563bcaf05542432f8f7fa80e0bda7b09edb2531f6d44",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic-execution\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic-execution/inputs/case.pptx",
+      "bytes": 101005,
+      "sha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic-execution\\inputs\\case.pptx"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic-execution/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic-execution\\inputs\\native-process.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic-execution/inputs/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic-execution\\inputs\\segment-worker.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic-execution/runner.json",
+      "bytes": 6331,
+      "sha256": "9d1c80671cbad46a653743c01b83831642ad6abbbb87fb02288c628272119f14",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic-execution\\runner.json"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic-wrapper-terminal.json",
+      "bytes": 775,
+      "sha256": "6038711be6fbaf0785999104b9767f242258dfe39e3a708b4828c6520f358de9",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic-wrapper-terminal.json"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic.stderr.log"
+    },
+    {
+      "name": "admission/rtl-contrast-06-whole-explicit-arabic.stdout.log",
+      "bytes": 5802,
+      "sha256": "9d96a0dd4716d3332ab2b004d0cc7d9b2720dfc2bc04c5e7e4d70379afe8fcb6",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-06-whole-explicit-arabic.stdout.log"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic-admission/execution-envelope.json",
+      "bytes": 3315,
+      "sha256": "1ae85f2aafc2a1d00cf4fcb181ee98c82f620d1fc08bf7c328ad64e4f9087aa1",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic-admission\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic-execution/execution-envelope.json",
+      "bytes": 3315,
+      "sha256": "1ae85f2aafc2a1d00cf4fcb181ee98c82f620d1fc08bf7c328ad64e4f9087aa1",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic-execution\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic-execution/inputs/case.pptx",
+      "bytes": 101121,
+      "sha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic-execution\\inputs\\case.pptx"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic-execution/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic-execution\\inputs\\native-process.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic-execution/inputs/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic-execution\\inputs\\segment-worker.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic-execution/runner.json",
+      "bytes": 6331,
+      "sha256": "9688fb077f2635d33f463f6be101092ab60fbb6a39334ea9efabd0583517ebd3",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic-execution\\runner.json"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic-wrapper-terminal.json",
+      "bytes": 773,
+      "sha256": "1340d4f2bfa32be6d2b5a55099c3feee0942341f93b60cd3a95348a7d16b2e2e",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic-wrapper-terminal.json"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic.stderr.log"
+    },
+    {
+      "name": "admission/rtl-contrast-09-long-explicit-arabic.stdout.log",
+      "bytes": 6472,
+      "sha256": "7fc00ca58967b9d0166b448d63efa546b2c5fc55582f66cb2a60d0f3f1cb7dfc",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-09-long-explicit-arabic.stdout.log"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits-admission/execution-envelope.json",
+      "bytes": 3292,
+      "sha256": "281b4cfc6eab3ea2ea0ecb640d9af2dfbd519385dd391052a4a8166162f6027e",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits-admission\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits-execution/execution-envelope.json",
+      "bytes": 3292,
+      "sha256": "281b4cfc6eab3ea2ea0ecb640d9af2dfbd519385dd391052a4a8166162f6027e",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits-execution\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits-execution/inputs/case.pptx",
+      "bytes": 102841,
+      "sha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits-execution\\inputs\\case.pptx"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits-execution/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits-execution\\inputs\\native-process.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits-execution/inputs/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits-execution\\inputs\\segment-worker.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits-execution/runner.json",
+      "bytes": 6331,
+      "sha256": "876cd5667a388d47f90fa6a40f698c60de0bc7113d7d6c7e61494e9e8d41ea3d",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits-execution\\runner.json"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits-wrapper-terminal.json",
+      "bytes": 765,
+      "sha256": "8147430d4d023929c54ec5b5170b38ab7ac0edcd57f631549629b96f9ff29197",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits-wrapper-terminal.json"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits.stderr.log"
+    },
+    {
+      "name": "admission/rtl-contrast-10-non-ascii-digits.stdout.log",
+      "bytes": 14670,
+      "sha256": "76beee8d02d5a9ddbddefb709e552eaadd7c6351a4ecda53541868f07b9ef371",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-10-non-ascii-digits.stdout.log"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french-admission/execution-envelope.json",
+      "bytes": 3315,
+      "sha256": "ad42f417bac09dec93dbf326fc23225fe70e8b30a0e84d397e0ca89b946ed4a8",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french-admission\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french-execution/execution-envelope.json",
+      "bytes": 3315,
+      "sha256": "ad42f417bac09dec93dbf326fc23225fe70e8b30a0e84d397e0ca89b946ed4a8",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french-execution\\execution-envelope.json"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french-execution/inputs/case.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french-execution\\inputs\\case.pptx"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french-execution/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french-execution\\inputs\\native-process.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french-execution/inputs/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french-execution\\inputs\\segment-worker.ps1"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french-execution/runner.json",
+      "bytes": 6331,
+      "sha256": "8da7489f6db3d35dd039ab3f6dc521a413ef72decf474c3fb03db087c4ca74cb",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french-execution\\runner.json"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french-wrapper-terminal.json",
+      "bytes": 773,
+      "sha256": "106bc9f5407e191eced85006be47741bfffda22dcd150fd0c4cc6cc4c76b3f17",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french-wrapper-terminal.json"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french.stderr.log"
+    },
+    {
+      "name": "admission/rtl-contrast-11-long-explicit-french.stdout.log",
+      "bytes": 5232,
+      "sha256": "7bfb61cdfa54e65ed99271741c523fc2e96aea69a6cca9731f9a9c972b90b9c3",
+      "source": "C:\\opf-work\\b07-cs-admission01\\rtl-contrast-11-long-explicit-french.stdout.log"
+    },
+    {
+      "name": "construction/construct-controller01.mjs",
+      "bytes": 6883,
+      "sha256": "11080405f9386ad70e6f2e43b37817f2c8b5750e92d4d1a116e369e6feec4210",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/construct-controller01.mjs"
+    },
+    {
+      "name": "construction/controller-derivation01.json",
+      "bytes": 10930,
+      "sha256": "437000269c4a2e4d4ed3bc4d49ea7f6fa2131ec160209940d69ca919ea424298",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/controller-derivation01.json"
+    },
+    {
+      "name": "construction/seal-controller01.mjs",
+      "bytes": 3829,
+      "sha256": "2e7cf903452ef07ad232eedbd5ba7ca7b9775c212a8de562b690393c5040d86d",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\seal-controller01.mjs"
+    },
+    {
+      "name": "controller-baseline/.gitattributes",
+      "bytes": 42,
+      "sha256": "9cb1513f02ae8f9e475437641b70f055770cc15bbd4d444a23df739eb22d553d",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/.gitattributes"
+    },
+    {
+      "name": "controller-baseline/data-tools.mjs",
+      "bytes": 7315,
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/data-tools.mjs"
+    },
+    {
+      "name": "controller-baseline/managed.ps1",
+      "bytes": 20475,
+      "sha256": "ac77b6635d3c37d06e1124ce370d7f37b4a3acab50bbb56df3aaf787415749fa",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/managed.ps1"
+    },
+    {
+      "name": "controller-baseline/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/native-process.ps1"
+    },
+    {
+      "name": "controller-baseline/profile.mjs",
+      "bytes": 17128,
+      "sha256": "b4b2545f49614813702414dfe2ea348d8d58d6ff6fea8493b3d580239596a6f1",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/profile.mjs"
+    },
+    {
+      "name": "controller-baseline/references/base-managed.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/base-managed.ps1"
+    },
+    {
+      "name": "controller-baseline/references/base-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/base-worker.ps1"
+    },
+    {
+      "name": "controller-baseline/references/base-wrapper.ps1",
+      "bytes": 11352,
+      "sha256": "26f964e141cebe1f63ff39c18b6bda79364e134fa6436973bb2b5a603b21110d",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/base-wrapper.ps1"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-05-mixed-explicit-arabic/expectation.json",
+      "bytes": 4131,
+      "sha256": "dcfa2c313c38c1582a66df74c3e249738ac9fd9ef43da09603f14252ff6e2383",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/expectation.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+      "bytes": 101006,
+      "sha256": "7c4b61ae2421b1611c9ff4c2b0db6b871e2f5896d502f38a42ca796b44824a70",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/input.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-05-mixed-explicit-arabic/original.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/original.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-06-whole-explicit-arabic/expectation.json",
+      "bytes": 4208,
+      "sha256": "b3a484b739f756a2121d4f6b1c0cd389fcfec51c7f43ff6285d3ef7d63ae0ab2",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/expectation.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "bytes": 101005,
+      "sha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/input.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-06-whole-explicit-arabic/original.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/original.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/source.opf.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-09-long-explicit-arabic/expectation.json",
+      "bytes": 5248,
+      "sha256": "febc22a7a4ea534ed68bac19818c70925b9121ee2c9d4e77063ae1d63441f46d",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/expectation.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "bytes": 101121,
+      "sha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/input.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-09-long-explicit-arabic/original.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/original.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/source.opf.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-10-non-ascii-digits/expectation.json",
+      "bytes": 18335,
+      "sha256": "383cf18a052d3c98df0b52d8302dbbf23cd2d64bdcca90b65fa950d6de6b6778",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/expectation.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "bytes": 102841,
+      "sha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/input.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-10-non-ascii-digits/original.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/original.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/source.opf.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-11-long-explicit-french/expectation.json",
+      "bytes": 3116,
+      "sha256": "52b79e6a85ea16c86386525d23ae43d308f032ef5418943849f44779c053be4c",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/expectation.json"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-11-long-explicit-french/input.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/input.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-11-long-explicit-french/original.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/original.pptx"
+    },
+    {
+      "name": "controller-baseline/references/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/source.opf.json"
+    },
+    {
+      "name": "controller-baseline/run-managed.mjs",
+      "bytes": 1870,
+      "sha256": "6be08c0b96e8788cc9653540a3dc28e98c21f6ee08e644bb168c37ff77c210b6",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/run-managed.mjs"
+    },
+    {
+      "name": "controller-baseline/run-segment-observer.ps1",
+      "bytes": 18838,
+      "sha256": "f0f0ae0a50366db9649da47b0c0f8133364e60c11fa2f1738a05b08adfecb84c",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/run-segment-observer.ps1"
+    },
+    {
+      "name": "controller-baseline/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/segment-worker.ps1"
+    },
+    {
+      "name": "controller-baseline/SOURCE.json",
+      "bytes": 9139,
+      "sha256": "ce67110ccd28b1467feb2dc2aeb460823fe041ccab350af340268dc3ea3633cb",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/SOURCE.json"
+    },
+    {
+      "name": "controller-baseline/test.mjs",
+      "bytes": 7805,
+      "sha256": "13b22dd6a388fabb4d202e3cba94f1a1bf73f8ab2a67e11b4bd44c1cac2378a6",
+      "source": "C:/opf-work/b07-seg-ipc/tools/rr105-native-segment-observer/test.mjs"
+    },
+    {
+      "name": "controller-current/.gitattributes",
+      "bytes": 42,
+      "sha256": "9cb1513f02ae8f9e475437641b70f055770cc15bbd4d444a23df739eb22d553d",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\.gitattributes"
+    },
+    {
+      "name": "controller-current/data-tools.mjs",
+      "bytes": 7315,
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\data-tools.mjs"
+    },
+    {
+      "name": "controller-current/managed.ps1",
+      "bytes": 20475,
+      "sha256": "ac77b6635d3c37d06e1124ce370d7f37b4a3acab50bbb56df3aaf787415749fa",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\managed.ps1"
+    },
+    {
+      "name": "controller-current/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\native-process.ps1"
+    },
+    {
+      "name": "controller-current/profile.mjs",
+      "bytes": 17128,
+      "sha256": "31d019f8cfabc63b86ad603e8bd9dd5145491ef5aed48c18dae7f462628c38c9",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\profile.mjs"
+    },
+    {
+      "name": "controller-current/README.md",
+      "bytes": 532,
+      "sha256": "115f5b9b35163696aef695dcdd0248834bf35b9ba5100ad3a91a90f754eadd52",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\README.md"
+    },
+    {
+      "name": "controller-current/references/base-managed.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\base-managed.ps1"
+    },
+    {
+      "name": "controller-current/references/base-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\base-worker.ps1"
+    },
+    {
+      "name": "controller-current/references/base-wrapper.ps1",
+      "bytes": 11352,
+      "sha256": "26f964e141cebe1f63ff39c18b6bda79364e134fa6436973bb2b5a603b21110d",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\base-wrapper.ps1"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-05-mixed-explicit-arabic/expectation.json",
+      "bytes": 2475,
+      "sha256": "9cc33657ac4919952fc99cdb256ece174afbed9b194f1479e4e137388d33e6a2",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-05-mixed-explicit-arabic\\expectation.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+      "bytes": 100889,
+      "sha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-05-mixed-explicit-arabic\\input.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-05-mixed-explicit-arabic/original.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-05-mixed-explicit-arabic\\original.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-05-mixed-explicit-arabic\\source.opf.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-06-whole-explicit-arabic/expectation.json",
+      "bytes": 4208,
+      "sha256": "b3a484b739f756a2121d4f6b1c0cd389fcfec51c7f43ff6285d3ef7d63ae0ab2",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-06-whole-explicit-arabic\\expectation.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "bytes": 101005,
+      "sha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-06-whole-explicit-arabic\\input.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-06-whole-explicit-arabic/original.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-06-whole-explicit-arabic\\original.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-06-whole-explicit-arabic\\source.opf.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-09-long-explicit-arabic/expectation.json",
+      "bytes": 5248,
+      "sha256": "febc22a7a4ea534ed68bac19818c70925b9121ee2c9d4e77063ae1d63441f46d",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-09-long-explicit-arabic\\expectation.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "bytes": 101121,
+      "sha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-09-long-explicit-arabic\\input.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-09-long-explicit-arabic/original.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-09-long-explicit-arabic\\original.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-09-long-explicit-arabic\\source.opf.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-10-non-ascii-digits/expectation.json",
+      "bytes": 18335,
+      "sha256": "383cf18a052d3c98df0b52d8302dbbf23cd2d64bdcca90b65fa950d6de6b6778",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-10-non-ascii-digits\\expectation.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "bytes": 102841,
+      "sha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-10-non-ascii-digits\\input.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-10-non-ascii-digits/original.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-10-non-ascii-digits\\original.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-10-non-ascii-digits\\source.opf.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-11-long-explicit-french/expectation.json",
+      "bytes": 3116,
+      "sha256": "52b79e6a85ea16c86386525d23ae43d308f032ef5418943849f44779c053be4c",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-11-long-explicit-french\\expectation.json"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-11-long-explicit-french/input.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-11-long-explicit-french\\input.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-11-long-explicit-french/original.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-11-long-explicit-french\\original.pptx"
+    },
+    {
+      "name": "controller-current/references/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-11-long-explicit-french\\source.opf.json"
+    },
+    {
+      "name": "controller-current/run-managed.mjs",
+      "bytes": 1870,
+      "sha256": "6be08c0b96e8788cc9653540a3dc28e98c21f6ee08e644bb168c37ff77c210b6",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\run-managed.mjs"
+    },
+    {
+      "name": "controller-current/run-segment-observer.ps1",
+      "bytes": 18838,
+      "sha256": "f0f0ae0a50366db9649da47b0c0f8133364e60c11fa2f1738a05b08adfecb84c",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\run-segment-observer.ps1"
+    },
+    {
+      "name": "controller-current/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\segment-worker.ps1"
+    },
+    {
+      "name": "controller-current/SOURCE.json",
+      "bytes": 10064,
+      "sha256": "a9089abf057c14d44b66fe4ed582e4c478be6e409e8f74b468c33f8a14168b14",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\SOURCE.json"
+    },
+    {
+      "name": "controller-current/test.mjs",
+      "bytes": 7805,
+      "sha256": "4e4e116ceedf58d4a87ed2569983e790ea278d48e1e1d8dee5db0230708094b7",
+      "source": "C:\\opf-work\\b07-cs-slot\\tools\\rr105-native-segment-observer\\test.mjs"
+    },
+    {
+      "name": "managed/managed01.exit.json",
+      "bytes": 557,
+      "sha256": "f08942d02072a0d09cf490bb3c083bfacffb758399c1248c10a706a4e8a8fea7",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01.exit.json"
+    },
+    {
+      "name": "managed/managed01.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01.stderr.log"
+    },
+    {
+      "name": "managed/managed01.stdout.log",
+      "bytes": 69,
+      "sha256": "67363293feda5ba442b30fb7616c9be0a140412b3dd6ab4369aa5b237303420f",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01.stdout.log"
+    },
+    {
+      "name": "managed/managed01/fault-app-path/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-path\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-app-path/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-path\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-app-path/report.json",
+      "bytes": 955,
+      "sha256": "d1094907874880ef31658ea36016edd490403b448e606938f8f8cc29031cce72",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-path\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-app-path/stages.jsonl",
+      "bytes": 2097,
+      "sha256": "fe8619a761f4c293d5483aaee2d64a2ee01237722ded1bc39cd728decaf08ae1",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-path\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-app-presentations/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-presentations\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-app-presentations/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-presentations\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-app-presentations/report.json",
+      "bytes": 498,
+      "sha256": "3a7dac72800640587618a0a2bdd946218cd221454d4bddb9c0fb8208c955d448",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-presentations\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-app-presentations/stages.jsonl",
+      "bytes": 942,
+      "sha256": "d02d430ea49d6a063d59866fbc2de98f7e718962ccadbd67c68a124292f02449",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-presentations\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-app-quit/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-quit\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-app-quit/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-quit\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-app-quit/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-quit\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-app-quit/report.json",
+      "bytes": 70252,
+      "sha256": "0380d365b3634bbef6b905e57a8616b58d684e77dca3185826ce68dfa7db160b",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-quit\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-app-quit/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-quit\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-app-quit/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-quit\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-app-quit/stages.jsonl",
+      "bytes": 94436,
+      "sha256": "db92c913e2673ed41f2d7a598a957b325f12b6628a3776be29a64b68c29eee5c",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-quit\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-app-version/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-version\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-app-version/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-version\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-app-version/report.json",
+      "bytes": 708,
+      "sha256": "8cce3d81d3bf966db8590627008dbee9288833e1e54aa9c4573fdc26f693f750",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-version\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-app-version/stages.jsonl",
+      "bytes": 1722,
+      "sha256": "86a2a5f55e5696568e63b8e3caf756848a231b39b13233d32db696f199a6781b",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-app-version\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-application-factory/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-application-factory\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-application-factory/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-application-factory\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-application-factory/report.json",
+      "bytes": 483,
+      "sha256": "4a9ba9d4b98f536598011eca20d392c2498e22b4d5938f3c466b43463b6d2643",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-application-factory\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-application-factory/stages.jsonl",
+      "bytes": 462,
+      "sha256": "f1e8c74a075f2156f07190612e2cc58ec8e19813beba960a67c4720dff56ea20",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-application-factory\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-global-preflight/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-global-preflight\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-global-preflight/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-global-preflight\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-open-original/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-original\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-open-original/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-original\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-open-original/report.json",
+      "bytes": 2659,
+      "sha256": "05aac0f8c62344e2259366d25198978179cc658e84912421d38ad6ef9981b7bc",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-original\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-open-original/stages.jsonl",
+      "bytes": 3335,
+      "sha256": "6bdee5d7b5743bd39646690e2bbc02792780b03ee72ad09019b14505214e002b",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-original\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-open-saved/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-saved\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-open-saved/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-saved\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-open-saved/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-saved\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-open-saved/report.json",
+      "bytes": 36543,
+      "sha256": "ced729b698cd0a3e7c88fc272f355753c4ccdce7546b194457c3a1d951f29dc7",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-saved\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-open-saved/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-saved\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-open-saved/stages.jsonl",
+      "bytes": 48894,
+      "sha256": "1e1c114d43582eb7cbbb513cd94289ca8f5cd8c8e42af3c5d4a60a6905908253",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-open-saved\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-close/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-close\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-close/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-close\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-original-close/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-close\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-close/report.json",
+      "bytes": 35725,
+      "sha256": "413467f9da4d54995ad73756580c3930ba009cf700d0a05d05ae837c9dbc3789",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-close\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-close/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-close\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-close/stages.jsonl",
+      "bytes": 47691,
+      "sha256": "49a387cf2f615202bdeff1a0c3bbf076c78eaac06a90377ebbe03f0a53f00ec5",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-close\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-discard/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-discard\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-discard/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-discard\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-original-discard/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-discard\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-discard/report.json",
+      "bytes": 35759,
+      "sha256": "1d2257023738a7502d405ff325d9b0419ee114a70c9fc6947f024b988a6067ca",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-discard\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-discard/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-discard\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-discard/stages.jsonl",
+      "bytes": 47310,
+      "sha256": "5fb74dcdfde411c23f86ab6e238e5297f6326ba55ffef536f56821db091f9285",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-discard\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-fullName/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-fullName\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-fullName/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-fullName\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-fullName/report.json",
+      "bytes": 2671,
+      "sha256": "b926a780e488131298a1ec4d6fb33e227a7bb88f85650a1bb9c1670c8e88f94c",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-fullName\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-fullName/stages.jsonl",
+      "bytes": 3789,
+      "sha256": "fcfb122e1a303c78dac5022eee4a88fd1190f0f3981591d3e1c83c5b9a5ee81a",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-fullName\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-readOnly/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-readOnly\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-readOnly/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-readOnly\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-readOnly/report.json",
+      "bytes": 3094,
+      "sha256": "4d5648f99a84b172f26f156ced02f4fce41d7c0d0e42d930210b83a246a93ad5",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-readOnly\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-readOnly/stages.jsonl",
+      "bytes": 4262,
+      "sha256": "b75dea967fa4a2824bd80f20406fb9385b295cdd86f47834033b90c9af09442f",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-readOnly\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-export/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-export\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-export/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-export\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-export/report.json",
+      "bytes": 33066,
+      "sha256": "2f9a163a0a6e41d3196b32a5e468c7a8dda8063af296be9e03dc18b4b54371bf",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-export\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-export/stages.jsonl",
+      "bytes": 45177,
+      "sha256": "7e3a91555ea4850d2615b82e212afae4a9caffa67f76851de0fd63d50bb9f668",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-export\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-id/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-id\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-id/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-id\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-id/report.json",
+      "bytes": 5066,
+      "sha256": "1c5ec75a524ccf59ec63837af95abf811f26b290dbf46d82d00bef2078e21024",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-id\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-id/stages.jsonl",
+      "bytes": 5834,
+      "sha256": "e505920d804c2f1b7c5476b0ca07cf1e4ef7826711800179e052dd928f364239",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-id\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-name/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-name\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-name/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-name\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-name/report.json",
+      "bytes": 5317,
+      "sha256": "2c0ee314a0a49290e61c060b23588d0286e36fa490170fc6f00a689c424fb9f0",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-name\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-name/stages.jsonl",
+      "bytes": 6218,
+      "sha256": "0cedef896dd72ce6fcba72491733d937d147d55ed8985782e33e6324d0211094",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-name\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-alternativeText/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-alternativeText\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-alternativeText/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-alternativeText\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-alternativeText/report.json",
+      "bytes": 9362,
+      "sha256": "8a6d9ee3e1bf89a2ef59347954ebb18260dca959db94180ac1cd96257aec6072",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-alternativeText\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-alternativeText/stages.jsonl",
+      "bytes": 11632,
+      "sha256": "bc549de0d9c6055f1fbbe8781aae78c7dd1f1b22006fa4c67ab8eda78c249e50",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-alternativeText\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-font/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-font\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-font/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-font\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-font/report.json",
+      "bytes": 10461,
+      "sha256": "8be0df121086f8f5d8b59a31bad2b3bf7bd80e2b5381628f189ab3d1d6d3dc52",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-font\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-font/stages.jsonl",
+      "bytes": 13716,
+      "sha256": "437d1bb59869e1914bb154defbef9abe204ab0a2d19408bc6210c441b5704f36",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-font\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-fontName/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-fontName\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-fontName/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-fontName\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-fontName/report.json",
+      "bytes": 10485,
+      "sha256": "756d766a198180b8610a7a70b8f292f72fbbdb2e228b1037062b0603ecb1f7a3",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-fontName\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-fontName/stages.jsonl",
+      "bytes": 14165,
+      "sha256": "3bf52127835daf91b4aac67c7b5e957558c644fb6d98147ce869c0260a2bc933",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-fontName\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-fontSize/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-fontSize\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-fontSize/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-fontSize\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-fontSize/report.json",
+      "bytes": 10948,
+      "sha256": "a88aea841f19e453a709109ea1b60399ace7e91488c6a7c766ad44b44e15d259",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-fontSize\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-fontSize/stages.jsonl",
+      "bytes": 14611,
+      "sha256": "97103d07140baa341bda45b58dda6025f550342474eee3daa9b5799db0e5cc8b",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-fontSize\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-hasTextFrame/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-hasTextFrame\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-hasTextFrame/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-hasTextFrame\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-hasTextFrame/report.json",
+      "bytes": 9005,
+      "sha256": "216fcfc66d578319fb780760777fd889a2580db18973da8bd349f001387386c0",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-hasTextFrame\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-hasTextFrame/stages.jsonl",
+      "bytes": 11202,
+      "sha256": "33ca7b30d139b4ce77bed7fc0be388d60adbcdc0ae9a79b4c19aee81bbe32ded",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-hasTextFrame\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-height/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-height\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-height/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-height\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-height/report.json",
+      "bytes": 8270,
+      "sha256": "a070843e1da1373644cdcaee78734ba30e3232d3efa4b531908334bc5f0d4992",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-height\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-height/stages.jsonl",
+      "bytes": 10347,
+      "sha256": "024f856fbebe71607abf58f215b105de6a2a0b5b0cc16abda4b5c9f7b94be3e6",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-height\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-id/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-id\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-id/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-id\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-id/report.json",
+      "bytes": 6055,
+      "sha256": "43eb268885bdb145d6744d26c2254666c32c88a2425afff44a7f0abeca61dda9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-id\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-id/stages.jsonl",
+      "bytes": 7872,
+      "sha256": "2f3b69541b13d3011c23da2fb9b8b28912f6aeb6754710626ea94da4840758c0",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-id\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-languageId/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-languageId\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-languageId/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-languageId\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-languageId/report.json",
+      "bytes": 10158,
+      "sha256": "1de31a1bf38db6181c54f82c333adeaccb0a333fcfada3e4f2d24d240f02783c",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-languageId\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-languageId/stages.jsonl",
+      "bytes": 13342,
+      "sha256": "09526c53c6f07d1140f703454f7912ae62900e996c7d9ce2317e64a2115518e2",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-languageId\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-left/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-left\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-left/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-left\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-left/report.json",
+      "bytes": 7154,
+      "sha256": "f8be576e0e6fbca723563f4d0e2fc42f57087bfec48bf7786ef6345493a01f30",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-left\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-left/stages.jsonl",
+      "bytes": 9100,
+      "sha256": "b051a6890f19cc53b7ed1cc19d38ffc03f60ec23e1fa3345e84bf27c005f92d9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-left\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-name/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-name\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-name/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-name\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-name/report.json",
+      "bytes": 6381,
+      "sha256": "00564af4c046d8ed54e9d9a6127d1c45820ecbca84e5286493819a30f2a29bea",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-name\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-name/stages.jsonl",
+      "bytes": 8275,
+      "sha256": "af815ed094daca57698e26e390f2949aff91daf3ae87f16d42dc08f953743d15",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-name\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-rotation/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-rotation\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-rotation/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-rotation\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-rotation/report.json",
+      "bytes": 8655,
+      "sha256": "18716808de45a29e89988a5c20ea4d11a2a9c3d5d0492405f3d87085f1a30e1c",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-rotation\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-rotation/stages.jsonl",
+      "bytes": 10775,
+      "sha256": "eb0d07273e5ebd49d6d02e62c79354c098f347d041fdd8a962555abd4fc0ff7e",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-rotation\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-text/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-text\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-text/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-text\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-text/report.json",
+      "bytes": 9657,
+      "sha256": "7e61b2729801d750774e31f57a9107d82bb6859573a5e282d9b903aa617caafa",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-text\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-text/stages.jsonl",
+      "bytes": 12862,
+      "sha256": "85a4afd5936618bf4e2b69e16006e0f8d0efe6286e7eacd2c059149af450b5a7",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-text\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-textFrame/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-textFrame\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-textFrame/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-textFrame\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-textFrame/report.json",
+      "bytes": 9687,
+      "sha256": "72cb6a71bb5d823fac0b78667cc0ff4ecab519e8ee611e6bb25eced70ec38189",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-textFrame\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-textFrame/stages.jsonl",
+      "bytes": 12014,
+      "sha256": "7261d7c59392a20c83b3e33eb8b1b5ef57c4f1da9f8f5e88ab8e5979552ee181",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-textFrame\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-textRange/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-textRange\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-textRange/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-textRange\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-textRange/report.json",
+      "bytes": 9687,
+      "sha256": "db67eefcc4025632b75bd2c28260d767c42902f71cd26da871b43e0f8f3dc5f0",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-textRange\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-textRange/stages.jsonl",
+      "bytes": 12453,
+      "sha256": "9328039e99cff776daffd10f9324f2cedde502bd78bc96d8e1d377270a97cab6",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-textRange\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-top/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-top\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-top/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-top\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-top/report.json",
+      "bytes": 7517,
+      "sha256": "9b03fc4194b9e8cb80fef8b74b11bb2b2b36b0d34139891a6be138ea8d50b93b",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-top\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-top/stages.jsonl",
+      "bytes": 9506,
+      "sha256": "d8842fd9d92ac870d9a636ac7c5c0804392d93f5f935aaef485b5e1d7470b599",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-top\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-type/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-type\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-type/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-type\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-type/report.json",
+      "bytes": 6801,
+      "sha256": "7641f0f82e95ce16e536c0ed8bbb1aabaec058be52d0da6fa2effad9bad97830",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-type\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-type/stages.jsonl",
+      "bytes": 8704,
+      "sha256": "366933248b2e5408f3c81f263b7a6c5c5153e518e05eede53ea9ee8f518e0936",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-type\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-width/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-width\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-width/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-width\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-width/report.json",
+      "bytes": 7896,
+      "sha256": "d3db7f65dcd50cc0c29488cbe8237785a3a1c1207c60702387097cf0471f80bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-width\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1-width/stages.jsonl",
+      "bytes": 9928,
+      "sha256": "c508aaa420d7a86ada1446ae6d1d0b4e48ae891eecd06052374253d63a08a04d",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1-width\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1/report.json",
+      "bytes": 5810,
+      "sha256": "5c57c7ec3055dfc90e74f138695c76f39956049a567c77a1fb1ea64cd75e4b2a",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shape-1/stages.jsonl",
+      "bytes": 7403,
+      "sha256": "b370da1e17a7efe945c9b272dafdf07bf292e71485bbde2c1cd085894f2cea83",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shape-1\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shapes-count/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shapes-count\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shapes-count/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shapes-count\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shapes-count/report.json",
+      "bytes": 5608,
+      "sha256": "4d8afe6032bd4ecf8d6f3dfdf68586e04a23946bda553963fdc84375f6698486",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shapes-count\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shapes-count/stages.jsonl",
+      "bytes": 7063,
+      "sha256": "fb949a914a7f4ed7e370a63bd21b352994111ca1fb138daa33464061344de05b",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shapes-count\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shapes/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shapes\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shapes/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shapes\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shapes/report.json",
+      "bytes": 5572,
+      "sha256": "aa5ae162466d15feb3d3f83e5e2d66aea98ed47c036729049ed0eb33c37e53d1",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shapes\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1-shapes/stages.jsonl",
+      "bytes": 6617,
+      "sha256": "3c58a06a1aeb3a226257ff6a918d20c00601b861471bea2a7bc6f4a400d76f4b",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1-shapes\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1/report.json",
+      "bytes": 4515,
+      "sha256": "6dcdd4f92061fb4579c1d57f73dd7d33d5e13ff6f9df5fe9454b3aa077bc9e43",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slide-1/stages.jsonl",
+      "bytes": 5376,
+      "sha256": "1508bc36b4737bf40b6a9ff348e8e4204407434a088db15c3a93af9ec5d8f814",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slide-1\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slides-count/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slides-count\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slides-count/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slides-count\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slides-count/report.json",
+      "bytes": 4321,
+      "sha256": "c025f8e0cb611176a8db088408606ba64c8d606bd2d22d5016695c2761593a91",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slides-count\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slides-count/stages.jsonl",
+      "bytes": 5052,
+      "sha256": "73e1c31e9f5b114255a35f6f1d3ebbb3b00e2f287a8cf98500cc3b93f87bf20d",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slides-count\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-original-slides/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slides\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-original-slides/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slides\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-original-slides/report.json",
+      "bytes": 4285,
+      "sha256": "2e1dcd453ea9e62c75bf375489c999cb3a6cde1c47c0fe4c4251e46271de6b36",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slides\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-original-slides/stages.jsonl",
+      "bytes": 4622,
+      "sha256": "c11d0f8bfd21c978a9f23c5484e3476190d1b76eef9cbf4f391882e266181b13",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-original-slides\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-presentations-count/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-presentations-count\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-presentations-count/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-presentations-count\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-presentations-count/report.json",
+      "bytes": 490,
+      "sha256": "3bb5e8834308868ed33bbdbb953a6672bca311fd8c9c77a9d256a26180c95f9d",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-presentations-count\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-presentations-count/stages.jsonl",
+      "bytes": 1355,
+      "sha256": "de4b2a1b16a7491e15f53ef08902b6aae3c3e2d11e3c3688eee8278817098ce6",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-presentations-count\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-saveCopyAs/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saveCopyAs\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-saveCopyAs/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saveCopyAs\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-saveCopyAs/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saveCopyAs\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-saveCopyAs/report.json",
+      "bytes": 34496,
+      "sha256": "a1d0c3aacc8a58c20dd31375024bfcae34bd9ec67d900c0ab97bbe2d8d4086e6",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saveCopyAs\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-saveCopyAs/stages.jsonl",
+      "bytes": 45974,
+      "sha256": "515a2a58017eef4e9a542b6dc7ab9fd5b7d8d6decb740c95a9d18a1e60fdbb23",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saveCopyAs\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-saved-close/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-close\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-saved-close/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-close\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-saved-close/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-close\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-saved-close/report.json",
+      "bytes": 69232,
+      "sha256": "8290c9982e9d7e531b3124e9ae98708f4d0c6a9735e6562f482bdee77b9b99b6",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-close\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-saved-close/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-close\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-saved-close/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-close\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-saved-close/stages.jsonl",
+      "bytes": 93267,
+      "sha256": "6e63e1c955fb67bb682f381fa768b4a15b0da6448b7ffc40584f9d9301e8ca6f",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-close\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/fault-saved-slide-1-export/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-slide-1-export\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-saved-slide-1-export/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-slide-1-export\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/fault-saved-slide-1-export/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-slide-1-export\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/fault-saved-slide-1-export/report.json",
+      "bytes": 68134,
+      "sha256": "d3ddea2d45526c9cd83ec0e906a602e720576b637c23d9ce3319b2208a90360d",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-slide-1-export\\report.json"
+    },
+    {
+      "name": "managed/managed01/fault-saved-slide-1-export/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-slide-1-export\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/fault-saved-slide-1-export/stages.jsonl",
+      "bytes": 92057,
+      "sha256": "b143200bbe0292a456e1de3cef366b2f32cdc77c2f1a8aa72a711e5531683036",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\fault-saved-slide-1-export\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/forbidden-getter/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\forbidden-getter\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/forbidden-getter/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\forbidden-getter\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/global-busy/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\global-busy\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/global-busy/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\global-busy\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mock-results.json",
+      "bytes": 36989,
+      "sha256": "d80d5dbf0b42f39b74a2c2495190686282cef888d06e603db8927ba7da43ffff",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mock-results.json"
+    },
+    {
+      "name": "managed/managed01/mutant-badTriState/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-badTriState\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-badTriState/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-badTriState\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-badTriState/report.json",
+      "bytes": 9221,
+      "sha256": "0d6e70dcc59fb1e528442253e67ed6910bc77d6b1ebba1c523239af9c6ec1d58",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-badTriState\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-badTriState/stages.jsonl",
+      "bytes": 11000,
+      "sha256": "c865eb148bcc83217b66970bdee304626aa029e0ba0331340b62507c4d912c65",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-badTriState\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-busyApplication/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-busyApplication\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-busyApplication/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-busyApplication\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-busyApplication/report.json",
+      "bytes": 718,
+      "sha256": "a483db0e4f89a2dca4c550aad84e9b4c0eca0facd7aae4ae9ef4bd58341272f1",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-busyApplication\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-busyApplication/stages.jsonl",
+      "bytes": 1228,
+      "sha256": "cfcf055c44ac95a2e0c0eb95b16cbf680c45ba4172748cf44d53daf612793840",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-busyApplication\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-countObject/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-countObject\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-countObject/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-countObject\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-countObject/report.json",
+      "bytes": 4568,
+      "sha256": "c76a12cd6d0635f416209247a39236aa0fbc94a8a4d9088696b779662ec74994",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-countObject\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-countObject/stages.jsonl",
+      "bytes": 4939,
+      "sha256": "2089d9e035db960c2bba9547dccb7475f59528a2d558e9f50fef946909483961",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-countObject\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeOpen/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeOpen\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeOpen/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeOpen\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeOpen/report.json",
+      "bytes": 2334,
+      "sha256": "c0123bfb9563f145f7e25b2cd1d0cd7b06c5bca6e2a1d75e29f39a222b938bbe",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeOpen\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeOpen/stages.jsonl",
+      "bytes": 2894,
+      "sha256": "75ae814a376464ef17a82f45aa0af619edc10c00a76700ff38a8bf84980a25d9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeOpen\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeQuit/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeQuit\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeQuit/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeQuit\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeQuit/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeQuit\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeQuit/report.json",
+      "bytes": 70453,
+      "sha256": "1316842b3eb078902937a38bae26e33d0df4059af721fc8367b6fc036b1059cb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeQuit\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeQuit/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeQuit\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeQuit/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeQuit\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignBeforeQuit/stages.jsonl",
+      "bytes": 94057,
+      "sha256": "21021a983d2205d1be7606c526019e623f956cd51c0bac132a5fdb0b6c925301",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignBeforeQuit\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignFullName/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignFullName\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignFullName/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignFullName\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignFullName/report.json",
+      "bytes": 3102,
+      "sha256": "3f2fb21cc217a55e1a1a2f3a4f483fbe7c24c802c0cdfed0b66d66dcb7a16b7e",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignFullName\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-foreignFullName/stages.jsonl",
+      "bytes": 3769,
+      "sha256": "d88ce6ab4ccda00843cdf86f23acb0e759a24142b592f3bd4e581d26adeed8f7",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-foreignFullName\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-nonfinite/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-nonfinite\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-nonfinite/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-nonfinite\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-nonfinite/report.json",
+      "bytes": 8194,
+      "sha256": "c6011ab2a974f81f185969ae6b569ac0949bd559174754382d0d29e774ab4439",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-nonfinite\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-nonfinite/stages.jsonl",
+      "bytes": 9779,
+      "sha256": "b8f0317d71714ec4e7740d60d9eb015edfc6619932cd295d09a2ade1a510de73",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-nonfinite\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-shapeCount/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-shapeCount\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-shapeCount/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-shapeCount\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-shapeCount/report.json",
+      "bytes": 5750,
+      "sha256": "4529573949c8c4ea42c3bc395468b20ee6e44c56be398895695387a7b5b8922b",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-shapeCount\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-shapeCount/stages.jsonl",
+      "bytes": 6890,
+      "sha256": "2402f44fd7f08223875eb815317b3c5c727e72e7a387c0ac6693f4f932be6b56",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-shapeCount\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-slideCount/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-slideCount\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-slideCount/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-slideCount\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-slideCount/report.json",
+      "bytes": 4495,
+      "sha256": "595ee9b7621adf71768a2770afff8a167eff1b1306cd785c4a8e6fe288682c06",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-slideCount\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-slideCount/stages.jsonl",
+      "bytes": 4903,
+      "sha256": "a50ecc421ef43f3ad4c80b90c3ea9c56202f886840052fa8ffd99d3de72208b2",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-slideCount\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-textObject/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-textObject\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-textObject/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-textObject\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-textObject/report.json",
+      "bytes": 10006,
+      "sha256": "c1292e723ff21a753760e80c94e97085215d285b919d29554258c7418f2bd205",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-textObject\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-textObject/stages.jsonl",
+      "bytes": 12724,
+      "sha256": "65a2d98c946087da08edfd07568c8f0aad762cc6b64762f818ba984c08549e77",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-textObject\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-writable/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-writable\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-writable/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-writable\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-writable/report.json",
+      "bytes": 3288,
+      "sha256": "cc21043808e45026ae7496cb67f1c1a94b10aec716534f90d141ab4375549af7",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-writable\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-writable/stages.jsonl",
+      "bytes": 4118,
+      "sha256": "76c611d8aac173f46665b04fc5179b098ecb76d9b061edace774a6df3db8b726",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-writable\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongFrame/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongFrame\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongFrame/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongFrame\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongFrame/report.json",
+      "bytes": 8173,
+      "sha256": "f114b0386dc206ba751538b98b3b8a763199bb944d08fece93cab76bf27c59a8",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongFrame\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongFrame/stages.jsonl",
+      "bytes": 9768,
+      "sha256": "cbd4173d0ffaf0f50091297ce0cd7e185fe24197bcddee5e4aad26d3c0777dc7",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongFrame\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongLanguage/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongLanguage\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongLanguage/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongLanguage\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongLanguage/report.json",
+      "bytes": 10396,
+      "sha256": "bc95eae5b056dec67e20cb0d8795726916348ed52e2b76f7d2d91f4e8f38bec0",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongLanguage\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongLanguage/stages.jsonl",
+      "bytes": 13155,
+      "sha256": "d9ce3b0e187d34e48211c883ad6d551cffc1545d61a261bf841d48e83d92b11f",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongLanguage\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongName/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongName\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongName/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongName\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongName/report.json",
+      "bytes": 6726,
+      "sha256": "da37d94f1b2fbd82f5a09d91552b9b7f00a472aecab5bc9a31f65354011954d6",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongName\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongName/stages.jsonl",
+      "bytes": 8143,
+      "sha256": "fa8e8972937904a06ea20570c6846a2accb31c4b7238c0680d519d71c6486a06",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongName\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongSize/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongSize\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongSize/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongSize\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongSize/report.json",
+      "bytes": 11172,
+      "sha256": "d58113c5abc73cfde586fd7f52afdc821f866e7ff5ca69f38909d250d8c6e0e5",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongSize\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongSize/stages.jsonl",
+      "bytes": 14428,
+      "sha256": "87d5d9087aeaef35c1487409bcc8f5050180e78cf87a3b649c0b4726b2278022",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongSize\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongText/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongText\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongText/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongText\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongText/report.json",
+      "bytes": 10045,
+      "sha256": "ae8f3ef6e94b120b6be6269e729297c1671d508cca98d6b36e79427bbb87b28d",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongText\\report.json"
+    },
+    {
+      "name": "managed/managed01/mutant-wrongText/stages.jsonl",
+      "bytes": 12744,
+      "sha256": "4c610a0a97546c8d6b71cfd43bb7a39176a987e50c6dddea072c267b1b5dc837",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\mutant-wrongText\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/ownership-Close-ReferenceWitnessOwned/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Close-ReferenceWitnessOwned\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/ownership-Close-ReferenceWitnessOwned/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Close-ReferenceWitnessOwned\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/ownership-Close-ReferenceWitnessOwned/report.json",
+      "bytes": 757,
+      "sha256": "dcc9fd315869856abf6c903a40e82b55aed8b23e71f562c3de27485cc3817f67",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Close-ReferenceWitnessOwned\\report.json"
+    },
+    {
+      "name": "managed/managed01/ownership-Quit-ReferenceWitnessOwned/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Quit-ReferenceWitnessOwned\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/ownership-Quit-ReferenceWitnessOwned/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Quit-ReferenceWitnessOwned\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/ownership-Quit-ReferenceWitnessOwned/report.json",
+      "bytes": 708,
+      "sha256": "bb77e004b71096faa7482f590d13fcab72b3af5330732aa77b23d3c22623c315",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Quit-ReferenceWitnessOwned\\report.json"
+    },
+    {
+      "name": "managed/managed01/ownership-Read-ReferenceWitnessPhase/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Read-ReferenceWitnessPhase\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/ownership-Read-ReferenceWitnessPhase/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Read-ReferenceWitnessPhase\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/ownership-Read-ReferenceWitnessPhase/report.json",
+      "bytes": 747,
+      "sha256": "b5babdd3c810e11cb4ad248f2d46ff92642e42fb8a5de164023834abd64f1b72",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Read-ReferenceWitnessPhase\\report.json"
+    },
+    {
+      "name": "managed/managed01/ownership-Save-ReferenceWitnessCopy/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Save-ReferenceWitnessCopy\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/ownership-Save-ReferenceWitnessCopy/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Save-ReferenceWitnessCopy\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/ownership-Save-ReferenceWitnessCopy/report.json",
+      "bytes": 747,
+      "sha256": "847a4d78cf3de4e57e484aed2efdf4cbae36b5570135d1f6f094f57b1c6adfe6",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\ownership-Save-ReferenceWitnessCopy\\report.json"
+    },
+    {
+      "name": "managed/managed01/success/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\success\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/success/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\success\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/success/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\success\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/success/report.json",
+      "bytes": 70120,
+      "sha256": "0f1d9f59d686430744ca7069f8f6dc74393e57e22805dae7b7d736ec3bec9ef8",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\success\\report.json"
+    },
+    {
+      "name": "managed/managed01/success/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\success\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/success/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\success\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/success/stages.jsonl",
+      "bytes": 94686,
+      "sha256": "24275a1e3b051a1865effe257ae6ed7341158f3370b51d3a1d54c8a311381492",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\success\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-05-mixed-explicit-arabic/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-05-mixed-explicit-arabic\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-05-mixed-explicit-arabic/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-05-mixed-explicit-arabic\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-05-mixed-explicit-arabic/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-05-mixed-explicit-arabic\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-05-mixed-explicit-arabic/report.json",
+      "bytes": 37589,
+      "sha256": "8c16eca5c7663879a75d49ba6eb09a26b96ad3ddaab500bab2be07da9d33cb3d",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-05-mixed-explicit-arabic\\report.json"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-05-mixed-explicit-arabic/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-05-mixed-explicit-arabic\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-05-mixed-explicit-arabic/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-05-mixed-explicit-arabic\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-05-mixed-explicit-arabic/stages.jsonl",
+      "bytes": 48426,
+      "sha256": "52cfd51859735b82a45ba4480740b47499ccc94e82343aa9b7d32f51838aa9dd",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-05-mixed-explicit-arabic\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-06-whole-explicit-arabic/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-06-whole-explicit-arabic\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-06-whole-explicit-arabic/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-06-whole-explicit-arabic\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-06-whole-explicit-arabic/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-06-whole-explicit-arabic\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-06-whole-explicit-arabic/report.json",
+      "bytes": 59497,
+      "sha256": "58f1b4971a675c48dd6515dfad3c7229af8899dac89df3c2d2fddb8400720d57",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-06-whole-explicit-arabic\\report.json"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-06-whole-explicit-arabic/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-06-whole-explicit-arabic\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-06-whole-explicit-arabic/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-06-whole-explicit-arabic\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-06-whole-explicit-arabic/stages.jsonl",
+      "bytes": 79106,
+      "sha256": "da07b0aa08cc80313cdabd45187411913aea6ef7e2d12256ff25297368a3de17",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-06-whole-explicit-arabic\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-09-long-explicit-arabic/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-09-long-explicit-arabic\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-09-long-explicit-arabic/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-09-long-explicit-arabic\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-09-long-explicit-arabic/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-09-long-explicit-arabic\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-09-long-explicit-arabic/report.json",
+      "bytes": 70786,
+      "sha256": "f8a1dd2c1ae71ead398c3ad1b4341dd731f062d085b2d483dc6df64d99fd4e37",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-09-long-explicit-arabic\\report.json"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-09-long-explicit-arabic/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-09-long-explicit-arabic\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-09-long-explicit-arabic/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-09-long-explicit-arabic\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-09-long-explicit-arabic/stages.jsonl",
+      "bytes": 94557,
+      "sha256": "eeea713a5c1075509a5efd9ae515da4b31cf583ff4b521d749cdc4237b290b97",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-09-long-explicit-arabic\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-10-non-ascii-digits/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-10-non-ascii-digits\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-10-non-ascii-digits/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-10-non-ascii-digits\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-10-non-ascii-digits/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-10-non-ascii-digits\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-10-non-ascii-digits/report.json",
+      "bytes": 235410,
+      "sha256": "0857dfae172e586dc4e875a3ea86c950444d543b4c2d42526d1e777e542acdbe",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-10-non-ascii-digits\\report.json"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-10-non-ascii-digits/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-10-non-ascii-digits\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-10-non-ascii-digits/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-10-non-ascii-digits\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-10-non-ascii-digits/stages.jsonl",
+      "bytes": 325968,
+      "sha256": "76948addffb71129ffea536db02659fd5240f966564f6ea4741c9eb9ada20b00",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-10-non-ascii-digits\\stages.jsonl"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-11-long-explicit-french/case.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-11-long-explicit-french\\case.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-11-long-explicit-french/original-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-11-long-explicit-french\\original-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-11-long-explicit-french/POWERPNT.EXE",
+      "bytes": 41,
+      "sha256": "d56c7217f530b93150b87a27582b47a918a73b4629497d12209099682c4857bb",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-11-long-explicit-french\\POWERPNT.EXE"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-11-long-explicit-french/report.json",
+      "bytes": 48878,
+      "sha256": "3d08a7b6afc1b61a0ed25e5a7dbc481e54f61b7716494b6e499816d948df3ae4",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-11-long-explicit-french\\report.json"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-11-long-explicit-french/saved-reopened-01.png",
+      "bytes": 33,
+      "sha256": "7f9c9e31ac8256ca2f258583df262dbc7d6f68f2a03043d5c99a4ae5a7396ce9",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-11-long-explicit-french\\saved-reopened-01.png"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-11-long-explicit-french/saved.pptx",
+      "bytes": 39,
+      "sha256": "f5c0ad58c62034225bc093d28b8e0a6787314da1ce933e429a6665c04669f693",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-11-long-explicit-french\\saved.pptx"
+    },
+    {
+      "name": "managed/managed01/whole-rtl-contrast-11-long-explicit-french/stages.jsonl",
+      "bytes": 63877,
+      "sha256": "cdd8f69094ec31fac5602c3a06396153ada54483a11b172155ffffa74855f742",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\segment-observer\\managed01\\whole-rtl-contrast-11-long-explicit-french\\stages.jsonl"
+    },
+    {
+      "name": "protected-objects.json",
+      "bytes": 1228,
+      "sha256": "0c7fd1385eae1b90f0fc3877e3857af5b84cba28149d61e2e4a93cb5a9c65fad",
+      "source": "git:46249cd98f9ee210113fc2d7f5ee48026600a5cc"
+    }
+  ]
+}

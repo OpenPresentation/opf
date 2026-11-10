@@ -1,0 +1,8 @@
+{
+  "kind": "Offline verifier setup refusal, not source/control failure",
+  "toolExitCode": 1,
+  "error": "ENOENT opening C:/opf-work/tools/rr105-native-segment-observer/.gitattributes",
+  "cause": "Draft verifier walked six rather than five parents from append01",
+  "correction": "Only the verifier root path changed; all447 retained records, controller source, existing pure results and both raw archives remained unchanged",
+  "officeInvoked": false
+}
