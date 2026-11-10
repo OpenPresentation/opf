@@ -22,6 +22,8 @@ The commands each print one JSON report (the `opf validate` shape: `ok`, `findin
 
 Node `loadFonts({ pack: 'office', scripts: 'auto', presentation: deck, renderOptions: { catalogs, date } })` prepares only the verified faces that document draws. Omit `presentation` for deliberate complete-pack loading. Await `fonts.ensure(changedDeck, { renderOptions: { catalogs, date } })` after edits before synchronous rendering, using the same catalogs/date; `pending` includes new ordinary styles and script faces. Actual missing-face measurement still refuses, optional script absence keeps its diagnostics/fallback policy, and the loader never discovers system fonts. Core conversion/pagination and the async PPTX exporter prepare demand handles automatically; native selected typeface names remain unchanged.
 
+Node preparation checks selected bytes, styles and glyph coverage; it no longer shapes solely to discard widths. Shaping errors can therefore occur later during actual measurement or rendering even when preparation finished. Actual measurement/outline errors remain unchanged, and custom measurement/accessor/shaper overrides retain full coverage measurement. This is a preparation contract, not a shaping or native-visual qualification.
+
 ## Files in Node
 
 `@openpresentation/opf` in Node is core's file API. The same import in a browser or worker is a browser-safe build with the same names, where `open`, `save` and `convert` reject with `node-only`; `@openpresentation/opf/node` of 0.17 is gone. The commands above run it.
