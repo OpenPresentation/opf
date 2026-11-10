@@ -1,0 +1,198 @@
+{
+  "kind": "ACTUAL_REFERENCE_SUITE03_FAILED_UNSEALED",
+  "source": "519dd89a80904907a3d0120f90b732065d99a0b1",
+  "tree": "8558ae2748fa4deecdb5a930551a51a1deae50fa",
+  "producer": "C:/opf-work/ref-gen03",
+  "consumer": "C:/opf-work/n034-current/artifacts/npm/consumer",
+  "workerSource": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "runtimeDigest": "724c718a2d449b912394f0bf76e828b3e2da72c8f9211881eadc864f2d40e15e",
+  "archive": {
+    "file": "partial-suite03.zip",
+    "bytes": 1224351,
+    "sha256": "a4ed56a1d7877129a9194496824f44ff102ed0227f361fa4625c8231cf648d9f",
+    "files": 23,
+    "expandedBytes": 2229205,
+    "inventory": [
+      {
+        "path": "actions/reference-native-axes.json",
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "path": "actions/reference-native-lines.json",
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "path": "actions/reference-overlays-markers.json",
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "path": "inputs/reference-native-axes.pptx",
+        "bytes": 129466,
+        "sha256": "d0878373b71b01930fb92d626faa484d157d9f5064a4d5d144f59f957e8aec82"
+      },
+      {
+        "path": "inputs/reference-native-lines.pptx",
+        "bytes": 128812,
+        "sha256": "229f3b9db61aabae4b1b52b8554d125f27649ef8e0a5f74f8b94698087848e08"
+      },
+      {
+        "path": "inputs/reference-overlays-markers.pptx",
+        "bytes": 128307,
+        "sha256": "229c01fbacd4f7bbc78c726f482dde32f0789184fd23f1d0f0c0fbf1125a191d"
+      },
+      {
+        "path": "inspection/reference-native-axes.json",
+        "bytes": 93683,
+        "sha256": "1fc614fc51c28863970da94032046278d65b4e0c403e389da4e0b758b31ff0d1"
+      },
+      {
+        "path": "inspection/reference-native-lines.json",
+        "bytes": 78075,
+        "sha256": "479980efae4cdb1cfbd10fa65d3f1c7581a34129e020f2b556d40e37a6c20228"
+      },
+      {
+        "path": "previews/reference-native-axes-01.png",
+        "bytes": 35055,
+        "sha256": "96b39a99180e651c7c2c8962afcfe5ed364930e9a2470308632fd7684d97a55c"
+      },
+      {
+        "path": "previews/reference-native-axes-01.svg",
+        "bytes": 222529,
+        "sha256": "9adc8ba5d5f2557f0b1df2f4b7c6c4673a768ecd552313926a86e8323241f6c4"
+      },
+      {
+        "path": "previews/reference-native-axes-02.png",
+        "bytes": 18994,
+        "sha256": "7ce5be3204e540bc72733bf1569b90b44aca786e02fe73ceeb21329bb480c5db"
+      },
+      {
+        "path": "previews/reference-native-axes-02.svg",
+        "bytes": 219706,
+        "sha256": "3674f84f7e14a23e7cffe1d4c5f50ffad411ef12a5a767e5c7785194ffb6ad74"
+      },
+      {
+        "path": "previews/reference-native-axes-03.png",
+        "bytes": 13570,
+        "sha256": "0028d9dc6a4465d12757b7498faf60ed44b88adfd508423e564190898b50567f"
+      },
+      {
+        "path": "previews/reference-native-axes-03.svg",
+        "bytes": 219960,
+        "sha256": "48f31bfcdefbb0893c01a37b233b6ddc836c422c5a952e451cb8c116ec1046d3"
+      },
+      {
+        "path": "previews/reference-native-lines-01.png",
+        "bytes": 18130,
+        "sha256": "9152be2643713df7e5778d17a3ad32312385d8bee7b1123773fb49e86b6f4a52"
+      },
+      {
+        "path": "previews/reference-native-lines-01.svg",
+        "bytes": 220968,
+        "sha256": "128d504bff9139575ad84605b4356396690ec01373910421a720ab0a890f96da"
+      },
+      {
+        "path": "previews/reference-native-lines-02.png",
+        "bytes": 17301,
+        "sha256": "f1010fc34b0853d391b97b47a55de633cc784ea69c8c64058e24e09896b50bc1"
+      },
+      {
+        "path": "previews/reference-native-lines-02.svg",
+        "bytes": 219392,
+        "sha256": "b5697fb77f1f501bf7dae6a1ea6a5be0585bfd16e5366d35451ba56846c7b335"
+      },
+      {
+        "path": "previews/reference-native-lines-03.png",
+        "bytes": 24053,
+        "sha256": "47352e0eeeae20afd2b8b5805b94432aac0b6493b3a107dff92045c944fbe3ae"
+      },
+      {
+        "path": "previews/reference-native-lines-03.svg",
+        "bytes": 433202,
+        "sha256": "b9e97a7aa9f698290d128a96842b28e7aca84bfb5608b3b66de1e83b94274d70"
+      },
+      {
+        "path": "sources/reference-native-axes.opf.json",
+        "bytes": 3111,
+        "sha256": "ec455bebf5e5460fcaac18d8247a4d22b67d02568914c8936a7a3b1d5eb44db4"
+      },
+      {
+        "path": "sources/reference-native-lines.opf.json",
+        "bytes": 2418,
+        "sha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e"
+      },
+      {
+        "path": "sources/reference-overlays-markers.opf.json",
+        "bytes": 2464,
+        "sha256": "2c9855331e99bd5bebfce326f056e9c990e1b7d55f41f7a772ec850af97950a1"
+      }
+    ]
+  },
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 760322,
+    "sha256": "ed2503b47332227f427f61bba795f28ceb0507078e75b80b79a68260087a5d30",
+    "expandedBytes": 2195633,
+    "records": 54,
+    "decodedBytes": 1640850
+  },
+  "result": {
+    "exitCode": 1,
+    "retries": 0,
+    "suiteSealed": false,
+    "profileEligible": false,
+    "firstTwoInputsByteIdenticalToSuite02": true,
+    "firstTwoFindings": [],
+    "thirdBarExpectedReferences": 1,
+    "thirdBarActualReferences": 0,
+    "titlePair": "UNRUN",
+    "thirdGeneratedPreviews": "UNRUN",
+    "fontSeal": "UNRUN"
+  },
+  "causalDiagnostic": {
+    "separateFromGeneration": true,
+    "source": {
+      "path": "C:/opf-work/n034-current-reference-suite03/sources/reference-overlays-markers.opf.json",
+      "bytes": 2464,
+      "sha256": "2c9855331e99bd5bebfce326f056e9c990e1b7d55f41f7a772ec850af97950a1"
+    },
+    "convertCalls": 1,
+    "pptxExportCalls": 0,
+    "barAxis": {
+      "min": 0,
+      "max": 25,
+      "majorUnit": 5
+    },
+    "barLayer": null,
+    "barOptionsActive": true,
+    "diagnostics": [],
+    "outputs": [
+      {
+        "file": "diagnostic-1.svg",
+        "bytes": 220504,
+        "sha256": "f0fd9dec95493084f630c7a70c641074ea0888067d48a2c1e76a9f100f369660",
+        "targetLabelPresent": true,
+        "referenceColorOccurrences": 1
+      },
+      {
+        "file": "diagnostic-2.svg",
+        "bytes": 220008,
+        "sha256": "310f35376775d2730bacd3ebf9aa999eb58313ab61e2bb1d2a5f6221f4a10d37",
+        "targetLabelPresent": false,
+        "referenceColorOccurrences": 0
+      },
+      {
+        "file": "diagnostic-3.svg",
+        "bytes": 220041,
+        "sha256": "71040bda6d2e516d633dad232f83894fa4d9de0ef602b28d5bba2e6ff9dfc25c",
+        "targetLabelPresent": true,
+        "referenceColorOccurrences": 0
+      }
+    ]
+  },
+  "officeRun": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}
