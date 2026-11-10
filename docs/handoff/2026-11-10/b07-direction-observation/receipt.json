@@ -1,0 +1,129 @@
+{
+  "format": "b07-direction-observation-v1",
+  "records": 303,
+  "rawBytes": 4241084,
+  "compressedBytes": 1991706,
+  "archiveSha256": "30c9042686b1f361263dd0ec186a88631c6baa30a19362eaba1a9f3866dfcd9c",
+  "suiteSha256": "a9c91a0bd1df36298bd920e3a578e39be5871ea39d9aaf856a036910d97ebf25",
+  "observations": {
+    "rootSession": 57166,
+    "coordinatorObservedActualExit": 0,
+    "sourceBindings": [
+      {
+        "name": "preparation",
+        "path": "tools/rr105-proofing-prepare/prepare-core.mjs",
+        "revision": "f9b713ca1c15fbfc9ed350e1f019e6b80658c6bb",
+        "bytes": 11229,
+        "sha256": "c40eff97390711890960168bc806a529cf0322d00b2e7a2e2aae9283aad376ad"
+      },
+      {
+        "name": "preparation",
+        "path": "tools/rr105-proofing-prepare/prepare-suite.mjs",
+        "revision": "f9b713ca1c15fbfc9ed350e1f019e6b80658c6bb",
+        "bytes": 1829,
+        "sha256": "55a59d0e1fe0b6b8d714c7cebd62e810882edc85c2688fba494599233cca1080"
+      },
+      {
+        "name": "worker",
+        "path": "test/native-furniture-control.ps1",
+        "revision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+        "bytes": 81652,
+        "sha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9"
+      },
+      {
+        "name": "worker",
+        "path": "test/native-process.ps1",
+        "revision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+        "bytes": 2341,
+        "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+      },
+      {
+        "name": "worker",
+        "path": "test/native-process-check.ps1",
+        "revision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+        "bytes": 2333,
+        "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+      },
+      {
+        "name": "worker",
+        "path": "test/native-furniture-harness-check.ps1",
+        "revision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+        "bytes": 45855,
+        "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+      },
+      {
+        "name": "worker",
+        "path": "test/fixtures/sh25-native-circle-observations.json",
+        "revision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+        "bytes": 2490,
+        "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+      },
+      {
+        "name": "controller",
+        "path": "scripts/native-acceptance/run-windows.ps1",
+        "revision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+        "bytes": 15359,
+        "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+      }
+    ],
+    "currentSources": {
+      "driver": {
+        "root": "C:\\opf-work\\b07-prep",
+        "head": "f9b713ca1c15fbfc9ed350e1f019e6b80658c6bb",
+        "dirty": false
+      },
+      "worker": {
+        "root": "C:\\opf-work\\b07-dir",
+        "head": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+        "dirty": false
+      },
+      "controller": {
+        "root": "C:\\opf-work\\rr105-readonly-survey",
+        "head": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+        "dirty": false
+      },
+      "historic": {
+        "root": "C:\\opf-work\\proofing-observed",
+        "head": "fb37046f043f860c8887e0574620ef3c507e3fa4",
+        "dirty": false
+      }
+    },
+    "images": [
+      {
+        "phase": "original",
+        "path": "images/original.png",
+        "archiveMember": "native/native/original-slide-01.png",
+        "bytes": 10442,
+        "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+        "historicalMember": "cases/A/native/original-slide-01.png"
+      },
+      {
+        "phase": "edited",
+        "path": "images/edited.png",
+        "archiveMember": "native/native/edited-slide-01.png",
+        "bytes": 10442,
+        "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+        "historicalMember": "cases/A/native/edited-slide-01.png"
+      },
+      {
+        "phase": "reopened",
+        "path": "images/reopened.png",
+        "archiveMember": "native/native/reopened-slide-01.png",
+        "bytes": 10442,
+        "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+        "historicalMember": "cases/A/native/reopened-slide-01.png"
+      }
+    ],
+    "visualInspection": {
+      "rootObserved": true,
+      "archivingAgentAlsoViewedOriginal": true,
+      "result": "First English line remains reversed; second English line remains forward.",
+      "paragraphDirectionMismatchHypothesis": "rejected by nine matches-xml direction observations while the visual failure persists",
+      "glyphFix": false,
+      "currentRuntimeAcceptance": false,
+      "nativeAcceptance": false,
+      "registryAcceptance": false
+    },
+    "scope": "Historical original09 observation only. Managed harness fake files are not Office evidence. No new native/preparation/export run or cleanup was performed while archiving."
+  }
+}
