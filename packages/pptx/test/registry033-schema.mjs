@@ -62,6 +62,14 @@ test('current text, rich table text and cache edits in an old registry PPTX are 
   };
   edit('ppt/slides/slide1.xml', '<a:t>Literal slides.0.left</a:t>', '<a:t>Edited! slides.0.left</a:t>');
   edit('ppt/slides/slide2.xml', '<a:t>Bonjour </a:t>', '<a:t>Bonsoir </a:t>');
+  // The actual 0.33 table writer stored French only in provenance; its native
+  // runs say en-US. Apply a real XML proofing edit too, and require that current
+  // override instead of restoring an unobserved language from stale source.
+  const tableXml = strFromU8(entries['ppt/slides/slide2.xml']);
+  const currentRun = [...tableXml.matchAll(/<a:r>[\s\S]*?<\/a:r>/g)].map(match => match[0]).find(run => run.includes('<a:t>Bonsoir </a:t>'));
+  assert.ok(currentRun);
+  assert.match(currentRun, /lang="en-US"/);
+  entries['ppt/slides/slide2.xml'] = strToU8(tableXml.replace(currentRun, currentRun.replace('lang="en-US"', 'lang="fr-FR" altLang="en-US"')));
   const chartPart = Object.keys(entries).find(name => /^ppt\/charts\/chart\d+\.xml$/.test(name));
   assert.ok(chartPart);
   edit(chartPart, '<c:v>12</c:v>', '<c:v>13</c:v>');
@@ -71,10 +79,23 @@ test('current text, rich table text and cache edits in an old registry PPTX are 
   assert.equal(plain(editedCell.value), 'Bonsoir slides.0.left');
   assert.ok(editedCell.value.some(run => run?.language === 'fr-FR'));
   assert.equal(editedCell.style.align, 'start');
-  assert.deepEqual(editedCell.style.borders.left, expected.slides[1].table.rows[0][1].style.borders.left);
+  const accent = /<a:accent1>\s*<a:srgbClr val="([0-9A-Fa-f]+)"/.exec(strFromU8(entries['ppt/theme/theme1.xml']))?.[1];
+  assert.ok(accent);
+  assert.deepEqual(editedCell.style.borders.left, {color: '#' + accent.toUpperCase(), width: 1});
   assert.deepEqual(back.slides[0].shapes.map(shape => shape.at), expected.slides[0].shapes.map(shape => shape.at));
   assert.deepEqual(back.datasets, expected.datasets);
   assert.deepEqual(back.extensions, expected.extensions);
   assert.equal(back.slides[2].chart.data.dataset, undefined, 'edited native cache cannot regain the stale dataset reference');
   assert.equal(back.slides[2].chart.data.rows[0][1], 13);
+});
+
+test('an old table text edit cannot recover a French override that its native XML never stored', async () => {
+  const entries = unzipSync(await read('registry033.pptx'));
+  const xml = strFromU8(entries['ppt/slides/slide2.xml']);
+  assert.ok(xml.includes('<a:t>Bonjour </a:t>'));
+  entries['ppt/slides/slide2.xml'] = strToU8(xml.replace('<a:t>Bonjour </a:t>', '<a:t>Bonsoir </a:t>'));
+  const back = await importDeck(zipSync(entries));
+  const value = back.slides[1].table.rows[0][1].value;
+  assert.equal(plain(value), 'Bonsoir slides.0.left');
+  assert.equal(value.some(run => run?.language === 'fr-FR'), false, 'current en-US native text cannot regain stale French source proofing');
 });

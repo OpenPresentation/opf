@@ -4,7 +4,7 @@ import {XMLParser} from 'fast-xml-parser';
 import {unbindNoBreak} from '@openpresentation/opf/composition';
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
-import {nativeRunStyle, mergeNativeRunProperties, nativeTypeface} from './native-text-style.js';
+import {nativeRunLanguage, nativeRunStyle, mergeNativeRunProperties, nativeTypeface} from './native-text-style.js';
 import {nativeAutofit, scaledNativeRun, reportNativeAutofit} from './native-autofit.js';
 
 const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', preserveOrder:true, parseAttributeValue:false, parseTagValue:false, trimValues:false, htmlEntities:true});
@@ -60,11 +60,6 @@ export const joinNativeParagraphs = paragraphs => value(paragraphs.flatMap((para
 
 // FA-13: a run language that differs from the deck language comes back as TextRun.language; a run in the design's code family
 // comes back as an inline code run. `extras` is {deckLang, codeFamily} (either may be absent).
-const RUN_LANG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
-function nativeRunLanguage(properties, extras) {
-  const lang = properties.lang;
-  return typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang) && (properties.altLang === 'en-US' || extras.deckLang && lang.toLowerCase() !== extras.deckLang.toLowerCase()) ? {language: lang} : {};
-}
 function bodyRunStyle(properties, context, relationships, report, extras = {}) {
   const supported = {...properties};
   for (const key of ['b', 'i']) if (properties[key] !== undefined && !['1','0','true','false','on','off'].includes(properties[key])) {

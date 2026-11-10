@@ -64,7 +64,7 @@ test('a tag that is not well formed has no suggestion', () => {
 });
 
 test('runs in lists, tables, quotes and blocks are checked, and slides report their own path', () => {
-	const bad = (text) => ({ text, lang: 'en-UK' });
+	const bad = (text) => ({ text, language: 'en-UK' });
 	const found = only(
 		deck(
 			{},
