@@ -1,0 +1,22 @@
+[
+  {
+    "id": "reference-native-lines",
+    "path": "C:/opf-work/n034-pairs-ref-admission01/reference-native-lines.json",
+    "sha256": "be2bc2d7a752140a9259bf042a1df9235302b90c506440b11ba80c80071c66b6"
+  },
+  {
+    "id": "reference-native-axes",
+    "path": "C:/opf-work/n034-pairs-ref-admission01/reference-native-axes.json",
+    "sha256": "7e0caf454d476993b80305ae3022da27bb6303ee5449ddc66758157c52c79933"
+  },
+  {
+    "id": "reference-overlays-markers",
+    "path": "C:/opf-work/n034-pairs-ref-admission01/reference-overlays-markers.json",
+    "sha256": "4e45e4195ace101b95ebea827661d0f13f1c0f57583dd4f9728965a4620f14ed"
+  },
+  {
+    "id": "reference-singleton-axes",
+    "path": "C:/opf-work/n034-pairs-ref-admission01/reference-singleton-axes.json",
+    "sha256": "864139b1b312b1e6aa52da2d6b9a9b6316c2f9073845d1a4797d73545065e491"
+  }
+]

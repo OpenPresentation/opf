@@ -1,0 +1,14 @@
+{
+  "source": "db64054523051cf4da676cbbb874c728fd3ebf81",
+  "runtimeDigest": "5f69d2644ef876b4289352f650b83f2510259341ab709a395b0a43faec895008",
+  "fullSuiteSha256": "4d482bbf270d2d0c5fe836f110e665ad2dcdff6adee635519b5cfac19657abf2",
+  "referenceSuiteSha256": "f228cf8b0767d239bd536eba49ac6678d1f59b23f6083e62b254ddcce06e48d4",
+  "fullCases": 59,
+  "referenceCases": 4,
+  "fourthRawShapes": [
+    3,
+    3,
+    1
+  ],
+  "nativeAcceptance": false
+}
