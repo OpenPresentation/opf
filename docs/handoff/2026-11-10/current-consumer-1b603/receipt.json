@@ -2201,5 +2201,15 @@
       "bytes": 194989,
       "sha256": "aa34f6db0374857e1307665be4461b7bd0549a32243915d6556444b34cb32ca7"
     }
-  ]
+  ],
+  "metadataChecks": {
+    "records": 17,
+    "bytes": 16358,
+    "sha256": "f75421129650f9d769311df5d58436d8e854378a7798667db6060acd4bdef255",
+    "rawBytes": 36573,
+    "testedHead": "242055906fc0c2dd9d24cbfb9dce214a86e012d7",
+    "originalStatus": 1,
+    "recoveredTextStatus": 0,
+    "aggregateRerun": false
+  }
 }
