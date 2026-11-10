@@ -61,7 +61,7 @@
     "playwright": "1.64.1",
     "tsup": "^9.0.0",
     "typescript": "~5.9.3",
-    "workerd": "1.20261030.1"
+    "workerd": "1.20261106.1"
   },
   "peerDependencies": {
     "@openpresentation/opf-render": "workspace:^"
