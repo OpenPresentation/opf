@@ -1,0 +1,27 @@
+# PROPOSED ONLY. No preparation, ValidateOnly, comparison or Office invocation has run.
+# Freeze current producer/controller/worker HEAD069 and its installed consumer.
+$node = 'C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe'
+$repo = 'C:/opf-work/n034-current'
+$suite = 'C:/opf-work/n034-current-suite01'
+$consumer = 'C:/opf-work/n034-current/artifacts/npm/consumer'
+$output = 'C:/opf-work/n034-current-table-profile01'
+
+# Office-free: copies only the already sealed intact6slide input/metadata and bound source snapshots.
+$preparedRaw = & $node 'C:/opf-work/n034-current/scripts/native-acceptance/table-profile.mjs' prepare --suite 'C:/opf-work/n034-current-suite01' --producer 'C:/opf-work/n034-current' --legacy-worker 'C:/opf-work/n034-current/packages/pptx' --consumer 'C:/opf-work/n034-current/artifacts/npm/consumer' --output 'C:/opf-work/n034-current-table-profile01'
+if ($LASTEXITCODE -ne 0) { throw 'Profile preparation failed; preserve output, no retry' }
+$prepared = $preparedRaw | ConvertFrom-Json
+if ($prepared.controllerRevision -cne '0699820e2f562d94c48b8c44a2d9b72387c0cecb') { throw 'Unexpected controller identity' }
+$envelope = $prepared.envelope
+$envelopeSha256 = $prepared.sha256
+# Record preparedRaw and the actual independently verified envelope hash. No invented hash/alias.
+
+# Office-free validation: supervisor default branch never enters its Office/process helper.
+& 'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe' -NoProfile -NonInteractive -ExecutionPolicy Bypass -File 'C:/opf-work/n034-current/scripts/native-acceptance/run-table-profile.ps1' -Envelope $envelope -EnvelopeSha256 $envelopeSha256 -NodeExecutable $node -TimeoutSeconds 60 -ValidateOnly
+if ($LASTEXITCODE -ne 0) { throw 'Pure validation failed; no Office authorized' }
+
+# ROOT ONLY, separately authorized after source/profile review and fresh globalPOWERPNTcount0.
+# & 'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe' -NoProfile -NonInteractive -ExecutionPolicy Bypass -File 'C:/opf-work/n034-current/scripts/native-acceptance/run-table-profile.ps1' -Envelope $envelope -EnvelopeSha256 $envelopeSha256 -NodeExecutable $node -TimeoutSeconds 60 -RunOffice
+# If any failure/timedOut/cleanupfalse: no later COM, no cleanup/retry. Preserve originals/probes/terminal.
+
+# Only AFTER genuine workercomplete/ownedcleanup succeeds; this performs the required9imports/6reexports.
+# & $node 'C:/opf-work/n034-current/scripts/native-acceptance/compare-table-profile.mjs' --envelope $envelope --sha256 $envelopeSha256

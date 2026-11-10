@@ -1,0 +1,4207 @@
+{
+  "node": "v24.20.0",
+  "runtime": {
+    "chartBaselines": {
+      "current": {
+        "path": "packages/pptx/test/fixtures/chartex-fallback-main.json",
+        "sha256": "94cfa51624b4a1bf01e4f7ad84f7ed1ffc61f2f3b245ee49a5ec8088cd6b0105",
+        "source": {
+          "repository": "OpenPresentation/opf-pptx",
+          "commit": "b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1",
+          "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating). Regenerated again for RR-11 always-on header/footer placeholders (codex/rr-11-hf-always): a deck with no footer now carries the dt/ftr/sldNum placeholders and p:hf flags on its slide master, layout and notes master; only ppt/slideMasters/slideMaster1.xml, ppt/slideLayouts/slideLayout1.xml and ppt/notesMasters/notesMaster1.xml changed (verified part by part against the previous entries); slides, charts, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-29 (chartPaletteForFill, opf#270): the exported series colours come from the shared palette function, so the srgbClr values in the chart parts changed (the default light card now writes a darker fourth, fifth and later series colours where the old per-colour clamp left them within a few lightness points of their neighbours); only ppt/charts/chart*.xml differ, and with srgbClr values masked those parts are identical, verified part by part against the previous entries; slides, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-36 (codex/rr-36-single-series-colour, owner-approved 2026-10-01): a single-series bar chart no longer writes a c:dPt per point, so the single-series clustered-column fallback chart parts lose their c:dPt elements; verified part by part against a build of main 4ed11db (after RR-29) with the CI-pinned core 395e4c1 (which reproduces the previous entries exactly): pareto-multi and box-multi are byte-identical, and every other deck differs only in ppt/charts/chartN.xml, which is byte-identical once the c:dPt elements are removed. Regenerated again for FF-05 (codex/ff-05-notes-theme): PowerPoint listed fonts that no part names, so the exporter now writes presentation.xml children in schema order (p:notesMasterIdLst before p:sldIdLst), gives the notes master its own theme part (ppt/theme/theme2.xml, a copy of the deck theme, with its relationship, content-type override and a second Theme name in docProps/app.xml), writes no run-level a:ea/a:cs typeface in slides (PowerPoint lists such a run font as an empty-name font), and names a font in the theme ea slot (the latin family, or the script font when one is selected; cs is unchanged). Verified part by part against a build of main 1f50912 (which reproduces the previous entries exactly): in every deck only [Content_Types].xml, docProps/app.xml, ppt/presentation.xml, ppt/notesMasters/_rels/notesMaster1.xml.rels, ppt/slides/slideN.xml, ppt/tags/opfDocument.xml (the recorded theme slots) and ppt/theme/theme1.xml (ea slot) changed, plus the added ppt/theme/theme2.xml; world-category (ja-JP, whose theme ea is already Calibri) changed no theme1 and no opfDocument, only ppt/tags/opfSlideN.xml; chart parts, embedded workbooks, slide masters of these decks and diagnostics are byte-identical. Entries are toPptx(deck, {chartex: 'fallback'}) output, as test/chartex.mjs checks. Regenerated again for RR-17 (codex/rr-17-keynote-charts, opf-pptx#162): the embedded chart workbook's table ref loses the stray apostrophe PptxGenJS 4.0.1 writes (A1:B5' -> A1:B5), which made Keynote drop the chart. Verified part by part against a build of main 2686d1e: in every deck the only changed part is ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx, and inside it only xl/tables/table1.xml, whose only difference is the table ref attribute; chart parts, slides, theme, tags, every other workbook part and diagnostics are byte-identical. Regenerated again for RR-17 (codex/rr-17-pptxgenjs-plus, owner decision 2026-10-05: the vendored engine is pptxgenjs-plus 4.3.4 instead of PptxGenJS 4.0.1). Verified part by part against a build of main bc97949 (which reproduces the previous entries exactly), with canonical XML (attributes sorted, namespace declarations and whitespace between elements ignored): the packages lose their ZIP directory entries (also inside the embedded workbooks, whose parts are otherwise byte-identical); [Content_Types].xml writes the jpg default as image/jpeg; ppt/presentation.xml carries firstSlideNum=\"1\"; ppt/presProps.xml and docProps/core.xml change whitespace only; docProps/app.xml counts Paragraphs and Notes; slides declare the m, a14 and mc namespaces, write self-closing elements and drop the chart frame descr=\"\"; slide relationships to charts are relative; chart parts use a flat c:strRef for categories, drop the third (orphan) c:axId and write the category axis numFmt with sourceLinked=\"0\"; notes slides drop an empty run. After masking those classes every slide equals main; theme, tags, notes master, slide masters, layouts, embedded workbook parts and diagnostics are byte-identical (docs/pptxgenjs-plus-migration.md rows 1, 2, 4 to 7, 11, 12, 16 and 18 to 20). Regenerated again for FA-03 (clean chart type ids): only the all-seven entry changed, because its deck no longer carries the two retired alias slides (treemap-2x and australia, which are not chart types any more); the other eight entries are byte-identical. Regenerated again for the FA 0.14 integration (layout record design applied, FA-01 and FA-17): only the world-category entry changed, because its layout chart-1x now supplies design.contentAlignment 'center' (the layout record's own design), so the chart heading paragraph in ppt/slides/slide1.xml is algn=\"ctr\" instead of \"l\"; verified part by part against a build of main 673dbba: that paragraph attribute is the only difference in the package, and the other eight entries are byte-identical. Regenerated for FA-23 (OPF 0.15, owner-approved breaking spec): with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"); the world-category deck registers the default catalog for its gallery ids. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59 (AUTO-18, round trip restores absent document defaults): full provenance now records the document-level defaults a document leaves to the engine (OPF_DOCUMENT_V1.absent), so every full-mode export carries the document tag and its slide tags, also when the document states nothing else. Verified part by part against a build of main 3d2698f: with the OPF_DOCUMENT_V1 and OPF_SLIDE_V1 tag parts, their relationships, content-type overrides and custDataLst references removed, every package is byte-identical to main; only the tag parts changed. RR-81 intentional OPF 0.19 default-export contract: eight automatic fixtures explicitly regenerated after owner-authorized design section 8 and coordinator archive review. Baseline converter 991023c, core fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5, renderer 9fbddcb78dbebcb87355922ca92af7d26c24c48d, Node 24.21.0. Every changed slide XML differs only by title placeholder and noGrp locks; chart parts, chart relationships, embedded workbooks, themes, existing tags and diagnostics are identical. Added only OPF auto titleOnly layout, its relationship and tag, and corresponding content types/master layout registration/slide relationships. The ninth world-category fixture is unchanged and its historical hash passes with the test helper’s registered default catalog. Final gallery 2 integration explicitly rebaselined all nine archives after independent coordinator review: 28 reachable v2 layouts add 84 layout/relationship/tag parts. Charts, chart relationships, embedded workbooks and themes remain byte-identical. World-category changes chart-1x to chart with explicit contentAlignment:center: the primary chart becomes full-width above the supporting note, with unchanged title geometry and exact source text. This is the accepted v2 chart intent, not geometry equivalence or native visual evidence. Strict archive/diagnostic/mode checks remain. RR-20 row-data provenance: independently reviewed and approved update of only waterfall-single against baseline converter e673f106c2fd38fcb5d51db190649c3855cc1885. Adds OPF_DATA_V1 for an authored single column actually plotted against synthetic row numbers. Only that tag, its content-type override, slide relationship and customer-data link change; every native part and all other archives remain byte-identical. Prior hash and size are retained; evidence: docs/evidence/rr20-row-data-provenance/archive-review.json. Native raster acceptance remains separate. Regenerated for RR-94: each tagged text shape records a fingerprint (sig) and every image block carries an OPF_IMAGE_V1 tag, so only tag parts changed. Regenerated for RR-90 (opf-pptx 0.22.1): chart text is core chartTextSize (20 px, 15 pt on the default slide) instead of 14 px floored at 16 px, so only chart part text sizes (sz) changed. Regenerated for RR-96 (color variants): scheme-derived colors in the classic chart parts and slides are schemeClr (with lumMod/lumOff for the derived neutrals) instead of sRGB, and every master carries its color map, so only color elements and the master color map changed. Regenerated for FA-33 (layout records are one ordered list of regions): the 28 default layouts' OPF_LAYOUT_V1 tags (ppt/tags/opfLayoutN.xml) carry a hash of the record, which hashes the new record form, so only that hash field of those tag parts changed (252 tag parts compared across the nine archives; every slide, layout, master, theme, chart and other part, and every diagnostic, is byte-identical). The previous hash of every entry is kept as fa33PreviousSha256. Regenerated for WI-6 (design.listBullet none; the pillars, team and faq layouts set it, and team also accepts list): the OPF_LAYOUT_V1 tags of those three default layouts (ppt/tags/opfLayout10.xml, opfLayout14.xml and opfLayout27.xml) carry a hash of the record, which hashes the new record, so only that hash field of those three tag parts changed (verified part by part against a build of main with the previous gallery, which reproduces every previous entry exactly: in each of the nine archives exactly those three parts differ, and every slide, layout, master, theme, chart, workbook and other tag part, and every diagnostic, is byte-identical). The previous hash of every entry is kept as wi6PreviousSha256. Regenerated for LH-12 (native conformance): every OPF text shape that is not a placeholder is a text box (txBox=\"1\"). Only the world-category entry changed, and in it only ppt/slides/slide1.xml, whose one difference is that flag on its text lines (verified part by part against a build of main); the other eight entries are byte-identical. The previous hash is kept as lh12PreviousSha256. Regenerated for layout-harvest wave 5: every entry moves only in the four slide layouts of the section, statement, quote and closing records (LH-96: each carries its layout variant as a clrMapOvr and a bg1 background) and in the layout tags of the process, agenda and agenda-split records (LH-07: their regions gain a sequence), checked part by part against an export of main 23cc70d45; every slide, master, theme, chart, workbook and other part is byte-identical. The previous hash and size are kept as lhWave5PreviousSha256 and lhWave5PreviousBytes. Regenerated for layout-harvest wave 6: every entry moves only in its slide layouts and two layout tags, checked part by part against an export of main 581ef9838: 22 layouts write marL=\"0\" indent=\"0\" and a:buNone on every level of their subtitle and non-list body placeholders (LH-140), and nothing else in them changes; the Cover and Section layouts set their title placeholder start-aligned and taller, anchored at the foot (LH-130); ppt/tags/opfLayout1.xml and opfLayout2.xml carry the new hash of the cover and section records. Every slide, master, theme, chart, workbook and other part is byte-identical. The previous hash and size are kept as lhWave6PreviousSha256 and lhWave6PreviousBytes. Regenerated for LH-175 (a Pareto chart of several series is core's pareto-as-columns fallback in every chartex mode, as the preview draws it): only the pareto-multi entry changed; its chart is written through the column construct with every series and reports chart-fallback instead of chartex-fallback. The previous hash and size are kept as lh175PreviousSha256 and lh175PreviousBytes.",
+          "rr81Review": {
+            "baselineCommit": "991023c",
+            "coreCommit": "fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5",
+            "rendererCommit": "9fbddcb78dbebcb87355922ca92af7d26c24c48d",
+            "runtime": "Node 24.21.0"
+          },
+          "finalGalleryReview": {
+            "baselineConverter": "b954ddd0333b2d59a0080f9e76f63bfe32bcefa3",
+            "core": "e21c472d88057d9d90cfa507fe91b89063f3f29a",
+            "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99",
+            "renderer": "9fbddcb78dbebcb87355922ca92af7d26c24c48d",
+            "runtime": "Node 24.21.0",
+            "evidence": "docs/evidence/rr-81-layout-review/final-gallery-comparison.json",
+            "archives": "/private/tmp/rr81-final-gallery-review/",
+            "candidateConverter": "b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1"
+          },
+          "historicalCommit": "438ce8801701f2fa2531ac56537234d274e36aa7",
+          "rr20Review": {
+            "candidateConverter": "477c101abd38dde05d5a1c3d91b90173e5d88358",
+            "core": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+            "gallery": "146e477196405fe7d2283008f6fad34c12742599",
+            "renderer": "013f39025d0cc63cc149228efb992dfad06838e5",
+            "runtime": "Node 24.21.0",
+            "evidence": "docs/evidence/rr20-array-areas/chartex-archive-review.json",
+            "note": "Reviewed all nine coherent fallback archives against published converter and dependency graph. The 28 layout tags change only record hashes; comparison layout adjusts two content heights and footer geometry for the 32pt list default. Candidate chart XML changes only the neutral gridline color and value-axis zero minimum for five constructs. All slide XML, chart data, diagnostic codes, and ZIP part sets remain unchanged."
+          },
+          "rr20RowDataReview": {
+            "baselineConverter": "e673f106c2fd38fcb5d51db190649c3855cc1885",
+            "runtime": "Node 24.21.0",
+            "changedEntry": "waterfall-single",
+            "evidence": "docs/evidence/rr20-row-data-provenance/archive-review.json"
+          },
+          "galleryMasterNameReview": {
+            "baselineConverter": "0e2ea4982c4bb1280f22763411e681fe0786f4fc",
+            "evidence": "docs/evidence/rr81-gallery-master-name/archive-review.json",
+            "note": "Owner-requested generated master display name pptx.gallery, reviewed 2026-10-14. Existing source.commit, notes and earlier review identities above are historical. All nine old hashes/sizes reproduced exactly on the published baseline. Only master name attributes change: 20 XML bytes and 14 compressed archive bytes per deck; every other part, inventory and diagnostic is exact. Authored theme identity and individual layout names stay unchanged. Native menu display was not observed."
+          },
+          "defaultThemeCategoryReview": {
+            "baselineVersion": "0.20.1",
+            "baselinePublisher": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+            "candidateBase": "373715ad62bd679ad39ba5b8783ec8f11df50065",
+            "evidence": "docs/evidence/rr68-default-theme-category/archive-review.json",
+            "scope": "All nine same-input candidate fallback archives differ only in default theme display identity: theme1/theme2 a:theme and thm15:themeFamily names, and app.xml theme-name entries. Every other part, inventory and diagnostic remains byte-identical. Previous master-only review and original archive identities remain historical. Explicit authored themes remain unchanged. Native Home > Layout verification is pending; this is source evidence, not a publication or native acceptance claim."
+          },
+          "wi2LayoutCatalogReview": {
+            "baseline": "origin/main 533a030e7 (WI-4 merged, 0.27.0) with @openpresentation/gallery 0.27.0",
+            "candidate": "codex/wi-2-group-placement (WI-2: whole-group placement)",
+            "evidence": "Exported all nine fallback decks with the same converter on both sides (chartex: fallback, default catalog registered). The baseline reproduced every entry hash and size above before this change. Diagnostics are identical. The new gallery layout agenda-split adds one slide layout part (with its relationships) and one opfLayout tag part, and the slide-layout numbering after the fourth layout shifts by one; closing, statement, quote and comparison are redrawn records, so their layout parts and tags change. Changed parts in every deck: [Content_Types].xml, ppt/slideLayouts/*, ppt/slideMasters/slideMaster1.xml and its rels, ppt/tags/opfLayout*.xml and the slide rels that name a layout. Charts, workbooks, themes, presentation.xml, notes masters and slides are byte-identical."
+          },
+          "lhWave2Review": "LH wave 2 (opf#968 to opf#975), verified part by part against a build of codex/lh-wave-1: every entry moves in the four ppt/tags/opfLayoutN.xml tags of the section, statement, quote and closing records (LH-01 adds design.variant to them); box-multi and all-seven also move in their box and world charts (LH-60: one box per series, a world over categories that are not places drawn as columns), with the chart-fallback diagnostic. Prior hashes and sizes are kept as lhWave2PreviousSha256 and lhWave2PreviousBytes.",
+          "rr20FallbackArchiveReviews": [
+            {
+              "baseline": {
+                "head": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+                "catalogSha256": "94523217d5a391df0216d0605ca18c37cf9d766667a042b9c295b57e9c308281",
+                "distManifestSha256": "785af9dbd18cf646e7fff187f59829c329488f42f49d16c7494f5bea5cdb9fd4"
+              },
+              "candidate": {
+                "head": "513156a982397eaa0033808215fbb86dd284745b",
+                "catalogSha256": "c2abb53fe57dd30bdb8bfe9c63b8aa73499afb6ec6bcaa1a53b3af3a627d1232",
+                "distManifestSha256": "6e1797fe71a978aee0fff037318788b17858bc4ae7a303afa310dbf0a3c2e427"
+              },
+              "evidence": {
+                "file": "review.json",
+                "sha256": "3c04c23eea605234760b03d1c279f000c9e6eb67579c789964ddbdd26ab6f9b7"
+              },
+              "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance."
+            },
+            {
+              "baseline": {
+                "head": "c9732accd41cfffa27b8893251f33868c6b0514e",
+                "catalogSha256": "c2abb53fe57dd30bdb8bfe9c63b8aa73499afb6ec6bcaa1a53b3af3a627d1232",
+                "distManifestSha256": "dd77b1d9ac7edcce2ed25dbc5ae702b1cfcdf55746f0a0bd1468fa6423aabf7e"
+              },
+              "candidate": {
+                "head": "5b9e4386c00319da1fa4370dcc0b3eb6e93c9578",
+                "catalogSha256": "4d279b51b9eb67ff28d54b243fda4342502d02072e2d18e0c8e12e7c1d59124f",
+                "distManifestSha256": "74ba8fc577b633819ee22d00b55f7873bf5badb37985a8f9cdb3cc001276cde6"
+              },
+              "evidence": {
+                "file": "review.json",
+                "sha256": "aee881ee7a959225a66e9e3f0f264fab5c51854a0bbab8811ea113457a5eb0c3"
+              },
+              "scope": "Separate nine-deck chartex:fallback family. All baseline hashes, sizes, ordered diagnostics and layout/tag counts reproduced; no XML normalization, automatic promotion or native acceptance."
+            }
+          ]
+        },
+        "scope": "output-preparation"
+      },
+      "historicalNative": {
+        "path": "scripts/native-acceptance/fixtures/chartex-fallback-main.json",
+        "sha256": "867c384ba2a1733e7bba738b8e2f797b8efbee0b3083a22bea391c6a32994b1e",
+        "source": {
+          "repository": "OpenPresentation/opf-pptx",
+          "commit": "b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1",
+          "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating). Regenerated again for RR-11 always-on header/footer placeholders (codex/rr-11-hf-always): a deck with no footer now carries the dt/ftr/sldNum placeholders and p:hf flags on its slide master, layout and notes master; only ppt/slideMasters/slideMaster1.xml, ppt/slideLayouts/slideLayout1.xml and ppt/notesMasters/notesMaster1.xml changed (verified part by part against the previous entries); slides, charts, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-29 (chartPaletteForFill, opf#270): the exported series colours come from the shared palette function, so the srgbClr values in the chart parts changed (the default light card now writes a darker fourth, fifth and later series colours where the old per-colour clamp left them within a few lightness points of their neighbours); only ppt/charts/chart*.xml differ, and with srgbClr values masked those parts are identical, verified part by part against the previous entries; slides, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-36 (codex/rr-36-single-series-colour, owner-approved 2026-10-01): a single-series bar chart no longer writes a c:dPt per point, so the single-series clustered-column fallback chart parts lose their c:dPt elements; verified part by part against a build of main 4ed11db (after RR-29) with the CI-pinned core 395e4c1 (which reproduces the previous entries exactly): pareto-multi and box-multi are byte-identical, and every other deck differs only in ppt/charts/chartN.xml, which is byte-identical once the c:dPt elements are removed. Regenerated again for FF-05 (codex/ff-05-notes-theme): PowerPoint listed fonts that no part names, so the exporter now writes presentation.xml children in schema order (p:notesMasterIdLst before p:sldIdLst), gives the notes master its own theme part (ppt/theme/theme2.xml, a copy of the deck theme, with its relationship, content-type override and a second Theme name in docProps/app.xml), writes no run-level a:ea/a:cs typeface in slides (PowerPoint lists such a run font as an empty-name font), and names a font in the theme ea slot (the latin family, or the script font when one is selected; cs is unchanged). Verified part by part against a build of main 1f50912 (which reproduces the previous entries exactly): in every deck only [Content_Types].xml, docProps/app.xml, ppt/presentation.xml, ppt/notesMasters/_rels/notesMaster1.xml.rels, ppt/slides/slideN.xml, ppt/tags/opfDocument.xml (the recorded theme slots) and ppt/theme/theme1.xml (ea slot) changed, plus the added ppt/theme/theme2.xml; world-category (ja-JP, whose theme ea is already Calibri) changed no theme1 and no opfDocument, only ppt/tags/opfSlideN.xml; chart parts, embedded workbooks, slide masters of these decks and diagnostics are byte-identical. Entries are toPptx(deck, {chartex: 'fallback'}) output, as test/chartex.mjs checks. Regenerated again for RR-17 (codex/rr-17-keynote-charts, opf-pptx#162): the embedded chart workbook's table ref loses the stray apostrophe PptxGenJS 4.0.1 writes (A1:B5' -> A1:B5), which made Keynote drop the chart. Verified part by part against a build of main 2686d1e: in every deck the only changed part is ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx, and inside it only xl/tables/table1.xml, whose only difference is the table ref attribute; chart parts, slides, theme, tags, every other workbook part and diagnostics are byte-identical. Regenerated again for RR-17 (codex/rr-17-pptxgenjs-plus, owner decision 2026-10-05: the vendored engine is pptxgenjs-plus 4.3.4 instead of PptxGenJS 4.0.1). Verified part by part against a build of main bc97949 (which reproduces the previous entries exactly), with canonical XML (attributes sorted, namespace declarations and whitespace between elements ignored): the packages lose their ZIP directory entries (also inside the embedded workbooks, whose parts are otherwise byte-identical); [Content_Types].xml writes the jpg default as image/jpeg; ppt/presentation.xml carries firstSlideNum=\"1\"; ppt/presProps.xml and docProps/core.xml change whitespace only; docProps/app.xml counts Paragraphs and Notes; slides declare the m, a14 and mc namespaces, write self-closing elements and drop the chart frame descr=\"\"; slide relationships to charts are relative; chart parts use a flat c:strRef for categories, drop the third (orphan) c:axId and write the category axis numFmt with sourceLinked=\"0\"; notes slides drop an empty run. After masking those classes every slide equals main; theme, tags, notes master, slide masters, layouts, embedded workbook parts and diagnostics are byte-identical (docs/pptxgenjs-plus-migration.md rows 1, 2, 4 to 7, 11, 12, 16 and 18 to 20). Regenerated again for FA-03 (clean chart type ids): only the all-seven entry changed, because its deck no longer carries the two retired alias slides (treemap-2x and australia, which are not chart types any more); the other eight entries are byte-identical. Regenerated again for the FA 0.14 integration (layout record design applied, FA-01 and FA-17): only the world-category entry changed, because its layout chart-1x now supplies design.contentAlignment 'center' (the layout record's own design), so the chart heading paragraph in ppt/slides/slide1.xml is algn=\"ctr\" instead of \"l\"; verified part by part against a build of main 673dbba: that paragraph attribute is the only difference in the package, and the other eight entries are byte-identical. Regenerated for FA-23 (OPF 0.15, owner-approved breaking spec): with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"); the world-category deck registers the default catalog for its gallery ids. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59 (AUTO-18, round trip restores absent document defaults): full provenance now records the document-level defaults a document leaves to the engine (OPF_DOCUMENT_V1.absent), so every full-mode export carries the document tag and its slide tags, also when the document states nothing else. Verified part by part against a build of main 3d2698f: with the OPF_DOCUMENT_V1 and OPF_SLIDE_V1 tag parts, their relationships, content-type overrides and custDataLst references removed, every package is byte-identical to main; only the tag parts changed. RR-81 intentional OPF 0.19 default-export contract: eight automatic fixtures explicitly regenerated after owner-authorized design section 8 and coordinator archive review. Baseline converter 991023c, core fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5, renderer 9fbddcb78dbebcb87355922ca92af7d26c24c48d, Node 24.21.0. Every changed slide XML differs only by title placeholder and noGrp locks; chart parts, chart relationships, embedded workbooks, themes, existing tags and diagnostics are identical. Added only OPF auto titleOnly layout, its relationship and tag, and corresponding content types/master layout registration/slide relationships. The ninth world-category fixture is unchanged and its historical hash passes with the test helper’s registered default catalog. Final gallery 2 integration explicitly rebaselined all nine archives after independent coordinator review: 28 reachable v2 layouts add 84 layout/relationship/tag parts. Charts, chart relationships, embedded workbooks and themes remain byte-identical. World-category changes chart-1x to chart with explicit contentAlignment:center: the primary chart becomes full-width above the supporting note, with unchanged title geometry and exact source text. This is the accepted v2 chart intent, not geometry equivalence or native visual evidence. Strict archive/diagnostic/mode checks remain.",
+          "rr81Review": {
+            "baselineCommit": "991023c",
+            "coreCommit": "fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5",
+            "rendererCommit": "9fbddcb78dbebcb87355922ca92af7d26c24c48d",
+            "runtime": "Node 24.21.0"
+          },
+          "finalGalleryReview": {
+            "baselineConverter": "b954ddd0333b2d59a0080f9e76f63bfe32bcefa3",
+            "core": "e21c472d88057d9d90cfa507fe91b89063f3f29a",
+            "gallery": "e0a7eee2dfe996e680b34a907cabfe41905e6d99",
+            "renderer": "9fbddcb78dbebcb87355922ca92af7d26c24c48d",
+            "runtime": "Node 24.21.0",
+            "evidence": "docs/evidence/rr-81-layout-review/final-gallery-comparison.json",
+            "candidateConverter": "b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1",
+            "archiveSource": "OpenPresentation/opf-pptx:test/fixtures/chartex-fallback-main.json#entries (historical SHA-256 only; reviewed archive binaries are not bundled)"
+          },
+          "historicalCommit": "438ce8801701f2fa2531ac56537234d274e36aa7",
+          "rr20Review": {
+            "candidateConverter": "477c101abd38dde05d5a1c3d91b90173e5d88358",
+            "core": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+            "gallery": "146e477196405fe7d2283008f6fad34c12742599",
+            "renderer": "013f39025d0cc63cc149228efb992dfad06838e5",
+            "runtime": "Node 24.21.0",
+            "evidence": "docs/evidence/rr20-array-areas/chartex-archive-review.json",
+            "note": "Reviewed all nine coherent fallback archives against published converter and dependency graph. The 28 layout tags change only record hashes; comparison layout adjusts two content heights and footer geometry for the 32pt list default. Candidate chart XML changes only the neutral gridline color and value-axis zero minimum for five constructs. All slide XML, chart data, diagnostic codes, and ZIP part sets remain unchanged."
+          },
+          "nativeAcceptanceFixtureOrigin": "OpenPresentation/opf-pptx:test/fixtures/chartex-fallback-main.json",
+          "nativeSuiteRowDataReview": {
+            "pptxCommit": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+            "fixture": "test/fixtures/chartex-fallback-main.json#entries.waterfall-single",
+            "evidence": "docs/evidence/rr20-row-data-provenance/archive-review.json",
+            "scope": "Only the approved waterfall fallback hash and size change. Added data-provenance tag and links; native parts and the other eight chart archives are unchanged. Previous hash and size retained in the entry. Strict fallback archive equality remains required."
+          },
+          "currentMasterDisplayNameReview": {
+            "date": "2026-10-15",
+            "publishedBaseline": {
+              "version": "0.20.0",
+              "gitHead": "0e2ea4982c4bb1280f22763411e681fe0786f4fc"
+            },
+            "publishedCurrent": {
+              "version": "0.20.1",
+              "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+            },
+            "evidence": "docs/evidence/rr-68-native-chart-master-name-2026-10-15/comparison.json",
+            "scope": "All nine exact maintained fallback decks exported with otherwise identical registry dependencies. Every old archive and size reproduced its historical entry; all 1079 ZIP parts retained. Only each generated slide master gains p:cSld@name=pptx.gallery; all other parts and diagnostic bytes unchanged. Older source metadata above remains historical. Whole-archive equality, chart mode assertions and complete suite sealing remain strict."
+          },
+          "sourceCandidateDefaultThemeReview": {
+            "sourceCandidate": {
+              "repository": "OpenPresentation/opf-pptx",
+              "commit": "560571c7ced447484c55c673c8fbeb8f69f838a4",
+              "base": "373715ad62bd679ad39ba5b8783ec8f11df50065",
+              "registryAcceptance": false,
+              "notPublished": true
+            },
+            "publishedBaseline": {
+              "version": "0.20.1",
+              "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+            },
+            "evidence": "docs/evidence/rr-68-native-chart-master-name-2026-10-15/source-candidate-theme-category.json",
+            "scope": "Exact reviewed source-candidate default theme display-name correction; all nine current strict fallback identities change only for theme1/theme2 root/family names and app theme-name entries. Every other ZIP payload, source fixture and diagnostic remains exact. All previous published0.20.0/0.20.1 identities and cause evidence remain historical. Candidate preparation remains registryAcceptance:false; native UI success is not yet claimed."
+          }
+        },
+        "scope": "historical-native-witness"
+      },
+      "nativeAcceptance": false,
+      "registryAcceptance": false
+    },
+    "packages": {
+      "consumer": "C:\\opf-work\\n034-current\\artifacts\\npm\\consumer",
+      "packages": [
+        {
+          "name": "@openpresentation/opf",
+          "version": "0.4.0-preview.11",
+          "directory": "C:\\opf-work\\n034-current\\artifacts\\npm\\consumer\\node_modules\\@openpresentation\\opf",
+          "runtime": {
+            "sha256": "427b97919ca74beb5225b54c98a6be9b5271296cfaaf727cc93ad9b3ec0a8376",
+            "files": [
+              {
+                "path": "package.json",
+                "bytes": 5609,
+                "sha256": "b6dff2df173612eeddda2699504cb391de91a219b09c0a1c2a0e331c16114d49"
+              },
+              {
+                "path": "dist/browser.js",
+                "bytes": 4427,
+                "sha256": "876d455cbbb2e7539853f007bd2646b50bc686ab065c7ef2fb61b4cd5252bab6"
+              },
+              {
+                "path": "dist/catalog-refs-BacOFTcg.d.ts",
+                "bytes": 7729,
+                "sha256": "1a354bba8c6ab8ee04b98659e4291288e8bc3ebfe8d6b554fb62a8e9c4f86595"
+              },
+              {
+                "path": "dist/catalog-schemas-CiEafJRf.d.ts",
+                "bytes": 1738,
+                "sha256": "73b46fbd317941de642cc7fe5bfd8ee6a582a24416e8623d585659cea6b1392d"
+              },
+              {
+                "path": "dist/chart-data-yEE-WzgV.d.ts",
+                "bytes": 11271,
+                "sha256": "065ce9cfc465268c427852aa4f7ae5cb64a4ef4a4ebd8da5ef52349728f92936"
+              },
+              {
+                "path": "dist/chunk-43JWUIGF.js",
+                "bytes": 203,
+                "sha256": "2b229ad6f7d6b7005f4a974dad1538fc515ff0e3ad09bfde1ccfd74be82198f7"
+              },
+              {
+                "path": "dist/chunk-466I5SCB.js",
+                "bytes": 63844,
+                "sha256": "bf5dfe9d9fda8b9578df7f60e35a827c194f59a8de2783b54697772f2a046d9f"
+              },
+              {
+                "path": "dist/chunk-4HRWL2TM.js",
+                "bytes": 56369,
+                "sha256": "f9ec9a4ed12e935abaef578dd8336fcadaac187febac96b594ceeede95c7e551"
+              },
+              {
+                "path": "dist/chunk-7QJUCCFA.js",
+                "bytes": 1394935,
+                "sha256": "0759adf8f082144e00adf8d65e5b3f4c624974b5285c06aa8bde2f553559741d"
+              },
+              {
+                "path": "dist/chunk-CKXPEP4C.js",
+                "bytes": 44979,
+                "sha256": "1492ece0fd7740aa57f59bac8a619b0c3c4d49aa4348179afb6df9c1f39ee6b6"
+              },
+              {
+                "path": "dist/chunk-F4VQEACK.js",
+                "bytes": 4798,
+                "sha256": "7571eaec8f682345036588e77ba1687397b4308eadd03c875781a6b38cc765a6"
+              },
+              {
+                "path": "dist/chunk-FK5XG742.js",
+                "bytes": 157304,
+                "sha256": "e6c95820b6e93c78a61ca11817144781d996dbd77ca7e8c36f39353f53b88fc3"
+              },
+              {
+                "path": "dist/chunk-FYURTI3W.js",
+                "bytes": 503374,
+                "sha256": "5f68ac5512ff17e813ceb56a90247a3d4e87f0ec9f2280b27eb4ec958ebf6f26"
+              },
+              {
+                "path": "dist/chunk-IJXKVM4W.js",
+                "bytes": 10945,
+                "sha256": "675f49f7235e76248dab49255a12e1ecb8c9147e116ea8b7e3230da12038f3e0"
+              },
+              {
+                "path": "dist/chunk-INIMUBSE.js",
+                "bytes": 286,
+                "sha256": "7e65e95fc14a6d806c7e0335feb620b07034bc137ada002eb5353dc660550494"
+              },
+              {
+                "path": "dist/chunk-JBARNYFR.js",
+                "bytes": 776,
+                "sha256": "4a48db67e16a9cc9c607a561c0df043f8ffd1b9139b2773401696c1c7a7854bc"
+              },
+              {
+                "path": "dist/chunk-JEYWTUQK.js",
+                "bytes": 1853134,
+                "sha256": "a10fccc956d10acef4f3ec90e228a3ba1b113ebfd268387860d6bda915cf943f"
+              },
+              {
+                "path": "dist/chunk-LSNALPFG.js",
+                "bytes": 36913,
+                "sha256": "d255ef51ba5c2a7cfea2cb8aea2d6a26c83fa4e64ff9a790973e0de4da8e0f48"
+              },
+              {
+                "path": "dist/chunk-N5BO63LW.js",
+                "bytes": 31311,
+                "sha256": "dad91ffbab7326648fd55e95e6e28f789403f16e2ff4bf8d088ab45966d65b7c"
+              },
+              {
+                "path": "dist/chunk-NSDIKSKY.js",
+                "bytes": 3008,
+                "sha256": "a7bccb364c4daaac50f4b54cc6cbc6d4d58e23e53d0bbb19a955efaa857e0677"
+              },
+              {
+                "path": "dist/chunk-NZXTZ2A2.js",
+                "bytes": 455983,
+                "sha256": "28c2372c5e2e719a25ada959af1df799a2a2386f46e7382dd85bab2fa33d5478"
+              },
+              {
+                "path": "dist/chunk-OLIJRUDC.js",
+                "bytes": 72819,
+                "sha256": "501f646ea25edc8e86b209888e8e1fc3ed225370b98b77ffda220157680ae605"
+              },
+              {
+                "path": "dist/chunk-PRXZD2II.js",
+                "bytes": 463,
+                "sha256": "46ee4d93f7064a623e4e3203658539c4a48bed40a8e3edef9acf32c1d41a1a66"
+              },
+              {
+                "path": "dist/chunk-QLR5ZWMU.js",
+                "bytes": 3788,
+                "sha256": "979c454d4cd1baf7141ab3ac91cc3be3d3710f1a8dcdbbd220ef26530a7aa21f"
+              },
+              {
+                "path": "dist/chunk-R5FLG22B.js",
+                "bytes": 10267,
+                "sha256": "4b2b98806811661fea11e120b2e26e6f49ba86faf28735009f2f360ad3649d9f"
+              },
+              {
+                "path": "dist/chunk-RYZPBJLB.js",
+                "bytes": 302,
+                "sha256": "648bfbc96d7f5326515b99e812fdfcc90663e86ca78104aa7c2c16946a112747"
+              },
+              {
+                "path": "dist/chunk-TVAQQT2H.js",
+                "bytes": 5033,
+                "sha256": "0324eb26ab7004e31c27e77b6f8a87019a98ecf9f66536f4c21072d61626b107"
+              },
+              {
+                "path": "dist/chunk-VLHW6M5F.js",
+                "bytes": 28142,
+                "sha256": "c8dd3a31651ed82462bb14c49c9f5210adce07cc45d24a8263bfd7a5101a4465"
+              },
+              {
+                "path": "dist/chunk-VSOXFZ2I.js",
+                "bytes": 48416,
+                "sha256": "b69b2478186c59d658bc2adf5fb9386bf6edda7e6ab3f8fcf640a1bb8dd5ade7"
+              },
+              {
+                "path": "dist/chunk-W4DYDRV2.js",
+                "bytes": 6363,
+                "sha256": "a946040e039d89cc24489d2eb4ed06e95e2eb1962a38a2b0913d3124e4167526"
+              },
+              {
+                "path": "dist/chunk-XOLSLSGI.js",
+                "bytes": 32288,
+                "sha256": "e37ae9d70850f5ffb6de2e0946374718e7ccd4337ca4e66f56270c30a30d21b9"
+              },
+              {
+                "path": "dist/chunk-YRGRZJHY.js",
+                "bytes": 15552,
+                "sha256": "0f3087279ba665c5c228806ae43aa4c838c4d88efa720e4ae039de1bf3264273"
+              },
+              {
+                "path": "dist/chunk-YYT6N7AI.js",
+                "bytes": 267856,
+                "sha256": "02f442c34a80d1bf48776bc704e35649c8e366c09f4ee8a47405598407d9eb06"
+              },
+              {
+                "path": "dist/chunk-ZYSCX2U2.js",
+                "bytes": 6461,
+                "sha256": "2905664721321f8e07600ac3ccfa70ec72c87ebc579c53102e90eca6f08f44c9"
+              },
+              {
+                "path": "dist/composition-pdsYn31I.d.ts",
+                "bytes": 477534,
+                "sha256": "b2d7fdba5cebb5d960b71fda3cf5ded653831b2e135b15b4ef23aa1bb210cb6b"
+              },
+              {
+                "path": "dist/composition.d.ts",
+                "bytes": 26042,
+                "sha256": "ac7c9da1604405e93ddf1e04cc92abf5b7d3a8a2bdc6c1f14835bffe657db94e"
+              },
+              {
+                "path": "dist/composition.js",
+                "bytes": 13129,
+                "sha256": "f2740883edb63cb343a2957a5f8aaa1b487511a72c6416767c8fa20746ea0bac"
+              },
+              {
+                "path": "dist/conversion-4D2V4YQA.js",
+                "bytes": 835,
+                "sha256": "99418b61371fed4b401777abf84b22ec9688af668d29f90e11e216a65f23afd4"
+              },
+              {
+                "path": "dist/conversion-DMSuP08K.d.ts",
+                "bytes": 33313,
+                "sha256": "5e57ae34449e0e4a53dd39fd085e44a9cca49624e9015fab8265868759299e07"
+              },
+              {
+                "path": "dist/convert.d.ts",
+                "bytes": 15040,
+                "sha256": "1cc417ffb08e88af9415655e0a75d71860b9530ba27a1a169712e5daf5714b7e"
+              },
+              {
+                "path": "dist/convert.js",
+                "bytes": 61383,
+                "sha256": "36d48f62dec6d1ec43989ea68322adf2fc4b84d9ece685b4d6b50aacea36e8d3"
+              },
+              {
+                "path": "dist/data.d.ts",
+                "bytes": 2609,
+                "sha256": "bfbe8f1817efbdcaec270cd01014f2348a19665ab23a4793a6a196dc6b7682ca"
+              },
+              {
+                "path": "dist/data.js",
+                "bytes": 443,
+                "sha256": "781adbce470a5d06ace8a0780ddcaf11fce99ea4ebc43d299ee744d5bac7a54b"
+              },
+              {
+                "path": "dist/deck-report-CW_BkX7-.d.ts",
+                "bytes": 2414,
+                "sha256": "4a985c51b28d2f1906fee3b48147a530a363c21b83eba54c11b3912fce94acd2"
+              },
+              {
+                "path": "dist/deck.d.ts",
+                "bytes": 2964,
+                "sha256": "e745d1e204ecf95b7bf1aac5b9957fafd120c1f19d3760cc5079954837491e1d"
+              },
+              {
+                "path": "dist/deck.js",
+                "bytes": 474,
+                "sha256": "b931a527d85c3759935d067af15013d516802def2746566a729c4c1cdcbd1d86"
+              },
+              {
+                "path": "dist/diagram-engine-eager.js",
+                "bytes": 360,
+                "sha256": "bdda69c4a470ab218074b33edc5c162b40bd1e664e365271faa15fa1747d6fc3"
+              },
+              {
+                "path": "dist/diagram-engine-lazy.js",
+                "bytes": 430,
+                "sha256": "21c9b614eaecd2abd1792b607ab8c8b19818641d3626d4be20482ebf179c5ce8"
+              },
+              {
+                "path": "dist/diagram-plantuml-ZZYMHBHZ.js",
+                "bytes": 87,
+                "sha256": "25f6b1cd4ee537704db65ffdc2d1bf09841ac212d6268ddf4d1576e5b2c068a3"
+              },
+              {
+                "path": "dist/diff.d.ts",
+                "bytes": 5944,
+                "sha256": "9310bd7aaa538370e43d6d4879a7ac0676021df5b8495f61be4be1cf7e3e0d14"
+              },
+              {
+                "path": "dist/diff.js",
+                "bytes": 271,
+                "sha256": "a52db91c5cd572cc9fb0e6d80ec6679e8f0cf63e2cea78def24f4075cd412cc6"
+              },
+              {
+                "path": "dist/docs.d.ts",
+                "bytes": 682,
+                "sha256": "7a3737469cc71abe1ae87c951f46657168a142b88118c97a651ee783903db6f1"
+              },
+              {
+                "path": "dist/docs.js",
+                "bytes": 1925415,
+                "sha256": "81c10af75ff7919995de4451a71f929a6b2db629c99fda3ba6340dacd9790191"
+              },
+              {
+                "path": "dist/examples.d.ts",
+                "bytes": 2126,
+                "sha256": "966cd6a4a161b3822aba2038671e28f207b7d058c3434fc1ed8c10370b5f9164"
+              },
+              {
+                "path": "dist/examples.js",
+                "bytes": 9341279,
+                "sha256": "43ee0a66fe90d62a885299fa12f52b42ea4dd1ea0d6eb8a03f190e803fcbc1e3"
+              },
+              {
+                "path": "dist/explain-iZeNOUc6.d.ts",
+                "bytes": 3979,
+                "sha256": "805cc0e5e2ea25a92a498a5fb5b0d81379d431f6bcb96bbfe4779a67da8c39bb"
+              },
+              {
+                "path": "dist/finding-l9dlQ2NF.d.ts",
+                "bytes": 7413,
+                "sha256": "c129e210603a48ad0f305c8600ea99d7b58a324a717d2feb37e00491adafbaf9"
+              },
+              {
+                "path": "dist/font-policy.d.ts",
+                "bytes": 7904,
+                "sha256": "76ecc80cf6c34910ec09e14b972bdca923d59475e274f6d23d07ca62292b6ff2"
+              },
+              {
+                "path": "dist/font-policy.js",
+                "bytes": 151,
+                "sha256": "80bafd517897185dc55223e253256ed0fdb59ab37dd37aebf54b6b300002ca7e"
+              },
+              {
+                "path": "dist/format.d.ts",
+                "bytes": 951,
+                "sha256": "f8e4861f53c2b9156485c893394f8160553f5b77ac59f49ab9485e9ac13b96a5"
+              },
+              {
+                "path": "dist/format.js",
+                "bytes": 157,
+                "sha256": "e7f5fca8480b785e5ad6a4f9308393baafa1fb0d8a552542d03e3d0c1d8093a0"
+              },
+              {
+                "path": "dist/ids.d.ts",
+                "bytes": 6870,
+                "sha256": "5a4c9c081e42fd9b3edfc790665b9a6a72cee42302ac9886c99ed5a1d254c5b3"
+              },
+              {
+                "path": "dist/ids.js",
+                "bytes": 339,
+                "sha256": "93879d9042358ae69ea9bf0abe4a749041b062677da6a9ccc24f280829e8f7cd"
+              },
+              {
+                "path": "dist/index.d.ts",
+                "bytes": 40487,
+                "sha256": "fbaa24e3e581ce0f0001daef4ffa7ba2da7f9309f91828f48ef3c5216d0aa8ef"
+              },
+              {
+                "path": "dist/index.js",
+                "bytes": 5855,
+                "sha256": "45b35d5b9fba6e3b098768df2543491cc3a9b9d89186f7e11c45cd65c429eb49"
+              },
+              {
+                "path": "dist/json-BFSdESOE.d.ts",
+                "bytes": 827,
+                "sha256": "e42487d6802977bc25edd5ba56177caf5ebe95da82cf5606d9dad086df233b78"
+              },
+              {
+                "path": "dist/markdown.d.ts",
+                "bytes": 5142,
+                "sha256": "a7b899473c4f09f774ac65fbe5b3925b77bfbac0b8cb7d751c0e3c19dff681f8"
+              },
+              {
+                "path": "dist/markdown.js",
+                "bytes": 390,
+                "sha256": "4a7126a0a475c0b75f84587d57f414146f6a3b56da06fb48d16d422016a7112c"
+              },
+              {
+                "path": "dist/node-engine.d.ts",
+                "bytes": 11652,
+                "sha256": "cb9663a759454cf4b9040dd10afc493549bdfc4cc0931f1b851a29814e9ea9a5"
+              },
+              {
+                "path": "dist/node-engine.js",
+                "bytes": 4065,
+                "sha256": "0a82ba77e9154408e7078b0d585e4d5c02e6a8d0be7bd4c8315716c554eaa017"
+              },
+              {
+                "path": "dist/pagination-D4U0bSme.d.ts",
+                "bytes": 13832,
+                "sha256": "f26414749bfce2343dad0f79caaacc6866b306e4d374172b3004f5dd98731fd1"
+              },
+              {
+                "path": "dist/pagination.d.ts",
+                "bytes": 540,
+                "sha256": "242f8404d37a4ff0a71b60a6e3c64d40ea6fb3fe51c08ce7f0445bb1836f1248"
+              },
+              {
+                "path": "dist/pagination.js",
+                "bytes": 282,
+                "sha256": "1cfcc8180fb5f653d558a347ea677919b0d303cb9371be6b21a586774831b3d4"
+              },
+              {
+                "path": "dist/patch.d.ts",
+                "bytes": 10686,
+                "sha256": "676307d0fc64c3e7f8493a77fcb0a85624538c20197d93db8c9fdcbebde911eb"
+              },
+              {
+                "path": "dist/patch.js",
+                "bytes": 536,
+                "sha256": "6cd700ccb2829ae82eeb7caa2e5b909c72029ad02cbc408559d1017ea523bdcb"
+              },
+              {
+                "path": "dist/precompiled.d.ts",
+                "bytes": 13,
+                "sha256": "4bd5186f89b856606fcd365feda2e5daa184651613339dcbc297e371b26dd169"
+              },
+              {
+                "path": "dist/precompiled.js",
+                "bytes": 231,
+                "sha256": "3896f5fdd2e839c1a3f2242c5221fba5719f00843a14055ba17d1a4cc5e96180"
+              },
+              {
+                "path": "dist/presentation-CLGKiART.d.ts",
+                "bytes": 297367,
+                "sha256": "53dbd35c5eb0cfed4c4512cc25613109c95c01889694e98d50a4a4cbcbd82623"
+              },
+              {
+                "path": "dist/repo-readme.d.ts",
+                "bytes": 139,
+                "sha256": "efa7477233f1982692546f2aaa2b2133546021755b66139970b136a724b45455"
+              },
+              {
+                "path": "dist/repo-readme.js",
+                "bytes": 19933,
+                "sha256": "c0a3317bd4cc0adf95a985fee7c2c937b16ce56406354634ef37e1069896b51c"
+              },
+              {
+                "path": "dist/schema-engine-ajv.js",
+                "bytes": 1179,
+                "sha256": "d227f0a5d518659124da2591e141ad78f07bb6a53b8c34dfb2be28d6fe2d316f"
+              },
+              {
+                "path": "dist/schema-engine-precompiled.js",
+                "bytes": 131,
+                "sha256": "4adc32ceb1beb6d4b8d3f5b2eee2ab36789318e0eaa78f7804d4c0416e4e293a"
+              },
+              {
+                "path": "dist/schema.d.ts",
+                "bytes": 9555,
+                "sha256": "ba30c3b7dd7d67f38437bb81a5c85fcc14dd23e8b846cef1900732ea05f74191"
+              },
+              {
+                "path": "dist/schema.js",
+                "bytes": 396,
+                "sha256": "a2882fb61b36faf3dc8e6169847d448f3c5ec46120f32b82982c2b0b6cca068c"
+              },
+              {
+                "path": "dist/schemas.d.ts",
+                "bytes": 14805,
+                "sha256": "80f25793c82a7fd465b4c57c9953190ac652508846b170da7d57c35898db22e5"
+              },
+              {
+                "path": "dist/schemas.js",
+                "bytes": 241,
+                "sha256": "a7106812e530f42d706ed1ccc25ad22ee327303444bfbcc73ea61cf9e4f52c4c"
+              },
+              {
+                "path": "dist/shape-catalog.d.ts",
+                "bytes": 4600,
+                "sha256": "27442f3b79ae5979bc0d45450298174d3a352405bdecfcc6025b88a92a667999"
+              },
+              {
+                "path": "dist/shape-catalog.js",
+                "bytes": 14977,
+                "sha256": "92e97d7c769114b1d00a56908e91cce2eb8be279a3c9bb5ff561320f7086288c"
+              },
+              {
+                "path": "dist/shape-engine-eager.js",
+                "bytes": 323,
+                "sha256": "56141eac3331bbd00f6a37c790f4f1b707f4c33ee27c2cc39edd1add2055a788"
+              },
+              {
+                "path": "dist/shape-engine-lazy.js",
+                "bytes": 308,
+                "sha256": "50e91c640653fd45a180cf9604329ca4407478b22652e10e2c349f19bcc4bb2c"
+              },
+              {
+                "path": "dist/shape-engine-module-BK7JNEUV.js",
+                "bytes": 308,
+                "sha256": "9085c04cb0378b469ac753ed79c0288f2d41e99bc2d819cfda9c3f9ecb4c0608"
+              },
+              {
+                "path": "dist/shape-geometry.d.ts",
+                "bytes": 7580,
+                "sha256": "9b2f42b5e25d44e99a9c1d3080b2b00fa6fb54761713a8aa2d9d5f41ae366bd5"
+              },
+              {
+                "path": "dist/shape-geometry.js",
+                "bytes": 229,
+                "sha256": "eaef14b1f91d6893844e4c05eade8313f5f7283d332401b76ce24e14f861f24a"
+              },
+              {
+                "path": "dist/source.d.ts",
+                "bytes": 16598,
+                "sha256": "de235e53f7d2476b7e7a48676e67a3e73c6a9c1dff338aea353383e79361b6cf"
+              },
+              {
+                "path": "dist/source.js",
+                "bytes": 23245,
+                "sha256": "0c4d9f37504805b1d87526300cbb9bd877a624a27c5eddc50cf76a0d18114260"
+              },
+              {
+                "path": "dist/spec/README.md",
+                "bytes": 5985,
+                "sha256": "3697401941147266a208924fc0418f8d86b87f9c9866e4a855c984be1d9841b2"
+              },
+              {
+                "path": "dist/spec/openapi.yaml",
+                "bytes": 24151,
+                "sha256": "523bbb95ce43b5213b6f1aa963f8c3392b7ccef41e8c6faee24bffb1e0d7df79"
+              },
+              {
+                "path": "dist/spec/reference/engine-defaults.json",
+                "bytes": 1341,
+                "sha256": "9faa8e4a2aec0e138d26f603ab6a0f55d7715e8f0bb0792cca2b5476adca9d6f"
+              },
+              {
+                "path": "dist/spec/reference/engine-vocabularies.json",
+                "bytes": 37175,
+                "sha256": "362f598ee3eabb4b76314dceeee2358f46c1589c39e855f2bc7c8fada4fa2ae4"
+              },
+              {
+                "path": "dist/spec/reference/font-policy.json",
+                "bytes": 153842,
+                "sha256": "de84a4926670b0423f07e7aea90f7f19e5191a60bd12575f71ebe081b4d0cffd"
+              },
+              {
+                "path": "dist/spec/reference/font-policy.schema.json",
+                "bytes": 10295,
+                "sha256": "0e5a1132c08e80f561b0734e9eeb28d0238d3bd5481f8c0b69f85c774a64d837"
+              },
+              {
+                "path": "dist/spec/reference/preset-geometry.json",
+                "bytes": 318701,
+                "sha256": "1b6fdad7c83022df2187e1874313dbfb38db164f5fca7dade842f395aa08b773"
+              },
+              {
+                "path": "dist/spec/reference/preset-geometry.schema.json",
+                "bytes": 5271,
+                "sha256": "a9e5928d47f4d13a84150fe0148b0c48c15748ab9802d289710624d824efeb9e"
+              },
+              {
+                "path": "dist/spec/reference/symbol-font-encodings.json",
+                "bytes": 318426,
+                "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d"
+              },
+              {
+                "path": "dist/spec/reference/symbol-font-encodings.schema.json",
+                "bytes": 7451,
+                "sha256": "a2f27e92b29106fd4c1eb8cc2158618bf1bad0e5b2090fb0830b8e9ec13eb74e"
+              },
+              {
+                "path": "dist/spec/schemas/audience.schema.json",
+                "bytes": 6240,
+                "sha256": "bdeedc46884063b955a54d61f4647368644cee6eba60f369cf88ac319decc939"
+              },
+              {
+                "path": "dist/spec/schemas/catalog-index.schema.json",
+                "bytes": 4861,
+                "sha256": "c4249cd003aedb5cf6eb822528ecf9b1fe7853809dd480ae5fcd77beb827221e"
+              },
+              {
+                "path": "dist/spec/schemas/catalog-manifest.schema.json",
+                "bytes": 3787,
+                "sha256": "e2b1df4de499f9f87b12ff67cc8644c25738e2b108e256c9f6890406a567369d"
+              },
+              {
+                "path": "dist/spec/schemas/chart-type.schema.json",
+                "bytes": 9736,
+                "sha256": "2a602878e5422ea34f49af6f7bd1da3ce8652b60a06bd9fd304c4aa07360b579"
+              },
+              {
+                "path": "dist/spec/schemas/color-scheme.schema.json",
+                "bytes": 7408,
+                "sha256": "daaef7a0d1ad6e416ab0aa86f10f9b64c47a442a1560c20d17ef4853ec0df6da"
+              },
+              {
+                "path": "dist/spec/schemas/finding.schema.json",
+                "bytes": 10374,
+                "sha256": "a3d5b2800fbcba3a47acad73b7565fbec1c701657b7ca6d7651e298eee41e31b"
+              },
+              {
+                "path": "dist/spec/schemas/font-scheme.schema.json",
+                "bytes": 10211,
+                "sha256": "3c576adeac4d5a39238b9e7be4baa4f566b76cd68851fc54f004a52aa0aea707"
+              },
+              {
+                "path": "dist/spec/schemas/icon-set.schema.json",
+                "bytes": 4896,
+                "sha256": "3008c5d917ff3f0ec73ba46b609aa987a6399e9121f465b32fbf3a4af635c5df"
+              },
+              {
+                "path": "dist/spec/schemas/language.schema.json",
+                "bytes": 7329,
+                "sha256": "254da39754e210a2bd4d5b0976fa12af3f8fae51f341273544f8c4ff3c1ef7a3"
+              },
+              {
+                "path": "dist/spec/schemas/layout-preview-index.schema.json",
+                "bytes": 2563,
+                "sha256": "96e52b4a3caf390bfc3bf73559cfbc460060243e718b101bdae1d6e1363f31b2"
+              },
+              {
+                "path": "dist/spec/schemas/layout.schema.json",
+                "bytes": 32341,
+                "sha256": "47084e6b0d622f690149ece4cfda9b809f0383ae37971c433a01fbfcef08daab"
+              },
+              {
+                "path": "dist/spec/schemas/narrative.schema.json",
+                "bytes": 8651,
+                "sha256": "1a40f4ea8f15477dcae349275bfbb1bfd75b27ec663f16e13cc59abdb2cd28b3"
+              },
+              {
+                "path": "dist/spec/schemas/opf.schema.json",
+                "bytes": 293646,
+                "sha256": "fe1c924543213dadbcae5f1f99c442c1b85f95179e1efbbe2d0acce3cb98359f"
+              },
+              {
+                "path": "dist/spec/schemas/purpose.schema.json",
+                "bytes": 4191,
+                "sha256": "83f4c3a9d577e658d9d6b4a28a4995068de64c9f77d4899c706005eebecc96d9"
+              },
+              {
+                "path": "dist/spec/schemas/social-platform.schema.json",
+                "bytes": 5925,
+                "sha256": "f94d4789ab382bd9e4aafecd8bc2aeb94375117e82ff507f5d75e04379a11a00"
+              },
+              {
+                "path": "dist/spec/schemas/theme.schema.json",
+                "bytes": 10948,
+                "sha256": "7ccc6a5d6155ab5946f81464cee44c3cb51fef76be987c4bcc6ea0fb22befa0e"
+              },
+              {
+                "path": "dist/spec/schemas/tone.schema.json",
+                "bytes": 5750,
+                "sha256": "7fbbf17e0985dff85606bb9ffdf7776d06e0dac9668f95ac994eeb826808e22b"
+              },
+              {
+                "path": "dist/spec-files.d.ts",
+                "bytes": 1629,
+                "sha256": "0d11b1d24d33398abf30a63aaf8f85bfaa172e71a16ff40e9aed9d7785ca3276"
+              },
+              {
+                "path": "dist/spec-files.js",
+                "bytes": 115,
+                "sha256": "36600b703f46fd680b88f63b91bc21f8afe8a401237ffb1848ab29611d9dd7d9"
+              },
+              {
+                "path": "dist/symbol-font-encodings.d.ts",
+                "bytes": 5692,
+                "sha256": "2b80f418cd25ce395a5d87a0d40aa40facf9607bf41123171553f19122fde207"
+              },
+              {
+                "path": "dist/symbol-font-encodings.js",
+                "bytes": 424031,
+                "sha256": "46bc0d34dc11b68a694055aa8b06899a941cd0331fced2fa56338993e629fb75"
+              },
+              {
+                "path": "dist/types.d.ts",
+                "bytes": 76101,
+                "sha256": "7d14c8e48b4a073f6230c0881ece2ce1882d738a4634452bbac54ccb2bff43ea"
+              },
+              {
+                "path": "dist/types.js",
+                "bytes": 1,
+                "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+              },
+              {
+                "path": "dist/validation-types-U_24Qe5b.d.ts",
+                "bytes": 15510,
+                "sha256": "9e6f5980d7c007fc69d1688f2920ad55d8ed318187c58723b96ee07a6bbcd424"
+              },
+              {
+                "path": "dist/validator.d.ts",
+                "bytes": 6540,
+                "sha256": "e365e8853040507d5d49094299976ac400dd023ae11b1ff23ea2a637218b9ef5"
+              },
+              {
+                "path": "dist/validator.js",
+                "bytes": 385,
+                "sha256": "416543a2582cac8cef378a2d18672f0a9ffbae5a3677d1f2077192b272d68173"
+              },
+              {
+                "path": "dist/yaml.d.ts",
+                "bytes": 6023,
+                "sha256": "2d1f9fec8a02582fdc2ec04397d7a071d50826218e00c59e88a8eb7d0192a1f0"
+              },
+              {
+                "path": "dist/yaml.js",
+                "bytes": 390,
+                "sha256": "63fac22702a39f2d9b71a9d3855ba8fa7ead4e20ef5b6356aab640b1ee9d59b7"
+              }
+            ]
+          }
+        },
+        {
+          "name": "@openpresentation/opf-render",
+          "version": "0.1.0-preview.11",
+          "directory": "C:\\opf-work\\n034-current\\artifacts\\npm\\consumer\\node_modules\\@openpresentation\\opf-render",
+          "runtime": {
+            "sha256": "01ae091ee39478a168f8726cba3e8a6806a04662542975cc046edf634fb3a72f",
+            "files": [
+              {
+                "path": "package.json",
+                "bytes": 8285,
+                "sha256": "605ae23212402fe91ecf40c097bc8ae0203ae1c137bb9febfb64c60b35be61d1"
+              },
+              {
+                "path": "dist/annotations.js",
+                "bytes": 4097,
+                "sha256": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738"
+              },
+              {
+                "path": "dist/chart-options.js",
+                "bytes": 10447,
+                "sha256": "cfe252a79fcda709bbbcb41cf988f8fc2ccd324cb5afcab6ecd167268e1d6780"
+              },
+              {
+                "path": "dist/charts.js",
+                "bytes": 120869,
+                "sha256": "3363788309602198568df9d0ec353db69a50f84f7bd9d2e8ca4ad07d380bc140"
+              },
+              {
+                "path": "dist/color-fonts.js",
+                "bytes": 2435,
+                "sha256": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468"
+              },
+              {
+                "path": "dist/converters.js",
+                "bytes": 2679,
+                "sha256": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b"
+              },
+              {
+                "path": "dist/deck-runtime.js",
+                "bytes": 23518,
+                "sha256": "f813c3b2a1d5ca7b3f108b1793955008a01e45fc787a9a02b10b065206f12441"
+              },
+              {
+                "path": "dist/drawn-faces.js",
+                "bytes": 2865,
+                "sha256": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f"
+              },
+              {
+                "path": "dist/effects.js",
+                "bytes": 18498,
+                "sha256": "8e36bbdb90c128f81875046f76e109b4ac7d6aebcb664360085a374540491453"
+              },
+              {
+                "path": "dist/element-define.d.ts",
+                "bytes": 11,
+                "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+              },
+              {
+                "path": "dist/element-define.js",
+                "bytes": 314,
+                "sha256": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba"
+              },
+              {
+                "path": "dist/element.d.ts",
+                "bytes": 5683,
+                "sha256": "81cc9c65c1fe092c497b1debc86e00856a982b95ced661df4a8002e864c93153"
+              },
+              {
+                "path": "dist/element.js",
+                "bytes": 38903,
+                "sha256": "b279575209023ed10aea0731d2ff5cab82164465af2c2f5ed7f126908d55e37b"
+              },
+              {
+                "path": "dist/export-browser.d.ts",
+                "bytes": 4275,
+                "sha256": "589aefa109c29b82a327d0c48783127c700d53c161e0a55af06acd6541ffe1df"
+              },
+              {
+                "path": "dist/export-browser.js",
+                "bytes": 15997,
+                "sha256": "ad95d100d9cb0af04e605367515283eeac6b755fee365aacc1bc530dd63ac7eb"
+              },
+              {
+                "path": "dist/font-compatibility.js",
+                "bytes": 9574,
+                "sha256": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a"
+              },
+              {
+                "path": "dist/font-demand.js",
+                "bytes": 19878,
+                "sha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e"
+              },
+              {
+                "path": "dist/font-fstype.js",
+                "bytes": 3542,
+                "sha256": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869"
+              },
+              {
+                "path": "dist/font-manifest.js",
+                "bytes": 110526,
+                "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+              },
+              {
+                "path": "dist/font-registry.js",
+                "bytes": 34237,
+                "sha256": "63041d9ce5e4aed51726e53bdf2d4624e29d256a903c2ada7eb5a0c63399544a"
+              },
+              {
+                "path": "dist/font-selection-metadata.js",
+                "bytes": 809,
+                "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da"
+              },
+              {
+                "path": "dist/font-selection.js",
+                "bytes": 309,
+                "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27"
+              },
+              {
+                "path": "dist/font-subset.js",
+                "bytes": 9956,
+                "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+              },
+              {
+                "path": "dist/fonts-browser.d.ts",
+                "bytes": 14599,
+                "sha256": "57ec7eb44de4054cfba02409a7590c3a8b12517b127a93382b2d403fb45b10d0"
+              },
+              {
+                "path": "dist/fonts-browser.js",
+                "bytes": 25371,
+                "sha256": "7c96c843ba87fe7db8943455b0d1dcbce8c35e54ad12f11dd6fd5142a20d4917"
+              },
+              {
+                "path": "dist/fonts-node.d.ts",
+                "bytes": 9069,
+                "sha256": "7d4714b6ec3fb2c7350c399e0bc75d9ad24ef39759035c80d9ab454719f963f8"
+              },
+              {
+                "path": "dist/fonts-node.js",
+                "bytes": 26164,
+                "sha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+              },
+              {
+                "path": "dist/fonts.d.ts",
+                "bytes": 15019,
+                "sha256": "4c3eb306ccea177c082dc2d89d1677bd1d2a058e64934e3d534f8a9d38a18bdc"
+              },
+              {
+                "path": "dist/fonts.js",
+                "bytes": 1409,
+                "sha256": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b"
+              },
+              {
+                "path": "dist/hb-shape.js",
+                "bytes": 7333,
+                "sha256": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2"
+              },
+              {
+                "path": "dist/index.d.ts",
+                "bytes": 22154,
+                "sha256": "5bb6c4f72b1110324fe9aeeaf745b244de8dbca36b8d7edd673fd601940593c6"
+              },
+              {
+                "path": "dist/index.js",
+                "bytes": 237,
+                "sha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+              },
+              {
+                "path": "dist/lazy-font-list.js",
+                "bytes": 4834,
+                "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266"
+              },
+              {
+                "path": "dist/lazy-fonts.js",
+                "bytes": 25720,
+                "sha256": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa"
+              },
+              {
+                "path": "dist/measure-pictures-node.js",
+                "bytes": 1311,
+                "sha256": "2f68f6940bac8a69ef2c154d2b33e73d70d186a04ea8f033447c20e7d7b83052"
+              },
+              {
+                "path": "dist/measure-pictures.js",
+                "bytes": 10875,
+                "sha256": "2a61cbaaf490e040aede2ad0d795951c3c5cb91ea683f11e168a46317168474f"
+              },
+              {
+                "path": "dist/node-resolve.js",
+                "bytes": 1796,
+                "sha256": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f"
+              },
+              {
+                "path": "dist/pdf-fonts.js",
+                "bytes": 16436,
+                "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781"
+              },
+              {
+                "path": "dist/pdf-style.js",
+                "bytes": 26153,
+                "sha256": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041"
+              },
+              {
+                "path": "dist/pdf-subset.js",
+                "bytes": 8232,
+                "sha256": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1"
+              },
+              {
+                "path": "dist/pdf-text.js",
+                "bytes": 17334,
+                "sha256": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758"
+              },
+              {
+                "path": "dist/pdf-vector.js",
+                "bytes": 72285,
+                "sha256": "a3b101658fb84a009beab2b7dbe02a115c6a22934a0a2569cdb52a883a8385df"
+              },
+              {
+                "path": "dist/pdf-writer.js",
+                "bytes": 6009,
+                "sha256": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6"
+              },
+              {
+                "path": "dist/pdf-xml.js",
+                "bytes": 3847,
+                "sha256": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669"
+              },
+              {
+                "path": "dist/pdf.d.ts",
+                "bytes": 112,
+                "sha256": "27386c86cc10b91fe4c7f6fe3306c18344962723b37c9abf0d3361487bed0dc1"
+              },
+              {
+                "path": "dist/pdf.js",
+                "bytes": 448,
+                "sha256": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c"
+              },
+              {
+                "path": "dist/player.d.ts",
+                "bytes": 5783,
+                "sha256": "e17b92ca0c538fcfc340c426086da5edf803e4e36032304f9f1bf0d3f993d6d3"
+              },
+              {
+                "path": "dist/player.js",
+                "bytes": 42455,
+                "sha256": "a4ba133549e24f7e299056b63dc46131348dccbff69f4b82bc1f5c4f1b576c68"
+              },
+              {
+                "path": "dist/png.d.ts",
+                "bytes": 84,
+                "sha256": "ce179217342929bfdc163560ba139249a72f94e00be3b4ddc5214826ecf34e6b"
+              },
+              {
+                "path": "dist/png.js",
+                "bytes": 345,
+                "sha256": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5"
+              },
+              {
+                "path": "dist/preview-fonts-cli.js",
+                "bytes": 2219,
+                "sha256": "53f540f653d9389074f4a21f0a5897b339be8209a4a8a5b2f6823603b012625c"
+              },
+              {
+                "path": "dist/preview-fonts-node.d.ts",
+                "bytes": 1848,
+                "sha256": "8c4696cb164b1010a27e8a8e976c538ab19b4de088076d92683df30c92934524"
+              },
+              {
+                "path": "dist/preview-fonts-node.js",
+                "bytes": 7956,
+                "sha256": "e37634fdcd22384d167fd23b25e7573887ef2b297220b61124a9e9c38ff0799c"
+              },
+              {
+                "path": "dist/preview-fonts.d.ts",
+                "bytes": 1569,
+                "sha256": "8b96826a8b2f7b53f65dd686e3a2e4469aa92b97c9bfc7fed885f9056e6bc572"
+              },
+              {
+                "path": "dist/preview-fonts.js",
+                "bytes": 4587,
+                "sha256": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47"
+              },
+              {
+                "path": "dist/raster-images.js",
+                "bytes": 5367,
+                "sha256": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303"
+              },
+              {
+                "path": "dist/raster-text.js",
+                "bytes": 34635,
+                "sha256": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14"
+              },
+              {
+                "path": "dist/raster.js",
+                "bytes": 12058,
+                "sha256": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705"
+              },
+              {
+                "path": "dist/script-font-pack.js",
+                "bytes": 20650,
+                "sha256": "c3d8016bd2632e40707fbc1c7aa3098d946c463fe74b16a4404d1eb2e21c5d15"
+              },
+              {
+                "path": "dist/script-fonts.js",
+                "bytes": 52019,
+                "sha256": "d09a8f9ee1c753c1dcec1cec8e762a9722580bc5925eb3da1b68202c60c04eb4"
+              },
+              {
+                "path": "dist/sha256.js",
+                "bytes": 3035,
+                "sha256": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b"
+              },
+              {
+                "path": "dist/shapes.js",
+                "bytes": 25718,
+                "sha256": "f3190b2c8c778e576c6c83ad4a388d284cfc326a368e807b88de1e7546860267"
+              },
+              {
+                "path": "dist/slide-sources.js",
+                "bytes": 2976,
+                "sha256": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3"
+              },
+              {
+                "path": "dist/svg-internals.js",
+                "bytes": 248,
+                "sha256": "9a99be96460e6b3ed04d1c37b9ca001a67eb705f3e6f115f657cd115d18c35cc"
+              },
+              {
+                "path": "dist/svg.d.ts",
+                "bytes": 15054,
+                "sha256": "198cd8cea7f32d54d2a90ead4c66e87cd34fd9083f10cfe80cdccc9652c5b59e"
+              },
+              {
+                "path": "dist/svg.js",
+                "bytes": 181982,
+                "sha256": "9f26dbdabd6ecd179fa0dcb8a20c233fcb92ab68ea90061cead2a34e7bb14c56"
+              },
+              {
+                "path": "dist/symbol-fonts.js",
+                "bytes": 3986,
+                "sha256": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7"
+              },
+              {
+                "path": "dist/text-paths.js",
+                "bytes": 20837,
+                "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da"
+              }
+            ]
+          }
+        },
+        {
+          "name": "@openpresentation/opf-pptx",
+          "version": "0.1.0-preview.11",
+          "directory": "C:\\opf-work\\n034-current\\artifacts\\npm\\consumer\\node_modules\\@openpresentation\\opf-pptx",
+          "runtime": {
+            "sha256": "0ccf46bd98e1da283fe137bc0ec2552e4f2d55a19533a27b5d3dd20c447677be",
+            "files": [
+              {
+                "path": "package.json",
+                "bytes": 1540,
+                "sha256": "992f85259a3adb8329e2bab81de9810dc458de7909c95743e6581086cd1378e8"
+              },
+              {
+                "path": "dist/annotation-export.js",
+                "bytes": 7203,
+                "sha256": "f45f743368b87e4c5f6f4b3c76d3f6cf3ed3fd2f78be13fce3c69c68b79e641e"
+              },
+              {
+                "path": "dist/annotation-provenance.js",
+                "bytes": 17692,
+                "sha256": "57a2a1699755c3d46ca78ffa42daa6f000feaf9f3b7b67c267303f3cb1f77a83"
+              },
+              {
+                "path": "dist/background-import.js",
+                "bytes": 11727,
+                "sha256": "8903e0408961bccb16db12d4395748b8c2c06b3d708061f92b9e05c67a172af0"
+              },
+              {
+                "path": "dist/background.js",
+                "bytes": 16997,
+                "sha256": "e34e5bbc125be779efbe012f41290432f107d29b2635e2e6fd1b0b6bbcb83000"
+              },
+              {
+                "path": "dist/body-text-import.js",
+                "bytes": 13895,
+                "sha256": "7d43c1dbbfc1e72ac156f0005b7eeb132ef6ef5aab4bf559d0b59936a2c38283"
+              },
+              {
+                "path": "dist/card-provenance.js",
+                "bytes": 3588,
+                "sha256": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb"
+              },
+              {
+                "path": "dist/chart-data.js",
+                "bytes": 9643,
+                "sha256": "0505a4df3d90f8221ccc5efc294c0095efd2dfc5d4c3a3eda8eccd77b5ab6f8c"
+              },
+              {
+                "path": "dist/chart-direct-labels.js",
+                "bytes": 8784,
+                "sha256": "06f3341477aa19a6119156b2827dd27301973736303947feead00fdc1725c4bd"
+              },
+              {
+                "path": "dist/chart-fallback.js",
+                "bytes": 7749,
+                "sha256": "7656f61cbd2163c83da809ed888e0aa2875e9b1ccc2cef9582d34ed6d3226afd"
+              },
+              {
+                "path": "dist/chart-highlight.js",
+                "bytes": 8080,
+                "sha256": "9a6b258ba94815dd3ff997101055db18d954c4c063204d2f58769679fe8018f2"
+              },
+              {
+                "path": "dist/chart-layer.js",
+                "bytes": 14439,
+                "sha256": "ec41409c914a95c4d5e7ddd6d0cdcc1703c218dff470cba5e515c0644c1fd51f"
+              },
+              {
+                "path": "dist/chart-marks.js",
+                "bytes": 10709,
+                "sha256": "feb9459b478816a5cfef45ac45245b81d627cf06d27301ae720705d3ea7d1cb3"
+              },
+              {
+                "path": "dist/chart-options.js",
+                "bytes": 21181,
+                "sha256": "00db5b585cc2733938bec6c4145a0e2ee58cefbb1aa27e6a746a860c626f1b50"
+              },
+              {
+                "path": "dist/chart-order.js",
+                "bytes": 4252,
+                "sha256": "fee0852bf47a347763b600a1ded83a6a54d7cb1221ecdab14d92d6f596a9b543"
+              },
+              {
+                "path": "dist/chart-references.js",
+                "bytes": 33832,
+                "sha256": "5f856671388adc37cbec29972c047e6f246827435302eb7a975fe30f3c302818"
+              },
+              {
+                "path": "dist/chart-scheme-colors.js",
+                "bytes": 4422,
+                "sha256": "3057bff3044a8260e68c4428ee8b7131993aec5845d84d999099eab2ea801bce"
+              },
+              {
+                "path": "dist/chart-types.js",
+                "bytes": 11302,
+                "sha256": "e1d897724933a7659bd3e4872e7e7f218b5397b46f4b488d956ca520c921562b"
+              },
+              {
+                "path": "dist/chart-workbook.js",
+                "bytes": 13344,
+                "sha256": "c0b742b78ea7eac0b1cf140693d80e95ee80548a94f5826d4ebae002d3a4247b"
+              },
+              {
+                "path": "dist/chartex.js",
+                "bytes": 41440,
+                "sha256": "3afcc3a81ba1418cd42955301711d6b6e5075085c32685f4a8e1bc47d67f12fd"
+              },
+              {
+                "path": "dist/code-provenance.js",
+                "bytes": 20354,
+                "sha256": "80b67b48814a5d10900245673ae996646c1a999b1c557e9350f12d40ee5f8f0c"
+              },
+              {
+                "path": "dist/color-ref.js",
+                "bytes": 4265,
+                "sha256": "390e828de8c7f84d988f29f78e35eab380930178b851b94e46e8f5dd9e6b6ef4"
+              },
+              {
+                "path": "dist/connectors.js",
+                "bytes": 6676,
+                "sha256": "84794a467d4b5c490f3da48c10a0100cebfb02a2b8e8cac944c6bd4de756a19e"
+              },
+              {
+                "path": "dist/content-topology.js",
+                "bytes": 43740,
+                "sha256": "8d332e0ccd231d52b9398277f35ac04513e308a6978a354e6926c47e0813318a"
+              },
+              {
+                "path": "dist/data-provenance.js",
+                "bytes": 38422,
+                "sha256": "7b5f24bc4f09fd95b9420e20f802b13e83ac9b77aee52ac4db5b316bc7e78186"
+              },
+              {
+                "path": "dist/diagram-provenance.js",
+                "bytes": 13507,
+                "sha256": "6aa4d96e2e3cbedf9013f37cb292e02802b2094d2b8ad099c6e66df15c139cf4"
+              },
+              {
+                "path": "dist/diagram-shapes.js",
+                "bytes": 64758,
+                "sha256": "0549d3bcdc0bd20b5eeff9727fd8a0ecf207e48be18c5fa7f62dafdd9fca739d"
+              },
+              {
+                "path": "dist/document-provenance.js",
+                "bytes": 99413,
+                "sha256": "c7fbed43fcd0acd162867f75c6635cda799ce9fd7c32494871528f0b3d6a3c33"
+              },
+              {
+                "path": "dist/effects.js",
+                "bytes": 8821,
+                "sha256": "81daadab6a098794f36befead6a741dd9b7e9b1917a5d716459a00c7fbae489d"
+              },
+              {
+                "path": "dist/errors.js",
+                "bytes": 372,
+                "sha256": "a21814578efacd0f8d77f376ebc5414d4f5f686c3257ed4f516b7f2d6322af67"
+              },
+              {
+                "path": "dist/font-weights.js",
+                "bytes": 3259,
+                "sha256": "360ec5bb64f237c0f410271efae70d048ccbac79e1d6c6c27a8271a40217653e"
+              },
+              {
+                "path": "dist/format-check.js",
+                "bytes": 594,
+                "sha256": "837d8668c11adc531a717d3499448e7cbb128f678e1116e745a02532ad4e4edb"
+              },
+              {
+                "path": "dist/frame-alt.js",
+                "bytes": 3846,
+                "sha256": "e790e3d8ef21cad79a1c549ab319bff4bc2d6acd3782582df37713c11c4ff100"
+              },
+              {
+                "path": "dist/furniture-fields.js",
+                "bytes": 17254,
+                "sha256": "0c2ecb783fe74bd10400f1cd6ee6720bec22f5c381c3fdec35585afdf0670121"
+              },
+              {
+                "path": "dist/furniture-provenance.js",
+                "bytes": 43961,
+                "sha256": "e456f1d121411e90949a5e43182d9c73f73c7b1d83690d938e6afa66c79d3a8c"
+              },
+              {
+                "path": "dist/heading-provenance.js",
+                "bytes": 4289,
+                "sha256": "2ffc3de9d96b5e9b2698b2537eadb444c6623c3357646135389a15326b90fe45"
+              },
+              {
+                "path": "dist/icons.js",
+                "bytes": 8451,
+                "sha256": "39861f6fc801b12344078fd603d6f0c7c0ad4737c9eda38dbc79b0d794df4ba5"
+              },
+              {
+                "path": "dist/image-callout-provenance.js",
+                "bytes": 5245,
+                "sha256": "005463443c8ebf160469f166164e58b26f9ccb2c1564926c9d6c6db52ff25a96"
+              },
+              {
+                "path": "dist/image-fallback-browser.js",
+                "bytes": 2338,
+                "sha256": "911a7f6d329a1ab652c7aaca5047acf1db0bdd3cb97917caa016576488d563a4"
+              },
+              {
+                "path": "dist/image-fallback-node.js",
+                "bytes": 3044,
+                "sha256": "9cfc5385c070083c03235d9b11a330265434a6fbd13eeda33bc77634043daad0"
+              },
+              {
+                "path": "dist/image-geometry.js",
+                "bytes": 10359,
+                "sha256": "64d3470d36b70184527a06d0f66ec5e81eae264101cb52dde07fbf2ad180474e"
+              },
+              {
+                "path": "dist/image-import.js",
+                "bytes": 5776,
+                "sha256": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a"
+              },
+              {
+                "path": "dist/image-provenance.js",
+                "bytes": 27294,
+                "sha256": "5b0aea8401e85f3f46660f5b44ee4d5d4529827c46e124e9b61f777edbc32c77"
+              },
+              {
+                "path": "dist/import-signals.js",
+                "bytes": 46012,
+                "sha256": "062959bcb8b6e681a9e594e1a7dd216c56b3f1822cb1bdd19fbef8777cfe19bb"
+              },
+              {
+                "path": "dist/index.d.ts",
+                "bytes": 44313,
+                "sha256": "73c21d102056b734c0e299c4a00206fb9212813a54ce222f0f339eea78180dc0"
+              },
+              {
+                "path": "dist/index.js",
+                "bytes": 483278,
+                "sha256": "5212843f3f35822079248e9f4f8afc741275c3cf9b9127ac3d672580f598f34f"
+              },
+              {
+                "path": "dist/input-safety.js",
+                "bytes": 7271,
+                "sha256": "d57d4b01582cbb3c3bb4180e880ad66a1bd0f4e1730ef49acaad76c47f265c62"
+              },
+              {
+                "path": "dist/logo-provenance.js",
+                "bytes": 11171,
+                "sha256": "26919d9c2308aeb808b136224776295ab42d4fa269fdd373755ae6d88d00e9ac"
+              },
+              {
+                "path": "dist/master-furniture.js",
+                "bytes": 24218,
+                "sha256": "874762541dcfe6c762dfc8f79d30ed01cf94aadbf31627509bf46cc9279654ed"
+              },
+              {
+                "path": "dist/master-themes.js",
+                "bytes": 10369,
+                "sha256": "74d3ec6c3f7e9d687d3ccd14ec28b21eb2832fb39b203f93db50644a6e874426"
+              },
+              {
+                "path": "dist/media-dedupe.js",
+                "bytes": 2702,
+                "sha256": "7beecb4ad66ba2165f26f26e5ec4c375c76bf1e00048e43885ca35cb18bcaaef"
+              },
+              {
+                "path": "dist/media-provenance.js",
+                "bytes": 16905,
+                "sha256": "f73d0a824fc5a464029bae4bb4711ef92a5c85511cfaa7d20995b57ecf1048f7"
+              },
+              {
+                "path": "dist/metric-provenance.js",
+                "bytes": 8026,
+                "sha256": "648d16a9e86e5e51b9c3a71e52e6aaab7cf8f66e5e4c9200354298e63cbc1df3"
+              },
+              {
+                "path": "dist/native-autofit.js",
+                "bytes": 3566,
+                "sha256": "9c9c4984650d7aa3ca636d3883614e2a37e17ba22a1acb40ae50d3dc560ca03f"
+              },
+              {
+                "path": "dist/native-body.js",
+                "bytes": 23592,
+                "sha256": "4e6975110fd201b39d3fd9a8ee4ff0e8b1941781d9b2b109ff7f65d3b64139d7"
+              },
+              {
+                "path": "dist/native-footer-classification.js",
+                "bytes": 8151,
+                "sha256": "ee784048e83aadbf6771a434b1adc5bafb1b1a1f0c55a51c567419e9e36b4223"
+              },
+              {
+                "path": "dist/native-furniture.js",
+                "bytes": 25335,
+                "sha256": "476dcc15cc141b3bee3708cd73f935bd82faeef9bdc3e3281866a47dffe8f1f6"
+              },
+              {
+                "path": "dist/native-language-provenance.js",
+                "bytes": 7043,
+                "sha256": "7d9f8e3f5bb95fe7749115ac2fa02e68554853844ddc10c7cb63b4601d923cb2"
+              },
+              {
+                "path": "dist/native-text-style.js",
+                "bytes": 5869,
+                "sha256": "ca7b23474307ab9f41c806badaf4c1b80c5cb8d285d7e9f3da2799befa4005ef"
+              },
+              {
+                "path": "dist/numbered-list.js",
+                "bytes": 7284,
+                "sha256": "92dcd93047cfa1a8e9d5da1e5cb6b8eb75eb38fac3b7a2c1b0f300c258179557"
+              },
+              {
+                "path": "dist/package-fonts.js",
+                "bytes": 9791,
+                "sha256": "075722b50fd94f29a46a448044e5ad979bb503e1d6a80b3cfc37e66f921038eb"
+              },
+              {
+                "path": "dist/picture-slides.js",
+                "bytes": 8357,
+                "sha256": "765dffcc2ba30ed2bbe5b765c49ed3f5424fe976f62f610342370c0d3cecbb4d"
+              },
+              {
+                "path": "dist/quote-provenance.js",
+                "bytes": 14384,
+                "sha256": "77cf365fff84fcd44b8a7c2e334ee2b017bf4a192470ec47a52cef1ecf840815"
+              },
+              {
+                "path": "dist/rich-heading.js",
+                "bytes": 7765,
+                "sha256": "771be6a28469f362c1f9ad8e5eabf1ca79b12939ca2505c1f2bd3564c3b8425d"
+              },
+              {
+                "path": "dist/run-colors.js",
+                "bytes": 11794,
+                "sha256": "cba18b43c81ca0d3846f695d88eb980fbdc4b033b2d792433cd09b74452175a4"
+              },
+              {
+                "path": "dist/safe-typefaces.js",
+                "bytes": 9586,
+                "sha256": "f58516973dd92fec0654c1825cac503c6236519d57f0adea71b39cd3385b581f"
+              },
+              {
+                "path": "dist/script-fonts.js",
+                "bytes": 39664,
+                "sha256": "fb8ec017faa680a4c24e19308da0fad7e2cc594d5e6e81889de09be87b3b99aa"
+              },
+              {
+                "path": "dist/sections.js",
+                "bytes": 6466,
+                "sha256": "53b140f77568bb7e33fc588fa5c281c5dab7d244015884da9ae0128a1c2021e2"
+              },
+              {
+                "path": "dist/shape-blocks.js",
+                "bytes": 19034,
+                "sha256": "c1e90a2379b3a8397240f9ffee419b608c468ba76f8592ecca1e7309de41112f"
+              },
+              {
+                "path": "dist/shape-import.js",
+                "bytes": 49997,
+                "sha256": "be6c5ad498fe80c7c48abc28effa998f972111b3c549b4bf942084504c626365"
+              },
+              {
+                "path": "dist/shape-restore.js",
+                "bytes": 17761,
+                "sha256": "0bc350ff4d5305a5e12ecfbeadf4e753f155f67fd529f7d2a9775994c3f9d9ba"
+              },
+              {
+                "path": "dist/smart-art-import.js",
+                "bytes": 23105,
+                "sha256": "92a0e3c5c76a773f71785db37152a25e8eac70dd49f59b79238b90f01f0b1741"
+              },
+              {
+                "path": "dist/smart-art-layouts.js",
+                "bytes": 11700,
+                "sha256": "d6450e4e610a1b91793e78274ca13cf2fa0064bb8b7c11fe9aef1ae28774c722"
+              },
+              {
+                "path": "dist/smart-art.js",
+                "bytes": 74570,
+                "sha256": "ab9f4561d17b9eb44dab62811ef9ca7e4b4590ee4517651fdde708649c0874cb"
+              },
+              {
+                "path": "dist/source-run-styles.js",
+                "bytes": 4535,
+                "sha256": "0ed5609f426ea53437b7b49c472e16ae039b59dfc69b51839c52670b95299c2c"
+              },
+              {
+                "path": "dist/step-badges.js",
+                "bytes": 10880,
+                "sha256": "c7a438735fc8502f80352d55a0b7683415ce4cca1dc44fc0c0fa47ee6e4f7a03"
+              },
+              {
+                "path": "dist/svg-image.js",
+                "bytes": 19986,
+                "sha256": "f4816024704dd1059bccdce42c8f372588f2c81066a9856c6cb410f70f83b1ea"
+              },
+              {
+                "path": "dist/table-border-import.js",
+                "bytes": 3629,
+                "sha256": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093"
+              },
+              {
+                "path": "dist/table-cell-import.js",
+                "bytes": 10232,
+                "sha256": "539bfc262fb73fcef2c339c59e3e53ec8d2d4e6358dbf030ea4126ab3bf84c55"
+              },
+              {
+                "path": "dist/table-import.js",
+                "bytes": 10524,
+                "sha256": "904a1800361abd3c88c585d8a56b60e1cbac932353d4d3c191c426f7ed5b74ef"
+              },
+              {
+                "path": "dist/template-layouts.js",
+                "bytes": 45399,
+                "sha256": "6608e59125d57d303292ddd0bffbb62a416823ddd02238b7fccc37bbd8209458"
+              },
+              {
+                "path": "dist/text-provenance.js",
+                "bytes": 5599,
+                "sha256": "d802160babee1c8389715a5edf1bfda1a3e8168dc3a2489552ff0b475f644cc5"
+              },
+              {
+                "path": "dist/theme-colors.js",
+                "bytes": 24410,
+                "sha256": "c23e3675acddabad7d598648d409177f724eeeb749a9eced9ccadbbc6229e0c2"
+              },
+              {
+                "path": "dist/timeline-provenance.js",
+                "bytes": 9927,
+                "sha256": "8fb4ba812eda4ff70351991bf820c7ddbd18994a1139dbab8b61ac171970752b"
+              },
+              {
+                "path": "dist/title-rule.js",
+                "bytes": 2703,
+                "sha256": "2d64bb95bafaf56704e98113b7d02363fe0242fe1fed8e5878a8c4476b5cc7e2"
+              },
+              {
+                "path": "dist/typeface-inventory.js",
+                "bytes": 15017,
+                "sha256": "38b9e969e62c2483b33b9b0cf90d48d1f8b16b96948d8271e4c35c10efdc5a9d"
+              },
+              {
+                "path": "dist/vendor-compat.js",
+                "bytes": 10914,
+                "sha256": "1ec89159eeb55511215924740c37cbfb608451cfa4fc795e1badc07857bd2433"
+              },
+              {
+                "path": "dist/watermark-provenance.js",
+                "bytes": 13331,
+                "sha256": "15ff4d314c215b196be68fad84600e8accf740ec6aa8e93cfd2b5fddec031f1f"
+              }
+            ]
+          }
+        },
+        {
+          "name": "@openpresentation/opf-editor",
+          "version": "0.1.0-preview.11",
+          "directory": "C:\\opf-work\\n034-current\\artifacts\\npm\\consumer\\node_modules\\@openpresentation\\opf-editor",
+          "runtime": {
+            "sha256": "ee794aa127a59c28507b3122c8dcf3976747a0a436edc5287a29e2cdb5f3fefc",
+            "files": [
+              {
+                "path": "package.json",
+                "bytes": 10818,
+                "sha256": "e5eb9191379145d3d92caa9ca75eb78fe1a113893da089e086e16bfee7a7485b"
+              },
+              {
+                "path": "dist/agent-handoff-dialog.d.ts",
+                "bytes": 2247,
+                "sha256": "098fffcc52fdaf698a0b26dd7b3c5fb06c80aa229b3c66a26846e02fd3dd0e01"
+              },
+              {
+                "path": "dist/agent-handoff-dialog.js",
+                "bytes": 10137,
+                "sha256": "64ab6199eea4e35b728ea4988be1ff8da183fbf4e0922a30e3b5efc971ecc9e3"
+              },
+              {
+                "path": "dist/agent-handoff.d.ts",
+                "bytes": 1963,
+                "sha256": "e78554a3cde19cfc1eebbc529a77b6b5cb72cc7d6de752d5351e081eea7dea55"
+              },
+              {
+                "path": "dist/agent-handoff.js",
+                "bytes": 5152,
+                "sha256": "45e239275e33c2bf0cb51e435445c121b09ced392e8e8b87a241820c970bdf69"
+              },
+              {
+                "path": "dist/annotations.d.ts",
+                "bytes": 5484,
+                "sha256": "a9671d876500e1b5f4a64cb0de6d4af497054e9584923368e9bce9f136ad2d7e"
+              },
+              {
+                "path": "dist/annotations.js",
+                "bytes": 17764,
+                "sha256": "4062d1c37e1ffbf6bfbff308eb4aa34923998fab1d1459fef94aa092d0b1279a"
+              },
+              {
+                "path": "dist/assets.d.ts",
+                "bytes": 3980,
+                "sha256": "6ea5dde474c7b8abe8f989cdad3beb2b3e63282d9a36209da91a81f7339e477c"
+              },
+              {
+                "path": "dist/assets.js",
+                "bytes": 11861,
+                "sha256": "009a1a9ed7a8f15ded16862a93a642765fe44d19d5ef8d3ac5dca74f165795ad"
+              },
+              {
+                "path": "dist/background-options.d.ts",
+                "bytes": 3601,
+                "sha256": "ccc39dc783c2e7b98e8260bbc55638c712dd4c72310fe6ce48726bea77d7d57c"
+              },
+              {
+                "path": "dist/background-options.js",
+                "bytes": 12557,
+                "sha256": "652affb6ffdd4404ae3a28e66bb8dfe128e26313b8769ab000acb170edfbc099"
+              },
+              {
+                "path": "dist/block-controls.js",
+                "bytes": 19075,
+                "sha256": "c1d035af590aeae9f3905849eca8d8dad0d2f9627a6c1b327635352a181d8cb3"
+              },
+              {
+                "path": "dist/block-convert.d.ts",
+                "bytes": 3461,
+                "sha256": "2533628461b9d7b20f04cc0f033f318199b406fdc6348349257c5e0e49a01e89"
+              },
+              {
+                "path": "dist/block-convert.js",
+                "bytes": 7905,
+                "sha256": "e1105e19345bb106e6c1437f01c82828d974e43753b4040935bd2805f0ea41ab"
+              },
+              {
+                "path": "dist/blocks.d.ts",
+                "bytes": 1559,
+                "sha256": "bb9c745be046626659b93ec64047e02d381c42e4121e1718e55cfa3236abdb9e"
+              },
+              {
+                "path": "dist/blocks.js",
+                "bytes": 12122,
+                "sha256": "751b4d7026d2ae492718e1db288c5195791da902e49749e6d9464a4a36938b95"
+              },
+              {
+                "path": "dist/canvas-fields.js",
+                "bytes": 4156,
+                "sha256": "f6de408adb81c3c77e32eb513830bd7ba47cdd006c84d8545b4eb42997927258"
+              },
+              {
+                "path": "dist/canvas-pages.js",
+                "bytes": 7033,
+                "sha256": "e54c712c094b6b3aab00225793bedca5f1878342e0b99049fe19865378175c9e"
+              },
+              {
+                "path": "dist/canvas-variables.d.ts",
+                "bytes": 947,
+                "sha256": "420c70c720b819766afd3733cc85e0c073e482c10558f43862058e4385af9609"
+              },
+              {
+                "path": "dist/canvas-variables.js",
+                "bytes": 2839,
+                "sha256": "29436e1197bd9ca349f1c05e8f27935c2da88a41b834aa2a0e7f224b23b154b6"
+              },
+              {
+                "path": "dist/canvas.d.ts",
+                "bytes": 10618,
+                "sha256": "af2f32100060e415e32b830fb9fae2ed6cbe0db97fbb1ff63f41272099fed2d3"
+              },
+              {
+                "path": "dist/canvas.js",
+                "bytes": 65743,
+                "sha256": "0efce814cc94a606da24231d2d91d0af641ea7a200a94e1119a12e8ebd847ac9"
+              },
+              {
+                "path": "dist/catalog-control.js",
+                "bytes": 790,
+                "sha256": "f8e3eaa49de4119b195dc22fd4cc510b04234f1a3c6f6cd662cac3cb7fd848b9"
+              },
+              {
+                "path": "dist/catalogs.d.ts",
+                "bytes": 4465,
+                "sha256": "35c00fd13d8ae89ce9681dd92a8c003376ecead65384fd5639b4e6af23b42f97"
+              },
+              {
+                "path": "dist/catalogs.js",
+                "bytes": 13629,
+                "sha256": "ae0c9238932f26db5b825fd4689894c76aaf9e8017bbff1aece0e77b7e46dd03"
+              },
+              {
+                "path": "dist/chart-data.d.ts",
+                "bytes": 4511,
+                "sha256": "6378c15e804b66f4f4eaf0bae533f5c2192bd227935b29339d748d17f37d1048"
+              },
+              {
+                "path": "dist/chart-data.js",
+                "bytes": 5582,
+                "sha256": "cb5117ad692e1dca57faa9b071fa501fdd9fc26e1965e4467dc033e43598f1bb"
+              },
+              {
+                "path": "dist/chart-options-panel.d.ts",
+                "bytes": 989,
+                "sha256": "5f367b4e6db26c01bb51cd92b3bbb8cfe6147abef203fb7ae4630ea7fee7cd5b"
+              },
+              {
+                "path": "dist/chart-options-panel.js",
+                "bytes": 20020,
+                "sha256": "a65997437c8ba4926eba140e82fe2ae50b5f585a1fc0a4fe7daea5563c64ec21"
+              },
+              {
+                "path": "dist/chart-options.d.ts",
+                "bytes": 6055,
+                "sha256": "3c613ceeb0878881c74bb553c898681fb642acfe6142df33231f8057b924ddc8"
+              },
+              {
+                "path": "dist/chart-options.js",
+                "bytes": 23587,
+                "sha256": "16868f12edcce46c968e10caa52dde6ed37905a4934b61ba63182ee4c72e8132"
+              },
+              {
+                "path": "dist/checks.js",
+                "bytes": 1511,
+                "sha256": "ee04a8c83a9fb48f659f8624b28f5d610eae9244f7cb13706489c29c4c163116"
+              },
+              {
+                "path": "dist/codemirror-guard.js",
+                "bytes": 3362,
+                "sha256": "6ae79b196127ee4b76dd7a943e2594dd8f2d64ec5734095c06e83a9a3a977fee"
+              },
+              {
+                "path": "dist/color-authoring.js",
+                "bytes": 832,
+                "sha256": "8bc8ca271341460777917c72b082041e2b977524eae1677c1b369a999fe15b45"
+              },
+              {
+                "path": "dist/color-slots.d.ts",
+                "bytes": 1413,
+                "sha256": "d2405378bb5aca54755407eab6ce4be9f06cb17038666abd1b93b61a0fd10d59"
+              },
+              {
+                "path": "dist/color-slots.js",
+                "bytes": 1992,
+                "sha256": "0db7dc91c8a867c7aab42e0db320679183b48a01d65d1e4164ad687ccede02b7"
+              },
+              {
+                "path": "dist/content-actions.d.ts",
+                "bytes": 8983,
+                "sha256": "55e449f17a8133fb52861507a9038f2cc213dd85f9b6a02e4918fac391a32fe4"
+              },
+              {
+                "path": "dist/content-actions.js",
+                "bytes": 18182,
+                "sha256": "8bac28835d4b020b60acba19eded94e7f1d0d9a23084830802b90be0e16e91f4"
+              },
+              {
+                "path": "dist/content-controls.js",
+                "bytes": 19680,
+                "sha256": "ecda70cefa1f7c7e1741e45313678c301a049af98305ae7b80aa93c92c091ca5"
+              },
+              {
+                "path": "dist/continuation.js",
+                "bytes": 3996,
+                "sha256": "baa9b6dd2004ec22650b97358dd9a4e8b4342c054b66060341d29ce0f09ce391"
+              },
+              {
+                "path": "dist/data-grid.d.ts",
+                "bytes": 1704,
+                "sha256": "a53eb57cffa0d2cffc294251114bc031cb80e6854aa7600b5d126904320d93f7"
+              },
+              {
+                "path": "dist/data-grid.js",
+                "bytes": 61763,
+                "sha256": "7a643748630a7f825167992036ab04e37a6056c446993b0ccc1476a2ee34a7ee"
+              },
+              {
+                "path": "dist/data.d.ts",
+                "bytes": 1529,
+                "sha256": "2d021aca9dbc0b9b139b1252cf5f45ade8d0cae4f908e56ea9c4dd28ef195f33"
+              },
+              {
+                "path": "dist/data.js",
+                "bytes": 2815,
+                "sha256": "4ea3c494cb406a6259e7db5edccc728866578db29c8f61e5589f0ca01d28f863"
+              },
+              {
+                "path": "dist/dataset-refs.d.ts",
+                "bytes": 990,
+                "sha256": "e48ba7cccb1f5ad8c8e116307f5634bbf2ece6323012cd223fddbf6a88e0b5af"
+              },
+              {
+                "path": "dist/dataset-refs.js",
+                "bytes": 2723,
+                "sha256": "ba9b0dcf0b8c4c45a4036e0fe7189251fee79ab2d54946d496c26b6a473a71d4"
+              },
+              {
+                "path": "dist/deck-title.d.ts",
+                "bytes": 2890,
+                "sha256": "2c67ec14e2ebb4c995ad8ae3a8e8d73b16ed0675c6ca9cc491b87e6695d749c0"
+              },
+              {
+                "path": "dist/deck-title.js",
+                "bytes": 7086,
+                "sha256": "78d1931d9de6d35cc09dc64ecca925373464966b8477376097f91b19cf05445c"
+              },
+              {
+                "path": "dist/design-controls.d.ts",
+                "bytes": 4357,
+                "sha256": "bf155f0c5a4bf85bdc0ae5c4b91a626cb391ae2c5c1849aa3d0b2a78a4df9932"
+              },
+              {
+                "path": "dist/design-controls.js",
+                "bytes": 103430,
+                "sha256": "a13b58e22204014bea46d299808bbf055ec9520e798bab69544c01b892b9d970"
+              },
+              {
+                "path": "dist/design-menu.d.ts",
+                "bytes": 4540,
+                "sha256": "1ead93c24fa951f64d1205cd1281d44ba6521d83093249caeacdea5f0ec68b7d"
+              },
+              {
+                "path": "dist/design-menu.js",
+                "bytes": 23468,
+                "sha256": "69e08b750c0050580854ddf103e4d41bd9d0e85c26d6806d9ce7417a1ad4f929"
+              },
+              {
+                "path": "dist/design-options.d.ts",
+                "bytes": 11875,
+                "sha256": "7ef7923d3c24d03651c5f0d45aa22eed21dd72bc59096771f2f661a82448b776"
+              },
+              {
+                "path": "dist/design-options.js",
+                "bytes": 40017,
+                "sha256": "d6082cd378b32b534c1243fcc59294cc74cbef01e51770335a45df6d631470b1"
+              },
+              {
+                "path": "dist/design-variants.d.ts",
+                "bytes": 5808,
+                "sha256": "649c257a892f7ff4826dd82e91f47a5cb0262388bfc59ef33002cd7db229fd84"
+              },
+              {
+                "path": "dist/design-variants.js",
+                "bytes": 12631,
+                "sha256": "3f9a0ece8ea5a6942b799cd77b089abcefd852258415b6105bcb3430c1a01a23"
+              },
+              {
+                "path": "dist/edit-helpers.js",
+                "bytes": 2628,
+                "sha256": "2c62e3ab09b7ab401e6f4ac66c6725f5db9c236965d902508e9c17098764afb0"
+              },
+              {
+                "path": "dist/editor-expand.d.ts",
+                "bytes": 5858,
+                "sha256": "354a71b4c1b633074c2a8e41c42fb627ae4282cfa3bba6b53b4a74d8afd79a5e"
+              },
+              {
+                "path": "dist/editor-expand.js",
+                "bytes": 20590,
+                "sha256": "bb1e9be1ab8a84f2edae8c300b30b7cc7474b45ad7acc56cf44665cfb272cbcb"
+              },
+              {
+                "path": "dist/element-define.d.ts",
+                "bytes": 99,
+                "sha256": "591ad51fd63808cab3108f28d94c3b9cf33e6d3c3dca1107fffa75109f1bbeb8"
+              },
+              {
+                "path": "dist/element-define.js",
+                "bytes": 670,
+                "sha256": "a30f9b72c5d4fe955e25a9abbef563b0c69064244f85227a5faeefe0dc0875b8"
+              },
+              {
+                "path": "dist/element.d.ts",
+                "bytes": 5894,
+                "sha256": "2431954a59a1e2579042c38723192700af72c100bb91380680905b4e37a8df6d"
+              },
+              {
+                "path": "dist/element.js",
+                "bytes": 23788,
+                "sha256": "71f55d705e92871853ca239665b12626e61666d6e60b68bfb456e6607ca8cd02"
+              },
+              {
+                "path": "dist/exact-source.d.ts",
+                "bytes": 2086,
+                "sha256": "d5cbe1a508cb2a214294ca80cd77fa49939862430e4e3884dc895c067ed05841"
+              },
+              {
+                "path": "dist/exact-source.js",
+                "bytes": 15568,
+                "sha256": "96e76149032e039b89560eb3f88331931e77812fd323134d8dd8ca298ade0e27"
+              },
+              {
+                "path": "dist/export-dom.js",
+                "bytes": 4759,
+                "sha256": "17defdb7746e8e946f1190ac9a4b37ea0fa7f02379a8e0e410e1c278a47ea6af"
+              },
+              {
+                "path": "dist/export-menu.d.ts",
+                "bytes": 7351,
+                "sha256": "20bcbcc71bc6be3c1866ea18a4fb7a2407b066d33cf7ca31572c2bad482e34ec"
+              },
+              {
+                "path": "dist/export-menu.js",
+                "bytes": 23807,
+                "sha256": "a38fe48762b02510a3301392b9ec3f4cb5d27292ae05ca33a4a950754d570bc1"
+              },
+              {
+                "path": "dist/export.d.ts",
+                "bytes": 6529,
+                "sha256": "99056d7506bd7cf286aed0c40ee37f277b0ee98bf459c1330b434273d39e5c56"
+              },
+              {
+                "path": "dist/export.js",
+                "bytes": 20797,
+                "sha256": "d831bd32e2c9f1c96971a4a90339902c5ecfb37dca3f096465af511e94e62397"
+              },
+              {
+                "path": "dist/find-panel.d.ts",
+                "bytes": 2670,
+                "sha256": "061f0f9af3302ac1526de1275702ecbb3ee6f435743d4884375a5fbbf7dbf898"
+              },
+              {
+                "path": "dist/find-panel.js",
+                "bytes": 23127,
+                "sha256": "38cb1e06df0d1838c48bc78e036752e5f6fde792d3470b6c68dfa4102726d8a8"
+              },
+              {
+                "path": "dist/find-replace.d.ts",
+                "bytes": 4476,
+                "sha256": "94ff84a1c1e90f64da886655c2a04ecddefbea02702d48ed8a3eb4489f7e48eb"
+              },
+              {
+                "path": "dist/find-replace.js",
+                "bytes": 22654,
+                "sha256": "27922e7d7c06cd45301d0d438fc9b288edb6e47d0f4463e2d56d9468e1e722ba"
+              },
+              {
+                "path": "dist/font-gate.js",
+                "bytes": 6297,
+                "sha256": "0f4fde9c71050061d43546f136ab962ccde6b7cb97ae775db380e3e8fcf33a42"
+              },
+              {
+                "path": "dist/galleries.d.ts",
+                "bytes": 935,
+                "sha256": "0810ffea96fc14749bd08635589a1ff9af1b99a98d2ec21389282ee491ee37ce"
+              },
+              {
+                "path": "dist/galleries.js",
+                "bytes": 8829,
+                "sha256": "5ef3fdee1662bb2b79f2992f1b9aa1edf637bd0c41ee216cd453b8ac2fe4f9d0"
+              },
+              {
+                "path": "dist/grid-model.d.ts",
+                "bytes": 13622,
+                "sha256": "6e15cb36743906b127c72b4f7d510fb9a0613b37f3b73f10cf67296ade5278fc"
+              },
+              {
+                "path": "dist/grid-model.js",
+                "bytes": 76599,
+                "sha256": "bdae04ec8a0a6a12daca0e7e7a4cdfcac2c450e15a51cf15fe01f933015577f1"
+              },
+              {
+                "path": "dist/grid-text.d.ts",
+                "bytes": 2557,
+                "sha256": "a1da8a423668e84a934740d6f9363c77b6efe30826b3abc94ee797d8e476073e"
+              },
+              {
+                "path": "dist/grid-text.js",
+                "bytes": 11323,
+                "sha256": "f4143d24d9fd09ebd80bda0f54d06d456e7ca5828116619519c0facf24db512e"
+              },
+              {
+                "path": "dist/icon-options.d.ts",
+                "bytes": 8047,
+                "sha256": "a514fadfa4acfa16a152b6da72aa0a6207948b28870774e0412cc548dc982d72"
+              },
+              {
+                "path": "dist/icon-options.js",
+                "bytes": 25296,
+                "sha256": "a9296d66862ba55c3f932ee95e090b97127c197338a13d1b7e15bc870dbf2490"
+              },
+              {
+                "path": "dist/icon-picker.d.ts",
+                "bytes": 1755,
+                "sha256": "2a6161da4609820b9aa7367d2a93fd0fb5714e182df15ae054a6da00022465ec"
+              },
+              {
+                "path": "dist/icon-picker.js",
+                "bytes": 17098,
+                "sha256": "b87855dc32703302d536e5cf7e3d4cf7c0d2792953f85007f6108bf26541af90"
+              },
+              {
+                "path": "dist/icons.d.ts",
+                "bytes": 2235,
+                "sha256": "bbcad62d7beaca07e854f73d012bc0a370f43983458f8f6628e8f566e010c6af"
+              },
+              {
+                "path": "dist/icons.js",
+                "bytes": 4884,
+                "sha256": "fcf0e0a55853ad516057d81662f5dedded61020bd24cd124315190fb8bff97d9"
+              },
+              {
+                "path": "dist/image-crop.d.ts",
+                "bytes": 4858,
+                "sha256": "ba1fa24ada8b329b5cdf3c0838b235f764285c483ec4c6d0111bdc2e4228e782"
+              },
+              {
+                "path": "dist/image-crop.js",
+                "bytes": 20450,
+                "sha256": "0f6d45bc74e222cbf6820a9755289a7866477e2e88abf0d3d8772d4fd06fa9dc"
+              },
+              {
+                "path": "dist/image-cropper.d.ts",
+                "bytes": 1590,
+                "sha256": "a653f3e6da3df1c092e44c3c6f6456e4bcdaa7f105aa8ad84ce3513c5751d5e8"
+              },
+              {
+                "path": "dist/image-cropper.js",
+                "bytes": 28938,
+                "sha256": "0b7b22b0ebfdddeadda6836b9e36e0453d410626257952795c509d89144f0012"
+              },
+              {
+                "path": "dist/image-options.d.ts",
+                "bytes": 4179,
+                "sha256": "b626ac1710ef617d427da2097fd1c713345d89d5de91d0f7bf8ddd248ddf8e64"
+              },
+              {
+                "path": "dist/image-options.js",
+                "bytes": 13660,
+                "sha256": "502ff5a47a44bc040b5e75b379444c00913f312eae36bac2c7f2016bc041f2b2"
+              },
+              {
+                "path": "dist/index.d.ts",
+                "bytes": 13758,
+                "sha256": "070002b88d4b630f411c4abf03dd5a44a36d20fcf42bf928903c2efe8ae224cb"
+              },
+              {
+                "path": "dist/index.js",
+                "bytes": 37653,
+                "sha256": "baa7de7ebd0140f845fe6ee015c99c6bbc7313715d5b898c15951b5111f18126"
+              },
+              {
+                "path": "dist/json-editor.d.ts",
+                "bytes": 11441,
+                "sha256": "f44e856427425216089c231844cdd5ded13525345910fe0a631710f952cb4d14"
+              },
+              {
+                "path": "dist/json-editor.js",
+                "bytes": 53849,
+                "sha256": "f9e1f6daecb833841c2bd37ea56c2c3282fa36980b9c8c9ed0c32165fddda0c1"
+              },
+              {
+                "path": "dist/json-format.js",
+                "bytes": 2448,
+                "sha256": "c4048163d7fb6c9fb123d3da628d0d4711f6cb468457c2f7eca7eecb71055109"
+              },
+              {
+                "path": "dist/json-menu.js",
+                "bytes": 8264,
+                "sha256": "1cc05f77a374e89c8cfb5b7b2287fc42af38507a0c60d10637ebf2408bde28d3"
+              },
+              {
+                "path": "dist/json-options.d.ts",
+                "bytes": 2676,
+                "sha256": "52287ce6472d7b46b33c55964692b35c6bc3ca001b873d8719308cdc4c43e96f"
+              },
+              {
+                "path": "dist/json-options.js",
+                "bytes": 14077,
+                "sha256": "0c23070d65a1e8c8fbffc5248bbe768710763f5369a3e06b67b7f287f806cf5c"
+              },
+              {
+                "path": "dist/json-source.js",
+                "bytes": 2662,
+                "sha256": "10c17e4edc8d0b97fbe049d8b6b2edcf639b1d631a274cf2fb4ac00ad4fa5a74"
+              },
+              {
+                "path": "dist/layout-adapter.js",
+                "bytes": 5399,
+                "sha256": "067113fca2a32b664d92b057f8f4c805bb2ef6a27676e6770be2cf479f5ec66b"
+              },
+              {
+                "path": "dist/layout-canvas.js",
+                "bytes": 34318,
+                "sha256": "f237b53407d44653993350eba5b05693ea849d991559c471d7f012f38ee30589"
+              },
+              {
+                "path": "dist/layout-diagram.js",
+                "bytes": 1551,
+                "sha256": "066e7ca444607779271e1402a57f94ca3762d6910a23e1e0755dbca492e08468"
+              },
+              {
+                "path": "dist/layout-editor-ui.js",
+                "bytes": 7502,
+                "sha256": "25225f36960800bc92d1c2b2d2db7f49dffab36ae3b906c77e7effe45ee40ab4"
+              },
+              {
+                "path": "dist/layout-editor.d.ts",
+                "bytes": 11039,
+                "sha256": "46193f71ece666a5a919dceea584216a946c0ab3fa242e5f1097df79d04f7ab1"
+              },
+              {
+                "path": "dist/layout-editor.js",
+                "bytes": 12095,
+                "sha256": "f6a30931cefe4bfc36673c92896678538b38b128ebcd47fd568665360be2b389"
+              },
+              {
+                "path": "dist/layout-handles.js",
+                "bytes": 12075,
+                "sha256": "606435220085bb0096030d090c40611b0d448dd33ee00a011140a1ca09f03908"
+              },
+              {
+                "path": "dist/layout-inspector.js",
+                "bytes": 19806,
+                "sha256": "63012da4db2b2f1bd823be37fc699e6dc8783a569f9242c3caa5910eb5321adc"
+              },
+              {
+                "path": "dist/layout-layers.js",
+                "bytes": 17948,
+                "sha256": "e49150f92e03d7d50b39f293611f2bf97c4dcc0495530d51d1f2a41502ddbd2a"
+              },
+              {
+                "path": "dist/layout-model.js",
+                "bytes": 14873,
+                "sha256": "3764c4129de541bd6acbae69c31c479cfcd245adff24a7f1b999f1a190de975a"
+              },
+              {
+                "path": "dist/layout-palette.js",
+                "bytes": 4936,
+                "sha256": "39eb972db5fd717880a8b03c006420359f604325fceb13d95d6d987c890b7c22"
+              },
+              {
+                "path": "dist/layout-samples.js",
+                "bytes": 6205,
+                "sha256": "000bd0214d2fab4792e618237459934b552239343ccb90bff7b7fdf52198da69"
+              },
+              {
+                "path": "dist/layout-templates.d.ts",
+                "bytes": 3695,
+                "sha256": "5c214c18600f6546000399f2bc4c8fe3db3cd7a4e17ee2223745d79539ca41bc"
+              },
+              {
+                "path": "dist/layout-templates.js",
+                "bytes": 12486,
+                "sha256": "77e5c802fb3b51ad328155719e2084a0c367067af871028ff61b4e9cdad1f2ca"
+              },
+              {
+                "path": "dist/layout-tree.d.ts",
+                "bytes": 7512,
+                "sha256": "99b085707456b97c4181267d431513924c7c459088786c3abfee541cd7c88bc6"
+              },
+              {
+                "path": "dist/layout-tree.js",
+                "bytes": 39532,
+                "sha256": "2bc9342139928fd08b5fd0a0bc8197914045db88262a05f4bd4ec48cb272a701"
+              },
+              {
+                "path": "dist/layout.d.ts",
+                "bytes": 683,
+                "sha256": "c1bd89da2419f6d95a2ba07c7eab3634b98ce5b30666c02c4ea499eb85008202"
+              },
+              {
+                "path": "dist/layout.js",
+                "bytes": 2738,
+                "sha256": "8e5115b2ac53444a9bd6de4284136098ee8d7cea0253f9fa18317971f01ebe66"
+              },
+              {
+                "path": "dist/numbering-panel.d.ts",
+                "bytes": 1113,
+                "sha256": "c7a4a176ec23c79df2cebe46aa0a5e03ff2c303df7e8b9b3321177e8980cab00"
+              },
+              {
+                "path": "dist/numbering-panel.js",
+                "bytes": 9980,
+                "sha256": "932c303953d439e8a26c30c013a9895bad92f52b737d99abe222dbd1b97a55a7"
+              },
+              {
+                "path": "dist/numbering.d.ts",
+                "bytes": 3713,
+                "sha256": "cb8daedcf988f2e77b7e12b9a8511045391448f88d46ad479dc93364617a6a1e"
+              },
+              {
+                "path": "dist/numbering.js",
+                "bytes": 11627,
+                "sha256": "36e217d6be19812788cc07f9468a7486b2c4e84a6945d1eab7ab91e523798ead"
+              },
+              {
+                "path": "dist/outline-view.d.ts",
+                "bytes": 687,
+                "sha256": "918390422b0d806551cef148376709035863e693a6847ef3bc9087edd3b3d421"
+              },
+              {
+                "path": "dist/outline-view.js",
+                "bytes": 14874,
+                "sha256": "3b1b5cf160813e01b42100813271136f7b87ab6f8be6b03ba32df5937301d6d7"
+              },
+              {
+                "path": "dist/outline.d.ts",
+                "bytes": 3700,
+                "sha256": "0364a291086067b72451f9d76e6570892a2e3b6b040e4ab82f408f3a92d3108e"
+              },
+              {
+                "path": "dist/outline.js",
+                "bytes": 19596,
+                "sha256": "0c6ce7be659e3b6a960239b1b41556856f9cf9f3960eb020eac420c7a0bac753"
+              },
+              {
+                "path": "dist/overlay-tools.js",
+                "bytes": 23869,
+                "sha256": "43cfc7e4d54b9fe8bab9ce34eb8b87e36808bdcfa3080d57ac465c9e28470d42"
+              },
+              {
+                "path": "dist/persistence-ui.d.ts",
+                "bytes": 1232,
+                "sha256": "aa9f1e7d8c4677e69c134f23bd5190d0e785d9df793b260a300c846f88af34c2"
+              },
+              {
+                "path": "dist/persistence-ui.js",
+                "bytes": 5646,
+                "sha256": "2ce5616e54909f4a7b60b4f3b02b6097bd6830bf2af8cb7e82e00c906872c6b5"
+              },
+              {
+                "path": "dist/persistence.d.ts",
+                "bytes": 6210,
+                "sha256": "529ac08d407c910c508d9d873e3225f028fc4a9be07bbc6932c09702a4182fd6"
+              },
+              {
+                "path": "dist/persistence.js",
+                "bytes": 23911,
+                "sha256": "8db27b5a0f4a8e28ef9a3dcdfd837246d46df201db1eed4d6b300bd268ed10cd"
+              },
+              {
+                "path": "dist/picture-luminance.js",
+                "bytes": 3754,
+                "sha256": "ed003344d25c0b6c1dd430f6578d301f2e8408696694d3613b5453aa8bf33493"
+              },
+              {
+                "path": "dist/presentation-ids.js",
+                "bytes": 3038,
+                "sha256": "a51fbe0f3fb9e1f5d92d0e11449a0c59257da8082b6332e62a48857c1776922f"
+              },
+              {
+                "path": "dist/presenter.d.ts",
+                "bytes": 7008,
+                "sha256": "4fb1dd2aec0e5ad792268174d61dd5553a381971de8a819752fb82cfe6eb366f"
+              },
+              {
+                "path": "dist/presenter.js",
+                "bytes": 31774,
+                "sha256": "9ff2fa33f7858b0b9388c01a8112445f9ebee484aba8f7c4a276b34d459b1bfc"
+              },
+              {
+                "path": "dist/react.d.ts",
+                "bytes": 4833,
+                "sha256": "ae38d74656bf8b706057ff619b2626e24b18ffa5f87cb1b0cdeae39d2e0757d7"
+              },
+              {
+                "path": "dist/react.js",
+                "bytes": 13221,
+                "sha256": "e893baa9db9ce72b7ed0d742f45ed3c6381f08e30a995c0abd051fbeef807f37"
+              },
+              {
+                "path": "dist/read-deck-file.d.ts",
+                "bytes": 3456,
+                "sha256": "9ce431508950196f4b3aa2a1b70ec7089cc7192b501aa0df9fce1f385e815633"
+              },
+              {
+                "path": "dist/read-deck-file.js",
+                "bytes": 7928,
+                "sha256": "378dd7ad975c47437c5f860ec885aa41bac0cfb7a8e236fb324b7d32f9e6330e"
+              },
+              {
+                "path": "dist/review-panel.d.ts",
+                "bytes": 4369,
+                "sha256": "167998f575f0a370eb343041b725e7bf134dab5afff5632c6cf713e2adcfa279"
+              },
+              {
+                "path": "dist/review-panel.js",
+                "bytes": 25538,
+                "sha256": "9e6340d0a78e80a97452b0f6ddccdc1b711e8bb947f7445befb294da772f1bef"
+              },
+              {
+                "path": "dist/review-pill.d.ts",
+                "bytes": 3974,
+                "sha256": "1c6e7303fb445a722b4cc66f0f9229cab6b1eea84714c76f8b8be763bf262731"
+              },
+              {
+                "path": "dist/review-pill.js",
+                "bytes": 7171,
+                "sha256": "e904a5067f0848b361deff28c617031cb563a2033d4e9d0ca9fc4888ff515892"
+              },
+              {
+                "path": "dist/review.d.ts",
+                "bytes": 5392,
+                "sha256": "e19fd5c21ebbd353aff851f927fd5c7f97be082b480c87863f9f43142b4d06e3"
+              },
+              {
+                "path": "dist/review.js",
+                "bytes": 13837,
+                "sha256": "fe04fcedf2ab3b528efb9765f23d3de001fc23fdba7fe1035a445a494fd21906"
+              },
+              {
+                "path": "dist/rich-text-input.js",
+                "bytes": 10518,
+                "sha256": "3637f982b39ae7f980da3935bff310d9ded51c8116e60c7d87c17d103c9c31b4"
+              },
+              {
+                "path": "dist/rich-text-toolbar.js",
+                "bytes": 9728,
+                "sha256": "10fc7d1b6fcb4dfd424d34c6b7dcc13949ea3cfc552f217a316343530cfd58a2"
+              },
+              {
+                "path": "dist/rich-text.d.ts",
+                "bytes": 1251,
+                "sha256": "857894362cbd2b11ae1b65fb9633a111f50c1f6f9e53cc4245636774ded69580"
+              },
+              {
+                "path": "dist/rich-text.js",
+                "bytes": 7356,
+                "sha256": "d89992553a681ba66f62fe5f2d280e4e2261b8d05502861bd005b4b8fb328d5b"
+              },
+              {
+                "path": "dist/schema-inspector.d.ts",
+                "bytes": 528,
+                "sha256": "b7cead43f3ff5e45c004c094567677c068c55ad601fa1dddc9153525afb576e1"
+              },
+              {
+                "path": "dist/schema-inspector.js",
+                "bytes": 11421,
+                "sha256": "f524fd63eba7d3b60a86ee13ee6f6a86ea057ad85a02e2c6309e069a229b2712"
+              },
+              {
+                "path": "dist/schema.d.ts",
+                "bytes": 865,
+                "sha256": "1d7a7b58363fb7f04369831025c04a6f3a71661c672c858f55890e0a2f86eb46"
+              },
+              {
+                "path": "dist/schema.js",
+                "bytes": 430,
+                "sha256": "4655298b8287d41576a479a258b51f55533aa1df105a660d2ce8c2d5589e9b35"
+              },
+              {
+                "path": "dist/shape-controls.js",
+                "bytes": 49823,
+                "sha256": "6c4adc8b6c2788a27889fc5ccc704c0ac8b76bfaa6e2b034ce407d2ff259bf17"
+              },
+              {
+                "path": "dist/shape-engine.d.ts",
+                "bytes": 381,
+                "sha256": "f9676c8135f7288e80d53b60ad0397ec33c1d2b27c84ca253859add72f019d9e"
+              },
+              {
+                "path": "dist/shape-engine.js",
+                "bytes": 968,
+                "sha256": "937733dff7d73381463b4712015e64f81cc78f3228b5b1df4f2b4aadc759bfaa"
+              },
+              {
+                "path": "dist/shape-handle-math.js",
+                "bytes": 10027,
+                "sha256": "429a96f2524f4516a7660153df3c316d885c907ce396c2099c1c294aa634bf32"
+              },
+              {
+                "path": "dist/shape-handle-tools.js",
+                "bytes": 536,
+                "sha256": "be5bcc565d69e58b1dbfc10f6758027e7e9b6cd66dc504509433e43e39f25296"
+              },
+              {
+                "path": "dist/shape-handles.js",
+                "bytes": 12001,
+                "sha256": "0e7e174be359eda9568ba8792e47ab78a7b7c23d31e2347b916b27b14769c7c5"
+              },
+              {
+                "path": "dist/shape-options.d.ts",
+                "bytes": 5605,
+                "sha256": "184af82c6e35552a7e461cb022ae9642e4afe26e0801a9c465cf92a2d10b3416"
+              },
+              {
+                "path": "dist/shape-options.js",
+                "bytes": 21570,
+                "sha256": "2703caf6109bd081a5eb5c7c780e6e43fd30319f7f9feb3d198a89e06e8dc215"
+              },
+              {
+                "path": "dist/shape-overlays.d.ts",
+                "bytes": 7191,
+                "sha256": "3b53d15cad86637201752017d5abbd02cd3cae4f3cc7e2e46b1b4b489ed20362"
+              },
+              {
+                "path": "dist/shape-overlays.js",
+                "bytes": 28027,
+                "sha256": "3f8e92fea0b7ee1373f8393b5020b76c15b57b84433b25418cb5d4eb9d377e12"
+              },
+              {
+                "path": "dist/shape-picker.d.ts",
+                "bytes": 2522,
+                "sha256": "c33ff1e694eafee90802f91568767dba575da4ca22dfcb5c4c8d47e7a74b6478"
+              },
+              {
+                "path": "dist/shape-picker.js",
+                "bytes": 13885,
+                "sha256": "5eb6e4ab6604ed2f727a2d33bfb87cb9116155694fbc38cc58036ce8a6430142"
+              },
+              {
+                "path": "dist/shortcuts-sheet.d.ts",
+                "bytes": 4663,
+                "sha256": "e4d57ae61c9f8aaa486980b296eedffea3a09a3b610e550fe9013b9f8b312bc9"
+              },
+              {
+                "path": "dist/shortcuts-sheet.js",
+                "bytes": 12255,
+                "sha256": "8c93f3581b34aa86c1d52f6590e905e5a680543b57da79c3383af15f42fb9805"
+              },
+              {
+                "path": "dist/slide-adapter.d.ts",
+                "bytes": 3342,
+                "sha256": "2c3bb4b73810d6e851eb3c5b6f56280b3fbbb56cb39304f67a2c830927abea42"
+              },
+              {
+                "path": "dist/slide-adapter.js",
+                "bytes": 15768,
+                "sha256": "f5945707aeab1ab224f4c6af7bd835ef9b01c5a5e4ea52c512daae0072e45ad9"
+              },
+              {
+                "path": "dist/slide-edits.d.ts",
+                "bytes": 3987,
+                "sha256": "0ed5e5a9b45a47b6c80093586ab899a7f0f23dfaa6894de09d1e28bced7397ee"
+              },
+              {
+                "path": "dist/slide-edits.js",
+                "bytes": 46009,
+                "sha256": "2ac79fc8ed391a3ea161836e33f7daea9b87b4fa4264ba00805de90f09fd1e5a"
+              },
+              {
+                "path": "dist/slide-manager.d.ts",
+                "bytes": 3507,
+                "sha256": "11b46fb22c7efbc7638a884437e540b06cf2415e8e6d96e0dd1af84316b3378b"
+              },
+              {
+                "path": "dist/slide-manager.js",
+                "bytes": 44421,
+                "sha256": "6f1c1e13fced87817b62d7bdf187bdb0df6fbf12a647ed9b284d9321ddfa77e5"
+              },
+              {
+                "path": "dist/slide-navigator.d.ts",
+                "bytes": 2396,
+                "sha256": "45b66f2a3b5c477193a486c95e9669eecd0017294c7626c574cde0a2436c4a51"
+              },
+              {
+                "path": "dist/slide-navigator.js",
+                "bytes": 8421,
+                "sha256": "08f0ea736423b48e1bd26ee50e8e16ee2c0e51c549e19b7951e2998a6f98bbbf"
+              },
+              {
+                "path": "dist/slide-retention.js",
+                "bytes": 794,
+                "sha256": "2549b37270f75da87d012462c05706ed1c6f049a0de83132f8b01d56f0478225"
+              },
+              {
+                "path": "dist/slide-scene.d.ts",
+                "bytes": 4647,
+                "sha256": "bef865dabec95249116248824073f923b9aa5047b47378f1b2326ad4e4be34f2"
+              },
+              {
+                "path": "dist/slide-scene.js",
+                "bytes": 28217,
+                "sha256": "a43279a2e5fa2a4fe3c3158bf3963431ac97216dc940fe78dbd88e1d19fbcd06"
+              },
+              {
+                "path": "dist/slides.d.ts",
+                "bytes": 6936,
+                "sha256": "cc3c9d9fa593757b77ec55730d92d5b6645534ecc383488c1842e23aabdd32e6"
+              },
+              {
+                "path": "dist/slides.js",
+                "bytes": 25286,
+                "sha256": "508a5b00beeb74bd7d059ac5e071b4cba6f125a87bb90082e78699ef13146ecb"
+              },
+              {
+                "path": "dist/source-a11y.js",
+                "bytes": 6021,
+                "sha256": "b5d9fd2bd5c853e6119d64b25726d6a2d7a299982981bb804afa6105eee4809b"
+              },
+              {
+                "path": "dist/source-check.js",
+                "bytes": 5863,
+                "sha256": "b6c3695788609c299caaf1c927f59c8d533cf7b7d7855318daed4f9f769c2f00"
+              },
+              {
+                "path": "dist/source-checker.js",
+                "bytes": 10332,
+                "sha256": "077b4f923cad914f460c76ffedd14d5ba58f7782cd5d151eaaa52c9e6e432c49"
+              },
+              {
+                "path": "dist/source-color-scheme.js",
+                "bytes": 3232,
+                "sha256": "798eb2c7f22c4a11bd6a70d3bc1e8faa09c47410b63de08fc938407f4703a394"
+              },
+              {
+                "path": "dist/source-completions.js",
+                "bytes": 44758,
+                "sha256": "cbb2d429a0d356c288e7cbe5f174ea7265a309f6bf7b8570aa24117ce04dbeab"
+              },
+              {
+                "path": "dist/source-details.js",
+                "bytes": 1171,
+                "sha256": "e8e8476fe248b5131d0d356d2446639283dc4c8bc9c280014107cc65550bc5ea"
+              },
+              {
+                "path": "dist/source-diagnostics.js",
+                "bytes": 12352,
+                "sha256": "20acb57516c23e58c185cee162e7c28f583a58f41d56ca451eec64850170650a"
+              },
+              {
+                "path": "dist/source-docs.js",
+                "bytes": 3987,
+                "sha256": "df8d1e1376df188a320dd3cb56a1307fbe7ede811eaf955c3a500478f9aa75e2"
+              },
+              {
+                "path": "dist/source-editing.js",
+                "bytes": 16991,
+                "sha256": "14ccfc2469f7a5fd14ebde7361eba6e21ae70ecc8136eccdabe9750f3f18a9b1"
+              },
+              {
+                "path": "dist/source-findings.js",
+                "bytes": 2699,
+                "sha256": "2ff4da84daf86366475e1a467291d0c2657f222075db61cf5368d84d1daee580"
+              },
+              {
+                "path": "dist/source-fixes-syntax.js",
+                "bytes": 20446,
+                "sha256": "101714ba52734ce2685d6d93b848ca9ec0c0ad504b0f46f99c02856b15179030"
+              },
+              {
+                "path": "dist/source-fixes-text.js",
+                "bytes": 10903,
+                "sha256": "2586e0a98611ff8383facc6c719d01803dcc06e3b9c882e51d5ac7a2573d630a"
+              },
+              {
+                "path": "dist/source-fixes.js",
+                "bytes": 8194,
+                "sha256": "5c25177afa1e1c451680164417937af9adc2c4a81ff58330d7086190df3d82d5"
+              },
+              {
+                "path": "dist/source-folding.js",
+                "bytes": 9088,
+                "sha256": "2b38c07220ae7d509357b77a3f608dda9d5ca65928c81e4ee89f58b59a6679e6"
+              },
+              {
+                "path": "dist/source-format.js",
+                "bytes": 4958,
+                "sha256": "72a42f4d7f9bb75c4ae34334447d3aff5b84af2e2573ee5947bbe4c6dc50f45c"
+              },
+              {
+                "path": "dist/source-hints.js",
+                "bytes": 22642,
+                "sha256": "4608b582a5468f473563417d3a0be236243a3fd6e201932ed7c190559e97f2d5"
+              },
+              {
+                "path": "dist/source-json.js",
+                "bytes": 8635,
+                "sha256": "282bc5b019455141c034e30fe24dcb718d5cb9d749f2738100a23313cf4602ba"
+              },
+              {
+                "path": "dist/source-keymap.js",
+                "bytes": 27932,
+                "sha256": "e82062c819a957f8aadaa2844e70eb4d924bb9589fb0b849d73a66dec5d634a0"
+              },
+              {
+                "path": "dist/source-lines.js",
+                "bytes": 8781,
+                "sha256": "322a655a7751ad58a662dace5536c0efa198ef804ab581e7bdd14c0690e763ea"
+              },
+              {
+                "path": "dist/source-markdown.js",
+                "bytes": 40130,
+                "sha256": "2a7fb2a199277fc9f54ac1cde50da5628845c93f73695674767b7a84e8ad3705"
+              },
+              {
+                "path": "dist/source-messages.js",
+                "bytes": 3288,
+                "sha256": "4efa9515e10757adb7a734a7c33defde0a70c792bf0d53cf211f6c60f9060eab"
+              },
+              {
+                "path": "dist/source-navigation-model.js",
+                "bytes": 25838,
+                "sha256": "ae45fc9f6687780dd3336169ff565a306d59428f2c02aca2f71084e98b393eaa"
+              },
+              {
+                "path": "dist/source-navigation-read.js",
+                "bytes": 15347,
+                "sha256": "b41035c687a31a633e39e54035a00d1d2f3e762d29d682b3a8e8b3c2e0718a60"
+              },
+              {
+                "path": "dist/source-navigation-ui.js",
+                "bytes": 12242,
+                "sha256": "5f87453875d2f0c41b4e30664bc5fa45158bd85348385a7a896ade3924fc1a33"
+              },
+              {
+                "path": "dist/source-navigation.js",
+                "bytes": 12689,
+                "sha256": "1c81219e9ffa000761b103d19f07af9d4b2681d6ec61f054ef8151f7a0687937"
+              },
+              {
+                "path": "dist/source-outline.js",
+                "bytes": 7254,
+                "sha256": "9d500a0f3217d0710ff1c49232e34df267463fed3d5d3c628d7a1cb6ee9576e1"
+              },
+              {
+                "path": "dist/source-pane.d.ts",
+                "bytes": 19694,
+                "sha256": "08e6444ccd784432939fed295f37d0eca78ff5c5520fdd8e9b093f4c7d2f3a79"
+              },
+              {
+                "path": "dist/source-pane.js",
+                "bytes": 78372,
+                "sha256": "7ee8e78cc093d2cc92714c751d1879c3ccfe9d2087a1c7cc7493f2b42002c803"
+              },
+              {
+                "path": "dist/source-problems.js",
+                "bytes": 5582,
+                "sha256": "9f27f8f61cecf6b660b1a004b1f789a7c78331bd05da4d4e9c4bab1d8c67c358"
+              },
+              {
+                "path": "dist/source-ranges.js",
+                "bytes": 1929,
+                "sha256": "d872c4f3d36589f847041eac1dbadf8dce5f20895c35a7c59142d61f41afc313"
+              },
+              {
+                "path": "dist/source-references.js",
+                "bytes": 16238,
+                "sha256": "71ccdd5159a99440853e296db43dab0c768894408858add08ff0789ea5d40d1d"
+              },
+              {
+                "path": "dist/source-shortcuts.js",
+                "bytes": 6566,
+                "sha256": "0941094cb8c5c17e5349552b443faad4317ad68d6a4612a4decd4e1574362eaf"
+              },
+              {
+                "path": "dist/source-snippets.js",
+                "bytes": 17432,
+                "sha256": "110de25953dd29e6a03b236d0e8381b21317a0351d7d59c30af5b56dc8845209"
+              },
+              {
+                "path": "dist/source-symbols.js",
+                "bytes": 10459,
+                "sha256": "87ba8120bc8631d13956fcfe9b7108faeeec1144d080015097a1ac891bb35ced"
+              },
+              {
+                "path": "dist/source-syntax.js",
+                "bytes": 5210,
+                "sha256": "d0b002ab9a23f220a791ec4d0847ca0bb3a49a04a99c4832980cc8e01425e791"
+              },
+              {
+                "path": "dist/source-undo-groups.js",
+                "bytes": 2597,
+                "sha256": "eac54abd588baef3d011f45a75bb35f492a2e68b4874f477ecea9d6d0394af9f"
+              },
+              {
+                "path": "dist/source-worker.d.ts",
+                "bytes": 463,
+                "sha256": "ce3e1c79bba1eb50ac034383ce697f58072c22753d461ab45738e4d71a67677a"
+              },
+              {
+                "path": "dist/source-worker.js",
+                "bytes": 2225,
+                "sha256": "131408f6ce66a6f0a57a4e877407eb4932cbd4404e5442039128f40929b5849b"
+              },
+              {
+                "path": "dist/source-wrap.js",
+                "bytes": 5032,
+                "sha256": "dfc71aef95900237e1b020ea67b473e076d60e59968a516dc0f713d3f0b58bd3"
+              },
+              {
+                "path": "dist/source-yaml.js",
+                "bytes": 31697,
+                "sha256": "2c0ffd6ea58031d53e2e40e610432b2a2d3123dc7f2b36ec40f652dd595325a0"
+              },
+              {
+                "path": "dist/studio-canvas.d.ts",
+                "bytes": 1448,
+                "sha256": "3c1728dc5c3afed76bfc4ccc6a9a23d1f1da33b46f34ef4050beeb1d20c273a3"
+              },
+              {
+                "path": "dist/studio-canvas.js",
+                "bytes": 31310,
+                "sha256": "9a542442dcc01c4cb300528bea728bca44e7ee2cc87126c9981a91b21f903283"
+              },
+              {
+                "path": "dist/studio-commands.d.ts",
+                "bytes": 1198,
+                "sha256": "2becf86521d6f2468561ead0a68871aa55ab6701ea04a577109d1019d379c93a"
+              },
+              {
+                "path": "dist/studio-commands.js",
+                "bytes": 15013,
+                "sha256": "60c51a18a6ecc29fb1369f6c042b08938df255852d8bed717e2a8e2c33d7ebf6"
+              },
+              {
+                "path": "dist/studio-design.d.ts",
+                "bytes": 940,
+                "sha256": "004282e3ba34f77046fcc5413114d6cd39bec3496d188c9a8272381fb0cd9e1a"
+              },
+              {
+                "path": "dist/studio-design.js",
+                "bytes": 21458,
+                "sha256": "56ffb93f874176a88a804e888aac8e9cf3a7bc066de2f467b31b9171c8bd8d96"
+              },
+              {
+                "path": "dist/studio-kit/commands.d.ts",
+                "bytes": 2287,
+                "sha256": "e8f725f3cd4d905b3be0d7b83341ac24f3498d6b82c91725970a6af9cb834eeb"
+              },
+              {
+                "path": "dist/studio-kit/commands.js",
+                "bytes": 8653,
+                "sha256": "c07a3ccbbdbb8ea609f0a64ee74ccccbca22f3b8dad46bc854a63e968ab5de53"
+              },
+              {
+                "path": "dist/studio-kit/dom.d.ts",
+                "bytes": 2564,
+                "sha256": "a41622eb702cdee6a5f7d3e4e12dc636b136c2f5c7d26dd3b481019ae86ac570"
+              },
+              {
+                "path": "dist/studio-kit/dom.js",
+                "bytes": 15041,
+                "sha256": "8018c919b5bdcd56f56365e1e3d88223d1ccd44a85dcb03f1ee07c9b3796e0ba"
+              },
+              {
+                "path": "dist/studio-kit/drag.d.ts",
+                "bytes": 1534,
+                "sha256": "6da3c8b127f2cc96fb4a3ff30d95fff113f2f7c299a1c9c42b70048930abe30e"
+              },
+              {
+                "path": "dist/studio-kit/drag.js",
+                "bytes": 5521,
+                "sha256": "5762b6c0880cb5429c43665cb6ddb4411281fd80ac116361f19923afc13a158b"
+              },
+              {
+                "path": "dist/studio-kit/gesture.d.ts",
+                "bytes": 1352,
+                "sha256": "83a6384b4413dcdc99a7117a730580073f5e78ae1b91d54db83e3948936adcfb"
+              },
+              {
+                "path": "dist/studio-kit/gesture.js",
+                "bytes": 3592,
+                "sha256": "84c3d77f4850ba9750922cc3e5b28cdeefd47a249f586692152f512e85527e37"
+              },
+              {
+                "path": "dist/studio-kit/index.d.ts",
+                "bytes": 1540,
+                "sha256": "4eb2889dae2e00fac954c9a9b4bc93c1ccece2f7d757b22aa9b42d0ce6c07e31"
+              },
+              {
+                "path": "dist/studio-kit/index.js",
+                "bytes": 1224,
+                "sha256": "fa3a1d007d9ba4bca7d3f6f82ebdf83b43fb51d003c4926734af980b8047e81f"
+              },
+              {
+                "path": "dist/studio-kit/inspector.d.ts",
+                "bytes": 1964,
+                "sha256": "0399ed4d97af0ab01e2470841d70e910476709cf420d1d5e45dbb9ddb79d3f5f"
+              },
+              {
+                "path": "dist/studio-kit/inspector.js",
+                "bytes": 7125,
+                "sha256": "1081d54ad38b69794c27c4f0632767f40fb2da97d97178b11bd5b20f9abfa83e"
+              },
+              {
+                "path": "dist/studio-kit/overlay.d.ts",
+                "bytes": 2484,
+                "sha256": "b054d277e9bdeb5b3e020f6e11aaa11400c2c95cc3670e21b95cc481f89e10e0"
+              },
+              {
+                "path": "dist/studio-kit/overlay.js",
+                "bytes": 9340,
+                "sha256": "976cf97d21468efd6338bb4de43b6864e342cc2063980394b656322506bd9b7f"
+              },
+              {
+                "path": "dist/studio-kit/selection.d.ts",
+                "bytes": 1500,
+                "sha256": "402d1796d1e68ec1fa571b0ee4363077fb97d07569f5608a85a528f07fb1065e"
+              },
+              {
+                "path": "dist/studio-kit/selection.js",
+                "bytes": 5815,
+                "sha256": "d3c5ac1734af93b3fdd8331cd93e0b2bc672efb4dd110427e35dbb8c80a02b1f"
+              },
+              {
+                "path": "dist/studio-kit/tree.d.ts",
+                "bytes": 1384,
+                "sha256": "6d051643f614a84456ff748879d53ef2ee7e314da7ce42b5226bc4f55e6012ec"
+              },
+              {
+                "path": "dist/studio-kit/tree.js",
+                "bytes": 4536,
+                "sha256": "e343144e61ce6488009115484fc1eb872f55240994abac753ea84d4e42c90c9d"
+              },
+              {
+                "path": "dist/studio-kit/viewport.d.ts",
+                "bytes": 1590,
+                "sha256": "0f9bd0445195eb5cf96aafce744b2ec942a8ec6ad0c6d729e7f8343b080e0b14"
+              },
+              {
+                "path": "dist/studio-kit/viewport.js",
+                "bytes": 7680,
+                "sha256": "75f7c00e4ebbc8d587ecdf4fa65aab3b213a6f9aa78f37c7a5788e8d6efc34e9"
+              },
+              {
+                "path": "dist/studio-layers.d.ts",
+                "bytes": 501,
+                "sha256": "a897ad97f2652adb6a42a8ce534181c68a9247a037c760aa1a5762691c97e6e7"
+              },
+              {
+                "path": "dist/studio-layers.js",
+                "bytes": 13188,
+                "sha256": "83f5f48c74e725ca75ee4da1d8333defccd81733b0dca4c0a370870008f6d450"
+              },
+              {
+                "path": "dist/studio-track-geometry.js",
+                "bytes": 609,
+                "sha256": "c43613be6e84b8d56abb2ac9f174d221591d649102b8bff915875e8b98a770ac"
+              },
+              {
+                "path": "dist/studio.d.ts",
+                "bytes": 1713,
+                "sha256": "5eae74a9b089aed9515bcf6d0bc1d5bb1fd6c60a77b6d88af802fc23b96ebbae"
+              },
+              {
+                "path": "dist/studio.js",
+                "bytes": 97133,
+                "sha256": "139f9d8add0c562ee050aadf6f2d1b7bfe99b614526d08e2679396858b3a1fbf"
+              },
+              {
+                "path": "dist/styles.css",
+                "bytes": 239570,
+                "sha256": "5820c467006bd8542f97f7986cfcfae1243f2a8d07513f729b382fcb1307dcf1"
+              },
+              {
+                "path": "dist/styles.layered.css",
+                "bytes": 239886,
+                "sha256": "389760d2e65f2ac2a6531a6b5c7e133d9d38c347d1263f38d0ef7d7b652563e7"
+              },
+              {
+                "path": "dist/svelte.d.ts",
+                "bytes": 1849,
+                "sha256": "c7f29efb42f93b8a9c10b071a125660884a6539d152580acdf04a9a6c58dddd6"
+              },
+              {
+                "path": "dist/svelte.js",
+                "bytes": 4353,
+                "sha256": "dc9cf271a12df0561fe83b8f84fb868683b753e903d5cdbc23cf67b7f7e5cdbd"
+              },
+              {
+                "path": "dist/switches.d.ts",
+                "bytes": 7087,
+                "sha256": "1e40f68effe02ed89ca4fd2c91b52c1dc2cf0cbb89635e06a4d3a0500525a8e1"
+              },
+              {
+                "path": "dist/switches.js",
+                "bytes": 38251,
+                "sha256": "6978eb4c49a80820d81af3bbb7bbac595a6b18ba10f4e411904490a297f90571"
+              },
+              {
+                "path": "dist/table-options.d.ts",
+                "bytes": 6291,
+                "sha256": "050111eceb0fa3d096de911c714013629aae69d3830c2de89637b7d5cb5c8e91"
+              },
+              {
+                "path": "dist/table-options.js",
+                "bytes": 26127,
+                "sha256": "a0cc31b3c7c8ed1575242011f32b0303b9eb83e4769e2012b2d44d04056fab00"
+              },
+              {
+                "path": "dist/table-structure.d.ts",
+                "bytes": 4223,
+                "sha256": "0b8527255399f441667d1d293d5d84633e8f90c95e5a33de7f3d92460e3ea40a"
+              },
+              {
+                "path": "dist/table-structure.js",
+                "bytes": 4975,
+                "sha256": "5ae56a42b74fc02176201e6736700d6e90006b0138fd0376275dd6c4c2fb0377"
+              },
+              {
+                "path": "dist/template-panel.d.ts",
+                "bytes": 1821,
+                "sha256": "fc59ab33eebea41fa16315091c1d182214850a86c54c398f44a9386e5fde7c7a"
+              },
+              {
+                "path": "dist/template-panel.js",
+                "bytes": 21002,
+                "sha256": "be932cb569f7788960203bec37b29ca5b06d9cf16b7d99d7ea0fbb33dee6d443"
+              },
+              {
+                "path": "dist/templates.d.ts",
+                "bytes": 6640,
+                "sha256": "86a511c3b4d03de14661c20ddc195ca700b5118f6a789bc1eb470e76881ea8a2"
+              },
+              {
+                "path": "dist/templates.js",
+                "bytes": 15276,
+                "sha256": "6dc48ecdb3adfcd95cb070824cc29b622d49e7f8ca8916d27e0497168ca3e490"
+              },
+              {
+                "path": "dist/text-input.js",
+                "bytes": 1646,
+                "sha256": "5e805cfb0a014795631992b9f3ce34865e43d86f141b8091dc78a4238b87dd83"
+              },
+              {
+                "path": "dist/text-pointer.js",
+                "bytes": 9278,
+                "sha256": "a3d860cc14d3e327370f7848db04717aeaac5a592a8ca730dc7f85b7d93cbf7a"
+              },
+              {
+                "path": "dist/thumbnail-cache.d.ts",
+                "bytes": 1807,
+                "sha256": "1ff036e7050576d87b76d07c0246cbc2cffb64015a7a0e77ae9cc2320304b334"
+              },
+              {
+                "path": "dist/thumbnail-cache.js",
+                "bytes": 3180,
+                "sha256": "b2d855e5b0b3a9ddbae1622b59fdcb2aca7256282477f090c75b61960aeeadae"
+              },
+              {
+                "path": "dist/thumbnail-strip.d.ts",
+                "bytes": 6295,
+                "sha256": "48d6a137b15863b12c27c314b203d38f8f944713acfa6fa3de38e30e95dd3c80"
+              },
+              {
+                "path": "dist/thumbnail-strip.js",
+                "bytes": 32318,
+                "sha256": "664937dfa66f9d44a5bf289ff9c9de34a2a58ba294b28650984f4694164eb69c"
+              },
+              {
+                "path": "dist/toolbar-actions.d.ts",
+                "bytes": 2879,
+                "sha256": "412a5c1ea26e668193b16ca2f06fb89ba89ec67dbe67306c88874be585c62fc8"
+              },
+              {
+                "path": "dist/toolbar-actions.js",
+                "bytes": 5535,
+                "sha256": "2bd81b80af8d037524e505369b29cdbd6684fe5c49922462279ecbcb57b29ba5"
+              },
+              {
+                "path": "dist/toolbar.d.ts",
+                "bytes": 5269,
+                "sha256": "7efb6c5a2985fc4c6c1f165ac9de776659ad03fc2fa8d2e84a65def63ad3dc68"
+              },
+              {
+                "path": "dist/toolbar.js",
+                "bytes": 18705,
+                "sha256": "d14e95ea1625bd26e3e87d87fff51f9b49fbd40e079ebba63d043ea3d1476d0a"
+              },
+              {
+                "path": "dist/transfer.d.ts",
+                "bytes": 1371,
+                "sha256": "811f3f45137fe8eb1848199fbe003ab0142660b3c06c95c9b7dff115f040a86f"
+              },
+              {
+                "path": "dist/transfer.js",
+                "bytes": 11396,
+                "sha256": "49010a3f36536984f6f710a7f38c553aca6f7303056f589ef7fad1f8a572797f"
+              },
+              {
+                "path": "dist/workspace-layouts.d.ts",
+                "bytes": 1248,
+                "sha256": "278ab64abfd98cd122b5f40c5a46fbcc547f1053f3331c01cbf73b173c71ef2a"
+              },
+              {
+                "path": "dist/workspace-layouts.js",
+                "bytes": 4418,
+                "sha256": "23cf8a26d90c10ba51e19901304ad5e711785998dfc4d810688c73b3c77dcf0b"
+              },
+              {
+                "path": "dist/workspace-measure.js",
+                "bytes": 2769,
+                "sha256": "94abd645c75d03d33e119f82d42fbd312fd910ac87d3d6dddd5feee555727a2a"
+              },
+              {
+                "path": "dist/workspace-parts.js",
+                "bytes": 1965,
+                "sha256": "b0b1267492a1a75c0a3da1ab8ebbaa5a0045db88b1e272a926ff64b7446f9081"
+              },
+              {
+                "path": "dist/workspace-shell.js",
+                "bytes": 10115,
+                "sha256": "592404ba402da7635671b3490cdb6fdf613403b5837a5c67b3cbdfa2bc41ae6b"
+              },
+              {
+                "path": "dist/workspace-source.js",
+                "bytes": 4325,
+                "sha256": "1fd2c4f2dc66211b5381ec16034590488f7e2cc3d1303b68ffb83cf11919b55a"
+              },
+              {
+                "path": "dist/workspace-theme.js",
+                "bytes": 7703,
+                "sha256": "315a5519d43e11893d1b58efd1ea7c6631773429bdf4b33ffd7c1525b89f7bd8"
+              },
+              {
+                "path": "dist/workspace.d.ts",
+                "bytes": 39890,
+                "sha256": "08bba8e79b2aa93cf4abf5040b2828fd4dcd43507ba2d33ef13506ae6c4c411a"
+              },
+              {
+                "path": "dist/workspace.js",
+                "bytes": 96102,
+                "sha256": "eb9c4b04331f230d1015b3cc810c8e25921447f591fc0cb6857540c3858fb788"
+              },
+              {
+                "path": "dist/zip.d.ts",
+                "bytes": 422,
+                "sha256": "0cd1483de3e27bad108c643fc2e71fcbb691266785b1d62cf363ff1574a3d347"
+              },
+              {
+                "path": "dist/zip.js",
+                "bytes": 4015,
+                "sha256": "8e90b8297593535501ba851cde2181e2932f69f99a06ebb00415f95750141f56"
+              }
+            ]
+          }
+        },
+        {
+          "name": "@openpresentation/cli",
+          "version": "0.1.0-preview.11",
+          "directory": "C:\\opf-work\\n034-current\\artifacts\\npm\\consumer\\node_modules\\@openpresentation\\cli",
+          "runtime": {
+            "sha256": "abf14304acf38b0059650a1dab4a11aa38b4c2a88e07685abab1350d37bfbe57",
+            "files": [
+              {
+                "path": "package.json",
+                "bytes": 1155,
+                "sha256": "44004f5c545f25cccadd0c671b8165ba435affacc03154ce86c6ebfcbe17dfd7"
+              },
+              {
+                "path": "dist/index.js",
+                "bytes": 360177,
+                "sha256": "b0f6bf44a5e940b3ee26c9c45fcb172603c6f073022f39d7271f360cfc829b97"
+              },
+              {
+                "path": "dist/index.js.map",
+                "bytes": 511880,
+                "sha256": "f717fc82f74ba49e728e3949f4333cab69b5455f8dc7877653cd5f7da814320a"
+              }
+            ]
+          }
+        },
+        {
+          "name": "@openpresentation/gallery",
+          "version": "0.33.0",
+          "directory": "C:\\opf-work\\n034-current\\artifacts\\npm\\consumer\\node_modules\\@openpresentation\\gallery",
+          "runtime": {
+            "sha256": "c73f51e345b929760a0cd6cd34e3280d6d06392f409d416ec8544468a35590c5",
+            "files": [
+              {
+                "path": "package.json",
+                "bytes": 1591,
+                "sha256": "31dd5a212191f6dc26531eaaf2ef91320fca0a74734f49dcc7199ead56e96e0f"
+              },
+              {
+                "path": "dist/icon-sets/icon-set.d.ts",
+                "bytes": 1218,
+                "sha256": "701a5665b8da753eda82ba593b8384015c9b6991e7a87e1c5fd8387645da93c4"
+              },
+              {
+                "path": "dist/icon-sets/lucide.js",
+                "bytes": 757487,
+                "sha256": "5d05b96f4f6b908a3a115e23b326ed54489a39dec627680e4c3b9884d0d5bbd1"
+              },
+              {
+                "path": "dist/icon-sets/tabler.js",
+                "bytes": 1700906,
+                "sha256": "f5ba61f1850d2044106fa3ca2c4a8f0efff98fb2805c8602411d795dd2060b3b"
+              },
+              {
+                "path": "dist/icon-sets.d.ts",
+                "bytes": 1036,
+                "sha256": "21f7c2185eabb1cd60282267fedc309fcc87e14739192ab31b28e72473013070"
+              },
+              {
+                "path": "dist/icon-sets.js",
+                "bytes": 645,
+                "sha256": "7cbf177a16dbbc5723313492c5cda76c8dc66d7e8ab02d22b211aa81d0ea1b6c"
+              },
+              {
+                "path": "dist/index.d.ts",
+                "bytes": 4208,
+                "sha256": "0351071f62b30d8db227f0e67bb6e3d1d8d5e72dae7429723455c7fc7c8dfce7"
+              },
+              {
+                "path": "dist/index.js",
+                "bytes": 345080,
+                "sha256": "a1a6f50e19e6a9c570ba331d5bb3322d507806658338b27b4b5f55ce21a28cd5"
+              },
+              {
+                "path": "dist/previews.d.ts",
+                "bytes": 1692,
+                "sha256": "178e24df4a902aa351368ea49d3e967e927993ffb2a02eff9d5558cede5a3364"
+              },
+              {
+                "path": "dist/previews.js",
+                "bytes": 190931,
+                "sha256": "af23f09b8b9cbaf119affe3a86727f0261cc6b6d551f8f928be57674eb6f6014"
+              }
+            ]
+          }
+        }
+      ],
+      "registryAcceptance": false
+    },
+    "suiteRepository": {
+      "directory": "C:\\opf-work\\n034-current",
+      "revision": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+      "dirty": false,
+      "files": [
+        {
+          "path": "scripts/native-acceptance/README.md",
+          "bytes": 12556,
+          "sha256": "0595bf0ebca0ad0cab4e5464e3e4e06f6d84c57cd8eec2ab5afbfc775132a1bc"
+        },
+        {
+          "path": "scripts/native-acceptance/WINDOWS.md",
+          "bytes": 16057,
+          "sha256": "dc463f8aead3fd23fd0abada43f6c23dcac50ec56c5e1efe82fae28ea40f2639"
+        },
+        {
+          "path": "scripts/native-acceptance/chart-data-contract.mjs",
+          "bytes": 6535,
+          "sha256": "b90e9c44eb949f1b999f74a393d02635310b727578f030da54842de99233d0e5"
+        },
+        {
+          "path": "scripts/native-acceptance/chart-modes.mjs",
+          "bytes": 9639,
+          "sha256": "5ab02e1cb46cc39edd2a33814f09fd5c187e155f7ba000775bd85f0c544cf89e"
+        },
+        {
+          "path": "scripts/native-acceptance/chart-modes.test.mjs",
+          "bytes": 13552,
+          "sha256": "632b6f1aef169ae2c519644601c9e626b530e4ab30734fe41b3ccf5e6004555a"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-list-edit.mjs",
+          "bytes": 8096,
+          "sha256": "52d9a4b1cb20c1d828fdab4d8a365b2849bf9e1dfd7a3e8cfb95c6d8bdc91a2a"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-list-edit.test.mjs",
+          "bytes": 4746,
+          "sha256": "4bdf09049cdb23e7655c9dec803d6595ac034675a384d5146470e445715fbf01"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-table-colors.mjs",
+          "bytes": 4871,
+          "sha256": "3cb42089dec2479851b739d13c206fd7e7c47cee3ce9e34cc3944e2216acb245"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-table-colors.test.mjs",
+          "bytes": 4121,
+          "sha256": "a02127adc3a441ac7251f6e8bb2f1258adbc837b86ac2cfcaf4456a1fa3e4afb"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-table-profile.mjs",
+          "bytes": 9585,
+          "sha256": "bc407f68c3867f144c981bf6b24a61379016ef4bad96957f0af35a8b3246dcac"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-tables.mjs",
+          "bytes": 1785,
+          "sha256": "9c69026d6021ee4c376a6346a09581c048e82b27551a7adfb766e5e503924ace"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-text-fonts.mjs",
+          "bytes": 11632,
+          "sha256": "af6e76296b1af62beebe9966a2a08f095c6bd583860db971af610f64343c7f4b"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-text-fonts.test.mjs",
+          "bytes": 14097,
+          "sha256": "8260b6e2ad1ec4b1f6d819d8cdf4f82095e3270acce28d2ed20fb32df47939ad"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-text.mjs",
+          "bytes": 19448,
+          "sha256": "b5f1828c98f8364abc7f06e39ee257844212f3f09f42c17991b54eff3a9077ee"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-text.test.mjs",
+          "bytes": 15104,
+          "sha256": "cdae59662b2592a29e490f9190584db29a1c838876d266cfcdd760acfe574e8d"
+        },
+        {
+          "path": "scripts/native-acceptance/dense-survey-contract.mjs",
+          "bytes": 22301,
+          "sha256": "d9f3d84e7ad84a3cf2986bf05b7498d0c0f44a437380c72ee915196982049110"
+        },
+        {
+          "path": "scripts/native-acceptance/dense-survey-contract.test.mjs",
+          "bytes": 25686,
+          "sha256": "06760c71798699d04077391b3344b4d8d5935523c3334fe99c6eb47b46d805fc"
+        },
+        {
+          "path": "scripts/native-acceptance/derive-reference-controller.mjs",
+          "bytes": 3292,
+          "sha256": "d2bf546bf4951f9fb8e48cd8972b5baa0b70fdc2f24e85ae8398a208978fd0b3"
+        },
+        {
+          "path": "scripts/native-acceptance/fixture-source.mjs",
+          "bytes": 4636,
+          "sha256": "a4be970a845941aa1268ede28efca5cb7c05a4ccc08e0eb011935080e1d72a21"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures.mjs",
+          "bytes": 4160,
+          "sha256": "c081379ba571a80b6ab3181b4956315ddf86ebffba4ced3d869ea71255d03568"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/PROVENANCE.md",
+          "bytes": 1737,
+          "sha256": "80de9ee120b76c66e70ceb71450b6d77f5d7579c93acbf5136af1ff6d27bb730"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/README.md",
+          "bytes": 2641,
+          "sha256": "df0a473974a025615dfdf196f2d9eb5e34997222dcc746d00d694b631acff942"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/actions/furniture-inherited.json",
+          "bytes": 323,
+          "sha256": "d27a96bea4513368205453999e9a2d53a50f27c029ad2d7b67dedfaaacc5fedd"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/actions/layout-title-auto.json",
+          "bytes": 153,
+          "sha256": "d3d06764f433a91c50ca5e08fa413e51e2412760d61989220a76d58e9997bfda"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/actions/list-description-native-edit.json",
+          "bytes": 154,
+          "sha256": "9557a7ae564d0e0928eb2d3beda71976c081f00c3aa1dea13ac4c15fc05692ff"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/chartex-fallback-main.json",
+          "bytes": 26248,
+          "sha256": "867c384ba2a1733e7bba738b8e2f797b8efbee0b3083a22bea391c6a32994b1e"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/dense-survey/.gitattributes",
+          "bytes": 8,
+          "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/dense-survey/action-plan.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/dense-survey/input.pptx",
+          "bytes": 123356,
+          "sha256": "dcbaec0f1889997af5f21ea67ad5aa10d8865eb99eb5149ce624e316a50730c4"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/dense-survey/preview.png",
+          "bytes": 80726,
+          "sha256": "40283c54d3590985aa3abe126b60b68dc757f4ddc187a93e21075c0ac6480554"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/dense-survey/receipt.json",
+          "bytes": 1913,
+          "sha256": "b4b2476e6a590e3fda535a1dbedca7f4574b48a7d2e163a6044c6acb2a274721"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/dense-survey/source.opf.json",
+          "bytes": 5522,
+          "sha256": "9661195f8e6b2153853741fbfed236f30cb5ec5ae731abde46830808459bfa90"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/feature-inputs.json",
+          "bytes": 3009,
+          "sha256": "13288d26829599b71df047598c12e80a80895424aad0bdd1beca18fa628d1cbf"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-catalog-timeline.opf.json",
+          "bytes": 4557,
+          "sha256": "bfc00820144f79b1728c0c140449ee9a511a40635cf01fbc6a861107149ed2a1"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-custom-roadmap.opf.json",
+          "bytes": 4769,
+          "sha256": "3761d7ac68e610a0f9f797a09248e2987e904b23e1cd8e3dc9344c1b39aceeac"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-dense-events.opf.json",
+          "bytes": 5522,
+          "sha256": "3670c406ecf7d0a174ad3a8fdd2aecd51fe00216b54934335219d23494d123b1"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-list.opf.json",
+          "bytes": 1883,
+          "sha256": "1246bdb50510191f927bb3750856beab9f3dcda74bdcaa58919525b79a213709"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-long-labels.opf.json",
+          "bytes": 5116,
+          "sha256": "6dbdf7d8f322ae9d4ccbfd5e65ddb7da4534d577269d222e5bf85e8b8ee61693"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-metrics.opf.json",
+          "bytes": 2505,
+          "sha256": "88bc624e75abe9f7ea2e8ffbc3b4338e308ca9eb2c0a226008fd013b3e11085a"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-quote.opf.json",
+          "bytes": 1542,
+          "sha256": "dd8dc4f105cc024149de1f901c09626a16754d92b78a1e5b1f4103d3970782ad"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-table.opf.json",
+          "bytes": 2370,
+          "sha256": "c298f61742f58f078b59126e0d278cde420d572513686af9273a5b991e807767"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/font-routes.json",
+          "bytes": 2086,
+          "sha256": "787f85f265095028cbcc368a462814995bd797637bf3c9a8b20655783c53c8bd"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/metrics-font-empty-frame/input.pptx",
+          "bytes": 107010,
+          "sha256": "9d68dd0820805d1462027091e33f94e21f516d329e91d95a0f6fe203944b2ecc"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/metrics-font-empty-frame/native-report.json.gz",
+          "bytes": 11480,
+          "sha256": "8d03c2085ae02bd153565c579054b3e33dc078698c3cfdca6d0b58faa7b3752b"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/metrics-font-empty-frame/receipt.json",
+          "bytes": 919,
+          "sha256": "8cc67b10f393d8956d897f4203c5920953374a6ba0728543d1ea2ce6bd2b7db3"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/wide.png",
+          "bytes": 469,
+          "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905"
+        },
+        {
+          "path": "scripts/native-acceptance/font-routes.mjs",
+          "bytes": 5789,
+          "sha256": "39e6ee6bf59a3094bfb314fb091d8fb6fb2bf9a1e9bbfded55dcb39ad2600036"
+        },
+        {
+          "path": "scripts/native-acceptance/font-routes.test.mjs",
+          "bytes": 9848,
+          "sha256": "94c88c1a3cf276d46deae197f701194bca1fb3116625513a26cd75872f3b64c7"
+        },
+        {
+          "path": "scripts/native-acceptance/fonts.mjs",
+          "bytes": 2898,
+          "sha256": "bdd27c9a39199f0ebc57326066783bf4f0bd18e3b1f0bb8255c25d8cac87864e"
+        },
+        {
+          "path": "scripts/native-acceptance/fonts.test.mjs",
+          "bytes": 2603,
+          "sha256": "ab6e76331ab12bdacc8ceb1e60bb12a6e5b407d697d228627a805c44c98f630f"
+        },
+        {
+          "path": "scripts/native-acceptance/generate.mjs",
+          "bytes": 8912,
+          "sha256": "f4c63a57e618bbdf65c1ee16637c8a30d91b559bee43a9f2f04e9a881d9c2029"
+        },
+        {
+          "path": "scripts/native-acceptance/generate.test.mjs",
+          "bytes": 10262,
+          "sha256": "36bdff1c728b3213a356609340d442f4abed12921bf240a448d24cc1758854be"
+        },
+        {
+          "path": "scripts/native-acceptance/identity.mjs",
+          "bytes": 3090,
+          "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+        },
+        {
+          "path": "scripts/native-acceptance/identity.test.mjs",
+          "bytes": 1224,
+          "sha256": "eeb7567191e1f0f459c773062c4b3a87a9c214670001f746c20ba15f4fcaf2c7"
+        },
+        {
+          "path": "scripts/native-acceptance/prepare.mjs",
+          "bytes": 5943,
+          "sha256": "b0f41cc5ea2124d0f2a6c91bb88bb39270214891db2141f8e0fd7e67fd6d5767"
+        },
+        {
+          "path": "scripts/native-acceptance/prepare.test.mjs",
+          "bytes": 1166,
+          "sha256": "b9bf628c04c702607ab6a5b8f338e08bbdfa4a117372e3e03739a1cc5c58a879"
+        },
+        {
+          "path": "scripts/native-acceptance/probe-fonts-windows.ps1",
+          "bytes": 536,
+          "sha256": "49855dd4a941a7d39804ce6b7254b98d3561dfdbbf3716e4e8ff4622a2a2284f"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification.test.mjs",
+          "bytes": 7467,
+          "sha256": "26680973cda1fffa082e332163e35e9b11e87b4813deb2f4522b92315df33ce5"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/README.md",
+          "bytes": 3132,
+          "sha256": "d114e5e99c65be9069f608184a16286c777cb4acfbf59ed7c3297cc3f82bac15"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/build.mjs",
+          "bytes": 5857,
+          "sha256": "814ad5d3ce7097fa366285dca6d70000d3f35f7d6fe0f92c12e12e740e2434bf"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/assets/alice.png",
+          "bytes": 1470,
+          "sha256": "ed8faea8df1beb24260e19aae41fe67a75296a93ef7d994ee3fa5bb56c442f7f"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/assets/context-photo.png",
+          "bytes": 28472,
+          "sha256": "e3b8cf31fb84f71cd43e6055b5755babc2ec0ebe4d31d687d42ad453f247fa73"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/assets/cover-image.png",
+          "bytes": 26536,
+          "sha256": "02dc00969668e206b9e11ff5775f8bb9f27f88ef54c45b3685ee07f58f55de81"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/diagram-connectors.opf.json",
+          "bytes": 612,
+          "sha256": "f6aa89aab704e020e829bdce4525cd5cfab99e6ce39b06d6665bcef608a6d5c3"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/footers.opf.json",
+          "bytes": 1283,
+          "sha256": "c46b58a09d037e5db5e93ca3865cd07060df6cb2b8487af4fcacd1a55a4d1e4a"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/layout-harvest.opf.json",
+          "bytes": 15007,
+          "sha256": "59f051cb02d89bbc95726b444dec008e24c134c5c2263dd3f6e7bff29e0c9756"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/smartart-arabic.opf.json",
+          "bytes": 1077,
+          "sha256": "f9ece76f6c2d0c223decf52e6f823371a5865c9444eb3a92def00051031e976d"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/smartart-japanese.opf.json",
+          "bytes": 900,
+          "sha256": "9d5348237ca23a7199dcae869932aed73430e96d1a3ac57c7261aba905a9224e"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/decks/smartart.opf.json",
+          "bytes": 4802,
+          "sha256": "a55533cf9ab892886c8ff0f859412d2a82158bb78bbf48b0a62eef7c680e6d6d"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/evaluate.mjs",
+          "bytes": 18036,
+          "sha256": "255adae69002480acb822736ea8a0c46e02bd3248fef3c322cc4e09717cac586"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/manifest.json",
+          "bytes": 29871,
+          "sha256": "68766692818cadb1de603da020b657e6ee99a3d2d6f57551912c882df11b58e8"
+        },
+        {
+          "path": "scripts/native-acceptance/qualification/run-powerpoint-windows.ps1",
+          "bytes": 14946,
+          "sha256": "ee4d2e362c80912b13abf5d4bf8e31494d06535f1b2f98c11a3e215e865694a5"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-archive.mjs",
+          "bytes": 21341,
+          "sha256": "94fa1b751f2840fe901c07d8ef41a5b10e92bd48fcb5d4af20d86f20a800588f"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-envelope.test.mjs",
+          "bytes": 10034,
+          "sha256": "0f472de05128288396e9ee373395c86e4c4bca653d44e6f8008f2e9cd2f75447"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-fixtures.mjs",
+          "bytes": 6332,
+          "sha256": "930ead1cee7ca404c6a896944be5aaeab05916d304247ad48667be13acae55b3"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-fixtures.test.mjs",
+          "bytes": 3885,
+          "sha256": "8f5cfd0407bf37bef3a8849dabc800c2fe7505184848c93634c0e063c762ea58"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-generate.mjs",
+          "bytes": 11228,
+          "sha256": "98bd46ae75df7e4b75c16babe8a2b89d3e72d7b12245726b5344af91eaf78f30"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-generate.test.mjs",
+          "bytes": 4115,
+          "sha256": "36c7db3c4b2010291b30f2c71b746f6f55c4cb31e7690bc654f3a498c55dfce3"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-profile.mjs",
+          "bytes": 44495,
+          "sha256": "3c5e10121b2bf5e3886d4a300616fac16be56baf82a63f52543095f203568097"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-profile.test.mjs",
+          "bytes": 9453,
+          "sha256": "02ceb52c772fcdc5082e33aa5004bb44a6853a603ee118eed9ceb943de4f8e75"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-worker-self-test.ps1",
+          "bytes": 16733,
+          "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-worker-source.test.mjs",
+          "bytes": 4462,
+          "sha256": "5a5abf4df8ad76f420fdac54aea1ebeaa7c20a9fa48d772945dccc2c5aae9415"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-chart-worker.ps1",
+          "bytes": 23783,
+          "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-runtime-routes.mjs",
+          "bytes": 3993,
+          "sha256": "9568f30aedbc6920861f9174d40f250566467b002dc1064b05bf23c1a7a94585"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-runtime-routes.test.mjs",
+          "bytes": 4621,
+          "sha256": "5cebd149cfeb6c0ec6ebf5a81886ce122e15bdcd0df402b482d919d4485504b0"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-witnesses/reference-native-axes.opf.json",
+          "bytes": 3111,
+          "sha256": "ec455bebf5e5460fcaac18d8247a4d22b67d02568914c8936a7a3b1d5eb44db4"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-witnesses/reference-native-lines.opf.json",
+          "bytes": 2418,
+          "sha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e"
+        },
+        {
+          "path": "scripts/native-acceptance/reference-witnesses/reference-overlays-markers.opf.json",
+          "bytes": 2464,
+          "sha256": "2c9855331e99bd5bebfce326f056e9c990e1b7d55f41f7a772ec850af97950a1"
+        },
+        {
+          "path": "scripts/native-acceptance/roboto-mono-fonts.mjs",
+          "bytes": 4541,
+          "sha256": "9a1293ccf8590f5775e4680db1628204532ef77eaaa61952401621054c743b79"
+        },
+        {
+          "path": "scripts/native-acceptance/roboto-mono-fonts.test.mjs",
+          "bytes": 3097,
+          "sha256": "eb0117109c372031fa736b6ff6eb7ef5b4f259c0949c0c7455204bebbe98a61e"
+        },
+        {
+          "path": "scripts/native-acceptance/run-dense-survey-self-test.ps1",
+          "bytes": 5809,
+          "sha256": "32cf9109342c88bc4b3e5009c87a0993f70590ab88f974436de3c2d773a8379f"
+        },
+        {
+          "path": "scripts/native-acceptance/run-dense-survey-windows.ps1",
+          "bytes": 10716,
+          "sha256": "230081d7d371499912d02b89cb6cb82b89f04e4b598aaaaf947b5eca2928e44a"
+        },
+        {
+          "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+          "bytes": 11352,
+          "sha256": "26f964e141cebe1f63ff39c18b6bda79364e134fa6436973bb2b5a603b21110d"
+        },
+        {
+          "path": "scripts/native-acceptance/run-seven-chart-profile.ps1",
+          "bytes": 10729,
+          "sha256": "060cafa0e782f7aaaaafb9d395bbfa51598f89c2269986a56c17e3e0ce5e3878"
+        },
+        {
+          "path": "scripts/native-acceptance/run-table-profile.ps1",
+          "bytes": 7147,
+          "sha256": "fba11c28992f4ddf51c1b5f60106d49071806ac15d0fb17f13432457e505ac34"
+        },
+        {
+          "path": "scripts/native-acceptance/run-table-windows.ps1",
+          "bytes": 7725,
+          "sha256": "78b5231d9152d597794b758f4ce79792dac3dba672ba0f16c616fd97968c6c6e"
+        },
+        {
+          "path": "scripts/native-acceptance/run-windows-self-test.ps1",
+          "bytes": 11521,
+          "sha256": "720f9df917f97a851ce281d069ecf90e30dc486add7dbb17ec8873677b41f800"
+        },
+        {
+          "path": "scripts/native-acceptance/run-windows.ps1",
+          "bytes": 15359,
+          "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+        },
+        {
+          "path": "scripts/native-acceptance/run-windows.test.mjs",
+          "bytes": 2363,
+          "sha256": "4174534d73cc8ff6dd2fa20949c87124c8ec91407f3ea35ca996cf41441a35f3"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-fonts-windows-self-test.ps1",
+          "bytes": 8294,
+          "sha256": "172097a5e77239a08baba0a4375eba7756b3e882b24409f8f9488c04f6b202ef"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-fonts-windows.ps1",
+          "bytes": 17135,
+          "sha256": "eea52129b8aee679506bac4268360472eff3e213f19026955c0faa0bacc14069"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-fonts-windows.test.mjs",
+          "bytes": 3055,
+          "sha256": "6aea5ebe6824e85cce755936a9f3427124caf22232599db1cd895339de6f1005"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-roboto-mono-windows-self-test.ps1",
+          "bytes": 9584,
+          "sha256": "1c0f393bf1512b63ce24c0ca83081bde34ee43dc610df706219197cfa001b749"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-roboto-mono-windows.ps1",
+          "bytes": 18221,
+          "sha256": "b1dfba73768c11823dc0400597f38dc10b235bcde1c1183843c2dfb38343052a"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-roboto-mono-windows.test.mjs",
+          "bytes": 2573,
+          "sha256": "a36f36978514df85ad8478b3b966077d791e1c862301a040ba0dca955fbe6285"
+        },
+        {
+          "path": "scripts/native-acceptance/seven-chart-archive.mjs",
+          "bytes": 21090,
+          "sha256": "bf931ee425adcb6a67b1af17f5587c4316b48f1c64e8c2cfafeb10a50a534e61"
+        },
+        {
+          "path": "scripts/native-acceptance/seven-chart-profile.mjs",
+          "bytes": 32665,
+          "sha256": "f9a6a68b0d1f388857025bf0959d373f103d50de75f3a6109a874becf44715e0"
+        },
+        {
+          "path": "scripts/native-acceptance/seven-chart-profile.test.mjs",
+          "bytes": 17552,
+          "sha256": "a1844753c603897f971ad80ad8fe195a5244e45e9677c4b348058d1ac279d1fd"
+        },
+        {
+          "path": "scripts/native-acceptance/seven-chart-worker-self-test.ps1",
+          "bytes": 15017,
+          "sha256": "35b1b4e69d21181144ad0cfed5f4050488929717840fff514894f97751d8aa0b"
+        },
+        {
+          "path": "scripts/native-acceptance/seven-chart-worker.ps1",
+          "bytes": 21756,
+          "sha256": "7735dcd6c9c1f3ff6d0a454319697eda040f66ec515dde96e705a1ed65571af4"
+        },
+        {
+          "path": "scripts/native-acceptance/table-colors.mjs",
+          "bytes": 3126,
+          "sha256": "e6264ec2f507a25ca241d0e24c2d6e892815d78a36e6b3f970be9ec9c12dd8e2"
+        },
+        {
+          "path": "scripts/native-acceptance/table-profile.mjs",
+          "bytes": 13609,
+          "sha256": "356a2d004eaf9d21a47135f911eb446b488cb5575d156759f827c8274867913c"
+        },
+        {
+          "path": "scripts/native-acceptance/table-profile.test.mjs",
+          "bytes": 23366,
+          "sha256": "c9550792ec2dd4f4fa7ea50754a9fc084ced8cc98ddacaabe3459258b3470d80"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/reference-chart-synthetic.mjs",
+          "bytes": 10395,
+          "sha256": "4a8d0e66aaeb768256cde43b93e77cde76146d6d4e01e30fd8effe02ec1008b2"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/reference-chart/native-process-check.ps1",
+          "bytes": 2333,
+          "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/reference-chart/native-process.ps1",
+          "bytes": 2341,
+          "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/reference-runtime-routes.mjs",
+          "bytes": 3170,
+          "sha256": "0bb7fc773c87db19ad804876fb814f0edb2dc1d1003cbc25e780dc5a6b28ddee"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/seven-chart/chart-all-seven.pptx",
+          "bytes": 189742,
+          "sha256": "d14f8a9489d4a4f3a99f0a6ff23cd0e5cc0d847d2389a0e96fb3886b5a05649b"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/seven-chart/chart-mode-all-seven-auto.pptx",
+          "bytes": 189797,
+          "sha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/seven-chart/chart-mode-all-seven-fallback.pptx",
+          "bytes": 171762,
+          "sha256": "b8d9448f8b8a09aca2d5cc3d19432b1c29d875bd227cd617879467fca9d0afde"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/seven-chart/chart-mode-all-seven-native.pptx",
+          "bytes": 189797,
+          "sha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/seven-chart/manifest.json",
+          "bytes": 9647,
+          "sha256": "712e6dc963dfd1d4709da326599501c42b71b8e6a01ef14d9b2e5d9de80bf476"
+        },
+        {
+          "path": "scripts/native-acceptance/test-fixtures/seven-chart/whole-seven.opf.json",
+          "bytes": 3682,
+          "sha256": "d5132b17c5ddece1445c800459de876ff3dd4ff57b1db6d786bff6adb8efc630"
+        },
+        {
+          "path": "scripts/native-acceptance/windows-powershell-env.mjs",
+          "bytes": 495,
+          "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+        },
+        {
+          "path": "packages/pptx/test/fixtures/chartex-fallback-main.json",
+          "bytes": 62257,
+          "sha256": "94cfa51624b4a1bf01e4f7ad84f7ed1ffc61f2f3b245ee49a5ec8088cd6b0105"
+        }
+      ]
+    },
+    "workerRepository": {
+      "directory": "C:\\opf-work\\n034-current\\packages\\pptx",
+      "revision": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+      "dirty": false,
+      "files": [
+        {
+          "path": "test/native-process.ps1",
+          "bytes": 2341,
+          "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+        },
+        {
+          "path": "test/native-process-check.ps1",
+          "bytes": 2333,
+          "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+        },
+        {
+          "path": "test/native-furniture-control.ps1",
+          "bytes": 71285,
+          "sha256": "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+        },
+        {
+          "path": "test/native-furniture-harness-check.ps1",
+          "bytes": 45855,
+          "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+        },
+        {
+          "path": "test/native-picture-control.ps1",
+          "bytes": 21632,
+          "sha256": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a"
+        },
+        {
+          "path": "test/native-picture-harness-check.ps1",
+          "bytes": 2726,
+          "sha256": "0b88466e9ccd6bfb6a62f7f9fa52b987a11743047d495735fc2f5c256ed503d1"
+        },
+        {
+          "path": "test/native-table-colors.ps1",
+          "bytes": 6010,
+          "sha256": "5fa908030d5ccd60152b3429a11aed62dccff6a1556855b2f1db83bf91c7a3c2"
+        }
+      ]
+    },
+    "node": "v24.20.0",
+    "nativeAcceptance": false,
+    "registryAcceptance": false
+  },
+  "sourceSha256": "ff2214eda3cb406ffe0ea1ad5bfe004819e294b34135f3c91b982fb1871adc7c",
+  "pptxSha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb",
+  "expected": [
+    {
+      "fill": "#F8FAFC",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#000000"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#000000"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#0F172A",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#777777",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#000000"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#000000"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#767676",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#000000"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#000000"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#FFFFFF80",
+      "explicit": null,
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#000000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#000000"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fill": "#F8FAFC",
+      "explicit": "#FFFFFF",
+      "cells": [
+        {
+          "row": 1,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Header",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 1,
+          "column": 2,
+          "runs": [
+            {
+              "text": "Inherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "Explicit",
+              "color": "#FF0000"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 1,
+          "runs": [
+            {
+              "text": "Body",
+              "color": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "column": 2,
+          "runs": [
+            {
+              "text": "BodyInherited",
+              "color": "#FFFFFF"
+            },
+            {
+              "text": "BodyExplicit",
+              "color": "#FF0000"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

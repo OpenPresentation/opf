@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "sourceHead": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "profilePrepared": true,
+  "OfficeCalls": 0,
+  "nativeAcceptance": false,
+  "records": [
+    {
+      "path": "raw/plan/proposed-commands.ps1.txt",
+      "original": "C:/opf-work/table069-plan/proposed-commands.ps1.txt",
+      "bytes": 2565,
+      "sha256": "bbbe28664a50638d922112a51cdf225d2619ebf8faa99314f1a2b9536429c17d"
+    },
+    {
+      "path": "raw/plan/source-identities.json",
+      "original": "C:/opf-work/table069-plan/source-identities.json",
+      "bytes": 2865,
+      "sha256": "0a1aa7d5f874d7751ecb8e10c4afdde7bf42a7ed33b5fa004804c536de025b23"
+    },
+    {
+      "path": "raw/plan/expectation-comparison.json",
+      "original": "C:/opf-work/table069-plan/expectation-comparison.json",
+      "bytes": 1064,
+      "sha256": "6d819fd8ffa5825192c8c0c57a2675d294e9214e9534a3b2eb82e0137a0fea73"
+    },
+    {
+      "path": "raw/current/suite.json",
+      "original": "C:/opf-work/n034-current-suite01/suite.json",
+      "bytes": 579228,
+      "sha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29"
+    },
+    {
+      "path": "raw/current/generation.json",
+      "original": "C:/opf-work/n034-current-suite01/table-colors/generation.json",
+      "bytes": 194989,
+      "sha256": "aa34f6db0374857e1307665be4461b7bd0549a32243915d6556444b34cb32ca7"
+    },
+    {
+      "path": "raw/current/source.opf.json",
+      "original": "C:/opf-work/n034-current-suite01/sources/table-colors.opf.json",
+      "bytes": 5941,
+      "sha256": "e5706ff7f2a493da1c22ab90e672904442972e579dbe2203d042ad688ef3e6ba"
+    },
+    {
+      "path": "raw/current/table-colors.pptx",
+      "original": "C:/opf-work/n034-current-suite01/table-colors/table-colors.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "raw/historical/generation.json",
+      "original": "C:/opf-work/n034-table-profile02/table-colors/generation.json",
+      "bytes": 183107,
+      "sha256": "80be00fcfd823c561fd2f9b2cff67a09498c0e9e65ef4413889616ab3f52c4b2"
+    },
+    {
+      "path": "raw/historical/failure.json",
+      "original": "C:/opf-work/n034-table-profile02/table-colors/failure.json",
+      "bytes": 548628,
+      "sha256": "23870dd14bc726bb16bf5ef1f9a6d73c6eab0eca0657c88ea23959bf72f9d4e7"
+    },
+    {
+      "path": "raw/historical/envelope.json",
+      "original": "C:/opf-work/n034-table-profile02/table-profile.json",
+      "bytes": 180729,
+      "sha256": "69d4e170a6c017dd28abbe25a1b61769d68d335426dcd3c6efd399842d785246"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/table-profile.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\table-profile.mjs",
+      "bytes": 13609,
+      "sha256": "356a2d004eaf9d21a47135f911eb446b488cb5575d156759f827c8274867913c"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/run-table-profile.ps1",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\run-table-profile.ps1",
+      "bytes": 7147,
+      "sha256": "fba11c28992f4ddf51c1b5f60106d49071806ac15d0fb17f13432457e505ac34"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/compare-table-profile.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\compare-table-profile.mjs",
+      "bytes": 9585,
+      "sha256": "bc407f68c3867f144c981bf6b24a61379016ef4bad96957f0af35a8b3246dcac"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/compare-table-colors.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\compare-table-colors.mjs",
+      "bytes": 4871,
+      "sha256": "3cb42089dec2479851b739d13c206fd7e7c47cee3ce9e34cc3944e2216acb245"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/identity.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\identity.mjs",
+      "bytes": 3090,
+      "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/table-colors.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\table-colors.mjs",
+      "bytes": 3126,
+      "sha256": "e6264ec2f507a25ca241d0e24c2d6e892815d78a36e6b3f970be9ec9c12dd8e2"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/generate.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\generate.mjs",
+      "bytes": 8912,
+      "sha256": "f4c63a57e618bbdf65c1ee16637c8a30d91b559bee43a9f2f04e9a881d9c2029"
+    },
+    {
+      "path": "raw/source/packages/pptx/test/native-table-colors-v2.ps1",
+      "original": "C:\\opf-work\\n034-current\\packages\\pptx\\test\\native-table-colors-v2.ps1",
+      "bytes": 21441,
+      "sha256": "89b66bfe6bdac36b93872ee05e2e888b19ae7ff3184c75cebc72227ad032a7cd"
+    },
+    {
+      "path": "raw/controls/packages/pptx/test/native-table-color-contract.mjs",
+      "original": "C:\\opf-work\\n034-current\\packages\\pptx\\test\\native-table-color-contract.mjs",
+      "bytes": 2634,
+      "sha256": "056975039e42e2cf24dda3074f10533c48854c9dda81c09dfb238d639481b507"
+    },
+    {
+      "path": "raw/controls/packages/pptx/test/styled-table.mjs",
+      "original": "C:\\opf-work\\n034-current\\packages\\pptx\\test\\styled-table.mjs",
+      "bytes": 8368,
+      "sha256": "8e1bfb17918e45bbc76cb19eaddd80f819be7df0cf304b34bdf605487f23d86d"
+    },
+    {
+      "path": "raw/controls/packages/pptx/test/native-table-colors-v2-check.ps1",
+      "original": "C:\\opf-work\\n034-current\\packages\\pptx\\test\\native-table-colors-v2-check.ps1",
+      "bytes": 19026,
+      "sha256": "adc83317cc99d68664f8d7bda400e4fe92bbde2dd0310fc369d4d2c6cb3f3106"
+    },
+    {
+      "path": "raw/controls/scripts/native-acceptance/table-profile.test.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\table-profile.test.mjs",
+      "bytes": 23366,
+      "sha256": "c9550792ec2dd4f4fa7ea50754a9fc084ced8cc98ddacaabe3459258b3470d80"
+    },
+    {
+      "path": "raw/controls/scripts/native-acceptance/compare-table-colors.test.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\compare-table-colors.test.mjs",
+      "bytes": 4121,
+      "sha256": "a02127adc3a441ac7251f6e8bb2f1258adbc837b86ac2cfcaf4456a1fa3e4afb"
+    },
+    {
+      "path": "raw/controls/packages/pptx/test/native-table-colors-v2.mjs",
+      "original": "C:\\opf-work\\n034-current\\packages\\pptx\\test\\native-table-colors-v2.mjs",
+      "bytes": 5268,
+      "sha256": "8daa86665bfe9dcc87c52936f87388f680db5b02ecdff31d5864c1e4cb3221b4"
+    },
+    {
+      "path": "raw/controls/packages/pptx/test/helpers/scheme-colors.mjs",
+      "original": "C:\\opf-work\\n034-current\\packages\\pptx\\test\\helpers\\scheme-colors.mjs",
+      "bytes": 3808,
+      "sha256": "bd74c9632edef4f0aca574e0cd6fdbbb5dfcccd8c37742b3c38bd3b873a37fce"
+    },
+    {
+      "path": "raw/preparation/driver.mjs",
+      "original": "C:/opf-work/n034-current-table-validate01/driver.mjs",
+      "bytes": 5246,
+      "sha256": "ffb042ce5729e50754c2645109708dfc8746ce5e06361d76a935de166614a2dc"
+    },
+    {
+      "path": "raw/preparation/postflight.json",
+      "original": "C:/opf-work/n034-current-table-validate01/postflight.json",
+      "bytes": 309,
+      "sha256": "c7be69b6279810f44d47b393ec678cf9d8339eb2cebc52df73bb898eba83c7a4"
+    },
+    {
+      "path": "raw/preparation/preflight.json",
+      "original": "C:/opf-work/n034-current-table-validate01/preflight.json",
+      "bytes": 584,
+      "sha256": "31548117c279784b09153cf0485da1e683c19ed290e73bf796446e90e8aeb738"
+    },
+    {
+      "path": "raw/preparation/prepare.exit.json",
+      "original": "C:/opf-work/n034-current-table-validate01/prepare.exit.json",
+      "bytes": 730,
+      "sha256": "aaf88665aeb93fae22a97c073a641da84fa6929555ef5fc42000ac10a24c7317"
+    },
+    {
+      "path": "raw/preparation/prepare.stderr.log",
+      "original": "C:/opf-work/n034-current-table-validate01/prepare.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/preparation/prepare.stdout.log",
+      "original": "C:/opf-work/n034-current-table-validate01/prepare.stdout.log",
+      "bytes": 243,
+      "sha256": "0d805b7557f28b21878c3fc18d196ab8720821bb659fa00257611325ad400492"
+    },
+    {
+      "path": "raw/preparation/prepared-binding.json",
+      "original": "C:/opf-work/n034-current-table-validate01/prepared-binding.json",
+      "bytes": 1596,
+      "sha256": "fddff1da7fa52be442f8c2c4f33734d40438b9fc991c6bcef2d3289a6de88873"
+    },
+    {
+      "path": "raw/preparation/prepared-envelope.json",
+      "original": "C:/opf-work/n034-current-table-validate01/prepared-envelope.json",
+      "bytes": 192610,
+      "sha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751"
+    },
+    {
+      "path": "raw/preparation/validate.exit.json",
+      "original": "C:/opf-work/n034-current-table-validate01/validate.exit.json",
+      "bytes": 824,
+      "sha256": "4ee2fdf3cd876a211172c8a332882c334bfa0b3259618c3afccc9125d2778aa0"
+    },
+    {
+      "path": "raw/preparation/validate.stderr.log",
+      "original": "C:/opf-work/n034-current-table-validate01/validate.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/preparation/validate.stdout.log",
+      "original": "C:/opf-work/n034-current-table-validate01/validate.stdout.log",
+      "bytes": 468,
+      "sha256": "5d7e8fb1bfb081c5650577a3300371cae3e25c04cf26b401185568c1a958d015"
+    },
+    {
+      "path": "raw/profile/table-profile.json",
+      "original": "C:/opf-work/n034-current-table-profile01/table-profile.json",
+      "bytes": 192610,
+      "sha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751"
+    },
+    {
+      "path": "raw/profile/table-colors/table-colors.pptx",
+      "original": "C:/opf-work/n034-current-table-profile01/table-colors/table-colors.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "raw/profile/table-colors/generation.json",
+      "original": "C:/opf-work/n034-current-table-profile01/table-colors/generation.json",
+      "bytes": 194989,
+      "sha256": "aa34f6db0374857e1307665be4461b7bd0549a32243915d6556444b34cb32ca7"
+    },
+    {
+      "path": "raw/profile/inputs/table-colors.opf.json",
+      "original": "C:/opf-work/n034-current-table-profile01/inputs/table-colors.opf.json",
+      "bytes": 5941,
+      "sha256": "e5706ff7f2a493da1c22ab90e672904442972e579dbe2203d042ad688ef3e6ba"
+    },
+    {
+      "path": "raw/profile/inputs/suite.json",
+      "original": "C:/opf-work/n034-current-table-profile01/inputs/suite.json",
+      "bytes": 579228,
+      "sha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29"
+    },
+    {
+      "path": "raw/profile/inputs/native-table-colors-v2.ps1",
+      "original": "C:/opf-work/n034-current-table-profile01/inputs/native-table-colors-v2.ps1",
+      "bytes": 21441,
+      "sha256": "89b66bfe6bdac36b93872ee05e2e888b19ae7ff3184c75cebc72227ad032a7cd"
+    },
+    {
+      "path": "raw/profile/inputs/native-process.ps1",
+      "original": "C:/opf-work/n034-current-table-profile01/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "raw/preparation/windows-powershell-env.mjs",
+      "original": "C:/opf-work/n034-current/scripts/native-acceptance/windows-powershell-env.mjs",
+      "bytes": 495,
+      "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+    }
+  ],
+  "ValidateOnlyExit": 0,
+  "envelopeSha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751"
+}

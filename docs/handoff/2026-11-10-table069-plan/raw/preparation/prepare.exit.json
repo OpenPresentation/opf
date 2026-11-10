@@ -1,0 +1,25 @@
+{
+  "executable": "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+  "args": [
+    "C:/opf-work/n034-current/scripts/native-acceptance/table-profile.mjs",
+    "prepare",
+    "--suite",
+    "C:/opf-work/n034-current-suite01",
+    "--producer",
+    "C:/opf-work/n034-current",
+    "--legacy-worker",
+    "C:/opf-work/n034-current/packages/pptx",
+    "--consumer",
+    "C:/opf-work/n034-current/artifacts/npm/consumer",
+    "--output",
+    "C:/opf-work/n034-current-table-profile01"
+  ],
+  "timeoutMs": 90000,
+  "startedAt": "2026-11-10T07:10:30.789Z",
+  "endedAt": "2026-11-10T07:10:31.377Z",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdoutBytes": 243,
+  "stderrBytes": 0
+}

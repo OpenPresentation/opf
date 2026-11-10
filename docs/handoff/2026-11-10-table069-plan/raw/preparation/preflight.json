@@ -1,0 +1,15 @@
+{
+  "observedAt": "2026-11-10T07:10:30.729Z",
+  "sourceHead": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "sourceClean": true,
+  "outputInitiallyAbsent": true,
+  "envHelper": {
+    "path": "C:/opf-work/n034-current/scripts/native-acceptance/windows-powershell-env.mjs",
+    "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+  },
+  "node": {
+    "path": "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+    "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5"
+  },
+  "OfficeCalls": 0
+}

@@ -1,0 +1,4 @@
+Actual first verifier invocation exited 1 before reading artifacts:
+SyntaxError: Invalid regular expression: /<p:clrMap\s([^>]+)\/?\>/u: Invalid escape
+Node.js v24.20.0
+This is a tool-output transcription, not an original stderr transport. Original verifier source is retained beside this note. Only its invalid Unicode-regex escaped closing angle bracket was corrected. No product/Office/preparation operation ran in this attempt.

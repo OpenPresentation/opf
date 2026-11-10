@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFile} from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {inflateRawSync} from 'node:zlib';
+const root=path.dirname(fileURLToPath(import.meta.url));
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const json=b=>JSON.parse(b.toString('utf8').replace(/^\uFEFF/u,''));
+const raw=f=>readFile(path.join(root,'raw',f));
+const manifest=json(await readFile(path.join(root,'manifest.json')));
+assert.equal(manifest.sourceHead,'0699820e2f562d94c48b8c44a2d9b72387c0cecb');
+assert.equal(manifest.records.length,44);assert.equal(manifest.nativeAcceptance,false);assert.equal(manifest.profilePrepared,true);assert.equal(manifest.OfficeCalls,0);
+for(const record of manifest.records){assert.ok(record.path.startsWith('raw/')&&!record.path.includes('..'));const bytes=await readFile(path.join(root,record.path));assert.equal(bytes.length,record.bytes,record.path);assert.equal(sha(bytes),record.sha256,record.path);}
+const [suite,generation,oldGeneration,oldFailure,oldEnvelope,identity,comparison]=await Promise.all(['current/suite.json','current/generation.json','historical/generation.json','historical/failure.json','historical/envelope.json','plan/source-identities.json','plan/expectation-comparison.json'].map(async f=>json(await raw(f))));
+const input=await raw('current/table-colors.pptx'),source=json(await raw('current/source.opf.json'));
+assert.equal(sha(input),'485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb');
+assert.equal(input.length,39289);assert.equal(sha(await raw('current/suite.json')),'34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29');
+assert.equal(generation.pptxSha256,sha(input));assert.equal(oldGeneration.pptxSha256,sha(input));
+assert.equal(generation.sourceSha256,oldGeneration.sourceSha256);assert.equal(generation.sourceSha256,sha(JSON.stringify(source)));
+assert.deepEqual(generation.runtime,suite.provenance);assert.equal(source.slides.length,6);assert.equal(generation.expected.length,6);
+assert.equal(oldFailure.cleanupConfirmed,false);assert.equal(oldFailure.officeOperationsStopped,true);assert.equal(oldFailure.error,'Native table character color differs');
+assert.equal(oldEnvelope.controller.revision,'f9897413098c01d14c0c38e813790bd6897365ea');
+const diffs=[];
+function compare(a,b,where){if(JSON.stringify(a)===JSON.stringify(b))return;if(a&&b&&typeof a==='object'&&typeof b==='object'){assert.deepEqual(Object.keys(a),Object.keys(b));for(const key of Object.keys(a))compare(a[key],b[key],where+'.'+key);}else diffs.push({path:where,before:a,after:b});}
+compare(oldGeneration.expected,generation.expected,'expected');
+assert.deepEqual(diffs,[{path:'expected.3.cells.0.runs.0.color',before:'#FFFFFF',after:'#000000'},{path:'expected.3.cells.1.runs.0.color',before:'#FFFFFF',after:'#000000'}]);assert.deepEqual(comparison.expectationDiffs,diffs);
+assert.equal(identity.sourceHead,manifest.sourceHead);assert.equal(identity.sourceStatus,'');assert.equal(identity.files.length,8);
+for(const record of identity.files){const bytes=await raw('source/'+record.path);assert.equal(bytes.length,record.bytes);assert.equal(sha(bytes),record.sha256);}
+function unzip(bytes){let end=bytes.length-22;while(end>=Math.max(0,bytes.length-65557)&&bytes.readUInt32LE(end)!==0x06054b50)end--;assert.ok(end>=0);const count=bytes.readUInt16LE(end+10),offset=bytes.readUInt32LE(end+16),parts=new Map();assert.ok(count<4096);let at=offset;for(let index=0;index<count;index++){assert.equal(bytes.readUInt32LE(at),0x02014b50);const method=bytes.readUInt16LE(at+10),size=bytes.readUInt32LE(at+20),length=bytes.readUInt32LE(at+24),n=bytes.readUInt16LE(at+28),extra=bytes.readUInt16LE(at+30),comment=bytes.readUInt16LE(at+32),local=bytes.readUInt32LE(at+42);const name=bytes.subarray(at+46,at+46+n).toString('utf8');assert.ok(!parts.has(name));assert.equal(bytes.readUInt32LE(local),0x04034b50);const start=local+30+bytes.readUInt16LE(local+26)+bytes.readUInt16LE(local+28),compressed=bytes.subarray(start,start+size);const decoded=method===0?compressed:method===8?inflateRawSync(compressed):assert.fail('unsupported method');assert.equal(decoded.length,length);parts.set(name,decoded);at+=46+n+extra+comment;}return parts;}
+const parts=unzip(input),text=p=>{assert.ok(parts.has(p),p);return parts.get(p).toString('utf8');};
+const theme=text('ppt/theme/theme1.xml'),master=text('ppt/slideMasters/slideMaster1.xml');
+const attr=(s,k)=>new RegExp('(?:^|\\s)'+k+'="([^"]*)"','u').exec(s)?.[1];
+const map=/<p:clrMap\s([^>]+)\/?>/u.exec(master)?.[1];assert.ok(map);
+const colors={};for(const match of theme.matchAll(/<a:(dk1|lt1|dk2|lt2|accent[1-6]|hlink|folHlink)>([\s\S]*?)<\/a:\1>/gu))colors[match[1]]=attr(match[2],'val')?.match(/^[a-f0-9]{6}$/iu)?.[0]??attr(match[2],'lastClr');
+const unescape=s=>s.replace(/&lt;/gu,'<').replace(/&gt;/gu,'>').replace(/&quot;/gu,'"').replace(/&apos;/gu,"'").replace(/&amp;/gu,'&');
+const actual=[];let cellCount=0,runCount=0;
+for(let index=0;index<6;index++){const xml=text('ppt/slides/slide'+(index+1)+'.xml');assert.equal([...xml.matchAll(/<a:tbl>/gu)].length,1);const cells=[...xml.matchAll(/<a:tc>([\s\S]*?)<\/a:tc>/gu)];assert.equal(cells.length,4);for(const [j,cell] of cells.entries()){cellCount++;const runs=[...cell[1].matchAll(/<a:r>([\s\S]*?)<\/a:r>/gu)];const wanted=generation.expected[index].cells[j];assert.equal(runs.length,wanted.runs.length);for(const [k,run] of runs.entries()){runCount++;const style=/<a:rPr\b[^>]*>([\s\S]*?)<\/a:rPr>/u.exec(run[1])?.[1];assert.ok(style);const fill=/<a:solidFill>([\s\S]*?)<\/a:solidFill>/u.exec(style)?.[1];assert.ok(fill);const literal=/<a:srgbClr\b([^>]+)>?/u.exec(fill),scheme=/<a:schemeClr\b([^>]+)>?/u.exec(fill);const token=literal?attr(literal[1],'val'):attr(scheme?.[1]??'','val');const hex=literal?token:colors[attr(map,token)??token];assert.match(hex??'',/^[a-f0-9]{6}$/iu);const value=unescape(/<a:t>([\s\S]*?)<\/a:t>/u.exec(run[1])?.[1]??'');const color='#'+hex.toUpperCase();assert.equal(value,wanted.runs[k].text);assert.equal(color,wanted.runs[k].color,JSON.stringify({slide:index+1,cell:j+1,run:k+1}));actual.push({slide:index+1,cell:j+1,run:k+1,text:value,color,token});}}}
+assert.equal(cellCount,24);assert.equal(runCount,36);
+const profile=json(await raw('profile/table-profile.json')),binding=json(await raw('preparation/prepared-binding.json')),prepareExit=json(await raw('preparation/prepare.exit.json')),validateExit=json(await raw('preparation/validate.exit.json')),postflight=json(await raw('preparation/postflight.json'));
+assert.equal(sha(await raw('profile/table-profile.json')),manifest.envelopeSha256);assert.equal(binding.sha256,manifest.envelopeSha256);assert.equal(profile.controller.revision,manifest.sourceHead);assert.equal(profile.controller.dirty,false);assert.equal(profile.suiteSha256,sha(await raw('current/suite.json')));assert.equal(profile.selectedCase.archiveSha256,sha(input));assert.equal(profile.nativeAcceptance,false);assert.equal(profile.registryAcceptance,false);assert.equal(profile.snapshots.length,6);for(const snapshot of profile.snapshots){const bytes=await raw('profile/'+snapshot.path);assert.equal(bytes.length,snapshot.bytes);assert.equal(sha(bytes),snapshot.sha256);}assert.equal(prepareExit.status,0);assert.equal(validateExit.status,0);assert.equal(validateExit.timeoutMs,90000);assert.ok(validateExit.args.includes('-ValidateOnly'));assert.ok(!validateExit.args.includes('-RunOffice'));assert.equal(postflight.OfficeCalls,0);assert.equal(postflight.sourceHead,manifest.sourceHead);assert.equal(postflight.sourceStatus,'');assert.equal(postflight.RunOfficeInvoked,false);assert.equal(sha(await raw('preparation/windows-powershell-env.mjs')),'80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6');
+const contract=(await raw('source/scripts/native-acceptance/table-profile.mjs')).toString('utf8');assert.ok(contract.includes('assert.deepEqual(generation.expected, expected.expected'));assert.ok(contract.includes('timeoutSecondsMax: 60'));
+const refusal=(await raw('controls/scripts/native-acceptance/table-profile.test.mjs')).toString('utf8');assert.ok(refusal.includes('historical preferred-white native expectation is refused'));
+const worker=(await raw('source/packages/pptx/test/native-table-colors-v2.ps1')).toString('utf8');assert.ok(worker.indexOf('Write-TableCharacterProbe $probe')<worker.indexOf("Assert-TableCondition $probe.rgbValid"));
+console.log(JSON.stringify({passed:true,rawFiles:manifest.records.length,rawBytes:manifest.records.reduce((s,f)=>s+f.bytes,0),source:manifest.sourceHead,suiteSha256:sha(await raw('current/suite.json')),inputSha256:sha(input),archiveParts:parts.size,slides:6,cells:cellCount,runs:runCount,expectedOnlyDiffs:diffs,slide4Runs:actual.filter(r=>r.slide===4),historicalActualRGB:'UNKNOWN/notpersisted',historicalCleanupConfirmed:false,profilePrepared:true,ValidateOnlyExit:validateExit.status,envelopeSha256:manifest.envelopeSha256,OfficeCalls:0,nativeAcceptance:false},null,2));

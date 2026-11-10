@@ -1,0 +1,33 @@
+{
+  "inputUnchanged": true,
+  "inputSha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb",
+  "sourceUnchanged": true,
+  "sourceSha256": "ff2214eda3cb406ffe0ea1ad5bfe004819e294b34135f3c91b982fb1871adc7c",
+  "oldGenerationProducer": "2400d38bf549cdb661c31725776df25e497d364c",
+  "currentGenerationProducer": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "oldController": "f9897413098c01d14c0c38e813790bd6897365ea",
+  "oldWorker": {
+    "path": "packages/pptx/test/native-table-colors-v2.ps1",
+    "bytes": 20122,
+    "sha256": "384ba8d49a53793a15228675b0e2da91caaedc827cdc7225af7288a8d451b4c7"
+  },
+  "expectedCells": 24,
+  "expectedRuns": 36,
+  "expectationDiffs": [
+    {
+      "path": "expected.3.cells.0.runs.0.color",
+      "before": "#FFFFFF",
+      "after": "#000000"
+    },
+    {
+      "path": "expected.3.cells.1.runs.0.color",
+      "before": "#FFFFFF",
+      "after": "#000000"
+    }
+  ],
+  "actualOldRGB": "UNKNOWN/notpersisted",
+  "oldCleanup": false,
+  "currentNativePass": false,
+  "profilePrepared": false,
+  "OfficeCalls": 0
+}

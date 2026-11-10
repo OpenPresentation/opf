@@ -1,0 +1,28 @@
+{
+  "executable": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+  "args": [
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "C:/opf-work/n034-current/scripts/native-acceptance/run-table-profile.ps1",
+    "-Envelope",
+    "C:\\opf-work\\n034-current-table-profile01\\table-profile.json",
+    "-EnvelopeSha256",
+    "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751",
+    "-NodeExecutable",
+    "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+    "-TimeoutSeconds",
+    "60",
+    "-ValidateOnly"
+  ],
+  "timeoutMs": 90000,
+  "startedAt": "2026-11-10T07:10:31.381Z",
+  "endedAt": "2026-11-10T07:10:32.515Z",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdoutBytes": 468,
+  "stderrBytes": 0
+}

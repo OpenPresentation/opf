@@ -1,0 +1,50 @@
+{
+  "envelope": "C:\\opf-work\\n034-current-table-profile01\\table-profile.json",
+  "sha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751",
+  "controllerHead": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "suiteSha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29",
+  "inputSha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb",
+  "snapshots": [
+    {
+      "path": "table-colors/table-colors.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "table-colors/generation.json",
+      "bytes": 194989,
+      "sha256": "aa34f6db0374857e1307665be4461b7bd0549a32243915d6556444b34cb32ca7"
+    },
+    {
+      "path": "inputs/table-colors.opf.json",
+      "bytes": 5941,
+      "sha256": "e5706ff7f2a493da1c22ab90e672904442972e579dbe2203d042ad688ef3e6ba"
+    },
+    {
+      "path": "inputs/suite.json",
+      "bytes": 579228,
+      "sha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29"
+    },
+    {
+      "path": "inputs/native-table-colors-v2.ps1",
+      "bytes": 21441,
+      "sha256": "89b66bfe6bdac36b93872ee05e2e888b19ae7ff3184c75cebc72227ad032a7cd"
+    },
+    {
+      "path": "inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    }
+  ],
+  "limits": {
+    "slides": 6,
+    "tables": 6,
+    "cells": 24,
+    "phases": 3,
+    "nativeCells": 72,
+    "pngs": 18,
+    "imports": 9,
+    "timeoutSecondsMax": 60
+  },
+  "nativeAcceptance": false
+}

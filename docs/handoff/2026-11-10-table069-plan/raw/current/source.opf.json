@@ -1,0 +1,292 @@
+{
+  "design": {
+    "background": "#FFFFFF",
+    "fontScheme": "roboto",
+    "colorScheme": {
+      "id": "cool-horizon",
+      "dark1": "#000000"
+    }
+  },
+  "slides": [
+    {
+      "table": {
+        "columns": [
+          {
+            "value": "Header",
+            "style": {
+              "fill": "#F8FAFC"
+            }
+          },
+          {
+            "value": [
+              "Inherited",
+              {
+                "text": "Explicit",
+                "color": "#FF0000"
+              }
+            ],
+            "style": {
+              "fill": "#F8FAFC"
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "Body",
+              "style": {
+                "fill": "#F8FAFC"
+              }
+            },
+            {
+              "value": [
+                "BodyInherited",
+                {
+                  "text": "BodyExplicit",
+                  "color": "#FF0000"
+                }
+              ],
+              "style": {
+                "fill": "#F8FAFC"
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "table": {
+        "columns": [
+          {
+            "value": "Header",
+            "style": {
+              "fill": "#0F172A"
+            }
+          },
+          {
+            "value": [
+              "Inherited",
+              {
+                "text": "Explicit",
+                "color": "#FF0000"
+              }
+            ],
+            "style": {
+              "fill": "#0F172A"
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "Body",
+              "style": {
+                "fill": "#0F172A"
+              }
+            },
+            {
+              "value": [
+                "BodyInherited",
+                {
+                  "text": "BodyExplicit",
+                  "color": "#FF0000"
+                }
+              ],
+              "style": {
+                "fill": "#0F172A"
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "table": {
+        "columns": [
+          {
+            "value": "Header",
+            "style": {
+              "fill": "#777777"
+            }
+          },
+          {
+            "value": [
+              "Inherited",
+              {
+                "text": "Explicit",
+                "color": "#FF0000"
+              }
+            ],
+            "style": {
+              "fill": "#777777"
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "Body",
+              "style": {
+                "fill": "#777777"
+              }
+            },
+            {
+              "value": [
+                "BodyInherited",
+                {
+                  "text": "BodyExplicit",
+                  "color": "#FF0000"
+                }
+              ],
+              "style": {
+                "fill": "#777777"
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "table": {
+        "columns": [
+          {
+            "value": "Header",
+            "style": {
+              "fill": "#767676"
+            }
+          },
+          {
+            "value": [
+              "Inherited",
+              {
+                "text": "Explicit",
+                "color": "#FF0000"
+              }
+            ],
+            "style": {
+              "fill": "#767676"
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "Body",
+              "style": {
+                "fill": "#767676"
+              }
+            },
+            {
+              "value": [
+                "BodyInherited",
+                {
+                  "text": "BodyExplicit",
+                  "color": "#FF0000"
+                }
+              ],
+              "style": {
+                "fill": "#767676"
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "table": {
+        "columns": [
+          {
+            "value": "Header",
+            "style": {
+              "fill": "#FFFFFF80"
+            }
+          },
+          {
+            "value": [
+              "Inherited",
+              {
+                "text": "Explicit",
+                "color": "#FF0000"
+              }
+            ],
+            "style": {
+              "fill": "#FFFFFF80"
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "Body",
+              "style": {
+                "fill": "#FFFFFF80"
+              }
+            },
+            {
+              "value": [
+                "BodyInherited",
+                {
+                  "text": "BodyExplicit",
+                  "color": "#FF0000"
+                }
+              ],
+              "style": {
+                "fill": "#FFFFFF80"
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "table": {
+        "columns": [
+          {
+            "value": "Header",
+            "style": {
+              "fill": "#F8FAFC",
+              "color": "#FFFFFF"
+            }
+          },
+          {
+            "value": [
+              "Inherited",
+              {
+                "text": "Explicit",
+                "color": "#FF0000"
+              }
+            ],
+            "style": {
+              "fill": "#F8FAFC",
+              "color": "#FFFFFF"
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "Body",
+              "style": {
+                "fill": "#F8FAFC",
+                "color": "#FFFFFF"
+              }
+            },
+            {
+              "value": [
+                "BodyInherited",
+                {
+                  "text": "BodyExplicit",
+                  "color": "#FF0000"
+                }
+              ],
+              "style": {
+                "fill": "#F8FAFC",
+                "color": "#FFFFFF"
+              }
+            }
+          ]
+        ]
+      }
+    }
+  ]
+}

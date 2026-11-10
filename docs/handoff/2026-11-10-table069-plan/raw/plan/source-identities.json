@@ -1,0 +1,73 @@
+{
+  "sourceHead": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "sourceStatus": "",
+  "files": [
+    {
+      "sha256": "356a2d004eaf9d21a47135f911eb446b488cb5575d156759f827c8274867913c",
+      "gitBlob": "83a96cf314c26985dd2a191502554f2327626919",
+      "path": "scripts/native-acceptance/table-profile.mjs",
+      "bytes": 13609
+    },
+    {
+      "sha256": "fba11c28992f4ddf51c1b5f60106d49071806ac15d0fb17f13432457e505ac34",
+      "gitBlob": "da9a361e9f8405952aca76323d9a8acab7eeeb50",
+      "path": "scripts/native-acceptance/run-table-profile.ps1",
+      "bytes": 7147
+    },
+    {
+      "sha256": "bc407f68c3867f144c981bf6b24a61379016ef4bad96957f0af35a8b3246dcac",
+      "gitBlob": "6616cd764059127ff90eb8b8da8f3a0b6e418f1d",
+      "path": "scripts/native-acceptance/compare-table-profile.mjs",
+      "bytes": 9585
+    },
+    {
+      "sha256": "3cb42089dec2479851b739d13c206fd7e7c47cee3ce9e34cc3944e2216acb245",
+      "gitBlob": "ff6fd6495991848c5a6158a717dba38b45fdf2fd",
+      "path": "scripts/native-acceptance/compare-table-colors.mjs",
+      "bytes": 4871
+    },
+    {
+      "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912",
+      "gitBlob": "b69be8154231d05ec8e3fd8e14f9cfb82f7a3b3f",
+      "path": "scripts/native-acceptance/identity.mjs",
+      "bytes": 3090
+    },
+    {
+      "sha256": "e6264ec2f507a25ca241d0e24c2d6e892815d78a36e6b3f970be9ec9c12dd8e2",
+      "gitBlob": "d22ae78f7877927025309743deef1f5e768ea490",
+      "path": "scripts/native-acceptance/table-colors.mjs",
+      "bytes": 3126
+    },
+    {
+      "sha256": "f4c63a57e618bbdf65c1ee16637c8a30d91b559bee43a9f2f04e9a881d9c2029",
+      "gitBlob": "a06cd1a2c67db8a66d51ccd13f203d0c2289cc04",
+      "path": "scripts/native-acceptance/generate.mjs",
+      "bytes": 8912
+    },
+    {
+      "sha256": "89b66bfe6bdac36b93872ee05e2e888b19ae7ff3184c75cebc72227ad032a7cd",
+      "gitBlob": "f351296013527768521d5a613e15c65f76cb0441",
+      "path": "packages/pptx/test/native-table-colors-v2.ps1",
+      "bytes": 21441
+    }
+  ],
+  "node": {
+    "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5",
+    "version": "v24.20.0",
+    "path": "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+    "bytes": 93381448
+  },
+  "currentSuite": {
+    "path": "C:/opf-work/n034-current-suite01",
+    "sha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29"
+  },
+  "input": {
+    "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb",
+    "path": "C:/opf-work/n034-current-suite01/table-colors/table-colors.pptx",
+    "bytes": 39289
+  },
+  "proposedOutput": "C:/opf-work/n034-current-table-profile01",
+  "proposedOutputExists": false,
+  "generationOrValidationInvoked": false,
+  "OfficeCalls": 0
+}
