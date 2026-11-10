@@ -69,3 +69,23 @@ test("default width and legal0/64 remain exact while the64bound cannot accept an
   charts(current.document).referenceLines[0].stroke.width=64;
   assert.ok(compareReferenceWitnessImports(illegal,{original:current,"saved-reopened":current},archive.canvas).some(f=>f.code==="import-reference-value-label-style-differs"));
 });
+
+// Pure nonunit-canvas expectation: no export or native observation is performed.
+test("nonunit source canvas uses exporter multiplication order at an observable halfEMU boundary",async()=>{
+  const sourceCanvas={cx:9144000,cy:5143500},scale=0.75,width=0.5009273840769903;
+  assert.equal(Math.min(sourceCanvas.cx,sourceCanvas.cy)/6858000,scale);
+  assert.equal(Math.round((width*scale)*9525),3578);
+  assert.equal(Math.round((width*9525)*scale),3579,"Reassociation must remain observably different");
+  const wanted=structuredClone(source),current=await original();
+  wanted.slides[0].chart.referenceLines[0].stroke.width=width;
+  for(const [index,slide] of wanted.slides.entries()){
+    const actual=current.document.slides[index].chart??current.document.slides[index].blocks.find(b=>b.chart).chart;
+    for(const [reference,line] of slide.chart.referenceLines.entries())
+      actual.referenceLines[reference].stroke.width=Math.min(64,Math.round(((line.stroke?.width??4/3)*scale)*9525)/(9525*scale));
+  }
+  assert.equal(charts(current.document).referenceLines[0].stroke.width,3578/(9525*scale));
+  assert.deepEqual(compareReferenceWitnessImports(wanted,{original:current,"saved-reopened":current},sourceCanvas),[]);
+  const wrong=structuredClone(current);
+  charts(wrong.document).referenceLines[0].stroke.width=3579/(9525*scale);
+  assert.ok(compareReferenceWitnessImports(wanted,{original:current,"saved-reopened":wrong},sourceCanvas).some(f=>f.phase==="saved-reopened"&&f.reference===0&&f.code==="import-reference-value-label-style-differs"));
+});
