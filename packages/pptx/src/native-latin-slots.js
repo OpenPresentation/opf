@@ -52,7 +52,9 @@ export function createNativeLatinSlots(plan, resolveProfile, report) {
       for (const [index,fragment] of fragments.entries()) {
         const {text,source,style = {}} = fragment, start = fragment.start ?? 0, end = fragment.end ?? start + text.length;
         // Native no-break binding only substitutes U+0020 with U+00A0, retaining UTF-16 offsets.
-        if (typeof source !== 'string' || start < 0 || end < start || source.slice(start,end).replace(/ /g,'\u00a0') !== text.replace(/ /g,'\u00a0')) { unavailable(path,'source-range'); return; }
+        const mapped = typeof source==='string'&&typeof text==='string'&&Number.isSafeInteger(start)&&Number.isSafeInteger(end)&&start>=0&&end>=start&&end<=source.length
+          &&(fragment.marker?start===source.length&&end===start:source.slice(start,end).replace(/ /g,'\u00a0')===text.replace(/ /g,'\u00a0'));
+        if (!mapped) { unavailable(path,'source-range'); return; }
         const ranges = fragment.marker ? [] : selection(source,style,slideIndex);
         parts.push({text,sourceRun:fragment.marker?`marker:${index}`:fragment.sourceRun??index,selected:Array.from({length:text.length},(_,i)=>text.charCodeAt(i)>=32&&text.charCodeAt(i)<=126&&ranges.some(([from,to])=>start+i>=from&&start+i<to))});
       }
