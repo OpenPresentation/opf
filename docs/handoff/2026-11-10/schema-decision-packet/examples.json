@@ -1,0 +1,547 @@
+[
+  {
+    "id": "anchor-pixels-before",
+    "schema": "current",
+    "document": {
+      "slides": [
+        {
+          "blocks": [
+            {
+              "id": "note",
+              "text": "Launch in March"
+            }
+          ],
+          "shapes": [
+            {
+              "at": {
+                "block": "note",
+                "edge": "end",
+                "width": 160,
+                "height": 64
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "anchor-pixels-proposed",
+    "schema": "proposed",
+    "document": {
+      "slides": [
+        {
+          "blocks": [
+            {
+              "id": "note",
+              "text": "Launch in March"
+            }
+          ],
+          "shapes": [
+            {
+              "at": {
+                "block": "note",
+                "edge": "end",
+                "widthPx": 160,
+                "heightPx": 64
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "anchor-boundary-before",
+    "schema": "current",
+    "document": {
+      "slides": [
+        {
+          "blocks": [
+            {
+              "id": "note",
+              "text": "Launch"
+            }
+          ],
+          "shapes": [
+            {
+              "at": {
+                "block": "note",
+                "edge": "center",
+                "width": 1.01,
+                "height": 0.5
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "anchor-boundary-proposed",
+    "schema": "proposed",
+    "document": {
+      "slides": [
+        {
+          "blocks": [
+            {
+              "id": "note",
+              "text": "Launch"
+            }
+          ],
+          "shapes": [
+            {
+              "at": {
+                "block": "note",
+                "edge": "center",
+                "widthPx": 1.01,
+                "height": 0.5
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "logical-layout-before",
+    "schema": "current",
+    "document": {
+      "design": {
+        "titleAlignment": "left",
+        "footer": {
+          "right": {
+            "text": "Confidential"
+          }
+        }
+      },
+      "slides": [
+        {
+          "title": "Decision",
+          "left": {
+            "text": "Launch now"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "logical-layout-proposed",
+    "schema": "proposed",
+    "document": {
+      "design": {
+        "titleAlignment": "start",
+        "footer": {
+          "end": {
+            "text": "Confidential"
+          }
+        }
+      },
+      "slides": [
+        {
+          "title": "Decision",
+          "start": {
+            "text": "Launch now"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "physical-border-before",
+    "schema": "current",
+    "document": {
+      "language": "ar-SA",
+      "design": {
+        "contentAlignment": "right"
+      },
+      "slides": [
+        {
+          "table": {
+            "columns": [
+              "Item"
+            ],
+            "rows": [
+              [
+                {
+                  "value": "A",
+                  "style": {
+                    "align": "left",
+                    "borders": {
+                      "left": {
+                        "color": "accent1",
+                        "width": 1
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "physical-border-proposed",
+    "schema": "proposed",
+    "document": {
+      "language": "ar-SA",
+      "design": {
+        "contentAlignment": "end"
+      },
+      "slides": [
+        {
+          "table": {
+            "columns": [
+              "Item"
+            ],
+            "rows": [
+              [
+                {
+                  "value": "A",
+                  "style": {
+                    "align": "start",
+                    "borders": {
+                      "left": {
+                        "color": "accent1",
+                        "width": 1
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "run-language-before",
+    "schema": "current",
+    "document": {
+      "language": "en-US",
+      "slides": [
+        {
+          "text": [
+            {
+              "text": "Bonjour",
+              "lang": "fr-FR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "run-language-proposed",
+    "schema": "proposed",
+    "document": {
+      "language": "en-US",
+      "slides": [
+        {
+          "text": [
+            {
+              "text": "Bonjour",
+              "language": "fr-FR"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "arabic-proofing-before",
+    "schema": "current",
+    "document": {
+      "language": "ar-SA",
+      "slides": [
+        {
+          "text": [
+            {
+              "text": "Bonjour 1",
+              "lang": "ar-SA",
+              "fontFamily": "Aptos"
+            },
+            " العربية 2"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "arabic-proofing-proposed",
+    "schema": "proposed",
+    "document": {
+      "language": "ar-SA",
+      "slides": [
+        {
+          "text": [
+            {
+              "text": "Bonjour 1",
+              "language": "ar-SA",
+              "fontFamily": "Aptos"
+            },
+            " العربية 2"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "border-before",
+    "schema": "current",
+    "document": {
+      "slides": [
+        {
+          "table": {
+            "columns": [
+              "Region"
+            ],
+            "rows": [
+              [
+                {
+                  "value": "North",
+                  "style": {
+                    "borders": {
+                      "top": {
+                        "color": "accent1",
+                        "width": 2
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "border-proposed",
+    "schema": "proposed",
+    "document": {
+      "slides": [
+        {
+          "table": {
+            "columns": [
+              "Region"
+            ],
+            "rows": [
+              [
+                {
+                  "value": "North",
+                  "style": {
+                    "borders": {
+                      "top": {
+                        "width": 2
+                      },
+                      "bottom": "none"
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "reference-hidden-before",
+    "schema": "current",
+    "document": {
+      "slides": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Month",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  10
+                ],
+                [
+                  "Feb",
+                  20
+                ]
+              ]
+            },
+            "referenceLines": [
+              {
+                "value": 30,
+                "label": "Ceiling",
+                "stroke": {
+                  "width": 0
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "reference-hidden-proposed",
+    "schema": "proposed",
+    "document": {
+      "slides": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Month",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  10
+                ],
+                [
+                  "Feb",
+                  20
+                ]
+              ]
+            },
+            "referenceLines": [
+              {
+                "value": 30,
+                "label": "Ceiling",
+                "stroke": "none"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "custom-design-before",
+    "schema": "current",
+    "document": {
+      "design": {
+        "projectOwner": "Sam"
+      },
+      "slides": [
+        {
+          "text": "Launch plan"
+        }
+      ]
+    }
+  },
+  {
+    "id": "custom-extension-proposed",
+    "schema": "proposed",
+    "document": {
+      "extensions": {
+        "projectOwner": "Sam"
+      },
+      "slides": [
+        {
+          "text": "Launch plan"
+        }
+      ]
+    }
+  },
+  {
+    "id": "explicit-combo-reference-current",
+    "schema": "current",
+    "document": {
+      "slides": [
+        {
+          "title": "Margin — do not infer a target",
+          "chart": {
+            "type": "combo",
+            "data": {
+              "columns": [
+                "Month",
+                "Revenue",
+                {
+                  "name": "Margin",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  100,
+                  0.2
+                ],
+                [
+                  "Feb",
+                  120,
+                  0.3
+                ]
+              ]
+            },
+            "line": [
+              "Margin"
+            ],
+            "secondaryAxis": [
+              "Margin"
+            ],
+            "referenceLines": [
+              {
+                "value": -10,
+                "label": "Floor",
+                "stroke": {
+                  "dash": "solid"
+                }
+              },
+              {
+                "value": 0.25,
+                "axis": "secondary",
+                "label": "Target",
+                "stroke": {
+                  "dash": "dash"
+                }
+              },
+              {
+                "value": 0.1,
+                "axis": "secondary"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "empty-pie-references-current",
+    "schema": "current",
+    "document": {
+      "slides": [
+        {
+          "chart": {
+            "type": "pie",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ]
+              ]
+            },
+            "referenceLines": []
+          }
+        }
+      ]
+    }
+  }
+]
