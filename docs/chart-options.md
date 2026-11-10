@@ -205,6 +205,8 @@ The authoritative schema supports `chart.referenceLines`; the composition, SVG r
 
 The main data line retains its existing solid default. A reference stroke is independent of every data series.
 
+A [singleton combo example](../examples/technical/singleton-combo-reference-lines.opf.json) places Revenue180 on the primary value axis and Margin0.25 (25% under `0%`) on the actual secondary value axis. Both references expand their own bounds. With one category, both are full-plot line/text overlays; they remain fixed after independent PowerPoint chart/data/axis edits. The exporter records each overlay's explicit current category/value axis IDs, and import requires the same unique reciprocal native pair and unchanged geometry/style/text binding. Reordering axis declarations alone is harmless; swapped, duplicate or missing associations preserve ordinary shapes with a diagnostic. Older multi-axis overlay receipts without explicit pairs also remain ordinary shapes; re-export their OPF source to create current receipts.
+
 | Property | Meaning and default |
 | --- | --- |
 | `referenceLines` | Optional array. Absent/`[]` means none. Authored order, duplicates and values equal to data are retained; no two-line cap or inferred-range cutoff. Nonempty arrays are supported only by `column`, `bar`, `line`, `line-with-markers`, `area` and `combo`. |
