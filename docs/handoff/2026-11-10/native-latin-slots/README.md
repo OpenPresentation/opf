@@ -24,3 +24,21 @@ The native-body control now explicitly requests bodyText: native, requires an ac
 No qualification child was launched for 731: its preflight refused a stale index stat-size entry after raw LF restoration; working, index and HEAD blobs were identical. Re-adding that verified identical blob refreshed stat metadata without changing the staged tree. The preserved additional assertion is combined into the next successor.
 
 Core citation fragments have a legitimate zero-width source range at the source run's end. Range validation now admits exactly that marker form before excluding marker text from Latin selection and source-span grouping; final concatenated native text still must match. Marker style, proofing, text, size and baseline remain unchanged. The cited Latin/Arabic-neighbor and combined explicit-rich safe-family controls are included in the same focused file. No bidi/runtime formatting controls or speculative native mutations are added.
+## Separate automatic native-body font-preparation defect (OPEN for v0.34)
+
+Exact 621553ddf1f4983b03bbbdc8113c9e469fce0229 focused execution ended with 14 PASS / 1 RED; head, index and source guards remained exact. All font-slot, marker, canonical-attribute, inherited-chunk, ownership and budget controls passed. The strict core type step did not start after this focused failure. Raw log: C:/opf-work/latin-cs-slots-qualification01/review621-focused.log.
+
+Minimal reproducer (normal public API):
+
+```js
+const source = {slides:[{title:'Title',text:[
+  {text:'Bonjour 1\nWelcome 2 ',lang:'ar-SA',fontFamily:'Georgia'},
+  {text:'Hello 2',lang:'ar-SA',fontFamily:'Times New Roman'}
+]}]};
+const fonts = await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:source});
+await toPptx(source,{fonts,bodyText:'native'});
+```
+
+The actual error is font-unavailable for Aptos400 at slides.0.text: prepared (font-demand.js577) → textMeasurement.measure → nativeWrapBox (native-body.js188). Every visible rich run overrides the base Aptos role. nativeWrapWidths uses those authored faces, but nativeWrapBox additionally measures the base alphabet width for heuristic wrap slack; native-body defaults also retain Aptos for future blank/appended paragraphs. The new demand API documents preparation for actual drawn faces through ToSvg options. The exporter currently forwards chosen-family mode but not this extra native planning dependency. Root owns its separate runtime repair; it remains OPEN and is not qualified by this fixture.
+
+The capture test now supplies exactly one additional manifest-pinned Intos Regular400 face through the public CallerFontFace API, with its actual family Intos and verified existing font/OFL/notice hashes. No relabeling, whole-pack preload, shared-resource mutation, native box/heuristic change or strictness relaxation is used. It still requests bodyText: native, requires an actual native body and two hard-line paragraphs, and checks exact rich-source recovery. The next focused/type result will bind the coherent successor; it must not be described as a passing automatic native-font preparation test.

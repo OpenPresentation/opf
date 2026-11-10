@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {spawnSync} from 'node:child_process';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
 import {decodeTextTag,encodeTextTag} from '../dist/code-provenance.js';
 import {strFromU8,strToU8,unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
@@ -24,7 +27,13 @@ test('mixed source preserves Arabic-context digits and semantic source',async()=
  const result=await read(mixed),runs=result.shapes.filter(s=>s.name?.startsWith('OPF list')).flatMap(s=>s.runs);equalSlots(runs.filter(r=>/[A-Za-z]/.test(r.text)));for(const run of runs.filter(r=>/[\u0600-\u06ff]/.test(r.text)))assert.notEqual(run.cs,run.latin,'Arabic and its contextual digits retain the script face');assert.deepEqual(result.imported,mixed);});
 test('native body rich faces',async()=>{
  const rich={slides:[{title:'Title',text:[{text:'Bonjour 1\nWelcome 2 ',lang:'ar-SA',fontFamily:'Georgia'},{text:'Hello 2',lang:'ar-SA',fontFamily:'Times New Roman'}]}]};
- const {loadFonts}=await import('@openpresentation/opf-render/fonts-node');const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:rich});
+ const {loadFonts,BUNDLED_FONT_MANIFEST}=await import('@openpresentation/opf-render/fonts-node');
+ // The native wrap-slack/default paragraph measures Aptos even though visible runs all override it.
+ // Supply that one genuine extra dependency through the public API; automatic native preparation is tracked OPEN separately.
+ const pkg=BUNDLED_FONT_MANIFEST.packages.find(item=>item.name==='intos'),face=pkg.faces.find(item=>item.family==='Intos'&&item.weight===400&&!item.italic),root=new URL('../',import.meta.resolve('@openpresentation/opf-render/fonts-node'));
+ assert(pkg&&face);const fontUrl=new URL(`${pkg.vendored}/${face.file}`,root),licenseUrl=new URL(`${pkg.vendored}/${pkg.licenseFile}`,root),noticeUrl=new URL(`${pkg.vendored}/${pkg.noticeFile}`,root),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+ assert.equal(sha(readFileSync(fontUrl)),face.sha256);assert.equal(sha(readFileSync(licenseUrl)),pkg.licenseSha256);assert.equal(sha(readFileSync(noticeUrl)),pkg.noticeSha256);
+ const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:rich,faces:[{path:fileURLToPath(fontUrl),family:face.family,weight:face.weight,italic:face.italic,embed:'used',license:readFileSync(licenseUrl,'utf8')+'\n\n'+readFileSync(noticeUrl,'utf8')}]});
  try{const result=await read(rich,{fonts,bodyText:'native'}),bodies=result.shapes.filter(s=>s.name?.startsWith('OPF native body'));assert.equal(bodies.length,1,'The changed native-body capture path must actually execute; no measured fallback');assert.equal([...bodies[0].xml.matchAll(/<a:p>/g)].length,2,'Hard newline must exercise source offsets across paragraphs');const runs=bodies.flatMap(s=>s.runs);equalSlots(runs);assert.deepEqual(new Set(runs.map(r=>r.latin)),new Set(['Georgia','Times New Roman']));assert.deepEqual(result.imported,rich);}finally{fonts.dispose?.();}
 });
 test('foreign language and symbol controls',async()=>{
