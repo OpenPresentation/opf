@@ -48,7 +48,7 @@ Root and an independent peer reviewed a separate quadratic HarfBuzz cluster-boun
 
 The new source-bound six-child36-slide trial completed once with two fresh processes per arm. Preparation plus first SVG means: whole3.461s, old demand3.735s, new demand3.417s. This supports rough first-use parity with whole, not a statistical speed win: one whole sample3.405s beats both new3.407/3.428s. New demand render-recorded process HWM305.64–306.07MiB versus whole487.47–488.86; startup CPU4437.5ms remains above whole4078ms. All648rendered slide outputs are hash-guarded;216final digests retained, no pending faces. Module import is separate, OS cache notreset, n2/oneWindowsmachine and no mobile/cloud/leak claim.
 
-[Exact current results and limits](https://github.com/OpenPresentation/opf/blob/ddbd1aebbfdf8420e2210bc2ab96d42a994de4ea/docs/handoff/2026-11-10/rr114-cmap-cold/RESULTS.md). The privateNodeprobe is reviewed and folded into qualification source57; full0897gate49/51 and active57delta remain separate from release acceptance. Earlier layout-replay candidates stay UNFOLDED.
+[Exact current results and limits](https://github.com/OpenPresentation/opf/blob/ddbd1aebbfdf8420e2210bc2ab96d42a994de4ea/docs/handoff/2026-11-10/rr114-cmap-cold/RESULTS.md). The privateNodeprobe is reviewed and folded into qualification source57; full0897gate49/51, the closed original57 delta and the final coherent gate remain separate from release acceptance. Earlier layout-replay candidates stay UNFOLDED.
 
 ## Independent follow-up verification — November 10
 
