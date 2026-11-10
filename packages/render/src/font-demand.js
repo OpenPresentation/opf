@@ -80,6 +80,19 @@ export async function createNodeDemand(
     selection: undefined,
   };
   registry.fontFiles = loaded.fontFiles;
+  const ownedMeasurement = registry.textMeasurement;
+  let ownedMeasure = ownedMeasurement.measure, prepareCoverage;
+  const coverage = (text,size,style) => {
+    // A caller replacement/accessor keeps its original full measurement and this binding.
+    const holder=Object.getOwnPropertyDescriptor(registry,'textMeasurement');
+    const measurement=registry.textMeasurement;
+    const descriptor=measurement===ownedMeasurement ? Object.getOwnPropertyDescriptor(measurement,'measure') : undefined;
+    if (holder && Object.hasOwn(holder,'value') && holder.value===ownedMeasurement && descriptor && Object.hasOwn(descriptor,'value') && descriptor.value===ownedMeasure && controls.canProbeGlyphs()) {
+      prepareCoverage?.(style);
+      controls.probeGlyphs(text,size,style);
+    } else measurement.measure(text,size,style);
+  };
+
   const analysis = createFontAnalysis(),
     scriptMemory = createScriptAnalysis({ fonts: analysis }),
     fallbacks = new Set();
@@ -302,7 +315,7 @@ export async function createNodeDemand(
                   }),
                 )
               )
-                registry.textMeasurement.measure(text, size, style);
+                coverage(text, size, style);
               else if (
                 !faces.some(
                   (face) =>
@@ -572,6 +585,8 @@ export async function createNodeDemand(
     prepared(style);
     return real.measure(text, size, style);
   };
+  ownedMeasure = registry.textMeasurement.measure;
+  prepareCoverage = prepared;
   registry.textMeasurement.outlineBounds = (text, size, style) => {
     prepared(style);
     return real.outlineBounds(text, size, style);
@@ -600,6 +615,7 @@ export async function createNodeDemand(
   return {
     registry,
     loaded,
+    acceptOwnedShaper: () => controls.acceptOwnedShaper(),
     ensure,
     pending,
     orderFaces: (faces) =>
