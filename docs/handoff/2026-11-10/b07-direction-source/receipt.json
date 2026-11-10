@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "base": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "source": "fdcd93c6300fd07eccf63782b8c36529535b714e",
+  "sourceTree": "fa774c91e761d5b5fd851c06157fab2d542666c2",
+  "codeFiles": [
+    {
+      "path": "tools/rr105-proofing-direction/.gitattributes",
+      "gitBlob": "c970b369a951b6642b862274b2d40a9870482e79",
+      "bytes": 24,
+      "sha256": "a3a695d8a38b56c32fff172d18c0dff4f4b9a32db35250f5b72489bb388a53cd"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/README.md",
+      "gitBlob": "c9483da752b9e7de22a61363933f30ffd4cdec92",
+      "bytes": 4239,
+      "sha256": "00150ed7bfa7bf35bef7b66556f1100cae44d3c12846301a9bbd14dec364087e"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/derive-worker.mjs",
+      "gitBlob": "acb7b85d0882ccf93c647931cf9d8a6ef1934926",
+      "bytes": 8091,
+      "sha256": "1d349d0ec6e2935537bb59938490f7f907dad6a8d8c17e77453677a9eaebff06"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/original09.pptx.gz",
+      "gitBlob": "b653f8f6cb9c035d5ecb74a1fa938b86daf2968f",
+      "bytes": 72471,
+      "sha256": "3d91bd0a042595cd3ad7c7233012bc73b37ee3a33a39b844f33da813ec89068c"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/qualify-input.ps1",
+      "gitBlob": "c9f57bca87f130000fc671787c94a40f5cca1780",
+      "bytes": 3055,
+      "sha256": "6253f4ef5aed12d2c6a50cef96fa735eb70bfe0ad05dca1cd89cf00d4cd11ebf"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/qualify-source.ps1",
+      "gitBlob": "5cb6551c2fe82f20ebe7e303244a5734b8eed782",
+      "bytes": 13005,
+      "sha256": "1ba990c87c57aec2eb1738d42298aba09d8eecce4a87ce4721b8eaa27c1f5913"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/reference-native-shapes.json.gz",
+      "gitBlob": "c169a07c646c00bde22bf15de84cdb1f120050e1",
+      "bytes": 648,
+      "sha256": "e464c4ad39b14b4ebbd9253ef3d1985eda1714b804f799e023a5f39bd84ac34a"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/reference-worker.ps1.gz",
+      "gitBlob": "8a7c18706231def7bce1795ddfb6835ebdb8e3aa",
+      "bytes": 18255,
+      "sha256": "4db1d7d74e698b4afb5c313f55d3d37cda9ba3a06c904dabf11718d2a7e90c9d"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/verify-source.mjs",
+      "gitBlob": "e38de160422d9b0263c978c98f14e9865d39f98f",
+      "bytes": 2120,
+      "sha256": "d5edb1337b4400479bb6ceb576365d574cc7c5cbaf3db9b02ab94a97d5699745"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/worker-package/test/fixtures/sh25-native-circle-observations.json",
+      "gitBlob": "295d8acd054c81dbb8071597b89aa7ff9507ac80",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/worker-package/test/native-furniture-control.ps1",
+      "gitBlob": "ea7abb2ebd1d761e6b4d0d62c9a9a80246d55ac1",
+      "bytes": 81652,
+      "sha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/worker-package/test/native-furniture-harness-check.ps1",
+      "gitBlob": "16bb02d2cc9ab8dc5b79edfa14d3f71a368b8785",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/worker-package/test/native-process-check.ps1",
+      "gitBlob": "e7baec2618b005f0532c272fba718ee198c008cc",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "tools/rr105-proofing-direction/worker-package/test/native-process.ps1",
+      "gitBlob": "3d8754b1d15baa944b1dabe42b71ec01b823afc1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    }
+  ],
+  "sourcePaths": [
+    "changes/rr105-paragraph-direction-diagnostic.md",
+    "docs/handoff/2026-11-10/b07-paragraph-direction.md",
+    "docs/programs/release-readiness/burndown.md",
+    "tools/rr105-proofing-direction/.gitattributes",
+    "tools/rr105-proofing-direction/README.md",
+    "tools/rr105-proofing-direction/derive-worker.mjs",
+    "tools/rr105-proofing-direction/original09.pptx.gz",
+    "tools/rr105-proofing-direction/qualify-input.ps1",
+    "tools/rr105-proofing-direction/qualify-source.ps1",
+    "tools/rr105-proofing-direction/reference-native-shapes.json.gz",
+    "tools/rr105-proofing-direction/reference-worker.ps1.gz",
+    "tools/rr105-proofing-direction/verify-source.mjs",
+    "tools/rr105-proofing-direction/worker-package/test/fixtures/sh25-native-circle-observations.json",
+    "tools/rr105-proofing-direction/worker-package/test/native-furniture-control.ps1",
+    "tools/rr105-proofing-direction/worker-package/test/native-furniture-harness-check.ps1",
+    "tools/rr105-proofing-direction/worker-package/test/native-process-check.ps1",
+    "tools/rr105-proofing-direction/worker-package/test/native-process.ps1"
+  ],
+  "metadataPrefix": "docs/handoff/2026-11-10/b07-direction-source/",
+  "metadataExtra": [
+    "docs/programs/release-readiness/burndown.md"
+  ],
+  "raw": {
+    "path": "raw.json.gz",
+    "bytes": 246875,
+    "sha256": "5c213d54dde8f45967116ca7437148a97090733f4ca62e15aa7784eb779e699d",
+    "members": 42,
+    "decodedBytes": 378097
+  },
+  "qualifiedWorkerSha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9",
+  "baselineWorkerSha256": "26ea8b008cdacebc937decbfe52356ace0a146af0d5ade54e20de6397596415c",
+  "original09Sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+  "results": {
+    "pure01": 1,
+    "pure02": 0,
+    "pureControls": 30,
+    "input01": 0,
+    "inputControls": 7,
+    "identity01": 0,
+    "protectedFunctions": 41,
+    "wrongParsedTitleUtf16Units": 48,
+    "correctTitleUtf16Units": 26
+  },
+  "held": {
+    "install": true,
+    "build": true,
+    "exports": true,
+    "Office": true,
+    "mappedCheck": true,
+    "suitePreparation": true,
+    "nativeAcceptance": true
+  },
+  "scope": "NEVERMERGE source/pure checkpoint only; source review required before mapped/build/preparation. No glyph/native/current59 qualification."
+}
