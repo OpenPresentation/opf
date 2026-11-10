@@ -1,0 +1,40 @@
+{
+  "source": "c4d81418a75933ce226ee71eb9fe0ee309f625bd",
+  "records": 55,
+  "rawBytes": 1172453,
+  "compressedBytes": 507155,
+  "archiveSha256": "416f851aa36a308d669b740e6e7372330f08913e65815c481f939eebe4465d13",
+  "observations": {
+    "source": "c4d81418a75933ce226ee71eb9fe0ee309f625bd",
+    "roots": {
+      "driver": {
+        "path": "C:/opf-work/b07-ppr",
+        "revision": "c4d81418a75933ce226ee71eb9fe0ee309f625bd",
+        "dirty": false
+      },
+      "worker": {
+        "path": "C:/opf-work/b07-ppr-worker",
+        "revision": "c4d81418a75933ce226ee71eb9fe0ee309f625bd",
+        "dirty": false
+      }
+    },
+    "fixturePrepared": true,
+    "suitePrepared": false,
+    "validateOnlyRun": false,
+    "officeRun": false,
+    "mutantSha256": "907cf5ade50c81498d2799c29f1ce43b128f680f642acf9cc7863bad1605ea79",
+    "derivedWorkerSha256": "3929563e503352dfdbf425c5f749bef2329cda382f2dce6a0c28dcc881e81145",
+    "zipEntries": 147,
+    "unchangedParts": 146,
+    "managedInputGuards": 8,
+    "managedStructuralGroups": 1,
+    "initialManagedExit": 1,
+    "finalManagedExit": 0,
+    "proofCorrection": "Initial .NET clone OuterXml changed only empty-element lexical spelling (a:avLst self-close vs explicit empty open/close); strict namespace/localname/allnon-xmlnsattribute/value/orderedchild/text comparator proves exact semantic equality. Strong raw one-pPr substring and147/146byte guards stay unchanged.",
+    "oneAuthorizedManagedRepeat": true,
+    "newFixtureVariantAfterFailure": false,
+    "glyphFix": false,
+    "currentRuntimeAcceptance": false,
+    "nativeAcceptance": false
+  }
+}
