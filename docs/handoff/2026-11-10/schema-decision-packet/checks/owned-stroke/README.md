@@ -7,3 +7,5 @@ Root approved a narrow repair2026-11-10: validate recovered authored style with 
 The new maintained controls include16malformed cases across helper/overlay modes, adding arrays, overflowwidth, unsupporteddash and outline-only arrowheads. They preserve exact data, one canonical reference/full nativepaint, no duplicate shapes and precisely one style diagnostic. Built verification is pending in this initial source snapshot. Positive and current native edit controls remain in the same file.
 
 To replay the original observation, install/build exactbb1148and run `node replay-initial-probe.mjs /path/to/bb1148 /tmp/stroke-probe`. The recipe refuses any other actual reader build by both runtime SHA256 values before exporting. No native application or large-resource operation is used.
+
+Common ca895 build and all twelve focused files now pass. The Line file includes16actual malformedstyle scenarios,30positive authoring scenarios and2nativeedit/overlayuncertainty scenarios; all10tests pass. See [the common source-bound packet](../common-ca895/README.md) for original and forward outcomes.
