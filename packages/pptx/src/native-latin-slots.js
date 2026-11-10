@@ -1,6 +1,6 @@
 import {itemizeScripts} from '@openpresentation/opf/composition';
 import {isSymbolEncodedFamily} from '@openpresentation/opf/symbol-font-encodings';
-import {nativeLatinParagraphFingerprint} from './native-language-provenance.js';
+import {nativeLatinParagraphFingerprint,nativeLatinMemberProperties} from './native-language-provenance.js';
 
 // Export-local source selections, captured before native language/run adapters.
 // No source words are stored in the structural split-span receipt.
@@ -9,7 +9,7 @@ const escapeXml = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<
 const decodeXml = text => text.replace(/&(?:amp|lt|gt|quot|apos|#x[\da-f]+|#\d+);/gi, entity => ({'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'"}[entity] ?? String.fromCodePoint(parseInt(entity.slice(entity[2]?.toLowerCase() === 'x' ? 3 : 2, -1), entity[2]?.toLowerCase() === 'x' ? 16 : 10))));
 const ascii = /^[\x20-\x7e]*$/;
 const runPattern = /<a:r>([\s\S]*?)<a:t>([\s\S]*?)<\/a:t><\/a:r>/g;
-const withoutCs = properties => properties.replace(/<a:cs\b[^>]*\/>/g,'');
+const withoutCs = nativeLatinMemberProperties;
 
 export function createNativeLatinSlots(plan, resolveProfile, report) {
   const records = new Map(), profiles = new Map(), warned = new Set(), groups = new Map();
@@ -68,7 +68,7 @@ export function createNativeLatinSlots(plan, resolveProfile, report) {
         if (!record) return shape;
         const runs = [...shape.matchAll(runPattern)], text = runs.map(run=>decodeXml(run[2])).join('');
         if (text !== record.text) { unavailable(record.path,'native-text'); return shape; }
-        let offset = 0, paragraphIndex = 0;
+        let offset = 0, paragraphIndex = 0, generatedSpans = 0, metadataAvailable = true;
         const paragraphs = [];
         const result = shape.replace(/<a:p>[\s\S]*?<\/a:p>/g, paragraph => {
           const native = [];
@@ -77,7 +77,7 @@ export function createNativeLatinSlots(plan, resolveProfile, report) {
             const latin = /<a:latin\b[^>]*\btypeface="([^"]*)"[^>]*\/>/.exec(properties)?.[0];
             let chosen=properties;
             if (selected.some(Boolean)) {
-              if (!latin || !/<a:rPr\b[^>]*>[\s\S]*<\/a:rPr>/.test(properties)) unavailable(record.path,'native-font');
+              if (!latin || !/<a:rPr\b[^>]*>[\s\S]*<\/a:rPr>/.test(properties)) { unavailable(record.path,'native-font'); native.push({xml:whole,properties,source:undefined,changed:false}); return whole; }
               else {
                 // Copy only the FINAL post-safe Latin typeface. Existing CS metadata and every other property stay exact.
                 const face=/\btypeface="([^"]*)"/.exec(latin)[1],currentCs=/<a:cs\b[^>]*\/>/.exec(properties)?.[0];
@@ -96,15 +96,20 @@ export function createNativeLatinSlots(plan, resolveProfile, report) {
             return pieces.length===1&&pieces[0]===whole?whole:pieces.join('');
           });
           const spans=[];
-          for(let start=0;start<native.length;){let end=start+1;while(end<native.length&&native[end].source===native[start].source)end++;
+          // Restore CS-generated boundaries only. Existing adapters' distinct proofing/styles remain distinct.
+          for(let start=0;start<native.length;){const style=withoutCs(native[start].properties);let end=start+1;while(end<native.length&&native[end].source===native[start].source&&withoutCs(native[end].properties)===style)end++;
             const members=native.slice(start,end);
-            if(end-start>1&&members.some(run=>run.changed)&&members.every(run=>withoutCs(run.properties)===withoutCs(members[0].properties)))spans.push({start,count:end-start});
+            if(end-start>1&&members.some(run=>run.changed)){
+              generatedSpans++;
+              if(generatedSpans>1000||native.length>10000){metadataAvailable=false;paragraphs.length=0;}
+              else if(metadataAvailable)spans.push({start,count:end-start});
+            }
             start=end;
           }
-          if(spans.length)paragraphs.push({index:paragraphIndex,count:native.length,hash:nativeLatinParagraphFingerprint(next,{name,index:paragraphIndex,count:native.length,spans}),spans});
+          if(metadataAvailable&&spans.length)paragraphs.push({index:paragraphIndex,count:native.length,hash:nativeLatinParagraphFingerprint(next,{name,index:paragraphIndex,count:native.length,spans}),spans});
           paragraphIndex++;return next;
         });
-        if(paragraphs.length){if(paragraphs.length>1000||paragraphs.some(p=>p.count>10000||p.spans.length>1000))unavailable(record.path,'source-boundary-budget');else groups.set(name,{slideIndex,paragraphs});}
+        if(!metadataAvailable)unavailable(record.path,'source-boundary-budget');else if(paragraphs.length)groups.set(name,{slideIndex,paragraphs});
         return result;
       });
     }

@@ -5,6 +5,7 @@ import {decodeTextTag,encodeTextTag} from '../dist/code-provenance.js';
 import {strFromU8,strToU8,unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {createNativeLatinSlots} from '../dist/native-latin-slots.js';
+import {nativeLanguageReadView,nativeLatinParagraphFingerprint} from '../dist/native-language-provenance.js';
 const decode=s=>s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
 const read=async(source,options={})=>{const diagnostics=[],bytes=await toPptx(source,{...options,onDiagnostic:d=>diagnostics.push(d)}),zip=unzipSync(new Uint8Array(bytes));const shapes=Object.entries(zip).filter(([p])=>/^ppt\/slides\/slide\d+\.xml$/.test(p)).flatMap(([path,b])=>[...strFromU8(b).matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(m=>({path,name:/<p:cNvPr\b[^>]*name="([^"]*)"/.exec(m[0])?.[1],xml:m[0],runs:[...m[0].matchAll(/<a:r>([\s\S]*?)<a:t>([\s\S]*?)<\/a:t><\/a:r>/g)].map(r=>({text:decode(r[2]),properties:r[1],latin:/<a:latin\b[^>]*typeface="([^"]*)"/.exec(r[1])?.[1],cs:/<a:cs\b[^>]*typeface="([^"]*)"/.exec(r[1])?.[1]}))})));return{bytes,zip,shapes,diagnostics,imported:await fromPptx(bytes)};};
 const source={language:'ar-SA',slides:[{title:'لغة عربية صريحة',items:[['البند: ',{text:'Bonjour 1',lang:'ar-SA'}]],numbering:'arabic'}]};
@@ -20,15 +21,19 @@ test('mixed source preserves Arabic-context digits and semantic source',async()=
  const mixed={language:'ar-SA',slides:[{title:'عنوان',items:[[{text:'العربية 1 Bonjour 2 العربية 3',lang:'ar-SA'}]]}]};
  const result=await read(mixed),runs=result.shapes.filter(s=>s.name?.startsWith('OPF list')).flatMap(s=>s.runs);equalSlots(runs.filter(r=>/[A-Za-z]/.test(r.text)));for(const run of runs.filter(r=>/[\u0600-\u06ff]/.test(r.text)))assert.notEqual(run.cs,run.latin,'Arabic and its contextual digits retain the script face');assert.deepEqual(result.imported,mixed);});
 test('native body rich faces',async()=>{
- const rich={slides:[{title:'Title',text:[{text:'Bonjour 1 ',lang:'ar-SA',fontFamily:'Georgia'},{text:'Hello 2',lang:'ar-SA',fontFamily:'Times New Roman'}]}]};
- const result=await read(rich);const runs=result.shapes.filter(s=>s.name?.startsWith('OPF native body')||s.name?.startsWith('OPF text')).flatMap(s=>s.runs);equalSlots(runs);assert.deepEqual(new Set(runs.map(r=>r.latin)),new Set(['Georgia','Times New Roman']));assert.deepEqual(result.imported,rich);});
+ const rich={slides:[{title:'Title',text:[{text:'Bonjour 1\nWelcome 2 ',lang:'ar-SA',fontFamily:'Georgia'},{text:'Hello 2',lang:'ar-SA',fontFamily:'Times New Roman'}]}]};
+ const {loadFonts}=await import('@openpresentation/opf-render/fonts-node');const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:rich});
+ try{const result=await read(rich,{fonts,bodyText:'native'}),bodies=result.shapes.filter(s=>s.name?.startsWith('OPF native body'));assert.equal(bodies.length,1,'The changed native-body capture path must actually execute; no measured fallback');assert.equal([...bodies[0].xml.matchAll(/<a:p>/g)].length,2,'Hard newline must exercise source offsets across paragraphs');const runs=bodies.flatMap(s=>s.runs);equalSlots(runs);assert.deepEqual(new Set(runs.map(r=>r.latin)),new Set(['Georgia','Times New Roman']));assert.deepEqual(result.imported,rich);}finally{fonts.dispose?.();}
+});
 test('foreign language and symbol controls',async()=>{
  const foreign={language:'ar-SA',slides:[{title:'عنوان',items:[[{text:'Bonjour 1',lang:'fr-FR'}],[{text:'ABC 1',lang:'ar-SA',fontFamily:'Symbol'}],[{text:'العربية 1',lang:'ar-SA'}]]}]};
  const runs=(await read(foreign)).shapes.flatMap(s=>s.runs);assert(!runs.find(r=>r.text==='Bonjour 1')?.cs);assert.equal(runs.find(r=>r.text==='ABC 1')?.cs,'Arabic Typesetting');assert.equal(runs.find(r=>r.text==='العربية 1')?.cs,'Arabic Typesetting');});
 test('exact current-text binding',async()=>{
  const diagnostics=[],profile={script:'Arab',scriptRole:'complexScript'},slots=createNativeLatinSlots({},()=>profile,d=>diagnostics.push(d));
  const shape='<p:sp><p:nvSpPr><p:cNvPr name="owned"/></p:nvSpPr><p:txBody><a:p><a:r><a:rPr lang="ar-SA"><a:latin typeface="Arial"/><a:cs typeface="Arabic Typesetting"/></a:rPr><a:t>Bonjour 1</a:t></a:r></a:p></p:txBody></p:sp>';
- slots.remember(0,'owned',[{source:'Bonjour 1',text:'Bonjour 1',style:{fontFamily:'Aptos'}}]);assert.match(slots.write(shape,0),/<a:cs typeface="Arial"/);const edited=shape.replace('Bonjour 1','Bonjour 2');assert.equal(slots.write(edited,0),edited);assert(diagnostics.some(d=>d.reason==='native-text'));assert.equal(slots.write(shape.replace('name="owned"','name="foreign"'),0),shape.replace('name="owned"','name="foreign"'));});
+ slots.remember(0,'owned',[{source:'Bonjour 1',text:'Bonjour 1',style:{fontFamily:'Aptos'}}]);assert.match(slots.write(shape,0),/<a:cs typeface="Arial"/);const edited=shape.replace('Bonjour 1','Bonjour 2');assert.equal(slots.write(edited,0),edited);assert(diagnostics.some(d=>d.reason==='native-text'));assert.equal(slots.write(shape.replace('name="owned"','name="foreign"'),0),shape.replace('name="owned"','name="foreign"'));
+ const missing=createNativeLatinSlots({},()=>profile,d=>diagnostics.push(d)),withoutLatin=shape.replace('Bonjour 1','عA').replace('<a:latin typeface="Arial"/>','');missing.remember(0,'owned',[{source:'عA',text:'عA',style:{fontFamily:'Aptos'}}]);assert.equal(missing.write(withoutLatin,0),withoutLatin,'Ambiguous native font keeps its exact current run, without introducing a new split');assert(diagnostics.some(d=>d.reason==='native-font'));
+});
 
 test('two authored identical mixed runs keep two source boundaries',async()=>{
  const run={text:'العربية 1 Bonjour 2 ',lang:'ar-SA',bold:true,color:'#123456'},source={language:'ar-SA',slides:[{title:'عنوان',items:[[run,{...run}]]}]};
@@ -63,4 +68,31 @@ test('unmeasured mixed public export never loads optional renderer or font packs
  const mixed={language:'ar-SA',slides:[{title:'عنوان',items:[[{text:'العربية 1 Bonjour 2 العربية 3',lang:'ar-SA'}]]}]};
  const program=`import assert from 'node:assert/strict';import{registerHooks}from'node:module';let attempts=0;registerHooks({resolve(specifier,context,next){if(specifier.startsWith('@openpresentation/opf-render')||specifier.startsWith('@openpresentation/fonts-')){attempts++;throw Object.assign(new Error('Optional renderer/font package unavailable'),{code:'ERR_MODULE_NOT_FOUND'});}return next(specifier,context);}});const{toPptx,fromPptx}=await import(${JSON.stringify(new URL('../dist/index.js',import.meta.url).href)});const source=${JSON.stringify(mixed)};assert.deepEqual(await fromPptx(await toPptx(source)),source);assert.equal(attempts,0);console.log(JSON.stringify({rendererOrFontAttempts:attempts}));`;
  const child=spawnSync(process.execPath,['--input-type=module','-e',program],{encoding:'utf8',timeout:30000,windowsHide:true});assert.equal(child.status,0,child.stderr);assert.equal(JSON.parse(child.stdout.trim()).rendererOrFontAttempts,0);
+});
+test('one native member attribute reorder preserves source boundaries',async()=>{
+ const source={language:'ar-SA',slides:[{title:'عنوان',items:[[{text:'العربية 1 Bonjour 2 العربية 3',lang:'ar-SA'}]]}]},result=await read(source),path='ppt/slides/slide1.xml';let changed=0;
+ const entries={...result.zip,[path]:strToU8(strFromU8(result.zip[path]).replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>!shape.includes('OPF list')?shape:shape.replace(/<a:rPr lang="ar-SA" altLang="en-US"/,()=>{changed++;return'<a:rPr altLang="en-US" lang="ar-SA"';})))};
+ assert.equal(changed,1,'Exactly one member has syntax-only reordered attributes');assert.deepEqual(await fromPptx(zipSync(entries)),source);
+});
+
+test('inherited mixed rich source retains pre-CS native chunking',async()=>{
+ const source={language:'ar-SA',slides:[{title:'عنوان',items:[[{text:'العربية 1 Bonjour 2 العربية 3'}]]}]},result=await read(source);
+ assert.deepEqual(result.imported,{language:'ar-SA',slides:[{title:'عنوان',items:[['العربية 1 ','Bonjour 2',' العربية 3']]}]},'Preserve the pre-existing proofing adapter chunks without adding a CS-only space run');
+});
+
+test('source-span metadata total budget retains all current glyph text',()=>{
+ const profile={script:'Arab',scriptRole:'complexScript'},properties=face=>`<a:rPr lang="ar-SA"><a:latin typeface="Aptos"/><a:cs typeface="${face}"/></a:rPr>`,run=(text,face)=>`<a:r>${properties(face)}<a:t>${text}</a:t></a:r>`;
+ for(const count of[1000,1001]){
+  const diagnostics=[],slots=createNativeLatinSlots({},()=>profile,d=>diagnostics.push(d)),fragments=Array.from({length:count},(_,sourceRun)=>({source:'عA',text:'عA',style:{fontFamily:'Aptos'},sourceRun}));slots.remember(0,'OPF text budget',fragments);
+  const shape=`<p:sp><p:nvSpPr><p:cNvPr name="OPF text budget"/></p:nvSpPr><p:txBody><a:p>${run('عA','Arabic Typesetting').repeat(count)}</a:p></p:txBody></p:sp>`,actual=slots.write(shape,0);
+  assert.equal([...actual.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(m=>m[1]).join(''),'عA'.repeat(count));assert.equal([...actual.matchAll(/<a:cs typeface="Aptos"\/><\/a:rPr><a:t>A<\/a:t>/g)].length,count,'Every selected ASCII glyph gets its final Latin face, including over budget');
+  assert.equal(slots.groups.size,count===1000?1:0);assert.equal(diagnostics.some(d=>d.reason==='source-boundary-budget'),count===1001);
+ }
+ for(const count of[500,501]){
+  const name='OPF text budget',paragraph=`<a:p>${(run('ع','Arabic Typesetting')+run('A','Aptos')).repeat(count)}</a:p>`,spans=Array.from({length:count},(_,i)=>({start:2*i,count:2}));
+  const latinSlots=[0,1].map(index=>({index,count:2*count,hash:nativeLatinParagraphFingerprint(paragraph,{name,index,count:2*count,spans}),spans})),record={v:1,name,paragraphs:[],latinSlots};
+  const shape=`<p:sp><p:nvSpPr><p:cNvPr name="${name}"/><p:nvPr><p:custDataLst><p:tags r:id="rBudget"/></p:custDataLst></p:nvPr></p:nvSpPr><p:txBody>${paragraph.repeat(2)}</p:txBody></p:sp>`,entries={'ppt/slides/slide1.xml':strToU8(shape),'ppt/tags/budget.xml':strToU8(`<p:tagLst><p:tag name="OPF_NATIVE_LANGUAGE_V1" val="${encodeTextTag(record)}"/></p:tagLst>`)},diagnostics=[];
+  const normalized=nativeLanguageReadView(entries,()=>new Map([['rBudget',{type:'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags',path:'ppt/tags/budget.xml'}]]),d=>diagnostics.push(d));
+  assert.equal(normalized.size,count===500?1:0);assert.equal(diagnostics.some(d=>d.message.includes('budget exceeded')),count===501);assert.equal(strFromU8(entries['ppt/slides/slide1.xml']),shape,'Read view never mutates current native input');
+ }
 });
