@@ -43,7 +43,7 @@ function Assert-B07BootstrapController([string]$Root,$Identity) {
         foreach($part in $file.path.Split('/')) { if($part -eq '' -or $part -in @('.','..') -or $part -match '[. ]$') { throw 'Unsafe B07 controller identity segment' } }
         Assert-B07BootstrapFile (Join-Path $full $file.path) $file
     }
-    foreach($required in @('scripts/native-acceptance/b07-current-profile.mjs','scripts/native-acceptance/run-b07-current-profile.ps1','scripts/native-acceptance/run-windows.ps1','scripts/native-acceptance/identity.mjs','scripts/native-acceptance/b07-current-generate.mjs','scripts/native-acceptance/b07-current-source.mjs','scripts/native-acceptance/table-profile.mjs','scripts/native-acceptance/reference-chart-profile.mjs','scripts/native-acceptance/reference-runtime-routes.mjs')) {
+    foreach($required in @('scripts/native-acceptance/b07-current-profile.mjs','scripts/native-acceptance/run-b07-current-profile.ps1','scripts/native-acceptance/run-windows.ps1','scripts/native-acceptance/identity.mjs','scripts/native-acceptance/b07-current-generate.mjs','scripts/native-acceptance/b07-current-source.mjs','scripts/native-acceptance/b07-stages.mjs','scripts/native-acceptance/b07-postflight.mjs','scripts/native-acceptance/b07-postflight.ps1','scripts/native-acceptance/run-reference-chart-profile.ps1','scripts/native-acceptance/table-profile.mjs','scripts/native-acceptance/reference-chart-profile.mjs','scripts/native-acceptance/reference-runtime-routes.mjs')) {
         if(@($Identity.files | Where-Object {[string]::Equals($_.path,$required,[StringComparison]::Ordinal)}).Count -ne 1) { throw 'Missing B07 controller input' }
     }
 }
@@ -88,6 +88,8 @@ function Assert-B07Binding {
 }
 $binding=Assert-B07Binding
 Import-B07PureDispatcher (Join-Path $PSScriptRoot 'run-windows.ps1')
+. (Join-Path $PSScriptRoot 'b07-postflight.ps1')
+Import-B07PostflightObserver (Join-Path $PSScriptRoot 'run-reference-chart-profile.ps1')
 $workerRoot=$profile.spec.workerRepository;$worker=Resolve-NativeAsset $workerRoot 'packages/pptx/test/native-furniture-control.ps1'
 $required=@('packages/pptx/test/native-furniture-control.ps1','packages/pptx/test/native-process.ps1','packages/pptx/test/native-process-check.ps1','packages/pptx/test/native-furniture-harness-check.ps1','packages/pptx/test/native-text-probes-check.ps1')
 $null=Assert-NativeRepositoryIdentity $workerRoot $profile.workerRepository $required
@@ -103,7 +105,7 @@ $shell=Join-Path $env:WINDIR 'System32/WindowsPowerShell/v1.0/powershell.exe'
 if(-not (Test-Path -LiteralPath $shell -PathType Leaf)) { throw 'B07 requires maintained Windows PowerShell5 lifecycle' }
 [void](New-Item -ItemType Directory -Path $output);[void](New-Item -ItemType Directory -Path (Join-Path $output 'inputs'));[void](New-Item -ItemType Directory -Path (Join-Path $output 'harness'))
 $script:b07RunnerPath=Join-Path $output 'runner.json'
-$script:b07Runner=[ordered]@{schemaVersion=1;profile=$profile.profile;envelopeSha256=$ExpectedEnvelopeSha256;caseId=$profile.selectedCase.id;timeoutSeconds=$TimeoutSeconds;runOfficeRequested=[bool]$RunOffice;status='snapshots-pending';snapshots=@();nativeAcceptance=$false;registryAcceptance=$false}
+$script:b07Runner=[ordered]@{schemaVersion=1;profile=$profile.profile;postflightPolicy=$profile.postflightPolicy;envelopeSha256=$ExpectedEnvelopeSha256;caseId=$profile.selectedCase.id;timeoutSeconds=$TimeoutSeconds;runOfficeRequested=[bool]$RunOffice;status='snapshots-pending';snapshots=@();nativeAcceptance=$false;registryAcceptance=$false}
 Write-B07Runner
 try {
     $copies=Get-B07SnapshotCopies $ExecutionEnvelope $profile
@@ -121,6 +123,7 @@ try {
     Invoke-NativeChild $shell (Join-Path $workerRoot 'packages/pptx/test/native-furniture-harness-check.ps1') @('-ScriptPath',$worker,'-ReportPath',(Join-Path $output 'harness/furniture.json')) (Join-Path $output 'furniture-harness.log')
     Invoke-NativeChild $shell (Join-Path $workerRoot 'packages/pptx/test/native-text-probes-check.ps1') @('-ScriptPath',$worker,'-RunnerPath',(Join-Path $PSScriptRoot 'run-windows.ps1')) (Join-Path $output 'text-probes-check.log')
     Invoke-NativeChild $shell (Join-Path $PSScriptRoot 'run-b07-current-profile-self-test.ps1') @() (Join-Path $output 'b07-profile-check.log')
+    Invoke-NativeChild $shell (Join-Path $PSScriptRoot 'b07-postflight-self-test.ps1') @() (Join-Path $output 'b07-postflight-check.log')
     $null=Assert-B07Binding;Assert-NativeFileRecords $output $script:b07Runner.snapshots
     $input=Join-Path $output 'inputs/case.pptx';$plan=Join-Path $output 'inputs/action-plan.json';$probe=Join-Path $output 'inputs/text-probe-plan.json'
     $actions=Read-AndValidateActionPlan $plan
@@ -134,10 +137,34 @@ try {
     $terminal=Get-Content -LiteralPath (Join-Path $output 'native/supervisor.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     $report=Get-Content -LiteralPath (Join-Path $output 'native/report.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if($terminal.timedOut -isnot [bool] -or $terminal.timedOut -or $terminal.exitCode -ne 0 -or $terminal.cleanupConfirmed -isnot [bool] -or -not $terminal.cleanupConfirmed -or $report.cleanupConfirmed -isnot [bool] -or -not $report.cleanupConfirmed -or $report.officeOperationsStopped -isnot [bool] -or $report.officeOperationsStopped -or $null -ne $report.error -or $report.lastStage -cne 'worker.complete' -or $report.lastStatus -cne 'success') { throw 'B07 owned worker did not complete; preserve outputs, no retry or cleanup' }
-    # One read-only query after completed owned Quit; never wait, kill, enumerate windows or touch COM.
-    $remaining=@([Diagnostics.Process]::GetProcessesByName('POWERPNT') | ForEach-Object {$_.Id})
-    $script:b07Runner.postflight=[ordered]@{policy='one-global-zero-query-after-completed-owned-quit';processIds=$remaining;officeActions=0};Write-B07Runner
-    if($remaining.Count -ne 0) { throw 'B07 global-zero postflight failed; no wait/retry/Office action' }
+    # NEW prospective policy: the worker's unchanged45s deadline is separate
+    # from the exact reviewed5s/100ms/51-query read-only global observation.
+    # No PID ownership is inferred and no failed/old runner can enter this path.
+    $script:b07Runner.status='native-worker-completed; bounded-postflight-pending';Write-B07Runner
+    $checked=& $node $validator verify-postflight --envelope $ExecutionEnvelope --expected-envelope-sha256 $ExpectedEnvelopeSha256 --output $output
+    if($LASTEXITCODE -ne 0) { throw 'B07 completed worker/request/stage/runtime binding failed; no process observation started' }
+    $postflightBinding=($checked | Out-String) | ConvertFrom-Json
+    Assert-NativeFileRecords $output $postflightBinding.rows
+    $native=Join-Path $output 'native';$postflightPath=Join-Path $native 'postflight.jsonl'
+    $stream=[IO.File]::Open($postflightPath,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::Read)
+    $writer=[IO.StreamWriter]::new($stream,[Text.UTF8Encoding]::new($false));$watch=[Diagnostics.Stopwatch]::StartNew()
+    $postflightRows=[Collections.Generic.List[object]]::new();$postflightResult=$null;$postflightError=$null
+    try {
+        $append={param($row) $writer.WriteLine(($row | ConvertTo-Json -Compress -Depth 8));$writer.Flush();$postflightRows.Add($row)}
+        $evidence=[pscustomobject]@{report=$report;binding=$postflightBinding}
+        $postflightResult=Invoke-ReferenceWitnessPostflight $terminal $evidence { @([Diagnostics.Process]::GetProcessesByName('POWERPNT') | ForEach-Object {$_.Id}) } { $watch.Elapsed.TotalMilliseconds } { [DateTime]::UtcNow.ToString('o') } {param($milliseconds) [Threading.Thread]::Sleep($milliseconds)} $append
+    } catch { $postflightError=$_.Exception.Message } finally { $watch.Stop();$writer.Dispose() }
+    # Preserve the raw first sample, including any nonzero IDs, on every outcome.
+    $samples=@($postflightRows | Where-Object {$_.status -ceq 'observed'})
+    $initialCount=if($samples.Count -gt 0){@($samples[0].processIds).Count}else{$null}
+    $finalCount=if($samples.Count -gt 0){@($samples[-1].processIds).Count}else{$null}
+    $postflightIdentity=[ordered]@{path='native/postflight.jsonl';bytes=(Get-Item -LiteralPath $postflightPath).Length;sha256=(Get-FileHash -LiteralPath $postflightPath -Algorithm SHA256).Hash.ToLowerInvariant()}
+    if($null -eq $postflightError) {
+        try { $null=Assert-B07Binding;Assert-NativeFileRecords $output $postflightBinding.rows }
+        catch { $postflightError=$_.Exception.Message }
+    }
+    $script:b07Runner.postflight=[ordered]@{policy=$profile.postflightPolicy;workerCleanupConfirmed=$postflightBinding.ready.workerCleanupConfirmed;initialCount=$initialCount;finalCount=$finalCount;result=$postflightResult;identity=$postflightIdentity;error=$postflightError};Write-B07Runner
+    if($null -ne $postflightError -or $null -eq $postflightResult) { throw 'B07 bounded postflight failed; preserve samples and stop without further query, retry or Office action' }
     $script:b07Runner.status='native-worker-completed; offline-observation-requested';Write-B07Runner
     & $node $validator observe --envelope $ExecutionEnvelope --expected-envelope-sha256 $ExpectedEnvelopeSha256 --output $output
     if($LASTEXITCODE -ne 0) { throw 'B07 raw offline observation binding failed; preserve all findings' }
