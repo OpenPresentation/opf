@@ -211,7 +211,7 @@
     {
       "title": "One category",
       "chart": {
-        "type": "line",
+        "type": "line-with-markers",
         "data": {
           "columns": [
             "Quarter",
