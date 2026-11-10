@@ -65,7 +65,7 @@ Short paragraphs without icons draw as tiles (LH-162, see [Dynamic composition](
 `icon` is one string, in one of three forms:
 
 - **`<set>:<name>`**, an icon of a set: `lucide:truck`, `tabler:rocket`. The gallery (`@openpresentation/gallery`) bundles
-  [Lucide](https://lucide.dev) (ISC, `lucide-static` 1.68.0, about 2,000 icons, the default set) and
+  [Lucide](https://lucide.dev) (ISC, `lucide-static` 1.70.0, about 2,000 icons, the default set) and
   [Tabler outline](https://tabler.io/icons) (MIT, `@tabler/icons` 3.50.0, about 5,200 icons). The MCP's `search_icons` tool
   finds names by keyword; never guess one.
 - **a bare name**, an icon of the deck's own `icons` map: an author's or an LLM's SVG, written once and named anywhere in the deck.

@@ -1,0 +1,33 @@
+
+> @openpresentation/mcp@0.33.0 build /private/tmp/opf-dependency-review/packages/mcp
+> node ../../scripts/reuse-build.mjs check || (node scripts/build-app.mjs && tsup && node ../../scripts/reuse-build.mjs stamp)
+
+build-app: app-dist/deck-app.html 9732 KiB (script 9479 KiB, styles 249 KiB, 32 faces on request)
+build-app: JSON-RPC resource 10332728 bytes / 10485760 default stdio bytes (153032 bytes headroom)
+CLI Building entry: {"index":"src/index.ts","server":"src/server.ts","stdio":"src/stdio.ts","bin":"src/bin.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v9.0.0
+CLI Using tsup config: /private/tmp/opf-dependency-review/packages/mcp/tsup.config.ts
+CLI Target: node24
+CLI Cleaning output folder
+ESM Build start
+DTS Build start
+ESM dist/index.js              504.00 B
+ESM dist/bin.js                1.55 KB
+ESM dist/server.js             333.00 B
+ESM dist/stdio.js              244.00 B
+ESM dist/chunk-PNKQNYD7.js     3.53 KB
+ESM dist/chunk-IMYV5ABB.js     268.02 KB
+ESM dist/bin.js.map            2.17 KB
+ESM dist/server.js.map         71.00 B
+ESM dist/stdio.js.map          71.00 B
+ESM dist/index.js.map          71.00 B
+ESM dist/chunk-PNKQNYD7.js.map 7.77 KB
+ESM dist/chunk-IMYV5ABB.js.map 340.30 KB
+ESM dist/chunk-LUVRTTX2.js     9.78 MB
+ESM dist/chunk-LUVRTTX2.js.map 9.83 MB
+ESM ⚡️ Build success in 266ms
+DTS ⚡️ Build success in 695ms
+DTS dist/index.d.ts  1.83 KB
+DTS dist/stdio.d.ts  1.22 KB
+DTS dist/server.d.ts 5.46 KB
