@@ -1,0 +1,5 @@
+# B07 worker probe-state source repair
+
+This isolated successor of reviewed worker `3deb9cfbf3ab7a9fae8acabc2f139fd58dacc1c5` renames seven internal `$script:textProbePlan` references to `$script:validatedTextProbePlan`. PowerShell's case-insensitive script scope made the former initializer clear the main `$TextProbePlan` CLI parameter before matching source/snapshot preflight. Native02 failed before COM; its original evidence and prior source remain unchanged.
+
+CLI/JSON vocabulary, binding/hash checks, caps and lifecycle are unchanged. The existing managed harness executes only the actual main parameter block and two probe-preflight AST statements in a temporary script, with real matching plan paths/hash, path/hash refusals and a case-insensitive parameter-shadow guard. Existing 48 controls plus five new controls are expected; all 53 require actual Windows PowerShell 5 validation. No PowerShell, Office, build or install was executed locally. The controller's reviewed-worker pin is unchanged and requires a separate reviewed update after managed validation.

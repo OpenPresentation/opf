@@ -315,11 +315,11 @@ if((Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Presentation
 if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256 -or $actions.Count -ne $request.actionPlan.count) { throw 'Action-plan snapshot does not match the validated request' }
 
 Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $actions $sourceSnapshot
-$script:textProbePlan=$null
+$script:validatedTextProbePlan=$null
 if($null -ne $request.PSObject.Properties['textProbePlan']) {
     $probe=$request.textProbePlan
     if($TextProbePlan -ceq '' -or (Resolve-Path -LiteralPath $TextProbePlan).Path -ine $probe.snapshotPath -or $probe.sha256 -cne $probe.snapshotSha256 -or (Get-FurnitureSha256 $probe.path) -cne $probe.sha256 -or (Get-FurnitureSha256 $TextProbePlan) -cne $probe.sha256) { throw 'Text probe plan request/source/snapshot differs' }
-    $script:textProbePlan=Read-AndValidateTextProbePlan $TextProbePlan $sourceHash ([bool]$CaptureTextFonts) $actions
+    $script:validatedTextProbePlan=Read-AndValidateTextProbePlan $TextProbePlan $sourceHash ([bool]$CaptureTextFonts) $actions
 } elseif($TextProbePlan -cne '') { throw 'Text probe plan is not bound to the validated request' }
 
 $script:sequence=0; $script:lastStage='worker.initialize'; $script:lastStatus='begin'; $script:cleanupConfirmed=$true; $script:officeOperationsStopped=$false
@@ -339,7 +339,7 @@ $report=[ordered]@{
     cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;lastStage=$script:lastStage;lastStatus=$script:lastStatus;error=$null
     scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations.'
 }
-if($null -ne $script:textProbePlan) { $report.textProbePlan=$request.textProbePlan }
+if($null -ne $script:validatedTextProbePlan) { $report.textProbePlan=$request.textProbePlan }
 if($ReadOnlySurvey) { $report.scope='One explicitly supplied read-only survey: exactly one slide, at most 100 shapes, an empty action plan, source at most 16 MiB/4096 ZIP entries and the unchanged 60-second maximum. Owned read-only Open, SaveCopyAs, read-only reopen and observations only; no content edits, UI, process termination or retry.' }
 function Write-FurnitureReport {
     $report.cleanupConfirmed=$script:cleanupConfirmed; $report.officeOperationsStopped=$script:officeOperationsStopped; $report.lastStage=$script:lastStage; $report.lastStatus=$script:lastStatus
@@ -443,8 +443,8 @@ function Read-FurnitureState($Presentation,[string]$Phase) {
             $shapeTagsObject=Invoke-FurnitureCom "$Phase.slide-$slideIndex.shape-$shapeIndex.tags.get" { return ,$shape.Tags }; $shapeTags=Read-NativeTags $shapeTagsObject "$Phase.slide-$slideIndex.shape-$shapeIndex.tags"
             $shapeRecord=[ordered]@{index=$shapeIndex;id=$id;name=$name;type=$type;left=$left;top=$top;width=$width;height=$height;rotation=$rotation;hasTextFrame=$hasTextFrame;text=$text;alternativeText=$alt;tags=$shapeTags}
             if($CaptureTextFonts) { $shapeRecord.textFont=Read-FurnitureTextFont $shape $text "$Phase.slide-$slideIndex.shape-$shapeIndex" }
-            if($null -ne $script:textProbePlan) {
-                foreach($target in $script:textProbePlan.targets) {
+            if($null -ne $script:validatedTextProbePlan) {
+                foreach($target in $script:validatedTextProbePlan.targets) {
                     if($target.slideIndex -eq $slideIndex -and ([string]::Equals($target.shapeName,$name,[StringComparison]::Ordinal) -or $target.shapeId -eq $id)) {
                         if(-not [string]::Equals($target.shapeName,$name,[StringComparison]::Ordinal) -or $target.shapeId -ne $id) { Stop-FurnitureLifecycle 'Foreign or stale text probe shape name/ID pair' }
                         $shapeRecord.textProbe=Read-FurnitureTextProbe $shape $target "$Phase.slide-$slideIndex.shape-$shapeIndex.probe"
@@ -458,7 +458,7 @@ function Read-FurnitureState($Presentation,[string]$Phase) {
         $rasters+=@([ordered]@{slideIndex=$slideIndex;path=$png;sha256=(Get-FurnitureSha256 $png)})
         $slideRecords+=@([ordered]@{index=$slideIndex;slideId=$slideId;name=$slideName;tags=$slideTags;shapeCount=$shapeCount;shapes=$shapeRecords})
     }
-    if($null -ne $script:textProbePlan -and $probeTargetsSeen -ne $script:textProbePlan.targets.Count) { Stop-FurnitureLifecycle 'Missing or repeated exact text probe target' }
+    if($null -ne $script:validatedTextProbePlan -and $probeTargetsSeen -ne $script:validatedTextProbePlan.targets.Count) { Stop-FurnitureLifecycle 'Missing or repeated exact text probe target' }
     return [ordered]@{slideCount=$slideCount;slides=$slideRecords;rasters=$rasters;chartSeriesNames=(Read-FurnitureSeriesNameState $Presentation $actions $Phase)}
 }
 function Get-ActionTags($Presentation,$Action,[string]$Prefix) {
