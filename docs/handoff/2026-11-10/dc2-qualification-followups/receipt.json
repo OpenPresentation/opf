@@ -1,0 +1,211 @@
+{
+  "schema": 1,
+  "kind": "DC2_SOURCE_BOUND_POST_FULL_CHECK_FOLLOWUPS",
+  "source": "dc2e94f77faeb5789421a3cf7d4cadf2536b1834",
+  "tree": "f847e95bf26af4bf8c61e7bc98e8b8ee4d0da33f",
+  "sourceClean": true,
+  "originalFullAggregate": {
+    "source": "dc2e94f77faeb5789421a3cf7d4cadf2536b1834",
+    "exitCode": 1,
+    "steps": 51,
+    "passed": 47,
+    "failed": 4,
+    "rendererScriptsUnrun": 126,
+    "archivedAtSource": "8dd7e7db973a9c66d64d6607282abfebfb75c43e",
+    "reclassified": false
+  },
+  "fontRecovery": {
+    "files": 12,
+    "bytes": 1422276,
+    "onlyFailedCheckRerun": true,
+    "tests": 38,
+    "exitCode": 0,
+    "regenerated": false
+  },
+  "ordinaryGolden": {
+    "exitCode": 1,
+    "signal": null,
+    "error": null,
+    "changed": 7,
+    "added": 5,
+    "candidateSlides": 965,
+    "baselineSlides": 960,
+    "unchanged": 953,
+    "changedDeck": "technical/localized-chart-references.opf.json",
+    "newDeck": "technical/explicit-chart-reference-lines.opf.json",
+    "beforeProducer": "348fd323b31302b5a3cdd7af2db8bb8bf6fffa2a",
+    "beforeWorkflow": 42498350968,
+    "allBeforePngHashesMatchCanonical": true,
+    "baselineUpdated": false,
+    "secondRender": false
+  },
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 397884,
+    "sha256": "527ad4b396517f84771cd91a1e719e82509bbb75a36aa369bf548645aa635062",
+    "records": 54,
+    "rawBytes": 808751
+  },
+  "images": [
+    {
+      "path": "images/current/0000.png",
+      "bytes": 5477,
+      "sha256": "155dd6f1a128b933c0f6da4b67d9ee3320986ce9f814bd8c82a53bc84f98d2ef",
+      "archivePath": "ordinary/0000.png"
+    },
+    {
+      "path": "images/current/0001.png",
+      "bytes": 5092,
+      "sha256": "ca95f68300c579bf8953754838cb84506913b7af47726d1e1ad222403459ea43",
+      "archivePath": "ordinary/0001.png"
+    },
+    {
+      "path": "images/current/0002.png",
+      "bytes": 6951,
+      "sha256": "4f648b9858fea329b9ba20f0e4603776a7af62c095e19e522c773b0bbd61bf2f",
+      "archivePath": "ordinary/0002.png"
+    },
+    {
+      "path": "images/current/0003.png",
+      "bytes": 4656,
+      "sha256": "0e7a1893e24a36b96e36d0e8d3746812e78afb82cf38ad7eec20385933bd1242",
+      "archivePath": "ordinary/0003.png"
+    },
+    {
+      "path": "images/current/0004.png",
+      "bytes": 2830,
+      "sha256": "14e8df342bcecbc97408343250a04abd11f7ab85394042ddefe2d9735f88e3f0",
+      "archivePath": "ordinary/0004.png"
+    },
+    {
+      "path": "images/current/0005.png",
+      "bytes": 7530,
+      "sha256": "2ce1c079bff120fe8c71e2c50b38969936ae93c3b96e4b144ca318c7cb22a9cf",
+      "archivePath": "ordinary/0005.png"
+    },
+    {
+      "path": "images/current/0006.png",
+      "bytes": 8655,
+      "sha256": "10d95d2a6d188ef235f4edc1fd7fa325303ea07c9c884dae1a88ffec338e7a14",
+      "archivePath": "ordinary/0006.png"
+    },
+    {
+      "path": "images/current/0007.png",
+      "bytes": 8894,
+      "sha256": "21a4f6d58ea5ff91254b5267c139bb2f440792436a4cb7c4f0f2b9f0f3de8ee5",
+      "archivePath": "ordinary/0007.png"
+    },
+    {
+      "path": "images/current/0008.png",
+      "bytes": 8459,
+      "sha256": "db283f19631b08d5603dee30c97bb8adf6ecc1dc1f21d657b5339446085c3361",
+      "archivePath": "ordinary/0008.png"
+    },
+    {
+      "path": "images/current/0009.png",
+      "bytes": 7095,
+      "sha256": "80100140d6de73ed585753c0f69896de3c5f27686d8aebfee4f45d75b7eea956",
+      "archivePath": "ordinary/0009.png"
+    },
+    {
+      "path": "images/current/0010.png",
+      "bytes": 8498,
+      "sha256": "6ecf5af8082f56505c3cd8913f0f88853171f0ddddbc0a53cab807e88f9fa0ae",
+      "archivePath": "ordinary/0010.png"
+    },
+    {
+      "path": "images/current/0011.png",
+      "bytes": 8502,
+      "sha256": "c745fec1d6728285a05ec5f37a13742d0d2ae1f8d77b594471dee6d394aba5fa",
+      "archivePath": "ordinary/0011.png"
+    },
+    {
+      "path": "images/current/sheet-0.png",
+      "bytes": 66641,
+      "sha256": "f8a2cdec2a0890ce427066665e761456629f39b2c9b12b8be4050a0ca3900d08",
+      "archivePath": "ordinary/sheet-0.png"
+    },
+    {
+      "path": "images/before/00.png",
+      "bytes": 7767,
+      "sha256": "9fca74123f20c751a92a8819e6899bed024c270be1068d5a8473c1781dea29f6",
+      "archivePath": "review/before/00.png"
+    },
+    {
+      "path": "images/before/01.png",
+      "bytes": 8894,
+      "sha256": "0fa3559130b37b221d660f65bff74945005ebc88de123b68106230fa0098d451",
+      "archivePath": "review/before/01.png"
+    },
+    {
+      "path": "images/before/02.png",
+      "bytes": 9049,
+      "sha256": "e722744eb8fd6ea8bae08eb1dd60b76ba33c1d5238655184e3c963cf8f4f2ea8",
+      "archivePath": "review/before/02.png"
+    },
+    {
+      "path": "images/before/03.png",
+      "bytes": 8631,
+      "sha256": "e99c0d9c914607eab1a77ea908de3ea47ed8113c9833f6bdccb9e9190841e753",
+      "archivePath": "review/before/03.png"
+    },
+    {
+      "path": "images/before/04.png",
+      "bytes": 7309,
+      "sha256": "b63009c33e8f2a68a97b8f178639e06ac65d99e9fd5c9a69bc8bcc6b9c2ec815",
+      "archivePath": "review/before/04.png"
+    },
+    {
+      "path": "images/before/05.png",
+      "bytes": 8699,
+      "sha256": "90e5a6fa94a25e0676eb6580404367f06346ea865811315286619c80df621759",
+      "archivePath": "review/before/05.png"
+    },
+    {
+      "path": "images/before/06.png",
+      "bytes": 8720,
+      "sha256": "737a31e4bffb9f1c62afd217b386bb6c1f72c5eb092209bd8d9afbe72d6a5ac9",
+      "archivePath": "review/before/06.png"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "path": "packages",
+      "oid": "b6c47a9903521c5ef2cb9eacecc8f1754b687d90"
+    },
+    {
+      "path": "spec",
+      "oid": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "path": "examples",
+      "oid": "33aa659b7da812c52b1c2c290a3f3d9ffc13871d"
+    },
+    {
+      "path": "scripts",
+      "oid": "8fcdc99829f483bbb86334edbbd78ae721400857"
+    },
+    {
+      "path": ".github",
+      "oid": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "oid": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "oid": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    }
+  ],
+  "actualNativeOrOfficeRun": false,
+  "registryAcceptance": false,
+  "releaseAcceptance": false,
+  "restoredInputs": {
+    "file": "restored-inputs.json.gz",
+    "bytes": 205803,
+    "sha256": "4fd47b49c9c9b11fcd159b28294f8ec43b6f6a31e31978575f839323d53a057b",
+    "records": 12,
+    "rawBytes": 1422276
+  }
+}
