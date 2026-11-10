@@ -1,0 +1,198 @@
+{
+  "schema": 1,
+  "kind": "final handoff recovery; evidence only",
+  "neverMerge": true,
+  "unqualified": true,
+  "nativeAcceptance": false,
+  "productAcceptance": false,
+  "baseRevision": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "branch": "codex/handoff-recovery-20261110",
+  "recordCount": 7,
+  "decodedBytes": 483041,
+  "archive": {
+    "path": "raw.json.gz",
+    "encoding": "gzip of UTF-8 JSON with canonical base64 records",
+    "bytes": 471363,
+    "sha256": "dbaf30493447d134a4c4e63dd3588abacef3a5704f365fe02b66bdc874faa494",
+    "jsonBytes": 645119,
+    "jsonSha256": "020fa4417c33952f1f5cb6030949321e462d7fcfe1d6ce807df1a3dabfd4e4ec"
+  },
+  "files": [
+    {
+      "path": "inheritance/README.md",
+      "sourcePath": "C:/opf-work/rr105-inherit-evidence/docs/handoff/2026-11-08/rtl-language-inheritance/README.md",
+      "bytes": 4759,
+      "sha256": "5d3dd5c95b62c3c58afe6e2ab37facd82a5083901eac5e5f5b8a498c96684d8a"
+    },
+    {
+      "path": "inheritance/review-packet.zip.gz",
+      "sourcePath": "C:/opf-work/rr105-inherit-evidence/docs/handoff/2026-11-08/rtl-language-inheritance/review-packet.zip.gz",
+      "bytes": 454934,
+      "sha256": "7e869d480bc9460ae2c318d598c450c047b2403504e992150f8724a3b1728416"
+    },
+    {
+      "path": "inheritance/review-packet-inventory.json",
+      "sourcePath": "C:/opf-work/rr105-inherit-evidence/docs/handoff/2026-11-08/rtl-language-inheritance/review-packet-inventory.json",
+      "bytes": 3086,
+      "sha256": "ecc6c26c0d8c2759c6623cebffd1d2330e19cc7eaf45b02c9ccfa8dbb493af26"
+    },
+    {
+      "path": "inheritance/verify-review.mjs",
+      "sourcePath": "C:/opf-work/rr105-inherit-evidence/docs/handoff/2026-11-08/rtl-language-inheritance/verify-review.mjs",
+      "bytes": 5026,
+      "sha256": "e9c6e4ca946ca4dbdc57e36c6dd136df2e06842cb43ae039e7fb444cf0d19c54"
+    },
+    {
+      "path": "sh21/artifacts-sh20-marker-gate.log",
+      "sourcePath": "C:/opf-work/sh21-qualification/artifacts-sh20-marker-gate.log",
+      "bytes": 2358,
+      "sha256": "c82b4c75ba8cf29671a23f02dabc086d109ee50273f4bed61c37fafc8b390327"
+    },
+    {
+      "path": "sh21/artifacts-sh21-candidate-build.log",
+      "sourcePath": "C:/opf-work/sh21-qualification/artifacts-sh21-candidate-build.log",
+      "bytes": 12016,
+      "sha256": "548f98ac2aef6d37456b45efa28f85d5075f9d4a1b3a9430a11f4ae6da81263f"
+    },
+    {
+      "path": "sh21/artifacts-sh21-product-pilot.log",
+      "sourcePath": "C:/opf-work/sh21-qualification/artifacts-sh21-product-pilot.log",
+      "bytes": 862,
+      "sha256": "42c67d2315fc48a85bb2a6768ecc40f1d8770fe51b207a75bab4bcc60c181e3e"
+    }
+  ],
+  "publishedEquivalent": [
+    {
+      "originalHead": "3c5c2f59cfc00a6995f814ff8e4ba2eaccc6a7d2",
+      "publishedHead": "b35d10dfafa711ce4039eeb497052a4f4294ba6b",
+      "publishedRef": "origin/codex/evidence-b07-character-bounds-native-sealed",
+      "proofPath": "docs/handoff/2026-11-10/b07-character-bounds-native",
+      "equalRawRecordsObservationsCsvAndThreePngs": true,
+      "archiveComparisonBytes": 8701700,
+      "archiveComparisonSha256": "0ba9474b6e83f4e5e54e16df918bbe2d7f8ba9e579f54821fd7b955f35b5be3d",
+      "archiveComparisonRestoresByteExactly": true,
+      "receiptParsedJsonEqual": true,
+      "scope": "Historical B07 nonmonotonic character bounds; no glyph/native/physical-font acceptance."
+    },
+    {
+      "originalHead": "897005388dd4617965b6a0e4f719e1c4051f1b46",
+      "publishedHead": "c1b0fd6ee043d9e8400270cb05dd1040199b24c6",
+      "publishedRef": "origin/codex/evidence-rr105-native-direction-2026-11-08",
+      "relation": "original is ancestor of published evidence head",
+      "scope": "Frozen experimental a:rtl=0 source; not a proven fix."
+    },
+    {
+      "originalHead": "d53812829b53e3c9e65e92519b78f2c8a1f6bed0",
+      "publishedEquivalentCommit": "acc222502c79d199527c62f25386e94fbe99052f",
+      "pullRequest": 1079,
+      "path": "scripts/test-rich-text-browser.mjs",
+      "originalBlob": "eace052ada422e43c28fb6515dda6471b514aa6f",
+      "mainBlob": "eace052ada422e43c28fb6515dda6471b514aa6f",
+      "stagingBlob": "eace052ada422e43c28fb6515dda6471b514aa6f",
+      "scope": "Exact fixture content already merged, no missing product delta."
+    }
+  ],
+  "eolOnlyFlags": {
+    "root": "C:/opf-work/rr-105-language-native",
+    "publishedHead": "e1f8a0921640f2b4100d6807fc3590dbe26abeed",
+    "publishedRef": "origin/codex/rr-105-language-native",
+    "files": [
+      {
+        "path": "C:/opf-work/rr-105-language-native/docs/evidence/rr-105-mixed-language-native/office/attempt-01-no-acceptance/build.json",
+        "bytes": 383,
+        "sha256": "b68df46ebfc7bd40ff64d7bc5f716774c33e985335c03e2e2e72849ddf5aa1d5",
+        "relativePath": "docs/evidence/rr-105-mixed-language-native/office/attempt-01-no-acceptance/build.json",
+        "headGitBlob": "81cc21836ea42434afdc4a6dc9edde0ef59c00f2",
+        "lfGitBlob": "81cc21836ea42434afdc4a6dc9edde0ef59c00f2",
+        "normalizedEqualsHead": true
+      },
+      {
+        "path": "C:/opf-work/rr-105-language-native/docs/evidence/rr-105-mixed-language-native/office/attempt-01-no-acceptance/run.json",
+        "bytes": 717,
+        "sha256": "1efeb6f8e380fd893fad12fef3919c139423334d0bae7e6bb1079a9cdfab5612",
+        "relativePath": "docs/evidence/rr-105-mixed-language-native/office/attempt-01-no-acceptance/run.json",
+        "headGitBlob": "edf09c3d4c851b7d3cdd106c06801433db1e6418",
+        "lfGitBlob": "edf09c3d4c851b7d3cdd106c06801433db1e6418",
+        "normalizedEqualsHead": true
+      },
+      {
+        "path": "C:/opf-work/rr-105-language-native/docs/evidence/rr-105-mixed-language-native/office/build.json",
+        "bytes": 430,
+        "sha256": "cfe299761170b412487c9e41dd33d6b5f5eb4242030da028a6145b069bd9556c",
+        "relativePath": "docs/evidence/rr-105-mixed-language-native/office/build.json",
+        "headGitBlob": "1ce74a95656d9d76630ce81fb16817621856fa77",
+        "lfGitBlob": "1ce74a95656d9d76630ce81fb16817621856fa77",
+        "normalizedEqualsHead": true
+      },
+      {
+        "path": "C:/opf-work/rr-105-language-native/docs/evidence/rr-105-mixed-language-native/office/metrics.json",
+        "bytes": 18452,
+        "sha256": "465eda47f6d0f6a5bbb0a48f7a39b145e2b3c251bcdb22b38a7b6b5f1a4280b7",
+        "relativePath": "docs/evidence/rr-105-mixed-language-native/office/metrics.json",
+        "headGitBlob": "b12e66e6e402b5d12c6d5c7de8fbf2bc9999ceca",
+        "lfGitBlob": "b12e66e6e402b5d12c6d5c7de8fbf2bc9999ceca",
+        "normalizedEqualsHead": true
+      },
+      {
+        "path": "C:/opf-work/rr-105-language-native/docs/evidence/rr-105-mixed-language-native/office/office.log",
+        "bytes": 45,
+        "sha256": "248e2a0af8eba5fd7726845e575393f03e54d010386fb25606b1d84679846480",
+        "relativePath": "docs/evidence/rr-105-mixed-language-native/office/office.log",
+        "headGitBlob": "ecdb3806164ea9b93b5cc3e41f0c67c35c418318",
+        "lfGitBlob": "ecdb3806164ea9b93b5cc3e41f0c67c35c418318",
+        "normalizedEqualsHead": true
+      },
+      {
+        "path": "C:/opf-work/rr-105-language-native/docs/evidence/rr-105-mixed-language-native/office/run.json",
+        "bytes": 993,
+        "sha256": "28a5760301dfb35fd680e546ceccf7b66e272e7433f3b08d14dbdb3ced8e6f9f",
+        "relativePath": "docs/evidence/rr-105-mixed-language-native/office/run.json",
+        "headGitBlob": "1b9eceb27982c33d960f3e7e2c2608da90a79c3e",
+        "lfGitBlob": "1b9eceb27982c33d960f3e7e2c2608da90a79c3e",
+        "normalizedEqualsHead": true
+      }
+    ],
+    "action": "Do not stage, refresh, normalize or alter source checkout; six working contents normalize exactly to existing published Git blobs."
+  },
+  "alreadyPreservedArchiveLogs": {
+    "publishedHead": "5e89a184ffc8a38539f5fb5e573f403066bcca17",
+    "publishedRef": "origin/codex/rr-105-034-archive-evidence",
+    "files": [
+      {
+        "path": "C:/opf-work/rr105-034-archive-evidence/artifacts-archive-capture-01.log",
+        "bytes": 77,
+        "sha256": "22c91ed9ec7403ddb30fdca8abd4e694a7c31d75b29a73539b4f6428ca2c8aed",
+        "publishedZipEntry": "docs/evidence/rr105-034-archive-review/original-builds-failures-and-tools.zip::evidence-local/artifacts-archive-capture-01.log",
+        "entrySha256VerifiedExact": true
+      },
+      {
+        "path": "C:/opf-work/rr105-034-archive-evidence/artifacts-part-review-01.log",
+        "bytes": 1176,
+        "sha256": "f6ac2ec2ec8e9367aac1040e6c45c23f61338cfbe5aba115f6015c979824ff8c",
+        "publishedZipEntry": "docs/evidence/rr105-034-archive-review/original-builds-failures-and-tools.zip::evidence-local/artifacts-part-review-01.log",
+        "entrySha256VerifiedExact": true
+      },
+      {
+        "path": "C:/opf-work/rr105-034-archive-evidence/artifacts-part-review-02.log",
+        "bytes": 436,
+        "sha256": "68968747d35483a2e14ab1da316e0ddbb7c7d94fec83cc925a3dd358af4f959d",
+        "publishedZipEntry": "docs/evidence/rr105-034-archive-review/original-builds-failures-and-tools.zip::evidence-local/artifacts-part-review-02.log",
+        "entrySha256VerifiedExact": true
+      }
+    ],
+    "action": "No duplicate copy; all three local untracked logs match existing published ZIP entry bytes exactly."
+  },
+  "sourcePreservationAudit": {
+    "path": "C:/opf-work/latin-cs-slots-qualification01/opf-preservation-extra.json",
+    "bytes": 62237,
+    "sha256": "a03dafd538a629d5d885a75b405c58e24453e9aec654645c8efad97d42c7e2e1",
+    "scope": "Read-only cached Git/byte inspection; no archived code executed."
+  },
+  "limitations": [
+    "Inheritance records are an offline historical A/B/C diagnostic, not a new native run or current-package qualification.",
+    "Historical verification.json reports 4144 assertions and six authored imports; this recovery does not execute that verifier or reproduce its claims.",
+    "The preserved verify-review.mjs has an absolute historical fflate dependency. The new verification below uses only Node built-ins and never imports or executes any archived source.",
+    "SH20 marker log reports 0 pass/3 fail; SH21 pilot reports 0 pass/1 fail(layout). The build log is not native feature acceptance.",
+    "No credentials, font binaries, entire artifact directories, dependencies or runtime packages were copied."
+  ]
+}

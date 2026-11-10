@@ -1,0 +1,4 @@
+raw.json.gz -text
+manifest.json text eol=lf
+verify.mjs text eol=lf
+README.md text eol=lf
