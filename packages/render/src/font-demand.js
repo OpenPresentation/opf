@@ -439,10 +439,11 @@ export async function createNodeDemand(
           }),
           loadPackages(optional, missing),
         ]);
+        const successfulPackages = new Set(batches.flatMap((batch) => batch.packages).filter((name) => !missing.some((item) => item.package === name)));
         const extra = {
           entries: batches.flatMap((batch) => batch.entries),
           fontFiles: batches.flatMap((batch) => batch.fontFiles),
-          packages: selected.map((pkg) => pkg.name), // Keep declared selection order across required/optional reads.
+          packages: selected.map((pkg) => pkg.name).filter((name) => successfulPackages.has(name)), // Actual successes, in declared selection order.
         };
         if (extra.entries.length) {
           registry.addFaces(

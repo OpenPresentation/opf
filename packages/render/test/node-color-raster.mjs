@@ -151,3 +151,40 @@ for (const mode of ['missing', 'integrity']) test(`${mode} raster companion refu
   assert.equal(result.retry.filter((face) => face.package === '@expo-google-fonts/noto-emoji').length, 1);
   assert.deepEqual(result.pending, []);
 });
+
+const optionalCode = String.raw`
+import {registerHooks}from'node:module';import fs from'node:fs/promises';import{createHash}from'node:crypto';
+const [mode,moduleURL,galleryURL]=process.argv.slice(1),blocked=mode==='color-missing'?'@expo-google-fonts/noto-color-emoji/package.json':'@expo-google-fonts/noto-sans-math/package.json',calls=[];
+registerHooks({resolve(specifier,context,next){if(specifier.includes('@expo-google-fonts/'))calls.push(specifier);if(specifier===blocked)throw Object.assign(Error('Optional package unavailable'),{code:'MODULE_NOT_FOUND'});return next(specifier,context);}});
+const{loadFonts}=await import(moduleURL),{toSvg}=await import(new URL('./index.js',moduleURL)),{gallery}=await import(galleryURL),diagnostics=[],renderOptions={catalogs:[gallery]};
+const doc=mode==='color-missing'?{slides:[{title:'Hello \u{1F600}',text:'Body'}]}:{design:{fontScheme:{id:'math-control',heading:'Cambria Math',body:'Cambria Math'}},slides:[{title:'Theorem',text:'Proof'}]};
+const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',fallbackFamily:'Roboto',scripts:'auto',presentation:doc,renderOptions,onDiagnostic:value=>diagnostics.push(value)}),family=mode==='color-missing'?'Noto Emoji':'STIX Two Math',text=mode==='color-missing'?'\u{1F600}':'Theorem';
+const advance=fonts.textMeasurement.measure(text,20,{fontFamily:family,fontWeight:400}),svg=toSvg(doc,1,{...renderOptions,fonts});
+const files=await Promise.all(fonts.fontFiles.map(async file=>({file,sha256:createHash('sha256').update(await fs.readFile(file)).digest('hex')})));
+console.log(JSON.stringify({blocked,calls,selection:fonts.registry.scriptSelection,faces:fonts.registry.describeFaces(),advance,svg,files,diagnostics,pending:fonts.pending(doc,renderOptions)}));
+`;
+for (const mode of ['color-missing', 'math-unneeded']) test(`${mode}: package reporting describes only actual verified resources and strict glyph coverage`, () => {
+  const result = JSON.parse(execFileSync(process.execPath, ['--input-type=module', '-e', optionalCode, mode, new URL('../dist/fonts-node.js', import.meta.url).href, new URL('../../gallery/dist/index.js', import.meta.url).href], { encoding: 'utf8', timeout: 30000, maxBuffer: 2 * 1024 * 1024 }));
+  assert(result.advance > 0, 'actual selected family strictly covers the drawn sample');
+  assert.deepEqual(result.pending, []);
+  assert(!result.selection.packages.includes('@expo-google-fonts/noto-sans-math'));
+  assert(!result.files.some((row) => slash(row.file).includes('/noto-sans-math/')));
+  if (mode === 'color-missing') {
+    assert(result.calls.includes(result.blocked), 'the unavailable optional primary was actually attempted');
+    assert.deepEqual(result.selection.packages, ['@expo-google-fonts/noto-emoji']);
+    assert(result.selection.notInstalled.includes('@expo-google-fonts/noto-color-emoji'));
+    assert(!result.faces.some((face) => face.family === 'Noto Color Emoji'));
+    assert(result.faces.some((face) => face.family === 'Noto Emoji'));
+    assert.match(result.svg, /font-family="Noto Emoji/);
+    assert(!result.files.some((row) => isColor(row.file)));
+    const mono = result.files.find((row) => isMono(row.file));
+    assert(mono);
+    assert.equal(mono.sha256, BUNDLED_FONT_MANIFEST.packages.find((pkg) => pkg.name === '@expo-google-fonts/noto-emoji').faces[0].sha256);
+    assert(result.diagnostics.some((finding) => finding.code === 'script-font-not-installed' && finding.package === '@expo-google-fonts/noto-color-emoji'));
+  } else {
+    assert(!result.calls.includes(result.blocked), 'an unneeded optional math package is never resolved');
+    assert.deepEqual(result.selection.packages, ['@expo-google-fonts/stix-two-math']);
+    assert.deepEqual(result.selection.notInstalled, []);
+    assert.match(result.svg, /font-family="STIX Two Math/);
+  }
+});
