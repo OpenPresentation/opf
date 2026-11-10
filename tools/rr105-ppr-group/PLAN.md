@@ -1,0 +1,9 @@
+# B07 paragraph-group discriminator — pure preparation
+
+This isolated source branch normally merges frozen901 only to reuse its pinned ZIP/XML tools and exact2bworker derivation helper. All previous paths/heads/inputs/evidence remain unchanged. Newcase is ONE paragraph-property-group copy based on actualC010bullet-none input, never an OPF export or product fix.
+
+Copy the bad first-line's exact good continuation a:pPr substring from the SAME input. The replacement changes only marL394654→0,indent-394654→0 and removes buClr(tx1),buSzPts2775,buFontAptos; both source/donor already have buNone,rtl0,leftalignment and100000line spacing. Preserve all147ZIP entry names/order,146other byte arrays, all UTF16 text/rPr/bodyPr/endParaRPr/transforms/IDs/names. Prove the entire target XML equals one bounded substring replacement and its parsed full tree equals only that pPr substitution.
+
+Derive the new guarded worker from exact2b825worker SHA51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9 by only ONE64hex allowlist substitution. No methods/getters/setters/caps/lifecycle changes. Managed input controls use distinct baselineC010 and original worker-allowlist4b9 hashes; no accidental derivation from the previous3a7d worker.
+
+Pure ZIP/XML proof, independent namespace-aware managed .NET full-tree proof and8actual AST-extracted input guards are authorized. Suite/default inspect source will bind distinct honest driver/worker checkouts of the same frozen authored head and unchangedce92controller. No Office/ValidateOnly, new text/control characters, language waiver, outlining, additional variant or native retry is authorized. Markers remain intentionally absent; glyphFix:false/currentRuntimeAcceptance:false/nativeAcceptance:false. Root reviews exact source and fixture proof before any further step.
