@@ -30,7 +30,7 @@ test('native language and appearance edits remain rich and are never flattened',
  const source=fixture(phrase),bytes=await exportDeck(source);
  for(const kind of ['language','alternate','bold','color']){
   const edited=editSlide(bytes,xml=>xml.replace(/<a:r>[\s\S]*?<\/a:r>/g,run=>!run.includes('<a:t>Release 1 remains available</a:t>')?run:kind==='language'?run.replace(/lang="en-US"/,'lang="fr-FR" altLang="en-US"'):kind==='alternate'?run.replace(/lang="en-US"/,'lang="en-US" altLang="ar-SA"'):kind==='bold'?run.replace(/<a:rPr\b([^>]*)>/,(_all,attrs)=>'<a:rPr'+attrs.replace(/\sb="[^"]*"/g,'')+' b="1">'):run.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/,'<a:solidFill><a:srgbClr val="FF0000"/></a:solidFill>')));
-  const restored=await importDeck(edited),actual=runs(restored.slides[0].items[0]);assert.ok(actual.some(run=>run.text.includes('Release 1')&&(kind==='language'?run.lang==='fr-FR':kind==='alternate'?run.lang==='en-US':kind==='bold'?run.bold===true:run.color==='#FF0000')),'current native '+kind+' retained');
+  const restored=await importDeck(edited),actual=runs(restored.slides[0].items[0]);assert.ok(actual.some(run=>run.text.includes('Release 1')&&(kind==='language'?run.language==='fr-FR':kind==='alternate'?run.language==='en-US':kind==='bold'?run.bold===true:run.color==='#FF0000')),'current native '+kind+' retained');
  }
 });
 test('named color slots after a split scalar retain their source identities',async()=>{
@@ -61,7 +61,7 @@ test('contradictory scalar intent cannot consume an authored color slot',async()
 test('unowned alternate retains current native language beside named color slots',async()=>{
  const source=fixture(phrase);source.slides[0].items.push([{text:'inherited role',color:'text'}],[{text:'accent role',color:'accent2'}]);const bytes=await exportDeck(source);assert.ok(tagOf(bytes).listScalars);
  const edited=editSlide(bytes,xml=>xml.replace(/<a:r>[\s\S]*?<\/a:r>/g,run=>!run.includes('<a:t>Release 1 remains available</a:t>')?run:run.replace(/lang="en-US"/,'lang="en-US" altLang="ar-SA"'))),diagnostics=[],restored=await importDeck(edited,diagnostics);
- assert.equal(restored.language,'ar-SA');assert.ok(runs(restored.slides[0].items[0]).some(run=>run.lang==='en-US'&&run.text==='Release 1 remains available'));assert.equal(characters(restored.slides[0].items[0]),phrase);assert.deepEqual(restored.slides[0].items.slice(1),source.slides[0].items.slice(1));assert.ok(diagnostics.some(d=>d.code==='native-language-unowned'));assert.ok(!diagnostics.some(d=>d.code==='color-reference-changed'));
+ assert.equal(restored.language,'ar-SA');assert.ok(runs(restored.slides[0].items[0]).some(run=>run.language==='en-US'&&run.text==='Release 1 remains available'));assert.equal(characters(restored.slides[0].items[0]),phrase);assert.deepEqual(restored.slides[0].items.slice(1),source.slides[0].items.slice(1));assert.ok(diagnostics.some(d=>d.code==='native-language-unowned'));assert.ok(!diagnostics.some(d=>d.code==='color-reference-changed'));
 });
 test('predominant foreign and no-base-vote proofing remain observed rather than replaced by scalar intent',async()=>{
  const source={language:'ar-SA',slides:[{items:[phrase,[{text:'inherited role',color:'text'}]],numbering:'arabic'}]},bytes=await exportDeck(source);assert.ok(tagOf(bytes).listScalars);
@@ -69,6 +69,6 @@ test('predominant foreign and no-base-vote proofing remain observed rather than 
   const edited=editSlide(bytes,xml=>xml.replace(/<a:rPr\b[^>]*>/g,run=>run.replace(/\s(?:lang|altLang)="[^"]*"/g,'').replace(/>$/,' lang="'+lang+'" altLang="'+altLang+'">'))),diagnostics=[],restored=await importDeck(edited,diagnostics);
   assert.equal(characters(restored.slides[0].items[0]),phrase);assert.ok(runs(restored.slides[0].items[1]).some(run=>run.color==='text'));assert.ok(!diagnostics.some(d=>d.code==='color-reference-changed'));
   if(lang==='en-US')assert.equal(restored.language,'en-US','current native base carries the predominant unowned language');
-  else {assert.equal(restored.language,'ar-SA','full source base remains while every current override is protected');assert.ok(runs(restored.slides[0].items[0]).every(run=>run.lang==='fr-FR'));assert.ok(runs(restored.slides[0].items[0]).length>0);}
+  else {assert.equal(restored.language,'ar-SA','full source base remains while every current override is protected');assert.ok(runs(restored.slides[0].items[0]).every(run=>run.language==='fr-FR'));assert.ok(runs(restored.slides[0].items[0]).length>0);}
  }
 });

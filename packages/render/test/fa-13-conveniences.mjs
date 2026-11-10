@@ -3,7 +3,7 @@ import {colorContrast, codeHighlightColors, ENGINE_DEFAULT_COLOR_SCHEME, resolve
 // The decks name the gallery's roboto font scheme, so the host catalog is registered (./catalog-harness.mjs).
 import { toSvg } from './catalog-harness.mjs';
 
-// FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets in the SVG preview.
+// FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.language and the 1:1, 4:5 and 9:16 presets in the SVG preview.
 
 const svg = (document, options = {}, index = 0) => toSvg(document, index + 1, { trace: true, ...options});
 const source = ['const a = 1;', 'const b = 2;', 'const c = a + b;', '', 'console.log(c);', 'return c;'].join('\n');
@@ -80,7 +80,7 @@ for (const [preset, width, height] of [['1:1', 720, 720], ['4:5', 720, 900], ['9
   assert.equal(image.includes('rotate(-30'), false);
 }
 
-// --- TextRun.code and TextRun.lang ----------------------------------------------------------------------------------------
+// --- TextRun.code and TextRun.language ----------------------------------------------------------------------------------------
 {
   const deck = text => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Runs', text}]});
   const out = svg(deck(['Run ', {text: 'npm install', code: true}, ' now']));

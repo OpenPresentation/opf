@@ -141,7 +141,7 @@ test('a text watermark is centered, diagonal and inside every preset', () => {
   assert.equal(layoutWatermark('A\nB', { width: 1000, height: 500 }).text, 'A B');
 });
 
-// --- TextRun.code and TextRun.lang -------------------------------------------------------------------------------
+// --- TextRun.code and TextRun.language -------------------------------------------------------------------------------
 
 test('a code run takes the code family; its own fontFamily wins; lang reaches the fragment style', () => {
   const runs = ['See ', { text: 'npm i', code: true }, ' and ', { text: 'x', code: true, fontFamily: 'Courier New' }, { text: ' bonjour', language: 'fr-FR' }];

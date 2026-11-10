@@ -69,8 +69,8 @@ for(const bodyText of ['measured','native']){
  const restored=await fromPptx(bytes,{catalogs:[gallery]});
  assert.equal(restored.language,'en-US');
  assert.deepEqual(restored.slides[1].language,measuredDeck.slides[1].language);
- assert.ok(allRuns(restored.slides[1]).some(run=>run.lang==='en-US'&&run.text.includes('Hello from this English run.')));
- assert.ok(allRuns(restored.slides[0]).some(run=>run.lang==='ar-SA'&&run.text.includes('مرحبا بالعالم')));
+ assert.ok(allRuns(restored.slides[1]).some(run=>run.language==='en-US'&&run.text.includes('Hello from this English run.')));
+ assert.ok(allRuns(restored.slides[0]).some(run=>run.language==='ar-SA'&&run.text.includes('مرحبا بالعالم')));
  const edited=xml.replace(/<a:rPr\b[^>]*>/g,run=>run.includes('altLang=')?run:run.replace('lang="ar-SA"','lang="he-IL"'));
  const native={...parts,'ppt/slides/slide2.xml':new TextEncoder().encode(edited)};
  assert.equal((await fromPptx(zipSync(native),{catalogs:[gallery]})).slides[1].language,'he-IL','an explicit native edit of base runs remains authoritative');

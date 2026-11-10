@@ -6,7 +6,7 @@ import {colorContrast, ENGINE_DEFAULT_COLOR_SCHEME, resolveCanvasDimensions, res
 import {toSvg, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
 
-// FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets, exported natively
+// FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.language and the 1:1, 4:5 and 9:16 presets, exported natively
 // and imported back. Core owns the geometry and colours (codeHighlight*, layoutWatermark); this checks the package.
 
 const exportDeck = async (document, options = {}) => {
@@ -169,7 +169,7 @@ const textDeck = (watermark, slideDesign) => ({design: {fontScheme: 'roboto', ..
   assert.equal(validate(textDeck({text: 'DRAFT', src: 'asset:x', opacity: 0.1}), {only: ['format']}).valid, false);
 }
 
-// --- TextRun.code and TextRun.lang -------------------------------------------------------------------------------------
+// --- TextRun.code and TextRun.language -------------------------------------------------------------------------------------
 const richDeck = (language, text) => ({...(language ? {language} : {}), design: {fontScheme: 'roboto'}, slides: [{title: 'Runs', text}]});
 const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(match => ({properties: match[1], text: match[2]}));
 {
@@ -208,7 +208,7 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
   assert.doesNotMatch(by('bonjour'), /<a:ea /, 'a Latin run keeps following the theme');
   const {document} = await importDeck(bytes);
   const imported = document.slides[0].text;
-  const lang = value => imported.find(run => run.text === value)?.lang;
+  const lang = value => imported.find(run => run.text === value)?.language;
   assert.equal(lang('bonjour'), 'fr-FR');
   assert.equal(lang('日本語'), 'ja-JP');
   assert.equal(lang('中文'), 'zh-CN');

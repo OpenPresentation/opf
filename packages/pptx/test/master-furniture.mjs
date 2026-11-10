@@ -65,9 +65,9 @@ const oneTone = {organization, design: {background: light, header: {end: {text: 
   const master = text(entries, 'ppt/slideMasters/slideMaster1.xml');
   const masterPictures = pictures(master);
   assert.equal(masterPictures.length, 1, 'the master holds the logo once');
-  assert.match(masterPictures[0], /name="OPF furniture footer left image"/);
+  assert.match(masterPictures[0], /name="OPF furniture footer start image"/);
   assert.ok(same(pictureBytes(entries, 'ppt/slideMasters/slideMaster1.xml', masterPictures[0]), bytes.square), 'the onLight icon');
-  assert.deepEqual(lifted(master).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header right text line 0', 'OPF furniture footer left image']);
+  assert.deepEqual(lifted(master).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header end text line 0', 'OPF furniture footer start image']);
   assert.equal(layouts(entries).length, catalogLayoutCount + 2, 'default, all reachable gallery templates and automatic layout share the master');
   assert.equal(lifted(text(entries, 'ppt/slideLayouts/slideLayout1.xml')).length, 0);
   for (let number = 1; number <= 3; number++) {
@@ -307,7 +307,7 @@ const oneTone = {organization, design: {background: light, header: {end: {text: 
   const deck = {design: {header: {start: {text: 'Page {{slide.number}}'}, end: {text: 'Same'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
   const {entries, bytes: output} = await exportDeck(deck);
   for (const number of [1, 2]) assert.match(text(entries, `ppt/slides/slide${number}.xml`), /type="slidenum"/);
-  assert.deepEqual(lifted(text(entries, 'ppt/slideMasters/slideMaster1.xml')).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header right text line 0']);
+  assert.deepEqual(lifted(text(entries, 'ppt/slideMasters/slideMaster1.xml')).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header end text line 0']);
   const {imported, invalid} = await read(output);
   assert.deepEqual(invalid, []);
   assert.deepEqual(imported.design.header, deck.design.header);
