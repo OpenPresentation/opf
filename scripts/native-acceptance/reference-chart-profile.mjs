@@ -19,6 +19,7 @@ export const REFERENCE_CASES = [
   "reference-native-lines",
   "reference-native-axes",
   "reference-overlays-markers",
+  "reference-singleton-axes",
 ];
 export const REFERENCE_CONTROLLER_FILES = [
   "scripts/native-acceptance/reference-chart-profile.mjs",
@@ -146,7 +147,7 @@ export const REFERENCE_LIMITS = {
 export function assertReferenceWitnessSelection(suite, caseId, input, plan, deps) {
   assert.ok(
     REFERENCE_CASES.includes(caseId),
-    "Select one of the three whole reference witness cases",
+    "Select one of the four whole reference witness cases",
   );
   assert.equal(suite.schemaVersion, 1);
   assert.equal(suite.nativeAcceptance, false);
@@ -156,7 +157,7 @@ export function assertReferenceWitnessSelection(suite, caseId, input, plan, deps
   assert.deepEqual(
     suite.cases.map((c) => c.id),
     REFERENCE_CASES,
-    "Exactly the three separate witness cases in authored order",
+    "Exactly the four separate witness cases in authored order",
   );
   assert.equal(suite.fullSuite, false);
   assert.equal(suite.scope?.profile, REFERENCE_PROFILE);
@@ -813,6 +814,22 @@ export function assertReferenceWitnessSource(archive, source) {
         assert.equal(owned.value, ref.value, "Bound overlay authored value differs");
         assert.equal(owned.axis, ref.axis ?? "value");
         assert.equal(owned.labelPosition, ref.labelPosition ?? "end");
+        if (wanted.type === 'combo' && wanted.secondaryAxis?.length) {
+          const associated = ordinary.find(x => wanted.secondaryAxis.includes(x.series['c:tx'].values?.[0]) === (ref.axis === 'secondary'));
+          assert.ok(associated, 'Singleton overlay ordinary axis association missing');
+          assert.equal(associated.group.axes.length, 2, 'Singleton overlay needs exactly one category/value pair');
+          const axes = associated.group.axes.map(id => chart.axes.find(a => a.id === id)),
+            category = axes.find(a => a?.kind === 'c:catAx'), value = axes.find(a => a?.kind === 'c:valAx');
+          assert.ok(category && value, 'Singleton overlay category/value pair missing');
+          assert.equal(category.cross, value.id, 'Singleton category/value pair is not reciprocal');
+          assert.equal(value.cross, category.id, 'Singleton value/category pair is not reciprocal');
+          assert.deepEqual(Object.keys(owned.axisIds ?? {}).sort(), ['category','value'], 'Explicit singleton axis IDs missing');
+          for (const [key, axis] of [['category',category],['value',value]]) {
+            assert.ok(Number.isInteger(owned.axisIds[key]) && owned.axisIds[key] >= 0 && owned.axisIds[key] <= 4294967295, 'Singleton axis ID must be uint32');
+            assert.equal(String(owned.axisIds[key]), axis.id, 'Singleton overlay selected the wrong current native axis');
+          }
+          assert.ok(Number(value.scaling?.['c:min']?.val) <= ref.value && Number(value.scaling?.['c:max']?.val) >= ref.value, 'Singleton explicit value is outside its own written bounds');
+        }
         assert.equal(
           slide.shapes.filter((x) => x.name === owned.id + " line").length,
           1,

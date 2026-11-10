@@ -10,14 +10,15 @@ export const REFERENCE_PROFILE='reference-chart-original-readonly-v1';
 export const REFERENCE_CASES=Object.freeze([
   {id:'reference-native-lines',file:'reference-native-lines.opf.json',slides:['line-multiple','line-defaults','no-inference'],types:['line','line','column']},
   {id:'reference-native-axes',file:'reference-native-axes.opf.json',slides:['combo-axes','column-percent','area-unlabelled'],types:['combo','column','area']},
-  {id:'reference-overlays-markers',file:'reference-overlays-markers.opf.json',slides:['line-markers','bar-overlay','singleton-overlay'],types:['line-with-markers','bar','column']}
+  {id:'reference-overlays-markers',file:'reference-overlays-markers.opf.json',slides:['line-markers','bar-overlay','singleton-overlay'],types:['line-with-markers','bar','column']},
+  {id:'reference-singleton-axes',file:'reference-singleton-axes.opf.json',slides:['singleton-both-axes','singleton-secondary-only','singleton-no-references'],types:['combo','combo','combo']}
 ].map(item=>Object.freeze({...item,slides:Object.freeze(item.slides),types:Object.freeze(item.types)})));
 export const REFERENCE_LIMITS=Object.freeze({slides:3,maxShapesPerSlide:3,maxTotalShapes:9,maxActions:0,maxArchiveBytes:16*1024*1024,maxZipEntries:4096,defaultTimeoutSeconds:45,maxTimeoutSeconds:60});
 const folder=fileURLToPath(new URL('./reference-witnesses/',import.meta.url));
 const supported=['area','bar','column','combo','line','line-with-markers'];
 
 export function assertReferenceSources(sources){
-  assert.equal(sources.length,REFERENCE_CASES.length,'Exactly the three independently authored cases');
+  assert.equal(sources.length,REFERENCE_CASES.length,'Exactly the four independently authored cases');
   const types=new Set(),ids=new Set();
   for(const[index,item]of sources.entries()){
     const expected=REFERENCE_CASES[index],doc=item.document;
@@ -59,6 +60,11 @@ export function assertReferenceSources(sources){
     assert.equal(typeof slide.chart.referenceLines[0].label,'string');
   }
   assert.equal(sources[2].document.slides[2].chart.data.rows.length,1,'Intentional singleton overlay');
+  const singleton=sources[3].document.slides;
+  for(const slide of singleton){assert.equal(slide.title,undefined);assert.equal(slide.subtitle,undefined);assert.equal(slide.chart.data.rows.length,1);assert.deepEqual(slide.chart.line,['Margin']);assert.deepEqual(slide.chart.secondaryAxis,['Margin']);assert.equal(slide.chart.data.columns[2].format,'0%');}
+  assert.deepEqual(singleton[0].chart.referenceLines.map(({value,axis,label})=>({value,axis,label})),[{value:180,axis:undefined,label:undefined},{value:.25,axis:'secondary',label:undefined}]);
+  assert.equal(singleton[1].chart.referenceLines.length,1);assert.equal(singleton[1].chart.referenceLines[0].axis,'secondary');assert.equal(singleton[1].chart.referenceLines[0].value,.25);assert.equal(singleton[1].chart.referenceLines[0].label,'Margin 25%');
+  assert.equal(singleton[2].chart.referenceLines,undefined);
   return sources;
 }
 

@@ -84,6 +84,7 @@ function syntheticCase(source) {
           value: ref.value,
           axis: ref.axis ?? "value",
           labelPosition: ref.labelPosition ?? "end",
+          ...(chart.type === "combo" ? {axisIds: ref.axis === "secondary" ? {category:30,value:40} : {category:10,value:20}} : {}),
           binding: "synthetic-not-a-production-hash",
         });
     });

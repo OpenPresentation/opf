@@ -23,7 +23,7 @@ import {
 import { resolveChartData } from "../../packages/javascript/dist/index.js";
 const compareImports = (source, imported, canvas) => compareReferenceWitnessImports(source, imported, canvas, resolveChartData);
 const clone = structuredClone;
-test("synthetic direct classic archives preserve all nine source charts, helpers, workbooks, raw caps and exact source contracts", () => {
+test("synthetic direct classic archives preserve all twelve source charts, helpers, workbooks, raw caps and exact source contracts", () => {
   assert.equal(REFERENCE_LIMITS.maxShapesPerSlide, 3);
   assert.equal(REFERENCE_LIMITS.maxTotalShapes, 9);
   assert.equal(REFERENCE_LIMITS.maxTimeoutSeconds, 60);
@@ -278,3 +278,5 @@ test('postflight receipt preserves initial nonzero samples and requires a fresh 
     const t=clone(terminal),r=clone(samples);mutate(t,r);assert.throws(()=>assertReferenceWitnessPostflight(t,r));
   }
 });
+
+test('fourth singleton case stays whole and binds both IDs to the current own-axis group without a shape-cap increase',()=>{const source=sources[3],archive=inspectReferenceArchive(syntheticCase(source),deps);assert.equal(source.id,'reference-singleton-axes');assert.deepEqual(archive.slides.map(s=>s.shapes.length),[3,3,1]);assert.equal(archive.rawShapes,7);assertReferenceWitnessSource(archive,source.document);for(const mode of['missing','wrong','duplicate','overflow','swapped-group','nonreciprocal','own-bounds']){const changed=clone(archive),chart=changed.slides[0].shapes.find(s=>s.kind==='chart').chart,owner=chart.ownership.overlays[0];if(mode==='missing')delete owner.axisIds;else if(mode==='wrong')owner.axisIds.value=40;else if(mode==='duplicate')owner.axisIds.category=owner.axisIds.value;else if(mode==='overflow')owner.axisIds.value=4294967296;else if(mode==='swapped-group')chart.groups[0].axes=['30','40'];else if(mode==='nonreciprocal')chart.axes.find(a=>a.id==='10').cross='40';else chart.axes.find(a=>a.id==='20').scaling['c:max'].val='100';assert.throws(()=>assertReferenceWitnessSource(changed,source.document),undefined,mode);}const five=structuredClone(source);five.document.slides[0].chart.referenceLines.forEach((r,i)=>r.label='extra'+i);assert.throws(()=>inspectReferenceArchive(syntheticCase(five),deps),/shape cap/);});

@@ -40,7 +40,7 @@ test("the dedicated generator default is source inspection only and incomplete/u
     );
   assert.equal(summary.nativeAcceptance, false);
   assert.equal(summary.fullSuite, false);
-  assert.equal(summary.cases.length, 3);
+  assert.equal(summary.cases.length, 4);
   assert.match(summary.exportedShapeCounts, /UNMEASURED/);
   for (const args of [["generate"], ["--run-office"], ["generate", "--consumer", "unbound"]]) {
     const out = spawnSync(process.execPath, [file, ...args], {
@@ -51,7 +51,7 @@ test("the dedicated generator default is source inspection only and incomplete/u
     assert.notEqual(out.status, 0);
     assert.match(out.stderr, /required|Unknown|explicit|supported/i);
   }
-  assert.equal(readReferenceSources().length, 3);
+  assert.equal(readReferenceSources().length, 4);
 });
 
 
