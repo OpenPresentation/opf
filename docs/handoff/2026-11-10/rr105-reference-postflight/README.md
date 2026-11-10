@@ -23,3 +23,15 @@ Each process sample is append-only JSONL with UTC, monotonic elapsed time and al
 - Focused formatter exited0, no fixes,9warnings/32informational diagnostics retained. Normal mapper, independent critical review, coherent PR/CI, all actual native reference cases and release qualification remain owed.
 
 Worktree starts from fresh origin/main and normally merges reviewed staging`b5a57bc86aba4de3e1ea28dcc38e47cfb46827f1`. The branch is a contribution toward one coherent native-reference qualification PR. Frozen historical workers, actual native outputs and all B07 evidence remain separate and unchanged. The lossless source/managed receipt packet preserves these source-preparation failures; it is not native evidence. The required full normal mapper is still pending the reviewed three-way union; no aggregate pass is claimed.
+
+## Durable source/managed evidence
+
+Frozen tested source: `9372083b8d7214fa1ba4e75b7ec7865c2b03c95b`. The lossless packet retains77 records /774,711 decoded bytes (133,213-byte gzip), including all original setup/parser refusals, the original32 managed outcomes, final38 controls, actual10-test JavaScript execution, pinned offline install/core-gallery build, and genuine ef9 append-deadline RED versus corrected PASS. The first native wrapper failure is retained only as historical receipts; no native case was rerun or reclassified.
+
+Replay without product imports or external processes:
+
+```sh
+node docs/handoff/2026-11-10/rr105-reference-postflight/verify.mjs
+```
+
+The verifier checks every archived byte, tested source/protected worker hashes, exact before/after append-deadline outcomes and executed tests. It reports whether current relevant files still match; it does not claim a later merged revision was tested. The normal mapper remains pending one reviewed coherent union with the axis-label and localized integration-test contributions.
