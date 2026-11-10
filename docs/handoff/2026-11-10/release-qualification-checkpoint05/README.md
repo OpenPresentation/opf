@@ -15,3 +15,5 @@ Vetoable decisions: retain the established demand-font memory/warm gains while f
 The JSON files retain actual root verifier outputs and exact closed CLI/main observer receipts. This checkpoint's required metadata-only check is separate and pending at initial write.
 
 The maintained metadata-only check at472f0343d actually passed five selected steps in26.9s, with typecheck skipped by selection and no package/full suites. Its exact log and terminal receipt are retained separately. A small metadata-only delivery delta remains distinct from combined product qualification.
+
+Receipt storage: the four readable check logs/JSON copies use LF. Their exact original CRLF bytes, SHA-256 values and the initial whitespace-check refusal are retained losslessly in metadata-checks.raw.json.gz; no shared Git setting was changed.
