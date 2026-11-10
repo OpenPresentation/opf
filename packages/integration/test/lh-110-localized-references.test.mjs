@@ -83,6 +83,41 @@ function nativeChart(parts, index) {
 	assert(target.startsWith("ppt/charts/"));
 	return { xml: parts.get(target).toString("utf8"), slide };
 }
+// Resolve this fixture's native neutral through the actual package relationships,
+// master color map and theme, without asking the importer to fill authored defaults.
+function relatedPart(parts, source, kind) {
+	const rels = parts.get(
+		path.posix.join(path.posix.dirname(source), "_rels", path.posix.basename(source) + ".rels"),
+	).toString("utf8");
+	const matches = [...rels.matchAll(/<Relationship\b([^>]*)\/?\s*>/g)]
+		.map((m) => attrs(m[1])).filter((r) => r.Type.endsWith("/" + kind));
+	assert.equal(matches.length, 1, "Exactly one native " + kind + " relationship");
+	assert.equal(matches[0].TargetMode, undefined);
+	const target = path.posix.normalize(path.posix.join(path.posix.dirname(source), matches[0].Target));
+	assert(target.startsWith("ppt/") && parts.has(target));
+	return target;
+}
+function nativeReferenceColor(parts, index, paint) {
+	const literal = /^<a:srgbClr val="([\dA-Fa-f]{6})"\/>$/.exec(paint);
+	if (literal) return "#" + literal[1].toUpperCase();
+	const scheme = /^<a:schemeClr val="tx1"><a:lumMod val="(\d+)"\/><\/a:schemeClr>$/.exec(paint);
+	assert(scheme, "Theme reference paint is the fixture's explicit tx1 luminance transform");
+	const slide = `ppt/slides/slide${index + 1}.xml`,
+		layout = relatedPart(parts, slide, "slideLayout"),
+		master = relatedPart(parts, layout, "slideMaster"),
+		theme = relatedPart(parts, master, "theme");
+	for (const part of [slide, layout])
+		assert.match(parts.get(part).toString("utf8"), /<p:clrMapOvr><a:masterClrMapping\/><\/p:clrMapOvr>/);
+	const mapping = /<p:clrMap\b([^>]*)\/>/.exec(parts.get(master).toString("utf8"));
+	assert(mapping);
+	assert.equal(attrs(mapping[1]).tx1, "lt1");
+	assert.match(parts.get(theme).toString("utf8"), /<a:lt1><a:srgbClr val="FFFFFF"\/><\/a:lt1>/);
+	const luminance = Number(scheme[1]);
+	assert(Number.isSafeInteger(luminance) && luminance >= 0 && luminance <= 100000);
+	// The asserted white base is achromatic: lumMod scales all three channels.
+	const channel = Math.round(255 * luminance / 100000).toString(16).padStart(2, "0");
+	return "#" + channel.repeat(3).toUpperCase();
+}
 const chartItem = (deck, index, fonts) => {
 	const context = resolveSlideContext(deck, index, { fonts, catalogs: [] });
 	return composeSlide(context.slide, context.options).items.find(
@@ -146,7 +181,7 @@ test("LH-110: all seven authored labels keep explicit geometry, native helper pa
 		const authored = source.chart.referenceLines;
 		assert.equal(authored.length, 1);
 		assert.equal(authored[0].value, 0.92);
-		assert.equal(authored[0].stroke.dash, "dash");
+		assert.deepEqual(authored[0].stroke, { dash: "dash" });
 		assert.ok(authored[0].label.endsWith("92%"));
 		const item = chartItem(document, index, fonts),
 			chart = item.chart,
@@ -193,6 +228,14 @@ test("LH-110: all seven authored labels keep explicit geometry, native helper pa
 			/<a:(?:srgbClr|schemeClr)\b/,
 			"Native reference has explicit RGB or theme paint",
 		);
+		assert.equal(
+			nativeReferenceColor(parts, index, paint[1]),
+			svgLine.stroke.toUpperCase(),
+			"Actual native XML paint resolves to the same SVG stroke color",
+		);
+		const nativeWidth = /<a:ln\b([^>]*)>/.exec(helper);
+		assert(nativeWidth);
+		assert.equal(Number(attrs(nativeWidth[1]).w) / 9525, 4 / 3);
 		assert.match(xml, /urn:openpresentation:chart-references:v1/);
 		assert.match(helper, /<c:symbol val="none"/);
 		assert.ok(
@@ -286,11 +329,10 @@ test("LH-110: all seven authored labels keep explicit geometry, native helper pa
 		assert.equal(reference[0].axis, "value");
 		assert.equal(reference[0].labelPosition, "end");
 		assert.equal(reference[0].stroke.dash, "dash");
-		assert.equal(reference[0].stroke.width, 4 / 3);
-		assert.equal(
-			reference[0].stroke.color.toUpperCase(),
-			svgLine.stroke.toUpperCase(),
-			"Current native XML paint imports to the same resolved SVG stroke color",
+		assert.deepEqual(
+			reference[0].stroke,
+			authored[0].stroke,
+			"Unchanged native paint preserves the exact authored partial stroke",
 		);
 		assert.equal(
 			result.shapes?.length ?? 0,
