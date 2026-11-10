@@ -316,7 +316,7 @@
               "subtitle"
             ]
           },
-          "description": "The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words ('left', 'center', 'right', 'top', 'middle', 'bottom'), so a Markdown block's region= option stays unambiguous: the validate finding opf/layout-region.",
+          "description": "The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words ('start', 'center', 'end', 'top', 'middle', 'bottom'), so a Markdown block's region= option stays unambiguous: the validate finding opf/layout-region.",
           "examples": [
             "main",
             "aside",
@@ -463,20 +463,20 @@
         "titleAlignment": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
-          "description": "Horizontal alignment of the title heading area."
+          "description": "Horizontal alignment of the title heading area. Logical, as design.titleAlignment of a deck: 'start' is the edge a paragraph starts on."
         },
         "contentAlignment": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
-          "description": "Horizontal alignment of the body regions."
+          "description": "Horizontal alignment of the body regions. Logical, as design.contentAlignment of a deck: 'start' is the edge a paragraph starts on."
         },
         "contentBox": {
           "type": "boolean",
@@ -496,8 +496,8 @@
             "none",
             "top",
             "bottom",
-            "left",
-            "right"
+            "start",
+            "end"
           ],
           "description": "Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template."
         },

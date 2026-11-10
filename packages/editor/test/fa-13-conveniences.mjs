@@ -60,7 +60,7 @@ for (const preset of ["1:1", "4:5", "9:16"]) {
   const code = formatRichTextRange(runs, 4, 15, { code: true });
   assert.deepEqual(code, ["Run ", { text: "npm install", code: true }, " now"]);
   const lang = formatRichTextRange(code, 0, 3, { lang: "fr-FR" });
-  assert.deepEqual(lang, [{ text: "Run", lang: "fr-FR" }, " ", { text: "npm install", code: true }, " now"]);
+  assert.deepEqual(lang, [{ text: "Run", language: "fr-FR" }, " ", { text: "npm install", code: true }, " now"]);
   const reset = formatRichTextRange(lang, 0, 19, { code: null, lang: null });
   assert.ok(reset.every((run) => typeof run === "string" || Object.keys(run).join() === "text"), "Reset removes code and lang");
   assert.throws(() => formatRichTextRange(runs, 0, 3, { lang: "not a tag" }), /BCP-47/);

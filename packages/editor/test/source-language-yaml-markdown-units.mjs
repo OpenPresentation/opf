@@ -32,7 +32,7 @@ const labels = (format, doc, explicit = true) => {
 assert.deepEqual(readMarkers('  - - a: 1'), { indent: 2, markers: [2, 4], rest: 'a: 1', restStart: 6 });
 assert.deepEqual(readMarkers('-a'), { indent: 0, markers: [], rest: '-a', restStart: 0 }, 'a dash is a marker only before a space');
 assert.equal(readEntry('title: x').key, 'title');
-assert.equal(readEntry('top+middle:left: x').key, 'top+middle:left', 'a colon not followed by a space is part of a plain key');
+assert.equal(readEntry('top+middle:start: x').key, 'top+middle:start', 'a colon not followed by a space is part of a plain key');
 assert.equal(readEntry('"a: b": 1').key, 'a: b');
 assert.equal(readEntry("'it''s': 1").key, "it's");
 assert.equal(readEntry('a # b: c'), null, 'a comment hides the colon');
@@ -55,7 +55,7 @@ const yamlContexts = [
   ['value, partly typed', 'design:\n  titleAlignment: ce¦', { mode: 'value', path: ['design', 'titleAlignment'], key: 'titleAlignment', text: 'ce' }],
   ['value of a key in a slide', 'slides:\n  - layout: pi¦', { mode: 'value', path: ['slides', 0, 'layout'], key: 'layout', text: 'pi' }],
   ['value inside quotes', 'slides:\n  - layout: "pi¦"', { mode: 'value', path: ['slides', 0, 'layout'], key: 'layout', text: 'pi', quoted: true }],
-  ['a promoted region key is one key', 'top+middle:left: ¦', { mode: 'value', path: ['top+middle:left'], key: 'top+middle:left', text: '' }],
+  ['a promoted region key is one key', 'top+middle:start: ¦', { mode: 'value', path: ['top+middle:start'], key: 'top+middle:start', text: '' }],
   ['flow list item', 'audience: [bo¦]', { mode: 'item', path: ['audience', 0], text: 'bo', flow: true }],
   ['second flow list item', 'audience: [board, cu¦]', { mode: 'item', path: ['audience', 1], text: 'cu', flow: true }],
   ['flow mapping key', 'design: {theme: x, co¦}', { mode: 'key', path: ['design'], existing: ['theme'], text: 'co', flow: true }],
@@ -235,7 +235,7 @@ assert.deepEqual(tokenFor('md', 'sli', 3), { quoted: false, closed: false, start
 
 // ---- hover ---------------------------------------------------------------------------------------------------------------------------------------
 {
-  const text = 'design:\n  titleAlignment: left\nslides:\n  - layout: pillars\n    title: Hello\n';
+  const text = 'design:\n  titleAlignment: start\nslides:\n  - layout: pillars\n    title: Hello\n';
   const hover = (needle, shift = 0) => hoverModelAt(EditorState.create({ doc: text }), text.indexOf(needle) + shift, { catalogs, format: 'yaml' });
   assert.equal(hover('titleAlignment', 2).model.title, 'titleAlignment');
   assert.ok(hover('titleAlignment', 2).model.description, 'the key has the schema description');
@@ -246,7 +246,7 @@ assert.deepEqual(tokenFor('md', 'sli', 3), { quoted: false, closed: false, start
   assert.equal(hover('left', 1).model.title, 'titleAlignment', 'an enum value shows its field');
 }
 {
-  const text = '---\nname: Deck\ndesign:\n  titleAlignment: left\n---\n# A\n<!-- slide: layout=pillars -->\n';
+  const text = '---\nname: Deck\ndesign:\n  titleAlignment: start\n---\n# A\n<!-- slide: layout=pillars -->\n';
   const hover = (needle, shift = 0) => hoverModelAt(EditorState.create({ doc: text }), text.indexOf(needle) + shift, { catalogs, format: 'md' });
   assert.equal(hover('titleAlignment', 3).model.title, 'titleAlignment');
   assert.equal(hover('pillars', 2).model.type, 'layout');

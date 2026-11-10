@@ -17,10 +17,10 @@
     {
       "layout": "two-column",
       "title": "Two columns of prose",
-      "left": {
+      "start": {
         "text": "The left column carries the situation: what happened, when it happened and who noticed first. It is long enough to wrap several times in a half-width column."
       },
-      "right": {
+      "end": {
         "text": "The right column carries the decision: what we will do next, who owns it and how we will know it worked. It wraps as often as the left one does."
       }
     },

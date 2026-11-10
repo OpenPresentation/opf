@@ -1,5 +1,5 @@
 // LH-69: a placed region's lone short text draws as a tile, left to right and right to left.
-// - A promoted region (a slide key such as `top:left`) whose one block is a plain text of at most 4 words that is no sentence draws as a
+// - A promoted region (a slide key such as `top:start`) whose one block is a plain text of at most 4 words that is no sentence draws as a
 //   card filling the region, the text bold at its foot, at one size for every tile of the slide, larger than the heading it was.
 // - The blocks beside the tiles keep every size they have without them (not even LH-149's half step is given up).
 // - A sentence ("Teams want fewer exports.") and a longer text keep LH-69's bold heading and draw no tile.
@@ -18,7 +18,7 @@ const inside = (box, outer) => box.x >= outer.x - 0.5 && box.y >= outer.y - 0.5 
 
 for (const [language, text] of Object.entries(WORDS)) {
   const direction = language === 'ar' ? 'rtl' : 'ltr';
-  const teams = (labels) => ({ title: text.title, 'top+middle:left': { text: labels[0] }, 'top+middle:center': { text: labels[1] }, 'top+middle:right': { text: labels[2] }, 'bottom:left+center+right': { bullets: text.bullets } });
+  const teams = (labels) => ({ title: text.title, 'top+middle:start': { text: labels[0] }, 'top+middle:center': { text: labels[1] }, 'top+middle:end': { text: labels[2] }, 'bottom:start+center+end': { bullets: text.bullets } });
 
   test(`LH-69 (${direction}): placed short texts draw as tiles at one size, the bullets beside them at their own size`, () => {
     const result = composeSlide(teams(text.teams), { direction });
@@ -57,10 +57,10 @@ for (const [language, text] of Object.entries(WORDS)) {
   });
 
   test(`LH-69 (${direction}): a sentence or a longer text keeps its heading`, () => {
-    const sentence = composeSlide({ title: text.title, left: { text: text.sentence }, 'center+right': { text: text.detail } }, { direction });
+    const sentence = composeSlide({ title: text.title, start: { text: text.sentence }, 'center+end': { text: text.detail } }, { direction });
     assert.equal(tiles(sentence), undefined, 'a short sentence is a statement, not a label');
     const long = composeSlide(teams([text.long, ...text.teams.slice(1)]), { direction });
     const grid = tiles(long);
-    assert.ok(!grid?.chips.some((chip) => chip.path.endsWith('top+middle:left.text')), 'a text of more than four words draws no tile');
+    assert.ok(!grid?.chips.some((chip) => chip.path.endsWith('top+middle:start.text')), 'a text of more than four words draws no tile');
   });
 }

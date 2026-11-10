@@ -319,7 +319,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
   // insets on the slide and on the empty layout alike.
   const band = {edge: 'left', size: 0.2}, twoLines = block => block.text !== undefined ? {text: 'First line.\nSecond line.', emphasis: false} : block;
   for (const contentBox of [undefined, true]) {
-  const deck = {name: 'Bands', catalogs: {custom: {layouts: templates}}, design: {...(contentBox !== undefined ? {contentBox} : {}), footer: {left: {text: 'Board review'}, right: {text: '{{slide.number}}'}}},
+  const deck = {name: 'Bands', catalogs: {custom: {layouts: templates}}, design: {...(contentBox !== undefined ? {contentBox} : {}), footer: {start: {text: 'Board review'}, end: {text: '{{slide.number}}'}}},
     slides: contentSlides().map(slide => ({...slide, subtitle: 'Subtitle', blocks: [{image: {src: square}, placement: band}, ...(slide.blocks ?? []).map(twoLines)]}))};
   const {entries: parts} = await exportDeck(deck);
   const emu = value => Math.round(value * 9525), boxOf = box => [box.x, box.y, box.width, box.height].map(emu);
@@ -451,7 +451,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
 // placeholders and the OPF_LAYOUT_V1 tag; repeated footer text sits on the master. Import maps the copy back to its template.
 {
   const deck = {name: 'Furniture', catalogs: {custom: {layouts: {pillars: templates.pillars, text: templates.text}}},
-    design: {footer: {left: {text: 'Board review'}, right: {text: 'Confidential draft'}}},
+    design: {footer: {start: {text: 'Board review'}, end: {text: 'Confidential draft'}}},
     slides: [{layout: 'pillars', title: 'One', blocks: [{text: 'A'}, {text: 'B'}]}, {layout: 'text', title: 'Two', blocks: [{text: 'Body.'}]},
       {layout: 'pillars', title: 'Three', blocks: [{text: 'C'}], design: {footer: false}}, {title: 'Automatic', text: 'Composed automatically.'}]};
   const {bytes: output, entries: parts} = await exportDeck(deck);

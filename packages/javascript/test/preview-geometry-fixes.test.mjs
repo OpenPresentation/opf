@@ -38,7 +38,7 @@ test('a picture bullet draws as a square 0.65 of the font size with its bottom o
 });
 
 test('furniture images and logos align like the zone text: left edge, centered, right edge', () => {
-  const presentation = {organization: {id: 'acme', name: 'Acme', logo: {icon: png(128, 128)}}, design: {header: {left: {image: png(128, 128)}, center: {image: 'var:organization.logo.icon'}, right: {image: png(128, 128)}}, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: 'Right'}}}};
+  const presentation = {organization: {id: 'acme', name: 'Acme', logo: {icon: png(128, 128)}}, design: {header: {start: {image: png(128, 128)}, center: {image: 'var:organization.logo.icon'}, end: {image: png(128, 128)}}, footer: {start: {image: 'var:organization.logo.icon'}, end: {text: 'Right'}}}};
   const layout = layoutFurniture({}, {presentation});
   // RR-91: zones are columns on the content inset (padding .08, gutter 2% of the width) when their neighbours are occupied.
   const inset = 0.08 * 720, gutter = 1280 * 0.02, zoneWidth = (1280 - 2 * inset - 2 * gutter) / 3;
@@ -47,26 +47,27 @@ test('furniture images and logos align like the zone text: left edge, centered, 
   assert.equal(images.length, 4);
   for (const part of images) {
     near(part.box.width, part.box.height, `${part.kind} ${part.zone} ${part.field} is as wide as it is tall`);
-    const expected = part.zone === 'left' ? zoneX.left : part.zone === 'center' ? zoneX.center + (zoneWidth - part.box.width) / 2 : zoneX.right + zoneWidth - part.box.width;
+    const expected = part.zone === 'start' ? zoneX.left : part.zone === 'center' ? zoneX.center + (zoneWidth - part.box.width) / 2 : zoneX.right + zoneWidth - part.box.width;
     near(part.box.x, expected, `${part.kind} ${part.zone} ${part.field} x`);
   }
   // The text of the same zone still spans the full zone box, so its left and right edges are the images' edges.
-  const right = layout.parts.find(part => part.type === 'text' && part.zone === 'right');
-  near(right.box.x + right.box.width, images.find(part => part.zone === 'right').box.x + images.find(part => part.zone === 'right').box.width, 'right edges meet');
+  const right = layout.parts.find(part => part.type === 'text' && part.zone === 'end');
+  near(right.box.x + right.box.width, images.find(part => part.zone === 'end').box.x + images.find(part => part.zone === 'end').box.width, 'right edges meet');
   // LH-38: the header band starts half a content margin (28.8 px at the default padding) from the top edge.
   near(images.find(part => part.kind === 'header').box.y, 720 * 0.04, 'header image top');
-  assert.deepEqual(layout.parts.map(part => part.alignment), layout.parts.map(part => part.zone));
+  // The zone is the document's word; the alignment is the engine's (`left` is the start edge in this left-to-right deck).
+  assert.deepEqual(layout.parts.map(part => part.alignment), layout.parts.map(part => ({start: 'left', center: 'center', end: 'right'})[part.zone]));
   // A logo reference draws the organization's asset and keeps the reference it came from.
   const logo = images.find(part => part.kind === 'footer');
   assert.deepEqual([logo.field, logo.reference, logo.sourcePath, logo.image], ['image', 'var:organization.logo.icon', 'organization.logo.icon', png(128, 128)]);
 });
 
 test('a furniture image keeps its own proportions, capped at the zone; unreadable sources are square', () => {
-  const place = (image, zone = 'right') => layoutFurniture({}, {presentation: {design: {header: {[zone]: {image}}}}}).parts[0];
+  const place = (image, zone = 'end') => layoutFurniture({}, {presentation: {design: {header: {[zone]: {image}}}}}).parts[0];
   const wide = place(png(400, 100));
   near(wide.box.width, wide.box.height * 4, 'a 4:1 PNG');
   near(wide.box.x + wide.box.width, 1280 - 0.08 * 720, 'the wide image still ends at the content edge');
-  const tall = place(png(50, 100), 'left');
+  const tall = place(png(50, 100), 'start');
   near(tall.box.width, tall.box.height / 2, 'a 1:2 PNG');
   near(tall.box.x, 0.08 * 720, 'the tall image starts at the content inset');
   const huge = place(png(4000, 100), 'center');
@@ -84,14 +85,14 @@ test('a furniture image keeps its own proportions, capped at the zone; unreadabl
 });
 
 test('asset references resolve through the deck assets for the image proportions', () => {
-  const presentation = {assets: {wordmark: {src: png(300, 100)}, alias: 'asset:wordmark', loop: 'asset:loop'}, design: {header: {right: {image: 'asset:alias'}}, footer: {left: {image: 'asset:loop'}}}};
+  const presentation = {assets: {wordmark: {src: png(300, 100)}, alias: 'asset:wordmark', loop: 'asset:loop'}, design: {header: {end: {image: 'asset:alias'}}, footer: {start: {image: 'asset:loop'}}}};
   const [header, footer] = layoutFurniture({}, {presentation}).parts;
   near(header.box.width, header.box.height * 3, 'a chain of references');
   near(footer.box.width, footer.box.height, 'a reference loop is unreadable');
 });
 
 // Only a bounded prefix of a data URI is decoded, and results are memoized per source.
-const furnitureAspect = image => { const part = layoutFurniture({}, {presentation: {design: {header: {right: {image}}}}}).parts[0]; return part.box.width / part.box.height; };
+const furnitureAspect = image => { const part = layoutFurniture({}, {presentation: {design: {header: {end: {image}}}}}).parts[0]; return part.box.width / part.box.height; };
 const padded = (head, bytes) => Buffer.concat([Buffer.from(head), Buffer.alloc(bytes, 7)]);
 const pngBytes = (width, height, extra) => {
   const head = Buffer.alloc(33);

@@ -234,7 +234,7 @@ export interface StatsOptions extends CatalogOptions {
 const DEFAULT_WORDS_PER_MINUTE = 130;
 const KIND_ORDER = ['text', 'items', 'bullets', 'quote', 'metric', 'code', 'timeline', 'diagram', 'chart', 'table', 'image', 'video'] as const;
 const FURNITURE_FIELDS = ['image', 'text', 'socials', 'date'] as const;
-const ZONES = ['left', 'center', 'right'] as const;
+const ZONES = ['start', 'center', 'end'] as const;
 
 const WORD = /[\p{L}\p{N}\p{M}]+(?:['’.,-][\p{L}\p{N}\p{M}]+)*/gu;
 /** Scripts written without spaces between words (Thai, Lao, Myanmar, Khmer, kana, Han) count one unit per character: a fixed rule, so a count never depends on the runtime's ICU data. */

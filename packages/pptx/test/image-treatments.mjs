@@ -34,7 +34,7 @@ let checked = 0;
 
 // Masks: the picture's preset geometry and guides equal core's normalized shape, at core's frame.
 for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellipse', {}], ['hexagon', {}], ['rect', {}], ['star5', {}]]) {
-  const deck = deckFor({ placement: { edge: 'right', inset: true }, shape, ...extra });
+  const deck = deckFor({ placement: { edge: 'end', inset: true }, shape, ...extra });
   const geometry = geometryOf(deck);
   const { picture } = await exported(deck);
   const preset = picture['p:spPr']['a:prstGeom'];
@@ -48,7 +48,7 @@ for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellips
 
 // Border: centered solid line on the picture; width in EMU from scaled reference pixels, alpha from #RRGGBBAA.
 {
-  const deck = deckFor({ placement: { edge: 'left' }, shape: 'roundRect', stroke: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
+  const deck = deckFor({ placement: { edge: 'start' }, shape: 'roundRect', stroke: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
   const geometry = geometryOf(deck, 1920, 1080);
   const line = (await exported(deck)).picture['p:spPr']['a:ln'];
   assert.equal(Number(line.w), Math.round(geometry.stroke.width / 96 * 914400));
@@ -81,7 +81,7 @@ for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellips
 
 // Overlay: one native shape directly above the picture, in the frame's shape or an edge band.
 {
-  const deck = deckFor({ placement: { edge: 'right', inset: true }, shape: 'ellipse', overlay: { color: '#00000080', opacity: 0.5 } });
+  const deck = deckFor({ placement: { edge: 'end', inset: true }, shape: 'ellipse', overlay: { color: '#00000080', opacity: 0.5 } });
   const geometry = geometryOf(deck);
   const { overlay, entries } = await exported(deck);
   assert.equal(overlay['p:spPr']['a:prstGeom'].prst, 'ellipse');
@@ -105,7 +105,7 @@ for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellips
 }
 
 // Round trip: every treatment field returns while the native objects are unchanged.
-const full = { placement: { edge: 'right', size: 0.46, inset: true }, aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, fit: 'cover', focus: { x: 0.3, y: 0.6 },
+const full = { placement: { edge: 'end', size: 0.46, inset: true }, aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, fit: 'cover', focus: { x: 0.3, y: 0.6 },
   stroke: { color: 'dark1', width: 12 }, opacity: 0.8, recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: '#000000', opacity: 0.2 } };
 {
   const deck = deckFor(full);

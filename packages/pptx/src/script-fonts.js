@@ -46,7 +46,7 @@ export function planScriptFonts(presentation, report, {catalogs} = {}) {
 }
 
 /**
- * FA-13: the OOXML tag a run's own `lang` (TextRun.lang) is written with: core's curated tag for the language (fr becomes
+ * FA-13: the OOXML tag a run's own `lang` (TextRun.language) is written with: core's curated tag for the language (fr becomes
  * fr-FR). Explicit RTL base-language choices remain marked; other choices equal to the effective slide language are elided. Without a plan the tag is written as given.
  */
 export function runLanguageTag(plan, tag, slideIndex = 0) {
@@ -68,7 +68,7 @@ export function runLanguageTag(plan, tag, slideIndex = 0) {
 }
 
 /**
- * FA-13: a run with its own language (TextRun.lang) names the East Asian and complex-script faces of that language, so a Han
+ * FA-13: a run with its own language (TextRun.language) names the East Asian and complex-script faces of that language, so a Han
  * run tagged ja-JP draws in the Japanese face and one tagged zh-CN in the Simplified Chinese face, as the preview does. Only a
  * slot with a script-specific font for the run's language is written; every other run keeps following the theme. Runs the
  * exporter writes carry no ea/cs of their own (stripRunScriptFonts), so this runs after that strip. `xml` is a slide part.
@@ -314,7 +314,7 @@ function runScriptFonts(xml, resolved, headingShape) {
   });
 }
 
-// A run with its own language (TextRun.lang, FA-13) is written with an altLang attribute; the deck language never replaces it.
+// A run with its own language (TextRun.language, FA-13) is written with an altLang attribute; the deck language never replaces it.
 const RUN_LANGUAGE = /(<a:(?:rPr|endParaRPr|defRPr)\b[^>]*?\slang=")en-US("(?! altLang="))/g;
 const OWN_LANGUAGE_RUN = /<a:rPr\b[^>]*?\slang="([^"]+)" altLang="en-US"[^>]*[^/]>[\s\S]*?<\/a:rPr>/g;
 

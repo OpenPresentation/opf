@@ -32,13 +32,13 @@ const drawn = deck => resolvePresentation(deck, {fonts, baseDir, date: DATE}).sl
     ink: placed?.outline ? {left: Math.round(placed.outline.x * EMU), right: Math.round((placed.outline.x + placed.outline.width) * EMU)} : undefined};
 });
 const slides = [{title: 'One', text: 'Body'}, {title: 'Two', text: 'Body'}];
-const org = {left: {text: 'Tandem BioSystems'}, center: {text: 'Internal planning draft'}, right: {text: '{{slide.number}}'}};
+const org = {start: {text: 'Tandem BioSystems'}, center: {text: 'Internal planning draft'}, end: {text: '{{slide.number}}'}};
 
 {
   // Every zone holds a part and the deck has no date: the date goes into the left zone's row, after the organization name,
   // exactly where OPF draws it when the author adds date: true there.
   const {boxes} = await masterBoxes({design: {fontScheme: 'roboto', footer: org}, slides});
-  const withDate = drawn({design: {fontScheme: 'roboto', footer: {...org, left: {...org.left, date: true}}}, slides});
+  const withDate = drawn({design: {fontScheme: 'roboto', footer: {...org, start: {...org.left, date: true}}}, slides});
   const date = withDate.find(part => part.field === 'date'), name = withDate.find(part => part.text === 'Tandem BioSystems');
   assert.equal(boxes.dt.x, date.x, 'The master date starts where OPF draws a date added to the left zone.');
   assert.ok(boxes.dt.x > name.ink.right, 'The date starts after the organization name: turning it on never covers the name.');
@@ -53,7 +53,7 @@ const org = {left: {text: 'Tandem BioSystems'}, center: {text: 'Internal plannin
 {
   // A 4:3 deck: the left zone is too narrow for the name and a date side by side (OPF would wrap the name), so the date follows the
   // name's ink by one gap, still clear of the center text (wildfire-evacuation-preparedness in the gallery).
-  const footer = {...org, left: {text: 'Pine County Emergency Management'}};
+  const footer = {...org, start: {text: 'Pine County Emergency Management'}};
   const deck = {design: {fontScheme: 'roboto', dimensions: '4:3', footer}, slides};
   const {boxes} = await masterBoxes(deck);
   const own = drawn(deck), name = own.find(part => part.zone === 'left'), center = own.find(part => part.zone === 'center');
@@ -66,7 +66,7 @@ const org = {left: {text: 'Tandem BioSystems'}, center: {text: 'Internal plannin
   // A logo beside the organization name (RR-71) and a lone number: the three share the footer text's baseline (the number on the
   // slides sits higher, centered differently, but a footer and number turned on where OPF hid the footer line up), the footer text
   // spans its zone, and the date follows the name.
-  const footer = {left: {image: 'var:organization.logo.icon', text: '{{organization.name}}'}, center: {text: 'Confidential fixture'}, right: {text: '{{slide.number}}'}};
+  const footer = {start: {image: 'var:organization.logo.icon', text: '{{organization.name}}'}, center: {text: 'Confidential fixture'}, end: {text: '{{slide.number}}'}};
   const organization = {id: 'fixture-org', name: 'Fixture Org', logo: {icon: 'asset:icon'}};
   const deck = {organization, assets: {icon: './assets/icon.svg'}, design: {fontScheme: 'roboto', footer}, slides: [...slides, {title: 'Hidden', design: {footer: false}}]};
   const {boxes} = await masterBoxes(deck);
@@ -79,7 +79,7 @@ const org = {left: {text: 'Tandem BioSystems'}, center: {text: 'Internal plannin
 
 {
   // A deck with a current date of its own: the master date is that field, in that pattern, so a date turned on is OPF's date.
-  const {boxes, entries} = await masterBoxes({design: {fontScheme: 'roboto', footer: {left: {date: true, dateFormat: 'MMMM d, yyyy'}, right: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}}}, slides});
+  const {boxes, entries} = await masterBoxes({design: {fontScheme: 'roboto', footer: {start: {date: true, dateFormat: 'MMMM d, yyyy'}, end: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}}}, slides});
   assert.equal(boxes.dt.field, 'datetime4');
   assert.match(dec.decode(entries['ppt/slideLayouts/slideLayout1.xml']), /<a:fld [^>]*type="datetime4"><a:rPr lang="en-US"\/><a:t>November 6, 2026<\/a:t>/);
   // The footer text is missing: it goes to the empty center zone, between the date and the number.

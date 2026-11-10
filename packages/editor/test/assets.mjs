@@ -78,7 +78,7 @@ const uploads = [
   { name: "watermark", build: (ref, doc) => prepareDesignOption(doc, "watermark", { src: ref }), check: (doc, ref) => assert.equal(doc.design.watermark, ref) },
   { name: "background shorthand", build: (ref, doc) => prepareBackground(doc, ref, { slideIndex: 0 }), check: (doc, ref) => assert.equal(doc.slides[0].design.background, ref) },
   { name: "background", build: (ref, doc) => prepareBackground(doc, { type: "image", src: ref, fit: "contain", alt: "Backdrop" }), check: (doc, ref) => assert.equal(doc.design.background.src, ref) },
-  { name: "footer image", build: (ref, doc) => prepareHeaderFooterZone(doc, "footer", "right", { image: ref }), check: (doc, ref) => assert.equal(doc.design.footer.right.image, ref) },
+  { name: "footer image", build: (ref, doc) => prepareHeaderFooterZone(doc, "footer", "right", { image: ref }), check: (doc, ref) => assert.equal(doc.design.footer.end.image, ref) },
 ];
 for (const [index, entry] of uploads.entries()) {
   const editor = session();

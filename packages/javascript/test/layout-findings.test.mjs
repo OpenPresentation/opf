@@ -72,7 +72,7 @@ test('opf/tight-spacing: gaps under 0.25 in and margins under 0.5 in; the defaul
 		assert.equal(tight?.path, '/slides/0/blocks/1/blocks/1', `${mode} group with gap 0.01`);
 	}
 	// A picture placed on an edge bleeds on purpose.
-	const placed = deck([{ title: 'Site', blocks: [{ image: { src: 'https://example.com/site.png', alt: 'The site' }, placement: { edge: 'left' } }, { text: 'The new site opens in May.' }] }]);
+	const placed = deck([{ title: 'Site', blocks: [{ image: { src: 'https://example.com/site.png', alt: 'The site' }, placement: { edge: 'start' } }, { text: 'The new site opens in May.' }] }]);
 	assert.deepEqual(findings(placed, 'opf/tight-spacing'), []);
 	// The default layouts at their intended counts.
 	const sampler = JSON.parse(readFileSync(new URL('../../../examples/technical/layout-sampler.opf.json', import.meta.url), 'utf8'));

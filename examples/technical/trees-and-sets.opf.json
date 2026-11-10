@@ -5,7 +5,7 @@
   "design": {
     "background": "light1",
     "footer": {
-      "left": {
+      "start": {
         "text": "Illustrative example • fictional data"
       }
     }

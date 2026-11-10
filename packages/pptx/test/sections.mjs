@@ -83,7 +83,7 @@ const exported = await toPptx(structuredClone(deck), EXPORT);
 // FA-31: a footer shows the section as `{{slide.section}}`. The list and the footer agree on export and the token returns; after a
 // rename in PowerPoint's sections pane the list wins and a footer that no longer shows the listed name keeps its current text.
 {
-  const footer = {name: 'Footer', design: {footer: {left: {text: '{{slide.section}}'}}}, slides: [{title: 'One', section: 'Intro'}, {title: 'Two', section: 'Intro'}, {title: 'Three', section: 'Close'}]};
+  const footer = {name: 'Footer', design: {footer: {start: {text: '{{slide.section}}'}}}, slides: [{title: 'One', section: 'Intro'}, {title: 'Two', section: 'Intro'}, {title: 'Three', section: 'Close'}]};
   const bytes = await toPptx(structuredClone(footer), EXPORT);
   const same = await read(bytes);
   assert.deepEqual(same.provenance, []);
@@ -104,14 +104,14 @@ const exported = await toPptx(structuredClone(deck), EXPORT);
 {
   await assert.rejects(toPptx({name: 'Control', slides: [{title: 'One'}, {title: 'Two', section: 'Ctrl\u0001Char'}]}, EXPORT), error => error.code === 'invalid-text' && error.path === 'slides.1.section' && /U\+0001/.test(error.message));
   await assert.rejects(toPptx({name: 'Surrogate', slides: [{title: 'One', section: 'Lone\uD800'}]}, EXPORT), {code: 'invalid-text'});
-  const bytes = await toPptx({name: 'Whitespace', design: {footer: {left: {text: '{{slide.section}}'}}}, slides: [{title: 'One', section: 'Tab\tand\nline'}, {title: 'Two', section: 'Tab\tand\nline'}]}, EXPORT);
+  const bytes = await toPptx({name: 'Whitespace', design: {footer: {start: {text: '{{slide.section}}'}}}, slides: [{title: 'One', section: 'Tab\tand\nline'}, {title: 'Two', section: 'Tab\tand\nline'}]}, EXPORT);
   const xml = presentation(bytes);
   assert.equal(XMLValidator.validate(xml), true);
   assert.deepEqual(sections(xml).map(section => section.name), ['Tab and line']);
   const {deck, provenance} = await read(bytes);
   assert.deepEqual(provenance, [], 'a normalized list agrees with the authored label');
   assert.deepEqual(deck.slides.map(slide => slide.section), ['Tab\tand\nline', 'Tab\tand\nline'], 'the authored label returns');
-  assert.deepEqual(deck.design.footer, {left: {text: '{{slide.section}}'}}, 'the token returns although the list stores the label with spaces');
+  assert.deepEqual(deck.design.footer, {start: {text: '{{slide.section}}'}}, 'the token returns although the list stores the label with spaces');
 }
 
 // Malformed lists count as none; the stored value then returns.

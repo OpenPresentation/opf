@@ -25,7 +25,9 @@ A slide carries `title` / `subtitle` / `tag` / `notes` / `section` / `beat` / `l
 
 1. **Root payload** — content-kind fields directly on the slide. The kind is inferred from the field: `text`, `items` (list), `bullets`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, `diagram` (Mermaid, Graphviz DOT or PlantUML source). Several kinds at the root are shorthand for `blocks`.
 2. **`blocks`** — an ordered array of payloads when placement should stay engine-inferred. A block is a leaf payload or a **group**: `{ "type": "group", "blocks": [...], "composition": { ... } }`. Groups nest (hard cap 32; stay ≤ 3 in practice) and cannot mix `blocks` with leaf fields.
-3. **Promoted regions** — a 3×3 grid when position matters. Rows `top|middle|bottom`, columns `left|center|right`, spans with `+`, intersections with `:` — `"left"`, `"center+right"`, `"top:left"`, `"middle+bottom:center+right"`. Keys must not overlap; regions cannot mix with a root payload.
+3. **Promoted regions** — a 3×3 grid when position matters. Rows `top|middle|bottom`, columns `start|center|end`, spans with `+`, intersections with `:` — `"start"`, `"center+end"`, `"top:start"`, `"middle+bottom:center+end"`. Keys must not overlap; regions cannot mix with a root payload.
+
+Direction: layout words are logical. `start` and `end` (region columns, `titleAlignment` and `contentAlignment`, a caption's or table cell's `align`, header and footer zones, image `placement.edge`, `overlay.edge`, `chartPrimary`, shape anchors, an overlay shape's `x`) follow the deck's direction: `start` is the left edge in a left-to-right deck and the right edge in a right-to-left deck. Coordinates and sides that name pixels of a picture or parts of a plot are physical in every language: image `focus` and `callouts`, chart `legend` and `dataLabels.position`, and the `left` and `right` sides of cell `borders` and `padding` and of a shape's `padding`.
 
 `composition` (on a slide or group) arranges children: `{ "mode": "auto|grid|row|column", "columns": 1-12, "weights": [..], "gap": 0-0.1, "padding": 0-0.2, "minFontSize": 8-32, "maxFontSize": 8-200, "overflow": "warn|error" }`. Weights are relative track sizes; gap/padding are fractions of the canvas short edge; the font sizes are reference pixels at a 720-pixel short edge. Engines own the placement of content: a block has no x/y.
 
@@ -35,7 +37,7 @@ Payload notes: chart (never the Chart.js `categories`/`series`/`labels`/`dataset
 
 ## Rich text and color references
 
-`text`, list items, bullets, and table cells accept `TextRun[]`: strings or `{ "text", "bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "code", "lang", "link", "superscript", "subscript", "cite", "footnote" }`. `fontSize` is in points (12 points is 16 reference pixels), the one size in OPF that is not in reference pixels; an unknown key in a run is an error.
+`text`, list items, bullets, and table cells accept `TextRun[]`: strings or `{ "text", "bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "code", "language", "link", "superscript", "subscript", "cite", "footnote" }`. `fontSize` is in points (12 points is 16 reference pixels), the one size in OPF that is not in reference pixels; an unknown key in a run is an error.
 
 Every content color field (`TextRun.color`, table cell `style.fill` / `style.color`, cell border `color`) accepts four forms:
 
@@ -56,7 +58,7 @@ Reusable records live in catalogs; a reference is a bare id or `name:id`: `narra
 
 ## Design in three lines
 
-`design.theme` bundles scheme + fonts + background + dimensions; `design.colorScheme` / `fontScheme` override it; `slides[].design` overrides per slide; resolution is per field, most specific wins. Backgrounds accept slot names (`"light1"`) or hex. `false` suppresses inherited `watermark` / `header` / `footer`. A header or footer zone (`left` / `center` / `right`) takes `image`, `text`, `socials`, `date`, laid out side by side in that order; generated values are variables in `text`: `"{{slide.number}} / {{deck.slideCount}}"`, `"{{slide.section}}"`, `"{{organization.name}}"` (the slide-scoped `{{slide.number}}`, `{{slide.section}}`, `{{deck.slideCount}}` also work in body text). Logos live on `organization.logo` (one path, or `full` / `stacked` / `icon` / `wordmark`, each a path or `{ onLight, onDark }`); place one with `"image": "var:organization.logo.icon"`; covers draw the full logo, and `design.logo` is only an override reference or `false`.
+`design.theme` bundles scheme + fonts + background + dimensions; `design.colorScheme` / `fontScheme` override it; `slides[].design` overrides per slide; resolution is per field, most specific wins. Backgrounds accept slot names (`"light1"`) or hex. `false` suppresses inherited `watermark` / `header` / `footer`. A header or footer zone (`start` / `center` / `end`) takes `image`, `text`, `socials`, `date`, laid out side by side in that order; generated values are variables in `text`: `"{{slide.number}} / {{deck.slideCount}}"`, `"{{slide.section}}"`, `"{{organization.name}}"` (the slide-scoped `{{slide.number}}`, `{{slide.section}}`, `{{deck.slideCount}}` also work in body text). Logos live on `organization.logo` (one path, or `full` / `stacked` / `icon` / `wordmark`, each a path or `{ onLight, onDark }`); place one with `"image": "var:organization.logo.icon"`; covers draw the full logo, and `design.logo` is only an override reference or `false`.
 
 ## Prefer / never
 
@@ -70,8 +72,8 @@ Never: loose chart or table fields directly on a slide; region keys mixed with a
 {
   "id": "headline",
   "title": "Adoption Doubled",
-  "left": { "id": "kpi", "metric": { "value": "2.1x", "label": "Adoption", "trend": "up" } },
-  "center+right": { "chart": { "type": "line", "data": { "columns": ["Month", "Teams"], "rows": [["Jan", 12], ["Feb", 18]] } } }
+  "start": { "id": "kpi", "metric": { "value": "2.1x", "label": "Adoption", "trend": "up" } },
+  "center+end": { "chart": { "type": "line", "data": { "columns": ["Month", "Teams"], "rows": [["Jan", 12], ["Feb", 18]] } } }
 }
 ```
 

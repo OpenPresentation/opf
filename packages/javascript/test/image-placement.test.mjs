@@ -70,7 +70,7 @@ test('a right-to-left deck mirrors placement: left is the start side, drawn at t
 });
 
 test('v1 layout placement records are rejected; content block placement remains supported', () => {
-  const record = { name: 'Old placement', placeholders: [{type: 'image', placement: {edge: 'left', size: 0.4}}] };
+  const record = { name: 'Old placement', placeholders: [{type: 'image', placement: {edge: 'start', size: 0.4}}] };
   assert.equal(check({catalogs: {custom: {layouts: {old: record}}}, slides: [{layout: 'old', image: photo}]}, {only:['format','references']}).valid, false);
   const result = composeSlide({blocks: [placed({edge: 'left',size: 0.4}), {text: 'Body'}]});
   assert.deepEqual(result.items.find(item=>item.field==='image').box,{x:0,y:0,width:512,height:720});
@@ -100,8 +100,8 @@ test('validation: two blocks on the same edge, a placed block inside a group or 
   assert.deepEqual(twice.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/blocks/1/placement/edge']]);
   const grouped = errorsOf(check(deck([{ title: 'T', blocks: [{ blocks: [placed({ edge: 'left' }), { text: 'Body' }] }] }])));
   assert.deepEqual(grouped.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/blocks/0/blocks/0/placement']]);
-  const region = errorsOf(check(deck([{ title: 'T', left: placed({ edge: 'left' }), right: { text: 'Body' } }])));
-  assert.deepEqual(region.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/left/placement']]);
-  const text = errorsOf(check(deck([{ title: 'T', blocks: [{ text: 'Body', placement: { edge: 'left' } }] }])));
+  const region = errorsOf(check(deck([{ title: 'T', left: placed({ edge: 'left' }), end: { text: 'Body' } }])));
+  assert.deepEqual(region.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/start/placement']]);
+  const text = errorsOf(check(deck([{ title: 'T', blocks: [{ text: 'Body', placement: { edge: 'start' } }] }])));
   assert.deepEqual(text.map((f) => [f.ruleId, f.path]), [['opf/image-option-unsupported-payload', '/slides/0/blocks/0/placement']]);
 });

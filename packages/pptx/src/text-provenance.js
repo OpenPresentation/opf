@@ -30,14 +30,14 @@ export function sourceLineParagraphs(ordered,paragraphs,{legacy=false}={}) {
 function currentLanguages(ordered, readBody, expected) {
  if(!readBody)return undefined;
  const parts=joinRichLines(ordered,index=>readBody(index,{languageOnly:true}),item=>item.data.separator??'');
- if(!parts?.some(part=>typeof part==='object'&&typeof part.lang==='string'))return undefined;
+ if(!parts?.some(part=>typeof part==='object'&&typeof part.language==='string'))return undefined;
  const text=parts.map(part=>typeof part==='string'?part:part.text).join('');
  if(text!==expected)throw Error('Current native language text disagrees with source boundaries.');
  const runs=[];
  for(const part of parts){
-  const current=typeof part==='object'&&typeof part.lang==='string'?{text:part.text,lang:part.lang}:typeof part==='string'?part:part.text,previous=runs.at(-1);
+  const current=typeof part==='object'&&typeof part.language==='string'?{text:part.text,language:part.language}:typeof part==='string'?part:part.text,previous=runs.at(-1);
   if(typeof current==='string'&&typeof previous==='string')runs[runs.length-1]+=current;
-  else if(typeof current==='object'&&typeof previous==='object'&&current.lang===previous.lang)previous.text+=current.text;
+  else if(typeof current==='object'&&typeof previous==='object'&&current.language===previous.language)previous.text+=current.text;
   else runs.push(current);
  }
  return runs;

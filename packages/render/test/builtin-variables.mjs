@@ -9,7 +9,7 @@ const deck = () => ({
   name: 'Q4 Review',
   speaker: [{id: 'ada', name: 'Ada Lovelace', title: 'CTO'}, {id: 'grace', name: 'Grace Hopper'}],
   organization: {id: 'acme', name: 'Acme Corp', tagline: 'Build the future', logo},
-  design: {footer: {left: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, right: {text: '{{organization.tagline}}'}}},
+  design: {footer: {start: {text: '{{organization.name}}\n{{speaker.name}}, {{speaker.title}}'}, end: {text: '{{organization.tagline}}'}}},
   slides: [{id: 'cover', title: '{{deck.name}}', subtitle: '{{speaker.name}}, {{speaker.title}} · {{organization.name}}', image: 'var:organization.logo'}]
 });
 const text = (svg, value) => svg.includes(`>${value}<`);

@@ -61,7 +61,7 @@ test('uncapped lists retain the existing larger-type and no-worse-alternative co
 });
 
 test('rich formatting and RTL column reading order survive the same-cap measure correction', () => {
-  const rich = entries.map(text => [{text: text.slice(0, 8), bold: true}, {text: text.slice(8), lang: 'en-US'}]);
+  const rich = entries.map(text => [{text: text.slice(0, 8), bold: true}, {text: text.slice(8), language: 'en-US'}]);
   const source = slide({items: rich}), frozen = structuredClone(source), result = composeSlide(source, {direction: 'rtl'}), item = listOf(result);
   assert.deepEqual(source, frozen);
   assert.equal(item.listColumns?.length, 2);
@@ -121,7 +121,7 @@ test('fallback reflow preserves explicit region and payload counts, opt-out, ric
     assert.deepEqual(fitFailures(result), []);
     complete(item, entries);
   }
-  const rich = entries.map(text => [{text: text.slice(0, 8), bold: true}, {text: text.slice(8), lang: 'en-US'}]);
+  const rich = entries.map(text => [{text: text.slice(0, 8), bold: true}, {text: text.slice(8), language: 'en-US'}]);
   const source = slide({items: rich}); source.title = 'Pyramid: a longer title that may need a second line on the slide';
   const result = composeSlide(source, {layout, direction: 'rtl'}), item = listOf(result);
   assert.deepEqual(fontsOf(item), [24]);

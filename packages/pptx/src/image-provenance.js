@@ -1,6 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {normalizeCrop, withoutSvgBlip} from './svg-image.js';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
+import {upgradeTag} from './legacy-tags.js';
 
 // FA-23 (OPF 0.15): image blocks and image backgrounds as native pictures.
 //
@@ -226,7 +227,7 @@ function ownTag(container, relationships, entries, name) {
   const own = tags.filter(tag => tag.name?.toUpperCase() === name);
   if (!own.length) return null;
   if (unreadable || own.length !== 1 || tags.some(tag => /^OPF_/i.test(tag.name) && tag.name.toUpperCase() !== name)) throw Error('Ambiguous image identity.');
-  return decodeTextTag(own[0].val);
+  return upgradeTag(decodeTextTag(own[0].val));
 }
 
 const pick = (value, keys) => Object.fromEntries(keys.filter(key => Object.hasOwn(value, key)).map(key => [key, value[key]]));

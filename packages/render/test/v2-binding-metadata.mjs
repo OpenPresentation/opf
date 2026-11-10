@@ -13,10 +13,10 @@ for(const item of [...bound.contentItems,...bound.blocks]){
 assert.match(toSvg(deck,{catalogs:[gallery]})[0],/Region alignment probe/);
 const rootDeck={slides:[{title:'Root',text:'Root text'}]};
 assert.deepEqual(resolvePresentation(rootDeck).slides[0].contentItems,[{type:'text',field:'text',value:'Root text',path:'slides.0.text'}]);
-const promotedDeck={slides:[{title:'Promoted',left:{text:'Left text'},right:{text:'Right text'}}]};
+const promotedDeck={slides:[{title:'Promoted',start:{text:'Left text'},end:{text:'Right text'}}]};
 assert.deepEqual(resolvePresentation(promotedDeck).slides[0].contentItems,[
- {type:'text',field:'text',value:'Left text',path:'slides.0.left.text',regionKey:'left'},
- {type:'text',field:'text',value:'Right text',path:'slides.0.right.text',regionKey:'right'}
+ {type:'text',field:'text',value:'Left text',path:'slides.0.start.text',regionKey:'left'},
+ {type:'text',field:'text',value:'Right text',path:'slides.0.end.text',regionKey:'right'}
 ]);
 const group={blocks:[{text:'First nested'},{text:'Second nested'}],composition:{mode:'column'}};
 const richSlide={title:[{text:'Plain',bold:false},{text:' strong',bold:true,italic:true}],subtitle:[{text:'Sub',italic:true}],blocks:[group]};

@@ -74,7 +74,7 @@ assert.match(decode(native.entries, part), /<p:ph type="title"\/>/, 'Accepted ti
 assert.equal(plain((await imported(native.bytes)).value.slides[0].text), auto.slides[0].text);
 
 const rich = deck({title: 'Rich body', layout: 'two-column', blocks: [
-  {text: [{text: 'Bold ', bold: true, italic: true, fontSize: 24, color: '#123456'}, {text: 'Normal ', bold: false, italic: false, underline: false, fontSize: 22}, {text: 'Link', link: 'https://example.org', fontFamily: 'Roboto', lang: 'fr-FR'}]},
+  {text: [{text: 'Bold ', bold: true, italic: true, fontSize: 24, color: '#123456'}, {text: 'Normal ', bold: false, italic: false, underline: false, fontSize: 22}, {text: 'Link', link: 'https://example.org', fontFamily: 'Roboto', language: 'fr-FR'}]},
   {metric: {value: 24, label: 'Teams'}}
 ]});
 const nativeRich = await exported(rich, {bodyText: 'native'});
@@ -98,7 +98,7 @@ assert.equal(importedRich.find(run => run.text === 'Bold ').fontSize, 24, 'Autho
 assert.equal(importedRich.find(run => run.text === 'Normal ').bold, false);
 assert.equal(importedRich.find(run => run.text === 'Normal ').italic, false);
 
-const centered = deck({title: 'Anchor', layout: 'custom:anchored', text: 'Centered body', design: {contentAlignment: 'right'}});
+const centered = deck({title: 'Anchor', layout: 'custom:anchored', text: 'Centered body', design: {contentAlignment: 'end'}});
 centered.catalogs = {custom: {layouts: {anchored: {name: 'Anchored', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['text'], flow: 'none', anchor: 'middle'}]}}}};
 const centeredOutput = await exported(centered, {bodyText: 'native'});
 const [centeredBody] = bodyShapes(centeredOutput.entries);

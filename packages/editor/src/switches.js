@@ -81,7 +81,7 @@ const DESIGN_KEYS = Object.freeze({
   backgrounds: ["background"],
   "headers-footers": ["header", "footer"],
 });
-const REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/;
+const REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
 const BLOCK_KINDS = ["text", "list", "chart", "table", "metric", "quote", "code", "diagram", "timeline", "group", "image", "video"];
 const RESERVED_GROUPS = new Set(["default", "custom"]);
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);

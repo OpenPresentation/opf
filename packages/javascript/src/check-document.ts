@@ -175,6 +175,12 @@ export function issueFinding(
 		? issue.params.allowedValues.filter(primitive)
 		: [];
 	const nearest = issue.keyword === 'additionalProperties' ? nearestProperties(issue, entry.schema, precise?.pointer, precise?.schemaName) : [];
+	// A layout word written as a physical side (a `left` region, a `right` footer zone): the fix is the logical word.
+	const typedName = issue.keyword === 'additionalProperties' && typeof issue.params.additionalProperty === 'string' ? issue.params.additionalProperty : undefined;
+	if (typedName !== undefined && nearest[0]?.value === logicalName(typedName) && nearest[0].value !== typedName)
+		help = `Write ${JSON.stringify(nearest[0].value)}: layout words follow the deck's direction, so the sides are "start" and "end", not "left" and "right".`;
+	else if (typedName !== undefined && typeof nearest[0]?.value === 'string' && nearest[0].value.startsWith(typedName))
+		help = `Write ${JSON.stringify(nearest[0].value)}: ${JSON.stringify(typedName)} is not a field of this object.`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -201,11 +207,15 @@ export function issueFinding(
 
 /** The most near-miss names a "did you mean" offers. */
 const NEAREST_PROPERTIES = 3;
+/** A key with `left` and `right` read as the logical sides: `left` is `start`, `top:center+right` is `top:center+end`. */
+const logicalName = (name: string): string => name.split(':').map((part) => part.split('+').map((word) => (word === 'left' ? 'start' : word === 'right' ? 'end' : word)).join('+')).join(':');
 
 /**
  * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares whose
  * names are within edit distance 2 (1 for a name of three characters or fewer, or every short name would match), compared
- * case-insensitively, nearest first, at most three. A suggestion is a name the schema has, never a rewrite of authored content.
+ * case-insensitively, nearest first, at most three. Two exact readings come before those: the same key with `left` and `right` as the
+ * logical `start` and `end` (a region or a header or footer zone), and the one declared name the typed name abbreviates (`lang` for
+ * `language`; three characters or more). A suggestion is a name the schema has, never a rewrite of authored content.
  */
 function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, pointerToKeyword: string | undefined, schemaName: SchemaName | undefined): FindingSuggestion[] {
 	const typed = issue.params.additionalProperty;
@@ -214,19 +224,27 @@ function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, poi
 	let node: unknown = rootEntry?.schema ?? fallbackRoot;
 	const base = pointerToKeyword.split('/').slice(0, -1);
 	for (const token of base.slice(1)) {
-		if (!isRecord(node)) return [];
-		node = node[token.replaceAll('~1', '/').replaceAll('~0', '~')];
+		// A branch of a union is an array entry (`oneOf/1`): the object form of a text run, of a caption.
+		if (Array.isArray(node)) node = /^\d+$/.test(token) ? node[Number(token)] : undefined;
+		else if (isRecord(node)) node = node[token.replaceAll('~1', '/').replaceAll('~0', '~')];
+		else return [];
 	}
 	if (!isRecord(node) || !isRecord(node.properties)) return [];
 	const root = (rootEntry?.schema ?? fallbackRoot) as JsonSchema,
 		limit = typed.length <= 3 ? 1 : 2,
 		lower = typed.toLowerCase();
-	return Object.keys(node.properties)
+	const declared = Object.keys(node.properties),
+		logical = logicalName(typed),
+		longer = typed.length >= 3 ? declared.filter((name) => name !== typed && name.toLowerCase().startsWith(lower)) : [],
+		exact = logical !== typed && declared.includes(logical) ? [logical] : longer.length === 1 ? longer : [];
+	const near = declared
 		.map((name) => ({ name, away: distance(lower, name.toLowerCase()) }))
-		.filter(({ name, away }) => name !== typed && away <= limit)
+		.filter(({ name, away }) => name !== typed && away <= limit && !exact.includes(name))
 		.sort((a, b) => a.away - b.away || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+		.map(({ name }) => name);
+	return [...exact, ...near]
 		.slice(0, NEAREST_PROPERTIES)
-		.map(({ name }) => ({
+		.map((name) => ({
 			value: name,
 			label: name,
 			origin: 'schema' as const,

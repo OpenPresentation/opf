@@ -20,7 +20,7 @@ export interface LostPart {
 const CONTENT = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram"] as const;
 const isContent = (key: string): boolean => (CONTENT as readonly string[]).includes(key);
 const ROWS = "(?:top|middle|bottom|top\\+middle|middle\\+bottom|top\\+middle\\+bottom)";
-const COLUMNS = "(?:left|center|right|left\\+center|center\\+right|left\\+center\\+right)";
+const COLUMNS = "(?:start|center|end|start\\+center|center\\+end|start\\+center\\+end)";
 /** The promoted region keys of a slide: a row band, a column band, or both as `rows:columns`. */
 const REGION = new RegExp(`^(?:${ROWS}(?::${COLUMNS})?|${COLUMNS})$`);
 const NATIVE_SLIDE = new Set(["id", "type", "layout", "section", "tag", "hidden", "beat", "language", "title", "subtitle", "notes", "blocks", ...CONTENT]);

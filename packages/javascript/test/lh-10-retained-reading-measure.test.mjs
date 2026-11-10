@@ -18,7 +18,7 @@ for(const scale of [.75,1,1.5])for(const advance of [.4,.42])test('under-capacit
  const paragraphs=body(result).filter(item=>!item.eyebrow&&!item.emphasis);assert.ok(paragraphs[0].text.lines.length>=3);assert.ok(paragraphs.at(-1).text.lines.length>=3);
 });
 test('source rich runs stay rich at their settled size and retain their authored text',()=>{
- const source=structuredClone(fixture.slide),text=source.blocks[0].text;source.blocks[0].text=[{text:text.slice(0,42)},{text:text.slice(42),bold:true,lang:'en-US'}];const result=composeSlide(source,options()),item=body(result)[0];
+ const source=structuredClone(fixture.slide),text=source.blocks[0].text;source.blocks[0].text=[{text:text.slice(0,42)},{text:text.slice(42),bold:true,language:'en-US'}];const result=composeSlide(source,options()),item=body(result)[0];
  assert.equal(item.text.fontSize,32);assert.ok(item.text.richLines);assert.deepEqual(item.value,source.blocks[0].text);assert.equal(item.text.lines.join(''),text);assert.ok(item.text.lines.every(line=>line.trim().length<=70));
 });
 test('authored narrow columns and short content retain their row arrangement and complete text',()=>{

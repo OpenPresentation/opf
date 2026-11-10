@@ -46,7 +46,7 @@ describe("unknown property suggestions", () => {
   });
   test("an enum finding keeps its allowed values, all of them in the params", () => {
     const found = validate({ slides: [{ title: "a" }], design: { titleAlignment: "middle" } }, { only: ["format"] }).findings.find((entry) => entry.validation?.keyword === "enum");
-    assert.deepEqual(found.validation.params.allowedValues, ["left", "center", "right"]);
-    assert.deepEqual(names(found), ["left", "center", "right"]);
+    assert.deepEqual(found.validation.params.allowedValues, ["start", "center", "end"]);
+    assert.deepEqual(names(found), ["start", "center", "end"]);
   });
 });

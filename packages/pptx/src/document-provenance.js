@@ -1,6 +1,7 @@
 import {nativeRunStyleEvidence, hasSourceRunStyles} from './source-run-styles.js';
 import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
+import {upgradeTag} from './legacy-tags.js';
 import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks, validateListRuns, validateListScalars, listLineRoles, validateListRoles, MAX_LIST_PATHS} from './content-topology.js';
 import {runColorRecord, validateRunColors} from './run-colors.js';
 import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
@@ -886,7 +887,7 @@ function readTag(entries, container, rels, name) {
   if (found.length > 1) throw Error(`Multiple ${name} tags.`);
   const value = found[0].val;
   if (typeof value !== 'string' || value.length > MAX_TAG_CHARS) throw Error(`Oversized or empty ${name} tag.`);
-  return {value: decodeTextTag(value)};
+  return {value: upgradeTag(decodeTextTag(value))};
 }
 
 function validateOmitted(value) {

@@ -74,7 +74,7 @@ export function editorialDeck(id, record) {
   else delete slide.subtitle;
   if (id === 'metrics') slide.design = { titleAlignment: 'center' };
   // The examples' figures are fictional: every preview says so in its footer.
-  deck.design = { background: 'light1', footer: { left: { text: 'Illustrative example • fictional data' } } };
+  deck.design = { background: 'light1', footer: { start: { text: 'Illustrative example • fictional data' } } };
   const counts = {};
   slide.blocks = (slide.blocks ?? []).map((block) => {
     const kind = Object.keys(block).find(key => key !== 'region');

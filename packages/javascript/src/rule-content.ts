@@ -191,7 +191,7 @@ export function assetRefs(document: Rec, slide: Rec, slidePath: string, includeD
 	}
 	const designRefs = (design: Rec, base: string) => {
 		for (const kind of ['header', 'footer'])
-			for (const zone of ['left', 'center', 'right']) {
+			for (const zone of ['start', 'center', 'end']) {
 				const item = rec(rec(design[kind])[zone]);
 				if (item.image !== undefined && !isLogoReference(item.image)) out.push({ path: `${base}/${kind}/${zone}/image`, value: item.image, kind: 'furniture' });
 			}

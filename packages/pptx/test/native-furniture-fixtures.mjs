@@ -59,24 +59,24 @@ const localHeader='  Local image label  ';
 const inherited={
   organization:{id:'registry_org',name:'  Registry Organization  '},
   design:{fontScheme:'roboto',dimensions,
-    header:{left:{text:inheritedHeader},center:{text:'Registry Organization'},right:{text:'{{slide.section}}'}},
-    footer:{left:{text:inheritedFooter},right:{text:'{{slide.number}}'}}},
+    header:{start:{text:inheritedHeader},center:{text:'Registry Organization'},end:{text:'{{slide.section}}'}},
+    footer:{start:{text:inheritedFooter},end:{text:'{{slide.number}}'}}},
   slides:[
     {title:'Inherited furniture',section:'  Alpha section  ',text:'Scalar body inherited — exact.'},
     {title:'Local furniture',section:'  Beta section  ',text:'Scalar body local — exact.',design:{
-      header:{left:{image,text:localHeader},center:{text:'Registry Organization'},right:{text:'{{slide.section}}'}},
-      footer:{left:{text:'  Local footer  '},right:{text:'{{slide.number}}'}}}},
+      header:{start:{image,text:localHeader},center:{text:'Registry Organization'},end:{text:'{{slide.section}}'}},
+      footer:{start:{text:'  Local footer  '},end:{text:'{{slide.number}}'}}}},
     {title:'Inherited again',section:'  Gamma section  ',text:'Scalar body inherited again — exact.'},
   ],
 };
 const flags={
-  design:{fontScheme:'roboto',dimensions,header:{left:{text:'Global header must be suppressed.'}},footer:{right:{text:'Global footer must be suppressed.'}}},
+  design:{fontScheme:'roboto',dimensions,header:{start:{text:'Global header must be suppressed.'}},footer:{end:{text:'Global footer must be suppressed.'}}},
   slides:[
     {title:'False and empty',text:'Scalar body false and empty.',design:{header:false,footer:{}}},
     {title:'Empty and false',text:'Scalar body empty and false.',design:{header:{},footer:false}},
     {title:'Inactive fields',text:'Scalar body inactive fields.',design:{
-      header:{left:{text:''},center:{date:false}},
-      footer:{right:{text:''}}}},
+      header:{start:{text:''},center:{date:false}},
+      footer:{end:{text:''}}}},
   ],
 };
 const sources={

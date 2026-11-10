@@ -350,8 +350,8 @@ export interface ComposedConnector {
 /** An entry of `SlideComposition.overlayShapes`, in draw order. */
 export type ComposedOverlayEntry = ComposedOverlayShape | ComposedConnector;
 
-/** The promoted region keys of a slide (`left`, `center+right`, `top:left` ...), whose payloads are blocks too. */
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:middle|bottom))*(?::(?:left|center|right)(?:\+(?:center|right))*)?|(?:left|center|right)(?:\+(?:center|right))*)$/;
+/** The promoted region keys of a slide (`start`, `center+end`, `top:start` ...), whose payloads are blocks too. */
+const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:middle|bottom))*(?::(?:start|center|end)(?:\+(?:center|end))*)?|(?:start|center|end)(?:\+(?:center|end))*)$/;
 
 /** Every block id of a slide with its dotted path (`slides.0.blocks.1.blocks.0`), in document order; the first of a repeated id wins. */
 export function slideBlockIds(slide: unknown, slidePath: string): Map<string, string> {

@@ -42,14 +42,14 @@ test('a region that is not assigned is reported, and UK suggests GB', () => {
 test('en-UK as the deck language is the schema rule, not reported twice; a run is still reported', () => {
 	const result = validate(deck({ language: 'en-UK' }), { only: ['language-tag', 'schema'] });
 	assert.deepEqual(result.findings.map((entry) => entry.ruleId).filter((id) => id === 'opf/language-tag'), []);
-	const run = only(deck({}, { title: 'T', text: ['The ', { text: 'colour', lang: 'en-UK' }] }));
+	const run = only(deck({}, { title: 'T', text: ['The ', { text: 'colour', language: 'en-UK' }] }));
 	assert.equal(run.length, 1);
 	assert.equal(run[0].path, '/slides/0/text/1/lang');
 	assert.equal(run[0].fixes[0].patch[0].value, 'en-GB');
 });
 
 test('wrong case is a spelling-only suggestion of the canonical form', () => {
-	const [finding] = only(deck({}, { title: [{ text: 'Bonjour', lang: 'FR-ca' }] }));
+	const [finding] = only(deck({}, { title: [{ text: 'Bonjour', language: 'FR-ca' }] }));
 	assert.equal(finding.path, '/slides/0/title/0/lang');
 	assert.match(finding.message, /canonical form is 'fr-CA'/);
 	assert.equal(finding.fixes[0].safe, true);
@@ -57,7 +57,7 @@ test('wrong case is a spelling-only suggestion of the canonical form', () => {
 });
 
 test('a tag that is not well formed has no suggestion', () => {
-	const [finding] = only(deck({}, { title: 'T', items: [['a ', { text: 'b', lang: 'en-a' }]] }));
+	const [finding] = only(deck({}, { title: 'T', items: [['a ', { text: 'b', language: 'en-a' }]] }));
 	assert.equal(finding.path, '/slides/0/items/0/1/lang');
 	assert.match(finding.message, /not a well-formed BCP 47/);
 	assert.equal(finding.fixes, undefined);

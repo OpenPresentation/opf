@@ -11,7 +11,7 @@ const wideLogo=`data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.
 const longWordOutcomes=[];
 // The header-left text wraps only between whole words: core's lines and the drawn <text> lines are each whole words of the source.
 function wholeWords(geometry,svg,source){
- const words=source.split(' '),label=geometry.furniture.parts.find(part=>part.path==='design.header.left.text');
+ const words=source.split(' '),label=geometry.furniture.parts.find(part=>part.path==='design.header.start.text');
  const check=(lines,where)=>{
   assert.deepEqual(lines.map(line=>line.trim()).filter(Boolean).join(' ').split(' '),words,`${where} keep every word in order`);
   for(const line of lines)for(const word of line.trim().split(/\s+/).filter(Boolean))assert.ok(words.includes(word),`${where}: "${line}" breaks inside a word`);
@@ -20,7 +20,7 @@ function wholeWords(geometry,svg,source){
  check([...svg.matchAll(/<text\b[^>]*data-opf-path="design\.header\.left\.text"[^>]*>([^<]*)<\/text>/g)].map(match=>match[1]),'drawn lines');
 }
 for(const measured of [false,true])for(const floor of [16,32])for(const [width,height]of [[1280,720],[720,1280]]){
- const deck={organization:{id:'opf',name:'Organization'},design:{fontScheme:'roboto',imageFit:'cover',dimensions:{widthInches:width/96,heightInches:height/96},header:{left:{image,text:'Keep both'},center:{text:'{{organization.name}}'},right:{text:'{{slide.section}}'}},footer:{left:{date:'Literal date'},right:{text:'{{slide.number}}'}}},slides:[{section:'Section',title:'Furniture',text:'Body',composition:{minFontSize:floor,overflow:'error'}}]};
+ const deck={organization:{id:'opf',name:'Organization'},design:{fontScheme:'roboto',imageFit:'cover',dimensions:{widthInches:width/96,heightInches:height/96},header:{start:{image,text:'Keep both'},center:{text:'{{organization.name}}'},end:{text:'{{slide.section}}'}},footer:{start:{date:'Literal date'},end:{text:'{{slide.number}}'}}},slides:[{section:'Section',title:'Furniture',text:'Body',composition:{minFontSize:floor,overflow:'error'}}]};
  const before=structuredClone(deck),config={...(measured?{fonts:prepared}:{}),trace:true},geometry=resolvePresentation(deck,config).slides[0].geometry,svg=toSvg(deck, 1,config);
  assert.deepEqual(geometry.diagnostics,[]);assert.deepEqual(deck,before);
  assert.ok(svg.includes('Visible furniture logo'));assert.ok(svg.includes('xMidYMid meet'));
@@ -34,8 +34,8 @@ for(const measured of [false,true])for(const floor of [16,32])for(const [width,h
  const empty=structuredClone(deck);empty.slides[0].design={header:{},footer:{}};assert.ok(!toSvg(empty, 1,config).includes('data-opf-furniture-field'));
  // A word wider than its share beside a wide logo either fits whole or is core's text-overflow at the part (which the
  // renderer refuses under overflow: 'error'); it is never broken across lines.
- const long=structuredClone(deck);long.design.header.left={image:{src:wideLogo,alt:'Wide logo'},text:'Confidentiality'};long.slides[0].composition.overflow='warn';
- const longGeometry=resolvePresentation(long,config).slides[0].geometry,flagged=longGeometry.diagnostics.filter(entry=>entry.code==='text-overflow'&&entry.path==='design.header.left.text');
+ const long=structuredClone(deck);long.design.header.start={image:{src:wideLogo,alt:'Wide logo'},text:'Confidentiality'};long.slides[0].composition.overflow='warn';
+ const longGeometry=resolvePresentation(long,config).slides[0].geometry,flagged=longGeometry.diagnostics.filter(entry=>entry.code==='text-overflow'&&entry.path==='design.header.start.text');
  if(flagged.length){
   assert.match(flagged[0].message,/break inside the word/);
   const strict=structuredClone(long);strict.slides[0].composition.overflow='error';
@@ -44,10 +44,10 @@ for(const measured of [false,true])for(const floor of [16,32])for(const [width,h
  longWordOutcomes.push(flagged.length?'overflow':'whole');
 }
 assert.ok(longWordOutcomes.includes('whole')&&longWordOutcomes.includes('overflow'),'a long word fits whole where there is room and is reported where there is not');
-assert.throws(()=>toSvg({design:{header:{left:{date:true}}},slides:[{text:'Body',composition:{overflow:'error'}}]}, 1),{code:'layout-overflow'});
+assert.throws(()=>toSvg({design:{header:{start:{date:true}}},slides:[{text:'Body',composition:{overflow:'error'}}]}, 1),{code:'layout-overflow'});
 // FF-27 / FA-31: slide-number text, fixed formatted dates and host-supplied current dates.
 {
- const deck={design:{fontScheme:'roboto',header:{center:{text:'Internal Use Only'}},footer:{left:{date:'2026-04-23',dateFormat:'MMM d, yyyy'},center:{date:true,dateFormat:'MMMM d, yyyy'},right:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',design:{header:false,footer:false}},{title:'Two',text:'Body'},{title:'Three',text:'Body'}]};
+ const deck={design:{fontScheme:'roboto',header:{center:{text:'Internal Use Only'}},footer:{start:{date:'2026-04-23',dateFormat:'MMM d, yyyy'},center:{date:true,dateFormat:'MMMM d, yyyy'},end:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',design:{header:false,footer:false}},{title:'Two',text:'Body'},{title:'Three',text:'Body'}]};
  const before=structuredClone(deck),config={trace:true,date:'2026-09-22'},resolved=resolvePresentation(deck,config);
  assert.deepEqual(deck,before);
  assert.deepEqual(resolved.slides.map(slide=>slide.geometry.diagnostics),[[],[],[]]);
@@ -59,8 +59,8 @@ assert.throws(()=>toSvg({design:{header:{left:{date:true}}},slides:[{text:'Body'
   assert.equal((svg.match(/data-opf-furniture-field="date"/g)??[]).length,2);assert.ok(!/<g[^>]*data-opf-furniture-editable="true"[^>]*data-opf-furniture-field="date"/.test(svg),'Formatted and current dates are generated, not editable source text.');
   assert.deepEqual(parts.find(part=>part.zone==='right').fields,[{type:'slideNumber',start:0,end:1}]);
  }
- assert.throws(()=>toSvg({design:{footer:{left:{date:true}}},slides:[{text:'Body',composition:{overflow:'error'}}]}, 1,{date:'22/09/2026'}),RangeError);
- const literal=toSvg({design:{footer:{left:{date:'Q3 2026'}}},slides:[{text:'Body'}]}, 1,{trace:true});
+ assert.throws(()=>toSvg({design:{footer:{start:{date:true}}},slides:[{text:'Body',composition:{overflow:'error'}}]}, 1,{date:'22/09/2026'}),RangeError);
+ const literal=toSvg({design:{footer:{start:{date:'Q3 2026'}}},slides:[{text:'Body'}]}, 1,{trace:true});
  assert.ok(/<g[^>]*data-opf-furniture-editable="true"[^>]*data-opf-furniture-field="date"/.test(literal),'A date string without dateFormat stays editable literal text.');
 }
 console.log('Furniture renderer passed: shared readable fields, combined image/text, generated metadata, fit images, local disabling and unresolved-content rejection.');

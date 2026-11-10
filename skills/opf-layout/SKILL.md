@@ -14,7 +14,7 @@ Work on the supplied OPF document without silently rewriting or dropping content
 - **Furniture**: the parts that repeat on slides outside the content: header, footer, logo, slide number. You set them once on the deck or a layout, not in `blocks`.
 - **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. A `composition` key steers it.
 - **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
-- **Promoted region**: content placed by a 3×3 grid key on the slide (`left`, `top:right`, `center+right`), used when relative position matters. It cannot be mixed with root content.
+- **Promoted region**: content placed by a 3×3 grid key on the slide (`start`, `top:end`, `center+end`), used when relative position matters. It cannot be mixed with root content.
 - **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
 - **Reflow**: text wrapping again when its box or size changes. OPF computes preview line breaks. Default PPTX export keeps each wrapped line in its own box; opt-in native paragraph export lets supported text re-wrap in the application, while fallback content stays measured.
 - **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.
@@ -25,7 +25,7 @@ Work on the supplied OPF document without silently rewriting or dropping content
 - `blocks` with `composition.mode: auto` suit content that can reflow. Use `row`, `column`, or `grid` when arrangement matters; `columns` selects grid tracks or caps automatic candidates.
 - `weights` size columns in row/grid/auto and rows in column mode. They describe relative allocation, not percentages or absolute pixels.
 - Nested groups keep related content together. Each group contains `blocks` and optionally `composition`; it is not also a leaf `text`/`image` payload.
-- Promoted regions (`left`, `center+right`, `top:left`, and the other schema-defined regions) preserve placement on a 3×3 vocabulary. Use disjoint regions; flow direction and weights do not relocate them.
+- Promoted regions (`start`, `center+end`, `top:start`, and the other schema-defined regions) preserve placement on a 3×3 vocabulary. Use disjoint regions; flow direction and weights do not relocate them.
 - A layout record is one ordered list of `regions`, declared once, in reading order, with a `direction` (`row` side by side, `column` stacked) and a `size` per entry (a share of the parent; `auto` only in a column). An entry is a region (`name`, `accepts`, `flow`, ...) or a split (`direction` and its own `regions`, for two dimensions, three levels at most). `title` and `subtitle` are reserved heading regions that take only a size, their own `anchor` and (the title) `rule: true`, a short accent rule above a title with no tag; `anchor` on the record or a split is inherited by the body regions under it. Regions say which kinds they accept, how several blocks flow, and whether an empty region collapses. The 40 built-ins in this source are named by intent (`cover`, `text`, `chart`, `two-column`, and others). Read `docs/layout-templates.md` and the actual record before pinning a block with `region`. Unpinned blocks bind by kind, role, then reading order; a pin names a region on that layout. Use `layout: "auto"` for explicit automatic composition. The slide's own groups remain content groups, not layout placeholders.
 
 Read [geometry and repair](references/geometry.md) before measuring or paginating. The format schema is the source of numeric bounds; do not invent arbitrary `x`, `y`, `width`, or `fontSize` fields on leaf payloads.
@@ -47,7 +47,7 @@ One idea per slide. Pick the layout from what the content is, then check it fits
 
 ## Multilingual slides
 
-Set a slide's `language` to a BCP-47 tag or inline Language object when it differs from the deck. The slide's direction, script fonts, quotation marks and number formatting follow it; omission inherits the deck language. A run's `lang` still overrides one run. Keep the author's selected font scheme: an Arabic script-family scheme on an Arabic slide writes that face in the PPTX complex-script slot, including in an English deck.
+Set a slide's `language` to a BCP-47 tag or inline Language object when it differs from the deck. The slide's direction, script fonts, quotation marks and number formatting follow it; omission inherits the deck language. A run's `language` still overrides one run. Keep the author's selected font scheme: an Arabic script-family scheme on an Arabic slide writes that face in the PPTX complex-script slot, including in an English deck.
 
 A timeline with semantic `status` values adds localized status words where the engine vocabulary provides them and the source labels keep their size. Regional variants share their language words; Chinese scripts differ. Unsupported generated translations keep markers and progress without inserting English. Keep precise local wording and schedule-health notes in the event text. See docs/dynamic-composition.md, "Localized timeline status words".
 
@@ -55,7 +55,7 @@ A timeline can give each event a positive numeric `duration` in one shared unit:
 
 ## Headers and footers
 
-Header and footer zones (`left`, `center`, `right`) sit on the content inset, so a footer's left edge meets the body's. They are three columns with a small gutter, and a zone beside empty zones takes their width: a lone `left` footer spans the content width, and a `left` and a `right` zone share the free center. A `center` zone stays centered. A zone that still wraps onto more than two lines gets the `opf/furniture-wraps` warning: shorten it, or move a source to a `caption` on the chart, table or image it describes, or to the speaker notes. See `docs/dynamic-composition.md` for the geometry (`furniture-flow-v2`).
+Header and footer zones (`start`, `center`, `end`) sit on the content inset, so a footer's start edge meets the body's. They are three columns with a small gutter, and a zone beside empty zones takes their width: a lone `start` footer spans the content width, and a `start` and an `end` zone share the free center. A `center` zone stays centered. A zone that still wraps onto more than two lines gets the `opf/furniture-wraps` warning: shorten it, or move a source to a `caption` on the chart, table or image it describes, or to the speaker notes. See `docs/dynamic-composition.md` for the geometry (`furniture-flow-v2`).
 
 ## Repair loop
 

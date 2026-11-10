@@ -413,7 +413,7 @@ const centeredBody: RuleText = (finding) => {
   const blocks = measuredNumber(finding, "blocks") ?? 1;
   return {
     message: `A centered ${what}${onSlide(finding)} runs ${lines} line${lines === 1 ? "" : "s"} (${characters} characters)${blocks > 1 ? `, with ${blocks - 1} more like it` : ""}; each line starts at a different place, which is harder to read.`,
-    next: `set ${code('contentAlignment: "left"')} in the slide's design, or cut it to a line or two.`,
+    next: `set ${code('contentAlignment: "start"')} in the slide's design, or cut it to a line or two.`,
   };
 };
 

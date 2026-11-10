@@ -58,12 +58,12 @@ export const joinNativeParagraphs = paragraphs => value(paragraphs.flatMap((para
   ...(index ? ['\n'] : []), ...(Array.isArray(paragraph.richText) ? paragraph.richText : [paragraph.richText ?? paragraph.text])
 ]));
 
-// FA-13: a run language that differs from the deck language comes back as TextRun.lang; a run in the design's code family
+// FA-13: a run language that differs from the deck language comes back as TextRun.language; a run in the design's code family
 // comes back as an inline code run. `extras` is {deckLang, codeFamily} (either may be absent).
 const RUN_LANG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
 function nativeRunLanguage(properties, extras) {
   const lang = properties.lang;
-  return typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang) && (properties.altLang === 'en-US' || extras.deckLang && lang.toLowerCase() !== extras.deckLang.toLowerCase()) ? {lang} : {};
+  return typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang) && (properties.altLang === 'en-US' || extras.deckLang && lang.toLowerCase() !== extras.deckLang.toLowerCase()) ? {language: lang} : {};
 }
 function bodyRunStyle(properties, context, relationships, report, extras = {}) {
   const supported = {...properties};

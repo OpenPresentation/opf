@@ -23,7 +23,7 @@ export const REFERENCE_RULES = Object.freeze([
 ]);
 
 /** The promoted regions of a slide a block can be pinned to (the lower-case names the `region` pattern accepts). */
-export const PROMOTED_REGIONS = Object.freeze(["top", "middle", "bottom", "left", "center", "right"]);
+export const PROMOTED_REGIONS = Object.freeze(["top", "middle", "bottom", "start", "center", "end"]);
 
 const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 const isIndex = (segment) => typeof segment === "number" || /^(?:0|[1-9]\d*)$/.test(String(segment));

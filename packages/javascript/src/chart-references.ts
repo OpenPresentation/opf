@@ -68,7 +68,8 @@ export function placeReferences(refs:readonly ChartReference[],data:ResolvedChar
       let previous:{x:number;y:number}|undefined;
       data.rows.forEach((row,index)=>{
         const own=chartNumber(row[series+1]);if(own===null){previous=undefined;return;}
-        const value=stacked?(totals[index]=totals[index]!+own):own;
+        if(stacked)totals[index]=totals[index]!+own;
+        const value=stacked?totals[index]!:own;
         const point={x:plot.x+((rtl?count-1-index:index)+.5)*plot.width/count,y:plot.y+chartAxisFraction(value,axis,true)*plot.height};
         if(previous)segments.push({x1:previous.x,y1:previous.y,x2:point.x,y2:point.y,pad:4/3*geometry.scale});
         if(role||geometry.chartType==='line-with-markers')segments.push({x1:point.x,y1:point.y,x2:point.x,y2:point.y,pad:4*geometry.scale});

@@ -37,14 +37,14 @@ test('named color slots after a split scalar retain their source identities',asy
  const source=fixture(phrase);source.slides[0].items.push([{text:'inherited role',color:'text'}],[{text:'accent role',color:'accent2'}]);const diagnostics=[];const restored=await importDeck(await exportDeck(source),diagnostics);assert.deepEqual(restored,source);assert.ok(!diagnostics.some(d=>d.code==='color-reference-changed'));
 });
 test('explicit authored rich boundaries survive beside scalar recovery',async()=>{
- for(const value of [['البند: ',{text:'Bonjour 1',lang:'fr-FR'}],['البند: ',{text:'Release 1',bold:true}],[{text:'الروابط: ',color:'text'},{text:'Release 1',link:'https://example.com'}]]){const source=fixture(value);assert.deepEqual(await importDeck(await exportDeck(source)),source);}
+ for(const value of [['البند: ',{text:'Bonjour 1',language:'fr-FR'}],['البند: ',{text:'Release 1',bold:true}],[{text:'الروابط: ',color:'text'},{text:'Release 1',link:'https://example.com'}]]){const source=fixture(value);assert.deepEqual(await importDeck(await exportDeck(source)),source);}
 });
 
 const tagOf=bytes=>{const file=unzipSync(bytes)['ppt/tags/opfSlide1.xml'];return file?JSON.parse(Buffer.from(strFromU8(file).match(/val="([^"]+)"/)[1],'hex').toString('utf8')):undefined;};
 const characters=value=>typeof value==='string'?value:Array.isArray(value)?value.map(part=>typeof part==='string'?part:part.text).join(''):characters(value.text);
 test('source scalar proof is bounded, word-free, full-only and omitted for unaffected values',async()=>{
  const source=fixture(phrase),tag=tagOf(await exportDeck(source));assert.deepEqual(tag.listScalars,[['slides.0.items',[[0,'text']]]]);assert.match(tag.native.listIdentity,/^[a-f0-9]{14}$/);assert.doesNotMatch(JSON.stringify(tag.listScalars),/Release|البند/);
- for(const input of [{slides:[{items:['Ordinary English text.']}]},fixture('نص عربي كامل'),fixture(['البند: ','Release 1 remains available']),fixture([{text:phrase,lang:'ar-SA'}])])assert.equal(tagOf(await exportDeck(input))?.listScalars,undefined);
+ for(const input of [{slides:[{items:['Ordinary English text.']}]},fixture('نص عربي كامل'),fixture(['البند: ','Release 1 remains available']),fixture([{text:phrase,language:'ar-SA'}])])assert.equal(tagOf(await exportDeck(input))?.listScalars,undefined);
  for(const provenance of ['references-only',false])assert.equal(tagOf(await exportDeck(source,{provenance}))?.listScalars,undefined);
  assert.doesNotThrow(()=>validateListScalars([['slides.0.items',[[0,'text'],[0,'description'],[1,'text']]]]));
  for(const bad of [[],{},[['items',[[0,'text']]]],[['slides.0.items',[]]],[['slides.0.items',[[0,'other']]]],[['slides.0.items',[[0,'text'],[0,'text']]]],[['slides.0.items',[[1,'text'],[0,'text']]]],[['slides.0.items',[[MAX_LIST_BREAKS,'text']]]]])assert.throws(()=>validateListScalars(bad));

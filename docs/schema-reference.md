@@ -230,11 +230,11 @@ _No named properties._
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
-| `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout... |
-| `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.content... |
+| `titleAlignment` | no | `enum:start \| center \| end` | Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout... |
+| `contentAlignment` | no | `enum:start \| center \| end` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.content... |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the theme's design.contentBox, then the layout record's design.contentBox,... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout re... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says t... |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| start \| end` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says t... |
 | `imageFit` | no | `enum:cover \| contain \| stretch \| auto` | Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture in a frame of its own proportion... |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the... |
 | `listStyle` | no | `enum:stack \| rows` | How list entries are arranged. 'stack' draws each entry's text with its description under it, the entries close together, as before. 'rows' draws ruled rows: a hairline between two first-level entries (the scheme's bo... |
@@ -634,7 +634,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `color` | yes | `ref:ColorRef` | Overlay fill color: a hex color (eight-digit hex keeps its alpha), a color-scheme slot or role name, or a 'var:<id>' variable reference. |
 | `opacity` | yes | `number` | Overlay fill opacity. |
-| `edge` | no | `enum:top \| bottom \| left \| right` | Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment.... |
+| `edge` | no | `enum:top \| bottom \| start \| end` | Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment.... |
 | `size` | no | `number` | Band share of the frame for an edge overlay. Default 0.3. Ignored without edge. |
 
 
@@ -646,8 +646,8 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `edge` | yes | `enum:left \| right \| top \| bottom` | The slide edge the image bleeds to. |
-| `size` | no | `number` | Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5. |
+| `edge` | yes | `enum:start \| end \| top \| bottom` | The slide edge the image bleeds to. |
+| `size` | no | `number` | Share of the slide width (start, end) or height (top, bottom) given to the band. Default 0.5. |
 | `inset` | no | `boolean` | Draw the frame inside the slide padding on every side of the band, like a card, instead of edge to edge. Default false. |
 
 
@@ -850,20 +850,20 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Repeated header or footer content split into left, center, and right zones. Header/footer content is slide furniture, separate from the main slide content payloads.
+- Purpose: Repeated header or footer content split into start, center, and end zones. The zones follow the deck's direction: 'start' is at the left of a left-to-right deck and at the right of a right-to-left one. Header/footer content is slide furniture, separate from the main slide content payloads.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `left` | no | `ref:HeaderFooterItem` | Left-aligned header/footer content. |
+| `start` | no | `ref:HeaderFooterItem` | Content at the start edge, aligned to it. |
 | `center` | no | `ref:HeaderFooterItem` | Centered header/footer content. |
-| `right` | no | `ref:HeaderFooterItem` | Right-aligned header/footer content. |
+| `end` | no | `ref:HeaderFooterItem` | Content at the end edge, aligned to it. |
 
 
 ### HeaderFooterItem
 
 - Type: `object`
 - Required fields: none
-- Purpose: One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (left, center or right) and vertically centered on each other; a line break inside text or socials ('\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide number, the slide count, t...
+- Purpose: One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (the start edge, the center or the end edge) and vertically centered on each other; a line break inside text or socials ('\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide numbe...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -954,7 +954,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'left', 'center+right', and 'top:left'.
+- Purpose: A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'start', 'center+end', and 'top:start'. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -983,54 +983,54 @@ _No named properties._
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
 | `shapes` | no | `array<ref:OverlayShape>` | Shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overla... |
 | `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
-| `left` | no | `ref:ContentPayload` |  |
+| `start` | no | `ref:ContentPayload` |  |
 | `center` | no | `ref:ContentPayload` |  |
-| `right` | no | `ref:ContentPayload` |  |
-| `left+center` | no | `ref:ContentPayload` |  |
-| `center+right` | no | `ref:ContentPayload` |  |
-| `left+center+right` | no | `ref:ContentPayload` |  |
+| `end` | no | `ref:ContentPayload` |  |
+| `start+center` | no | `ref:ContentPayload` |  |
+| `center+end` | no | `ref:ContentPayload` |  |
+| `start+center+end` | no | `ref:ContentPayload` |  |
 | `top` | no | `ref:ContentPayload` |  |
 | `middle` | no | `ref:ContentPayload` |  |
 | `bottom` | no | `ref:ContentPayload` |  |
 | `top+middle` | no | `ref:ContentPayload` |  |
 | `middle+bottom` | no | `ref:ContentPayload` |  |
 | `top+middle+bottom` | no | `ref:ContentPayload` |  |
-| `top:left` | no | `ref:ContentPayload` |  |
+| `top:start` | no | `ref:ContentPayload` |  |
 | `top:center` | no | `ref:ContentPayload` |  |
-| `top:right` | no | `ref:ContentPayload` |  |
-| `top:left+center` | no | `ref:ContentPayload` |  |
-| `top:center+right` | no | `ref:ContentPayload` |  |
-| `top:left+center+right` | no | `ref:ContentPayload` |  |
-| `middle:left` | no | `ref:ContentPayload` |  |
+| `top:end` | no | `ref:ContentPayload` |  |
+| `top:start+center` | no | `ref:ContentPayload` |  |
+| `top:center+end` | no | `ref:ContentPayload` |  |
+| `top:start+center+end` | no | `ref:ContentPayload` |  |
+| `middle:start` | no | `ref:ContentPayload` |  |
 | `middle:center` | no | `ref:ContentPayload` |  |
-| `middle:right` | no | `ref:ContentPayload` |  |
-| `middle:left+center` | no | `ref:ContentPayload` |  |
-| `middle:center+right` | no | `ref:ContentPayload` |  |
-| `middle:left+center+right` | no | `ref:ContentPayload` |  |
-| `bottom:left` | no | `ref:ContentPayload` |  |
+| `middle:end` | no | `ref:ContentPayload` |  |
+| `middle:start+center` | no | `ref:ContentPayload` |  |
+| `middle:center+end` | no | `ref:ContentPayload` |  |
+| `middle:start+center+end` | no | `ref:ContentPayload` |  |
+| `bottom:start` | no | `ref:ContentPayload` |  |
 | `bottom:center` | no | `ref:ContentPayload` |  |
-| `bottom:right` | no | `ref:ContentPayload` |  |
-| `bottom:left+center` | no | `ref:ContentPayload` |  |
-| `bottom:center+right` | no | `ref:ContentPayload` |  |
-| `bottom:left+center+right` | no | `ref:ContentPayload` |  |
-| `top+middle:left` | no | `ref:ContentPayload` |  |
+| `bottom:end` | no | `ref:ContentPayload` |  |
+| `bottom:start+center` | no | `ref:ContentPayload` |  |
+| `bottom:center+end` | no | `ref:ContentPayload` |  |
+| `bottom:start+center+end` | no | `ref:ContentPayload` |  |
+| `top+middle:start` | no | `ref:ContentPayload` |  |
 | `top+middle:center` | no | `ref:ContentPayload` |  |
-| `top+middle:right` | no | `ref:ContentPayload` |  |
-| `top+middle:left+center` | no | `ref:ContentPayload` |  |
-| `top+middle:center+right` | no | `ref:ContentPayload` |  |
-| `top+middle:left+center+right` | no | `ref:ContentPayload` |  |
-| `middle+bottom:left` | no | `ref:ContentPayload` |  |
+| `top+middle:end` | no | `ref:ContentPayload` |  |
+| `top+middle:start+center` | no | `ref:ContentPayload` |  |
+| `top+middle:center+end` | no | `ref:ContentPayload` |  |
+| `top+middle:start+center+end` | no | `ref:ContentPayload` |  |
+| `middle+bottom:start` | no | `ref:ContentPayload` |  |
 | `middle+bottom:center` | no | `ref:ContentPayload` |  |
-| `middle+bottom:right` | no | `ref:ContentPayload` |  |
-| `middle+bottom:left+center` | no | `ref:ContentPayload` |  |
-| `middle+bottom:center+right` | no | `ref:ContentPayload` |  |
-| `middle+bottom:left+center+right` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:left` | no | `ref:ContentPayload` |  |
+| `middle+bottom:end` | no | `ref:ContentPayload` |  |
+| `middle+bottom:start+center` | no | `ref:ContentPayload` |  |
+| `middle+bottom:center+end` | no | `ref:ContentPayload` |  |
+| `middle+bottom:start+center+end` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:start` | no | `ref:ContentPayload` |  |
 | `top+middle+bottom:center` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:right` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:left+center` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:center+right` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:left+center+right` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:end` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:start+center` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:center+end` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:start+center+end` | no | `ref:ContentPayload` |  |
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. Also the slide-scoped built-in variable '{{sli... |
 | `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (o... |
@@ -1565,7 +1565,7 @@ _No named properties._
 | `fill` | no | `ref:ColorRef` | Cell background: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent. |
 | `color` | no | `ref:ColorRef` | Default text color, overridden by individual rich run colors. Accepts a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. |
 | `bold` | no | `boolean` | Bold cell text. Runs that set their own bold keep it; a number cell stays bold and still uses the cell's or column's number format. |
-| `align` | no | `enum:left \| center \| right` | Horizontal text alignment inside the cell. |
+| `align` | no | `enum:start \| center \| end` | Horizontal text alignment inside the cell. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge. |
 | `verticalAlign` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
 | `padding` | no | `ref:TableCellPadding` |  |
 | `borders` | no | `object` | Independent cell edges. An omitted edge keeps the table's default rule: a line under every row (and over the first row), none between columns. Width 0 removes an edge. |

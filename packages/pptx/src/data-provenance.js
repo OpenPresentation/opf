@@ -1,6 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {checkFormat, isValidFormat} from './format-check.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
+import {upgradeTag} from './legacy-tags.js';
 import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableData, tableCellDisplayValue} from './chart-data.js';
 
 // RR-54: chart and table data survive a PPTX round trip (core docs/chart-table-data.md).
@@ -370,7 +371,7 @@ function readTags(entries, container, relationships, name) {
   if (found.length > 1) throw Error(`Multiple ${name} tags.`);
   const value = found[0].val;
   if (typeof value !== 'string' || value.length > MAX_TAG_CHARS) throw Error(`Oversized or empty ${name} tag.`);
-  const decoded = decodeTextTag(value);
+  const decoded = upgradeTag(decodeTextTag(value));
   if (tooDeep(decoded)) throw Error(`The ${name} tag nests deeper than ${MAX_DEPTH} levels.`);
   return decoded;
 }

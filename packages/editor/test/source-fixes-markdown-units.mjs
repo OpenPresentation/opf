@@ -48,7 +48,7 @@ apply('# A\n\ntext\n>\nmore\n', 'markdown/empty-quote', 'Remove the empty quote'
 
 // markdown/options-orphan
 apply('# A\n\n<!-- block: id=a -->\n', 'markdown/options-orphan', 'Remove the options comment', '# A\n\n');
-apply('# A\n\n- x\n\n<!-- block: id=a\n  region=left -->\n', 'markdown/options-orphan', 'Remove the options comment', '# A\n\n- x\n\n');
+apply('# A\n\n- x\n\n<!-- block: id=a\n  region=start -->\n', 'markdown/options-orphan', 'Remove the options comment', '# A\n\n- x\n\n');
 
 // markdown/options-trailing
 apply('# A\n\n<!-- block: id=a --> text after\n- x\n', 'markdown/options-trailing', 'Move the text to its own line', '# A\n\n<!-- block: id=a -->\ntext after\n- x\n');

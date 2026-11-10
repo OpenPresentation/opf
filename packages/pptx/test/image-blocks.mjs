@@ -16,7 +16,7 @@ const wide = await readFile(new URL('fixtures/images/wide.png', import.meta.url)
 const tall = await readFile(new URL('fixtures/images/tall.png', import.meta.url));
 const uri = bytes => `data:image/png;base64,${bytes.toString('base64')}`;
 // This suite runs against the linked coordinated core; a core without image block geometry is a pinning error.
-assert.ok(composeSlide({ title: 'probe', blocks: [{ type: 'image', image: 'x', placement: { edge: 'left' } }] }).items.some(item => item.image?.placement),
+assert.ok(composeSlide({ title: 'probe', blocks: [{ type: 'image', image: 'x', placement: { edge: 'start' } }] }).items.some(item => item.image?.placement),
   'Linked core composition has no ComposedItem.image placement; pin a core with the FA-22 image blocks.');
 
 async function exported(deck, options = {}) {
@@ -79,7 +79,7 @@ for (const edge of ['left', 'right', 'top', 'bottom']) {
 // Focus: a cover crop keeps the focus point in view.
 {
   for (const focus of [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 0.25, y: 0.5 }]) {
-    const deck = deckFor({ fit: 'cover', focus, placement: { edge: 'left', size: 0.2 } });
+    const deck = deckFor({ fit: 'cover', focus, placement: { edge: 'start', size: 0.2 } });
     const item = imageItem(deck);
     const crop = (await exported(deck)).pictures[0]['p:blipFill']['a:srcRect'];
     const l = Number(crop.l ?? 0) / 100000, r = Number(crop.r ?? 0) / 100000;
@@ -138,7 +138,7 @@ for (const edge of ['left', 'right', 'top', 'bottom']) {
 
 // An edited image block stays an ordinary picture with a diagnostic.
 {
-  const { entries } = await exported(deckFor({ placement: { edge: 'left' } }), { provenance: false });
+  const { entries } = await exported(deckFor({ placement: { edge: 'start' } }), { provenance: false });
   const path = 'ppt/slides/slide1.xml';
   entries[path] = new TextEncoder().encode(decode(entries[path]).replace(/(<p:pic>[\s\S]*?<a:off x=")(\d+)/, (_, head, x) => `${head}${Number(x) + 9525}`));
   const diagnostics = [];
@@ -151,7 +151,7 @@ for (const edge of ['left', 'right', 'top', 'bottom']) {
 
 // Unresolved image blocks draw the unavailable-image panel in their frame.
 {
-  const bytes = await toPptx({ slides: [{ title: 'Missing', blocks: [{ type: 'image', image: 'asset:missing', placement: { edge: 'left' } }] }] }, { onDiagnostic: () => {} });
+  const bytes = await toPptx({ slides: [{ title: 'Missing', blocks: [{ type: 'image', image: 'asset:missing', placement: { edge: 'start' } }] }] }, { onDiagnostic: () => {} });
   const xml = decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
   assert.equal((xml.match(/<p:pic>/g) ?? []).length, 0);
   assert.match(xml, /name="OPF image placeholder 1"/);

@@ -166,12 +166,12 @@ const shapeImageFields = new Set<string>(["aspectRatio", "shape", "adjust", "str
 const shapeOptionFields = SHAPE_BLOCK_KEYS.filter((field) => field !== "path");
 
 const columnSpans: Record<string, readonly number[]> = {
-  left: [0],
+  start: [0],
   center: [1],
-  right: [2],
-  "left+center": [0, 1],
-  "center+right": [1, 2],
-  "left+center+right": [0, 1, 2],
+  end: [2],
+  "start+center": [0, 1],
+  "center+end": [1, 2],
+  "start+center+end": [0, 1, 2],
 };
 
 const rowSpans: Record<string, readonly number[]> = {

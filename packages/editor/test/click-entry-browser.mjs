@@ -46,7 +46,7 @@ const design = {fontScheme: 'roboto', footer: {center: {text: 'Confidential foot
 const deck = {design, slides: [
   {title: 'Quarterly review of everything', subtitle: wrapped},
   {title: 'Centered heading here', subtitle: 'Short', design: {titleAlignment: 'center'}},
-  {title: 'Right aligned heading', design: {titleAlignment: 'right'}},
+  {title: 'Right aligned heading', design: {titleAlignment: 'end'}},
   {title: 'Bullets', items: [bullet, 'Second bullet']},
   {title: 'Rich', text: [{text: 'Hello ', bold: true}, {text: 'world again', underline: true}]},
   {title: 'CRLF', text: 'line one\r\nline two\r\n\r\nline four  spaced'},

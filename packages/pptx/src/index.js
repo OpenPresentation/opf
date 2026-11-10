@@ -73,7 +73,7 @@ import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colo
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
-  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, itemAlignment, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -89,7 +89,7 @@ import {
   resolveVariables,
   validate
 } from "@openpresentation/opf";
-import {checkFormat, isValidFormat} from "./format-check.js";
+import {checkFormat, checkImportedFormat, isValidFormat} from "./format-check.js";
 import {OPFPptxError} from './errors.js';
 import {readInputZip} from './input-safety.js';
 export {OPFPptxError} from './errors.js';
@@ -186,54 +186,54 @@ const ROOT_PAYLOAD_FIELDS = [
 ];
 
 const PROMOTED_REGION_KEYS = [
-  "left",
+  "start",
   "center",
-  "right",
-  "left+center",
-  "center+right",
-  "left+center+right",
+  "end",
+  "start+center",
+  "center+end",
+  "start+center+end",
   "top",
   "middle",
   "bottom",
   "top+middle",
   "middle+bottom",
   "top+middle+bottom",
-  "top:left",
+  "top:start",
   "top:center",
-  "top:right",
-  "top:left+center",
-  "top:center+right",
-  "top:left+center+right",
-  "middle:left",
+  "top:end",
+  "top:start+center",
+  "top:center+end",
+  "top:start+center+end",
+  "middle:start",
   "middle:center",
-  "middle:right",
-  "middle:left+center",
-  "middle:center+right",
-  "middle:left+center+right",
-  "bottom:left",
+  "middle:end",
+  "middle:start+center",
+  "middle:center+end",
+  "middle:start+center+end",
+  "bottom:start",
   "bottom:center",
-  "bottom:right",
-  "bottom:left+center",
-  "bottom:center+right",
-  "bottom:left+center+right",
-  "top+middle:left",
+  "bottom:end",
+  "bottom:start+center",
+  "bottom:center+end",
+  "bottom:start+center+end",
+  "top+middle:start",
   "top+middle:center",
-  "top+middle:right",
-  "top+middle:left+center",
-  "top+middle:center+right",
-  "top+middle:left+center+right",
-  "middle+bottom:left",
+  "top+middle:end",
+  "top+middle:start+center",
+  "top+middle:center+end",
+  "top+middle:start+center+end",
+  "middle+bottom:start",
   "middle+bottom:center",
-  "middle+bottom:right",
-  "middle+bottom:left+center",
-  "middle+bottom:center+right",
-  "middle+bottom:left+center+right",
-  "top+middle+bottom:left",
+  "middle+bottom:end",
+  "middle+bottom:start+center",
+  "middle+bottom:center+end",
+  "middle+bottom:start+center+end",
+  "top+middle+bottom:start",
   "top+middle+bottom:center",
-  "top+middle+bottom:right",
-  "top+middle+bottom:left+center",
-  "top+middle+bottom:center+right",
-  "top+middle+bottom:left+center+right"
+  "top+middle+bottom:end",
+  "top+middle+bottom:start+center",
+  "top+middle+bottom:center+end",
+  "top+middle+bottom:start+center+end"
 ];
 
 const DIMENSION_PRESETS = Object.freeze({
@@ -680,7 +680,7 @@ export async function fromPptx(input, options = {}) {
       slides: slidePaths.map((path, index) => ({path, root: furnitureContexts[index].root, relationships: furnitureContexts[index].relationships, contentBounds: furnitureContexts[index].contentBounds}))}, report);
     // The stored language wins while the runs still carry its tag (FF-07).
     restored.groups = reconcileLanguage(restored.groups, observedLanguage, report);
-    imported = applyDocumentProvenance(imported, restored, checkFormat, report);
+    imported = applyDocumentProvenance(imported, restored, checkImportedFormat, report);
     slideProvenance = restored.slides;
     restoredGroups = restored.groups;
   } catch (error) {
@@ -2857,7 +2857,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: geometry.design.contentAlignment, direction: geometry.direction, tableGrowth: item.tableGrowth, tableHighlight: item.tableHighlight }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: itemAlignment(geometry.design.contentAlignment), direction: geometry.direction, tableGrowth: item.tableGrowth, tableHighlight: item.tableHighlight }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
       if (item.caption) {
         const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
@@ -4262,7 +4262,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
 // The default footer band core composes for a deck with no footer of its own: where a footer added natively lands.
 function defaultFooterParts(composeOptions) {
   try {
-    const slide = {design: {footer: {left: {date: '2026-01-01'}, center: {text: 'Footer'}, right: {text: '{{slide.number}}'}}}};
+    const slide = {design: {footer: {start: {date: '2026-01-01'}, center: {text: 'Footer'}, end: {text: '{{slide.number}}'}}}};
     // Only the zone boxes and line height are used, and they do not depend on text widths: estimated measurement keeps the host's measurer (and its call count) out of this.
     return (composeSlide(slide, {...composeOptions, textMeasurement: undefined}).furniture?.parts ?? []).filter(part => part.kind === 'footer' && part.type === 'text');
   } catch {
@@ -4285,7 +4285,7 @@ function zoneBands(composeOptions) {
 // core's line placement; a part in a row is as wide as its words and does not wrap (`noWrap`), and a text in a zone with a picture spans the
 // zone (RR-71). Returns {geometry: Map<'dt'|'ftr'|'sldNum', {x, y, cx, cy, algn, noWrap, sz}> in EMU, present: the deck footer's own
 // native parts by type}, or undefined when core cannot compose it.
-const ADD_ZONES = {dt: ['left', 'center', 'right'], ftr: ['center', 'left', 'right'], sldNum: ['right', 'center', 'left']};
+const ADD_ZONES = {dt: ['start', 'center', 'end'], ftr: ['center', 'start', 'end'], sldNum: ['end', 'center', 'start']};
 // The widest digits of the year, for the width of a date placed beside other parts.
 const SAMPLE_DATE = '2026-12-28';
 const EMU_PER_PIXEL = 9525;
@@ -4298,7 +4298,7 @@ function masterFooterGeometry(composeOptions, {staticNumbers, dateFormat}) {
   const presentation = composeOptions?.presentation;
   if (!presentation) return undefined;
   const base = deckFooter(presentation);
-  const footer = Object.fromEntries(['left', 'center', 'right'].filter(zone => plainObject(base[zone])).map(zone => [zone, {...base[zone]}]));
+  const footer = Object.fromEntries(['start', 'center', 'end'].filter(zone => plainObject(base[zone])).map(zone => [zone, {...base[zone]}]));
   const filled = item => item !== undefined && (item.image !== undefined || (typeof item.text === 'string' ? item.text.trim() !== '' : item.text !== undefined) || item.socials === true || item.date === true || typeof item.date === 'string');
   // Text widths matter only beside other parts: a deck without a footer (every part alone in its zone) keeps the host's measurer,
   // and its call count, out of this.
@@ -4943,7 +4943,7 @@ function chosenFamilyMeasurement(measurement) {
   return wrapped;
 }
 
-// FA-13: TextRun.lang as the run's own proofing language (a:rPr lang), when it differs from the deck language.
+// FA-13: TextRun.language as the run's own proofing language (a:rPr lang), when it differs from the deck language.
 function langOptions(context, tag) {
   const lang = runLanguageTag(context.scriptFonts, tag, context.slideIndex ?? 0);
   return lang ? {lang} : {};
@@ -5018,7 +5018,7 @@ function textRuns(value, context, fallbackFontSize, path) {
         superscript: run?.superscript,
         subscript: !run?.superscript && run?.subscript,
         hyperlink: run?.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? { url: run.link } : undefined,
-        ...langOptions(context, run?.lang)
+        ...langOptions(context, run?.language)
       }
     };
   });

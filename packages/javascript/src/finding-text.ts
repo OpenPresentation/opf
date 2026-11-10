@@ -4,7 +4,7 @@
  * `validate` returns findings written for tools (an Ajv sentence such as "must be equal to one of the allowed values", a rule's own sentence, `help`
  * text for agents). An editor, the CLI or an agent that shows them to a person wants the sentence of artifacts/source-editor/VALIDATOR-HINTS.md:
  *
- *     `titleAlignment` must be left, center or right, but is `middle`.      (message)
+ *     `titleAlignment` must be start, center or end, but is `middle`.      (message)
  *     did you mean `center`?                                                (next)
  *
  * The text is written from the structured data a finding already carries (the schema keyword and its parameters, the suggestions, the measured

@@ -7,7 +7,7 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Plain text | `{"text":"A useful assertion"}` |
 | Rich text | `{"text":[{"text":"Important","bold":true}," detail"]}` |
 | Inline code | `{"text":["Run ",{"text":"pnpm install","code":true}]}` (the design's code font; Markdown `` `backticks` `` are the same thing) |
-| Run in another language | `{"text":["The word ",{"text":"Zeitgeist","lang":"de"}]}` (BCP-47 tag; sets proofing and script fonts for that run) |
+| Run in another language | `{"text":["The word ",{"text":"Zeitgeist","language":"de"}]}` (BCP-47 tag; sets proofing and script fonts for that run) |
 | List | `{"items":["First point","Second point"]}` (a `list` payload for entries that share a shape or may need a `description`) |
 | Prose bullets | `{"bullets":["A talking point","Another one"]}` (a `text` payload for plain talking points that each stand alone; `bullets` entries have no `description`) |
 | List with detail | `{"items":[{"text":"Faster onboarding","description":"First value in under a day."}]}` (`description` exists only on `items`; use `items` whenever any entry needs detail) |
@@ -60,9 +60,9 @@ These numeric examples are illustrative; replace them only with supported data. 
 
 Chart values are numbers. A string counts only in strict decimal syntax (`"12"`, `"-3.5"`, `"1e6"`); `"12%"`, `"$5"`, `"(5)"` and `"1,234"` are gaps and a `chart-value-not-numeric` warning. Put units, currency and percent in a column format instead: a chart, dataset or table column may be `{"name":"Revenue","format":"$#,##0.0"}` (the `NumberVariable.format` syntax: `#,##0`, `0.0%`, `#,##0 units`; a `%` multiplies by 100, so store 0.31 for 31%), and a styled table cell takes its own `format`. Data used by several charts or tables goes once in the top-level `datasets` map (`{"revenue":{"columns":[...],"rows":[...],"source":{"src":"./revenue.csv"}}}`) and is referenced with `"chart":{"type":"line","data":{"dataset":"revenue","fields":["Quarter","Revenue"]}}` or `"table":{"dataset":"revenue"}`; an unreferenced dataset is the warning `opf/unused-dataset`. `chart.mapping` (`{"category":"Quarter","x":"Spend","series":["Revenue","Costs"]}`) picks columns by name; omit it for the positional rule (first column the category, every other column a series; scatter takes the second as X). Record where inline data came from with `data.source` (`{"src","sheet","range","retrieved"}`), which engines never read. `"data":{"src":...}` (a data source by file or asset) is not part of the format and is a schema error: import the data inline or into a dataset. See `docs/chart-table-data.md`.
 
-The slide `tag` (the small line above the title) follows `titleAlignment`, like the title, so a layout that centers its content does not center the tag over a left-aligned title; only a slide's own `design.contentAlignment` keeps it on the content, as on a cover.
+The slide `tag` (the small line above the title) follows `titleAlignment`, like the title, so a layout that centers its content does not center the tag over a start-aligned title; only a slide's own `design.contentAlignment` keeps it on the content, as on a cover.
 
-Keep numbers numeric where the schema permits them. Tables use `columns` and `rows`, not `headers` and `cells`. OPF slide content is not an `elements` array or arbitrary HTML. Promoted region values are content payloads, for example `"left":{"text":"Context"}`.
+Keep numbers numeric where the schema permits them. Tables use `columns` and `rows`, not `headers` and `cells`. OPF slide content is not an `elements` array or arbitrary HTML. Promoted region values are content payloads, for example `"start":{"text":"Context"}`.
 
 The presentation root accepts identity, organizations, speakers, author, audience, purpose, language, tone, takeaway, duration, tags, design, variables, template, narrative, slides, references, datasets, assets, catalogs, and extensions. Query the schema for object alternatives and required fields. Do not put old `version`/`meta` wrappers into the current canonical document.
 
@@ -89,19 +89,19 @@ A table's text draws at the body size (about 19 pt, next to 24 pt bullets) and t
       "table": {
         "columns": [
           {"value": "Region", "style": {"bold": true, "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-          {"value": "Q4 revenue", "style": {"bold": true, "align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-          {"value": "Growth", "style": {"bold": true, "align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+          {"value": "Q4 revenue", "style": {"bold": true, "align": "end", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+          {"value": "Growth", "style": {"bold": true, "align": "end", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
         ],
         "rows": [
           [
             {"value": "North America", "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-            {"value": "$18.1M", "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-            {"value": [{"text": "+46%", "bold": true, "color": "accent2"}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+            {"value": "$18.1M", "style": {"align": "end", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "+46%", "bold": true, "color": "accent2"}], "style": {"align": "end", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
           ],
           [
             {"value": "EMEA", "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-            {"value": "$11.5M", "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-            {"value": "+40%", "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+            {"value": "$11.5M", "style": {"align": "end", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": "+40%", "style": {"align": "end", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
           ]
         ],
         "alt": "North America grew 46% to $18.1M in Q4, ahead of EMEA at 40%."
@@ -111,7 +111,7 @@ A table's text draws at the body size (about 19 pt, next to 24 pt bullets) and t
 }
 ```
 
-A text cell keeps the string you type, so write the number as you want it shown (`"$18.1M"`) and right-align it with `style.align`. Keep a number a number when the same data feeds a chart or other tables, or the table is dense and reference-only: give the column a `format` and write plain numbers; a number column is right-aligned for you, and a cell written as runs (to color one number, say) keeps that column's alignment. A bold number that keeps its format is `{"value": 18.1, "style": {"bold": true}}`.
+A text cell keeps the string you type, so write the number as you want it shown (`"$18.1M"`) and align it at the end edge with `style.align` (`"end"`). Keep a number a number when the same data feeds a chart or other tables, or the table is dense and reference-only: give the column a `format` and write plain numbers; a number column is aligned at the end edge for you, and a cell written as runs (to color one number, say) keeps that column's alignment. A bold number that keeps its format is `{"value": 18.1, "style": {"bold": true}}`.
 
 ```json
 {
@@ -141,7 +141,7 @@ An image block takes `fit` (`cover`, the default via `design.imageFit`; `contain
 
 A shape block draws a PowerPoint preset with optional text inside: `{"shape": "chevron", "text": "Plan"}`. Use one for a process step, a callout, a badge or a labeled figure; use a list or a table when the words carry the slide. `shape` takes DrawingML's preset names (`rect`, `roundRect`, `ellipse`, `rightArrow`, `chevron`, `wedgeRectCallout`, `flowChartDecision`, all 187 in docs/shapes.md), or `path` gives an outline of your own (SVG path data in a 0 to 1 box). `adjust` moves the preset's handles in fractions and degrees (`{"adj": 0.3}` on a `roundRect`). `fill` is `"none"`, a color, `{"gradient": {...}}` or `{"pattern": {...}}`; `stroke` is the line (`{"color", "width", "dash", "end": {"type": "triangle"}}`); `style` (`none`, `subtle`, `moderate` by default, `intense`) is the theme's shape style for whatever you leave unset, so a bare shape already follows the deck. Text is fitted inside the preset's text rectangle at the readable size, never shrunk below `minFontSize`: keep it to a few words. `anchor`, `padding` and `textDirection` place it; `rotate` and `flip` turn the shape; `alt`, `decorative`, `hidden` and `link` set its accessibility and click. Any color can be lighter or darker: `{"color": "accent1", "lighten": 0.4}` is PowerPoint's "Lighter 40%".
 
-An `image`, `chart`, `table` or `video` payload takes a `caption` (a string, `TextRun[]`, or `{text, position: "below" | "above", align: "left" | "center" | "right"}`), composed inside the block's region; only one captionable payload per block or slide root.
+An `image`, `chart`, `table` or `video` payload takes a `caption` (a string, `TextRun[]`, or `{text, position: "below" | "above", align: "start" | "center" | "end"}`), composed inside the block's region; only one captionable payload per block or slide root.
 
 ```json
 {

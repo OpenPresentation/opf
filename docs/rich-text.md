@@ -14,7 +14,7 @@ The canvas supports native SVG text selection with a formatting toolbar for bold
 
 A run with `code: true` is an inline code span. It is set in the design's code font (the font scheme's `code` family, else Roboto Mono) unless the run names its own `fontFamily`. Only the font changes: a PPTX run cannot carry a background, so neither engine draws one. Composition measures the run in the code font (`RichTextOptions.codeFontFamily`, `TableLayoutOptions.codeFontFamily`; `composeSlide` passes `fonts.code`). Markdown backticks read and write code runs (see [Markdown](markdown.md)).
 
-A run with `lang` (a BCP-47 tag such as `fr-FR` or `ja-JP`) overrides the deck language for that run. It reaches the layout as `style.lang` on the run's fragments, the preview writes it as the `lang` of the run's text, and PPTX export writes `a:rPr/@lang` (with the run's own East Asian and complex-script theme fonts for that language). PPTX import reads `lang` back only when it differs from the deck language. Without `lang` a run follows the deck language.
+A run with `language` (a BCP-47 tag such as `fr-FR` or `ja-JP`) overrides the deck language for that run. It reaches the layout as `style.lang` on the run's fragments, the preview writes it as the `lang` of the run's text, and PPTX export writes `a:rPr/@lang` (with the run's own East Asian and complex-script theme fonts for that language). PPTX import reads `language` back only when it differs from the deck language. Without `language` a run follows the deck language.
 
 ```js
 import {fitRichText} from '@openpresentation/opf/composition';

@@ -56,7 +56,7 @@ for (const [index, fixture] of manifest.fixtures.entries()) {
     slide.blocks = slide.blocks.filter(block => block !== matches[0]);
     if (!slide.blocks.length) delete slide.blocks;
   }
-  expected.design.footer.left = {text: 'Keynote qualification'};
+  expected.design.footer.start = {text: 'Keynote qualification'};
   assert.deepEqual(current.document, expected, 'Only literal-block removal and footer addition differ from the same-final-runtime diagnostic control');
   assert.deepEqual(current.issues, before[index].issues, 'All twenty ordered diagnostics remain exact, including the K11 paint finding');
   assert.equal(current.issues.length, 20);
@@ -103,7 +103,7 @@ for (const remove of [false, true]) {
     entries[part] = strToU8(strFromU8(entries[part]).replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => /name="OPF furniture \d+ part 0 line 0"/.test(shape) ? remove ? '' : words(shape, '') : shape));
   }
   const result = await read(zipSync(entries));
-  assert.equal(result.document.design.footer.left, undefined);
+  assert.equal(result.document.design.footer.start, undefined);
   assert.ok(result.document.slides.every((_, index) => !composed(result.document, index).some(part => part.text === 'Keynote qualification'))); controls++;
 }
 const rejected = [

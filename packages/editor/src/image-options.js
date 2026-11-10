@@ -12,7 +12,7 @@ import { SHAPE_PRESETS } from "@openpresentation/opf/composition";
 export const IMAGE_FITS = Object.freeze(["cover", "contain", "stretch", "auto"]);
 /** SH-02: a frame's mask is any of the 187 DrawingML presets (rect, roundRect, ellipse, hexagon, chevron, ...). */
 export const IMAGE_SHAPES = SHAPE_PRESETS;
-export const IMAGE_EDGES = Object.freeze(["left", "right", "top", "bottom"]);
+export const IMAGE_EDGES = Object.freeze(["start", "end", "top", "bottom"]);
 /** LH-132: how a person's picture is drawn in a team: the avatar, beside the text, or across the top of the card. */
 export const IMAGE_PORTRAITS = Object.freeze(["avatar", "side", "top"]);
 /** The fields an image block carries besides its `image`, in schema order. */
@@ -208,7 +208,7 @@ export function prepareImageTreatment(presentation, blockPath, fields) {
 
 /**
  * Set or remove (`null`) treatment fields of one image block as a single undoable transaction:
- * `setImageTreatment(editor, "slides.1.blocks.0", { fit: "contain", placement: { edge: "right", size: 0.45 } })`.
+ * `setImageTreatment(editor, "slides.1.blocks.0", { fit: "contain", placement: { edge: "end", size: 0.45 } })`.
  */
 export function setImageTreatment(editor, blockPath, fields, meta = {}) {
   if (!editor || typeof editor.applyPatch !== "function") throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");

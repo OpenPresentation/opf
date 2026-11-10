@@ -419,7 +419,7 @@ function visitDataPayloads(document: Record<string, any>, visit: (payload: Recor
   for (const slide of document.slides) {
     if (!record(slide)) continue;
     walk(slide, 0, []);
-    for (const [key, value] of Object.entries(slide)) if (record(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) walk(value, 1, [slide]);
+    for (const [key, value] of Object.entries(slide)) if (record(value) && /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key)) walk(value, 1, [slide]);
   }
 }
 

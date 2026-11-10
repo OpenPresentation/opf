@@ -30,7 +30,7 @@ for(const [fill,headerColor,bodyColor,explicit] of [
   assert.deepEqual(input,original);
 }
 const table = {rows:[
-  [{value:['Merged ',{text:'red',color:'#ff0000'}],rowSpan:2,colSpan:2,style:{fill,color:'#abcdef80',align:'right',verticalAlign:'bottom',padding:{top:0,left:3,bottom:6},borders:{top:border,bottom:{color:'#000',width:0}}}},null,{value:'C',style:{padding:{left:17},borders:{right:{color:'#00ff00',width:3,dash:'dash'}}}}],
+  [{value:['Merged ',{text:'red',color:'#ff0000'}],rowSpan:2,colSpan:2,style:{fill,color:'#abcdef80',align:'end',verticalAlign:'bottom',padding:{top:0,left:3,bottom:6},borders:{top:border,bottom:{color:'#000',width:0}}}},null,{value:'C',style:{padding:{left:17},borders:{right:{color:'#00ff00',width:3,dash:'dash'}}}}],
   [null,null,{value:'D',style:{align:'center',padding:{top:.25,right:19}}}],
   ['E','F','G']
 ]};

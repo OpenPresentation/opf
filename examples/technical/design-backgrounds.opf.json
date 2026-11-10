@@ -19,10 +19,10 @@
     "dimensions": "widescreen",
     "background": "light1",
     "footer": {
-      "left": {
+      "start": {
         "text": "Background fixture"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     }

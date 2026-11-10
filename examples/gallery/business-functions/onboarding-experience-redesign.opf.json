@@ -16,7 +16,7 @@
     "titleAlignment": "center",
     "contentBox": false,
     "contentDirection": "vertical",
-    "chartPrimary": "left",
+    "chartPrimary": "start",
     "imageFit": "contain",
     "listBullet": "image"
   },
@@ -410,8 +410,8 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "left",
-            "contentAlignment": "left"
+            "titleAlignment": "start",
+            "contentAlignment": "start"
           },
           "direction": "row",
           "regions": [

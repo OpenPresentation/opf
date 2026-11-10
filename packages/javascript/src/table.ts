@@ -3,6 +3,7 @@
 export interface TableBorder { color?: string; width?: number; dash?: 'solid'|'dash'|'dot' }
 export interface TableCellStyle {
   fill?: string; color?: string; bold?: boolean;
+  /** Logical, in the engine's words: `left` is the start edge (the document writes `start`) and `right` the end edge (`end`). */
   align?: 'left'|'center'|'right'; verticalAlign?: 'top'|'middle'|'bottom';
   padding?: Partial<Record<'top'|'right'|'bottom'|'left',number>>;
   borders?: Partial<Record<'top'|'right'|'bottom'|'left',TableBorder>>;
@@ -20,11 +21,15 @@ export interface TableGrid {
   issues: TableGridIssue[];
 }
 const record = (value:unknown):Record<string,any> => value && typeof value==='object'&&!Array.isArray(value)?value as Record<string,any>:{};
-/** A cell's style with each `'none'` border written as the border of no width that engines draw nothing for. */
+/**
+ * A cell's style as engines read it: each `'none'` border is the border of no width that engines draw nothing for, and the
+ * document's logical `align` (`start`, `end`) is the engine's `left` and `right`, which `physicalAlignment` resolves per direction.
+ */
 function cellStyle(style:Record<string,any>):TableCellStyle {
-  const borders=style.borders;
-  if(!borders||typeof borders!=='object'||Array.isArray(borders)||!Object.values(borders).includes('none')) return style;
-  return {...style,borders:Object.fromEntries(Object.entries(borders).map(([edge,border])=>[edge,border==='none'?{color:'#00000000',width:0}:border]))};
+  const borders=style.borders,logical=style.align==='start'||style.align==='end';
+  const none=borders&&typeof borders==='object'&&!Array.isArray(borders)&&Object.values(borders).includes('none');
+  if(!none&&!logical) return style;
+  return {...style,...(logical?{align:style.align==='start'?'left':'right'}:{}),...(none?{borders:Object.fromEntries(Object.entries(borders).map(([edge,border])=>[edge,border==='none'?{color:'#00000000',width:0}:border]))}:{})};
 }
 export function tableGrid(value:unknown,path='table'):TableGrid {
   const table=record(value),hasHeaders=Array.isArray(table.columns)&&table.columns.length>0;

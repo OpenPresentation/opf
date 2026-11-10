@@ -10,7 +10,7 @@ import { setHeaderFooterZone } from "../dist/design-options.js";
 const catalogs = [defaultCatalog];
 const deck = () => ({
   name: "Quarterly review",
-  design: { theme: "minimal", fontScheme: "roboto", footer: { right: { text: "{{slide.number}} / {{deck.slideCount}}" } } },
+  design: { theme: "minimal", fontScheme: "roboto", footer: { end: { text: "{{slide.number}} / {{deck.slideCount}}" } } },
   slides: [
     { id: "one", title: "One", section: "Intro", text: "Slide {{slide.number}} of {{deck.slideCount}} in {{slide.section}}" },
     { id: "two", title: "Two", text: "Slide {{slide.number}} of {{deck.slideCount}}" },
@@ -62,7 +62,7 @@ const furniture = (composed) => JSON.stringify(composed.furniture);
 // Edits keep working on a slide that uses tokens: a footer change and a replace leave them alone.
 {
   setHeaderFooterZone(editor, "footer", "left", { text: "Review" });
-  assert.equal(editor.presentation.design.footer.right.text, "{{slide.number}} / {{deck.slideCount}}");
+  assert.equal(editor.presentation.design.footer.end.text, "{{slide.number}} / {{deck.slideCount}}");
   replaceAll(editor, "Slide", "Page");
   assert.equal(editor.presentation.slides[1].text, "Page {{slide.number}} of {{deck.slideCount}}");
 }

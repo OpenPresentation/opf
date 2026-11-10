@@ -392,11 +392,11 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `titleAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the title heading area. |
-| `contentAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the body regions. |
+| `titleAlignment` | no | `enum:start \| center \| end` | Horizontal alignment of the title heading area. Logical, as design.titleAlignment of a deck: 'start' is the edge a paragraph starts on. |
+| `contentAlignment` | no | `enum:start \| center \| end` | Horizontal alignment of the body regions. Logical, as design.contentAlignment of a deck: 'start' is the edge a paragraph starts on. |
 | `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. On a layout slide it turns every flowing region into one row or one column; the slide's own composition.mode, columns and... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template. |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| start \| end` | Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template. |
 | `imageFit` | no | `enum:cover \| contain \| stretch \| auto` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame, 'auto' covers when the crop keeps at least 85% of the pictu... |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
 | `listStyle` | no | `enum:stack \| rows` | As design.listStyle of a deck: 'stack' or 'rows' (ruled rows) for the lists of slides using this layout. |

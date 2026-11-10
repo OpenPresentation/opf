@@ -516,7 +516,7 @@
         "direction": {
           "type": "string",
           "enum": ["ltr", "rtl"],
-          "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. The engine language vocabulary (spec/reference/engine-vocabularies.json) states it for the tags it knows."
+          "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. The engine language vocabulary (spec/reference/engine-vocabularies.json) states it for the tags it knows. A right-to-left deck mirrors its layout, and one rule says what follows it. Layout words and layout coordinates are logical: 'start' and 'end' in alignments, header and footer zones, promoted regions, image placement, overlay bands, chartPrimary and shape anchors, the order of side-by-side blocks and columns, and an overlay shape's 'x' all run from the edge the deck starts on. Coordinates and sides that name pixels of a picture or parts of a plot are physical in every language: ImageFocus, ImageCallout 'x', a chart's 'legend' and data label 'position', and the 'left' and 'right' of table cell borders and paddings and of a shape's padding."
         },
         "script": {
           "type": "string",
@@ -837,7 +837,7 @@
             { "$ref": "#/$defs/HeaderFooter" }
           ],
           "description": "Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header.",
-          "examples": [false, { "left": { "text": "{{slide.section}}" }, "right": { "image": "var:organization.logo.icon" } }]
+          "examples": [false, { "start": { "text": "{{slide.section}}" }, "end": { "image": "var:organization.logo.icon" } }]
         },
         "footer": {
           "oneOf": [
@@ -847,18 +847,18 @@
           "description": "Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer.",
           "examples": [
             false,
-            { "left": { "image": "var:organization.logo.icon" }, "center": { "text": "Confidential" }, "right": { "text": "{{slide.number}}" } }
+            { "start": { "image": "var:organization.logo.icon" }, "center": { "text": "Confidential" }, "end": { "text": "{{slide.number}}" } }
           ]
         },
         "titleAlignment": {
           "type": "string",
-          "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default."
+          "enum": ["start", "center", "end"],
+          "description": "Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
         },
         "contentAlignment": {
           "type": "string",
-          "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. The tag follows titleAlignment (and so does a subtitle in the title area, as on a cover) unless the slide's own design sets contentAlignment."
+          "enum": ["start", "center", "end"],
+          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. The tag follows titleAlignment (and so does a subtitle in the title area, as on a cover) unless the slide's own design sets contentAlignment. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
         },
         "contentBox": {
           "type": "boolean",
@@ -867,12 +867,12 @@
         "contentDirection": {
           "type": "string",
           "enum": ["horizontal", "vertical"],
-          "description": "Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout record's design.contentDirection. On a slide with a template layout it turns every flowing region of the slide into one row or one column, below the slide's own composition.mode, columns and weights, which arrange its first primary flowing region. On an automatic slide (and a 0.18 record) it sets the root arrangement mode when no composition.mode is set on the slide or on its layout record. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
+          "description": "Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout record's design.contentDirection. On a slide with a template layout it turns every flowing region of the slide into one row or one column, below the slide's own composition.mode, columns and weights, which arrange its first primary flowing region. On an automatic slide (and a 0.18 record) it sets the root arrangement mode when no composition.mode is set on the slide or on its layout record. Promoted regions (start, top:start, ...) keep their explicit geometry and nested groups keep their own composition."
         },
         "chartPrimary": {
           "type": "string",
-          "enum": ["none", "top", "bottom", "left", "right"],
-          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says the same with its regions (chart-beside). When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight. Automatic composition builds direct content groups; template regions remain authoritative."
+          "enum": ["none", "top", "bottom", "start", "end"],
+          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says the same with its regions (chart-beside). When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'start'/'end' is a two-track row with the chart on that side (logical: 'start' is the left in a left-to-right deck and the right in a right-to-left one) and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight. Automatic composition builds direct content groups; template regions remain authoritative."
         },
         "imageFit": {
           "type": "string",
@@ -1852,8 +1852,8 @@
         },
         "edge": {
           "type": "string",
-          "enum": ["top", "bottom", "left", "right"],
-          "description": "Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment. Omit to cover the whole frame. In a right-to-left deck 'left' and 'right' are the start and end sides."
+          "enum": ["top", "bottom", "start", "end"],
+          "description": "Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment. Omit to cover the whole frame. 'start' and 'end' follow the deck's direction: the left and right sides in a left-to-right deck, the right and left sides in a right-to-left one."
         },
         "size": {
           "type": "number",
@@ -1871,25 +1871,25 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["edge"],
-      "description": "Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge. Template layout regions do not supply image placement; set it on the image block itself. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a background never does. A slide whose only body is placed images is composed like a cover: its headings center in the free area. In a right-to-left deck 'left' is the start side, drawn at the right.",
+      "description": "Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge. Template layout regions do not supply image placement; set it on the image block itself. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a background never does. A slide whose only body is placed images is composed like a cover: its headings center in the free area. 'start' and 'end' follow the deck's direction: 'start' is the left edge in a left-to-right deck and the right edge in a right-to-left one.",
       "properties": {
         "edge": {
           "type": "string",
-          "enum": ["left", "right", "top", "bottom"],
+          "enum": ["start", "end", "top", "bottom"],
           "description": "The slide edge the image bleeds to."
         },
         "size": {
           "type": "number",
           "minimum": 0.1,
           "maximum": 0.9,
-          "description": "Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5."
+          "description": "Share of the slide width (start, end) or height (top, bottom) given to the band. Default 0.5."
         },
         "inset": {
           "type": "boolean",
           "description": "Draw the frame inside the slide padding on every side of the band, like a card, instead of edge to edge. Default false."
         }
       },
-      "examples": [{ "edge": "left", "size": 0.45 }, { "edge": "right", "size": 0.4, "inset": true }]
+      "examples": [{ "edge": "start", "size": 0.45 }, { "edge": "end", "size": 0.4, "inset": true }]
     },
     "Stroke": {
       "anyOf": [
@@ -2520,25 +2520,25 @@
     "HeaderFooter": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Repeated header or footer content split into left, center, and right zones. Header/footer content is slide furniture, separate from the main slide content payloads.",
+      "description": "Repeated header or footer content split into start, center, and end zones. The zones follow the deck's direction: 'start' is at the left of a left-to-right deck and at the right of a right-to-left one. Header/footer content is slide furniture, separate from the main slide content payloads.",
       "properties": {
-        "left": {
+        "start": {
           "$ref": "#/$defs/HeaderFooterItem",
-          "description": "Left-aligned header/footer content."
+          "description": "Content at the start edge, aligned to it."
         },
         "center": {
           "$ref": "#/$defs/HeaderFooterItem",
           "description": "Centered header/footer content."
         },
-        "right": {
+        "end": {
           "$ref": "#/$defs/HeaderFooterItem",
-          "description": "Right-aligned header/footer content."
+          "description": "Content at the end edge, aligned to it."
         }
       }
     },
     "HeaderFooterItem": {
       "type": "object",
-      "description": "One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (left, center or right) and vertically centered on each other; a line break inside text or socials ('\\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide number, the slide count, the section, the organization or the speaker are variables inside text ('{{slide.number}} / {{deck.slideCount}}', '{{organization.name}}'), so one text writes several values in the author's order. An organization logo is image: 'var:organization.logo.icon'. See docs/templates-and-variables.md.",
+      "description": "One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (the start edge, the center or the end edge) and vertically centered on each other; a line break inside text or socials ('\\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide number, the slide count, the section, the organization or the speaker are variables inside text ('{{slide.number}} / {{deck.slideCount}}', '{{organization.name}}'), so one text writes several values in the author's order. An organization logo is image: 'var:organization.logo.icon'. See docs/templates-and-variables.md.",
       "additionalProperties": false,
       "properties": {
         "text": {
@@ -2889,7 +2889,7 @@
     },
     "Slide": {
       "type": "object",
-      "description": "A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'left', 'center+right', and 'top:left'.",
+      "description": "A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'start', 'center+end', and 'top:start'. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one.",
       "additionalProperties": false,
       "dependentSchemas": {
         "caption": {
@@ -3057,22 +3057,22 @@
           "$ref": "#/$defs/SlideDesign",
           "description": "Slide-level design applied on top of the deck-wide design."
         },
-        "left": {
+        "start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "right": {
+        "end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "left+center": {
+        "start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "center+right": {
+        "center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "left+center+right": {
+        "start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
         "top": {
@@ -3093,112 +3093,112 @@
         "top+middle+bottom": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:left": {
+        "top:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "top:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:right": {
+        "top:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:left+center": {
+        "top:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:center+right": {
+        "top:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top:left+center+right": {
+        "top:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:left": {
+        "middle:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "middle:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:right": {
+        "middle:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:left+center": {
+        "middle:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:center+right": {
+        "middle:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle:left+center+right": {
+        "middle:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:left": {
+        "bottom:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "bottom:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:right": {
+        "bottom:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:left+center": {
+        "bottom:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:center+right": {
+        "bottom:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "bottom:left+center+right": {
+        "bottom:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:left": {
+        "top+middle:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "top+middle:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:right": {
+        "top+middle:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:left+center": {
+        "top+middle:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:center+right": {
+        "top+middle:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle:left+center+right": {
+        "top+middle:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:left": {
+        "middle+bottom:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "middle+bottom:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:right": {
+        "middle+bottom:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:left+center": {
+        "middle+bottom:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:center+right": {
+        "middle+bottom:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "middle+bottom:left+center+right": {
+        "middle+bottom:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:left": {
+        "top+middle+bottom:start": {
           "$ref": "#/$defs/ContentPayload"
         },
         "top+middle+bottom:center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:right": {
+        "top+middle+bottom:end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:left+center": {
+        "top+middle+bottom:start+center": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:center+right": {
+        "top+middle+bottom:center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
-        "top+middle+bottom:left+center+right": {
+        "top+middle+bottom:start+center+end": {
           "$ref": "#/$defs/ContentPayload"
         },
         "notes": {
@@ -4412,7 +4412,7 @@
               "type": "boolean",
               "description": "Whether the run is an inline code span: it is drawn in the design's code font (design.fontScheme.code, else the resolved font scheme's code family, else Roboto Mono), unless the run names its own fontFamily. Only the font changes; there is no background, because a PPTX run cannot have one. Markdown backticks read and write code runs."
             },
-            "lang": {
+            "language": {
               "type": "string",
               "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$",
               "description": "BCP-47 language tag of the run, such as 'fr-FR' or 'ja-JP', when it differs from the deck language. It sets the proofing language (PPTX a:rPr lang) and the language the run's script fonts and glyph variants follow (for example the Japanese or the Simplified Chinese face for Han characters); without it the run follows the deck language.",
@@ -4476,8 +4476,8 @@
             },
             "align": {
               "type": "string",
-              "enum": ["left", "center", "right"],
-              "description": "Horizontal alignment of the caption text within the block. Defaults to left."
+              "enum": ["start", "center", "end"],
+              "description": "Horizontal alignment of the caption text within the block. Defaults to start. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
             }
           }
         }
@@ -5100,11 +5100,11 @@
         "align": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
-          "description": "Horizontal text alignment inside the cell."
+          "description": "Horizontal text alignment inside the cell. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge."
         },
         "verticalAlign": {
           "type": "string",
