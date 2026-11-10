@@ -1,0 +1,6 @@
+import fs from 'node:fs';
+import z from 'node:zlib';
+import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
+const dir=new URL('.',import.meta.url),read=n=>fs.readFileSync(new URL(n,dir)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+const m=JSON.parse(read('final-handoff-receipts.manifest.json')),bytes=read(m.archive);assert.equal(bytes.length,m.bytes);assert.equal(sha(bytes),m.sha256);const p=JSON.parse(z.gunzipSync(bytes));assert.equal(p.canonical,'7618e916dacc166463cddf5f2ea029f523bbe51d');assert.equal(p.nativeAcceptance,false);assert.equal(p.records.length,m.records.length);let total=0;for(const[r,i]of p.records.map((r,i)=>[r,i])){const b=Buffer.from(r.base64,'base64');assert.equal(r.name,m.records[i].name);assert.equal(b.length,m.records[i].bytes);assert.equal(sha(b),m.records[i].sha256);total+=b.length;}assert.equal(total,m.decodedBytes);const s=JSON.parse(read('open-pr-inventory-final.json'));assert.equal(s.repository.nameWithOwner,'OpenPresentation/opf');assert.equal(s.repository.isPrivate,false);assert.equal(s.repository.pullRequests.totalCount,46);assert.equal(s.repository.pullRequests.nodes.find(p=>p.number===1225).headRefOid,p.canonical);console.log(JSON.stringify({pass:true,records:p.records.length,decodedBytes:total,openPublicPrs:46,executesArchivedCode:false,nativeAcceptance:false}));

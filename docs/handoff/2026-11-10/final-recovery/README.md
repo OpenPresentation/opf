@@ -33,3 +33,5 @@ node docs/handoff/2026-11-10/final-recovery/verify.mjs
 ```
 
 It uses only Node built-ins; it writes nothing, imports no product or archived code, starts no child process and makes no Office/network call. Passing means only that the seven preserved files and declared manifest match their pins. No tests, build, native run, archived script or historical verifier is run.
+
+Final metadata append: own-repository complete open-PR inventory is in open-pr-inventory-final.json, captured 2026-11-10T17:49:53.5814741Z. The public canonical handoff is7618e916dacc166463cddf5f2ea029f523bbe51d. Existing recovery archive and manifest bytes are unchanged. final-handoff-receipts.json.gz preserves both closed5-pass handoff checks and the current known-red1267seven-job CI logs; verify-final-handoff.mjs performs builtin read-only integrity checks, never archived execution.
