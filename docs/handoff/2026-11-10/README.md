@@ -167,3 +167,6 @@ Root coordinates currentdc2/source decisions, reference native/golden/coherent r
 
 
 Coordinator count correction: the closed57 delta is **9PASS/3RED plus typecheckSKIP,13total rows**. The earlier root10PASS shorthand wrongly counted the skipped typecheck as a pass. Original stdout/stderr/exit receipts are unchanged; no test was rerun to correct arithmetic. coordinator-delta-count-correction.json.gz retains the explicit correction plus the preceding normal metadata02PASS (4checks/28.2s).
+
+
+Coordinator integration fold: normal merge of source57acc14a into priorfc90 completed without conflicts; packages/spec/examples/scripts/skills/changes/CI/rootmanifest/lock/workspace and both program burndowns match the qualified57 Git objects exactly. coherent-source-57-fold.json records all identities. The current coordinator handoff was preserved. This folds reviewed postflight/category/localized/singleton/HarfBuzz/private-font-probe/saved-line-label repairs into the staging checkout; canonical PR1225/main/release are not advanced. Required local validation against source57 checks only coordinator metadata because the product subtrees are exact previously tested source. Saved-overlay importer repair is a NEW leaf in progress; all original native/golden/final release scope remains.

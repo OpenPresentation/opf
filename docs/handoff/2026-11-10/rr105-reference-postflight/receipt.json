@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "revision": "9372083b8d7214fa1ba4e75b7ec7865c2b03c95b",
+    "tree": "829cceb74ec2a7d7dbdbb027e955cffb014c9bb5",
+    "baseline": "b5a57bc86aba4de3e1ea28dcc38e47cfb46827f1",
+    "files": [
+      {
+        "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+        "workingSha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3",
+        "gitBlobSha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+      },
+      {
+        "path": "scripts/native-acceptance/reference-chart-profile.mjs",
+        "workingSha256": "c69a4f8579dd02d0e34eb5d79e002a1009a934cc3fa4bf0cfd3ecb2878b876ea",
+        "gitBlobSha256": "c69a4f8579dd02d0e34eb5d79e002a1009a934cc3fa4bf0cfd3ecb2878b876ea"
+      },
+      {
+        "path": "scripts/native-acceptance/reference-chart-profile.test.mjs",
+        "workingSha256": "b3b1b606999d552b4bb0fb0846a9c748fe6f57f15e684a8bab98f7c11d1d1543",
+        "gitBlobSha256": "b3b1b606999d552b4bb0fb0846a9c748fe6f57f15e684a8bab98f7c11d1d1543"
+      },
+      {
+        "path": "scripts/native-acceptance/reference-postflight-self-test.ps1",
+        "workingSha256": "1618d28cf0dfdfe4e9a4bb284373ca154f8cf97d2726cf2b4ff7b5e705810b60",
+        "gitBlobSha256": "c7c428dece7f668240257fd1f4da03ea267cff9045f9b9a73d4938d6748d234c"
+      },
+      {
+        "path": "scripts/native-acceptance/reference-postflight.test.mjs",
+        "workingSha256": "99169f813ea20e9533d14248fb3d32edd1012377c48272fa0713fc2d8f628f7a",
+        "gitBlobSha256": "772ae03244545199868fa5d915a988e4d0c6c807c912de4c10bd7c747681de06"
+      }
+    ]
+  },
+  "archiveSha256": "4ffd5b93d5bcf6f75c7c08507739a0b7918d4b425acb910c5b0cfe067558f034",
+  "compressedBytes": 133213,
+  "rawBytes": 1052660,
+  "decodedBytes": 774711,
+  "recordCount": 77,
+  "records": [
+    {
+      "name": "root/ref-postflight-after-append-after-exit.json",
+      "path": "C:/opf-work/ref-postflight-after-append-after-exit.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 281,
+      "sha256": "5bfc3446b48b2ac494aa295aa983e19a30c8be556c325e5b68355aa299b71d27"
+    },
+    {
+      "name": "root/ref-postflight-after-append-after.json",
+      "path": "C:/opf-work/ref-postflight-after-append-after.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 1193,
+      "sha256": "cfac1f630d373b64bad3f4f1b1c0531d06b5d6f80d3d89172d35bea76d8fa60d"
+    },
+    {
+      "name": "root/ref-postflight-after-append-after.stderr.log",
+      "path": "C:/opf-work/ref-postflight-after-append-after.stderr.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/ref-postflight-after-append-after.stdout.log",
+      "path": "C:/opf-work/ref-postflight-after-append-after.stdout.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/ref-postflight-after-append-before-exit.json",
+      "path": "C:/opf-work/ref-postflight-after-append-before-exit.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 240,
+      "sha256": "60a5c54bbee6eaebd692bb1f4d43894ab2ce5dbc8f2371edad05b66b16cf7330"
+    },
+    {
+      "name": "root/ref-postflight-after-append-before.json",
+      "path": "C:/opf-work/ref-postflight-after-append-before.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 1322,
+      "sha256": "443226607d9ba0d34d84b4f968b5bb6b1091b9f9da6e8e2da653add0f1add848"
+    },
+    {
+      "name": "root/ref-postflight-after-append-before.stderr.log",
+      "path": "C:/opf-work/ref-postflight-after-append-before.stderr.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 546,
+      "sha256": "b17224de8bde193be5c7269359c43f73fb0686638917a7e3f9678448e1f8db40"
+    },
+    {
+      "name": "root/ref-postflight-after-append-before.stdout.log",
+      "path": "C:/opf-work/ref-postflight-after-append-before.stdout.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/ref-postflight-after-append-proof.ps1",
+      "path": "C:/opf-work/ref-postflight-after-append-proof.ps1",
+      "kind": "managed-driver-or-output",
+      "bytes": 1806,
+      "sha256": "36b5a960f789cb4252d8169f0e4a9a1a4d15973667692d7d15fff3dd7f0655a2"
+    },
+    {
+      "name": "root/ref-postflight-build01-exit.json",
+      "path": "C:/opf-work/ref-postflight-build01-exit.json",
+      "kind": "source-preparation",
+      "bytes": 236,
+      "sha256": "f5d7523f7de379234aa6465fc8bbd6d140d7fb16ad42af0f7a9895436bbe76a9"
+    },
+    {
+      "name": "root/ref-postflight-build01.log",
+      "path": "C:/opf-work/ref-postflight-build01.log",
+      "kind": "source-preparation",
+      "bytes": 11772,
+      "sha256": "0238a9825dd853521f200525f13af8a9f484f6832afb7edeea2f6c3c4b23c2b5"
+    },
+    {
+      "name": "root/ref-postflight-edit01.mjs",
+      "path": "C:/opf-work/ref-postflight-edit01.mjs",
+      "kind": "source-preparation",
+      "bytes": 8468,
+      "sha256": "7ce9dc698c430ec974f082751d83effa51d94b3fdbc92022d75eb6677881b1b7"
+    },
+    {
+      "name": "root/ref-postflight-edit03.mjs",
+      "path": "C:/opf-work/ref-postflight-edit03.mjs",
+      "kind": "source-preparation",
+      "bytes": 8472,
+      "sha256": "104f93892bafc73a8f5c7b61be0dd9dd6a41d350e207bb51087996d216bbe667"
+    },
+    {
+      "name": "root/ref-postflight-ef9-wrapper.ps1",
+      "path": "C:/opf-work/ref-postflight-ef9-wrapper.ps1",
+      "kind": "source-preparation",
+      "bytes": 18597,
+      "sha256": "3b0b2eaf96b8c69f63c0d63dd535fe0bbbbcc252c2deef05dfaf5e8e18907027"
+    },
+    {
+      "name": "root/ref-postflight-failure-record04.mjs",
+      "path": "C:/opf-work/ref-postflight-failure-record04.mjs",
+      "kind": "source-preparation",
+      "bytes": 3104,
+      "sha256": "8bddf224fafc73164c5e0ef6e8329801eb9321c51a47512f9fe2ee6b9c8be37b"
+    },
+    {
+      "name": "root/ref-postflight-final-clock06.mjs",
+      "path": "C:/opf-work/ref-postflight-final-clock06.mjs",
+      "kind": "source-preparation",
+      "bytes": 4782,
+      "sha256": "d657d0dc346cf55b94c63dc0db2e0c25db2247c61f17af4538bdfdd73331290d"
+    },
+    {
+      "name": "root/ref-postflight-focused07-exit.json",
+      "path": "C:/opf-work/ref-postflight-focused07-exit.json",
+      "kind": "source-preparation",
+      "bytes": 287,
+      "sha256": "dde9f7da20434ee621526e3a19f0c00bb1f4c533efb2f43838c2c5b82c64e170"
+    },
+    {
+      "name": "root/ref-postflight-focused07.log",
+      "path": "C:/opf-work/ref-postflight-focused07.log",
+      "kind": "source-preparation",
+      "bytes": 1709,
+      "sha256": "b8f0f9911f3f38f22516bebe8d119c2165dfad068b9df491c3c7da134f98cd4c"
+    },
+    {
+      "name": "root/ref-postflight-format01.log",
+      "path": "C:/opf-work/ref-postflight-format01.log",
+      "kind": "source-preparation",
+      "bytes": 23853,
+      "sha256": "49227e040fae7ee03b5756783973d002edd5285bd0259f474570cdca56a3e709"
+    },
+    {
+      "name": "root/ref-postflight-install01-exit.json",
+      "path": "C:/opf-work/ref-postflight-install01-exit.json",
+      "kind": "source-preparation",
+      "bytes": 178,
+      "sha256": "2e6b481b697a7e6b4f3ca06e1dbc10abc5b3be430252f509f5a3059007070919"
+    },
+    {
+      "name": "root/ref-postflight-install01.log",
+      "path": "C:/opf-work/ref-postflight-install01.log",
+      "kind": "source-preparation",
+      "bytes": 4475,
+      "sha256": "a747f5af9c38c15061c999b1330026cd6a8418f537534227e8846ded2801cf29"
+    },
+    {
+      "name": "root/ref-postflight-managed01-exit.json",
+      "path": "C:/opf-work/ref-postflight-managed01-exit.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 161,
+      "sha256": "4ec42d4d429ff2cd428e55875b15deeea77dfe8348869c40719108663f4edcce"
+    },
+    {
+      "name": "root/ref-postflight-managed01.log",
+      "path": "C:/opf-work/ref-postflight-managed01.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 1351,
+      "sha256": "e4299e3e688744f60f0dd3c93fa38982380977b9654b57e4b3bdab9625b4d73d"
+    },
+    {
+      "name": "root/ref-postflight-managed02-exit.json",
+      "path": "C:/opf-work/ref-postflight-managed02-exit.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 161,
+      "sha256": "3b0f158d72194a6ce74794e5bd90e9faef226a75bae4639302defe920b2c36df"
+    },
+    {
+      "name": "root/ref-postflight-managed02.log",
+      "path": "C:/opf-work/ref-postflight-managed02.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 1733,
+      "sha256": "ce09347160210dd6fb7b86280cd5673be5d0293664edd0d5bd6d3454cbdc0550"
+    },
+    {
+      "name": "root/ref-postflight-managed03-exit.json",
+      "path": "C:/opf-work/ref-postflight-managed03-exit.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 161,
+      "sha256": "0b84d1b2a7eaf2502a53feba1c5b4844700f460132ff330b5ec1062c79c47474"
+    },
+    {
+      "name": "root/ref-postflight-managed03.log",
+      "path": "C:/opf-work/ref-postflight-managed03.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 749,
+      "sha256": "015ffc27924593b51b75b1a68ab3c3d6c330870c5191786b17f27b8eba353691"
+    },
+    {
+      "name": "root/ref-postflight-managed04-exit.json",
+      "path": "C:/opf-work/ref-postflight-managed04-exit.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 161,
+      "sha256": "3ea7a0e302c1c1847e1b44bcd9c160437a285b8a0b0bea789cb6bacd0ea7cd33"
+    },
+    {
+      "name": "root/ref-postflight-managed04.log",
+      "path": "C:/opf-work/ref-postflight-managed04.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 750,
+      "sha256": "3b5bc1d6cc9d03797478a2242fe7181af6950fa1e6668e5fc7ba3d8bec9a0add"
+    },
+    {
+      "name": "root/ref-postflight-managed05-exit.json",
+      "path": "C:/opf-work/ref-postflight-managed05-exit.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 161,
+      "sha256": "9ad74ccdacf71a1a972569fadb4caa0a1ff6db2a8d58d7f82eea2bf95cc523a4"
+    },
+    {
+      "name": "root/ref-postflight-managed05.log",
+      "path": "C:/opf-work/ref-postflight-managed05.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 749,
+      "sha256": "430d2752448832c352de8a865e993e78b185ce82aea67ae9c45ffef63b419a27"
+    },
+    {
+      "name": "root/ref-postflight-managed06-exit.json",
+      "path": "C:/opf-work/ref-postflight-managed06-exit.json",
+      "kind": "managed-driver-or-output",
+      "bytes": 161,
+      "sha256": "9ad74ccdacf71a1a972569fadb4caa0a1ff6db2a8d58d7f82eea2bf95cc523a4"
+    },
+    {
+      "name": "root/ref-postflight-managed06.log",
+      "path": "C:/opf-work/ref-postflight-managed06.log",
+      "kind": "managed-driver-or-output",
+      "bytes": 749,
+      "sha256": "9e71e66abd2a49e6df573977b12e0df3b4abb55e210ccbaef085766f681ff8f4"
+    },
+    {
+      "name": "root/ref-postflight-merge01.log",
+      "path": "C:/opf-work/ref-postflight-merge01.log",
+      "kind": "source-preparation",
+      "bytes": 1469,
+      "sha256": "fe9dd1b50aa5e2f354944fb82b6e4891c4c7f352e3cbb9b9086badb4badb6fba"
+    },
+    {
+      "name": "root/ref-postflight-parse02.log",
+      "path": "C:/opf-work/ref-postflight-parse02.log",
+      "kind": "source-preparation",
+      "bytes": 1799,
+      "sha256": "e282c58922cbf62b3faeb7ab0492bf68593d4c916c5cf7dbeea52f06e9f77d05"
+    },
+    {
+      "name": "root/ref-postflight-profile01.mjs",
+      "path": "C:/opf-work/ref-postflight-profile01.mjs",
+      "kind": "source-preparation",
+      "bytes": 3416,
+      "sha256": "2182c6a205bf940af1568941326452907dd0862af1a7a4afca03dc2595a33253"
+    },
+    {
+      "name": "root/ref-postflight-review05.mjs",
+      "path": "C:/opf-work/ref-postflight-review05.mjs",
+      "kind": "source-preparation",
+      "bytes": 2722,
+      "sha256": "cf7fbf596c5dab2496e418801c6ddfe1a85a063cd7168bb76f4f0a2419a72892"
+    },
+    {
+      "name": "root/ref-postflight-source-commit01.log",
+      "path": "C:/opf-work/ref-postflight-source-commit01.log",
+      "kind": "source-preparation",
+      "bytes": 472,
+      "sha256": "4e3006c4c64d751c094bf565ebeccec9b7cf931ef8ae4b292f16f111ebc65ada"
+    },
+    {
+      "name": "root/ref-postflight-source-commit02.log",
+      "path": "C:/opf-work/ref-postflight-source-commit02.log",
+      "kind": "source-preparation",
+      "bytes": 163,
+      "sha256": "8883c335ec07755e039f6d2e84a3999578d73ab606b92a5ce697344e22cffe93"
+    },
+    {
+      "name": "root/ref-postflight-worktree01.log",
+      "path": "C:/opf-work/ref-postflight-worktree01.log",
+      "kind": "source-preparation",
+      "bytes": 1052,
+      "sha256": "20996ffe1b97a432270412a6693e3e2a02c934109565cff2d3fc869458851350"
+    },
+    {
+      "name": "root/ref-postflight-wrapper02-malformed.ps1",
+      "path": "C:/opf-work/ref-postflight-wrapper02-malformed.ps1",
+      "kind": "source-preparation",
+      "bytes": 23780,
+      "sha256": "c308e5fc1c665860206cf7b8738bcc19c9d470d224ac9c734b595adeaff77e0f"
+    },
+    {
+      "name": "managed/managed-2YwHJY/exit.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-2YwHJY\\exit.json",
+      "kind": "managed-fake",
+      "bytes": 104,
+      "sha256": "540ff476fad2e90d6a302d7778d52a4c4aeb0d5027d848279553519ef7bebd4a"
+    },
+    {
+      "name": "managed/managed-2YwHJY/report.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-2YwHJY\\report.json",
+      "kind": "managed-fake",
+      "bytes": 107167,
+      "sha256": "0fc642b130edbde5e58c6485749d63ea3d3794d7b8cdd05250e77a0edf416086"
+    },
+    {
+      "name": "managed/managed-2YwHJY/stderr.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-2YwHJY\\stderr.log",
+      "kind": "managed-fake",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "managed/managed-2YwHJY/stdout.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-2YwHJY\\stdout.log",
+      "kind": "managed-fake",
+      "bytes": 69,
+      "sha256": "cfaf01ae8ce2758ef68e91f1fbb3647ccee953e1a6d296f775b83c79b467b653"
+    },
+    {
+      "name": "managed/managed-9S9KC1/exit.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-9S9KC1\\exit.json",
+      "kind": "managed-fake",
+      "bytes": 104,
+      "sha256": "540ff476fad2e90d6a302d7778d52a4c4aeb0d5027d848279553519ef7bebd4a"
+    },
+    {
+      "name": "managed/managed-9S9KC1/report.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-9S9KC1\\report.json",
+      "kind": "managed-fake",
+      "bytes": 107167,
+      "sha256": "0fc642b130edbde5e58c6485749d63ea3d3794d7b8cdd05250e77a0edf416086"
+    },
+    {
+      "name": "managed/managed-9S9KC1/stderr.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-9S9KC1\\stderr.log",
+      "kind": "managed-fake",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "managed/managed-9S9KC1/stdout.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-9S9KC1\\stdout.log",
+      "kind": "managed-fake",
+      "bytes": 69,
+      "sha256": "cfaf01ae8ce2758ef68e91f1fbb3647ccee953e1a6d296f775b83c79b467b653"
+    },
+    {
+      "name": "managed/managed-aWI2Ma/exit.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-aWI2Ma\\exit.json",
+      "kind": "managed-fake",
+      "bytes": 104,
+      "sha256": "540ff476fad2e90d6a302d7778d52a4c4aeb0d5027d848279553519ef7bebd4a"
+    },
+    {
+      "name": "managed/managed-aWI2Ma/report.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-aWI2Ma\\report.json",
+      "kind": "managed-fake",
+      "bytes": 95582,
+      "sha256": "a3bb9f1860dd107d03a4505366b9c4c699d4680ab8cc497a77b5cadefc49880e"
+    },
+    {
+      "name": "managed/managed-aWI2Ma/stderr.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-aWI2Ma\\stderr.log",
+      "kind": "managed-fake",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "managed/managed-aWI2Ma/stdout.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-aWI2Ma\\stdout.log",
+      "kind": "managed-fake",
+      "bytes": 69,
+      "sha256": "0f7ae52f4f00bc314b76f508a07c11eab25b3dc1705900f772556bb8960b34ef"
+    },
+    {
+      "name": "managed/managed-AzDMZL/exit.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-AzDMZL\\exit.json",
+      "kind": "managed-fake",
+      "bytes": 104,
+      "sha256": "540ff476fad2e90d6a302d7778d52a4c4aeb0d5027d848279553519ef7bebd4a"
+    },
+    {
+      "name": "managed/managed-AzDMZL/report.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-AzDMZL\\report.json",
+      "kind": "managed-fake",
+      "bytes": 96192,
+      "sha256": "799518c4f3276fecd2a0e75f3dba299e44ecbd017f70f3c76c5b317cc686e5b3"
+    },
+    {
+      "name": "managed/managed-AzDMZL/stderr.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-AzDMZL\\stderr.log",
+      "kind": "managed-fake",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "managed/managed-AzDMZL/stdout.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-AzDMZL\\stdout.log",
+      "kind": "managed-fake",
+      "bytes": 69,
+      "sha256": "4956786259f10889f39ce8c81702fdf98f235cfaf092cbe0b1f0da99ac70a298"
+    },
+    {
+      "name": "managed/managed-rki69w/exit.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-rki69w\\exit.json",
+      "kind": "managed-fake",
+      "bytes": 104,
+      "sha256": "540ff476fad2e90d6a302d7778d52a4c4aeb0d5027d848279553519ef7bebd4a"
+    },
+    {
+      "name": "managed/managed-rki69w/report.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-rki69w\\report.json",
+      "kind": "managed-fake",
+      "bytes": 96802,
+      "sha256": "314e1582ce41f5c563745956d26b3b9e8a7cc76b5ae8ab09de36e38a4f45b41c"
+    },
+    {
+      "name": "managed/managed-rki69w/stderr.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-rki69w\\stderr.log",
+      "kind": "managed-fake",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "managed/managed-rki69w/stdout.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-rki69w\\stdout.log",
+      "kind": "managed-fake",
+      "bytes": 69,
+      "sha256": "4956786259f10889f39ce8c81702fdf98f235cfaf092cbe0b1f0da99ac70a298"
+    },
+    {
+      "name": "managed/managed-Xk5ELo/exit.json",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-Xk5ELo\\exit.json",
+      "kind": "managed-fake",
+      "bytes": 104,
+      "sha256": "3b397bed9c58180ee561c09d2bdf6a1b94971b3ad16edc36a343c1e0c90bceac"
+    },
+    {
+      "name": "managed/managed-Xk5ELo/stderr.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-Xk5ELo\\stderr.log",
+      "kind": "managed-fake",
+      "bytes": 392,
+      "sha256": "0fbd20636a06b6cc9db8404cc7000cac0402fd057394e81b6dadf984bf6608b7"
+    },
+    {
+      "name": "managed/managed-Xk5ELo/stdout.log",
+      "path": "C:\\opf-work\\ref-postflight\\artifacts\\reference-postflight\\managed-Xk5ELo\\stdout.log",
+      "kind": "managed-fake",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source/scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "path": "C:/opf-work/ref-postflight/scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "kind": "tested-source",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+    },
+    {
+      "name": "source/scripts/native-acceptance/reference-chart-profile.mjs",
+      "path": "C:/opf-work/ref-postflight/scripts/native-acceptance/reference-chart-profile.mjs",
+      "kind": "tested-source",
+      "bytes": 48782,
+      "sha256": "c69a4f8579dd02d0e34eb5d79e002a1009a934cc3fa4bf0cfd3ecb2878b876ea"
+    },
+    {
+      "name": "source/scripts/native-acceptance/reference-chart-profile.test.mjs",
+      "path": "C:/opf-work/ref-postflight/scripts/native-acceptance/reference-chart-profile.test.mjs",
+      "kind": "tested-source",
+      "bytes": 12043,
+      "sha256": "b3b1b606999d552b4bb0fb0846a9c748fe6f57f15e684a8bab98f7c11d1d1543"
+    },
+    {
+      "name": "source/scripts/native-acceptance/reference-postflight-self-test.ps1",
+      "path": "C:/opf-work/ref-postflight/scripts/native-acceptance/reference-postflight-self-test.ps1",
+      "kind": "tested-source",
+      "bytes": 10621,
+      "sha256": "1618d28cf0dfdfe4e9a4bb284373ca154f8cf97d2726cf2b4ff7b5e705810b60"
+    },
+    {
+      "name": "source/scripts/native-acceptance/reference-postflight.test.mjs",
+      "path": "C:/opf-work/ref-postflight/scripts/native-acceptance/reference-postflight.test.mjs",
+      "kind": "tested-source",
+      "bytes": 3087,
+      "sha256": "99169f813ea20e9533d14248fb3d32edd1012377c48272fa0713fc2d8f628f7a"
+    },
+    {
+      "name": "protected/scripts/native-acceptance/reference-chart-worker.ps1",
+      "path": "C:/opf-work/ref-postflight/scripts/native-acceptance/reference-chart-worker.ps1",
+      "kind": "protected-unchanged",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "name": "protected/packages/pptx/test/native-process.ps1",
+      "path": "C:/opf-work/ref-postflight/packages/pptx/test/native-process.ps1",
+      "kind": "protected-unchanged",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "name": "protected/scripts/native-acceptance/run-windows.ps1",
+      "path": "C:/opf-work/ref-postflight/scripts/native-acceptance/run-windows.ps1",
+      "kind": "protected-unchanged",
+      "bytes": 15359,
+      "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+    },
+    {
+      "name": "historical-reference/n034-ref-native-lines01-exit.json",
+      "path": "C:/opf-work/n034-ref-native-lines01-exit.json",
+      "kind": "historical-native-receipt-not-reclassified",
+      "bytes": 976,
+      "sha256": "56a4d37eb9a9b96c6a151409e329d2354fe559d352a0e85d232f32826eeb9903"
+    },
+    {
+      "name": "historical-reference/n034-ref-native-lines01-office-immediate-after.json",
+      "path": "C:/opf-work/n034-ref-native-lines01-office-immediate-after.json",
+      "kind": "historical-native-receipt-not-reclassified",
+      "bytes": 119,
+      "sha256": "90bba914b38f0ea5484c65351f56fb91586df171ed6e769862efd10094f2ad69"
+    },
+    {
+      "name": "historical-reference/n034-ref-native-lines01-office-later01.json",
+      "path": "C:/opf-work/n034-ref-native-lines01-office-later01.json",
+      "kind": "historical-native-receipt-not-reclassified",
+      "bytes": 163,
+      "sha256": "10261a2ba3896e8fce4e70e61688a944d3275b3c8853504c84aac5e749e87f30"
+    },
+    {
+      "name": "historical-reference/native/worker.json",
+      "path": "C:/opf-work/n034-ref-native-lines01/native/worker.json",
+      "kind": "historical-native-receipt-not-reclassified",
+      "bytes": 341,
+      "sha256": "4f9a517588ba4ce027c5b487ac0fdfd383aee7948103012e6e615b2973c41de6"
+    },
+    {
+      "name": "historical-reference/native/supervisor.json",
+      "path": "C:/opf-work/n034-ref-native-lines01/native/supervisor.json",
+      "kind": "historical-native-receipt-not-reclassified",
+      "bytes": 378,
+      "sha256": "31a8592949f9e7ce080fc706925d928c900496dd61f5b849d211c3ab66fe3017"
+    }
+  ]
+}

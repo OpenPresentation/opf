@@ -201,7 +201,7 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
         return hash;
       },license:entry.license,embed:entry.embed,scripts,fallbackOnly:entry.fallbackOnly===true,cache:new Map()};
   };
-  let shaper;
+  let shaper, ownedShaper, ownedBackend = true;
   const faces = [], duplicates = new Set(), familySlots = new Map();
   // Adds faces atomically: every check runs before any face is registered.
   const register = added => {
@@ -283,15 +283,10 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
     else if(style.symbolEncoding && symbolPreviewFaces(style.symbolEncoding).some(name=>name.toLowerCase()===face.family.toLowerCase())) resolved.symbolEncoding=symbolEncodingFamily(style.symbolEncoding);
     return resolved;
   };
-  const metrics = (text,size,style,includeOutline=false) => {
+  const validateMeasurementInput = (text,size) => {
     if (typeof text!=='string'||!Number.isFinite(size)||size<=0) throw new OPFFontError('invalid-text-measurement','Text measurement requires a string and a positive finite font size.');
-    const {face,resolution}=resolve(style);
-    // Automatic and explicit direction requests have separate keys. A cache hit
-    // needs neither Unicode direction analysis nor OpenType language lookup.
-    const directionKey = style.direction == null ? "auto" : `explicit:${style.direction}`;
-    const key = `${directionKey}\u0000${style.lang ?? ""}\u0000${text}`;
-    let value=face.cache.get(key);
-    if (value===undefined) {
+  };
+  const checkGlyphCoverage = (face,text,style) => {
       if (options.strictGlyphs!==false) for(const character of text) {
         if (/\p{Default_Ignorable_Code_Point}/u.test(character)) continue;
         const code=character.codePointAt(0);
@@ -301,6 +296,24 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
           throw new OPFFontError("missing-glyph", `Font '${face.family}' cannot display U+${code.toString(16).toUpperCase()}.${loadedElsewhere?"":" No loaded font has it, so glyph fallback has no face to fall back to; if it is a script character, load that script's font (loadFonts with scripts: 'auto' and the presentation, or fonts.ensure(presentation))."}`, {path:style.path,fontFamily:face.family,character,...(loadedElsewhere?{}:{loadedFaceHasGlyph:false})});
         }
       }
+  };
+  if (controls) {
+    // Node-only preparation control. It never supplies geometry or populates metric caches.
+    controls.probeGlyphs = (text,size,style) => { validateMeasurementInput(text,size); const {face}=resolve(style); checkGlyphCoverage(face,text,style); };
+    controls.canProbeGlyphs = () => ownedBackend && shaper === ownedShaper;
+    // Called only by the local fonts-node handoff after it attaches its own default outline adapter.
+    controls.acceptOwnedShaper = () => { ownedShaper=shaper; ownedBackend=true; };
+  }
+  const metrics = (text,size,style,includeOutline=false) => {
+    validateMeasurementInput(text,size);
+    const {face,resolution}=resolve(style);
+    // Automatic and explicit direction requests have separate keys. A cache hit
+    // needs neither Unicode direction analysis nor OpenType language lookup.
+    const directionKey = style.direction == null ? "auto" : `explicit:${style.direction}`;
+    const key = `${directionKey}\u0000${style.lang ?? ""}\u0000${text}`;
+    let value=face.cache.get(key);
+    if (value===undefined) {
+      checkGlyphCoverage(face,text,style);
     }
     if(value===undefined||includeOutline&&!Object.hasOwn(value,'outline')) {
       // A width-only entry is shaped again when its outline is first requested.
@@ -376,6 +389,8 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
     // Attach the handle's outline shaper after its WASM loads. Earlier measurements must not survive the engine switch.
     setShaper(engine) {
       shaper = engine;
+      // A public setter call is never a trusted Node-owned attachment.
+      ownedBackend = false;
       for (const face of faces) face.cache.clear();
     },
     resolveFont(style) { return resolve(style).resolution; },

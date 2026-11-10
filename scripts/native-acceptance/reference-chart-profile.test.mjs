@@ -5,6 +5,7 @@ import { inspectReferenceArchive, bindReferenceWitnessPhase } from "./reference-
 import {
   REFERENCE_LIMITS,
   assertReferenceWitnessLifecycle,
+  assertReferenceWitnessPostflight,
   assertReferenceWitnessSelection,
   assertReferenceWitnessSource,
   compareReferenceWitnessImports,
@@ -241,4 +242,39 @@ test("failed/partial lifecycles never count as successful observations", () => {
     { ...terminal, cleanupConfirmed: false },
   ])
     assert.throws(() => assertReferenceWitnessLifecycle(report, t, "a".repeat(64), "b".repeat(64)));
+});
+
+
+test('postflight receipt preserves initial nonzero samples and requires a fresh zero before the fixed deadline', () => {
+  const samples = [
+    {schemaVersion:1,sequence:1,utc:'2026-11-10T00:00:00.000Z',elapsedMilliseconds:0,status:'observed',processIds:[6328],error:null},
+    {schemaVersion:1,sequence:2,utc:'2026-11-10T00:00:00.100Z',elapsedMilliseconds:100,status:'observed',processIds:[6328],error:null},
+    {schemaVersion:1,sequence:3,utc:'2026-11-10T00:00:00.200Z',elapsedMilliseconds:200,status:'observed',processIds:[],error:null},
+  ];
+  const terminal = {workerCleanupConfirmed:true,postflightError:null,powerPointPostflightInitialCount:1,powerPointPostflightCount:0,postflight:{schemaVersion:1,policy:'global-zero-after-completed-owned-quit-v1',budgetMilliseconds:5000,intervalMilliseconds:100,maximumQueries:51,sampleCount:3,initialProcessIds:[6328],initialCount:1,finalProcessIds:[],finalCount:0,elapsedMilliseconds:200,finishedElapsedMilliseconds:201,observedZero:true,officeActions:0}};
+  assertReferenceWitnessPostflight(terminal,samples);
+  for (const mutate of [
+    (t,r)=>{r[1].processIds=[9999];},
+    (t,r)=>{r[1].sequence=3;},
+    (t,r)=>{r[1].elapsedMilliseconds=-1;},
+    (t,r)=>{r[2].elapsedMilliseconds=5000;t.postflight.elapsedMilliseconds=5000;},
+    (t,r)=>{r[2].elapsedMilliseconds=NaN;},
+    (t,r)=>{r[0].processIds=[];},
+    (t,r)=>{r[1].processIds=[6328,6328];},
+    (t,r)=>{r[1].processIds=[0];},
+    (t,r)=>{r[1].utc='not-a-timestamp';},
+    (t,r)=>{r[1].status='failed';},
+    t=>{t.postflight.finishedElapsedMilliseconds=5000;},
+    t=>{t.postflight.finishedElapsedMilliseconds=199;},
+    t=>{t.postflight.finishedElapsedMilliseconds=NaN;},
+    t=>{delete t.postflight.finishedElapsedMilliseconds;},
+    t=>{t.postflight.sampleCount=2;},
+    t=>{t.postflight.budgetMilliseconds=5001;},
+    t=>{t.postflight.intervalMilliseconds=99;},
+    t=>{t.workerCleanupConfirmed=false;},
+    t=>{t.postflightError='query failed';},
+    t=>{t.powerPointPostflightInitialCount=0;},
+  ]) {
+    const t=clone(terminal),r=clone(samples);mutate(t,r);assert.throws(()=>assertReferenceWitnessPostflight(t,r));
+  }
 });

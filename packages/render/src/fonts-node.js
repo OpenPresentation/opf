@@ -298,6 +298,9 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     const {file, without} = HARFBUZZ[kind];
     options.onDiagnostic?.({code: "harfbuzz-unavailable", package: "harfbuzzjs", file, message: `${file} could not be loaded, so ${without}. Ship the harfbuzzjs package with the server.`});
   }
+  const outlines = textOutlines({ registry, shaper });
+  // Private local handoff only: later public setShaper calls remain conservative full-measure coverage.
+  demand?.acceptOwnedShaper();
   return {
     textMeasurement: registry.textMeasurement,
     get embeddedFonts() { return (embeddedFonts ??= selectEmbedded()); },
@@ -306,7 +309,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     loadSystemFonts: false,
     registry,
     // RR-64: the outline engine `toSvg(deck, { fonts, text: "paths" })` draws text with, over this registry's faces.
-    outlines: textOutlines({ registry, shaper }),
+    outlines,
     // RR-65: the subset engine that cuts each face an SVG embeds to the characters the slide draws.
     ...(subsetter ? { subsets: fontSubsets(registry, subsetter) } : {}),
     manifest: BUNDLED_FONT_MANIFEST,
