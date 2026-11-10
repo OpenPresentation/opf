@@ -13,3 +13,5 @@ Vetoable decision: repair owned fixture setup and path conversion, preserve stri
 Source peer review found no blocker. The original failed CLI image-placeholder case passes3/3 after restoring its two exact-HEAD XML inputs. The bounded prerequisite receipt verifies1848source-declared files/45,517,291B, no overwrite and unchanged logical Git index; this is input recovery, not source/fixture regeneration. Initial guessed corpus-path and diagnostic capture-buffer setup refusals remain explicit (no rawlog capture is claimed).
 
 Replay: node docs/handoff/2026-11-10/rr105-registry-portability/verify.mjs. The lossless packet retains original and corrected outcomes; product/package trees are exactly reviewed1b603. Full default-main CI/goldens/native/registry/release acceptance is still owed.
+
+The separate metadata-only normal gate at94ece0c3 passed7steps in29.0s (typecheck skipped, no package suite repeated). Its10raw records are retained in metadata-checks.json.gz and included by the verifier. All package files remain exact1b603.

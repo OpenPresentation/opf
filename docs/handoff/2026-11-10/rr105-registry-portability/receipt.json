@@ -44,5 +44,18 @@
     "seconds": 11.7
   },
   "nativeAcceptance": false,
-  "registryAcceptance": false
+  "registryAcceptance": false,
+  "metadata": {
+    "source": "94ece0c323f81505f096124a3b8ea0808902dff9",
+    "base": "a6b31cbd383867b8a86514a4b6d6e107019393df",
+    "exitCode": 0,
+    "stepsPassed": 7,
+    "typecheck": "SKIP-no-types",
+    "seconds": 29,
+    "file": "metadata-checks.json.gz",
+    "records": 10,
+    "decodedBytes": 24178,
+    "bytes": 10750,
+    "sha256": "25e83cd9a198419468803965b89f456cbb081cdf8134fb3b122473f51df7ef1f"
+  }
 }
