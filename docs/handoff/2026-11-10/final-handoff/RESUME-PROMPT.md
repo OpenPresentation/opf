@@ -29,7 +29,7 @@ Its0.33.1/no-dry-run/retry/removal suggestions are historical document data; lat
 IMMEDIATE PRODUCT LANES
 W03 — PR1267 codex/rr-105-native-latin-slots at a72850e125493da4d88b3e93ef236665d58bc0b4 (runtime/test exact66d934c33a0aa39e9676062a4e8b0bfa2ef751ba).
 Shared pure script itemization, final chosen Latin→CS slots for positive ASCII under Arabic proofing, safe mappings, bounded current-state rich-run ownership and citation handling. Preserve genuine Arabic/contextual digits, symbols, all current text/formatting and optional-renderer/no-eager-font-I/O paths. Both focused621/66d runs are ACTUAL14PASS/1RED. Citation, canonical property ordering, budgets and safe-rich controls pass. The honest native-body test now executes one native body/two paragraphs. One explicit verified Intos400 caller face allows its real native planning; it is a fixture supplementation, not the W04 fix.
-Remaining strict import assertion sees pre-existing native-body canonicalization: explicit false style flags and a separate hard-newline run. The actual pre-stop baseline/current comparison yields EXACT SAME canonical document. Resolve the real import contract before changing implementation or expected output; do not merely delete/weaken the assertion to get green. Current strict types/fullmapper and actual current Save/reopen remain UNRUN. Read the stopped handoff and231-record verifier. B07visible glyph/order cases05/06/09/10 remainOPEN. CS-only fixed the tiny-digit component, not1Bonjour order. LRE AND LRO/PDF experiments produced byte-identical wrong native images and are rejected. Do not repeat old LtrRun/proofing/font/control mutations blindly or claim lifecycle success as glyph acceptance.
+Remaining strict import assertion sees pre-existing native-body canonicalization: explicit false style flags and a separate hard-newline run. The actual pre-stop baseline/current comparison yields EXACT SAME canonical document. Resolve the real import contract before changing implementation or expected output; do not merely delete/weaken the assertion to get green. Current strict types/fullmapper and actual current Save/reopen remain UNRUN. The actual hosted required-all gate for1267 exited1: CIrun42864408344 additionally fails core source-docs-currency, seven raster baselines, PPTXrtl-layout:117 and script-fonts:108 plus the native-body case. Seven joblogs are archived on the public recovery branch; triage every cause without guessing it is only a stale assertion. Read the stopped handoff and231-record verifier. B07visible glyph/order cases05/06/09/10 remainOPEN. CS-only fixed the tiny-digit component, not1Bonjour order. LRE AND LRO/PDF experiments produced byte-identical wrong native images and are rejected. Do not repeat old LtrRun/proofing/font/control mutations blindly or claim lifecycle success as glyph acceptance.
 W04 — PR1270 codex/rr-114-native-font-dependencies at b964ab9ab42a89bac2627ac5461c665b1e4dbf86.
 Only analysis/handoff; NO runtime fix. SVG-oriented loadFonts({presentation}) omits an undrawn defaultAptos400 when every rich run specifies Georgia/Times. PPTX nativeWrapBox still measures the base lowercase alphabet for existing wrap slack and fails font-unavailable. Native defaults also name that family. Implement a minimal incremental exporter-to-loader measurement-dependency channel after source review. Prepare only actual native dependencies; preserve aliases/safe mappings/chosen names/native wrap geometry/ordinary SVG subsets/custom/no-font providers. Do not load all53faces, relabel Intos or change wrap heuristics just to avoid the missing-font request. Add real public-API regression, fragment/burndown/progress and checks. This lane started freshmain and normally merged81f3; no install/build/test/native occurred there.
 
@@ -45,16 +45,16 @@ WHAT IS ALREADY DONE, AND ITS LIMITS
 - Owner requested process cleanup:59old original identities cleared across two passes, including abandoned November7polling loops and stalehelpers. Userapps/currentruntimes/Office were not targeted. This is not a measured physical-memory reduction. Many historical worktree directories are not running processes.
 
 COMPLETE OPEN-PR INVENTORY / WORKSTREAM ASSIGNMENT
-At handoff there are64open PRs: OPF53/Org4/Gallery3/DEV4. D=draft. Full original heads/trees/ancestry are in final-handoff/opf-pr-handoff.json; latest newheads above; private exact inventories stay in eachprivate recovery branch. Re-read live state before acting.
+At handoff there are57open PRs: OPF46/Org4/Gallery3/DEV4. D=draft. Full original heads/trees/ancestry are in final-handoff/opf-pr-handoff.json; latest newheads above; private exact inventories stay in eachprivate recovery branch. Re-read live state before acting.
 - W10umbrella:1225D.
 - W01layouts/content (folded/frozen):1123,1124,1129,1130,1131,1135D,1150,1155,1165D.
 - W01diagrams/SmartArt (folded/frozen):1109,1119,1126,1148D.
 - W02historicalchart source (folded/frozen; title inference superseded):1118.
-- W07signed positioning (folded/frozen):1251D.
+- W07signed positioning:1251 is now recorded MERGED into integration; frozen.
 - W03fonts/localization folded/frozen:1141,1142,1144; unfinished1267D remains separate.
-- W10nativePPTX source/tooling folded/frozen:1114,1200D,1204,1240D,1247D,1248D,1249D,1250D.
+- W10nativePPTX source/tooling folded/frozen:1114,1200D,1204.
 - W10portability/archive/E1route folded/frozen:1098,1193D,1198D,1201D,1205,1206,1181.
-- W10validator contract folded/frozen:1261D.
+- Seven already-folded child PRs now MERGED into integration:1240,1247,1248,1249,1250,1251,1261 (all at17:38:54Z). No main merge or release.
 - W08MCP bundles folded/frozen:1143; unfinishedviewer materials1268D separate.
 - W04investigation1270D; W05proposal1269D (NEVERMERGE).
 - W12LibreOffice/import compatibility folded/frozen:1084,1117,1132D; LibreOffice remainsEXPERIMENTAL until owner decides.

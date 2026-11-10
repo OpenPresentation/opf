@@ -1,6 +1,6 @@
 # OPF release workstreams
 
-Owner requested STOP and takeover. Read [final handoff](final-handoff/README.md) and [all64openPRs](final-handoff/open-prs.md). Previous agent assignments below are historical; all lanes are stopped after final publication and need reassignment by the new coordinator. Updated at the final November10handoff. **v0.33.0 is published; v0.34.0 is not published.** This is the operational board; the dated README and linked receipts retain detailed history. Original scope is all31 items in [issue1139](https://github.com/OpenPresentation/opf/issues/1139), plus the owner additions below. A passed local check, an implementation commit and a release are different states.
+Owner requested STOP and takeover. Read [final handoff](final-handoff/README.md) and [all57openPRs](final-handoff/open-prs.md). Previous agent assignments below are historical; all lanes are stopped after final publication and need reassignment by the new coordinator. Updated at the final November10handoff. **v0.33.0 is published; v0.34.0 is not published.** This is the operational board; the dated README and linked receipts retain detailed history. Original scope is all31 items in [issue1139](https://github.com/OpenPresentation/opf/issues/1139), plus the owner additions below. A passed local check, an implementation commit and a release are different states.
 
 ## Owner-supplied inputs are tracked explicitly
 

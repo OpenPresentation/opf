@@ -4,11 +4,11 @@
 
 ## Where the work is
 
-- Canonical draft PR1225 and staging alias are normally aligned by the final handoff push. No merge or release is performed. Product source before these handoff-only docs is55db07face8e1e9777be6ce7ff493d0c53b68ac1; full final remote heads are in the coordinator closeout.
+- Canonical draft PR1225 and staging alias are normally aligned by the final handoff push. No merge into main or release is performed; seven already-folded child PRs were automatically recorded as merged into their integration base. Product source before these handoff-only docs is55db07face8e1e9777be6ce7ff493d0c53b68ac1; full final remote heads are in the coordinator closeout.
 - All four new drafts are pushed:1267fontslots at a72850e125493da4d88b3e93ef236665d58bc0b4;1268viewerkit at1644f461e796dd37fa68a2f6e8e54e32724c1ddd;1269schema REVIEWONLY at5b7c64225e2100539deacb270cb266b68820b116;1270nativefontdependency analysis atb964ab9ab42a89bac2627ac5461c665b1e4dbf86. They remain separate from the integration source.
 - Current source/proof branches and metadata successor are normally pushed; see [publication receipts](published-current-branches.json). Source1f5 required metadata5PASS but an added raw-index postguard refused a changed index representation; exact source/staged identities remained. Proofcd8required metadata is unrun. The negative actualLRO result is not a product fix.
 - Recovery branches codex/handoff-recovery-20261110 preserve real historical working changes without rewriting frozen leaves; their own manifests/readonly verifiers and the final preservation ledger define scope/exclusions. Never merge/apply these backups automatically.
-- Original source/head snapshots are [public49-PR report](opf-pr-handoff.md) and [full JSON](opf-pr-handoff.json); four new drafts make53OPF plus11private site PRs=64total. Original tables explicitly precede final canonical alignment. Private full inventories stay in each private repository and the owner's prompt.
+- Original source/head snapshots are [public49-PR report](opf-pr-handoff.md) and [full JSON](opf-pr-handoff.json); four new drafts and seven integration-child merges leave46OPF plus11private site PRs=57total. Original tables explicitly precede final canonical alignment. Private full inventories stay in each private repository and the owner's prompt.
 
 ## Completed history and remaining acceptance
 
