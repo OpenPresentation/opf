@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "diagnosticOnly": true,
+  "caseId": "proofing-ppr-group-original09",
+  "baseWorkerRevision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+  "baseWorkerSha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9",
+  "mutantSha256": "907cf5ade50c81498d2799c29f1ce43b128f680f642acf9cc7863bad1605ea79",
+  "fixtureReceiptSha256": "d865ae3c3b58ee579a329a64e73b3f41cc6dad4f1490cbee3794c346f1a8b84e",
+  "derivedWorkerSha256": "3929563e503352dfdbf425c5f749bef2329cda382f2dce6a0c28dcc881e81145",
+  "workerFiles": [
+    {
+      "path": "test/native-furniture-control.ps1",
+      "bytes": 81652,
+      "sha256": "3929563e503352dfdbf425c5f749bef2329cda382f2dce6a0c28dcc881e81145"
+    },
+    {
+      "path": "test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "test/native-furniture-harness-check.ps1",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "test/fixtures/sh25-native-circle-observations.json",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    }
+  ],
+  "baselineSuiteSha256": "8f38b08e4bb93c6e157f66f63696eb27ad905315b23266003e6e34115282ee91",
+  "controllerRevision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "controllerFile": {
+    "path": "scripts/native-acceptance/run-windows.ps1",
+    "bytes": 15359,
+    "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+  },
+  "workerPackage": "tools/rr105-ppr-group/worker-package",
+  "limits": {
+    "slides": 1,
+    "shapes": 3,
+    "actions": 0,
+    "timeoutSeconds": 45,
+    "maximumSeconds": 60,
+    "phases": [
+      "original",
+      "edited",
+      "reopened"
+    ],
+    "pngs": 3
+  },
+  "markerIntentionallyOmitted": true,
+  "glyphFix": false,
+  "currentRuntimeAcceptance": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "baselineInputSha256": "c01016d8214ff7b60ea3ea6f29b11563cd7fa958de9184130733b14cc739f29c",
+  "baseWorkerOriginalAllowedSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+  "pPrGroupCopiedFromSameInput": true
+}
