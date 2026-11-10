@@ -1,0 +1,34 @@
+{
+  "testedSource": "f87050703f79876dc078ecdaa971ff501f8b65a3",
+  "node": {
+    "path": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+    "version": "v24.20.0",
+    "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5"
+  },
+  "syntax": {
+    "status": 0,
+    "count": 12
+  },
+  "offlineVerifier": {
+    "status": 0,
+    "signal": null,
+    "stdout": "{\"status\":\"PASS\",\"records\":168,\"logicalBytes\":6191047,\"cases\":5,\"shapeCounts\":[4,4,5,20,3],\"changedLines\":7,\"segments\":25,\"unchangedShapes\":11,\"originalListFramesExact\":10,\"officeCalls\":0,\"nativeAcceptance\":false,\"publicImportAcceptance\":false}\n",
+    "stderr": ""
+  },
+  "protectedTrees": {
+    "originMain": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+    "paths": [
+      "packages",
+      "spec",
+      "scripts",
+      ".github",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml"
+    ],
+    "objects": "040000 tree 5a4a74222b1a29b70a1f3f5ccacf003eb525a8ed\t.github\n100644 blob 88d10438bf85e0131f824c5ec2b9787b97ef39cb\tpackage.json\n040000 tree 505c904c20eef735367e91058488c47b2c0238ad\tpackages\n100644 blob 2e45923e6a027db20e2593a5befef39473259f2a\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 902d74ad453e1127ac5124757cd8849d780de2c4\tscripts\n040000 tree d7107be1cf1e020d9e17769dec09c7c4bf2a808d\tspec",
+    "exact": true
+  },
+  "scope": "syntax and offline evidence only; check:changed/product build/package tests/public import/native UNRUN",
+  "finished": "2026-11-10T12:51:14.510Z"
+}

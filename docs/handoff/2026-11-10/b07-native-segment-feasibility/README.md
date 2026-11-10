@@ -1,11 +1,17 @@
-# B07 independent native segment feasibility — exploratory
+# B07 native segment-box feasibility — diagnostic only
 
-This evidence lane starts at fresh main a52dc9441f7eec9dc6f72debb174339758e1761e. It makes no product, public API, schema, Office or native-acceptance change.
+The five complete original 05/06/09/10/French11 slides have source-bound diagnostic variants. This is **not a product fix, native/glyph acceptance, approval of segment-level editing, or a public import/reassembly feature**. No Office, ValidateOnly or native controller ran.
 
-The first capability probe uses every intact original 05/06/09/10/French11 source and PPTX. The historical 473d3fff renderer modules are used only inside the diagnostic, after their complete captured dist inventory is verified; the historical source/output roots are read-only. It captures an in-memory traced SVG and its private full-line UBA/HarfBuzz glyph plan with the original office/visual/auto font policy. No raster is drawn. Original full native shape frames, paragraph properties, every run and original font-file hashes are recorded. No font bytes are copied into evidence.
+Read [RESULTS.md](RESULTS.md), then run the builtin-only offline proof with the pinned Node24 executable:
 
-These plans do not yet authorize a native segment variant. A later pure mapping must establish exact logical UTF16 coverage, full-line visual placement and an unchanged native marker carrier. If those facts cannot be bound, stop without a variant rather than use substring-width approximations. French11 and number-free continuation shapes are unchanged controls. Current public import has no new segment-group metadata or reassembly contract; its limitations must be reported honestly.
+```powershell
+node docs/handoff/2026-11-10/b07-native-segment-feasibility/verify.mjs
+```
 
-The historical cc587 numeric partition was within one text box, preserved properties, and produced unchanged bad/control native images. This separate-box prototype is not a repeated run split, a glyph fix, a release candidate or approval of its finer editing granularity. The existing closed three-shape native profile is inapplicable; no profile/cap is changed here.
+It reads the sealed bytes; it never executes archived producer/worker code or invokes an engine. The final proof covers 168 lossless raw records, all five original/variant PPTX archives, complete native run properties and UTF16 ranges, unchanged vertical geometry and marker carriers, all non-slide archive parts, eleven untouched original shapes and the entire unchanged French negative archive. Native shape counts are 4/4/5/20/3.
 
-No Office, ValidateOnly, native controller or worker is invoked. Each named diagnostic attempt and any failure are retained. No automatic retry.
+Critical diagnostic constructors are `offset-loader.mjs` and `offset-variants.mjs`; the tested source is f8705070. They operate only in this fresh-main evidence lane. The loader uses a hash/unique-anchor-bound in-memory copy of historical473 renderer code: full numeric serialization precision plus existing pre-trim source offsets/text/placement/gap exposed as trace attributes. Removing those trace attributes reproduces all five prior full-precision SVG bytes exactly. Historical producer files were never edited or rebuilt.
+
+`files/<original-id>/` contains the intact original OPF/PPTX and diagnostic variant. `manifest.json` indexes all raw records in `raw.json.gz`. Earlier invalid collector results, the ZIP-adapter failure and source-offset refusal remain literal. `font-provenance.json` and `licenses/intos/` bind the small public OFL Intos subsets already embedded by the renderer in raw SVG outputs; no full font files, private/system/owner fonts, installed consumer or credentials are archived.
+
+The existing three-shape B07 native profile is inapplicable. No profile, schema, product source or acceptance limit was changed. Root and peer review precede publication or any separately authorized native work.

@@ -1,0 +1,6 @@
+{
+  "command": "git diff --cached --check",
+  "status": 1,
+  "onlyFinding": "licenses/intos/OFL.txt:22 trailing whitespace in exact verified third-party OFL bytes",
+  "decision": "Preserve exact license bytes losslessly in direct gzip and raw archive; never rewrite the pinned third-party license to make whitespace pass."
+}

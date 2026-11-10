@@ -1,0 +1,7 @@
+{
+  "status": 1,
+  "error": "AssertionError: Undeclared namespace p",
+  "scope": "Owned offline verifier parsed standalone XML shape snippets without their inherited namespace declarations; no product/variant failure or assertion weakening.",
+  "sourceSha256": "a58bee6d4adbe58ea65dee1f3eefd0c2a0bf8ec332a0a678cb7b152f32273d4e",
+  "native": false
+}

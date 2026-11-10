@@ -1,0 +1,103 @@
+{
+  "node": "v24.20.0",
+  "checks": [
+    {
+      "name": "bridge.mjs",
+      "sha256": "c6ecc4f0c750d041bf245c2a33beae3a1fd1fea9c081ee3557f31ba5467dbcd2",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capability.mjs",
+      "sha256": "02dea17d0ffb37c8304aceec41094a879f6e547a0ed07ead2b68b5c644ea8ba5",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "data-tools.mjs",
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offset-bridge.mjs",
+      "sha256": "4fcb841d816e40e631a89e021d5938004cf5888f0fa31305287b49196bc2c103",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offset-capability.mjs",
+      "sha256": "c6e35520416641857d1eeda292f887534556d254234cb93b9aa63aae33cf5ef3",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offset-loader.mjs",
+      "sha256": "a35f02e41b0f7ad98361292dff952ac2eff0c55252fbd8d47d5c9c2ca4f7e87a",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offset-variants.mjs",
+      "sha256": "aec1b2160d87918f7e3445470da1f94ace35c4eadfec5aaad94f512e76841e6a",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "precision-capability.mjs",
+      "sha256": "1e041df0c783d3252898a8e517e81b738c95aac3d1f6dfa746b9966a4345c946",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "precision-loader.mjs",
+      "sha256": "174aae206fd5ff6bfc44a9f877b2366538dca28ad89411d2fe407b5cefaf4bc7",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "seal.mjs",
+      "sha256": "0a5a937f4354b0979be01b24e3b71bb237e8c991127d44b6df881842e8d2aee1",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "variants.mjs",
+      "sha256": "037f8249351db2e525976148ba3490f0a075b8d782e01876bd9247b8449f3c8c",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "verify.mjs",
+      "sha256": "c18464d46f5481a8891dd648610a165b8ee6ddf99cade54b00d6e4bb38814092",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "productBuild": false,
+  "native": false
+}
