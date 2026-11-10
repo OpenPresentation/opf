@@ -312,7 +312,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
       label = labels[0],
       idx = Number(label?.['c:idx']?.val),
       side = label?.['c:dLblPos']?.val;
-    const unsupportedLabels = unsupportedReferenceLabels(e?.ser?.['c:dLbls']);
+    const unsupportedLabels = unsupportedReferenceLabels(e?.ser?.['c:dLbls'], e?.kind);
     const valid =
       matches.length === 1 &&
       uniqueIndexes &&
@@ -786,10 +786,12 @@ function currentLabelText(nodes) {
   return output.join('\n');
 }
 
-function unsupportedReferenceLabels(node) {
+function unsupportedReferenceLabels(node, kind) {
   const on = (n) => ['1', 1, true, 'true'].includes(n?.val);
   if (on(node?.['c:delete'])) return false;
-  const flags = ['showVal', 'showCatName', 'showSerName', 'showPercent', 'showBubbleSize', 'showLegendKey'];
+  // PowerPoint adds percent/bubble defaults when saving explicit line labels; neither applies to a line series.
+  // Keep every visible line-label/leader/manual-layout refusal, and the conservative flags for any other family.
+  const flags = ['showVal', 'showCatName', 'showSerName', 'showLegendKey', ...(kind === 'lineChart' ? [] : ['showPercent', 'showBubbleSize'])];
   const unsupported = (n) =>
     flags.some((f) => on(n?.['c:' + f])) ||
     on(n?.['c:showLeaderLines']) ||
