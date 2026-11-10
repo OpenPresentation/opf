@@ -229,11 +229,12 @@ jobs:
             status=$?
             [ "$status" -eq 2 ] || exit "$status"
           fi
-          depth=()
-          [ "$(git rev-parse --is-shallow-repository)" = false ] || depth=(--unshallow)
+          # Keep this array nonempty: Bash 3.2 treats an empty array as unset under nounset.
+          fetch=(fetch)
+          [ "$(git rev-parse --is-shallow-repository)" = false ] || fetch+=(--unshallow)
           refs=("refs/heads/$BASE:refs/remotes/origin/$BASE")
           [ "$existing" = false ] || refs+=("refs/heads/$branch:refs/remotes/origin/$branch")
-          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch "${depth[@]}" origin "${refs[@]}"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" "${fetch[@]}" origin "${refs[@]}"
           git merge --no-edit "origin/$BASE"
           [ "$existing" = false ] || git merge --no-edit "origin/$branch"
           # Recheck just before pushing; neither a folded head nor a concurrent non-fast-forward update may be overwritten.

@@ -307,6 +307,7 @@ function publicationFixture(mode) {
   const previous = existing ? git(seed, 'rev-parse', 'origin/bot/opf-v0.34.0') : null;
   const cloneArgs = mode === 'full-history' ? [] : ['--depth=1'];
   git(dir, 'clone', ...cloneArgs, '--branch', 'main', pathToFileURL(remote).href, job);
+  assert.equal(git(job, 'rev-parse', '--is-shallow-repository'), mode === 'full-history' ? 'false' : 'true', 'exercise both shallow and full-history fetch paths');
   writeFileSync(path.join(seed, 'upstream.txt'), 'latest default-branch work\n');
   git(seed, 'add', '.'); git(seed, 'commit', '-m', 'latest main'); git(seed, 'push', 'origin', 'main');
   const latestMain = git(seed, 'rev-parse', 'HEAD');
