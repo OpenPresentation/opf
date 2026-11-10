@@ -34,7 +34,31 @@ test('native body rich faces',async()=>{
  assert(pkg&&face);const fontUrl=new URL(`${pkg.vendored}/${face.file}`,root),licenseUrl=new URL(`${pkg.vendored}/${pkg.licenseFile}`,root),noticeUrl=new URL(`${pkg.vendored}/${pkg.noticeFile}`,root),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
  assert.equal(sha(readFileSync(fontUrl)),face.sha256);assert.equal(sha(readFileSync(licenseUrl)),pkg.licenseSha256);assert.equal(sha(readFileSync(noticeUrl)),pkg.noticeSha256);
  const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:rich,faces:[{path:fileURLToPath(fontUrl),family:face.family,weight:face.weight,italic:face.italic,embed:'used',license:readFileSync(licenseUrl,'utf8')+'\n\n'+readFileSync(noticeUrl,'utf8')}]});
- try{const result=await read(rich,{fonts,bodyText:'native'}),bodies=result.shapes.filter(s=>s.name?.startsWith('OPF native body'));assert.equal(bodies.length,1,'The changed native-body capture path must actually execute; no measured fallback');assert.equal([...bodies[0].xml.matchAll(/<a:p>/g)].length,2,'Hard newline must exercise source offsets across paragraphs');const runs=bodies.flatMap(s=>s.runs);equalSlots(runs);assert.deepEqual(new Set(runs.map(r=>r.latin)),new Set(['Georgia','Times New Roman']));assert.deepEqual(result.imported,rich);}finally{fonts.dispose?.();}
+ try{
+  const result=await read(rich,{fonts,bodyText:'native'}),bodies=result.shapes.filter(s=>s.name?.startsWith('OPF native body'));
+  assert.equal(bodies.length,1,'The changed native-body capture path must actually execute; no measured fallback');
+  assert.equal([...bodies[0].xml.matchAll(/<a:p>/g)].length,2,'Hard newline must exercise source offsets across paragraphs');
+  const runs=bodies.flatMap(s=>s.runs);equalSlots(runs);assert.deepEqual(new Set(runs.map(r=>r.latin)),new Set(['Georgia','Times New Roman']));
+  // The ordinary native-body reader retains current explicit false styles and
+  // paragraph boundaries. It never recovers original authoring boundaries.
+  // The archived 863/66d baseline comparison has this same exact document.
+  const expected={slides:[{title:'Title',text:[
+   {text:'Bonjour 1',bold:false,italic:false,underline:false,fontFamily:'Georgia',lang:'ar-SA'},
+   {text:'\n',fontFamily:'Georgia'},
+   {text:'Welcome 2 ',bold:false,italic:false,underline:false,fontFamily:'Georgia',lang:'ar-SA'},
+   {text:'Hello 2',bold:false,italic:false,underline:false,fontFamily:'Times New Roman',lang:'ar-SA'},
+  ]}]};
+  assert.deepEqual(result.imported,expected,'Exact current native-body contract, including every run/style/paragraph');
+  const path='ppt/slides/slide1.xml',slide=strFromU8(result.zip[path]),body=bodies[0].xml;
+  for(const[name,transform,update]of[
+   ['text',xml=>xml.replace('Bonjour 1','Changed 7'),doc=>{doc.slides[0].text[0].text='Changed 7';}],
+   ['bold',xml=>xml.replace(/<a:rPr\b/,'<a:rPr b="1"'),doc=>{doc.slides[0].text[0].bold=true;}],
+  ]){
+   const changed=transform(body);assert.notEqual(changed,body,`The ${name} control actually changes the native body`);
+   const entries={...result.zip,[path]:strToU8(slide.replace(body,changed))},current=structuredClone(expected);update(current);
+   assert.deepEqual(await fromPptx(zipSync(entries)),current,`Current native ${name} wins over stored source`);
+  }
+ }finally{fonts.dispose?.();}
 });
 test('foreign language and symbol controls',async()=>{
  const foreign={language:'ar-SA',slides:[{title:'عنوان',items:[[{text:'Bonjour 1',lang:'fr-FR'}],[{text:'ABC 1',lang:'ar-SA',fontFamily:'Symbol'}],[{text:'العربية 1',lang:'ar-SA'}]]}]};
