@@ -1,0 +1,144 @@
+{
+  "evidenceBase": {
+    "head": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+    "tree": "49bdf8b51f02bde62dcd701c0c112e7b89432724",
+    "driversDuringTrial": "Authored/untracked in this fresh evidence worktree; pinned by actual driver/child/input SHA before and after. The later evidence commit is not represented as the measured runtime head."
+  },
+  "runtimeRoots": [
+    {
+      "arm": "baseline",
+      "head": "d4bb1a56a54cd60565aae16ef9417ee80ca70147",
+      "tree": "373520af376a313af20e220dc116a1b92243745e",
+      "sourcePins": [
+        {
+          "path": "render/src/fonts-node.js",
+          "bytes": 26164,
+          "sha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-demand.js",
+          "bytes": 19878,
+          "sha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-registry.js",
+          "bytes": 34237,
+          "sha256": "63041d9ce5e4aed51726e53bdf2d4624e29d256a903c2ada7eb5a0c63399544a",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-selection.js",
+          "bytes": 309,
+          "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-selection-metadata.js",
+          "bytes": 809,
+          "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/lazy-fonts.js",
+          "bytes": 25720,
+          "sha256": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/script-fonts.js",
+          "bytes": 52028,
+          "sha256": "83f3678471757c6af177a01839bd34fadb4b34b36c226ef88b1e41b761ce285a",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/hb-shape.js",
+          "bytes": 7331,
+          "sha256": "7a07db6607170c51f4c166331205436800608ca17470eafc47f53fbdd5b4d8d3",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-manifest.js",
+          "bytes": 110526,
+          "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b",
+          "matchesRecordedDist": true
+        }
+      ],
+      "observation": "Post-trial sealing read; normal source/dist equality also asserted by frozen run for its original8 source files before/after."
+    },
+    {
+      "arm": "candidate",
+      "head": "d6d9bcac6ddb7727668333d227451179fbb98b9a",
+      "tree": "c090c8f02e16e5e892a1ee539f9308bf18fe1ab3",
+      "sourcePins": [
+        {
+          "path": "render/src/fonts-node.js",
+          "bytes": 26319,
+          "sha256": "76054060544c2b038d650ee0aab99764da2bb107f944191be2a4efc0c2cb9452",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-demand.js",
+          "bytes": 20825,
+          "sha256": "b17f440524b013454ec39511731a2f738f96aea326df2d54f143719373a45036",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-registry.js",
+          "bytes": 35101,
+          "sha256": "c6a1bf547591318b4f688a8efb0a18d1ae61407af5b982ac8f41a06693e07fd5",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-selection.js",
+          "bytes": 309,
+          "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-selection-metadata.js",
+          "bytes": 809,
+          "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/lazy-fonts.js",
+          "bytes": 25720,
+          "sha256": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/script-fonts.js",
+          "bytes": 52028,
+          "sha256": "83f3678471757c6af177a01839bd34fadb4b34b36c226ef88b1e41b761ce285a",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/hb-shape.js",
+          "bytes": 7331,
+          "sha256": "7a07db6607170c51f4c166331205436800608ca17470eafc47f53fbdd5b4d8d3",
+          "matchesRecordedDist": true
+        },
+        {
+          "path": "render/src/font-manifest.js",
+          "bytes": 110526,
+          "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b",
+          "matchesRecordedDist": true
+        }
+      ],
+      "observation": "Post-trial sealing read; normal source/dist equality also asserted by frozen run for its original8 source files before/after."
+    }
+  ],
+  "peerReview": {
+    "scope": "Independent source-only sealing review after the completed root trial; no archived driver was executed, no benchmark/build repeated.",
+    "findings": "Timing/render/GC/storage statements remain explicit in archived derivation. Six mirrored fresh children45s/zero retries; module import separate. Wholecontrol3405.0814ms beats bothnew3406.7869/3427.6156; no universal or statistically established win.",
+    "rootProtocolAuthority": "Parent authorized and executed exactly one six-child cold trial, reported actual terminal0 before sealing.",
+    "limits": "No physical mobile/cloud/leak/native/registry/release acceptance. Raw final216 digests plus passing repeated-render guard reports support648 guarded slide outputs; all648 hash vectors are not archived."
+  },
+  "missingParentStderr": {
+    "path": "C:/opf-work/cmap-cold-trial01.stderr.log",
+    "exists": false,
+    "note": "No such parent stderr file was supplied; all6 child stderr files are retained literally."
+  }
+}

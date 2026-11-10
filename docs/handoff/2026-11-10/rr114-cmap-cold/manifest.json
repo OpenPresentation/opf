@@ -1,0 +1,494 @@
+{
+  "schema": 1,
+  "neverMerge": true,
+  "diagnosticOnly": true,
+  "productSourceUnchanged": true,
+  "trialRerun": false,
+  "buildRerun": false,
+  "nativeRun": false,
+  "publication": "HOLD for root review",
+  "runtime": {
+    "baseline": "d4bb1a56a54cd60565aae16ef9417ee80ca70147",
+    "candidate": "d6d9bcac6ddb7727668333d227451179fbb98b9a"
+  },
+  "driverSha256": "ef95766334af7d99ac3507f2ce53f21ae864678d9299be659afd6679412aea54",
+  "childSha256": "b449589fe33018fffaf389afa068c7dbca6a23c089e42b6fb24e8f10d729e59c",
+  "input": {
+    "bytes": 98976,
+    "sha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+    "slides": 36
+  },
+  "raw": {
+    "path": "raw.json.gz",
+    "bytes": 1179751,
+    "sha256": "ff586ccb5c17fe39fdf3661dd62af5e6cb8bbd778d5157836e5bd53a92983036",
+    "expandedBytes": 5103612,
+    "records": 46,
+    "logicalBytes": 3818369
+  },
+  "records": [
+    {
+      "path": "trial/01-baseline-whole.json",
+      "source": "C:/opf-work/cmap-cold-trial01/01-baseline-whole.json",
+      "bytes": 63626,
+      "sha256": "33b123beedd18b9310e8a80595fcd57777a3ae247c8608fd324d48372fb060ae"
+    },
+    {
+      "path": "trial/01-baseline-whole.stderr.log",
+      "source": "C:/opf-work/cmap-cold-trial01/01-baseline-whole.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "trial/01-baseline-whole.stdout.log",
+      "source": "C:/opf-work/cmap-cold-trial01/01-baseline-whole.stdout.log",
+      "bytes": 271,
+      "sha256": "9f24925c0bba5292de3b8d033cb3a3ae6ede501beeaa735a810105538a0a2782"
+    },
+    {
+      "path": "trial/02-baseline-demand.json",
+      "source": "C:/opf-work/cmap-cold-trial01/02-baseline-demand.json",
+      "bytes": 52266,
+      "sha256": "e20d670e481c2f3a2c16eca3cc04980e679fc0b560d126ed11b222d37c354d6a"
+    },
+    {
+      "path": "trial/02-baseline-demand.stderr.log",
+      "source": "C:/opf-work/cmap-cold-trial01/02-baseline-demand.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "trial/02-baseline-demand.stdout.log",
+      "source": "C:/opf-work/cmap-cold-trial01/02-baseline-demand.stdout.log",
+      "bytes": 255,
+      "sha256": "ce5395cc6d1d15bc19c284e511311bbd68ddc7646a7853903377a9964ebb875f"
+    },
+    {
+      "path": "trial/03-candidate-demand.json",
+      "source": "C:/opf-work/cmap-cold-trial01/03-candidate-demand.json",
+      "bytes": 52312,
+      "sha256": "6234ea1ce3c02e5f2627e482848a7750529b1d65453d527eba2480e19d961d44"
+    },
+    {
+      "path": "trial/03-candidate-demand.stderr.log",
+      "source": "C:/opf-work/cmap-cold-trial01/03-candidate-demand.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "trial/03-candidate-demand.stdout.log",
+      "source": "C:/opf-work/cmap-cold-trial01/03-candidate-demand.stdout.log",
+      "bytes": 265,
+      "sha256": "a9a121505434f5ca4ba622c7a0b781753da7be4b8a3bb6d2fcc25cea510c8c95"
+    },
+    {
+      "path": "trial/04-candidate-demand.json",
+      "source": "C:/opf-work/cmap-cold-trial01/04-candidate-demand.json",
+      "bytes": 52276,
+      "sha256": "f2920773617f8a4038f0e43641503c52a3541f9040639116baa8c3adb7debb5d"
+    },
+    {
+      "path": "trial/04-candidate-demand.stderr.log",
+      "source": "C:/opf-work/cmap-cold-trial01/04-candidate-demand.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "trial/04-candidate-demand.stdout.log",
+      "source": "C:/opf-work/cmap-cold-trial01/04-candidate-demand.stdout.log",
+      "bytes": 266,
+      "sha256": "e409ea5ec7ba65aa2d0ad77debe73dc06ce83b322116c103f08373c2e2fc6566"
+    },
+    {
+      "path": "trial/05-baseline-demand.json",
+      "source": "C:/opf-work/cmap-cold-trial01/05-baseline-demand.json",
+      "bytes": 52302,
+      "sha256": "45cbb01e92faf388cb623d5a33290e18cae259f9f53f01fcc1896d6db8e88f9e"
+    },
+    {
+      "path": "trial/05-baseline-demand.stderr.log",
+      "source": "C:/opf-work/cmap-cold-trial01/05-baseline-demand.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "trial/05-baseline-demand.stdout.log",
+      "source": "C:/opf-work/cmap-cold-trial01/05-baseline-demand.stdout.log",
+      "bytes": 264,
+      "sha256": "0f834f45419a56fa4c2774650f252ca3cabe46e25c65e766c6ee3304fe23d858"
+    },
+    {
+      "path": "trial/06-baseline-whole.json",
+      "source": "C:/opf-work/cmap-cold-trial01/06-baseline-whole.json",
+      "bytes": 63660,
+      "sha256": "6b8fdaeb12f95a2c9cfffbc8b8c8a1fbde45bd46f96d900cda142fed6d9bf176"
+    },
+    {
+      "path": "trial/06-baseline-whole.stderr.log",
+      "source": "C:/opf-work/cmap-cold-trial01/06-baseline-whole.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "trial/06-baseline-whole.stdout.log",
+      "source": "C:/opf-work/cmap-cold-trial01/06-baseline-whole.stdout.log",
+      "bytes": 271,
+      "sha256": "b6694a2a545a6b82c367eefd75c55e2b2460722205dbb145f1abe89d07129e95"
+    },
+    {
+      "path": "trial/summary.json",
+      "source": "C:/opf-work/cmap-cold-trial01/summary.json",
+      "bytes": 1870322,
+      "sha256": "b59340c44dc26579d76f96150c2b92b9e17ec03ed9154d7296a9d06ca0895545"
+    },
+    {
+      "path": "inspect01/summary.json",
+      "source": "C:/opf-work/cmap-cold-inspect01/summary.json",
+      "bytes": 925870,
+      "sha256": "a73033862fb53399a7b8d39afa6a1957ebc45ccfdf5ad37678af23057622aa78"
+    },
+    {
+      "path": "root/trial01-exit.json",
+      "source": "C:/opf-work/cmap-cold-trial01-exit.json",
+      "bytes": 241,
+      "sha256": "9bf6a14e4066db7c0603e3c4561ff93b5d2fe25e9fb37d11dabf2d1bd021d251"
+    },
+    {
+      "path": "root/trial01.stdout.log",
+      "source": "C:/opf-work/cmap-cold-trial01.stdout.log",
+      "bytes": 1319,
+      "sha256": "c9df398d4e9f88fa6fc7cfc682fdb2367866fefb0c36e7097bf4cef503a85af3"
+    },
+    {
+      "path": "driver/run.mjs",
+      "source": "C:/opf-work/cmap-cold-proof/docs/handoff/2026-11-10/rr114-cmap-cold/run.mjs",
+      "bytes": 9876,
+      "sha256": "ef95766334af7d99ac3507f2ce53f21ae864678d9299be659afd6679412aea54"
+    },
+    {
+      "path": "driver/case.mjs",
+      "source": "C:/opf-work/cmap-cold-proof/docs/handoff/2026-11-10/rr114-cmap-cold/case.mjs",
+      "bytes": 6089,
+      "sha256": "b449589fe33018fffaf389afa068c7dbca6a23c089e42b6fb24e8f10d729e59c"
+    },
+    {
+      "path": "driver/driver-derivation.json",
+      "source": "C:/opf-work/cmap-cold-proof/docs/handoff/2026-11-10/rr114-cmap-cold/driver-derivation.json",
+      "bytes": 859,
+      "sha256": "a460fbe0c50bf3c4bf23cd11bcb573598de05027b000ad276ae6b34731f0078e"
+    },
+    {
+      "path": "driver/inputs/extended-36.opf.json",
+      "source": "C:/opf-work/cmap-cold-proof/docs/handoff/2026-11-10/rr114-cmap-cold/inputs/extended-36.opf.json",
+      "bytes": 98976,
+      "sha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599"
+    },
+    {
+      "path": "runtime/baseline/src/fonts-node.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/fonts-node.js",
+      "bytes": 26164,
+      "sha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+    },
+    {
+      "path": "runtime/baseline/src/font-demand.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/font-demand.js",
+      "bytes": 19878,
+      "sha256": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e"
+    },
+    {
+      "path": "runtime/baseline/src/font-registry.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/font-registry.js",
+      "bytes": 34237,
+      "sha256": "63041d9ce5e4aed51726e53bdf2d4624e29d256a903c2ada7eb5a0c63399544a"
+    },
+    {
+      "path": "runtime/baseline/src/font-selection.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/font-selection.js",
+      "bytes": 309,
+      "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27"
+    },
+    {
+      "path": "runtime/baseline/src/font-selection-metadata.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/font-selection-metadata.js",
+      "bytes": 809,
+      "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da"
+    },
+    {
+      "path": "runtime/baseline/src/lazy-fonts.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/lazy-fonts.js",
+      "bytes": 25720,
+      "sha256": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa"
+    },
+    {
+      "path": "runtime/baseline/src/script-fonts.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/script-fonts.js",
+      "bytes": 52028,
+      "sha256": "83f3678471757c6af177a01839bd34fadb4b34b36c226ef88b1e41b761ce285a"
+    },
+    {
+      "path": "runtime/baseline/src/hb-shape.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/hb-shape.js",
+      "bytes": 7331,
+      "sha256": "7a07db6607170c51f4c166331205436800608ca17470eafc47f53fbdd5b4d8d3"
+    },
+    {
+      "path": "runtime/baseline/src/font-manifest.js",
+      "source": "C:/opf-work/hb-clusters/packages/render/src/font-manifest.js",
+      "bytes": 110526,
+      "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+    },
+    {
+      "path": "runtime/candidate/src/fonts-node.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/fonts-node.js",
+      "bytes": 26319,
+      "sha256": "76054060544c2b038d650ee0aab99764da2bb107f944191be2a4efc0c2cb9452"
+    },
+    {
+      "path": "runtime/candidate/src/font-demand.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/font-demand.js",
+      "bytes": 20825,
+      "sha256": "b17f440524b013454ec39511731a2f738f96aea326df2d54f143719373a45036"
+    },
+    {
+      "path": "runtime/candidate/src/font-registry.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/font-registry.js",
+      "bytes": 35101,
+      "sha256": "c6a1bf547591318b4f688a8efb0a18d1ae61407af5b982ac8f41a06693e07fd5"
+    },
+    {
+      "path": "runtime/candidate/src/font-selection.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/font-selection.js",
+      "bytes": 309,
+      "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27"
+    },
+    {
+      "path": "runtime/candidate/src/font-selection-metadata.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/font-selection-metadata.js",
+      "bytes": 809,
+      "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da"
+    },
+    {
+      "path": "runtime/candidate/src/lazy-fonts.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/lazy-fonts.js",
+      "bytes": 25720,
+      "sha256": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa"
+    },
+    {
+      "path": "runtime/candidate/src/script-fonts.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/script-fonts.js",
+      "bytes": 52028,
+      "sha256": "83f3678471757c6af177a01839bd34fadb4b34b36c226ef88b1e41b761ce285a"
+    },
+    {
+      "path": "runtime/candidate/src/hb-shape.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/hb-shape.js",
+      "bytes": 7331,
+      "sha256": "7a07db6607170c51f4c166331205436800608ca17470eafc47f53fbdd5b4d8d3"
+    },
+    {
+      "path": "runtime/candidate/src/font-manifest.js",
+      "source": "C:/opf-work/glyph-probe/packages/render/src/font-manifest.js",
+      "bytes": 110526,
+      "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+    },
+    {
+      "path": "reference/original-demand-font-case.mjs",
+      "source": "C:/opf-work/cmap-cold-proof/docs/handoff/2026-11-10/rr114-cmap-cold/references/original-demand-font-case.mjs",
+      "bytes": 5928,
+      "sha256": "8dcf1863803287028ca1d42671d5d43bd409ea39f80757c8459f667ccd80b757"
+    },
+    {
+      "path": "reference/case-derivation.diff",
+      "source": "C:/opf-work/cmap-cold-proof/docs/handoff/2026-11-10/rr114-cmap-cold/references/case-derivation.diff",
+      "bytes": 4885,
+      "sha256": "11644b23b206f7863fadd34bee8fcbcfef44828bb30dcb6a76fe7e0a5428cc2d"
+    }
+  ],
+  "statistics": {
+    "path": "statistics.json",
+    "bytes": 12798,
+    "sha256": "b6aa566dfdc9d78ec57176e970ab78c1f81801baca99c6ea1fa65582ac94d85d"
+  },
+  "reviewNotes": {
+    "path": "review-notes.json",
+    "bytes": 6036,
+    "sha256": "72a80e092455b202909a8ca59ed651d96fe17b0adb92beb882bee52c7ed8577b"
+  },
+  "fontBinariesArchived": false,
+  "metadataChecks": [
+    {
+      "path": "checks/case.mjs.syntax-exit.json",
+      "bytes": 58,
+      "sha256": "73bb1ef5edb744575698e6a697c9882946d0ceaa148a69c84e46ce21c8a027ea"
+    },
+    {
+      "path": "checks/case.mjs.syntax.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks/case.mjs.syntax.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks/run.mjs.syntax-exit.json",
+      "bytes": 57,
+      "sha256": "f50b98827f708ef5b263a921ab6523dd3974e98ee3abead146e2bc583301a4da"
+    },
+    {
+      "path": "checks/run.mjs.syntax.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks/run.mjs.syntax.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks/sealing-setup.json",
+      "bytes": 613,
+      "sha256": "4e2c021e461acac125e0abb7491c29637272be2945b1cc2cabedb00ae823507f"
+    },
+    {
+      "path": "checks/verifier-exit.json",
+      "bytes": 92,
+      "sha256": "3bfc1b054a10c409b31da1ef9497969f2a0dcb23be038fa4f3ee95a57be4ef99"
+    },
+    {
+      "path": "checks/verifier.log",
+      "bytes": 469,
+      "sha256": "6b711d5ec9988f5e9ae3f633e4c5011f4222afe18ca82d682f6dc4848e767c5f"
+    },
+    {
+      "path": "checks/verifier.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks/verify.mjs.syntax-exit.json",
+      "bytes": 60,
+      "sha256": "50c1c5b81f47cbd4dfd80ff183ca5e8a0060516a9d8c4e62332dfbec301d3512"
+    },
+    {
+      "path": "checks/verify.mjs.syntax.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks/verify.mjs.syntax.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks/whitespace-first.json",
+      "bytes": 158,
+      "sha256": "2f19190a208a7ac352915312c7b17c30fe0c9876f5b6e1ba4422e1e3d54a79e1"
+    },
+    {
+      "path": "checks/whitespace-first.log",
+      "bytes": 1904,
+      "sha256": "221829c3d48b8154db01be7e14dd27934570d365e71bf77f8d54e8b9f9d3633f"
+    },
+    {
+      "path": "checks/whitespace-first.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "checks/sealing-authoring-refusal.json",
+      "bytes": 245,
+      "sha256": "769fc0ea5e209fd80a280871af644c1ca7fdb7c84576f34bd8b2806a792f50f1"
+    }
+  ],
+  "originalMetadataChecks": {
+    "path": "checks-original.json.gz",
+    "bytes": 2366,
+    "sha256": "907634bf0a8fc3345731d60ddb299bd3fdb204bafd3e903ac9a277d7395e6cb8",
+    "expandedBytes": 7446,
+    "records": [
+      {
+        "path": "case.mjs.syntax-exit.json",
+        "bytes": 62,
+        "sha256": "3c3ce367bc379544fbe398f1f1ab935db94cb5f185ef41fccabb7b90c40a4201"
+      },
+      {
+        "path": "case.mjs.syntax.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "case.mjs.syntax.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "run.mjs.syntax-exit.json",
+        "bytes": 61,
+        "sha256": "ba7fff30812d88aa99a0086671d06c56b429d7ae7ce4541ddcc0e7e3305b8158"
+      },
+      {
+        "path": "run.mjs.syntax.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "run.mjs.syntax.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "sealing-setup.json",
+        "bytes": 614,
+        "sha256": "f6fcf71f4309096902cb1b8531b03f89df02ecc860ba713e365a8a602cfcdbac"
+      },
+      {
+        "path": "verifier-exit.json",
+        "bytes": 96,
+        "sha256": "562dc63998e34543ae26df2cc3e2b8f4b054f680013c6c93aad38029f8d14c5b"
+      },
+      {
+        "path": "verifier.log",
+        "bytes": 469,
+        "sha256": "6b711d5ec9988f5e9ae3f633e4c5011f4222afe18ca82d682f6dc4848e767c5f"
+      },
+      {
+        "path": "verifier.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "verify.mjs.syntax-exit.json",
+        "bytes": 64,
+        "sha256": "d319989f36490d9fb9a25f8f0c80dd1290dd259782c21b4b6d94157f852297d3"
+      },
+      {
+        "path": "verify.mjs.syntax.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "verify.mjs.syntax.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "whitespace-first.json",
+        "bytes": 163,
+        "sha256": "715ed6bc3024e87b4418f5ad8ae11fa36e186a69eb3a00fb633faa07a0e45567"
+      },
+      {
+        "path": "whitespace-first.log",
+        "bytes": 1921,
+        "sha256": "d68f77b69823086996871e39fb3fb89a568d96c2dbc0e8b2968dec27997a0698"
+      },
+      {
+        "path": "whitespace-first.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "interpretation": "Exact original metadata/check outputs, including first whitespace refusal. Direct checks/ files are explicit CRLF-to-LF display copies only; no measurement/raw child bytes changed."
+  }
+}

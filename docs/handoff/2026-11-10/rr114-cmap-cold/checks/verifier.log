@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "rawRecords": 46,
+  "rawBytes": 3818369,
+  "children": 6,
+  "guardedSlideOutputs": 648,
+  "archivedFinalDigestEntries": 216,
+  "sourceFilesPerArm": 208,
+  "identicalExternalPackages": 24,
+  "identicalExternalFiles": 1977,
+  "declaredRuntimeDifferences": 3,
+  "startupMeansMs": {
+    "whole": 3461.01095,
+    "oldDemand": 3734.9971,
+    "newDemand": 3417.20125
+  },
+  "roughParityOnly": true,
+  "executedArchivedCode": false,
+  "newTrial": false
+}

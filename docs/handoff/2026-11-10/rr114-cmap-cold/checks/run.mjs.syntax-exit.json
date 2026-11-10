@@ -1,0 +1,4 @@
+{
+  "command": "node --check run.mjs",
+  "exitCode": 0
+}

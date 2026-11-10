@@ -1,0 +1,17 @@
+{
+  "source": "4d1ffa78440c47d955d9883575d347996325bf40",
+  "path": "docs/handoff/2026-11-09/svg-performance/demand-font-case.mjs",
+  "originalSha256": "8dcf1863803287028ca1d42671d5d43bd409ea39f80757c8459f667ccd80b757",
+  "derivedSha256": "b449589fe33018fffaf389afa068c7dbca6a23c089e42b6fb24e8f10d729e59c",
+  "changes": [
+    "Restrict fixture to36slides",
+    "Replace historical hardcodedsource with explicit parent-bound fullSHA",
+    "Describe current three-arm comparison",
+    "Require explicit runtime root/head"
+  ],
+  "input": {
+    "bytes": 98976,
+    "sha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599"
+  },
+  "measurements": "Original rendering/GC/storage/timing code unchanged; first+two warm; only last SVG batch retained as before. Complete per-run slide SHA guards; no inference of a universal/mobile/cloud result."
+}

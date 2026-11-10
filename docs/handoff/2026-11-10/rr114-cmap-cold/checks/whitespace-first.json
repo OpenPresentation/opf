@@ -1,0 +1,5 @@
+{
+  "expected": "original direct metadata CRLF retained before explicit normalized display copies",
+  "command": "git diff --cached --check",
+  "status": 2
+}

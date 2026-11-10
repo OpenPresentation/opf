@@ -1,0 +1,9 @@
+inputs/*.opf.json -text
+*.gz -text
+run.mjs -text
+case.mjs -text
+driver-derivation.json -text
+references/* -text
+statistics.json -text
+review-notes.json -text
+checks/* -text

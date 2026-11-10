@@ -1,0 +1,545 @@
+{
+  "schema": 1,
+  "samples": [
+    {
+      "order": 1,
+      "arm": "baseline",
+      "variant": "whole",
+      "moduleMs": 225.9252,
+      "preparationMs": 328.82949999999994,
+      "firstRenderMs": 3188.111,
+      "preparationPlusFirstMs": 3516.9404999999997,
+      "warmProcessMedianMs": 2073.8360000000002,
+      "preparationCpuMs": 515,
+      "firstRenderCpuMs": 3594,
+      "preparationPlusFirstCpuMs": 4109,
+      "warmCpuMeanMs": 2281.5,
+      "setupRssBytes": 282353664,
+      "renderCumulativeHwmBytes": 511152128,
+      "finalRssBytes": 424665088,
+      "postGcHeapBytes": 104685584,
+      "faces": 131
+    },
+    {
+      "order": 2,
+      "arm": "baseline",
+      "variant": "demand",
+      "moduleMs": 241.4325,
+      "preparationMs": 1931.8176,
+      "firstRenderMs": 1785.8015,
+      "preparationPlusFirstMs": 3717.6191,
+      "warmProcessMedianMs": 1638.2526,
+      "preparationCpuMs": 2672,
+      "firstRenderCpuMs": 2265,
+      "preparationPlusFirstCpuMs": 4937,
+      "warmCpuMeanMs": 1906.5,
+      "setupRssBytes": 275034112,
+      "renderCumulativeHwmBytes": 333877248,
+      "finalRssBytes": 295710720,
+      "postGcHeapBytes": 62218744,
+      "faces": 3
+    },
+    {
+      "order": 3,
+      "arm": "candidate",
+      "variant": "demand",
+      "moduleMs": 225.8817,
+      "preparationMs": 1714.8618999999999,
+      "firstRenderMs": 1691.925,
+      "preparationPlusFirstMs": 3406.7869,
+      "warmProcessMedianMs": 1503.16605,
+      "preparationCpuMs": 2187,
+      "firstRenderCpuMs": 2125,
+      "preparationPlusFirstCpuMs": 4312,
+      "warmCpuMeanMs": 1632.5,
+      "setupRssBytes": 196345856,
+      "renderCumulativeHwmBytes": 320487424,
+      "finalRssBytes": 288243712,
+      "postGcHeapBytes": 55878664,
+      "faces": 3
+    },
+    {
+      "order": 4,
+      "arm": "candidate",
+      "variant": "demand",
+      "moduleMs": 225.2746,
+      "preparationMs": 1718.7056,
+      "firstRenderMs": 1708.9100000000003,
+      "preparationPlusFirstMs": 3427.6156,
+      "warmProcessMedianMs": 1526.09555,
+      "preparationCpuMs": 2437,
+      "firstRenderCpuMs": 2126,
+      "preparationPlusFirstCpuMs": 4563,
+      "warmCpuMeanMs": 1679,
+      "setupRssBytes": 197771264,
+      "renderCumulativeHwmBytes": 320933888,
+      "finalRssBytes": 288796672,
+      "postGcHeapBytes": 55882528,
+      "faces": 3
+    },
+    {
+      "order": 5,
+      "arm": "baseline",
+      "variant": "demand",
+      "moduleMs": 228.5987,
+      "preparationMs": 1945.3346,
+      "firstRenderMs": 1807.0405,
+      "preparationPlusFirstMs": 3752.3751,
+      "warmProcessMedianMs": 1633.0745499999998,
+      "preparationCpuMs": 2781,
+      "firstRenderCpuMs": 2188,
+      "preparationPlusFirstCpuMs": 4969,
+      "warmCpuMeanMs": 1750,
+      "setupRssBytes": 276893696,
+      "renderCumulativeHwmBytes": 335032320,
+      "finalRssBytes": 298496000,
+      "postGcHeapBytes": 62218880,
+      "faces": 3
+    },
+    {
+      "order": 6,
+      "arm": "baseline",
+      "variant": "whole",
+      "moduleMs": 225.75789999999998,
+      "preparationMs": 276.7151,
+      "firstRenderMs": 3128.3662999999997,
+      "preparationPlusFirstMs": 3405.0813999999996,
+      "warmProcessMedianMs": 2046.0307500000001,
+      "preparationCpuMs": 453,
+      "firstRenderCpuMs": 3594,
+      "preparationPlusFirstCpuMs": 4047,
+      "warmCpuMeanMs": 2242,
+      "setupRssBytes": 281346048,
+      "renderCumulativeHwmBytes": 512606208,
+      "finalRssBytes": 426606592,
+      "postGcHeapBytes": 104674016,
+      "faces": 131
+    }
+  ],
+  "arms": {
+    "whole": {
+      "n": 2,
+      "orders": [
+        1,
+        6
+      ],
+      "metrics": {
+        "moduleMs": {
+          "mean": 225.84154999999998,
+          "min": 225.75789999999998,
+          "max": 225.9252,
+          "values": [
+            225.9252,
+            225.75789999999998
+          ]
+        },
+        "preparationMs": {
+          "mean": 302.7723,
+          "min": 276.7151,
+          "max": 328.82949999999994,
+          "values": [
+            328.82949999999994,
+            276.7151
+          ]
+        },
+        "firstRenderMs": {
+          "mean": 3158.23865,
+          "min": 3128.3662999999997,
+          "max": 3188.111,
+          "values": [
+            3188.111,
+            3128.3662999999997
+          ]
+        },
+        "preparationPlusFirstMs": {
+          "mean": 3461.01095,
+          "min": 3405.0813999999996,
+          "max": 3516.9404999999997,
+          "values": [
+            3516.9404999999997,
+            3405.0813999999996
+          ]
+        },
+        "warmProcessMedianMs": {
+          "mean": 2059.933375,
+          "min": 2046.0307500000001,
+          "max": 2073.8360000000002,
+          "values": [
+            2073.8360000000002,
+            2046.0307500000001
+          ]
+        },
+        "preparationCpuMs": {
+          "mean": 484,
+          "min": 453,
+          "max": 515,
+          "values": [
+            515,
+            453
+          ]
+        },
+        "firstRenderCpuMs": {
+          "mean": 3594,
+          "min": 3594,
+          "max": 3594,
+          "values": [
+            3594,
+            3594
+          ]
+        },
+        "preparationPlusFirstCpuMs": {
+          "mean": 4078,
+          "min": 4047,
+          "max": 4109,
+          "values": [
+            4109,
+            4047
+          ]
+        },
+        "warmCpuMeanMs": {
+          "mean": 2261.75,
+          "min": 2242,
+          "max": 2281.5,
+          "values": [
+            2281.5,
+            2242
+          ]
+        },
+        "setupRssBytes": {
+          "mean": 281849856,
+          "min": 281346048,
+          "max": 282353664,
+          "values": [
+            282353664,
+            281346048
+          ]
+        },
+        "renderCumulativeHwmBytes": {
+          "mean": 511879168,
+          "min": 511152128,
+          "max": 512606208,
+          "values": [
+            511152128,
+            512606208
+          ]
+        },
+        "finalRssBytes": {
+          "mean": 425635840,
+          "min": 424665088,
+          "max": 426606592,
+          "values": [
+            424665088,
+            426606592
+          ]
+        },
+        "postGcHeapBytes": {
+          "mean": 104679800,
+          "min": 104674016,
+          "max": 104685584,
+          "values": [
+            104685584,
+            104674016
+          ]
+        },
+        "faces": {
+          "mean": 131,
+          "min": 131,
+          "max": 131,
+          "values": [
+            131,
+            131
+          ]
+        }
+      }
+    },
+    "oldDemand": {
+      "n": 2,
+      "orders": [
+        2,
+        5
+      ],
+      "metrics": {
+        "moduleMs": {
+          "mean": 235.0156,
+          "min": 228.5987,
+          "max": 241.4325,
+          "values": [
+            241.4325,
+            228.5987
+          ]
+        },
+        "preparationMs": {
+          "mean": 1938.5761,
+          "min": 1931.8176,
+          "max": 1945.3346,
+          "values": [
+            1931.8176,
+            1945.3346
+          ]
+        },
+        "firstRenderMs": {
+          "mean": 1796.421,
+          "min": 1785.8015,
+          "max": 1807.0405,
+          "values": [
+            1785.8015,
+            1807.0405
+          ]
+        },
+        "preparationPlusFirstMs": {
+          "mean": 3734.9971,
+          "min": 3717.6191,
+          "max": 3752.3751,
+          "values": [
+            3717.6191,
+            3752.3751
+          ]
+        },
+        "warmProcessMedianMs": {
+          "mean": 1635.663575,
+          "min": 1633.0745499999998,
+          "max": 1638.2526,
+          "values": [
+            1638.2526,
+            1633.0745499999998
+          ]
+        },
+        "preparationCpuMs": {
+          "mean": 2726.5,
+          "min": 2672,
+          "max": 2781,
+          "values": [
+            2672,
+            2781
+          ]
+        },
+        "firstRenderCpuMs": {
+          "mean": 2226.5,
+          "min": 2188,
+          "max": 2265,
+          "values": [
+            2265,
+            2188
+          ]
+        },
+        "preparationPlusFirstCpuMs": {
+          "mean": 4953,
+          "min": 4937,
+          "max": 4969,
+          "values": [
+            4937,
+            4969
+          ]
+        },
+        "warmCpuMeanMs": {
+          "mean": 1828.25,
+          "min": 1750,
+          "max": 1906.5,
+          "values": [
+            1906.5,
+            1750
+          ]
+        },
+        "setupRssBytes": {
+          "mean": 275963904,
+          "min": 275034112,
+          "max": 276893696,
+          "values": [
+            275034112,
+            276893696
+          ]
+        },
+        "renderCumulativeHwmBytes": {
+          "mean": 334454784,
+          "min": 333877248,
+          "max": 335032320,
+          "values": [
+            333877248,
+            335032320
+          ]
+        },
+        "finalRssBytes": {
+          "mean": 297103360,
+          "min": 295710720,
+          "max": 298496000,
+          "values": [
+            295710720,
+            298496000
+          ]
+        },
+        "postGcHeapBytes": {
+          "mean": 62218812,
+          "min": 62218744,
+          "max": 62218880,
+          "values": [
+            62218744,
+            62218880
+          ]
+        },
+        "faces": {
+          "mean": 3,
+          "min": 3,
+          "max": 3,
+          "values": [
+            3,
+            3
+          ]
+        }
+      }
+    },
+    "newDemand": {
+      "n": 2,
+      "orders": [
+        3,
+        4
+      ],
+      "metrics": {
+        "moduleMs": {
+          "mean": 225.57815,
+          "min": 225.2746,
+          "max": 225.8817,
+          "values": [
+            225.8817,
+            225.2746
+          ]
+        },
+        "preparationMs": {
+          "mean": 1716.78375,
+          "min": 1714.8618999999999,
+          "max": 1718.7056,
+          "values": [
+            1714.8618999999999,
+            1718.7056
+          ]
+        },
+        "firstRenderMs": {
+          "mean": 1700.4175,
+          "min": 1691.925,
+          "max": 1708.9100000000003,
+          "values": [
+            1691.925,
+            1708.9100000000003
+          ]
+        },
+        "preparationPlusFirstMs": {
+          "mean": 3417.20125,
+          "min": 3406.7869,
+          "max": 3427.6156,
+          "values": [
+            3406.7869,
+            3427.6156
+          ]
+        },
+        "warmProcessMedianMs": {
+          "mean": 1514.6308,
+          "min": 1503.16605,
+          "max": 1526.09555,
+          "values": [
+            1503.16605,
+            1526.09555
+          ]
+        },
+        "preparationCpuMs": {
+          "mean": 2312,
+          "min": 2187,
+          "max": 2437,
+          "values": [
+            2187,
+            2437
+          ]
+        },
+        "firstRenderCpuMs": {
+          "mean": 2125.5,
+          "min": 2125,
+          "max": 2126,
+          "values": [
+            2125,
+            2126
+          ]
+        },
+        "preparationPlusFirstCpuMs": {
+          "mean": 4437.5,
+          "min": 4312,
+          "max": 4563,
+          "values": [
+            4312,
+            4563
+          ]
+        },
+        "warmCpuMeanMs": {
+          "mean": 1655.75,
+          "min": 1632.5,
+          "max": 1679,
+          "values": [
+            1632.5,
+            1679
+          ]
+        },
+        "setupRssBytes": {
+          "mean": 197058560,
+          "min": 196345856,
+          "max": 197771264,
+          "values": [
+            196345856,
+            197771264
+          ]
+        },
+        "renderCumulativeHwmBytes": {
+          "mean": 320710656,
+          "min": 320487424,
+          "max": 320933888,
+          "values": [
+            320487424,
+            320933888
+          ]
+        },
+        "finalRssBytes": {
+          "mean": 288520192,
+          "min": 288243712,
+          "max": 288796672,
+          "values": [
+            288243712,
+            288796672
+          ]
+        },
+        "postGcHeapBytes": {
+          "mean": 55880596,
+          "min": 55878664,
+          "max": 55882528,
+          "values": [
+            55878664,
+            55882528
+          ]
+        },
+        "faces": {
+          "mean": 3,
+          "min": 3,
+          "max": 3,
+          "values": [
+            3,
+            3
+          ]
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "newVersusOldStartupPercent": -8.508596967853066,
+    "newVersusWholeStartupPercent": -1.2658064546140713,
+    "oldVersusWholeStartupPercent": 7.916361836416619
+  },
+  "limits": {
+    "freshProcesses": 6,
+    "processesPerArm": 2,
+    "renderBatchesPerProcess": 3,
+    "childTimeoutMs": 45000,
+    "retries": 0,
+    "osCacheReset": false,
+    "moduleImportSeparate": true,
+    "onlyFinalBatchRetained": true,
+    "cumulativeHwm": true,
+    "earlierBatchHashVectorsArchived": false,
+    "guardedSlideOutputs": 648,
+    "finalDigestEntries": 216
+  }
+}

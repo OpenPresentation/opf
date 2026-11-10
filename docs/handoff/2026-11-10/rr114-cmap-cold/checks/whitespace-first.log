@@ -1,0 +1,34 @@
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/case.mjs.syntax-exit.json:1: trailing whitespace.
++{
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/case.mjs.syntax-exit.json:2: trailing whitespace.
++  "command": "node --check case.mjs",
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/case.mjs.syntax-exit.json:3: trailing whitespace.
++  "exitCode": 0
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/case.mjs.syntax-exit.json:4: trailing whitespace.
++}
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/run.mjs.syntax-exit.json:1: trailing whitespace.
++{
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/run.mjs.syntax-exit.json:2: trailing whitespace.
++  "command": "node --check run.mjs",
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/run.mjs.syntax-exit.json:3: trailing whitespace.
++  "exitCode": 0
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/run.mjs.syntax-exit.json:4: trailing whitespace.
++}
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/sealing-setup.json:8: trailing whitespace.
++}
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/verifier-exit.json:1: trailing whitespace.
++{
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/verifier-exit.json:2: trailing whitespace.
++  "command": "node docs/handoff/2026-11-10/rr114-cmap-cold/verify.mjs",
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/verifier-exit.json:3: trailing whitespace.
++  "exitCode": 0
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/verifier-exit.json:4: trailing whitespace.
++}
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/verify.mjs.syntax-exit.json:1: trailing whitespace.
++{
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/verify.mjs.syntax-exit.json:2: trailing whitespace.
++  "command": "node --check verify.mjs",
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/verify.mjs.syntax-exit.json:3: trailing whitespace.
++  "exitCode": 0
+docs/handoff/2026-11-10/rr114-cmap-cold/checks/verify.mjs.syntax-exit.json:4: trailing whitespace.
++}

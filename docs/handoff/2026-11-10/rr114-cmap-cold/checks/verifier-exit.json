@@ -1,0 +1,4 @@
+{
+  "command": "node docs/handoff/2026-11-10/rr114-cmap-cold/verify.mjs",
+  "exitCode": 0
+}

@@ -1,0 +1,6 @@
+{
+  "status": 1,
+  "step": "metadata verifier authoring helper",
+  "error": "ReferenceError: assert is not defined",
+  "effect": "Failed before writing verifier; corrected helper import only. No trial, product or archived raw output changed."
+}

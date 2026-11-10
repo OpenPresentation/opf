@@ -1,0 +1,4 @@
+{
+  "command": "node --check case.mjs",
+  "exitCode": 0
+}

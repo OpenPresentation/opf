@@ -1,0 +1,8 @@
+{
+  "trialRerun": false,
+  "buildRerun": false,
+  "failures": [
+    {"step":"seal01","status":1,"code":"EEXIST","path":".gitattributes","detail":"Exclusive-write refusal because the coordinator had already authored scoped input/gzip attributes. Raw archive, manifest and statistics had completed; existing attributes were preserved and appended without rerunning the trial."},
+    {"step":"post-seal inspection01","status":1,"detail":"PowerShell parser rejected Bash-style brace expansion before any command executed. Corrected literal-array read-only inspection succeeded; no result or producer changed."}
+  ]
+}
