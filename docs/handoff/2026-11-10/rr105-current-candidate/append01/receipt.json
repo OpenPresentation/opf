@@ -1,0 +1,128 @@
+{
+  "kind": "REAL_REFERENCE_ATTEMPT01_FAILED_PLUS_METADATA_RECOVERY",
+  "source": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "metadataSource": "b85a86591440ff9b3f48ad32cddd6288174be937",
+  "full59SuiteSha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29",
+  "full59Unchanged": true,
+  "metadata": {
+    "originalExit": 1,
+    "passedSteps": 4,
+    "failedSteps": 1,
+    "typecheck": "SKIPPED_NO_TS",
+    "reason": "known absent tracked painting-Linux.json.gz",
+    "exactRecoveredBytes": 16102,
+    "recoveredCheckTextExit": 0,
+    "composedOnly": true,
+    "producerRebuilt": false
+  },
+  "referenceAttempt": {
+    "status": "FAILED_UNSEALED",
+    "exitCode": 1,
+    "actualAttempts": 1,
+    "retries": 0,
+    "expectedCases": 3,
+    "startedCases": 1,
+    "partialFiles": 4,
+    "expectedRuntimeIdentitySha256": "724c718a2d449b912394f0bf76e828b3e2da72c8f9211881eadc864f2d40e15e",
+    "sourceWidth": 1.5,
+    "serializedEmu": 14288,
+    "currentImportedWidth": 1.5000524934383201,
+    "originalAndSavedLabelsAreModelledImportChecks": true,
+    "actualNativePhases": 0,
+    "titleMutationGeneration": "UNRUN",
+    "remainingTwoCases": "UNRUN",
+    "suiteSeal": false
+  },
+  "archive": {
+    "file": "docs/evidence/rr105-current-candidate-069-20261110/reference-attempt01.zip",
+    "bytes": 102672,
+    "sha256": "e86cdcd0c27d707c484749aceed26e29f0be8c510cfadbfb03914573a520e4eb",
+    "members": [
+      {
+        "path": "actions/reference-native-lines.json",
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "path": "inputs/reference-native-lines.pptx",
+        "bytes": 128812,
+        "sha256": "229f3b9db61aabae4b1b52b8554d125f27649ef8e0a5f74f8b94698087848e08"
+      },
+      {
+        "path": "inspection/reference-native-lines.json",
+        "bytes": 79325,
+        "sha256": "6977d660bc17c64159f5b7ee81977e25c4364028549e7429c6fd5248f9e532cf"
+      },
+      {
+        "path": "sources/reference-native-lines.opf.json",
+        "bytes": 2418,
+        "sha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e"
+      }
+    ]
+  },
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 8330,
+    "sha256": "3a9b2e825f86e17e9de810d72a5ed2281d832564dc2cca5a3f0b833a73dca541",
+    "expandedBytes": 25011,
+    "records": 10,
+    "decodedBytes": 17615
+  },
+  "records": [
+    {
+      "name": "metadata/install.exit.json",
+      "bytes": 489,
+      "sha256": "c3fc691d11b459d9ca7d9a0c8fb7b3f03789f2f9c63054e0ca444af257bb2d38"
+    },
+    {
+      "name": "metadata/install.log",
+      "bytes": 4430,
+      "sha256": "ba409d5da5ca9ffec01dc554b23485c836eb168c1fa217e6f6f7da56814c728b"
+    },
+    {
+      "name": "metadata/mapped.exit.json",
+      "bytes": 511,
+      "sha256": "e65023946a33785f76565c50b0d0017fa362285e9071116ff7ce74dc7bccd33a"
+    },
+    {
+      "name": "metadata/mapped.log",
+      "bytes": 2891,
+      "sha256": "c62c43db778fbcc8608f83402fa9ba404fb365f4e5adaad4de2e18a7da410fd3"
+    },
+    {
+      "name": "metadata/recovered-text.exit.json",
+      "bytes": 607,
+      "sha256": "c845ce8b9f350e1dd9a53de1dbeaea668ef05f3489794be59640822121fcd039"
+    },
+    {
+      "name": "metadata/recovered-text.log",
+      "bytes": 1075,
+      "sha256": "47de784a7706b1ee79db900e6deb40d9fd068c8850f35e86b821abacd6a0a3d3"
+    },
+    {
+      "name": "metadata/text-prerequisite-recovery.json",
+      "bytes": 474,
+      "sha256": "b8c46fbe9c4fc3748b44e209f5ec83d98777926f0a2798178f0416559cea5ccb"
+    },
+    {
+      "name": "reference-attempt01/reference-generate.log",
+      "bytes": 2921,
+      "sha256": "f73f195ec3db3680b34a3e7aa4f44a99d21c6705ad887e5932fc0cf4c0f045fc"
+    },
+    {
+      "name": "reference-attempt01/reference-generate.exit.json",
+      "bytes": 1440,
+      "sha256": "51b9a0626964507f4cf622227fe0f303fff84c46215326d3504289b75d7cdf9b"
+    },
+    {
+      "name": "reference-attempt01/reference-attempt01-width-facts.json",
+      "bytes": 2777,
+      "sha256": "6c6044df29b63fb385196250a476c0d1b0b03d96d7e46aa41b6ccaecffeb4992"
+    }
+  ],
+  "sourceFixApplied": false,
+  "assertionWaived": false,
+  "registryAcceptance": false,
+  "nativeAcceptance": false,
+  "officeRun": false
+}

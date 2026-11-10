@@ -19,3 +19,13 @@ Archives: docs/evidence/rr105-current-candidate-069-20261110/full59.zip (340memb
 raw.json.gz preserves25lossless records /1403424decoded bytes, including actual command logs/exits and old fd13suite manifest as a byte-bound comparison authority. receipt.json binds all archives/members/source/consumer facts. Run node docs/handoff/2026-11-10/rr105-current-candidate/verify.mjs for offline proof, without product imports/rendering/generation/Office. seal.mjs documents original packaging and is not a command to overwrite existing archives. Proof-checkout metadata qualification is separate and will be appended after its actual outcome.
 
 Next separately authorized work: generate the reviewed three-case explicit-reference suite against this same real consumer into a different fresh external root; never append to or change this59suite. No native call is implied. This evidence branch remains OPEN for that separate result append until parent review/freezing.
+
+## Appended metadata and first real reference failure
+
+At proof source b85a8659, the ordinary metadata mapper actually completed4PASS/1RED/typeSKIP in27.0s. Its only failure was the known sparse painting gzip. Exact-HEAD recovery of16,102bytes and ONLY maintained check:text then passed; the original aggregate remains RED and this is composed coverage, not an invented replacement green. All producer files/069HEAD stayed unchanged; its build was not repeated.
+
+The separately authorized REAL three-reference-case generator then ran once against the SAME six-package consumer and failed on current width quantization during the first case. All four partial outputs/logs/runtime/EMU facts are durable in [append01](append01/README.md). It is unsealed: remaining two cases, previews/title-mutant checks and every physical Office phase are UNRUN. No assertion was waived, no fixture changed and no generator retried. Full59suite34139 and all340members remain exact.
+
+Run the append01/verify.mjs entrypoint to replay both the complete full59/tar/roster packet and the preserved failed reference attempt/metadata recovery. It needs no product execution. Subsequent append files received offline member/source checks, script syntax, UTF-8 and whitespace checks; no unchanged full mapper/build was repeated.
+
+This evidence branch is OPEN only for parent-authorized append work. Root owns the canonical-width expectation decision, any NEWsource correction and later real reference generation/native qualification. Current B07/font/physical/registry/release gaps remain open. Neither the53identicalarchive count nor53eligibility count promotes a native result.
