@@ -1,0 +1,254 @@
+{
+  "schema": 1,
+  "neverMerge": true,
+  "diagnosticOnly": true,
+  "nativeAcceptance": false,
+  "officeInvoked": false,
+  "baseMain": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "pureDriverHead": "875945608a214307b527f3cf847524e16a5bb3d2",
+  "pureDriverTree": "82e2b2e8a1034072f95dc06a92f47517ad7add09",
+  "sourceHead": "db64054523051cf4da676cbbb874c728fd3ebf81",
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 352146,
+    "sha256": "bbdf14d9d28bee244810f440f5b1f8d59054acc0cec302377a2a77faac386572",
+    "expandedBytes": 753715,
+    "records": 38,
+    "logicalBytes": 558964
+  },
+  "variant": {
+    "name": "variant05-cs-aptos.pptx",
+    "bytes": 100889,
+    "sha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7"
+  },
+  "records": [
+    {
+      "name": "driver/prepare.mjs",
+      "bytes": 7318,
+      "sha256": "119f4d699489423dba23f72fec0351fbb6a38b57f32a04fed31ee497b4a7f5bb",
+      "source": "C:/opf-work/b07-cs-slot/docs/handoff/2026-11-10/b07-cs-slot-diagnostic/prepare.mjs"
+    },
+    {
+      "name": "driver/zip-tools.mjs",
+      "bytes": 6991,
+      "sha256": "b8196b349751751df8c7f0dff63268433ae1ccd7c4de73655abc8121a043792b",
+      "source": "C:/opf-work/b07-cs-slot/docs/handoff/2026-11-10/b07-cs-slot-diagnostic/zip-tools.mjs"
+    },
+    {
+      "name": "history/launch01-moving-HEAD-refusal/prepare.mjs",
+      "bytes": 6843,
+      "sha256": "b0d106b11885d6791b69fad3096ce8e5dc455f80ad2af0f4e7cac8a586d46fd2",
+      "source": "git:05fcf9ab5d6236e82a78e9e4d9d8ce3ae38ae79f:prepare.mjs"
+    },
+    {
+      "name": "history/launch02-require-import-condition-refusal/prepare.mjs",
+      "bytes": 6889,
+      "sha256": "7e1776a91c5e889db3b0c05cf63c3f3f361f67c52851cf9756d972466e7fcec9",
+      "source": "git:2f77978c9c97cf0970c559415691227fb42ea153:prepare.mjs"
+    },
+    {
+      "name": "history/launch03-wrong-Arabic-oracle-refusal/prepare.mjs",
+      "bytes": 7229,
+      "sha256": "22e2640b00925b49d533f0051ccb5cf523e6f6c70b8b4a2209db60d31fe978f6",
+      "source": "git:da288a3a839e2fc1b74050099e3f9518c03a2892:prepare.mjs"
+    },
+    {
+      "name": "history/launch04-actual-PASS/prepare.mjs",
+      "bytes": 7317,
+      "sha256": "7ced25a109d400871634d5e4de64442657140b68151c197330f10e20c8005ce6",
+      "source": "git:875945608a214307b527f3cf847524e16a5bb3d2:prepare.mjs"
+    },
+    {
+      "name": "history/unexecuted-initial-root-path/prepare.mjs",
+      "bytes": 6846,
+      "sha256": "65c2e0d548a6f668d631e18f9892749beb3f34ad37ab3c0a39e665c6227c6f96",
+      "source": "git:12b6efeede51c4434b0dccb779829d50479ec94f:prepare.mjs"
+    },
+    {
+      "name": "launch/launch01.mjs",
+      "bytes": 1295,
+      "sha256": "dd1912095e8b6294e519ad2071753d3fb036f4b79a4d3f6f51b8fdee096efbc5",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/launch01.mjs"
+    },
+    {
+      "name": "launch/launch02.mjs",
+      "bytes": 1295,
+      "sha256": "5ccea7ea3ee5cc4cc6a65036b42145ade78afdc67c2d379dab46df126fd3ab8d",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/launch02.mjs"
+    },
+    {
+      "name": "launch/launch03.mjs",
+      "bytes": 1295,
+      "sha256": "207ea2c8e0b0d3166a2d8824994275865f7cb40b7fff5c5a6f25d3224cae16e3",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/launch03.mjs"
+    },
+    {
+      "name": "launch/launch04.mjs",
+      "bytes": 1295,
+      "sha256": "ed359c51f486667b633ba4c0230c659532a57a63cebc1516037918569431d49b",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/launch04.mjs"
+    },
+    {
+      "name": "launch/pure-launch01.exit.json",
+      "bytes": 478,
+      "sha256": "75ec0480f3a902a9bafad61f40897e108a34bc225d5935aaa429de9e5ada79a0",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch01.exit.json"
+    },
+    {
+      "name": "launch/pure-launch01.stderr.log",
+      "bytes": 813,
+      "sha256": "897779a2e64b45510bf41174c301f8e7537ffa54ed7589796b780bc0511865ab",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch01.stderr.log"
+    },
+    {
+      "name": "launch/pure-launch01.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch01.stdout.log"
+    },
+    {
+      "name": "launch/pure-launch02.exit.json",
+      "bytes": 478,
+      "sha256": "d91bf0efd6e1d2903d77f9ea8694a75d6de0d25d8f09759cc95dea7f7f4d1a17",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch02.exit.json"
+    },
+    {
+      "name": "launch/pure-launch02.stderr.log",
+      "bytes": 1088,
+      "sha256": "fba8d2c1add8cf7be1d2e5f29b989143791813464c0285a3fee71f24c9415ee7",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch02.stderr.log"
+    },
+    {
+      "name": "launch/pure-launch02.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch02.stdout.log"
+    },
+    {
+      "name": "launch/pure-launch03.exit.json",
+      "bytes": 478,
+      "sha256": "4ed279b834e6cc97222d305b7abc41e83d3fd9020690ec1b61cab2dac9980535",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch03.exit.json"
+    },
+    {
+      "name": "launch/pure-launch03.stderr.log",
+      "bytes": 483,
+      "sha256": "b69ad0790ca54ddae56b3ecd68b399ff9b69d86e89f5b0ceba9d342503a36021",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch03.stderr.log"
+    },
+    {
+      "name": "launch/pure-launch03.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch03.stdout.log"
+    },
+    {
+      "name": "launch/pure-launch04.exit.json",
+      "bytes": 478,
+      "sha256": "dc7159b6ea451bc8896a614d4e580111593edd59a30cdf264ccaa228c93c2bf8",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch04.exit.json"
+    },
+    {
+      "name": "launch/pure-launch04.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch04.stderr.log"
+    },
+    {
+      "name": "launch/pure-launch04.stdout.log",
+      "bytes": 908,
+      "sha256": "a9ee7aada0ec0d676bf33835fc99b132acc36621ec84316fbcdfd5ee2c283a09",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/pure-launch04.stdout.log"
+    },
+    {
+      "name": "pure/french11.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\french11.pptx"
+    },
+    {
+      "name": "pure/original05.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\original05.pptx"
+    },
+    {
+      "name": "pure/report.json",
+      "bytes": 7071,
+      "sha256": "896160f6815c208b75332eff91831831420858e5b4616d9795bc1e84799c1f62",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\report.json"
+    },
+    {
+      "name": "pure/source/docs/programs/font-fidelity-everywhere/script-font-model.md",
+      "bytes": 37199,
+      "sha256": "2afeb3035e464fad061001bbb4a06b0cd8b45c9b3e6c281594752f2eb9577653",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\source\\docs\\programs\\font-fidelity-everywhere\\script-font-model.md"
+    },
+    {
+      "name": "pure/source/packages/pptx/src/safe-typefaces.js",
+      "bytes": 9586,
+      "sha256": "f58516973dd92fec0654c1825cac503c6236519d57f0adea71b39cd3385b581f",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\source\\packages\\pptx\\src\\safe-typefaces.js"
+    },
+    {
+      "name": "pure/source/packages/pptx/src/script-fonts.js",
+      "bytes": 39664,
+      "sha256": "fb8ec017faa680a4c24e19308da0fad7e2cc594d5e6e81889de09be87b3b99aa",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\source\\packages\\pptx\\src\\script-fonts.js"
+    },
+    {
+      "name": "pure/source/packages/pptx/test/script-fonts.mjs",
+      "bytes": 25330,
+      "sha256": "e1739859ea28304af730d575b8c0027d9af57c88d2944fdd9d0714044f711499",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\source\\packages\\pptx\\test\\script-fonts.mjs"
+    },
+    {
+      "name": "pure/source/packages/render/src/script-fonts.js",
+      "bytes": 52028,
+      "sha256": "83f3678471757c6af177a01839bd34fadb4b34b36c226ef88b1e41b761ce285a",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\source\\packages\\render\\src\\script-fonts.js"
+    },
+    {
+      "name": "pure/source/packages/render/test/script-fonts.mjs",
+      "bytes": 19992,
+      "sha256": "e70acdb8014f40108bfbeb1ba8d02f18abdf5b5387853a9e53c4b331408d80d6",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\source\\packages\\render\\test\\script-fonts.mjs"
+    },
+    {
+      "name": "pure/source05.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\source05.opf.json"
+    },
+    {
+      "name": "pure/source11.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\source11.opf.json"
+    },
+    {
+      "name": "pure/variant05-cs-aptos.pptx",
+      "bytes": 100889,
+      "sha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\pure01\\variant05-cs-aptos.pptx"
+    },
+    {
+      "name": "setup/policy-inspect.mjs",
+      "bytes": 1097,
+      "sha256": "27b125775d772be969f5aef08f08db3c7c1da82bc5f802ba33b1e94c31d212c0",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/policy-inspect.mjs"
+    },
+    {
+      "name": "setup/policy-inspect.stdout.json",
+      "bytes": 519,
+      "sha256": "dbcb9a0ca22281c2b11a5d5b019dd2baab7122c66ec6a8266095a2e3be50a5d3",
+      "source": "C:/opf-work/b07-cs-slot/artifacts/policy-inspect.stdout.json"
+    },
+    {
+      "name": "setup/seal01.mjs",
+      "bytes": 3188,
+      "sha256": "589b564e92a580b86cb9afb3e8df30fa84b6fa9856953358dfa077604fff899f",
+      "source": "C:\\opf-work\\b07-cs-slot\\artifacts\\seal01.mjs"
+    }
+  ]
+}

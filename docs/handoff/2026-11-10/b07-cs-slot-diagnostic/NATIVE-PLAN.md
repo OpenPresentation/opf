@@ -1,0 +1,12 @@
+# Proposed closed native route (not implemented or activated)
+
+One original05 CS-slot variant, one slide, exactly two shapes, zero editing actions. Keep the historical at-most-three-shape budget, 16 MiB archive /4096 ZIP parts, default45/hard60 worker cap, owned windowless readonly Open(path,-1,0,0), one SaveCopyAs24, saved reopen, two owned Close and empty-owned Quit. Root remains the sole caller, with a fresh global-zero preflight and separately bounded qualified postflight. No font/UI/Chart/Excel operations, attach/kill/retry or COM cleanup after failure.
+
+Existing bindings do not accept this variant unchanged:
+
+1. c984's original09 composite is hard-bound to original09 and performs LtrRun plus a language setter. Reusing that actionful route would confound this CS-only archive discriminator. Do not retarget or activate it.
+2. The qualified zero-action segment observer (IPC3f/00 followup) already reads the needed current text/font/size/language/frame primitives using the desired two-phase lifecycle and ce92 supervisor. Its worker/wrapper/bootstrap paths and profile label say independent segments, and its closed five-case catalog binds 4/4/5/20/3 shapes. It cannot silently accept this original two-shape archive.
+
+The smallest honest follow-up would mechanically copy that qualified zero-action primitive/ownership/failure-latch/lifecycle code into a separately named single-case CS-slot controller, narrow its shape guard to <=3 with exact2, and bind this variant's complete hash plus original source, shape names/text/frames/fonts/languages and every controller byte. Reuse the exact unchanged ce92 supervisor and exact qualified postflight helpers; keep default-pure/no process query until explicit root activation. The profile name must state original05 CS-slot, never segmentation. No getters or actions need to be added. Any such source preparation requires root decision/review and managed fault/default-pure/admission controls; none has been authored or run in this checkpoint.
+
+A later root observation would compare the unmodified original05 preview/native witnesses with this one-slot variant, preserving all original language and point-size criteria. PNG order/digit size and original/save-reopen text/font/language/frame probes must be reported separately. Physical face identity remains unknown from current primitives. No native result may be inferred from this pure archive proof.
