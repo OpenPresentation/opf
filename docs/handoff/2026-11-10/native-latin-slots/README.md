@@ -1,3 +1,57 @@
+# OWNER HANDOFF — stopped with a known RED
+
+Implementation is stopped at the owner's request. Only handoff packaging followed that request. Do not resume implementation, tests or native work until the owner resumes it.
+
+- Branch: `codex/rr-105-native-latin-slots`; worktree: `C:/opf-work/latin-cs-slots`.
+- Last tested source: `66d934c33a0aa39e9676062a4e8b0bfa2ef751ba`, normally descended from base `863b83b902eaad7a2c614b353c0379f269146441`. Later handoff commits change no package/spec/runtime/test files.
+- Both actual focused runs are retained: `621553dd` and `66d934c3` each **14 PASS / 1 RED**, clean unchanged head/index/source guards. Native body and two-paragraph preconditions pass at66d; its remaining exact-document assertion is RED. Final strict typecheck was **not started** after those failures; no full mapper was launched. Earlier development types/itemizer differentials are separately scoped history.
+- No push or PR was performed by this lane. Root will publish the branch/draft as appropriate. Issue1139 and canonical integration PR1225 remain the coordination/release lane; their current status is not re-polled here.
+- No Office/browser/native run or release was performed by this lane. No live owned job, dev server, browser, REPL or CUA helper remains.
+
+The unresolved native-body import assertion is explicit: the current reader adds `bold:false`, `italic:false`, `underline:false` and emits a separate newline run with Georgia. A bounded owned-scratch baseline comparison completed just before STOP: exact Git863 index/native-body source with the same current dependencies and explicit verified Intos face yields the **same imported document** as66d. That proves this canonicalization is pre-existing for this comparison; it does not justify weakening the preserved assertion or claim a fully historical installed-consumer identity. The new source-slot correction itself passes its other14 groups. The automatic native default-face preparation omission remains a separate OPEN RR-114 product defect, assigned by root to its specialist; the explicit Intos fixture does not solve it.
+
+The new split-span receipts still need genuine current PowerPoint Save/reopen qualification. They canonicalize attribute order while retaining ordered properties/defaults; harmless Office-added defaults may cause conservative refusal and current native parts. No broad normalization or native-acceptance waiver was added. B07 word ordering remains unresolved; this font-family correction does not fix it. D2 stays owner-only.
+
+## Closed receipts and offline replay
+
+All raw closed results are in `raw-records.json.gz`, indexed by `manifest.json`: **231 records / 4,874,587 raw member bytes**. The 1,997,562-byte gzip includes original REDs, setup/type/fixture failures, source guards, actual export archives, the exact differential corpus and the owned reconstructed baseline module copy. It excludes junctions, dependency stores, external vendor links and font files. The baseline module copy is explicitly a source comparison, not a historical consumer/release claim.
+
+Run the built-in-only integrity replay (no product code, fonts, network, Office or extraction):
+
+```powershell
+& 'C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe' docs/handoff/2026-11-10/native-latin-slots/verify.mjs
+```
+
+Important raw paths in the archive (prefixed `qualification/`):
+
+- `review621-focused.{log,exit.json}` and `review66d-focused.{log,exit.json}`: actual terminal1,15 tests,14pass/1fail each.
+- `frozen621-{preflight,postflight}.json` and `frozen66d-{preflight,postflight}.json`: exact source/index/head preservation.
+- `native-body-canonical-comparison.{json,log,exit.json}` and its before/after PPTX archives: actual terminal0, old/new imported documents equal, original authored document still different.
+- `baseline-positive.*`, `native-slots-isolated-02.*`, `attribute-order-before.*`, `itemizer-differential.*`, and all intervening setup/fixture failures: retained original evidence, not relabeled passes.
+
+## Next work after explicit resumption
+
+First resolve the intended native-body canonicalization contract against the preserved source/current documents; leave its failing exact assertion intact until that reviewed decision. Finish the separate automatic native-planning face dependency fix. Then rerun the focused file and strict types on one coherent frozen source, followed by the maintained mapper once. The last inspected maintained plan selected20 rows, including all opf/render/pptx suites and typecheck.
+
+Use the explicit pinned pnpm entry, not the global Roaming shim:
+
+```powershell
+$node = 'C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe'
+$pnpm = 'C:/Users/micha/AppData/Local/npm-cache/_npx/334030cfead2389c/node_modules/pnpm/bin/pnpm.cjs'
+& $node $pnpm build
+& $node scripts/agent-slot.mjs -- $node packages/pptx/test/native-latin-slots.mjs
+& $node $pnpm --filter @openpresentation/opf typecheck
+& $node scripts/check-changed.mjs --plan --base 863b83b902eaad7a2c614b353c0379f269146441
+& $node $pnpm check:changed --base 863b83b902eaad7a2c614b353c0379f269146441
+```
+
+No tolerance/golden/tracker edits, force pushes or pushes to folded leaves. Actual native qualification belongs to root under the maintained guarded controller after source/consumer review. Preserve all existing native and consumer artifacts.
+
+Relevant immutable lanes: folded `hb-clusters` d4bb1a56, `glyph-probe` d6d9bcac, `ref-overlay-save` f5b579a9/1ea, `ref-secondary-axis`0df13baf/876, and corrected `ref-singleton-profile`bdda5943 must never be pushed/edited. `n034-pairs` and its controller remain permanently frozen at db640545; its consumer5f69d264 and published consumer/native proofs6a0848cb/20e897d7 do not qualify this newer font-slot source.
+
+The earlier sections below retain their chronology and scoped pre-STOP statements; this header is the latest state.
+
+---
 # RR-105: native Latin font-slot consistency
 
 Source worktree: C:/opf-work/latin-cs-slots, branch codex/rr-105-native-latin-slots, fresh origin/main normally aligned to 863b83b902eaad7a2c614b353c0379f269146441. Source review, the required coherent gate and actual current native qualification are still pending. No Office, deployment or release was performed.
