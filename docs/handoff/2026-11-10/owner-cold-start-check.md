@@ -30,7 +30,7 @@ The first pass discovers the styles the actual layout draws. The next checks sel
 
 [Diagnostic and limits](https://github.com/OpenPresentation/opf/blob/697100785cc10bb21d03dce13907a926baf64935/docs/handoff/2026-11-09/rr114-cold-start-diagnostic/RESULTS.md).
 
-## Latest optimization check
+## Held layout-replay candidate
 
 A separate candidate attempts to reuse verified analysis work while retaining coverage/fallback checks and exact SVG bytes. In a mirrored 12-process trial, startup was 1.83% faster at 16 slides and 8.00% faster at 36, but 5.58% slower at 48. Both 48-slide candidate repetitions were slower than both controls. The reason for that regression, including whether a replay cap was involved, was not instrumented and remains unknown. All 1,200 SVG checks matched. Post-GC heap was essentially unchanged.
 
@@ -43,3 +43,9 @@ Vetoable decision: keep the established demand-loader memory and warm-render gai
 ## Follow-up source work — November 10
 
 Root and an independent peer reviewed a separate quadratic HarfBuzz cluster-boundary repair and replayed all68 evidence records/13 exact glyph pairs. An unchanged8100-character CLI paginate command that previously timed out at120s now finishes once in91.18s under the same cap. This fixture does not establish how much of the original36-slide473ms penalty it removes. A NEW private Node preparation path is testing cmap coverage without discarded shaping/metrics; it is not yet qualified or merged. The held layout-replay candidate and its unexplained48-slide regression remain held. No new whole-versus-demand timing trial was run for this update.
+
+## Current coverage-only candidate: controlled check completed
+
+The new source-bound six-child36-slide trial completed once with two fresh processes per arm. Preparation plus first SVG means: whole3.461s, old demand3.735s, new demand3.417s. This supports rough first-use parity with whole, not a statistical speed win: one whole sample3.405s beats both new3.407/3.428s. New demand render-recorded process HWM305.64–306.07MiB versus whole487.47–488.86; startup CPU4437.5ms remains above whole4078ms. All648rendered slide outputs are hash-guarded;216final digests retained, no pending faces. Module import is separate, OS cache notreset, n2/oneWindowsmachine and no mobile/cloud/leak claim.
+
+[Exact current results and limits](https://github.com/OpenPresentation/opf/blob/ddbd1aebbfdf8420e2210bc2ab96d42a994de4ea/docs/handoff/2026-11-10/rr114-cmap-cold/RESULTS.md). The privateNodeprobe is reviewed and folded into qualification source57; full0897gate49/51 and active57delta remain separate from release acceptance. Earlier layout-replay candidates stay UNFOLDED.

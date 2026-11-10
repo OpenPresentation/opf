@@ -2,7 +2,18 @@
 
 **v0.33.0 is published. v0.34.0 is unpublished.** The original31 checkbox lines in [issue1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact:21checked/10open. The current-state table below supersedes historical descriptions inside those preserved lines. Every original item remains in scope. [Previous detailed checkpoint](../2026-11-09/coordination-checkpoint.md) and [binding working rules](../2026-11-07/working-rules.md) remain available.
 
-## Latest coordinator checkpoint — November 10, 11:05 UTC
+## Latest coordinator checkpoint — November 10, 12:30 UTC
+
+[Closed49/51gate, cold-start result, current production and actual native findings](release-qualification-checkpoint06/README.md). v0.34 remains unpublished; original31issue lines21checked/10open were freshly verified. Canonical1225 unchanged.
+
+- Actual0897 full gate closed49PASS/twoRED/51steps. Core/CLI/MCP/all294PPTX/editor146/gallery/integration33/typesPASS. Renderer seven golden changes leave128scriptsUNRUN; strict native derivation145test failure has reviewed6681 repair, with maintained148PASS/four sparseRED then only four recovered namesPASS.
+- Source57 now normally folds6681QA and df37 saved-reference importer fix; neverpush folded leaves. One affected24-file delta is live57029; source57 genuine consumer/full59/three-reference generation/pure admission and actual saved-import audit PASS; three actual new native cases remain pending. Do not repeat full51 or mutate producers.
+- Public controlled36trialddbd1: whole3.461s/old demand3.735/new3.417, n2roughparity; new HWM306MiB versuswhole488, CPU startup stillhigher. Original13.6percent trial distinct; no universal/mobile claim.
+- Publiceb362 genuine0897consumer/full59/three-reference generation and exact6/756audit pass. Firstactualreference case0 resolves label gutter/inference visual checks but saved publicimport exposes helper data; records survived and importer rejected inert native-line flags. Fixdf37 passes actualsaved6groups+existing43, no export/schema/tag changes. Other actualcases wait newconsumer.
+- Org148 currentproduction owner2/MCP6/privacy9/provider100percent verified and published5610. B07 c984 published actual0 but unchanged bad text; duplicate viewer blankclaim withdrawn. Independentsegment approach remains source-only feasibility, no newOffice or productchange.
+- DEV exact secret transfer stillheld; no valuescopied. NoCIobserver/golden/release/owner-only action.
+
+## Historical coordinator checkpoint — November 10, 11:05 UTC
 
 [Closed full gate, exact performance repair, site218 merge and current source ownership](release-qualification-checkpoint05/README.md). v0.34 remains unpublished; canonical1225 is unchanged.
 
@@ -85,13 +96,13 @@ Never push a folded leaf. Never force-push. Normally merge origin/main. Evidence
 
 | Original open item | Current truth and next action |
 | --- | --- |
-|B05 final integration|Staging b5 contains all17 original wave2 heads and reviewed1258–1265; package bytes exact1b603. LOCAL reference group b113 and reviewed HB repair d4bb await final performance source/one coherent mapping/push. Canonical1225 unchanged.|
-|B07 native glyphs|05/06/09/10 remainOPEN. Published b35d original09 diagnostic confirms wrong API Latin ordering/ordered continuation with actual global0-to0/30samples. NEW composite1d1 is source-only, Node6/managed484/inherited23PASS, root/peer review and every native step pending.|
-|B17 all033sites|Org033/Gallery033 prior acceptance remains. Recovery218 exact689 own preview accepted and merged148; exact-mainGREEN. Current148 provider/receipt and narrow owner-flow proof in progress. DEV033 exact credential transfer held.|
+|B05 final integration|Current coherent source57 includes reviewed QA6681/importerdf37; original0897 gate49PASS/twoRED. One24-file delta57029 live. Canonical1225 unchanged; close native/goldens/finalCI before release.|
+|B07 native glyphs|05/06/09/10 OPEN. Publishedc984 LtrRun+exact1025 composite actual0 but unchangedbadPNG/bounds; no fix. Prior same-box numeric partition rejected. Independentnativeboxes only source feasibility, originalUTF16/proofing/fonts/geometry/markers mandatory.|
+|B17 all033sites|Org148 currentproduction2owner/MCP6/privacy9/provider100percent proof5610 accepted narrowly; old20case aggregation kept separate. Gallery033 prior acceptance remains. DEV033 exactcredentialtransferheld.|
 |B20 exact credential transfer|Automatic review still holds striped-fox-33 CONVEX_SERVICE_SECRET and AI_GATEWAY_API_KEY to Data-Advantage/pptx-dev preview. No values read/copied/workaround; build CONVEX_DEPLOY_KEY is not runtime.|
-|B24 final images/goldens|Seven localized-reference raster changes are source-attributed and root visually reviewed against actual canonical images; five new examples also viewed, singleton marker corrected locally. ONE final pinned workflow refresh and renderer126-script tail remain owed after final source; no local hash/tolerance edits.|
-|B25 trackers/bundles|Committed117/863 tracker statuses retained. Twelve declared sparse inputs restored exact, failed font tracker alone now38PASS. MCP actual escaped frame under10MiB with functionality preserved; final coherent bundles remainowed.|
-|B26 combined gate|Original51941PASS/10RED and dc2 terminal47PASS/fourRED remain literal. Current full PPTX293/editor146PASS; renderer126UNRUN. Narrow tracker/QA/CLI repairs pass separately. Final grouped mapping, genuine final consumer/reference/seven/native/SH21/E1/E3/goldens/platform/registry gates remainowed.|
+|B24 final images/goldens|Earlier seven localized-reference canonicalpairs reviewed; current0897ordinarygate again reports7changes but tempdetailsdeleted, so keyidentitynotinferred. Finalpinned workflow/visualreview and128renderer tail remainowed. No manualbaseline/tolerance change.|
+|B25 trackers/bundles|1860declaredinputs recoveredexact for0897; font/gallerytracker/fullMCPpass in49/51gate. Finalsource bundles/MCPresource/registrygate stillowed; no sourcecheck waiver.|
+|B26 combined gate|0897full49PASS/twoRED; all294PPTX/editor146/integration33PASS, renderer128UNRUN. Source57affected delta57029 live. Genuineconsumer0897/full59/3refs publishedeb362; new57 consumer/generation/pure/saved-importPASS, realthreecasespending. Currentreference Saveimportbug fixedfocused, finalnative/SH21/E1/E3/platform/registry/release gates open.|
 |B27 release034|Accepted main/exact-head managed merge/mainverify, Release dryrun then real trusted tag; all7registry identities/provenance/changelogs/release/mcpb/checksum. No release occurred.|
 |B28 all034delivery|Actual034 registry bumps and all3site assets/docs/examples/gallery/MCP/E3 plus builds/NativePreview/service/public/production. Org216/Gallery180 remain future-adoption leaves; no third release assumed.|
 |B31 owner remainders|Chart design and deployment/Preview authority received. Exact held credentials, D2, LibreOffice promotion, Claudeconnector/local.mcpb removal, new logins/DNS/account-plan/visibility changes remain owner-only.|
