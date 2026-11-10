@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "neverMerge": true,
+  "diagnosticOnly": true,
+  "caseId": "proofing-character-bounds-original09",
+  "baseWorkerRevision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+  "baseWorkerFiles": [
+    {
+      "path": "test/native-furniture-control.ps1",
+      "bytes": 81652,
+      "sha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9"
+    },
+    {
+      "path": "test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "test/native-furniture-harness-check.ps1",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "test/fixtures/sh25-native-circle-observations.json",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    }
+  ],
+  "workerPackage": "tools/rr105-character-bounds/worker-package",
+  "workerFiles": [
+    {
+      "path": "test/native-furniture-control.ps1",
+      "bytes": 90059,
+      "sha256": "d460945c9cb82f8ddcf101438c625c8d7e991167882e35286aa930070524180d"
+    },
+    {
+      "path": "test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "test/native-furniture-harness-check.ps1",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "test/fixtures/sh25-native-circle-observations.json",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    }
+  ],
+  "references": [
+    {
+      "path": "references/original09.pptx.gz",
+      "bytes": 72471,
+      "sha256": "3d91bd0a042595cd3ad7c7233012bc73b37ee3a33a39b844f33da813ec89068c",
+      "expandedBytes": 101027,
+      "expandedSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "references/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "references/sealed-cli-preview.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "references/empty.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "references/base-worker.ps1.gz",
+      "bytes": 19222,
+      "sha256": "51d0402f73e14b5686267d29457c6b7bdfa7ffdc773ff2a756f5a163235f0774",
+      "expandedBytes": 81652,
+      "expandedSha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9"
+    }
+  ],
+  "originalExporter": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "originalArchiveSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+  "originalArchiveBytes": 101027,
+  "originalZipParts": 147,
+  "controllerRevision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "controllerFile": {
+    "path": "scripts/native-acceptance/run-windows.ps1",
+    "bytes": 15359,
+    "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+  },
+  "baselineDirectionSuiteSha256": "a9c91a0bd1df36298bd920e3a578e39be5871ea39d9aaf856a036910d97ebf25",
+  "limits": {
+    "slides": 1,
+    "shapes": 3,
+    "actions": 0,
+    "timeoutSeconds": 45,
+    "phases": [
+      "original",
+      "edited",
+      "reopened"
+    ],
+    "characterSamplesPerPhase": 10
+  },
+  "nativeAuthorized": false,
+  "nativeAcceptance": false,
+  "samplePlan": [
+    {
+      "shapeIndex": 2,
+      "shapeId": 3,
+      "name": "OPF list slides.0.items line 0",
+      "positions1Based": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        9
+      ],
+      "expectedAscii": [
+        "I",
+        "t",
+        "e",
+        "m",
+        "1",
+        "C"
+      ]
+    },
+    {
+      "shapeIndex": 3,
+      "shapeId": 4,
+      "name": "OPF list slides.0.items line 1",
+      "positions1Based": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "expectedAscii": [
+        "a",
+        "r",
+        "o",
+        "u"
+      ]
+    }
+  ],
+  "scope": "API character range geometry only; no glyph/font-file/causal/clipping/native-acceptance assertion"
+}
