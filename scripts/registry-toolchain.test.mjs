@@ -29,7 +29,7 @@ test('real installed imports and browser entries stay inside consumer; ancestor 
   const ancestor=path.join(root,'node_modules/@openpresentation/ancestor');mkdirSync(ancestor,{recursive:true});writeFileSync(path.join(ancestor,'package.json'),JSON.stringify({...manifest,name:'@openpresentation/ancestor'}));writeFileSync(path.join(ancestor,'index.js'),'export const leaked=true;');writeFileSync(path.join(ancestor,'browser.js'),'export const leaked=true;');
   await assert.rejects(tools.import('@openpresentation/ancestor'),/outside the installed consumer/);
   assert.throws(()=>onResolve({path:'@openpresentation/ancestor'}),/outside the installed consumer/);
-  const escape=(name,target)=>{
+  const linkOutsideConsumer=(name,target)=>{
    const entry=path.join(installed,name);rmSync(entry);
    // Windows directory junctions need no file-symlink privilege. The same final containment guards must refuse them.
    // POSIX retains the actual file-symlink cases; the Windows nested control also resolves an existing JavaScript file.
@@ -39,11 +39,11 @@ test('real installed imports and browser entries stay inside consumer; ancestor 
     assert.throws(()=>registryFile(modules,pathToFileURL(file)),/outside the installed consumer/);
    }
   };
-  escape('exact-source.js','index.js');
+  linkOutsideConsumer('exact-source.js','index.js');
   assert.throws(()=>fallback({path:'@openpresentation/opf-editor/exact-source'}),/outside the installed consumer/);
-  escape('browser.js','browser.js');
+  linkOutsideConsumer('browser.js','browser.js');
   assert.throws(()=>onResolve({path:'@openpresentation/probe'}),/outside the installed consumer/);
-  escape('index.js','index.js');
+  linkOutsideConsumer('index.js','index.js');
   await assert.rejects(tools.import('@openpresentation/probe'),/outside the installed consumer/);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
