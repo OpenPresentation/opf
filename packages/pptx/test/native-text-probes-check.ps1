@@ -9,6 +9,17 @@ function Import-PureDefinitions([string]$Path,[string[]]$Names) {
         Invoke-Expression ($found[0].Extent.Text -replace '^function\s+', 'function script:')
     }
 }
+function Assert-NoMainParameterShadow($Ast) {
+    $names=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach($parameter in $Ast.ParamBlock.Parameters) { [void]$names.Add($parameter.Name.VariablePath.UserPath) }
+    foreach($variable in @($Ast.FindAll({param($node) $node -is [System.Management.Automation.Language.VariableExpressionAst]},$true))) {
+        $name=$variable.VariablePath.UserPath
+        if($name.StartsWith('script:',[StringComparison]::OrdinalIgnoreCase) -and $names.Contains($name.Substring(7))) { throw "Script state shadows a main parameter: $name" }
+    }
+}
+$workerTokens=$null;$workerErrors=$null
+$workerAst=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$workerTokens,[ref]$workerErrors)
+if($workerErrors.Count -ne 0) { throw ($workerErrors | Out-String) }
 Import-PureDefinitions $ScriptPath @('Get-FurnitureSha256','Assert-FurnitureTextProbeIntegrity','Test-Integer','Require-Property','Assert-String','Assert-FurnitureProbeKeys','Test-FurnitureProbeFinite','Read-AndValidateTextProbePlan','Read-FurnitureProbeDescriptor','Read-FurnitureTextProbe','Read-FurnitureState','Read-NativeTags','Read-FurnitureProperty','Invoke-FurnitureCom','Stop-FurnitureLifecycle')
 Import-PureDefinitions $RunnerPath @('Assert-PlainNativePath','Resolve-NativeAsset','Read-NativeTextProbeBinding','Import-NativePlanValidation')
 function Write-FurnitureStage { param($Name,$Status,$Message) $script:events+=@($Name+':'+$Status) }
@@ -54,6 +65,42 @@ try {
     $script:archiveHash=(Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash.ToLowerInvariant()
     $script:planPath=Join-Path $root 'probe.json'
     $plan=New-Plan;Save-Plan $plan;$null=Read-Plan;$passed++
+    # Execute only the actual main parameter block and probe preflight in their own
+    # script scope. A child script is essential: PS parameter names and $script:
+    # state alias case-insensitively inside the worker's script scope.
+    Assert-NoMainParameterShadow $workerAst;$passed++
+    $shadowTokens=$null;$shadowErrors=$null
+    $shadowAst=[System.Management.Automation.Language.Parser]::ParseInput('param([string]$TextProbePlan) $script:tExTpRoBePlAn=$null',[ref]$shadowTokens,[ref]$shadowErrors)
+    if($shadowErrors.Count -ne 0) { throw 'Shadow negative control did not parse' }
+    Reject 'case-insensitive main parameter shadow' { Assert-NoMainParameterShadow $shadowAst }
+    $statements=@($workerAst.EndBlock.Statements)
+    $preflights=@(for($i=1;$i -lt $statements.Count;$i++) {
+        if($statements[$i].Extent.Text.StartsWith('if($null -ne $request.PSObject.Properties[''textProbePlan''])',[StringComparison]::Ordinal)) { $i }
+    })
+    if($preflights.Count -ne 1 -or $statements[$preflights[0]-1] -isnot [System.Management.Automation.Language.AssignmentStatementAst]) { throw 'Missing or ambiguous actual probe preflight' }
+    $preflightPath=Join-Path $root 'probe-preflight.ps1'
+    $preflightRequest=Join-Path $root 'probe-preflight-request.json'
+    $preflightSnapshot=Join-Path $root 'probe-preflight-snapshot.json'
+    [IO.File]::WriteAllBytes($preflightSnapshot,[IO.File]::ReadAllBytes($planPath))
+    $probeHash=Get-FurnitureSha256 $planPath
+    $preflightBinding=[pscustomobject]@{source=[pscustomobject]@{sha256=$script:archiveHash};textProbePlan=[pscustomobject]@{path=$planPath;snapshotPath=$preflightSnapshot;sha256=$probeHash;snapshotSha256=$probeHash}}
+    $preflightSetup=@'
+$ErrorActionPreference='Stop'
+$request=Get-Content -LiteralPath (Join-Path $OutputDirectory 'probe-preflight-request.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$sourceHash=$request.source.sha256;$actions=@()
+'@
+    $preflightResult=@'
+[pscustomobject]@{parameterPath=$TextProbePlan;validatedPlan=$script:validatedTextProbePlan}
+'@
+    $preflightSource=@($workerAst.ParamBlock.Extent.Text,$preflightSetup,$statements[$preflights[0]-1].Extent.Text,$statements[$preflights[0]].Extent.Text,$preflightResult) -join "`n"
+    [IO.File]::WriteAllText($preflightPath,$preflightSource)
+    $preflightBinding | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $preflightRequest -Encoding UTF8
+    $actualPreflight=& $preflightPath -OutputDirectory $root -InputPresentation $inputPath -TextProbePlan $preflightSnapshot -CaptureTextFonts -Worker
+    if(-not [string]::Equals($actualPreflight.parameterPath,$preflightSnapshot,[StringComparison]::Ordinal) -or $null -eq $actualPreflight.validatedPlan -or $actualPreflight.validatedPlan.archiveSha256 -cne $script:archiveHash -or $actualPreflight.validatedPlan.targets.Count -ne 1) { throw 'Actual main preflight lost the CLI path or validated state' };$passed++
+    Reject 'actual main preflight wrong snapshot path' { $null=& $preflightPath -OutputDirectory $root -InputPresentation $inputPath -TextProbePlan $planPath -CaptureTextFonts -Worker }
+    $preflightBinding.textProbePlan.snapshotSha256='0'*64
+    $preflightBinding | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $preflightRequest -Encoding UTF8
+    Reject 'actual main preflight wrong snapshot hash' { $null=& $preflightPath -OutputDirectory $root -InputPresentation $inputPath -TextProbePlan $preflightSnapshot -CaptureTextFonts -Worker }
     if($null -ne (Read-AndValidateTextProbePlan '' 'ignored' $false @())) { throw 'Disabled probe changed default scope' };$passed++
     foreach($mode in @('wrong-archive','unknown','empty-targets','too-many-targets','duplicate-id','duplicate-name','bad-slide','bad-shape','bad-range','wrong-utf16','overlap','too-many-ranges','too-many-units','nonfinite-style','wrong-style-flag','unknown-style')) {
         $plan=New-Plan
@@ -114,7 +161,7 @@ try {
     function Read-FurnitureSeriesNameState { return ,@() }
     $script:CaptureTextFonts=$false;$script:ReadOnlySurvey=$false;$script:actions=@()
     $namePlan=New-Plan;$namePlan.targets[0].shapeName=[string][char]0xE9
-    $script:textProbePlan=$namePlan;$script:probeMockShape=New-Shape
+    $script:validatedTextProbePlan=$namePlan;$script:probeMockShape=New-Shape
     $script:probeMockShape | Add-Member -NotePropertyMembers @{Id=3;Name=('e'+[char]0x301);Type=17;Left=0;Top=0;Width=100;Height=40;Rotation=0;HasTextFrame=-1;AlternativeText='';Tags=[pscustomobject]@{Count=0}}
     $shapes=[pscustomobject]@{Count=1};$shapes | Add-Member ScriptMethod Item {param($index) return $script:probeMockShape}
     $script:probeMockSlide=[pscustomobject]@{SlideID=1;Name='mock';Tags=[pscustomobject]@{Count=0};Shapes=$shapes}
@@ -123,7 +170,7 @@ try {
     $slides=[pscustomobject]@{Count=1};$slides | Add-Member ScriptMethod Item {param($index) return $script:probeMockSlide}
     $presentation=[pscustomobject]@{Slides=$slides}
     Reject 'canonically equivalent native shape name is stale' { $null=Read-FurnitureState $presentation 'ordinal-shape' } $true
-    $script:textProbePlan=$null
+    $script:validatedTextProbePlan=$null
     $distinct=New-Plan;$other=(New-Plan).targets[0];$distinct.targets[0].shapeName=[string][char]0xE9;$other.shapeName='e'+[char]0x301;$other.shapeId=4;$distinct.targets+=@($other);Save-Plan $distinct;$null=Read-Plan;$passed++
     $fontTarget=(New-Plan).targets[0];$fontTarget.ranges[0].style.name=[string][char]0xE9;$shape=New-Shape;$shape.TextFrame.TextRange.Font.Name='e'+[char]0x301
     Reset-Probe;$fontResult=Read-FurnitureTextProbe $shape $fontTarget 'ordinal-font'
