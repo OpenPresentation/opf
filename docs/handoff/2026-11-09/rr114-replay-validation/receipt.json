@@ -1,0 +1,67 @@
+{
+  "source": "23e579ac18d6a12506eefde0a5caa7cf0c50a4dd",
+  "sourceTree": "2d95023565e075ab2095db99c66bc8d4e1b63639",
+  "base": "3360d18d0c0366b90ed0a746479097923b4acde3",
+  "records": 27,
+  "rawBytes": 323948,
+  "compressedBytes": 96889,
+  "archiveSha256": "a26959d6349f2ad981077cc3dd52fe406a1aafca4bf286bf68ee20d15667d4b3",
+  "bindings": [
+    {
+      "file": "packages/render/src/font-preparation-replay.js",
+      "sha256": "c9a3226bdb90c0bd7e9c06d8fd94d6ae83b1eb1736843395c669ca4168fa0ffb"
+    },
+    {
+      "file": "packages/render/src/font-demand.js",
+      "sha256": "b909a71f3a88099be6f040277689ce6321593a3263676261022a03ce155d66a9"
+    },
+    {
+      "file": "packages/render/src/lazy-fonts.js",
+      "sha256": "685da6dca08eb8964fe3ed69046bda2b042960580aedee453a1a3c24b24b0e43"
+    },
+    {
+      "file": "packages/render/src/font-preparation-context.js",
+      "sha256": "e932dafb28742997df6bd727e02e7349508edc595108184a44884a86ffff6ba1"
+    },
+    {
+      "file": "packages/render/test/node-demand-replay.mjs",
+      "sha256": "b2bef6873b34d8cc2829c7d66887d92600b78ea67f56ab91751dada2a86bd607"
+    },
+    {
+      "file": "packages/render/test/node-demand-fonts.mjs",
+      "sha256": "b632ca398434f4f72ed4c5fc4a3f45c9d75da8fd3501341a97a72bc295cfe4d4"
+    },
+    {
+      "file": "packages/render/test/node-demand-font-failures.mjs",
+      "sha256": "230491e66a8dfb6a40c71a6bed60e69a57ecce33686327de7af558e501b97bbd"
+    },
+    {
+      "file": "packages/pptx/test/node-demand-native-fallback.mjs",
+      "sha256": "13d3224faf1d665400db87e80eef98e412741719a0125d29f94a70c861d41c9f"
+    },
+    {
+      "file": "packages/render/test/lazy-fonts.mjs",
+      "sha256": "9a0c7a843a966ec509b5067cb2095ec342d89659d136786330c64791377fc06c"
+    },
+    {
+      "file": "packages/render/test/font-analysis-incremental.mjs",
+      "sha256": "1794d011411e1282b4c7947783d267f72ead5a9ca9a5c42f97b13059f3810507"
+    }
+  ],
+  "tests": {
+    "focused": 33,
+    "demandAndFault": 14,
+    "nativeXml": 7,
+    "lazyResolutions": 558,
+    "syntaxFiles": 337
+  },
+  "setupRefusals": [
+    "Root Biome intentionally ignores renderer source: no files processed; package-owned syntax check passes.",
+    "First attempted native-neighbor path was absent; corrected to packages/pptx/test/node-demand-native-fallback.mjs before execution."
+  ],
+  "limitations": [
+    "No performance run on this source.",
+    "No new tests or validation-copy oracle; existing behavioral suite reused.",
+    "No aggregate mapped gate, CI, Office, goldens or release."
+  ]
+}
