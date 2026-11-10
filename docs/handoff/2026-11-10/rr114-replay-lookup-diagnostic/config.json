@@ -1,0 +1,913 @@
+{
+  "schema": 1,
+  "scope": "NON-TIMED deterministic counters only; no performance results",
+  "runtime": {
+    "root": "C:/opf-work/replay-fast",
+    "head": "bcc7d76d7eeeca8cd6102ef6a54a27fd9d4cce38",
+    "sourceRevision": "23e579ac18d6a12506eefde0a5caa7cf0c50a4dd",
+    "module": "packages/render/dist/font-preparation-replay.js",
+    "sourceModule": "packages/render/src/font-preparation-replay.js",
+    "bytes": 13331,
+    "sha256": "c9a3226bdb90c0bd7e9c06d8fd94d6ae83b1eb1736843395c669ca4168fa0ffb"
+  },
+  "inputs": {
+    "root": "C:/opf-work/perf-svg/docs/handoff/2026-11-09/svg-performance/inputs",
+    "names": {
+      "16": "original-16.opf.json",
+      "36": "extended-36.opf.json"
+    }
+  },
+  "limits": {
+    "children": 2,
+    "timeoutMs": 45000,
+    "maxCalls": 10000000,
+    "maxKeyUtf16": 65536,
+    "maxRetainedKeys": 5
+  },
+  "oracles": [
+    {
+      "size": 16,
+      "file": "oracle-16.json",
+      "sha256": "776ced0e262366ed8c11299391ebd04f9aa2c87bf916a3c2fc41e60a828218b8"
+    },
+    {
+      "size": 36,
+      "file": "oracle-36.json",
+      "sha256": "033949e9d2913d500c07ce3ea49c6885f5ae6440f0893832a9c1c18016b9cbd7"
+    }
+  ],
+  "formal03Preflight": {
+    "sourceFile": "C:/opf-work/replay-perf/artifacts/replay-validation-preflight-01.json",
+    "sha256": "769e77431afb08e5877c6a05e7ce0db33ceb81965050b0426bd7b714e6b32a65",
+    "node": "v24.20.0",
+    "nodeExecutable": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+    "nodeExecutableSha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5",
+    "runtime": {
+      "root": "C:/opf-work/replay-fast",
+      "head": "bcc7d76d7eeeca8cd6102ef6a54a27fd9d4cce38",
+      "runtime": "23e579ac18d6a12506eefde0a5caa7cf0c50a4dd",
+      "tree": "ddaf9c7eba43312382339636a5b21ea46cf51483",
+      "runtimeTree": "2d95023565e075ab2095db99c66bc8d4e1b63639",
+      "lockSha256": "0448f92e9822c8532279a5f56a9066f52ef147b4dad5320e1bbc050d7447c0e1",
+      "workspaceSha256": "a4c126fc53ef833e4b5d36e373efe8c6138b8a98b04fb2b079536f97ade693b1",
+      "backendAssets": [
+        {
+          "specifier": "harfbuzzjs/dist/harfbuzz-subset.wasm",
+          "file": "node_modules/.pnpm/harfbuzzjs@1.6.4/node_modules/harfbuzzjs/dist/harfbuzz-subset.wasm",
+          "bytes": 683531,
+          "sha256": "62415fe6bad92ef16f3e5d2dbed6c66a4adec7f5a59c6d27084811c92cce1ba5"
+        },
+        {
+          "specifier": "harfbuzzjs/dist/harfbuzz.wasm",
+          "file": "node_modules/.pnpm/harfbuzzjs@1.6.4/node_modules/harfbuzzjs/dist/harfbuzz.wasm",
+          "bytes": 444394,
+          "sha256": "6eeed8e1bc9ad7773038e48ff8f9e07e0ad228572c594b45e5357e9c2f7a0b2e"
+        }
+      ],
+      "copies": [
+        {
+          "file": "fonts-node.js",
+          "bytes": 26164,
+          "sha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+        },
+        {
+          "file": "font-demand.js",
+          "bytes": 20695,
+          "sha256": "b909a71f3a88099be6f040277689ce6321593a3263676261022a03ce155d66a9"
+        },
+        {
+          "file": "font-registry.js",
+          "bytes": 34237,
+          "sha256": "63041d9ce5e4aed51726e53bdf2d4624e29d256a903c2ada7eb5a0c63399544a"
+        },
+        {
+          "file": "font-selection.js",
+          "bytes": 309,
+          "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27"
+        },
+        {
+          "file": "font-selection-metadata.js",
+          "bytes": 809,
+          "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da"
+        },
+        {
+          "file": "font-manifest.js",
+          "bytes": 110526,
+          "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+        },
+        {
+          "file": "script-fonts.js",
+          "bytes": 52019,
+          "sha256": "d09a8f9ee1c753c1dcec1cec8e762a9722580bc5925eb3da1b68202c60c04eb4"
+        },
+        {
+          "file": "script-font-pack.js",
+          "bytes": 20650,
+          "sha256": "c3d8016bd2632e40707fbc1c7aa3098d946c463fe74b16a4404d1eb2e21c5d15"
+        },
+        {
+          "file": "lazy-font-list.js",
+          "bytes": 4834,
+          "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266"
+        },
+        {
+          "file": "lazy-fonts.js",
+          "bytes": 28042,
+          "sha256": "685da6dca08eb8964fe3ed69046bda2b042960580aedee453a1a3c24b24b0e43"
+        },
+        {
+          "file": "svg.js",
+          "bytes": 181982,
+          "sha256": "9f26dbdabd6ecd179fa0dcb8a20c233fcb92ab68ea90061cead2a34e7bb14c56"
+        },
+        {
+          "file": "index.js",
+          "bytes": 237,
+          "sha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+        },
+        {
+          "file": "hb-shape.js",
+          "bytes": 7333,
+          "sha256": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2"
+        },
+        {
+          "file": "font-subset.js",
+          "bytes": 9956,
+          "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+        },
+        {
+          "file": "font-preparation-context.js",
+          "bytes": 2423,
+          "sha256": "e932dafb28742997df6bd727e02e7349508edc595108184a44884a86ffff6ba1"
+        },
+        {
+          "file": "font-preparation-replay.js",
+          "bytes": 13331,
+          "sha256": "c9a3226bdb90c0bd7e9c06d8fd94d6ae83b1eb1736843395c669ca4168fa0ffb"
+        }
+      ],
+      "built": [
+        {
+          "file": "packages/javascript/dist/browser.js",
+          "bytes": 4427,
+          "sha256": "876d455cbbb2e7539853f007bd2646b50bc686ab065c7ef2fb61b4cd5252bab6"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-43JWUIGF.js",
+          "bytes": 203,
+          "sha256": "2b229ad6f7d6b7005f4a974dad1538fc515ff0e3ad09bfde1ccfd74be82198f7"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-466I5SCB.js",
+          "bytes": 63844,
+          "sha256": "bf5dfe9d9fda8b9578df7f60e35a827c194f59a8de2783b54697772f2a046d9f"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-4HRWL2TM.js",
+          "bytes": 56369,
+          "sha256": "f9ec9a4ed12e935abaef578dd8336fcadaac187febac96b594ceeede95c7e551"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-7QJUCCFA.js",
+          "bytes": 1394935,
+          "sha256": "0759adf8f082144e00adf8d65e5b3f4c624974b5285c06aa8bde2f553559741d"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-CKXPEP4C.js",
+          "bytes": 44979,
+          "sha256": "1492ece0fd7740aa57f59bac8a619b0c3c4d49aa4348179afb6df9c1f39ee6b6"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-F4VQEACK.js",
+          "bytes": 4798,
+          "sha256": "7571eaec8f682345036588e77ba1687397b4308eadd03c875781a6b38cc765a6"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-FK5XG742.js",
+          "bytes": 157304,
+          "sha256": "e6c95820b6e93c78a61ca11817144781d996dbd77ca7e8c36f39353f53b88fc3"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-FYURTI3W.js",
+          "bytes": 503374,
+          "sha256": "5f68ac5512ff17e813ceb56a90247a3d4e87f0ec9f2280b27eb4ec958ebf6f26"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-IJXKVM4W.js",
+          "bytes": 10945,
+          "sha256": "675f49f7235e76248dab49255a12e1ecb8c9147e116ea8b7e3230da12038f3e0"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-INIMUBSE.js",
+          "bytes": 286,
+          "sha256": "7e65e95fc14a6d806c7e0335feb620b07034bc137ada002eb5353dc660550494"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-JBARNYFR.js",
+          "bytes": 776,
+          "sha256": "4a48db67e16a9cc9c607a561c0df043f8ffd1b9139b2773401696c1c7a7854bc"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-JEYWTUQK.js",
+          "bytes": 1853134,
+          "sha256": "a10fccc956d10acef4f3ec90e228a3ba1b113ebfd268387860d6bda915cf943f"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-LSNALPFG.js",
+          "bytes": 36913,
+          "sha256": "d255ef51ba5c2a7cfea2cb8aea2d6a26c83fa4e64ff9a790973e0de4da8e0f48"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-N5BO63LW.js",
+          "bytes": 31311,
+          "sha256": "dad91ffbab7326648fd55e95e6e28f789403f16e2ff4bf8d088ab45966d65b7c"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-NSDIKSKY.js",
+          "bytes": 3008,
+          "sha256": "a7bccb364c4daaac50f4b54cc6cbc6d4d58e23e53d0bbb19a955efaa857e0677"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-NZXTZ2A2.js",
+          "bytes": 455983,
+          "sha256": "28c2372c5e2e719a25ada959af1df799a2a2386f46e7382dd85bab2fa33d5478"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-OLIJRUDC.js",
+          "bytes": 72819,
+          "sha256": "501f646ea25edc8e86b209888e8e1fc3ed225370b98b77ffda220157680ae605"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-PRXZD2II.js",
+          "bytes": 463,
+          "sha256": "46ee4d93f7064a623e4e3203658539c4a48bed40a8e3edef9acf32c1d41a1a66"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-QLR5ZWMU.js",
+          "bytes": 3788,
+          "sha256": "979c454d4cd1baf7141ab3ac91cc3be3d3710f1a8dcdbbd220ef26530a7aa21f"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-R5FLG22B.js",
+          "bytes": 10267,
+          "sha256": "4b2b98806811661fea11e120b2e26e6f49ba86faf28735009f2f360ad3649d9f"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-RYZPBJLB.js",
+          "bytes": 302,
+          "sha256": "648bfbc96d7f5326515b99e812fdfcc90663e86ca78104aa7c2c16946a112747"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-TVAQQT2H.js",
+          "bytes": 5033,
+          "sha256": "0324eb26ab7004e31c27e77b6f8a87019a98ecf9f66536f4c21072d61626b107"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-VLHW6M5F.js",
+          "bytes": 28142,
+          "sha256": "c8dd3a31651ed82462bb14c49c9f5210adce07cc45d24a8263bfd7a5101a4465"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-VSOXFZ2I.js",
+          "bytes": 48416,
+          "sha256": "b69b2478186c59d658bc2adf5fb9386bf6edda7e6ab3f8fcf640a1bb8dd5ade7"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-W4DYDRV2.js",
+          "bytes": 6363,
+          "sha256": "a946040e039d89cc24489d2eb4ed06e95e2eb1962a38a2b0913d3124e4167526"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-XOLSLSGI.js",
+          "bytes": 32288,
+          "sha256": "e37ae9d70850f5ffb6de2e0946374718e7ccd4337ca4e66f56270c30a30d21b9"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-YRGRZJHY.js",
+          "bytes": 15552,
+          "sha256": "0f3087279ba665c5c228806ae43aa4c838c4d88efa720e4ae039de1bf3264273"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-YYT6N7AI.js",
+          "bytes": 267856,
+          "sha256": "02f442c34a80d1bf48776bc704e35649c8e366c09f4ee8a47405598407d9eb06"
+        },
+        {
+          "file": "packages/javascript/dist/chunk-ZYSCX2U2.js",
+          "bytes": 6461,
+          "sha256": "2905664721321f8e07600ac3ccfa70ec72c87ebc579c53102e90eca6f08f44c9"
+        },
+        {
+          "file": "packages/javascript/dist/composition.js",
+          "bytes": 13129,
+          "sha256": "f2740883edb63cb343a2957a5f8aaa1b487511a72c6416767c8fa20746ea0bac"
+        },
+        {
+          "file": "packages/javascript/dist/conversion-4D2V4YQA.js",
+          "bytes": 835,
+          "sha256": "99418b61371fed4b401777abf84b22ec9688af668d29f90e11e216a65f23afd4"
+        },
+        {
+          "file": "packages/javascript/dist/convert.js",
+          "bytes": 61383,
+          "sha256": "36d48f62dec6d1ec43989ea68322adf2fc4b84d9ece685b4d6b50aacea36e8d3"
+        },
+        {
+          "file": "packages/javascript/dist/data.js",
+          "bytes": 443,
+          "sha256": "781adbce470a5d06ace8a0780ddcaf11fce99ea4ebc43d299ee744d5bac7a54b"
+        },
+        {
+          "file": "packages/javascript/dist/deck.js",
+          "bytes": 474,
+          "sha256": "b931a527d85c3759935d067af15013d516802def2746566a729c4c1cdcbd1d86"
+        },
+        {
+          "file": "packages/javascript/dist/diagram-engine-eager.js",
+          "bytes": 360,
+          "sha256": "bdda69c4a470ab218074b33edc5c162b40bd1e664e365271faa15fa1747d6fc3"
+        },
+        {
+          "file": "packages/javascript/dist/diagram-engine-lazy.js",
+          "bytes": 430,
+          "sha256": "21c9b614eaecd2abd1792b607ab8c8b19818641d3626d4be20482ebf179c5ce8"
+        },
+        {
+          "file": "packages/javascript/dist/diagram-plantuml-ZZYMHBHZ.js",
+          "bytes": 87,
+          "sha256": "25f6b1cd4ee537704db65ffdc2d1bf09841ac212d6268ddf4d1576e5b2c068a3"
+        },
+        {
+          "file": "packages/javascript/dist/diff.js",
+          "bytes": 271,
+          "sha256": "a52db91c5cd572cc9fb0e6d80ec6679e8f0cf63e2cea78def24f4075cd412cc6"
+        },
+        {
+          "file": "packages/javascript/dist/docs.js",
+          "bytes": 1925415,
+          "sha256": "81c10af75ff7919995de4451a71f929a6b2db629c99fda3ba6340dacd9790191"
+        },
+        {
+          "file": "packages/javascript/dist/examples.js",
+          "bytes": 9341279,
+          "sha256": "43ee0a66fe90d62a885299fa12f52b42ea4dd1ea0d6eb8a03f190e803fcbc1e3"
+        },
+        {
+          "file": "packages/javascript/dist/font-policy.js",
+          "bytes": 151,
+          "sha256": "80bafd517897185dc55223e253256ed0fdb59ab37dd37aebf54b6b300002ca7e"
+        },
+        {
+          "file": "packages/javascript/dist/format.js",
+          "bytes": 157,
+          "sha256": "e7f5fca8480b785e5ad6a4f9308393baafa1fb0d8a552542d03e3d0c1d8093a0"
+        },
+        {
+          "file": "packages/javascript/dist/ids.js",
+          "bytes": 339,
+          "sha256": "93879d9042358ae69ea9bf0abe4a749041b062677da6a9ccc24f280829e8f7cd"
+        },
+        {
+          "file": "packages/javascript/dist/index.js",
+          "bytes": 5855,
+          "sha256": "45b35d5b9fba6e3b098768df2543491cc3a9b9d89186f7e11c45cd65c429eb49"
+        },
+        {
+          "file": "packages/javascript/dist/markdown.js",
+          "bytes": 390,
+          "sha256": "4a7126a0a475c0b75f84587d57f414146f6a3b56da06fb48d16d422016a7112c"
+        },
+        {
+          "file": "packages/javascript/dist/node-engine.js",
+          "bytes": 4065,
+          "sha256": "0a82ba77e9154408e7078b0d585e4d5c02e6a8d0be7bd4c8315716c554eaa017"
+        },
+        {
+          "file": "packages/javascript/dist/pagination.js",
+          "bytes": 282,
+          "sha256": "1cfcc8180fb5f653d558a347ea677919b0d303cb9371be6b21a586774831b3d4"
+        },
+        {
+          "file": "packages/javascript/dist/patch.js",
+          "bytes": 536,
+          "sha256": "6cd700ccb2829ae82eeb7caa2e5b909c72029ad02cbc408559d1017ea523bdcb"
+        },
+        {
+          "file": "packages/javascript/dist/precompiled.js",
+          "bytes": 231,
+          "sha256": "3896f5fdd2e839c1a3f2242c5221fba5719f00843a14055ba17d1a4cc5e96180"
+        },
+        {
+          "file": "packages/javascript/dist/repo-readme.js",
+          "bytes": 19933,
+          "sha256": "c0a3317bd4cc0adf95a985fee7c2c937b16ce56406354634ef37e1069896b51c"
+        },
+        {
+          "file": "packages/javascript/dist/schema-engine-ajv.js",
+          "bytes": 1179,
+          "sha256": "d227f0a5d518659124da2591e141ad78f07bb6a53b8c34dfb2be28d6fe2d316f"
+        },
+        {
+          "file": "packages/javascript/dist/schema-engine-precompiled.js",
+          "bytes": 131,
+          "sha256": "4adc32ceb1beb6d4b8d3f5b2eee2ab36789318e0eaa78f7804d4c0416e4e293a"
+        },
+        {
+          "file": "packages/javascript/dist/schema.js",
+          "bytes": 396,
+          "sha256": "a2882fb61b36faf3dc8e6169847d448f3c5ec46120f32b82982c2b0b6cca068c"
+        },
+        {
+          "file": "packages/javascript/dist/schemas.js",
+          "bytes": 241,
+          "sha256": "a7106812e530f42d706ed1ccc25ad22ee327303444bfbcc73ea61cf9e4f52c4c"
+        },
+        {
+          "file": "packages/javascript/dist/shape-catalog.js",
+          "bytes": 14977,
+          "sha256": "92e97d7c769114b1d00a56908e91cce2eb8be279a3c9bb5ff561320f7086288c"
+        },
+        {
+          "file": "packages/javascript/dist/shape-engine-eager.js",
+          "bytes": 323,
+          "sha256": "56141eac3331bbd00f6a37c790f4f1b707f4c33ee27c2cc39edd1add2055a788"
+        },
+        {
+          "file": "packages/javascript/dist/shape-engine-lazy.js",
+          "bytes": 308,
+          "sha256": "50e91c640653fd45a180cf9604329ca4407478b22652e10e2c349f19bcc4bb2c"
+        },
+        {
+          "file": "packages/javascript/dist/shape-engine-module-BK7JNEUV.js",
+          "bytes": 308,
+          "sha256": "9085c04cb0378b469ac753ed79c0288f2d41e99bc2d819cfda9c3f9ecb4c0608"
+        },
+        {
+          "file": "packages/javascript/dist/shape-geometry.js",
+          "bytes": 229,
+          "sha256": "eaef14b1f91d6893844e4c05eade8313f5f7283d332401b76ce24e14f861f24a"
+        },
+        {
+          "file": "packages/javascript/dist/source.js",
+          "bytes": 23245,
+          "sha256": "0c4d9f37504805b1d87526300cbb9bd877a624a27c5eddc50cf76a0d18114260"
+        },
+        {
+          "file": "packages/javascript/dist/spec/reference/engine-defaults.json",
+          "bytes": 1341,
+          "sha256": "9faa8e4a2aec0e138d26f603ab6a0f55d7715e8f0bb0792cca2b5476adca9d6f"
+        },
+        {
+          "file": "packages/javascript/dist/spec/reference/engine-vocabularies.json",
+          "bytes": 37175,
+          "sha256": "362f598ee3eabb4b76314dceeee2358f46c1589c39e855f2bc7c8fada4fa2ae4"
+        },
+        {
+          "file": "packages/javascript/dist/spec/reference/font-policy.json",
+          "bytes": 153842,
+          "sha256": "de84a4926670b0423f07e7aea90f7f19e5191a60bd12575f71ebe081b4d0cffd"
+        },
+        {
+          "file": "packages/javascript/dist/spec/reference/font-policy.schema.json",
+          "bytes": 10295,
+          "sha256": "0e5a1132c08e80f561b0734e9eeb28d0238d3bd5481f8c0b69f85c774a64d837"
+        },
+        {
+          "file": "packages/javascript/dist/spec/reference/preset-geometry.json",
+          "bytes": 318701,
+          "sha256": "1b6fdad7c83022df2187e1874313dbfb38db164f5fca7dade842f395aa08b773"
+        },
+        {
+          "file": "packages/javascript/dist/spec/reference/preset-geometry.schema.json",
+          "bytes": 5271,
+          "sha256": "a9e5928d47f4d13a84150fe0148b0c48c15748ab9802d289710624d824efeb9e"
+        },
+        {
+          "file": "packages/javascript/dist/spec/reference/symbol-font-encodings.json",
+          "bytes": 318426,
+          "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d"
+        },
+        {
+          "file": "packages/javascript/dist/spec/reference/symbol-font-encodings.schema.json",
+          "bytes": 7451,
+          "sha256": "a2f27e92b29106fd4c1eb8cc2158618bf1bad0e5b2090fb0830b8e9ec13eb74e"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/audience.schema.json",
+          "bytes": 6240,
+          "sha256": "bdeedc46884063b955a54d61f4647368644cee6eba60f369cf88ac319decc939"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/catalog-index.schema.json",
+          "bytes": 4861,
+          "sha256": "c4249cd003aedb5cf6eb822528ecf9b1fe7853809dd480ae5fcd77beb827221e"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/catalog-manifest.schema.json",
+          "bytes": 3787,
+          "sha256": "e2b1df4de499f9f87b12ff67cc8644c25738e2b108e256c9f6890406a567369d"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/chart-type.schema.json",
+          "bytes": 9736,
+          "sha256": "2a602878e5422ea34f49af6f7bd1da3ce8652b60a06bd9fd304c4aa07360b579"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/color-scheme.schema.json",
+          "bytes": 7408,
+          "sha256": "daaef7a0d1ad6e416ab0aa86f10f9b64c47a442a1560c20d17ef4853ec0df6da"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/finding.schema.json",
+          "bytes": 10374,
+          "sha256": "a3d5b2800fbcba3a47acad73b7565fbec1c701657b7ca6d7651e298eee41e31b"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/font-scheme.schema.json",
+          "bytes": 10211,
+          "sha256": "3c576adeac4d5a39238b9e7be4baa4f566b76cd68851fc54f004a52aa0aea707"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/icon-set.schema.json",
+          "bytes": 4896,
+          "sha256": "3008c5d917ff3f0ec73ba46b609aa987a6399e9121f465b32fbf3a4af635c5df"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/language.schema.json",
+          "bytes": 7329,
+          "sha256": "254da39754e210a2bd4d5b0976fa12af3f8fae51f341273544f8c4ff3c1ef7a3"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/layout-preview-index.schema.json",
+          "bytes": 2563,
+          "sha256": "96e52b4a3caf390bfc3bf73559cfbc460060243e718b101bdae1d6e1363f31b2"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/layout.schema.json",
+          "bytes": 32341,
+          "sha256": "47084e6b0d622f690149ece4cfda9b809f0383ae37971c433a01fbfcef08daab"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/narrative.schema.json",
+          "bytes": 8651,
+          "sha256": "1a40f4ea8f15477dcae349275bfbb1bfd75b27ec663f16e13cc59abdb2cd28b3"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/opf.schema.json",
+          "bytes": 293646,
+          "sha256": "fe1c924543213dadbcae5f1f99c442c1b85f95179e1efbbe2d0acce3cb98359f"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/purpose.schema.json",
+          "bytes": 4191,
+          "sha256": "83f4c3a9d577e658d9d6b4a28a4995068de64c9f77d4899c706005eebecc96d9"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/social-platform.schema.json",
+          "bytes": 5925,
+          "sha256": "f94d4789ab382bd9e4aafecd8bc2aeb94375117e82ff507f5d75e04379a11a00"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/theme.schema.json",
+          "bytes": 10948,
+          "sha256": "7ccc6a5d6155ab5946f81464cee44c3cb51fef76be987c4bcc6ea0fb22befa0e"
+        },
+        {
+          "file": "packages/javascript/dist/spec/schemas/tone.schema.json",
+          "bytes": 5750,
+          "sha256": "7fbbf17e0985dff85606bb9ffdf7776d06e0dac9668f95ac994eeb826808e22b"
+        },
+        {
+          "file": "packages/javascript/dist/spec-files.js",
+          "bytes": 115,
+          "sha256": "36600b703f46fd680b88f63b91bc21f8afe8a401237ffb1848ab29611d9dd7d9"
+        },
+        {
+          "file": "packages/javascript/dist/symbol-font-encodings.js",
+          "bytes": 424031,
+          "sha256": "46bc0d34dc11b68a694055aa8b06899a941cd0331fced2fa56338993e629fb75"
+        },
+        {
+          "file": "packages/javascript/dist/types.js",
+          "bytes": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "file": "packages/javascript/dist/validator.js",
+          "bytes": 385,
+          "sha256": "416543a2582cac8cef378a2d18672f0a9ffbae5a3677d1f2077192b272d68173"
+        },
+        {
+          "file": "packages/javascript/dist/yaml.js",
+          "bytes": 390,
+          "sha256": "63fac22702a39f2d9b71a9d3855ba8fa7ead4e20ef5b6356aab640b1ee9d59b7"
+        },
+        {
+          "file": "packages/gallery/dist/icon-sets/lucide.js",
+          "bytes": 757487,
+          "sha256": "5d05b96f4f6b908a3a115e23b326ed54489a39dec627680e4c3b9884d0d5bbd1"
+        },
+        {
+          "file": "packages/gallery/dist/icon-sets/tabler.js",
+          "bytes": 1700906,
+          "sha256": "f5ba61f1850d2044106fa3ca2c4a8f0efff98fb2805c8602411d795dd2060b3b"
+        },
+        {
+          "file": "packages/gallery/dist/icon-sets.js",
+          "bytes": 645,
+          "sha256": "7cbf177a16dbbc5723313492c5cda76c8dc66d7e8ab02d22b211aa81d0ea1b6c"
+        },
+        {
+          "file": "packages/gallery/dist/index.js",
+          "bytes": 345080,
+          "sha256": "a1a6f50e19e6a9c570ba331d5bb3322d507806658338b27b4b5f55ce21a28cd5"
+        },
+        {
+          "file": "packages/gallery/dist/previews.js",
+          "bytes": 190931,
+          "sha256": "af23f09b8b9cbaf119affe3a86727f0261cc6b6d551f8f928be57674eb6f6014"
+        },
+        {
+          "file": "packages/render/dist/annotations.js",
+          "bytes": 4097,
+          "sha256": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738"
+        },
+        {
+          "file": "packages/render/dist/chart-options.js",
+          "bytes": 10447,
+          "sha256": "cfe252a79fcda709bbbcb41cf988f8fc2ccd324cb5afcab6ecd167268e1d6780"
+        },
+        {
+          "file": "packages/render/dist/charts.js",
+          "bytes": 120869,
+          "sha256": "3363788309602198568df9d0ec353db69a50f84f7bd9d2e8ca4ad07d380bc140"
+        },
+        {
+          "file": "packages/render/dist/color-fonts.js",
+          "bytes": 2435,
+          "sha256": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468"
+        },
+        {
+          "file": "packages/render/dist/converters.js",
+          "bytes": 2679,
+          "sha256": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b"
+        },
+        {
+          "file": "packages/render/dist/deck-runtime.js",
+          "bytes": 23518,
+          "sha256": "f813c3b2a1d5ca7b3f108b1793955008a01e45fc787a9a02b10b065206f12441"
+        },
+        {
+          "file": "packages/render/dist/drawn-faces.js",
+          "bytes": 2865,
+          "sha256": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f"
+        },
+        {
+          "file": "packages/render/dist/effects.js",
+          "bytes": 18498,
+          "sha256": "8e36bbdb90c128f81875046f76e109b4ac7d6aebcb664360085a374540491453"
+        },
+        {
+          "file": "packages/render/dist/element-define.js",
+          "bytes": 314,
+          "sha256": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba"
+        },
+        {
+          "file": "packages/render/dist/element.js",
+          "bytes": 38903,
+          "sha256": "b279575209023ed10aea0731d2ff5cab82164465af2c2f5ed7f126908d55e37b"
+        },
+        {
+          "file": "packages/render/dist/export-browser.js",
+          "bytes": 15997,
+          "sha256": "ad95d100d9cb0af04e605367515283eeac6b755fee365aacc1bc530dd63ac7eb"
+        },
+        {
+          "file": "packages/render/dist/font-compatibility.js",
+          "bytes": 9574,
+          "sha256": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a"
+        },
+        {
+          "file": "packages/render/dist/font-demand.js",
+          "bytes": 20695,
+          "sha256": "b909a71f3a88099be6f040277689ce6321593a3263676261022a03ce155d66a9"
+        },
+        {
+          "file": "packages/render/dist/font-fstype.js",
+          "bytes": 3542,
+          "sha256": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869"
+        },
+        {
+          "file": "packages/render/dist/font-manifest.js",
+          "bytes": 110526,
+          "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+        },
+        {
+          "file": "packages/render/dist/font-preparation-context.js",
+          "bytes": 2423,
+          "sha256": "e932dafb28742997df6bd727e02e7349508edc595108184a44884a86ffff6ba1"
+        },
+        {
+          "file": "packages/render/dist/font-preparation-replay.js",
+          "bytes": 13331,
+          "sha256": "c9a3226bdb90c0bd7e9c06d8fd94d6ae83b1eb1736843395c669ca4168fa0ffb"
+        },
+        {
+          "file": "packages/render/dist/font-registry.js",
+          "bytes": 34237,
+          "sha256": "63041d9ce5e4aed51726e53bdf2d4624e29d256a903c2ada7eb5a0c63399544a"
+        },
+        {
+          "file": "packages/render/dist/font-selection-metadata.js",
+          "bytes": 809,
+          "sha256": "7ce6fc1afe35a2902352484510b702429a8717e17a86e2072d5bad9497f734da"
+        },
+        {
+          "file": "packages/render/dist/font-selection.js",
+          "bytes": 309,
+          "sha256": "e1faa4603b33156507657417d207eb211ead0207291258a64f21ef34d23f2e27"
+        },
+        {
+          "file": "packages/render/dist/font-subset.js",
+          "bytes": 9956,
+          "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+        },
+        {
+          "file": "packages/render/dist/fonts-browser.js",
+          "bytes": 25371,
+          "sha256": "7c96c843ba87fe7db8943455b0d1dcbce8c35e54ad12f11dd6fd5142a20d4917"
+        },
+        {
+          "file": "packages/render/dist/fonts-node.js",
+          "bytes": 26164,
+          "sha256": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8"
+        },
+        {
+          "file": "packages/render/dist/fonts.js",
+          "bytes": 1409,
+          "sha256": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b"
+        },
+        {
+          "file": "packages/render/dist/hb-shape.js",
+          "bytes": 7333,
+          "sha256": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2"
+        },
+        {
+          "file": "packages/render/dist/index.js",
+          "bytes": 237,
+          "sha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+        },
+        {
+          "file": "packages/render/dist/lazy-font-list.js",
+          "bytes": 4834,
+          "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266"
+        },
+        {
+          "file": "packages/render/dist/lazy-fonts.js",
+          "bytes": 28042,
+          "sha256": "685da6dca08eb8964fe3ed69046bda2b042960580aedee453a1a3c24b24b0e43"
+        },
+        {
+          "file": "packages/render/dist/measure-pictures-node.js",
+          "bytes": 1311,
+          "sha256": "2f68f6940bac8a69ef2c154d2b33e73d70d186a04ea8f033447c20e7d7b83052"
+        },
+        {
+          "file": "packages/render/dist/measure-pictures.js",
+          "bytes": 10875,
+          "sha256": "2a61cbaaf490e040aede2ad0d795951c3c5cb91ea683f11e168a46317168474f"
+        },
+        {
+          "file": "packages/render/dist/node-resolve.js",
+          "bytes": 1796,
+          "sha256": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f"
+        },
+        {
+          "file": "packages/render/dist/pdf-fonts.js",
+          "bytes": 16436,
+          "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781"
+        },
+        {
+          "file": "packages/render/dist/pdf-style.js",
+          "bytes": 26153,
+          "sha256": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041"
+        },
+        {
+          "file": "packages/render/dist/pdf-subset.js",
+          "bytes": 8232,
+          "sha256": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1"
+        },
+        {
+          "file": "packages/render/dist/pdf-text.js",
+          "bytes": 17334,
+          "sha256": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758"
+        },
+        {
+          "file": "packages/render/dist/pdf-vector.js",
+          "bytes": 72285,
+          "sha256": "a3b101658fb84a009beab2b7dbe02a115c6a22934a0a2569cdb52a883a8385df"
+        },
+        {
+          "file": "packages/render/dist/pdf-writer.js",
+          "bytes": 6009,
+          "sha256": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6"
+        },
+        {
+          "file": "packages/render/dist/pdf-xml.js",
+          "bytes": 3847,
+          "sha256": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669"
+        },
+        {
+          "file": "packages/render/dist/pdf.js",
+          "bytes": 448,
+          "sha256": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c"
+        },
+        {
+          "file": "packages/render/dist/player.js",
+          "bytes": 42455,
+          "sha256": "a4ba133549e24f7e299056b63dc46131348dccbff69f4b82bc1f5c4f1b576c68"
+        },
+        {
+          "file": "packages/render/dist/png.js",
+          "bytes": 345,
+          "sha256": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5"
+        },
+        {
+          "file": "packages/render/dist/preview-fonts-cli.js",
+          "bytes": 2219,
+          "sha256": "53f540f653d9389074f4a21f0a5897b339be8209a4a8a5b2f6823603b012625c"
+        },
+        {
+          "file": "packages/render/dist/preview-fonts-node.js",
+          "bytes": 7956,
+          "sha256": "e37634fdcd22384d167fd23b25e7573887ef2b297220b61124a9e9c38ff0799c"
+        },
+        {
+          "file": "packages/render/dist/preview-fonts.js",
+          "bytes": 4587,
+          "sha256": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47"
+        },
+        {
+          "file": "packages/render/dist/raster-images.js",
+          "bytes": 5367,
+          "sha256": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303"
+        },
+        {
+          "file": "packages/render/dist/raster-text.js",
+          "bytes": 34635,
+          "sha256": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14"
+        },
+        {
+          "file": "packages/render/dist/raster.js",
+          "bytes": 12058,
+          "sha256": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705"
+        },
+        {
+          "file": "packages/render/dist/script-font-pack.js",
+          "bytes": 20650,
+          "sha256": "c3d8016bd2632e40707fbc1c7aa3098d946c463fe74b16a4404d1eb2e21c5d15"
+        },
+        {
+          "file": "packages/render/dist/script-fonts.js",
+          "bytes": 52019,
+          "sha256": "d09a8f9ee1c753c1dcec1cec8e762a9722580bc5925eb3da1b68202c60c04eb4"
+        },
+        {
+          "file": "packages/render/dist/sha256.js",
+          "bytes": 3035,
+          "sha256": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b"
+        },
+        {
+          "file": "packages/render/dist/shapes.js",
+          "bytes": 25718,
+          "sha256": "f3190b2c8c778e576c6c83ad4a388d284cfc326a368e807b88de1e7546860267"
+        },
+        {
+          "file": "packages/render/dist/slide-sources.js",
+          "bytes": 2976,
+          "sha256": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3"
+        },
+        {
+          "file": "packages/render/dist/svg-internals.js",
+          "bytes": 248,
+          "sha256": "9a99be96460e6b3ed04d1c37b9ca001a67eb705f3e6f115f657cd115d18c35cc"
+        },
+        {
+          "file": "packages/render/dist/svg.js",
+          "bytes": 181982,
+          "sha256": "9f26dbdabd6ecd179fa0dcb8a20c233fcb92ab68ea90061cead2a34e7bb14c56"
+        },
+        {
+          "file": "packages/render/dist/symbol-fonts.js",
+          "bytes": 3986,
+          "sha256": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7"
+        },
+        {
+          "file": "packages/render/dist/text-paths.js",
+          "bytes": 20837,
+          "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da"
+        }
+      ]
+    }
+  }
+}
