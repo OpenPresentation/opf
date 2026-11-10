@@ -1,0 +1,159 @@
+{
+  "sourceSha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc",
+  "originalArchiveSha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+  "variantSha256": "7c4b61ae2421b1611c9ff4c2b0db6b871e2f5896d502f38a42ca796b44824a70",
+  "slideCount": 1,
+  "shapeCount": 4,
+  "shapes": [
+    {
+      "index": 1,
+      "id": 2,
+      "name": "OPF heading slides.0.title line 0",
+      "text": "لغة عربية صريحة",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 40.5,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos Display"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "548640",
+        "cx": "11094720",
+        "cy": "627507"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 43.20000076293945,
+        "width": 873.5999755859375,
+        "height": 49.40999984741211
+      },
+      "runPropertiesSha256": "2eb15f4024468498f9c28dd87cad020706a5c671c99da2a6ae69b8e21d766c59"
+    },
+    {
+      "index": 2,
+      "id": 3,
+      "name": "OPF list slides.0.items line 0",
+      "text": "البند: ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "3627787",
+        "cx": "11094720",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 285.65252685546875,
+        "width": 873.5999755859375,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "da2a5141cd66333c0cb08d7bcf3bca3b78a62c5e63e8b9c4f66d57fcd7f1bf64"
+    },
+    {
+      "index": 3,
+      "id": 5,
+      "name": "RR105 independent native segment OPF list slides.0.items line 0 7:15",
+      "text": "Bonjour ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": [
+            {
+              "typeface": "Arabic Typesetting"
+            }
+          ]
+        }
+      ],
+      "frameEmu": {
+        "x": "9359973",
+        "y": "3627787",
+        "cx": "1262742",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 737.0057373046875,
+        "top": 285.65252685546875,
+        "width": 99.42850494384766,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "21173d068af9aad46da1587a722459fa0ba3648c4eae7140aca2fcf156e33f28"
+    },
+    {
+      "index": 4,
+      "id": 6,
+      "name": "RR105 independent native segment OPF list slides.0.items line 0 15:16",
+      "text": "1",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": [
+            {
+              "typeface": "Arabic Typesetting"
+            }
+          ]
+        }
+      ],
+      "frameEmu": {
+        "x": "10622714",
+        "y": "3627787",
+        "cx": "188258",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 836.4341430664062,
+        "top": 285.65252685546875,
+        "width": 14.823464393615723,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "21173d068af9aad46da1587a722459fa0ba3648c4eae7140aca2fcf156e33f28"
+    }
+  ],
+  "physicalFontIdentity": false,
+  "nativeAcceptance": false
+}

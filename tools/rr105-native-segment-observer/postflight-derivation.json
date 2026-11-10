@@ -1,0 +1,34 @@
+{
+  "baseC3": "c3eb40463fe596256e9091e78bb107f0ec7df212",
+  "qualifiedRevision": "57acc14a61c19cceab26d5bce7b3ce6c6aa745c2",
+  "qualifiedPath": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+  "qualifiedBytes": 19206,
+  "qualifiedSha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3",
+  "baseWrapperSha256": "0ea83545c350752ec1c6f045004ce89071104173bc04458fc2924adabe39f93c",
+  "newWrapperSha256": "f0f0ae0a50366db9649da47b0c0f8133364e60c11fa2f1738a05b08adfecb84c",
+  "exactHelpers": [
+    "Test-ReferenceWitnessPostflightInteger",
+    "Test-ReferenceWitnessPostflightReady",
+    "Invoke-ReferenceWitnessPostflight"
+  ],
+  "integrationChanges": [
+    "Use already-owned execution envelope at identity recheck",
+    "Retain publicImportAcceptance:false supervisor field"
+  ],
+  "unchangedWorker": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+  "unchangedSupervisor": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+  "childTimeoutSeconds": 45,
+  "rootOuterTimeoutSeconds": 90,
+  "policy": {
+    "budgetMilliseconds": 5000,
+    "intervalMilliseconds": 100,
+    "maximumQueries": 51
+  },
+  "officeInvoked": false,
+  "initialSetupRefusal": {
+    "attempt": "policy01",
+    "status": 1,
+    "cause": "JavaScript replacement-string $quote expansion duplicated source at regex end-anchor; fixed by literal slicing, qualified helper bytes unchanged",
+    "nativeInvoked": false
+  }
+}
