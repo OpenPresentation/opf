@@ -92,7 +92,7 @@ const exported = await toPptx(structuredClone(deck), EXPORT);
   const renamed = await read(modify(bytes, entries => text(entries, 'ppt/presentation.xml', xml => xml.replace('name="Intro"', 'name="Opening"'))));
   assert.deepEqual(renamed.deck.slides.map(slide => slide.section), ['Opening', 'Opening', 'Close']);
   assert.deepEqual(renamed.provenance, []);
-  assert.deepEqual(renamed.deck.slides.map(slide => slide.design?.footer?.left?.text ?? renamed.deck.design.footer?.left?.text), ['Intro', 'Intro', '{{slide.section}}'], 'The stale words stay as text; the slide that still agrees keeps the token.');
+  assert.deepEqual(renamed.deck.slides.map(slide => slide.design?.footer?.start?.text ?? renamed.deck.design.footer?.start?.text), ['Intro', 'Intro', '{{slide.section}}'], 'The stale words stay as text; the slide that still agrees keeps the token.');
   const stripped = await read(stripTags(bytes));
   assert.deepEqual(stripped.deck.slides.map(slide => slide.section), ['Intro', 'Intro', 'Close']);
 }

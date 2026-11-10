@@ -95,8 +95,8 @@ try {
     assert.equal(older.design.listBullet, 'image');
     // FA-31: the footer's slide number is a zone `text` with a native field. The published importer reads each slide's current
     // words (the field's cached number) as that slide's own footer text; it does not know the token.
-    assert.equal(older.slides[0].design.footer.center.text, 'Confidential'); assert.equal(older.slides[0].design.footer.end.text, '1');
-    assert.equal(older.slides[3].design.footer.end.text, '4');
+    assert.equal(older.slides[0].design.footer.center.text, 'Confidential'); assert.equal(older.slides[0].design.footer.right.text, '1');
+    assert.equal(older.slides[3].design.footer.right.text, '4');
     assert.equal(older.slides[0].tag, 'Eyebrow'); assert.equal(older.slides[0].title, 'Cover');
     // The published importer does not know a:buBlip bullets or the logo pictures: the entries import as text lines, the logos as ordinary pictures.
     for (const entry of ['Alpha', 'Beta', 'Gamma']) assert.ok(JSON.stringify(older.slides[2]).includes(entry), `${entry} is kept`);
@@ -104,9 +104,9 @@ try {
     assert.deepEqual(newer.design.fontScheme, {id: 'aptos'});
     assert.equal(newer.design.listBullet, 'image');
     assert.equal(newer.organization.logo, square);
-    assert.deepEqual(newer.design.footer?.right, {text: '{{slide.number}}'}); assert.deepEqual(newer.design.footer?.center, {text: 'Confidential'});
+    assert.deepEqual(newer.design.footer?.end, {text: '{{slide.number}}'}); assert.deepEqual(newer.design.footer?.center, {text: 'Confidential'});
     if (rich) {
-      assert.deepEqual(newer.design.footer?.left, {image: 'var:organization.logo.icon'}); assert.deepEqual(newer.design.header?.right, {image: 'var:organization.logo.icon'});
+      assert.deepEqual(newer.design.footer?.start, {image: 'var:organization.logo.icon'}); assert.deepEqual(newer.design.header?.end, {image: 'var:organization.logo.icon'});
       // RR-72: the logos are the same on every slide, so they are drawn once, on the slide master. The published importer reads slide
       // shapes only and ignores the manifest's `shared` entries: it reads the rest of the footer and no logo, without a complaint.
       assert.ok(!JSON.stringify(older.slides[0].design.footer ?? {}).includes('data:image/png'), 'an older importer does not see the master logo');
@@ -125,7 +125,7 @@ try {
     const older = await published.fromPptx(exported, {onDiagnostic: issue => reports.push(issue)});
     assert.deepEqual(reports.filter(issue => /^invalid-.*provenance$/.test(issue.code)), [], `published ${PUBLISHED} accepts native footer placeholders`);
     // The published importer sees the slide number's cached words, which differ per slide, so each slide has its own footer.
-    assert.deepEqual(older.slides.map(slide => slide.design.footer.end.text), ['1', '2']);
+    assert.deepEqual(older.slides.map(slide => slide.design.footer.right.text), ['1', '2']);
     assert.deepEqual(older.slides.map(slide => slide.design.footer.center.text), ['Native footer', 'Native footer']);
     assert.ok(older.slides.every(slide => !JSON.stringify({...slide, design: undefined}).includes('Native footer')), 'placeholder text is not slide content');
     assert.deepEqual((await fromPptx(exported)).design.footer, nativeFooter.design.footer);

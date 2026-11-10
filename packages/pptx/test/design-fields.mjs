@@ -179,8 +179,8 @@ let checked = 0;
   // Pixel parity with the preview's image part: same fitted rectangle.
   for (const native of natives) assert.ok(previewImages.some(rect => ['x', 'y', 'w', 'h'].every(key => Math.abs(rect[key] - native[key]) <= 1)), 'native logo matches a preview logo rectangle');
   const imported = await fromPptx(bytes);
-  assert.deepEqual(imported.design.footer?.left, {image: 'var:organization.logo.icon'}, 'the footer logo returns as its reference');
-  assert.deepEqual(imported.design.header?.right, {image: 'var:organization.logo.icon', text: 'Confidential'}, 'the header logo and text return');
+  assert.deepEqual(imported.design.footer?.start, {image: 'var:organization.logo.icon'}, 'the footer logo returns as its reference');
+  assert.deepEqual(imported.design.header?.end, {image: 'var:organization.logo.icon', text: 'Confidential'}, 'the header logo and text return');
   assert.ok(!JSON.stringify(imported.design).includes('data:'), 'no data URI image is fabricated');
   assert.deepEqual(imported.organization, organization, 'the logo itself returns on the organization');
   // Without any logo the part reports unresolved-content and nothing is drawn; the reference still round-trips.
