@@ -1,0 +1,13 @@
+# RR-105 exact reference-width qualification
+
+Fresh-main isolated correction normally aligns exact working60fe72ca0994d61525fb3b3c5e53192a74a53e03. The genuine069producer/consumer/full59suite and failed partial reference attempt remain immutable. This source changes qualification only: profile comparator, original-canvas callers and tests; no package/schema/exporter/importer/witness/cap change.
+
+Actual prior evidence c08da0c3 preserved source width1.5→serialized14288EMU→current imported1.5000524934383201. Export/import correctly read current XML paint, while the profile contradicted its own exact exported-width assertion by comparing that value to unprojected1.5. A new immutable regression input copies the exact128812byte actual Office-free failed archive (SHA229f3b9db61aabae4b1b52b8554d125f27649ef8e0a5f74f8b94698087848e08); it is not Office evidence or a changed authored witness.
+
+Genuine before regression at clean46e3d07bcafbe3fa8c3ebca329afc97c880d5d65 ran after pinned offline install/normalbuild and failed1/1 with exactly the two modeled phase width findings. Before any execution, inspection corrected only the newly authored test wrapper to the actual public fromPptx document/diagnostics contract (the earlier test-only snapshot remains in Git). No actual generator ran or retried.
+
+Vetoable decision RR105-CURRENT-EMU: native quantization is representation, not permission to substitute stale authored style. compareReferenceWitnessImports now requires a positive safe-integer ORIGINAL source canvas. Generator supplies its validated original archive.canvas; native output comparison supplies binding.archive.canvas from the sealed original, never edited/saved geometry or observed line.w. Expected width is exactly Math.min(64,round(sourceWidth×9525×scale)/(9525×scale)), scale=min(cx,cy)/6858000, default4/3; nonnumeric/out-of-bound source widths remain mismatches. No epsilon. Data/value/axis/label/color/dash/topology/full-document/diagnostic assertions stay unchanged.
+
+Real-import tests preserve1.5, default4/3, legal0/64 and illegal65 refusal; an actual current-XML helper mutation14288→14289EMU must import as14289/9525 and fail source qualification. A malformed/missing source canvas refuses. Existing mock current-paint construction is projected onto its same inspected source canvas so its original data/drop/edit/duplicate assertions remain faithful; no old assertion is removed.
+
+Source review and normal focused/mapped qualification are pending. No fresh actual reference generation, package publication, Office or native acceptance follows. Root owns later source approval and a new fresh suite02 using the genuine consumer; all original failure artifacts stay preserved.

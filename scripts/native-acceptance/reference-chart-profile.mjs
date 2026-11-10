@@ -783,7 +783,13 @@ export function assertReferenceWitnessSource(archive, source) {
   return true;
 }
 const chartOf = (slide) => slide.chart ?? slide.blocks?.find((b) => b.chart)?.chart;
-export function compareReferenceWitnessImports(source, imported) {
+export function compareReferenceWitnessImports(source, imported, sourceCanvas) {
+  assert.ok(
+    sourceCanvas && ["cx", "cy"].every((key) => Number.isSafeInteger(sourceCanvas[key]) && sourceCanvas[key] > 0),
+    "Explicit verified source canvas is required",
+  );
+  // Callers supply the validated ORIGINAL source archive canvas, never observed line paint or saved geometry.
+  const scale = Math.min(sourceCanvas.cx, sourceCanvas.cy) / 6858000;
   const findings = [];
   for (const phase of ["original", "saved-reopened"]) {
     const result = imported[phase];
@@ -823,12 +829,16 @@ export function compareReferenceWitnessImports(source, imported) {
       for (let j = 0; j < Math.min(refs.length, expected.length); j++) {
         const a = refs[j],
           w = expected[j],
+          width = w.stroke?.width ?? 4 / 3,
+          canonicalWidth = Number.isFinite(width) && width >= 0 && width <= 64
+            ? Math.min(64, Math.round(width * 9525 * scale) / (9525 * scale))
+            : Number.NaN,
           mismatch =
             a.value !== w.value ||
             (a.axis ?? "value") !== (w.axis ?? "value") ||
             a.label !== w.label ||
             (w.label !== undefined && (a.labelPosition ?? "end") !== (w.labelPosition ?? "end")) ||
-            a.stroke?.width !== (w.stroke?.width ?? 4 / 3) ||
+            a.stroke?.width !== canonicalWidth ||
             a.stroke?.dash !== (w.stroke?.dash ?? "dash") ||
             (w.stroke?.color !== undefined &&
               String(a.stroke?.color).toUpperCase() !== String(w.stroke.color).toUpperCase());
@@ -992,7 +1002,7 @@ export async function bindReferenceWitnessObservation({
       consumer: binding.envelope.generation.consumer,
       engines,
     });
-  findings.push(...compareReferenceWitnessImports(binding.source.deck, imported));
+  findings.push(...compareReferenceWitnessImports(binding.source.deck, imported, binding.archive.canvas));
   readReferenceWitnessEnvelope(envelopeFile, expectedEnvelopeSha256, { root });
   return {
     schemaVersion: 1,

@@ -52,3 +52,20 @@ test("source-bound canvas is required and malformed canvas cannot define an expe
   for(const canvas of [undefined,null,{cx:0,cy:6858000},{cx:12192000,cy:NaN},{cx:12192000,cy:6858000.5}])
     assert.throws(()=>compareReferenceWitnessImports(source,phases,canvas),/source canvas/);
 });
+
+test("default width and legal0/64 remain exact while the64bound cannot accept an illegal65source",async()=>{
+  const imported=await original();
+  const defaultChart=imported.document.slides[1].chart??imported.document.slides[1].blocks.find(b=>b.chart).chart;
+  assert.equal(source.slides[1].chart.referenceLines[0].stroke,undefined);
+  assert.equal(defaultChart.referenceLines[0].stroke.width,4/3);
+  for(const width of [0,64]){
+    const wanted=structuredClone(source),current=structuredClone(imported);
+    wanted.slides[0].chart.referenceLines[0].stroke.width=width;
+    charts(current.document).referenceLines[0].stroke.width=width;
+    assert.deepEqual(compareReferenceWitnessImports(wanted,{original:current,"saved-reopened":current},archive.canvas),[]);
+  }
+  const illegal=structuredClone(source),current=structuredClone(imported);
+  illegal.slides[0].chart.referenceLines[0].stroke.width=65;
+  charts(current.document).referenceLines[0].stroke.width=64;
+  assert.ok(compareReferenceWitnessImports(illegal,{original:current,"saved-reopened":current},archive.canvas).some(f=>f.code==="import-reference-value-label-style-differs"));
+});
