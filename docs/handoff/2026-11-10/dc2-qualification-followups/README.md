@@ -23,3 +23,5 @@ node docs/handoff/2026-11-10/dc2-qualification-followups/verify.mjs
 ```
 
 The verifier uses Node built-ins only and executes no archived code. It verifies every lossless record/image, current source objects, all12 blob identities, the actual narrow check exits, exact old/current raster hashes, source-only authored delta and original failure/UNRUN boundaries. An evidence-only metadata check is recorded separately from source/consumer qualification.
+
+Metadata-only maintained `check:changed --base dc2e94f77faeb5789421a3cf7d4cadf2536b1834` at evidence head`7cc41ea1d992b963c81d9c9db7f1b6b4b5eb3448` actually passed: five steps, typecheck skipped by selection, 27.6seconds maintained total. Its own ordinary build is separate from frozen product qualification. The known exact16,102-byte tracked painting input was prepared before this check with a raw HEAD/OID/SHA/no-overwrite/index receipt. No package/full/group suite was rerun.

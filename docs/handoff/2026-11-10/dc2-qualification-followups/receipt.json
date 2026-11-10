@@ -207,5 +207,15 @@
     "sha256": "4fd47b49c9c9b11fcd159b28294f8ec43b6f6a31e31978575f839323d53a057b",
     "records": 12,
     "rawBytes": 1422276
+  },
+  "metadata": {
+    "file": "metadata.json.gz",
+    "bytes": 14090,
+    "sha256": "d2658cb85357679bc8c8014439993d70fb61d8db738cae1b75fe91d99a109411",
+    "records": 13,
+    "rawBytes": 31411,
+    "testedHead": "7cc41ea1d992b963c81d9c9db7f1b6b4b5eb3448",
+    "exitCode": 0,
+    "selection": "5PASS/1typecheckSKIP; metadata-only normalcheck; originalfullaggregate unchanged"
   }
 }
