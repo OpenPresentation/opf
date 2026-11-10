@@ -3912,6 +3912,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // Low moves only the labels to the reserved gutter; it preserves the axis crossing, numeric bounds, data and authored options.
     ...(chartData.type === 'bar' && chartData.barDir === 'bar' ? { catAxisOrientation: 'maxMin', catAxisCrossesAt: 'max', valAxisLabelPos: 'nextTo',
       ...(chartLayout?.valueAxis?.min < 0 ? {catAxisLabelPos: 'low'} : {}) } : {}),
+    // RR-105: explicit negative references keep vertical category names in the preview's lower gutter.
+    // Labels move independently of the unchanged zero crossing, bounds and hidden secondary category axis.
+    ...(layer?.references?.lines?.length && ['category', 'combo'].includes(chartData.spec.family) && chartData.barDir !== 'bar' && chartLayout?.valueAxis?.min < 0 ? {catAxisLabelPos: 'low'} : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
