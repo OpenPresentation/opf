@@ -80,6 +80,7 @@ export async function createNodeDemand(
     selection: undefined,
   };
   registry.fontFiles = loaded.fontFiles;
+  const callerFaceKeys = new Set(registry.describeFaces().map(key));
   const ownedMeasurement = registry.textMeasurement;
   let ownedMeasure = ownedMeasurement.measure, prepareCoverage;
   const coverage = (text,size,style) => {
@@ -334,7 +335,15 @@ export async function createNodeDemand(
                 );
             },
           });
-    const wanted = new Set(drawn.map(key));
+    const wanted = new Set(drawn.map(key)), rasterRequired = new Set();
+    // A selected manifest colour face also needs its effective monochrome raster face.
+    // This is a dependency of the drawn face, not another script/pack or a caller-face substitution.
+    for (const face of universe) {
+      if (!wanted.has(key(face)) || callerFaceKeys.has(key(face)) || !face.pkg.color?.rasterFamily) continue;
+      const companion = pickFace(universe, face.pkg.color.rasterFamily, {fontWeight: face.weight, italic: face.italic}).face;
+      wanted.add(key(companion));
+      rasterRequired.add(companion.id);
+    }
     return {
       scriptAnalysis,
       selection,
@@ -343,11 +352,12 @@ export async function createNodeDemand(
       orderedPackages: packages,
       metadata: { faces, aliases },
       universe,
+      rasterRequired,
       needed: universe.filter(
         (face) =>
           wanted.has(key(face)) &&
           !heldKeys.has(key(face)) &&
-          !skipped.has(face.package),
+          (!skipped.has(face.package) || rasterRequired.has(face.id)),
       ),
     };
   }
@@ -420,12 +430,9 @@ export async function createNodeDemand(
           pkg.faces.push({ ...face, file: face.sourceFile });
         }
         const missing = [],
-          mandatory = selected.filter(
-            (pkg) => plan.mode !== 'auto' || !pkg.scripts,
-          ),
-          optional = selected.filter(
-            (pkg) => plan.mode === 'auto' && pkg.scripts,
-          );
+          required = (pkg) => plan.mode !== 'auto' || !pkg.scripts || pkg.faces.some((face) => plan.rasterRequired.has(face.id)),
+          mandatory = selected.filter(required),
+          optional = selected.filter((pkg) => !required(pkg));
         const batches = await Promise.all([
           loadPackages(mandatory, undefined, {
             what: 'The presentation selected font faces',
@@ -435,7 +442,7 @@ export async function createNodeDemand(
         const extra = {
           entries: batches.flatMap((batch) => batch.entries),
           fontFiles: batches.flatMap((batch) => batch.fontFiles),
-          packages: batches.flatMap((batch) => batch.packages),
+          packages: selected.map((pkg) => pkg.name), // Keep declared selection order across required/optional reads.
         };
         if (extra.entries.length) {
           registry.addFaces(
@@ -457,8 +464,13 @@ export async function createNodeDemand(
           }
         }
         for (const face of plan.needed)
-          if (!missing.some((item) => item.package === face.package))
+          if (!missing.some((item) => item.package === face.package)) {
+            if (plan.rasterRequired.has(face.id)) {
+              skipped.delete(face.package);
+              if (loaded.selection) loaded.selection.notInstalled = loaded.selection.notInstalled.filter((name) => name !== face.package);
+            }
             added.push(publicFace(face));
+          }
         for (const item of missing) {
           skipped.add(item.package);
           if (
@@ -506,8 +518,11 @@ export async function createNodeDemand(
             'No loaded script face covers some drawn characters; the renderer reports missing-glyph for them.',
             onDiagnostic,
           );
-        for (const name of loaded.packages)
+        // Physical reads can complete across several coverage passes. Report this ensure batch
+        // in the declared package order while retaining the already-reported prior-ensure prefix.
+        for (const {name} of plan.orderedPackages)
           if (
+            loaded.packages.includes(name) &&
             (plan.required.has(name) || fallbacks.has(name)) &&
             !loaded.selection.packages.includes(name)
           )
