@@ -6,6 +6,7 @@ import { readBackgroundColor, colorTransforms } from './background.js';
 import { drawingObject } from './background-import.js';
 import { resolveExportColor } from './color-ref.js';
 import { applyComboConstruct, comboFromNative, NATIVE_CHART_ELEMENTS } from './chart-types.js';
+import { isValidFormat } from './format-check.js';
 export const REFERENCE_URI = 'urn:openpresentation:chart-references:v1';
 const URI = REFERENCE_URI,
   TAG = 'OPF_CHART_REFERENCE_V1';
@@ -234,9 +235,18 @@ function authoredBudgetRecord(line) {
   return {written, ...(line.authoredStroke !== undefined ? {stroke: line.authoredStroke} : {})};
 }
 /** Keep the reader's canonical axis/label fields; recover only the authored stroke while native paint is unchanged. */
-function authoredReference(ref, owned, key) {
+function authoredReference(ref, owned, key, report) {
   const unchanged = typeof owned?.written === 'string' && owned.written === key;
-  const stroke = unchanged ? owned.stroke : ref.stroke;
+  // Ownership is untrusted archive metadata. Ask the authoritative shared Line
+  // schema before using its authored style; an outline's richer Stroke schema
+  // would also allow arrowheads/caps that references cannot represent.
+  const valid = !unchanged || owned.stroke === undefined || isValidFormat({slides: [{chart: {
+    type: 'line', data: {columns: ['Category', 'Value'], rows: [['A', 0], ['B', 0]]},
+    referenceLines: [{value: 0, stroke: owned.stroke}],
+  }}]});
+  if (!valid) report?.({code: 'chart-reference-style-uncertain', option: 'referenceLines',
+    message: 'Stored authored reference stroke is not a valid Line; the current native paint was retained.'});
+  const stroke = unchanged && valid ? owned.stroke : ref.stroke;
   return {
     index: ref.index,
     value: ref.value,
@@ -411,6 +421,7 @@ export function readNativeReferences(xml, { scale = 1, colors = {}, report, pars
         },
         h,
         currentPaintKey(styles.get(h.id) ?? e?.ser?.['c:spPr'], colors),
+        report,
       ),
     );
     consumedIds.add(h.id);
@@ -776,6 +787,7 @@ export function importReferenceOverlays(shapes, frames, rels, entries, { scale =
           { index: o.index, value: o.value, axis: o.axis, ...(label ? { label, labelPosition: o.labelPosition } : {}), stroke: paint },
           o,
           currentPaintKey(styles.get(String(line?.['p:nvSpPr']?.['p:cNvPr']?.id)) ?? s, colors),
+          report,
         ),
       );
       for (const m of members) consumed.add(m.shape);

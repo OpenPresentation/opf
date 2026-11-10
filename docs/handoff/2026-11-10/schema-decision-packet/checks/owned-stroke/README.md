@@ -1,0 +1,9 @@
+# Untrusted authored reference style
+
+A real bounded archive probe edits only the global ownership record's `stroke`, leaving native DrawingML, identity, axes, caches and binding untouched. Both untouched line/helper and bar/overlay exports import successfully. All8edited cases (unknownkey, invalidstring, null and negativewidth for each mode) refuse with `invalid-import-opf`: the recovered style bypassed the actual Line schema until final document validation. Exact original/edited archive bytes, findings and reader hashes are sealed in `initial-probe.zip`. The actual pre-guard build was ed51 plus bb1148chart repairs; checkout1a4 is recorded only as checkout identity, not common-runtime qualification.
+
+Root approved a narrow repair2026-11-10: validate recovered authored style with the existing format validator's actual ChartReferenceLine/Line field; on malformed style preserve the valid current native reference/paint and emit `chart-reference-style-uncertain`. Do not discard the reference, consume visible shapes twice, relax native identity/binding/foreign guards or raise limits. Absent/partial/none and ColorRefs still recover only when written native paint matches. A shape outline's richer Stroke schema is intentionally not used.
+
+The new maintained controls include16malformed cases across helper/overlay modes, adding arrays, overflowwidth, unsupporteddash and outline-only arrowheads. They preserve exact data, one canonical reference/full nativepaint, no duplicate shapes and precisely one style diagnostic. Built verification is pending in this initial source snapshot. Positive and current native edit controls remain in the same file.
+
+To replay the original observation, install/build exactbb1148and run `node replay-initial-probe.mjs /path/to/bb1148 /tmp/stroke-probe`. The recipe refuses any other actual reader build by both runtime SHA256 values before exporting. No native application or large-resource operation is used.
