@@ -27,10 +27,10 @@ export function assertB07Output(output,consumer,sourceRepository=repository) {
 }
 
 /** Recheck the maintained test:packed-ecosystem's installed-code receipt; do not duplicate its stage/archive verification. */
-export function readB07PackedProof({consumer,proof,expectedProofSha256}) {
+export function readB07PackedProof({consumer,proof,expectedProofSha256,preparationRepository=repository}) {
   hex(expectedProofSha256);const bytes=fs.readFileSync(proof);assert.equal(digest(bytes),expectedProofSha256,'Packed qualification receipt changed');
   const report=JSON.parse(bytes);assert.equal(report.mode,'candidate-tarballs','Use the maintained unpublished local consumer');
-  assert.equal(fs.realpathSync(path.resolve(repository,report.consumer)),consumer,'Packed receipt names another consumer');
+  assert.equal(fs.realpathSync(path.resolve(preparationRepository,report.consumer)),consumer,'Packed receipt names another consumer');
   const lockFile=path.join(consumer,'package-lock.json');assert.equal(fileIdentity(lockFile).sha256,report.lockSha256);
   const lock=JSON.parse(fs.readFileSync(lockFile)),installed=installedIdentity(consumer);
   const manifestFile=path.join(path.dirname(consumer),'manifest.json'),manifestBytes=fs.readFileSync(manifestFile),manifest=JSON.parse(manifestBytes);
