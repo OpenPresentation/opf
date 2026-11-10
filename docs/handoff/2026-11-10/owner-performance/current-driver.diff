@@ -1,0 +1,184 @@
+--- build.mjs
++++ build-current.mjs
+@@ -1,6 +1,6 @@
+ import fs from 'node:fs';
+ import path from 'node:path';
+-import {fileURLToPath} from 'node:url';
++import {fileURLToPath,pathToFileURL} from 'node:url';
+ import {createRequire} from 'node:module';
+ import {createHash} from 'node:crypto';
+ import {execFileSync} from 'node:child_process';
+@@ -9,7 +9,7 @@
+ const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
+ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+ const abs=file=>path.resolve(root,file).split(path.sep).join('/');
+-const out=path.resolve(root,process.argv.find(arg=>arg.startsWith('--out='))?.slice(6)??'artifacts/review-paired-build-01');
++const out=path.resolve(root,process.argv.find(arg=>arg.startsWith('--out='))?.slice(6)??'artifacts/owner-current-build-01');
+ const relative=path.relative(root,out);if(!relative||relative.startsWith('..')||path.isAbsolute(relative)||fs.existsSync(out))throw Error('Fresh owned output directory required');
+ if(git('diff','--name-only','HEAD','--','packages','spec','pnpm-lock.yaml'))throw Error('Production source must be frozen');
+ fs.mkdirSync(out,{recursive:true});
+@@ -29,10 +29,15 @@
+   virtual.push({name:args.path,bytes:Buffer.byteLength(contents),sha256:hash(contents),source:contents});return{resolveDir:root,contents};
+  });
+ }};
+-const result=await build({entryPoints:[path.join(folder,'browser-entry.mjs')],absWorkingDir:root,bundle:true,platform:'browser',format:'esm',minify:true,write:false,metafile:true,plugins:[plugin],define:{'process.env.NODE_ENV':'"production"'},logLevel:'error'});
++const inputDir=path.resolve(root,process.argv.find(arg=>arg.startsWith('--inputs='))?.slice(9)??'artifacts/owner-performance-inputs');
++const inputManifest=JSON.parse(fs.readFileSync(path.join(folder,'input-manifest.json')));
++const [{validate},{gallery}]=await Promise.all([import(pathToFileURL(abs('packages/javascript/dist/index.js')).href),import(pathToFileURL(abs('packages/gallery/dist/index.js')).href)]);
++const validationInputs=[];
++for(const[name,key]of [['original-16','original'],['extended-36','extended']]){const bytes=fs.readFileSync(path.join(inputDir,name+'.opf.json')),expected=inputManifest[key];if(hash(bytes)!==expected.sha256||bytes.length!==expected.bytes)throw Error('Owner input bytes differ: '+name);const report=validate(JSON.parse(bytes),{only:['format'],catalogs:[gallery]});if(!report.valid)throw Error('Exact owner input fails current format; no implicit projection: '+JSON.stringify(report.findings));validationInputs.push({name,bytes:bytes.length,sha256:hash(bytes),valid:report.valid});}
++const result=await build({entryPoints:[path.join(folder,'current-browser-entry.mjs')],absWorkingDir:root,bundle:true,platform:'browser',format:'esm',minify:true,write:false,metafile:true,plugins:[plugin],define:{'process.env.NODE_ENV':'"production"'},logLevel:'error'});
+ const js=result.outputFiles[0].contents;fs.writeFileSync(path.join(out,'app.js'),js);
+ fs.writeFileSync(path.join(out,'index.html'),'<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="./styles.css"><style>html,body{margin:0;height:100%;width:100%;overflow:hidden}#host{height:100dvh;width:100vw}</style><div id="host"></div><script type="module" src="./app.js"></script>');
+ const inputs=Object.keys(result.metafile.inputs).filter(file=>!file.startsWith('rr117:')).map(file=>{const bytes=fs.readFileSync(path.resolve(root,file));return{path:file,bytes:bytes.length,sha256:hash(bytes)};});
+-const receipt={scope:'BUILT_NOT_MEASURED',source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),node:process.version,bundleBytes:js.length,bundleSha256:hash(js),inputs,virtual,buildDriver:{path:path.relative(root,fileURLToPath(import.meta.url)),sha256:hash(fs.readFileSync(fileURLToPath(import.meta.url)))},control:'Identical frozen candidate bundle in all cases; public panel.invalidate before cold edits, outside primary interval. Wrapper instrumentation only; no product source/dist rewrite.'};
++const receipt={scope:'BUILT_NOT_MEASURED',validationInputs,source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),node:process.version,bundleBytes:js.length,bundleSha256:hash(js),inputs,virtual,buildDriver:{path:path.relative(root,fileURLToPath(import.meta.url)),sha256:hash(fs.readFileSync(fileURLToPath(import.meta.url)))},control:'One frozen current-candidate bundle in six cached cases; complete public cold-oracle reports checked outside intervals. Wrapper instrumentation only; no product source/dist rewrite.'};
+ fs.writeFileSync(path.join(out,'build-receipt.json'),JSON.stringify(receipt,null,2)+'\n');
+ console.log(JSON.stringify({scope:receipt.scope,source:receipt.source,inputs:inputs.length,bundleBytes:js.length,out}));
+--- browser-entry.mjs
++++ current-browser-entry.mjs
+@@ -15,10 +15,10 @@
+ const settle=async()=>{await editor?.whenIdle();await window.__reviewTrial.panels.at(-1)?.whenIdle();await document.fonts.ready;await new Promise(r=>setTimeout(r,0));await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
+ function reset(){window.__reviewTrial.checks=[];state.calls=[];state.continuations=[];state.outputs.clear();state.longTasks=[];state.mutations=0;}
+ function snapshot(){return{reviewChecks:window.__reviewTrial.checks,cache:window.__reviewTrial.checkers.at(-1)?.cache,canvasSvg:document.querySelectorAll('.opf-canvas-preview svg').length,stripSvg:document.querySelectorAll('.opf-thumbs-frame svg').length,sorterSvg:document.querySelectorAll('.opf-ws-sorter .thumbnail svg').length,domNodes:document.querySelectorAll('*').length,svgElements:document.querySelectorAll('svg *').length,calls:state.calls,continuations:state.continuations,longTasks:state.longTasks,mutations:state.mutations,fontFaces:fonts.registry.describeFaces(),fontAnalysis:fonts.analysisStats,substitutions:fonts.substitutions??fonts.registry.substitutions,errors:state.errors};}
+-async function mount(deck){editor?.destroy();host.replaceChildren();reset();let firstSvgMs=null;const start=performance.now(),observer=new MutationObserver(()=>{if(firstSvgMs===null&&host.querySelector('.opf-canvas-preview svg'))firstSvgMs=performance.now()-start;});observer.observe(host,{childList:true,subtree:true});editor=createOpfEditor(host,{document:deck,catalogs:[gallery],fonts,layout:'full',onError:e=>state.errors.push(e?.stack??String(e))});await editor.ready;await settle();observer.disconnect();return{elapsedMs:performance.now()-start,firstSvgMs,...snapshot()};}
++async function mount(deck){editor?.destroy();host.replaceChildren();reset();let firstSvgMs=null,firstSvgNavigationMs=null;const start=performance.now(),observer=new MutationObserver(()=>{if(firstSvgMs===null&&host.querySelector('.opf-canvas-preview svg')){firstSvgNavigationMs=performance.now();firstSvgMs=firstSvgNavigationMs-start;}});observer.observe(host,{childList:true,subtree:true});editor=createOpfEditor(host,{document:deck,catalogs:[gallery],fonts,layout:'full',persistence:false,onError:e=>state.errors.push(e?.stack??String(e))});await editor.ready;await settle();observer.disconnect();return{elapsedMs:performance.now()-start,firstSvgMs,firstSvgNavigationMs,visibleScope:'DOM_INSERTION_NOT_PHYSICAL_PAINT; construction interval excludes prior module/startup-face setup; navigation interval includes harness/controller setup',phaseStart:start,phaseEnd:performance.now(),...snapshot()};}
+ async function operation(kind,payload){reset();if(window.__reviewTrial.mode==='cold')window.__reviewTrial.panels.at(-1)?.invalidate();const start=performance.now();if(kind==='navigate')editor.setSlide(payload);else if(kind==='sorter')editor.setView('sorter');else if(kind==='slide')editor.setView('slide');else if(kind==='set')editor.session.set(payload.path,payload.value);else if(kind==='replace')await editor.setDocument(payload);else throw Error('Unknown phase '+kind);await settle();return{elapsedMs:performance.now()-start,phaseStart:start,phaseEnd:performance.now(),...snapshot()};}
+ async function hashes(){const output=[];for(const [key,svg]of state.outputs){const bytes=new TextEncoder().encode(svg),digest=await crypto.subtle.digest('SHA-256',bytes);output.push({key,bytes:bytes.length,sha256:[...new Uint8Array(digest)].map(n=>n.toString(16).padStart(2,'0')).join('')});}state.outputs.clear();return output;}
+-window.browserPerf={mount,operation,snapshot,hashes,get fonts(){return fonts;},get editor(){return editor;},async systemControl(deck){await fonts.ensure(deck,{catalogs:[gallery]});const before=performance.now(),svgs=directSvg(deck,{fonts,catalogs:[gallery],text:'system',trace:false});return{elapsedMs:performance.now()-before,count:svgs.length,hashes:await Promise.all(svgs.map(async(svg,i)=>({slide:i+1,sha256:[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(svg)))].map(n=>n.toString(16).padStart(2,'0')).join('')}))) };},destroy(){editor?.destroy();fonts.dispose();}};
++window.browserPerf={mount,operation,snapshot,hashes,document(){return editor.session.presentation;},get fonts(){return fonts;},get editor(){return editor;},async systemControl(deck){await fonts.ensure(deck,{catalogs:[gallery]});const before=performance.now(),svgs=directSvg(deck,{fonts,catalogs:[gallery],text:'system',trace:false});return{elapsedMs:performance.now()-before,count:svgs.length,hashes:await Promise.all(svgs.map(async(svg,i)=>({slide:i+1,sha256:[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(svg)))].map(n=>n.toString(16).padStart(2,'0')).join('')}))) };},destroy(){editor?.destroy();fonts.dispose();}};
+ 
+ window.reviewTrial={
+  setMode(mode){if(!['cold','cached'].includes(mode))throw Error('bad mode');window.__reviewTrial.mode=mode;},
+--- run-paired-review.mjs
++++ run-current.mjs
+@@ -5,18 +5,18 @@
+ import {createRequire} from 'node:module';
+ import {createHash} from 'node:crypto';
+ import {execFileSync} from 'node:child_process';
+-import {gzipSync} from 'node:zlib';
++import {gzipSync,brotliCompressSync,constants} from 'node:zlib';
+ 
+ const root=process.cwd(),req=createRequire(path.join(root,'packages/editor/package.json')),{chromium}=req('playwright');
+ const smoke=process.argv.includes('--smoke'),measured=process.argv.includes('--measure');
+ assert.notEqual(smoke,measured,'Choose exactly --smoke (functional only) or coordinator-authorized --measure');
+ const option=(name,fallback)=>process.argv.find(arg=>arg.startsWith(name+'='))?.slice(name.length+1)??fallback;
+-const site=path.resolve(root,option('--build','artifacts/review-paired-build-01'));
+-const output=path.resolve(root,option('--out',`artifacts/review-paired-${smoke?'smoke':'formal'}-01`));
++const site=path.resolve(root,option('--build','artifacts/owner-current-build-01'));
++const output=path.resolve(root,option('--out',`artifacts/owner-current-${smoke?'smoke':'formal'}-01`));
+ const relative=path.relative(root,output);assert.ok(relative&&!relative.startsWith('..')&&!path.isAbsolute(relative)&&!fs.existsSync(output),'Fresh owned output directory required');fs.mkdirSync(output,{recursive:true});
+ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+ const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim();
+-const build=JSON.parse(fs.readFileSync(path.join(site,'build-receipt.json'))),scope=smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_SAME_CANDIDATE';
++const build=JSON.parse(fs.readFileSync(path.join(site,'build-receipt.json'))),scope=smoke?'FUNCTIONAL_NOT_TIMING':'MEASURED_CURRENT_CANDIDATE_NOT_VERSION_COMPARISON';
+ // Explicit roots replace the archived driver's machine-private Windows paths.
+ const inputDir=path.resolve(root,option('--inputs','artifacts/owner-performance-inputs'));
+ const assetSite=path.resolve(root,option('--assets','packages/editor/artifacts/playground'));
+@@ -24,9 +24,10 @@
+ assert.ok(fs.statSync(assetSite).isDirectory(),'Current maintained split-font assets are required');
+ const expected={16:'e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29',36:'249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599'};
+ const inputs=Object.fromEntries([16,36].map(size=>{const file=path.join(inputDir,size===16?'original-16.opf.json':'extended-36.opf.json'),bytes=fs.readFileSync(file);assert.equal(hash(bytes),expected[size]);const deck=JSON.parse(bytes);assert.equal(deck.slides.length,size);return[size,{file,bytes,sha256:hash(bytes),deck}];}));
++assert.deepEqual(inputs[36].deck.slides.slice(0,16),inputs[16].deck.slides,'first16 original slide objects unchanged');
+ function verifyBuild(){assert.equal(git('rev-parse','HEAD'),build.source,'source revision stays fixed');assert.equal(hash(fs.readFileSync(path.join(site,'app.js'))),build.bundleSha256);for(const item of build.inputs)assert.equal(hash(fs.readFileSync(path.resolve(root,item.path))),item.sha256,item.path);}
+ verifyBuild();
+-const requests=[],blocked=[],errors=[],assets=new Map(),cases=[],comparisons=new Map();let activeCase='setup';
++const requests=[],blocked=[],errors=[],assets=new Map(),cases=[],renderedVectors=new Map();let activeCase='setup';
+ const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.ttf':'font/ttf','.woff2':'font/woff2','.wasm':'application/wasm'};
+ const server=createServer((request,response)=>{try{
+  const url=new URL(request.url,'http://127.0.0.1');if(url.pathname==='/favicon.ico'){response.writeHead(204).end();return;}
+@@ -46,7 +47,7 @@
+  activeCase=configuration.name;verifyBuild();
+  const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined,args:['--js-flags=--expose-gc']});
+  try {
+- const context=await browser.newContext({viewport:{width:1440,height:900},deviceScaleFactor:1}),page=await context.newPage(),cdp=await context.newCDPSession(page);
++ const context=await browser.newContext({viewport:configuration.viewport??{width:1440,height:900},deviceScaleFactor:1}),page=await context.newPage(),cdp=await context.newCDPSession(page);
+  page.setDefaultTimeout(30000);page.on('pageerror',error=>errors.push({case:activeCase,kind:'page',message:error.stack??error.message}));
+  await context.route(/^https?:/,route=>new URL(route.request().url()).origin===origin?route.continue():(blocked.push(route.request().url()),route.abort()));
+  await cdp.send('Performance.enable');await cdp.send('Emulation.setCPUThrottlingRate',{rate:configuration.cpu});
+@@ -62,14 +63,19 @@
+  const after=mapMetrics(await cdp.send('Performance.getMetrics')),domAfter=await cdp.send('Memory.getDOMCounters');
+  assert.equal(errors.length,errorsBefore);assert.deepEqual(result.errors,[]);assert.ok(result.canvasSvg>0,'real workspace SVG');assert.ok(result.cache.entries>0);assert.ok(result.cache.entries<=64&&result.cache.bytes<=result.cache.maxBytes);
+  for(const call of result.calls)assert.equal(call.selected.length,call.outputs,'requested-slide log matches actual output');
+- if(primary){assert.ok(result.reviewChecks.length>0,'actual settled core review ran');if(configuration.mode==='cold')assert.equal(result.reviewChecks[0].beforeCache.entries,0,'public invalidate cold control');else assert.ok(result.reviewChecks[0].beforeCache.entries>0,'candidate begins with retained composition');}
++ if(primary&&action==='set'){assert.ok(result.reviewChecks.length>0,'actual settled core review ran');if(configuration.mode==='cold')assert.equal(result.reviewChecks[0].beforeCache.entries,0,'public invalidate cold control');else assert.ok(result.reviewChecks[0].beforeCache.entries>0,'candidate begins with retained composition');}
+  const oracle=await page.evaluate(()=>window.reviewTrial.oracle());assert.equal(oracle.same,true,'complete report equals public cold oracle');
+  const svgs=await page.evaluate(()=>window.reviewTrial.outputs());svgs.sort((a,b)=>a.key.localeCompare(b.key));
+  const svgHashes=svgs.map(item=>({key:item.key,bytes:Buffer.byteLength(item.svg),sha256:hash(item.svg)}));
+- const parity={report:oracle.report,svgs};
+- if(primary||smoke&&configuration.name.startsWith('desktop-')&&action==='set'){const key=`${configuration.size}:${configuration.cpu}:${round}:${name.split(':').at(-1)}`,previous=comparisons.get(key);if(previous){assert.notEqual(previous.mode,configuration.mode);assert.deepEqual(parity,previous.parity,'exact cross-mode report/SVG bytes '+key);previous.matched=true;}else comparisons.set(key,{mode:configuration.mode,parity,matched:false});}
++ // This is one current candidate: cold-oracle report equality above remains mandatory; no cross-version speed claim or artificial opposite-mode pair is invented.
++ const previousVector=renderedVectors.get(configuration.name)??new Map(),outputChanges={scope:'EMITTED_OUTPUTS_ONLY_NOT_FULL_DECK_INVALIDATION',changed:[],unchanged:[],previouslyUnknown:[]};
++ for(const output of svgHashes){const slide=Number(output.key.split(':').at(-1)),previous=previousVector.get(slide);outputChanges[previous===undefined?'previouslyUnknown':previous===output.sha256?'unchanged':'changed'].push(slide);previousVector.set(slide,output.sha256);}renderedVectors.set(configuration.name,previousVector);
+  const primaryLongTasks=Number.isFinite(result.phaseStart)?result.longTasks.map(item=>({...item,overlapMs:Math.max(0,Math.min(item.start+item.duration,result.phaseEnd)-Math.max(item.start,result.phaseStart))})).filter(item=>item.overlapMs>0):[];
+- const postGc=await gc(cdp),row={name,primary,round,action,payload:action==='mount'?{slides:payload.slides.length}:payload,...result,primaryLongTasks,oracle,svgHashes,svgs,cdpDelta:delta(before,after),domBefore,domAfter,postGc};
++ const document=await page.evaluate(()=>window.browserPerf.document()),compact=Buffer.from(JSON.stringify(document));
++ const apiOperationBytes=action==='set'?Buffer.byteLength(JSON.stringify({method:'session.set',path:payload.path,value:payload.value})):null;
++ const payloadStorage={scope:'ENCODED_SIZE_OUTSIDE_INTERVAL_NOT_PERSISTENCE_OR_WIRE_IO',compactDocumentBytes:compact.length,compactDocumentGzipBytes:gzipSync(compact).length,actualApiOperationEncodingBytes:apiOperationBytes,emittedSvgBytes:svgs.reduce((n,row)=>n+Buffer.byteLength(row.svg),0),emittedSvgGzipBytes:svgs.reduce((n,row)=>n+gzipSync(row.svg).length,0),emittedSvgBrotliQuality5Bytes:svgs.reduce((n,row)=>n+brotliCompressSync(Buffer.from(row.svg),{params:{[constants.BROTLI_PARAM_QUALITY]:5}}).length,0)};
++ if(action==='sorter'){const direct=await bounded(page.evaluate(document=>window.browserPerf.systemControl(document),document),configuration.name+'/system-oracle',30000);assert.equal(result.sorterSvg,document.slides.length,'all requested sorter thumbnails are drawn');for(const output of svgHashes){const slide=Number(output.key.split(':').at(-1));assert.equal(output.sha256,direct.hashes.find(row=>row.slide===slide)?.sha256,'actual sorter SVG equals current direct system-text oracle');}}
++ const postGc=await gc(cdp),row={name,primary,round,action,payloadStorage,outputChanges,payload:action==='mount'?{slides:payload.slides.length}:payload,...result,primaryLongTasks,oracle,svgHashes,svgs,cdpDelta:delta(before,after),domBefore,domAfter,postGc};
+  console.log(JSON.stringify({scope,case:configuration.name,phase:name,primary,ms:row.elapsedMs,coreMs:row.reviewChecks.reduce((sum,item)=>sum+item.ms,0),rendererCalls:row.calls.length,requestedSlides:row.calls.reduce((sum,item)=>sum+item.selected.length,0),cacheEntries:row.cache.entries}));return row;
+ }
+ async function measuredCase(configuration){
+@@ -78,16 +84,21 @@
+   if(measured){session.cdp.on('Tracing.dataCollected',event=>traceEvents.push(...event.value));await session.cdp.send('Tracing.start',{categories:'devtools.timeline,blink.user_timing',transferMode:'ReportEvents'});tracing=true;}
+   const deck=structuredClone(inputs[configuration.size].deck),cell=chartCell(deck);assert.ok(cell.dataset,'the edit is a real shared document dataset');if(configuration.size===36)assert.equal(cell.dependentChartIndices.length,2);assert.equal(typeof deck.slides[0].title,'string');
+   rows.push(await phase(session,configuration,'setup:mount','mount',deck));
++  rows.push(await phase(session,configuration,'setup:sorter','sorter'));
++  rows.push(await phase(session,configuration,'setup:slide','slide'));
+   const rounds=smoke?1:4;
+   for(let round=0;round<rounds;round++){
+    const primary=measured&&round>0,prefix=round===0?'warmup':`round-${round}`;
+-   await session.page.evaluate(async()=>{await window.browserPerf.operation('navigate',0);await window.reviewTrial.oracle();window.reviewTrial.outputs();});
++   rows.push(await phase(session,configuration,prefix+':navigate','navigate',0,{primary,round}));
++   rows.push(await phase(session,configuration,prefix+':sorter','sorter',undefined,{primary,round}));
++   rows.push(await phase(session,configuration,prefix+':slide','slide',undefined,{primary,round}));
+    rows.push(await phase(session,configuration,prefix+':local-title0','set',{path:'slides.0.title',value:deck.slides[0].title+` — edit ${round}`},{primary,round}));
+    await session.page.evaluate(async index=>{await window.browserPerf.operation('navigate',index);await window.reviewTrial.oracle();window.reviewTrial.outputs();},cell.slideIndex);
+    rows.push(await phase(session,configuration,prefix+':shared-datum','set',{path:cell.path,value:cell.previous+round+1},{primary,round}));
+    rows.push(await phase(session,configuration,prefix+':global-name','set',{path:'name',value:(deck.name??'Deck')+` — edit ${round}`},{primary,round}));
+    if(round===0)await session.page.screenshot({path:path.join(output,configuration.name+'-warmup.png'),timeout:10000});
+   }
++  if(configuration.size===16){rows.push(await phase(session,configuration,'update:append-twenty','replace',structuredClone(inputs[36].deck)));rows.push(await phase(session,configuration,'update:append-sorter','sorter'));}
+   const record={scope,status:'PASS',configuration,setup:session.setup,browserVersion:session.browserVersion,cell,rows};cases.push(record);fs.writeFileSync(path.join(output,configuration.name+'.json'),JSON.stringify(record,null,2)+'\n');
+  }catch(error){fs.writeFileSync(path.join(output,configuration.name+'-failure.json'),JSON.stringify({scope,status:'FAILED',message:error.stack??String(error),rows},null,2));throw error;}
+  finally{try{
+@@ -102,26 +113,26 @@
+   const warmDisposed=await session.page.evaluate(()=>window.reviewTrial.dispose());assert.ok(warmDisposed.infos.length>0&&warmDisposed.infos.every(info=>info.entries===0&&info.bytes===0));
+   const baseline=await gc(session.cdp);
+   await phase(session,configuration,'soak:mount','mount',deck);
+-  for(let edit=0;edit<(smoke?3:20);edit++){
++  samples.push({edit:0,cache:await session.page.evaluate(()=>window.browserPerf.snapshot().cache),...await gc(session.cdp)});
++  for(let edit=0;edit<(smoke?3:200);edit++){
+    await bounded(session.page.evaluate(async edit=>{await window.browserPerf.operation('set',{path:'slides.35.title',value:'Retained heap edit '+edit});},edit),'soak-edit',30000);
+-   if((edit+1)%5===0||smoke){const oracle=await session.page.evaluate(()=>window.reviewTrial.oracle());assert.equal(oracle.same,true);const cache=await session.page.evaluate(()=>window.browserPerf.snapshot().cache);assert.ok(cache.entries<=64&&cache.bytes<=cache.maxBytes);samples.push({edit:edit+1,cache,...await gc(session.cdp)});await session.page.evaluate(()=>window.reviewTrial.outputs());}
++   if([20,40,80,120,200].includes(edit+1)||smoke){const oracle=await session.page.evaluate(()=>window.reviewTrial.oracle());assert.equal(oracle.same,true);const cache=await session.page.evaluate(()=>window.browserPerf.snapshot().cache);assert.ok(cache.entries<=64&&cache.bytes<=cache.maxBytes);samples.push({edit:edit+1,cache,...await gc(session.cdp)});await session.page.evaluate(()=>window.reviewTrial.outputs());}
+   }
+   const cycles=[];
+-  for(let cycle=0;cycle<(smoke?1:4);cycle++){
++  for(let cycle=0;cycle<(smoke?1:10);cycle++){
+    const disposed=await session.page.evaluate(()=>window.reviewTrial.dispose());assert.ok(disposed.infos.length>0&&disposed.infos.every(info=>info.entries===0&&info.bytes===0));assert.equal(disposed.workspaces,0);assert.equal(disposed.fontFaces,warmDisposed.fontFaces,'repeated sessions do not duplicate prepared faces');
+    cycles.push({cycle,disposed,...await gc(session.cdp)});
+-   if(cycle<(smoke?1:4)-1)await phase(session,configuration,'soak:remount-'+cycle,'mount',deck);
++   if(cycle<(smoke?1:10)-1)await phase(session,configuration,'soak:remount-'+cycle,'mount',deck);
+   }
+-  const record={scope:'BOUNDED_RETENTION_NOT_LEAK_ACCEPTANCE',configuration,baseline,warmDisposed,samples,cycles,edits:smoke?3:20,mountDestroyCycles:smoke?1:4,browserVersion:session.browserVersion};fs.writeFileSync(path.join(output,configuration.name+'.json'),JSON.stringify(record,null,2)+'\n');return record;
++  const record={scope:'BOUNDED_RETENTION_NOT_LEAK_ACCEPTANCE',configuration,baseline,warmDisposed,samples,cycles,edits:smoke?3:200,mountDestroyCycles:smoke?1:10,browserVersion:session.browserVersion};fs.writeFileSync(path.join(output,configuration.name+'.json'),JSON.stringify(record,null,2)+'\n');return record;
+  }finally{await session.browser.close();}
+ }
+ try{
+- const cells=smoke?[{size:16,cpu:1,modes:['cold','cached']}]:[{size:16,cpu:1,modes:['cold','cached']},{size:36,cpu:1,modes:['cached','cold']},{size:16,cpu:4,modes:['cached','cold']},{size:36,cpu:4,modes:['cold','cached']}];
+- for(const cell of cells)for(const mode of cell.modes)await measuredCase({name:`desktop-cpu${cell.cpu}-${cell.size}-${mode}`,size:cell.size,cpu:cell.cpu,mode});
+- assert.ok([...comparisons.values()].every(item=>item.matched),'all exact phase pairs are present');
+- const retained=[];for(const mode of ['cold','cached'])retained.push(await soak(mode));
+- assert.equal(errors.length,0,JSON.stringify(errors));assert.deepEqual(blocked,[]);verifyBuild();for(const input of Object.values(inputs))assert.equal(hash(fs.readFileSync(input.file)),input.sha256);
+- const receipt={status:'PASS',scope,source:build.source,tree:build.tree,bundleSha256:build.bundleSha256,node:process.version,inputFiles:Object.fromEntries(Object.entries(inputs).map(([size,input])=>[size,{bytes:input.bytes.length,sha256:input.sha256}])),cases:cases.map(item=>({configuration:item.configuration,rows:item.rows.length})),pairedPhases:comparisons.size,retained:retained.map(item=>({configuration:item.configuration,edits:item.edits,mountDestroyCycles:item.mountDestroyCycles})),requests,blocked,errors,limits:{setupMs:90000,phaseMs:30000,traceEndMs:15000},disclosure:['Same candidate/public invalidate cold control; local title0 and global metadata are conservative cache misses.','One fresh browser process per case; fixed desktop viewport; no physical-mobile claim.','Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals.','Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.','Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.','Original root smoke is functional evidence only and is preserved separately; no invented root stdout.']};
+- fs.writeFileSync(path.join(output,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({status:'PASS',scope,cases:receipt.cases.length,pairedPhases:receipt.pairedPhases,output}));
++ const cells=smoke?[{size:16,cpu:1,label:'desktop'}]:[16,36].flatMap(size=>[{size,cpu:1,label:'desktop'},{size,cpu:4,label:'desktop'},{size,cpu:4,label:'viewport390',viewport:{width:390,height:844}}]);
++ for(const cell of cells)await measuredCase({...cell,name:`${cell.label}-cpu${cell.cpu}-${cell.size}-cached`,mode:'cached'});
++ const retained=[await soak('cached')];
++ assert.equal(errors.length,0,JSON.stringify(errors));assert.deepEqual(blocked,[]);verifyBuild();for(const[file,sha256]of assets)assert.equal(hash(fs.readFileSync(file)),sha256,'served asset remains byte exact: '+file);for(const input of Object.values(inputs))assert.equal(hash(fs.readFileSync(input.file)),input.sha256);
++ const receipt={status:'PASS',scope,source:build.source,tree:build.tree,bundleSha256:build.bundleSha256,node:process.version,inputFiles:Object.fromEntries(Object.entries(inputs).map(([size,input])=>[size,{bytes:input.bytes.length,sha256:input.sha256}])),cases:cases.map(item=>({configuration:item.configuration,rows:item.rows.length})),completeColdOracleChecks:cases.reduce((n,item)=>n+item.rows.length,0),retained:retained.map(item=>({configuration:item.configuration,edits:item.edits,mountDestroyCycles:item.mountDestroyCycles})),requests,blocked,errors,limits:{setupMs:90000,phaseMs:30000,traceEndMs:15000},disclosure:['One current candidate with public cold-oracle equality outside intervals; no historical/version speed comparison.','One fresh browser process per case;390px viewport and4xCPU are desktop proxies; no physical-mobile/low-power-device claim.','Debounce stays inside settled elapsed time; report/SVG equality, hashing, GC and storage are outside primary intervals. Sorter direct-oracle work primes caches outside intervals.','Trace/forwarder/observer overhead is present symmetrically; no unperturbed-production claim.','Cache policy bounds are logical; short post-GC heap/DOM soak is not leak acceptance.','Original root smoke is functional evidence only and is preserved separately; no invented root stdout.']};
++ fs.writeFileSync(path.join(output,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify({status:'PASS',scope,cases:receipt.cases.length,completeColdOracleChecks:receipt.completeColdOracleChecks,output}));
+ }catch(error){fs.writeFileSync(path.join(output,'first-failure.json'),JSON.stringify({status:'FAILED',scope,message:error.stack??String(error),requests,blocked,errors},null,2)+'\n');console.error(error);process.exitCode=1;}
+ finally{await new Promise(resolve=>server.close(resolve));}
