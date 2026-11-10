@@ -156,6 +156,7 @@ function poolOf(faces) {
   }
   return { result, bytes };
 }
+
 export function createPreparationReplay() {
   let candidate,
     recording = false,
@@ -165,28 +166,13 @@ export function createPreparationReplay() {
     recording = false;
     candidate = undefined;
   };
-  const add = (key, make) => {
-    if (!recording || !candidate) return;
-    if (candidate.seen.has(key)) return;
-    let event, retained;
-    try {
-      event = make();
-      if (!event) {
-        invalidate();
-        return;
-      }
-      retained = 2 * (key.length + JSON.stringify(event).length);
-    } catch {
+  const reserve = (bytes) => {
+    if (!candidate || candidate.bytes + bytes > LIMIT_BYTES) {
       invalidate();
-      return;
+      return false;
     }
-    if (candidate.events.length >= LIMIT_ENTRIES || candidate.bytes + retained > LIMIT_BYTES) {
-      invalidate();
-      return;
-    }
-    candidate.bytes += retained;
-    candidate.seen.add(key);
-    candidate.events.push(event);
+    candidate.bytes += bytes;
+    return true;
   };
   const contextOf = (keys, optionsToken, registry) => {
     if (
@@ -229,7 +215,19 @@ export function createPreparationReplay() {
       invalidate();
       return false;
     }
-    candidate = { ...context, events: [], seen: new Set(), entries: undefined, positive: true };
+    candidate = {
+      ...context,
+      events: [],
+      seen: new Map(),
+      styles: [],
+      styleIds: new Map(),
+      texts: [],
+      textIds: new Map(),
+      paths: [],
+      pathIds: new Map(),
+      entries: undefined,
+      positive: true,
+    };
     recording = true;
     return true;
   };
@@ -237,46 +235,107 @@ export function createPreparationReplay() {
     if (recording && candidate) candidate.entries = entries;
     recording = false;
   };
+  // Intern FULL validated base snapshots. The separate path token belongs to the first unique event.
+  const internStyle = (style) => {
+    if (styleKey(style) === undefined) return;
+    const copy = snapshot(style);
+    if (!copy) return;
+    delete copy.path;
+    const key = JSON.stringify(
+      Reflect.ownKeys(copy).map((field) => [field, property(copy, field)]),
+    );
+    const held = candidate.styleIds.get(key);
+    if (held !== undefined) return held;
+    // Count both the retained signature and full snapshot data, with table/ref scalars.
+    if (!reserve(4 * key.length + 32)) return;
+    const id = candidate.styles.length;
+    candidate.styleIds.set(key, id);
+    candidate.styles.push(copy);
+    return id;
+  };
+  const internText = (text) => {
+    const held = candidate.textIds.get(text);
+    if (held !== undefined) return held;
+    // The raw text key and array table retain the same string; no concatenated text copy is kept.
+    if (!reserve(2 * text.length + 24)) return;
+    const id = candidate.texts.length;
+    candidate.textIds.set(text, id);
+    candidate.texts.push(text);
+    return id;
+  };
+  const internPath = (style) => {
+    const descriptor = property(style, 'path'),
+      tag = descriptor[0],
+      value = descriptor[1];
+    const paths = candidate.pathIds.get(tag),
+      held = paths?.get(value);
+    if (held !== undefined) return held;
+    if (!reserve((typeof value === 'string' ? 2 * value.length : 0) + 24 + (paths ? 0 : 24)))
+      return;
+    const id = candidate.paths.length;
+    if (paths) paths.set(value, id);
+    else candidate.pathIds.set(tag, new Map([[value, id]]));
+    candidate.paths.push({ tag, value });
+    return id;
+  };
+  const seen = (kind, style, text) => candidate.seen.get(kind)?.get(style)?.has(text) === true;
+  const add = (kind, style, text, path, event) => {
+    if (!candidate) return;
+    if (candidate.events.length >= LIMIT_ENTRIES) {
+      invalidate();
+      return;
+    }
+    const group = candidate.seen.get(kind),
+      set = group?.get(style);
+    // Scalar event refs/size/outcome, numeric seen entry, and newly retained nested map/set keys.
+    const extra =
+      event.kind === 'selection' ? 2 * (event.identity.length + event.logical.length) : 0;
+    if (!reserve(64 + extra + (group ? 0 : 24 + 2 * kind.length) + (set ? 0 : 24))) return;
+    if (set) set.add(text);
+    else if (group) group.set(style, new Set([text]));
+    else candidate.seen.set(kind, new Map([[style, new Set([text])]]));
+    candidate.events.push({ ...event, style, text, path });
+  };
   const selection = (style, preserveChosen, choice, resolved) => {
-    if (!recording) return;
-    let key;
+    if (!recording || !candidate) return;
     try {
-      key = styleKey(style);
+      const id = internStyle(style);
+      if (id === undefined) {
+        invalidate();
+        return;
+      }
+      const kind = 'selection:' + Number(preserveChosen);
+      if (seen(kind, id, null)) return;
+      const path = internPath(style);
+      if (path === undefined) return;
+      add(kind, id, null, path, {
+        kind: 'selection',
+        preserveChosen,
+        identity: identity(choice),
+        logical: logical(resolved),
+      });
     } catch {
       invalidate();
-      return;
     }
-    if (key === undefined) {
-      invalidate();
-      return;
-    }
-    add('s' + Number(preserveChosen) + key, () => {
-      const copy = snapshot(style);
-      return (
-        copy && {
-          kind: 'selection',
-          style: copy,
-          preserveChosen,
-          identity: identity(choice),
-          logical: logical(resolved),
-        }
-      );
-    });
   };
   const coverage = (kind, text, size, style, run) => {
-    let eventKey;
-    if (recording) {
-      let key;
+    let eligible = recording;
+    if (eligible) {
       try {
-        key =
-          typeof text === 'string' && Number.isFinite(size) && size > 0
-            ? styleKey(style)
-            : undefined;
+        if (
+          typeof text !== 'string' ||
+          text.length > LIMIT_BYTES / 2 ||
+          !Number.isFinite(size) ||
+          size <= 0 ||
+          styleKey(style) === undefined
+        ) {
+          invalidate();
+          eligible = false;
+        }
       } catch {
         invalidate();
+        eligible = false;
       }
-      if (key === undefined || text.length > LIMIT_BYTES / 2) invalidate();
-      else eventKey = kind + '\0' + key + '\0' + text;
     }
     let outcome = 'ok';
     try {
@@ -285,19 +344,34 @@ export function createPreparationReplay() {
       outcome = error?.code ?? 'fatal';
       throw error;
     } finally {
-      if (eventKey && recording) {
+      if (eligible && recording && candidate) {
         const soft = kind === 'measure' ? MEASURE_SOFT : PROBE_SOFT;
-        if (outcome !== 'ok' && !soft.has(outcome)) {
-          invalidate();
-        } else {
-          if (outcome !== 'ok' && candidate) candidate.positive = false;
-          add(eventKey, () => {
-            const copy = snapshot(style);
-            return copy && { kind, text, size, style: copy, outcome };
-          });
-        }
+        if (outcome !== 'ok' && !soft.has(outcome)) invalidate();
+        else
+          try {
+            if (outcome !== 'ok') candidate.positive = false;
+            const styleId = internStyle(style);
+            if (styleId === undefined) {
+              invalidate();
+            } else {
+              const textId = internText(text);
+              if (textId !== undefined && !seen(kind, styleId, textId)) {
+                const path = internPath(style);
+                if (path !== undefined) add(kind, styleId, textId, path, { kind, size, outcome });
+              }
+            }
+          } catch {
+            invalidate();
+          }
       }
     }
+  };
+  const styleFor = (old, event) => {
+    const style = { ...old.styles[event.style] },
+      path = old.paths[event.path];
+    if (path.tag === 1) style.path = undefined;
+    else if (path.tag === 3) style.path = path.value;
+    return style;
   };
   const replay = (keys, optionsToken, registry, select) => {
     if (disabled || !candidate?.entries) return;
@@ -315,10 +389,11 @@ export function createPreparationReplay() {
       return;
     }
     for (const event of old.events) {
+      const style = styleFor(old, event);
       if (event.kind === 'selection') {
         let actual;
         try {
-          actual = select(event.style, event.preserveChosen);
+          actual = select(style, event.preserveChosen);
         } catch {
           invalidate();
           return;
@@ -329,7 +404,7 @@ export function createPreparationReplay() {
         }
       } else {
         try {
-          registry.coverage(event.text, event.size, event.style);
+          registry.coverage(old.texts[event.text], event.size, style);
         } catch (error) {
           const soft = event.kind === 'measure' ? MEASURE_SOFT : PROBE_SOFT;
           if (!soft.has(error?.code)) {

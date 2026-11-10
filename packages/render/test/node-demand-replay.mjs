@@ -298,7 +298,10 @@ for (const [name, inject] of [
   ],
   [
     '512KiB retained data',
-    (measurement) => measurement[fontCoverageProbe]('A'.repeat(200000), 1, request()),
+    (measurement) => {
+      measurement[fontCoverageProbe]('A'.repeat(160000), 1, request());
+      measurement[fontCoverageProbe]('B'.repeat(160000), 1, request());
+    },
   ],
   ['nonpositive size', (measurement) => measurement[fontCoverageProbe]('owned', 0, request())],
   ['nonfinite size', (measurement) => measurement[fontCoverageProbe]('owned', Infinity, request())],

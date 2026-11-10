@@ -1,5 +1,9 @@
 # RR-114 bounded demand replay
 
+Compact retention checkpoint: actual owner16/36 first refused the unchanged512KiB cap at753/649 events (32/72 binds, identical52 SVG pairs and3 faces). Those actual receipts remain preserved. The approved repair interns FULL validated base snapshots with presence-tagged signatures, exact texts and FIRST path states; ordered events hold scalar IDs and first size/outcome/selection fingerprints, and nested seen maps avoid duplicated style-plus-text strings. All tables/keys/events count toward the same cap.33 focused controls pass after the representation change; actual16/36 repeat and peer review are pending. The byte-cap fixture now uses two160k texts because one200k text is retained once rather than duplicated; approved limits are unchanged.
+
+## Earlier semantic checkpoint
+
 Current semantic correction checkpoint:33 focused controls pass. Every semantic/native logical field now distinguishes absent, own undefined, null and value; the actual6-versus8 collapsed requirement RED is retained. Node mode content is guarded without normalizing undefined caller data. Replay requires the original owned measurement object and its trusted data-property function identity at capture and post-await; wrappers/accessors stay cold. An actual held-font-read size-sensitive replacement proves why: an explicitly guard-disabled in-memory control skips size40, while the real guarded path preserves its original size40 failure once. This is an owned differential control, not a historical full-runtime claim. Actual16/36 structural qualification, final source review, neighbors and exclusive timing/RSS remain pending.
 
 ## Historical first source checkpoint
