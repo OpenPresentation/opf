@@ -49,12 +49,12 @@ test('plain and styled Latin paragraph fragments share protected numeric shaping
 });
 test('explicit run proofing languages win, including an override equal to the Arabic base',async()=>{
  for(const [lang,nativeTag]of [['ar-SA','ar-SA'],['fr','fr-FR'],['en-US','en-US']]){
-  const result=await native({language:'ar-SA',slides:[{items:[{text:[{text:'Item 1: authored proofing choice.',lang}]}],numbering:'arabic'}]});
+  const result=await native({language:'ar-SA',slides:[{items:[{text:[{text:'Item 1: authored proofing choice.',language:lang}]}],numbering:'arabic'}]});
   const run=runsOf(result).find(r=>r.text.includes('authored proofing'));
   assert.ok(run);assert.equal(run.properties['@lang'],nativeTag,'the automatic fallback never replaces an explicit run language');
   const restored=await fromPptx(result.bytes,{catalogs:[gallery]});
   assert.equal(restored.language,'ar-SA');
-  assert.ok(everyRun(restored).some(value=>value.lang===nativeTag&&value.text.includes('authored proofing')),'authored language survives import as its explicit native BCP-47 identity');
+  assert.ok(everyRun(restored).some(value=>value.language===nativeTag&&value.text.includes('authored proofing')),'authored language survives import as its explicit native BCP-47 identity');
  }
 });
 test('Arabic and mixed-script content retain their native direction and Arabic runs',async()=>{
@@ -133,7 +133,7 @@ test('automatic language and source-boundary tags share one native custom-data l
 
 test('canonical explicit list-language fixtures preserve complete authored rich items',async()=>{
  for(const lang of ['ar-SA','fr-FR','en-US']){
-  const document={language:'ar-SA',slides:[{items:[[{text:'Item 1: authored proofing choice.',lang}]],numbering:'arabic'}]};
+  const document={language:'ar-SA',slides:[{items:[[{text:'Item 1: authored proofing choice.',language:lang}]],numbering:'arabic'}]};
   const result=await native(document),restored=await fromPptx(result.bytes,{catalogs:[gallery]});
   assert.deepEqual(restored.slides[0].items,document.slides[0].items,'canonical authored run identity and characters survive unchanged');
   assert.equal(restored.language,'ar-SA');
@@ -178,7 +178,7 @@ test('plain source-boundary tags cannot erase current language after automatic-l
   const current=restored.slides[0].text,characters=Array.isArray(current)?current.map(run=>typeof run==='string'?run:run.text).join(''):current;
   assert.equal(characters,edit==='stale-text'?text.replace('English.','Current English.'):text,'current characters and hard line boundaries stay exact');
   assert.ok(everyRun(current).some(run=>run.language==='en-US'&&run.text.includes(edit==='partial-alternate'?'Item 1:':'English.')),'observed current native English is retained while the Arabic slide base remains');
-  assert.ok(everyRun(current).every(run=>Object.keys(run).every(key=>['text','lang'].includes(key))),'plain-boundary recovery does not leak the generated body look as authored style');
+  assert.ok(everyRun(current).every(run=>Object.keys(run).every(key=>['text','language'].includes(key))),'plain-boundary recovery does not leak the generated body look as authored style');
   if(edit!=='partial-alternate')assert.ok(findings.some(x=>x.code===(edit==='strip-only-language'?'native-language-unowned':'native-language-reference-changed')));
  }
 });

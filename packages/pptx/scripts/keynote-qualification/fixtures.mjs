@@ -12,7 +12,7 @@ export function sourceDeck(image) {
   const slide = (id, fields) => ({...fields, notes: `${id} speaker notes: preserve this sentence.`});
   return {
     name: 'Keynote qualification', language: 'en-US',
-    design: {fontScheme: {major: 'Arial', minor: 'Arial'}, dimensions: 'widescreen', footer: {left: {text: 'Keynote qualification'}, right: {text: '{{slide.number}}'}}},
+    design: {fontScheme: {major: 'Arial', minor: 'Arial'}, dimensions: 'widescreen', footer: {start: {text: 'Keynote qualification'}, end: {text: '{{slide.number}}'}}},
     slides: [
       slide('K01', {layout: 'cover', title: 'Title and subtitle', subtitle: 'Native layout baseline'}),
       slide('K02', {layout: 'text', title: 'Paragraph editing', text: 'KN_ORIGINAL_PARAGRAPH. Keep this second sentence.\nA second authored paragraph.'}),

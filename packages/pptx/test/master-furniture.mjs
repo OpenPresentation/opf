@@ -121,7 +121,7 @@ const oneTone = {organization, design: {background: light, header: {end: {text: 
   }
   const view = await read(zipSync(older));
   assert.deepEqual(view.invalid, []);
-  assert.deepEqual(view.imported.design.footer, {left: {}, center: {text: 'Confidential'}, end: {text: '{{slide.number}}'}});
+  assert.deepEqual(view.imported.design.footer, {start: {}, center: {text: 'Confidential'}, end: {text: '{{slide.number}}'}});
   checked++;
 
   // PowerPoint edits on the master. Deleting the logo there removes it from every slide: the deck's footer loses its image (intent,

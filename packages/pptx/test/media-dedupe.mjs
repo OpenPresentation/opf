@@ -94,7 +94,7 @@ const slides = count => Array.from({ length: count }, (_, index) => ({ title: `S
   assert.match(xml, /name="OPF image 1"/); assert.match(xml, /name="OPF watermark"/);
   packageIsConsistent(entries);
   const imported = await fromPptx(await toPptx(deck, { imageFormat: 'preserve', strictAssets: true }), { onDiagnostic: () => {} });
-  assert.ok(imported.slides[0].blocks[0].placement?.edge === 'left' && imported.design.watermark.opacity === 0.2);
+  assert.ok(imported.slides[0].blocks[0].placement?.edge === 'start' && imported.design.watermark.opacity === 0.2);
   checked++;
 }
 console.log(`Media dedupe checks passed (${checked}).`);

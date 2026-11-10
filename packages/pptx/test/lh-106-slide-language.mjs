@@ -47,8 +47,8 @@ for (const bodyText of ['measured', 'native']) {
   assert.match(run(xml2,'Hello'),/lang="en-US" altLang="en-US"/,bodyText+' authored English run on Arabic slide');
   const restored=await fromPptx(mixedBytes);
   const runs=value=>Array.isArray(value)?value.flatMap(runs):value&&typeof value==='object'?[...(typeof value.text==='string'?[value]:[]),...Object.values(value).filter(x=>typeof x==='object').flatMap(runs)]:[];
-  assert.ok(runs(restored.slides[0]).some(r=>r.text==='مرحبا'&&r.lang==='ar-SA'),bodyText+' Arabic run survives import');
-  assert.ok(runs(restored.slides[1]).some(r=>r.text==='Hello'&&r.lang==='en-US'),bodyText+' English run survives import');
+  assert.ok(runs(restored.slides[0]).some(r=>r.text==='مرحبا'&&r.language==='ar-SA'),bodyText+' Arabic run survives import');
+  assert.ok(runs(restored.slides[1]).some(r=>r.text==='Hello'&&r.language==='en-US'),bodyText+' English run survives import');
 }
 
 // A measured override can wrap into more native runs than the base language.

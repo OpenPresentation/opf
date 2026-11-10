@@ -66,8 +66,8 @@ export function assertReferenceExportBudget(series, lines, { key = 'OPF chart', 
   const ownership = { v: 1, key, helpers: [], overlays: [] };
   for (const line of lines) {
     const id = key + ':' + line.index;
-    if (line.native) ownership.helpers.push({ id, index: line.index });
-    else ownership.overlays.push({ id, index: line.index, value: line.value, axis: line.axis, labelPosition: line.labelPosition, ...(multiAxisOverlays ? {axisIds: {category: 4294967295, value: 4294967295}} : {}), binding: '0000000000000000' });
+    if (line.native) ownership.helpers.push({ id, index: line.index, ...authoredBudgetRecord(line) });
+    else ownership.overlays.push({ id, index: line.index, value: line.value, axis: line.axis, labelPosition: line.labelPosition, ...(multiAxisOverlays ? {axisIds: {category: 4294967295, value: 4294967295}} : {}), ...authoredBudgetRecord(line), binding: '0000000000000000' });
   }
   // The structural record uses UTF-8 uppercase hex; the binding placeholder has the exact fixed serialized width.
   if (enc.encode(JSON.stringify(ownership)).length * 2 > 4 * 1024 * 1024) refuse('ownership-metadata', 4 * 1024 * 1024);
@@ -102,9 +102,7 @@ export function applyReferenceSeries(xml, info, binding) {
     ordered = ['value', 'secondary'].flatMap((a) => refs.filter((l) => l.axis === a));
   let ordinal = 0;
   const helpers = [];
-  // Only a chart that gained helper series is a multi-type chart: one whose references are all overlays keeps its own grouping
-  // (a stacked line chart stays stacked).
-  let out = (refs.length ? applyComboConstruct(xml) : xml).replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
+  let out = applyComboConstruct(xml).replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
     const index = ordinal++ - info.primaryCount;
     if (index < 0) return ser;
     const line = ordered[index];
@@ -226,15 +224,24 @@ function currentPaintKey(node, colors) {
     read = readBackgroundColor(ln?.['a:solidFill'], colors);
   return ln && read ? paintKey(Number(ln.w), read.hex, read.alpha < 1 ? Math.round(read.alpha * 255) : 255, ln['a:prstDash']?.val ?? 'solid') : undefined;
 }
-/** A verified reference in the document's own form: defaults omitted, and the authored stroke while the native paint is as written. */
+// Width/dash are already resolved geometry. Six RGB digits and the longest
+// possible alpha value conservatively bound native paint without resolving a
+// named color here; zero-width paint always has the exact alpha 0. Preserve the
+// actual authored-stroke JSON, including partial styles and 'none'.
+function authoredBudgetRecord(line) {
+  const emu = Number.isFinite(line.strokeWidth) ? Math.round(line.strokeWidth * 9525) : 4294967295;
+  const written = paintKey(emu, 'FFFFFF', line.strokeWidth > 0 ? 255 : 0, line.stroke?.dash ?? 'solid');
+  return {written, ...(line.authoredStroke !== undefined ? {stroke: line.authoredStroke} : {})};
+}
+/** Keep the reader's canonical axis/label fields; recover only the authored stroke while native paint is unchanged. */
 function authoredReference(ref, owned, key) {
   const unchanged = typeof owned?.written === 'string' && owned.written === key;
   const stroke = unchanged ? owned.stroke : ref.stroke;
   return {
     index: ref.index,
     value: ref.value,
-    ...(ref.axis === 'secondary' ? { axis: ref.axis } : {}),
-    ...(ref.label !== undefined ? { label: ref.label, ...(ref.labelPosition === 'start' ? { labelPosition: ref.labelPosition } : {}) } : {}),
+    axis: ref.axis,
+    ...(ref.label !== undefined ? { label: ref.label, labelPosition: ref.labelPosition } : {}),
     ...(stroke !== undefined ? { stroke } : {}),
   };
 }

@@ -33,7 +33,7 @@ const deckFor = (block, extra = {}) => ({ assets: { hero: { src: uri(wide), alt:
   slides: [{ title: 'Image block', blocks: [{ type: 'image', image: 'asset:hero', ...block }, { type: 'text', text: 'Body copy beside the image.' }], ...(extra.slide ?? {}) }] });
 
 let checked = 0;
-for (const edge of ['left', 'right', 'top', 'bottom']) {
+for (const edge of ['start', 'end', 'top', 'bottom']) {
   for (const fit of ['cover', 'contain', 'stretch']) {
     const deck = deckFor({ fit, placement: { edge, size: 0.4 } });
     const item = imageItem(deck);

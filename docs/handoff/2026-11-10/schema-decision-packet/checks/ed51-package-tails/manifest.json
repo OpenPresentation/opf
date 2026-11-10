@@ -1,0 +1,3199 @@
+{
+  "source": "ed51a7e8a6636bb2e08c9a446a7d22c21ad81066",
+  "sourceDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scope": "Sequential diagnostic continuation after literal mapper refusals; maintained selectTests/nodeArgs, no test changes/skips/new lists; all failures retained; not a green original aggregate.",
+  "node": "24.21.0",
+  "counts": {
+    "javascript": {
+      "files": 3,
+      "pass": 3,
+      "red": 0,
+      "seconds": 0.281
+    },
+    "render": {
+      "files": 182,
+      "pass": 162,
+      "red": 20,
+      "seconds": 522.854
+    },
+    "pptx": {
+      "files": 301,
+      "pass": 263,
+      "red": 38,
+      "seconds": 899.367
+    },
+    "editor": {
+      "files": 144,
+      "pass": 134,
+      "red": 10,
+      "seconds": 85.056
+    }
+  },
+  "total": {
+    "files": 630,
+    "pass": 562,
+    "red": 68
+  },
+  "zip": {
+    "file": "logs.zip",
+    "bytes": 265292,
+    "sha256": "947652449a834f693afb020e71919c4f9f161d6e4b6153225678013c6bc16f58"
+  },
+  "entries": [
+    {
+      "path": "editor-assets.mjs.log",
+      "bytes": 309,
+      "sha256": "ef75bc678a7efc6035d96d6298b1c767aa1a52d9a5d1666a50c51fb51243fbdf"
+    },
+    {
+      "path": "editor-background-options.mjs.log",
+      "bytes": 148,
+      "sha256": "d825cbe51c028c7de0db613cc378e50174b44e786e8eb91a0ef75f128d6748ea"
+    },
+    {
+      "path": "editor-block-convert.mjs.log",
+      "bytes": 163,
+      "sha256": "82b79c8a9f1b77b54bed3084756e82ea7157889a22f91f2f1ac0207e320c071a"
+    },
+    {
+      "path": "editor-block-duplicate-ids.mjs.log",
+      "bytes": 82,
+      "sha256": "8d487d9e2705af093d33cb3a16855eb657eb835784aa7cbdc43995ab46d3b9cf"
+    },
+    {
+      "path": "editor-blocks.mjs.log",
+      "bytes": 311,
+      "sha256": "2bdb5883296a743b4dbd3e0abf2941b52139f6181db3252ca6c55013b10a974a"
+    },
+    {
+      "path": "editor-builtin-variables.mjs.log",
+      "bytes": 1025,
+      "sha256": "fa869139a7d6d2808d6bedc1ff833ed28d38fa38b839a9b4cf2912a5adf90212"
+    },
+    {
+      "path": "editor-canvas-fields.mjs.log",
+      "bytes": 82,
+      "sha256": "981ef6a11a00b3476acaf66367fbc99105fd7fb59eab1874c97d8960bb4b4287"
+    },
+    {
+      "path": "editor-catalog-optional-design.mjs.log",
+      "bytes": 79,
+      "sha256": "e6dbfc79ed89186aa55f68f675007d8a8529fafc0a1e343d066070b3f9b6cbaf"
+    },
+    {
+      "path": "editor-catalogs.mjs.log",
+      "bytes": 338,
+      "sha256": "4c305aeb56909e547993a393d7021fd8dd889d51317a47aecb4725aeffbed4e3"
+    },
+    {
+      "path": "editor-chart-alt.mjs.log",
+      "bytes": 60,
+      "sha256": "ab5eb12574d74d0697620902119d5e85281ab60ea5aebd67e17cf33ecb3c379c"
+    },
+    {
+      "path": "editor-chart-colors.mjs.log",
+      "bytes": 16,
+      "sha256": "ea3319d1319f1790170ce8131bf8dcc23c5fe01add3d493b5c965933fa009187"
+    },
+    {
+      "path": "editor-chart-highlight.mjs.log",
+      "bytes": 186,
+      "sha256": "37842992fc9e48e47c64809975c12fae8d203b778449cf439833b45c6a93947d"
+    },
+    {
+      "path": "editor-chart-options.mjs.log",
+      "bytes": 181,
+      "sha256": "d421bb4691317affc4c7456a82cc18c55df07adb950bbe0df9126696a28109b1"
+    },
+    {
+      "path": "editor-chart-table-data.mjs.log",
+      "bytes": 221,
+      "sha256": "2cad28eec2a00d124b9a8e0081ee429619ec8e0cdc957e89b17bb5294a8f5fad"
+    },
+    {
+      "path": "editor-chrome-guide.mjs.log",
+      "bytes": 112,
+      "sha256": "9b668a28ffdddfcc747c388f4bc33164c6e691f2a8bd5c2b314746759e17f65e"
+    },
+    {
+      "path": "editor-codemirror-guard.mjs.log",
+      "bytes": 134,
+      "sha256": "6c7f97683fa636fcca4ab59742efc56c41fae3c5d37b4ed29a4fb62eb2b10134"
+    },
+    {
+      "path": "editor-combo-charts.mjs.log",
+      "bytes": 120,
+      "sha256": "bef005d6ba0b01334db24777b46ece70ec8af46a33b76c9ec2bfcb739402f431"
+    },
+    {
+      "path": "editor-component-smoke.mjs.log",
+      "bytes": 34,
+      "sha256": "7767d61c0fc6a88af73ef19ca7584e133332e9ba9c4e1f2f0dd3368b7644d312"
+    },
+    {
+      "path": "editor-compose-slide-date.mjs.log",
+      "bytes": 102,
+      "sha256": "d93b00efed553cc14cfb7d0421c95eae3e2a99a2ca5e630fe7edc167975f9819"
+    },
+    {
+      "path": "editor-content-actions.mjs.log",
+      "bytes": 1224,
+      "sha256": "40713f5621d2925100914d3c2e82414f84c95ad33cc86ea0c6198e963ea68486"
+    },
+    {
+      "path": "editor-convert-contract.mjs.log",
+      "bytes": 155,
+      "sha256": "dae5f08e4e50a0e942a66fca0d8943fff5d518156f7b4749fc12baec0ee2690b"
+    },
+    {
+      "path": "editor-core-features.mjs.log",
+      "bytes": 103,
+      "sha256": "bca715f767b84c7b09d9df16637cc616555f9db4e4909a6beef2d9638eb9f228"
+    },
+    {
+      "path": "editor-data-grid.mjs.log",
+      "bytes": 29,
+      "sha256": "8b21952ca04e8bdc8a2707c8d5ac462e78cd3f6c6ef8b37509d53f1349ab95b8"
+    },
+    {
+      "path": "editor-deck-stats.mjs.log",
+      "bytes": 100,
+      "sha256": "414e63be611181a4fc94cb857bcae54e925806d4f5dd88ccfec8fe95298792f1"
+    },
+    {
+      "path": "editor-deck-title.mjs.log",
+      "bytes": 15,
+      "sha256": "ba31084de2df2d3a9078d82c8de560ed1224248ddd69447f46e9822c44bb9bf5"
+    },
+    {
+      "path": "editor-declared-options.mjs.log",
+      "bytes": 84,
+      "sha256": "72f2033f76fd5887f6b66bfaa44c8bd28740597e6f7e8c8113bb98e1ebd4fa84"
+    },
+    {
+      "path": "editor-default-font-scheme.mjs.log",
+      "bytes": 133,
+      "sha256": "c45b4b5ba9072a0b714c979bb463fcab1843fc3dddb5c0a64d98acb7517d559b"
+    },
+    {
+      "path": "editor-design-options.mjs.log",
+      "bytes": 250,
+      "sha256": "53d6f26a9db23d79096a45a2012e6cc5de3d1dd0a88d2e329b1c04718f4dd9b8"
+    },
+    {
+      "path": "editor-design-variants.mjs.log",
+      "bytes": 19,
+      "sha256": "22d413cce4e88f853aa95ea8001d28908ccb99e52ee2c7993cd60782d37bbc45"
+    },
+    {
+      "path": "editor-diagram.mjs.log",
+      "bytes": 217,
+      "sha256": "bd9c507866064938efaa62ef07d33ae3bc413e4a7516e6f1480e9a9b286c3626"
+    },
+    {
+      "path": "editor-editor-expand.mjs.log",
+      "bytes": 33,
+      "sha256": "e7d27e48b3dabca887500dd11e9fa1833f8b33e2ff315ac684dc522c69c7a274"
+    },
+    {
+      "path": "editor-element-units.mjs.log",
+      "bytes": 27,
+      "sha256": "12a5877f338b82bbabf1ae2fa016985876b610f9af53cde114610f3f163b1d97"
+    },
+    {
+      "path": "editor-exact-source-entry.mjs.log",
+      "bytes": 120,
+      "sha256": "722f619aecd88b1c95b3aefc01868299d03b8f7544238bde29f8ed06d16024a1"
+    },
+    {
+      "path": "editor-exact-source.mjs.log",
+      "bytes": 105,
+      "sha256": "78e5068a9498a7f5ac37e7a865fee7ac49714b8fae3500462159289d9ec0d872"
+    },
+    {
+      "path": "editor-export-subset.mjs.log",
+      "bytes": 141,
+      "sha256": "bd9a5d23f740fd0e9bdd92843edf13404ce84ade6869137f9041986bb6e887eb"
+    },
+    {
+      "path": "editor-export.mjs.log",
+      "bytes": 130,
+      "sha256": "54fbe277750b4228b07ecead483699c8bde392fd83bcdb413dc42b53832d3509"
+    },
+    {
+      "path": "editor-fa-13-conveniences.mjs.log",
+      "bytes": 581,
+      "sha256": "b0e00f83512fff31b3b2217e671d073c4de2e75104145ed79441f1f20041ab18"
+    },
+    {
+      "path": "editor-find-replace-empty-unicode.mjs.log",
+      "bytes": 74,
+      "sha256": "bfde450112e086d5a9e0c89f1802203bf19d5a60417d90b7af5aadbfcd270dbf"
+    },
+    {
+      "path": "editor-find-replace.mjs.log",
+      "bytes": 1360,
+      "sha256": "eb8c03e9ffbb3323370b3a10c4ce1fe6d36fdf9007c67576fa81e1d6fe20f7c7"
+    },
+    {
+      "path": "editor-font-gate-latin-families.mjs.log",
+      "bytes": 179,
+      "sha256": "59e43731963b47f834c33d591bd074c74487770da0575f7a25c7d42d14edbe68"
+    },
+    {
+      "path": "editor-font-gate-registry.mjs.log",
+      "bytes": 170,
+      "sha256": "1ee913eedea582631f1b15ccb9700c642013b81dcb9d5815b4d52dd6c566561c"
+    },
+    {
+      "path": "editor-font-gate-script-families.mjs.log",
+      "bytes": 494,
+      "sha256": "732d11ffcc67b104acb5600352b94a2fd3936e12112e0d0fe69958876b00ad18"
+    },
+    {
+      "path": "editor-font-gate-script-names.mjs.log",
+      "bytes": 410,
+      "sha256": "3700bd437e244345d425ef7190b4528122cd3f3ad07abbe1172871711b3cae17"
+    },
+    {
+      "path": "editor-font-gate.mjs.log",
+      "bytes": 123,
+      "sha256": "ec12ab658a167fb403db8f147f41c8889e9fad4b59c49f74d8673217f8da4c3e"
+    },
+    {
+      "path": "editor-gallery-font-roles.mjs.log",
+      "bytes": 33,
+      "sha256": "acde39c1094744fb66770c10838241fcb00958891f3c196c835d576619e6bb67"
+    },
+    {
+      "path": "editor-gallery-layout-records.mjs.log",
+      "bytes": 93,
+      "sha256": "eca34ec196e84722e561ec99bb5f109ddea93d4a00b2b7ccd30a5273141c090d"
+    },
+    {
+      "path": "editor-hang-cap.mjs.log",
+      "bytes": 102,
+      "sha256": "502e71d45e0c1c224471b0dcd91d95fcff74cb3f46fc8df4bf298089a6f063cd"
+    },
+    {
+      "path": "editor-host-continuation.mjs.log",
+      "bytes": 29,
+      "sha256": "37e3f13dd329e23add86641f9949c1b767c05bd1c53b71c956ba9d0f427ecaf2"
+    },
+    {
+      "path": "editor-icon-options.mjs.log",
+      "bytes": 107,
+      "sha256": "a16ec88cfcb951757f03e69e880791aca96741ebb31490fcb34433c7da26005a"
+    },
+    {
+      "path": "editor-icons.mjs.log",
+      "bytes": 26,
+      "sha256": "41c9c4a8f2de1fbc162d6c53446ed1bdf5bfab816814a12674538714056c6c40"
+    },
+    {
+      "path": "editor-id-paths.mjs.log",
+      "bytes": 56,
+      "sha256": "3da172219a4d55a60e0da6df1c3374e48340779d0188b68f4111467dc03605c2"
+    },
+    {
+      "path": "editor-image-crop-async.mjs.log",
+      "bytes": 126,
+      "sha256": "344ffc6fa5654448c15f274fc3beff3cb66fb7028d395263b202d4a705baff6b"
+    },
+    {
+      "path": "editor-image-crop.mjs.log",
+      "bytes": 15,
+      "sha256": "ef56f6e31e96a2f24e8d12334b71e61269acc1b2d2a19a34bf397c08c9faea3a"
+    },
+    {
+      "path": "editor-image-options.mjs.log",
+      "bytes": 122,
+      "sha256": "9c448abd22c7e0579c393a47dc7d2fd3f618979963d6a5873b7dd03a08b8ab86"
+    },
+    {
+      "path": "editor-json-options.mjs.log",
+      "bytes": 380,
+      "sha256": "bb5ba9b2d8f9b662d0e0c4c0d7017f005511941846b2c8bfc7fb9a6b9d2040a2"
+    },
+    {
+      "path": "editor-json-source.mjs.log",
+      "bytes": 131,
+      "sha256": "fe2203035f9e129570c690bed671761f9d49359127de5ceba8e63a772ef6220e"
+    },
+    {
+      "path": "editor-layout-design-applied.mjs.log",
+      "bytes": 129,
+      "sha256": "2358968a65185124e5982e2554392d4b330b73301b739573e91f38a82c2f3ae3"
+    },
+    {
+      "path": "editor-layout-groups.mjs.log",
+      "bytes": 93,
+      "sha256": "f56f13bae462df5a6d5b5a4db4d7d48102689902986a82358a5a96c143899c0f"
+    },
+    {
+      "path": "editor-layout-model.mjs.log",
+      "bytes": 78,
+      "sha256": "f3283c1f64184d2149280a4b76021cc692f03172faa9491994a374e4414a125d"
+    },
+    {
+      "path": "editor-layout-templates.mjs.log",
+      "bytes": 42,
+      "sha256": "ea9b1fafe2f558158df05a042c6c9d6f35d667d5bcb7eab562b6573f26b562bb"
+    },
+    {
+      "path": "editor-layout-tree.mjs.log",
+      "bytes": 104,
+      "sha256": "36179498483f46a49edfff1f2635ea0de816ec064c5bd21b5d025e2a508d6544"
+    },
+    {
+      "path": "editor-layout.mjs.log",
+      "bytes": 153,
+      "sha256": "453ca2b0c3fa131cbe89cb9be7039d58f33536207df2d018ce11255cd69c6717"
+    },
+    {
+      "path": "editor-lh-100-chart-label-default.mjs.log",
+      "bytes": 113,
+      "sha256": "0ac0b66fd38f428f311fa53fbcb2b195e5f6a88529e03c9c8577cf7f0f34553b"
+    },
+    {
+      "path": "editor-lh-97-variant-trend-fit.mjs.log",
+      "bytes": 32,
+      "sha256": "1a6ee1ddc3de0d4c6d48dbde44faec93faf437c0ef5e2e15f5cebbeb7286d8bc"
+    },
+    {
+      "path": "editor-metric-sentiment.mjs.log",
+      "bytes": 119,
+      "sha256": "58f8baea686790f5763f7940ee0b153e277986a4c05d258a1d094f17b5070d0c"
+    },
+    {
+      "path": "editor-narrative-switch.mjs.log",
+      "bytes": 21,
+      "sha256": "5f6281aaf600b32d0b8ae5462cb42f942ebd3dbaa15cb3dddde29c450e98baa2"
+    },
+    {
+      "path": "editor-native-playground-controls.mjs.log",
+      "bytes": 93,
+      "sha256": "057e0b7b91fbf6fb8e6bd9dc56543792be7d33e772f951432e46eadd7d7e89c6"
+    },
+    {
+      "path": "editor-numbering.mjs.log",
+      "bytes": 187,
+      "sha256": "30b85d737cce0fb8e8feaa7b409c63822a9c90f7b41cfa69f2bb67db420eaed4"
+    },
+    {
+      "path": "editor-outline.mjs.log",
+      "bytes": 18,
+      "sha256": "cd51cd68cdc31243211b369b47c1068fe7b3e35bf0413c0b210d12bdbf904a8d"
+    },
+    {
+      "path": "editor-overlay-size-units.mjs.log",
+      "bytes": 23,
+      "sha256": "7115a101365d9b683bca8cffc8d17ff04f7889e41c2dbf22f42513726c436383"
+    },
+    {
+      "path": "editor-patch.mjs.log",
+      "bytes": 133,
+      "sha256": "4a4218ced1358a8f706343e9203650e2057711d767d16f05b75f5b1e85b5f264"
+    },
+    {
+      "path": "editor-persistence.mjs.log",
+      "bytes": 22,
+      "sha256": "4a2f232398baaca0892afd9b694e7a9922262fdc918d4ef54d11b645b2e0bdb4"
+    },
+    {
+      "path": "editor-picture-luminance.mjs.log",
+      "bytes": 76,
+      "sha256": "a67b8ed88a29da236e51721f48a75acf14e71412836218f9ac17ed6d8731d964"
+    },
+    {
+      "path": "editor-placeholder-groups.mjs.log",
+      "bytes": 139,
+      "sha256": "14910cae1479ad35b7ff7d309724968c7828d11820851b6b274d8cdd1bc334a3"
+    },
+    {
+      "path": "editor-placeholder-selection.mjs.log",
+      "bytes": 212,
+      "sha256": "d1c16860f99c28cc57fdd1db4f04ed6add39300ffe9b6b53eb7a51544aa16ecb"
+    },
+    {
+      "path": "editor-playground-thumbnail-cache.mjs.log",
+      "bytes": 224,
+      "sha256": "d9185a2016a90576467ca6679508673bc0f32a1a0543767b420b6e534f1bd83a"
+    },
+    {
+      "path": "editor-presentation-ids.mjs.log",
+      "bytes": 59,
+      "sha256": "3839ba27029fec3f42dc66caf5c3d8b01cd29010563ddd982eef388bb1b1d75e"
+    },
+    {
+      "path": "editor-presenter.mjs.log",
+      "bytes": 26,
+      "sha256": "609008aafd320b8fda93a5d48d4e9c5102b053ae8f95cba0241287297f9ee565"
+    },
+    {
+      "path": "editor-quote-role-photo.mjs.log",
+      "bytes": 102,
+      "sha256": "69c04e943867f3b0ea358a02bc5ec27a21c102f02fd8784e04043c0209045cc9"
+    },
+    {
+      "path": "editor-read-deck-file.mjs.log",
+      "bytes": 22,
+      "sha256": "a71808a420f78fb4e5bb43edcf2fbe598a433c0900eb70087a8c0d8b06ba012c"
+    },
+    {
+      "path": "editor-replace-document.mjs.log",
+      "bytes": 91,
+      "sha256": "77041263f22711ceff1e9429b4724ea0a0dae6cf279f85079951c42b5a88ec7d"
+    },
+    {
+      "path": "editor-review-logo-alt.mjs.log",
+      "bytes": 183,
+      "sha256": "2f74adc7fa9d642f3c546201eb0d497f9cdb92f8eedd12e8e390a1a01d102335"
+    },
+    {
+      "path": "editor-review-pill.mjs.log",
+      "bytes": 15,
+      "sha256": "00ef54ad925dc45c0edfc504fa2181110acab852f72376d0df39754c27d691e9"
+    },
+    {
+      "path": "editor-review.mjs.log",
+      "bytes": 31,
+      "sha256": "f71eb0d3029c9f4b49b7ae6935a4a31983509206383dae659e0874872962f9cd"
+    },
+    {
+      "path": "editor-rich-headings.mjs.log",
+      "bytes": 81,
+      "sha256": "dbbd2be1e812ecac81268077fdcb93482a1a0fbd946a1c783abb522b22cbb4a5"
+    },
+    {
+      "path": "editor-rich-text.mjs.log",
+      "bytes": 369,
+      "sha256": "0aa238aae91cb5c0391d594b80d5140f5f9eccd28b966ed5231e1c8ea808e06e"
+    },
+    {
+      "path": "editor-rr-20-centered-track-resize.mjs.log",
+      "bytes": 1096,
+      "sha256": "ca41379bbebff398784cac220140b969109b46952558fe1d0a2f25e8af6bdc01"
+    },
+    {
+      "path": "editor-schema.mjs.log",
+      "bytes": 115,
+      "sha256": "9aee7e98d9e1afff52e860c734e65cda9c6c421c13cfc66b894fe885e344949d"
+    },
+    {
+      "path": "editor-session-boundaries.mjs.log",
+      "bytes": 166,
+      "sha256": "e3be67d8f151f23038c66c8ccbb87ef585831654f99510a01f7206fdbaa6a2e0"
+    },
+    {
+      "path": "editor-sh-25-chart-point-anchors.mjs.log",
+      "bytes": 34,
+      "sha256": "34d16aaf3f07dea3e1d595a8e30a2a26ccff387e2ad7caa4c03cb512c2c20cec"
+    },
+    {
+      "path": "editor-shape-handle-math.mjs.log",
+      "bytes": 49,
+      "sha256": "d18c6fa6adea8c30e5cf27b2718ba963f4a633d8aa25ce3ec4c96261397bd491"
+    },
+    {
+      "path": "editor-shape-options.mjs.log",
+      "bytes": 17,
+      "sha256": "521abc6a0181ba391a41f515826b3a0c8a6595f399557490db023661a741de8e"
+    },
+    {
+      "path": "editor-shape-overlays.mjs.log",
+      "bytes": 88,
+      "sha256": "3e330f925a77f3b5f2664a1e69bd75a54f029cbdbd1b7f7db5c8e021d2754652"
+    },
+    {
+      "path": "editor-shortcuts-sheet.mjs.log",
+      "bytes": 19,
+      "sha256": "ca7b8306944056bb987cad41d8c8d1680c8d228362b4c4c15bb7497669a9f63e"
+    },
+    {
+      "path": "editor-slide-adapter.mjs.log",
+      "bytes": 18,
+      "sha256": "ab72d1f2aa215b88379ff9261dd8b8e22fd13b68585a4073d154f3ea8b46d80c"
+    },
+    {
+      "path": "editor-slide-context.mjs.log",
+      "bytes": 137,
+      "sha256": "24a87006ef5d7eec07415d21ce4df0c2519bb7ad5f8c445ee7b6d3dad76ca92f"
+    },
+    {
+      "path": "editor-slide-edits-corpus.mjs.log",
+      "bytes": 285,
+      "sha256": "ec1b02dab288fbc5153ddc5a55340a8d24a9dc07d04326095ea8c4616c62969e"
+    },
+    {
+      "path": "editor-slide-navigator.mjs.log",
+      "bytes": 26,
+      "sha256": "70ba1a18ea508f294524e98cab1e38c069d02cf05c277fd00bcc568d5681c257"
+    },
+    {
+      "path": "editor-slide-scene.mjs.log",
+      "bytes": 36,
+      "sha256": "2182810402ec895ee202b0418b292df540856cd668947884fe839b77d845fc32"
+    },
+    {
+      "path": "editor-slide-variables.mjs.log",
+      "bytes": 165,
+      "sha256": "47ff92784e56690626fa02b36cd2a0f51f2b8cfc4557b0182582486db06ddfd6"
+    },
+    {
+      "path": "editor-slides-declarations.mjs.log",
+      "bytes": 74,
+      "sha256": "4a66a09159ee4140fa276c23f55c93d24cfebbf771174344a9c95335dae7f080"
+    },
+    {
+      "path": "editor-slides.mjs.log",
+      "bytes": 27,
+      "sha256": "ce48297aaa5965449038132d1461b6139853e8cfcd7328135804cb92889c0f55"
+    },
+    {
+      "path": "editor-smoke.mjs.log",
+      "bytes": 24,
+      "sha256": "24ad540552e318b0a11639780194ec5fc8abb7b691cb85e04dbcbaff56c95212"
+    },
+    {
+      "path": "editor-source-block-budget.mjs.log",
+      "bytes": 1090,
+      "sha256": "aa31bc6510c39d2a7a36f3787f4183d36363a237e3bb50b6283868c538172b3f"
+    },
+    {
+      "path": "editor-source-check-units.mjs.log",
+      "bytes": 135,
+      "sha256": "b3d42e1a86e8530036ab78871fbb6ca640e9c2e945c2efa48510d0eb82325070"
+    },
+    {
+      "path": "editor-source-checker-icon-sets.mjs.log",
+      "bytes": 116,
+      "sha256": "1e50c8ce3753c5d1b29c77cde52362d978ebed231e93d711323e35bb68082e30"
+    },
+    {
+      "path": "editor-source-completions-phase4-units.mjs.log",
+      "bytes": 106,
+      "sha256": "8ca8455d1e5d010c5c638296845b6eb11c6059b9548e1f428406fdb8f369cb50"
+    },
+    {
+      "path": "editor-source-completions-units.mjs.log",
+      "bytes": 674,
+      "sha256": "33ee769f61ed47d3d092128de55609fbcabaf0aab19b8c4673a819d83844f92f"
+    },
+    {
+      "path": "editor-source-findings.mjs.log",
+      "bytes": 74,
+      "sha256": "b992de147588efa233ae0beec0eda4092ba869c150d06f783b2ba4f9855affbc"
+    },
+    {
+      "path": "editor-source-fixes-markdown-units.mjs.log",
+      "bytes": 164,
+      "sha256": "bf35f884e6a8f84b9d31bb2dc42af92b4a008aa7323279cdb19c5ea90f77950d"
+    },
+    {
+      "path": "editor-source-fixes-syntax-units.mjs.log",
+      "bytes": 164,
+      "sha256": "a69d6557b76b186cc7d87a3a715d27c1a956d64e4fc734c7df6256cb32fcc58f"
+    },
+    {
+      "path": "editor-source-format.mjs.log",
+      "bytes": 117,
+      "sha256": "a3a188bc5f119ac300c4d4cb079ebc3c4654d0be76f0b23ce0822f218dbbeb41"
+    },
+    {
+      "path": "editor-source-hints-units.mjs.log",
+      "bytes": 99,
+      "sha256": "5b09ccd532c6cc540508a7233700a817bca2348f44215592802dc0e8acdc3045"
+    },
+    {
+      "path": "editor-source-keymap-units.mjs.log",
+      "bytes": 1028,
+      "sha256": "4317e149c7248b682602982b5370a3bbf1ba3f4ab21c0375928c4f99270c5d14"
+    },
+    {
+      "path": "editor-source-language-units.mjs.log",
+      "bytes": 743,
+      "sha256": "10c3a4e3faa9ba468cc2a7246e4d34051df7cbc3ac184ef2797433551a4b7cdd"
+    },
+    {
+      "path": "editor-source-language-yaml-markdown-units.mjs.log",
+      "bytes": 758,
+      "sha256": "82e03a051b191184519acc5f446fd6ac6172127138878bc1be4735345d6979ac"
+    },
+    {
+      "path": "editor-source-lines.mjs.log",
+      "bytes": 1807,
+      "sha256": "3c61537f74af60954d1680c5a8a5c4cde4b705b9ed408f711f1942db65edafc5"
+    },
+    {
+      "path": "editor-source-navigation-units.mjs.log",
+      "bytes": 240,
+      "sha256": "646381846bab9c54d7642c5f49f8063d7ccbdad43f8048bdff0c1b44c33ad504"
+    },
+    {
+      "path": "editor-source-symbols-units.mjs.log",
+      "bytes": 764,
+      "sha256": "bd629b14cc58f68cd03f13ea2e664a59427c01ed60e470d2cd3b2a6f42c0990e"
+    },
+    {
+      "path": "editor-source-worker-bundle.mjs.log",
+      "bytes": 111,
+      "sha256": "577ea3a800d2abde58e2fe812dbd2766937dd21ced328fb50ce87e5c7fc6ec21"
+    },
+    {
+      "path": "editor-studio-commands.mjs.log",
+      "bytes": 118,
+      "sha256": "c805b0a2c43825729ea836ac3d790135c5f63bd5af59a5c46907d261487bd3c6"
+    },
+    {
+      "path": "editor-studio-kit-commands.mjs.log",
+      "bytes": 113,
+      "sha256": "93f8edf2b2b3321cdf73fe3696ebe58b4f066cdb8928a806304448de9553706b"
+    },
+    {
+      "path": "editor-studio-kit-drag.mjs.log",
+      "bytes": 123,
+      "sha256": "e864062100f9b1b02d9cecee2aef88a583c2db5b07165df67bde8213151c342f"
+    },
+    {
+      "path": "editor-studio-kit-gesture.mjs.log",
+      "bytes": 124,
+      "sha256": "5232b742eaadb3794e8b51cf2af6e8c469d89eb555ef29c2e518b72be7f4ce68"
+    },
+    {
+      "path": "editor-studio-kit-overlay.mjs.log",
+      "bytes": 73,
+      "sha256": "f0199e66ce30a85ef49920e7495d472b67eb6bf53abd5acc102c14ce3681db52"
+    },
+    {
+      "path": "editor-studio-kit-selection.mjs.log",
+      "bytes": 124,
+      "sha256": "faf3bcbd73671f0d0cb22b64ccb771f63bda2b8e6495fff7d6a13bf72968aca8"
+    },
+    {
+      "path": "editor-studio-kit-tree.mjs.log",
+      "bytes": 91,
+      "sha256": "6c3c4c820389f50348aa2be908e1e108fae44f5612570f7a11fc17ef5eb3ce2b"
+    },
+    {
+      "path": "editor-studio-kit-viewport.mjs.log",
+      "bytes": 121,
+      "sha256": "a47ec2a270c22750895d9538dd3a2d19b9e08be8956cfe8710e687c815f33a38"
+    },
+    {
+      "path": "editor-studio-tracks.mjs.log",
+      "bytes": 106,
+      "sha256": "818ec3cd7c4daf07ed2d86513a9f0a516911bba1b697cf1ecd4f7bbc32a2989a"
+    },
+    {
+      "path": "editor-styled-table.mjs.log",
+      "bytes": 145,
+      "sha256": "90b711b6e5f4026aa33154069102994252ae24e23bf095ef8cd271cb35866ad9"
+    },
+    {
+      "path": "editor-styles.mjs.log",
+      "bytes": 32,
+      "sha256": "ebd095366090f69dd1849f33f49eb461a263d44297c9fce4dbfaabf783bb3f1c"
+    },
+    {
+      "path": "editor-styling-contract.mjs.log",
+      "bytes": 55,
+      "sha256": "acf6b9d668bd381f644c3cd74ee73007cc6a30ad24e9b8f8a0df4236f72140db"
+    },
+    {
+      "path": "editor-switches-export.mjs.log",
+      "bytes": 88,
+      "sha256": "a7691cc950e44f234952d603a23ddb73e9b9615a0e70f460fa836e1a73e5efe2"
+    },
+    {
+      "path": "editor-switches-ui.mjs.log",
+      "bytes": 124,
+      "sha256": "99610e96a55c07f4c94c98ad363850976a3860a64eda7c71f391178419a2fa58"
+    },
+    {
+      "path": "editor-switches.mjs.log",
+      "bytes": 119,
+      "sha256": "a1b2750816be6a2f8106d631c6449718dedf9a95c22f5b3c1f136f7a3c2e0229"
+    },
+    {
+      "path": "editor-table-alt.mjs.log",
+      "bytes": 63,
+      "sha256": "c52055b893534a27d805a41d7e677770efae52f926210bfb7503322afda78311"
+    },
+    {
+      "path": "editor-table-options.mjs.log",
+      "bytes": 166,
+      "sha256": "c6c16bac16ee68a0d4792f88f1142ef514e83108922342445dfb6929d72fd929"
+    },
+    {
+      "path": "editor-task-budget.mjs.log",
+      "bytes": 581,
+      "sha256": "55bbc003163b86841e9cc8be430b1f0722b749454b0e568d62aa0726410d49ed"
+    },
+    {
+      "path": "editor-templates.mjs.log",
+      "bytes": 103,
+      "sha256": "bdc4bdcf5330ec20cd048e31dd6a5131b911ba15f1f73510a80bbb97fbece636"
+    },
+    {
+      "path": "editor-toolbar-actions.mjs.log",
+      "bytes": 19,
+      "sha256": "7e9b5418214990588c70fbc237c4f7939274c0076e22c43357844d086ec5ad3d"
+    },
+    {
+      "path": "editor-transfer.mjs.log",
+      "bytes": 136,
+      "sha256": "fae135f6cfda0dee6cebb092781ff96aed3319d179a0fd90474e29a0956d6025"
+    },
+    {
+      "path": "editor-workspace-bundle.mjs.log",
+      "bytes": 225,
+      "sha256": "75d933472168ff79d5eff611a7061b278d477f05618c6f13e8137f37a609b4e9"
+    },
+    {
+      "path": "editor-workspace-ssr.mjs.log",
+      "bytes": 28,
+      "sha256": "93374b7612ac04012759df10224c5c5f6d1d2eff07af98e90e4022b6dc6ead0f"
+    },
+    {
+      "path": "editor-workspace-units.mjs.log",
+      "bytes": 29,
+      "sha256": "e4a98d4ccad7d7e7ff02447f0d1560772b74534e5f14c97b464d392218e554cc"
+    },
+    {
+      "path": "javascript-rich-tab.mjs.log",
+      "bytes": 156,
+      "sha256": "f21529843ee21cc4fec6b915297cfb3ab3f913e8397cd368dc515529ce84cba6"
+    },
+    {
+      "path": "javascript-rich-text.mjs.log",
+      "bytes": 42,
+      "sha256": "697ef4b817bcef840b422e351a7cefdf14774b46385b0fbfabc9c0af1cb03ca3"
+    },
+    {
+      "path": "javascript-script-itemization.mjs.log",
+      "bytes": 66,
+      "sha256": "2c191ed81ed688d2dc4e0f4d012ee13db019aec1540c558a10801525918b273c"
+    },
+    {
+      "path": "pptx-builtin-variables.mjs.log",
+      "bytes": 130,
+      "sha256": "140445051f4ab7c903be8bbe66db3a9fe9b091a543ba1d79aa4eed845c8e7836"
+    },
+    {
+      "path": "pptx-chart-cache-import.mjs.log",
+      "bytes": 5350,
+      "sha256": "bdcb72c7a40850d216e3cfe359f9e588acb9b2e053486cd8ed86ed8361f30c50"
+    },
+    {
+      "path": "pptx-chart-colors.mjs.log",
+      "bytes": 125,
+      "sha256": "b3e212275228a7bccaeeb69577da5e67c351b0fee0d1835bc24b94f18a664b05"
+    },
+    {
+      "path": "pptx-chart-correctness.mjs.log",
+      "bytes": 137,
+      "sha256": "fac0c7657e138c1600f795af593d62245eff9fca454aa9782caeb648bf5f5e7b"
+    },
+    {
+      "path": "pptx-chart-fallbacks.mjs.log",
+      "bytes": 24,
+      "sha256": "dbacb77bebd95b9573aadf800decaa0a41e2f23935100fd5fe8d0b391259c1a5"
+    },
+    {
+      "path": "pptx-chart-followups.mjs.log",
+      "bytes": 73,
+      "sha256": "7ae863784370a4bfb735c83d8c33d422b4d582580fa1e6a1844a68bfc6d8e9a9"
+    },
+    {
+      "path": "pptx-chart-highlight.mjs.log",
+      "bytes": 179,
+      "sha256": "55cc61e7fba2d27e719e584412858ee160b93f1e9a382efcc6af5aeb34c71101"
+    },
+    {
+      "path": "pptx-chart-layer.mjs.log",
+      "bytes": 115,
+      "sha256": "cc40cc6703ac514ce7f8eb8d378c8550e08fae7b329caa46d0d72ce3674839fc"
+    },
+    {
+      "path": "pptx-chart-options.mjs.log",
+      "bytes": 190,
+      "sha256": "ba40d81edf56d200a493192b8129295fa06b2573813694a7eafda4d42edc96a4"
+    },
+    {
+      "path": "pptx-chart-palette-axis.mjs.log",
+      "bytes": 135,
+      "sha256": "5c98f54decada48884bae4a3d4f3f9c0822415776615540fd6eb773a8d2688e6"
+    },
+    {
+      "path": "pptx-chart-reference-bar-options.mjs.log",
+      "bytes": 2385,
+      "sha256": "23d3947212c508c5583616582d84401c0b35e849ae39374a835a3cca28114a00"
+    },
+    {
+      "path": "pptx-chart-reference-boundaries.mjs.log",
+      "bytes": 1358,
+      "sha256": "afff7eb486aa0856953bf3469842d1323a9cf515fe4100a425bd84769a3822d0"
+    },
+    {
+      "path": "pptx-chart-reference-category-labels.mjs.log",
+      "bytes": 5676,
+      "sha256": "02d4707af1a58a457f03e798715cfdd1bb8a64d638c5a2da381be543852590c5"
+    },
+    {
+      "path": "pptx-chart-reference-lines.mjs.log",
+      "bytes": 16942,
+      "sha256": "ce78b138e9d3213a70bf5581e2ed4c1ba6fd4560427e4230c1515687c02a73af"
+    },
+    {
+      "path": "pptx-chart-reference-overlay-save.mjs.log",
+      "bytes": 1918,
+      "sha256": "c84c27699feec3a1b62209e15ad664975f2df2c6e017f247a40117bce9506337"
+    },
+    {
+      "path": "pptx-chart-reference-powerpoint-save.mjs.log",
+      "bytes": 1999,
+      "sha256": "592e70b96482c024f9a5661ccc20f37947a1183cbf793066fe37e4ed65d504ff"
+    },
+    {
+      "path": "pptx-chart-reference-secondary-overlays.mjs.log",
+      "bytes": 6169,
+      "sha256": "6f36a1776e0b9725144d5723fe95b03595c1778d1ddac5fa894a271013552ccd"
+    },
+    {
+      "path": "pptx-chart-series-order.mjs.log",
+      "bytes": 165,
+      "sha256": "1d9a7927f12b2521afd94e1b38f9bd3db40dce8ac46e68f8a84146d6e93371a9"
+    },
+    {
+      "path": "pptx-chart-series-paint-import.mjs.log",
+      "bytes": 201,
+      "sha256": "a730dac90d4d12f14b68ff858199a4d86e6b2a0b8a333677345ebeb68caf8295"
+    },
+    {
+      "path": "pptx-chart-text-size.mjs.log",
+      "bytes": 199,
+      "sha256": "4e7fdbac9fb5b437aeb3f1728c2647d4431dacd7b9ffbab65929a8b2cee29eae"
+    },
+    {
+      "path": "pptx-chart-types.mjs.log",
+      "bytes": 122,
+      "sha256": "76d6899112191e9dd658a79ee8ef21b74551651f5c0e8bcb05106bf084948bc3"
+    },
+    {
+      "path": "pptx-chart-workbook-ranges.mjs.log",
+      "bytes": 125,
+      "sha256": "7dbb8d839a11832b5c2fb648ad4db5ef8647f466ceda873a01f4621bd5cbc422"
+    },
+    {
+      "path": "pptx-chart-workbook-values.mjs.log",
+      "bytes": 145,
+      "sha256": "818f0e7cf57a26dad74e7474beac34c58dfc76c3596f15ed453d193fe7c6bffb"
+    },
+    {
+      "path": "pptx-chart-workbook.mjs.log",
+      "bytes": 190,
+      "sha256": "dd02293e0a64eff3525c8ab7240ff0fadddfb30032c62bac2fe96ea8477b56b3"
+    },
+    {
+      "path": "pptx-chartex-fallback-archive-review.mjs.log",
+      "bytes": 218,
+      "sha256": "56cbb94430b05015dbe5a10f3060460369ca8a5381703e445fdd786f1066df58"
+    },
+    {
+      "path": "pptx-chartex-title-data-provenance.mjs.log",
+      "bytes": 651,
+      "sha256": "ee0129569db293a864f5edecca452a84bbef25460eaaca26e3407709d2d3d635"
+    },
+    {
+      "path": "pptx-chartex.mjs.log",
+      "bytes": 401,
+      "sha256": "45d0b189cbb5a3ad86da06c3e0bb62492578cf3e1954f3425f7bfe5b94ee7475"
+    },
+    {
+      "path": "pptx-color-ref-export.mjs.log",
+      "bytes": 100,
+      "sha256": "9ff74444c092ff75dddd241ca82c7b6e211b40c75d041eeaba980ebad48b7d36"
+    },
+    {
+      "path": "pptx-color-roles.mjs.log",
+      "bytes": 94,
+      "sha256": "59e2509d53eb2985c3113825d13d56474a8ee670c14343bdb73419904baf7002"
+    },
+    {
+      "path": "pptx-color-variants-parity.mjs.log",
+      "bytes": 100,
+      "sha256": "c6d4943541ec4891e72ce6cbfa8480b3554d112c3c4184642900f244ba5cec01"
+    },
+    {
+      "path": "pptx-color-variants.mjs.log",
+      "bytes": 146,
+      "sha256": "15888dc2d5c10659218488b4f55f015f6de967f4b6b8afa9b6680b4d58bd0b0a"
+    },
+    {
+      "path": "pptx-combo-charts.mjs.log",
+      "bytes": 125,
+      "sha256": "728857a81b433b07e1816cdd806b0d1c5a5057fd598ba12955be3374c0573aad"
+    },
+    {
+      "path": "pptx-content-cards.mjs.log",
+      "bytes": 228,
+      "sha256": "2f25e155eadf0ebbdf309ff8cf38e9e95abab76061fae8881588976c76084c22"
+    },
+    {
+      "path": "pptx-content-layout.mjs.log",
+      "bytes": 264,
+      "sha256": "0fcc831eac65490c91998962fe880a30086b0d58d55cfe367ba77424d7261d4f"
+    },
+    {
+      "path": "pptx-content-topology.mjs.log",
+      "bytes": 1139,
+      "sha256": "eb6b6ba03f1b48d205405e35841a83437c1585425612a0ad26fde3f41a01794f"
+    },
+    {
+      "path": "pptx-core-features.mjs.log",
+      "bytes": 57,
+      "sha256": "789e360bb45820abe5eabcf7e53cb403948caa6dc90020ebd54732732433d058"
+    },
+    {
+      "path": "pptx-cover-centering.mjs.log",
+      "bytes": 62,
+      "sha256": "f1af6d6779a91337e620f11f86f833246c0dcea987a4cc8885e910873f9363c2"
+    },
+    {
+      "path": "pptx-data-readability.mjs.log",
+      "bytes": 138,
+      "sha256": "ef43896dade06f5bb2eb13b7455079ba1755c5b2aa161e481513e6597b8e3527"
+    },
+    {
+      "path": "pptx-default-font-scheme.mjs.log",
+      "bytes": 160,
+      "sha256": "5fb469d0d67aa429940f1f106b2cc163d21d19da1c229f95fa01f088e846675a"
+    },
+    {
+      "path": "pptx-design-alignment.mjs.log",
+      "bytes": 6387,
+      "sha256": "2f70e1f252f9bacf06ff2824180cea949f8146af2f72b71739395e06dc3db95e"
+    },
+    {
+      "path": "pptx-design-fields.mjs.log",
+      "bytes": 164,
+      "sha256": "92f9d26b497da742c6c29a5a1e806095c3af23f3842545c5c738f993d02808c1"
+    },
+    {
+      "path": "pptx-determinism.mjs.log",
+      "bytes": 424,
+      "sha256": "61422f35ae021d28c8ba313101a0dfc53d7f34d07cfdcfcd8bb005ea13300548"
+    },
+    {
+      "path": "pptx-diagram.mjs.log",
+      "bytes": 154,
+      "sha256": "a4b33dc35b6e2d66c50f3da1f22371b2f8ed4d192fbdd255c7acce9c194c4a9a"
+    },
+    {
+      "path": "pptx-document-provenance.mjs.log",
+      "bytes": 435,
+      "sha256": "48a75d34d6ac0f591e8c4226ab2e4da2b6527fb06fa24f38a127f2ef093ee827"
+    },
+    {
+      "path": "pptx-drawing-id-collisions.mjs.log",
+      "bytes": 61,
+      "sha256": "1da16bb410840248a869ad15e1975ff2ed31e434e59be19ff1f8b44d2d22cb53"
+    },
+    {
+      "path": "pptx-emphasis-surface.mjs.log",
+      "bytes": 34,
+      "sha256": "b9c6a63053584b221172ab29bb63687b20a24e6bb46e4175864197b373ea8566"
+    },
+    {
+      "path": "pptx-engine-text-weights.mjs.log",
+      "bytes": 236,
+      "sha256": "4664843d34e4a30dc2aa3d5f77003e82e3ba2304b9d33ff42a84168516d287d9"
+    },
+    {
+      "path": "pptx-export-chosen-fonts.mjs.log",
+      "bytes": 431,
+      "sha256": "2bf8830a20bf623aefdfdfdf2692919b61af4a749c6cf9476a8178ac28d451cf"
+    },
+    {
+      "path": "pptx-export-lossy.mjs.log",
+      "bytes": 99,
+      "sha256": "7d87d5b05365f4e4e0658725b095670fea513b1ba3babeca5c608fb2551ba48d"
+    },
+    {
+      "path": "pptx-fa-06-metric-sentiment.mjs.log",
+      "bytes": 6433,
+      "sha256": "45e020821d5659dbf59bf8c3be49dc6330e43be1b1cee73c846126aedaa4472a"
+    },
+    {
+      "path": "pptx-fa-07-links-audience.mjs.log",
+      "bytes": 121,
+      "sha256": "23bd7fe642b4cd4fef4b9e67343a3f2261f8ff261902cc946b1eaf81a5036830"
+    },
+    {
+      "path": "pptx-fa-13-conveniences.mjs.log",
+      "bytes": 110,
+      "sha256": "b086e2df3e5aad9b73299dedb02110a94cb23289444bd6721807c46bb622c42b"
+    },
+    {
+      "path": "pptx-fa-23-catalogs-units.mjs.log",
+      "bytes": 138,
+      "sha256": "55749e1bcbef30e97bcfa196eced9bd91047be6782384f3bf11d3fbfa0fb4be0"
+    },
+    {
+      "path": "pptx-fa-23-catalogs.mjs.log",
+      "bytes": 320,
+      "sha256": "2a132020f185df29f6a63eed7852b6f9083ec9da23d1145d9de84dbf41be261f"
+    },
+    {
+      "path": "pptx-fa-23-image-drawingml.mjs.log",
+      "bytes": 40,
+      "sha256": "5d8bc278ad2d1a4e507b19965b32e2dd4044ad0e556630a8773ac52ff8404dbe"
+    },
+    {
+      "path": "pptx-fixed-background-layout-variants.mjs.log",
+      "bytes": 37,
+      "sha256": "475c4c6ca98b483eb8c7d11d2aa765360ac78ff3c1589ae4bca518a8ae1e934a"
+    },
+    {
+      "path": "pptx-font-metadata-weight-fallback.mjs.log",
+      "bytes": 195,
+      "sha256": "5d2bb3962303d9486f93026f5b2f1259ee1affe1647d683d4703fbf3f663aae8"
+    },
+    {
+      "path": "pptx-font-weight-import.mjs.log",
+      "bytes": 55,
+      "sha256": "8bb1af36426355f2705cae6bdab09cc84a96c0c84568278abb54ab5611fb3517"
+    },
+    {
+      "path": "pptx-footer-text-shape.mjs.log",
+      "bytes": 170,
+      "sha256": "2d092264dc64ee36f35cd8efe09fd37ed5b9eba4448fad0c61b68cbece2854f0"
+    },
+    {
+      "path": "pptx-footnote-rule-authority.mjs.log",
+      "bytes": 102,
+      "sha256": "02c673723bc240f959a0a8d0bf16e7c0e62ba3083740673da753b2b927be47bc"
+    },
+    {
+      "path": "pptx-frame-alt.mjs.log",
+      "bytes": 65,
+      "sha256": "5ce49c00767af019111dc8ab82959a6bc9c3b254bb57e72c85fb262b5fe44467"
+    },
+    {
+      "path": "pptx-furniture-fields.mjs.log",
+      "bytes": 167,
+      "sha256": "5a99cbfc03606f5386f17cbf1a166ba43c5a08eadc02c16840588e0b5bdf3f8f"
+    },
+    {
+      "path": "pptx-furniture-provenance.mjs.log",
+      "bytes": 233,
+      "sha256": "9c577a583bf23b79ad1da3b29a57303d5596cf8fd06d7640ea58db3d5ac4faf1"
+    },
+    {
+      "path": "pptx-furniture-wrapped-date.mjs.log",
+      "bytes": 1653,
+      "sha256": "279a7900bc4633060c98205de4aa747de5c9c7992a8c2fcba43771c2158e88c6"
+    },
+    {
+      "path": "pptx-gallery-layout-alignment.mjs.log",
+      "bytes": 11242,
+      "sha256": "6828f5093971587b4b1f4b0f6c9e8e6f09dc0e75ec077c01683eaaf78ebdae65"
+    },
+    {
+      "path": "pptx-hard-line-breaks.mjs.log",
+      "bytes": 340,
+      "sha256": "da90b0cad66d61e3041597ac69238b5d3efd7ffc1b43c0408e9b46b999589e10"
+    },
+    {
+      "path": "pptx-header-footer-dialog.mjs.log",
+      "bytes": 175,
+      "sha256": "99db40cc9f03b316999049b5e028b380b4c2fbb847216d9240e94b8543370987"
+    },
+    {
+      "path": "pptx-header-footer-placeholders.mjs.log",
+      "bytes": 473,
+      "sha256": "29640e87301931d0451b634186b5a8a2794518ee96a73fc042d4e3ce54593dbf"
+    },
+    {
+      "path": "pptx-heading-provenance.mjs.log",
+      "bytes": 262,
+      "sha256": "ae69201f92c0d0c481ab23253c532aae4b67dca15657e28fc6e1efb859b5c2ef"
+    },
+    {
+      "path": "pptx-histogram-negative-category.mjs.log",
+      "bytes": 1175,
+      "sha256": "b55ba5bba324e8aa0fb4dc8e91c050ab796bb75518baa7111558e4673d3c99b8"
+    },
+    {
+      "path": "pptx-icons.mjs.log",
+      "bytes": 119,
+      "sha256": "99d4a5c3213b257ebd1fa7becd6e8832357b82c67ef2cc749ada35e812dbd3d8"
+    },
+    {
+      "path": "pptx-image-blocks.mjs.log",
+      "bytes": 7105,
+      "sha256": "daae87bf0e026907a210522faab4360cced30b015a245c7349e39e83f1c1a017"
+    },
+    {
+      "path": "pptx-image-fit-serialization.mjs.log",
+      "bytes": 158,
+      "sha256": "eedeb756610f6fc590f90e2c0094d4881583109c7321d9a3b861b40e0b9520f5"
+    },
+    {
+      "path": "pptx-image-placeholder-group.mjs.log",
+      "bytes": 988,
+      "sha256": "2b089ec654af96662e536285838e7e7398408acffbf71a56cd4d0a80cdfccf82"
+    },
+    {
+      "path": "pptx-image-placeholder.mjs.log",
+      "bytes": 177,
+      "sha256": "c4ae7d53a1f12ff54d3bc8a13fc4f70ce5b251caa9f5969f26edd8c355e29ee8"
+    },
+    {
+      "path": "pptx-image-treatments-014.mjs.log",
+      "bytes": 155,
+      "sha256": "c78c676d9631e7b9cd84c80ca66469e6ac94965c0c4c7e1ddc000265031ce211"
+    },
+    {
+      "path": "pptx-image-treatments.mjs.log",
+      "bytes": 4058,
+      "sha256": "eec5f9823e015e6f9121fea8a4fae6d2385937e79ce91013cc8d9959998e0e0d"
+    },
+    {
+      "path": "pptx-import-details.mjs.log",
+      "bytes": 239,
+      "sha256": "57fe4054ab0a4480936ff27eaf0338a21eefe8af37c8af3a491577003b4cf55b"
+    },
+    {
+      "path": "pptx-import-fabrications.mjs.log",
+      "bytes": 39,
+      "sha256": "0a5892996a4d746420575310e9ddecb386963beb6c2b370d685fe3679bd964af"
+    },
+    {
+      "path": "pptx-import-signals.mjs.log",
+      "bytes": 32,
+      "sha256": "242e4afeb40874957c8216f92225d8f8167ed2b3d04dba80ffd90e1dc43e6e60"
+    },
+    {
+      "path": "pptx-keynote-footer-controls.mjs.log",
+      "bytes": 304,
+      "sha256": "0fbf6d09d70b6ff2082e41abc83020c08f98527b1bd46df909ca53e8c35716ec"
+    },
+    {
+      "path": "pptx-keynote-native-list-qualification.mjs.log",
+      "bytes": 271,
+      "sha256": "3b9ec65df41657d4bfe2e1f8c96ce1dc7a8a975ce59dd641c41b25105d11e288"
+    },
+    {
+      "path": "pptx-keynote-noop-semantics.mjs.log",
+      "bytes": 352,
+      "sha256": "e6ab2356d08766191bf06b9802dc26f281d4f5581d58e445510d566c578ca368"
+    },
+    {
+      "path": "pptx-keynote-qualification.mjs.log",
+      "bytes": 570,
+      "sha256": "d5547c5adc7f84faf70a2a68249a265b5bf0232454e278526b8661812f3d119a"
+    },
+    {
+      "path": "pptx-keynote-registry-runtime.mjs.log",
+      "bytes": 137,
+      "sha256": "e275e0b6875a09f4de5f85633e647a5b83e8a387198e7ac615deb4b72b5b278f"
+    },
+    {
+      "path": "pptx-keynote-table-inspection.mjs.log",
+      "bytes": 208,
+      "sha256": "ff40525c235de9303e60b481eb311821905ff3682ea20f3c4dca810672f35435"
+    },
+    {
+      "path": "pptx-layout-design-applied.mjs.log",
+      "bytes": 216,
+      "sha256": "d3575996b93fe80e46410c7954029d42e8e15391976228d3494d4c8da8355dbe"
+    },
+    {
+      "path": "pptx-layout-intent.mjs.log",
+      "bytes": 251,
+      "sha256": "1e601cb4ac8eb657219b62936c8f8a60060f1a1c7b6f3fc9e34780d0c4cf536c"
+    },
+    {
+      "path": "pptx-layout-parity.mjs.log",
+      "bytes": 6209,
+      "sha256": "2caf0274a6c595cd8f07175d9aa1af57b5a4aa7790227f4d2364ba8d3c44885d"
+    },
+    {
+      "path": "pptx-layout-variants.mjs.log",
+      "bytes": 20,
+      "sha256": "647c34059375914e086be59dee2ea8fb39ee3498fdde470e0358d1bc26eacdf8"
+    },
+    {
+      "path": "pptx-legacy-tags.mjs.log",
+      "bytes": 124,
+      "sha256": "f5a474fa3d8b1ca8cd97c83038eaf4c15eed8711acbdc637ecf36398f62cf2b0"
+    },
+    {
+      "path": "pptx-lh-105-few-charts.mjs.log",
+      "bytes": 138,
+      "sha256": "69ec7b1a60af10de2a58f2ec2b9ec24e94a21801827222b2aad789432ea4c016"
+    },
+    {
+      "path": "pptx-lh-106-slide-language.mjs.log",
+      "bytes": 437,
+      "sha256": "01b0d458f3c9412b87505f9c2c26f135c451e1d1885f17358170b177a368fe98"
+    },
+    {
+      "path": "pptx-lh-107-chart-ideas.mjs.log",
+      "bytes": 159,
+      "sha256": "881aac450396cee40c3400645d9817856d38bb8bee3d0571c161d6d82d6a656b"
+    },
+    {
+      "path": "pptx-lh-113-shared-emphasis.mjs.log",
+      "bytes": 492,
+      "sha256": "9dfaf63f6615d480bcdfdcee647fd3fa1ab020f307e014aca7248908602c804c"
+    },
+    {
+      "path": "pptx-lh-114-pull-line-timeline.mjs.log",
+      "bytes": 43,
+      "sha256": "97c0ee1d07afdfc1d6c30bd93f3fba84fdc56a23bc49235e19ba422661560fab"
+    },
+    {
+      "path": "pptx-lh-118-bidi-numbers.mjs.log",
+      "bytes": 385,
+      "sha256": "7b13136e89403e3e8d213c965fd5c0ec7614e066d89baa49cebd97b5e6e70528"
+    },
+    {
+      "path": "pptx-lh-121-localized-status.mjs.log",
+      "bytes": 78,
+      "sha256": "b0022b951dc1a2f0ab47199a18d2ab0087e59c3b73935cbdc12e2db125d056a6"
+    },
+    {
+      "path": "pptx-lh-125-chart-marks.mjs.log",
+      "bytes": 104,
+      "sha256": "74e2b15b9e249c05437e20a6406c3772fed617ef0c626d4760818d7f1ae1ea4c"
+    },
+    {
+      "path": "pptx-lh-131-featured-pills.mjs.log",
+      "bytes": 73,
+      "sha256": "aec7c243ef4ecd039f70bd0a9b3e6301f0893a3518e037eeb0b9f52c8bd4b2e5"
+    },
+    {
+      "path": "pptx-lh-133-faq-takeaways.mjs.log",
+      "bytes": 97,
+      "sha256": "100ccfb207ef27f097aeb4c45f687a8d8f1c174374dc5cf530902e740c618b47"
+    },
+    {
+      "path": "pptx-lh-139-master-backgrounds.mjs.log",
+      "bytes": 142,
+      "sha256": "8fc62e3539688c29897d88deee7ed6b181064e9fb0aaec8391324fd9cbc718b0"
+    },
+    {
+      "path": "pptx-lh-141-chart-fixes.mjs.log",
+      "bytes": 37,
+      "sha256": "ab6fb69e0fed34ef1a2c7a8a45a0ca624ef0638691be634cac7ad573e1256872"
+    },
+    {
+      "path": "pptx-lh-153-chart-follow-ups.mjs.log",
+      "bytes": 40,
+      "sha256": "0efaacd3228fd73a90e09f990da27dc0f68e66dcd6e0afaefa2ab8ffc94ad1dd"
+    },
+    {
+      "path": "pptx-lh-156-flow-citation.mjs.log",
+      "bytes": 51,
+      "sha256": "249eebe784e69918e14036c939e1597e6f883572aa44832651800718e3ceebc7"
+    },
+    {
+      "path": "pptx-lh-16-duration-timeline.mjs.log",
+      "bytes": 86,
+      "sha256": "a8dd66d1ca9b9ed04cf7da3f50e36fe51760ff01bd0d0579ea688a456cbb02bc"
+    },
+    {
+      "path": "pptx-lh-16-rtl-date-language.mjs.log",
+      "bytes": 87,
+      "sha256": "0bd6c278a908c3bc7907e73954172f27fae39285bbe17f602601c270d6dd54fc"
+    },
+    {
+      "path": "pptx-lh-160-chart-labels.mjs.log",
+      "bytes": 37,
+      "sha256": "ff990b11cbc873c7ece586f771172fa5bda8084c6c6207437fe145399222b301"
+    },
+    {
+      "path": "pptx-lh-164-watermark.mjs.log",
+      "bytes": 140,
+      "sha256": "aa0a668979973b6fd98cca12b54ce1a07b323b24356b24737d0c7477625dc9ba"
+    },
+    {
+      "path": "pptx-lh-182-doughnut-hole.mjs.log",
+      "bytes": 96,
+      "sha256": "6d8924637fc33a97db485690ff10de85e322317318166091b95275e833a76fa5"
+    },
+    {
+      "path": "pptx-lh-182-optioned-doughnut.mjs.log",
+      "bytes": 114,
+      "sha256": "71b8eb8daef387df05807f8d9e493b064d690caea3a7eb1e015a8daec0aa49bf"
+    },
+    {
+      "path": "pptx-lh-34-image-callouts.mjs.log",
+      "bytes": 139,
+      "sha256": "9a859be6db16258f3dd697e7821a3b213f6d7b00eb334e06243f9f93e95d1de3"
+    },
+    {
+      "path": "pptx-lh-34-native-panels.mjs.log",
+      "bytes": 319,
+      "sha256": "46ee7f8803a65683eb1ed2f1af8e7f9195e99b5029ff919eecae1d4e583ffa86"
+    },
+    {
+      "path": "pptx-lh-63-run-in-quote-marks.mjs.log",
+      "bytes": 48,
+      "sha256": "15c7fbeddb48c456bdc5a70f4b800cc352872da92668d2481da981fe16a53bd9"
+    },
+    {
+      "path": "pptx-lh-93-horizontal-siblings.mjs.log",
+      "bytes": 66,
+      "sha256": "2649bd7ac650e264494341aa9839ca52449a8f3624f8a57f342999c795eb682d"
+    },
+    {
+      "path": "pptx-lh-93-negative-category-labels.mjs.log",
+      "bytes": 240,
+      "sha256": "1980971ff551df7b08680c2564c97b53da8087f7491c7d7f4a27abd32cd69ed3"
+    },
+    {
+      "path": "pptx-lh-93-rtl-legend.mjs.log",
+      "bytes": 129,
+      "sha256": "e762ebd465dc61ec5b28d914b4d2393c76e40ce0b8a5a87de02b770562d5b3cc"
+    },
+    {
+      "path": "pptx-lh-93-stacked-siblings.mjs.log",
+      "bytes": 136,
+      "sha256": "3805cec9f3f715f5796ffb590cc6993fa649538e156c8dc8cf7bab3e1b5a7f15"
+    },
+    {
+      "path": "pptx-lh-96-layout-variant-layouts.mjs.log",
+      "bytes": 32,
+      "sha256": "ecaf55b679747ed89f392e7d80f503140138ea8c3fc258441b0df8ae60c12fed"
+    },
+    {
+      "path": "pptx-lh-98-native-line-pitch.mjs.log",
+      "bytes": 106,
+      "sha256": "8cde189be78a6a46e50f9278bb91505f34ac33720c6a1fffcec77723322ff59c"
+    },
+    {
+      "path": "pptx-libreoffice-saved-import.mjs.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pptx-line-break-native.mjs.log",
+      "bytes": 89,
+      "sha256": "16715da10144b1653c30483618fd7fb0ed490db9670b8c600aede522c5ff4465"
+    },
+    {
+      "path": "pptx-list-bullet-none.mjs.log",
+      "bytes": 100,
+      "sha256": "b0c1a29770f773ec3430861f99bc37f159be100067a25bc6d492ec0fedd7f58c"
+    },
+    {
+      "path": "pptx-list-description-identity.mjs.log",
+      "bytes": 108,
+      "sha256": "e6140ced8ea853e73a8065e5ba8412316615b8240dbec606b31cd0d93aeb2c74"
+    },
+    {
+      "path": "pptx-list-inherited-runs.mjs.log",
+      "bytes": 181,
+      "sha256": "3abce641d48fdb243f3431aef6491187f56beecb52adad942655df1e46d67bb7"
+    },
+    {
+      "path": "pptx-list-shape-names.mjs.log",
+      "bytes": 130,
+      "sha256": "642a6e6a4c515745eae66514091485ebdde96c6eb945ab89b01b22ae18951e5b"
+    },
+    {
+      "path": "pptx-manual-harness-smoke.mjs.log",
+      "bytes": 105,
+      "sha256": "81476b10f9f53eb8425a9bb2100408a57b267fdd455aaaa29135a0576f3f7030"
+    },
+    {
+      "path": "pptx-master-bullet-font.mjs.log",
+      "bytes": 62,
+      "sha256": "fbcb36d9fa158ae16cdf4d480aa6a39c3218470dd4b0d0562c6e7ef8d8387b90"
+    },
+    {
+      "path": "pptx-master-display-name.mjs.log",
+      "bytes": 158,
+      "sha256": "dfb79119eeeb930a8f0dc536dc2c4717574bed6e62dfb6f7d09c967b0a90c1bf"
+    },
+    {
+      "path": "pptx-master-furniture.mjs.log",
+      "bytes": 731,
+      "sha256": "d5cd1badbdfb10a86083ae460b89b110591e24b40924a5f66853697cca53547f"
+    },
+    {
+      "path": "pptx-math-emoji.mjs.log",
+      "bytes": 169,
+      "sha256": "6dec41f6dfca6b9f9cac4eee17236b1d30e4a897a68d0d05e7662942faebeb0d"
+    },
+    {
+      "path": "pptx-media-dedupe.mjs.log",
+      "bytes": 574,
+      "sha256": "206c7732e089660c9dcab80c74ba3aa524d291a589bb6aa5986480173eb6eff4"
+    },
+    {
+      "path": "pptx-media-placeholder.mjs.log",
+      "bytes": 223,
+      "sha256": "0e69a536ebeb7cd37339090977ff9257a4846b160a108a85d83ccf8b1f0f6251"
+    },
+    {
+      "path": "pptx-metric-provenance.mjs.log",
+      "bytes": 157,
+      "sha256": "bfeacb5da1b240ed6d38fb4eecce13c1bc64d3d0d0be12d7fe41d403c422a0c5"
+    },
+    {
+      "path": "pptx-narrative-provenance.mjs.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pptx-native-area-point.mjs.log",
+      "bytes": 79,
+      "sha256": "e64df2c13cef8f9766aa4a0078efa7b00ee8afe5a95e6e9be62dba979a92e2cc"
+    },
+    {
+      "path": "pptx-native-body-export.mjs.log",
+      "bytes": 269,
+      "sha256": "d7d9eb6f196803b285c25027bec0cdbf139c359107691de808bdfa55a34e6d03"
+    },
+    {
+      "path": "pptx-native-body-inherited-bullets.mjs.log",
+      "bytes": 680,
+      "sha256": "facc82a10caf9b9e4a4c9e0119414a5aaf7c6e4cd366c0eba8cd028a9ad13bd9"
+    },
+    {
+      "path": "pptx-native-body-inherited-style.mjs.log",
+      "bytes": 781,
+      "sha256": "7714954d51e02335d330c62034f516700fb1b6d691fe48a61bd475637b25af3a"
+    },
+    {
+      "path": "pptx-native-body-rich-text.mjs.log",
+      "bytes": 120,
+      "sha256": "40ca4f59110253f8e5cec2e5a3e2e63a013e47c3be2325444b373ce6e9c38083"
+    },
+    {
+      "path": "pptx-native-circle-center.mjs.log",
+      "bytes": 82,
+      "sha256": "8ae64f5e4649ff1fec808fae3ce90654afc381fc0f4b5c3c34586188d8f4a6e6"
+    },
+    {
+      "path": "pptx-native-conformance.mjs.log",
+      "bytes": 454,
+      "sha256": "fa2a8e36b1e77fae032b9770dd97d88db346973a6642bb35ec51cdf2b53f64d6"
+    },
+    {
+      "path": "pptx-native-curved-slice-bounds.mjs.log",
+      "bytes": 94,
+      "sha256": "ce1fe81e3f165f0ccbe59c88e12fffd70cb53a133d54b49dd277d49a37a38730"
+    },
+    {
+      "path": "pptx-native-fallback-contracts.mjs.log",
+      "bytes": 201,
+      "sha256": "99245025a724716385f022ee6127f503c287b62593644623493e379cdda1e4a8"
+    },
+    {
+      "path": "pptx-native-footer-classification.mjs.log",
+      "bytes": 196,
+      "sha256": "64ef246e4523018531f764f9375110d0d18d78defc5c8374d847a5c68c80caef"
+    },
+    {
+      "path": "pptx-native-furniture-style-controls.mjs.log",
+      "bytes": 106,
+      "sha256": "2ecda07f701257919dc26e59924f20838fe9577715e173fb505e62a11534b54e"
+    },
+    {
+      "path": "pptx-native-furniture-wide-zones.mjs.log",
+      "bytes": 5187,
+      "sha256": "76dd659b92d5a67a467667da35506a51c64ddefd7b7258f78b26896af5724f04"
+    },
+    {
+      "path": "pptx-native-furniture.mjs.log",
+      "bytes": 758,
+      "sha256": "b570b45adbf07be5fb416a85e00f727801599ee2b915be2d48ab933369909ee6"
+    },
+    {
+      "path": "pptx-native-image-stretch.mjs.log",
+      "bytes": 138,
+      "sha256": "3a3f027334aa1b1363703a9efc2533bf1df141f762401b36dc3bc3b0c4219271"
+    },
+    {
+      "path": "pptx-native-latin-slots.mjs.log",
+      "bytes": 1167,
+      "sha256": "72a3894ca45cb56eb0719e389c93df5f5374bf69576aefe9c33decee9786dd19"
+    },
+    {
+      "path": "pptx-native-long-text-fixture.mjs.log",
+      "bytes": 142,
+      "sha256": "6eb5a11e258ab61387c599534928267620ad8e533847210c4f5def61329bfd96"
+    },
+    {
+      "path": "pptx-native-name-witness.mjs.log",
+      "bytes": 159,
+      "sha256": "92134626c32ffd1edc6c29c0ddfc3b2e064987e56ffea68ecc8c69f704cfe457"
+    },
+    {
+      "path": "pptx-native-quote-import-controls.mjs.log",
+      "bytes": 220,
+      "sha256": "6c6891b299f26dc7166d419f5e07e3476c1c362e978823f561acf121c57d0688"
+    },
+    {
+      "path": "pptx-native-readonly-survey.mjs.log",
+      "bytes": 206,
+      "sha256": "65daf95202a8c06adcc3612c60a8d2777813e6b039cc16fabb9a2cda59046bcf"
+    },
+    {
+      "path": "pptx-native-series-literal-import.mjs.log",
+      "bytes": 227,
+      "sha256": "936a1915e072f6281fa8a92c5ed4f2151a05c6faf5c40f93cf6bc41565d7c6a4"
+    },
+    {
+      "path": "pptx-native-series-name-runner.mjs.log",
+      "bytes": 104,
+      "sha256": "327f434ecc65545cf311849504880dffa8de821ef147c066d6e7be1a20a096d4"
+    },
+    {
+      "path": "pptx-native-series-name.mjs.log",
+      "bytes": 98,
+      "sha256": "e228e06a4c9e9fb67a40e24ea62f70fcb5497674ce8cccc0329f39cce78ad6f1"
+    },
+    {
+      "path": "pptx-native-table-color-contract.mjs.log",
+      "bytes": 169,
+      "sha256": "531c0e246d7de099e7e1b7b322ac67afde21a34fe50804bfbf18c75d5894dcbd"
+    },
+    {
+      "path": "pptx-native-table-colors-v2.mjs.log",
+      "bytes": 89,
+      "sha256": "3704cb0ca87564e0c92486a6977997a078c1d90a0a14cec61f0aca10d3baee00"
+    },
+    {
+      "path": "pptx-native-text-whitespace.mjs.log",
+      "bytes": 46,
+      "sha256": "32ff45f03a15364580675405943cc21959965c11725c2236d9a89661c992345b"
+    },
+    {
+      "path": "pptx-native-title-and-bodies.mjs.log",
+      "bytes": 140,
+      "sha256": "8d72cd68fa9369fd36258eae06a73938b8670fe21c22ef43a43deb7770331d7f"
+    },
+    {
+      "path": "pptx-native-underline.mjs.log",
+      "bytes": 906,
+      "sha256": "1006868f69ee3748148a2a7a1756642c115b0dba2812d0758dc79ee4ee5f06dc"
+    },
+    {
+      "path": "pptx-neutral-scaffolding.mjs.log",
+      "bytes": 116,
+      "sha256": "b461f88ef9d375d7d8bde52856e9439e4a58cd141e8bdd9ebf02f53c969feb4e"
+    },
+    {
+      "path": "pptx-node-demand-encoded-weight.mjs.log",
+      "bytes": 258,
+      "sha256": "860980724f65bb40950b2380cc30e158b64113016cf0b812021ffe1b9d836a9e"
+    },
+    {
+      "path": "pptx-node-demand-font-context.mjs.log",
+      "bytes": 247,
+      "sha256": "07fbba26381685c3a2104802d83bd0bd18538b3e17c7719f8a4813f9542ac1b3"
+    },
+    {
+      "path": "pptx-node-demand-fonts.mjs.log",
+      "bytes": 580,
+      "sha256": "f57b36af7acc0740c9519913a57904c79e66b1983e7056e6a676b7c7a12be8a1"
+    },
+    {
+      "path": "pptx-node-demand-native-fallback.mjs.log",
+      "bytes": 736,
+      "sha256": "b2840c7997ab1175a0e2bef40dcc369e5853f08a99e5f88987ea6f014afb2e04"
+    },
+    {
+      "path": "pptx-node-demand-native-measurements.mjs.log",
+      "bytes": 933,
+      "sha256": "f687aadd574d4441163f27e12cb590b929c79e9e6a195f869feef23381f2917b"
+    },
+    {
+      "path": "pptx-notes-master-theme.mjs.log",
+      "bytes": 116,
+      "sha256": "15d02fa4dd513988e2aa2756d8e5b1d4988cfaa0404efa5c5b4f5e5ad1f91342"
+    },
+    {
+      "path": "pptx-numbered-lists.mjs.log",
+      "bytes": 281,
+      "sha256": "4233bbe694800d9e97c20abfad405f6026dd7ed70d5a6b0a4372e473c35cee5a"
+    },
+    {
+      "path": "pptx-organization-logos.mjs.log",
+      "bytes": 247,
+      "sha256": "2b8299174e591360c633dde99236bf96b2fde04e8da5a43a34711ba70a720f12"
+    },
+    {
+      "path": "pptx-overflow-integrity.mjs.log",
+      "bytes": 92,
+      "sha256": "b461cf62850b3e5d7b4b38a8d83acedb5c9ed8cf7c94d3283aa8270365ac5b17"
+    },
+    {
+      "path": "pptx-overlay-size-units.mjs.log",
+      "bytes": 311,
+      "sha256": "e33a458706e673ef3210ed2db6a30c8573e981a14539c6c6d96e7aaff50f7110"
+    },
+    {
+      "path": "pptx-pareto-multi-series.mjs.log",
+      "bytes": 127,
+      "sha256": "f357b1bf038b3823989d2a2cb64155ef2fe703a1efa7bcdb28e3eb183a66cdf5"
+    },
+    {
+      "path": "pptx-per-slide-script-fonts.mjs.log",
+      "bytes": 76,
+      "sha256": "03b50700261879c6841e64a730b3477f8703c54d87388c8c3837937283669fca"
+    },
+    {
+      "path": "pptx-picture-scrim.mjs.log",
+      "bytes": 155,
+      "sha256": "25d881624f0ef26eba6de97fa7e26a560ddf424a5abc0f09d046a3248c5fb11d"
+    },
+    {
+      "path": "pptx-picture-slides.mjs.log",
+      "bytes": 109,
+      "sha256": "1c4f3650e78d25838057bdfffcf761b873b777eb1f68e0ba31d5af14a7fab6f1"
+    },
+    {
+      "path": "pptx-picture-tag-color.mjs.log",
+      "bytes": 93,
+      "sha256": "90a7ffca6491d9bed558811bab982e425b78aab8fd0dc1a3f45347c9e407f5b7"
+    },
+    {
+      "path": "pptx-placeholder-groups.mjs.log",
+      "bytes": 116,
+      "sha256": "3a1b1e0f6caee1aede738d91e6605b759a0bb277c5d1a7c4d70414c4fbf7da52"
+    },
+    {
+      "path": "pptx-plain-whitespace.mjs.log",
+      "bytes": 180,
+      "sha256": "59c9359043e8b396ce17c715633590aefa9d83250474489603a9834867ae0cdd"
+    },
+    {
+      "path": "pptx-portrait-focus.mjs.log",
+      "bytes": 43,
+      "sha256": "75c4a61b1a3b77e42eb4b0825a7f7084355b53a2f68e8e52b702f9fc3a4b57f0"
+    },
+    {
+      "path": "pptx-pptx-input-safety.mjs.log",
+      "bytes": 165,
+      "sha256": "9b17ec3eec613c660d8f2f6b829cc15fd58ffecef3e67481d42eb48f8ca8b282"
+    },
+    {
+      "path": "pptx-presentation-order.mjs.log",
+      "bytes": 54,
+      "sha256": "d0402ce33bad89b8144bcafc0b37aa78984d373047114226de816c8b5e5593b0"
+    },
+    {
+      "path": "pptx-pristine-reimport.mjs.log",
+      "bytes": 152,
+      "sha256": "af37dfdb97d160da6e22953070f5f56f1968c9f44d68d74746849b06879917b4"
+    },
+    {
+      "path": "pptx-quote-marks.mjs.log",
+      "bytes": 16,
+      "sha256": "217f1a4ccb21482bebc2b0ba14133a14cc8d32bd951fe1617f24d01bdd165339"
+    },
+    {
+      "path": "pptx-quote-photo.mjs.log",
+      "bytes": 242,
+      "sha256": "6e6efd7824828ed5f931a63cb70b3ec802b075f2b969b04e1c2ff74011ac185e"
+    },
+    {
+      "path": "pptx-quote-provenance.mjs.log",
+      "bytes": 294,
+      "sha256": "bcd4e83c1f08b5176bfad553e4972e9262e15824c69190642d2fd38fb3b0a31b"
+    },
+    {
+      "path": "pptx-recomposed-native-body.mjs.log",
+      "bytes": 110,
+      "sha256": "d133a3ad357c1595cef6840c1e8d1ba072892c9e926e3495b0fd58d1bd7d2748"
+    },
+    {
+      "path": "pptx-region-reading-order.mjs.log",
+      "bytes": 91,
+      "sha256": "8d8b6281a17096536a1256daae03228ec50a71e19591372d61c611911bfe501e"
+    },
+    {
+      "path": "pptx-registry-glyph-fallback.mjs.log",
+      "bytes": 93,
+      "sha256": "9cf566e7abd383cc0a3ed0548176d0ca2cb478746f2a8cfa28ecdc4fdade9cc7"
+    },
+    {
+      "path": "pptx-registry033-schema.mjs.log",
+      "bytes": 555,
+      "sha256": "202adb02b9707106683c6ccb6ff69cb6ae9fdb81de5555a77405a5fdf4e492d6"
+    },
+    {
+      "path": "pptx-retired-native-entrypoints.mjs.log",
+      "bytes": 113,
+      "sha256": "c30ecf8cedf7182d7f608638b4916d108673d1982b5f6fa982af527294f2e353"
+    },
+    {
+      "path": "pptx-rich-headings.mjs.log",
+      "bytes": 91,
+      "sha256": "712952fd499d3ab2829f3bf0249f6203476eade4bd22accf8b170406e5073758"
+    },
+    {
+      "path": "pptx-rich-xml-characters.mjs.log",
+      "bytes": 92,
+      "sha256": "62f84bcf3a4197e13cfb8db930d52ad6114b8411c414a295ab5a4298f77045a1"
+    },
+    {
+      "path": "pptx-row-data-provenance.mjs.log",
+      "bytes": 143,
+      "sha256": "f5e12a77cc920beb500516f9c02657373bde50c7a6b88c0d3ba006b756fbf480"
+    },
+    {
+      "path": "pptx-rr-07-preview-polish.mjs.log",
+      "bytes": 6326,
+      "sha256": "04a3ba74fefc4954678d2a537f465a149c7945295a943e959d584785527f8b1c"
+    },
+    {
+      "path": "pptx-rr-104-no-autofit.mjs.log",
+      "bytes": 37,
+      "sha256": "724531a67a64c5f946d4374a01821dfe5a2057835b8d12ebeb55ac5b62d0b957"
+    },
+    {
+      "path": "pptx-rr-105-chartex-scale.mjs.log",
+      "bytes": 144,
+      "sha256": "941c77bd984c84c4a3f31e516c55ffc7214d38009c3f8a5dec136cf9c8af9674"
+    },
+    {
+      "path": "pptx-rr-105-list-scalar-import.mjs.log",
+      "bytes": 1259,
+      "sha256": "14ddd0ae85618327424e6891379031719dd72e2bc0877975e82e3c08ff62384c"
+    },
+    {
+      "path": "pptx-rr-105-ltr-latin-native.mjs.log",
+      "bytes": 5988,
+      "sha256": "fc160b2e3217caab7a50934edc5b80479c92b8d2e3645da513d33d08740e9829"
+    },
+    {
+      "path": "pptx-rr-105-native-body-wrap.mjs.log",
+      "bytes": 135,
+      "sha256": "1fce8f1de9240a74d75f8e58eae4e6d0e3e92d27221329dfaf9b2d59e0f7db70"
+    },
+    {
+      "path": "pptx-rr-105-native-title-wrap.mjs.log",
+      "bytes": 185,
+      "sha256": "2cdd6375d2b18d514e7970a4108953795fd04e4153ebe5ea35f63b45f7e84d3c"
+    },
+    {
+      "path": "pptx-rr-105-numeric-axes.mjs.log",
+      "bytes": 60,
+      "sha256": "b3758ca9d29c3e1fce9a3a6da11b03d2a9b42bc7dd35f392ba8b449a19108a4b"
+    },
+    {
+      "path": "pptx-rr-105-small-run-title.mjs.log",
+      "bytes": 133,
+      "sha256": "ebf930c4810d1d8540fc30e0d5509a813af16a3b0f80f5c7c2ddcade456fc365"
+    },
+    {
+      "path": "pptx-rr-105-smartart-text-color.mjs.log",
+      "bytes": 92,
+      "sha256": "9af454bc17d109e3452c2a51a6906a35bb7a9359def4dce472586c604dc853f1"
+    },
+    {
+      "path": "pptx-rr-105-tag-ownership.mjs.log",
+      "bytes": 2124,
+      "sha256": "9e7d710472a244f45b53f86665450ddcaa33d634181e133bf0db5992f76be32e"
+    },
+    {
+      "path": "pptx-rr-105-title-font-measurement.mjs.log",
+      "bytes": 130,
+      "sha256": "7ac53aacf9abaec7d7ba23ad065f74330abedcbd47dcd3bc8184e6fd9193c0c1"
+    },
+    {
+      "path": "pptx-rr-105-waterfall-axis.mjs.log",
+      "bytes": 88,
+      "sha256": "03b6736af51d6563690f768e606804ffba38872619a6738fd5141c13fe687e63"
+    },
+    {
+      "path": "pptx-rr-112-native-autofit.mjs.log",
+      "bytes": 2196,
+      "sha256": "85cc0b4577538afc558899e3dc231bb9c18ee68d23e0cf314318120c627a7358"
+    },
+    {
+      "path": "pptx-rr-54-chart-table-data.mjs.log",
+      "bytes": 1986,
+      "sha256": "eac10d36315d172541b31d50a417d649716d0f397122306eaef53bae975aa1d5"
+    },
+    {
+      "path": "pptx-rr-54-data-hardening.mjs.log",
+      "bytes": 212,
+      "sha256": "406b8890131a187e5a3d7975747d2cc17cd05a1efbbb652d395afa37d6ec67ef"
+    },
+    {
+      "path": "pptx-rr-54-format-respelling.mjs.log",
+      "bytes": 42,
+      "sha256": "fe56f413946d2c60434bc6fe3319558d236efa901979b2cdeda1bfff2f87892a"
+    },
+    {
+      "path": "pptx-rr-59-absent-defaults.mjs.log",
+      "bytes": 229,
+      "sha256": "018c999d6b2d84563279baf4d496a61e1608d6be4cb9a26f3b9cbb9c708f881a"
+    },
+    {
+      "path": "pptx-rr-59-export-integrity.mjs.log",
+      "bytes": 1577,
+      "sha256": "2c2fd3147fe08b5b8409098436d4b5fbf3a569ad807eb7001f097c1ee8269290"
+    },
+    {
+      "path": "pptx-rr-59-picture-diagnostics.mjs.log",
+      "bytes": 159,
+      "sha256": "0b89f8fafe0fd6308151a27a6781004cf7a6225981981d0d00d2b3df9fde60e8"
+    },
+    {
+      "path": "pptx-rr-59-script-measurement.mjs.log",
+      "bytes": 190,
+      "sha256": "1c9e87b4ad6a55fea8b0c295272a575ee6d27c2a254eeb4ade6b14b2f380938f"
+    },
+    {
+      "path": "pptx-rr-59-table-alt-provenance.mjs.log",
+      "bytes": 101,
+      "sha256": "c1167e6a755df16a20b206dc0ed906da0eba4a3d3c58f42edb70ef4887254d8e"
+    },
+    {
+      "path": "pptx-rr-97-resolver-failure.mjs.log",
+      "bytes": 122,
+      "sha256": "3ac1a297ec7d971bd9daf2098015e38ad29fd050ca3468153f80b7a8990ed6ff"
+    },
+    {
+      "path": "pptx-rr54-archive-candidate.mjs.log",
+      "bytes": 194,
+      "sha256": "2f07d58190265152e492200fa5530cf50bf518a9d191200a1dee896c941993ef"
+    },
+    {
+      "path": "pptx-rtl-layout.mjs.log",
+      "bytes": 203,
+      "sha256": "7ea1aac94bc53a9610ea8c5182c9da399d8554c8c114c1ef1f30de068f2403fd"
+    },
+    {
+      "path": "pptx-safe-typefaces.mjs.log",
+      "bytes": 120,
+      "sha256": "0654607f2d35c5c6c01dd5299f0dab12704e550dbee65ceac11eb76365fd3747"
+    },
+    {
+      "path": "pptx-schema-vocabulary-roundtrip.mjs.log",
+      "bytes": 462,
+      "sha256": "4e5f59ddbca428b3f505ba131058b6a4838e18d8e5d66d8028a42fef450c53ca"
+    },
+    {
+      "path": "pptx-script-fonts.mjs.log",
+      "bytes": 198,
+      "sha256": "83031e172a2f27912777bca2910bc961789ed58cfaaabf29ade317edb80c683b"
+    },
+    {
+      "path": "pptx-sections.mjs.log",
+      "bytes": 327,
+      "sha256": "ce5d17efd1f613882c11029e0446716c7fc93b4ad3ac51d06ce5c3b527749aa3"
+    },
+    {
+      "path": "pptx-sh-02-shape-blocks.mjs.log",
+      "bytes": 4266,
+      "sha256": "b24afc4e83836ff6773f0b29250acbaa3a51c81e2ee683be44d0d4d2f918b06e"
+    },
+    {
+      "path": "pptx-sh-04-overlays.mjs.log",
+      "bytes": 4258,
+      "sha256": "e29cfdd7bd1e59070a65bff8ece83d289ad380e1a9ac88146501ad7077f2781e"
+    },
+    {
+      "path": "pptx-sh-05-powerpoint-shapes.mjs.log",
+      "bytes": 700,
+      "sha256": "dff158e5fad70d3c560edb556e2ddb216402a3fab81aca16222cb2d551f371b0"
+    },
+    {
+      "path": "pptx-sh-05-shape-import.mjs.log",
+      "bytes": 23,
+      "sha256": "e4f9213a84e2c69f2b336a8c2b3a9596ac1a01c3c37ceb79ede0f5fedf7a0836"
+    },
+    {
+      "path": "pptx-sh-07-native-diagrams.mjs.log",
+      "bytes": 236,
+      "sha256": "4d1ee6014af5db1ad2dced3b557fa45c51808946f0cee63ee098eb1714e7cc95"
+    },
+    {
+      "path": "pptx-sh-08-smartart-import.mjs.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pptx-sh-09-smartart.mjs.log",
+      "bytes": 258,
+      "sha256": "a479e20821839b05a58dee84af89b88402a61eee18941dbbe0da04e87ee13991"
+    },
+    {
+      "path": "pptx-sh-11-shape-text-rect.mjs.log",
+      "bytes": 84,
+      "sha256": "c79b8336b4f4d056406fc1f5597e66e6c0de156b474802877bfa4919eb3f7368"
+    },
+    {
+      "path": "pptx-sh-12-dot-diagrams.mjs.log",
+      "bytes": 152,
+      "sha256": "a6e04c7a3e203c0720b47fff85d5d94bf2922f36ae7f9afd1da2e676d136129a"
+    },
+    {
+      "path": "pptx-sh-13-plantuml-diagrams.mjs.log",
+      "bytes": 153,
+      "sha256": "5f8f4e5206b76d6258fe43f506c725a1f764791769a58a8f49fbf392e34a504c"
+    },
+    {
+      "path": "pptx-sh-16-smartart-fallback.mjs.log",
+      "bytes": 438,
+      "sha256": "b8bd85fc2914b8d53f5a490574c76938f36cd342fa797644ce942f68208a57f2"
+    },
+    {
+      "path": "pptx-sh-17-smartart.mjs.log",
+      "bytes": 363,
+      "sha256": "92aac87e43dbd0db7e048cac2bc8e78e33e735ccd5fd82db7e2abfcd8841f1d0"
+    },
+    {
+      "path": "pptx-sh-18-smartart.mjs.log",
+      "bytes": 254,
+      "sha256": "29dc62b2a5a20109207be582995b8169fe8cff3a180d31b0ec80645cdb52d24c"
+    },
+    {
+      "path": "pptx-sh-19-smartart-layouts.mjs.log",
+      "bytes": 27,
+      "sha256": "c5e31068905f795ee223eae14bdf6f22df2df5d5a0af88cd96697467dd6d14bd"
+    },
+    {
+      "path": "pptx-sh-23-smartart-more-entries.mjs.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pptx-sh-25-chart-point-anchors.mjs.log",
+      "bytes": 169,
+      "sha256": "38d361526a808618a0ca6b0096c6a8f2221b44e1844386efaf85215e9414aba2"
+    },
+    {
+      "path": "pptx-sh-27-offslide-overlays.mjs.log",
+      "bytes": 47,
+      "sha256": "2edf1f695f1bcd53fafaec64c01c0c86c46135e0e45cf6b2c287da2537347fd3"
+    },
+    {
+      "path": "pptx-sh-phase-2-meeting-points.mjs.log",
+      "bytes": 146,
+      "sha256": "77a9475b102c604214eeddb64e2a1a06a9eb32d3a58d79de9ebb0296b6a2222c"
+    },
+    {
+      "path": "pptx-sh20-gate-output.mjs.log",
+      "bytes": 113,
+      "sha256": "d0f0e6a181ad1766c66e743843b6e33bcff019bd9d2188c3d92052437e69c023"
+    },
+    {
+      "path": "pptx-sh20-layout-xml.mjs.log",
+      "bytes": 124,
+      "sha256": "2efd6b2badb2a4d80cec0859a48213a94a6a1744551ffec08bb958abae2aebc5"
+    },
+    {
+      "path": "pptx-sh20-live-domain-boundary.mjs.log",
+      "bytes": 151,
+      "sha256": "b837f6e27333491a6160ac18bbbf48d62f86336df6876abe7b320d6f4260156c"
+    },
+    {
+      "path": "pptx-sh20-witness-offline.mjs.log",
+      "bytes": 89,
+      "sha256": "08aac1e2230e2bfbfefe8dd788b452bb7c2d8caf1c9b7014486b7b603ddbd196"
+    },
+    {
+      "path": "pptx-sh21-native-arrangements.mjs.log",
+      "bytes": 152,
+      "sha256": "30ef8df0ec71420f0d62c8f3cc64613b058c635c97656a528eeaccacb5a0f8b2"
+    },
+    {
+      "path": "pptx-sh21-product-probe-offline.mjs.log",
+      "bytes": 94,
+      "sha256": "ed0f9b813856da2a3917dc6efad0131515e0589225752803c3e0d5be3221396b"
+    },
+    {
+      "path": "pptx-sh21-production-packet-offline.mjs.log",
+      "bytes": 94,
+      "sha256": "5c79c0c80a4a21de053097f8dc7084164be6a66b3dbe2ee745d5693c4e886775"
+    },
+    {
+      "path": "pptx-sh21-smartart-parts.mjs.log",
+      "bytes": 122,
+      "sha256": "6125122ac2c4613e10f40ae96868ef0054abd5567b5700b22eb96608325ed0bd"
+    },
+    {
+      "path": "pptx-sh21-venn-editable.mjs.log",
+      "bytes": 565,
+      "sha256": "19492732fdb8a0bb13c283a04ab380c08e2b1f08160c5f3930e03f0be1d8c025"
+    },
+    {
+      "path": "pptx-sh21-venn-reading-measure.mjs.log",
+      "bytes": 480,
+      "sha256": "3bce57361631a14287c354f187dac533c5ebe6fba66dbbdc48476374acf99001"
+    },
+    {
+      "path": "pptx-sh23-witness-offline.mjs.log",
+      "bytes": 79,
+      "sha256": "80f4762fbea968d77f731f6c1aaa65a1c593d08f8da59560676af91347fffbc9"
+    },
+    {
+      "path": "pptx-sh24-inverted-pyramid.mjs.log",
+      "bytes": 117,
+      "sha256": "4d7703371cfd49c5b52e3ab8f27630e9b19b1d4408376c18039c366ccb9e1f8f"
+    },
+    {
+      "path": "pptx-sh25-series-name-current-cache.mjs.log",
+      "bytes": 148,
+      "sha256": "e87365b471ec6a64f53f1294e8bce7a3d0b0a97f741d95217e40da32bc2d938b"
+    },
+    {
+      "path": "pptx-shape-block-effects.mjs.log",
+      "bytes": 4266,
+      "sha256": "cba5d6d018797e5e5680d0962373b2358888ce3a17992135ced266fb601dc46a"
+    },
+    {
+      "path": "pptx-shape-border-widths.mjs.log",
+      "bytes": 58,
+      "sha256": "af72ee39c0313e6aa4e8109730b5e80665385d60c55f0910b3d680842844fc61"
+    },
+    {
+      "path": "pptx-shape-effects.mjs.log",
+      "bytes": 32,
+      "sha256": "3bdd6eca79e432be29d57aebb2ed403f1e3e8e9db7a65c1730b923fc8ea089eb"
+    },
+    {
+      "path": "pptx-shared-furniture.mjs.log",
+      "bytes": 143,
+      "sha256": "0a03f59b244952abeeb47ffc6fc2ff5a1f7d13b4f3b0a58f7fcf8281fb26c808"
+    },
+    {
+      "path": "pptx-shared-metric.mjs.log",
+      "bytes": 6224,
+      "sha256": "45675d0b5aee78cebb6e811ffb74c3b2a30d0e9e12582db0d9f02395c4024f7d"
+    },
+    {
+      "path": "pptx-shared-quote.mjs.log",
+      "bytes": 162,
+      "sha256": "a6aed7f4b5013b862b5daa63f28948f17543b9b33b934030eeaf95761cd54e75"
+    },
+    {
+      "path": "pptx-shared-timeline.mjs.log",
+      "bytes": 193,
+      "sha256": "80bc97139c147a5324a7d8527b375810c77910abc53f0a53d0cabc8873e55eac"
+    },
+    {
+      "path": "pptx-single-column-chart.mjs.log",
+      "bytes": 247,
+      "sha256": "b5ec222eb553805c55437291aeb0144e89b7b8882ddfc2cbc7bd64e6b2239f2d"
+    },
+    {
+      "path": "pptx-single-series-colour.mjs.log",
+      "bytes": 155,
+      "sha256": "a09544d84a1d5683b7d44e68b103e9f5f43711d9981a68a3c0ae58167f14b69f"
+    },
+    {
+      "path": "pptx-slide-context.mjs.log",
+      "bytes": 39,
+      "sha256": "1ba05970b6cd1b115e59ee5067f6c56c9689a97071e9b0f2905ca3fa415875b5"
+    },
+    {
+      "path": "pptx-slide-number-static.mjs.log",
+      "bytes": 182,
+      "sha256": "57a4f9f348cde8e602bb2acd83bb280aa6028f01e8d14a6ad18cdb4bad044f89"
+    },
+    {
+      "path": "pptx-slide-variables.mjs.log",
+      "bytes": 218,
+      "sha256": "cb4b9c38fe373a7cd1dfdd5fa7f11ee6c3bd0b9ed78232cd210bd1b7af82eb9e"
+    },
+    {
+      "path": "pptx-socials-furniture.mjs.log",
+      "bytes": 132,
+      "sha256": "4656c997992995e36e396396223722ec1e79920c6f804c30d88d05eb0a05b6b3"
+    },
+    {
+      "path": "pptx-source-run-styles-roundtrip.mjs.log",
+      "bytes": 234,
+      "sha256": "794a623c081f8c171bda5e4e3e7715c9ffb085af526a3b8e859ae08e473bbf28"
+    },
+    {
+      "path": "pptx-source-run-styles.mjs.log",
+      "bytes": 113,
+      "sha256": "c822f332a2c29e0b6b824b2143ecf065c29f9529873d9f3e1d32bd3f9c654fea"
+    },
+    {
+      "path": "pptx-step-badge-numbering.mjs.log",
+      "bytes": 25,
+      "sha256": "c2483bca0f85ef9f0da7fe4a4b4d13410540001b0ceff9418ef410149d791b46"
+    },
+    {
+      "path": "pptx-step-badges.mjs.log",
+      "bytes": 81,
+      "sha256": "fa860d28bb512b8050953d2a2d8d173f37f33cb77607d9604b4efac0acb017f8"
+    },
+    {
+      "path": "pptx-styled-table-import.mjs.log",
+      "bytes": 184,
+      "sha256": "d76c5a58bdbc0ea624e3cb7cd33fcb4d75aba354f2671417bc02f43c65c1f493"
+    },
+    {
+      "path": "pptx-styled-table.mjs.log",
+      "bytes": 316,
+      "sha256": "919437512384cdb9a14c0b6fed6d460fbd98d20b16a3820deabc511b97df11f6"
+    },
+    {
+      "path": "pptx-svg-image-degrade.mjs.log",
+      "bytes": 39,
+      "sha256": "7f4c0c917b094717615fcdafbcbe53db12a7a9288247c99cb36982306e1d11e7"
+    },
+    {
+      "path": "pptx-svg-image.mjs.log",
+      "bytes": 175,
+      "sha256": "d02179b40bd60af850e84217727540ce4d927ac7348caa82ab6c00f6d92cf4e8"
+    },
+    {
+      "path": "pptx-svg-rasterizer-converter-missing.mjs.log",
+      "bytes": 113,
+      "sha256": "b2f1e0da2555d5a9b67a891846adbbf74d61083b31ea5390ee6948cf686db488"
+    },
+    {
+      "path": "pptx-svg-style-sanitization.mjs.log",
+      "bytes": 117,
+      "sha256": "2eb87dd9bd282305a521b180c59044c730313d04accdec63329a3c0766eac192"
+    },
+    {
+      "path": "pptx-symbol-fonts.mjs.log",
+      "bytes": 289,
+      "sha256": "172ade865f5eec3907e64544a6db21848768606f5b95c5c137478057df6277a3"
+    },
+    {
+      "path": "pptx-table-alt.mjs.log",
+      "bytes": 63,
+      "sha256": "edd9a6d5de50706621e8e5448985615ed020be982769b752e289ea6c39dc8256"
+    },
+    {
+      "path": "pptx-table-border-line.mjs.log",
+      "bytes": 217,
+      "sha256": "f271077f61d7b928b5440e40c46462e937ab5bebd47e43525a20992791149de2"
+    },
+    {
+      "path": "pptx-table-frame-furniture-order.mjs.log",
+      "bytes": 186,
+      "sha256": "bf6994931680c619330fe06499407d70d3114fa57ac4d3bbe789bb87bcc24cae"
+    },
+    {
+      "path": "pptx-table-powerpoint-save.mjs.log",
+      "bytes": 1600,
+      "sha256": "caf15e0a1856324d6f5c8b832be8ea5ae6df9d09f6d7214e217b16cb3920af42"
+    },
+    {
+      "path": "pptx-table-theme-colors.mjs.log",
+      "bytes": 103,
+      "sha256": "0bb64cf1bd1f402aad4c70a205694dd2ab90e2ec98d9556bcbd4e3dffe9726b2"
+    },
+    {
+      "path": "pptx-tag-colour.mjs.log",
+      "bytes": 81,
+      "sha256": "87d0930491a93a4d35ba93a51b4f0d440494ecca90ab3d38fd8203aa86f3ef75"
+    },
+    {
+      "path": "pptx-template-layout-review.mjs.log",
+      "bytes": 163,
+      "sha256": "30946b931de173ef1aabc55caebbf94fde0581193ef361179312e45d1ff513a5"
+    },
+    {
+      "path": "pptx-template-layouts.mjs.log",
+      "bytes": 3454,
+      "sha256": "9d7d7f0c18bd1fcaaad4b10910b24f5390ef677cc20c5794e386365e7bed7429"
+    },
+    {
+      "path": "pptx-template-variables.mjs.log",
+      "bytes": 136,
+      "sha256": "0284fa5b88a25a36a119b718651c69bdc60c6119967df736da19bb1e4eafa8c8"
+    },
+    {
+      "path": "pptx-theme-colors.mjs.log",
+      "bytes": 4301,
+      "sha256": "5ef9c232ec9b173e112773bea668618eb3aedc1aaa75b7b99e2c5291ee5f56e6"
+    },
+    {
+      "path": "pptx-theme-script-slots.mjs.log",
+      "bytes": 122,
+      "sha256": "3609dc7d0fe3aa98edece807ea3b8fc79829f6de2c446bd1db5391a2d5b4ed0a"
+    },
+    {
+      "path": "pptx-tier-pillar-pptx.mjs.log",
+      "bytes": 89,
+      "sha256": "e3ea9cc2b3f3e3d686be453e409c22c69942a26021dc644aa8d186bca63f99df"
+    },
+    {
+      "path": "pptx-timeline-status.mjs.log",
+      "bytes": 151,
+      "sha256": "d533e629fc73a4cf405592288d657535f11f30f3a3d081b2d44cb53d4e359a36"
+    },
+    {
+      "path": "pptx-title-rule.mjs.log",
+      "bytes": 15,
+      "sha256": "7f62d4a8b1bb4d844b17c8d88f142d5d6d408128fc74e6062b4dfb50c57947af"
+    },
+    {
+      "path": "pptx-title-split.mjs.log",
+      "bytes": 104,
+      "sha256": "e5ac4956cc4298303164b187c06a931c987d58d0980329dbd23195a63e311a97"
+    },
+    {
+      "path": "pptx-typeface-inventory.mjs.log",
+      "bytes": 135,
+      "sha256": "833c58d23dab45b95aaf5958da52d75c9f1436c590f8a02b83ed74fd44489ed6"
+    },
+    {
+      "path": "pptx-vendor-compat.mjs.log",
+      "bytes": 147,
+      "sha256": "e9dad6a5f31b06769e9deedea9750d271e354270efad3a73048d91a795654c8d"
+    },
+    {
+      "path": "pptx-video-frame.mjs.log",
+      "bytes": 16,
+      "sha256": "eacc46cc5fb7e88bcf4c17058e5c45c3675542b8f86e9230918c643b0137e622"
+    },
+    {
+      "path": "pptx-watermark.mjs.log",
+      "bytes": 7100,
+      "sha256": "f5bf1945bbe5b606e3e37142515744a50a7a75a9d082be704c259531f08eec24"
+    },
+    {
+      "path": "pptx-wave-6-interactions.mjs.log",
+      "bytes": 107,
+      "sha256": "94bf67ebc2b3e15ab747d2c9d1986682b3747d92739f538ac8b80c47f2a18e71"
+    },
+    {
+      "path": "pptx-xml-parser-dependency.mjs.log",
+      "bytes": 146,
+      "sha256": "17d7dd7828c73ace40872d8bceeb58e0623c24813b6f4058f497e00d1e3cfed4"
+    },
+    {
+      "path": "pptx-zip-date.mjs.log",
+      "bytes": 424,
+      "sha256": "2d94e61e2a7f39ff2f30d30718ca565e7a8d3e125a86374be1631c036985b9e6"
+    },
+    {
+      "path": "render-catalogs.mjs.log",
+      "bytes": 27,
+      "sha256": "242b5348e8a2f3662e82703087b9209c2591f879139291a0a8b8ab2ddef7226f"
+    },
+    {
+      "path": "render-ce20-font-face-selection-cache.mjs.log",
+      "bytes": 204,
+      "sha256": "7f49bcb4bff2e9ef620d5236297768775d42fc76b0b4f4414e671703cbb0af0f"
+    },
+    {
+      "path": "render-chart-alt.mjs.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "render-chart-axis.mjs.log",
+      "bytes": 266,
+      "sha256": "ca368868c26d3730ce6322d883c88b4522efadfaacc339a9655d51b276baaf4c"
+    },
+    {
+      "path": "render-chart-catalog.mjs.log",
+      "bytes": 140,
+      "sha256": "0470203529f53d8204ca9b789ed32fe2bd2b3a9fabca342d0416accd3179d3c5"
+    },
+    {
+      "path": "render-chart-category-labels.mjs.log",
+      "bytes": 250,
+      "sha256": "798146ee8c9bf41e0b5bcaeeca600135858cf8c34b4f160dc48f48a547b1e662"
+    },
+    {
+      "path": "render-chart-colors.mjs.log",
+      "bytes": 128,
+      "sha256": "453f78d771cc8a22788a005e4b0e200ef45b2f955fca5ca0015965829a9f17b7"
+    },
+    {
+      "path": "render-chart-correctness.mjs.log",
+      "bytes": 129,
+      "sha256": "b08a986aa5ae81f59db2fc9b1908912682c776a2040816dde7b4ad2f7ea5a9aa"
+    },
+    {
+      "path": "render-chart-fallbacks.mjs.log",
+      "bytes": 19,
+      "sha256": "32095e9e10bbc1d3c2dbc56b2860781df4c240a6f70e5dd477b22418afdaef8f"
+    },
+    {
+      "path": "render-chart-finite-statistics.mjs.log",
+      "bytes": 96,
+      "sha256": "84ac9e218fd744802684b11368a35d722dcbf4bc6c4cbcc398735948606d20b7"
+    },
+    {
+      "path": "render-chart-followups.mjs.log",
+      "bytes": 82,
+      "sha256": "6c42cd135a748b6f60d6dd64ea1a946f35253b1e5d03970ad60a74958fa3779a"
+    },
+    {
+      "path": "render-chart-highlight.mjs.log",
+      "bytes": 189,
+      "sha256": "87c848f797bb9d9a904037c2714853da3e1a0d0f22e1c70fbca236246a9c8472"
+    },
+    {
+      "path": "render-chart-layer.mjs.log",
+      "bytes": 263,
+      "sha256": "ebf956b18d556e8f337d9b2368c5295664782c542e07cfad0b0bc358b5d36205"
+    },
+    {
+      "path": "render-chart-options.mjs.log",
+      "bytes": 149,
+      "sha256": "f90969a2e1e284669d463e817c832e12d30a26cef395886336e64c52048353ec"
+    },
+    {
+      "path": "render-chart-reference-bar-options.mjs.log",
+      "bytes": 357,
+      "sha256": "8ddb8b63372e6b4394940c320d45df9f9439e81e38fb6be10cfdb5e2d16dca34"
+    },
+    {
+      "path": "render-chart-reference-lines.mjs.log",
+      "bytes": 1106,
+      "sha256": "faa9f7046155211d86390d256f97c50c9b751fb81d313e03f1dcd5a978555dcd"
+    },
+    {
+      "path": "render-chart-rtl-data-labels.mjs.log",
+      "bytes": 66,
+      "sha256": "c5d02d0d8c0f98d746b2e22842c6aa86adb8cd90b74764e92b5d2149a20c4fb4"
+    },
+    {
+      "path": "render-chart-scale.mjs.log",
+      "bytes": 102,
+      "sha256": "7e98998afa214d8c616532db75f3d14e9b47fe05c123a9348f01a57d2a98be15"
+    },
+    {
+      "path": "render-chart-scheme-palette.mjs.log",
+      "bytes": 111,
+      "sha256": "13633e6afa697caed1e86d5e9b76154ed26f15898ee9ce59681a02458c0629e0"
+    },
+    {
+      "path": "render-chart-table-data.mjs.log",
+      "bytes": 160,
+      "sha256": "e284137d54a95cf7f3db924f08683fc649ded1ed48252144ad394db52e672721"
+    },
+    {
+      "path": "render-chart-types.mjs.log",
+      "bytes": 126,
+      "sha256": "9fb7008f07780f56038566ac7cb7413a9121f1a2c93c40738b4577ee9e003f18"
+    },
+    {
+      "path": "render-color-references.mjs.log",
+      "bytes": 96,
+      "sha256": "2e6546befc1f5b540bd7c0426624fedf99c7b80498e4f185712be934f7858603"
+    },
+    {
+      "path": "render-color-roles.mjs.log",
+      "bytes": 108,
+      "sha256": "fb16ec9b442f2d866de8dc155ea3a0ed6659bc141ec53edc036d6322b35a0b78"
+    },
+    {
+      "path": "render-color-variants.mjs.log",
+      "bytes": 156,
+      "sha256": "0f19544c5a9bba57529aa9a42d077dd9fab2f4f7b5a2ae5c58f06ab63b9832ba"
+    },
+    {
+      "path": "render-combo-charts.mjs.log",
+      "bytes": 122,
+      "sha256": "eaf9d4a9cce93183d7b4ba7a7075e3e0bc23a2ee4b44a22a06aecf090a1eab71"
+    },
+    {
+      "path": "render-core-features.mjs.log",
+      "bytes": 120,
+      "sha256": "bb7c2931e238c5e0723955788f1ec8d7a689e5b04da86ff91d43735b6f4a0adc"
+    },
+    {
+      "path": "render-cover-centering.mjs.log",
+      "bytes": 57,
+      "sha256": "68b3bd4ad9a8adee192a3574b550e12474c98b06311cd432e355b8efc8bb777c"
+    },
+    {
+      "path": "render-data-readability.mjs.log",
+      "bytes": 143,
+      "sha256": "ee94a091e358f129f11d536f17f0747510955f2177c5753d88a46c1ba7fcbd64"
+    },
+    {
+      "path": "render-default-font-scheme.mjs.log",
+      "bytes": 221,
+      "sha256": "7e212a92688d92d5d5586895e8804dbece0ea55c1a28968781cfe2f8fb39c88e"
+    },
+    {
+      "path": "render-design-fields.mjs.log",
+      "bytes": 173,
+      "sha256": "26e4382a8381d74033d30eef8bd6e2d73109ae7dc502e9774f842f941993a9fe"
+    },
+    {
+      "path": "render-design-preview.mjs.log",
+      "bytes": 278,
+      "sha256": "e610f89e882ced3d269943af5da691756672f7d81b1881b19960761454e9fe4e"
+    },
+    {
+      "path": "render-diagram.mjs.log",
+      "bytes": 22,
+      "sha256": "05e1c7e0787f9f4c0d37c21ae24e7bd87d26fd6e0544efc8f1e3ed7ddea465f3"
+    },
+    {
+      "path": "render-emoji-math.mjs.log",
+      "bytes": 177,
+      "sha256": "8b41d70dfb09c50f4861506476bba2e22e9b64d9f95af61f2d95007a88d6ec27"
+    },
+    {
+      "path": "render-emphasis-surface.mjs.log",
+      "bytes": 28,
+      "sha256": "adbc39d04bf67faba20b58bdc6692d66f2c176aac315021b8cce873d5baf28e6"
+    },
+    {
+      "path": "render-example-baseline.mjs.log",
+      "bytes": 135,
+      "sha256": "950f0131b51bcc0642602dc608833669b9af3459d27bce7ea4e6044c192f82ea"
+    },
+    {
+      "path": "render-examples-portable.mjs.log",
+      "bytes": 89,
+      "sha256": "b664af9d2559388d0a7e42d1e22ac650ccdaa4fa4824908be17cfb65e86044f6"
+    },
+    {
+      "path": "render-fa-13-conveniences.mjs.log",
+      "bytes": 104,
+      "sha256": "f1bb40bc02570858ebd55b94128f160cba11da9ee10ff1d55ed98ffbc1be9845"
+    },
+    {
+      "path": "render-fixed-background-layout-variants.mjs.log",
+      "bytes": 37,
+      "sha256": "475c4c6ca98b483eb8c7d11d2aa765360ac78ff3c1589ae4bca518a8ae1e934a"
+    },
+    {
+      "path": "render-font-analysis-incremental.mjs.log",
+      "bytes": 134,
+      "sha256": "2f09a65408be9a1dcb11def38fc631678b689c3948ff5998f51b01caf447ce7d"
+    },
+    {
+      "path": "render-font-ensure-concurrency.mjs.log",
+      "bytes": 109,
+      "sha256": "a7156af6529c58874429e43aef58f1d39aba5d25fc31a52f34a756ed54aa035b"
+    },
+    {
+      "path": "render-font-outlines.mjs.log",
+      "bytes": 163,
+      "sha256": "aacb406b6080fefed7471f2ce96f2f69a93a25a6af730f842c614baceb965cde"
+    },
+    {
+      "path": "render-font-policy.mjs.log",
+      "bytes": 657,
+      "sha256": "e6963fc2e5c4ff7886062ab9e3673ca559eb7ea76e83ab1c819ffd455e3e8e6f"
+    },
+    {
+      "path": "render-font-startup-cleanup.mjs.log",
+      "bytes": 151,
+      "sha256": "17ff9bab19ad62143bfeb12cb37e1f521bcdbc5504ae8d3e273b37b7b141ca54"
+    },
+    {
+      "path": "render-font-subset-reference-glyphs.mjs.log",
+      "bytes": 94,
+      "sha256": "9c32dab0e5e01e1426116190670e81ff796f4040f158e04b1bd4f7afc08c0087"
+    },
+    {
+      "path": "render-font-subsets.mjs.log",
+      "bytes": 194,
+      "sha256": "fce6f9c51d9269a3c843bc14593eb99deb1e11b0a426d898b84779785d157e4b"
+    },
+    {
+      "path": "render-fonts-browser.mjs.log",
+      "bytes": 125,
+      "sha256": "2b4fb473a8f1e7a143ebc255f75eec2df9d10883000c281d77132047dff2308a"
+    },
+    {
+      "path": "render-fonts-handle.mjs.log",
+      "bytes": 128,
+      "sha256": "e5830d7c73118d15ec785cc87eabcccadde40c77f067c2f384781eef7ebd8b96"
+    },
+    {
+      "path": "render-fonts.mjs.log",
+      "bytes": 121,
+      "sha256": "eff5c03ab372557af6031dc3063eb3df79b208992a4a5ce9d089e5c2712da089"
+    },
+    {
+      "path": "render-furniture.mjs.log",
+      "bytes": 154,
+      "sha256": "351ba75fb36223d980f49e7e61e326e7d2ece8d728e71bd37811a1b2b517dba2"
+    },
+    {
+      "path": "render-gallery-layout-alignment.mjs.log",
+      "bytes": 6779,
+      "sha256": "198ce5b04ee5fe87045d980a8ad0d80b951dc71c14e70431d83d86504c112550"
+    },
+    {
+      "path": "render-glyph-fallback.mjs.log",
+      "bytes": 132,
+      "sha256": "d179a04ccf96a785f72d2f4403e0210b099ade7f0d5fbd14d930e7ec4f7e743e"
+    },
+    {
+      "path": "render-golden-gate.mjs.log",
+      "bytes": 1120,
+      "sha256": "099ca641ef53e901e6e15d6b87671c3580b290ac627d25d26ab7109696c56a5f"
+    },
+    {
+      "path": "render-golden-layout.mjs.log",
+      "bytes": 144,
+      "sha256": "6e809b0efd6e1bb096569ab200136159c0c6b2f7e6117dfddba096e7e9c7d028"
+    },
+    {
+      "path": "render-golden.mjs.log",
+      "bytes": 452,
+      "sha256": "ec9043d42bea3f37499a4f0ce145cbd44f52e829e5368a45dc714b7a1bbefee3"
+    },
+    {
+      "path": "render-harfbuzz-measurement.mjs.log",
+      "bytes": 144,
+      "sha256": "d493f589e5c62ea26ce233f8228d0cc7e9ff9e1bb2b4eec7cab6f94a0828ea02"
+    },
+    {
+      "path": "render-hb-cluster-carriers.mjs.log",
+      "bytes": 195,
+      "sha256": "928b122a6a0b65d908cc1fc3bc300431860dfc5ca035b8f3306bbe8f0b37db27"
+    },
+    {
+      "path": "render-host-continuation.mjs.log",
+      "bytes": 673,
+      "sha256": "fddbb05af699864970dd5f3ac81f941a2c3c5ed19755f565f234b489a9aa523f"
+    },
+    {
+      "path": "render-icons.mjs.log",
+      "bytes": 118,
+      "sha256": "c786a38bf77b936ae3f66fad42ca70fac6a9f94591aa70464cfeae7a08e6c33c"
+    },
+    {
+      "path": "render-image-blocks.mjs.log",
+      "bytes": 38,
+      "sha256": "9847b32de6c766d00004a1d0d5bfeacf8a4904ea09d1a998d58049575fb3c9df"
+    },
+    {
+      "path": "render-image-placeholders.mjs.log",
+      "bytes": 180,
+      "sha256": "48392cd6a4aa7b1e8c05f8efcad81b27b3aa2c27b034ac5303d19b3753585fce"
+    },
+    {
+      "path": "render-image-treatments.mjs.log",
+      "bytes": 404,
+      "sha256": "8a0631e3dee4ee1ea8e83cd09a78437312b46ca68ebf2841520bd6c7eb6c0af6"
+    },
+    {
+      "path": "render-item-alignment.mjs.log",
+      "bytes": 613,
+      "sha256": "e9711e180aa2992b24362b0ffb23517ef223d25feaa0cfd8c3f8de593173351f"
+    },
+    {
+      "path": "render-jpeg-orientation.mjs.log",
+      "bytes": 198,
+      "sha256": "e39a65cd645e5c7020639208fd200890c1310e9828227e8e99185c4e1709ff63"
+    },
+    {
+      "path": "render-latin-face-coverage.mjs.log",
+      "bytes": 112,
+      "sha256": "9fc1cdb227d0c330ca489ea945e88354c2eb85f328b962d1def0597982b6e668"
+    },
+    {
+      "path": "render-layout-design-applied.mjs.log",
+      "bytes": 137,
+      "sha256": "483590ad3751b96f69bbaa0c5b66c2cacca91bfd74a4eb19fa734cea60470913"
+    },
+    {
+      "path": "render-layout-template-goldens.mjs.log",
+      "bytes": 1092,
+      "sha256": "374557b0786454d42cdfd7c5270887d44c78260a8655d361fa6ba35132605bb4"
+    },
+    {
+      "path": "render-layout-templates.mjs.log",
+      "bytes": 12023,
+      "sha256": "3081fa4af57cc3232a4d9d77cb42312bb82287d76835fd5da2db6332f7179908"
+    },
+    {
+      "path": "render-layout-variants.mjs.log",
+      "bytes": 20,
+      "sha256": "647c34059375914e086be59dee2ea8fb39ee3498fdde470e0358d1bc26eacdf8"
+    },
+    {
+      "path": "render-lazy-converters.mjs.log",
+      "bytes": 102,
+      "sha256": "7a414b6158d3835d8579c8fec688ca3b6accc45f39c84afacea57e4fef2c5aea"
+    },
+    {
+      "path": "render-lazy-faces.mjs.log",
+      "bytes": 107,
+      "sha256": "d8801eebc898cd3bbc73bbc65ff9fdbce10cff6df2a084de4b7253441b99c067"
+    },
+    {
+      "path": "render-lazy-fonts.mjs.log",
+      "bytes": 123,
+      "sha256": "8c1c49fc576c655df330acd40fca2acd8b24313f7deceeae6452d21ce4e2db1e"
+    },
+    {
+      "path": "render-lh-105-few-charts.mjs.log",
+      "bytes": 141,
+      "sha256": "b6b3ea9bde817a21ed4ffa32631206afeb233ab43df191eac351d09c9058031d"
+    },
+    {
+      "path": "render-lh-106-language-embed.mjs.log",
+      "bytes": 137,
+      "sha256": "c26256deeb592110b69959bd93f441c0a2e11bc37296f6dd4fa7198c219a96da"
+    },
+    {
+      "path": "render-lh-106-slide-language.mjs.log",
+      "bytes": 61,
+      "sha256": "50876f37899726fe414138863f634e8db8a299d79c39d084eeddc32f28e27e4a"
+    },
+    {
+      "path": "render-lh-107-chart-ideas.mjs.log",
+      "bytes": 117,
+      "sha256": "2bfad5d8e649a3375a4c81aa60664d364ab2f873a9fabbcac5f3c674b5dfcd9d"
+    },
+    {
+      "path": "render-lh-113-shared-emphasis.mjs.log",
+      "bytes": 41,
+      "sha256": "df19897d046cbf4c630c48aa787c62c016fad38baff1b6b3403c3d4cde6c7e7d"
+    },
+    {
+      "path": "render-lh-114-pull-line.mjs.log",
+      "bytes": 106,
+      "sha256": "f24a241c5055a2d11cf47ef79afc942b0f5ccb6fa465e6b7bbf8b25b012d86c5"
+    },
+    {
+      "path": "render-lh-118-bidi-numbers.mjs.log",
+      "bytes": 123,
+      "sha256": "d73201925247a7bc489e84747a15847a31c50d57e5c975b8681114b6f84a6b0b"
+    },
+    {
+      "path": "render-lh-121-generated-status-fonts.mjs.log",
+      "bytes": 477,
+      "sha256": "7dbdafbccce89e54bcfd4f67eb8bd5a264a61247869a0325b1764477627719ca"
+    },
+    {
+      "path": "render-lh-121-localized-status.mjs.log",
+      "bytes": 75,
+      "sha256": "1ab8f91f68a99ecf643a583884cc0c6986f18383a4af167d04c54febe8c61883"
+    },
+    {
+      "path": "render-lh-125-chart-marks.mjs.log",
+      "bytes": 105,
+      "sha256": "b5fc4071d51e933365945610f36f97665b2f3e7fe354e17697b91cd2d776e075"
+    },
+    {
+      "path": "render-lh-133-faq-takeaways.mjs.log",
+      "bytes": 77,
+      "sha256": "e27bc1005e0d2c1a1989acde31812fdd61c73742861d5abab7a96a356693528e"
+    },
+    {
+      "path": "render-lh-141-chart-fixes.mjs.log",
+      "bytes": 37,
+      "sha256": "038dd2c0f96dd8c0543553a84a2347eb1c10953a5c8e9213bfa243d254f32ef8"
+    },
+    {
+      "path": "render-lh-153-chart-follow-ups.mjs.log",
+      "bytes": 42,
+      "sha256": "b85b9a9ef8dfefb959258593aaffba0d5f0927368d038d28ef77dddb9abfd938"
+    },
+    {
+      "path": "render-lh-16-duration-timeline.mjs.log",
+      "bytes": 78,
+      "sha256": "92e2e50860223214cf4119d701fb3997a915aed23e515664891c31144fe9ff76"
+    },
+    {
+      "path": "render-lh-160-chart-labels.mjs.log",
+      "bytes": 39,
+      "sha256": "7c858cc93f4521c350c55fadd38c6b1158fcc5c2b6d99fc6b3152a130b856a1d"
+    },
+    {
+      "path": "render-lh-176-rtl-column-series.mjs.log",
+      "bytes": 130,
+      "sha256": "e89e80a93b66dfb5017c9958cf5c7467099ffc99406cc59fd127a9036f038ff3"
+    },
+    {
+      "path": "render-lh-177-latin-family-contract.mjs.log",
+      "bytes": 158,
+      "sha256": "086cdaf872a3122c1a8208a51a1e371a49dfa067718e2fe2a38c60b547dd3da4"
+    },
+    {
+      "path": "render-lh-177-light-fonts.mjs.log",
+      "bytes": 99,
+      "sha256": "6e8d58b89437f86631d77e8db050907877066cdd61e3b88440f096ea5f07511f"
+    },
+    {
+      "path": "render-lh-34-image-callouts.mjs.log",
+      "bytes": 110,
+      "sha256": "9f24b9ec27898c1a90bef2d8f9c51a68e8fc3e5ac3b2f8d854a75f755589d1e3"
+    },
+    {
+      "path": "render-lh-63-run-in-quote-marks.mjs.log",
+      "bytes": 63,
+      "sha256": "7ef8bd810dc0350d1ed9db3e125447da0b0bb3485a5b8e536cb0622027865a60"
+    },
+    {
+      "path": "render-lh-wave-4-funnel-colors.mjs.log",
+      "bytes": 101,
+      "sha256": "9ae09abb4d84b47b2961f2b1791fe92e5c71f79a28653e1dfa9d834c335969c7"
+    },
+    {
+      "path": "render-list-bullet-none.mjs.log",
+      "bytes": 75,
+      "sha256": "8a84f483193852eb047f8a7231f74b8f5e9c3ebcb221c24759f24b572f47c566"
+    },
+    {
+      "path": "render-list-marker-glyphs.mjs.log",
+      "bytes": 144,
+      "sha256": "cc71e13c29b283da42b9b765872ce74de14f4e4f254f9125f9d5ab2440cbc5c2"
+    },
+    {
+      "path": "render-measure-determinism.mjs.log",
+      "bytes": 161,
+      "sha256": "ca23c890837f083b4d70c9fb1dec723e0e93b8b8e2a1fbbf23d17fb7b3725d29"
+    },
+    {
+      "path": "render-measure-pictures.mjs.log",
+      "bytes": 102,
+      "sha256": "42cef10668430a75ce22d48c33207a5b386e4693e1c62fb31795399d1fcd155e"
+    },
+    {
+      "path": "render-metric-sentiment.mjs.log",
+      "bytes": 183,
+      "sha256": "f69492ad599f8ac056daf5ad5abbe11d06dad45d69903687db0a65ab05861e98"
+    },
+    {
+      "path": "render-mongolian-shaping.mjs.log",
+      "bytes": 147,
+      "sha256": "9fee7e384a309463841fce96fd11f7442946b737a368e63393767523db535429"
+    },
+    {
+      "path": "render-neutral-scaffolding.mjs.log",
+      "bytes": 101,
+      "sha256": "17d19df5249cb2c5c386adb52a527763fe16b6ae1dd5fd13cb4ef7729b487403"
+    },
+    {
+      "path": "render-node-color-raster.mjs.log",
+      "bytes": 1382,
+      "sha256": "cb38ea2a8e8042b7874875684ba2c8851778c6723b98969f56c2b3264e536087"
+    },
+    {
+      "path": "render-node-demand-font-failures.mjs.log",
+      "bytes": 495,
+      "sha256": "d160d71eb4a9ca69b400d5096e59d365f7bf116b349f7b8e6f7369aa66357ad5"
+    },
+    {
+      "path": "render-node-demand-fonts.mjs.log",
+      "bytes": 1445,
+      "sha256": "6d1184ebaab5fa19caa73ccd9372835e65b48d8e677397dd5bd5b06a33975b20"
+    },
+    {
+      "path": "render-node-demand-glyph-probe.mjs.log",
+      "bytes": 921,
+      "sha256": "86e19edd52668f371e4ed4e3055570c5555b109aec17866ca16c7805750ee9ae"
+    },
+    {
+      "path": "render-numbered-lists.mjs.log",
+      "bytes": 124,
+      "sha256": "b837c84cfee1963a59f6d201c9a70a70317410e998d80991ab210679d71cee54"
+    },
+    {
+      "path": "render-office-fonts.mjs.log",
+      "bytes": 202,
+      "sha256": "4d2ad0d42d4a55ed52618e682ed68ac8558a248d6912616b2287b05c9ee2ade1"
+    },
+    {
+      "path": "render-open-fonts.mjs.log",
+      "bytes": 307,
+      "sha256": "0b35e5463cfeb37395110b4d5955bbdd6f79afd8e26931023d30b42e9cf8ca2d"
+    },
+    {
+      "path": "render-overflow-integrity.mjs.log",
+      "bytes": 90,
+      "sha256": "9970036ef73bb6cf7166965adfbe721874f0e146a6dbbf131b18e8dbec9077fb"
+    },
+    {
+      "path": "render-pdf-harfbuzz-scripts.mjs.log",
+      "bytes": 1097,
+      "sha256": "a7cb5a776c31b56500d7252301ed4287367ff1ce1c49c2469bccfd9d492e7608"
+    },
+    {
+      "path": "render-pdf-relative-text-position.mjs.log",
+      "bytes": 123,
+      "sha256": "092a232770d93c3c2e43905cc8c1f98418408ee9eb3229b189ffe73f93e79d6d"
+    },
+    {
+      "path": "render-placeholder-groups.mjs.log",
+      "bytes": 136,
+      "sha256": "f6386b21aad1a62e35ed3d1c4161c9b6e6bdc2dc995a6fff30df4193674dd3e8"
+    },
+    {
+      "path": "render-player-unit.mjs.log",
+      "bytes": 26,
+      "sha256": "a2cda00e7580a8dd8d50d0e269fe7e22ae494736cefc06b3e93991811424d7b1"
+    },
+    {
+      "path": "render-portrait-focus.mjs.log",
+      "bytes": 41,
+      "sha256": "7bc38e5b41e81b8ca2d64adf05754298e931fd4e08e2c53a06a485cdcdea7a6e"
+    },
+    {
+      "path": "render-preview-a11y.mjs.log",
+      "bytes": 110,
+      "sha256": "12ba6fed70b70d8193b95e89bb8d385d560e8eb7b9beea2522a03666a1529f34"
+    },
+    {
+      "path": "render-preview-fonts-fontconfig.mjs.log",
+      "bytes": 78,
+      "sha256": "a00f85ff5511294aa03ebdf9a624fabfd4543978ced4d089ecd3960d10035dab"
+    },
+    {
+      "path": "render-preview-polish.mjs.log",
+      "bytes": 168,
+      "sha256": "18ef94492bfff1a061e1bc8b56e261c2c6101790aa0213db9934bbc3f5ea3d25"
+    },
+    {
+      "path": "render-quote-footer.mjs.log",
+      "bytes": 145,
+      "sha256": "dbe574290e363fec3dd17f26b6fa4613792d8d403902bdf111992b8d23558b60"
+    },
+    {
+      "path": "render-quote-photo.mjs.log",
+      "bytes": 252,
+      "sha256": "529c989363a0b930bd283142f4f2d41228acb25ea2659fce29e202206767f85f"
+    },
+    {
+      "path": "render-raster-cluster-context.mjs.log",
+      "bytes": 210,
+      "sha256": "862bc99f74026e4051538ffadf5c4a4c90880e390a9aa92fd96ea8bf6f7a9fe2"
+    },
+    {
+      "path": "render-render-diagnostics.mjs.log",
+      "bytes": 95,
+      "sha256": "8f9df3ab2f4fce23c0eafe07ae61fa1afb0f0cb2d8303a21f631273cd494966f"
+    },
+    {
+      "path": "render-resolve-selected-slides.mjs.log",
+      "bytes": 104,
+      "sha256": "9d41d31d7bfd4dd1033f628ecfcf3223c649c630e3b3e2221a26a2c11e6dd502"
+    },
+    {
+      "path": "render-rich-headings.mjs.log",
+      "bytes": 22,
+      "sha256": "2e2d3b8034a922e18a8e5755e4f5c1fbb435a4903613da10f9ec66534039a80b"
+    },
+    {
+      "path": "render-rich-tab.mjs.log",
+      "bytes": 278,
+      "sha256": "7495f099c9f4de8f65bbbe05c98fc740f1154c0686ba54048c8f9b10629f1f8b"
+    },
+    {
+      "path": "render-rich-table.mjs.log",
+      "bytes": 126,
+      "sha256": "5a9dcb36a97a3c5f8987b4060cda4b6c4b957a4b5f5e4e570a0fc19ea6b519f0"
+    },
+    {
+      "path": "render-rich-trace.mjs.log",
+      "bytes": 95,
+      "sha256": "d32cc38c81672982e3a49d476a61869ea9ab358a55c7184694dbdfbba4e721e9"
+    },
+    {
+      "path": "render-rich-xml-characters.mjs.log",
+      "bytes": 157,
+      "sha256": "33eeccd89ca2642b10ddc1f1932abdfb2213d00de49e252b2f6e2db512901213"
+    },
+    {
+      "path": "render-rr-116-measurement-cache.mjs.log",
+      "bytes": 348,
+      "sha256": "489e2c199ce35a383b4ad1de9b08a34cf4fe9a42ff75867c2cf88a4f9c7aa3d5"
+    },
+    {
+      "path": "render-rtl-layout.mjs.log",
+      "bytes": 135,
+      "sha256": "e7e840379c57bd68e0c066e4bd2c24aef64c23560f7186aec11bf46d098d45af"
+    },
+    {
+      "path": "render-rtl-mixed-runs.mjs.log",
+      "bytes": 124,
+      "sha256": "ab15b92d6731c04dc4a34aaa600efbabc07028a673b5865118275d956794606b"
+    },
+    {
+      "path": "render-script-corpora-order.mjs.log",
+      "bytes": 156,
+      "sha256": "ef8c93460e4800cf0e7afa3ed644ac8db4d689fcb7784eee71753bf27d51ac00"
+    },
+    {
+      "path": "render-script-family-hosts.mjs.log",
+      "bytes": 4584,
+      "sha256": "421a4a9da7e229e7d2a20466e28a5e1120ac605799b62d805a77d3c4e5173d58"
+    },
+    {
+      "path": "render-script-font-encoded-weight.mjs.log",
+      "bytes": 243,
+      "sha256": "28d05c2338e34cadd452688ea12bfbaa2236c17fa3516c20d473ac6e455a3885"
+    },
+    {
+      "path": "render-script-fonts-auto-robust.mjs.log",
+      "bytes": 189,
+      "sha256": "f273f120bab36ccadc12cd1ca194090a7f8ee8bc3a151c19ca50de882b6b0299"
+    },
+    {
+      "path": "render-script-fonts-auto.mjs.log",
+      "bytes": 137,
+      "sha256": "713fb9a6caed3f0f8537d768ff405e48ee2f3e97d834c3bac18fe8d85beaf268"
+    },
+    {
+      "path": "render-script-fonts.mjs.log",
+      "bytes": 10399,
+      "sha256": "56dee3d12aebefbe3c8a6c5331c942f295cd0d7e59a23d2cf3deae8ec8f52853"
+    },
+    {
+      "path": "render-script-name-hosts.mjs.log",
+      "bytes": 4583,
+      "sha256": "9b9009caa406a4fd7694f370920de868d3caa400c338cbc7649d7a4a9d8e3c97"
+    },
+    {
+      "path": "render-sh-02-shapes.mjs.log",
+      "bytes": 4350,
+      "sha256": "da20df390045c7d2c57c713c590a33fe4bcef83d606a2a5a64b2bfb2f1427610"
+    },
+    {
+      "path": "render-sh-04-overlays.mjs.log",
+      "bytes": 4354,
+      "sha256": "2f59d082e166e82e49c295bd3f8bdae4cff879872fe5e9562b55c98768dbbbcf"
+    },
+    {
+      "path": "render-sh-05-arrowheads.mjs.log",
+      "bytes": 21,
+      "sha256": "fdb1925de790135dac7bc15c2d493f2e99e6bf6fc3d2e31392496d6a2c5495d5"
+    },
+    {
+      "path": "render-sh-09-arrangements.mjs.log",
+      "bytes": 4269,
+      "sha256": "928cff7bf839cf7033e3e2db5d91d54d76dea3daa9ee15b6ff24d094d3873181"
+    },
+    {
+      "path": "render-sh-12-dot-preview.mjs.log",
+      "bytes": 89,
+      "sha256": "f4e4513e935edb79de3453f782ca1a4809e5ec8c3dea8f8e8f315854a180ce5d"
+    },
+    {
+      "path": "render-sh-13-plantuml-preview.mjs.log",
+      "bytes": 96,
+      "sha256": "88b4f78eef76dbcb0e054d37e6c223d4dccff91c331ac500ed291b6088870950"
+    },
+    {
+      "path": "render-sh-17-arrangements.mjs.log",
+      "bytes": 4269,
+      "sha256": "99535cfbc239a2bc12e457347c28da7ba6ea363469ab62eee9cfed09e292b6a4"
+    },
+    {
+      "path": "render-sh-18-cycle.mjs.log",
+      "bytes": 4262,
+      "sha256": "55f61e89561b7ba71449cd1a11e04349fd8a1d6588463ff6aaf592c78d0b2ab5"
+    },
+    {
+      "path": "render-sh-19-smartart-layouts.mjs.log",
+      "bytes": 131,
+      "sha256": "f25d7951ed57df4ab414b7ba7cd7e9bcfa6ea4cc6212f7e9bf704097bfeba94d"
+    },
+    {
+      "path": "render-sh-25-chart-point-anchors.mjs.log",
+      "bytes": 117,
+      "sha256": "e4a4e8149106bc9771339ce795e4bc1352279628eccf0203f716faeb0c32684c"
+    },
+    {
+      "path": "render-sh-27-offslide-overlays.mjs.log",
+      "bytes": 27,
+      "sha256": "383b25f0ad81a3b43b24da402fada2f91358cd4cd3d4cebf056888b9c6c4c314"
+    },
+    {
+      "path": "render-sh26-readable-fallbacks.mjs.log",
+      "bytes": 786,
+      "sha256": "34f749a7bd2816dab30f28ad1aa65c68c3b0fcdc25f733416e61ffde43403ed8"
+    },
+    {
+      "path": "render-shape-block-effects.mjs.log",
+      "bytes": 4260,
+      "sha256": "8a5220e295e4b18aface810907c1071c135602436d73874cdae535702a86ec58"
+    },
+    {
+      "path": "render-shape-effects.mjs.log",
+      "bytes": 32,
+      "sha256": "48f4982a354008d8f3931626364883b926676f961959196074e6e9a91a47aca7"
+    },
+    {
+      "path": "render-shared-quote.mjs.log",
+      "bytes": 140,
+      "sha256": "16342eb5a7514751bf67f103f3289c73d7a00c8ba9eee6065030b08aeae7272c"
+    },
+    {
+      "path": "render-skip-hidden.mjs.log",
+      "bytes": 81,
+      "sha256": "80161c7a417d3f8545129d99327693d3c4599fb39384f02435b3b8492b7028f3"
+    },
+    {
+      "path": "render-slide-arguments.mjs.log",
+      "bytes": 141,
+      "sha256": "1eb21ac4ee5f4fe1dab6722b169cf2ad16f979e5836e3f3c26a67b9e021d655c"
+    },
+    {
+      "path": "render-slide-context.mjs.log",
+      "bytes": 281,
+      "sha256": "536d6fe8ce001b452fbf23fb4c3904d5dd142ad7c9f3e53480e56be759dab3a5"
+    },
+    {
+      "path": "render-slide-variables.mjs.log",
+      "bytes": 896,
+      "sha256": "e66bde4d00ece36d0c1d1179f8f1a4189631c6d3a60c6abe7fdf1e3cb6d6b7da"
+    },
+    {
+      "path": "render-smoke.mjs.log",
+      "bytes": 59,
+      "sha256": "5b80f9c988357e245f8f04a2e1e845358656da57d47228d1a4a4559b53cca34c"
+    },
+    {
+      "path": "render-socials.mjs.log",
+      "bytes": 1353,
+      "sha256": "912a487d9eca71be1d0114a18903cfc8efdcd00ee110a8a8992b0d8cd4b7439d"
+    },
+    {
+      "path": "render-step-badges.mjs.log",
+      "bytes": 66,
+      "sha256": "b7581d988806cebcf816f1645f14ee2540bb1ede70239ceb96a2f81a97d0a3eb"
+    },
+    {
+      "path": "render-styled-table.mjs.log",
+      "bytes": 173,
+      "sha256": "9004efedd3f1626e544d009bd3f7b38f981194ef41adc64671b8eb9206c5055b"
+    },
+    {
+      "path": "render-svg-font-embedding.mjs.log",
+      "bytes": 178,
+      "sha256": "68fc1321e81a1d5c9434daa110700c99e91afce3695128666797a699b261fb22"
+    },
+    {
+      "path": "render-svg-fstype.mjs.log",
+      "bytes": 162,
+      "sha256": "70c66950f1409446fabd79f82a5b73ebe7a0bef4413176d951cf148c7871991b"
+    },
+    {
+      "path": "render-svg-image.mjs.log",
+      "bytes": 161,
+      "sha256": "d35d25d46cdf47121a4ccddf79e13475a9413f834bd594b9dea3ec1342ab6a33"
+    },
+    {
+      "path": "render-symbol-fonts.mjs.log",
+      "bytes": 221,
+      "sha256": "8e9c9aec4ae6a9299878740335618dead188af060393047ba62df61d18e017c5"
+    },
+    {
+      "path": "render-symbol-role-emoji-fallback.mjs.log",
+      "bytes": 131,
+      "sha256": "996f5a1df0ce4123933c1b5eb488939f2676bb5e85139c118887a555fce96258"
+    },
+    {
+      "path": "render-table-alt.mjs.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "render-table-border-line.mjs.log",
+      "bytes": 213,
+      "sha256": "8ff68331e0ad553148b578de45683fdfc96094557b3261fc6c30c51337ca32d3"
+    },
+    {
+      "path": "render-tag-colour.mjs.log",
+      "bytes": 14,
+      "sha256": "71a99b642ad38c5690a6eb3832d11cc308f4071b418c7274385c319912ed0cb9"
+    },
+    {
+      "path": "render-template-baseline.mjs.log",
+      "bytes": 155,
+      "sha256": "1feec11719a9f21e6cd86a727784c2a13d41608fd5339e704b77fa7efa36c496"
+    },
+    {
+      "path": "render-template-variables.mjs.log",
+      "bytes": 130,
+      "sha256": "11453fd30797925de71c957a1962b2b52d3e1de960bb3ba744d534e4bc8e0446"
+    },
+    {
+      "path": "render-text-as-paths-scripts.mjs.log",
+      "bytes": 399,
+      "sha256": "04e55c30f236bd2685e082f68255a77e8f3dc70799dca732b7ad7217df869acc"
+    },
+    {
+      "path": "render-text-as-paths.mjs.log",
+      "bytes": 255,
+      "sha256": "d27f3f937662d2824d5be496de70b8f6d5238900a07e5344d38a233b62443dad"
+    },
+    {
+      "path": "render-text-run-links.mjs.log",
+      "bytes": 121,
+      "sha256": "5d0d5d450de96923c9d7397ffd5f5c0c14fce837c6e72ff89dd5ce6a9e47fa41"
+    },
+    {
+      "path": "render-theme-slots.mjs.log",
+      "bytes": 73,
+      "sha256": "f24a7afce957afdfb8b2af49e950124813964a2be6b18ddb0841b33055f4aad9"
+    },
+    {
+      "path": "render-tier-pillar-svg.mjs.log",
+      "bytes": 79,
+      "sha256": "0e755979e8599a150be25ab319a8d598cf30fece0f9551e099ffcfab0fc5db17"
+    },
+    {
+      "path": "render-timeline-status.mjs.log",
+      "bytes": 163,
+      "sha256": "fa97adef0ce04810ed3def5a4398eaf531ab1c34c55ea95b59bcb9ad2c2fec0b"
+    },
+    {
+      "path": "render-timeline.mjs.log",
+      "bytes": 8322,
+      "sha256": "c933b00508e472950af7fec734bd2bfe84a7fc172cfeb45c68d968447b726cae"
+    },
+    {
+      "path": "render-title-rule.mjs.log",
+      "bytes": 15,
+      "sha256": "7f62d4a8b1bb4d844b17c8d88f142d5d6d408128fc74e6062b4dfb50c57947af"
+    },
+    {
+      "path": "render-title-split-trace.mjs.log",
+      "bytes": 63,
+      "sha256": "070d728a7a7c355b9010341b684cc580ae5eaf0dddea1d22cba4b0d01646b97b"
+    },
+    {
+      "path": "render-v2-binding-metadata.mjs.log",
+      "bytes": 1513,
+      "sha256": "b5f6ce906fa46bc2828c1534e236cc162f6f4b779dcf5e6bb7813269d2c8c8de"
+    },
+    {
+      "path": "render-validate-font-context.mjs.log",
+      "bytes": 26,
+      "sha256": "d19d57d1bc760b7384242d99c7b132c373513196adde2cb3df69d939516a1227"
+    },
+    {
+      "path": "render-validate-script-fonts.mjs.log",
+      "bytes": 91,
+      "sha256": "2312e9ed9f16e9c1ee5a83784446be160710a00ee9e59838372817c70c882e8b"
+    },
+    {
+      "path": "render-web-delivery.mjs.log",
+      "bytes": 98,
+      "sha256": "ea86966fb902c4d1bff0ae84d6327afe05e647311846c7e7f0c12a002012cead"
+    },
+    {
+      "path": "render-webp.mjs.log",
+      "bytes": 164,
+      "sha256": "f41cb19ddd7c274c05d5ce21d9807acf20b1a2478aabc56c890d090f3ca2fdb1"
+    },
+    {
+      "path": "results.json",
+      "bytes": 248481,
+      "sha256": "8863721b7a3b7bdefc37064f5b19fc184923f6e5cb92534bf86566f96cab67b4"
+    }
+  ]
+}

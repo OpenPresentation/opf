@@ -15,8 +15,8 @@ const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', pa
 const array = value => value == null ? [] : Array.isArray(value) ? value : [value];
 const decode = bytes => new TextDecoder().decode(bytes);
 const uri = `data:image/png;base64,${(await readFile(new URL('fixtures/images/square.png', import.meta.url))).toString('base64')}`;
-const scheme = { name: 'Custom', dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
-const deckFor = (treatment, design = {}) => ({ design: { colorScheme: scheme, ...design },
+const scheme = { dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
+const deckFor = (treatment, design = {}) => ({ extensions: {fixture: {colorSchemeName: 'Custom'}}, design: { colorScheme: scheme, ...design },
   slides: [{ title: 'Treatment', blocks: [{ type: 'image', image: uri, ...treatment }, { type: 'text', text: 'Body' }] }] });
 const geometryOf = (deck, width = 1280, height = 720) => composeSlide(deck.slides[0], { width, height, presentation: deck }).items.find(item => item.field === 'image').image;
 async function exported(deck) {

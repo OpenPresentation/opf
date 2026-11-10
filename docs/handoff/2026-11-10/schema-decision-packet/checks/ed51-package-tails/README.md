@@ -1,0 +1,7 @@
+# Frozen ed51 diagnostic continuation
+
+Source `ed51a7e8a6636bb2e08c9a446a7d22c21ad81066` was clean throughout this sequential run. After the original mapped suites stopped, the diagnostic used the maintained `selectTests` and `nodeArgs` to execute every previously unrun file in their selected tiers. It did not edit tests, introduce skips, change discovery, or run simultaneous heavy jobs. The original aggregate failures remain failures.
+
+All **630 files** ran: **562 PASS / 68 RED**. Core 3/3; render 162/182; PPTX 263/301; editor 134/144. A failed file can still leave later internal assertions unrun. These are file counts, not individual assertion counts. Summed subprocess time was 1,507.558 seconds. Each receipt retains arguments, exit/signal, PID, elapsed time, test-source SHA256 and full output. The ZIP contains all630 logs plus the exact results receipt; its entry hashes are in `manifest.json`.
+
+The retained driver is diagnostic evidence, not an added CI runner or a maintained test list. It records the literal first mapped refusal and verifies the exact remaining file counts against maintained discovery. Repairs and later reruns have separate receipts; this snapshot is immutable. Real defects found include default chart reference fields and per-cell restoration after one native table edit, alongside stale public-schema fixtures and unresolved raster changes. Native PowerPoint acceptance is not inferred.

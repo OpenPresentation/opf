@@ -38,7 +38,7 @@ const org = {start: {text: 'Tandem BioSystems'}, center: {text: 'Internal planni
   // Every zone holds a part and the deck has no date: the date goes into the left zone's row, after the organization name,
   // exactly where OPF draws it when the author adds date: true there.
   const {boxes} = await masterBoxes({design: {fontScheme: 'roboto', footer: org}, slides});
-  const withDate = drawn({design: {fontScheme: 'roboto', footer: {...org, start: {...org.left, date: true}}}, slides});
+  const withDate = drawn({design: {fontScheme: 'roboto', footer: {...org, start: {...org.start, date: true}}}, slides});
   const date = withDate.find(part => part.field === 'date'), name = withDate.find(part => part.text === 'Tandem BioSystems');
   assert.equal(boxes.dt.x, date.x, 'The master date starts where OPF draws a date added to the left zone.');
   assert.ok(boxes.dt.x > name.ink.right, 'The date starts after the organization name: turning it on never covers the name.');

@@ -213,8 +213,8 @@
             "point": "United States",
             "series": "Cost ($B)",
             "edge": "end",
-            "width": 80,
-            "height": 80
+            "widthPx": 80,
+            "heightPx": 80
           },
           "alt": "Circle attached to the United States bar end"
         }
@@ -267,8 +267,8 @@
             "point": 1,
             "series": "Score",
             "edge": "center",
-            "width": 56,
-            "height": 56
+            "widthPx": 56,
+            "heightPx": 56
           }
         }
       ]
@@ -315,8 +315,8 @@
             "block": "shares",
             "point": "South",
             "edge": "end",
-            "width": 48,
-            "height": 48
+            "widthPx": 48,
+            "heightPx": 48
           }
         }
       ]

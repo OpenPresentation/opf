@@ -78,7 +78,7 @@ for (const [index, slide] of deck.slides.entries()) {
 // resolved alignment (gallery number-* layouts center their metrics).
 let metricLines = 0;
 for (const align of ['left', 'center', 'right']) {
-  const metricDeck = {design: {fontScheme: 'roboto', contentAlignment: align}, slides: [{title: 'KPI', blocks: [{metric: {value: '$48B', label: 'TAM'}}, {metric: {value: '$6B', label: 'SAM', description: 'Serviceable market'}}]}]};
+  const metricDeck = {design: {fontScheme: 'roboto', contentAlignment: ({left:'start',right:'end'}[align]??align)}, slides: [{title: 'KPI', blocks: [{metric: {value: '$48B', label: 'TAM'}}, {metric: {value: '$6B', label: 'SAM', description: 'Serviceable market'}}]}]};
   for (const options of [{}, {fonts}]) {
     const [xml] = await slideXml(metricDeck, options), [svg] = toSvg(metricDeck, options);
     for (const text of ['$48B', 'TAM', '$6B', 'SAM', 'Serviceable market']) {

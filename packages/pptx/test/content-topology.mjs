@@ -157,13 +157,13 @@ const roundTrip = async slide => {
 // rebuild for that slide only and report content-structure-changed.
 {
   const bytes = await toPptx({name: 'Boxes', slides: [{title: 'Probe', start: {text: 'L'}, end: {text: 'R'}}, {title: 'Two', start: {text: 'L2'}, end: {text: 'R2'}}]}, EXPORT);
-  const shrunk = modify(bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.regions.right.box = [0, 0, 1, 1]; })));
+  const shrunk = modify(bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.regions.end.box = [0, 0, 1, 1]; })));
   const one = await read(shrunk);
   assert.deepEqual(one.provenance.map(issue => [issue.code, issue.path]), [['content-structure-changed', 'slides.0']]);
   assert.equal(one.deck.slides[0].start, undefined);
   assert.equal(one.deck.slides[0].blocks.length, 2);
-  assert.deepEqual(Object.keys(one.deck.slides[1]).filter(key => /left|right/.test(key)), ['left', 'right'], 'Other slides still rebuild.');
-  const crowded = modify(bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.regions.left.box = [0, 0, 1300, 740]; delete value.content.regions.right.box; })));
+  assert.deepEqual(Object.keys(one.deck.slides[1]).filter(key => /^(start|end)$/.test(key)), ['start', 'end'], 'Other slides still rebuild.');
+  const crowded = modify(bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.regions.start.box = [0, 0, 1300, 740]; delete value.content.regions.end.box; })));
   const two = await read(crowded);
   assert.deepEqual(two.provenance.map(issue => [issue.code, issue.path]), [['content-structure-changed', 'slides.0']]);
   assert.match(two.provenance[0].message, /2 blocks lie in one stored content box/);
@@ -187,7 +187,7 @@ const roundTrip = async slide => {
     'unknown region key': value => { value.content.regions['sideways:up'] = value.content.regions.left; },
     'unknown form': value => { value.content.form = 'tree'; },
     'unknown kind': value => { value.content.regions.left.k = 'script'; },
-    'bad box': value => { value.content.regions.left.box = ['1', 2, 3]; },
+    'bad box': value => { value.content.regions.start.box = ['1', 2, 3]; },
     'too deep': value => { let node = value.content.regions.left; for (let depth = 0; depth <= MAX_GROUP_DEPTH; depth += 1) node = {t: 'group', blocks: [node]}; value.content.regions.left = node; },
     'too many nodes': value => { value.content = {form: 'blocks', blocks: Array.from({length: 300}, () => ({t: 'leaf', k: 'text'}))}; },
     'bad section': value => { value.section = 42; },

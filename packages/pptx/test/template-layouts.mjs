@@ -289,7 +289,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 // master, opf-pptx#168) gets the same set.
 {
   const custom = {'zz-notes': {name: 'Notes', direction: 'column', regions: [{name: 'title'}, {name: 'notes', accepts: ['text', 'list']}]},
-    'aa-split': {name: 'Split', direction: 'column', regions: [{name: 'title'}, {direction: 'row', regions: [{name: 'start', accepts: ['text']}, {name: 'end', accepts: ['image']}]}]}};
+    'aa-split': {name: 'Split', direction: 'column', regions: [{name: 'title'}, {direction: 'row', regions: [{name: 'story', accepts: ['text']}, {name: 'media', accepts: ['image']}]}]}};
   const deck = {name: 'One template', language: 'ja', catalogs: {custom: {layouts: custom}, gallery: {source: defaultCatalog.source}}, slides: [{layout: 'pillars', title: '日本語の見出し', blocks: [{text: 'ひらがな'}]},
     {title: '日本語の見出し', text: 'カタカナ', design: {fontScheme: 'gallery:ms-mincho'}}]};
   const catalogs = [gallery2, defaultCatalog];

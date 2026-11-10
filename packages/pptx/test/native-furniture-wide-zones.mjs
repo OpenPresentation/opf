@@ -26,14 +26,14 @@ const SLIDE = 12192000;
 const algnOf = shape => shape.match(/<a:pPr\b[^>]*\salgn="(\w+)"/)?.[1];
 
 // 1. A lone zone is full width, aligned to its edge: every zone survives the round trip without tags.
-for (const zone of ['left', 'center', 'right']) {
+for (const zone of ['start', 'center', 'end']) {
   assert.deepEqual(await footerOf({[zone]: {text: 'Note'}}), {[zone]: {text: 'Note'}}, `a lone ${zone} text`);
   assert.deepEqual(await footerOf({[zone]: {text: '{{slide.number}}'}}), {[zone]: {text: '{{slide.number}}'}}, `a lone ${zone} slide number`);
   assert.deepEqual(await footerOf({[zone]: {date: '2026-05-02'}}), {[zone]: {date: '2026-05-02'}}, `a lone ${zone} date`);
 }
 
 // 2. Wide boxes with explicit alignment, whatever their centre: a right-aligned full-width box is right, and so on.
-for (const [algn, zone] of [['l', 'left'], ['ctr', 'center'], ['r', 'right']]) {
+for (const [algn, zone] of [['l', 'start'], ['ctr', 'center'], ['r', 'end']]) {
   const edit = shape => box(Math.round(SLIDE * .05), Math.round(SLIDE * .9))(shape).replace(/(<a:pPr\b[^>]*?)\salgn="\w+"/, '$1').replace(/<a:pPr\b/, `<a:pPr algn="${algn}"`);
   const footer = await footerOf({center: {text: 'Wide'}}, editShape('ftr', edit));
   assert.deepEqual(footer, {[zone]: {text: 'Wide'}}, `a wide ${algn} box`);

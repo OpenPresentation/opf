@@ -329,7 +329,7 @@ const footerOnly = {design: {fontScheme: 'roboto', footer: {start: {date: true, 
   for (const base of [removed, stripTags(unzipSync(removed))]) {
     const {imported, invalid} = await read(base);
     assert.deepEqual(invalid, []);
-    const second = {left: footerOnly.design.footer.start, center: footerOnly.design.footer.center};
+    const second = {start: footerOnly.design.footer.start, center: footerOnly.design.footer.center};
     assert.deepEqual(imported.slides[1].design?.footer ?? imported.design.footer, imported.slides[1].design?.footer ?? imported.design.footer);
     const footers = imported.slides.map(slide => slide.design?.footer ?? imported.design.footer);
     assert.deepEqual(footers[0], footerOnly.design.footer);

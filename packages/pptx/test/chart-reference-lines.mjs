@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { test } from 'node:test';
 import { unzipSync, zipSync, strFromU8, strToU8 } from 'fflate';
 import { XMLParser } from 'fast-xml-parser';
-import { composeSlide, resolveColorRef } from '@openpresentation/opf/composition';
+import { composeSlide } from '@openpresentation/opf/composition';
 import { toPptx, fromPptx } from '../dist/index.js';
 import { encodeTextTag, decodeTextTag } from '../dist/code-provenance.js';
 import { chartOrderProblems } from './helpers/chart-schema-order.mjs';
@@ -378,10 +378,13 @@ test('ColorRef alpha, transform, theme/variable resolution and zero-width are re
       const paint = out.chart.referenceLines[0].stroke;
       assert.equal(paint.width, 0);
       assert.equal(paint.dash, 'dot');
-      if (color === '#12345680') assert.equal(paint.color, '#12345680');
-      if (typeof color === 'object') assert.equal(paint.color, resolveColorRef(color, {}).toUpperCase());
-      if (color === 'var:reference') assert.equal(paint.color, resolveColorRef(color, { variables: d.variables }).toUpperCase());
-      if (color === 'accent1') assert.match(paint.color, /^#[0-9A-F]{6}$/);
+      assert.deepEqual(paint.color, color, 'unchanged owned paint preserves the original authored ColorRef');
+      const nativeColor = typeof color === 'object' ? '<a:srgbClr val="204060"><a:lumMod val="80000"/><a:lumOff val="20000"/><a:alpha val="0"/></a:srgbClr>'
+        : color === 'accent1' ? '<a:schemeClr val="accent1"><a:alpha val="0"/></a:schemeClr>'
+        : `<a:srgbClr val="${color === 'var:reference' ? '456789' : '123456'}"><a:alpha val="0"/></a:srgbClr>`;
+      const native = type === 'line' ? e.xml : strFromU8(e.entries['ppt/slides/slide1.xml']);
+      const zeroLines = native.match(/<a:ln w="0"[^>]*>[\s\S]*?<\/a:ln>/g) ?? [];
+      assert.ok(zeroLines.some(line => line.includes(`<a:solidFill>${nativeColor}</a:solidFill>`) && line.includes('<a:prstDash val="dot"/>')), `native zero-width paint preserves scheme identity/transforms and remains transparent: ${type} ${JSON.stringify(color)}`);
     }
 });
 test('RTL start/end native endpoints and singleton overlay labels follow logical category order', async () => {

@@ -46,7 +46,8 @@ for (const type of ['line', 'line-with-markers', 'area', 'column']) {
     assert.ok(Number(e.value['c:scaling']['c:max'].val) >= 80);
     const out = await fromPptx(e.bytes), chart = chartOf(out);
     assert.deepEqual(chart.data, data);
-    assert.deepEqual(chart.referenceLines.map(r => [r.value, r.label, r.stroke.width, r.stroke.dash, r.stroke.color.toUpperCase()]), refs.map(r => [r.value, r.label, Math.round(r.stroke.width * 9525) / 9525, r.stroke.dash, r.stroke.color.toUpperCase()]));
+    assert.deepEqual(chart.referenceLines.map(r => [r.value, r.label, r.stroke.width, r.stroke.dash, r.stroke.color.toUpperCase()]), refs.map(r => [r.value, r.label, r.stroke.width, r.stroke.dash, r.stroke.color.toUpperCase()]));
+    for (const ref of refs) assert.match(e.xml, new RegExp(`<a:ln w="${Math.round(ref.stroke.width * 9525)}"`), 'native EMU width stays quantized while unchanged ownership preserves authored units');
   });
 }
 

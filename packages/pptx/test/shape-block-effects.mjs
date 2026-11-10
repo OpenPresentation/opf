@@ -5,8 +5,8 @@ import assert from 'node:assert/strict';
 import { unzipSync } from 'fflate';
 import { toPptx } from '../dist/index.js';
 
-const scheme = { name: 'Test', dark1: '#101820', light1: '#FFFFFF', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
-const deck = (blocks, dimensions) => ({ name: 'Effects', language: 'en-US', design: { colorScheme: scheme, ...(dimensions ? { dimensions } : {}) }, slides: [{ title: 'Effects', blocks }] });
+const scheme = { dark1: '#101820', light1: '#FFFFFF', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
+const deck = (blocks, dimensions) => ({ name: 'Effects', language: 'en-US', extensions: {fixture: {colorSchemeName: 'Test'}}, design: { colorScheme: scheme, ...(dimensions ? { dimensions } : {}) }, slides: [{ title: 'Effects', blocks }] });
 const decode = bytes => new TextDecoder().decode(bytes);
 async function shapes(blocks, dimensions) {
   const slide = decode(unzipSync(await toPptx(deck(blocks, dimensions), { imageFormat: 'preserve' }))['ppt/slides/slide1.xml']);

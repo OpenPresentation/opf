@@ -79,7 +79,7 @@ for (const [label, alt, kind] of [['label', 'Sales by region & <quarter>', 'text
     return name && JSON.parse(Buffer.from(attr(strFromU8(parts[name]), 'val'), 'hex').toString('utf8'));
   };
   const bytes = await toPptx(structuredClone(source));
-  assert.deepEqual(tagOf(bytes), {v: 1, slide: 'slides.0', path: 'slides.0.blocks.0.image', image: {src: 'https://example.invalid/missing.png', alt: 'Alt'}, treatment: {fit: 'cover', focus: {x: 0.2, y: 0.8}}});
+  assert.deepEqual(tagOf(bytes), {v: 1, vocabulary: 2, slide: 'slides.0', path: 'slides.0.blocks.0.image', image: {src: 'https://example.invalid/missing.png', alt: 'Alt'}, treatment: {fit: 'cover', focus: {x: 0.2, y: 0.8}}});
   const [group] = groups(slideXml(bytes));
   assert.match(members(group)[0].xml, /<p:custDataLst><p:tags r:id="[^"]+"\/><\/p:custDataLst>/, 'the tag is on the panel');
   assert.doesNotMatch(group.match(/<p:nvGrpSpPr>[\s\S]*?<\/p:nvGrpSpPr>/)[0], /custDataLst/);
