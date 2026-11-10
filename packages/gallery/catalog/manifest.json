@@ -47,10 +47,10 @@
     "icon-sets": {
       "mode": "mirror",
       "records": 2,
-      "contentSha256": "fa9ad0987a0c10d60235c26855cea4758703079cf0f927012105d381b6f9b205",
+      "contentSha256": "85f090b4e554786f35d1e7cb286013da9a122964bfd543ebef001440c3b48ca5",
       "gallery": {
         "records": 2,
-        "contentSha256": "fa9ad0987a0c10d60235c26855cea4758703079cf0f927012105d381b6f9b205"
+        "contentSha256": "85f090b4e554786f35d1e7cb286013da9a122964bfd543ebef001440c3b48ca5"
       }
     },
     "languages": {

@@ -40,7 +40,9 @@ for (const face of office.registry.embeddedFonts) {
 }
 if (fonts.startup.length !== 1) throw new Error("The Office font pack has no Roboto Regular face to start the deck view with.");
 
+const profile = process.env.OPF_MCP_APP_PROFILE;
 const bundle = await build({
+	metafile: Boolean(profile),
 	// A path, not URL.pathname, which on Windows is "/C:/..." and does not resolve.
 	entryPoints: [fileURLToPath(new URL("app/main.ts", here))],
 	bundle: true,
@@ -50,6 +52,8 @@ const bundle = await build({
 	// `worker` picks core's precompiled validators (no code generated at run time); `module` is esbuild's default for the browser.
 	conditions: ["worker", "module"],
 	target: "es2022",
+	// The HTML declares UTF-8; preserve identical JS values without inflating non-ASCII literals into escapes.
+	charset: "utf8",
 	minify: true,
 	legalComments: "eof",
 	define: { MCP_VERSION: JSON.stringify(manifest.version), OPF_DECK_FONTS: JSON.stringify(fonts) },
@@ -57,6 +61,7 @@ const bundle = await build({
 	// tsup's chunks of core are imported bare for their order only; they are pure, so dropping the bare import changes nothing.
 	logOverride: { "ignored-bare-import": "silent" },
 });
+if (profile) await writeFile(profile, `${JSON.stringify(bundle.metafile, null, 2)}\n`);
 const script = bundle.outputFiles[0].text;
 // The sandbox refuses code generated from strings: a bundle that calls the Function constructor or eval would break there.
 for (const pattern of [/\bnew Function\(/, /\beval\(/]) {
