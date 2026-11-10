@@ -423,6 +423,50 @@ export function validateReferenceWitnessExecution({
   assert.equal(fileIdentity(snapshotEnvelope).sha256, binding.envelopeSha256);
   return { ...binding, directory, runner, snapshots: expected };
 }
+
+// A separate read-only shutdown observation; never a retry or additional worker budget.
+export function assertReferenceWitnessPostflight(terminal, samples) {
+  assert.equal(terminal.workerCleanupConfirmed, true);
+  assert.equal(terminal.postflightError, null);
+  const result = terminal.postflight;
+  assert.equal(result.schemaVersion, 1);
+  assert.equal(result.policy, 'global-zero-after-completed-owned-quit-v1');
+  assert.equal(result.budgetMilliseconds, 5000);
+  assert.equal(result.intervalMilliseconds, 100);
+  assert.equal(result.maximumQueries, 51);
+  assert.equal(result.observedZero, true);
+  assert.equal(result.officeActions, 0);
+  assert.ok(Array.isArray(samples) && samples.length >= 1 && samples.length <= 51);
+  assert.equal(result.sampleCount, samples.length);
+  const initial = samples[0].processIds;
+  assert.ok(Array.isArray(initial));
+  let previous = -1;
+  for (const [index, row] of samples.entries()) {
+    assert.equal(row.schemaVersion, 1);
+    assert.equal(row.sequence, index + 1);
+    assert.equal(row.status, 'observed');
+    assert.equal(row.error, null);
+    assert.ok(typeof row.utc === 'string' && row.utc.endsWith('Z') && Number.isFinite(Date.parse(row.utc)));
+    assert.ok(Number.isFinite(row.elapsedMilliseconds) && row.elapsedMilliseconds >= 0 && row.elapsedMilliseconds >= previous && row.elapsedMilliseconds < 5000);
+    previous = row.elapsedMilliseconds;
+    assert.ok(Array.isArray(row.processIds));
+    for (const [i, pid] of row.processIds.entries()) {
+      assert.ok(Number.isInteger(pid) && pid > 0 && pid <= 2147483647);
+      assert.ok(i === 0 || pid > row.processIds[i - 1]);
+      assert.ok(initial.includes(pid), 'A new global process was observed');
+    }
+    assert.equal(row.processIds.length === 0, index === samples.length - 1, 'A zero ends the observation immediately');
+  }
+  assert.deepEqual(result.initialProcessIds, initial);
+  assert.equal(result.initialCount, initial.length);
+  assert.deepEqual(result.finalProcessIds, []);
+  assert.equal(result.finalCount, 0);
+  assert.equal(result.elapsedMilliseconds, previous);
+  assert.equal(terminal.powerPointPostflightInitialCount, initial.length);
+  assert.equal(terminal.powerPointPostflightCount, 0);
+  return true;
+}
+
 export function assertReferenceWitnessLifecycle(report, terminal, inputSha256, envelopeSha256) {
   assert.equal(terminal.timedOut, false);
   assert.equal(terminal.exitCode, 0);
@@ -959,6 +1003,14 @@ export async function bindReferenceWitnessObservation({
   const report = readJson(asset(directory, "native/report.json")),
     terminal = readJson(asset(directory, "native/supervisor.json"));
   assertReferenceWitnessLifecycle(report, terminal, digest(binding.input), binding.envelopeSha256);
+  assert.equal(terminal.postflightIdentity?.path, 'native/postflight.jsonl');
+  const postflightBytes = fs.readFileSync(asset(directory, 'native/postflight.jsonl'));
+  assert.ok(postflightBytes.length > 0 && postflightBytes.length <= 65536);
+  assert.equal(postflightBytes.length, terminal.postflightIdentity.bytes);
+  assert.equal(digest(postflightBytes), terminal.postflightIdentity.sha256);
+  const postflightSamples = postflightBytes.toString('utf8').trim().split(/\r?\n/u).map(line => JSON.parse(line));
+  assertReferenceWitnessPostflight(terminal, postflightSamples);
+
   const stages = fs
     .readFileSync(asset(directory, "native/stages.jsonl"), "utf8")
     .replace(/^\uFEFF/u, "")
