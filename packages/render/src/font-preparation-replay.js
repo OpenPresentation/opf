@@ -123,6 +123,20 @@ function snapshot(style) {
   }
   return copy;
 }
+// Compare only fresh owned snapshots, never caller object identity or descriptors.
+function sameStyleSnapshot(current, previous) {
+  const keys = Reflect.ownKeys(current), oldKeys = Reflect.ownKeys(previous);
+  if (keys.length !== oldKeys.length) return false;
+  for (let index = 0; index < keys.length; index++) {
+    const field = keys[index];
+    if (field !== oldKeys[index]) return false;
+    const value = current[field], old = previous[field];
+    if (field === 'fontFace' && value !== null && old !== null && typeof value === 'object' && typeof old === 'object') {
+      if (value.family !== old.family || value.bold !== old.bold || value.italic !== old.italic) return false;
+    } else if (!Object.is(value, old)) return false;
+  }
+  return true;
+}
 function poolOf(faces) {
   const result = new Map();
   let bytes = 0;
@@ -210,8 +224,12 @@ export function createPreparationReplay() {
       invalidate();
       return false;
     }
+    // One previous style-ID scalar; its fixed bookkeeping is part of the same retained-data cap.
+    if (context.bytes + 16 > LIMIT_BYTES) { invalidate(); return false; }
     candidate = {
       ...context,
+      bytes: context.bytes + 16,
+      previousStyleId: undefined,
       events: [],
       seen: new Map(),
       styles: [],
@@ -236,16 +254,19 @@ export function createPreparationReplay() {
     const copy = snapshot(style);
     if (!copy) return;
     delete copy.path;
+    const previous = candidate.previousStyleId;
+    if (previous !== undefined && sameStyleSnapshot(copy, candidate.styles[previous])) return previous;
     const key = JSON.stringify(
       Reflect.ownKeys(copy).map((field) => [field, property(copy, field)]),
     );
     const held = candidate.styleIds.get(key);
-    if (held !== undefined) return held;
+    if (held !== undefined) { candidate.previousStyleId = held; return held; }
     // Count both the retained signature and full snapshot data, with table/ref scalars.
     if (!reserve(4 * key.length + 32)) return;
     const id = candidate.styles.length;
     candidate.styleIds.set(key, id);
     candidate.styles.push(copy);
+    candidate.previousStyleId = id;
     return id;
   };
   const internText = (text) => {
