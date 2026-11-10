@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "records": 170,
+  "rawBytes": 17732796,
+  "compressedBytes": 2320573,
+  "archiveSha256": "c33ed09136a6d8b4d3a0ecaf9a700fc0b40d69f30453fc499c57f3d658333c18",
+  "matrixSha256": "40dde532d6c67d08841c63dd3030f97b5659c64b5e7aaed1878dc37e6b3522f5",
+  "summary": {
+    "cases": 59,
+    "changedArchives": 6,
+    "exactInputCompletedRows": 20,
+    "exactInputFailedTableRows": 1,
+    "scopeCompatibleHistoricalRows": 19,
+    "rawNativeReports": 18,
+    "autoEligible": 53,
+    "currentConsumerImportsRun": 0,
+    "nativeAcceptedByAudit": 0,
+    "githubApiCalls": 0,
+    "officeRuns": 0,
+    "builds": 0
+  }
+}
