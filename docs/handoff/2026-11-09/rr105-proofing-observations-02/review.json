@@ -1,0 +1,50 @@
+{
+  "scope": "Existing observations reconciled read-only. No new Office run, current-engine/native/release acceptance or glyph fix.",
+  "reviewedAt": "2026-11-10T00:06:56.087Z",
+  "suiteSha256": "50dc947be9220127c2a18f6b3e47d47479a275bf3563144b00b27c38fa18e097",
+  "workerSource": "b8461d48b193e32dee4e6e1bb60896823f2303ff",
+  "runnerSource": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "nativePhases": 9,
+  "languageObservations": 27,
+  "allNativePngSha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+  "reviews": [
+    {
+      "id": "A",
+      "folder": "qualification034-proofing-A-03",
+      "recordedAt": "2026-11-09T16:05:14.0583024Z",
+      "mechanicalCompleted": true,
+      "cleanupConfirmed": true,
+      "languageObservations": 9,
+      "visualAccepted": false,
+      "reason": "Every native phase is byte-identical to rejected A: Latin first line remains visually reversed despite correct logical strings and Arabic proofing metadata."
+    },
+    {
+      "id": "B",
+      "folder": "qualification034-proofing-B-01",
+      "recordedAt": "2026-11-09T16:06:13.0220751Z",
+      "mechanicalCompleted": true,
+      "cleanupConfirmed": true,
+      "languageObservations": 9,
+      "visualAccepted": false,
+      "reason": "Every native phase is byte-identical to rejected A: Latin first line remains visually reversed despite correct logical strings and Arabic proofing metadata."
+    },
+    {
+      "id": "C",
+      "folder": "qualification034-proofing-C-01",
+      "recordedAt": "2026-11-09T16:10:38.3764942Z",
+      "mechanicalCompleted": true,
+      "cleanupConfirmed": true,
+      "languageObservations": 9,
+      "visualAccepted": false,
+      "reason": "Every native phase is byte-identical to rejected A: Latin first line remains visually reversed despite correct logical strings and Arabic proofing metadata."
+    }
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "glyphFix": false,
+  "notes": [
+    "Original source/output bytes unchanged. Saved authored imports/current59 and glyph05/06/09/10 remain owed.",
+    "BOM is stripped only in memory. First seal stopped at missing dated parent; second stopped at256-member archive cap. Read-only inventory measured146files percase,438total/2962154bytes. Evidence-only collection now512members/16MiB; native worker/action/shape/time caps are unchanged. No files omitted.",
+    "Multi-image display showed blank placeholders for B/C. Byte hashes and independent single-file B view prove all9 images retain the same reversed Latin; no blank-image product claim."
+  ]
+}
