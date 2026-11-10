@@ -1,0 +1,15 @@
+{
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 196552,
+    "sha256": "b31f6b2d1d212ed6b265d7f129685613c0c86f4d33e18c098c9ffe3ae8221262",
+    "expandedBytes": 567952,
+    "records": 26,
+    "decodedBytes": 423295
+  },
+  "facts": {
+    "file": "facts.json",
+    "bytes": 4227,
+    "sha256": "39b53f5e7c8013406c653eef915969c2ffe182adb6ef066b397dd2d0d17bbc24"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "kind": "EXISTING_SAME_LANGUAGE_NUMERIC_RUN_SPLIT_REJECTION",
+  "original09Sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+  "numericInputSha256": "52aab647785fd33b05d21f4b6ac6f9cb639fd3da926fa7021f2eef2d8505487e",
+  "comparisons": [
+    {
+      "shape": 2,
+      "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+      "candidateTexts": [
+        "Item ",
+        "1: ",
+        "Customers told us onboarding took too long, so we rebuilt it "
+      ],
+      "wholeSpPr": true,
+      "bodyPr": true,
+      "pPr": true,
+      "endPara": true,
+      "allFullRprCopied": true,
+      "exactConcatenation": true,
+      "rPr": {
+        "a:solidFill": {
+          "a:schemeClr": {
+            "val": "tx1"
+          }
+        },
+        "a:latin": {
+          "typeface": "Aptos",
+          "pitchFamily": "34",
+          "charset": "0"
+        },
+        "a:cs": {
+          "typeface": "Arabic Typesetting"
+        },
+        "lang": "ar-SA",
+        "altLang": "en-US",
+        "sz": "2775",
+        "dirty": "0"
+      }
+    },
+    {
+      "shape": 3,
+      "text": "around the customer journey.",
+      "candidateTexts": [
+        "around the customer journey."
+      ],
+      "wholeSpPr": true,
+      "bodyPr": true,
+      "pPr": true,
+      "endPara": true,
+      "allFullRprCopied": true,
+      "exactConcatenation": true,
+      "rPr": {
+        "a:solidFill": {
+          "a:schemeClr": {
+            "val": "tx1"
+          }
+        },
+        "a:latin": {
+          "typeface": "Aptos",
+          "pitchFamily": "34",
+          "charset": "0"
+        },
+        "a:cs": {
+          "typeface": "Arabic Typesetting"
+        },
+        "lang": "ar-SA",
+        "altLang": "en-US",
+        "sz": "2775",
+        "dirty": "0"
+      }
+    }
+  ],
+  "pngs": [
+    {
+      "phase": "original",
+      "page": 1,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+      "baselineCase": "rtl-contrast-09-long-explicit-arabic",
+      "exact": true
+    },
+    {
+      "phase": "edited",
+      "page": 1,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+      "baselineCase": "rtl-contrast-09-long-explicit-arabic",
+      "exact": true
+    },
+    {
+      "phase": "reopened",
+      "page": 1,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+      "baselineCase": "rtl-contrast-09-long-explicit-arabic",
+      "exact": true
+    },
+    {
+      "phase": "original",
+      "page": 2,
+      "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575",
+      "baselineCase": "rtl-contrast-05-mixed-explicit-arabic",
+      "exact": true
+    },
+    {
+      "phase": "edited",
+      "page": 2,
+      "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575",
+      "baselineCase": "rtl-contrast-05-mixed-explicit-arabic",
+      "exact": true
+    },
+    {
+      "phase": "reopened",
+      "page": 2,
+      "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575",
+      "baselineCase": "rtl-contrast-05-mixed-explicit-arabic",
+      "exact": true
+    },
+    {
+      "phase": "original",
+      "page": 3,
+      "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa",
+      "baselineCase": "rtl-contrast-06-whole-explicit-arabic",
+      "exact": true
+    },
+    {
+      "phase": "edited",
+      "page": 3,
+      "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa",
+      "baselineCase": "rtl-contrast-06-whole-explicit-arabic",
+      "exact": true
+    },
+    {
+      "phase": "reopened",
+      "page": 3,
+      "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa",
+      "baselineCase": "rtl-contrast-06-whole-explicit-arabic",
+      "exact": true
+    }
+  ],
+  "observedOriginalLength": 69,
+  "digitIndex": 5,
+  "existingSplitLengths": [
+    5,
+    3,
+    61
+  ],
+  "proposedDigitOnlySplitLengths": [
+    5,
+    1,
+    63
+  ],
+  "digitOnlyColonBoundaryExactlyTested": false,
+  "broadSameLanguageNumericIsolationAlreadyFailed": true,
+  "alternateRemovalProposed": false,
+  "productFixProposed": false,
+  "newOfficeCalls": 0,
+  "nativeAcceptance": false
+}
