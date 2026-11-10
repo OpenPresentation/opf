@@ -341,6 +341,8 @@ function inspectChart(parts, file, uri, deps, tools) {
       scaling: a["c:scaling"] ?? null,
       format: a["c:numFmt"] ?? null,
       major: a["c:majorUnit"] ?? null,
+      // Placement is part of reference geometry even when the outer chart frame is unchanged.
+      placement: Object.fromEntries(["c:axPos", "c:crosses", "c:crossesAt", "c:crossBetween", "c:tickLblPos", "c:lblAlgn", "c:lblOffset", "c:tickLblSkip", "c:tickMarkSkip", "c:noMultiLvlLbl", "c:delete", "c:title", "c:txPr"].map(name => [name, a[name] ?? null])),
     })),
   );
   assert.equal(new Set(axes.map((a) => a.id)).size, axes.length, "Duplicate chart axes");
@@ -353,7 +355,7 @@ function inspectChart(parts, file, uri, deps, tools) {
   for (const a of axes)
     for (const field of ["c:min", "c:max"])
       if (a.scaling?.[field]) number(String(a.scaling[field].val));
-  return { family: "classic", groups, axes, ownership: owner, workbook: book };
+  return { family: "classic", layout: plot["c:layout"] ?? null, groups, axes, ownership: owner, workbook: book };
 }
 function inspectReferenceWhole(input, expectedSlides, deps) {
   const { parts, count, total } = boundedParts(input, deps),

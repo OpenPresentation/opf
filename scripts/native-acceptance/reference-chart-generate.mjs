@@ -14,6 +14,7 @@ import {
 import { installedEngines, prepareFreshOutput, fixtureWriter } from "./generate.mjs";
 import { preparationInputPaths, sealSuite } from "./prepare.mjs";
 import { digest, fileIdentity, installedIdentity, repositoryIdentity } from "./identity.mjs";
+import { inspectReferenceRuntimeRoutes } from "./reference-runtime-routes.mjs";
 import {
   archiveDependencies,
   inspectReferenceArchive,
@@ -80,7 +81,9 @@ export async function generateReferenceWitnesses({
     REFERENCE_SUPERVISOR,
     "Only unchanged ce92 supervisor is eligible",
   );
+  const runtimeRoutes = await inspectReferenceRuntimeRoutes(consumer);
   const provenance = {
+    runtimeRoutes,
     packages,
     suiteRepository,
     workerRepository: worker,
@@ -212,6 +215,7 @@ export async function generateReferenceWitnesses({
     ...fileIdentity(file),
   }));
   assert.ok(fontFiles.length, "Actual pinned preview font files required");
+  assert.deepEqual((await inspectReferenceRuntimeRoutes(consumer)).binding, runtimeRoutes.binding, "Actual core runtime routes changed during generation");
   const finalPackages = installedIdentity(consumer);
   assert.deepEqual(finalPackages, packages, "Installed consumer changed during preparation");
   assert.deepEqual(

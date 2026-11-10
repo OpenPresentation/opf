@@ -37,8 +37,8 @@ function Assert-ReferenceWitnessBootstrapController([string]$Root,$Identity) {
     if($full -ine $Identity.directory -or $Identity.dirty -isnot [bool] -or $Identity.dirty -or $Identity.revision -cnotmatch '^[a-f0-9]{40}$') { throw 'ReferenceWitness controller requires its separate clean Git identity' }
     $head=(& git -C $full rev-parse HEAD | Out-String).Trim();if($LASTEXITCODE -ne 0 -or $head -cne $Identity.revision) { throw 'ReferenceWitness controller HEAD differs' }
     $status=(& git -C $full status --porcelain --untracked-files=normal | Out-String).Trim();if($LASTEXITCODE -ne 0 -or $status -ne '') { throw 'ReferenceWitness controller must remain clean' }
-    $required=@('scripts/native-acceptance/reference-chart-profile.mjs','scripts/native-acceptance/reference-chart-archive.mjs','scripts/native-acceptance/run-reference-chart-profile.ps1','scripts/native-acceptance/reference-chart-worker.ps1','scripts/native-acceptance/identity.mjs','scripts/native-acceptance/run-windows.ps1')
-    if($Identity.files -isnot [array] -or $Identity.files.Count -ne $required.Count) { throw 'ReferenceWitness controller requires all six exact code identities' }
+    $required=@('scripts/native-acceptance/reference-chart-profile.mjs','scripts/native-acceptance/reference-chart-archive.mjs','scripts/native-acceptance/reference-runtime-routes.mjs','scripts/native-acceptance/run-reference-chart-profile.ps1','scripts/native-acceptance/reference-chart-worker.ps1','scripts/native-acceptance/identity.mjs','scripts/native-acceptance/run-windows.ps1')
+    if($Identity.files -isnot [array] -or $Identity.files.Count -ne $required.Count) { throw 'ReferenceWitness controller requires all seven exact code identities' }
     foreach($name in $required) {
         $matches=@($Identity.files | Where-Object {$_.path -ceq $name});if($matches.Count -ne 1) { throw 'Missing/duplicate referenceWitness controller code identity' }
         $file=Assert-ReferenceWitnessBootstrapPath (Join-Path $full $name);$item=Get-Item -LiteralPath $file -Force

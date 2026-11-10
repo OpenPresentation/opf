@@ -7,6 +7,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { isDeepStrictEqual } from "node:util";
 import { inspectReferenceArchive, bindReferenceWitnessPhase } from "./reference-chart-archive.mjs";
 import { digest, fileIdentity, installedIdentity, repositoryIdentity } from "./identity.mjs";
+import { assertReferenceRuntimeRoutes } from "./reference-runtime-routes.mjs";
 
 export const REFERENCE_SUPERVISOR = {
   path: "test/native-process.ps1",
@@ -22,6 +23,7 @@ export const REFERENCE_CASES = [
 export const REFERENCE_CONTROLLER_FILES = [
   "scripts/native-acceptance/reference-chart-profile.mjs",
   "scripts/native-acceptance/reference-chart-archive.mjs",
+  "scripts/native-acceptance/reference-runtime-routes.mjs",
   "scripts/native-acceptance/run-reference-chart-profile.ps1",
   "scripts/native-acceptance/reference-chart-worker.ps1",
   "scripts/native-acceptance/identity.mjs",
@@ -259,6 +261,7 @@ export function validateReferenceWitnessEnvelope(
     "Original runtime changed",
   );
   boundRepository(root, envelope.controllerRepository, REFERENCE_CONTROLLER_FILES);
+  const runtimeRoutes = assertReferenceRuntimeRoutes(envelope.generation.consumer, binding.suite.provenance.runtimeRoutes);
   assert.equal(envelope.controllerRepository.directory, fs.realpathSync(root));
   assert.notEqual(
     envelope.controllerRepository.directory,
@@ -271,7 +274,7 @@ export function validateReferenceWitnessEnvelope(
   assert.match(process.version, /^v24\./u);
   assert.deepEqual(envelope.archive, binding.archive);
   assert.deepEqual(envelope.source, binding.source);
-  return { ...binding, envelope };
+  return { ...binding, envelope, runtimeRoutes };
 }
 export function createReferenceWitnessEnvelope({
   suiteDirectory,
@@ -1001,6 +1004,7 @@ export async function bindReferenceWitnessObservation({
     envelopeSha256: binding.envelopeSha256,
     generation: binding.envelope.generation,
     controllerRepository: binding.envelope.controllerRepository,
+    runtimeRoutes: binding.runtimeRoutes,
     inputSha256: digest(binding.input),
     savedSha256: digest(saved),
     phases: 2,
@@ -1086,6 +1090,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
         inputPath: asset(b.directory, b.selected.input),
         planPath: asset(b.directory, b.selected.actionPlan),
         archive: b.archive,
+        runtimeRoutes: b.runtimeRoutes,
       }),
     );
   } else if (mode === "verify-execution") {

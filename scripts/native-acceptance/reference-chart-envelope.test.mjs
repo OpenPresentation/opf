@@ -20,6 +20,8 @@ import {
 } from "./reference-chart-profile.mjs";
 import { syntheticCase, sources } from "./test-fixtures/reference-chart-synthetic.mjs";
 import { windowsPowerShellEnvironment } from "./windows-powershell-env.mjs";
+import { syntheticConsumer } from "./test-fixtures/reference-runtime-routes.mjs";
+import { inspectReferenceRuntimeRoutes } from "./reference-runtime-routes.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const write = (file, bytes) => {
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -83,7 +85,7 @@ function child(executable, args, options = {}) {
 
 test("actual create/verify/default-pure child route binds three whole cases, six packages, clean separate repos and unchanged supervisor without Office", {
   timeout: 30000,
-}, () => {
+}, async () => {
   const folder = fs.mkdtempSync(
       process.platform === "win32"
         ? "C:/opf-work/ref-envelope-"
@@ -118,23 +120,7 @@ test("actual create/verify/default-pure child route binds three whole cases, six
       ),
     );
   freeze(worker);
-  write(path.join(consumer, "package.json"), json({ private: true, type: "module" }));
-  for (const name of packageNames) {
-    const dir = path.join(consumer, "node_modules", name);
-    write(
-      path.join(dir, "package.json"),
-      json({
-        name,
-        version: "0.34.0",
-        type: "module",
-        exports: { ".": "./dist/index.js", "./package.json": "./package.json" },
-      }),
-    );
-    write(
-      path.join(dir, "dist/index.js"),
-      "// Synthetic installed identity only; never an engine implementation.\nexport const synthetic=true;\n",
-    );
-  }
+  syntheticConsumer(consumer);
   const provenance = {
       suiteRepository: repositoryIdentity(preparation, [
         "scripts/native-acceptance/run-windows.ps1",
@@ -144,6 +130,7 @@ test("actual create/verify/default-pure child route binds three whole cases, six
         "test/native-process-check.ps1",
       ]),
       packages: installedIdentity(consumer),
+      runtimeRoutes: await inspectReferenceRuntimeRoutes(consumer),
       nativeAcceptance: false,
       registryAcceptance: false,
     },

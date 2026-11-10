@@ -24,6 +24,10 @@ export function referenceControllerDerivation(){
       text=once(text,'$total -le 20','$total -le 9');
       text=once(text,"'<=20'","'<=9'");
     }
+    if(base==='run-seven-chart-profile.ps1'){
+      text=once(text,"'scripts/native-acceptance/reference-chart-archive.mjs',","'scripts/native-acceptance/reference-chart-archive.mjs','scripts/native-acceptance/reference-runtime-routes.mjs',");
+      text=once(text,'all six exact code identities','all seven exact code identities');
+    }
     if(base==='seven-chart-worker-self-test.ps1'){
       text=once(text,'=="slideCount"?6:7;','=="slideCount"?2:3;');
       assert.equal(text.split('rasters).Count -ne 7').length-1,2,'Two phase raster-count anchors');

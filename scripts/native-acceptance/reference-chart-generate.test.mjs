@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { titleInvariancePair, readReferenceSources } from "./reference-chart-fixtures.mjs";
 import { inspectReferenceArchive, inspectReferenceTitlePair } from "./reference-chart-archive.mjs";
 import { assertReferenceTitleInvariance } from "./reference-chart-generate.mjs";
-import { syntheticCase } from "./test-fixtures/reference-chart-synthetic.mjs";
+import { syntheticCase, rewrite } from "./test-fixtures/reference-chart-synthetic.mjs";
 
 test("pure title-pair inspector first proves actual fixed chart frame and XML/workbook parity; it cannot admit a one-slide physical case", () => {
   const pair = titleInvariancePair(),
@@ -52,4 +52,16 @@ test("the dedicated generator default is source inspection only and incomplete/u
     assert.match(out.stderr, /required|Unknown|explicit|supported/i);
   }
   assert.equal(readReferenceSources().length, 3);
+});
+
+
+test("title placement proof refuses internal plot layout and axis placement changes with an identical outer frame", () => {
+  const pair=titleInvariancePair(),bytes=syntheticCase({document:pair.before}),before=inspectReferenceTitlePair(bytes);
+  const mutants=[
+    ["plot manual layout",t=>t.replace('<c:plotArea>','<c:plotArea><c:layout><c:manualLayout><c:layoutTarget val="inner"/><c:xMode val="edge"/><c:yMode val="edge"/><c:wMode val="factor"/><c:hMode val="factor"/><c:x val="0.2"/><c:y val="0.1"/><c:w val="0.6"/><c:h val="0.7"/></c:manualLayout></c:layout>')],
+    ["category axis placement",t=>t.replace('<c:catAx>','<c:catAx><c:axPos val="t"/><c:crosses val="max"/><c:crossBetween val="between"/>')],
+    ["axis orientation",t=>t.replace('<c:scaling>','<c:scaling><c:orientation val="maxMin"/>')],
+    ["value axis placement",t=>t.replace('<c:valAx>','<c:valAx><c:axPos val="r"/><c:crossesAt val="1"/><c:tickLblPos val="high"/><c:lblOffset val="120"/>')],
+  ];
+  for(const[name,change]of mutants){const after=inspectReferenceTitlePair(rewrite(bytes,'ppt/charts/chart1.xml',source=>{const changed=change(source);assert.notEqual(changed,source,name+' must mutate XML');return changed;}));assert.deepEqual(before.slides[0].shapes.find(s=>s.kind==='chart').geometry,after.slides[0].shapes.find(s=>s.kind==='chart').geometry);assert.throws(()=>assertReferenceTitleInvariance(before,after),/title\/subtitle/,name);}
 });
