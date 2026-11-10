@@ -1,0 +1,342 @@
+{
+  "schema": 1,
+  "base": "45564d256b3b89018259e55e9cf37d396d7780c6",
+  "source": "36d7b83c307b2c329c67b69190ff3678218d5669",
+  "tree": "ce6cf642e4f1ee31f6b4169ba35095b6037ef1f4",
+  "protectedObjects": [
+    {
+      "path": "packages/javascript",
+      "base": "c937f5570844425c4047b4229cbf7362ed5a1371",
+      "source": "c937f5570844425c4047b4229cbf7362ed5a1371"
+    },
+    {
+      "path": "packages/render",
+      "base": "38d0751719135dc563576a875ca7f908c8c9ae59",
+      "source": "38d0751719135dc563576a875ca7f908c8c9ae59"
+    },
+    {
+      "path": "packages/pptx",
+      "base": "a8bd34b804febebcf26cca44d425be11e64379c8",
+      "source": "a8bd34b804febebcf26cca44d425be11e64379c8"
+    },
+    {
+      "path": "packages/editor",
+      "base": "1b1362e5d8f9813135a5426b167397afe5d16a79",
+      "source": "1b1362e5d8f9813135a5426b167397afe5d16a79"
+    },
+    {
+      "path": "packages/gallery",
+      "base": "609eb292785d0103295a7a2d9eb2fd09c6fbf835",
+      "source": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "path": "packages/cli",
+      "base": "74c6c57b2d099d88eb4e85f969a3f52ee8267908",
+      "source": "74c6c57b2d099d88eb4e85f969a3f52ee8267908"
+    },
+    {
+      "path": "packages/mcp/src",
+      "base": "88f93649c3ee8ed849b0d798fd6629abf6324e08",
+      "source": "88f93649c3ee8ed849b0d798fd6629abf6324e08"
+    },
+    {
+      "path": "packages/mcp/app/fonts.ts",
+      "base": "67e8f88ac47e6ff2d3305b6088ecaa0bfee070b2",
+      "source": "67e8f88ac47e6ff2d3305b6088ecaa0bfee070b2"
+    },
+    {
+      "path": "packages/mcp/app/view.css",
+      "base": "d39619980fb8353f455f96cbaa03f8c46127b9ed",
+      "source": "d39619980fb8353f455f96cbaa03f8c46127b9ed"
+    },
+    {
+      "path": "packages/mcp/app/index.html",
+      "base": "4f1788113185161312a5cd416f6a16f57ab1d36a",
+      "source": "4f1788113185161312a5cd416f6a16f57ab1d36a"
+    },
+    {
+      "path": "packages/mcp/test/mcp.test.mjs",
+      "base": "e79521f25abdfd7e7a4182cbb1ea82bb6daa826e",
+      "source": "e79521f25abdfd7e7a4182cbb1ea82bb6daa826e"
+    },
+    {
+      "path": "packages/mcp/test/deck-app.test.mjs",
+      "base": "e5bdb7c06e57f6c0a9486ab64adad6c8076a973b",
+      "source": "e5bdb7c06e57f6c0a9486ab64adad6c8076a973b"
+    },
+    {
+      "path": "packages/mcp/test/deck-app-browser.mjs",
+      "base": "f405f5db3cca81061a7769b12ea8c937f97d396d",
+      "source": "f405f5db3cca81061a7769b12ea8c937f97d396d"
+    },
+    {
+      "path": "packages/mcp/package.json",
+      "base": "17ca65ab3688439c4790ff0cc28be6a4dd563504",
+      "source": "17ca65ab3688439c4790ff0cc28be6a4dd563504"
+    },
+    {
+      "path": "spec",
+      "base": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274",
+      "source": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "path": ".github",
+      "base": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4",
+      "source": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "base": "2e45923e6a027db20e2593a5befef39473259f2a",
+      "source": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "path": "package.json",
+      "base": "846e509ef00827a8efe72c059ca3238f88be6fbb",
+      "source": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    }
+  ],
+  "sdk": "1.32.2",
+  "original519": {
+    "observedRawBytes": 10289372,
+    "observedSha256": "0cbec40483d4f704371dad1c7086dcbb82d52873e38bb43dba55da26d47ccc86",
+    "observedFrameBytes": 10688398,
+    "rawArtifactArchived": false
+  },
+  "baseline": {
+    "source": "45564d256b3b89018259e55e9cf37d396d7780c6",
+    "rawBytes": 10290042,
+    "sha256": "a35bc3e4d055ff7fe2fa1360d1a60594cb5c3536caafc231204c5a997d632c82",
+    "frame": 10689080,
+    "limit": 10485760,
+    "observedReadBufferError": "ReadBuffer exceeded maximum size of 10485760 bytes"
+  },
+  "candidate": {
+    "rawBytes": 9953999,
+    "sha256": "24c04b2c4516edc1ec0cee8a5076a1e6104c096731929977751e9cf75ef9a539",
+    "frameId1": 10342402,
+    "frameMaxSafeId": 10342417,
+    "headroom": 143343,
+    "scriptSaved": 336043,
+    "removedOutputModules": 11
+  },
+  "moduleSource": "1135747691b2de7cd761e7a663e167cfe3acea22",
+  "required": {
+    "wrapper": "ETIMEDOUT",
+    "wrapperExit": null,
+    "wrapperSignal": "SIGTERM",
+    "continuedCheckerObservedEnded": true,
+    "attachedExitCode": null,
+    "printedSteps": {
+      "passed": 9,
+      "failed": 1
+    },
+    "printedSeconds": 153.1,
+    "failedStep": "sparse gallery tracker",
+    "mcp": {
+      "passed": 61,
+      "failed": 0,
+      "skipped": 1
+    },
+    "noAggregateRerun": true
+  },
+  "browser": {
+    "actualExit": 0,
+    "groups": 16,
+    "captures": 19,
+    "seconds": 19.8,
+    "host": "local synthetic MCP host",
+    "actualClaudeSave": false
+  },
+  "html": [
+    {
+      "file": "baseline-viewer.html.gz",
+      "bytes": 2851400,
+      "sha256": "c76c6787e6bb04e2f549d11740ba2c4dde13b844a8d99b341a8f6d2b7c2ffe0c",
+      "rawBytes": 10290042,
+      "rawSha256": "a35bc3e4d055ff7fe2fa1360d1a60594cb5c3536caafc231204c5a997d632c82"
+    },
+    {
+      "file": "current-viewer.html.gz",
+      "bytes": 2736130,
+      "sha256": "f460823f5b4a9b7d22338f6c83aa011cb57a79790c00121d3e0e77bbfd5e3538",
+      "rawBytes": 9953999,
+      "rawSha256": "24c04b2c4516edc1ec0cee8a5076a1e6104c096731929977751e9cf75ef9a539"
+    }
+  ],
+  "claim": {
+    "native": false,
+    "hosted": false,
+    "registry": false,
+    "benchmark": false
+  },
+  "archive": {
+    "file": "raw.json.gz",
+    "bytes": 813736,
+    "sha256": "053480366107446fc7f8329669833a66ca70b7000b5acc98c200a6712830cb54"
+  },
+  "records": 85,
+  "rawBytes": 4727555,
+  "screenshots": [
+    {
+      "file": "screenshots/both-dark.png",
+      "bytes": 30388,
+      "sha256": "b0d6fcf3289261c956cf4703abeef691c97659ae7799ed6b5fdaa89a61007515"
+    },
+    {
+      "file": "screenshots/both-light.png",
+      "bytes": 46829,
+      "sha256": "55754bc3d1a589da77b47f11a5a33830bfe12faa81dbfd2a342f6b1f72d7e628"
+    },
+    {
+      "file": "screenshots/chat-dark-both-fullscreen.png",
+      "bytes": 23263,
+      "sha256": "91ef4127b35e0559d66b8969f42b170599f2e3060421b3a75b494ae062b8262f"
+    },
+    {
+      "file": "screenshots/chat-dark-both.png",
+      "bytes": 26505,
+      "sha256": "41a84c08cb85cebeebcdfeee1fe9f3f9b17c3b020881f2c8f0d5880f0b34d371"
+    },
+    {
+      "file": "screenshots/chat-dark-preview.png",
+      "bytes": 21501,
+      "sha256": "ffc5bcbe479a69cf936724d818801faa250cac97da18ede25f68366c7b25fd8d"
+    },
+    {
+      "file": "screenshots/design-light.png",
+      "bytes": 52315,
+      "sha256": "1299c4dcac1e477fff18a9b81d588047fc2c917d85f956eb7bd01128ce7ff6ac"
+    },
+    {
+      "file": "screenshots/export-menu.png",
+      "bytes": 25024,
+      "sha256": "9bd3537caad59a1b0996f443a4da352bf0da71fc466e778c6857de87b4c37b93"
+    },
+    {
+      "file": "screenshots/find-light.png",
+      "bytes": 39330,
+      "sha256": "563c0ddb70eafec4ea40c3832d16eed35c4b5979f60016d5bdc7834ba1d2eee0"
+    },
+    {
+      "file": "screenshots/host-download-cancelled.png",
+      "bytes": 33254,
+      "sha256": "29427e03b398ab6af569f3fdd4002db70472ef329b4214bf3b240d085e6e3cf2"
+    },
+    {
+      "file": "screenshots/host-download-denied.png",
+      "bytes": 33254,
+      "sha256": "29427e03b398ab6af569f3fdd4002db70472ef329b4214bf3b240d085e6e3cf2"
+    },
+    {
+      "file": "screenshots/host-download-edited-json.png",
+      "bytes": 45772,
+      "sha256": "3b21163cd29fe1ae058283b82df4a2af5bf4df555452f88d3fff5ab72bb29d01"
+    },
+    {
+      "file": "screenshots/host-download-export-denied.png",
+      "bytes": 37326,
+      "sha256": "33c5363b046b90b7fc21b3ea53d0ee428ab51a544a6bb431f519dd9e0c87a50a"
+    },
+    {
+      "file": "screenshots/host-download-rpc-error.png",
+      "bytes": 33501,
+      "sha256": "1eb02a3c05c114d2b04202b9165274d282ecf05ada8d2b38e602762630cbaa16"
+    },
+    {
+      "file": "screenshots/host-download-unsupported.png",
+      "bytes": 32897,
+      "sha256": "8cae484f6821ae7829ab45c82ff217f2bd46370f72ad10afff6373ea99be1af9"
+    },
+    {
+      "file": "screenshots/narrow-420.png",
+      "bytes": 19694,
+      "sha256": "0e7a966120bda85ebdc92c3131a3e0f3b5a728f1af929e259999488ab57aa397"
+    },
+    {
+      "file": "screenshots/narrow-860.png",
+      "bytes": 34736,
+      "sha256": "20fdb8cfeaf11347c1e66ffb2154f8fb394eae4d0de8ccd23d8f6a45230eaef1"
+    },
+    {
+      "file": "screenshots/preview-light.png",
+      "bytes": 34024,
+      "sha256": "d91e348505c5747aabfa887f9e20b3063e9864cde21e43d803fa3cc7ec9c24ae"
+    },
+    {
+      "file": "screenshots/review-light.png",
+      "bytes": 46010,
+      "sha256": "42f0db34c6527feb2d021c5ed3172056a817cf4637d04dd3f74c83f404e20c1e"
+    },
+    {
+      "file": "screenshots/source-light.png",
+      "bytes": 34031,
+      "sha256": "4b59376c93ad83b79f56894ccf8642ad99e88eb6cb6475144c042824d9076340"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "packages/mcp/app/main.ts",
+      "blob": "4a6f7cc53d362d2a082d42e28a1f8596743ad295"
+    },
+    {
+      "path": "packages/mcp/app/pptx-export.ts",
+      "blob": "29f89e33e7dcbf515d429da72198fec4582b483a"
+    },
+    {
+      "path": "packages/mcp/scripts/app-resource-frame.mjs",
+      "blob": "4d0d0a0c1f57970cb88ab419faad8db0c95abccf"
+    },
+    {
+      "path": "packages/mcp/scripts/build-app.mjs",
+      "blob": "eb6d5a9081ca0f755092bb937008449932badf59"
+    },
+    {
+      "path": "packages/mcp/test/app-resource-frame.test.mjs",
+      "blob": "a93ce07476e2f55cadf3e265370d317a1e5118c8"
+    }
+  ],
+  "privacy": {
+    "publicSynthetic": true,
+    "ownerDeck": false,
+    "secrets": false,
+    "standaloneFontPrograms": false,
+    "htmlFont": "existing renderer-pinned OFL-1.1 Roboto159108B/SHA15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459",
+    "htmlEvidenceCompressionOnly": true
+  },
+  "rejectedHypotheses": [
+    {
+      "source": "40b84ed2a34c969696f95faca2bf783c48bc2bb4",
+      "result": "no removed output modules; frame94B larger; removed from final source"
+    },
+    {
+      "kind": "CSSminify+UTF8 only",
+      "result": "still29511B over original519 cap; flags NOT applied"
+    }
+  ],
+  "setup": {
+    "originalWrapper": "ETIMEDOUT after60s; not passed",
+    "childEnd": "observed but attached ExitCode null",
+    "continuedSummary": "9PASS/1sparse-galleryRED; fullMCP61PASS1SKIP",
+    "noAggregateRerun": true,
+    "otherRefusals": "original unreachable remote455; diagnostic shebang/escape; missing dist prerequisite; CRLF-only candidate anchor + unintended unchanged455 baseline; original519 HTML capture refused after coordinator build advanced"
+  },
+  "nativeAcceptance": false,
+  "hostedAcceptance": false,
+  "actualClaudeSave": false,
+  "metadataCheck": {
+    "source": "d6465fb86a244a039941bf9fe06d4a7677232239",
+    "base": "36d7b83c307b2c329c67b69190ff3678218d5669",
+    "status": "RED",
+    "actualExit": 1,
+    "passed": 6,
+    "failed": 1,
+    "skipped": 1,
+    "seconds": 27.8,
+    "reason": "same sparse gallery inputs; no MCP suite repeated",
+    "file": "metadata-checks.json.gz",
+    "bytes": 14103,
+    "sha256": "20e9fb5118765f2b9243c4ef59a51528a1383335617cb794dbc6ec7d05d29611",
+    "records": 9,
+    "rawBytes": 38431
+  }
+}

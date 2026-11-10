@@ -7,6 +7,7 @@ import { test } from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { gallery } from "@openpresentation/gallery";
 import { fromPptx } from "@openpresentation/opf-pptx";
+import { OPFCompositionError } from "@openpresentation/opf/composition";
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "javascript");
 const opf = await import(pathToFileURL(path.join(coreRoot, "dist", "index.js")).href);
@@ -51,5 +52,15 @@ test("paginate: false draws the slide as written; a strict composition still fai
 	assert.deepEqual(continuedOf(kept.findings, "render"), []);
 	assert.ok(overflowOf(kept.findings).length > 0, "the overlap is reported as before");
 	await assert.rejects(opf.convert(deck(), { format: "svg", paginate: "pages" }), /paginate must be true, false or "blocks"/);
-	await assert.rejects(opf.convert(deck({ composition: { overflow: "error" } }), { format: "svg" }), (error) => error.code === "export-failed");
+	await assert.rejects(opf.convert(deck({ composition: { overflow: "error" } }), { format: "svg" }), (error) => {
+		assert.ok(error instanceof opf.OPFExportError, "strict composition fails in the public export step");
+		assert.equal(error.code, "layout-overflow", "the engine's explicit code is preserved");
+		assert.ok(error.cause instanceof OPFCompositionError, "the original composition error is retained");
+		assert.equal(error.cause.code, "layout-overflow");
+		assert.deepEqual(error.cause.diagnostics.map(({ code, path, region }) => ({ code, path, region })), [
+			{ code: "layout-unplaced", path: "slides.1.blocks.6", region: "steps" },
+			{ code: "layout-unplaced", path: "slides.1.blocks.7", region: "steps" },
+		], "the two unplaced timelines remain located on the source slide");
+		return true;
+	});
 });

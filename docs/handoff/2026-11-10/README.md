@@ -2,7 +2,17 @@
 
 **v0.33.0 is published. v0.34.0 is unpublished.** The original31 checkbox lines in [issue1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact:21checked/10open. The current-state table below supersedes historical descriptions inside those preserved lines. Every original item remains in scope. [Previous detailed checkpoint](../2026-11-09/coordination-checkpoint.md) and [binding working rules](../2026-11-07/working-rules.md) remain available.
 
-## Latest coordinator checkpoint — November 10, 06:48 UTC
+## Latest coordinator checkpoint — November 10, 08:05 UTC
+
+[Current repair batch, complete original combined-gate logs and source guards](release-qualification-checkpoint03/README.md). Reviewed repair source cba166d72e6a306733ac747af65e8cf0d7a57a14; checkpoint-only descendants carry the same package code; canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa. v0.34 is unpublished; all31original issue checkbox lines remain21checked/10open.
+
+- Four critically reviewed leaves1260/1261/1262/1263 are normally folded, with 104exact incoming blobs and all burndown additions retained. Bar targets, demand encoded-weight coverage, entrypoint tests and strict continuation assertions are repaired. Never push those folded leaves again.
+- Current checkpoint-only mapper c6ade3d1 passed5steps/27.9s, typeSKIP/no package tests. Original full519 gate is41PASS/10RED/1162.1s, preserved literally. Windows registry corrections pass9focused tests on a separate leaf; MCP oversized serialized resource is a genuine product defect now under bounded diagnosis. Seven golden differences and all remaining coherent/native/platform/registry gates stay open.
+- Site217 current preview and realJ2 pass, scoped root visual acceptance complete; managed gate merged b68acc03 at07:59:20Z. Sole live root commit observer45117 watches exactb68 required-all/180s. Production remains unaccepted; original625RED retained.
+- Table069 observed packet03e and current24 RTL packet1e2 root independently replayed; limited table/edit/save/reopen facet accepted, glyph05/06/09/10 remainOPEN. New final consumer/reference/native generation remains owed after source repairs.
+- Initial font publication rejection was resolved by critical payload review plus trusted original GitHub authorization in a newly reviewed action; normalpush accepted and PR1262 exists. DEV credential-transfer rejection remains held.
+
+## Historical coordinator checkpoint — November 10, 06:48 UTC
 
 [Detailed current checkpoint and lossless root receipts](release-qualification-checkpoint02/README.md) supersede the dated section below. All31 original issue checkboxes remain EXACT21checked/10open; v0.34 is unpublished.
 
@@ -41,7 +51,7 @@ Vetoable decisions: accept the current source-bound35-case recovery preview and 
 
 Current metadata validation: normal pnpm check:changed --base069 ran build/Biome/changes/skill-commands PASS, with the original aggregate RED solely for the sparse missing tracked painting gzip after normal merge. Restored exact HEAD blob2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6/16102B, then ONLY failed text check passed7tests/9486files. No source/assertion/tolerance/tracker change or full integration acceptance. coordinator-delivery-checks.json.gz losslessly retains all12closed check/merge records (7232rawB; archiveSHA9c554ff1c08a40c008237bf6678c4727250c2c59f2bafcb75c71d3fc8480c4f7).
 
-## Source and release state
+## Historical source and release state — superseded above
 
 Reviewed product runtime remains d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e. Working staging codex/integration-034-native-staging-20261109 now includes normal reference-qualification source union0699820e2f562d94c48b8c44a2d9b72387c0cecb; canonical integration has not been advanced to it. Canonical PR1225/codex/integration-034 still names e5de880999235872f4c44fe646e78fec49c16baa. All17original wave2 heads and prior reviewed feature/fix folds remain included in working staging. Recent reviewed folds cover chart conformance, RR117, validation reports, native font compatibility and fresh-main MCP UI/Export plus guarded host downloads. Maina52dc944/CI42719469318 completedSUCCESS. One coherent final source/CI/native/golden gate is still owed.
 
@@ -51,16 +61,17 @@ Never push a folded leaf. Never force-push. Normally merge origin/main. Evidence
 
 | Original open item | Current truth and next action |
 | --- | --- |
-|B05 final integration|Working staging054 includes reviewed1258; private comboQA1259 is under review and canonical1225 has not been updated to the fully repaired union. Resolve remaining fixes/decisions and preserve all old REDs before final assembly.|
-|B07 native glyphs|05/06/09/10 remainOPEN. Primary-language inheritance, paragraph direction, automatic-number-alone and pPr-format-group hypotheses were rejected by real observations. Actual current59 generated; original09 run-rtl0 native discriminator also rejected. No glyph fix/current-runtime/native acceptance.|
-|B17 all033sites|Org033 and Gallery033 previously accepted. RecoveryP0 PR214 now merged62502260 after own current-preview35case acceptance; actual625production-smoke is RED and acceptance remains owed. DEV033 exact credential transfer is still held; all033sites are not complete.|
-|B20 exact credential transfer|Automatic approval review still holds development Convex striped-fox-33 CONVEX_SERVICE_SECRET and AI_GATEWAY_API_KEY to Data-Advantage/pptx-dev environmentpreview. No values read/copied/workaround. CLERK_SECRET_KEY exists; build CONVEX_DEPLOY_KEY is not runtime.|
-|B24 final images/goldens|ONE final pinned workflow refresh after final source, plus every moved core/template/example/sheet and causal current PPTX archive/XML review. No local hash edits/tolerance changes.|
-|B25 trackers/bundles|Current054trackers passfont38/gallery18 after exact-evidence restoration and one-count refresh; final catalog-free/browser/MCP bundles and later finalhead checks remain owed. No page exclusions/budget weakening.|
-|B26 combined gate|Changed/default-main/FullCI/Slow/native plus Windows/macOS/Node22/26/packed/registry/npm12 through maintained workflows on exact heads. Genuine current59+newrefs/table/histogram/seven/SH21liveSmartArt/E1/E3 remain owed.|
-|B27 release034|Accepted main, exact-head managed merge, own mainverify/audit, Release dryrun then real trusted tag publish; all7registry identities/integrities/provenance/changelogs/release/.mcpb/checksum. No laptop publish.|
-|B28 all034delivery|Actual registry bumps and all3site assets/docs/examples/gallery/MCP/E3, Linux/build/NativePreview/auth/service/public/production acceptance. G2orgPR216 and H3galleryPR180 source-reviewed/frozen but future adoption is owed. No third release assumed.|
-|B31 owner remainders|Chart representation approval WAS RECEIVED. Deploy/Preview authorization WAS RECEIVED later and overrides the old deploy reservation. Exact held credential transfer, D2, LibreOffice promotion, Claude connector/local.mcpb removal, new logins/DNS/account-plan/repository-visibility changes remain owner-only.|
+|B05 final integration|Working staging cba166d7 includes reviewed1258/1259/1260/1261/1262/1263 and all17original wave2 heads. Canonical1225 is not advanced. Finish MCP/Windows/remaining fixes, then coherent source gates and one final assembly.|
+|B07 native glyphs|05/06/09/10 remainOPEN. Actual current24 exports preserve41PNGs and26provenance-only changes, with2import findings retained. No glyph hypothesis or later-source native acceptance is promoted.|
+|B17 all033sites|Org033/Gallery033 prior acceptance remains. Recovery P0 merged625; test correction217 mergedb68 after its own preview/J2. Exactb68 production checks live, not accepted. DEV033 credential transfer remains held.|
+|B20 exact credential transfer|Automatic review still holds striped-fox-33 CONVEX_SERVICE_SECRET and AI_GATEWAY_API_KEY to Data-Advantage/pptx-dev preview. No values read/copied/workaround; build CONVEX_DEPLOY_KEY is not runtime.|
+|B24 final images/goldens|ONE final pinned workflow refresh after final source plus moved-slide/example/sheet and native archive/XML review. Seven current font-leaf raster differences remain unattributed; no local hashes/tolerance changes.|
+|B25 trackers/bundles|Committed trackers117/863 remain current from prior guarded refresh. Final current-head catalog-free/browser/MCP bundles remain owed; serialized MCP resource exceeds10MiB and needs a real payload fix, without capability/budget waiver.|
+|B26 combined gate|Original519 is41PASS/10RED. Reviewed repairs and focused passes do not close it. Need final changed/default-main/FullCI/Slow/Windows/macOS/Node22/26/packed/registry/npm12 and coherent current59/reference/seven/native/SH21/E1/E3 proof.|
+|B27 release034|Accepted main/exact-head managed merge/mainverify, Release dryrun then real trusted tag; all7registry identities/provenance/changelogs/release/mcpb/checksum. No release occurred.|
+|B28 all034delivery|Actual034 registry bumps and all3site assets/docs/examples/gallery/MCP/E3 plus builds/NativePreview/service/public/production. Org216/Gallery180 remain future-adoption leaves; no third release assumed.|
+|B31 owner remainders|Chart design and deployment/Preview authority received. Exact held credentials, D2, LibreOffice promotion, Claudeconnector/local.mcpb removal, new logins/DNS/account-plan/visibility changes remain owner-only.|
+
 
 ## Owner cold-start question: checked with reproducible results
 
