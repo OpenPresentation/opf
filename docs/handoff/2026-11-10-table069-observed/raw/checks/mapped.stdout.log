@@ -1,0 +1,21 @@
+
+> openpresentation-workspace@ check:changed C:\opf-work\table069-native-proof
+> node scripts/check-changed.mjs "--base" "0699820e2f562d94c48b8c44a2d9b72387c0cecb"
+
+check-changed: 74 changed files since 0699820e2 (plus uncommitted and untracked)
+ok  build (10.4 s)
+ok  biome (0.1 s)
+ok  pnpm run check:changes (0.7 s)
+FAILED  pnpm run check:text (0.3 s)
+ok  pnpm run check:skill-commands (18.3 s)
+-  typecheck
+
+step                           status     time
+build                          passed   10.4 s
+biome                          passed    0.1 s  33 files
+pnpm run check:changes         passed    0.7 s
+pnpm run check:skill-commands  passed   18.3 s
+pnpm run check:text            FAILED    0.3 s
+typecheck                      skipped       -  no .ts, .mts or tsconfig change
+total                                   28.7 s
+ ELIFECYCLE  Command failed with exit code 1.

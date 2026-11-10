@@ -502,6 +502,164 @@
       "classification": "current-reviewed-child-environment-source-copy",
       "bytes": 495,
       "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+    },
+    {
+      "path": "raw/root/n034-current-table-native01-postflight02.json",
+      "original": "C:/opf-work/n034-current-table-native01-postflight02.json",
+      "classification": "actual-later-root-read-only-globalzero-inventory-no-cleanup",
+      "bytes": 82,
+      "sha256": "ca6e05c1cae22b4b7e65a2a6bc99cef761fced0c63b852c9b489c7df061092d4"
+    },
+    {
+      "path": "raw/checks/hydration.json",
+      "original": "C:/opf-work/table069-native-check01/hydration.json",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 578,
+      "sha256": "ca842af517f20dee0cf2f316be886dc3a4829b9d5e9686d091f1abdb8a9855e4"
+    },
+    {
+      "path": "raw/checks/install.exit.json",
+      "original": "C:/opf-work/table069-native-check01/install.exit.json",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 518,
+      "sha256": "72d55024a7767bcc81d393beb0467bc99f219c6dbc0f59a03db85b70e52b4e8e"
+    },
+    {
+      "path": "raw/checks/install.stderr.log",
+      "original": "C:/opf-work/table069-native-check01/install.stderr.log",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/checks/install.stdout.log",
+      "original": "C:/opf-work/table069-native-check01/install.stdout.log",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 4516,
+      "sha256": "739194b87d4e0dc48f82e2f6179647307c8a504ac69b60704507670dbcc74e80"
+    },
+    {
+      "path": "raw/checks/mapped.exit.json",
+      "original": "C:/opf-work/table069-native-check01/mapped.exit.json",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 562,
+      "sha256": "80a2646048554024bd22cd09d80ccc41acf2e5eae96dcc859da0e3a0af019cd8"
+    },
+    {
+      "path": "raw/checks/mapped.stderr.log",
+      "original": "C:/opf-work/table069-native-check01/mapped.stderr.log",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 2028,
+      "sha256": "0a36e9f0b4f4c2dc677e029f242298c6b4b1eb607c865746bb97e58e5634a988"
+    },
+    {
+      "path": "raw/checks/mapped.stdout.log",
+      "original": "C:/opf-work/table069-native-check01/mapped.stdout.log",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 880,
+      "sha256": "4596fb6fe5451b97662947ef5dd20e695ad729bbc74f5ade50af866d3a3f313b"
+    },
+    {
+      "path": "raw/checks/original-step-logs/biome.log",
+      "original": "C:/opf-work/table069-native-check01/original-step-logs/biome.log",
+      "classification": "actual-original-mapped-step-log",
+      "bytes": 673,
+      "sha256": "2fd00105569b33b21f001003f2d31a53be3879df5ec21b81c4118045103d0cfa"
+    },
+    {
+      "path": "raw/checks/original-step-logs/build.log",
+      "original": "C:/opf-work/table069-native-check01/original-step-logs/build.log",
+      "classification": "actual-original-mapped-step-log",
+      "bytes": 14617,
+      "sha256": "1d44460958474a3b95a8b0e531ce97d2a6873712cf51eea251bf11d5fc7b65b8"
+    },
+    {
+      "path": "raw/checks/original-step-logs/pnpm_run_check_changes.log",
+      "original": "C:/opf-work/table069-native-check01/original-step-logs/pnpm_run_check_changes.log",
+      "classification": "actual-original-mapped-step-log",
+      "bytes": 2642,
+      "sha256": "d5330dbcefd077ca3b4c4b2ee1c554849923a51530829fb15d9479c9f0dc31d3"
+    },
+    {
+      "path": "raw/checks/original-step-logs/pnpm_run_check_skill-commands.log",
+      "original": "C:/opf-work/table069-native-check01/original-step-logs/pnpm_run_check_skill-commands.log",
+      "classification": "actual-original-mapped-step-log",
+      "bytes": 1045,
+      "sha256": "6fdbc26371e557551a5dc82f5085547901c19855b23c06a296541e31943ed239"
+    },
+    {
+      "path": "raw/checks/original-step-logs/pnpm_run_check_text.log",
+      "original": "C:/opf-work/table069-native-check01/original-step-logs/pnpm_run_check_text.log",
+      "classification": "actual-original-mapped-step-log",
+      "bytes": 1863,
+      "sha256": "266225e4376283d951f4b2d6c5ee3b6da9c9e245480558ff35cd41b78a7d0e3d"
+    },
+    {
+      "path": "raw/checks/text-recovery.exit.json",
+      "original": "C:/opf-work/table069-native-check01/text-recovery.exit.json",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 466,
+      "sha256": "be127ac17c797d5e01c6a8b2b506ce10f1994325f7eb6819abbb15681b47dd61"
+    },
+    {
+      "path": "raw/checks/text-recovery.stderr.log",
+      "original": "C:/opf-work/table069-native-check01/text-recovery.stderr.log",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/checks/text-recovery.stdout.log",
+      "original": "C:/opf-work/table069-native-check01/text-recovery.stdout.log",
+      "classification": "actual-evidence-only-required-check",
+      "bytes": 1077,
+      "sha256": "2c252957a449421587fa35ee14047449714dd6577c42cd6ebbea4b74b0afa204"
+    },
+    {
+      "path": "raw/checks/drivers/install-observed.mjs",
+      "original": "C:/opf-work/table069-plan/install-observed.mjs",
+      "classification": "actual-check-driver-not-native-output",
+      "bytes": 1395,
+      "sha256": "5ace8788d643763ccdb8b528b435c4dbe93eb0c30982e6bc8728561742647b7c"
+    },
+    {
+      "path": "raw/checks/drivers/mapped-observed.mjs",
+      "original": "C:/opf-work/table069-plan/mapped-observed.mjs",
+      "classification": "actual-check-driver-not-native-output",
+      "bytes": 1386,
+      "sha256": "2853aaa34a9eb2847408206efaefdd4992492e60890e6b77d358c7478a2fe15b"
+    },
+    {
+      "path": "raw/checks/drivers/recover-observed-text.mjs",
+      "original": "C:/opf-work/table069-plan/recover-observed-text.mjs",
+      "classification": "actual-check-driver-not-native-output",
+      "bytes": 3372,
+      "sha256": "dcf4237ff25d7871e9ebf5a0c5b4f98fc13bf4d1761ff15133dee68b42353bb2"
     }
-  ]
+  ],
+  "requiredCheck": {
+    "testedEvidenceHead": "8939712b3fc7951c8e819e1d5e29391c26ebc08a",
+    "base": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+    "originalAggregateExit": 1,
+    "passed": [
+      "build",
+      "biome",
+      "check:changes",
+      "check:skill-commands"
+    ],
+    "failed": [
+      "check:text"
+    ],
+    "typecheck": "skipped-no-types",
+    "failure": "omitted-exact-HEAD-16102B-compressed-fixture",
+    "onlyFailedTextRecoveryExit": 0,
+    "originalAggregateRemainsRed": true
+  },
+  "globalPostflight": {
+    "immediateCount": 1,
+    "immediatePid": 8748,
+    "laterCount": 0,
+    "laterObservedAt": "2026-11-10T07:19:20.7261659Z",
+    "rootCleanupPerformed": false
+  }
 }
