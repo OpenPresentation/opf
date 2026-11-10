@@ -2,7 +2,19 @@
 
 **v0.33.0 is published. v0.34.0 is unpublished.** The original31 checkbox lines in [issue1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact:21checked/10open. The current-state table below supersedes historical descriptions inside those preserved lines. Every original item remains in scope. [Previous detailed checkpoint](../2026-11-09/coordination-checkpoint.md) and [binding working rules](../2026-11-07/working-rules.md) remain available.
 
-## Latest coordinator checkpoint — 2026-11-10T14:38:19.410Z
+## Latest coordinator checkpoint — 2026-11-10T15:11:31.979Z
+
+Working integration d7d95b83f6209fbe5a62eca8039a58ec20ea2bc9 normally folds the callback, standalone-example and exact-font-expectation repairs. All479 dated progress lines are retained. Runtime source/schema remain exact reviewed db640; original mapped gate16PASS/3RED/typeSKIP/873.3s is [losslessly preserved](coherent-gate-db640/README.md), not retrospectively green. Current renderer stopped43/188 at example portability; PPTX stopped169/297 at three stale face lists. Focused fixes pass22controls,149portabledecks/966slides and7native-fontgroups. Root next runs the required changed delta; B is actually running unchanged remaining128PPTX commands on frozen d7 source.
+
+- [Published genuine consumer6a](https://github.com/OpenPresentation/opf/tree/6a0848cb0d41a563e69d6639c418054272fa562b/docs/handoff/2026-11-10/current-consumer-db640): root replay134newrecords/6tarballs/756installedfiles/full59/4refs/4pure PASS. All original59exports and35original reference payloads remain exact57. Fourth actual shape counts3/3/1.
+- [Published current native20e](https://github.com/OpenPresentation/opf/tree/20e897d711d5c2d4d17c889331f4b93327c5d766/docs/handoff/2026-11-10/reference-native-db640-observations): ROOT sequential actual exits0/0/0/0,8read-onlyopens/zeroedits; freshglobal0 before/post/immediatelyafter each. All12PNGpairs byte-identical; all4full public documents+diagnostics and12source/data models match, no duplicate shapes. Root viewed all3new fourth native images. This verifies the Save/import repairs in these cases; chart edits/all-seven/full-corpus qualification remains owed. Raw findings3/3/7/7 include actual axis-position rewrites and are retained without blanket waiver.
+- [Published B07 diagnosticfe131](https://github.com/OpenPresentation/opf/tree/fe131d61873fee5331413d864f22d236aca8a2c4/docs/handoff/2026-11-10/b07-segment-05-native02): word order improved, tiny digit and painted baseline remain unacceptable. New original05 CS-slot-only pure variant is justified by the renderer selecting Latin for positive ASCII spans while PPTX selects Arabic Typesetting CS. It preserves authored Arabic language/text/size/geometry; diagnostic controller/pure review is separate and no native cure or product change is yet established.
+
+Closed consumer/native/B07 evidence metadata each retains original4PASS/1sparsepaintingRED plus ONLYfailedtext recovery0. Original proof ZIPs stay exact. Agent global-pnpm entry provenance is disclosed; actual install logs report10.33.2 and all four same-path/project current version probes return10.33.2; historical per-build dispatch remains a supported inference rather than direct attestation. The global bootstrap is11.5.3; future commands use explicit pinned10. See coherent-gate-db640/pnpm-provenance.json. Root own gate used explicit Node24.20/pnpm10.33.2.
+
+v0.34 is unpublished; canonical1225 stille5de8809 and maina52 unchanged. Pinned goldens, browser/full/platform/registry/Release gates, remaining native scope, site034 updates and listed owner-only actions remain open. No CI observer or release is active. Vetoable decision: accept only the demonstrated four-case Save/import repair scope, keep unresolved native glyphs and every original issue1139 item visible, and complete unvisited checks before the canonical final gate.
+
+## Historical coordinator checkpoint — 2026-11-10T14:38:19.410Z
 
 v0.34 remains unpublished. Canonical PR1225 is still e5de880999235872f4c44fe646e78fec49c16baa; fresh origin/main is a52dc9441f7eec9dc6f72debb174339758e1761e. Working integration source 3e43e2d64e109011c08cfa31d96421c73d36dbf0 normally combines all three reviewed fixes and the corrected fourth reference qualifier. No folded leaf may be edited or pushed.
 
@@ -157,7 +169,7 @@ Never push a folded leaf. Never force-push. Normally merge origin/main. Evidence
 
 | Original open item | Current truth and next action |
 | --- | --- |
-|B05 final integration|Reviewed saved-overlay/font-raster/secondary-axis fixes and corrected fourth qualifier are normally folded in working staging. Original57 baseline closure189PASS/7RED/one held direct golden is retained. One coherent mapped gate, new current consumer/native cases, final goldens/browser/platform/CI and release remain owed; canonical1225 is unchanged.|
+|B05 final integration|Workingd7 normally folds all reviewed fixes and three mapped-gate repairs. Original16PASS/3RED/typeSKIP retained; focused repairs pass. Current four-case native Save/import proved all12PNG pairs/full models equal. Required changed delta, unvisitedPPTX128, final renderer/goldens/browser/platform/CI remain owed; canonical1225 unchanged.|
 |B07 native glyphs|05/06/09/10 OPEN. Publishedc984 LtrRun+exact1025 composite actual0 but unchangedbadPNG/bounds; no fix. Prior same-box numeric partition rejected. Independentnativeboxes only source feasibility, originalUTF16/proofing/fonts/geometry/markers mandatory.|
 |B17 all033sites|Org148 currentproduction2owner/MCP6/privacy9/provider100percent proof5610 accepted narrowly; old20case aggregation kept separate. Gallery033 prior acceptance remains. DEV033 exactcredentialtransferheld.|
 |B20 exact credential transfer|Automatic review still holds striped-fox-33 CONVEX_SERVICE_SECRET and AI_GATEWAY_API_KEY to Data-Advantage/pptx-dev preview. No values read/copied/workaround; build CONVEX_DEPLOY_KEY is not runtime.|
