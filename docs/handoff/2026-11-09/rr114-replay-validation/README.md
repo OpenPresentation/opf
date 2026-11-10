@@ -1,0 +1,7 @@
+# RR-114 replay validator follow-up
+
+The frozen replay candidate3360 passed output and correctness controls but did not improve preparation-plus-first latency in the eight-child formal02 screening. That result and failed setup attempt remain on the NEVER MERGE evidence branch at6da89c4a6, under docs/handoff/2026-11-09/rr114-replay-performance. Both trial runtimes used demand-selected3face loading; no speed or RSS improvement is accepted.
+
+This isolated fresh-origin/main worktree normally merged3360. The only runtime change makes the private style validator return a boolean instead of constructing arrays, property tags and a JSON string which neither caller consumed. Every prototype, own-data descriptor, field type/range, path and native fontFace check remains in the same order and at the same before/after-coverage-callback sites. Full snapshots/presence signatures, ordered selection/coverage events, context/ownership guards, first size/path/errors and4096/512KiB limits stay intact. There is no object-identity memoization or caller mutation assumption.
+
+Vetoable decision: remove only the unused serialization before considering broader capture consolidation. Reuse the existing33 meaningful replay controls and demand/fault/native/lazy-cache neighbors. No serialization-internal test or duplicate validation oracle is added. Qualification and source review are pending; a further performance run requires the coordinator's explicit quiet-window approval. No release, Office, hand-generated golden, provider action or aggregate suite is authorized in this lane.

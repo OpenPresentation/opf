@@ -41,14 +41,13 @@ const logical = (style) =>
       (field) => property(style, field),
     ),
   );
-function styleKey(style) {
+function validStyle(style) {
   if (
     !style ||
     typeof style !== 'object' ||
     ![Object.prototype, null].includes(Object.getPrototypeOf(style))
   )
     return;
-  const values = [];
   for (const field of FIELDS) {
     const descriptor = Object.getOwnPropertyDescriptor(style, field);
     if (descriptor && !Object.hasOwn(descriptor, 'value')) return;
@@ -67,7 +66,6 @@ function styleKey(style) {
         if (typeof value !== 'boolean') return;
       } else if (typeof value !== 'string') return;
     }
-    values.push(property(style, field));
   }
   const path = Object.getOwnPropertyDescriptor(style, 'path');
   if (
@@ -84,7 +82,6 @@ function styleKey(style) {
         ![Object.prototype, null].includes(Object.getPrototypeOf(face.value))
       )
         return;
-      const parts = [];
       for (const field of ['family', 'bold', 'italic']) {
         const item = Object.getOwnPropertyDescriptor(face.value, field);
         if (
@@ -93,13 +90,11 @@ function styleKey(style) {
           typeof item.value !== (field === 'family' ? 'string' : 'boolean')
         )
           return;
-        parts.push(item.value);
       }
       if (Reflect.ownKeys(face.value).length !== 3) return;
-      values.push([3, ['face', parts]]);
-    } else values.push(property(style, 'fontFace'));
-  } else values.push([0]);
-  return JSON.stringify(values);
+    }
+  }
+  return true;
 }
 function snapshot(style) {
   const copy = {};
@@ -237,7 +232,7 @@ export function createPreparationReplay() {
   };
   // Intern FULL validated base snapshots. The separate path token belongs to the first unique event.
   const internStyle = (style) => {
-    if (styleKey(style) === undefined) return;
+    if (validStyle(style) === undefined) return;
     const copy = snapshot(style);
     if (!copy) return;
     delete copy.path;
@@ -327,7 +322,7 @@ export function createPreparationReplay() {
           text.length > LIMIT_BYTES / 2 ||
           !Number.isFinite(size) ||
           size <= 0 ||
-          styleKey(style) === undefined
+          validStyle(style) === undefined
         ) {
           invalidate();
           eligible = false;
