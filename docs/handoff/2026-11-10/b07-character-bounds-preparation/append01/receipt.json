@@ -1,0 +1,132 @@
+{
+  "kind": "B07_CHARACTER_BOUNDS_REPORT_PRECISION_APPEND",
+  "source": "02b86f5c2ed94deac9be22444700eb392034f648",
+  "tree": "065bb6ff827566521981ee2b1b35fcf3ade84187",
+  "prior": {
+    "head": "66bba582fade7ca36d33835850a48a9e604fab17",
+    "receiptSha256": "b8aad8bfb88b57b58bf4735aa60ebdcea56b8caaebed504c4e075b5b82077e50",
+    "rawSha256": "47430cf6f152c968e635275b73ce28acf5aa31e72a5f9f0ffcb4e95d08b78b2d",
+    "verifierSha256": "a5263616723cea017990583c78f3c9a7443980001a9ee3e2f5eae6e32d846d5d",
+    "verifierWorkingSha256": "a5bdd592772b2d5195dda360ab78cdb2f7e77f545a08125bb200dbdb47635480",
+    "verifierWorkingBytes": 6813,
+    "accepted": false,
+    "reason": "Copied Single shape coordinates lost JSON precision; original exact verifier refusal retained"
+  },
+  "sourceFiles": [
+    {
+      "path": "tools/rr105-character-bounds/.gitattributes",
+      "bytes": 9,
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+    },
+    {
+      "path": "tools/rr105-character-bounds/README.md",
+      "bytes": 3782,
+      "sha256": "6f2db492900eb5f58f6d277de4d962d7d575b39178b76c88767ed55092e81182"
+    },
+    {
+      "path": "tools/rr105-character-bounds/SOURCE.json",
+      "bytes": 4783,
+      "sha256": "b101710f03c75dd06a1267f2b8c0929cfff6b6011e268690ea334d3d5584f676"
+    },
+    {
+      "path": "tools/rr105-character-bounds/managed-check.ps1",
+      "bytes": 11545,
+      "sha256": "edb0e72845f553ee9b6152dd005048bf54899f64bed45ad9f1509b1139ecfd98"
+    },
+    {
+      "path": "tools/rr105-character-bounds/prepare-suite.mjs",
+      "bytes": 7820,
+      "sha256": "434e6157f2b2e68768b432ad48c6a7c5a79d5259093f934b70e90639f49a702a"
+    },
+    {
+      "path": "tools/rr105-character-bounds/prepare-suite.test.mjs",
+      "bytes": 2661,
+      "sha256": "3146e454f5e15df9cef81d2bd4321985f75a3da3a7e657e6f35c7c35cdf44666"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/base-worker.ps1.gz",
+      "bytes": 19222,
+      "sha256": "51d0402f73e14b5686267d29457c6b7bdfa7ffdc773ff2a756f5a163235f0774"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/empty.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/original09.pptx.gz",
+      "bytes": 72471,
+      "sha256": "3d91bd0a042595cd3ad7c7233012bc73b37ee3a33a39b844f33da813ec89068c"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/sealed-cli-preview.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/fixtures/sh25-native-circle-observations.json",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/native-furniture-control.ps1",
+      "bytes": 90099,
+      "sha256": "528b18d4af829a51ffbb288be0120d62a4a0cb9e9bd2b8ad2e0e36faf3414afa"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/native-furniture-harness-check.ps1",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    }
+  ],
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 253712,
+    "sha256": "ec6530673e03e69e8b204018ab49824b5ea0831cb9172f3603246b5665c46df3",
+    "expandedBytes": 1156602,
+    "records": 36,
+    "decodedBytes": 863326
+  },
+  "qualification": {
+    "originalVerifierExit": 1,
+    "initialRoundtripSetupExit": 1,
+    "genuineRoundtripRed": "managed02a",
+    "genuineRoundtripRedExit": 1,
+    "correctedManaged": "managed03",
+    "correctedManagedExit": 0,
+    "managedCases": 23,
+    "positivePositionObservations": 120,
+    "jsonRoundTripPositions": 120,
+    "nodeControls": 4,
+    "protectedFunctions": 45,
+    "unchangedBaseFunctions": 44,
+    "originalArchiveBytes": 101027,
+    "originalArchiveSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+    "zipEntries": 147,
+    "sourceGeometryChanged": false,
+    "numericTolerance": 0,
+    "actualPrepareRun": false,
+    "validateOnlyRun": false,
+    "nativeRun": false,
+    "officeActivated": false,
+    "buildRun": false
+  },
+  "glyphFix": false,
+  "currentRuntimeAcceptance": false,
+  "nativeAcceptance": false
+}
