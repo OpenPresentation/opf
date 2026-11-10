@@ -1,0 +1,5 @@
+
+> openpresentation-workspace@ check:catalog-free C:\opf-work\runtime519
+> node scripts/check-catalog-free.mjs
+
+catalog-free: 32 entries import no catalog data and stay within their gzip budget.

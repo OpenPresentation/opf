@@ -1,6 +1,6 @@
 // Offline guard controls only. Synthetic evidence is never registry/native acceptance.
 import assert from 'node:assert/strict';
-import {mkdtemp, mkdir, readFile, writeFile, realpath, symlink, unlink, rm} from 'node:fs/promises';
+import {mkdtemp, mkdir, readFile, writeFile, realpath, stat, symlink, unlink, rm} from 'node:fs/promises';
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {createHash} from 'node:crypto';
@@ -41,7 +41,11 @@ await assert.rejects(readFile(path.join(root, 'never-sealed/receipt.json')), /EN
 const beforeOptions = process.env.NODE_OPTIONS; process.env.NODE_OPTIONS = '--import=injected.mjs';
 await assert.rejects(checkVerifierSource(root, reviewedVerifier.revision), /Injected Node/);
 if (beforeOptions === undefined) delete process.env.NODE_OPTIONS; else process.env.NODE_OPTIONS = beforeOptions;
-const alias = path.join(root, 'verifier-alias'); await symlink(root, alias); await assert.rejects(checkVerifierSource(alias, reviewedVerifier.revision), /aliased/); await unlink(alias);
+const alias = path.join(root, 'verifier-alias');
+await symlink(root, alias, process.platform === 'win32' ? 'junction' : 'dir');
+assert.ok((await stat(alias)).isDirectory(), 'Verifier alias targets a directory');
+assert.equal(await realpath(alias), root, 'Verifier alias resolves to the actual source directory');
+await assert.rejects(checkVerifierSource(alias, reviewedVerifier.revision), /aliased/); await unlink(alias);
 const checkNames = ['npm version', 'tag', 'gitHead', 'tag on main', 'version at tag', 'dist.attestations', 'SLSA provenance', 'npm audit signatures', 'GitHub release'];
 const checks = checkNames.map(name => ({name, ok: true, detail: 'Synthetic guard fixture only'}));
 requireVerification({ok: true, checks});
@@ -98,7 +102,11 @@ await writeFile(rendererFile, json(shortRenderer)); await assert.rejects(invento
 const fontFile = path.join(consumer, 'node_modules/@expo-google-fonts/control-0/package.json'), originalFont = await readFile(fontFile);
 await writeFile(fontFile, json({name: '@expo-google-fonts/control-0', version: '9.9.9'})); await assert.rejects(inventoryRegistryConsumer(consumer)); await writeFile(fontFile, originalFont);
 const gallery = path.join(consumer, 'node_modules/@openpresentation/gallery'), moved = gallery + '-retained';
-await import('node:fs/promises').then(fs => fs.rename(gallery, moved)); await symlink(moved, gallery); await assert.rejects(inventoryRegistryConsumer(consumer), /normal directory/); await unlink(gallery); await import('node:fs/promises').then(fs => fs.rename(moved, gallery));
+await import('node:fs/promises').then(fs => fs.rename(gallery, moved));
+await symlink(moved, gallery, process.platform === 'win32' ? 'junction' : 'dir');
+assert.ok((await stat(gallery)).isDirectory(), 'Substituted gallery alias targets a directory');
+assert.equal(await realpath(gallery), await realpath(moved), 'Gallery alias resolves to the retained original directory');
+await assert.rejects(inventoryRegistryConsumer(consumer), /normal directory/); await unlink(gallery); await import('node:fs/promises').then(fs => fs.rename(moved, gallery));
 
 // Self-consistent synthetic evidence below is accepted only as an explicit test digest, never as real publication proof.
 const registry = path.join(root, 'identity'); await mkdir(path.join(registry, 'archives'), {recursive: true}); await mkdir(path.join(registry, 'evidence'));

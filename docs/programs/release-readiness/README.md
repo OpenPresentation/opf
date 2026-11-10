@@ -1,5 +1,7 @@
 # Program: release readiness (RR)
 
+Current cross-repository CI, native Preview, deployment and credential authority is in [docs/ci-cd.md](../../ci-cd.md). Preserve the dated acceptance scope below; current two-release execution is tracked in issue1139 and the 2026-11-08 handoff.
+
 ## Latest scoped status — 2026-10-16 14:54 UTC
 
 The verified C3/R2/P3/E3/CLI0/G3 set, canonical consumer and all three final site production/source closures are accepted. [Core #694](https://github.com/OpenPresentation/opf/pull/694) and [official lock #695](https://github.com/OpenPresentation/opf/pull/695) actually merged with exact combined-source proof. RR-85 is done against its unchanged metric criterion; the broader program remains active. RR-86 stays in progress: draft [PPTX #277](https://github.com/OpenPresentation/opf-pptx/pull/277) at cf29 does not inherit frozen 1a84 qualification; current P3 refuses native17, Mac remains locked at the dated 14:40 check and Windows is held. [Exact identities and boundaries](../../evidence/rr-85-final-adoption-2026-10-16/README.md). Earlier checkpoints remain dated history.

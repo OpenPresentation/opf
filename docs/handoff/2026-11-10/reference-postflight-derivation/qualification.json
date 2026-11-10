@@ -1,0 +1,934 @@
+{
+  "schema": 1,
+  "sourceBase": "08976a2f12544d92f1135d9fe827c39b438373ee",
+  "originalFailure": {
+    "path": "commands/original-native-acceptance.log",
+    "bytes": 106341,
+    "sha256": "f631d42c52444148f010728b58882e7a75bc4c74db4a67cca90adb5088183c18",
+    "tests": 145,
+    "passed": 144,
+    "failed": 1
+  },
+  "raw": {
+    "bytes": 193343,
+    "sha256": "648e2bf7989fb3a07ac4cdde11d86a7753ecc1a92906ad602aa9f09b13204886",
+    "expandedBytes": 2666485,
+    "records": 121
+  },
+  "sourceFiles": [
+    {
+      "path": "scripts/native-acceptance/derive-reference-controller.mjs",
+      "bytes": 5295,
+      "sha256": "8d9d5c5f31f0797fd25cc9786a504df626929d8f9333983d14de89f2da0356d4"
+    },
+    {
+      "path": "scripts/native-acceptance/derive-reference-controller.test.mjs",
+      "bytes": 4982,
+      "sha256": "de14bb284e57b90d09634268b233db123879da7c48b5b3517b6f58d9e00f1f91"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-worker-source.test.mjs",
+      "bytes": 4508,
+      "sha256": "ac27b54084d0020e4187a778d004293389c7f5eecdc647e3e4f73350b0ff5cbd"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-postflight-derivation.json",
+      "bytes": 10360,
+      "sha256": "6352c042d6576cb069da1d0683aa7e04b2f1e536d30fa70c12d5eff1a808511b"
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "scripts/native-acceptance/run-reference-chart-profile.ps1",
+      "bytes": 19206,
+      "sha256": "8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-worker-self-test.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038"
+    },
+    {
+      "path": "scripts/native-acceptance/run-windows.ps1",
+      "bytes": 15359,
+      "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+    },
+    {
+      "path": "packages/pptx/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-profile.mjs",
+      "bytes": 48782,
+      "sha256": "c69a4f8579dd02d0e34eb5d79e002a1009a934cc3fa4bf0cfd3ecb2878b876ea"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-chart-archive.mjs",
+      "bytes": 21341,
+      "sha256": "94fa1b751f2840fe901c07d8ef41a5b10e92bd48fcb5d4af20d86f20a800588f"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-runtime-routes.mjs",
+      "bytes": 3993,
+      "sha256": "9568f30aedbc6920861f9174d40f250566467b002dc1064b05bf23c1a7a94585"
+    },
+    {
+      "path": "scripts/native-acceptance/identity.mjs",
+      "bytes": 3090,
+      "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-chart-worker.ps1",
+      "bytes": 21756,
+      "sha256": "7735dcd6c9c1f3ff6d0a454319697eda040f66ec515dde96e705a1ed65571af4"
+    },
+    {
+      "path": "scripts/native-acceptance/run-seven-chart-profile.ps1",
+      "bytes": 10729,
+      "sha256": "060cafa0e782f7aaaaafb9d395bbfa51598f89c2269986a56c17e3e0ce5e3878"
+    },
+    {
+      "path": "scripts/native-acceptance/seven-chart-worker-self-test.ps1",
+      "bytes": 15017,
+      "sha256": "35b1b4e69d21181144ad0cfed5f4050488929717840fff514894f97751d8aa0b"
+    },
+    {
+      "path": "scripts/native-acceptance/reference-postflight-self-test.ps1",
+      "bytes": 10620,
+      "sha256": "c7c428dece7f668240257fd1f4da03ea267cff9045f9b9a73d4938d6748d234c"
+    }
+  ],
+  "excludedSyntheticFixtures": [
+    {
+      "path": "worker/fault-app-path/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-path/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-presentations/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-presentations/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/saved-reopened-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/saved-reopened-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/saved-reopened-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-quit/saved.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-version/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-app-version/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-application-factory/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-application-factory/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-global-preflight/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-global-preflight/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-open-original/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-open-original/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-open-saved/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-open-saved/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-open-saved/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-open-saved/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-open-saved/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-open-saved/saved.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-close/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-close/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-close/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-close/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-close/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-close/saved.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-discard/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-discard/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-discard/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-discard/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-discard/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-discard/saved.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-fullName/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-fullName/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-readOnly/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-readOnly/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-export/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-export/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-id/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-id/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-name/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-name/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-alternativeText/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-alternativeText/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-hasTextFrame/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-hasTextFrame/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-height/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-height/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-id/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-id/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-left/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-left/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-name/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-name/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-rotation/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-rotation/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-text/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-text/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-textFrame/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-textFrame/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-textRange/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-textRange/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-top/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-top/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-type/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-type/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-width/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shape-1-width/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shapes/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shapes/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shapes-count/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slide-1-shapes-count/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slides/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slides/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slides-count/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-original-slides-count/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-presentations-count/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-presentations-count/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saveCopyAs/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saveCopyAs/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saveCopyAs/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saveCopyAs/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saveCopyAs/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/saved-reopened-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/saved-reopened-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/saved-reopened-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-close/saved.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-slide-3-export/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-slide-3-export/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-slide-3-export/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-slide-3-export/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-slide-3-export/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-slide-3-export/saved-reopened-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-slide-3-export/saved-reopened-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/fault-saved-slide-3-export/saved.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/forbidden-getter/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/forbidden-getter/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/global-busy/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/global-busy/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-badTriState/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-badTriState/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-busyApplication/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-busyApplication/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-countObject/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-countObject/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeOpen/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeOpen/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/saved-reopened-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/saved-reopened-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/saved-reopened-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignBeforeQuit/saved.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignFullName/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-foreignFullName/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-nonfinite/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-nonfinite/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-shapeCount/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-shapeCount/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-slideCount/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-slideCount/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-writable/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/mutant-writable/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/ownership-Close-ReferenceWitnessOwned/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/ownership-Close-ReferenceWitnessOwned/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/ownership-Quit-ReferenceWitnessOwned/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/ownership-Quit-ReferenceWitnessOwned/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/ownership-Read-ReferenceWitnessPhase/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/ownership-Read-ReferenceWitnessPhase/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/ownership-Save-ReferenceWitnessCopy/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/ownership-Save-ReferenceWitnessCopy/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/case.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/original-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/original-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/original-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/POWERPNT.EXE",
+      "bytes": 41,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/saved-reopened-01.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/saved-reopened-02.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/saved-reopened-03.png",
+      "bytes": 33,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    },
+    {
+      "path": "worker/success/saved.pptx",
+      "bytes": 39,
+      "reason": "Synthetic binary-like fake fixture; not native output or required report data, not copied"
+    }
+  ],
+  "results": {
+    "baseline": {
+      "passed": 0,
+      "failed": 1
+    },
+    "focused": {
+      "passed": 12,
+      "failed": 0,
+      "newDerivationGroups": 7,
+      "managedWorkerCases": 55,
+      "managedPostflightCases": 38
+    },
+    "lint": {
+      "status": 0,
+      "files": 4,
+      "fixesApplied": false,
+      "notes": "CLI2.6.4/config-schema2.5.12 and10 informational style diagnostics retained"
+    },
+    "finalNewGroups": {
+      "passed": 7,
+      "failed": 0,
+      "reason": "Only one terminal CRLF normalized to required LF in the new test; repeated only that affected pure file; existing five source/postflight tests unchanged"
+    }
+  },
+  "mappedCheckRun": false,
+  "buildRun": false,
+  "installRun": false,
+  "officeActivated": false,
+  "nativeAcceptance": false,
+  "originalAggregateAccepted": false
+}

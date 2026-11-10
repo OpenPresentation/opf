@@ -1,0 +1,12 @@
+{
+  "name": "dc2-followups",
+  "cwd": "C:/opf-work/qual04-evidence",
+  "file": "docs/handoff/2026-11-10/dc2-qualification-followups/verify.mjs",
+  "started": "2026-11-10T11:00:50.752Z",
+  "finished": "2026-11-10T11:00:51.864Z",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "{\"pass\":true,\"source\":\"dc2e94f77faeb5789421a3cf7d4cadf2536b1834\",\"rawRecords\":54,\"trackedInputRecords\":12,\"images\":20,\"fontTrackerTestsPassed\":38,\"originalFullExit\":1,\"originalFullFailed\":4,\"rendererUnrun\":126,\"goldenDiagnosticExit\":1,\"changed\":7,\"newSlides\":5,\"unchanged\":953,\"allBeforePngHashesMatchCanonical\":true,\"baselineUpdated\":false,\"metadataRecords\":13,\"nativeAcceptance\":false}\n",
+  "stderr": ""
+}

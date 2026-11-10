@@ -13,20 +13,17 @@
 //                              the plot, each name where its segment starts in the first bar. A stacked area runs edge to edge, with
 //                              its first and last values inside the band at the plot's edges. A doughnut prints the value of the one
 //                              slice the title names in its hole.
-//   title references (LH-110)  a column, line or area chart whose title compares with a number the data does not hold ("stayed above
-//                              92%") draws a dashed reference line at that value, labeled as the title writes it; a line or area chart
-//                              in time whose title names one period ("overtook on-premises in 2023") shades that period's band.
+//   explicit references       numeric values and independent strokes authored in chart.referenceLines.
 //
 // An explicit option wins: `dataLabels` and `legend` keep the chart as authored (no default labels, no list, no names), `colors` keeps
 // a waterfall's palette positions. PPTX import does not write these defaults back as options.
-import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
+import {chartAxisScale, chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
-import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
+import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
 import {chartBarGeometry, chartValueAxisHidden, columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
-import {chartCategoriesInTime, monthOf} from './chart-time-order.js';
 
 interface Box { x: number; y: number; width: number; height: number }
 
@@ -230,10 +227,9 @@ export interface ChartLayerDoughnut {
 /**
  * LH-182: where a doughnut (the drawn type: a doughnut, or nested rings of a pie or doughnut of several series) is drawn, so its hole can
  * be filled with the surface the chart stands on (`surface`): a deck watermark or a background motif behind the chart otherwise shows
- * through the hole, and only in the hole. With a value list (LH-108) the doughnut fills the list's square. Without one, and without chart
- * options (`legend`, `axisTitles`, `dataLabels`, which carve the box themselves), the square is the preview's: the box less its padding
- * and the category legend at the end (none when the slices carry their names, LH-105), 90% of half the shorter side. A chart with options
- * has no square (its hole stays open in both engines).
+ * through the hole, and only in the hole. With a value list (LH-108) the doughnut fills the list's square. Otherwise the square is the
+ * preview's: the box less its padding, header and category legend (at its explicit position, otherwise the end; none when the slices
+ * carry their names, LH-105), 90% of half the shorter side. Explicit inside-ring labels keep the same plot and a filled hole.
  */
 export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined): ChartLayerDoughnut | undefined {
   if (!record(chart) || !data.ok || data.columns.length < 2 || !data.rows.length) return undefined;
@@ -242,8 +238,39 @@ export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry:
   if (!usable(box, scale)) return undefined;
   const of = (pie: Box): ChartLayerDoughnut => ({pie, hole: {cx: pie.x + pie.width / 2, cy: pie.y + pie.height / 2, r: pie.width / 4}});
   if (layer?.valueList) return of(layer.valueList.pie);
-  if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active || layer?.header) return undefined;
-  const {fontPx, pad} = metrics(box, scale, geometry.minFontSize);
+  const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
+  const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSize);
+  if (options.active || layer?.header) {
+    // RR-35's explicit legend is carved from the chart before the circular plot. Keep the preview's existing geometry;
+    // data labels on a doughnut are inside its rings and require no outside reserve. Axis titles are unsupported and already adapted.
+    let outer = layer?.header ? {...box, y: box.y + layer.header.height, height: Math.max(1, box.height - layer.header.height)} : box;
+    const names = data.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]));
+    const measure = (name: string) => geometry.measure(name, fontPx, 400);
+    const sideWidth = () => Math.min(outer.width * 0.45, fontPx + Math.max(0, ...names.map(measure)) + fontPx * 0.5);
+    let managed = Boolean(layer?.header?.legend || layer?.slices);
+    const position = options.legend;
+    if (position !== undefined) {
+      managed = true;
+      if (position === 'left' || position === 'right') {
+        const reserve = sideWidth() + pad;
+        outer = {...outer, x: position === 'left' ? outer.x + reserve : outer.x, width: Math.max(1, outer.width - reserve)};
+      } else if (position === 'top' || position === 'bottom') {
+        const available = Math.max(1, outer.width - 2 * pad), spacing = fontPx * 0.8;
+        const rows: number[] = [];
+        for (const name of names) {
+          const width = Math.min(available, fontPx + measure(name) + spacing), last = rows.length - 1;
+          if (last >= 0 && rows[last]! + width <= available + 0.01) rows[last]! += width;
+          else rows.push(width);
+        }
+        const reserve = rows.length * lineHeight + pad;
+        outer = {...outer, y: position === 'top' ? outer.y + reserve : outer.y, height: Math.max(1, outer.height - reserve)};
+      }
+    }
+    const legend = managed ? 0 : sideWidth() + pad;
+    const area = {x: outer.x + pad, y: outer.y + pad, width: Math.max(1, outer.width - 2 * pad - legend), height: Math.max(1, outer.height - 2 * pad)};
+    const radius = Math.max(1, Math.min(area.width, area.height) / 2 * 0.9), cx = area.x + area.width / 2, cy = area.y + area.height / 2;
+    return of({x: cx - radius, y: cy - radius, width: 2 * radius, height: 2 * radius});
+  }
   // The preview's side legend (charts.js legendEntries): one entry per category, a swatch, a gap and the longest name, at most 45% of the box.
   const names = data.rows.map(row => label(row[0]));
   const legend = layer?.slices ? 0 : Math.min(box.width * 0.45, fontPx * 0.6 + fontPx * 0.4 + Math.max(0, ...names.map(name => geometry.measure(name, fontPx, 400))) + fontPx * 0.5) + pad;
@@ -466,7 +493,8 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
  * the start; one text line each), so the plot leaves both: the title no longer overlaps the tick labels or the row names.
  */
 function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false, extra: {legend?: boolean; labelRoom?: number} = {}): ChartPlotInset | undefined {
-  if (!data.ok || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
+  const axisScale = chartAxisScale(axis);
+  if (!data.ok || !axisScale) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const width = (text: string) => geometry.measure(text, fontPx);
   const categories = data.rows.map(row => label(row[0]));
@@ -480,7 +508,7 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx - (extra.labelRoom ?? 0));
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   if (!hidden && format !== undefined && !typeOf(chart).startsWith('100pct')) {
-    const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axis.min + Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9) * axis.majorUnit;
+    const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axisScale.ticks.at(-1)!;
     const lastHalf = width(tickLabel(endTick, false, format)) / 2, right = box.x + box.width - pad;
     const nextX = Math.max(x, box.x + pad + first);
     plotWidth = Math.max(1, Math.min(x + plotWidth, right - lastHalf) - nextX); x = nextX;
@@ -497,12 +525,12 @@ const HORIZONTAL_BARS = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
  * LH-93: the inner plot of a horizontal bar chart (clustered, stacked or 100% stacked) without chart options, as an inset from its chart
  * box, laid out as the preview lays it out (horizontalStackPlot): a side legend only for two series or more without a header legend, and
  * a small chart's value labels (LH-03, no value axis) keep the widest label's room beyond the longest bar. Undefined for a chart with
- * options, a stacked chart with its marks (LH-109, LH-125: values inside the segments and names above the plot are fitted to its own plot)
- * or a chart drawn on a table's rows (LH-115): those keep their own plot.
+ * options or a chart drawn on a table's rows (LH-115): those keep their own plot. Stacked marks are refitted after sharing (refreshChartMarks).
  */
 export function horizontalBarPlot(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, axis: ChartValueAxis, box: Box, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
-  if (!record(chart) || !data.ok || data.combo || data.hasX || !HORIZONTAL_BARS.has(typeOf(chart)) || layer?.stack || layer?.rows) return undefined;
+  if (!record(chart) || !data.ok || data.combo || data.hasX || !HORIZONTAL_BARS.has(typeOf(chart)) || layer?.rows) return undefined;
   if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active) return undefined;
+  if (layer?.stack) return layer.plot;
   const hidden = chartValueAxisHidden(layer), {fontPx} = metrics(box, geometry.scale, geometry.minFontSize);
   const labeled = hidden && layer?.small?.labels === true;
   const labelRoom = labeled ? Math.max(0, ...data.rows.flatMap(row => row.slice(1).map((cell, j) => { const value = chartNumber(cell); return value === null ? 0 : geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx) + fontPx * 0.5; }))) : 0;
@@ -613,7 +641,12 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
  */
 export function restackForRows(chart: unknown, data: ResolvedChartData, layer: ChartLayer, rows: ChartLayerRows, box: Box, axis: ChartValueAxis | undefined, geometry: Omit<ChartPlotGeometry, 'box'>): ChartLayer {
   // LH-93: a plot shared with sibling charts gives way to the table's rows (rows take precedence in both engines).
-  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) { const {plot: _shared, ...rest} = layer; return {...rest, rows}; }
+  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) {
+    const {plot: _shared, references: _references, ...rest} = layer;
+    const plot = {left: rows.left, right: rows.right, top: rows.top, bottom: box.height - rows.bottom};
+    const references = axis && layer.references ? placeReferences(chartReferences(chart), data, {value: axis}, box, plot, {...geometry, horizontal: true, chartType:'bar'}) : undefined;
+    return {...rest, rows, ...(references ? {plot, references} : {})};
+  }
   const {plot: _plot, header: _header, stack, ...rest} = layer;
   const header = stack.legend ?? layer.header;
   const plot: Box = {x: box.x + rows.left, y: box.y + rows.top, width: box.width - rows.left - rows.right, height: rows.bottom - rows.top};
@@ -621,112 +654,52 @@ export function restackForRows(chart: unknown, data: ResolvedChartData, layer: C
   return {...rest, ...(header ? {header} : {}), rows, stack: {values: marks?.values ?? stack.values.map(row => row.map(() => false))}};
 }
 
-// ---------------------------------------------------------------------------------------------------------------------------------
-// LH-110: reference lines and bands the title names
-
-/** LH-110: a dashed reference line at a value the title names, with its label (the number as the title writes it). Slide pixels. */
-export interface ChartReferenceLine { value: number; text: string; y: number; x1: number; x2: number; label: Box }
-/** LH-110: the shaded band of the period (category) the title names. Slide pixels. */
-export interface ChartReferenceBand { row: number; box: Box }
-/** LH-110: the reference marks of a chart. */
-export interface ChartLayerReferences { lines: ChartReferenceLine[]; bands: ChartReferenceBand[] }
-
-const LINE_TYPES = new Set(['column', 'line', 'line-with-markers', 'area']);
-const BAND_TYPES = new Set(['line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area']);
-// English comparisons that name a threshold, right before the number (articles and "of" may stand between): "stayed above 92%",
-// "beat the target of 30", "at least 1,000". Conservative on purpose: a number after any other word is a data value or not a reference.
-const COMPARISON = /\b(?:above|below|over|under|exceed(?:s|ed|ing)?|surpass(?:es|ed|ing)?|beat(?:s|ing)?|top(?:s|ped)?|cross(?:es|ed|ing)?|reach(?:es|ed|ing)?|at least|at most|more than|less than|fewer than|within|beyond|target|goal|threshold|limit|cap|benchmark)(?:\s+(?:the|a|an|its|our|their|of|target|goal|threshold|limit|benchmark))*\s+$/i;
-const PERIOD_PREPOSITIONS = new Set(['in', 'since', 'during', 'after', 'from', 'until', 'before', 'by', 'around']);
-
-/**
- * LH-110: what the slide title (and subtitle) `text` names for reference marks, or undefined: `lines`, the numbers it compares the data
- * with (an English comparison right before the number, as `COMPARISON` lists) that no plotted value equals at the precision written, of
- * the value axis' kind (a percent only on a percent column) and within the data's range widened by its span on each side; `rows`, the one
- * category it names after a time preposition ("in 2023", "since March") on a line or area chart whose categories run in time. Column,
- * line and area charts (not stacked) take lines; line and area charts take bands. English titles only; `highlight` keeps the chart as
- * authored.
- */
-export function chartTitleReferences(chart: unknown, data: ResolvedChartData, options: {text?: string; language?: string} = {}): {lines: {value: number; text: string}[]; rows: number[]} | undefined {
-  if (!record(chart) || !data.ok || data.combo || chart.highlight !== undefined || !options.text?.trim()) return undefined;
-  const language = options.language || 'en';
-  if (!/^en(?:-|$)/i.test(language)) return undefined;
-  const type = typeOf(chart);
-  if (!LINE_TYPES.has(type) && !BAND_TYPES.has(type)) return undefined;
-  if (data.columns.length < 2 || !data.rows.length) return undefined;
-  const lines: {value: number; text: string}[] = [];
-  if (LINE_TYPES.has(type)) {
-    const format = typeof data.formats[1] === 'string' ? data.formats[1] : '';
-    const values = data.rows.flatMap(row => row.slice(1).map(chartNumber)).filter((value): value is number => value !== null);
-    if (values.length) {
-      const lo = Math.min(...values), hi = Math.max(...values), span = Math.max(hi - lo, Math.abs(hi) * 0.05);
-      for (const number of titleNumbers(options.text)) {
-        if (!COMPARISON.test(number.before) || number.percent !== format.includes('%')) continue;
-        const target = number.percent ? number.value / 100 : number.value, decimals = number.percent ? number.decimals + 2 : number.decimals;
-        if (values.some(value => Math.abs(Number(value.toFixed(decimals)) - target) < 10 ** -(decimals + 6))) continue;
-        if (target < lo - span || target > hi + span || lines.some(line => line.value === target)) continue;
-        lines.push({value: target, text: number.text});
-      }
-    }
-  }
-  const rows: number[] = [];
-  const categories = data.rows.map(row => label(row[0]));
-  if (BAND_TYPES.has(type) && chartCategoriesInTime(data.rows.map(row => row[0]), {title: label(data.columns[0]), language})) {
-    const title = words(options.text, language);
-    const after = (at: number) => at > 0 && PERIOD_PREPOSITIONS.has(title[at - 1]!);
-    categories.forEach((category, row) => {
-      const tokens = words(category, language);
-      if (!tokens.length) return;
-      for (let at = 0; at + tokens.length <= title.length; at++) {
-        if (tokens.every((token, index) => token === title[at + index]) && after(at)) { rows.push(row); return; }
-      }
-      const month = monthOf(category, language);
-      if (month !== undefined && title.some((word, at) => monthOf(word, language) === month && after(at))) rows.push(row);
-    });
-  }
-  const band = rows.length === 1 ? rows : [];
-  return lines.length || band.length ? {lines: lines.slice(0, 2), rows: band} : undefined;
-}
-
-/**
- * LH-110: the reference marks for a plot: each line across the plot at its value, its label bold at the plot's start (the right end right to
- * left), under the line when the first point lies above it and the label fits under it, else over it; each band 60% of its category's
- * width over the plot's height. The value axis must hold every line's value (composition widens it).
- */
-export function placeReferences(refs: {lines: readonly {value: number; text: string}[]; rows: readonly number[]}, data: ResolvedChartData, axis: ChartValueAxis, box: Box, plotInset: {left: number; top: number; right: number; bottom: number}, geometry: Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}): ChartLayerReferences | undefined {
-  if (!data.ok || !(axis.max > axis.min)) return undefined;
-  const plot = plotOf(box, plotInset);
-  if (!(plot.width > 1 && plot.height > 1)) return undefined;
-  const {fontPx, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
-  const rtl = geometry.direction === 'rtl', count = data.rows.length, band = plot.width / count;
-  const at = (value: number) => plot.y + (axis.max - value) / (axis.max - axis.min) * plot.height;
-  const first = data.rows.map(row => chartNumber(row[1])).find((value): value is number => value !== null);
-  const lines = refs.lines.filter(line => line.value >= axis.min && line.value <= axis.max).map((line): ChartReferenceLine => {
-    const y = at(line.value), width = (geometry.bold ?? geometry.measure)(line.text, fontPx) + fontPx * 0.5;
-    const below = first !== undefined && first > line.value && y + fontPx * 0.1 + lineHeight <= plot.y + plot.height + 0.5;
-    const x = rtl ? plot.x + plot.width - width : plot.x;
-    return {value: line.value, text: line.text, y, x1: plot.x, x2: plot.x + plot.width, label: {x, y: below ? y + fontPx * 0.1 : y - fontPx * 0.1 - lineHeight, width, height: lineHeight}};
-  });
-  const bands = refs.rows.filter(row => row >= 0 && row < count).map((row): ChartReferenceBand => {
-    const slot = rtl ? count - 1 - row : row;
-    return {row, box: {x: plot.x + (slot + 0.2) * band, y: plot.y, width: band * 0.6, height: plot.height}};
-  });
-  return lines.length || bands.length ? {lines, bands} : undefined;
-}
-
+// Explicit reference geometry lives in chart-references.ts.
+export {chartReferences,placeReferences} from './chart-references.js';
+export type {ChartReferenceLine,ChartLayerReferences} from './chart-references.js';
+import {chartReferences,placeReferences} from './chart-references.js';
 /** A composed chart item, as composition hands it to {@link refreshChartMarks}. */
-interface ComposedChartItem { value: unknown; box: Box; chart?: {valueAxis?: ChartValueAxis; layer?: ChartLayer} }
+interface ComposedChartItem { value: unknown; box: Box; chart?: {valueAxis?: ChartValueAxis; secondaryValueAxis?:ChartValueAxis; layer?: ChartLayer} }
 
 /**
  * LH-109, LH-110 with LH-93: after sibling charts share one plot height, the names beside a stacked chart's last column, an area's end
- * values (LH-125) and the reference marks are placed again against the chart's new plot.
+ * values (LH-125) and the reference marks are placed again against the chart's new plot. Horizontal stacks refit their names and value
+ * labels. Returns true when a names-to-legend or hidden-to-visible-axis fallback changed the plot, requiring another sharing pass.
  */
-export function refreshChartMarks(items: readonly ComposedChartItem[], geometryFor: (item: ComposedChartItem) => Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, document?: unknown): void {
+export function refreshChartMarks(items: readonly ComposedChartItem[], geometryFor: (item: ComposedChartItem) => Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, document?: unknown): boolean {
+  let layoutChanged = false;
   for (const item of items) {
     const layer = item.chart?.layer, axis = item.chart?.valueAxis;
-    if (!layer?.plot || !axis || (!layer.stack?.names && !layer.stack?.ends && !layer.references)) continue;
+    if (!layer?.plot || !axis || (!layer.stack && !layer.references)) continue;
     const data = resolveChartData(item.value, document), geometry = geometryFor(item);
     let next: ChartLayer = layer;
-    // The names above a horizontal bar chart (LH-125) and its plot do not move with a shared plot (only vertical charts share one).
+    // LH-93: horizontal siblings may contract either dimension. Refit marks at their unchanged text size.
+    if (layer.stack && record(item.value) && stackCandidate(item.value, data) && isHorizontal(item.value)) {
+      if (layer.stack.names?.above) {
+        const entries = placeBarNames(item.value, data, axis, item.box, layer.plot, geometry, layer.focus?.series);
+        if (entries) next = {...next, stack: {...next.stack!, names: {...layer.stack.names, entries}}};
+        else {
+          // Names no longer fit their segment starts: restore the original full-size header/side legend, then share again.
+          const {names: _names, legend, ...stack} = next.stack!;
+          const {header: _header, ...rest} = next;
+          const header = legend ?? layer.header;
+          const plot = horizontalStackPlot(item.value, data, axis, item.box, header, false, geometry, chartValueAxisHidden(next));
+          next = {...rest, ...(header ? {header} : {}), stack, ...(plot ? {plot} : {})};
+          layoutChanged = true;
+        }
+      }
+      const marks = stackMarks(item.value, data, axis, plotOf(item.box, next.plot!), {...geometry, box: item.box});
+      if (marks) {
+        next = {...next, stack: {...next.stack!, values: marks.values}};
+        if (next.stack!.valueAxis === false && !labeledEverySegment(data, marks.values)) {
+          // Direct values no longer replace every segment's axis. Restore the tick band and refit on the next shared plot.
+          const {valueAxis: _hidden, ...stack} = next.stack!;
+          const plot = horizontalStackPlot(item.value, data, axis, item.box, next.header, stack.names?.above === true, geometry);
+          next = {...next, stack, ...(plot ? {plot} : {})};
+          layoutChanged = true;
+        }
+      }
+    }
     if (layer.stack?.names && !layer.stack.names.above) {
       const entries = placeStackNames(item.value, data, axis, item.box, layer.plot, geometry, true, layer.focus?.series, layer.stack.edge === true);
       if (entries) next = {...next, stack: {...next.stack!, names: {...layer.stack.names, entries}}};
@@ -737,9 +710,10 @@ export function refreshChartMarks(items: readonly ComposedChartItem[], geometryF
       if (marks) next = {...next, stack: {...next.stack!, ...(marks.ends.length ? {ends: marks.ends} : {ends: undefined})}};
     }
     if (layer.references) {
-      const references = placeReferences({lines: layer.references.lines, rows: layer.references.bands.map(band => band.row)}, data, axis, item.box, layer.plot, geometry);
+      const references = placeReferences(chartReferences(item.value), data, {value: axis, ...(item.chart?.secondaryValueAxis ? {secondary:item.chart.secondaryValueAxis} : {})}, item.box, layer.plot, {...geometry,horizontal:typeOf(item.value)==='bar',chartType:typeOf(item.value)});
       if (references) next = {...next, references};
     }
     item.chart!.layer = next;
   }
+  return layoutChanged;
 }

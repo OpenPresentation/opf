@@ -6,6 +6,7 @@
 import { chartOptionTarget, resolveChartOptions } from './chart-options.js';
 import { chartNumber, resolveChartData, type ResolvedChartData } from './chart-data.js';
 import { chartDrawPlan } from './chart-fallback.js';
+import {chartReferences} from './chart-references.js';
 
 /** The ticks of an automatic value axis: `ticks` runs from `min` to `max` in steps of `step`. */
 export interface ChartScale {
@@ -75,6 +76,23 @@ function scaleFrom(min: number, max: number, step: number): ChartScale {
   const count = Math.floor((max - min) / step + 1e-9);
   for (let index = 0; index <= count; index++) ticks.push(clean(min + index * step));
   return { min, max, step, ticks };
+}
+
+/** Rebuild bounded native-axis ticks without overflowing an otherwise finite axis span or tick product. */
+export function chartAxisScale(axis: ChartValueAxis | undefined): ChartScale | undefined {
+  if (!axis || ![axis.min, axis.max, axis.majorUnit].every(Number.isFinite) || axis.max < axis.min || !(axis.majorUnit > 0)) return undefined;
+  const span = axis.max - axis.min;
+  const intervals = Number.isFinite(span) ? span / axis.majorUnit : axis.max / axis.majorUnit - axis.min / axis.majorUnit;
+  if (!Number.isFinite(intervals) || intervals > 1000) return undefined;
+  const ticks: number[] = [];
+  for (let index = 0, count = Math.floor(intervals + 1e-9); index <= count; index++) {
+    const ordinary = axis.min + index * axis.majorUnit;
+    // Only change arithmetic when an intermediate overflows: a negative minimum can cancel a product beyond MAX_VALUE.
+    const value = Number.isFinite(ordinary) ? ordinary : (axis.min / axis.majorUnit + index) * axis.majorUnit;
+    if (!Number.isFinite(value)) return undefined;
+    ticks.push(clean(value));
+  }
+  return {min: axis.min, max: axis.max, step: axis.majorUnit, ticks};
 }
 
 function pickStep(min: number, max: number, limit: number, steps: readonly number[]): number {
@@ -321,7 +339,7 @@ export interface ChartAxisGeometry {
   language?: string;
   /** LH-119: the chart is a line whose points carry their value labels and whose value axis is hidden (the small chart, LH-03). */
   labeled?: boolean;
-  /** LH-110: values the axis must hold besides the data (the reference lines the title names). */
+  /** LH-110: values the axis must hold besides the data (explicit reference lines). */
   include?: readonly number[];
 }
 
@@ -347,7 +365,8 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   // LH-60: the drawn construct (a map over categories that are not places is drawn as columns, and takes their axis).
   const id = resolved.ok ? chartDrawPlan(chart, resolved, { language: geometry.language }).type : authored;
   const spec = Object.hasOwn(CATEGORY_CHARTS, id) ? CATEGORY_CHARTS[id] : undefined;
-  if (!spec || !resolved.ok || resolved.combo) return undefined;
+  if (resolved.ok && resolved.combo) return chartComboAxes(chart,resolved,geometry)?.value;
+  if (!spec || !resolved.ok) return undefined;
   const { scale, width, height } = geometry;
   if (![width, height, scale].every(Number.isFinite) || width <= 0 || height <= 0 || scale <= 0) return undefined;
   const series = resolved.columns.slice(1).map((_, offset) => ({ values: resolved.rows.map((row) => chartNumber(row[offset + 1])) }));
@@ -362,9 +381,10 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const stackedGrouping = spec.grouping === 'stacked' || percent;
   const extents = stacks.flat().flatMap((point) => (point === null ? [] : spec.kind === 'line' || !stackedGrouping ? [point.to] : [point.from, point.to]));
   const anchor = spec.kind === 'bar' || spec.kind === 'area' ? [0] : [];
-  const include = (geometry.include ?? []).filter(Number.isFinite);
-  const dataMin = extents.length ? Math.min(...extents, ...anchor, ...include) : 0;
-  const dataMax = extents.length ? Math.max(...extents, ...anchor, ...include) : 1;
+  const include = [...geometry.include ?? [], ...chartReferences(chart).filter(ref=>ref.axis==='value').map(ref=>ref.value)].filter(Number.isFinite);
+  const bounds = [...extents, ...anchor, ...include];
+  const dataMin = bounds.length ? Math.min(...bounds) : 0;
+  const dataMax = bounds.length ? Math.max(...bounds) : 1;
   const pad = 10 * scale;
   const fontPx = chartTextSize(geometry) * scale;
   const lineHeight = fontPx * 1.5;
@@ -374,6 +394,25 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const length = spec.horizontal ? width * 0.7 - 2 * pad - fontPx : height - 2 * pad - lineHeight * 1.5 - legendBand - titleBand;
   const fitted = niceScale(dataMin, dataMax, chartIntervalsFor(Math.max(1, length), spec.horizontal ? 4 * fontPx : lineHeight * 1.2, scale), { percent, labeled: geometry.labeled === true && spec.kind === 'line' });
   return { min: fitted.min, max: fitted.max, majorUnit: fitted.step, ...(percent ? { percent: true as const } : {}) };
+}
+
+/** Shared scales for a combo. References affect only their own axis; both engines consume these exact bounds. */
+export function chartComboAxes(chart:unknown,resolved:ResolvedChartData,geometry:ChartAxisGeometry):{value:ChartValueAxis;secondary?:ChartValueAxis}|undefined {
+  if(!resolved.ok||!resolved.combo||!resolved.rows.length)return undefined;
+  const {width,height,scale}=geometry;if(![width,height,scale].every(Number.isFinite)||width<=0||height<=0||scale<=0)return undefined;
+  const font=chartTextSize(geometry)*scale,lineHeight=font*1.5,pad=10*scale,options=resolveChartOptions(chart,chartOptionTarget('combo'));
+  const legend=options.legend==='top'||options.legend==='bottom'?lineHeight+pad:0;
+  const length=height-2*pad-lineHeight*1.5-legend-(options.axisTitles.category?lineHeight:0);
+  const intervals=chartIntervalsFor(Math.max(1,length),lineHeight*1.2,scale),refs=chartReferences(chart);
+  const forAxis=(axis:'primary'|'secondary'):ChartValueAxis=>{
+    const columns=resolved.combo!.flatMap((entry,index)=>entry.axis===axis?[index+1]:[]);
+    const values=resolved.rows.flatMap(row=>columns.map(column=>chartNumber(row[column]))).filter((v):v is number=>v!==null);
+    if(resolved.combo!.some(entry=>entry.axis===axis&&entry.role==='bar'))values.push(0);
+    values.push(...refs.filter(ref=>ref.axis===(axis==='primary'?'value':'secondary')).map(ref=>ref.value));
+    const fitted=niceScale(values.length?Math.min(...values):0,values.length?Math.max(...values):1,intervals,{endOnTick:true});
+    return {min:fitted.min,max:fitted.max,majorUnit:fitted.step};
+  };
+  return {value:forAxis('primary'),...(resolved.combo.some(entry=>entry.axis==='secondary')?{secondary:forAxis('secondary')}:{})};
 }
 
 /** LH-33: a chart whose value axis {@link shareSiblingChartAxes} may share: the chart object and the axis composition gave it. */
@@ -412,10 +451,22 @@ export function shareSiblingChartAxes<T extends SiblingChart>(charts: readonly T
     const axes = members.map(item => item.chart!.valueAxis!);
     const min = Math.min(...axes.map(axis => axis.min)), max = Math.max(...axes.map(axis => axis.max));
     if (axes.every(axis => axis.min === min && axis.max === max)) continue;
-    const intervals = Math.max(1, Math.min(...axes.map(axis => Math.round((axis.max - axis.min) / axis.majorUnit))));
+    const intervals = Math.max(1, Math.min(...axes.map(axis => {
+      const span = axis.max - axis.min;
+      return Math.round(Number.isFinite(span) ? span / axis.majorUnit : axis.max / axis.majorUnit - axis.min / axis.majorUnit);
+    })));
     const percent = axes[0]!.percent === true;
     const shared = niceScale(min, max, intervals, { percent });
     for (const item of members) item.chart!.valueAxis = { min: shared.min, max: shared.max, majorUnit: shared.step, ...(percent ? { percent: true as const } : {}) };
   }
   return out;
+}
+
+/** A value's stable fraction of a numeric axis; preview marks and data-point anchors share this arithmetic. */
+export function chartAxisFraction(value: number, axis: {min: number; max: number}, reverse = false): number {
+  const range = axis.max - axis.min, distance = reverse ? axis.max - value : value - axis.min;
+  if (Number.isFinite(range) && Number.isFinite(distance)) return distance / (range || 1);
+  const unit = Math.max(Math.abs(axis.min), Math.abs(axis.max));
+  const min = axis.min / unit, max = axis.max / unit, position = value / unit;
+  return (reverse ? max - position : position - min) / (max - min);
 }

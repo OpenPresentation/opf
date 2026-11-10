@@ -1,0 +1,10 @@
+{
+  "command": "pnpm check:text",
+  "exitCode": 0,
+  "tests": 7,
+  "scope": "Focused repeat only for new compressed logs/receipt prose after approved ancestry merge; first missing-sparse-input attempt retained",
+  "rawBytes": 1086,
+  "rawSha256": "b433dc188bfba805776cdf71868c73bc15801dbe92033de6301a8f6b60026b69",
+  "gzipBytes": 598,
+  "gzipSha256": "0fdbf129706330f0c66ebd4a9f6805f2c894cf613701a225a26fa2234271ad08"
+}

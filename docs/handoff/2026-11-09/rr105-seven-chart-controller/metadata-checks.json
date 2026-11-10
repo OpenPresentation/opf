@@ -1,0 +1,119 @@
+{
+  "status": "PASS",
+  "scope": "Focused maintained inspectTextBytes plus fatalUTF8; not the full check:text or check:changed aggregate",
+  "checked": [
+    {
+      "file": ".gitattributes",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "changes/rr105-seven-chart-controller.md",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-seven-chart-controller/README.md",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-seven-chart-controller/manifest.json",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-seven-chart-controller/metadata-development-failure.json",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-seven-chart-controller/raw.json.gz",
+      "kind": "text",
+      "compressed": true
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-seven-chart-controller/receipt.json",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "docs/handoff/2026-11-09/rr105-seven-chart-controller/verify.mjs",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "docs/programs/release-readiness/burndown.md",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/run-seven-chart-profile.ps1",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-archive.mjs",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-profile.mjs",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-profile.test.mjs",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-worker-self-test.ps1",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/seven-chart-worker.ps1",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/seven-chart/chart-all-seven.pptx",
+      "kind": "binaryDocuments",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/seven-chart/chart-mode-all-seven-auto.pptx",
+      "kind": "binaryDocuments",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/seven-chart/chart-mode-all-seven-fallback.pptx",
+      "kind": "binaryDocuments",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/seven-chart/chart-mode-all-seven-native.pptx",
+      "kind": "binaryDocuments",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/seven-chart/manifest.json",
+      "kind": "text",
+      "compressed": false
+    },
+    {
+      "file": "scripts/native-acceptance/test-fixtures/seven-chart/whole-seven.opf.json",
+      "kind": "text",
+      "compressed": false
+    }
+  ],
+  "privacy": {
+    "publicSyntheticOriginsOnly": true,
+    "rawTextRecordsScanned": 503,
+    "credentialPatternMatches": 0,
+    "environmentOrSecretFilesRead": false,
+    "scope": "Bounded pattern audit of already-owned archived test/source outputs; no account/profile scan."
+  },
+  "officeInvoked": false
+}

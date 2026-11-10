@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "source": "d7d95b83f6209fbe5a62eca8039a58ec20ea2bc9",
+  "originalGateSource": "db64054523051cf4da676cbbb874c728fd3ebf81",
+  "archive": {
+    "bytes": 601676,
+    "sha256": "bedf64adc53d6f29457e608e3b80832d962f03da107e612c141e5688d5034790"
+  },
+  "records": 157,
+  "rawFileBytes": 1570805,
+  "originalGate": {
+    "exit": 1,
+    "passed": 16,
+    "failed": 3,
+    "skipped": 1,
+    "seconds": 873.3
+  },
+  "repairs": {
+    "callback": "a86af4403d9775b54ea075b7e4a345ac6c248726",
+    "portable": "ee2019232a36f98192f0e20cd6005a734aad6eba",
+    "fontExpectation": "42c4ec6501f9bfd3966460a449303937345016b3"
+  },
+  "nativeProof": "20e897d711d5c2d4d17c889331f4b93327c5d766",
+  "consumerProof": "6a0848cb0d41a563e69d6639c418054272fa562b",
+  "nativeAcceptanceScope": "Four cases read-only original/Save/reopen/import; no chart edits or whole-corpus acceptance"
+}

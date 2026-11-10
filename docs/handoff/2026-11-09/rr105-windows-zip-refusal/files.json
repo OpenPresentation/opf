@@ -1,0 +1,1997 @@
+[
+  {
+    "path": "focused-controls/actions.log",
+    "bytes": 439,
+    "sha256": "1987cce211fa0a82b39fed7abd7a2a1836f4eb3456bf2de2230a3cd7eb1526d9"
+  },
+  {
+    "path": "focused-controls/attempt-valid/furniture-harness.log",
+    "bytes": 228,
+    "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json",
+    "bytes": 310158,
+    "sha256": "461bd6e493926d6bac21496b95cf454164a6d2f33ebe14609562a7d46393a40a"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/close-failure.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/copy-failure.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/copy-identity-change.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/empty-list.json",
+    "bytes": 7,
+    "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/existing-output-saved.pptx",
+    "bytes": 13,
+    "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/existing-output.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/foreign-at-adoption.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/foreign-at-quit.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/fractional-move-index.json",
+    "bytes": 55,
+    "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-common-op-array.json",
+    "bytes": 81,
+    "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-common-op-null.json",
+    "bytes": 73,
+    "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-common-op-number.json",
+    "bytes": 70,
+    "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-common-shape-array.json",
+    "bytes": 81,
+    "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-common-shape-null.json",
+    "bytes": 71,
+    "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-common-shape-number.json",
+    "bytes": 68,
+    "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-common-slide-array.json",
+    "bytes": 81,
+    "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-common-slide-null.json",
+    "bytes": 82,
+    "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/legacy-text-array.json",
+    "bytes": 81,
+    "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/malformed-json.json",
+    "bytes": 6,
+    "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/move-index-four.json",
+    "bytes": 53,
+    "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/multi-empty-alt.json",
+    "bytes": 204,
+    "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/non-list-root.json",
+    "bytes": 51,
+    "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/null-entry.json",
+    "bytes": 11,
+    "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/numeric-target.json",
+    "bytes": 98,
+    "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/numeric-text.json",
+    "bytes": 69,
+    "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-chartName-array.json",
+    "bytes": 185,
+    "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-chartName-empty.json",
+    "bytes": 172,
+    "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-chartName-number.json",
+    "bytes": 171,
+    "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-chartName-too-long.json",
+    "bytes": 428,
+    "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-common-op-array.json",
+    "bytes": 185,
+    "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-common-op-null.json",
+    "bytes": 166,
+    "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-common-op-number.json",
+    "bytes": 163,
+    "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-common-shape-array.json",
+    "bytes": 185,
+    "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-common-shape-null.json",
+    "bytes": 175,
+    "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-common-shape-number.json",
+    "bytes": 172,
+    "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-common-slide-array.json",
+    "bytes": 185,
+    "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-common-slide-null.json",
+    "bytes": 186,
+    "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-edge-array.json",
+    "bytes": 185,
+    "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-edge-case.json",
+    "bytes": 183,
+    "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-edge-unsupported.json",
+    "bytes": 181,
+    "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-index-upper-bound.json",
+    "bytes": 187,
+    "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-kind-array.json",
+    "bytes": 185,
+    "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-kind-case.json",
+    "bytes": 183,
+    "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+    "bytes": 191,
+    "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-kind-marker.json",
+    "bytes": 183,
+    "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-kind-slice.json",
+    "bytes": 182,
+    "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-kind-unsupported.json",
+    "bytes": 182,
+    "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-kind-vertical-bar.json",
+    "bytes": 189,
+    "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-missing-chartKind.json",
+    "bytes": 162,
+    "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-missing-chartName.json",
+    "bytes": 157,
+    "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-missing-edge.json",
+    "bytes": 167,
+    "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-missing-pointIndex.json",
+    "bytes": 168,
+    "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-missing-seriesIndex.json",
+    "bytes": 167,
+    "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-missing-valueSign.json",
+    "bytes": 169,
+    "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-array.json",
+    "bytes": 185,
+    "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-boolean.json",
+    "bytes": 186,
+    "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-fraction.json",
+    "bytes": 185,
+    "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-negative.json",
+    "bytes": 184,
+    "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-null.json",
+    "bytes": 186,
+    "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-string.json",
+    "bytes": 185,
+    "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-too-high.json",
+    "bytes": 185,
+    "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-zero.json",
+    "bytes": 183,
+    "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-array.json",
+    "bytes": 185,
+    "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+    "bytes": 186,
+    "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+    "bytes": 185,
+    "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-negative.json",
+    "bytes": 184,
+    "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-null.json",
+    "bytes": 186,
+    "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-string.json",
+    "bytes": 185,
+    "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+    "bytes": 185,
+    "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-zero.json",
+    "bytes": 183,
+    "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-shapeName-array.json",
+    "bytes": 185,
+    "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-shapeName-empty.json",
+    "bytes": 173,
+    "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-sign-array.json",
+    "bytes": 185,
+    "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-sign-boolean.json",
+    "bytes": 186,
+    "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-sign-fraction.json",
+    "bytes": 185,
+    "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-sign-string.json",
+    "bytes": 185,
+    "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-sign-too-high.json",
+    "bytes": 183,
+    "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-sign-too-low.json",
+    "bytes": 184,
+    "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-unknown-field.json",
+    "bytes": 197,
+    "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/point-zero-sign.json",
+    "bytes": 183,
+    "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/quit-failure.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/same-path.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/serialized-curved-refusal.json",
+    "bytes": 9449,
+    "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/singleton-empty-text.json",
+    "bytes": 75,
+    "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/slide-index-four.json",
+    "bytes": 63,
+    "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/slide-index-zero.json",
+    "bytes": 63,
+    "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/string-slide-index.json",
+    "bytes": 76,
+    "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-bool-size.json",
+    "bytes": 87,
+    "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-both.json",
+    "bytes": 104,
+    "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-color.json",
+    "bytes": 88,
+    "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-empty.json",
+    "bytes": 71,
+    "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-extra-key.json",
+    "bytes": 106,
+    "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-hash-color.json",
+    "bytes": 89,
+    "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-overflow.json",
+    "bytes": 88,
+    "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-reference-color.json",
+    "bytes": 89,
+    "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-short-color.json",
+    "bytes": 86,
+    "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-size.json",
+    "bytes": 85,
+    "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-string-size.json",
+    "bytes": 87,
+    "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-too-big.json",
+    "bytes": 85,
+    "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/style-zero.json",
+    "bytes": 84,
+    "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/success-saved.pptx",
+    "bytes": 23,
+    "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/success.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/twenty-one-actions.json",
+    "bytes": 2003,
+    "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/unknown-operation.json",
+    "bytes": 63,
+    "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/unknown-property.json",
+    "bytes": 92,
+    "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/unowned-quit.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/writable-open.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/wrong-close-owner.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/furniture.json.plans/wrong-open-path.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/failure/owned worker with spaces.ps1",
+    "bytes": 55,
+    "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/failure/worker.json",
+    "bytes": 342,
+    "sha256": "d8de6488a26a4baa9cc9ff087089aeef32d006a2e7ce20643f9c72c4df70216c"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/failure/worker.stderr.log",
+    "bytes": 340,
+    "sha256": "5b7a1b895dc88b0a2e05216ef8a23b94a7e53ce58739089dc7a19559765b2e17"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/failure/worker.stdout.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/report.json",
+    "bytes": 1745,
+    "sha256": "28558ca5735d79539954d7c3f707b982e3d029ae1c4cee158532decc3b5d4828"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/success/owned worker with spaces.ps1",
+    "bytes": 55,
+    "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/success/worker.json",
+    "bytes": 341,
+    "sha256": "14bf25742887acb3f931b2f3a20d25443a5fdb8e7fb580eda4ed1defc06f2a89"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/success/worker.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/success/worker.stdout.log",
+    "bytes": 52,
+    "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/timeout/owned worker with spaces.ps1",
+    "bytes": 133,
+    "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/timeout/worker.json",
+    "bytes": 340,
+    "sha256": "e1c67aae9ea87e36ea55da003a3d55e6dd546286735ce7f85b069287329abac8"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/timeout/worker.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "focused-controls/attempt-valid/harness/process/timeout/worker.stdout.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "focused-controls/attempt-valid/inputs/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/attempt-valid/inputs/case.pptx",
+    "bytes": 150,
+    "sha256": "56a8b2f463b9e414651f8debf7f6ff6c7ad4a71f7ae2a2cc91cf96a714e0db35"
+  },
+  {
+    "path": "focused-controls/attempt-valid/process-check.log",
+    "bytes": 280,
+    "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+  },
+  {
+    "path": "focused-controls/attempt-valid/runner.json",
+    "bytes": 6857,
+    "sha256": "03cd20f4352bfb6f3c50ee0ea684ef236fcdbd7b95a5d451da79140de03925ea"
+  },
+  {
+    "path": "focused-controls/bad-zip.log",
+    "bytes": 313,
+    "sha256": "b8bf2183c7b95b164bf3fb104da80c63969c758f675cb287e57b1360b06b863e"
+  },
+  {
+    "path": "focused-controls/bad.pptx",
+    "bytes": 9,
+    "sha256": "91e19e7364481599c9722ad21ec9cec4f4ac26b3dd2c0af221e7896a2c31062b"
+  },
+  {
+    "path": "focused-controls/controls.json",
+    "bytes": 4085,
+    "sha256": "8f5012f6578386b1cc8b57d7d3a03e6a71cd59406a9b135bbcc6d25175fc9809"
+  },
+  {
+    "path": "focused-controls/declared-boolean.log",
+    "bytes": 491,
+    "sha256": "db1010ec93786b0f7fde805063f055fd0252e423cfdabac08207a9a6e1e253cb"
+  },
+  {
+    "path": "focused-controls/declared-string.log",
+    "bytes": 491,
+    "sha256": "db1010ec93786b0f7fde805063f055fd0252e423cfdabac08207a9a6e1e253cb"
+  },
+  {
+    "path": "focused-controls/declared-two.log",
+    "bytes": 491,
+    "sha256": "db1010ec93786b0f7fde805063f055fd0252e423cfdabac08207a9a6e1e253cb"
+  },
+  {
+    "path": "focused-controls/default30-slide-01.png",
+    "bytes": 1,
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+  },
+  {
+    "path": "focused-controls/entries.pptx",
+    "bytes": 440298,
+    "sha256": "50c553fa6c8a3774bcc90443aa5d8109512773e9b035b6dbed363bee5e2a7449"
+  },
+  {
+    "path": "focused-controls/large.pptx",
+    "bytes": 16777217,
+    "sha256": "1003b1b5dc078189799a1216ce0f9fbcebb94e8b6b83c58c4b03345f07f94ced"
+  },
+  {
+    "path": "focused-controls/one.pptx",
+    "bytes": 150,
+    "sha256": "56a8b2f463b9e414651f8debf7f6ff6c7ad4a71f7ae2a2cc91cf96a714e0db35"
+  },
+  {
+    "path": "focused-controls/physical-two.log",
+    "bytes": 422,
+    "sha256": "05bc1c84cd4f3a5d53b035562870f3b3828ea494e5f8ecfc13b32a6ee7f4e8db"
+  },
+  {
+    "path": "focused-controls/pure-report.json",
+    "bytes": 4772,
+    "sha256": "a3a422feb50fe2f3f827244020d473dfaa03b1c00b7e1c8e036a77f14de0ee84"
+  },
+  {
+    "path": "focused-controls/pure.log",
+    "bytes": 68,
+    "sha256": "71093606a8f050dbddec7f964c9db1332fa5e7faa1e1bd846b9a1e3dd5c2dfa5"
+  },
+  {
+    "path": "focused-controls/pure.ps1",
+    "bytes": 4336,
+    "sha256": "b8d67fdd2aaf365fbbc62de807fa6616cdfe6a367ee54e0e9a1f8944f8a47675"
+  },
+  {
+    "path": "focused-controls/request-false-true.log",
+    "bytes": 501,
+    "sha256": "e837cf3f6d87c4bb6ee479e8d00a1345d2bc4d5b6357e3d4a00bb03b87845ae2"
+  },
+  {
+    "path": "focused-controls/request-false-true/request.json",
+    "bytes": 48,
+    "sha256": "eb13b0d0329ab5ef1c0a717c709e9ad7919b84471a3bf4286ff7c4f1fade3349"
+  },
+  {
+    "path": "focused-controls/request-true-false.log",
+    "bytes": 501,
+    "sha256": "e837cf3f6d87c4bb6ee479e8d00a1345d2bc4d5b6357e3d4a00bb03b87845ae2"
+  },
+  {
+    "path": "focused-controls/request-true-false/request.json",
+    "bytes": 49,
+    "sha256": "3a3140e8aa951ceb3c871570b9a0bbc48326e9973c6ec2ba3d4f8acde8e8adc9"
+  },
+  {
+    "path": "focused-controls/request-true-true.log",
+    "bytes": 471,
+    "sha256": "c894630b6fc61a137c1b2f7c310cf08050d0f5513851ce88afb49a632cf82d5b"
+  },
+  {
+    "path": "focused-controls/request-true-true/request.json",
+    "bytes": 50,
+    "sha256": "1358b531339d50a240799ef6bf59d8c215426c7b60cc3490fb0edccd43a9aabd"
+  },
+  {
+    "path": "focused-controls/suite-actions/action-plan.json",
+    "bytes": 68,
+    "sha256": "3993e29cbac8958bcc95e3554e6e63c0e1f3c2b6a8c292bbb0548ccf8ae30b1d"
+  },
+  {
+    "path": "focused-controls/suite-actions/case.pptx",
+    "bytes": 150,
+    "sha256": "56a8b2f463b9e414651f8debf7f6ff6c7ad4a71f7ae2a2cc91cf96a714e0db35"
+  },
+  {
+    "path": "focused-controls/suite-actions/suite.json",
+    "bytes": 1284,
+    "sha256": "b7e55591c63db23b5756514ee16081fc084a8d31655bb1a54ddb19e047b79df1"
+  },
+  {
+    "path": "focused-controls/suite-bad-zip/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-bad-zip/case.pptx",
+    "bytes": 9,
+    "sha256": "91e19e7364481599c9722ad21ec9cec4f4ac26b3dd2c0af221e7896a2c31062b"
+  },
+  {
+    "path": "focused-controls/suite-bad-zip/suite.json",
+    "bytes": 1281,
+    "sha256": "920f2b250c423f1dca46178e50a7b919b7fae2e10832d4cda97f1e90a79558f4"
+  },
+  {
+    "path": "focused-controls/suite-declared-boolean/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-declared-boolean/case.pptx",
+    "bytes": 150,
+    "sha256": "56a8b2f463b9e414651f8debf7f6ff6c7ad4a71f7ae2a2cc91cf96a714e0db35"
+  },
+  {
+    "path": "focused-controls/suite-declared-boolean/suite.json",
+    "bytes": 1286,
+    "sha256": "7f97b22e20428fb5433af03839521be0aa7a84345e270050c82780c5229ec388"
+  },
+  {
+    "path": "focused-controls/suite-declared-string/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-declared-string/case.pptx",
+    "bytes": 150,
+    "sha256": "56a8b2f463b9e414651f8debf7f6ff6c7ad4a71f7ae2a2cc91cf96a714e0db35"
+  },
+  {
+    "path": "focused-controls/suite-declared-string/suite.json",
+    "bytes": 1285,
+    "sha256": "0818d36457a3c734ad00cfba7708318794205038eed915a8eb71cb2214f65a2c"
+  },
+  {
+    "path": "focused-controls/suite-declared-two/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-declared-two/case.pptx",
+    "bytes": 150,
+    "sha256": "56a8b2f463b9e414651f8debf7f6ff6c7ad4a71f7ae2a2cc91cf96a714e0db35"
+  },
+  {
+    "path": "focused-controls/suite-declared-two/suite.json",
+    "bytes": 1283,
+    "sha256": "3312b94cabf4bbf769f2c27889b72122b30e696d280eda2d0ac2ddb833aef9be"
+  },
+  {
+    "path": "focused-controls/suite-physical-two/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-physical-two/case.pptx",
+    "bytes": 278,
+    "sha256": "14988191d7aa8e62277133cc500e9d65fc887413e86406bcb62ee6f9fc638b75"
+  },
+  {
+    "path": "focused-controls/suite-physical-two/suite.json",
+    "bytes": 1283,
+    "sha256": "843eeb754c94514069911a8eb41e1f8f4e137b93fe4f377358d5801e61d5856b"
+  },
+  {
+    "path": "focused-controls/suite-timeout-61/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-timeout-61/case.pptx",
+    "bytes": 150,
+    "sha256": "56a8b2f463b9e414651f8debf7f6ff6c7ad4a71f7ae2a2cc91cf96a714e0db35"
+  },
+  {
+    "path": "focused-controls/suite-timeout-61/suite.json",
+    "bytes": 1283,
+    "sha256": "e29de614c75cd999137a6eefe959d0aafe9b692407425ce44054d3ecf233d623"
+  },
+  {
+    "path": "focused-controls/suite-too-large/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-too-large/case.pptx",
+    "bytes": 16777217,
+    "sha256": "1003b1b5dc078189799a1216ce0f9fbcebb94e8b6b83c58c4b03345f07f94ced"
+  },
+  {
+    "path": "focused-controls/suite-too-large/suite.json",
+    "bytes": 1288,
+    "sha256": "a7489a16245dda2f3fb0f183f613cbe0248add5e90f79ca4ec83c52ec9287f1e"
+  },
+  {
+    "path": "focused-controls/suite-too-many-entries/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-too-many-entries/case.pptx",
+    "bytes": 440298,
+    "sha256": "50c553fa6c8a3774bcc90443aa5d8109512773e9b035b6dbed363bee5e2a7449"
+  },
+  {
+    "path": "focused-controls/suite-too-many-entries/suite.json",
+    "bytes": 1286,
+    "sha256": "ce00d14ecd29ee96f53ff270e102d07192304a9987f1ef4936800afcc1922d5c"
+  },
+  {
+    "path": "focused-controls/suite-valid/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "focused-controls/suite-valid/case.pptx",
+    "bytes": 150,
+    "sha256": "56a8b2f463b9e414651f8debf7f6ff6c7ad4a71f7ae2a2cc91cf96a714e0db35"
+  },
+  {
+    "path": "focused-controls/suite-valid/suite.json",
+    "bytes": 1283,
+    "sha256": "e29de614c75cd999137a6eefe959d0aafe9b692407425ce44054d3ecf233d623"
+  },
+  {
+    "path": "focused-controls/survey100-slide-01.png",
+    "bytes": 1,
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+  },
+  {
+    "path": "focused-controls/survey92-slide-01.png",
+    "bytes": 1,
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+  },
+  {
+    "path": "focused-controls/timeout-61.log",
+    "bytes": 460,
+    "sha256": "5d3dfe2e55021ce0b4a0b61658b5bebd0e11850ec10800ba57f6fc02ea8b0365"
+  },
+  {
+    "path": "focused-controls/too-large.log",
+    "bytes": 399,
+    "sha256": "ac5a54902d001d84634fa310381849681e9ba3cf4ce6e1f22b86b109f4cf7c18"
+  },
+  {
+    "path": "focused-controls/too-many-entries.log",
+    "bytes": 429,
+    "sha256": "84447d163ad49c5bfa9f919732fedf0178962ca1907b3048d7e93c4870029b03"
+  },
+  {
+    "path": "focused-controls/two.pptx",
+    "bytes": 278,
+    "sha256": "14988191d7aa8e62277133cc500e9d65fc887413e86406bcb62ee6f9fc638b75"
+  },
+  {
+    "path": "focused-controls/unsupported.ps1",
+    "bytes": 30,
+    "sha256": "cdc0d9e16e33a1be523c5992f67ff8caf9997a0a6c5a37b89468a7eec7f5250e"
+  },
+  {
+    "path": "focused-controls/valid.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "focused-controls/zero.pptx",
+    "bytes": 160,
+    "sha256": "a89f0a1e58dec890f90ac8cb7bf4aaa23ec1d85db915188754e721b9c8ce3e5d"
+  },
+  {
+    "path": "mapped-controls/actions.log",
+    "bytes": 439,
+    "sha256": "1987cce211fa0a82b39fed7abd7a2a1836f4eb3456bf2de2230a3cd7eb1526d9"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/furniture-harness.log",
+    "bytes": 228,
+    "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json",
+    "bytes": 310158,
+    "sha256": "2ed48403eb4ce3722fb05b8af43b78b9973e647b6adb0909c31d16c39718c2b6"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/close-failure.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/copy-failure.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/copy-identity-change.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/empty-list.json",
+    "bytes": 7,
+    "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/existing-output-saved.pptx",
+    "bytes": 13,
+    "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/existing-output.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/foreign-at-adoption.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/foreign-at-quit.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/fractional-move-index.json",
+    "bytes": 55,
+    "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-common-op-array.json",
+    "bytes": 81,
+    "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-common-op-null.json",
+    "bytes": 73,
+    "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-common-op-number.json",
+    "bytes": 70,
+    "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-common-shape-array.json",
+    "bytes": 81,
+    "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-common-shape-null.json",
+    "bytes": 71,
+    "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-common-shape-number.json",
+    "bytes": 68,
+    "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-common-slide-array.json",
+    "bytes": 81,
+    "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-common-slide-null.json",
+    "bytes": 82,
+    "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/legacy-text-array.json",
+    "bytes": 81,
+    "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/malformed-json.json",
+    "bytes": 6,
+    "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/move-index-four.json",
+    "bytes": 53,
+    "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/multi-empty-alt.json",
+    "bytes": 204,
+    "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/non-list-root.json",
+    "bytes": 51,
+    "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/null-entry.json",
+    "bytes": 11,
+    "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/numeric-target.json",
+    "bytes": 98,
+    "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/numeric-text.json",
+    "bytes": 69,
+    "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-chartName-array.json",
+    "bytes": 185,
+    "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-chartName-empty.json",
+    "bytes": 172,
+    "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-chartName-number.json",
+    "bytes": 171,
+    "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-chartName-too-long.json",
+    "bytes": 428,
+    "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-common-op-array.json",
+    "bytes": 185,
+    "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-common-op-null.json",
+    "bytes": 166,
+    "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-common-op-number.json",
+    "bytes": 163,
+    "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-common-shape-array.json",
+    "bytes": 185,
+    "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-common-shape-null.json",
+    "bytes": 175,
+    "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-common-shape-number.json",
+    "bytes": 172,
+    "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-common-slide-array.json",
+    "bytes": 185,
+    "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-common-slide-null.json",
+    "bytes": 186,
+    "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-edge-array.json",
+    "bytes": 185,
+    "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-edge-case.json",
+    "bytes": 183,
+    "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-edge-unsupported.json",
+    "bytes": 181,
+    "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-index-upper-bound.json",
+    "bytes": 187,
+    "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-kind-array.json",
+    "bytes": 185,
+    "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-kind-case.json",
+    "bytes": 183,
+    "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+    "bytes": 191,
+    "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-kind-marker.json",
+    "bytes": 183,
+    "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-kind-slice.json",
+    "bytes": 182,
+    "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-kind-unsupported.json",
+    "bytes": 182,
+    "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-kind-vertical-bar.json",
+    "bytes": 189,
+    "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-missing-chartKind.json",
+    "bytes": 162,
+    "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-missing-chartName.json",
+    "bytes": 157,
+    "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-missing-edge.json",
+    "bytes": 167,
+    "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-missing-pointIndex.json",
+    "bytes": 168,
+    "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-missing-seriesIndex.json",
+    "bytes": 167,
+    "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-missing-valueSign.json",
+    "bytes": 169,
+    "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-array.json",
+    "bytes": 185,
+    "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-boolean.json",
+    "bytes": 186,
+    "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-fraction.json",
+    "bytes": 185,
+    "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-negative.json",
+    "bytes": 184,
+    "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-null.json",
+    "bytes": 186,
+    "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-string.json",
+    "bytes": 185,
+    "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-too-high.json",
+    "bytes": 185,
+    "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-pointIndex-zero.json",
+    "bytes": 183,
+    "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-array.json",
+    "bytes": 185,
+    "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+    "bytes": 186,
+    "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+    "bytes": 185,
+    "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-negative.json",
+    "bytes": 184,
+    "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-null.json",
+    "bytes": 186,
+    "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-string.json",
+    "bytes": 185,
+    "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+    "bytes": 185,
+    "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-seriesIndex-zero.json",
+    "bytes": 183,
+    "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-shapeName-array.json",
+    "bytes": 185,
+    "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-shapeName-empty.json",
+    "bytes": 173,
+    "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-sign-array.json",
+    "bytes": 185,
+    "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-sign-boolean.json",
+    "bytes": 186,
+    "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-sign-fraction.json",
+    "bytes": 185,
+    "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-sign-string.json",
+    "bytes": 185,
+    "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-sign-too-high.json",
+    "bytes": 183,
+    "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-sign-too-low.json",
+    "bytes": 184,
+    "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-unknown-field.json",
+    "bytes": 197,
+    "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/point-zero-sign.json",
+    "bytes": 183,
+    "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/quit-failure.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/same-path.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/serialized-curved-refusal.json",
+    "bytes": 9449,
+    "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/singleton-empty-text.json",
+    "bytes": 75,
+    "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/slide-index-four.json",
+    "bytes": 63,
+    "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/slide-index-zero.json",
+    "bytes": 63,
+    "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/string-slide-index.json",
+    "bytes": 76,
+    "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-bool-size.json",
+    "bytes": 87,
+    "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-both.json",
+    "bytes": 104,
+    "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-color.json",
+    "bytes": 88,
+    "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-empty.json",
+    "bytes": 71,
+    "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-extra-key.json",
+    "bytes": 106,
+    "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-hash-color.json",
+    "bytes": 89,
+    "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-overflow.json",
+    "bytes": 88,
+    "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-reference-color.json",
+    "bytes": 89,
+    "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-short-color.json",
+    "bytes": 86,
+    "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-size.json",
+    "bytes": 85,
+    "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-string-size.json",
+    "bytes": 87,
+    "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-too-big.json",
+    "bytes": 85,
+    "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/style-zero.json",
+    "bytes": 84,
+    "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/success-saved.pptx",
+    "bytes": 23,
+    "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/success.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/twenty-one-actions.json",
+    "bytes": 2003,
+    "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/unknown-operation.json",
+    "bytes": 63,
+    "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/unknown-property.json",
+    "bytes": 92,
+    "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/unowned-quit.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/writable-open.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/wrong-close-owner.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/furniture.json.plans/wrong-open-path.pptx",
+    "bytes": 8,
+    "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/failure/owned worker with spaces.ps1",
+    "bytes": 55,
+    "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/failure/worker.json",
+    "bytes": 342,
+    "sha256": "cde28309cd792900395542299867067ac1542cd214403163e823befbedf438be"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/failure/worker.stderr.log",
+    "bytes": 340,
+    "sha256": "d15199eccb1f1373a3727662e7e8cc85b95d7b63a8a5a9e3668c6e4708df6c67"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/failure/worker.stdout.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/report.json",
+    "bytes": 1745,
+    "sha256": "e9f013f45e9256f7c9f74141eaebc22fa9fa38c37d69457d01608c51757d8ba5"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/success/owned worker with spaces.ps1",
+    "bytes": 55,
+    "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/success/worker.json",
+    "bytes": 341,
+    "sha256": "904afe32a2eb2b4f5a668d3d875f9ffd971f23334786b62c80a015f8d70bb66f"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/success/worker.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/success/worker.stdout.log",
+    "bytes": 52,
+    "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/timeout/owned worker with spaces.ps1",
+    "bytes": 133,
+    "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/timeout/worker.json",
+    "bytes": 340,
+    "sha256": "682ef6f6c3384d078e644a32179d99220def2e1851689239015dadf53fd055a4"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/timeout/worker.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/harness/process/timeout/worker.stdout.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/inputs/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/inputs/case.pptx",
+    "bytes": 150,
+    "sha256": "6132c2a5a129be7643df36b51664a39ba65c477574b1b02ebca74636ddb8808b"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/process-check.log",
+    "bytes": 280,
+    "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+  },
+  {
+    "path": "mapped-controls/attempt-valid/runner.json",
+    "bytes": 6857,
+    "sha256": "6d00ad935ac85cb21a108468b731f3b3f270f133e7a3c7ea7082f04ada9d2f85"
+  },
+  {
+    "path": "mapped-controls/bad-zip.log",
+    "bytes": 313,
+    "sha256": "b8bf2183c7b95b164bf3fb104da80c63969c758f675cb287e57b1360b06b863e"
+  },
+  {
+    "path": "mapped-controls/bad.pptx",
+    "bytes": 9,
+    "sha256": "91e19e7364481599c9722ad21ec9cec4f4ac26b3dd2c0af221e7896a2c31062b"
+  },
+  {
+    "path": "mapped-controls/controls.json",
+    "bytes": 4085,
+    "sha256": "1277f9f590429fb8f836f8ed9b9ae3043f7ca65322dfce458367bc0caeb68cb7"
+  },
+  {
+    "path": "mapped-controls/declared-boolean.log",
+    "bytes": 491,
+    "sha256": "db1010ec93786b0f7fde805063f055fd0252e423cfdabac08207a9a6e1e253cb"
+  },
+  {
+    "path": "mapped-controls/declared-string.log",
+    "bytes": 491,
+    "sha256": "db1010ec93786b0f7fde805063f055fd0252e423cfdabac08207a9a6e1e253cb"
+  },
+  {
+    "path": "mapped-controls/declared-two.log",
+    "bytes": 491,
+    "sha256": "db1010ec93786b0f7fde805063f055fd0252e423cfdabac08207a9a6e1e253cb"
+  },
+  {
+    "path": "mapped-controls/default30-slide-01.png",
+    "bytes": 1,
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+  },
+  {
+    "path": "mapped-controls/entries.pptx",
+    "bytes": 440298,
+    "sha256": "f3da0a054a176f0f5fd334416a8c033006954d781b8cd63556e77893a57f7ec0"
+  },
+  {
+    "path": "mapped-controls/large.pptx",
+    "bytes": 16777217,
+    "sha256": "1003b1b5dc078189799a1216ce0f9fbcebb94e8b6b83c58c4b03345f07f94ced"
+  },
+  {
+    "path": "mapped-controls/one.pptx",
+    "bytes": 150,
+    "sha256": "6132c2a5a129be7643df36b51664a39ba65c477574b1b02ebca74636ddb8808b"
+  },
+  {
+    "path": "mapped-controls/physical-two.log",
+    "bytes": 422,
+    "sha256": "05bc1c84cd4f3a5d53b035562870f3b3828ea494e5f8ecfc13b32a6ee7f4e8db"
+  },
+  {
+    "path": "mapped-controls/pure-report.json",
+    "bytes": 4772,
+    "sha256": "994def5a2e434810ebb042415d48f530bb8b9842fcdb653b5182cfaba70f8537"
+  },
+  {
+    "path": "mapped-controls/pure.log",
+    "bytes": 68,
+    "sha256": "71093606a8f050dbddec7f964c9db1332fa5e7faa1e1bd846b9a1e3dd5c2dfa5"
+  },
+  {
+    "path": "mapped-controls/pure.ps1",
+    "bytes": 4336,
+    "sha256": "b8d67fdd2aaf365fbbc62de807fa6616cdfe6a367ee54e0e9a1f8944f8a47675"
+  },
+  {
+    "path": "mapped-controls/request-false-true.log",
+    "bytes": 501,
+    "sha256": "e837cf3f6d87c4bb6ee479e8d00a1345d2bc4d5b6357e3d4a00bb03b87845ae2"
+  },
+  {
+    "path": "mapped-controls/request-false-true/request.json",
+    "bytes": 48,
+    "sha256": "eb13b0d0329ab5ef1c0a717c709e9ad7919b84471a3bf4286ff7c4f1fade3349"
+  },
+  {
+    "path": "mapped-controls/request-true-false.log",
+    "bytes": 501,
+    "sha256": "e837cf3f6d87c4bb6ee479e8d00a1345d2bc4d5b6357e3d4a00bb03b87845ae2"
+  },
+  {
+    "path": "mapped-controls/request-true-false/request.json",
+    "bytes": 49,
+    "sha256": "3a3140e8aa951ceb3c871570b9a0bbc48326e9973c6ec2ba3d4f8acde8e8adc9"
+  },
+  {
+    "path": "mapped-controls/request-true-true.log",
+    "bytes": 471,
+    "sha256": "c894630b6fc61a137c1b2f7c310cf08050d0f5513851ce88afb49a632cf82d5b"
+  },
+  {
+    "path": "mapped-controls/request-true-true/request.json",
+    "bytes": 50,
+    "sha256": "1358b531339d50a240799ef6bf59d8c215426c7b60cc3490fb0edccd43a9aabd"
+  },
+  {
+    "path": "mapped-controls/suite-actions/action-plan.json",
+    "bytes": 68,
+    "sha256": "3993e29cbac8958bcc95e3554e6e63c0e1f3c2b6a8c292bbb0548ccf8ae30b1d"
+  },
+  {
+    "path": "mapped-controls/suite-actions/case.pptx",
+    "bytes": 150,
+    "sha256": "6132c2a5a129be7643df36b51664a39ba65c477574b1b02ebca74636ddb8808b"
+  },
+  {
+    "path": "mapped-controls/suite-actions/suite.json",
+    "bytes": 1284,
+    "sha256": "16dbd74a132f052e3c7d4543ea15f5e33b16ed8560330dc7452e8664d44eb5bd"
+  },
+  {
+    "path": "mapped-controls/suite-bad-zip/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-bad-zip/case.pptx",
+    "bytes": 9,
+    "sha256": "91e19e7364481599c9722ad21ec9cec4f4ac26b3dd2c0af221e7896a2c31062b"
+  },
+  {
+    "path": "mapped-controls/suite-bad-zip/suite.json",
+    "bytes": 1281,
+    "sha256": "920f2b250c423f1dca46178e50a7b919b7fae2e10832d4cda97f1e90a79558f4"
+  },
+  {
+    "path": "mapped-controls/suite-declared-boolean/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-declared-boolean/case.pptx",
+    "bytes": 150,
+    "sha256": "6132c2a5a129be7643df36b51664a39ba65c477574b1b02ebca74636ddb8808b"
+  },
+  {
+    "path": "mapped-controls/suite-declared-boolean/suite.json",
+    "bytes": 1286,
+    "sha256": "b246b7e190a16949c3a1aaae2e598c4336f0cca6f457d86890fe239f139791cb"
+  },
+  {
+    "path": "mapped-controls/suite-declared-string/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-declared-string/case.pptx",
+    "bytes": 150,
+    "sha256": "6132c2a5a129be7643df36b51664a39ba65c477574b1b02ebca74636ddb8808b"
+  },
+  {
+    "path": "mapped-controls/suite-declared-string/suite.json",
+    "bytes": 1285,
+    "sha256": "9237b47aa7b9502cea682600b0604be772579314cbbe97992656f7aa51887a93"
+  },
+  {
+    "path": "mapped-controls/suite-declared-two/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-declared-two/case.pptx",
+    "bytes": 150,
+    "sha256": "6132c2a5a129be7643df36b51664a39ba65c477574b1b02ebca74636ddb8808b"
+  },
+  {
+    "path": "mapped-controls/suite-declared-two/suite.json",
+    "bytes": 1283,
+    "sha256": "c5198b5a99f4869450d5ba711b1f2c6aec867ad17c83d7adf65f72368b046803"
+  },
+  {
+    "path": "mapped-controls/suite-physical-two/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-physical-two/case.pptx",
+    "bytes": 278,
+    "sha256": "f310613ddddebd865dc8851e8dafaa431c6124a476910d75e6d20d3ccce39312"
+  },
+  {
+    "path": "mapped-controls/suite-physical-two/suite.json",
+    "bytes": 1283,
+    "sha256": "8f779cb1b22e721e1320c2fb1e661c6e5a9437e236bde07805ce2676810ebec4"
+  },
+  {
+    "path": "mapped-controls/suite-timeout-61/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-timeout-61/case.pptx",
+    "bytes": 150,
+    "sha256": "6132c2a5a129be7643df36b51664a39ba65c477574b1b02ebca74636ddb8808b"
+  },
+  {
+    "path": "mapped-controls/suite-timeout-61/suite.json",
+    "bytes": 1283,
+    "sha256": "a6002d5349f247275f54012a8b2235d5e7e9f3658d6b06728f5d3d8d660e13a3"
+  },
+  {
+    "path": "mapped-controls/suite-too-large/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-too-large/case.pptx",
+    "bytes": 16777217,
+    "sha256": "1003b1b5dc078189799a1216ce0f9fbcebb94e8b6b83c58c4b03345f07f94ced"
+  },
+  {
+    "path": "mapped-controls/suite-too-large/suite.json",
+    "bytes": 1288,
+    "sha256": "a7489a16245dda2f3fb0f183f613cbe0248add5e90f79ca4ec83c52ec9287f1e"
+  },
+  {
+    "path": "mapped-controls/suite-too-many-entries/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-too-many-entries/case.pptx",
+    "bytes": 440298,
+    "sha256": "f3da0a054a176f0f5fd334416a8c033006954d781b8cd63556e77893a57f7ec0"
+  },
+  {
+    "path": "mapped-controls/suite-too-many-entries/suite.json",
+    "bytes": 1286,
+    "sha256": "96a30e8d6c2349a6e02e92ac2a216f886b4cadfd9de11688c7697f0054befc3f"
+  },
+  {
+    "path": "mapped-controls/suite-valid/action-plan.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "mapped-controls/suite-valid/case.pptx",
+    "bytes": 150,
+    "sha256": "6132c2a5a129be7643df36b51664a39ba65c477574b1b02ebca74636ddb8808b"
+  },
+  {
+    "path": "mapped-controls/suite-valid/suite.json",
+    "bytes": 1283,
+    "sha256": "a6002d5349f247275f54012a8b2235d5e7e9f3658d6b06728f5d3d8d660e13a3"
+  },
+  {
+    "path": "mapped-controls/survey100-slide-01.png",
+    "bytes": 1,
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+  },
+  {
+    "path": "mapped-controls/survey92-slide-01.png",
+    "bytes": 1,
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+  },
+  {
+    "path": "mapped-controls/timeout-61.log",
+    "bytes": 460,
+    "sha256": "5d3dfe2e55021ce0b4a0b61658b5bebd0e11850ec10800ba57f6fc02ea8b0365"
+  },
+  {
+    "path": "mapped-controls/too-large.log",
+    "bytes": 399,
+    "sha256": "ac5a54902d001d84634fa310381849681e9ba3cf4ce6e1f22b86b109f4cf7c18"
+  },
+  {
+    "path": "mapped-controls/too-many-entries.log",
+    "bytes": 429,
+    "sha256": "84447d163ad49c5bfa9f919732fedf0178962ca1907b3048d7e93c4870029b03"
+  },
+  {
+    "path": "mapped-controls/two.pptx",
+    "bytes": 278,
+    "sha256": "f310613ddddebd865dc8851e8dafaa431c6124a476910d75e6d20d3ccce39312"
+  },
+  {
+    "path": "mapped-controls/unsupported.ps1",
+    "bytes": 30,
+    "sha256": "cdc0d9e16e33a1be523c5992f67ff8caf9997a0a6c5a37b89468a7eec7f5250e"
+  },
+  {
+    "path": "mapped-controls/valid.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "mapped-controls/zero.pptx",
+    "bytes": 160,
+    "sha256": "d7820b9382bc00341b0c1b87eff8c6c51e5664af17b95fe604f6fa56e0f4fea9"
+  },
+  {
+    "path": "raw/baseline-regex.exit.json",
+    "bytes": 108,
+    "sha256": "a4d112afaf98e65a601b6ce13335fcabc82d07944cc38bcbb835f7639dcc2803"
+  },
+  {
+    "path": "raw/baseline-regex.log",
+    "bytes": 1116,
+    "sha256": "ae033ae17f61f5cdc30566ecb01140dd049a41467308bd7596aeffaf75c5ea0c"
+  },
+  {
+    "path": "raw/baseline-regex.mjs",
+    "bytes": 318,
+    "sha256": "1961450e5934abc627f4aceb900fb15ebf773d42978d7cc674c15d8c4c29586a"
+  },
+  {
+    "path": "raw/biome-01.log",
+    "bytes": 1276,
+    "sha256": "faab2f9b696d564b51cfdbceba71218e98d0f6034b9270cbf063963dd85154b3"
+  },
+  {
+    "path": "raw/focused-01.exit.json",
+    "bytes": 463,
+    "sha256": "386445126cd9d5fc22e585cc33fd21f50e54a0ee668bc34be3526b5b0d994fa4"
+  },
+  {
+    "path": "raw/focused-01.log",
+    "bytes": 288,
+    "sha256": "29cd664075d19b47ccc49e78578a3fbf2d8ad11a833616deb72dc3ac432eea58"
+  },
+  {
+    "path": "raw/hydration.json",
+    "bytes": 514578,
+    "sha256": "3599186bef0fa806b5e54e78224b7112b2517e88408eb54fa931aec38d6f9048"
+  },
+  {
+    "path": "raw/install.log",
+    "bytes": 4611,
+    "sha256": "44bd5698a177ef757c0be81bdd08a3adebc4d857706f9ee04fce054d286a1abf"
+  },
+  {
+    "path": "raw/mapped-01-steps/biome.log",
+    "bytes": 703,
+    "sha256": "5e99f1d16f4c5213413779744a396de0dae2855010834c9d8d9ee04e317cea69"
+  },
+  {
+    "path": "raw/mapped-01-steps/build.log",
+    "bytes": 14550,
+    "sha256": "065ce965c642c12fc5acd8b5fbd4608fe34dca59dc6174130b0a8ed900e06887"
+  },
+  {
+    "path": "raw/mapped-01-steps/pnpm_run_check_changes.log",
+    "bytes": 2632,
+    "sha256": "8448781d30ced9b18dcc4e2d520eefeec0bb6e788743a811216dad63d248b06e"
+  },
+  {
+    "path": "raw/mapped-01-steps/pnpm_run_check_font-hotlinks.log",
+    "bytes": 878,
+    "sha256": "fe196c6f27e0ad477b0fc63d0f626cc47621c65f4818f82de96ccf26802ebc90"
+  },
+  {
+    "path": "raw/mapped-01-steps/pnpm_run_check_gallery-tracker.log",
+    "bytes": 1983,
+    "sha256": "1ada473e84048c1e9fd40f09ce7b465586a0180005860dacec138e7765e55b8c"
+  },
+  {
+    "path": "raw/mapped-01-steps/pnpm_run_check_release-report.log",
+    "bytes": 806,
+    "sha256": "cabe3a0f3387190a59a6ef1fd5ed274e2670cadce3a564c5f4be28ad14705b67"
+  },
+  {
+    "path": "raw/mapped-01-steps/pnpm_run_check_skill-commands.log",
+    "bytes": 1031,
+    "sha256": "4c9edd4871c25c47654f7d6aab8c4d996d5a8d437b445d123a84bcd9d80666dc"
+  },
+  {
+    "path": "raw/mapped-01-steps/pnpm_run_check_stability.log",
+    "bytes": 3960,
+    "sha256": "3543182f8214b82d9e561dc0275ae0226a28d6d9155b0ba94e46022c45a1a01d"
+  },
+  {
+    "path": "raw/mapped-01-steps/pnpm_run_check_text.log",
+    "bytes": 1066,
+    "sha256": "b1f709d3a330e2f31eddb27ac08802342d288f07465f70cfd96a76d23655c20b"
+  },
+  {
+    "path": "raw/mapped-01-steps/tests_pptx.log",
+    "bytes": 1087,
+    "sha256": "56ea5a685757346e0add69cad7c7f4bd58c85a251cde5b5db5b636951a8ae584"
+  },
+  {
+    "path": "raw/mapped-01.exit.json",
+    "bytes": 436,
+    "sha256": "ec7ae65cc61f0e56070a21af86e90dfacb371518514322bb07785c54efd164f7"
+  },
+  {
+    "path": "raw/mapped-01.log",
+    "bytes": 1329,
+    "sha256": "f94b51466ae371de03df201d7eb8cf3fd25c637ac9d5bb1ca0b6f4771de719b1"
+  },
+  {
+    "path": "raw/original-log.json",
+    "bytes": 296,
+    "sha256": "a7c56ee515eeb82daa00e5b2d44a6a634ad2c281aebcf60f599b3e1b852fc8d9"
+  }
+]

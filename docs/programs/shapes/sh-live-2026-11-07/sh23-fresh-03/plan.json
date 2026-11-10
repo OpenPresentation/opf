@@ -1,0 +1,11 @@
+{
+    "cases":  [
+                  {
+                      "initialCount":  8,
+                      "sha256":  "e2acbeb79cc46ae09929276d2009a218841c67b86a0591c5cc79d3d6ce654750",
+                      "ninthShapes":  18,
+                      "source":  "C:\\opf-work\\sh20-23-review\\artifacts\\sh23-fresh-03\\pyramid.pptx"
+                  }
+              ],
+    "scope":  "Plan only: no output directory, process or COM object created."
+}

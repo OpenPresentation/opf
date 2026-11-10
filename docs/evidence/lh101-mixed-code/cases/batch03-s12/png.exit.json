@@ -1,0 +1,13 @@
+{
+  "args": [
+    "packages/cli/dist/index.js",
+    "convert",
+    "C:/opf-work/lh101-mixed-code-after-03/cases/batch03-s12/source.opf.json",
+    "C:/opf-work/lh101-mixed-code-after-03/preview/batch03-s12/slide-{n}.png",
+    "--date",
+    "2026-11-08",
+    "--keep-slides",
+    "--include-hidden"
+  ],
+  "status": 0
+}

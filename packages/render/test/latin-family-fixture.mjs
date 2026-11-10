@@ -2,7 +2,7 @@
 // policy names (the proprietary Latin families that route to a bundled open face, the open Latin families, and the metric aliases
 // Liberation Sans, Serif and Mono and Source Sans Pro), it says which face each of the four styles must draw, from the policy row
 // and the pinned manifest alone: the route family, the face of it that a style resolves to (italic before weight, nearest weight,
-// ties to the lighter, the row's encoded weight kept for the regular style and raised for bold), the manifest file that holds it
+// ties to the lighter, the row's encoded weight kept for regular and modest Light/Semilight emphasis), the manifest file that holds it
 // and whether the registry loads it eagerly or on demand. Nothing here calls the registry, so the hosts are checked against it.
 import {BUNDLED_FONT_MANIFEST} from '../dist/fonts-node.js';
 import {FONT_POLICY, disabledFeaturesFor} from '../dist/fonts.js';
@@ -43,7 +43,10 @@ export function latinFamilies() {
 
 /** The face a style resolves to inside the route family, following the registry's rule. */
 export function expectedFace(entry, weight, italic) {
-  const wanted = entry.weight ? (weight >= 600 ? Math.max(entry.weight, 700) : entry.weight) : weight;
+  // LH-177's native-reviewed contract: bold on a named lightweight family is 400;
+  // a directly authored parent family still selects its ordinary 700 face.
+  const lightEmphasis = entry.weight && entry.weight < 400 && weight >= 600;
+  const wanted = lightEmphasis ? 400 : entry.weight ? (weight >= 600 ? Math.max(entry.weight, 700) : entry.weight) : weight;
   const upright = entry.faces.filter(face => !face.italic), slanted = entry.faces.filter(face => face.italic);
   const pool = italic && slanted.length ? slanted : upright;
   const face = [...pool].sort((a, b) => Math.abs(a.weight - wanted) - Math.abs(b.weight - wanted) || a.weight - b.weight)[0];
@@ -53,9 +56,11 @@ export function expectedFace(entry, weight, italic) {
 /**
  * The face one run of the family deck draws. The deck's role styles resolve once, to the replacement family, so a run that is not
  * bold keeps the weight the family names (Arial Black draws Montserrat 900, Segoe UI Semibold Red Hat Display 600), and a bold run
- * resolves 700 inside the replacement family, as the composition resolves its runs.
+ * generally resolves 700 inside the replacement family. LH-177 retains a named light family's
+ * source identity for rich emphasis instead, so Light/Semilight use 400, including headings.
  */
 export function runFace(entry, {bold = false, italic = false, heading = false} = {}) {
+  if (entry.weight && entry.weight < 400) return expectedFace(entry, bold || heading ? 700 : 400, italic);
   return bold || heading && !entry.weight ? expectedFace({...entry, weight: undefined}, 700, italic) : expectedFace(entry, heading ? 700 : 400, italic);
 }
 export const RUNS = [['Regular', {}], ['Bold', {bold: true}], ['Italic', {italic: true}], ['BoldItalic', {bold: true, italic: true}]];

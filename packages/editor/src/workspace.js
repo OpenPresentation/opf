@@ -456,8 +456,10 @@ export function createOpfEditor(element, options = {}) {
   }
   // ---- navigation and the refresh loop ----------------------------------------------------------------------------------------
   function renderViews(deck) {
+    // Only the slide manager and active sorter consume this cache. A slots host
+    // can have a canvas and lazy strip without either; the strip owns its cache.
     // The Studio's filmstrip draws the thumbnails it shows itself, as they scroll in.
-    if (!studioLayout) thumbnailCache?.prepare(deck);
+    if (!studioLayout && (slideManager || (activeView === "sorter" && sorter))) thumbnailCache?.prepare(deck);
     slideManager?.render();
     if (activeView === "sorter") sorter?.render();
     if (activeView === "outline") outline?.render();
@@ -516,6 +518,8 @@ export function createOpfEditor(element, options = {}) {
         fontsPending = false;
         if (loaded) {
           thumbnailCache?.clear();
+          // The fonts handle also prepares lazy icons, shapes and diagram engines; all change derived review geometry.
+          review?.invalidate();
           emit("fonts", { state: "ready" });
           if (/Loading fonts/.test(statusText)) say(MESSAGES.ready);
         }
@@ -526,6 +530,8 @@ export function createOpfEditor(element, options = {}) {
         }
       },
       failed: (error) => {
+        // Earlier verified resources may have committed before a later one failed; a different complete deck can have no pending load.
+        review?.invalidate();
         fontsFailure = error;
         emit("fonts", { state: "error", error });
         say(error.message);
@@ -1037,12 +1043,17 @@ export function createOpfEditor(element, options = {}) {
   function mountReview() {
     const configured = typeof options.review === "object" ? options.review : {};
     const { hook, ...panelOptions } = configured;
+    let reviewDeck;
+    const reviewMeasurement = (index) => layoutFor(reviewDeck, index).fonts.textMeasurement;
     review = createReviewPanel(slots.review, {
       ...panelOptions,
       editor: ui,
       getSlideIndex: () => slideIndex,
       // The layout checks measure text with the fonts the canvas draws with, script-aware per slide.
-      getValidateOptions: (deck) => (fonts?.textMeasurement ? { fonts: { textMeasurement: (index) => layoutFor(deck, index).fonts.textMeasurement } } : {}),
+      getValidateOptions: (deck) => {
+        reviewDeck = deck;
+        return fonts?.textMeasurement ? { fonts: { textMeasurement: reviewMeasurement } } : {};
+      },
       // The workspace re-checks after it has redrawn, so the faces are loaded and the checks measure what the canvas shows.
       autoRefresh: false,
       ...(hook ? { review: hook } : {}),

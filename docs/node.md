@@ -217,11 +217,13 @@ Every error has a `code`; branch on it, never on the message.
 | Class | Codes |
 | --- | --- |
 | `OPFApiError` (the base class) | `node-only` (the browser-safe build), `invalid-option`, `input-not-found`, `input-unreadable`, `invalid-presentation` (a deck written as a deck), `output-exists`, `output-not-file`, `output-unwritable` |
-| `OPFExportError` | the export step: `peer-not-installed` (the message carries the install command; `details` the package and range), `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed`, a font code |
+| `OPFExportError` | the export step: `peer-not-installed` (the message carries the install command; `details` the package and range), `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `layout-overflow` (strict composition), `export-failed`, a font code |
 | `OPFImportError` | the import step and `open` of a PowerPoint file: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `import-failed`, `invalid-presentation` |
 | `OPFValidationError` | `open` and `save` of an invalid deck; also thrown by core's `parse` and `assertValid` |
 
-`findings` on an error holds the located findings of the failed step.
+An engine failure with its own string `code` keeps that code; `export-failed` and `import-failed` are fallbacks for errors without one. For example, strict composition rejects with `OPFExportError` and code `layout-overflow`, retaining the original `OPFCompositionError` and its located `diagnostics` on `error.cause`.
+
+`findings` on an error holds any located findings supplied by the failed step.
 
 ## Fonts, determinism and the network
 

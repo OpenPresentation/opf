@@ -1,0 +1,124 @@
+{
+  "source": "6c426406b29db6b899c7d9c4342824f72a631454",
+  "tree": "6bf69152b205ede9aa5bb07c68b9641416b6cafc",
+  "node": "v24.20.0",
+  "focused": {
+    "tests": 38,
+    "pass": 38,
+    "fail": 0,
+    "log": "artifacts/reference-lines/final-focused-auto.log"
+  },
+  "qualification": "FOCUSED_PASS_REQUIRED_GATE_HELD",
+  "nativeAcceptance": false,
+  "requiredGate": "Coordinator holds heavy gate until existing check and quiet performance windows finish; ONE combined source gate still owed.",
+  "setupRefusals": [
+    "Initial auto-value control retained global delete1, hiding its flag; corrected to delete0.",
+    "Initial manual placement rewrite targeted only top label and could be a no-op; now every adversarial rewrite asserts actual mutation.",
+    "First pure reader probe lacked theme context for a default scheme stroke; corrected explicit RGB probe isolates the actual auto-label bug."
+  ],
+  "classifierComparison": {
+    "path": "artifacts/reference-lines/auto-label-classifier-rgb-receipt.json",
+    "scope": "pure exact-Git270 reader versus current reader, not an old whole runtime/native qualification"
+  },
+  "runtime": [
+    {
+      "name": "index.js",
+      "sourceSha256": "8e11637c2d03a5a059250d37481741e6bb449b366e8d71c36e61170b0406241d",
+      "distSha256": "8e11637c2d03a5a059250d37481741e6bb449b366e8d71c36e61170b0406241d"
+    },
+    {
+      "name": "chart-references.js",
+      "sourceSha256": "d90b9168041d32dc97926ceb0e6f7ba3d37dee4ce5cc68733e6bcf2c67dfb35d",
+      "distSha256": "d90b9168041d32dc97926ceb0e6f7ba3d37dee4ce5cc68733e6bcf2c67dfb35d"
+    },
+    {
+      "name": "chart-marks.js",
+      "sourceSha256": "feb9459b478816a5cfef45ac45245b81d627cf06d27301ae720705d3ea7d1cb3",
+      "distSha256": "feb9459b478816a5cfef45ac45245b81d627cf06d27301ae720705d3ea7d1cb3"
+    },
+    {
+      "name": "data-provenance.js",
+      "sourceSha256": "60c5494430a58829755d33f2ec5da2f47679fbcb30f4815e74ffac5b2b3a1cf8",
+      "distSha256": "60c5494430a58829755d33f2ec5da2f47679fbcb30f4815e74ffac5b2b3a1cf8"
+    }
+  ],
+  "files": [
+    {
+      "path": "artifacts/reference-lines/auto-label-after-corrected.log",
+      "bytes": 4074,
+      "sha256": "b5dd11f8acfb2ce62acf055e58f6593f7b173c765f7d594948a33d4113f411c0"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-after.log",
+      "bytes": 4996,
+      "sha256": "922c8fc1bfd680c691d8168fad14ae7c356c48afd0006a8e2757d521943e65d9"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-before.log",
+      "bytes": 1225,
+      "sha256": "b23cd1a06c28128b4eecebaf5af90bc319bf7e1f32fab9377d89cdb119f7c49c"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-classifier-02.log",
+      "bytes": 956,
+      "sha256": "e03cbbb1cce8bc424209682de2d12bcf21e3046fbf3d86a63d98d3014d9e3259"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-classifier-initial.mjs",
+      "bytes": 2460,
+      "sha256": "47a3e6a4c4570dd70bd1cc525f71e3797cd467ce967076128951509da30abf4e"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-classifier-rgb-receipt.json",
+      "bytes": 1048,
+      "sha256": "e4bc68b34ddf334e4f2016de0a782f96fd7a38a0254eb3bca4d2a68231fa70c9"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-classifier.log",
+      "bytes": 493,
+      "sha256": "98ade48d480ee013060ffbc2cd8715aaa83f07d00f388261d9f19c841a7705f8"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-classifier.mjs",
+      "bytes": 2493,
+      "sha256": "eef47d40a7e93a559576d1c49a8d3a8da110fd40b9a60de9f51859059bbe513a"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-visible-control.xml",
+      "bytes": 8960,
+      "sha256": "8dd1acbfe705e8ebba14a10c5368f0d45150e946259aa128b731138ee136c4f3"
+    },
+    {
+      "path": "artifacts/reference-lines/auto-label-visible-rgb-control.xml",
+      "bytes": 8936,
+      "sha256": "cb98e59a8b936e02ecea1b70048ee7e23bc2286cdb8c97ad96e81b7c76791707"
+    },
+    {
+      "path": "artifacts/reference-lines/baseline270-reader.mjs",
+      "bytes": 194245,
+      "sha256": "bb2eb791d3a96175fef834dfeccba4e4a1ee7d6c596bba7eeaf6dfa5caa4e56a"
+    },
+    {
+      "path": "artifacts/reference-lines/final-build-auto.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/final-focused-auto.log",
+      "bytes": 4074,
+      "sha256": "0282cca2dd29b520fd178cdfb28cb6420a892db672ae0384d68c8c62ca86840a"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-auto-label.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    }
+  ],
+  "archive": {
+    "path": "auto-label-raw.zip",
+    "bytes": 68643,
+    "sha256": "ba4e592accfcd1f1174b6731415900c7871929ec7a1c5b7d05fafa0bfe6c64fd",
+    "members": 14,
+    "expandedBytes": 234310
+  }
+}

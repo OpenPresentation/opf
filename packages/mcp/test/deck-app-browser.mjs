@@ -64,16 +64,13 @@ window.addEventListener("message", async (event) => {
       return reply({
         protocolVersion: "2026-01-26",
         hostInfo: { name: setup.hostName ?? "test-host", version: "1.0.0" },
-        hostCapabilities: { serverTools: {}, serverResources: {}, logging: {}, openLinks: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} }, ...(setup.download ? { downloadFile: {} } : {}) },
+        hostCapabilities: { serverTools: {}, serverResources: {}, logging: {}, openLinks: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} }, ...(setup.download || setup.downloadMode ? { downloadFile: {} } : {}) },
         hostContext: { theme: setup.theme, displayMode: "inline", availableDisplayModes: ["inline", "fullscreen"], containerDimensions: { width: setup.width ?? 960, maxHeight: 640 }, platform: "web", ...(setup.variables ? { styles: { variables: setup.variables } } : {}) },
       });
     case "ui/notifications/size-changed":
       // A host gives an inline view the height it asks for, up to the maximum it named.
       if (message.params.height) frame.style.height = Math.min(640, Math.ceil(message.params.height)) + "px";
       return;
-    case "ui/download-file":
-      host.downloads.push(message.params);
-      return reply({});
     case "ui/notifications/initialized":
       initialized = true;
       send({ method: "ui/notifications/tool-input", params: { arguments: setup.arguments } });
@@ -90,6 +87,10 @@ window.addEventListener("message", async (event) => {
     case "ui/update-model-context":
       host.context.push(message.params);
       return reply({});
+    case "ui/download-file":
+      host.downloads.push(message.params);
+      if (setup.downloadMode === "rpc-error") return send({ id: message.id, error: { code: -32000, message: "Download denied by the test host" } });
+      return reply(setup.downloadMode === "denied" || setup.downloadMode === "cancelled" ? { isError: true } : {});
     case "ui/message":
       host.messages.push(message.params);
       return reply({});
@@ -121,6 +122,8 @@ const failures = [];
 try {
 	const page = await browser.newPage({ viewport: { width: 1000, height: 700 } });
 	const problems = [];
+	const browserDownloads = [];
+	page.on("download", (download) => browserDownloads.push(download.suggestedFilename()));
 	page.on("console", (message) => {
 		if (message.type() === "error" || /Content Security Policy|Refused to/.test(message.text())) problems.push(message.text());
 	});
@@ -142,6 +145,18 @@ try {
 			window.startView(setup);
 		}, { viewUrl, arguments: args, result, theme, ...host });
 		await page.waitForFunction(() => window.host.context.length > 0, null, { timeout: 60000 });
+	};
+	const probeIframeDownload = async () => page.frame({ url: /\/view$/ }).evaluate(() => {
+		window.downloadProbe = { blobs: 0, anchors: 0 };
+		const create = URL.createObjectURL.bind(URL);
+		URL.createObjectURL = (...args) => { window.downloadProbe.blobs++; return create(...args); };
+		document.addEventListener("click", (event) => {
+			if (event.target.closest?.("a[download]")) window.downloadProbe.anchors++;
+		}, true);
+	});
+	const noIframeDownload = async () => {
+		assert.deepEqual(await page.frame({ url: /\/view$/ }).evaluate(() => window.downloadProbe), { blobs: 0, anchors: 0 }, "source downloads never use an iframe Blob/anchor fallback");
+		assert.deepEqual(browserDownloads, [], "the iframe never directly downloads a file");
 	};
 
 	const run = async (name, body) => {
@@ -388,6 +403,106 @@ try {
 		assert.equal(await view().locator("#deck-wait-text").innerText(), "The assistant sent no deck.");
 		assert.equal(await view().locator(".deck-wait-slide").isVisible(), false);
 	});
+
+	const downloadDeck = {
+		name: "Download witness", language: "en-US", design: { fontScheme: "roboto" },
+		slides: [{ id: "current", title: "Current content", blocks: [{ text: "Original body." }] }],
+	};
+	await run("Download source sends the exact edited JSON, MIME and filename through the capable host", async () => {
+		await open({ document: downloadDeck, view: "both" }, "light", { downloadMode: "accepted" });
+		const expected = structuredClone(downloadDeck);
+		expected.slides[0].blocks[0].text = "The source body was edited and all of its words remain.";
+		const text = JSON.stringify(expected, null, 2);
+		const source = view().locator("#deck-source .cm-content");
+		await source.click();
+		await source.press("ControlOrMeta+A");
+		await page.keyboard.insertText(text);
+		await page.waitForFunction((body) => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === body, expected.slides[0].blocks[0].text, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, expected);
+		assert.equal(await source.innerText(), text, "the current authored source is retained exactly");
+		// Only visual line boundaries may change: every word and interior space must remain.
+		const painted = (await view().locator("#deck-canvas").innerText()).split(/\r?\n/u).map((line) => line.trim()).filter(Boolean).join(" ");
+		assert.equal(painted, expected.slides[0].title + " " + expected.slides[0].blocks[0].text);
+		await view().getByRole("button", { name: "Rename deck", exact: true }).click();
+		const filename = view().getByRole("textbox", { name: "File name", exact: true });
+		await filename.fill("Q3#1 100%");
+		await filename.press("Enter");
+		await probeIframeDownload();
+		await view().getByRole("button", { name: "Download source", exact: true }).click();
+		await noIframeDownload();
+		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
+		assert.deepEqual((await hostState()).downloads, [{ contents: [{ type: "resource", resource: { uri: "file:///Q3%231-100%25.opf.json", mimeType: "application/json", text } }] }]);
+		assert.equal(await view().locator("#deck-status").innerText(), "", "host acknowledgement does not invent a saved-file success notice");
+		await shoot("host-download-edited-json");
+		await view().locator("#deck-undo").click();
+		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === "Original body.", null, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, downloadDeck);
+		await view().locator("#deck-redo").click();
+		await page.waitForFunction((body) => window.host.context.at(-1)?.structuredContent?.document?.slides?.[0]?.blocks?.[0]?.text === body, expected.slides[0].blocks[0].text, { timeout: 15000 });
+		assert.deepEqual((await hostState()).context.at(-1).structuredContent.document, expected);
+	});
+
+	await run("host downloads preserve untouched JSON, YAML and Markdown source text and MIME", async () => {
+		for (const [format, text, mimeType, extension] of [
+			["json", '{\r\n  "name" : "Raw JSON",\r\n  "slides" : [{"title":"Raw source"}]\r\n}\r\n', "application/json", "json"],
+			["yaml", '# Keep this YAML comment\nname: Raw YAML\nslides:\n  - title: Raw source\n', "text/yaml", "yaml"],
+			["markdown", '---\nname: Raw Markdown\n---\n\n# Raw source\n\nKeep this Markdown sentence.\n', "text/markdown", "md"],
+		]) {
+			await open({ document: text, format, view: "source" }, "light", { downloadMode: "accepted" });
+			await view().locator("#deck-source .cm-editor").waitFor();
+			await probeIframeDownload();
+			await view().getByRole("button", { name: "Download source", exact: true }).click();
+			await noIframeDownload();
+			await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
+			assert.deepEqual((await hostState()).downloads, [{ contents: [{ type: "resource", resource: { uri: `file:///deck.opf.${extension}`, mimeType, text } }] }], format + ": exact source bytes and metadata");
+		}
+	});
+
+	await run("a host without download capability gets no request or iframe fallback and a visible error", async () => {
+		await open({ document: downloadDeck, view: "source" });
+		await view().locator("#deck-source .cm-editor").waitFor();
+		await probeIframeDownload();
+		// The redesigned UI hides this unsupported action. Invoke its real handler only to test the transport guard.
+		assert.equal(await view().locator(".opf-source-action-download").isVisible(), false);
+		await view().locator(".opf-source-action-download").evaluate((button) => button.click());
+		await noIframeDownload();
+		await view().locator("#deck-status").waitFor();
+		assert.match(await view().locator("#deck-status").innerText(), /host does not support.*download/i);
+		assert.deepEqual((await hostState()).downloads, []);
+		assert.equal((await hostState()).requests.includes("ui/download-file"), false);
+		await shoot("host-download-unsupported");
+	});
+
+	await run("host denial, cancellation and protocol errors remain visible failures without fallback", async () => {
+		for (const mode of ["denied", "cancelled", "rpc-error"]) {
+			await open({ document: downloadDeck, view: "source" }, "light", { downloadMode: mode });
+			await view().locator("#deck-source .cm-editor").waitFor();
+			await probeIframeDownload();
+			await view().getByRole("button", { name: "Download source", exact: true }).click();
+			await noIframeDownload();
+			await view().locator("#deck-status").waitFor();
+			assert.match(await view().locator("#deck-status").innerText(), /download failed/i);
+			assert.equal((await hostState()).downloads.length, 1);
+			if (mode !== "rpc-error") assert.match(await view().locator("#deck-status").innerText(), /cancelled or denied/i);
+			await shoot("host-download-" + mode);
+		}
+	});
+
+	await run("a capable host binary Export denial is visible and never uses an iframe download", async () => {
+		await open({ document: downloadDeck }, "light", { downloadMode: "denied" });
+		await probeIframeDownload();
+		await view().locator("#deck-export .opf-export-trigger").click();
+		await view().locator('.opf-export-item[data-format="pptx"]').click();
+		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 120000 });
+		const resource = (await hostState()).downloads[0].contents[0].resource;
+		assert.equal(resource.mimeType, "application/vnd.openxmlformats-officedocument.presentationml.presentation");
+		assert.equal(Buffer.from(resource.blob, "base64").subarray(0, 2).toString("latin1"), "PK", "the denied transfer really contains a generated PowerPoint archive");
+		await view().locator(".opf-export-status").filter({ hasText: /download failed.*cancelled or denied/i }).waitFor();
+		assert.match(await view().locator("#deck-status").innerText(), /download failed.*cancelled or denied/i);
+		await noIframeDownload();
+		await shoot("host-download-export-denied");
+	});
+
 
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);

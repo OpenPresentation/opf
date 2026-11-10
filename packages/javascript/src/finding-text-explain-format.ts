@@ -108,6 +108,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] }, mapping: { series: ["Profit"] } } },
     { title: "Revenue", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] }, mapping: { series: ["Revenue"] } } },
   ),
+  "opf/chart-reference-axis-unavailable": ex(
+    "Use axis value, or add an actual secondary line series to a combo chart before using a secondary reference.",
+    { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "secondary"}]} },
+    { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "value"}]} },
+  ),
   "opf/number-format-invalid": ex(
     "Write the format as an Excel-style pattern with a numeric part, such as `0.0`, `#,##0`, `0%` or `$#,##0.00`.",
     { title: "Revenue", table: { columns: [{ name: "Revenue", format: "units" }], rows: [[12]] } },

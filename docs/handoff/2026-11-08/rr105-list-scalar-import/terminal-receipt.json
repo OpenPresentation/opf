@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "sourceHead": "c2da92c1661a229911c586801bae6720790d6701",
+  "base": "67dd9ec10b7019cb95807f59c75186482c800f10",
+  "runtime": {
+    "node": "v24.20.0",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "sourceStayedFrozen": true,
+  "productionAndTestSha256": {
+    "packages/pptx/src/index.js": "55c1af2e162a631b32b7ef0b5756fafc74bc7f974aacf1d4981b96e53e65efb6",
+    "packages/pptx/src/content-topology.js": "8d332e0ccd231d52b9398277f35ac04513e308a6978a354e6926c47e0813318a",
+    "packages/pptx/src/document-provenance.js": "3dbe87157c3c4eee095bf7f661b28801c2ba16a702b10e5e537ba6fd3d1cf8f4",
+    "packages/pptx/src/run-colors.js": "cba18b43c81ca0d3846f695d88eb980fbdc4b033b2d792433cd09b74452175a4",
+    "packages/pptx/src/body-text-import.js": "20910a64938f7037f52bb555efd52c5af5047183fb76c81cef7a2db5207e7888",
+    "packages/pptx/test/rr-105-list-scalar-import.mjs": "c3e92e2681a64f3f7490353ce0f3323cde1cb210a734585c97410df60d2e172a"
+  },
+  "mapped": {
+    "exitCode": 1,
+    "allOtherSelectedStepsPassed": true,
+    "typecheck": "not selected",
+    "failed": "PPTX test/notes-master-theme.mjs",
+    "index": 155,
+    "discovered": 278,
+    "completedBeforeFailure": 154,
+    "notRunAfterFailure": 123,
+    "strictDeterminism": {
+      "passed": true,
+      "cases": 43,
+      "children": 45,
+      "seconds": 243,
+      "scope": "Local single-OS evidence only"
+    },
+    "firstFailurePreserved": true
+  },
+  "focusedPassed": 12,
+  "affectedCombinedPassed": 36,
+  "syntax": {
+    "files": 457,
+    "failed": 0
+  },
+  "browserBundle": {
+    "exitCode": 0,
+    "afterMappedTerminal": true
+  },
+  "baseline": {
+    "head": "67dd9ec10b7019cb95807f59c75186482c800f10",
+    "unchangedTestExitCode": 1,
+    "example": "examples/technical/multilingual-slides.opf.json",
+    "inputSha256": "c12aae7dcd89fab0ddf520ad549064f3c52cd250fd6debbd2a6f4ca683670add",
+    "archiveSha256": "12f36179e0d2556d7b57cff407f118ba3cc999097ae443ed60566c117a720528",
+    "currentCompleteArchiveByteIdentical": true,
+    "actualThemeParts": 4,
+    "appXmlThemeCount": 4,
+    "unchangedTestExpected": 2,
+    "assertionOrFixtureModified": false
+  },
+  "nativeAcceptance": false,
+  "nativeLimit": "Scalar metadata requires a new case7 native SaveCopy/import. Existing native case07 prefix display and09/10 glyph direction remain held; case11 tag-part rename language-vote drift is separately diagnosed, not fixed here.",
+  "files": {
+    "terminal-check-changed.log.gz": {
+      "sha256": "ae99f0e9d2103664f6b80b8eab16a6f25d865cef1654bf43f7ccf83847eae524",
+      "bytes": 1973,
+      "rawSha256": "d3743213acd66ad70e9cfa19e4f8877963a0dde9c95aa1bf32798934ec178ea9",
+      "rawBytes": 5248
+    },
+    "terminal-pptx.log.gz": {
+      "sha256": "50a63464847aa81393875bafc5e421e43e6ac6070e7d2b3382b865367990c678",
+      "bytes": 13925,
+      "rawSha256": "42ccf67a251a699b1d0de53653e0ebc6cd006b067cabda1e620423e25f3f2e69",
+      "rawBytes": 41154
+    },
+    "terminal-browser-build.log.gz": {
+      "sha256": "59e3af7fcb27606b7c8500172e50f4fd4187928e18072e32324f1157a2f05e5d",
+      "bytes": 1212,
+      "rawSha256": "aebe0fc5b1845e5d9a3bdfbf780733a39acc28638215bf4114a57d146cbf3d7a",
+      "rawBytes": 55348
+    },
+    "notes-master-67dd-baseline.log.gz": {
+      "sha256": "d1b36b06f8f4465a79057cc64a761568fcc72e543189ab431583548605cb5e3a",
+      "bytes": 929,
+      "rawSha256": "44e81b90172017d71fc4b39c598bbea3c404acbcf5dd61b13e7551b1f6c97ef5",
+      "rawBytes": 2429
+    },
+    "notes-master-q473-baseline.log.gz": {
+      "sha256": "7304ea065d778570dea56bd7c4733cd22447ed9890c184527cbd043d8cab702a",
+      "bytes": 932,
+      "rawSha256": "fa8f3160d65d690b5064b71b119e43052eed1abd1d7c3f72aa0d2077a9671cab",
+      "rawBytes": 2431
+    },
+    "theme67-exact.json": {
+      "sha256": "c283cddef57fc172f180356b2cc4fb5c39c810586037d2394254bf53deb3b50d",
+      "bytes": 48118,
+      "rawSha256": "c283cddef57fc172f180356b2cc4fb5c39c810586037d2394254bf53deb3b50d",
+      "rawBytes": 48118
+    },
+    "theme-c2da-exact.json": {
+      "sha256": "db098c03cef071c7126c96a9039c0120740bae62473245d49d4bfd8bc24b140a",
+      "bytes": 48129,
+      "rawSha256": "db098c03cef071c7126c96a9039c0120740bae62473245d49d4bfd8bc24b140a",
+      "rawBytes": 48129
+    },
+    "theme-count-producer.mjs": {
+      "sha256": "6ecdb5b3ceb0853479293c6fc757af798d4de124c4a139451e4f9a9472f168c6",
+      "bytes": 2031,
+      "note": "Readable LF-normalized copy; exact originally executed bytes retained in theme-count-producer-executed.mjs.gz."
+    },
+    "theme67-c2da-identical.pptx": {
+      "sha256": "12f36179e0d2556d7b57cff407f118ba3cc999097ae443ed60566c117a720528",
+      "bytes": 293441,
+      "rawSha256": "12f36179e0d2556d7b57cff407f118ba3cc999097ae443ed60566c117a720528",
+      "rawBytes": 293441
+    },
+    "theme-count-producer-executed.mjs.gz": {
+      "sha256": "62526344ed0f1b7deb2e4e5717d3b9b9896ba95f75914d5a0c10f2b19c520335",
+      "bytes": 966,
+      "rawSha256": "18573070dc06488ef850a1ecf61dd9c0c065cac5e2a5a3982e3165f32bcad41f",
+      "rawBytes": 2032
+    }
+  }
+}
