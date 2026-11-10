@@ -1,0 +1,21 @@
+{
+  "scope": "Pinned public SDK particle/type and primary documentation only; no full-XSD validation",
+  "records": [
+    {
+      "name": "sdk-drawingml.json",
+      "url": "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/main/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json",
+      "finalUrl": "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/main/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json",
+      "bytes": 809697,
+      "sha256": "e760b534c96ee02745d2a8084f1be362826da4470a85d0b0102a67c3b1678ab7",
+      "retrievedAt": "2026-11-10T05:36:16.303Z"
+    },
+    {
+      "name": "microsoft-righttoleft.html",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.righttoleft?view=openxml-3.0.1",
+      "finalUrl": "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.righttoleft?view=openxml-3.0.1",
+      "bytes": 135489,
+      "sha256": "2697c5dfc295d20c4e43432f3f3ef679d4e0d406b4b455bd6f1bb4f71bfe6369",
+      "retrievedAt": "2026-11-10T05:36:16.642Z"
+    }
+  ]
+}
