@@ -7,7 +7,7 @@ test('actual native combo default elision preserves complete resolved roles/data
  assert.deepEqual(combo(source).line,['Margin']);assert.equal(combo(document).line,undefined);
  assert.deepEqual(resolveChartData(combo(source)),resolveChartData(combo(document)));
  assert.deepEqual(resolveChartData(combo(source)).combo,[{role:'bar',axis:'primary'},{role:'line',axis:'secondary'}]);
- assert.deepEqual(compare(source,phases()),[]);assert.deepEqual(result.diagnostics,diagnostics);
+ assert.deepEqual(compare(source,phases()),[]);assert.equal(result.diagnostics.length,1);assert.equal(result.diagnostics[0].code,'chart-option-adapted');assert.equal(result.diagnostics[0].option,'series.1.line.color');
 });
 test('changed combo line roles, secondary association and explicit empty lines remain failures',()=>{
  for(const change of [c=>{c.line=['Revenue'];},c=>{c.secondaryAxis=['Revenue'];},c=>{delete c.secondaryAxis;},c=>{c.secondaryAxis=[];},c=>{c.line=[];},c=>{c.secondaryAxis=['Margin','Unknown'];}]){const imported=phases();change(combo(imported['saved-reopened'].document));assert(compare(source,imported).some(x=>x.phase==='saved-reopened'&&x.code==='import-combo-axis-association-differs'));}
