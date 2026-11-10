@@ -348,6 +348,15 @@ async function saveFile(name: string, type: string, data: Blob | string): Promis
 	}
 }
 
+// Keep named exports at the dynamic import boundary, without initializing exporters during viewer startup.
+async function loadPptxExporter() {
+	const { toPptx } = await import("@openpresentation/opf-pptx");
+	return toPptx;
+}
+async function loadPngExporter() {
+	const { toPng } = await import("@openpresentation/opf-render/export-browser");
+	return toPng;
+}
 /**
  * An editable PowerPoint file from the deck, made here with @openpresentation/opf-pptx (the exporter the playground uses), with the
  * preview's fonts and catalogs so the file matches the slides. The exporter loads only when this runs. It makes no request: a
@@ -362,7 +371,7 @@ async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgr
 	await fonts?.ensure(whole as never, { signal: request.signal, catalogs } as never);
 	check();
 	request.onProgress({ stage: "convert", done: 0, total: 1, message: "Building the PowerPoint file…" });
-	const [{ toPptx }, { toPng }] = await Promise.all([import("@openpresentation/opf-pptx"), import("@openpresentation/opf-render/export-browser")]);
+	const [toPptx, toPng] = await Promise.all([loadPptxExporter(), loadPngExporter()]);
 	const notes = new Set<string>();
 	const png = (svg: string, options: { scale?: number; background?: string }) => toPng(svg as `<${string}`, { ...options, svgSource: "data" });
 	const bytes = await toPptx(whole as never, {
