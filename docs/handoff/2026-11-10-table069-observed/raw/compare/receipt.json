@@ -1,0 +1,75 @@
+{
+  "executable": "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+  "args": [
+    "C:/opf-work/n034-current/scripts/native-acceptance/compare-table-profile.mjs",
+    "--envelope",
+    "C:/opf-work/n034-current-table-profile01/table-profile.json",
+    "--sha256",
+    "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751"
+  ],
+  "startedAt": "2026-11-10T07:17:48.934Z",
+  "endedAt": "2026-11-10T07:17:50.988Z",
+  "exitCode": 0,
+  "signal": null,
+  "error": null,
+  "OfficeCalls": 0,
+  "automaticRetry": false,
+  "profileEnvelopeSha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751",
+  "sourceHead": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "sourceClean": true,
+  "consumerUnchanged": true,
+  "preexistingNativeFilesUnchanged": true,
+  "counts": {
+    "slides": 6,
+    "cells": 72,
+    "phases": 3,
+    "imports": 9,
+    "reexports": 6,
+    "pngs": 18
+  },
+  "added": [
+    {
+      "path": "table-colors/comparison.json",
+      "bytes": 1459,
+      "sha256": "2b9e1e3021ad4ccc2c427c5db0573caed2fbf032994c589dac8f393024d096e6"
+    },
+    {
+      "path": "table-colors/table-edited-reexport-1.pptx",
+      "bytes": 40321,
+      "sha256": "a3ae64a9522c3203ec6099094be28559214968c5c80bf8e2ddff3185a607e137"
+    },
+    {
+      "path": "table-colors/table-edited-reexport-2.pptx",
+      "bytes": 40321,
+      "sha256": "a3ae64a9522c3203ec6099094be28559214968c5c80bf8e2ddff3185a607e137"
+    },
+    {
+      "path": "table-colors/table-original-reexport-1.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "table-colors/table-original-reexport-2.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "table-colors/table-saved-reexport-1.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "table-colors/table-saved-reexport-2.pptx",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "table-profile-comparison.json",
+      "bytes": 192497,
+      "sha256": "90220a93451061a620c844ee01bbfc19dc8d3f4baffa6c33cbfa36f12355411c"
+    }
+  ],
+  "scope": "Native editable table text and character colors persist through save/reopen; two additional export/import cycles preserve cell text. No formatting/geometry or raster equivalence claim for reexports.",
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}

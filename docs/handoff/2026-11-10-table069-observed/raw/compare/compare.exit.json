@@ -1,0 +1,17 @@
+{
+  "executable": "C:/Users/micha/AppData/Local/npm-cache/_npx/00a8f3ae68dc15e1/node_modules/node/bin/node.exe",
+  "args": [
+    "C:/opf-work/n034-current/scripts/native-acceptance/compare-table-profile.mjs",
+    "--envelope",
+    "C:/opf-work/n034-current-table-profile01/table-profile.json",
+    "--sha256",
+    "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751"
+  ],
+  "startedAt": "2026-11-10T07:17:48.934Z",
+  "endedAt": "2026-11-10T07:17:50.988Z",
+  "exitCode": 0,
+  "signal": null,
+  "error": null,
+  "OfficeCalls": 0,
+  "automaticRetry": false
+}

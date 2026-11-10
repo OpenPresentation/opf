@@ -1,0 +1,66 @@
+{
+  "generationSha256": "aa34f6db0374857e1307665be4461b7bd0549a32243915d6556444b34cb32ca7",
+  "nativeSha256": "5060b041cee2c51c72d24322f3f8a7f714bf55b2dd0e9eab99b1ce8fb1ba0213",
+  "slides": 6,
+  "phases": 3,
+  "cells": 72,
+  "characterColorObservations": 978,
+  "imports": [
+    {
+      "phase": "original",
+      "cycle": 0,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "original",
+      "cycle": 1,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "original",
+      "cycle": 2,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "saved",
+      "cycle": 0,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "saved",
+      "cycle": 1,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "saved",
+      "cycle": 2,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "edited",
+      "cycle": 0,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "edited",
+      "cycle": 1,
+      "slides": 6,
+      "currentCellText": true
+    },
+    {
+      "phase": "edited",
+      "cycle": 2,
+      "slides": 6,
+      "currentCellText": true
+    }
+  ],
+  "passed": true,
+  "scope": "Native editable table text and character colors persist through save/reopen; two additional export/import cycles preserve cell text. No formatting/geometry or raster equivalence claim for reexports."
+}

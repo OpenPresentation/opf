@@ -1,0 +1,507 @@
+{
+  "schemaVersion": 1,
+  "sourceHead": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "sourceDirty": false,
+  "priorPreparationEvidence": "96f894b7be3b3d6024cb324b22b9015a3390a47b",
+  "envelopeSha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751",
+  "sourceSuiteSha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29",
+  "inputSha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb",
+  "neverMerge": true,
+  "sourceInput": "public-synthetic-qualification-deck",
+  "nativeOutputs": "actual-root-PowerPoint-run-not-synthetic",
+  "childOfficeCalls": 0,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "records": [
+    {
+      "path": "raw/profile/inputs/native-process.ps1",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\inputs\\native-process.ps1",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "raw/profile/inputs/native-table-colors-v2.ps1",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\inputs\\native-table-colors-v2.ps1",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 21441,
+      "sha256": "89b66bfe6bdac36b93872ee05e2e888b19ae7ff3184c75cebc72227ad032a7cd"
+    },
+    {
+      "path": "raw/profile/inputs/suite.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\inputs\\suite.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 579228,
+      "sha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29"
+    },
+    {
+      "path": "raw/profile/inputs/table-colors.opf.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\inputs\\table-colors.opf.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 5941,
+      "sha256": "e5706ff7f2a493da1c22ab90e672904442972e579dbe2203d042ad688ef3e6ba"
+    },
+    {
+      "path": "raw/profile/runner.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\runner.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 517575,
+      "sha256": "5b19d7d3a3ab9275108e17ff267407816b86631e8a3552f96a9baf3256475ce3"
+    },
+    {
+      "path": "raw/profile/table-colors/character-probes.jsonl",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\character-probes.jsonl",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 189992,
+      "sha256": "d2e916ddb97a12849fc8bb5fdfc85864841f7e6ec1a220f9302961766c161a04"
+    },
+    {
+      "path": "raw/profile/table-colors/comparison.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\comparison.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 1459,
+      "sha256": "2b9e1e3021ad4ccc2c427c5db0573caed2fbf032994c589dac8f393024d096e6"
+    },
+    {
+      "path": "raw/profile/table-colors/edited-1.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\edited-1.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 8072,
+      "sha256": "832de14429ba4a51311359274564879ddb9c640bf1867f3b4be600a1dfe30b4b"
+    },
+    {
+      "path": "raw/profile/table-colors/edited-2.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\edited-2.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 8069,
+      "sha256": "71e4e5c849dd30388b5771dd4a2b8efb31993659da013643a15a3acc3edf2c32"
+    },
+    {
+      "path": "raw/profile/table-colors/edited-3.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\edited-3.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 8072,
+      "sha256": "9a11de5f47d8ed25497247a5a88ab944e43d157995098079d760c0c57c688311"
+    },
+    {
+      "path": "raw/profile/table-colors/edited-4.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\edited-4.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 8072,
+      "sha256": "429f5c4ed77a3907995991c94f39aef38cc95cc573adac40b50309193535954e"
+    },
+    {
+      "path": "raw/profile/table-colors/edited-5.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\edited-5.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 5837,
+      "sha256": "69aa4ae594b33b6e3b0bef8482082bd92ce25351ccd0fab271c875486eb97ed4"
+    },
+    {
+      "path": "raw/profile/table-colors/edited-6.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\edited-6.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7362,
+      "sha256": "4a28dbab41b8d5f0dfbcfd521cdb7134273068d4363e6a0ca85c03fec190535d"
+    },
+    {
+      "path": "raw/profile/table-colors/generation.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\generation.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 194989,
+      "sha256": "aa34f6db0374857e1307665be4461b7bd0549a32243915d6556444b34cb32ca7"
+    },
+    {
+      "path": "raw/profile/table-colors/native.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\native.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 850438,
+      "sha256": "5060b041cee2c51c72d24322f3f8a7f714bf55b2dd0e9eab99b1ce8fb1ba0213"
+    },
+    {
+      "path": "raw/profile/table-colors/original-1.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\original-1.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7414,
+      "sha256": "6db576afce37f856aceda63615d0d0201926b6c2855cc6045c9468990de080c2"
+    },
+    {
+      "path": "raw/profile/table-colors/original-2.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\original-2.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7415,
+      "sha256": "641855fd5f202373d6150e51ac8887cb6c7b6bd5336282fb890c712ba859d3eb"
+    },
+    {
+      "path": "raw/profile/table-colors/original-3.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\original-3.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7414,
+      "sha256": "0acecf07b2e606c9d5cdb8b9a45fcbef1ced49402b632222fa9634ea00e1dd68"
+    },
+    {
+      "path": "raw/profile/table-colors/original-4.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\original-4.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7414,
+      "sha256": "17ca4a1442ca5f8156ac3cd25106afd5b7270afae40407abd9b2548b51f86410"
+    },
+    {
+      "path": "raw/profile/table-colors/original-5.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\original-5.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 5163,
+      "sha256": "c0cc9969bceea69c604766dfbcc19c02b717ecba4252e11edd404f5726856302"
+    },
+    {
+      "path": "raw/profile/table-colors/original-6.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\original-6.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 6846,
+      "sha256": "8bda9325bd451cb45dec4fe1f1a8c21df6ccda57b70d71307d086468c0a83950"
+    },
+    {
+      "path": "raw/profile/table-colors/progress.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\progress.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 272,
+      "sha256": "3dd93d0324aa48a24fb2a84f76c8a7791285b8f8a9291c049022ac562e2efab8"
+    },
+    {
+      "path": "raw/profile/table-colors/reopened-1.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\reopened-1.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7414,
+      "sha256": "6db576afce37f856aceda63615d0d0201926b6c2855cc6045c9468990de080c2"
+    },
+    {
+      "path": "raw/profile/table-colors/reopened-2.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\reopened-2.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7415,
+      "sha256": "641855fd5f202373d6150e51ac8887cb6c7b6bd5336282fb890c712ba859d3eb"
+    },
+    {
+      "path": "raw/profile/table-colors/reopened-3.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\reopened-3.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7414,
+      "sha256": "0acecf07b2e606c9d5cdb8b9a45fcbef1ced49402b632222fa9634ea00e1dd68"
+    },
+    {
+      "path": "raw/profile/table-colors/reopened-4.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\reopened-4.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 7414,
+      "sha256": "17ca4a1442ca5f8156ac3cd25106afd5b7270afae40407abd9b2548b51f86410"
+    },
+    {
+      "path": "raw/profile/table-colors/reopened-5.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\reopened-5.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 5163,
+      "sha256": "c0cc9969bceea69c604766dfbcc19c02b717ecba4252e11edd404f5726856302"
+    },
+    {
+      "path": "raw/profile/table-colors/reopened-6.png",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\reopened-6.png",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 6846,
+      "sha256": "8bda9325bd451cb45dec4fe1f1a8c21df6ccda57b70d71307d086468c0a83950"
+    },
+    {
+      "path": "raw/profile/table-colors/stages.jsonl",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\stages.jsonl",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 826566,
+      "sha256": "680c862b217ca7841a4a1c430f6555f631bf655c795e41ce84b0929f80ca2775"
+    },
+    {
+      "path": "raw/profile/table-colors/supervisor.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\supervisor.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 223,
+      "sha256": "4dd701c78924f6f62b6db0dee3fbe2003ae8e50e3a654681a3ec958bcc6cd3c5"
+    },
+    {
+      "path": "raw/profile/table-colors/table-colors-edited.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-colors-edited.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 42211,
+      "sha256": "7a0d5f8099031ca0494c78c296af4d9a25474d7f6dae8ac8150ab9db88433679"
+    },
+    {
+      "path": "raw/profile/table-colors/table-colors-saved.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-colors-saved.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 42158,
+      "sha256": "3453cd3584bb4ce281a588acc0bd78c23e975818fa38f4afe4fde3192e51be24"
+    },
+    {
+      "path": "raw/profile/table-colors/table-colors.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-colors.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "raw/profile/table-colors/table-edited-reexport-1.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-edited-reexport-1.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 40321,
+      "sha256": "a3ae64a9522c3203ec6099094be28559214968c5c80bf8e2ddff3185a607e137"
+    },
+    {
+      "path": "raw/profile/table-colors/table-edited-reexport-2.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-edited-reexport-2.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 40321,
+      "sha256": "a3ae64a9522c3203ec6099094be28559214968c5c80bf8e2ddff3185a607e137"
+    },
+    {
+      "path": "raw/profile/table-colors/table-original-reexport-1.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-original-reexport-1.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "raw/profile/table-colors/table-original-reexport-2.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-original-reexport-2.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "raw/profile/table-colors/table-saved-reexport-1.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-saved-reexport-1.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "raw/profile/table-colors/table-saved-reexport-2.pptx",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\table-saved-reexport-2.pptx",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 39289,
+      "sha256": "485236f38e925ac3435582799edbf968d6ea8a2a2148a88f6e23194a9cfcb6fb"
+    },
+    {
+      "path": "raw/profile/table-colors/worker.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\worker.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 341,
+      "sha256": "11de6111020ac82970401d6581ec33e9047ef7d222d902366daee167f81c2560"
+    },
+    {
+      "path": "raw/profile/table-colors/worker.stderr.log",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\worker.stderr.log",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/profile/table-colors/worker.stdout.log",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-colors\\worker.stdout.log",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/profile/table-profile-comparison.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-profile-comparison.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 192497,
+      "sha256": "90220a93451061a620c844ee01bbfc19dc8d3f4baffa6c33cbfa36f12355411c"
+    },
+    {
+      "path": "raw/profile/table-profile.json",
+      "original": "C:\\opf-work\\n034-current-table-profile01\\table-profile.json",
+      "classification": "actual-root-native-result-and-public-synthetic-source",
+      "bytes": 192610,
+      "sha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751"
+    },
+    {
+      "path": "raw/compare/after-profile-files.json",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\after-profile-files.json",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 6784,
+      "sha256": "6f3c96c6841954cf1e3bffaee814d496e2e805c1d21e7a21bad2d58856a0773d"
+    },
+    {
+      "path": "raw/compare/after-runtime.json",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\after-runtime.json",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 112950,
+      "sha256": "a90cf3028b21806fafc2062055d2a6da73c1b4a8e2bdcab90888d588ee3a733e"
+    },
+    {
+      "path": "raw/compare/after-source.json",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\after-source.json",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 1577,
+      "sha256": "2518dc66be8c6f214687b3271d4668a8ce6dadf21fb2f5b38d1cf8a6546df6f9"
+    },
+    {
+      "path": "raw/compare/before-profile-files.json",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\before-profile-files.json",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 5471,
+      "sha256": "5381659b0174ea403b8a1c9abbc4a9031c39b9853f6f0b0e55ee8d5a3ec882f1"
+    },
+    {
+      "path": "raw/compare/before-runtime.json",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\before-runtime.json",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 112950,
+      "sha256": "a90cf3028b21806fafc2062055d2a6da73c1b4a8e2bdcab90888d588ee3a733e"
+    },
+    {
+      "path": "raw/compare/before-source.json",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\before-source.json",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 1577,
+      "sha256": "2518dc66be8c6f214687b3271d4668a8ce6dadf21fb2f5b38d1cf8a6546df6f9"
+    },
+    {
+      "path": "raw/compare/compare.exit.json",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\compare.exit.json",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 570,
+      "sha256": "456c1bb728bda3c248b38a5b5e8fe356de7c186b0d3130359acb902d95238010"
+    },
+    {
+      "path": "raw/compare/compare.stderr.log",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\compare.stderr.log",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compare/compare.stdout.log",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\compare.stdout.log",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 131596,
+      "sha256": "0ed687fae024f47cb937e6af9abd10565b06918601a18f0a4a1d5228e7cf8f6b"
+    },
+    {
+      "path": "raw/compare/driver.mjs",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\driver.mjs",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 5081,
+      "sha256": "d94e5e048c4f040739fe628194ebd70d8e5d0c7c3654861b14b4cee1f4b83865"
+    },
+    {
+      "path": "raw/compare/receipt.json",
+      "original": "C:\\opf-work\\n034-current-table-compare01\\receipt.json",
+      "classification": "actual-office-free-comparator-result",
+      "bytes": 2626,
+      "sha256": "a53779ad4b42d49c31ab90653f1d500fb5eedd4961db48b5a6abd54d1d6c87ae"
+    },
+    {
+      "path": "raw/root/n034-current-table-native-launch01.mjs",
+      "original": "C:/opf-work/n034-current-table-native-launch01.mjs",
+      "classification": "actual-root-supervisor-and-global-inventories",
+      "bytes": 2503,
+      "sha256": "5dbd79e3a4f9ed1c0546195a937f590f6705d87baa802321932b8e3f419be817"
+    },
+    {
+      "path": "raw/root/n034-current-table-native01-exit.json",
+      "original": "C:/opf-work/n034-current-table-native01-exit.json",
+      "classification": "actual-root-supervisor-and-global-inventories",
+      "bytes": 1283,
+      "sha256": "942f98123ec08595031b008a5622c0aef9910b9ac247892e1f50c74029cd4343"
+    },
+    {
+      "path": "raw/root/n034-current-table-native01-preflight.json",
+      "original": "C:/opf-work/n034-current-table-native01-preflight.json",
+      "classification": "actual-root-supervisor-and-global-inventories",
+      "bytes": 82,
+      "sha256": "054b70dc9a1829d5c8582bd3659eed57e9956df0ff258ca678ad892fbde68d63"
+    },
+    {
+      "path": "raw/root/n034-current-table-native01-postflight.json",
+      "original": "C:/opf-work/n034-current-table-native01-postflight.json",
+      "classification": "actual-root-supervisor-and-global-inventories",
+      "bytes": 175,
+      "sha256": "99bf2192ae5dc91bf6f453d99193371692ead5f3098bb401e6bce1d68a2d5453"
+    },
+    {
+      "path": "raw/root/n034-current-table-native01.stdout.log",
+      "original": "C:/opf-work/n034-current-table-native01.stdout.log",
+      "classification": "actual-root-supervisor-and-global-inventories",
+      "bytes": 412,
+      "sha256": "d4fd3a7fbcf9b1e169265a887a81156cadbcb81163317fd942a80daa174b4259"
+    },
+    {
+      "path": "raw/root/n034-current-table-native01.stderr.log",
+      "original": "C:/opf-work/n034-current-table-native01.stderr.log",
+      "classification": "actual-root-supervisor-and-global-inventories",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/table-profile.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\table-profile.mjs",
+      "classification": "current-reviewed-shipping-source-copy",
+      "bytes": 13609,
+      "sha256": "356a2d004eaf9d21a47135f911eb446b488cb5575d156759f827c8274867913c"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/run-table-profile.ps1",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\run-table-profile.ps1",
+      "classification": "current-reviewed-shipping-source-copy",
+      "bytes": 7147,
+      "sha256": "fba11c28992f4ddf51c1b5f60106d49071806ac15d0fb17f13432457e505ac34"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/compare-table-profile.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\compare-table-profile.mjs",
+      "classification": "current-reviewed-shipping-source-copy",
+      "bytes": 9585,
+      "sha256": "bc407f68c3867f144c981bf6b24a61379016ef4bad96957f0af35a8b3246dcac"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/compare-table-colors.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\compare-table-colors.mjs",
+      "classification": "current-reviewed-shipping-source-copy",
+      "bytes": 4871,
+      "sha256": "3cb42089dec2479851b739d13c206fd7e7c47cee3ce9e34cc3944e2216acb245"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/identity.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\identity.mjs",
+      "classification": "current-reviewed-shipping-source-copy",
+      "bytes": 3090,
+      "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/table-colors.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\table-colors.mjs",
+      "classification": "current-reviewed-shipping-source-copy",
+      "bytes": 3126,
+      "sha256": "e6264ec2f507a25ca241d0e24c2d6e892815d78a36e6b3f970be9ec9c12dd8e2"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/generate.mjs",
+      "original": "C:\\opf-work\\n034-current\\scripts\\native-acceptance\\generate.mjs",
+      "classification": "current-reviewed-shipping-source-copy",
+      "bytes": 8912,
+      "sha256": "f4c63a57e618bbdf65c1ee16637c8a30d91b559bee43a9f2f04e9a881d9c2029"
+    },
+    {
+      "path": "raw/source/packages/pptx/test/native-table-colors-v2.ps1",
+      "original": "C:\\opf-work\\n034-current\\packages\\pptx\\test\\native-table-colors-v2.ps1",
+      "classification": "current-reviewed-shipping-source-copy",
+      "bytes": 21441,
+      "sha256": "89b66bfe6bdac36b93872ee05e2e888b19ae7ff3184c75cebc72227ad032a7cd"
+    },
+    {
+      "path": "raw/source/scripts/native-acceptance/windows-powershell-env.mjs",
+      "original": "C:/opf-work/n034-current/scripts/native-acceptance/windows-powershell-env.mjs",
+      "classification": "current-reviewed-child-environment-source-copy",
+      "bytes": 495,
+      "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+    }
+  ]
+}

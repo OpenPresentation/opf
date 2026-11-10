@@ -1,0 +1,47 @@
+{
+  "directory": "C:\\opf-work\\n034-current",
+  "revision": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "dirty": false,
+  "files": [
+    {
+      "path": "scripts/native-acceptance/table-profile.mjs",
+      "bytes": 13609,
+      "sha256": "356a2d004eaf9d21a47135f911eb446b488cb5575d156759f827c8274867913c"
+    },
+    {
+      "path": "scripts/native-acceptance/run-table-profile.ps1",
+      "bytes": 7147,
+      "sha256": "fba11c28992f4ddf51c1b5f60106d49071806ac15d0fb17f13432457e505ac34"
+    },
+    {
+      "path": "scripts/native-acceptance/compare-table-profile.mjs",
+      "bytes": 9585,
+      "sha256": "bc407f68c3867f144c981bf6b24a61379016ef4bad96957f0af35a8b3246dcac"
+    },
+    {
+      "path": "scripts/native-acceptance/compare-table-colors.mjs",
+      "bytes": 4871,
+      "sha256": "3cb42089dec2479851b739d13c206fd7e7c47cee3ce9e34cc3944e2216acb245"
+    },
+    {
+      "path": "scripts/native-acceptance/identity.mjs",
+      "bytes": 3090,
+      "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+    },
+    {
+      "path": "scripts/native-acceptance/table-colors.mjs",
+      "bytes": 3126,
+      "sha256": "e6264ec2f507a25ca241d0e24c2d6e892815d78a36e6b3f970be9ec9c12dd8e2"
+    },
+    {
+      "path": "scripts/native-acceptance/generate.mjs",
+      "bytes": 8912,
+      "sha256": "f4c63a57e618bbdf65c1ee16637c8a30d91b559bee43a9f2f04e9a881d9c2029"
+    },
+    {
+      "path": "packages/pptx/test/native-table-colors-v2.ps1",
+      "bytes": 21441,
+      "sha256": "89b66bfe6bdac36b93872ee05e2e888b19ae7ff3184c75cebc72227ad032a7cd"
+    }
+  ]
+}

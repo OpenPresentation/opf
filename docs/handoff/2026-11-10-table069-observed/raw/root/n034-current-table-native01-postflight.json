@@ -1,0 +1,11 @@
+{
+  "utc": "2026-11-10T07:14:25.0548594Z",
+  "count": 1,
+  "processes": [
+    {
+      "Id": 8748,
+      "ProcessName": "POWERPNT",
+      "SessionId": 1
+    }
+  ]
+}

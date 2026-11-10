@@ -1,0 +1,33 @@
+{
+  "started": "2026-11-10T07:14:12.507Z",
+  "finished": "2026-11-10T07:14:25.028Z",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "executable": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+  "args": [
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "C:/opf-work/n034-current/scripts/native-acceptance/run-table-profile.ps1",
+    "-Envelope",
+    "C:/opf-work/n034-current-table-profile01/table-profile.json",
+    "-EnvelopeSha256",
+    "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751",
+    "-NodeExecutable",
+    "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+    "-TimeoutSeconds",
+    "60",
+    "-RunOffice"
+  ],
+  "nodeVersion": "v24.20.0",
+  "nodeExecutable": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+  "envelopeSha256": "55f8f5b71c7449eaf04d3c83f0c3e07b615ca4a8eb95c2570cb352b8644aa751",
+  "controllerSha256": "fba11c28992f4ddf51c1b5f60106d49071806ac15d0fb17f13432457e505ac34",
+  "workerSha256": "89b66bfe6bdac36b93872ee05e2e888b19ae7ff3184c75cebc72227ad032a7cd",
+  "nativeExplicitlyAuthorized": true,
+  "automaticRetry": false,
+  "officeCleanupByLauncher": false
+}
