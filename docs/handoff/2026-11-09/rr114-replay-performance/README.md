@@ -1,5 +1,9 @@
 # RR-114 paired replay performance screening
 
+Current result: formal02 actual root session16602 terminated0, all8 children/624 exact SVG checks and font/file/license/dependency identities pass. There is no demonstrated latency gain:16-slide preparation+first averages2035.0ms control versus2124.1ms replay (+4.4%);36 averages3762.9 versus3760.6ms (essentially unchanged). See RESULTS.md and all raw vectors in summary.json. Source3360 remains frozen and unmerged. No speed/RSS improvement or causal bookkeeping claim is accepted.
+
+## Historical prepared protocol
+
 NEVER MERGE this evidence branch. Formal01 stopped after its first16-slide control: the post-metric evidence lookup wrongly inferred WASM locations from imported JavaScript, although the engine reads two exact nested filesystem assets. No candidate/remaining child ran and no valid performance comparison exists. Its original raw receipt/stdout/stderr/root exit log are immutable. The narrow correction resolves and hashes the two source-bound HARFBUZZ specifiers in source-only preflight and after metrics; it never removes the binary assertion. A new formal02 requires fresh review and quiet authorization. Both product runtimes are frozen in separate clean worktrees; this branch changes only the benchmark protocol and evidence.
 
 The control is exact `276f339a68069dc11970d649092d6181c9feba38` in `C:/opf-work/replay-control` (runtime source `d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e`). The candidate is exact `3360d18d0c0366b90ed0a746479097923b4acde3` in `C:/opf-work/font-replay` (runtime source `36c8eb798286fd8d30cc2a6cfe16e857d9338cde`). Both use presentation-aware Office/visual/scripts-auto loading and exactly the same three Intos faces. The original 131-face whole-pack result is historical context, not this trial's control.
@@ -32,3 +36,7 @@ node docs/handoff/2026-11-09/rr114-replay-performance/run.mjs --measure --expect
 ```
 
 Capture actual stdout/stderr/process exit. Do not run, retry, change a deadline or mutate either runtime before that authorization. Root owns interpretation, source integration and the coherent mapped/CI/native gates. No release or Office action belongs to this evidence branch.
+
+## Durable results
+
+formal-evidence.json.gz preserves 86 lossless records: both trial attempts and actual root logs/exits, all preflights, dedicated control setup/build, the stale-build audit observation, all8 child results/stdout/stderr, exact input files, all executed driver bytes, source/config parity checks and the three exact historical-background-process records. Run `node docs/handoff/2026-11-09/rr114-replay-performance/verify.mjs` offline. It verifies the archive and source/identity/output/results arithmetic, and reports current driver matches separately from historical validity. Never merge this branch or infer that future source was benchmarked. No product source, native Office, CI watcher or release changed here.

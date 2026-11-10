@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "driverSource": "b6cd1205d7d1674adfc9f7c04bfa0c71325c35d6",
+  "control": "276f339a68069dc11970d649092d6181c9feba38",
+  "candidate": "3360d18d0c0366b90ed0a746479097923b4acde3",
+  "records": 86,
+  "rawBytes": 1592558,
+  "compressedBytes": 432378,
+  "archiveSha256": "48febce2fb3f757ffd64c256772c96b5246b621aad460fb59bae4fb339b10244",
+  "executedDriverFiles": [
+    {
+      "name": "config.mjs",
+      "sha256": "352d17650e01104a339ced62cc6b5159b8759d9b5e6b9ec7bdb23533e62748d5"
+    },
+    {
+      "name": "shared.mjs",
+      "sha256": "0545f2c931ec774be4a9e98f8b255380b0cc0ab4761d7fa2f1f5da9b0060275c"
+    },
+    {
+      "name": "preflight.mjs",
+      "sha256": "0833b7f54b6c57aacb7e4e3e450a4c3aed4c26f50c5d339d0a3f1af3bd52277a"
+    },
+    {
+      "name": "case.mjs",
+      "sha256": "d61f738cb78debcafd9c3f78029729e8a576c0f37a8bef5d6da5d4de8241bbd9"
+    },
+    {
+      "name": "run.mjs",
+      "sha256": "2477e0756f6fc3183865f67d02dc13ebd2c924e2c11719362e8524ddc8001520"
+    }
+  ],
+  "observations": {
+    "formal02": {
+      "rootSession": 16602,
+      "exit": 0,
+      "coordinatorObserved": true,
+      "driver": "b6cd1205d7d1674adfc9f7c04bfa0c71325c35d6",
+      "children": 8,
+      "exactSvgChecks": 624,
+      "retries": 0
+    },
+    "formal01": {
+      "exit": 1,
+      "childrenStarted": 1,
+      "validComparison": false,
+      "cause": "Post-metric binary evidence inferred JS import path; actual engine reads exact filesystem WASMs."
+    },
+    "staleControlAudit": {
+      "sourceHead": "276f339a68069dc11970d649092d6181c9feba38",
+      "root": "C:/opf-work/integration-034",
+      "action": "Read-only audit refused existing stale/missing dist; no trial or build in that worktree.",
+      "files": {
+        "font-demand.js": {
+          "source": "3dcf2705afd5cda50e152008b664de4ac40320554fa8120036fa12e6522ab18e",
+          "built": "MISSING"
+        },
+        "fonts-node.js": {
+          "source": "aa3a38cef856ad5c3b22f69a7d3a4691bf08e524ec3a12b9421c949462f181e8",
+          "built": "9e99ae8aa21e5927bc9ede011fb3bb7dbbb43a049372b6f4d836c85c8e4ed049"
+        },
+        "lazy-fonts.js": {
+          "source": "55a5638fc1fda8d39f13afe1410c206e9fc705195c28fe8f635585a7dcd45dfa",
+          "built": "ff7dfd32c70ad9eaffaacaf0f458f6e932b6b6348b56100f750581642f771e93"
+        },
+        "font-registry.js": {
+          "source": "63041d9ce5e4aed51726e53bdf2d4624e29d256a903c2ada7eb5a0c63399544a",
+          "built": "0402fa8c0373406153e284f1955f6f1a91f7aeeac420ef385792300d89e7aab0"
+        }
+      }
+    },
+    "dedicatedControl": {
+      "source": "276f339a68069dc11970d649092d6181c9feba38",
+      "installAndBuildSession": 82979,
+      "exit": 0,
+      "sourceChanged": false
+    },
+    "limitations": [
+      "No valid comparison from formal01.",
+      "Two replicates per cell, local screening only.",
+      "No causal CPU profile in formal02; bookkeeping is a source-level suspect.",
+      "Functional/formal API and output identity match; formal had no composition counters.",
+      "The unrelated historical background normalizer was stopped before the new trial. Historical absolute time/RSS and retained-output workload are not directly comparable.",
+      "First-batch hashes are retained per child; successful child status follows all three batch hash assertions (624 checks). No fabricated separate warm hash vectors."
+    ]
+  },
+  "summarySha256": "ffee1dcbae1307d3f48865faf12a5d98e7a694b6f77f71a4d41bf6740e86579b",
+  "paritySha256": "c60471895ddb61f35f71e6d889e80ba58d59c3c54b83d50606f2f28d73fb1ae8"
+}

@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "kind": "source/config/output parity only; no new execution",
+  "loadFonts": "Both office/visual/scripts:auto/presentation/renderOptions.catalogs:[gallery]",
+  "toSvg": "Both toSvg(deck,{fonts,catalogs:[gallery]}); index.js directly reexports svg.js",
+  "functionalObservation": "Read-only helper/counter instrumentation; no measure override",
+  "formalObservation": "URL import observer only; forced pre-preparation GC and fixed rendering/memory protocol",
+  "differences": "Formal3render/GC workload differs fromfunctional1render, relevant to timings/memory, not prepare arguments/scope. No direct measured bookkeeping attribution.",
+  "records": [
+    {
+      "size": 16,
+      "formal": "02-16-candidate",
+      "inputSha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29",
+      "exactSvgPairs": 16,
+      "exactFaces": 3,
+      "builtReplayModules": 4,
+      "functionalBindCount": 16,
+      "formalBindCount": "not instrumented"
+    },
+    {
+      "size": 16,
+      "formal": "07-16-candidate",
+      "inputSha256": "e14be44e63a8bbe4e64c5bdd2b6d95194ed39dc5e67c09c5a6a1225d13396a29",
+      "exactSvgPairs": 16,
+      "exactFaces": 3,
+      "builtReplayModules": 4,
+      "functionalBindCount": 16,
+      "formalBindCount": "not instrumented"
+    },
+    {
+      "size": 36,
+      "formal": "04-36-candidate",
+      "inputSha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+      "exactSvgPairs": 36,
+      "exactFaces": 3,
+      "builtReplayModules": 4,
+      "functionalBindCount": 36,
+      "formalBindCount": "not instrumented"
+    },
+    {
+      "size": 36,
+      "formal": "05-36-candidate",
+      "inputSha256": "249a8912ce59d7d55988d04b41909033017eb285b239960cb7fba6fab8d62599",
+      "exactSvgPairs": 36,
+      "exactFaces": 3,
+      "builtReplayModules": 4,
+      "functionalBindCount": 36,
+      "formalBindCount": "not instrumented"
+    }
+  ]
+}

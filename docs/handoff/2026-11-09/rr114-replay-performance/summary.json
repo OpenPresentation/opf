@@ -1,0 +1,515 @@
+{
+  "schema": 1,
+  "trial": "formal02",
+  "status": "PASS",
+  "children": 8,
+  "replicatesPerCell": 2,
+  "warmCallsPerCell": 4,
+  "exactSvgChecks": 624,
+  "sourceDriver": "b6cd1205d7d1674adfc9f7c04bfa0c71325c35d6",
+  "control": "276f339a68069dc11970d649092d6181c9feba38",
+  "candidate": "3360d18d0c0366b90ed0a746479097923b4acde3",
+  "cells": [
+    {
+      "size": 16,
+      "variant": "control",
+      "preparationMs": {
+        "values": [
+          1064.0414999999998,
+          1055.4133
+        ],
+        "mean": 1059.7273999999998,
+        "min": 1055.4133,
+        "max": 1064.0414999999998
+      },
+      "firstMs": {
+        "values": [
+          976.6217000000001,
+          974.0108
+        ],
+        "mean": 975.3162500000001,
+        "min": 974.0108,
+        "max": 976.6217000000001
+      },
+      "prepPlusFirstMs": {
+        "values": [
+          2040.6632,
+          2029.4241
+        ],
+        "mean": 2035.04365,
+        "min": 2029.4241,
+        "max": 2040.6632
+      },
+      "continuousPreparationToFirstMs": {
+        "values": [
+          2040.8004,
+          2029.5717
+        ],
+        "mean": 2035.18605,
+        "min": 2029.5717,
+        "max": 2040.8004
+      },
+      "warmMs": {
+        "values": [
+          807.047,
+          785.4162000000001,
+          810.3346999999999,
+          812.8402999999998
+        ],
+        "mean": 803.90955,
+        "min": 785.4162000000001,
+        "max": 812.8402999999998
+      },
+      "preparationCpuMs": {
+        "values": [
+          1688,
+          1828
+        ],
+        "mean": 1758,
+        "min": 1688,
+        "max": 1828
+      },
+      "prepPlusFirstCpuMs": {
+        "values": [
+          3110,
+          3203
+        ],
+        "mean": 3156.5,
+        "min": 3110,
+        "max": 3203
+      },
+      "warmCpuMs": {
+        "values": [
+          983,
+          844,
+          984,
+          860
+        ],
+        "mean": 917.75,
+        "min": 844,
+        "max": 984
+      },
+      "firstMaxRssMiB": {
+        "values": [
+          301.16015625,
+          301.37109375
+        ],
+        "mean": 301.265625,
+        "min": 301.16015625,
+        "max": 301.37109375
+      },
+      "finalRenderMaxRssMiB": {
+        "values": [
+          310.859375,
+          312.25390625
+        ],
+        "mean": 311.556640625,
+        "min": 310.859375,
+        "max": 312.25390625
+      },
+      "postDropHeapMiB": {
+        "values": [
+          54.00856018066406,
+          54.155059814453125
+        ],
+        "mean": 54.081809997558594,
+        "min": 54.00856018066406,
+        "max": 54.155059814453125
+      },
+      "postDropRssMiB": {
+        "values": [
+          268.41015625,
+          268.2890625
+        ],
+        "mean": 268.349609375,
+        "min": 268.2890625,
+        "max": 268.41015625
+      },
+      "faces": 3
+    },
+    {
+      "size": 16,
+      "variant": "candidate",
+      "preparationMs": {
+        "values": [
+          1139.9216000000001,
+          1136.5495999999998
+        ],
+        "mean": 1138.2356,
+        "min": 1136.5495999999998,
+        "max": 1139.9216000000001
+      },
+      "firstMs": {
+        "values": [
+          986.7815,
+          984.9385
+        ],
+        "mean": 985.86,
+        "min": 984.9385,
+        "max": 986.7815
+      },
+      "prepPlusFirstMs": {
+        "values": [
+          2126.7031,
+          2121.4880999999996
+        ],
+        "mean": 2124.0955999999996,
+        "min": 2121.4880999999996,
+        "max": 2126.7031
+      },
+      "continuousPreparationToFirstMs": {
+        "values": [
+          2126.8977,
+          2121.631
+        ],
+        "mean": 2124.26435,
+        "min": 2121.631,
+        "max": 2126.8977
+      },
+      "warmMs": {
+        "values": [
+          811.9974000000002,
+          797.0426000000002,
+          806.7104999999997,
+          806.5281
+        ],
+        "mean": 805.56965,
+        "min": 797.0426000000002,
+        "max": 811.9974000000002
+      },
+      "preparationCpuMs": {
+        "values": [
+          1749,
+          1687
+        ],
+        "mean": 1718,
+        "min": 1687,
+        "max": 1749
+      },
+      "prepPlusFirstCpuMs": {
+        "values": [
+          3109,
+          2999
+        ],
+        "mean": 3054,
+        "min": 2999,
+        "max": 3109
+      },
+      "warmCpuMs": {
+        "values": [
+          1016,
+          984,
+          985,
+          827
+        ],
+        "mean": 953,
+        "min": 827,
+        "max": 1016
+      },
+      "firstMaxRssMiB": {
+        "values": [
+          298.03125,
+          297.91796875
+        ],
+        "mean": 297.974609375,
+        "min": 297.91796875,
+        "max": 298.03125
+      },
+      "finalRenderMaxRssMiB": {
+        "values": [
+          307.65625,
+          308.96484375
+        ],
+        "mean": 308.310546875,
+        "min": 307.65625,
+        "max": 308.96484375
+      },
+      "postDropHeapMiB": {
+        "values": [
+          54.05267333984375,
+          54.01709747314453
+        ],
+        "mean": 54.03488540649414,
+        "min": 54.01709747314453,
+        "max": 54.05267333984375
+      },
+      "postDropRssMiB": {
+        "values": [
+          268.57421875,
+          267.3203125
+        ],
+        "mean": 267.947265625,
+        "min": 267.3203125,
+        "max": 268.57421875
+      },
+      "faces": 3
+    },
+    {
+      "size": 36,
+      "variant": "control",
+      "preparationMs": {
+        "values": [
+          1937.9652,
+          1957.2884999999999
+        ],
+        "mean": 1947.62685,
+        "min": 1937.9652,
+        "max": 1957.2884999999999
+      },
+      "firstMs": {
+        "values": [
+          1811.7685000000001,
+          1818.7359000000001
+        ],
+        "mean": 1815.2522000000001,
+        "min": 1811.7685000000001,
+        "max": 1818.7359000000001
+      },
+      "prepPlusFirstMs": {
+        "values": [
+          3749.7337,
+          3776.0244000000002
+        ],
+        "mean": 3762.8790500000005,
+        "min": 3749.7337,
+        "max": 3776.0244000000002
+      },
+      "continuousPreparationToFirstMs": {
+        "values": [
+          3749.8848,
+          3776.1609
+        ],
+        "mean": 3763.02285,
+        "min": 3749.8848,
+        "max": 3776.1609
+      },
+      "warmMs": {
+        "values": [
+          1618.7506000000003,
+          1607.0865999999996,
+          1617.9846999999995,
+          1611.0248000000001
+        ],
+        "mean": 1613.7116749999998,
+        "min": 1607.0865999999996,
+        "max": 1618.7506000000003
+      },
+      "preparationCpuMs": {
+        "values": [
+          2594,
+          3047
+        ],
+        "mean": 2820.5,
+        "min": 2594,
+        "max": 3047
+      },
+      "prepPlusFirstCpuMs": {
+        "values": [
+          4781,
+          5203
+        ],
+        "mean": 4992,
+        "min": 4781,
+        "max": 5203
+      },
+      "warmCpuMs": {
+        "values": [
+          1938,
+          1922,
+          1843,
+          1782
+        ],
+        "mean": 1871.25,
+        "min": 1782,
+        "max": 1938
+      },
+      "firstMaxRssMiB": {
+        "values": [
+          320.60546875,
+          315.734375
+        ],
+        "mean": 318.169921875,
+        "min": 315.734375,
+        "max": 320.60546875
+      },
+      "finalRenderMaxRssMiB": {
+        "values": [
+          321.98046875,
+          316.18359375
+        ],
+        "mean": 319.08203125,
+        "min": 316.18359375,
+        "max": 321.98046875
+      },
+      "postDropHeapMiB": {
+        "values": [
+          56.00929260253906,
+          55.97673034667969
+        ],
+        "mean": 55.993011474609375,
+        "min": 55.97673034667969,
+        "max": 56.00929260253906
+      },
+      "postDropRssMiB": {
+        "values": [
+          286.90234375,
+          283.703125
+        ],
+        "mean": 285.302734375,
+        "min": 283.703125,
+        "max": 286.90234375
+      },
+      "faces": 3
+    },
+    {
+      "size": 36,
+      "variant": "candidate",
+      "preparationMs": {
+        "values": [
+          1902.1230999999998,
+          1919.7963999999997
+        ],
+        "mean": 1910.9597499999998,
+        "min": 1902.1230999999998,
+        "max": 1919.7963999999997
+      },
+      "firstMs": {
+        "values": [
+          1848.1444999999999,
+          1851.2264
+        ],
+        "mean": 1849.68545,
+        "min": 1848.1444999999999,
+        "max": 1851.2264
+      },
+      "prepPlusFirstMs": {
+        "values": [
+          3750.2675999999997,
+          3771.0227999999997
+        ],
+        "mean": 3760.6452,
+        "min": 3750.2675999999997,
+        "max": 3771.0227999999997
+      },
+      "continuousPreparationToFirstMs": {
+        "values": [
+          3750.4152,
+          3771.174
+        ],
+        "mean": 3760.7946,
+        "min": 3750.4152,
+        "max": 3771.174
+      },
+      "warmMs": {
+        "values": [
+          1650.3618999999999,
+          1635.7242000000006,
+          1632.5893,
+          1632.6605999999992
+        ],
+        "mean": 1637.8339999999998,
+        "min": 1632.5893,
+        "max": 1650.3618999999999
+      },
+      "preparationCpuMs": {
+        "values": [
+          2641,
+          2562
+        ],
+        "mean": 2601.5,
+        "min": 2562,
+        "max": 2641
+      },
+      "prepPlusFirstCpuMs": {
+        "values": [
+          5063,
+          4844
+        ],
+        "mean": 4953.5,
+        "min": 4844,
+        "max": 5063
+      },
+      "warmCpuMs": {
+        "values": [
+          1828,
+          1812,
+          1874,
+          1720
+        ],
+        "mean": 1808.5,
+        "min": 1720,
+        "max": 1874
+      },
+      "firstMaxRssMiB": {
+        "values": [
+          314.2109375,
+          312.92578125
+        ],
+        "mean": 313.568359375,
+        "min": 312.92578125,
+        "max": 314.2109375
+      },
+      "finalRenderMaxRssMiB": {
+        "values": [
+          315.22265625,
+          314.875
+        ],
+        "mean": 315.048828125,
+        "min": 314.875,
+        "max": 315.22265625
+      },
+      "postDropHeapMiB": {
+        "values": [
+          55.894615173339844,
+          55.897918701171875
+        ],
+        "mean": 55.89626693725586,
+        "min": 55.894615173339844,
+        "max": 55.897918701171875
+      },
+      "postDropRssMiB": {
+        "values": [
+          280.828125,
+          281.5
+        ],
+        "mean": 281.1640625,
+        "min": 280.828125,
+        "max": 281.5
+      },
+      "faces": 3
+    }
+  ],
+  "changes": [
+    {
+      "size": 16,
+      "preparationMs": 7.408339163449029,
+      "firstMs": 1.081059605025536,
+      "prepPlusFirstMs": 4.37592333707435,
+      "continuousPreparationToFirstMs": 4.376911879874568,
+      "warmMs": 0.20650333112723906,
+      "preparationCpuMs": -2.2753128555176305,
+      "prepPlusFirstCpuMs": -3.2472675431649,
+      "warmCpuMs": 3.8409152819395276,
+      "firstMaxRssMiB": -1.0923966599242774,
+      "finalRenderMaxRssMiB": -1.0418952211989962,
+      "postDropHeapMiB": -0.08676594046421737,
+      "postDropRssMiB": -0.14993267586156378
+    },
+    {
+      "size": 36,
+      "preparationMs": -1.8826552940569896,
+      "firstMs": 1.8968851821250965,
+      "prepPlusFirstMs": -0.05936544784771458,
+      "continuousPreparationToFirstMs": -0.05921436272967595,
+      "warmMs": 1.4948348812064083,
+      "preparationCpuMs": -7.764580748094307,
+      "prepPlusFirstCpuMs": -0.7712339743589758,
+      "warmCpuMs": -3.3533734134936544,
+      "firstMaxRssMiB": -1.4462594304586185,
+      "finalRenderMaxRssMiB": -1.2640019587439544,
+      "postDropHeapMiB": -0.172779664471856,
+      "postDropRssMiB": -1.4506246791031963
+    }
+  ],
+  "interpretation": "No overall latency improvement demonstrated. Candidate16 preparation+first is about4.4%slower;36essentiallyunchanged. Bounded local screening; do not fold or claim speed/RSS improvement from this result."
+}
