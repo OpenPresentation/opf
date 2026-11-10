@@ -50,3 +50,17 @@ The original full-only lazy-face-fallback test measured every rendered run at400
 The manual raster-script-clusters fixture previously supplied a Hindi-only presentation while later raw SVGs needed Thai and local Intos/Roboto400 faces. The typed Node contract makes explicit script lists eligible metadata when a presentation is provided; it does not request unrelated files. One format-valid OPF presentation now explicitly authors the actual positive hand-SVG families/styles. Unsupported/RTL/relative-unit negative SVGs are not silently converted into preparation requests. All original cluster counts, positions, exact bytes and ink comparisons remain, and later real Hindi/Thai/Myanmar/Korean/Khmer per-deck demand PNG/PDF tests are untouched. The one focused run passes without a runtime rebuild.
 
 The current README now distinguishes this unreleased0.34 presentation-aware path from the no-presentation whole-pack collection path and caller-managed faces. It does not claim live0.33 adopted the new behavior. These are fixture/documentation follow-ups, not a broader loader or raster policy change. Original full-only failures are retained alongside all prior source57 failures.
+
+## Sealed evidence and offline replay
+
+The lossless gzip/base64 packet contains206records/786095decoded bytes, including all actual commands/logs/exits, original public RED, both source checkpoints and exact outputs, six original root failures, focused source guards and the two fixture-only recoveries. No font or system executable binary is copied. Runtime source is3042e83a23e785243812868d9dd565d9e9c043b6; final fixture/documentation source is9e120cf3379286cba31df84f46a0987f7cde8eef. The entire renderer src tree is identical between them.
+
+Run Node24 from this checkout: node docs/handoff/2026-11-10/rr114-color-raster/verify.mjs. It uses builtins and local Git objects only (lazy network fetching disabled), never imports product modules or executes archived drivers. It verifies every retained byte/hash, exact historical source,18protectedobjects, source/build equality, old RED versus current SVG/PNG/raster-PDF equality, pinned Mono metadata,11new+11demand+7private controls, both actual-style fixture results and all six original failures. The maintained final plan is retained at raw/normal-mapped-plan03.log; execution is still owed in the single normal coordinator batch.
+
+| Synthetic source case | Actual saved PNG |
+| --- | --- |
+| Original57 demand, missing raster companion | [Before](images/before-demand.png) |
+| Current3042 demand | [After](images/after-demand.png) |
+| Whole requested pack reference, identical to after | [Reference](images/whole-reference.png) |
+
+These are unedited renderer outputs, not native PowerPoint captures. The SVG keeps the color family; PNG/raster PDF use its documented monochrome fallback. No physical glyph, browser, native or release acceptance follows from these tests.
