@@ -19,7 +19,7 @@
 // unless `date` is passed.
 //
 // RR-75: in Node the functions behind the CLI's verbs have the CLI's defaults, so `opf validate deck` and `validate(deck)` agree:
-// `validate`, `stats`, `paginate`, `continueOverfull`, `embed` and `edit` resolve references in the pptx.gallery catalog (`gallery` of the
+// `validate`, `createValidator().validate`, `stats`, `paginate`, `continueOverfull`, `embed` and `edit` resolve references in the pptx.gallery catalog (`gallery` of the
 // @openpresentation/gallery package, RR-78) when no `catalogs` option is given. The browser build registers none (FA-21).
 import type { Presentation } from "./core.js";
 import type { Catalog } from "./catalog-refs.js";

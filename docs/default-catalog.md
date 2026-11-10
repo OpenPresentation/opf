@@ -74,8 +74,8 @@ matched by `source`.
 > their bare ids resolve in `custom`, then in that catalog. A document whose `default` names a `source` uses the
 > registered catalog with that source, and nothing when the host did not register it, even if it registered others.
 > `"default": false` uses no catalog for bare ids. Without the `catalogs` option the browser build and every engine
-> register nothing, so only what the document embeds resolves; in Node, core's file API and `validate`, `stats`,
-> `paginate`, `embed` and `edit` register `gallery`, as the CLI does. Hosts (the CLI, the editor app, the sites)
+> register nothing, so only what the document embeds resolves; in Node, core's file API and `validate`,
+> `createValidator().validate`, `stats`, `paginate`, `embed` and `edit` register `gallery`, as the CLI does. Hosts (the CLI, the editor app, the sites)
 > register `@openpresentation/gallery`; libraries and engines pass the option through.
 
 ```js
