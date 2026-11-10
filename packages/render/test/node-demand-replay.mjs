@@ -501,7 +501,14 @@ test('language, direction, encoding and native face links remain distinct covera
   const analysis = createFontAnalysis();
   let current = false;
   const seen = [];
+  const absentEncoding = request('trace.encoding-absent-own');
+  delete absentEncoding.symbolEncoding;
   const variants = [
+    absentEncoding,
+    request('trace.face-undefined', { fontFace: undefined }),
+    request('trace.encoding-null'),
+    request('trace.encoding-absent', { symbolEncoding: undefined }),
+    request('trace.face-null', { fontFace: null }),
     request('trace.ja', { lang: 'ja' }),
     request('trace.ar', { lang: 'ar' }),
     request('trace.ltr', { direction: 'ltr' }),
@@ -622,4 +629,144 @@ test('custom array prototypes and toJSON methods are opaque rather than executed
     undefined,
   );
   assert.equal(calls, 0);
+});
+
+test('Node scripts-mode content is included in the bounded content guard', () => {
+  assert.notEqual(
+    preparationContext(document, { renderOptions: {}, mode: ['Arab', 'Hebr'] }),
+    preparationContext(document, { renderOptions: {}, mode: ['Hebr', 'Arab'] }),
+  );
+});
+
+test('guard does not normalize absent/undefined/null option content into an empty object', () => {
+  assert.equal(preparationContext(document, undefined), undefined);
+  assert.notEqual(preparationContext(document, null), preparationContext(document, {}));
+  assert.equal(preparationContext(document, { value: undefined }), undefined);
+});
+
+test('a public Node measurement wrapper stays on the original cold callback path', async () => {
+  const renderOptions = { catalogs: [gallery] },
+    initial = { ...structuredClone(document), design: { fontScheme: 'roboto' } },
+    next = { ...structuredClone(document), design: { fontScheme: 'open-sans' } };
+  const fonts = await loadFonts({
+    pack: 'office',
+    substitutionPolicy: 'visual',
+    scripts: 'auto',
+    presentation: initial,
+    renderOptions,
+  });
+  const originalMeasure = fonts.textMeasurement.measure;
+  let calls = 0;
+  fonts.textMeasurement.measure = (...args) => {
+    calls++;
+    return originalMeasure(...args);
+  };
+  const original = deckInternals.openDeck;
+  let binds = 0;
+  deckInternals.openDeck = (...args) => {
+    const opened = original(...args);
+    return {
+      ...opened,
+      bind(...rest) {
+        binds++;
+        return opened.bind(...rest);
+      },
+    };
+  };
+  try {
+    await fonts.ensure(next, { renderOptions });
+    assert.equal(binds, 2 * next.slides.length);
+    assert.ok(calls > 0);
+    assert.deepEqual(fonts.pending(next, renderOptions), []);
+    assert.equal(binds, 2 * next.slides.length);
+  } finally {
+    deckInternals.openDeck = original;
+  }
+});
+
+test('a measure replacement during an awaited face read invalidates the already captured replay', () => {
+  const code = String.raw`
+ import fs from 'node:fs/promises';import {registerHooks,syncBuiltinESMExports} from 'node:module';import {createHash} from 'node:crypto';
+ const mode=process.argv[1];let patched=false;registerHooks({load(url,context,next){const result=next(url,context);if(mode==='disabled-guard-control'&&url.endsWith('/font-demand.js')){const source=typeof result.source==='string'?result.source:Buffer.from(result.source).toString('utf8'),needle='&&ownsStrictCoverage()';if(source.split(needle).length!==2)throw Error('guard control must patch exactly one predicate');patched=true;return {...result,source:source.replace(needle,'')};}return result;}});
+ const {loadFonts}=await import(process.argv[2]),{gallery}=await import(process.argv[3]),{deckInternals}=await import(new URL('./svg-internals.js',process.argv[2])),{fontCoverageProbe}=await import(new URL('./script-fonts.js',process.argv[2]));
+ const renderOptions={catalogs:[gallery]},initial={design:{fontScheme:'roboto'},slides:[{title:'Initial',text:'Body'}]},next={design:{fontScheme:'open-sans'},slides:[{title:'Next',text:'Body'}]};
+ const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:initial,renderOptions});
+ const originalRead=fs.readFile,originalMeasure=fonts.textMeasurement.measure,originalOpen=deckInternals.openDeck;let swapped=false,protectedFile,protectedBefore,passes=0,size40=0;
+ fs.readFile=async function(file,...args){const bytes=await originalRead.call(this,file,...args);if(!swapped&&String(file).includes('OpenSans_700Bold.ttf')){swapped=true;protectedFile=file;protectedBefore=createHash('sha256').update(bytes).digest('hex');fonts.textMeasurement.measure=(text,size,style)=>{if(text==='size-owned'&&size===40){size40++;throw Object.assign(Error('size-sensitive callback'),{code:'owned-size-dependent',details:{path:style.path}});}return originalMeasure(text,size,style);};}return bytes;};syncBuiltinESMExports();
+ deckInternals.openDeck=(...args)=>{const opened=originalOpen(...args);return {...opened,bind(index,measurement,...rest){if(index===0){passes++;measurement[fontCoverageProbe]('size-owned',20,{fontFamily:'Open Sans',fontWeight:400,path:'trace.size20'});measurement[fontCoverageProbe]('size-owned',40,{fontFamily:'Open Sans',fontWeight:400,path:'trace.size40'});}return opened.bind(index,measurement,...rest);}};};
+ let refusal;try{await fonts.ensure(next,{renderOptions});}catch(error){refusal={code:error.code,path:error.details?.path};}finally{fs.readFile=originalRead;syncBuiltinESMExports();deckInternals.openDeck=originalOpen;}
+ console.log(JSON.stringify({mode,patched,swapped,passes,size40,refusal:refusal??null,protectedBefore,protectedAfter:protectedFile?createHash('sha256').update(await originalRead(protectedFile)).digest('hex'):null}));
+`;
+  const run = (mode) =>
+    JSON.parse(
+      execFileSync(
+        process.execPath,
+        [
+          '--input-type=module',
+          '-e',
+          code,
+          mode,
+          new URL('../dist/fonts-node.js', import.meta.url).href,
+          new URL('../../gallery/dist/index.js', import.meta.url).href,
+        ],
+        { encoding: 'utf8', timeout: 20000, maxBuffer: 1000000 },
+      ).trim(),
+    );
+  const unprotected = run('disabled-guard-control'),
+    guarded = run('guarded');
+  assert.equal(unprotected.patched, true);
+  assert.equal(unprotected.swapped, true);
+  assert.equal(unprotected.size40, 0);
+  assert.equal(unprotected.passes, 1);
+  assert.equal(unprotected.refusal, null);
+  assert.equal(guarded.patched, false);
+  assert.equal(guarded.swapped, true);
+  assert.equal(guarded.passes, 2);
+  assert.equal(guarded.size40, 1);
+  assert.deepEqual(guarded.refusal, { code: 'owned-size-dependent', path: 'trace.size40' });
+  for (const result of [unprotected, guarded])
+    assert.equal(result.protectedBefore, result.protectedAfter);
+  console.log('held read callback identity', JSON.stringify({ unprotected, guarded }));
+});
+
+test('an accessor returning the original measure still keeps the Node callback path cold', async () => {
+  const renderOptions = { catalogs: [gallery] },
+    initial = { ...structuredClone(document), design: { fontScheme: 'roboto' } },
+    next = { ...structuredClone(document), design: { fontScheme: 'open-sans' } };
+  const fonts = await loadFonts({
+    pack: 'office',
+    substitutionPolicy: 'visual',
+    scripts: 'auto',
+    presentation: initial,
+    renderOptions,
+  });
+  const originalMeasure = fonts.textMeasurement.measure;
+  let reads = 0;
+  Object.defineProperty(fonts.textMeasurement, 'measure', {
+    configurable: true,
+    get() {
+      reads++;
+      return originalMeasure;
+    },
+  });
+  const original = deckInternals.openDeck;
+  let binds = 0;
+  deckInternals.openDeck = (...args) => {
+    const opened = original(...args);
+    return {
+      ...opened,
+      bind(...rest) {
+        binds++;
+        return opened.bind(...rest);
+      },
+    };
+  };
+  try {
+    await fonts.ensure(next, { renderOptions });
+    assert.equal(binds, 2 * next.slides.length);
+    assert.ok(reads > 0);
+    assert.deepEqual(fonts.pending(next, renderOptions), []);
+  } finally {
+    deckInternals.openDeck = original;
+  }
 });

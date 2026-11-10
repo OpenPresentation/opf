@@ -1,5 +1,9 @@
 # RR-114 bounded demand replay
 
+Current semantic correction checkpoint:33 focused controls pass. Every semantic/native logical field now distinguishes absent, own undefined, null and value; the actual6-versus8 collapsed requirement RED is retained. Node mode content is guarded without normalizing undefined caller data. Replay requires the original owned measurement object and its trusted data-property function identity at capture and post-await; wrappers/accessors stay cold. An actual held-font-read size-sensitive replacement proves why: an explicitly guard-disabled in-memory control skips size40, while the real guarded path preserves its original size40 failure once. This is an owned differential control, not a historical full-runtime claim. Actual16/36 structural qualification, final source review, neighbors and exclusive timing/RSS remain pending.
+
+## Historical first source checkpoint
+
 Source checkpoint under technical review, based on fresh origin/main normally merged with reviewed276f339a68069dc11970d649092d6181c9feba38. The untouched baseline genuinely records three slides six times; the candidate records three once and promotes only its existing face maps so pending does not defer the extra pass. The normal loader baseline also observes an owned font-scheme catalog mutation during an awaited font read (Roboto to Arimo); the candidate retains that behavior and the pinned font bytes remain unchanged. Twenty-eight focused controls pass before this checkpoint. Neighbors, source review and the coordinator's exclusive paired timing/RSS trial remain separate; no performance result, aggregate, native Office or release acceptance is claimed.
 
 ## Vetoable decisions
@@ -16,3 +20,7 @@ Source checkpoint under technical review, based on fresh origin/main normally me
 The new test is packages/render/test/node-demand-replay.mjs. The initial genuine6-versus3 RED, successful normal held-resource mutation control and later test-harness syntax refusals are retained under the owned artifacts/log lane for the final lossless packet. Test setup failures are not runtime failures. Current controls include actual default gallery, strict coverage ordering/errors, first-size/path behavior, semantic language/direction/encoding/native links, selection winner changes, aliases/policy/script metadata, cached slides, capacity overflow, unsupported types, opaque content, and scope release after success/failure.
 
 Do not push the folded compatibility/font/chart leaves. Work only on codex/rr-114-demand-replay. Root and A will review the frozen checkpoint; root alone schedules the exclusive paired timing/RSS comparison. No timing driver has run in this contribution. One final coherent mapper/CI/native gate remains coordinator-owned.
+
+## Remaining structural proof
+
+Before timing, run a non-timed actual16/36 input check using the accepted manifest hashes, actual loader bind/analysis counters and same-candidate cold SVG/face equality. Report cap/context/style refusals honestly. Do not raise4096/512KiB caps to manufacture admission; any compact retention repair needs measured structural evidence and review.

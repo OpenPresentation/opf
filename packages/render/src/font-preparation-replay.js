@@ -18,23 +18,29 @@ const FIELDS = [
   'lang',
   'direction',
 ];
+// Keep absent, own undefined, explicit null and values distinct; paths are deliberately first-use only.
+const property = (object, field) => {
+  const descriptor = Object.getOwnPropertyDescriptor(object, field);
+  if (!descriptor) return [0];
+  if (!Object.hasOwn(descriptor, 'value')) throw Error('opaque replay field');
+  return descriptor.value === undefined
+    ? [1]
+    : descriptor.value === null
+      ? [2]
+      : [3, descriptor.value];
+};
 const identity = (choice) =>
   JSON.stringify([
-    choice.face.family,
-    choice.face.weight,
-    !!choice.face.italic,
-    choice.face.familyGroup ?? choice.face.family,
-    choice.via,
-    choice.encoding ?? null,
+    ...['family', 'weight', 'italic', 'familyGroup'].map((field) => property(choice.face, field)),
+    property(choice, 'via'),
+    property(choice, 'encoding'),
   ]);
 const logical = (style) =>
-  JSON.stringify([
-    style.fontFamily,
-    style.fontWeight ?? 400,
-    !!style.italic,
-    style.symbolEncoding ?? null,
-    style.fontFace ?? null,
-  ]);
+  JSON.stringify(
+    ['fontFamily', 'fontWeight', 'italic', 'symbolEncoding', 'fontFace', 'sourceFontFamily'].map(
+      (field) => property(style, field),
+    ),
+  );
 function styleKey(style) {
   if (
     !style ||
@@ -61,7 +67,7 @@ function styleKey(style) {
         if (typeof value !== 'boolean') return;
       } else if (typeof value !== 'string') return;
     }
-    values.push(value ?? null);
+    values.push(property(style, field));
   }
   const path = Object.getOwnPropertyDescriptor(style, 'path');
   if (
@@ -90,9 +96,9 @@ function styleKey(style) {
         parts.push(item.value);
       }
       if (Reflect.ownKeys(face.value).length !== 3) return;
-      values.push(parts);
-    } else values.push(null);
-  } else values.push(null);
+      values.push([3, ['face', parts]]);
+    } else values.push(property(style, 'fontFace'));
+  } else values.push([0]);
   return JSON.stringify(values);
 }
 function snapshot(style) {
@@ -201,10 +207,12 @@ export function createPreparationReplay() {
       keys.context,
       keys.slides,
       optionsToken,
-      registry.policy ?? 'none',
+      property(registry, 'policy'),
+      property(registry, 'aliases'),
       [...(registry.aliases ?? new Map())],
-      registry.fallbackFamily ?? null,
-      !!registry.preserveChosenFamilies,
+      property(registry, 'fallbackFamily'),
+      property(registry, 'preserveChosenFamilies'),
+      property(registry, 'mapFamily'),
     ]);
     const bytes = 2 * key.length + pool.bytes;
     if (bytes > LIMIT_BYTES) return;

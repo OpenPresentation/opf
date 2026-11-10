@@ -66,7 +66,7 @@ export function preparationContext(presentation, options) {
     active.delete(value);
   };
   try {
-    visit([presentation, options ?? {}], 0);
+    visit([presentation, options], 0);
     return hash.digest('hex');
   } catch {
     return undefined;

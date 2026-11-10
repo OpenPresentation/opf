@@ -81,6 +81,10 @@ export async function createNodeDemand(
     selection: undefined,
   };
   registry.fontFiles = loaded.fontFiles;
+  const ownedMeasurement = registry.textMeasurement;
+  let trustedMeasure = ownedMeasurement.measure;
+  const ownsStrictCoverage = () => Object.getOwnPropertyDescriptor(registry, 'textMeasurement')?.value === ownedMeasurement
+    && Object.getOwnPropertyDescriptor(ownedMeasurement, 'measure')?.value === trustedMeasure;
   const analysis = createFontAnalysis(),
     scriptMemory = createScriptAnalysis({ fonts: analysis }),
     fallbacks = new Set();
@@ -294,7 +298,7 @@ export async function createNodeDemand(
             mapFamily,
             preserveChosenFamilies,
             preparationReplay,
-            preparationContext: preparationReplay&&mapFamily===undefined?preparationContext(presentation,renderOptions):undefined,
+            preparationContext: preparationReplay&&mapFamily===undefined&&ownsStrictCoverage()?preparationContext(presentation,{renderOptions,mode}):undefined,
             coverage(text, size, style) {
               if (
                 heldKeys.has(
@@ -579,6 +583,7 @@ export async function createNodeDemand(
     prepared(style);
     return real.measure(text, size, style);
   };
+  trustedMeasure = ownedMeasurement.measure;
   registry.textMeasurement.outlineBounds = (text, size, style) => {
     prepared(style);
     return real.outlineBounds(text, size, style);
