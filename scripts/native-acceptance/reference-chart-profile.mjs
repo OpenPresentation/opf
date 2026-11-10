@@ -783,11 +783,12 @@ export function assertReferenceWitnessSource(archive, source) {
   return true;
 }
 const chartOf = (slide) => slide.chart ?? slide.blocks?.find((b) => b.chart)?.chart;
-export function compareReferenceWitnessImports(source, imported, sourceCanvas) {
+export function compareReferenceWitnessImports(source, imported, sourceCanvas, resolveChartData) {
   assert.ok(
     sourceCanvas && ["cx", "cy"].every((key) => Number.isSafeInteger(sourceCanvas[key]) && sourceCanvas[key] > 0),
     "Explicit verified source canvas is required",
   );
+  assert.equal(typeof resolveChartData, "function", "Explicit bound core.resolveChartData is required");
   // Callers supply the validated ORIGINAL source archive canvas, never observed line paint or saved geometry.
   const scale = Math.min(sourceCanvas.cx, sourceCanvas.cy) / 6858000;
   const findings = [];
@@ -809,7 +810,14 @@ export function compareReferenceWitnessImports(source, imported, sourceCanvas) {
           source: wanted.data,
           actual: actual?.data,
         });
-      if(wanted.type==='combo'&&(!isDeepStrictEqual(actual?.line,wanted.line)||!isDeepStrictEqual(actual?.secondaryAxis,wanted.secondaryAxis)))findings.push({phase,slide:i+1,code:'import-combo-axis-association-differs',source:{line:wanted.line,secondaryAxis:wanted.secondaryAxis},actual:{line:actual?.line,secondaryAxis:actual?.secondaryAxis}});
+      if (wanted.type === "combo") {
+        // The public importer elides a redundant last-series line list. Core alone owns those defaults.
+        // Compare its full named/ordered data-role-axis model, including validity and diagnostics.
+        const sourcePlan = resolveChartData(wanted), actualPlan = resolveChartData(actual);
+        if (sourcePlan?.ok !== true || actualPlan?.ok !== true || !isDeepStrictEqual(sourcePlan, actualPlan))
+          findings.push({phase, slide:i+1, code:"import-combo-axis-association-differs",
+            source:sourcePlan, actual:actualPlan});
+      }
       if (actual?.type !== wanted.type)
         findings.push({
           phase,
@@ -993,6 +1001,10 @@ export async function bindReferenceWitnessObservation({
       assert.equal(digest(png), record.sha256);
       pngs.push({ phase, slide: index + 1, sha256: record.sha256 });
     }
+  const core = engines ? engines.core : await import(pathToFileURL(
+    createRequire(path.join(binding.envelope.generation.consumer, "package.json")).resolve("@openpresentation/opf"),
+  ).href);
+  assert.equal(typeof core?.resolveChartData, "function", "Missing bound installed core.resolveChartData");
   const imported = {};
   for (const [phase, bytes] of [
     ["original", binding.input],
@@ -1002,7 +1014,7 @@ export async function bindReferenceWitnessObservation({
       consumer: binding.envelope.generation.consumer,
       engines,
     });
-  findings.push(...compareReferenceWitnessImports(binding.source.deck, imported, binding.archive.canvas));
+  findings.push(...compareReferenceWitnessImports(binding.source.deck, imported, binding.archive.canvas, core.resolveChartData));
   readReferenceWitnessEnvelope(envelopeFile, expectedEnvelopeSha256, { root });
   return {
     schemaVersion: 1,
