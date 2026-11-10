@@ -13,7 +13,7 @@ const bases=[
   ['seven-chart-worker-self-test.ps1','reference-chart-worker-self-test.ps1','35b1b4e69d21181144ad0cfed5f4050488929717840fff514894f97751d8aa0b']
 ];
 const once=(source,before,after)=>{assert.equal(source.split(before).length-1,1,'Unique policy derivation '+before);return source.replace(before,after);};
-export function referenceControllerDerivation(){
+export function referenceControllerBaseDerivation(){
   return bases.map(([base,file,expected])=>{
     const bytes=fs.readFileSync(path.join(folder,base));assert.equal(sha(bytes),expected,'Reviewed source changed '+base);
     let text=bytes.toString('utf8').replaceAll('seven-chart','reference-chart').replaceAll('Seven','ReferenceWitness').replaceAll('seven','referenceWitness');
@@ -37,6 +37,39 @@ export function referenceControllerDerivation(){
     return{base,file,baseSha256:expected,bytes:Buffer.byteLength(text),sha256:sha(text),source:text};
   });
 }
+
+// Canonical second stage comes from the independently reviewed f3f source, never from the target being checked.
+const postflightPlan=JSON.parse(fs.readFileSync(new URL('./reference-postflight-derivation.json',import.meta.url),'utf8'));
+export function applyExactReferenceEdits(source,edits){
+  assert.equal(typeof source,'string');assert(Array.isArray(edits));
+  for(const edit of edits){
+    assert.equal(typeof edit.before,'string');assert.equal(typeof edit.after,'string');assert(edit.before.length>0&&edit.after.length>0);
+    assert.equal(source.split(edit.before).length-1,1,'Unique postflight policy anchor '+edit.name);
+    source=source.replace(edit.before,()=>edit.after);
+  }
+  return source;
+}
+export function deriveReferencePostflight(source,plan=postflightPlan){
+  assert.equal(plan.schema,1);
+  assert.equal(plan.reviewedRevision,'f3f04183c2d38ffe3e5755a23b571b6b9ce8155e');
+  assert.equal(plan.reviewedFile,'scripts/native-acceptance/run-reference-chart-profile.ps1');
+  assert.equal(plan.reviewedSourceSha256,'8902c341911dd9711872b4745d8ac3fe6524b9f5dcaa6d7ccd17b7f1f1116ee3');
+  assert.equal(sha(Buffer.from(source)),plan.baseSourceSha256,'Exact pre-postflight derivative');
+  assert.equal(Buffer.byteLength(source),plan.baseBytes);
+  assert.deepEqual(plan.edits.map(edit=>edit.name),['insert-reviewed-postflight-definitions','replace-legacy-terminal-confirmation']);
+  const result=applyExactReferenceEdits(source,plan.edits);
+  assert.equal(sha(Buffer.from(result)),plan.reviewedSourceSha256,'Exact reviewed postflight derivative');
+  assert.equal(Buffer.byteLength(result),plan.reviewedBytes);
+  return result;
+}
+export function referenceControllerDerivation(){
+  return referenceControllerBaseDerivation().map(item=>{
+    if(item.file!=='run-reference-chart-profile.ps1')return item;
+    const source=deriveReferencePostflight(item.source);
+    return {...item,prePostflightSha256:item.sha256,bytes:Buffer.byteLength(source),sha256:sha(Buffer.from(source)),source};
+  });
+}
+
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   assert.ok(process.argv.length<=3&&[undefined,'--check','--write'].includes(process.argv[2]));
   const records=referenceControllerDerivation();
