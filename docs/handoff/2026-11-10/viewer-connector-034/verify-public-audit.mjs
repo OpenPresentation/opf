@@ -1,0 +1,50 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {gunzipSync} from 'node:zlib';
+const root=import.meta.dirname;
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const m=JSON.parse(fs.readFileSync(path.join(root,'public-audit-manifest.json'),'utf8'));
+assert.equal(m.format,'opf-public-read-audit-v1');
+assert.equal(m.archive.path,'public-audit.raw.json.gz');
+const zip=fs.readFileSync(path.join(root,m.archive.path));
+assert.equal(zip.length,m.archive.bytes);assert.equal(sha(zip),m.archive.sha256);
+const raw=gunzipSync(zip,{maxOutputLength:32*1024*1024});
+assert.equal(raw.length,m.archive.uncompressedBytes);
+const pack=JSON.parse(raw.toString('utf8'));
+assert.equal(pack.format,'opf-public-read-records-v1');
+assert.equal(pack.records.length,11);assert.equal(pack.records.length,m.archive.records);
+const files=new Map();
+for(const [i,r] of pack.records.entries()){
+  assert.match(r.name,/^[A-Za-z0-9_.-]+$/);assert.ok(!files.has(r.name));
+  const b=Buffer.from(r.base64,'base64');assert.equal(b.length,r.bytes);assert.equal(sha(b),r.sha256);
+  assert.deepEqual({name:r.name,bytes:r.bytes,sha256:r.sha256},m.files[i]);files.set(r.name,b);
+}
+assert.equal([...files.values()].reduce((n,b)=>n+b.length,0),m.archive.rawFileBytes);
+const names=['01-landing.json','02-initialize.json','03-tools.json','04-resources.json','05-viewer.json','06-well-known.json','07-docs.json','08-privacy.json'];
+const rows=names.map(name=>JSON.parse(files.get(name).toString('utf8')));
+const parse=row=>JSON.parse(Buffer.from(row.body.base64,'base64').toString('utf8'));
+for(const [i,r] of rows.entries()){
+  assert.equal(r.sequence,i+1);assert.equal(r.requestHasAuthorization,false);assert.equal(r.requestHasCookie,false);
+  assert.equal(r.responseHasSetCookie,false);assert.equal(r.responseHasMcpSessionId,false);assert.equal(r.retries,0);assert.equal(r.redirectPolicy,'manual');assert.equal(r.error,undefined);
+  assert.ok(['GET','POST'].includes(r.method));assert.ok(r.url.startsWith('https://www.openpresentation.org/'));
+  for(const h of Object.keys(r.requestHeaders))assert.ok(['accept','content-type','mcp-protocol-version'].includes(h));
+  for(const h of Object.keys(r.responseHeaders))assert.ok(['content-type','cache-control','etag','location'].includes(h));
+  const b=Buffer.from(r.body.base64,'base64');assert.equal(b.length,r.body.bytes);assert.equal(sha(b),r.body.sha256);
+  assert.equal(r.status,i===0?405:200);
+  const {body,...rest}=r;assert.deepEqual({...rest,body:{bytes:body.bytes,sha256:body.sha256}},m.calls[i]);
+}
+assert.deepEqual(m.protocol,{actualCalls:8,maxCalls:8,retries:0,redirectsFollowed:0,perReadDeadlineMs:30000,perReadMaxBytes:16777216});
+assert.equal(parse(rows[1]).result.serverInfo.version,'0.33.0');
+const tools=parse(rows[2]).result.tools;assert.equal(tools.length,12);
+const app=tools.filter(t=>t._meta?.ui?.visibility?.includes('app'));assert.deepEqual(app.map(t=>t.name),['read_font_file']);
+assert.equal(tools.filter(t=>!t._meta?.ui?.visibility).length,11);
+const html=parse(rows[4]).result.contents.find(c=>c.uri==='ui://opf/deck').text;
+assert.equal(Buffer.byteLength(html),8499216);assert.equal(sha(Buffer.from(html)),'d7fb0581509bda099ff5a2db0558976c1bef4f1a45686e9d07788aaf30536eef');
+assert.ok(html.includes('deck-history'));assert.ok(!html.includes('deck-export'));assert.ok(!html.includes('deck-verdict'));
+const terminal=JSON.parse(files.get('terminal.json').toString('utf8'));
+assert.equal(terminal.actualCalls,8);assert.equal(terminal.retries,0);assert.equal(terminal.requestAuthOrCookies,false);
+assert.equal(sha(files.get('read-public.mjs')),terminal.sourceDriver.sha256);
+assert.equal(sha(files.get('HANDOFF-opf-viewer-and-connector.md')),'ffdd8879a8d8c828b1057d79473f12a487b6ed260aac6d9855154c2e58bd96b9');
+console.log(JSON.stringify({pass:true,records:files.size,rawFileBytes:m.archive.rawFileBytes,requests:8,viewerBytes:Buffer.byteLength(html),modelTools:11,appTools:1,executesArchivedCode:false}));
