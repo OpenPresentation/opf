@@ -1,0 +1,216 @@
+{
+  "kind": "ORIGINAL_B07_05_06_10_READ_ONLY_AUDIT",
+  "facts": {
+    "file": "facts.json",
+    "bytes": 63243,
+    "sha256": "7c51ab38311f0696086cf0f0022c155bb6af226c4f53b6548774e14aa1d2c887"
+  },
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 634649,
+    "sha256": "899a606c0d3f551546dc19c9850118e3e9dff20c7254d626cfcddf7962b3e60d",
+    "expandedBytes": 1415867,
+    "records": 39,
+    "decodedBytes": 1057015
+  },
+  "records": [
+    {
+      "name": "producer/build.json",
+      "bytes": 8309,
+      "sha256": "8f621fc980ecb7797d2b7622b6e7f99f6b1b031921c0d03abdcaa8ae8d32f4f7"
+    },
+    {
+      "name": "review/review.json",
+      "bytes": 42465,
+      "sha256": "16dec0e7ec0c9664443d2e3ffb427b46022acd2995fb81791ef25a6426721f2e"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/native/report.json",
+      "bytes": 30987,
+      "sha256": "84049c6c6122024788f48c8df9299f89562fc7afb5c715b97737982769d9d43a"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/native/request.json",
+      "bytes": 2355,
+      "sha256": "f3c84514a11ae5b75a75d88310457afea7fb7ab14a9f312d57273045227d29c1"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/preview.png",
+      "bytes": 12169,
+      "sha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/saved.pptx",
+      "bytes": 104071,
+      "sha256": "f5457bc6aaab1821289f0c6974e7de5529a824bd2465a439ee062bf9226f1588"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/native/original-slide-01.png",
+      "bytes": 3820,
+      "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/native/edited-slide-01.png",
+      "bytes": 3820,
+      "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/native/reopened-slide-01.png",
+      "bytes": 3820,
+      "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/original-slide.xml",
+      "bytes": 3066,
+      "sha256": "34e66c4c4dc07f2dfc803678c8e74a7b3d9471a74e5bc247a15dbbb9c6c6846a"
+    },
+    {
+      "name": "rtl-contrast-05-mixed-explicit-arabic/saved-slide.xml",
+      "bytes": 2754,
+      "sha256": "2895458dd63357bc6141d7b37caca7e529e8f7d26407bfda6a5bc0da0abdd3d4"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/native/report.json",
+      "bytes": 30969,
+      "sha256": "026b8b596c71a84ce62c3faea1ad9a3ab4f8b4ec9b2a1857b309f6ee737c295c"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/native/request.json",
+      "bytes": 2355,
+      "sha256": "06bb3910d52d73d4671f5b6cccc2d9651b3d4d7d36125573e7aa854a81a537b1"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/preview.png",
+      "bytes": 11680,
+      "sha256": "27cbf4fd66f0bffbbb77f78991525e28a42a89bc750fe98d4ce900633484ab52"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/saved.pptx",
+      "bytes": 104061,
+      "sha256": "ff5c187bcc42d6ee6b68cadb37e80af805df7df73d6dce2cfde801afe91cef72"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/native/original-slide-01.png",
+      "bytes": 3900,
+      "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/native/edited-slide-01.png",
+      "bytes": 3900,
+      "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/native/reopened-slide-01.png",
+      "bytes": 3900,
+      "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/original-slide.xml",
+      "bytes": 2883,
+      "sha256": "d97f82e7632fc1f72ecc9b5021b7bab4d532eabd61b5a3b5f50525cc50e9bc58"
+    },
+    {
+      "name": "rtl-contrast-06-whole-explicit-arabic/saved-slide.xml",
+      "bytes": 2571,
+      "sha256": "22167595e9f6812f01e8c142b921952aae00408d9a46ba1f0d202ec2e491971c"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/native/report.json",
+      "bytes": 87388,
+      "sha256": "f2e52b0bbda04f7cfd0fc71c091ad5a1fc3fd8cab580ed59304a03bd84849024"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/native/request.json",
+      "bytes": 2325,
+      "sha256": "33a27e3d4cf1982d9ba9d7bf5a0c3d0773817fa4b2aef585772d9860dc466d35"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/preview.png",
+      "bytes": 31586,
+      "sha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/input.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/saved.pptx",
+      "bytes": 105750,
+      "sha256": "d100ed781e495aa6bff94826ab4699a187a91ac173bc9e0b1e10bb2e63f48a2e"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/native/original-slide-01.png",
+      "bytes": 12259,
+      "sha256": "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/native/edited-slide-01.png",
+      "bytes": 12259,
+      "sha256": "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/native/reopened-slide-01.png",
+      "bytes": 12259,
+      "sha256": "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/original-slide.xml",
+      "bytes": 8307,
+      "sha256": "8fa85b327d9c544a39f826b2617e2a48264b5ddceb2023ac5741c1a4790e08df"
+    },
+    {
+      "name": "rtl-contrast-10-non-ascii-digits/saved-slide.xml",
+      "bytes": 7801,
+      "sha256": "d7106332c42c3ff703684e4ca5561d120eb6d9d056e0019dedc359387ac95913"
+    },
+    {
+      "name": "context054/packages/pptx/src/script-fonts.js",
+      "bytes": 39664,
+      "sha256": "fb8ec017faa680a4c24e19308da0fad7e2cc594d5e6e81889de09be87b3b99aa"
+    },
+    {
+      "name": "context054/packages/pptx/src/native-language-provenance.js",
+      "bytes": 7043,
+      "sha256": "7d9f8e3f5bb95fe7749115ac2fa02e68554853844ddc10c7cb63b4601d923cb2"
+    },
+    {
+      "name": "context054/docs/handoff/2026-11-08/CURRENT.md",
+      "bytes": 17893,
+      "sha256": "e62050ef0cfb4bab335b00384089358fbaa4eb37e1934b997c9d6d9ba342389c"
+    },
+    {
+      "name": "context054/docs/handoff/2026-11-10/README.md",
+      "bytes": 23262,
+      "sha256": "d64e1326cf307e7dde20b37908d224c476d860d5869950d2ba20ab8a3cb2fcfa"
+    }
+  ],
+  "newOfficeCalls": 0,
+  "newRenderOrExport": 0,
+  "nativeAcceptance": false
+}

@@ -1,0 +1,8 @@
+check-changed: 10 changed files since a52dc9441 (plus uncommitted and untracked)
+run   install
+run   build
+run   biome
+run   pnpm run check:changes
+run   pnpm run check:skill-commands
+run   pnpm run check:text
+skip  typecheck  (no .ts, .mts or tsconfig change)

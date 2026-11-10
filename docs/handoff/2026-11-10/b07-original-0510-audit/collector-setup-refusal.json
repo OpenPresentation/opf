@@ -1,0 +1,6 @@
+{
+  "exitCode": 1,
+  "error": "Native Windows report JSON begins with UTF8 BOM, rejected by direct JSON.parse",
+  "correction": "Strip only leading BOM in parser read-view; all archived raw source/report bytes remain exact. No Unicode text/property/output mutation.",
+  "officeCalls": 0
+}

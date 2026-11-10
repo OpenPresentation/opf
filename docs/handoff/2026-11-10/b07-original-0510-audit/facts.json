@@ -1,0 +1,2127 @@
+{
+  "kind": "ORIGINAL_B07_05_06_10_READ_ONLY_AUDIT",
+  "startedAt": "2026-11-10T06:34:55Z",
+  "finishedAt": "2026-11-10T06:42:07.295Z",
+  "sourceContext": "054456c9da817fc83b2ddd7b01920865343f38ce",
+  "originalExporter": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "originalWorker": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "producerEvidence": "da8caf37458fa967c74f504e7bafd814bc415860",
+  "rows": [
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "sourceSha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc",
+      "inputSha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+      "savedSha256": "f5457bc6aaab1821289f0c6974e7de5529a824bd2465a439ee062bf9226f1588",
+      "previewSha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e",
+      "nativePhases": [
+        {
+          "phase": "original",
+          "bytes": 3820,
+          "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575"
+        },
+        {
+          "phase": "save",
+          "bytes": 3820,
+          "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575"
+        },
+        {
+          "phase": "reopen",
+          "bytes": 3820,
+          "sha256": "2de22fadc3edb2c7325f6f37aebd8f83e06f8e4f719495ba3b83f28058de4575"
+        }
+      ],
+      "shapeCount": 2,
+      "source": {
+        "language": "ar-SA",
+        "slides": [
+          {
+            "title": "لغة عربية صريحة",
+            "items": [
+              [
+                "البند: ",
+                {
+                  "text": "Bonjour 1",
+                  "lang": "ar-SA"
+                }
+              ]
+            ],
+            "numbering": "arabic"
+          }
+        ]
+      },
+      "completeProperties": {
+        "original": [
+          {
+            "id": "2",
+            "name": "OPF heading slides.0.title line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "627507"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "1",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "a:tabLst": "",
+                  "rtl": "1",
+                  "algn": "r",
+                  "indent": "0",
+                  "marL": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos Display",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "4050",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "لغة عربية صريحة"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "4050",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "name": "OPF list slides.0.items line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "3627787"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buClr": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:buSzPts": {
+                    "val": "2775"
+                  },
+                  "a:buFont": {
+                    "typeface": "Aptos"
+                  },
+                  "a:buAutoNum": {
+                    "type": "arabicPeriod"
+                  },
+                  "rtl": "1",
+                  "algn": "r",
+                  "marL": "394654",
+                  "indent": "-394654"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "البند: "
+                  },
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "a:cs": {
+                        "typeface": "Arabic Typesetting"
+                      },
+                      "lang": "ar-SA",
+                      "altLang": "en-US",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "Bonjour 1"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          }
+        ],
+        "saved": [
+          {
+            "id": "2",
+            "name": "OPF heading slides.0.title line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "627507"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "1",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "a:tabLst": "",
+                  "marL": "0",
+                  "indent": "0",
+                  "algn": "r",
+                  "rtl": "1"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos Display",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "4050",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "لغة عربية صريحة"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "4050",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "name": "OPF list slides.0.items line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "3627787"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buClr": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:buSzPts": {
+                    "val": "2775"
+                  },
+                  "a:buFont": {
+                    "typeface": "Aptos"
+                  },
+                  "a:buAutoNum": {
+                    "type": "arabicPeriod"
+                  },
+                  "marL": "394654",
+                  "indent": "-394654",
+                  "algn": "r",
+                  "rtl": "1"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "البند: "
+                  },
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "a:cs": {
+                        "typeface": "Arabic Typesetting"
+                      },
+                      "lang": "ar-SA",
+                      "altLang": "en-US",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "Bonjour 1"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "nativeTextFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "لغة عربية صريحة",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF list slides.0.items line 0",
+          "text": "البند: Bonjour 1",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ],
+      "nativeLanguageIDObserved": false,
+      "oldReviewCanonicalImportExact": true,
+      "oldReviewNativeAcceptance": false
+    },
+    {
+      "id": "rtl-contrast-06-whole-explicit-arabic",
+      "sourceSha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923",
+      "inputSha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331",
+      "savedSha256": "ff5c187bcc42d6ee6b68cadb37e80af805df7df73d6dce2cfde801afe91cef72",
+      "previewSha256": "27cbf4fd66f0bffbbb77f78991525e28a42a89bc750fe98d4ce900633484ab52",
+      "nativePhases": [
+        {
+          "phase": "original",
+          "bytes": 3900,
+          "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa"
+        },
+        {
+          "phase": "save",
+          "bytes": 3900,
+          "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa"
+        },
+        {
+          "phase": "reopen",
+          "bytes": 3900,
+          "sha256": "af9c31230d4f90efdabee095dc8c8da829bb076cfae03941663e52054f3b2aaa"
+        }
+      ],
+      "shapeCount": 2,
+      "source": {
+        "language": "ar-SA",
+        "slides": [
+          {
+            "title": "نص عربي صريح",
+            "items": [
+              [
+                {
+                  "text": "البند: Bonjour 1",
+                  "lang": "ar-SA"
+                }
+              ]
+            ],
+            "numbering": "arabic"
+          }
+        ]
+      },
+      "completeProperties": {
+        "original": [
+          {
+            "id": "2",
+            "name": "OPF heading slides.0.title line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "627507"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "1",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "a:tabLst": "",
+                  "rtl": "1",
+                  "algn": "r",
+                  "indent": "0",
+                  "marL": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos Display",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "4050",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "نص عربي صريح"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "4050",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "name": "OPF list slides.0.items line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "3645801"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buClr": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:buSzPts": {
+                    "val": "2775"
+                  },
+                  "a:buFont": {
+                    "typeface": "Aptos"
+                  },
+                  "a:buAutoNum": {
+                    "type": "arabicPeriod"
+                  },
+                  "rtl": "1",
+                  "algn": "r",
+                  "marL": "394654",
+                  "indent": "-394654"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "a:cs": {
+                        "typeface": "Arabic Typesetting"
+                      },
+                      "lang": "ar-SA",
+                      "altLang": "en-US",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "البند: Bonjour 1"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          }
+        ],
+        "saved": [
+          {
+            "id": "2",
+            "name": "OPF heading slides.0.title line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "627507"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "1",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "a:tabLst": "",
+                  "marL": "0",
+                  "indent": "0",
+                  "algn": "r",
+                  "rtl": "1"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos Display",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "4050",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "نص عربي صريح"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "4050",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "name": "OPF list slides.0.items line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "3645801"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buClr": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:buSzPts": {
+                    "val": "2775"
+                  },
+                  "a:buFont": {
+                    "typeface": "Aptos"
+                  },
+                  "a:buAutoNum": {
+                    "type": "arabicPeriod"
+                  },
+                  "marL": "394654",
+                  "indent": "-394654",
+                  "algn": "r",
+                  "rtl": "1"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "a:cs": {
+                        "typeface": "Arabic Typesetting"
+                      },
+                      "lang": "ar-SA",
+                      "altLang": "en-US",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "البند: Bonjour 1"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "nativeTextFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "نص عربي صريح",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF list slides.0.items line 0",
+          "text": "البند: Bonjour 1",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ],
+      "nativeLanguageIDObserved": false,
+      "oldReviewCanonicalImportExact": true,
+      "oldReviewNativeAcceptance": false
+    },
+    {
+      "id": "rtl-contrast-10-non-ascii-digits",
+      "sourceSha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+      "inputSha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2",
+      "savedSha256": "d100ed781e495aa6bff94826ab4699a187a91ac173bc9e0b1e10bb2e63f48a2e",
+      "previewSha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3",
+      "nativePhases": [
+        {
+          "phase": "original",
+          "bytes": 12259,
+          "sha256": "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017"
+        },
+        {
+          "phase": "save",
+          "bytes": 12259,
+          "sha256": "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017"
+        },
+        {
+          "phase": "reopen",
+          "bytes": 12259,
+          "sha256": "9a5895a9e0912b1ad497ff379d3e49537a43e42aa4253d1bb7c4310f0b5a7017"
+        }
+      ],
+      "shapeCount": 8,
+      "source": {
+        "language": "ar-SA",
+        "slides": [
+          {
+            "title": "أرقام عربية وفارسية",
+            "blocks": [
+              {
+                "type": "text",
+                "text": "Item ١: Arabic-Indic number"
+              },
+              {
+                "type": "text",
+                "text": "Item ۱: Persian number"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Item ١: Arabic-Indic number",
+                  "Item ۱: Persian number"
+                ],
+                "numbering": "arabic"
+              }
+            ]
+          }
+        ]
+      },
+      "completeProperties": {
+        "original": [
+          {
+            "id": "2",
+            "name": "OPF heading slides.0.title line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "627507"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "1",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "a:tabLst": "",
+                  "rtl": "1",
+                  "algn": "r",
+                  "indent": "0",
+                  "marL": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos Display",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "4050",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "أرقام عربية وفارسية"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "4050",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "name": "OPF text slides.0.blocks.0.text line 0",
+            "geometry": {
+              "a:off": {
+                "x": "8097520",
+                "y": "3414884"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "algn": "l",
+                  "indent": "0",
+                  "marL": "0",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "Item ١:"
+                  },
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": " Arabic-Indic "
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "name": "OPF text slides.0.blocks.0.text line 1",
+            "geometry": {
+              "a:off": {
+                "x": "8097520",
+                "y": "3844842"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "algn": "l",
+                  "indent": "0",
+                  "marL": "0",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "number"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "5",
+            "name": "OPF text slides.0.blocks.1.text line 0",
+            "geometry": {
+              "a:off": {
+                "x": "4323080",
+                "y": "3629863"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "algn": "l",
+                  "indent": "0",
+                  "marL": "0",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "Item ۱:"
+                  },
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": " Persian number"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "6",
+            "name": "OPF list slides.0.blocks.2.items line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "2935586"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buClr": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:buSzPts": {
+                    "val": "2775"
+                  },
+                  "a:buFont": {
+                    "typeface": "Aptos"
+                  },
+                  "a:buAutoNum": {
+                    "type": "arabicPeriod"
+                  },
+                  "algn": "l",
+                  "marL": "394654",
+                  "indent": "-394654",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "Item ١: Arabic-Indic "
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "7",
+            "name": "OPF list slides.0.blocks.2.items line 1",
+            "geometry": {
+              "a:off": {
+                "x": "943294",
+                "y": "3365544"
+              },
+              "a:ext": {
+                "cx": "3151186",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "algn": "l",
+                  "indent": "0",
+                  "marL": "0",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "number"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "8",
+            "name": "OPF list slides.0.blocks.2.items line 2",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "3894182"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buClr": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:buSzPts": {
+                    "val": "2775"
+                  },
+                  "a:buFont": {
+                    "typeface": "Aptos"
+                  },
+                  "a:buAutoNum": {
+                    "type": "arabicPeriod",
+                    "startAt": "2"
+                  },
+                  "algn": "l",
+                  "marL": "394654",
+                  "indent": "-394654",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "Item ۱: Persian "
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "9",
+            "name": "OPF list slides.0.blocks.2.items line 3",
+            "geometry": {
+              "a:off": {
+                "x": "943294",
+                "y": "4324140"
+              },
+              "a:ext": {
+                "cx": "3151186",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "algn": "l",
+                  "indent": "0",
+                  "marL": "0",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "number"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          }
+        ],
+        "saved": [
+          {
+            "id": "2",
+            "name": "OPF heading slides.0.title line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094720",
+                "cy": "627507"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "1",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "a:tabLst": "",
+                  "marL": "0",
+                  "indent": "0",
+                  "algn": "r",
+                  "rtl": "1"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos Display",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "4050",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "أرقام عربية وفارسية"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "4050",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "name": "OPF text slides.0.blocks.0.text line 0",
+            "geometry": {
+              "a:off": {
+                "x": "8097520",
+                "y": "3414884"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "marL": "0",
+                  "indent": "0",
+                  "algn": "l",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "Item ١:"
+                  },
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": " Arabic-Indic "
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "name": "OPF text slides.0.blocks.0.text line 1",
+            "geometry": {
+              "a:off": {
+                "x": "8097520",
+                "y": "3844842"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "marL": "0",
+                  "indent": "0",
+                  "algn": "l",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "number"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "5",
+            "name": "OPF text slides.0.blocks.1.text line 0",
+            "geometry": {
+              "a:off": {
+                "x": "4323080",
+                "y": "3629863"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "marL": "0",
+                  "indent": "0",
+                  "algn": "l",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "b": "1",
+                      "dirty": "0"
+                    },
+                    "text": "Item ۱:"
+                  },
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": " Persian number"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "6",
+            "name": "OPF list slides.0.blocks.2.items line 0",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "2935586"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buClr": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:buSzPts": {
+                    "val": "2775"
+                  },
+                  "a:buFont": {
+                    "typeface": "Aptos"
+                  },
+                  "a:buAutoNum": {
+                    "type": "arabicPeriod"
+                  },
+                  "marL": "394654",
+                  "indent": "-394654",
+                  "algn": "l",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "Item ١: Arabic-Indic "
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "7",
+            "name": "OPF list slides.0.blocks.2.items line 1",
+            "geometry": {
+              "a:off": {
+                "x": "943294",
+                "y": "3365544"
+              },
+              "a:ext": {
+                "cx": "3151186",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "marL": "0",
+                  "indent": "0",
+                  "algn": "l",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "number"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "8",
+            "name": "OPF list slides.0.blocks.2.items line 2",
+            "geometry": {
+              "a:off": {
+                "x": "548640",
+                "y": "3894182"
+              },
+              "a:ext": {
+                "cx": "3545840",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buClr": {
+                    "a:schemeClr": {
+                      "val": "tx1"
+                    }
+                  },
+                  "a:buSzPts": {
+                    "val": "2775"
+                  },
+                  "a:buFont": {
+                    "typeface": "Aptos"
+                  },
+                  "a:buAutoNum": {
+                    "type": "arabicPeriod",
+                    "startAt": "2"
+                  },
+                  "marL": "394654",
+                  "indent": "-394654",
+                  "algn": "l",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "Item ۱: Persian "
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          },
+          {
+            "id": "9",
+            "name": "OPF list slides.0.blocks.2.items line 3",
+            "geometry": {
+              "a:off": {
+                "x": "943294",
+                "y": "4324140"
+              },
+              "a:ext": {
+                "cx": "3151186",
+                "cy": "429959"
+              }
+            },
+            "bodyPr": {
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "rtlCol": "0",
+              "anchor": "t"
+            },
+            "paragraphs": [
+              {
+                "pPr": {
+                  "a:lnSpc": {
+                    "a:spcPct": {
+                      "val": "100000"
+                    }
+                  },
+                  "a:buNone": "",
+                  "marL": "0",
+                  "indent": "0",
+                  "algn": "l",
+                  "rtl": "0"
+                },
+                "runs": [
+                  {
+                    "rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Aptos",
+                        "pitchFamily": "34",
+                        "charset": "0"
+                      },
+                      "lang": "ar-SA",
+                      "sz": "2775",
+                      "dirty": "0"
+                    },
+                    "text": "number"
+                  }
+                ],
+                "end": {
+                  "lang": "ar-SA",
+                  "sz": "2775",
+                  "dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "nativeTextFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "أرقام عربية وفارسية",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.0.text line 0",
+          "text": "Item ١: Arabic-Indic ",
+          "font": {
+            "status": "mixed-or-unavailable",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": -2,
+            "italic": 0,
+            "unavailableFields": [
+              "bold"
+            ],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.0.text line 1",
+          "text": "number",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 0",
+          "text": "Item ۱: Persian number",
+          "font": {
+            "status": "mixed-or-unavailable",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": -2,
+            "italic": 0,
+            "unavailableFields": [
+              "bold"
+            ],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF list slides.0.blocks.2.items line 0",
+          "text": "Item ١: Arabic-Indic ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF list slides.0.blocks.2.items line 1",
+          "text": "number",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF list slides.0.blocks.2.items line 2",
+          "text": "Item ۱: Persian ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF list slides.0.blocks.2.items line 3",
+          "text": "number",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ],
+      "nativeLanguageIDObserved": false,
+      "oldReviewCanonicalImportExact": true,
+      "oldReviewNativeAcceptance": false
+    }
+  ],
+  "newOfficeCalls": 0,
+  "newRenderOrExport": 0,
+  "productFixProposed": false,
+  "glyphAcceptance": false,
+  "metadataIsNotGlyphProof": true
+}
