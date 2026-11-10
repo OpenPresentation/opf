@@ -61,6 +61,12 @@ function Copy-B07Exclusive([string]$Source,[string]$Destination) {
     try { $target=[IO.File]::Open($Destination,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::None);try {$input.CopyTo($target)} finally {$target.Dispose()} } finally {$input.Dispose()}
     return [ordered]@{bytes=(Get-Item -LiteralPath $Destination).Length;sha256=(Get-FileHash -LiteralPath $Destination -Algorithm SHA256).Hash.ToLowerInvariant()}
 }
+function Get-B07SnapshotCopies([string]$Envelope,$Profile) {
+    # Preserve the first pair as an array element, including through PowerShell's function-output enumeration.
+    $copies=@(,@($Envelope,'execution-envelope.json'))
+    foreach($record in $Profile.snapshots) { $copies+=,@((Join-Path $Profile.output $record.path),$record.path) }
+    return ,$copies
+}
 function Get-B07WorkerArguments([string]$InputPath,[string]$PlanPath,[string]$ProbePath,[string]$NativeDirectory,[int]$Timeout) {
     # The existing supervisor remains the sole owner. Never pass -Worker or -ReadOnlySurvey here.
     return @('-InputPresentation',$InputPath,'-ActionPlan',$PlanPath,'-OutputDirectory',$NativeDirectory,'-TimeoutSeconds',([string]$Timeout),'-CaptureTextFonts','-TextProbePlan',$ProbePath)
@@ -100,8 +106,7 @@ $script:b07RunnerPath=Join-Path $output 'runner.json'
 $script:b07Runner=[ordered]@{schemaVersion=1;profile=$profile.profile;envelopeSha256=$ExpectedEnvelopeSha256;caseId=$profile.selectedCase.id;timeoutSeconds=$TimeoutSeconds;runOfficeRequested=[bool]$RunOffice;status='snapshots-pending';snapshots=@();nativeAcceptance=$false;registryAcceptance=$false}
 Write-B07Runner
 try {
-    $copies=@(@($ExecutionEnvelope,'execution-envelope.json'))
-    foreach($record in $profile.snapshots) { $copies+=,@((Join-Path $profile.output $record.path),$record.path) }
+    $copies=Get-B07SnapshotCopies $ExecutionEnvelope $profile
     foreach($copy in $copies) {
         $identity=Copy-B07Exclusive $copy[0] (Join-Path $output $copy[1])
         if($copy[1] -ceq 'execution-envelope.json') { if($identity.sha256 -cne $ExpectedEnvelopeSha256) { throw 'B07 execution envelope changed during copy' } }
