@@ -1,0 +1,62 @@
+{
+  "name": "Public original singleton combo primary and secondary references",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "roboto",
+    "variant": "light1"
+  },
+  "slides": [
+    {
+      "chart": {
+        "type": "combo",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue",
+            {
+              "name": "Margin",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "Q1",
+              120,
+              0.2
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 180,
+            "label": "Revenue 180",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "#C44900",
+              "width": 2,
+              "dash": "dot"
+            }
+          },
+          {
+            "value": 0.25,
+            "axis": "secondary",
+            "label": "Margin 25%",
+            "stroke": {
+              "color": "#087E8B",
+              "width": 2,
+              "dash": "dash"
+            }
+          }
+        ],
+        "line": [
+          "Margin"
+        ],
+        "secondaryAxis": [
+          "Margin"
+        ]
+      }
+    }
+  ]
+}

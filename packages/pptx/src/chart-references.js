@@ -5,7 +5,7 @@ import { attachTextTags, decodeTextTag, encodeTextTag } from './code-provenance.
 import { readBackgroundColor, colorTransforms } from './background.js';
 import { drawingObject } from './background-import.js';
 import { resolveExportColor } from './color-ref.js';
-import { applyComboConstruct, NATIVE_CHART_ELEMENTS } from './chart-types.js';
+import { applyComboConstruct, comboFromNative, NATIVE_CHART_ELEMENTS } from './chart-types.js';
 export const REFERENCE_URI = 'urn:openpresentation:chart-references:v1';
 const URI = REFERENCE_URI,
   TAG = 'OPF_CHART_REFERENCE_V1';
@@ -43,7 +43,7 @@ function addExt(xml, close, name, value) {
   return head + '<c:extLst>' + ownExt(name, value) + '</c:extLst>' + tail;
 }
 // Match the importer budgets before allocating helpers/workbook columns. These are export resource limits, not schema limits.
-export function assertReferenceExportBudget(series, lines, { key = 'OPF chart', path = 'chart.referenceLines' } = {}) {
+export function assertReferenceExportBudget(series, lines, { key = 'OPF chart', path = 'chart.referenceLines', multiAxisOverlays = false } = {}) {
   if (!lines.length) return;
   const refuse = (budget, limit) => {
     throw new OPFPptxError('chart-reference-resource-limit', 'Reference lines exceed the existing ' + budget + ' import budget; reduce chart rows, series or references before exporting.', { path, budget, limit });
@@ -67,7 +67,7 @@ export function assertReferenceExportBudget(series, lines, { key = 'OPF chart', 
   for (const line of lines) {
     const id = key + ':' + line.index;
     if (line.native) ownership.helpers.push({ id, index: line.index });
-    else ownership.overlays.push({ id, index: line.index, value: line.value, axis: line.axis, labelPosition: line.labelPosition, binding: '0000000000000000' });
+    else ownership.overlays.push({ id, index: line.index, value: line.value, axis: line.axis, labelPosition: line.labelPosition, ...(multiAxisOverlays ? {axisIds: {category: 4294967295, value: 4294967295}} : {}), binding: '0000000000000000' });
   }
   // The structural record uses UTF-8 uppercase hex; the binding placeholder has the exact fixed serialized width.
   if (enc.encode(JSON.stringify(ownership)).length * 2 > 4 * 1024 * 1024) refuse('ownership-metadata', 4 * 1024 * 1024);
@@ -139,6 +139,9 @@ export function applyReferenceSeries(xml, info, binding) {
       /(<c:legend>\s*<c:legendPos\b[^>]*\/>)/,
       `$1${info.hidden.map((idx) => `<c:legendEntry><c:idx val="${idx}"/><c:delete val="1"/></c:legendEntry>`).join('')}`,
     );
+  const overlayDoc = info.lines.some(line => !line.native) ? parser.parse(out) : undefined;
+  const overlayPlot = overlayDoc?.['c:chartSpace']?.['c:chart']?.['c:plotArea'];
+  const pairs = arr(overlayPlot?.['c:valAx']).length > 1 ? overlayAxisPairs(overlayPlot) : undefined;
   return addExt(out, '</c:chartSpace>', 'references', {
     v: 1,
     key: info.key,
@@ -155,7 +158,12 @@ export function applyReferenceSeries(xml, info, binding) {
               tag: { role: shape['p:nvSpPr']['p:cNvPr'].name === id + ' line' ? 'line' : 'label' },
             }));
         const value = { value: l.value, axis: l.axis, labelPosition: l.labelPosition };
-        return { id, index: l.index, ...value, binding: overlayHash(parser.parse(out), binding.frame, owned, value) };
+        if (arr(overlayPlot?.['c:valAx']).length > 1) {
+          const pair = pairs?.[l.axis];
+          if (!pair) throw Error('Reference overlay has no unique reciprocal native combo axis pair.');
+          value.axisIds = pair.axisIds;
+        }
+        return { id, index: l.index, ...value, binding: overlayHash(overlayDoc, binding.frame, owned, value) };
       }),
   });
 }
@@ -449,6 +457,50 @@ function overlayTag(shape, rels, entries) {
   return found?.v === 1 ? found : undefined;
 }
 
+// OOXML chart axis IDs use unsignedInt. IDs identify current native associations, never an array position.
+const validAxisId = value => Number.isInteger(value) && value >= 0 && value <= 4294967295;
+function nativeAxisId(value) {
+  if (typeof value !== 'string' || !/^\d+$/.test(value)) return;
+  const number = Number(value);
+  return validAxisId(number) ? number : undefined;
+}
+function overlayAxisPairs(plot) {
+  const combo = comboFromNative(plot), categories = arr(plot?.['c:catAx']), values = arr(plot?.['c:valAx']);
+  if (!combo || categories.length !== 2 || values.length !== 2) return;
+  const axes = new Map();
+  for (const [kind, entries] of [['category', categories], ['value', values]]) for (const axis of entries) {
+    const id = nativeAxisId(axis?.['c:axId']?.val);
+    if (id === undefined || axes.has(id)) return;
+    axes.set(id, {kind, axis});
+  }
+  const pairOf = group => {
+    const groupIds = arr(group?.['c:axId']).map(a => nativeAxisId(a?.val));
+    if (groupIds.length !== 2 || groupIds.some(id => id === undefined) || new Set(groupIds).size !== 2) return;
+    const categoryId = groupIds.find(id => axes.get(id)?.kind === 'category'), valueId = groupIds.find(id => axes.get(id)?.kind === 'value');
+    if (categoryId === undefined || valueId === undefined) return;
+    const category = axes.get(categoryId).axis, value = axes.get(valueId).axis;
+    if (nativeAxisId(category['c:crossAx']?.val) !== valueId || nativeAxisId(value['c:crossAx']?.val) !== categoryId) return;
+    return {category, value, axisIds: {category: categoryId, value: valueId}};
+  };
+  const primary = pairOf(combo.bar);
+  if (!primary) return;
+  let secondary;
+  for (const {node, secondary: isSecondary} of combo.lines) {
+    const pair = pairOf(node);
+    if (!pair) return;
+    const same = pair.axisIds.category === primary.axisIds.category && pair.axisIds.value === primary.axisIds.value;
+    if (same === isSecondary) return;
+    if (!same) {
+      if (pair.axisIds.category === primary.axisIds.category || pair.axisIds.value === primary.axisIds.value) return;
+      if (secondary && (secondary.axisIds.category !== pair.axisIds.category || secondary.axisIds.value !== pair.axisIds.value)) return;
+      secondary = pair;
+    }
+  }
+  return secondary ? {value: primary, secondary} : undefined;
+}
+function overlayValue(record) {
+  return {value: record.value, axis: record.axis, labelPosition: record.labelPosition, ...(record.axisIds === undefined ? {} : {axisIds: record.axisIds})};
+}
 // A bounded, deterministic identity hash, like existing data provenance. No hidden stored style overrides current native paint.
 function overlayHash(doc, frame, members, value) {
   const plot = doc?.['c:chartSpace']?.['c:chart']?.['c:plotArea'];
@@ -462,10 +514,19 @@ function overlayHash(doc, frame, members, value) {
       direction: group['c:barDir'],
       grouping: group['c:grouping'],
       categories: arr(group['c:ser']).map((entry) => Number(cache(entry['c:cat'])?.['c:ptCount']?.val ?? 0)),
+      ...(value.axisIds === undefined ? {} : {axisIds: ids(group).map(Number).sort((a,b) => a-b)}),
     }))),
     frame: frame['p:xfrm'],
     plot: plot?.['c:layout']?.['c:manualLayout'],
-    axes: ['c:catAx', 'c:valAx'].flatMap((k) =>
+    axes: axisBindingProjection(plot, value.axisIds !== undefined),
+    shapes: members
+      .map((m) => ({ role: m.tag.role, properties: m.shape['p:spPr'], orderedProperties: m.style, text: m.shape['p:txBody'] }))
+      .sort((a, b) => a.role < b.role ? -1 : a.role > b.role ? 1 : 0),
+  };
+  return identityHash(state);
+}
+function axisBindingProjection(plot, explicit) {
+  const axes = ['c:catAx', 'c:valAx'].flatMap((k) =>
       arr(plot?.[k]).map((a) => ({
         kind: k,
         id: a['c:axId'],
@@ -473,11 +534,11 @@ function overlayHash(doc, frame, members, value) {
         cross: a['c:crossAx'],
         between: a['c:crossBetween'],
       })),
-    ),
-    shapes: members
-      .map((m) => ({ role: m.tag.role, properties: m.shape['p:spPr'], orderedProperties: m.style, text: m.shape['p:txBody'] }))
-      .sort((a, b) => a.role < b.role ? -1 : a.role > b.role ? 1 : 0),
-  };
+    );
+  // Only new explicitly associated receipts ignore axis declaration order; legacy V1 bytes remain exact.
+  return explicit ? axes.sort((a,b) => a.kind < b.kind ? -1 : a.kind > b.kind ? 1 : Number(a.id?.val)-Number(b.id?.val)) : axes;
+}
+function identityHash(state) {
   const canonical = JSON.stringify(state, (_k, v) =>
     v && typeof v === 'object' && !Array.isArray(v)
       ? Object.fromEntries([
@@ -606,12 +667,17 @@ export function importReferenceOverlays(shapes, frames, rels, entries, { scale =
       pw = Number(layout?.['c:w']?.val) * w,
       ph = Number(layout?.['c:h']?.val) * h;
     const horizontal = arr(plot?.['c:barChart'])[0]?.['c:barDir']?.val === 'bar',
-      axis = arr(plot?.['c:valAx'])[0],
-      min = Number(axis?.['c:scaling']?.['c:min']?.val),
-      max = Number(axis?.['c:scaling']?.['c:max']?.val),
-      reverse = arr(plot?.['c:catAx'])[0]?.['c:scaling']?.['c:orientation']?.val === 'maxMin';
+      multiAxis = arr(plot?.['c:valAx']).length !== 1 || arr(plot?.['c:catAx']).length !== 1,
+      pairs = multiAxis ? overlayAxisPairs(plot) : undefined;
     const refs = [];
     for (const o of r.overlays) {
+      const pair = multiAxis ? pairs?.[o.axis] : undefined,
+        axis = multiAxis ? pair?.value : arr(plot?.['c:valAx'])[0],
+        min = Number(axis?.['c:scaling']?.['c:min']?.val),
+        max = Number(axis?.['c:scaling']?.['c:max']?.val);
+      const association = multiAxis ? pair && o.axisIds && Object.keys(o.axisIds).sort().join() === 'category,value' &&
+        validAxisId(o.axisIds.category) && validAxisId(o.axisIds.value) &&
+        o.axisIds.category === pair.axisIds.category && o.axisIds.value === pair.axisIds.value : o.axis === 'value' && o.axisIds === undefined;
       const members = tagged.filter((e) => e.tag.id === o.id && e.tag.key === r.key),
         lines = members.filter((e) => e.tag.role === 'line'),
         labels = members.filter((e) => e.tag.role === 'label'),
@@ -632,7 +698,7 @@ export function importReferenceOverlays(shapes, frames, rels, entries, { scale =
         pw > 0 &&
         ph > 0 &&
         max > min &&
-        o.axis === 'value' &&
+        association &&
         lines.length === 1 &&
         labels.length <= 1 &&
         paint &&
@@ -640,7 +706,7 @@ export function importReferenceOverlays(shapes, frames, rels, entries, { scale =
         !t?.flipH &&
         !t?.flipV &&
         (horizontal ? near(lw, 0) && lh > 0 : near(lh, 0) && lw > 0);
-      const value = { value: o.value, axis: o.axis, labelPosition: o.labelPosition };
+      const value = overlayValue(o);
       valid &&=
         Number.isFinite(o.value) &&
         ['start', 'end'].includes(o.labelPosition) &&
@@ -659,7 +725,7 @@ export function importReferenceOverlays(shapes, frames, rels, entries, { scale =
         report?.({
           code: 'chart-reference-overlay-uncertain',
           message:
-            'An explicit reference overlay no longer agrees with its versioned line/label/plot/axis binding; its visible line and label remain ordinary shapes and no stale reference is restored.',
+            'An explicit reference overlay no longer agrees with its versioned line/label/plot/axis binding, or a legacy multi-axis receipt has no explicit pair. Its visible line and label remain ordinary shapes; re-export the OPF source to create a current binding.',
         });
         continue;
       }
@@ -746,7 +812,7 @@ export function sealReferenceBindings(entries, infos, relationships) {
           }));
         return {
           ...o,
-          binding: overlayHash(doc, frame, members, { value: o.value, axis: o.axis, labelPosition: o.labelPosition }),
+          binding: overlayHash(doc, frame, members, overlayValue(o)),
         };
       });
       entries[p] = enc.encode(
