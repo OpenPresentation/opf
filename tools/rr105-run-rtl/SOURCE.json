@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "diagnosticOnly": true,
+  "caseId": "proofing-run-rtl-original09",
+  "baseWorkerRevision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+  "baseWorkerSha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9",
+  "mutantSha256": "8e3b46de6332b192439f86142520c372aadb62da4f961618d3cbdffa5e313017",
+  "fixtureReceiptSha256": "83fe03505280892fd29e048913991b0800656bc96609626751bd94c2a639f34a",
+  "derivedWorkerSha256": "7c7dfee1a2e73c47c2052ca5974c5a34c34cb611eaeb127226fe461ad425ebd0",
+  "workerFiles": [
+    {
+      "path": "test/native-furniture-control.ps1",
+      "bytes": 81652,
+      "sha256": "7c7dfee1a2e73c47c2052ca5974c5a34c34cb611eaeb127226fe461ad425ebd0"
+    },
+    {
+      "path": "test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "test/native-furniture-harness-check.ps1",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "test/fixtures/sh25-native-circle-observations.json",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    }
+  ],
+  "baselineSuiteSha256": "a9c91a0bd1df36298bd920e3a578e39be5871ea39d9aaf856a036910d97ebf25",
+  "controllerRevision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "controllerFile": {
+    "path": "scripts/native-acceptance/run-windows.ps1",
+    "bytes": 15359,
+    "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+  },
+  "workerPackage": "tools/rr105-run-rtl/worker-package",
+  "limits": {
+    "slides": 1,
+    "shapes": 3,
+    "actions": 0,
+    "timeoutSeconds": 45,
+    "maximumSeconds": 60,
+    "phases": [
+      "original",
+      "edited",
+      "reopened"
+    ],
+    "pngs": 3
+  },
+  "markerIntentionallyOmitted": false,
+  "glyphFix": false,
+  "currentRuntimeAcceptance": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "baselineInputSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+  "baseWorkerOriginalAllowedSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+  "originalNumberingPreserved": true,
+  "runBooleanInserted": {
+    "namespace": "http://schemas.openxmlformats.org/drawingml/2006/main",
+    "localName": "rtl",
+    "val": "0",
+    "shape": "OPF list slides.0.items line 0"
+  },
+  "officialReferences": {
+    "records": [
+      {
+        "name": "sdk-drawingml.json",
+        "url": "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/main/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json",
+        "finalUrl": "https://raw.githubusercontent.com/dotnet/Open-XML-SDK/main/data/schemas/schemas_openxmlformats_org_drawingml_2006_main.json",
+        "bytes": 809697,
+        "sha256": "e760b534c96ee02745d2a8084f1be362826da4470a85d0b0102a67c3b1678ab7",
+        "retrievedAt": "2026-11-10T05:36:16.303Z"
+      },
+      {
+        "name": "microsoft-righttoleft.html",
+        "url": "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.righttoleft?view=openxml-3.0.1",
+        "finalUrl": "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.righttoleft?view=openxml-3.0.1",
+        "bytes": 135489,
+        "sha256": "2697c5dfc295d20c4e43432f3f3ef679d4e0d406b4b455bd6f1bb4f71bfe6369",
+        "retrievedAt": "2026-11-10T05:36:16.642Z"
+      }
+    ],
+    "runType": "a:CT_TextCharacterProperties/a:rPr",
+    "rtlType": "a:CT_Bool/a:rtl",
+    "sequenceTail": [
+      "a:CT_TextFont/a:latin",
+      "a:CT_TextFont/a:ea",
+      "a:CT_TextFont/a:cs",
+      "a:CT_TextFont/a:sym",
+      "a:CT_Hyperlink/a:hlinkClick",
+      "a:CT_Hyperlink/a:hlinkMouseOver",
+      "a:CT_Bool/a:rtl",
+      "a:CT_OfficeArtExtensionList/a:extLst"
+    ],
+    "booleanValueType": true,
+    "lexicalFalse": "0",
+    "strongDirectionCaveat": true,
+    "fullEcmaXsdValidation": false
+  }
+}

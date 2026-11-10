@@ -9,3 +9,5 @@ References are downloaded once and stored losslessly in references/*.gz with exa
 No Office, ValidateOnly, exporter, product fix or acceptance is authorized by this tool. Native/registry/glyph/current-runtime acceptance remains false; original direction, bullet-none and pPr-group failures remain open and immutable. A current-package witness is a separate authority. NEVER MERGE this diagnostic branch.
 
 Root must review frozen source and explicit independent driver/worker execution roots before any suite preparation or native authorization. Exact commands/receipts follow in a sibling evidence packet.
+
+Pure fixture: input 4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2, mutant 8e3b46de6332b192439f86142520c372aadb62da4f961618d3cbdffa5e313017, worker 7c7dfee1a2e73c47c2052ca5974c5a34c34cb611eaeb127226fe461ad425ebd0. Fixture created at the recorded earlier clean source head; final execution roots must share one exact authored head including this adapter. Worker code bytes differ from2b only by the input allowlist hash. Baseline suitea9 remains historical original09 context.
