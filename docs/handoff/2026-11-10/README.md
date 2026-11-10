@@ -2,9 +2,18 @@
 
 **v0.33.0 is published. v0.34.0 is unpublished.** The original31 checkbox lines in [issue1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact:21checked/10open. The current-state table below supersedes historical descriptions inside those preserved lines. Every original item remains in scope. [Previous detailed checkpoint](../2026-11-09/coordination-checkpoint.md) and [binding working rules](../2026-11-07/working-rules.md) remain available.
 
-## Owner stop and final takeover
+## Active takeover — current acceptance state
 
-Read [the final coordinator handoff](final-handoff/README.md), [complete takeover prompt](final-handoff/RESUME-PROMPT.md) and [all open PRs](final-handoff/open-prs.md). This supersedes historical checkpoints below. The goal is paused after publication for a new owner-started agent; it is not complete. All current source work is pushed as explicit drafts/branches; frozen leaves and evidence remain protected. No merge or release occurs during this handoff.
+The owner resumed the complete goal with the Mac coordinator. This supersedes the stopped-team assignments below; the goal is active and incomplete. Use [the active workstream board](workstreams.md) for current owners and next gates. Reviewed successor `43ff26fbacbab09c70322ba0dc191e126a2a32f3` is pushed; canonical draft1225 remains a distinct frozen head. v0.34 is unpublished and no third release is planned.
+
+- Fresh full regression run: all310PPTX and147editor scripts PASS; original overall44PASS/9RED retained. Exact Git-input restoration and two causal test/metadata corrections are followed by selected maintained17step PASS. Eight raster differences and final coherent/native/platform/release gates remain.
+- Actual current case05 PowerPoint completes original/save/reopen and exact public source round-trips, but identical images visibly retain `1Bonjour` instead of `Bonjour 1`. Immediate nonzero global postflight leaves the attempt FAILED; Office/process actions are stopped. Raw evidence remains local pending exact transfer approval. Font metadata is not visual acceptance.
+- Current owner browser smoke and formal02 PASS at frozen89a9a74a: six cells/168cold-oracle checks/200edits/10destroy cycles. The36-slide desktop4× median edits take5.0–7.6seconds, and destroyed heap rises across cycles despite cleared caches/DOM; performance and memory acceptance remain open. The Mac quiet window is released. Two reviewed private site repairs are ready in one normal all-check merge gate; production and0.34adoption remain separate.
+- Existing rejected diagnostics remain rejected, including the historical explicit `a:rtl val="0"` attempt documented below. A standards-valid property is not itself proof of a native fix.
+
+## Historical owner stop and final takeover
+
+Read [the final coordinator handoff](final-handoff/README.md), [complete takeover prompt](final-handoff/RESUME-PROMPT.md) and [all open PRs](final-handoff/open-prs.md) for the stopped team's original checkpoint. Its pause was superseded by the owner-started active takeover above. Frozen leaves and evidence remain protected.
 
 ## Live workstream board
 
