@@ -1,0 +1,54 @@
+{
+  "records": 322,
+  "rawBytes": 2696602,
+  "compressedBytes": 704043,
+  "archiveSha256": "9520d105c89f509c55fd550a7d923efd5ccf683bd2b28958481d8e2c1e98e889",
+  "observations": {
+    "actualNativeExit": 0,
+    "coordinatorObserved": true,
+    "sourceRoots": {
+      "driver": {
+        "path": "C:/opf-work/b07-bullet",
+        "head": "90103d3546042af739acb454ccf243f0623449a3",
+        "dirty": false
+      },
+      "worker": {
+        "path": "C:/opf-work/b07-bullet-worker",
+        "head": "90103d3546042af739acb454ccf243f0623449a3",
+        "dirty": false
+      }
+    },
+    "images": [
+      {
+        "phase": "original",
+        "path": "images/original.png",
+        "archiveMember": "native/native/original-slide-01.png",
+        "bytes": 10325,
+        "sha256": "65f309d2c031d7ca82b76fd8c463e1f1c0895a7ae7629874dff6d3dbfc52745c"
+      },
+      {
+        "phase": "edited",
+        "path": "images/edited.png",
+        "archiveMember": "native/native/edited-slide-01.png",
+        "bytes": 10325,
+        "sha256": "65f309d2c031d7ca82b76fd8c463e1f1c0895a7ae7629874dff6d3dbfc52745c"
+      },
+      {
+        "phase": "reopened",
+        "path": "images/reopened.png",
+        "archiveMember": "native/native/reopened-slide-01.png",
+        "bytes": 10325,
+        "sha256": "65f309d2c031d7ca82b76fd8c463e1f1c0895a7ae7629874dff6d3dbfc52745c"
+      }
+    ],
+    "suiteSha256": "8f38b08e4bb93c6e157f66f63696eb27ad905315b23266003e6e34115282ee91",
+    "workerSha256": "3a7da86bc984de3a43c29004006e4045dbf8fe4b91791fcf5f67411b2e06cea0",
+    "visual": "First English line remains reversed with numeric marker omitted; continuation correct. Root and independent archiving-agent image inspection agree; all3rasters byte-identical.",
+    "automaticNumberAloneHypothesis": "REJECTED; does not isolate remaining bullet style/indent or other causes",
+    "processFlight": "Freshglobal0; immediatepostflight1/PID7556; laterreadonlypostflight0. Initial1 is preserved. Supervisor reports cleanuptrue; do not equate this with immediateglobalzero. No attach/kill/launcherCOMcleanup.",
+    "glyphFix": false,
+    "currentRuntimeAcceptance": false,
+    "nativeAcceptance": false,
+    "registryAcceptance": false
+  }
+}
