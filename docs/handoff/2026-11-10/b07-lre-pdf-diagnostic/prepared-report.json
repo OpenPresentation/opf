@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "diagnosticOnly": true,
+  "parentController": "eb0d8c61c67a5adc99442f1ac6c778d04e109038",
+  "baseInput": {
+    "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+    "bytes": 100889,
+    "sha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7"
+  },
+  "variant": {
+    "bytes": 100900,
+    "sha256": "faa5324ec7371f9802119d618089bf27f68816c19370e5b892272fd228700dc9"
+  },
+  "proof": {
+    "parts": 147,
+    "changedParts": [
+      "ppt/slides/slide1.xml"
+    ],
+    "untouchedLocalRecords": 146,
+    "slideUtf8BytesAdded": 6,
+    "nativeUtf16UnitsAdded": 2,
+    "onlyChange": {
+      "part": "ppt/slides/slide1.xml",
+      "runTextBefore": "Bonjour 1",
+      "runTextAfter": "\u202aBonjour 1\u202c",
+      "addedCodepoints": [
+        "U+202A LEFT-TO-RIGHT EMBEDDING",
+        "U+202C POP DIRECTIONAL FORMATTING"
+      ]
+    },
+    "rPrLanguageSizeShapeFramesThemeArabicTextUnchanged": true,
+    "oldNativeUtf16EqualitySatisfied": false,
+    "currentModifiedInputExactTextRequired": true,
+    "notUnicodeNormalization": true
+  },
+  "negativeControls": [
+    "missing exact Latin token",
+    "duplicate token",
+    "wrong authored proofing",
+    "wrong point size",
+    "extra uncontrolled formatting point",
+    "extra property change",
+    "changed theme",
+    "old native text cannot satisfy current input"
+  ],
+  "officeInvoked": false,
+  "controllerCreateVerifyOrValidateOnlyInvoked": false,
+  "nativeAcceptance": false,
+  "sourceOpfChanged": false
+}
