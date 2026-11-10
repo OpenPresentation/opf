@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "sourceBase": "08976a2f12544d92f1135d9fe827c39b438373ee",
+  "sourceCheckpoint": "85eb6181ea14035fe88bbed3a78084cbb9c88752",
+  "sourceTree": "9718d229e0cb8c901e83bc73bd59a71e0d41c08b",
+  "raw": {
+    "bytes": 138038,
+    "sha256": "11f3a5cbb41288d9a0ce1de0855d7a64d480282187c8d46f30be7fdf9691a671",
+    "records": 28,
+    "rawBytes": 613707
+  },
+  "sourceFiles": [
+    {
+      "path": "packages/pptx/src/chart-references.js",
+      "bytes": 34109,
+      "sha256": "70dc4572f0c8716c511bae8f51b7b7aca91a60d6859466a7a5957e40aa9c024c"
+    },
+    {
+      "path": "packages/pptx/test/chart-reference-powerpoint-save.mjs",
+      "bytes": 7714,
+      "sha256": "5835e97a39471a00d01c0e93d2402927cd7d9bf28444cb1175003f2d6a0d6a4f"
+    },
+    {
+      "path": "packages/pptx/test/fixtures/reference-powerpoint-save/original.pptx",
+      "bytes": 128805,
+      "sha256": "77305632e835d3fbf4e5348ec29eaddf916f0894896ac06988e431e7f575f748"
+    },
+    {
+      "path": "packages/pptx/test/fixtures/reference-powerpoint-save/saved.pptx",
+      "bytes": 134053,
+      "sha256": "850f10044211acaed135951c6730a5a63e178091f2cd5389833b837273aa56c0"
+    },
+    {
+      "path": "packages/pptx/test/fixtures/reference-powerpoint-save/source.opf.json",
+      "bytes": 2418,
+      "sha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e"
+    }
+  ],
+  "sourceMatchesBuilt": true,
+  "protectedObjects": [
+    {
+      "path": "packages/javascript",
+      "object": "c937f5570844425c4047b4229cbf7362ed5a1371"
+    },
+    {
+      "path": "packages/render",
+      "object": "874e3194c992d6392a202721f903f3197335d0dd"
+    },
+    {
+      "path": "packages/gallery",
+      "object": "609eb292785d0103295a7a2d9eb2fd09c6fbf835"
+    },
+    {
+      "path": "packages/editor",
+      "object": "1b1362e5d8f9813135a5426b167397afe5d16a79"
+    },
+    {
+      "path": "packages/mcp",
+      "object": "e70b97d726ec8eace0725945d81f6c239cf73773"
+    },
+    {
+      "path": "packages/cli",
+      "object": "74c6c57b2d099d88eb4e85f969a3f52ee8267908"
+    },
+    {
+      "path": "spec",
+      "object": "4329ff4b34d0c13d9b9fc32d4235897fa7cac274"
+    },
+    {
+      "path": "scripts",
+      "object": "6e0623013e66566f2c589948a30b11afce6efb3c"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "object": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "object": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "path": "package.json",
+      "object": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    },
+    {
+      "path": "packages/pptx/vendor",
+      "object": "7ea25333b0de29b0aba2b180c7080fe3fa789ff2"
+    },
+    {
+      "path": "packages/pptx/scripts",
+      "object": "7243dbd58a490a17317451ba79c0e6f650b028b1"
+    },
+    {
+      "path": "packages/pptx/src/index.js",
+      "object": "5fa791135aafc79c66d41301a4d4e9010a97b4ee"
+    },
+    {
+      "path": "packages/pptx/src/data-provenance.js",
+      "object": "e56e030fb15cf9530a900590f7b76157f5288635"
+    }
+  ],
+  "baseline": {
+    "passed": 3,
+    "failed": 3
+  },
+  "after": {
+    "passed": 6,
+    "failed": 0
+  },
+  "neighbors": {
+    "passed": 43,
+    "failed": 0
+  },
+  "syntax": {
+    "files": 476,
+    "failed": 0
+  },
+  "directBiome": {
+    "status": 1,
+    "processed": 0,
+    "reason": "PPTX package intentionally excluded by existing root configuration"
+  },
+  "originalNativeObservationFindings": 7,
+  "originalObservationUnchanged": true,
+  "fullMapperRun": false,
+  "newOfficeRun": false,
+  "exportChanged": false,
+  "newTags": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}
