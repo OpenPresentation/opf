@@ -41,7 +41,7 @@ for(const [id,platform] of platforms){
 // FF-27 + FF-34 + FA-31: one footer with a live slide-number field and linked socials in the same zone (text stacks before socials).
 const mixed={...deck,design:{footer:{start:{text:'Slide {{slide.number}} of {{deck.slideCount}}'},end:{text:'{{slide.number}}',socials:true}}},slides:[{text:'One'},{text:'Two'}]};
 const mixedParts=resolvePresentation(mixed).slides[1].geometry.furniture.parts;
-assert.deepEqual(mixedParts.map(part=>[part.zone,part.field,part.text,part.fields?.length??0,part.links?.length??0]),[['left','text','Slide 2 of 2',1,0],['right','text','2',1,0],['right','socials',lines,0,3]]);
+assert.deepEqual(mixedParts.map(part=>[part.zone,part.field,part.text,part.fields?.length??0,part.links?.length??0]),[['start','text','Slide 2 of 2',1,0],['end','text','2',1,0],['end','socials',lines,0,3]]);
 const mixedSvg=toSvg(mixed, 2,{trace:true});
 // Rendered in document order: left zone first, then the right zone top to bottom.
 const order=['Slide 2 of 2','>2<',...lines.split('\n')].map(text=>mixedSvg.indexOf(text.startsWith('>')?text:`>${text}<`,mixedSvg.indexOf('data-opf-furniture-field')));

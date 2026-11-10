@@ -189,7 +189,7 @@ const JSON_LISTS = [
   [`{${SALES},"slides":[{"chart":{"data":{"dataset":"pipeline"},"mapping":{"series":["|"]}}}]}`, ['Stage'], ['Quarter']],
   ['{"references":[{"id":"r1","text":"R"}],"slides":[{"title":[{"text":"x","cite":"|"}]}]}', ['r1'], []],
   ['{"narrative":"classic-story","slides":[{"beat":"|"}]}', ['opening', 'closing'], []],
-  ['{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second', 'left'], ['title']],
+  ['{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second', 'start'], ['title']],
   ['{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"title":[{"text":"x","color":"|"}]}]}', ['var:brand'], ['var:hero']],
   ['{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"image":"|"}]}', ['var:hero'], ['var:brand']],
 ];

@@ -15,8 +15,8 @@ const rootDeck={slides:[{title:'Root',text:'Root text'}]};
 assert.deepEqual(resolvePresentation(rootDeck).slides[0].contentItems,[{type:'text',field:'text',value:'Root text',path:'slides.0.text'}]);
 const promotedDeck={slides:[{title:'Promoted',start:{text:'Left text'},end:{text:'Right text'}}]};
 assert.deepEqual(resolvePresentation(promotedDeck).slides[0].contentItems,[
- {type:'text',field:'text',value:'Left text',path:'slides.0.start.text',regionKey:'left'},
- {type:'text',field:'text',value:'Right text',path:'slides.0.end.text',regionKey:'right'}
+ {type:'text',field:'text',value:'Left text',path:'slides.0.start.text',regionKey:'start'},
+ {type:'text',field:'text',value:'Right text',path:'slides.0.end.text',regionKey:'end'}
 ]);
 const group={blocks:[{text:'First nested'},{text:'Second nested'}],composition:{mode:'column'}};
 const richSlide={title:[{text:'Plain',bold:false},{text:' strong',bold:true,italic:true}],subtitle:[{text:'Sub',italic:true}],blocks:[group]};

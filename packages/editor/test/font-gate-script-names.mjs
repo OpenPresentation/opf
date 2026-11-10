@@ -78,7 +78,7 @@ const nameDeck = (name, sample) => ({
   $schema: "https://openpresentation.org/schema/opf/v1",
   name: `Script name fixture ${name} ${sample.id}`,
   ...(sample.language ? { language: sample.language } : {}),
-  design: { fontScheme: { id: "x-script-name-fixture", name, major: name, minor: name, eastAsian: { major: name, minor: name }, complexScript: { major: name, minor: name } } },
+  design: { fontScheme: { id: "x-script-name-fixture", major: name, minor: name, eastAsian: { major: name, minor: name }, complexScript: { major: name, minor: name } } },
   slides: [{ id: "a", title: sample.text, text: [{ text: sample.text }, { text: sample.text, bold: true }] }],
 });
 const codeDeck = (name, sample) => {

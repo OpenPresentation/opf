@@ -95,7 +95,7 @@ delete noSpeaker.speaker;
 assert.deepEqual(designWarnings(noSpeaker, 0).map((warning) => [warning.code, warning.path]), [["unresolved-content", "design.footer.end.text"]]);
 const noOrganization = { ...document(), design: { header: { start: { text: "{{organization.name}} | {{organization.acme.name}}" } } } };
 delete noOrganization.organization;
-assert.deepEqual(designWarnings(noOrganization, 0).map((warning) => warning.message), ["The header left zone shows {{organization.name}}, but the presentation has no value for it."], "an unknown id is not this panel's finding");
+assert.deepEqual(designWarnings(noOrganization, 0).map((warning) => warning.message), ["The header start zone shows {{organization.name}}, but the presentation has no value for it."], "an unknown id is not this panel's finding");
 // The slide-scoped values never warn from the deck: only {{slide.section}} on a slide without a section does.
 const perSlide = { ...document(), design: { footer: { end: { text: "{{slide.number}} / {{deck.slideCount}}" } } } };
 assert.deepEqual(designWarnings(perSlide, 0), []);

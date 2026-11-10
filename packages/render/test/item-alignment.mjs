@@ -6,6 +6,8 @@ import {resolvePresentation, toSvg} from './catalog-harness.mjs'; // FA-23: regi
 // against the coordinated core (CI links the pinned core source), so every
 // composed item must carry item.alignment.
 const anchors = {left: 'start', center: 'middle', right: 'end'};
+const authoredAlignment = {left: 'start', center: 'center', right: 'end'};
+const physicalAlignment = {start: 'left', center: 'center', end: 'right'};
 const attribute = (attrs, name) => new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
 const deck = {design: {fontScheme: 'roboto'}, slides: [
   {title: 'Centered cover', subtitle: 'Centered subtitle', design: {titleAlignment: 'center', contentAlignment: 'center'}},
@@ -24,7 +26,7 @@ for (const input of [deck, deckDesign]) {
       // Independent statement of the rule: the title follows titleAlignment only,
       // every other item follows contentAlignment; slide design wins over the deck.
       const design = {...input.design, ...slide.design};
-      const rule = (item.field === 'title' ? design.titleAlignment : design.contentAlignment) ?? 'left';
+      const rule = physicalAlignment[(item.field === 'title' ? design.titleAlignment : design.contentAlignment) ?? 'start'];
       assert.equal(item.alignment, rule, `${item.path}: core item.alignment`);
       const text = [...svg.matchAll(/<text\b([^>]*)>([^<]*)<\/text>/g)].find(([, attrs, body]) => body === item.value && attrs.includes(`data-opf-path="${item.path}"`));
       assert.ok(text, `${item.path}: traced preview text`);
@@ -67,7 +69,7 @@ assert.deepEqual(coverAnchors(2), ['start', 'start', 'start'], 'slides with body
 // native PPTX metric paragraphs; left metrics and tabbed lines keep their origins.
 let metricLines = 0, tabbedAligned = 0;
 for (const align of ['left', 'center', 'right']) {
-  const metricDeck = {design: {fontScheme: 'roboto', contentAlignment: align}, slides: [{title: 'KPI', blocks: [{metric: {value: '$48B', label: 'TAM'}}, {metric: {value: 42, label: 'Left\tRight'}}]}]};
+  const metricDeck = {design: {fontScheme: 'roboto', contentAlignment: authoredAlignment[align]}, slides: [{title: 'KPI', blocks: [{metric: {value: '$48B', label: 'TAM'}}, {metric: {value: 42, label: 'Left\tRight'}}]}]};
   const bound = resolvePresentation(metricDeck).slides[0], svg = toSvg(metricDeck, 1, {trace: true});
   const factor = {left: 0, center: .5, right: 1}[align];
   for (const item of bound.geometry.items.filter(entry => entry.field === 'metric')) {

@@ -47,7 +47,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const labels = fields.map((field) => field.label);
   for (const expected of ["Presentation name", "Presentation description", "Footer center", "Title", "Subtitle", "Tag", "Speaker notes", "Text",
     "List item 1", "List item 2", "List item 3", "Quote", "Quote attribution", "Quote source", "Metric label", "Timeline event 1", "Timeline event 1 date",
-    "Table header 1", "Table row 1, column 1", "Table row 2, column 1", "Chart label 2", "Image alt text", "Code", "left · Text", "right · List item 1", "Header left"]) {
+    "Table header 1", "Table row 1, column 1", "Table row 2, column 1", "Chart label 2", "Image alt text", "Code", "start · Text", "end · List item 1", "Header start"]) {
     assert.ok(labels.some((label) => label.endsWith(expected)), `searches ${expected}: ${labels.join("; ")}`);
   }
   assert.ok(!fields.some((field) => /asset:|data:|minimal|roboto/.test(field.text)), "never searches asset references or design ids");
