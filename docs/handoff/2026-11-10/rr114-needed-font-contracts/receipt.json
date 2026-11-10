@@ -180,5 +180,21 @@
   ],
   "nativeAcceptance": false,
   "registryAcceptance": false,
-  "performanceClaim": false
+  "performanceClaim": false,
+  "metadataCheck": {
+    "source": "4f5607d4f9528f208dc1f85c4acb9dfadc8995ef",
+    "base": "7c7ccda85b57904d8ebead8ae52eb1f843d19737",
+    "status": "RED",
+    "passed": 6,
+    "failed": 1,
+    "skipped": 1,
+    "exit": 1,
+    "seconds": 27.7,
+    "reason": "same sparse historical gallery prerequisites; no package tests repeated",
+    "file": "metadata-checks.json.gz",
+    "bytes": 14485,
+    "sha256": "6bb8c0bd598698a7b9c2c98dd9dbf510d10052888072218fafc94d68deff7505",
+    "records": 9,
+    "rawBytes": 38626
+  }
 }
