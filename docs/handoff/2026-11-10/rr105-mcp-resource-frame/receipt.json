@@ -322,5 +322,21 @@
   },
   "nativeAcceptance": false,
   "hostedAcceptance": false,
-  "actualClaudeSave": false
+  "actualClaudeSave": false,
+  "metadataCheck": {
+    "source": "d6465fb86a244a039941bf9fe06d4a7677232239",
+    "base": "36d7b83c307b2c329c67b69190ff3678218d5669",
+    "status": "RED",
+    "actualExit": 1,
+    "passed": 6,
+    "failed": 1,
+    "skipped": 1,
+    "seconds": 27.8,
+    "reason": "same sparse gallery inputs; no MCP suite repeated",
+    "file": "metadata-checks.json.gz",
+    "bytes": 14103,
+    "sha256": "20e9fb5118765f2b9243c4ef59a51528a1383335617cb794dbc6ec7d05d29611",
+    "records": 9,
+    "rawBytes": 38431
+  }
 }

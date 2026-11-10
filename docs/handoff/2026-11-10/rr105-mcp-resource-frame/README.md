@@ -27,3 +27,5 @@ The [lossless raw packet](raw.json.gz) contains 85 records / 4,727,555 raw bytes
 The original 519 HTML at its earlier 0cbec404 hash was no longer present after the coordinator built 455. The capture guard refused it; no substitute is called 519. The archived baseline instead exactly matches the independently recorded clean-455 diagnostic SHA a35bc3e4, while the original 519 log and earlier byte observations remain literal.
 
 Run with Node 24: `node docs/handoff/2026-11-10/rr105-mcp-resource-frame/verify.mjs`. It verifies both complete HTML artifacts, exact serialized-frame sizes, every raw record/image and unchanged protected source objects. It preserves wrapper failure/null child exit and does not promote local synthetic host acknowledgements into an actual Claude save, hosted adoption, native or release acceptance.
+
+The separate metadata-only delta at `d6465fb8` ran with the corrected ordinary runner and actually exited 1: 6 PASS / 1 same sparse-gallery RED / typecheck SKIP, 27.8 seconds. Its nine lossless records are in `metadata-checks.json.gz` and included by the same verifier; no MCP test suite was repeated.
