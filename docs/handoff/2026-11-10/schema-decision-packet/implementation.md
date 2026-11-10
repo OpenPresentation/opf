@@ -84,3 +84,8 @@ Coordinator owns the independently reproduced partial-table marker repair and ac
 
 
 Before the common rebuild, an actual8case malformedownedstroke probe reproduced whole-import refusals; exact untouched/edited archives and runtime hashes are retained in [owned-stroke](checks/owned-stroke/README.md). Root approved validating only recovered authored styles through the existing format validator's actual sharedLine field, preserving the current valid native reference and paint with a style diagnostic. The source guard and16malformed controls are prepared; commonbuild verification is pending. This forward repair does not alter exported bytes, native ownership/binding or any cap.
+
+
+## Common ca895 qualification and exact historical vocabulary view
+
+Root-approved malformedstroke guard, table-marker correction284and testcurrencya230 are normally integrated in clean ca895. One all-workspacebuild passes; the unchangedSDKframeguard measures10,425,631/10,485,760bytes (60,129headroom). Twelve focused PPTX files pass, including16malformedownership controls, genuine033currentedits, all43referencecases and untouched genuinePowerPointSavedcontrols. All38previously RED PPTX files replay33PASS/5RED97.496s. After exact14typedinverseproof reproduces ORIGINALwhole/first16hashes and archiveSHA, root-reviewed comparison/accessor-only corrections pass4/4on the identical built runtime. Originalhash literals/oldfailures/nativebytes stay unchanged. RR54strict21lock is stillREDhere and coordinator-owned; renderer/template/golden/finalCI/native/release acceptance are not inferred. [All exact outputs/inventories/proofs](checks/common-ca895/README.md).
