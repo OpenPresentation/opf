@@ -2,6 +2,10 @@
 
 **v0.33.0 is published. v0.34.0 is unpublished.** The original31 checkbox lines in [issue1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact:21checked/10open. The current-state table below supersedes historical descriptions inside those preserved lines. Every original item remains in scope. [Previous detailed checkpoint](../2026-11-09/coordination-checkpoint.md) and [binding working rules](../2026-11-07/working-rules.md) remain available.
 
+## Live workstream board
+
+The [operational workstream board](workstreams.md) explicitly tracks both owner-supplied handoffs, each active or queued lane, its owner, current evidence and next acceptance gate. v0.34 remains unpublished. Latest completed cleanup verifies59 stale original process identities gone across two passes; user apps/current runtimes/Office were preserved. W03 slot correction and W04 native preparation gap are separate open items. Schema report and viewer materials are review/delivery work, not silently folded product changes.
+
 ## Latest coordinator checkpoint — 2026-11-10T16:30:00Z
 
 The owner requested background-process cleanup. An independent OS check at16:22:54Z verified all28 identified stale Codex automation/helper processes absent; their combined pre-cleanup working sets were approximately522MiB (not a measured physical-memory reduction). Current runtimes and user applications were preserved; no PowerPoint was running. The initial reporting step had a PowerShell boolean typo after termination; an independent verification completed successfully and no termination was repeated. Full process command lines remain private local diagnostics. Vetoable resource decision: at most ONE heavy build/test aggregate at a time, with read-only review/documentation in parallel and no duplicate watchers. All three agent lanes reported no abandoned live jobs.
