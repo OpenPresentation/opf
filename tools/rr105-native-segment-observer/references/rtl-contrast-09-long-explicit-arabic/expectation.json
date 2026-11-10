@@ -1,0 +1,202 @@
+{
+  "sourceSha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c",
+  "originalArchiveSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+  "variantSha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c",
+  "slideCount": 1,
+  "shapeCount": 5,
+  "shapes": [
+    {
+      "index": 1,
+      "id": 2,
+      "name": "OPF heading slides.0.title line 0",
+      "text": "نص لاتيني بلغة عربية صريحة",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 40.5,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos Display"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": []
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "548640",
+        "cx": "11094720",
+        "cy": "627507"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 43.20000076293945,
+        "width": 873.5999755859375,
+        "height": 49.40999984741211
+      },
+      "runPropertiesSha256": "2eb15f4024468498f9c28dd87cad020706a5c671c99da2a6ae69b8e21d766c59"
+    },
+    {
+      "index": 2,
+      "id": 3,
+      "name": "OPF list slides.0.items line 0",
+      "text": "Item ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": [
+            {
+              "typeface": "Arabic Typesetting"
+            }
+          ]
+        }
+      ],
+      "frameEmu": {
+        "x": "548640",
+        "y": "3430822",
+        "cx": "11094720",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 43.20000076293945,
+        "top": 270.1434631347656,
+        "width": 873.5999755859375,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "21173d068af9aad46da1587a722459fa0ba3648c4eae7140aca2fcf156e33f28"
+    },
+    {
+      "index": 3,
+      "id": 6,
+      "name": "RR105 independent native segment OPF list slides.0.items line 0 5:6",
+      "text": "1",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": [
+            {
+              "typeface": "Arabic Typesetting"
+            }
+          ]
+        }
+      ],
+      "frameEmu": {
+        "x": "1705103",
+        "y": "3430822",
+        "cx": "188258",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 134.2600860595703,
+        "top": 270.1434631347656,
+        "width": 14.823464393615723,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "21173d068af9aad46da1587a722459fa0ba3648c4eae7140aca2fcf156e33f28"
+    },
+    {
+      "index": 4,
+      "id": 7,
+      "name": "RR105 independent native segment OPF list slides.0.items line 0 6:69",
+      "text": ": Customers told us onboarding took too long, so we rebuilt it ",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": [
+            {
+              "typeface": "Arabic Typesetting"
+            }
+          ]
+        }
+      ],
+      "frameEmu": {
+        "x": "1893362",
+        "y": "3430822",
+        "cx": "9243929",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 149.0836181640625,
+        "top": 270.1434631347656,
+        "width": 727.868408203125,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "21173d068af9aad46da1587a722459fa0ba3648c4eae7140aca2fcf156e33f28"
+    },
+    {
+      "index": 5,
+      "id": 4,
+      "name": "OPF list slides.0.items line 1",
+      "text": "around the customer journey.",
+      "language": "ar-SA",
+      "languageId": 1025,
+      "fontSize": 27.75,
+      "requestedFonts": [
+        {
+          "latin": [
+            {
+              "charset": "0",
+              "pitchFamily": "34",
+              "typeface": "Aptos"
+            }
+          ],
+          "eastAsian": [],
+          "complexScript": [
+            {
+              "typeface": "Arabic Typesetting"
+            }
+          ]
+        }
+      ],
+      "frameEmu": {
+        "x": "943294",
+        "y": "3860780",
+        "cx": "10700066",
+        "cy": "429959"
+      },
+      "framePoints": {
+        "left": 74.27511596679688,
+        "top": 303.9984130859375,
+        "width": 842.52490234375,
+        "height": 33.855037689208984
+      },
+      "runPropertiesSha256": "21173d068af9aad46da1587a722459fa0ba3648c4eae7140aca2fcf156e33f28"
+    }
+  ],
+  "physicalFontIdentity": false,
+  "nativeAcceptance": false
+}
