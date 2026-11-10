@@ -1,0 +1,11 @@
+# Closed follow-up and native diagnostics
+
+The required changed delta against db640 on exact863b83b9 passed15steps/0RED/typeSKIP in138.2s using explicit pinned Node24.20/pnpm10.33.2. Direct unchanged portability check passed149decks/966slides. Every15selected maintained log and all external receipts are lossless here; original16PASS/3RED gate remains unchanged in coherent-gate-db640. The plan command itself exited0 while its extra raw-index-metadata guard reported refresh; the actual gate kept source and both index guards exact.
+
+Published b077 retains128/128 unchanged tail commands170..297 on frozen d7. Combined coverage is original168passed files +corrected169seven-group test +unchanged128tail; this is not one new full297-script suite or final CI. Current renderer full/goldens/browser/platform/release gates remain owed.
+
+Published eb0/888 retain the CS-only diagnostic: font slot alone fixes the tiny digit (8x15 to10x24 ink), preserves all other pixels, but ordering remains1Bonjour. Both evidence metadata checks passed5steps, with exact painting fixture preempted; an external postguard typo is retained separately from the green maintained command. Physical font identity remains unknown.
+
+Root legacyLRE/PDF diagnostic on643e also ran once successfully with unchanged lifecycle/current18UTF16input checks. Its original/reopened PNGs are byte-identical to the known nonblank CS-only control; it does not fix ordering. The image viewer showed a blank preview despite identical nonblank bytes: no native-blank claim is made. Exactly2backend formatting codepoints were declared; old native16-unit equality is false, source OPF is unchanged and no public insertion/removal contract is adopted. All actual raw native data and root flights/launch/output are retained. LRO/PDF is a separate source-only proposal, not accepted or run by this checkpoint.
+
+Builtins-only replay: node docs/handoff/2026-11-10/closed-followup-863/verify.mjs. No archived command, Office or renderer is executed. Vetoable decision: preserve rich-run boundaries through a validated existing-tag span map in the pending font fix; never replace the exact-document regression with broad adjacent-run merging or cached-text replay.
