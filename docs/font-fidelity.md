@@ -5,10 +5,10 @@
 Use the coordinated versions in the [quickstart](quickstart.md). Load fonts once per worker with
 `loadFonts({pack: 'office', scripts: 'auto', presentation})` from `@openpresentation/opf-render/fonts-node`,
 and pass the same handle as `{fonts}` to preview and export. When reusing a worker for another deck,
-ensure its required faces are loaded before rendering, and bound concurrency. The renderer's
+await `fonts.ensure(nextPresentation, { renderOptions: { catalogs, date } })` before rendering with the same catalogs/date, and bound concurrency. Supplying `presentation` selects only the actual family/weight/style and needed glyph fallback files; omitting it keeps deliberate whole-pack loading. A no-text deck holds no faces, while explicit supplied faces stay loaded. Selection uses the complete allowed metadata, so loading fewer files does not change weight selection or native typeface names. Reused handles retain previously used faces; bound their lifetime as well as worker count. The renderer's
 [soak benchmark](https://github.com/OpenPresentation/opf-render#long-lived-workers-measured-memory-and-latency-opf-render171)
-(`npm run bench:soak`) measured no memory growth over 500 jobs per worker. A worker holds about 1 GiB, peaking near
-2 GiB on script-heavy decks, and its output is byte-identical on every repeat. Measure your own decks the same way.
+(`npm run bench:soak`) measured no memory growth over 500 jobs per worker. That historical whole-pack worker held about 1 GiB, peaking near
+2 GiB on script-heavy decks, and its output was byte-identical on every repeat. Measure your own decks the same way.
 For an authored Roboto deck, `pack: 'base'` avoids loading Office replacements. Neither loader reads system fonts by default.
 
 For every catalog scheme's authored and rendered fonts, see the website's generated [font scheme and export matrix](https://www.openpresentation.org/docs/font-fidelity#font-scheme-and-export-matrix), including PowerPoint, Keynote, LibreOffice, HTML, SVG, PNG and PDF.
@@ -22,6 +22,12 @@ and requires them on the recipient's machine; it does not automatically embed th
 The policy below is current. Version-specific measurements and implementation history are evidence for their named
 checkpoints, not transfer-size budgets for every release. The [font roadmap](plans/font-roadmap.md) records historical
 planning; use installed package APIs and measured output when choosing a deployment strategy.
+
+## A different language on one slide
+
+Set `language` on a slide when its language differs from the deck. It accepts the same BCP-47 tag or inline Language object as the deck; omission inherits the deck value. Direction, script fonts, quotation marks and number formatting follow the slide, while an individual text run's `lang` still wins. PPTX import keeps that explicit run language when measured text wraps across native fragments; native proofing-language edits remain authoritative.
+
+For example, an English deck can contain `{ "language": "ar-SA", "design": { "fontScheme": "noto-sans-arabic" }, "text": "اختر خط الشريحة" }`. The Arabic slide reads right to left, measures Noto Naskh Arabic and writes that selected face in PowerPoint's complex-script slot. The deck's other slides retain their own language and font selection. Markdown writes a tag as `<!-- slide: language=ar-SA -->`; an inline Language object uses an `opf-slide` block.
 
 ## Pass `fonts`, otherwise the estimate
 
@@ -101,7 +107,7 @@ The registry tries an exact supplied family first, then an explicit alias, the p
 | Keynote, imported PPTX | Authored names when available to Keynote | Installed fonts; Keynote handles missing-font substitution |
 | LibreOffice Impress, PPTX | Authored names, subject to local replacement settings | Installed fonts or system/LibreOffice substitutions |
 
-Native substitutions depend on application version, operating system, installed fonts and user settings. OPF cannot promise one fixed replacement for a missing native font. See [PowerPoint cloud fonts](https://support.microsoft.com/en-us/office/fonts/cloud-fonts-in-office), [Keynote missing fonts](https://support.apple.com/guide/keynote/tane1c9a464f/mac), and [LibreOffice replacement settings](https://help.libreoffice.org/latest/en-US/text/shared/optionen/01010700.html). There is no native OPF `.key` exporter: import PPTX into Keynote, then save there if needed.
+Native substitutions depend on application version, operating system, installed fonts and user settings. OPF cannot promise one fixed replacement for a missing native font. See [PowerPoint cloud fonts](https://support.microsoft.com/en-us/office/fonts/cloud-fonts-in-office), [Keynote missing fonts](https://support.apple.com/guide/keynote/tane1c9a464f/mac), and [LibreOffice replacement settings](https://help.libreoffice.org/latest/en-US/text/shared/optionen/01010700.html). There is no native OPF `.key` exporter: import PPTX into Keynote, then save there if needed. For LibreOffice (experimental), [LibreOffice interoperability](libreoffice.md) describes the font profile OPF tests with: its preview fonts plus a fontconfig alias from each proprietary family to its replacement.
 
 ### HTML and rendered exports
 
@@ -196,6 +202,8 @@ fonts.registry.resolveFont({fontFamily: 'Calibri', fontWeight: 400});
 Upstream evidence: [Carlito](https://github.com/googlefonts/carlito), [Fontconfig mappings](https://chromium.googlesource.com/external/fontconfig/+/refs/heads/main/conf.d/30-metric-aliases.conf), [Arimo](https://github.com/google/fonts/blob/main/ofl/arimo/DESCRIPTION.en_us.html), [Tinos](https://github.com/google/fonts/blob/main/ofl/tinos/DESCRIPTION.en_us.html), [Cousine](https://github.com/google/fonts/blob/main/ofl/cousine/DESCRIPTION.en_us.html), and [Gelasio](https://github.com/SorkinType/Gelasio). Metric classification describes compatibility intent within the stated style scope, not universal identical output. Missing matching weights cannot silently qualify for the metric tier.
 
 RR-17: Liberation Sans, Serif and Mono are not bundled (Reserved Font Name, about 4.4 MB); a document that names them previews with Arimo, Tinos and Cousine, the Croscore faces Liberation 2 is built from (metric, 0.0000% in four styles). Each Latin replacement has a per-family qualification and a fixture in every host; see the [font tracker](programs/font-fidelity-everywhere/font-tracker.md).
+
+Weight-named Segoe UI Light and Semilight preview with Red Hat Display 300 for regular text and 400 for bold emphasis. Semilight targets 350, but the bundled font has no 350 face, so this remains a visual approximation. PPTX retains the authored family. Yu Gothic Regular also remains a documented visual gap: its Noto Sans JP Regular stand-in draws heavier strokes. See the [font tracker](programs/font-fidelity-everywhere/font-tracker.md) and [comparison sheets](evidence/lh-177-font-weight/README.md).
 
 The exported `FONT_COMPATIBILITY` list also contains optional visual candidates and CJK families. Listing a candidate does not bundle it or imply complete character coverage. Liberation Sans Narrow is a separate legacy distribution with a different license history; it is not part of this bundle. Wingdings, Webdings, and Symbol require character mapping before substitution; an ordinary fallback fails with `font-encoding-required`. Cambria Math previews with STIX Two Math and Segoe UI Emoji with Noto Color Emoji once opf-render's optional math and emoji packs are loaded (FF-45, [special families: emoji and math](programs/font-fidelity-everywhere/special-families-emoji-math.md)); without the pack a renderer reports `font-unavailable` naming it, like any other routed family (the former `math-font-required` failure is gone). OPF has no equation model: a Cambria Math run is text drawn per character in a math face, not MATH-table layout.
 

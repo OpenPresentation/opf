@@ -1,0 +1,1258 @@
+{
+  "scope": "Unmodified exact integration67 core runtime; current editor resize changes do not affect composeSlideGeometry. No core source edit or patched runtime.",
+  "head": "6f1762b484c2fa86e6f5381a02b7a151919738bb",
+  "node": "v24.20.0",
+  "execPath": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+  "modeContract": "auto chooses a grid from available space and content; grid uses columns; row and column use one horizontal or vertical track.",
+  "anchors": {
+    "textTiles": "packages/javascript/src/composition.ts:10909-10950",
+    "lateCall": "packages/javascript/src/composition.ts:11080",
+    "flowRecord": "packages/javascript/src/composition.ts:7701",
+    "schema": "spec/schemas/opf.schema.json:5156"
+  },
+  "rows": [
+    {
+      "name": "implicit",
+      "input": {
+        "slides": [
+          {
+            "id": "s",
+            "title": "A stack",
+            "blocks": [
+              {
+                "id": "b0",
+                "text": "Short line 1"
+              },
+              {
+                "id": "b1",
+                "text": "Short line 2"
+              },
+              {
+                "id": "b2",
+                "text": "Short line 3"
+              },
+              {
+                "id": "b3",
+                "text": "Short line 4"
+              }
+            ]
+          }
+        ]
+      },
+      "inputSha256": "da006453f19baf76d72f1eaa06ec3599d6d2ab02c6d111f85b45477494a80464",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "distinctBodyX": [
+        140.4,
+        734.8
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "auto"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 570.4
+          },
+          {
+            "offset": 594.4,
+            "size": 570.4
+          }
+        ],
+        "rows": [
+          {
+            "offset": 208.29999999999998,
+            "size": 37.16
+          },
+          {
+            "offset": 269.4599999999999,
+            "size": 37.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "tiles": [
+        {
+          "form": "tiles",
+          "badges": 4,
+          "chips": [
+            {
+              "x": 57.6,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 57.6,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            }
+          ]
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "auto",
+      "input": {
+        "slides": [
+          {
+            "id": "s",
+            "title": "A stack",
+            "composition": {
+              "mode": "auto"
+            },
+            "blocks": [
+              {
+                "id": "b0",
+                "text": "Short line 1"
+              },
+              {
+                "id": "b1",
+                "text": "Short line 2"
+              },
+              {
+                "id": "b2",
+                "text": "Short line 3"
+              },
+              {
+                "id": "b3",
+                "text": "Short line 4"
+              }
+            ]
+          }
+        ]
+      },
+      "inputSha256": "2a16471dac41882b330b518acd581c63cd2498354781b6a2c4b9b2ea0c6550d9",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "distinctBodyX": [
+        140.4,
+        734.8
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "auto"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 570.4
+          },
+          {
+            "offset": 594.4,
+            "size": 570.4
+          }
+        ],
+        "rows": [
+          {
+            "offset": 208.29999999999998,
+            "size": 37.16
+          },
+          {
+            "offset": 269.4599999999999,
+            "size": 37.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "tiles": [
+        {
+          "form": "tiles",
+          "badges": 4,
+          "chips": [
+            {
+              "x": 57.6,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 57.6,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            }
+          ]
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "column",
+      "input": {
+        "slides": [
+          {
+            "id": "s",
+            "title": "A stack",
+            "composition": {
+              "mode": "column"
+            },
+            "blocks": [
+              {
+                "id": "b0",
+                "text": "Short line 1"
+              },
+              {
+                "id": "b1",
+                "text": "Short line 2"
+              },
+              {
+                "id": "b2",
+                "text": "Short line 3"
+              },
+              {
+                "id": "b3",
+                "text": "Short line 4"
+              }
+            ]
+          }
+        ]
+      },
+      "inputSha256": "b4cf41f696e3f72527ecaf3f241e53a172d2a8b5db82572700acc20381a4dce3",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "distinctBodyX": [
+        140.4,
+        734.8
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "column"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 34.16
+          },
+          {
+            "offset": 58.16,
+            "size": 34.16
+          },
+          {
+            "offset": 116.31999999999996,
+            "size": 34.16
+          },
+          {
+            "offset": 174.47999999999993,
+            "size": 34.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "tiles": [
+        {
+          "form": "tiles",
+          "badges": 4,
+          "chips": [
+            {
+              "x": 57.6,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 57.6,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            }
+          ]
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "row",
+      "input": {
+        "slides": [
+          {
+            "id": "s",
+            "title": "A stack",
+            "composition": {
+              "mode": "row"
+            },
+            "blocks": [
+              {
+                "id": "b0",
+                "text": "Short line 1"
+              },
+              {
+                "id": "b1",
+                "text": "Short line 2"
+              },
+              {
+                "id": "b2",
+                "text": "Short line 3"
+              },
+              {
+                "id": "b3",
+                "text": "Short line 4"
+              }
+            ]
+          }
+        ]
+      },
+      "inputSha256": "72fa51d643df05965a24cc9f38ef4030a335b7ca4e2d995ba907c37009af404c",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "distinctBodyX": [
+        140.4,
+        734.8
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "row"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 273.2
+          },
+          {
+            "offset": 297.2,
+            "size": 273.2
+          },
+          {
+            "offset": 594.4,
+            "size": 273.2
+          },
+          {
+            "offset": 891.5999999999999,
+            "size": 273.2
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 514.92
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "tiles": [
+        {
+          "form": "tiles",
+          "badges": 4,
+          "chips": [
+            {
+              "x": 57.6,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 57.6,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            }
+          ]
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "grid-one",
+      "input": {
+        "slides": [
+          {
+            "id": "s",
+            "title": "A stack",
+            "composition": {
+              "mode": "grid",
+              "columns": 1
+            },
+            "blocks": [
+              {
+                "id": "b0",
+                "text": "Short line 1"
+              },
+              {
+                "id": "b1",
+                "text": "Short line 2"
+              },
+              {
+                "id": "b2",
+                "text": "Short line 3"
+              },
+              {
+                "id": "b3",
+                "text": "Short line 4"
+              }
+            ]
+          }
+        ]
+      },
+      "inputSha256": "1ac9fb4edbc857c29f255ce440fafa9550bef88f7f5ee1b3e17ddc66afc8555b",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "distinctBodyX": [
+        140.4,
+        734.8
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "grid",
+          "columns": 1
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 34.16
+          },
+          {
+            "offset": 58.16,
+            "size": 34.16
+          },
+          {
+            "offset": 116.31999999999996,
+            "size": 34.16
+          },
+          {
+            "offset": 174.47999999999993,
+            "size": 34.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "tiles": [
+        {
+          "form": "tiles",
+          "badges": 4,
+          "chips": [
+            {
+              "x": 57.6,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 57.6,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            }
+          ]
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "grid-two",
+      "input": {
+        "slides": [
+          {
+            "id": "s",
+            "title": "A stack",
+            "composition": {
+              "mode": "grid",
+              "columns": 2
+            },
+            "blocks": [
+              {
+                "id": "b0",
+                "text": "Short line 1"
+              },
+              {
+                "id": "b1",
+                "text": "Short line 2"
+              },
+              {
+                "id": "b2",
+                "text": "Short line 3"
+              },
+              {
+                "id": "b3",
+                "text": "Short line 4"
+              }
+            ]
+          }
+        ]
+      },
+      "inputSha256": "63234ab086c34c0b68753bf44c8a8777f97176ae121ede94db254bfba6fda43c",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "distinctBodyX": [
+        140.4,
+        734.8
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "grid",
+          "columns": 2
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 570.4
+          },
+          {
+            "offset": 594.4,
+            "size": 570.4
+          }
+        ],
+        "rows": [
+          {
+            "offset": 208.29999999999998,
+            "size": 37.16
+          },
+          {
+            "offset": 269.4599999999999,
+            "size": 37.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "tiles": [
+        {
+          "form": "tiles",
+          "badges": 4,
+          "chips": [
+            {
+              "x": 57.6,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 57.6,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            }
+          ]
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "auto-one",
+      "input": {
+        "slides": [
+          {
+            "id": "s",
+            "title": "A stack",
+            "composition": {
+              "mode": "auto",
+              "columns": 1
+            },
+            "blocks": [
+              {
+                "id": "b0",
+                "text": "Short line 1"
+              },
+              {
+                "id": "b1",
+                "text": "Short line 2"
+              },
+              {
+                "id": "b2",
+                "text": "Short line 3"
+              },
+              {
+                "id": "b3",
+                "text": "Short line 4"
+              }
+            ]
+          }
+        ]
+      },
+      "inputSha256": "f992f5708da13909bbb26d5230064397d827db95b216fbb7820a4d0cc724dab5",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "distinctBodyX": [
+        140.4,
+        734.8
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "auto",
+          "columns": 1
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 34.16
+          },
+          {
+            "offset": 58.16,
+            "size": 34.16
+          },
+          {
+            "offset": 116.31999999999996,
+            "size": 34.16
+          },
+          {
+            "offset": 174.47999999999993,
+            "size": 34.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "tiles": [
+        {
+          "form": "tiles",
+          "badges": 4,
+          "chips": [
+            {
+              "x": 57.6,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 57.6,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            }
+          ]
+        }
+      ],
+      "diagnostics": []
+    },
+    {
+      "name": "weighted-column",
+      "input": {
+        "slides": [
+          {
+            "id": "s",
+            "title": "A stack",
+            "composition": {
+              "mode": "column",
+              "weights": [
+                1,
+                1,
+                1,
+                1
+              ]
+            },
+            "blocks": [
+              {
+                "id": "b0",
+                "text": "Short line 1"
+              },
+              {
+                "id": "b1",
+                "text": "Short line 2"
+              },
+              {
+                "id": "b2",
+                "text": "Short line 3"
+              },
+              {
+                "id": "b3",
+                "text": "Short line 4"
+              }
+            ]
+          }
+        ]
+      },
+      "inputSha256": "24bbecd3466c3b5b65eac8cf6d87bb78cd1c1d3b7f082b79150a621e99fea91a",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56
+        }
+      ],
+      "distinctBodyX": [
+        140.4,
+        734.8
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "column",
+          "weights": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 110.72999999999999
+          },
+          {
+            "offset": 134.73,
+            "size": 110.72999999999999
+          },
+          {
+            "offset": 269.46,
+            "size": 110.72999999999999
+          },
+          {
+            "offset": 404.18999999999994,
+            "size": 110.72999999999999
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "tiles": [
+        {
+          "form": "tiles",
+          "badges": 4,
+          "chips": [
+            {
+              "x": 57.6,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 159.48,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 57.6,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            },
+            {
+              "x": 652,
+              "y": 422.93999999999994,
+              "width": 570.4,
+              "height": 239.45999999999998
+            }
+          ]
+        }
+      ],
+      "diagnostics": []
+    }
+  ]
+}

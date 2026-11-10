@@ -55,6 +55,7 @@
     "check:published-matrix-consumer": "node --test scripts/published-matrix/consumer-dependencies.test.mjs",
     "check:published-matrix-fixture": "node --test scripts/published-matrix/browser-fixture.test.mjs",
     "check:parity-work-directory": "node --test scripts/published-matrix/parity-work-directory.test.mjs",
+    "check:font-switch-fixtures": "node --test scripts/font-switch-list-fixture.test.mjs scripts/published-matrix/prepare-harness.test.mjs",
     "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs scripts/published-matrix/compare-parity.test.mjs scripts/published-matrix/installed-parity.test.mjs",
     "check:font-tracker": "node --test scripts/build-font-tracker.test.mjs && node scripts/build-font-tracker.mjs --check",
     "build:font-tracker": "node scripts/build-font-tracker.mjs",
@@ -130,9 +131,12 @@
     "check:audit-picture-bullets": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/picture-bullets.test.mjs",
     "native:prepare": "node scripts/native-acceptance/prepare.mjs",
     "check:native-acceptance": "node --test scripts/native-acceptance/*.test.mjs",
+    "check:libreoffice": "node --test scripts/libreoffice/*.test.mjs",
+    "qualify:libreoffice": "node scripts/libreoffice/run.mjs",
     "native:compare:tables": "node scripts/native-acceptance/compare-tables.mjs",
     "check:preview-packaging": "node --test scripts/ecosystem-preview-plan.test.mjs",
-    "check:workspace-pack": "node --test scripts/workspace-pack.test.mjs"
+    "check:workspace-pack": "node --test scripts/workspace-pack.test.mjs",
+    "check:e1-current-after": "node --test scripts/e1-current-after.test.mjs"
   },
   "engines": {
     "node": ">=22"

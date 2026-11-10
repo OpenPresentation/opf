@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Layout sampler",
+  "slides": [
+    {
+      "title": "How the running total works",
+      "blocks": [
+        {
+          "code": {
+            "language": "javascript",
+            "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+          }
+        },
+        {
+          "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+        }
+      ],
+      "id": "dynamic-code-text",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          3,
+          2
+        ]
+      }
+    }
+  ],
+  "language": "en",
+  "description": "One slide for each of the 30 default layouts, then 13 dynamic compositions (no layout record), all on one fictional six-week pilot story. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
+  "design": {
+    "footer": {
+      "left": {
+        "text": "Illustrative example • fictional data"
+      },
+      "right": {
+        "text": "{{slide.number}}"
+      }
+    },
+    "background": "light1"
+  }
+}

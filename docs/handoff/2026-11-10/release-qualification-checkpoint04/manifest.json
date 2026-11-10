@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "records": 41,
+  "rawRecordBytes": 1248378,
+  "expandedJsonBytes": 1671212,
+  "archiveBytes": 314209,
+  "archiveSha256": "90537d980cfc2c42bddd7d258689f02a28b3359a32f3f114ad29f829532a2f87",
+  "source": "dc2e94f77faeb5789421a3cf7d4cadf2536b1834",
+  "packageSource": "1b6034589bcd0314fcd98d5b5cd51dc08f719999"
+}

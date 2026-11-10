@@ -1,0 +1,359 @@
+{
+  "source": "270852b451b8f185e51dec3500ad970eecd3d051",
+  "tree": "c173b989c3d6f9711eaacd62f77a077a5b1efdbf",
+  "base": "8f0f77d08ce63c5a797d553edf927f0d4c06f658",
+  "node": "v24.20.0",
+  "focused": {
+    "tests": 37,
+    "pass": 37,
+    "fail": 0,
+    "log": "artifacts/reference-lines/final-focused-270.log"
+  },
+  "qualification": "FOCUSED_PASS_REQUIRED_GATE_HELD",
+  "nativeAcceptance": false,
+  "requiredGate": "Coordinator holds heavy gate until existing check and quiet performance windows finish; ONE combined source gate still owed.",
+  "priorFailures": "Initial WIP/peer controls and corrected bad-band fixture are preserved literally. Six peer semantic/bound controls and later overlay-paint/category-diagnostic REDs precede fixes; the old local build did not capture a byte-exact original dist receipt, so its logs are not misrepresented as a separate sealed native/runtime qualification.",
+  "protected": [
+    {
+      "path": "packages/pptx/vendor",
+      "base": "7ea25333b0de29b0aba2b180c7080fe3fa789ff2",
+      "current": "7ea25333b0de29b0aba2b180c7080fe3fa789ff2"
+    },
+    {
+      "path": "spec",
+      "base": "47ab0069a2800dceca481299a89efdb2ca7c458c",
+      "current": "47ab0069a2800dceca481299a89efdb2ca7c458c"
+    },
+    {
+      "path": ".github",
+      "base": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4",
+      "current": "c4c18ba8c6545ea17966cb4b7148bf2a10b55cd4"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "base": "3432ab613e493c84d6eea74cb68d30be08720102",
+      "current": "3432ab613e493c84d6eea74cb68d30be08720102"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "base": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+      "current": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "path": "package.json",
+      "base": "846e509ef00827a8efe72c059ca3238f88be6fbb",
+      "current": "846e509ef00827a8efe72c059ca3238f88be6fbb"
+    }
+  ],
+  "runtime": [
+    {
+      "name": "index.js",
+      "sourceSha256": "8e11637c2d03a5a059250d37481741e6bb449b366e8d71c36e61170b0406241d",
+      "distSha256": "8e11637c2d03a5a059250d37481741e6bb449b366e8d71c36e61170b0406241d"
+    },
+    {
+      "name": "chart-references.js",
+      "sourceSha256": "dc3c3e6e78e49f53109a56789f3797ef8497b9300761cb08358edf45e7d0d32f",
+      "distSha256": "dc3c3e6e78e49f53109a56789f3797ef8497b9300761cb08358edf45e7d0d32f"
+    },
+    {
+      "name": "chart-marks.js",
+      "sourceSha256": "feb9459b478816a5cfef45ac45245b81d627cf06d27301ae720705d3ea7d1cb3",
+      "distSha256": "feb9459b478816a5cfef45ac45245b81d627cf06d27301ae720705d3ea7d1cb3"
+    },
+    {
+      "name": "data-provenance.js",
+      "sourceSha256": "60c5494430a58829755d33f2ec5da2f47679fbcb30f4815e74ffac5b2b3a1cf8",
+      "distSha256": "60c5494430a58829755d33f2ec5da2f47679fbcb30f4815e74ffac5b2b3a1cf8"
+    }
+  ],
+  "files": [
+    {
+      "path": "artifacts/reference-lines/alpha-01.log",
+      "bytes": 2324,
+      "sha256": "ec7fad926288b29d5c6b45bf1a756d952fd3f2b78f4e0413baf3680f6d9e5c83"
+    },
+    {
+      "path": "artifacts/reference-lines/alpha-02.log",
+      "bytes": 1197,
+      "sha256": "193467efbace69b74d7f91f18a44f3b8a361657058f2bd8ed1dafd21c09917a6"
+    },
+    {
+      "path": "artifacts/reference-lines/alpha-03.log",
+      "bytes": 1041,
+      "sha256": "8e35f9fb78eb95fd7913afa5b97ac285d2efdd58853e6ace58ddd3ade50e32f4"
+    },
+    {
+      "path": "artifacts/reference-lines/bar-01.log",
+      "bytes": 1564,
+      "sha256": "c5ffaef8de2dd63112b7a2ea29284d356d4e46892ce8737e6f0c74b9f5f00cb8"
+    },
+    {
+      "path": "artifacts/reference-lines/bar-02.log",
+      "bytes": 901,
+      "sha256": "28119470ef917c0833af6d4014558c0bfca1474990225ef5ae9e88ac533758dc"
+    },
+    {
+      "path": "artifacts/reference-lines/bar-chart.xml",
+      "bytes": 6673,
+      "sha256": "5de147bc1761847c7e9e1f4f838f614a62623ca734314612ac43def4b4bcee5c"
+    },
+    {
+      "path": "artifacts/reference-lines/bar.mjs",
+      "bytes": 793,
+      "sha256": "ac1a05e7023ad3545a46d93b57372ef1f2402c4087b1399690f0c7929dd8efa3"
+    },
+    {
+      "path": "artifacts/reference-lines/bar.pptx",
+      "bytes": 27207,
+      "sha256": "8cf86cdffdfdfd98e6a4897ee0b6b41eaecacb9d9e79a532c7a002ae2953758e"
+    },
+    {
+      "path": "artifacts/reference-lines/biome-01.log",
+      "bytes": 1467,
+      "sha256": "dc998f34a9d3f58724260e0cd4b8c266b33badb8270bdb6913e09e0f4bb2d141"
+    },
+    {
+      "path": "artifacts/reference-lines/deps-build-01.log",
+      "bytes": 11210,
+      "sha256": "d8b55fa6b576440ed1ca6eb4f62f74d412db14336d514c32541cc648e19daf68"
+    },
+    {
+      "path": "artifacts/reference-lines/deps-build-02.log",
+      "bytes": 11210,
+      "sha256": "3f6ff413dd3ad7e8372941dd95a26d7527ff84550c24e017653e40d2c4cb68d1"
+    },
+    {
+      "path": "artifacts/reference-lines/divergent-category-before.log",
+      "bytes": 1107,
+      "sha256": "51248f3568febeb72f7dbd287d5adb4a80f8ac81da513383ec548c5344e77fd8"
+    },
+    {
+      "path": "artifacts/reference-lines/final-build-270.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/final-focused-270.log",
+      "bytes": 3937,
+      "sha256": "13cd44187d7eb94f972c6a4fcdfa190942758e5963dd6847cdba558b0404a751"
+    },
+    {
+      "path": "artifacts/reference-lines/first-02.log",
+      "bytes": 1246,
+      "sha256": "033906b8d0fed9ebe4c31859e103a9133effab7a1598ca00de5657a96d7e5332"
+    },
+    {
+      "path": "artifacts/reference-lines/first-chart.xml",
+      "bytes": 9290,
+      "sha256": "f3092ff3e23304131d10c6c1679b2d0d7c947f7e317af520fb5e3964169a31ed"
+    },
+    {
+      "path": "artifacts/reference-lines/first.log",
+      "bytes": 494,
+      "sha256": "68957a0fbffeae827f96965cc528677a63640cf93cf2d83916df2f4fde455441"
+    },
+    {
+      "path": "artifacts/reference-lines/first.mjs",
+      "bytes": 798,
+      "sha256": "b026ef22d3d5b9954685617502c311e6af5346865505b6bff4b4dac65de17407"
+    },
+    {
+      "path": "artifacts/reference-lines/first.pptx",
+      "bytes": 26458,
+      "sha256": "7fb505d6c58da913a80a6aa028fac8c089d0d5cc24dc1ab99171792f31b1f18a"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-01.log",
+      "bytes": 77458,
+      "sha256": "1a6bc33d1319d21b5685868b7921f0c6b569aaabfae67bcb843e1f9c0416a95a"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-02.log",
+      "bytes": 3778,
+      "sha256": "4249c482f08a2990eed97ac78b1c32f75ff93a8fe662697d49fecaba3f8303ba"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-03.log",
+      "bytes": 1517,
+      "sha256": "1bece085e58e69f39f4d60ee0ce9347358ea2a5592d65d934d362f8f2972607a"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-04.log",
+      "bytes": 1943,
+      "sha256": "118b5c0c67d4ef7fff10a057fead84555772b20b680d95a589e5e30ca1c4bac1"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-05.log",
+      "bytes": 2864,
+      "sha256": "6f94b303005334d5bda179737e250326378fd50d941277449f0cf42be885cc41"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-06.log",
+      "bytes": 2325,
+      "sha256": "eb9e808ac2381b19f53fd5883dd1d88de96916ca9e430341ff59a11561c7c1c8"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-07.log",
+      "bytes": 2340,
+      "sha256": "07cf652ea018c478cf605870cb3c1f1429fad5ff61753e22cf4c91d3ecb9e3de"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-08.log",
+      "bytes": 2647,
+      "sha256": "e8345e0e499633b25c7674d5745e417951bf2f841ced5b53c7ac106ae7c2a405"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-neighbors-01.log",
+      "bytes": 3267,
+      "sha256": "1a8551455529ec876995f4c4c1fbb81844af2d7540290d235a38cb754d9e744e"
+    },
+    {
+      "path": "artifacts/reference-lines/focused-neighbors.mjs",
+      "bytes": 385,
+      "sha256": "e33867550a7c61abaf7617926606a2250d61b495e2f9a82442f654cf9b39289e"
+    },
+    {
+      "path": "artifacts/reference-lines/format/biome.json",
+      "bytes": 135,
+      "sha256": "45d6150a404de6332a1690b4d30726582d8b9a487ccd105e66c3b506c101e2c3"
+    },
+    {
+      "path": "artifacts/reference-lines/formatter.log",
+      "bytes": 1094,
+      "sha256": "fe8ee2d30a104c7f718f0eeee95431af74d0ec58896f10379df8723c95f2b4d2"
+    },
+    {
+      "path": "artifacts/reference-lines/install.log",
+      "bytes": 4248,
+      "sha256": "274256722f74eb543d3d50e631a018664a3b39c1a720d02d88dfff80d950b1d2"
+    },
+    {
+      "path": "artifacts/reference-lines/legacy-band-fixture-corrected-before.log",
+      "bytes": 232,
+      "sha256": "c5c08361957c0c0788eeb5586529bdafa33317db1d84161f91652139e7ef4627"
+    },
+    {
+      "path": "artifacts/reference-lines/overlay-paint-before.log",
+      "bytes": 1249,
+      "sha256": "7a244818e0d4a97b5b2fd3715e6d45e9bbf2ff0c0577d236c5388c6a738f5ded"
+    },
+    {
+      "path": "artifacts/reference-lines/peer-regressions-after-01.log",
+      "bytes": 4073,
+      "sha256": "8b6a157fd58f481d2714e3e6c8372e24c6c84eb3eaa03a597e090a2c72b69ba2"
+    },
+    {
+      "path": "artifacts/reference-lines/peer-regressions-after-02.log",
+      "bytes": 3697,
+      "sha256": "f2fa7d4bc5198ca82e896bbe471a7e503461c82602b974797f0ba892f71d806f"
+    },
+    {
+      "path": "artifacts/reference-lines/peer-regressions-after-03.log",
+      "bytes": 3809,
+      "sha256": "dc94610c15162f468fd64ea147561f58e38f0c64b20943fe1fb1aed9f37e8c81"
+    },
+    {
+      "path": "artifacts/reference-lines/peer-regressions-after-04.log",
+      "bytes": 3940,
+      "sha256": "5ee53542780e5b4ad49726e73045bbb75498307b77e8093051f80be8513e7fec"
+    },
+    {
+      "path": "artifacts/reference-lines/peer-regressions-before.log",
+      "bytes": 6787,
+      "sha256": "d21884e438071500ddb6be9175da779a23b48629417fa5592f616662da2148f5"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-01.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-02.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-03.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-04.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-05.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-06.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-07.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-08.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-09.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-10.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-11.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-peer-01.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-peer-02.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-peer-03.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/pptx-build-peer-04.log",
+      "bytes": 175,
+      "sha256": "c289e27d04a8964401722e31fcfd282e1bf7a894723532ee2a5709ad9a814877"
+    },
+    {
+      "path": "artifacts/reference-lines/readme-paragraph.md",
+      "bytes": 2007,
+      "sha256": "0ca7d3b12dcd6adcf51107f0b283a0ba7f041ffa1315c84a9a99087c65f077d6"
+    },
+    {
+      "path": "artifacts/reference-lines/wire.mjs",
+      "bytes": 9203,
+      "sha256": "331e2d4e2fa33089c8f4ecc1e901d582fb55d738ef6014f90bad318f56f43cf1"
+    }
+  ],
+  "archive": {
+    "path": "focused-raw.zip",
+    "bytes": 99938,
+    "sha256": "ac73c6d3082f35ff75b749fa7aec22807342deba05876d0055627f335b05a9b7",
+    "members": 56,
+    "expandedBytes": 250715
+  }
+}

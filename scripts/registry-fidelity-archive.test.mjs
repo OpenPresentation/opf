@@ -14,11 +14,16 @@ test('pinned renderer tests retain static script imports while executing install
   for(const folder of ['test','scripts','dist'])mkdirSync(path.join(checkout,folder));
   writeFileSync(path.join(checkout,'test/golden.mjs'), "import assert from 'node:assert/strict';\nimport {baseline} from '../scripts/example-baseline.mjs';\nimport {identity} from '../dist/index.mjs';\nassert.equal(baseline,'reviewed-ref');\nassert.equal(identity,'installed-registry');\nassert.equal(process.env.OPF_GOLDEN_BASELINE,'approved.json');\nconsole.log('static closure and installed runtime verified');\n");
   const helper="export const baseline='reviewed-ref';\n";
+  const crlf="export const intentional='CRLF';\r\n";
+  writeFileSync(path.join(checkout,'scripts/crlf.mjs'),crlf);
   writeFileSync(path.join(checkout,'scripts/example-baseline.mjs'),helper);
   writeFileSync(path.join(checkout,'dist/index.mjs'),"throw new Error('Source runtime must not execute');\n");
   writeFileSync(path.join(installed,'index.mjs'),"export const identity='installed-registry';\n");
   const git=(...args)=>execFileSync('git',args,{cwd:checkout,encoding:'utf8',stdio:'pipe'}).trim();
-  git('init','--quiet');git('add','.');
+  git('init','--quiet');
+  // This private fixture owns its bytes; do not inherit the host's checkout newline policy.
+  git('config','--local','core.autocrlf','false');git('config','--local','core.eol','lf');
+  git('add','.');
   git('-c','user.name=Registry fidelity test','-c','user.email=registry-fidelity@example.invalid','commit','--quiet','-m','immutable fixture');
   const ref=git('rev-parse','HEAD');
   // Dirty or later source must not supply the helper for an immutable release.
@@ -26,6 +31,7 @@ test('pinned renderer tests retain static script imports while executing install
   const archive=archiveRegistryFidelity({checkout,ref,repo:'opf-render',directory:output});
   assert.ok(existsSync(archive));
   assert.equal(readFileSync(path.join(output,'scripts/example-baseline.mjs'),'utf8'),helper);
+  assert.equal(readFileSync(path.join(output,'scripts/crlf.mjs'),'utf8'),crlf,'intentional CRLF bytes are preserved, not normalized by the archiver');
   assert.equal(existsSync(path.join(output,'dist')),false);
   symlinkSync(installed,path.join(output,'dist'),process.platform==='win32'?'junction':'dir');
   const result=execFileSync(process.execPath,[path.join(output,'test/golden.mjs')],{cwd:root,env:{...process.env,OPF_GOLDEN_BASELINE:'approved.json'},encoding:'utf8'});
@@ -50,7 +56,10 @@ test('a package of the monorepo is archived from its directory at the release co
   writeFileSync(path.join(checkout,'packages/render/dist/index.mjs'),"throw new Error('Source runtime must not execute');\n");
   writeFileSync(path.join(checkout,'packages/pptx/test/other.mjs'),"console.log('other package');\n");
   const git=(...args)=>execFileSync('git',args,{cwd:checkout,encoding:'utf8',stdio:'pipe'}).trim();
-  git('init','--quiet');git('add','.');
+  git('init','--quiet');
+  // This private fixture owns its bytes; do not inherit the host's checkout newline policy.
+  git('config','--local','core.autocrlf','false');git('config','--local','core.eol','lf');
+  git('add','.');
   git('-c','user.name=Registry fidelity test','-c','user.email=registry-fidelity@example.invalid','commit','--quiet','-m','immutable fixture');
   archiveRegistryFidelity({checkout,ref:git('rev-parse','HEAD'),repo:'opf-render',directory:output,prefix:'packages/render'});
   assert.equal(readFileSync(path.join(output,'test/golden.mjs'),'utf8'),"console.log('render test');\n");

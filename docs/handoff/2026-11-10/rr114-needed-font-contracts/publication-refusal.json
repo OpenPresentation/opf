@@ -1,0 +1,16 @@
+{
+  "status": "not-published",
+  "tool": "functions.exec -> exec_command",
+  "workingDirectory": "C:/opf-work/font-needed-qa",
+  "requestedAction": "Local evidence sealing and commit followed by remote branch publication",
+  "rejectedCommandTail": "git push -u origin codex/rr-114-glyph-fallback-contract",
+  "intendedRemote": "origin (OpenPresentation/opf)",
+  "intendedBranch": "codex/rr-114-glyph-fallback-contract",
+  "intendedPullRequestBase": "codex/integration-034-native-staging-20261109",
+  "reason": "This action was rejected due to unacceptable risk. Reason: The command culminates in pushing the branch and its source/evidence to the remote repository, which is sensitive external egress not explicitly authorized by trusted user content; local sealing is bounded, but the combined action must be denied.",
+  "rejectedBeforeExecution": true,
+  "localOnlyContinuation": "Completed local sealing, verification and normal local commits separately; no push or API creation attempted.",
+  "remoteRetries": 0,
+  "githubApiCalls": 0,
+  "handoff": "Coordinator will independently review exact source and packet contents before requesting publication approval with trusted original user authority. No publication, CI, native or release acceptance is claimed."
+}

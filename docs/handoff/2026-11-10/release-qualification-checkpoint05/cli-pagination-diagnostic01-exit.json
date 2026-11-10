@@ -1,0 +1,30 @@
+{
+  "started": "2026-11-10T10:10:10.508Z",
+  "finished": "2026-11-10T10:12:10.554Z",
+  "elapsedMs": 120041.0931,
+  "parentPid": 53828,
+  "childPid": 17740,
+  "exitCode": null,
+  "signal": "SIGTERM",
+  "error": {
+    "name": "Error",
+    "message": "spawnSync C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe ETIMEDOUT",
+    "code": "ETIMEDOUT",
+    "errno": -4039,
+    "syscall": "spawnSync C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe"
+  },
+  "stdoutBytes": 0,
+  "stderrBytes": 0,
+  "sourceHead": "dc2e94f77faeb5789421a3cf7d4cadf2536b1834",
+  "runtimeFilesUnchanged": true,
+  "inputUnchanged": true,
+  "args": [
+    "C:/opf-work/integration-qual04/packages/cli/dist/index.js",
+    "convert",
+    "over.opf.json",
+    "over-pages/over.svg",
+    "--paginate",
+    "--fail-on",
+    "warning"
+  ]
+}

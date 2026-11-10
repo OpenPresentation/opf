@@ -1,0 +1,43 @@
+✔ fontless Arab estimate improves corpus error or preserves base rules (1.8615ms)
+✔ fontless Hebr estimate improves corpus error or preserves base rules (0.2315ms)
+✔ fontless Deva estimate improves corpus error or preserves base rules (0.3642ms)
+✔ fontless Beng estimate improves corpus error or preserves base rules (0.1285ms)
+✔ fontless Guru estimate improves corpus error or preserves base rules (0.1078ms)
+✔ fontless Gujr estimate improves corpus error or preserves base rules (0.0977ms)
+✔ fontless Orya estimate improves corpus error or preserves base rules (0.0969ms)
+✔ fontless Taml estimate improves corpus error or preserves base rules (0.0696ms)
+✔ fontless Telu estimate improves corpus error or preserves base rules (0.1232ms)
+✔ fontless Knda estimate improves corpus error or preserves base rules (0.1412ms)
+✔ fontless Mlym estimate improves corpus error or preserves base rules (0.0811ms)
+✔ fontless Sinh estimate improves corpus error or preserves base rules (0.5322ms)
+✔ fontless Thai estimate improves corpus error or preserves base rules (0.1148ms)
+✔ fontless Laoo estimate improves corpus error or preserves base rules (0.057ms)
+✔ fontless Khmr estimate improves corpus error or preserves base rules (0.064ms)
+✔ fontless Mymr estimate improves corpus error or preserves base rules (0.0458ms)
+✔ fontless Tibt estimate improves corpus error or preserves base rules (0.037ms)
+✔ fontless Mong estimate improves corpus error or preserves base rules (0.03ms)
+✔ fontless Ethi estimate improves corpus error or preserves base rules (0.0334ms)
+✔ fontless Armn estimate improves corpus error or preserves base rules (0.0435ms)
+✔ fontless Geor estimate improves corpus error or preserves base rules (0.0304ms)
+✔ fontless Syrc estimate improves corpus error or preserves base rules (0.0293ms)
+✔ fontless Thaa estimate improves corpus error or preserves base rules (0.0311ms)
+✔ fontless Jpan estimate improves corpus error or preserves base rules (0.2468ms)
+✔ fontless Hans estimate improves corpus error or preserves base rules (0.0588ms)
+✔ fontless Hant estimate improves corpus error or preserves base rules (0.0432ms)
+✔ fontless Kore estimate improves corpus error or preserves base rules (0.0566ms)
+✔ fontless Cyrl estimate improves corpus error or preserves base rules (0.2117ms)
+✔ fontless Grek estimate improves corpus error or preserves base rules (0.1467ms)
+✔ fontless Latn estimate improves corpus error or preserves base rules (0.462ms)
+✔ spacing marks contribute while nonspacing/enclosing marks and ZWJ add no advance (0.0557ms)
+✔ mixed-script estimates preserve shared Latin and punctuation widths (0.0294ms)
+✔ provided text measurements determine wrapping regardless of script estimates (1.3158ms)
+✔ CJK spacing tone and reading marks preserve their previous zero advance (0.1376ms)
+✔ composition forwards host measurement for mixed scripts without applying script factors (18.1398ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 145.315

@@ -1,0 +1,53 @@
+{
+  "source": "exact HEAD blobs, unchanged bytes",
+  "checks": [
+    {
+      "file": "docs/evidence/rr-105-native-title-wrap/native-title-corpus.zip",
+      "bytes": 12303302,
+      "sha256": "53f0d7535cf83104a9ca3324d4b08d829119bab0c0dd463a600bf28b24f2585a",
+      "beforeKind": "text",
+      "beforeFalsePositives": 368,
+      "afterKind": "binaryArchives"
+    },
+    {
+      "file": "docs/evidence/rr-105-native-title-wrap/corrected-corpus.zip",
+      "bytes": 11510217,
+      "sha256": "ecdf0b824c47674efbb85cb175bfe64372e39a9b15c5acdaf9abdb54dbce7757",
+      "beforeKind": "text",
+      "beforeFalsePositives": 331,
+      "afterKind": "binaryArchives"
+    },
+    {
+      "file": "docs/evidence/rr-105-native-title-wrap/native-title-fixed-03-raw.zip",
+      "bytes": 1566703,
+      "sha256": "10552ac14163bc858ed554b0f655f15e694c368e19702b2b27d219d6aa5588ce",
+      "beforeKind": "text",
+      "beforeFalsePositives": 41,
+      "afterKind": "binaryArchives"
+    },
+    {
+      "file": "docs/evidence/rr-105-native-title-wrap/native-title-full-02-raw.zip",
+      "bytes": 14581982,
+      "sha256": "810c065dc204d9363bd37ea111cdbb1ae94456fbfb93449cd37f75c52a6d2774",
+      "beforeKind": "text",
+      "beforeFalsePositives": 452,
+      "afterKind": "binaryArchives"
+    },
+    {
+      "file": "docs/evidence/rr-105-native-title-wrap/native-title-pilot-01-raw.zip",
+      "bytes": 166396,
+      "sha256": "bea68fd5af19c0313aed9f2919328b04d2677e5ffb1862f37d074d271a7ec9c9",
+      "beforeKind": "text",
+      "beforeFalsePositives": 5,
+      "afterKind": "binaryArchives"
+    },
+    {
+      "file": "docs/evidence/lh-182-optioned-doughnut/native-previews.zip",
+      "bytes": 409109,
+      "sha256": "71f113df5046c687cb2eadce4e93621ab0bb1e37e2dc297b582e4b2270cc7c88",
+      "beforeKind": "text",
+      "beforeFalsePositives": 11,
+      "afterKind": "binaryArchives"
+    }
+  ]
+}

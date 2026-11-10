@@ -1,0 +1,29 @@
+SH-25 undoable point anchors pass
+✔ packages\editor\test\sh-25-chart-point-anchors.mjs (603.8412ms)
+✔ stacked and percent horizontal siblings share dimensions and refit names at segment starts (44.4357ms)
+✔ contraction restores the original legend when series names would meet (4.8257ms)
+✔ a segment that loses its value label restores the numeric axis and tick band (3.6142ms)
+✔ negative/null data and authored chart options retain their contracts (2.8174ms)
+✔ point references accept exact unique labels or zero-based indexes, with an omitted first series (305.4566ms)
+✔ missing, duplicate and unplotted identities report the existing located missing-anchor code (0.7713ms)
+✔ ordinary block anchors retain their findings and inline negative pie values remain plotted (0.2844ms)
+✔ point centers use the real shared plot, series grouping, signed endpoints and scale (70.9003ms)
+✔ marker, scatter and arc points are shared/pinned, offsets follow the point normal (9.7991ms)
+✔ a missing runtime point is omitted with a located finding and does not pin an ordinary chart (3.9577ms)
+LH-93 negative category labels: clustered, stacked, all-negative, authored-option and ordinary/percent/column controls pass.
+LH-93 RTL: rendered category anchors stay left; native category/value orientations, sides and zero crossing agree.
+✔ packages\pptx\test\lh-93-negative-category-labels.mjs (1775.1831ms)
+LH-93 native: shared stacked/percent plots, refitted names, restored legends/axes, deleted crowded labels and current data import pass.
+✔ packages\pptx\test\lh-93-stacked-siblings.mjs (1323.1386ms)
+SH-25:16 classic native plot pins, exact overlay EMU, current-data roundtrips and stale-anchor refusal pass; native application centers remain a separate qualification.
+✔ packages\pptx\test\sh-25-chart-point-anchors.mjs (5639.3863ms)
+SH25:18 actual SVG bar/marker bounds and overlay centers match shared geometry, including RTL and scatter X columns.
+✔ packages\render\test\sh-25-chart-point-anchors.mjs (1405.8264ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5682.7007

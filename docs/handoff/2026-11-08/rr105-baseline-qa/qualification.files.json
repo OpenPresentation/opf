@@ -1,0 +1,600 @@
+{
+  "sourceCommit": "f2d181002cf2d80fd2531510be0db846920d7c71",
+  "baseCommit": "f435a338973a1956025a6bc46f9fbd6ef28c4cc2",
+  "files": [
+    {
+      "path": "local-qualification/aligned-build-deps.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/aligned-build-deps.log",
+      "bytes": 11237,
+      "sha256": "489e2bd13b76d73a64adefdb36d7a2e9c33096e382424712c7135aa78c650f84"
+    },
+    {
+      "path": "local-qualification/aligned-build.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/aligned-build.log",
+      "bytes": 184,
+      "sha256": "e7afda8321968e1b46ac6dedaef69cb5732d1f61631daeea702e732350d6144f"
+    },
+    {
+      "path": "local-qualification/candidate-source-final.patch",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/candidate-source-final.patch",
+      "bytes": 45543,
+      "sha256": "b2d58387df71520d2c4451f51c1345a96e21788a8e98cbce62e2c78f172e159c"
+    },
+    {
+      "path": "local-qualification/candidate-source.patch",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/candidate-source.patch",
+      "bytes": 41055,
+      "sha256": "1bfece335c7cd3f1a2ab04b34dd33e643d9cb1fbeae81c8fc166235f72a93763"
+    },
+    {
+      "path": "local-qualification/check-changed-01.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/check-changed-01.log",
+      "bytes": 1205,
+      "sha256": "ffb575ea04050b1f3f5d30b5515054201834bff0ec89c061202857e460b67246"
+    },
+    {
+      "path": "local-qualification/focused-aligned-02.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/focused-aligned-02.log",
+      "bytes": 3588,
+      "sha256": "899b4349ac644bd53365b8e740d3dea6245fd3dafbcf3b91d93cb0c0749f2ca8"
+    },
+    {
+      "path": "local-qualification/focused-aligned-03.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/focused-aligned-03.log",
+      "bytes": 1175,
+      "sha256": "24ff9b3cd2b02478490de79900bf58414c61a4f5bfe0e856c0c99a1dbbd94f41"
+    },
+    {
+      "path": "local-qualification/frozen-final.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/frozen-final.log",
+      "bytes": 155,
+      "sha256": "74b24be338a2e448bef88a2d98d07dacb2d04706d598cb84841f98d2b9abd7e4"
+    },
+    {
+      "path": "local-qualification/frozen-source-final.json",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/frozen-source-final.json",
+      "bytes": 2626,
+      "sha256": "5fb2fa0b153aef12384597174e4a89ade73f26867af6e7a7f837b37f6646e767"
+    },
+    {
+      "path": "local-qualification/frozen-source.json",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/frozen-source.json",
+      "bytes": 2625,
+      "sha256": "36e41bb4e2000e2c91c00e822814a2b394b707d3ca1a5fff7d6dc63931ab43ab"
+    },
+    {
+      "path": "local-qualification/hydrate-required.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/hydrate-required.mjs",
+      "bytes": 2932,
+      "sha256": "37068f798141c9aa43dbf2af1d04dc5d5474e5e50c0335f733eaf91e0d334bd3"
+    },
+    {
+      "path": "local-qualification/hydration.json",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/hydration.json",
+      "bytes": 523672,
+      "sha256": "4af8df7c0f7baa50dab3b86d8c67e6a42a048d2f0b27115fcb139fb056bf0cbb"
+    },
+    {
+      "path": "local-qualification/hydration.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/hydration.log",
+      "bytes": 34,
+      "sha256": "83ba8c323340089c52544970091ae4bb89f11caab5234027a3c15c7c618ddac8"
+    },
+    {
+      "path": "local-qualification/reconstruct-first-red-source.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/reconstruct-first-red-source.mjs",
+      "bytes": 2174,
+      "sha256": "30f774418b4ffb634bde23af85568f24e3b648a1c9d7d792fe497a0d659db468"
+    },
+    {
+      "path": "local-qualification/red-source-reconstruction/packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/red-source-reconstruction/packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "bytes": 9775,
+      "sha256": "ab940bb9492c9ce98b0c81680db8d97395ad00bc27a344d824764171dd0bc15d"
+    },
+    {
+      "path": "local-qualification/red-source-reconstruction/packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/red-source-reconstruction/packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "bytes": 5822,
+      "sha256": "9aa111e0ab0d819d1d50fbda68900c2f1a58298816d353c1efa9a5eca6982a5c"
+    },
+    {
+      "path": "local-qualification/red-source-reconstruction/packages/pptx/test/template-layouts.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/red-source-reconstruction/packages/pptx/test/template-layouts.mjs",
+      "bytes": 40405,
+      "sha256": "3ef10988bea75de2d9b625989e61169bbaa5a994bd1cb6082d637aa778dd0356"
+    },
+    {
+      "path": "local-qualification/red-source-reconstruction/provenance.json",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/red-source-reconstruction/provenance.json",
+      "bytes": 1217,
+      "sha256": "6bd5dc99daf6e0c6fc9b99d2a69dafc4a7c983fb763eecd90d53b5b38e172d99"
+    },
+    {
+      "path": "local-qualification/red-source-reconstruction/reapply-first-edit.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/red-source-reconstruction/reapply-first-edit.mjs",
+      "bytes": 8793,
+      "sha256": "6760d2a699d2e98ae4809394ce96a59953a7167acc9398b76ea55abd27869a22"
+    },
+    {
+      "path": "local-qualification/red-source-reconstruction/reconstruction.stderr.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/red-source-reconstruction/reconstruction.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "local-qualification/red-source-reconstruction/reconstruction.stdout.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/red-source-reconstruction/reconstruction.stdout.log",
+      "bytes": 47,
+      "sha256": "d2bf89d408cec8d0c9ddf81c53da172b4010c96e2ea6354427c9de716c73d489"
+    },
+    {
+      "path": "local-qualification/required-plan.log",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/required-plan.log",
+      "bytes": 414,
+      "sha256": "b199e0ea562712997b5e90581b87ddb6af6fbdcf0cc93f5768ba365350257735"
+    },
+    {
+      "path": "local-qualification/seal-review-packet.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/seal-review-packet.mjs",
+      "bytes": 7296,
+      "sha256": "70bce639dd4936d78040022cd985a15b4dc072f11d4ac8692bef61ce079e20d5"
+    },
+    {
+      "path": "local-qualification/verify-frozen-source-final.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/verify-frozen-source-final.mjs",
+      "bytes": 2001,
+      "sha256": "b81b664d25160f757245f484bb2cdec2b05af97f57da50dea2b989c23ac77ac7"
+    },
+    {
+      "path": "local-qualification/verify-frozen-source.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-evidence/verify-frozen-source.mjs",
+      "bytes": 1989,
+      "sha256": "571a4e5ae9cdfb82749b79d4a109434e32e32ee5640d1c7c042d3afb4e4a33bc"
+    },
+    {
+      "path": "mapped-step-logs/biome.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/biome.log",
+      "bytes": 685,
+      "sha256": "f4cca9b4a6196c4dd1814eb4377829bcc2a3280ae10483e34cc32b656a70086a"
+    },
+    {
+      "path": "mapped-step-logs/build.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/build.log",
+      "bytes": 14594,
+      "sha256": "d8bd304ff34c26fa54c80d1af9bc537ddb03fdecb024a30663eabf9b215e5bb4"
+    },
+    {
+      "path": "mapped-step-logs/pnpm_run_check_changes.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/pnpm_run_check_changes.log",
+      "bytes": 2638,
+      "sha256": "4d6acbaa827d45f00a026a751a0dc8549c4213d96c9ea6e93f5e788bcec74d12"
+    },
+    {
+      "path": "mapped-step-logs/pnpm_run_check_font-hotlinks.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/pnpm_run_check_font-hotlinks.log",
+      "bytes": 887,
+      "sha256": "1ae5ecbff5e657df9118f4ed298c87200620ef86c9224f652fa9f81772bee31f"
+    },
+    {
+      "path": "mapped-step-logs/pnpm_run_check_gallery-tracker.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/pnpm_run_check_gallery-tracker.log",
+      "bytes": 1994,
+      "sha256": "4ac0ff184539082c9a4515035a869865815fe96f0423f5329c37bd70512545f3"
+    },
+    {
+      "path": "mapped-step-logs/pnpm_run_check_release-report.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/pnpm_run_check_release-report.log",
+      "bytes": 814,
+      "sha256": "a8af2d8782b7ebe12981d0f1821492ba861676bf319d3840af57e9f704d24aa0"
+    },
+    {
+      "path": "mapped-step-logs/pnpm_run_check_skill-commands.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/pnpm_run_check_skill-commands.log",
+      "bytes": 1041,
+      "sha256": "0d4478f94194cd226d22e5d471e8db3b3baa5c281f77736b65abd52f7ae77a06"
+    },
+    {
+      "path": "mapped-step-logs/pnpm_run_check_stability.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/pnpm_run_check_stability.log",
+      "bytes": 3972,
+      "sha256": "b250568f48740d52b359bf41e259e30695404bc0e71f8e61bf4dd64ac2d033e6"
+    },
+    {
+      "path": "mapped-step-logs/pnpm_run_check_text.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/pnpm_run_check_text.log",
+      "bytes": 1073,
+      "sha256": "b5b73ad68db5438d599b1f6c572ba4f1039fa7f02cfe64327c68601522a4821c"
+    },
+    {
+      "path": "mapped-step-logs/tests_pptx.log",
+      "source": "C:/opf-work/rr105-baseline-qa/artifacts/check-changed/tests_pptx.log",
+      "bytes": 1036,
+      "sha256": "457fc08306352a90511a130b85cf360caf991690d850f92d0f47419ea383901a"
+    },
+    {
+      "path": "diagnosis66/font-resolution.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/font-resolution.json",
+      "bytes": 239,
+      "sha256": "ef6aa51118268f1529a4f9e6c2bf807dcaf1a8b92a60dce5e804474c8f834c71"
+    },
+    {
+      "path": "diagnosis66/generic.geometry.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/generic.geometry.json",
+      "bytes": 36980,
+      "sha256": "d722d3b81ece53ede658ed610e0cdb1e5a7284f2b427340f0cf9c5613cfa85f5"
+    },
+    {
+      "path": "diagnosis66/geometry-summary.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/geometry-summary.json",
+      "bytes": 14815,
+      "sha256": "c942b019c8c7fb3f9fedf490c8900406e5566308af54d47492b7ae7fe37c58d8"
+    },
+    {
+      "path": "diagnosis66/independent-tail.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/independent-tail.json",
+      "bytes": 969,
+      "sha256": "a28755a6de64c341052b46f13052c1c56617fc7e5bcbe03d6443a75547dc27fe"
+    },
+    {
+      "path": "diagnosis66/long.imported.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/long.imported.json",
+      "bytes": 1962,
+      "sha256": "21180b1d3871c32d1a620555722633f828ec7751144e79f732d22a51bdeb62f7"
+    },
+    {
+      "path": "diagnosis66/long.pptx",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/long.pptx",
+      "bytes": 103602,
+      "sha256": "fcc62ab521fa0fe683c2ca4b4dbd68802ee2ea19cef8824d94197007001cd7ef"
+    },
+    {
+      "path": "diagnosis66/page-1.geometry.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/page-1.geometry.json",
+      "bytes": 76445,
+      "sha256": "2f85ebd3796ed82315ca04505380d7fdaceacae1087d0e537eaf9084c4e7c618"
+    },
+    {
+      "path": "diagnosis66/page-2.geometry.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/page-2.geometry.json",
+      "bytes": 22383,
+      "sha256": "305431f116e6fcefff1d6211c96d7668da206c6461bb3c221cfaa4f8b0b9317b"
+    },
+    {
+      "path": "diagnosis66/paged.opf.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/paged.opf.json",
+      "bytes": 1962,
+      "sha256": "96576ed3722d983a4b73a8f289b3f3f5a14c31a6941e16fbd219e9d5096d06f5"
+    },
+    {
+      "path": "diagnosis66/runtime-after.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/runtime-after.json",
+      "bytes": 51048,
+      "sha256": "24dcc383c54db99151738509d74fcf61f1a29228fc3677e21030cbb2f652f24e"
+    },
+    {
+      "path": "diagnosis66/runtime-before.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/runtime-before.json",
+      "bytes": 51048,
+      "sha256": "24dcc383c54db99151738509d74fcf61f1a29228fc3677e21030cbb2f652f24e"
+    },
+    {
+      "path": "diagnosis66/source.opf.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/source.opf.json",
+      "bytes": 1685,
+      "sha256": "87336178cc12ace2bed94cd9618fd71c3dc0141cee5f93de5956b0c5d33aecd9"
+    },
+    {
+      "path": "diagnosis66/strict-original.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/strict-original.json",
+      "bytes": 646,
+      "sha256": "7f2d8fe96df1414c656a934e715b8e05362aa0f2146aa722294802f1bb95b493"
+    },
+    {
+      "path": "diagnosis66/unpaginated.geometry.json",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02/unpaginated.geometry.json",
+      "bytes": 38985,
+      "sha256": "37ed7501f19959b0efeca3d89ef3f50e3a622f511351449395af7e53ea6e591c"
+    },
+    {
+      "path": "diagnosis67/font-resolution.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/font-resolution.json",
+      "bytes": 239,
+      "sha256": "ef6aa51118268f1529a4f9e6c2bf807dcaf1a8b92a60dce5e804474c8f834c71"
+    },
+    {
+      "path": "diagnosis67/geometry-summary.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/geometry-summary.json",
+      "bytes": 14811,
+      "sha256": "8f1d27d86d0baa45e802c0e8a7e1688d1498ad9aa63af3031758ca19462a1add"
+    },
+    {
+      "path": "diagnosis67/page-1.geometry.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/page-1.geometry.json",
+      "bytes": 76445,
+      "sha256": "2f85ebd3796ed82315ca04505380d7fdaceacae1087d0e537eaf9084c4e7c618"
+    },
+    {
+      "path": "diagnosis67/page-2.geometry.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/page-2.geometry.json",
+      "bytes": 22383,
+      "sha256": "305431f116e6fcefff1d6211c96d7668da206c6461bb3c221cfaa4f8b0b9317b"
+    },
+    {
+      "path": "diagnosis67/paged.opf.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/paged.opf.json",
+      "bytes": 1962,
+      "sha256": "96576ed3722d983a4b73a8f289b3f3f5a14c31a6941e16fbd219e9d5096d06f5"
+    },
+    {
+      "path": "diagnosis67/runtime-after.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/runtime-after.json",
+      "bytes": 50897,
+      "sha256": "f245fa3b96e91fe824213a06b032e28873dadc1ddab29f0c891af1c65fecd5f3"
+    },
+    {
+      "path": "diagnosis67/runtime-before.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/runtime-before.json",
+      "bytes": 50897,
+      "sha256": "f245fa3b96e91fe824213a06b032e28873dadc1ddab29f0c891af1c65fecd5f3"
+    },
+    {
+      "path": "diagnosis67/source.opf.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/source.opf.json",
+      "bytes": 1685,
+      "sha256": "87336178cc12ace2bed94cd9618fd71c3dc0141cee5f93de5956b0c5d33aecd9"
+    },
+    {
+      "path": "diagnosis67/strict-original.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/strict-original.json",
+      "bytes": 646,
+      "sha256": "7f2d8fe96df1414c656a934e715b8e05362aa0f2146aa722294802f1bb95b493"
+    },
+    {
+      "path": "diagnosis67/unpaginated.geometry.json",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01/unpaginated.geometry.json",
+      "bytes": 38985,
+      "sha256": "37ed7501f19959b0efeca3d89ef3f50e3a622f511351449395af7e53ea6e591c"
+    },
+    {
+      "path": "whitespace-and-metrics/long.resolved-metrics.json",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics-01/long.resolved-metrics.json",
+      "bytes": 24188,
+      "sha256": "969e10ba23308871c5bfd2f878982690ba80426cf40017f604aaaa1a16314aa6"
+    },
+    {
+      "path": "whitespace-and-metrics/medium.line-boundaries.json",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics-01/medium.line-boundaries.json",
+      "bytes": 19876,
+      "sha256": "3a28aef1aed98c48bece6df809638bf5e9349b1369b9622673af87ba507c0431"
+    },
+    {
+      "path": "whitespace-and-metrics/medium.page-1.geometry.json",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics-01/medium.page-1.geometry.json",
+      "bytes": 96260,
+      "sha256": "79b4858fdcf66e7ad6c5a9906687d4ad5f4c3405c224c2ba68a0017dc50a6f51"
+    },
+    {
+      "path": "whitespace-and-metrics/medium.page-2.geometry.json",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics-01/medium.page-2.geometry.json",
+      "bytes": 24429,
+      "sha256": "a6391d34fc76110a05ded7cfbd8391f7e4da8c0a7ae82be9316674d2468d0d9b"
+    },
+    {
+      "path": "whitespace-and-metrics/medium.paged.opf.json",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics-01/medium.paged.opf.json",
+      "bytes": 1345,
+      "sha256": "a45613406ab33c2cb85b784719b9a152d1c234384dddf843ccfbdbf024fb5ada"
+    },
+    {
+      "path": "whitespace-and-metrics/medium.source.opf.json",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics-01/medium.source.opf.json",
+      "bytes": 1097,
+      "sha256": "aac457b9ef82b3964395a0ed0aebc71edfef8673cc29e2c51686f16acdce5658"
+    },
+    {
+      "path": "whitespace-and-metrics/receipt.json",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics-01/receipt.json",
+      "bytes": 6171,
+      "sha256": "6a0729602a458095dfd669f0283f13f1af2599d6d302940b4f4f37fac1c58c34"
+    },
+    {
+      "path": "retained/rr105-baseline-qa-before.log",
+      "source": "C:/opf-work/rr105-baseline-qa-before.log",
+      "bytes": 4930,
+      "sha256": "40c7bab88c2af639230e4a92bab8384ad65eb8c1d0616e20df690aba05ba3183"
+    },
+    {
+      "path": "retained/rr105-baseline-qa-focused-01.log",
+      "source": "C:/opf-work/rr105-baseline-qa-focused-01.log",
+      "bytes": 2179,
+      "sha256": "8c6c128d873194bfff1cb983d6cc684b1dc732600e8c67a615af1b3e28699575"
+    },
+    {
+      "path": "retained/rr105-baseline-qa-install.log",
+      "source": "C:/opf-work/rr105-baseline-qa-install.log",
+      "bytes": 4438,
+      "sha256": "3e57af05ad718499680435f4ad4b8acbaad8b80720996d1376ca400eabbde4ee"
+    },
+    {
+      "path": "retained/rr105-baseline-qa-build-deps.log",
+      "source": "C:/opf-work/rr105-baseline-qa-build-deps.log",
+      "bytes": 11237,
+      "sha256": "19f6dd662ea25d20f44110b7da863cc4f412c71d7572bd2e8b44fec2da0d2380"
+    },
+    {
+      "path": "retained/rr105-baseline-qa-build.log",
+      "source": "C:/opf-work/rr105-baseline-qa-build.log",
+      "bytes": 184,
+      "sha256": "e7afda8321968e1b46ac6dedaef69cb5732d1f61631daeea702e732350d6144f"
+    },
+    {
+      "path": "retained/rr105-baseline-qa-edit.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-edit.mjs",
+      "bytes": 8758,
+      "sha256": "bb38cde2b5e993cfcc689b2bf03da9facd04f09bc1e0e96f01ee70d0781ce087"
+    },
+    {
+      "path": "retained/rr105-baseline-qa-metadata.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-metadata.mjs",
+      "bytes": 6680,
+      "sha256": "37b92898169add42d01d970d1ccbee0012f5e86b9eb3e7bb690c5e8e7e4477f4"
+    },
+    {
+      "path": "retained/rr105-venn-physical-column-edit.mjs",
+      "source": "C:/opf-work/rr105-venn-physical-column-edit.mjs",
+      "bytes": 3051,
+      "sha256": "a9ea361cea1b51ff39beeb1145424e44df8800a9441281891c86f4dacd150329"
+    },
+    {
+      "path": "retained/rr105-venn-whitespace-edit.mjs",
+      "source": "C:/opf-work/rr105-venn-whitespace-edit.mjs",
+      "bytes": 5784,
+      "sha256": "797337307874f85d4c3751a4a4662ff221fa9b1e4156a97b6e4f23c9a2a75e53"
+    },
+    {
+      "path": "retained/rr105-baseline-qa-venn-diagnose.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa-venn-diagnose.mjs",
+      "bytes": 8633,
+      "sha256": "211628216f6fb4ad6796ea9f2e4f783f032e0e2d58eaf21aed2e9ec86a75465b"
+    },
+    {
+      "path": "retained/rr105-venn-66-diagnostic-01.log",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-01.log",
+      "bytes": 668,
+      "sha256": "8e3f2b26245e8a502ae62189fcc0574d452ac91f5351b54c6614deb8ed61ccc0"
+    },
+    {
+      "path": "retained/rr105-venn-66-diagnostic-02.log",
+      "source": "C:/opf-work/rr105-venn-66-diagnostic-02.log",
+      "bytes": 2811,
+      "sha256": "2c72e6a8d102aa339a4c1ccadf10bcbe0fba50bda72e8dadaf8a90b05e8de3c7"
+    },
+    {
+      "path": "retained/rr105-venn-67-diagnostic-01.log",
+      "source": "C:/opf-work/rr105-venn-67-diagnostic-01.log",
+      "bytes": 2808,
+      "sha256": "bc35a0510aac8d5c01fec7db83c5f081b783f8e880ed2c8a0489f8eccfc42ae9"
+    },
+    {
+      "path": "retained/rr105-venn-compare.mjs",
+      "source": "C:/opf-work/rr105-venn-compare.mjs",
+      "bytes": 4342,
+      "sha256": "08fae3dc82ed8d90af250c613b9ec0755b51ef02d59a3c2e44ceb3a21306c425"
+    },
+    {
+      "path": "retained/rr105-venn-compare.log",
+      "source": "C:/opf-work/rr105-venn-compare.log",
+      "bytes": 22762,
+      "sha256": "796f64fc0e4534012aca1101b08f94b3d9983807f9bbf42c212423aa86c64d72"
+    },
+    {
+      "path": "retained/rr105-venn-compare-02.log",
+      "source": "C:/opf-work/rr105-venn-compare-02.log",
+      "bytes": 1319,
+      "sha256": "f769f018f21e4c2d12a75ba3577d89b91bcc3468a7b6ffb8ae16782331c7a067"
+    },
+    {
+      "path": "retained/rr105-venn-baseline-comparison.json",
+      "source": "C:/opf-work/rr105-venn-baseline-comparison.json",
+      "bytes": 6471,
+      "sha256": "927dc6b39e5980af58d48182117681547005261f5f1df2aa6cf7f0423a7976ea"
+    },
+    {
+      "path": "retained/rr105-venn-ordinal-fragment-proof.json",
+      "source": "C:/opf-work/rr105-venn-ordinal-fragment-proof.json",
+      "bytes": 894,
+      "sha256": "0dc1fd3ef1787c1f10510c8395ffa98a83144e12eff9b07c5949123c031d0692"
+    },
+    {
+      "path": "retained/rr105-venn-whitespace-metrics.mjs",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics.mjs",
+      "bytes": 7212,
+      "sha256": "7f19279a84c63671f0785cfcb12a01604aa442cf6e0bccf118dfdd476fdcef08"
+    },
+    {
+      "path": "retained/rr105-venn-whitespace-metrics-01.log",
+      "source": "C:/opf-work/rr105-venn-whitespace-metrics-01.log",
+      "bytes": 6418,
+      "sha256": "f3091a3ff09bc9f51cf49893dd658c23810ec74fda82949827f0da1ea5b341e8"
+    },
+    {
+      "path": "tested-working-source/packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa/packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "bytes": 9775,
+      "sha256": "ab940bb9492c9ce98b0c81680db8d97395ad00bc27a344d824764171dd0bc15d"
+    },
+    {
+      "path": "tested-working-source/packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa/packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "bytes": 10834,
+      "sha256": "5199cbfbc5248214dc03602bb56632c731c471fbfc3715858eae5755b0bc41d8"
+    },
+    {
+      "path": "tested-working-source/packages/pptx/test/template-layouts.mjs",
+      "source": "C:/opf-work/rr105-baseline-qa/packages/pptx/test/template-layouts.mjs",
+      "bytes": 40405,
+      "sha256": "3ef10988bea75de2d9b625989e61169bbaa5a994bd1cb6082d637aa778dd0356"
+    },
+    {
+      "path": "source-git-blobs/66eb880a358f5c5b41ae461ce5f3cc668f277af3/packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "source": "git show 66eb880a358f5c5b41ae461ce5f3cc668f277af3:packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "bytes": 8480,
+      "sha256": "40e58b00d3c8d1358d9f58cd56e208c35062ac8b70eb313e58497becd3f32de2"
+    },
+    {
+      "path": "source-git-blobs/66eb880a358f5c5b41ae461ce5f3cc668f277af3/packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "source": "git show 66eb880a358f5c5b41ae461ce5f3cc668f277af3:packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "bytes": 4552,
+      "sha256": "a7d17382683c681a6fd70e88680d68914169fd5a9d3905b68d61c188c8838fea"
+    },
+    {
+      "path": "source-git-blobs/66eb880a358f5c5b41ae461ce5f3cc668f277af3/packages/pptx/test/template-layouts.mjs",
+      "source": "git show 66eb880a358f5c5b41ae461ce5f3cc668f277af3:packages/pptx/test/template-layouts.mjs",
+      "bytes": 38383,
+      "sha256": "6e493b69445b495100fec400f0be07e8aa61d887cf1ba766f2905ccf45d5d6c5"
+    },
+    {
+      "path": "source-git-blobs/8aafd2d0c5914a4f8ba835f067fdb7b98b38ef3f/packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "source": "git show 8aafd2d0c5914a4f8ba835f067fdb7b98b38ef3f:packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "bytes": 9775,
+      "sha256": "ab940bb9492c9ce98b0c81680db8d97395ad00bc27a344d824764171dd0bc15d"
+    },
+    {
+      "path": "source-git-blobs/8aafd2d0c5914a4f8ba835f067fdb7b98b38ef3f/packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "source": "git show 8aafd2d0c5914a4f8ba835f067fdb7b98b38ef3f:packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "bytes": 8077,
+      "sha256": "7e1b94ce83bedd26664a568cd8e251a65ae53ccfd12a3808f25eb47e18cf0409"
+    },
+    {
+      "path": "source-git-blobs/8aafd2d0c5914a4f8ba835f067fdb7b98b38ef3f/packages/pptx/test/template-layouts.mjs",
+      "source": "git show 8aafd2d0c5914a4f8ba835f067fdb7b98b38ef3f:packages/pptx/test/template-layouts.mjs",
+      "bytes": 40405,
+      "sha256": "3ef10988bea75de2d9b625989e61169bbaa5a994bd1cb6082d637aa778dd0356"
+    },
+    {
+      "path": "source-git-blobs/f2d181002cf2d80fd2531510be0db846920d7c71/packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "source": "git show f2d181002cf2d80fd2531510be0db846920d7c71:packages/pptx/test/rr-105-native-body-wrap.mjs",
+      "bytes": 9775,
+      "sha256": "ab940bb9492c9ce98b0c81680db8d97395ad00bc27a344d824764171dd0bc15d"
+    },
+    {
+      "path": "source-git-blobs/f2d181002cf2d80fd2531510be0db846920d7c71/packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "source": "git show f2d181002cf2d80fd2531510be0db846920d7c71:packages/pptx/test/sh21-venn-reading-measure.mjs",
+      "bytes": 10834,
+      "sha256": "5199cbfbc5248214dc03602bb56632c731c471fbfc3715858eae5755b0bc41d8"
+    },
+    {
+      "path": "source-git-blobs/f2d181002cf2d80fd2531510be0db846920d7c71/packages/pptx/test/template-layouts.mjs",
+      "source": "git show f2d181002cf2d80fd2531510be0db846920d7c71:packages/pptx/test/template-layouts.mjs",
+      "bytes": 40405,
+      "sha256": "3ef10988bea75de2d9b625989e61169bbaa5a994bd1cb6082d637aa778dd0356"
+    },
+    {
+      "path": "diagnostic-attempt-notes.json",
+      "source": "Explicit scope notes; not a substitute for retained raw logs",
+      "bytes": 1478,
+      "sha256": "c715e2c831d9bbce09088b51b36faf9787bc54d9d5f28afbcab9eb71d38dc4fd"
+    }
+  ]
+}

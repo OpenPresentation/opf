@@ -1,0 +1,60 @@
+{
+  "file": "docs/programs/release-readiness/burndown.md",
+  "base": "e7dc37096a7332a65ae2af8c37e2283790408650",
+  "prior": "64c2795729b84f8409beb13cdb0016002eeb6213",
+  "incoming": "a7a59b5150b4195c1e7bb9cfadb7c587ef78c264",
+  "priorSha256": "ab1f8f857c6bda2efaa537a7d0cffd6f0abc40dda67acb732df246b129014e85",
+  "incomingSha256": "85c3d5d5d96b2ffeb0a64ff4363961721aad45853f34401a68cd2df2ee39889a",
+  "resolvedSha256": "3a2044bb3df00c9c6b1364f7c2cbe2bf3501bf595a41a916e86aac0aa7ed87f8",
+  "oldRow": null,
+  "newRow": null,
+  "appendedTail": "\n- 2026-11-09 RR-114 compatibility follow-up: fresh-origin/main isolated branch normally merged reviewed e7dc; all four reported folded-leaf CI failures reproduce on untouched source. Native chosen-family preparation now records physical fallback faces while preserving authored role weights; a private outer mapping boundary mirrors safe export without remapping generated script fallbacks. Four new native slide/theme XML and outlined-SVG parity controls pass, including Emoji/Math/rich bold and safe/edit mode changes. Original package-count and missing-catalog setup are adopted without weakening actual glyph or output assertions. Focused original controls pass; source review, demand/fault neighbors and the coordinator's coherent mapper remain separate. No release or local golden changes.\n\n- 2026-11-09 RR-114 compatibility source19d9: all four exact original CI failures now pass; affected demand11/fault3/native4, lazy558-resolution and CE20 cache controls pass. Package syntax805files pass. Durable archive retains original failures, the intermediate safe-mapping failure, exact built/source identity and two actual outlined-SVG/eight native XML pairs. Coordinator critical source review and one coherent mapped/CI/native gate are still separate; no folded leaf push, aggregate retry, release or local golden run.\n\n- 2026-11-09 RR-114 critical self-review: before folding4802, actual ASCII-only Emoji roles reproduced a remaining missing-glyph. Recording now keeps physical resolution inside the raw script planner and chosen-family resolution outside, followed by safe mapping, matching native export order. Seven expanded native controls pass with exact whole-pack output, unchanged outlined preview and unchanged Aptos/rich Latin/mono source/catalog data. The original66-record archive stays immutable; append evidence and coordinator review remain separate.\n\n- 2026-11-09 RR-114 final boundary runtimeb698: seven expanded native controls and original glyph fallback replay (7+3decks,0previewgaps) pass; actual full/demand4outlinedSVG/16slide-themeXML pairs and3changed-file syntax controls pass. Initial66-record evidence remains byte-exact; append-only packet binds final source/build and retains the genuine ASCII-only failure. Root critical source review and one coherent mapped/CI/native gate remain owed.\n\n- 2026-11-09 RR-114 finalsourceb698: coordinator critical review found no remaining source blocker. Actual final affected-neighbor session53164 exits0: demand11/fault3, lazy558-resolution and CE20 cache/error/style controls pass, with no broad corpus/aggregate repeat. Four new raw logs are append-only above both immutable archives. Root owns normalfold and the one coherent mapped/CI/native gate; no release claim.\n",
+  "priorBytesPreserved": true,
+  "fold": "5a585739b6adf6cd4de6b7c5ac3ff4f5c151cdfa",
+  "exactRuntimeTestBlobs": [
+    {
+      "file": "packages/pptx/src/index.js",
+      "blob": "9b48f58945d02117a67cd6a382fa1e44174d0405"
+    },
+    {
+      "file": "packages/pptx/test/lh-16-duration-timeline.mjs",
+      "blob": "f0e54b7f795a2d9539313fabb9ba5caecf29f262"
+    },
+    {
+      "file": "packages/pptx/test/node-demand-native-fallback.mjs",
+      "blob": "09ab861755274290a1d37ad24403f5dfca245b74"
+    },
+    {
+      "file": "packages/pptx/test/registry-glyph-fallback.mjs",
+      "blob": "61d51d952cb580cb11e3519350482156428ba3e1"
+    },
+    {
+      "file": "packages/render/src/font-demand.js",
+      "blob": "f8cc40728f6906a40edaa57eab3475e83b624852"
+    },
+    {
+      "file": "packages/render/src/fonts-node.d.ts",
+      "blob": "043d09b15d9d95f142c194ce3bc916fc3033f38c"
+    },
+    {
+      "file": "packages/render/src/fonts-node.js",
+      "blob": "cfb775a76938b163730a3e79bf5d4491cc13a258"
+    },
+    {
+      "file": "packages/render/src/lazy-fonts.js",
+      "blob": "09a5a9b8a56170551ac2ffc67e130290f21323b7"
+    },
+    {
+      "file": "packages/render/src/svg.js",
+      "blob": "9d61e4f0286ba44db5a2c98e6ccf386f85122510"
+    },
+    {
+      "file": "packages/render/test/emoji-math.mjs",
+      "blob": "be745161c4cbc77e146408a213de99a2327c932a"
+    },
+    {
+      "file": "packages/render/test/script-fonts-auto-robust.mjs",
+      "blob": "dc4c0f4e4955bd5bbc8747acb0239e5844a10229"
+    }
+  ]
+}
