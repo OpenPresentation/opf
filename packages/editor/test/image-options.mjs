@@ -32,7 +32,7 @@ const deck = () => ({
     recolor: { dark: "dark1", light: "accent1" },
     overlay: { color: "dark1", opacity: 0.4, edge: "bottom", size: 0.25 },
     aspectRatio: 1.5,
-    placement: { edge: "right", size: 0.45 },
+    placement: { edge: "end", size: 0.45 },
     // LH-132: how a person's picture is drawn in a team (it changes nothing on a lone picture).
     portrait: "side",
   };
@@ -44,7 +44,7 @@ const deck = () => ({
   for (const [key, value] of Object.entries(fields)) assert.deepEqual(block[key], value, key);
   const state = readImageTreatments(editor.presentation, "slides.0.blocks.0");
   assert.equal(state.placeable, true);
-  assert.deepEqual(state.placement, { edge: "right", size: 0.45 });
+  assert.deepEqual(state.placement, { edge: "end", size: 0.45 });
   // The composition draws what was set: the block bleeds to the right edge and carries its fit and focus.
   const geometry = composeSlide(editor.presentation.slides[0], resolveSlideContext(editor.presentation, 0).options);
   const image = geometry.items.find((item) => item.path === "slides.0.blocks.0.image" || item.path === "slides.0.blocks.0");
@@ -70,17 +70,17 @@ const deck = () => ({
 // --- placement rules: top-level blocks only, one per edge -----------------------------------------------------------
 {
   const presentation = deck();
-  presentation.slides[0].blocks[1] = { image: "asset:photo", placement: { edge: "left" } };
-  assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.0", { placement: { edge: "left" } }), (error) => error.code === "placement-edge-taken");
+  presentation.slides[0].blocks[1] = { image: "asset:photo", placement: { edge: "start" } };
+  assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.0", { placement: { edge: "start" } }), (error) => error.code === "placement-edge-taken");
   assert.equal(prepareImageTreatment(presentation, "slides.0.blocks.0", { placement: { edge: "top", size: 0.3 } }).changed, true);
-  assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.2.blocks.0", { placement: { edge: "right" } }), (error) => error.code === "placement-not-top-level");
-  assert.deepEqual(readImageTreatments(presentation, "slides.0.blocks.0").usedEdges, ["left"]);
+  assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.2.blocks.0", { placement: { edge: "end" } }), (error) => error.code === "placement-not-top-level");
+  assert.deepEqual(readImageTreatments(presentation, "slides.0.blocks.0").usedEdges, ["start"]);
   assert.equal(readImageTreatments(presentation, "slides.0.blocks.2.blocks.0").placeable, false);
   for (const [fields, message] of [
     [{ fit: "crop" }, /cover, contain, stretch/],
     [{ focus: { x: 2, y: 0 } }, /focus/i],
     [{ placement: { edge: "middle" } }, /edge/],
-    [{ placement: { edge: "left", size: 0.95 } }, /0\.1 to 0\.9/],
+    [{ placement: { edge: "start", size: 0.95 } }, /0\.1 to 0\.9/],
     [{ overlay: { color: "dark1" } }, /opacity/],
     [{ stroke: { color: "nope", width: 2 } }, /stroke color/i],
     [{ slideImage: "x" }, /Unknown image treatment/],

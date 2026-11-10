@@ -110,8 +110,8 @@ describe("slides", () => {
     assert.equal(regionKeys.filter((key) => key.includes(":")).length, 36);
     assert.deepEqual(advanced.sort(), [...regionKeys, "extensions"].sort());
     assert.equal(info.children.slice(-49).every((entry) => entry.advanced), true, "advanced keys sort last");
-    assert.equal(isPromotedRegionKey("top+middle:left+center"), true);
-    assert.equal(isPromotedRegionKey("left"), true);
+    assert.equal(isPromotedRegionKey("top+middle:start+center"), true);
+    assert.equal(isPromotedRegionKey("start"), true);
     assert.equal(isPromotedRegionKey("title"), false);
     assert.equal(isPromotedRegionKey("tag"), false);
     assert.equal(isPromotedRegionKey(""), false);
@@ -138,18 +138,18 @@ describe("slides", () => {
     assert.equal(child(info, "items").typeLabel, "array of ListItem");
   });
   test("a promoted region key is described like any property", () => {
-    const region = describeField(["slides", 0, "top+middle:left+center"]);
+    const region = describeField(["slides", 0, "top+middle:start+center"]);
     assert.equal(region.known, true);
     assert.equal(region.definition, "ContentPayload");
   });
 });
 
 describe("values", () => {
-  test("design.titleAlignment is an enum of left, center and right", () => {
+  test("design.titleAlignment is an enum of start, center and end", () => {
     const info = describeField(["design", "titleAlignment"]);
     assert.deepEqual(info.types, ["string"]);
-    assert.deepEqual(info.enum, [{ value: "left" }, { value: "center" }, { value: "right" }]);
-    assert.deepEqual(info.variants[0].enum.map((entry) => entry.value), ["left", "center", "right"]);
+    assert.deepEqual(info.enum, [{ value: "start" }, { value: "center" }, { value: "end" }]);
+    assert.deepEqual(info.variants[0].enum.map((entry) => entry.value), ["start", "center", "end"]);
     assert.equal(info.freeText, false);
     assert.equal(info.catalogKind, undefined);
   });

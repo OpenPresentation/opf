@@ -323,7 +323,7 @@ test('actual worker definitions stop after managed getter/method/primitive/owner
       ? 'Managed Windows PowerShell5.1 contract; portable archive/import controls above run on every OS'
       : false,
 }, () => {
-  const output = fs.mkdtempSync(path.join(os.tmpdir(), 'opf-seven-managed-'));
+  const output = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'opf-seven-managed-')));
   const owned = path.join(output, 'results');
   try {
     const r = spawnSync(
@@ -376,13 +376,13 @@ test('actual worker definitions stop after managed getter/method/primitive/owner
     }
   } finally {
     const full = path.resolve(output);
-    assert.ok(full.startsWith(path.resolve(os.tmpdir()) + path.sep));
+    assert.ok(full.startsWith(fs.realpathSync(os.tmpdir()) + path.sep));
     fs.rmSync(full, { recursive: true, force: true });
   }
 });
 
 test('controller paths reject aliases and output overlap with every immutable source/runtime root', () => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'opf-seven-paths-'));
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'opf-seven-paths-')));
   try {
     const names = ['suite', 'producer', 'worker', 'consumer', 'controller'];
     for (const name of names) fs.mkdirSync(path.join(root, name));
@@ -409,7 +409,7 @@ test('controller paths reject aliases and output overlap with every immutable so
     assert.throws(() => plainLocalPath(alias), /Reparse\/symlink/u);
     fs.unlinkSync(alias);
   } finally {
-    assert.ok(path.resolve(root).startsWith(path.resolve(os.tmpdir()) + path.sep));
+    assert.ok(path.resolve(root).startsWith(fs.realpathSync(os.tmpdir()) + path.sep));
     fs.rmSync(root, { recursive: true, force: true });
   }
 });

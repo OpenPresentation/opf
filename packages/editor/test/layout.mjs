@@ -34,8 +34,8 @@ for(const [boundary,fraction]of [[-1,.5],[2,.5],[0,NaN],[0,2]])assert.throws(()=
 const automatic={slides:[{blocks:[{text:'A'},{text:'B'}]}]};
 const automaticFlow=composeSlide(automatic.slides[0]).flows[0];
 assert.equal(prepareTrackResize(automatic,automaticFlow,0,.6).fraction,.6);
-const promoted=composeSlide({left:{text:'Fixed'},right:{blocks:[{text:'Top'},{text:'Bottom'}],composition:{mode:'column'}}});
-assert.deepEqual(promoted.flows.map(f=>f.path),['slides.0.right']);
+const promoted=composeSlide({start:{text:'Fixed'},end:{blocks:[{text:'Top'},{text:'Bottom'}],composition:{mode:'column'}}});
+assert.deepEqual(promoted.flows.map(f=>f.path),['slides.0.end']);
 const editor=createEditorSession(deck,{rejectInvalid:true});editor.applyPatch(prepared.patches);editor.undo();assert.deepEqual(editor.presentation,deck);assert.equal(editor.canUndo,false);
 editor.set('slides.0.title','Newer title');assert.throws(()=>editor.applyPatch(prepared.patches));assert.equal(editor.get('slides.0.title'),'Newer title');
 console.log('Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.');

@@ -1,0 +1,15 @@
+✔ the icon-set records are what the pinned packages give (98.002708ms)
+✔ each set records its license and copyright, and the notices carry the full license texts (11.12575ms)
+✔ the catalog carries no icon data: the icon sets are an entry of their own, each set loads on demand, and every icon's path data reads (76.970333ms)
+✔ the actual View SDK imports its required split peers while the public server keeps its SDK1 API (6.906667ms)
+✔ the real server exposes the newly generated icon through its existing SDK1 wire client (17.1045ms)
+Production XML parser: quoted/comment/PI internal DTD boundaries, PPTX DTD refusals, malformed references and exact literal text round trip PASS.
+✔ packages/pptx/test/xml-parser-dependency.mjs (509.085542ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1236.835041

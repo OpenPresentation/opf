@@ -56,8 +56,8 @@ let checked = 0;
 
 // ---- 1. One tone: the logo and the header text are drawn once, on the slide master; the slides do not repeat them. RR-11's
 // placeholders stay on the slides, and Insert > Header & Footer keeps every placeholder on the master and every layout.
-const oneTone = {organization, design: {background: light, header: {right: {text: 'Board review'}},
-  footer: {left: {image: 'var:organization.logo.icon'}, center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}}},
+const oneTone = {organization, design: {background: light, header: {end: {text: 'Board review'}},
+  footer: {start: {image: 'var:organization.logo.icon'}, center: {text: 'Confidential'}, end: {text: '{{slide.number}}'}}},
   slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}, {title: 'Three', text: 'Body.'}]};
 {
   const {entries, bytes: output, diagnostics} = await exportDeck(oneTone);
@@ -65,9 +65,9 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   const master = text(entries, 'ppt/slideMasters/slideMaster1.xml');
   const masterPictures = pictures(master);
   assert.equal(masterPictures.length, 1, 'the master holds the logo once');
-  assert.match(masterPictures[0], /name="OPF furniture footer left image"/);
+  assert.match(masterPictures[0], /name="OPF furniture footer start image"/);
   assert.ok(same(pictureBytes(entries, 'ppt/slideMasters/slideMaster1.xml', masterPictures[0]), bytes.square), 'the onLight icon');
-  assert.deepEqual(lifted(master).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header right text line 0', 'OPF furniture footer left image']);
+  assert.deepEqual(lifted(master).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header end text line 0', 'OPF furniture footer start image']);
   assert.equal(layouts(entries).length, catalogLayoutCount + 2, 'default, all reachable gallery templates and automatic layout share the master');
   assert.equal(lifted(text(entries, 'ppt/slideLayouts/slideLayout1.xml')).length, 0);
   for (let number = 1; number <= 3; number++) {
@@ -89,13 +89,13 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   // The lifted shapes carry their slot tag; the slide manifests move the parts into `shared`.
   const masterRels = text(entries, 'ppt/slideMasters/_rels/slideMaster1.xml.rels');
   const tags = [...masterRels.matchAll(/Target="\.\.\/tags\/(opfFurnitureShared\d+\.xml)"/g)].map(match => tagData(entries, `ppt/tags/${match[1]}`));
-  assert.deepEqual(tags.map(tag => tag.slot).sort(), ['footer.left.image', 'header.right.text']);
+  assert.deepEqual(tags.map(tag => tag.slot).sort(), ['footer.start.image', 'header.end.text']);
   assert.ok(tags.every(tag => tag.group === undefined && tag.part === undefined), 'a shared shape names no slide');
   for (let index = 0; index < 3; index++) {
     const manifest = manifestOf(entries, index);
-    assert.deepEqual(Object.keys(manifest.shared).sort(), ['footer.left.image', 'header.right.text']);
+    assert.deepEqual(Object.keys(manifest.shared).sort(), ['footer.start.image', 'header.end.text']);
     assert.deepEqual(Object.values(manifest.shared).map(entry => entry.on), ['master', 'master']);
-    assert.deepEqual(manifest.shared['footer.left.image'].image.reference, 'var:organization.logo.icon');
+    assert.deepEqual(manifest.shared['footer.start.image'].image.reference, 'var:organization.logo.icon');
     assert.deepEqual(manifest.parts.map(part => part.ph), ['ftr', 'sldNum'], 'the slide parts are its placeholders');
     assert.equal(manifest.images, undefined);
   }
@@ -121,7 +121,7 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   }
   const view = await read(zipSync(older));
   assert.deepEqual(view.invalid, []);
-  assert.deepEqual(view.imported.design.footer, {left: {}, center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}});
+  assert.deepEqual(view.imported.design.footer, {left: {}, center: {text: 'Confidential'}, end: {text: '{{slide.number}}'}});
   checked++;
 
   // PowerPoint edits on the master. Deleting the logo there removes it from every slide: the deck's footer loses its image (intent,
@@ -130,28 +130,28 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   const masterPath = 'ppt/slideMasters/slideMaster1.xml';
   const deleted = await read(mutate(entries, {[masterPath]: xml => xml.replace(/<p:pic>[\s\S]*?<\/p:pic>/, '')}));
   assert.deepEqual(deleted.invalid, []);
-  assert.deepEqual(deleted.imported.design.footer, {center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}});
+  assert.deepEqual(deleted.imported.design.footer, {center: {text: 'Confidential'}, end: {text: '{{slide.number}}'}});
   assert.ok(deleted.imported.slides.every(slide => slide.design?.footer === undefined));
   const replaced = await read(zipSync({...entries, [relationshipPath(entries, masterPath, embedOf(masterPictures[0]))]: bytes.wide}));
   assert.deepEqual(replaced.invalid, []);
-  assert.match(replaced.imported.design.footer.left.image?.src ?? '', /^data:image\/png;base64,/, 'a replaced master picture is an ordinary image');
+  assert.match(replaced.imported.design.footer.start.image?.src ?? '', /^data:image\/png;base64,/, 'a replaced master picture is an ordinary image');
   const hidden = await read(mutate(entries, {'ppt/slides/slide2.xml': xml => xml.replace('<p:sld ', '<p:sld showMasterSp="0" ')}));
   assert.deepEqual(hidden.invalid, []);
   assert.deepEqual(hidden.imported.design.footer, oneTone.design.footer);
-  assert.deepEqual(hidden.imported.slides[1].design.footer, {center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}});
+  assert.deepEqual(hidden.imported.slides[1].design.footer, {center: {text: 'Confidential'}, end: {text: '{{slide.number}}'}});
   assert.equal(hidden.imported.slides[1].design.header, false, 'the master header is hidden on that slide too');
   // A damaged tag on the master is damage: reported, and the master's current words stay the part's value.
-  const damaged = await read(mutate(entries, Object.fromEntries(Object.keys(entries).filter(path => /^ppt\/tags\/opfFurnitureShared\d+\.xml$/.test(path) && tagData(entries, path).slot === 'header.right.text')
+  const damaged = await read(mutate(entries, Object.fromEntries(Object.keys(entries).filter(path => /^ppt\/tags\/opfFurnitureShared\d+\.xml$/.test(path) && tagData(entries, path).slot === 'header.end.text')
     .map(path => [path, xml => xml.replace(/\bval="[^"]+"/, `val="${Buffer.from(JSON.stringify({...tagData(entries, path), boundary: 'bogus'})).toString('hex').toUpperCase()}"`)]))));
   assert.ok(damaged.invalid.length > 0);
-  assert.deepEqual(damaged.imported.design.header, {right: {text: 'Board review'}});
+  assert.deepEqual(damaged.imported.design.header, {end: {text: 'Board review'}});
   checked++;
 }
 
 // ---- 1b. All three native placeholders beside a master logo: the live date, the footer text and the slide number stay RR-11
 // placeholders on each slide (live fields, the dialog's objects); only the logo moves to the master.
 {
-  const deck = {organization, design: {background: light, footer: {left: {date: true, image: 'var:organization.logo.icon'}, center: {text: 'Internal'}, right: {text: 'Page {{slide.number}}'}}},
+  const deck = {organization, design: {background: light, footer: {start: {date: true, image: 'var:organization.logo.icon'}, center: {text: 'Internal'}, end: {text: 'Page {{slide.number}}'}}},
     slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
   const {entries, bytes: output} = await exportDeck(deck);
   const master = text(entries, 'ppt/slideMasters/slideMaster1.xml');
@@ -172,7 +172,7 @@ const oneTone = {organization, design: {background: light, header: {right: {text
 
 // ---- 2. Light and dark slides: one layout per tone, each drawing its own icon; the master draws no logo.
 {
-  const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}}, slides: [
+  const deck = {organization, design: {background: light, footer: {start: {image: 'var:organization.logo.icon'}, end: {text: '{{slide.number}}'}}}, slides: [
     {title: 'Light 1', text: 'Body.'}, {title: 'Dark 1', text: 'Body.', design: {background: dark}},
     {title: 'Light 2', text: 'Body.'}, {title: 'Dark 2', text: 'Body.', design: {background: dark}}]};
   const {entries, bytes: output, diagnostics} = await exportDeck(deck);
@@ -198,7 +198,7 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   const ids = [...master.matchAll(/<p:sldLayoutId id="(\d+)"/g)].map(match => match[1]);
   assert.equal(ids.length, catalogLayoutCount + 4); assert.equal(new Set(ids).size, ids.length);
   for (const layout of layouts(entries)) assert.ok(types.includes(`PartName="/${layout}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"`));
-  for (let index = 0; index < 4; index++) assert.equal(manifestOf(entries, index).shared['footer.left.image'].on, 'layout');
+  for (let index = 0; index < 4; index++) assert.equal(manifestOf(entries, index).shared['footer.start.image'].on, 'layout');
   // The reference returns on every slide.
   const {imported, invalid} = await read(output);
   assert.deepEqual(invalid, []);
@@ -228,7 +228,7 @@ const oneTone = {organization, design: {background: light, header: {right: {text
 // ---- 3. A hidden footer: the cover hides header and footer, so it uses a layout that hides the master's furniture; a slide that hides
 // only the footer keeps the master header and draws no footer.
 {
-  const deck = {organization, design: {background: light, header: {left: {text: 'Board review'}}, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: '{{slide.number}}'}}}, slides: [
+  const deck = {organization, design: {background: light, header: {start: {text: 'Board review'}}, footer: {start: {image: 'var:organization.logo.icon'}, end: {text: '{{slide.number}}'}}}, slides: [
     {title: 'Cover', layout: 'cover', design: {header: false, footer: false}},
     {title: 'Two', text: 'Body.'}, {title: 'Three', text: 'Body.'}]};
   const {entries, bytes: output} = await exportDeck(deck);
@@ -262,8 +262,8 @@ const oneTone = {organization, design: {background: light, header: {right: {text
 // ---- 4. A slide with its own furniture: its header differs, so it keeps that text on the slide; the shared header is on a layout and
 // the logo, the same everywhere, on the master.
 {
-  const deck = {organization, design: {background: light, header: {right: {text: 'Board review'}}, footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [
-    {title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}, {title: 'Appendix', text: 'Body.', design: {header: {right: {text: 'Appendix'}}}}, {title: 'Four', text: 'Body.'}]};
+  const deck = {organization, design: {background: light, header: {end: {text: 'Board review'}}, footer: {start: {image: 'var:organization.logo.icon'}}}, slides: [
+    {title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}, {title: 'Appendix', text: 'Body.', design: {header: {end: {text: 'Appendix'}}}}, {title: 'Four', text: 'Body.'}]};
   const {entries, bytes: output} = await exportDeck(deck);
   assert.equal(pictures(text(entries, 'ppt/slideMasters/slideMaster1.xml')).length, 1);
   assert.match(text(entries, 'ppt/slides/slide3.xml'), /<a:t>Appendix<\/a:t>/, 'the override stays on its slide');
@@ -272,13 +272,13 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   assert.notEqual(shared, automaticLayout(entries));
   for (const number of [1, 2, 4]) assert.equal(slideParts(entries, number).layout, shared);
   assert.match(text(entries, shared), /<a:t>Board review<\/a:t>/);
-  assert.equal(manifestOf(entries, 2).shared['footer.left.image'].on, 'master');
-  assert.equal(manifestOf(entries, 2).shared['header.right.text'], undefined);
-  assert.equal(manifestOf(entries, 0).shared['header.right.text'].on, 'layout');
+  assert.equal(manifestOf(entries, 2).shared['footer.start.image'].on, 'master');
+  assert.equal(manifestOf(entries, 2).shared['header.end.text'], undefined);
+  assert.equal(manifestOf(entries, 0).shared['header.end.text'].on, 'layout');
   const {imported, invalid} = await read(output);
   assert.deepEqual(invalid, []);
   assert.deepEqual(imported.design, {...imported.design, header: deck.design.header, footer: deck.design.footer});
-  assert.deepEqual(imported.slides[2].design.header, {right: {text: 'Appendix'}});
+  assert.deepEqual(imported.slides[2].design.header, {end: {text: 'Appendix'}});
   assert.ok([0, 1, 3].every(index => imported.slides[index].design?.header === undefined));
   checked++;
 }
@@ -286,10 +286,10 @@ const oneTone = {organization, design: {background: light, header: {right: {text
 // ---- 5. Slide content over the footer: PowerPoint draws master shapes beneath slide content, so on a slide where a picture bleeds
 // over the logo it stays a shape on that slide, above the picture as in the preview, with a diagnostic; the other slides share the master.
 {
-  const covered = {blocks: [{text: 'Body.'}, {image: uri(bytes.wide), placement: {edge: 'left'}}]};
-  const deck = {organization, design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', ...covered}, {title: 'Three', text: 'Body.'}]};
+  const covered = {blocks: [{text: 'Body.'}, {image: uri(bytes.wide), placement: {edge: 'start'}}]};
+  const deck = {organization, design: {background: light, footer: {start: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', ...covered}, {title: 'Three', text: 'Body.'}]};
   const {entries, bytes: output, diagnostics} = await exportDeck(deck);
-  assert.deepEqual(diagnostics.filter(item => item.code === 'furniture-on-slide').map(item => item.path), ['design.footer.left.image']);
+  assert.deepEqual(diagnostics.filter(item => item.code === 'furniture-on-slide').map(item => item.path), ['design.footer.start.image']);
   const slideTwo = text(entries, 'ppt/slides/slide2.xml');
   assert.equal(pictures(slideTwo).length, 2, 'the placed picture and the logo');
   assert.ok(slideTwo.lastIndexOf('<p:pic>') > slideTwo.indexOf('name="OPF image'), 'the logo is drawn after the picture');
@@ -304,10 +304,10 @@ const oneTone = {organization, design: {background: light, header: {right: {text
 
 // ---- 6. Live fields stay on each slide: a header slide number is cached per slide; a footer text with a number is RR-11's placeholder.
 {
-  const deck = {design: {header: {left: {text: 'Page {{slide.number}}'}, right: {text: 'Same'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
+  const deck = {design: {header: {start: {text: 'Page {{slide.number}}'}, end: {text: 'Same'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
   const {entries, bytes: output} = await exportDeck(deck);
   for (const number of [1, 2]) assert.match(text(entries, `ppt/slides/slide${number}.xml`), /type="slidenum"/);
-  assert.deepEqual(lifted(text(entries, 'ppt/slideMasters/slideMaster1.xml')).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header right text line 0']);
+  assert.deepEqual(lifted(text(entries, 'ppt/slideMasters/slideMaster1.xml')).map(shape => shape.match(/name="([^"]+)"/)[1]), ['OPF furniture header end text line 0']);
   const {imported, invalid} = await read(output);
   assert.deepEqual(invalid, []);
   assert.deepEqual(imported.design.header, deck.design.header);
@@ -336,7 +336,7 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   const {entries} = await exportDeck(oneTone, {provenance: false});
   assert.equal(pictures(text(entries, 'ppt/slideMasters/slideMaster1.xml')).length, 1, 'export without provenance still writes the master logo');
   const unstored = (await read(zipSync(entries))).imported.design;
-  assert.match(unstored.footer.left.image.src, /^data:image\/png;base64,/);
+  assert.match(unstored.footer.start.image.src, /^data:image\/png;base64,/);
   assert.deepEqual(unstored.header, oneTone.design.header);
   const untagged = zipSync(Object.fromEntries(Object.entries(entries).filter(([path]) => !/^ppt\/tags\//.test(path)).map(([path, data]) => [path,
     /^ppt\/(?:slides\/slide|slideLayouts\/slideLayout|slideMasters\/slideMaster)\d+\.xml$/.test(path) ? enc.encode(dec.decode(data).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, '')) :
@@ -345,13 +345,13 @@ const oneTone = {organization, design: {background: light, header: {right: {text
   const plain = await read(untagged);
   assert.ok(!JSON.stringify(plain.imported).includes('data:image/png'), 'the master logo of a plain file is not imported');
   assert.ok(!JSON.stringify(plain.imported).includes('Board review'), 'nor its master header text');
-  assert.deepEqual(plain.imported.design.footer, {center: {text: 'Confidential'}, right: {text: '{{slide.number}}'}}, 'the native placeholders still import');
+  assert.deepEqual(plain.imported.design.footer, {center: {text: 'Confidential'}, end: {text: '{{slide.number}}'}}, 'the native placeholders still import');
   checked++;
 }
 
 // ---- 8. Per-slide script fonts give a slide its own slide master (opf-pptx#168): furniture is lifted per master.
 {
-  const deck = {organization, language: 'ja', design: {background: light, footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [
+  const deck = {organization, language: 'ja', design: {background: light, footer: {start: {image: 'var:organization.logo.icon'}}}, slides: [
     {title: '日本語の見出し', text: 'ひらがな'}, {title: '日本語の見出し', text: 'カタカナ', design: {fontScheme: 'ms-mincho'}},
     {title: '日本語の見出し', text: 'ひらがな'}, {title: '日本語の見出し', text: 'カタカナ', design: {fontScheme: 'ms-mincho'}}]};
   const {entries, bytes: output} = await exportDeck(deck);

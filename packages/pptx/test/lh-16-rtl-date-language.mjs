@@ -42,7 +42,7 @@ for(const label of ['Weeks 2–5','Week١–٤','Week۱–۴']){
   assert.equal((await fromPptx(zipSync(parts))).language,'he-IL','a genuine unprotected native base-language edit remains authoritative');
  }
 }
-const explicit={language:'ar-SA',design:{fontScheme:'roboto'},slides:[{text:[{text:'Only protected English',lang:'en-US'}]}]};
+const explicit={language:'ar-SA',design:{fontScheme:'roboto'},slides:[{text:[{text:'Only protected English',language:'en-US'}]}]};
 assert.equal((await fromPptx(await toPptx(explicit))).language,'ar-SA','explicit run language alone is not a base-language edit');
 const override={language:'en-US',design:{fontScheme:'roboto'},slides:[{language:'ar-SA',timeline:[{when:'Weeks 2–5',what:''}]}]};
 const overridden=await fromPptx(await toPptx(override));assert.equal(overridden.language,'en-US');assert.equal(overridden.slides[0].language,'ar-SA');

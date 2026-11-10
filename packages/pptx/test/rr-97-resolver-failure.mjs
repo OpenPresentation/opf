@@ -71,7 +71,7 @@ const uses = [
   ['design.background', {design: {background: {type: 'image', src: MISSING}}, slides: [{title: 'Background'}]}],
   ['design.watermark', {design: {watermark: {src: MISSING, opacity: 0.2}}, slides: [{title: 'Watermark'}]}],
   ['organization.logo', {organization: {id: 'acme', name: 'Acme', role: 'primary', logo: MISSING}, design: {background: light}, slides: [{title: 'Cover', layout: 'cover'}]}, /Image unavailable/],
-  ['design.footer.left.image', {design: {footer: {left: {image: MISSING}}}, slides: [{title: 'Footer', text: 'Body'}]}, /Image unavailable/],
+  ['design.footer.start.image', {design: {footer: {start: {image: MISSING}}}, slides: [{title: 'Footer', text: 'Body'}]}, /Image unavailable/],
   ['organization.logo', {organization: {id: 'acme', name: 'Acme', logo: MISSING}, design: {listBullet: 'image', background: light}, slides: [{title: 'List', items: ['Alpha', 'Beta']}]}, /<a:buChar/],
 ];
 for (const [at, deck, shows] of uses) {

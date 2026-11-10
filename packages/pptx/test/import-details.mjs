@@ -99,7 +99,7 @@ const colorDeck = {
     {title: 'Lists', blocks: [
       {type: 'group', blocks: [{type: 'text', text: [{text: 'in a group ', color: 'accent2'}, 'then plain']}, {items: [[{text: 'x', color: 'accent2'}, 'y'], {text: [{text: 'z', color: 'var:brand'}], description: [{text: 'details', color: 'accent1'}]}]}]},
       {bullets: ['p', [{text: 'q', color: 'primary'}]]}]},
-    {title: 'Regions', left: {text: [{text: 'L', color: 'accent2'}]}, right: {text: [{text: 'R', color: 'var:brand'}]}}
+    {title: 'Regions', start: {text: [{text: 'L', color: 'accent2'}]}, end: {text: [{text: 'R', color: 'var:brand'}]}}
   ]
 };
 const colors = (deck, slide) => {
@@ -221,10 +221,10 @@ const colors = (deck, slide) => {
   const forms = {
     root: {items},
     group: {blocks: [{type: 'group', blocks: [{items}, {type: 'text', text: 'beside'}]}]},
-    region: {left: {items}, right: {text: 'R'}},
+    region: {start: {items}, end: {text: 'R'}},
     blocks: {blocks: [{items}, {items: ['p', 'q']}]}
   };
-  const dig = slide => slide.items ?? slide.left?.items ?? slide.blocks[0].items ?? slide.blocks[0].blocks[0].items;
+  const dig = slide => slide.items ?? slide.start?.items ?? slide.blocks[0].items ?? slide.blocks[0].blocks[0].items;
   for (const strip of [false, true]) for (const save of [false, true]) for (const [name, slide] of Object.entries(forms)) {
     let bytes = await exportDeck({slides: [{title: 'T', ...slide}]});
     if (save) bytes = resave(bytes);
@@ -251,8 +251,8 @@ const colors = (deck, slide) => {
     'root bullets': {bullets},
     'block bullets': {blocks: [{bullets}, {items: ['i', 'j']}]},
     'group bullets': {blocks: [{type: 'group', id: 'g', blocks: [{bullets}, {type: 'text', text: 'beside'}]}, {bullets: ['p', 'q']}]},
-    'region bullets': {left: {bullets}, right: {items: ['z']}},
-    'region group bullets': {left: {type: 'group', blocks: [{bullets}, {bullets: ['y']}]}, right: {text: 'R'}},
+    'region bullets': {start: {bullets}, end: {items: ['z']}},
+    'region group bullets': {start: {type: 'group', blocks: [{bullets}, {bullets: ['y']}]}, end: {text: 'R'}},
     'typed text bullets': {blocks: [{type: 'text', bullets}, {type: 'list', items: ['a']}]},
     'items stay items': {blocks: [{items: ['a', 'b']}, {type: 'list', items: ['c']}]}
   };

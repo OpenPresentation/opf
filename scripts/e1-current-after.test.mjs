@@ -23,12 +23,15 @@ import {
   PILOT_COMMIT,
 } from "./e1-current-after.mjs";
 
-const temporary = (fn) => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "opf-e1-control-"));
+const temporary = (fn, temporaryParent = os.tmpdir()) => {
+  // macOS may advertise /var while realpath returns /private/var. Fixtures enter the same strict boundary as real consumers.
+  const parent = fs.realpathSync(temporaryParent);
+  const root = fs.mkdtempSync(path.join(parent, "opf-e1-control-"));
+  assert.equal(fs.realpathSync(root), root, "The fixture must satisfy the consumer's canonical path contract");
   try {
     return fn(root);
   } finally {
-    const relative = path.relative(path.resolve(os.tmpdir()), path.resolve(root));
+    const relative = path.relative(parent, path.resolve(root));
     assert.ok(
       relative &&
         !relative.startsWith("..") &&
@@ -39,6 +42,22 @@ const temporary = (fn) => {
     fs.rmSync(root, { recursive: true, force: true });
   }
 };
+test("owned fixture canonicalizes an aliased temporary parent before strict consumer admission", () =>
+  temporary((root) => {
+    const target = path.join(root, "target"), alias = path.join(root, "alias");
+    fs.mkdirSync(target);
+    fs.symlinkSync(target, alias, process.platform === "win32" ? "junction" : "dir");
+    try {
+      temporary((inner) => {
+        assert.equal(path.dirname(inner), target);
+        assert.equal(fs.realpathSync(inner), inner);
+      }, alias);
+      assert.deepEqual(fs.readdirSync(target), [], "Only the exact inner fixture was removed");
+      assert.equal(fs.lstatSync(alias).isSymbolicLink(), true, "The owned parent alias stays a link");
+    } finally {
+      fs.unlinkSync(alias); // Remove only the owned link, never recurse through its target.
+    }
+  }));
 const write = (root, name, data) => {
   const file = path.join(root, name);
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -73,7 +92,7 @@ const deck = () => ({
       layouts: { cover: { historical: true } },
     },
   },
-  design: { footer: { left: { text: "Authored" } } },
+  design: { footer: { start: { text: "Authored" } } },
   slides: [
     {
       id: "s02",

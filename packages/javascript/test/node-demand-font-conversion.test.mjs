@@ -32,7 +32,7 @@ const catalogs = [
 const source = {
   design: {
     fontScheme: 'host-demand',
-    footer: { left: { date: true, dateFormat: 'MMMM d, yyyy' } },
+    footer: { start: { date: true, dateFormat: 'MMMM d, yyyy' } },
   },
   slides: [
     {

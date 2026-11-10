@@ -214,13 +214,13 @@ test('opf/missing-alt-text: images, video, organization logos, header images; ""
 				{ title: 'D', blocks: [{ image: { src: 'https://example.com/d.png' } }, { video: { src: 'https://example.com/v.mp4' } }] },
 				{ title: 'E', video: { src: 'https://example.com/w.mp4', title: 'Product walkthrough' } },
 			],
-			{ organization: [{ id: 'acme', name: 'Acme', logo: { full: { src: 'https://example.com/acme.svg', alt: 'Acme' }, icon: { onLight: { src: 'https://example.com/icon.svg' } } } }], design: { footer: { left: { image: 'var:organization.logo.icon' } } } },
+			{ organization: [{ id: 'acme', name: 'Acme', logo: { full: { src: 'https://example.com/acme.svg', alt: 'Acme' }, icon: { onLight: { src: 'https://example.com/icon.svg' } } } }], design: { footer: { start: { image: 'var:organization.logo.icon' } } } },
 		),
 		'missing-alt-text',
 	);
 	const paths = new Set(found.map((d) => d.path));
 	for (const expected of ['/slides/0/image', '/slides/3/blocks/0/image', '/slides/3/blocks/1/video', '/organization/0/logo/icon/onLight']) assert.ok(paths.has(expected), expected);
-	for (const unexpected of ['/slides/1/image', '/slides/2/image', '/slides/4/video', '/organization/0/logo/full', '/design/footer/left/image']) assert.ok(!paths.has(unexpected), unexpected);
+	for (const unexpected of ['/slides/1/image', '/slides/2/image', '/slides/4/video', '/organization/0/logo/full', '/design/footer/start/image']) assert.ok(!paths.has(unexpected), unexpected);
 	const stringImage = found.find((d) => d.path === '/slides/0/image');
 	assert.equal(stringImage.fixes[0].kind, 'focus');
 	assert.deepEqual(stringImage.fixes[0].focus, { path: '/slides/0/image', field: 'alt', value: 'https://example.com/a.png' });
@@ -234,8 +234,8 @@ test('opf/missing-alt-text: asset registry alt text and placed image blocks coun
 	const registry = { assets: { hero: { src: 'https://example.com/hero.jpg', alt: 'Team at the offsite' }, bare: 'https://example.com/bare.jpg' } };
 	assert.ok(!has(deck([{ title: 'A', image: 'asset:hero' }], registry), 'missing-alt-text'));
 	assert.ok(has(deck([{ title: 'A', image: 'asset:bare' }], registry), 'missing-alt-text'));
-	assert.ok(has(deck([{ title: 'A', blocks: [{ image: 'https://example.com/s.jpg', placement: { edge: 'left' } }, { text: 'x' }] }]), 'missing-alt-text'));
-	assert.ok(!has(deck([{ title: 'A', blocks: [{ image: { src: 'https://example.com/s.jpg', alt: 'Sunrise' }, placement: { edge: 'left' } }, { text: 'x' }] }]), 'missing-alt-text'));
+	assert.ok(has(deck([{ title: 'A', blocks: [{ image: 'https://example.com/s.jpg', placement: { edge: 'start' } }, { text: 'x' }] }]), 'missing-alt-text'));
+	assert.ok(!has(deck([{ title: 'A', blocks: [{ image: { src: 'https://example.com/s.jpg', alt: 'Sunrise' }, placement: { edge: 'start' } }, { text: 'x' }] }]), 'missing-alt-text'));
 	assert.ok(!has(deck([{ title: 'A', text: 'x', design: { background: 'https://example.com/s.jpg' } }]), 'missing-alt-text'));
 });
 
@@ -261,12 +261,12 @@ test('opf/missing-slide-title and opf/duplicate-slide-title', () => {
 
 test('opf/reading-order: promoted regions are composed in visual order, blocks in order', () => {
 	// composeSlide used to compose region keys alphabetically (center, left, right); it now follows the layout (RR-29)
-	assert.ok(!has(deck([{ title: 'T', left: { text: 'L' }, center: { text: 'C' }, right: { text: 'R' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', start: { text: 'L' }, center: { text: 'C' }, end: { text: 'R' } }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', top: { text: 'T' }, middle: { text: 'M' }, bottom: { text: 'B' } }]), 'reading-order'));
-	assert.ok(!has(deck([{ title: 'T', 'top:left': { text: 'A' }, 'top:center+right': { text: 'B' }, 'middle+bottom:left': { text: 'C' }, 'middle+bottom:center+right': { text: 'D' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', 'top:start': { text: 'A' }, 'top:center+end': { text: 'B' }, 'middle+bottom:start': { text: 'C' }, 'middle+bottom:center+end': { text: 'D' } }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', composition: { mode: 'row' }, blocks: [{ text: 'L' }, { text: 'C' }, { text: 'R' }] }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', blocks: [{ text: 'A' }, { text: 'B' }, { text: 'C' }, { text: 'D' }] }]), 'reading-order'));
-	assert.ok(!has(deck([{ title: 'T', left: { text: 'L' }, right: { text: 'R' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', start: { text: 'L' }, end: { text: 'R' } }]), 'reading-order'));
 });
 
 // ------------------------------------------------------------ resolved color roles
@@ -475,7 +475,7 @@ test('opf/image-resolution: embedded images measured at their displayed size; UR
 	assert.ok(!has(image('https://example.com/huge.png'), 'image-resolution'));
 	assert.ok(!has(image('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>'), 'image-resolution'));
 	assert.ok(has(deck([{ title: 'T', image: 'asset:s' }], { assets: { s: { src: small, alt: 'x' } } }), 'image-resolution'));
-	assert.ok(has(deck([{ title: 'T', blocks: [{ image: { src: small, alt: 'x' }, placement: { edge: 'left' } }, { text: 'x' }] }]), 'image-resolution'));
+	assert.ok(has(deck([{ title: 'T', blocks: [{ image: { src: small, alt: 'x' }, placement: { edge: 'start' } }, { text: 'x' }] }]), 'image-resolution'));
 	assert.ok(has(deck([{ title: 'T', text: 'x' }], { design: { background: { type: 'image', src: small } } }), 'image-resolution'));
 	assert.ok(has(deck([{ title: 'T', text: 'x' }], { design: { background: small } }), 'image-resolution'));
 	assert.ok(!has(image(small), 'image-resolution', { thresholds: { minImagePpi: 5 } }));

@@ -106,7 +106,7 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `id=...`, `type=...` | The block's `id` and explicit `type`. Such a block is always an entry in `blocks` |
 | `as=bullets` | Store a list as `bullets` instead of `items` |
 | `as=video` | Store an image line as `video` |
-| `region=top:left` | Put the block in that promoted region of the slide (`left`, `center+right`, `top+middle`, `middle+bottom:left+center+right`, ...) instead of the content |
+| `region=top:start` | Put the block in that promoted region of the slide (`start`, `center+end`, `top+middle`, `middle+bottom:start+center+end`, ...) instead of the content |
 
 | Markdown | OPF field | Notes |
 | --- | --- | --- |
@@ -134,7 +134,7 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `` `code` ``, ``` ``a ` b`` ``` | `code` (a backtick fence of any length; one space is trimmed from each side when both sides have one; the text is literal and other formatting wraps the span) |
 | `<u>`, `<sup>`, `<sub>` | `underline`, `superscript`, `subscript` |
 | `[text](url)`, `<https://...>` | `link` (a link title is ignored) |
-| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`, `lang` (a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
+| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`, `language` (written `lang=fr`, a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
 | `\*` and any backslash before ASCII punctuation | The character itself |
 
 Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. A backtick that has no matching fence, or that is escaped with a backslash, is text. There is no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. The title, the subtitle and a quote's text keep inline formatting (a string when nothing is formatted, `TextRun[]` otherwise); a quote with formatted text and no attribution stays `{ text: [...] }`, because the string shorthand is for plain text. A quote's attribution and source are plain strings and drop formatting with a `formatting-dropped` warning; backticks in them stay literal characters. `cite` and `footnote` have no inline syntax: a heading or quote that carries one is written in an `opf-slide` fence. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.

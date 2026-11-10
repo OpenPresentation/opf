@@ -49,9 +49,9 @@ export interface BindRegionsOptions {
 
 const FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'path'] as const;
 const FIELD_KINDS: Readonly<Record<string, RegionKind>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', shape: 'shape', path: 'shape', timeline: 'timeline', diagram: 'diagram' };
-const IMAGE_EDGES = ['left', 'right', 'top', 'bottom'];
-/** The promoted-region keys of a slide (`left`, `top:left`, `middle+bottom:center+right`, ...). */
-export const PROMOTED_REGION_KEY = /^(top|middle|bottom)(\+(top|middle|bottom))*(:(left|center|right)(\+(left|center|right))*)?$|^(left|center|right)(\+(left|center|right))*$/;
+const IMAGE_EDGES = ['start', 'end', 'top', 'bottom'];
+/** The promoted-region keys of a slide (`start`, `top:start`, `middle+bottom:center+end`, ...). */
+export const PROMOTED_REGION_KEY = /^(top|middle|bottom)(\+(top|middle|bottom))*(:(start|center|end)(\+(start|center|end))*)?$|^(start|center|end)(\+(start|center|end))*$/;
 const record = (value: unknown): Record<string, any> => value !== null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, any> : {};
 const empty = (value: unknown) => value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
 

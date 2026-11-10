@@ -265,8 +265,8 @@ assert.deepEqual(LAYOUT_FAMILIES, ['chart', 'code', 'image', 'list', 'metric', '
 
 const FOOTERS = {
   off: () => ({header: false, footer: false}),
-  number: () => ({footer: {right:{text:'{{slide.number}}'}}}),
-  date: () => ({footer: {left: {date: '2026-09-29', dateFormat: 'yyyy-MM-dd'}}}),
+  number: () => ({footer: {end:{text:'{{slide.number}}'}}}),
+  date: () => ({footer: {start: {date: '2026-09-29', dateFormat: 'yyyy-MM-dd'}}}),
   text: () => ({footer: {center: {text: 'Confidential'}}})
 };
 const BACKGROUNDS = {
@@ -492,7 +492,7 @@ function buildDeck(name, row, index) {
       colorScheme: row.colorScheme,
       background: BACKGROUNDS[row.background[0]],
       ...FOOTERS[row.headerFooter](),
-      ...(row.socials === 'profiles' ? {header: {right: {socials: true}}} : {})
+      ...(row.socials === 'profiles' ? {header: {end: {socials: true}}} : {})
     },
     assets: {hero: {src: PIXEL, alt: 'Illustration'}, clip: {src: CLIP, alt: 'Clip'}},
     slides

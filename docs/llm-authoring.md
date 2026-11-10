@@ -22,13 +22,13 @@ Choose one content structure per slide:
 
 - Root payloads for a simple slide: `text`, `items`, `image`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, or `diagram` (Mermaid, Graphviz DOT or PlantUML source for a flow, sequence, mind map or other structure; give it an `alt` and set `syntax` for DOT or PlantUML). Mark a roadmap's progress with `status` on the timeline events (`done`, `current`, `planned`); the engines draw it, so do not add color or schedule-health words to fake it.
 - `blocks` for a sequence that should reflow. Set `composition` only when an arrangement matters. Omit it to let the engine choose.
-- Promoted regions such as `left`, `center+right`, `top`, and `bottom` for spatially meaningful content. Regions must not overlap. Do not mix regions with root payloads or blocks.
+- Promoted regions such as `start`, `center+end`, `top`, and `bottom` for spatially meaningful content. Regions must not overlap. Do not mix regions with root payloads or blocks.
 
 Reference records by id from the pptx.gallery catalog (`gallery` of `@openpresentation/gallery`) or a catalog the host registers (`name:id` for a named group), and put the deck's own records in `catalogs.custom`. Embed what a deck uses before saving it (`embed`, `opf embed`), so it renders the same with no catalog registered. Do not invent an unresolvable layout or assume a network lookup will happen.
 
 A testimonial quote is `{ "quote": { "text": "...", "attribution": "Priya Raman", "role": "VP Operations, Acme", "photo": { "src": "asset:priya", "alt": "Priya Raman" } } }`: the attribution holds the name, `role` the title and organization, and `photo` a circular headshot that needs alt text.
 
-Pick `bullets` for plain talking points and `items` for a list whose entries have the same shape or a supporting `description` (see [content payloads](content-payloads.md#items-versus-bullets)). Mark an inline code span with `{ "text": "pnpm install", "code": true }`, a stretch in another language with `lang`, lines of a code block with `code.highlight` (`[3, [5, 7]]`), and stamp a deck with `design.watermark` `{ "text": "DRAFT", "opacity": 0.1 }`.
+Pick `bullets` for plain talking points and `items` for a list whose entries have the same shape or a supporting `description` (see [content payloads](content-payloads.md#items-versus-bullets)). Mark an inline code span with `{ "text": "pnpm install", "code": true }`, a stretch in another language with `language`, lines of a code block with `code.highlight` (`[3, [5, 7]]`), and stamp a deck with `design.watermark` `{ "text": "DRAFT", "opacity": 0.1 }`.
 
 A headline or quote may carry inline formatting: `title`, `subtitle`, `tag` and `quote.text` accept a string or `TextRun[]`, for example `"title": ["Revenue grew ", { "text": "28%", "color": "accent1" }]` to color the word that carries the claim, or a `cite` marker on the claim. Use a plain string unless a run needs its own style.
 

@@ -128,7 +128,7 @@ They use the two forms above and work wherever the same kind of user variable wo
   "speaker": { "id": "ada", "name": "Ada Lovelace", "title": "CTO", "photo": "asset:ada" },
   "assets": { "ada": { "src": "./photos/ada.jpg", "mediaType": "image/jpeg" } },
   "organization": { "id": "acme", "name": "Acme Corp", "tagline": "Build the future", "logo": { "full": "./assets/acme-logo.svg", "icon": "./assets/acme-mark.svg" } },
-  "design": { "footer": { "left": { "image": "var:organization.logo.icon", "text": "{{organization.tagline}}" } } },
+  "design": { "footer": { "start": { "image": "var:organization.logo.icon", "text": "{{organization.tagline}}" } } },
   "slides": [{ "id": "cover", "title": "Quarterly review", "subtitle": "{{speaker.name}}, {{speaker.title}} · {{organization.name}}", "image": "var:speaker.photo" }]
 }
 ```

@@ -65,7 +65,7 @@
         "row",
         "column"
       ],
-      "description": "How the record's 'regions' are laid out: 'row' places them side by side, left to right in reading order; 'column' stacks them top to bottom. Default 'column'.",
+      "description": "How the record's 'regions' are laid out: 'row' places them side by side from the start edge in reading order (left to right; right to left in a right-to-left deck); 'column' stacks them top to bottom. Default 'column'.",
       "examples": [
         "row",
         "column"
@@ -254,11 +254,11 @@
             "middle",
             "bottom"
           ],
-          "description": "Vertical position of the heading group in its area when the area is sized (a number): 'middle' (default) centers it, 'bottom' sets it at the foot of the area, as a cover or section sets its display title low (LH-130), 'top' at the top. An 'auto' area is as tall as the group, so the anchor changes nothing there. A heading region never inherits the 'anchor' of the record or a split."
+          "description": "Vertical position of the heading group in its area when the area is sized (a number): 'middle' (default) centers it, 'bottom' sets it at the foot of the area, as a cover or section sets its display title low, 'top' at the top. An 'auto' area is as tall as the group, so the anchor changes nothing there. A heading region never inherits the 'anchor' of the record or a split."
         },
         "rule": {
           "type": "boolean",
-          "description": "'title' only: draw a short accent rule (80 by 5 px at a 720 px short edge) half a gap above the title, at the title's start edge, on a slide with a title and no tag; a tag is the group's eyebrow and takes the rule's place (LH-130). Engines draw it in the tag's color, the primary or the text color where the primary is under 4.5:1 on the slide. Default false."
+          "description": "'title' only: draw a short accent rule (80 by 5 px at a 720 px short edge) half a gap above the title, at the title's start edge, on a slide with a title and no tag; a tag is the group's eyebrow and takes the rule's place. Engines draw it in the tag's color, the primary or the text color where the primary is under 4.5:1 on the slide. Default false."
         }
       }
     },
@@ -316,7 +316,7 @@
               "subtitle"
             ]
           },
-          "description": "The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words ('left', 'center', 'right', 'top', 'middle', 'bottom'), so a Markdown block's region= option stays unambiguous: the validate finding opf/layout-region.",
+          "description": "The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words ('start', 'center', 'end', 'top', 'middle', 'bottom'), so a Markdown block's region= option stays unambiguous: the validate finding opf/layout-region.",
           "examples": [
             "main",
             "aside",
@@ -489,20 +489,20 @@
         "titleAlignment": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
-          "description": "Horizontal alignment of the title heading area."
+          "description": "Horizontal alignment of the title heading area. Logical, as design.titleAlignment of a deck: 'start' is the edge a paragraph starts on."
         },
         "contentAlignment": {
           "type": "string",
           "enum": [
-            "left",
+            "start",
             "center",
-            "right"
+            "end"
           ],
-          "description": "Horizontal alignment of the body regions."
+          "description": "Horizontal alignment of the body regions. Logical, as design.contentAlignment of a deck: 'start' is the edge a paragraph starts on."
         },
         "contentBox": {
           "type": "boolean",
@@ -522,8 +522,8 @@
             "none",
             "top",
             "bottom",
-            "left",
-            "right"
+            "start",
+            "end"
           ],
           "description": "Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template."
         },
@@ -570,7 +570,7 @@
               "$ref": "#/$defs/LayoutVariantRole"
             }
           ],
-          "description": "The color variant slides on this layout draw on (LH-01): a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'surface', 'brand'), so the layout keeps the deck's tone. Unlike the other keys it outranks the deck's design and the theme: the slide's own design.variant or design.background wins, then this, then the deck's variant or background, then the theme's. It hides a background of the deck or theme (the slide is the variant's bg1), and without an accent order of its own it keeps the deck's.",
+          "description": "The color variant slides on this layout draw on: a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'surface', 'brand'), so the layout keeps the deck's tone. Unlike the other keys it outranks the deck's design and the theme: the slide's own design.variant or design.background wins, then this, then the deck's variant or background, then the theme's. It hides a background of the deck or theme (the slide is the variant's bg1), and without an accent order of its own it keeps the deck's.",
           "examples": [
             "accent1",
             "surface",
@@ -585,7 +585,7 @@
         "surface",
         "brand"
       ],
-      "description": "A layout variant relative to the deck's own variant (LH-01). 'surface' is the deck's secondary surface on its own side: light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck is already on light2 or dark2), so a statement stands off the deck without changing its tone. 'brand' is the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), with light text: a closing slide's strong surface on a light or a dark deck."
+      "description": "A layout variant relative to the deck's own variant. 'surface' is the deck's secondary surface on its own side: light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck is already on light2 or dark2), so a statement stands off the deck without changing its tone. 'brand' is the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), with light text: a closing slide's strong surface on a light or a dark deck."
     },
     "Composition": {
       "type": "object",

@@ -27,7 +27,7 @@ const withoutLayout = (document, layoutMode) => {
   const base = structuredClone(document), design = document.slides[0].design ?? {};
   delete base.slides[0].layout; delete base.slides[0].design; delete base.slides[0].composition; delete base.catalogs;
   const hints = Object.fromEntries(LAYOUT_HINTS.filter(key => design[key] !== undefined && !(key === 'contentDirection' && layoutMode)).map(key => [key, design[key]]));
-  base.slides[0].design = {...hints, titleAlignment: 'left', contentAlignment: 'left'};
+  base.slides[0].design = {...hints, titleAlignment: 'start', contentAlignment: 'start'};
   return base;
 };
 // The alignment the gallery design asks for, restated independently of core.

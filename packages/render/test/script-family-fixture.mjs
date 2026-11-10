@@ -69,7 +69,7 @@ export async function scriptFamilies({packagesRoot = root, limits = true} = {}) 
     const candidates = [];
     for (const script of scripts) {
       const group = corpora.groups.find(item => item.script === script);
-      if (group) for (const sample of group.samples) candidates.push({id: sample.id, script, text: sample.text, lang: sample.lang, rtl: group.direction === 'rtl', language: group.languages.find(tag => tag.split('-')[0] === sample.lang.split('-')[0]) ?? group.languages[0] ?? sample.lang, limited: limited.has(`${family}|${sample.id}`)});
+      if (group) for (const sample of group.samples) candidates.push({id: sample.id, script, text: sample.text, language: sample.lang, rtl: group.direction === 'rtl', language: group.languages.find(tag => tag.split('-')[0] === sample.lang.split('-')[0]) ?? group.languages[0] ?? sample.lang, limited: limited.has(`${family}|${sample.id}`)});
       for (const sample of SPECIAL_SAMPLES[script] ?? []) candidates.push({...sample, script, lang: null, rtl: false, language: null, limited: false});
     }
     // Samples every face of the family covers completely; the recorded fontkit limits come last (they stay bounded, never excluded silently).

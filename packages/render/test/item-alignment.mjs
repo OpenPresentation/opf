@@ -9,11 +9,11 @@ const anchors = {left: 'start', center: 'middle', right: 'end'};
 const attribute = (attrs, name) => new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
 const deck = {design: {fontScheme: 'roboto'}, slides: [
   {title: 'Centered cover', subtitle: 'Centered subtitle', design: {titleAlignment: 'center', contentAlignment: 'center'}},
-  {title: 'Left title', text: 'Right aligned body', design: {titleAlignment: 'left', contentAlignment: 'right'}},
+  {title: 'Left title', text: 'Right aligned body', design: {titleAlignment: 'start', contentAlignment: 'end'}},
   {title: 'Default title', blocks: [{text: 'Centered copy'}, {text: 'Second copy'}], design: {contentAlignment: 'center'}},
   {title: 'Deck default', text: 'Deck body'},
 ]};
-const deckDesign = {...deck, design: {...deck.design, titleAlignment: 'right', contentAlignment: 'center'}};
+const deckDesign = {...deck, design: {...deck.design, titleAlignment: 'end', contentAlignment: 'center'}};
 let checked = 0;
 for (const input of [deck, deckDesign]) {
   const resolved = resolvePresentation(input);
@@ -41,9 +41,9 @@ assert.equal(resolvePresentation(deck).slides[2].geometry.items[0].alignment, 'l
 // Readiness Review" cover drew a left title over a centered tag and subtitle). Only the slide's own
 // contentAlignment keeps them apart, and so does the subtitle of a slide with body content (WI-2).
 const coverText = {tag: 'Compliance', title: 'Compliance Readiness Review', subtitle: 'Tandem BioSystems Compliance'};
-const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', contentAlignment: 'center'}, slides: [
+const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'start', contentAlignment: 'center'}, slides: [
   {layout: 'title-subtitle', ...coverText},
-  {layout: 'title-subtitle', ...coverText, design: {contentAlignment: 'right'}},
+  {layout: 'title-subtitle', ...coverText, design: {contentAlignment: 'end'}},
   {...coverText, text: 'Body copy'},
 ]};
 const coverAnchors = index => {

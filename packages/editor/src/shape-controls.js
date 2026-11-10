@@ -383,7 +383,7 @@ export function createShapeControls(ctx) {
 
   // --- an overlay shape: where it is, what is over it (Part B) -----------------------------------------------------------------------------
   const place = (change, done) => run(() => setOverlayFrame(editor, path, change), done);
-  const percent = (key, label, help) => numberField(`shape-frame-${key}`, label, { ...(key === "x" || key === "y" ? {} : { min: 0, max: 100 }), step: 1, help, onCommit: (value) => { if (value !== null) place({ [key]: Math.round(value * 100) / 10000 }, `${label} changed.`); } });
+  const percent = (key, label, help) => numberField(`shape-frame-${key}`, label, { ...(key === "x" || key === "y" ? {} : { min: 0 }), step: 1, help, onCommit: (value) => { if (value !== null) place({ [key]: Math.round(value * 100) / 10000 }, `${label} changed.`); } });
   const frameX = percent("x", "X", "Percent of the slide from its start edge (the left, in a left-to-right deck); negative places it outside");
   const frameY = percent("y", "Y", "Percent of the slide from its top; negative places it above the slide");
   const frameWidth = percent("width", "Width", "Percent of the slide's width");
@@ -395,7 +395,7 @@ export function createShapeControls(ctx) {
   const chartTarget = selectField("shape-anchor-chart", "Follow a chart point", {empty: "Choose a chart", help: "The shape is centered on a native chart mark. Chart data changes move it.", onChange: value => {
     if (!value) return;
     const current = readOverlay(editor.presentation, path)?.entry.at;
-    run(() => setOverlayAnchor(editor, path, {block: value, point: 0, edge: "end", width: current?.width ?? 40, height: current?.height ?? 40}), "Chart point anchor set.");
+    run(() => setOverlayAnchor(editor, path, {block: value, point: 0, edge: "end", widthPx: current?.widthPx ?? 40, heightPx: current?.heightPx ?? 40}), "Chart point anchor set.");
   }});
   const pointChoice = selectField("shape-anchor-point", "Chart point", {onChange: value => {if (value !== "") changeAnchor({point: Number(value)}, "Chart point changed.");}});
   const seriesChoice = selectField("shape-anchor-series", "Chart series", {onChange: value => {if (value !== "") changeAnchor({series: Number(value)}, "Chart series changed.");}});
@@ -404,8 +404,11 @@ export function createShapeControls(ctx) {
   const pointFields = h("div", {"data-role": "shape-chart-point-fields"}, pointChoice.wrap, seriesChoice.wrap, pointEdge.wrap);
   const anchorInfo = h("p", { class: "opf-dc-hint", "data-role": "shape-anchor-info" });
   const anchorOffset = numberField("shape-anchor-offset", "Offset", { min: -720, max: 720, step: 1, help: "Reference pixels from the block's edge (negative overlaps it)", onCommit: (value) => { if (value !== null) place({ offset: value }, "Offset changed."); } });
-  const anchorWidth = numberField("shape-anchor-width", "Anchored width", { min: 0.001, max: 1280, step: 1, help: "A fraction of the block's width up to 1, else reference pixels", onCommit: (value) => { if (value !== null) place({ width: value }, "Width changed."); } });
-  const anchorHeight = numberField("shape-anchor-height", "Anchored height", { min: 0.001, max: 1280, step: 1, help: "A fraction of the block's height up to 1, else reference pixels", onCommit: (value) => { if (value !== null) place({ height: value }, "Height changed."); } });
+  // One unit per field: a share of the target (the block, or a chart mark), or reference pixels. Setting one clears the other.
+  const anchorWidth = numberField("shape-anchor-width", "Anchored width (share)", { min: 0.001, step: 0.05, help: "A fraction of the target's width: 1 is its own width, 1.1 a tenth wider", onCommit: (value) => { if (value !== null) place({ width: value }, "Width changed."); } });
+  const anchorHeight = numberField("shape-anchor-height", "Anchored height (share)", { min: 0.001, step: 0.05, help: "A fraction of the target's height", onCommit: (value) => { if (value !== null) place({ height: value }, "Height changed."); } });
+  const anchorWidthPx = numberField("shape-anchor-width-px", "Anchored width (px)", { min: 0.001, max: 1280, step: 1, help: "Reference pixels at a 720-pixel short edge, whatever size the target has", onCommit: (value) => { if (value !== null) place({ widthPx: value }, "Width changed."); } });
+  const anchorHeightPx = numberField("shape-anchor-height-px", "Anchored height (px)", { min: 0.001, max: 1280, step: 1, help: "Reference pixels at a 720-pixel short edge", onCommit: (value) => { if (value !== null) place({ heightPx: value }, "Height changed."); } });
   const free = button("Free from block", () => {
     const geometry = geometryFor?.(path);
     const entry = geometry?.overlayShapes?.find((candidate) => candidate.kind === "shape" && candidate.path === path);
@@ -416,7 +419,7 @@ export function createShapeControls(ctx) {
   }, { quiet: true, title: "Keep the shape where it is, with its own x, y, width and height" });
   free.dataset.role = "shape-free";
   const fractionBox = h("div", { class: "opf-sc-row", "data-role": "shape-frame-fields" }, frameX.wrap, frameY.wrap, frameWidth.wrap, frameHeight.wrap);
-  const anchorBox = h("div", { "data-role": "shape-anchor-fields" }, anchorInfo, anchorOffset.wrap, anchorWidth.wrap, anchorHeight.wrap, free);
+  const anchorBox = h("div", { "data-role": "shape-anchor-fields" }, anchorInfo, anchorOffset.wrap, anchorWidth.wrap, anchorHeight.wrap, anchorWidthPx.wrap, anchorHeightPx.wrap, free);
   const layerField = selectField("shape-layer", "Layer", { empty: "In front of the content", help: "Behind the content (above the background) or in front of it", onChange: (value) => place2({ layer: value === "" ? null : value }, "Layer changed.") });
   layerField.setOptions([{ value: "back", label: "Behind the content" }]);
   const place2 = (fields, done) => run(() => setShapeProperties(editor, path, fields), done);
@@ -547,6 +550,8 @@ export function createShapeControls(ctx) {
       anchorOffset.set(show(entry.at.offset ?? 0));
       anchorWidth.set(show(entry.at.width));
       anchorHeight.set(show(entry.at.height));
+      anchorWidthPx.set(show(entry.at.widthPx));
+      anchorHeightPx.set(show(entry.at.heightPx));
       return;
     }
     const percentOf = (value) => (typeof value === "number" ? String(Math.round(value * 10000) / 100) : "");

@@ -137,7 +137,7 @@ const formatted = {slides: [{title: 'Formats', chart: {type: 'column', dataLabel
 {
   const deck = {datasets: {sales: {columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {name: 'Growth', format: '0%'}], rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, 0.52]]}},
     slides: [{title: 'Dataset table', table: {dataset: 'sales'}}, {title: 'Inline table', table: {
-      columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'right'}, format: '0%'}],
+      columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'end'}, format: '0%'}],
       rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, {value: 0.52, format: '0.0%'}], ['LATAM', 'n/a', null]]}}]};
   const {text} = await exported(deck);
   const cells = xml => [...xml.matchAll(/<a:tc\b[^>]*>([\s\S]*?)<\/a:tc>/g)].map(([, body]) => [...body.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''));
@@ -158,7 +158,7 @@ const roundTripDeck = {
     {title: 'Mapped chart', chart: {type: 'line', mapping: {category: 'Quarter', series: ['Costs', 'Revenue']}, data: {columns: ['Revenue', 'Quarter', {name: 'Costs', format: '#,##0'}], rows: [[1, 'a', 2], [3, 'b', 4]], source: {src: 'https://example.com/q.csv', description: 'Finance export'}}}},
     {title: 'Scatter', chart: {type: 'scatter', mapping: {x: 'W'}, data: {columns: ['N', 'H', {name: 'W', format: '0.0'}], rows: [['a', 170, 60.5], ['b', 180, 75]]}}},
     {title: 'Dataset table', table: {dataset: 'revenue', fields: ['Quarter', 'Revenue']}},
-    {title: 'Inline table', table: {columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'right'}, format: '0%'}], rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, {value: 0.52, format: '0.0%'}]]}},
+    {title: 'Inline table', table: {columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'end'}, format: '0%'}], rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, {value: 0.52, format: '0.0%'}]]}},
     {title: 'Treemap', chart: {type: 'treemap', data: {columns: ['Area', {name: 'Size', format: '#,##0.0'}], rows: [['A', 5], ['B', 3]]}}},
   ],
 };

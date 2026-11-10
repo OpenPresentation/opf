@@ -99,7 +99,7 @@ const SITES = [
   ['asset', ['slides', 0, 'quote', 'photo'], { slides: [{ quote: { text: 'a', photo: '' } }] }],
   ['asset', ['design', 'watermark'], { design: { watermark: '' } }],
   ['asset', ['design', 'watermark', 'src'], { design: { watermark: { src: '' } } }],
-  ['asset', ['design', 'header', 'left', 'image'], { design: { header: { left: { image: '' } } } }],
+  ['asset', ['design', 'header', 'start', 'image'], { design: { header: { start: { image: '' } } } }],
   ['asset', ['organization', 'logo'], { organization: { id: 'a', name: 'A', logo: '' } }],
   ['asset', ['assets', 'logo', 'src'], { assets: { logo: { src: '' } } }],
   ['asset', ['speaker', 'photo'], { speaker: { name: 'A', photo: '' } }],
@@ -293,7 +293,7 @@ assert.equal(unloadedFooter({ catalogs: { b: { source: 'x' }, a: { source: 'y' }
   const result = completionResult(EditorState.create({ doc: text }), at, { explicit: true, catalogs, format: 'json' });
   assert.ok(result.options.some((option) => option.label === 'acme:bespoke'), 'the embedded record is still offered');
   assert.ok(result.options.every((option) => option.opfFooter === 'Records from catalog acme are not loaded'), 'every option carries the line');
-  const other = completionResult(EditorState.create({ doc: '{"slides":[{"layout":"x"}],"design":{"titleAlignment":"left"}}' }), 58, { explicit: true, catalogs, format: 'json' });
+  const other = completionResult(EditorState.create({ doc: '{"slides":[{"layout":"x"}],"design":{"titleAlignment":"start"}}' }), 58, { explicit: true, catalogs, format: 'json' });
   assert.ok(!other || other.options.every((option) => !option.opfFooter), 'no line for a field that is not a catalog reference');
 }
 

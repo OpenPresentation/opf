@@ -1,5 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag, encodeTextTag, groupUnchanged} from './code-provenance.js';
+import {currentTag, currentTags, upgradeTag} from './legacy-tags.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, dateFormatOfField, isBuiltinTemplate, mentionsSlideToken, parseDate, slideNumberTemplate} from './furniture-fields.js';
 import {schemas} from '@openpresentation/opf';
@@ -16,7 +17,7 @@ const NS = 'http://schemas.openxmlformats.org/presentationml/2006/main';
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
-const kinds = ['header', 'footer'], zones = ['left', 'center', 'right'];
+const kinds = ['header', 'footer'], zones = ['start', 'center', 'end'];
 const fields = ['text', 'image', 'socials', 'date'];
 const settings = ['dateFormat'];
 // Platform keys follow the Socials schema's propertyNames pattern exactly, so
@@ -126,7 +127,7 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
 }
 
 export function attachFurnitureTags(entries, records, manifests) {
-  attachTextTags(entries, records, TAG, 'opfFurniture', 'furniture', {pictures: true, signed: true});
+  attachTextTags(entries, currentTags(records), TAG, 'opfFurniture', 'furniture', {pictures: true, signed: true});
   const types = [];
   for (const [path, manifest] of manifests) {
     const part = `ppt/tags/opfFurnitureSlide${manifest.group}.xml`;
@@ -140,7 +141,7 @@ export function attachFurnitureTags(entries, records, manifests) {
     check(!entries[part] && xml.includes('</p:spTree>'), 'Missing slide tree or colliding furniture tag part.');
     xml = xml.replace('</p:spTree>', `</p:spTree><p:custDataLst><p:tags r:id="${id}"/></p:custDataLst>`);
     rels = rels.replace('</Relationships>', `<Relationship Id="${id}" Type="${REL}" Target="../tags/opfFurnitureSlide${manifest.group}.xml"/></Relationships>`);
-    entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${TAG}" val="${encodeTextTag(manifest)}"/></p:tagLst>`);
+    entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${TAG}" val="${encodeTextTag(currentTag(manifest))}"/></p:tagLst>`);
     entries[path] = enc.encode(xml);
     entries[relPath] = enc.encode(rels);
     types.push(`<Override PartName="/${part}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tags+xml"/>`);
@@ -187,7 +188,7 @@ export function stampFurnitureImageKeys(entries, manifests, names, relationships
     }
     const part = `ppt/tags/opfFurnitureSlide${manifest.group}.xml`;
     if (!entries[part]) throw Error('Missing furniture tag part.');
-    entries[part] = enc.encode(dec.decode(entries[part]).replace(/\bval="[^"]*"/, () => `val="${encodeTextTag(manifest)}"`));
+    entries[part] = enc.encode(dec.decode(entries[part]).replace(/\bval="[^"]*"/, () => `val="${encodeTextTag(currentTag(manifest))}"`));
   }
 }
 
@@ -340,7 +341,7 @@ function inheritedRecords(context, entries) {
         if (array(container?.['p:tags']).length && result.tags.length !== 1 && result.ambiguous) damaged[on] = true;
         for (const tag of result.tags) {
           let data;
-          try { data = decodeTextTag(tag.val); } catch { damaged[on] = true; continue; }
+          try { data = upgradeTag(decodeTextTag(tag.val), 'furniture'); } catch { damaged[on] = true; continue; }
           if (result.ambiguous || data?.v !== 1 || typeof data.slot !== 'string' || data.role !== type) { damaged[on] = true; continue; }
           const slot = `${on}|${data.slot}`;
           records.set(slot, [...(records.get(slot) ?? []), {type, index, data}]);
@@ -364,7 +365,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
       if (type === 'text' && result.tags.length) taggedText.add(index);
       for (const tag of result.tags) try {
         check(!result.ambiguous, 'Multiple identities on a furniture shape.');
-        records.push({type, index, data: decodeTextTag(tag.val)});
+        records.push({type, index, data: upgradeTag(decodeTextTag(tag.val), 'furniture')});
       } catch { invalidRecord = true; }
     }
   }
@@ -373,7 +374,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
   let manifest;
   try {
     check(!tags.ambiguous && tags.tags.length === 1 && !invalidRecord, 'Missing or ambiguous furniture manifest/shape tags.');
-    manifest = withSharedParts(decodeTextTag(tags.tags[0].val));
+    manifest = withSharedParts(upgradeTag(decodeTextTag(tags.tags[0].val), 'furniture'));
     validateManifest(manifest);
     for (const record of records) {
       const data = record.data, part = manifest.parts[data?.part];

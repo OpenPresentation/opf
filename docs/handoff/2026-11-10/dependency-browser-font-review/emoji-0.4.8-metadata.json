@@ -1,0 +1,73 @@
+{
+  "bugs": {
+    "url": "https://github.com/expo/google-fonts/issues"
+  },
+  "dist": {
+    "shasum": "eace9fc55f72cd23379966af863538b04636d0bb",
+    "tarball": "https://registry.npmjs.org/@expo-google-fonts/noto-color-emoji/-/noto-color-emoji-0.4.8.tgz",
+    "fileCount": 14,
+    "integrity": "sha512-4hKX1ZYEfsq2a5VjNJ/4CMlpkBbS7CDiIGBuyMDWhCJeXNof6IF79eFEuyHo+K11gHcsRkRaPz5Eac29R6H9wQ==",
+    "signatures": [
+      {
+        "sig": "MEQCIGsgtZlGeBvcYNYzruAhoJJ92ysHTAhGN3NhyxDZ5t1lAiBTAYz+KBxjy1ATKkRw6pThjqWavvTFbHt4dL/tt4eNyw==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEYCIQDlsNxPnL7pOV9CXzGSMFJzkdZPyI87QlbVJO43WwzUawIhAPsVP0Dz1d3CI6SkS0atra1rMEoS0uvR+UIXz5Dxj2vY",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "unpackedSize": 25361185
+  },
+  "main": "index.js",
+  "name": "@expo-google-fonts/noto-color-emoji",
+  "types": "./index.d.ts",
+  "author": {
+    "name": "Expo Team",
+    "email": "team@expo.io"
+  },
+  "gitHead": "7d1c94f239a387cad7a8391c472741338331740f",
+  "license": "MIT AND OFL-1.1",
+  "_npmUser": {
+    "name": "kadikraman",
+    "email": "hellokadi@gmail.com"
+  },
+  "homepage": "https://github.com/expo/google-fonts/tree/master/font-packages/noto-color-emoji#readme",
+  "repository": {
+    "url": "git+https://github.com/expo/google-fonts.git",
+    "type": "git",
+    "directory": "font-packages/noto-color-emoji"
+  },
+  "_npmVersion": "11.19.1",
+  "description": "Use the Noto Color Emoji font family from Google Fonts in your Expo app",
+  "directories": {},
+  "maintainers": [
+    {
+      "name": "brentvatne",
+      "email": "brentvatne@gmail.com"
+    },
+    {
+      "name": "ccheever",
+      "email": "ccheever@gmail.com"
+    },
+    {
+      "name": "kadikraman",
+      "email": "hellokadi@gmail.com"
+    },
+    {
+      "name": "jake7",
+      "email": "kontakt@jakubgrzywacz.pl"
+    }
+  ],
+  "_nodeVersion": "24.22.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "_hasShrinkwrap": false,
+  "_npmOperationalInternal": {
+    "tmp": "tmp/noto-color-emoji_0.4.8_1793391379487_0.15552832751126233",
+    "host": "s3://npm-registry-packages-npm-production"
+  },
+  "_id": "@expo-google-fonts/noto-color-emoji@0.4.8",
+  "version": "0.4.8"
+}

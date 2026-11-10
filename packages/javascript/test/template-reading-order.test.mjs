@@ -38,6 +38,6 @@ test('slides without a template keep the visual check', () => {
   const team = { catalogs: { custom: { layouts: { team: layouts.team } } }, slides: [{ layout: 'team', title: 'x', blocks: [person(0), person(1)] }] };
   assert.ok(!validate(team, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
   // A promoted-region slide on a template composes as in 0.18, in visual order.
-  const promoted = { catalogs: { custom: { layouts: { text: layouts.text } } }, slides: [{ layout: 'text', title: 'x', 'top:right': { text: 'Right' }, 'top:left': { text: 'Left' } }] };
+  const promoted = { catalogs: { custom: { layouts: { text: layouts.text } } }, slides: [{ layout: 'text', title: 'x', 'top:end': { text: 'Right' }, 'top:start': { text: 'Left' } }] };
   assert.ok(!validate(promoted, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
 });

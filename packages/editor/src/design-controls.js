@@ -1133,10 +1133,10 @@ export function createDesignControls(container, options = {}) {
         field.set(option.value ?? "", sourceNote(option.scope, option.value !== undefined));
       });
     };
-    enumField("titleAlignment", "Title alignment", ["left", "center", "right"], {});
-    enumField("contentAlignment", "Content alignment", ["left", "center", "right"], {});
+    enumField("titleAlignment", "Title alignment", ["start", "center", "end"], {});
+    enumField("contentAlignment", "Content alignment", ["start", "center", "end"], {});
     enumField("contentDirection", "Content direction", ["horizontal", "vertical"], { horizontal: "Horizontal (row)", vertical: "Vertical (column)" }, "When a slide sets no arrangement");
-    enumField("chartPrimary", "Primary chart position", ["none", "top", "bottom", "left", "right"], { none: "None (equal)" }, "Where the main chart sits");
+    enumField("chartPrimary", "Primary chart position", ["none", "top", "bottom", "start", "end"], { none: "None (equal)" }, "Where the main chart sits");
     enumField("imageFit", "Image fit", IMAGE_FITS, { cover: "Cover (crop to fill)", contain: "Contain (whole image)", stretch: "Stretch to the frame", auto: "Auto (cover a near fit, else whole)" }, "When an image block sets no fit");
     const box = selectField("opt-contentBox", "Content box", {
       empty: "Default",
@@ -1478,7 +1478,7 @@ export function createDesignControls(container, options = {}) {
     const fill = selectField("cell-fill", "Cell fill", { onChange: (value) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { fill: value === "" ? null : value }), "Cell fill changed.") });
     fill.setOptions(CELL_FILLS.map(([value, label]) => ({ value, label })));
     const align = selectField("cell-align", "Cell text alignment", { empty: "Default", onChange: (value) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { align: value === "" ? null : value }), "Cell alignment changed.") });
-    align.setOptions(["left", "center", "right"].map((value) => ({ value, label: titleCase(value) })));
+    align.setOptions(["start", "center", "end"].map((value) => ({ value, label: titleCase(value) })));
     // RR-93: `bold` is a cell style field, so a number cell stays bold without rich runs and keeps its number format and alignment. Unchecking removes the field.
     const bold = checkField("cell-bold", "Bold cell text", { onChange: (checked) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { bold: checked ? true : null }), checked ? "Cell text is bold." : "Cell text is no longer bold.") });
     const cellBox = h("div", { class: "opf-dc-cell" }, cellLabel, columns.wrap, rows.wrap, join.wrap, h("div", { class: "opf-dc-actions" }, merge, split), fill.wrap, align.wrap, bold.wrap);

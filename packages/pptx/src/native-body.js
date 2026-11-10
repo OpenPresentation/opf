@@ -4,7 +4,7 @@ import {bindNoBreak, paragraphDirection, resolveTextStyle, styledText, textWidth
 import {autoNumScheme} from './numbered-list.js';
 
 const FIELDS = new Set(['text', 'items', 'bullets']);
-const RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough', 'color', 'fontFamily', 'fontSize', 'lang', 'link']);
+const RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough', 'color', 'fontFamily', 'fontSize', 'language', 'link']);
 const runsOf = value => typeof value === 'string' ? [{text: value}] : value;
 const ownText = value => Array.isArray(value) ? value.map(run => typeof run === 'string' ? run : run?.text ?? '').join('') : value;
 const richSupported = value => typeof value === 'string' || Array.isArray(value) && value.every(run => typeof run === 'string' || run && typeof run.text === 'string' && Object.keys(run).every(key => RUN_KEYS.has(key)) && (run.link === undefined || /^(https?:|mailto:|tel:)/i.test(run.link)));
@@ -260,14 +260,14 @@ export function addNativeBody(slide, plan, context, options, helpers) {
       const runOptions = {...helpers.nativeFontOptions(style), fontSize: run.fontSize ?? item.text.fontSize * .75,
         color, transparency: hex.length === 8 ? (1 - parseInt(hex.slice(6), 16) / 255) * 100 : 0,
         underline: run.underline ? {style: 'sng', color} : {style: 'none'}, strike: run.strikethrough ? 'sngStrike' : undefined,
-        hyperlink: run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url: run.link} : undefined, ...helpers.langOptions(context, run.lang)};
+        hyperlink: run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url: run.link} : undefined, ...helpers.langOptions(context, run.language)};
       // LH-11: PowerPoint wraps the body itself, so the spaces core's line breaker never breaks at are no-break spaces (import writes them back).
       const pieces = bindNoBreak(run.text).split(/\r\n|\r|\n/);
       let sourceOffset = 0;
       pieces.forEach((text, index) => {
         if (index) { paragraph = []; paragraphs.push(paragraph); }
         paragraph.push({text, options: {...runOptions}});
-        latinFragments.push({text,source:run.text,start:sourceOffset,end:sourceOffset+text.length,sourceRun,style:{...style,...(run.lang?{lang:run.lang}:{})}});
+        latinFragments.push({text,source:run.text,start:sourceOffset,end:sourceOffset+text.length,sourceRun,style:{...style,...(run.language?{lang:run.language}:{})}});
         sourceOffset += text.length + (/^(?:\r\n|\r|\n)/.exec(run.text.slice(sourceOffset+text.length))?.[0].length ?? 0);
       });
       sourceRun++;

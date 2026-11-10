@@ -10,6 +10,8 @@ export interface ChartReference {
   label?: string;
   labelPosition: 'start' | 'end';
   stroke: {color?: unknown; width: number; dash: 'solid' | 'dash' | 'dot'};
+  /** Original authored stroke, retained only while native paint is unchanged. */
+  authoredStroke?: unknown;
 }
 interface Box {x: number; y: number; width: number; height: number}
 export interface ChartReferenceLine extends ChartReference {
@@ -31,8 +33,8 @@ export function chartReferences(chart: unknown): ChartReference[] {
   if(!record(chart)||typeof chart.type!=='string'||!CHART_REFERENCE_TYPES.has(chart.type)||!Array.isArray(chart.referenceLines))return [];
   return chart.referenceLines.flatMap((entry):ChartReference[]=>{
     if(!record(entry)||typeof entry.value!=='number'||!Number.isFinite(entry.value))return [];
-    const stroke=record(entry.stroke)?entry.stroke:{};
-    return [{value:entry.value,axis:entry.axis==='secondary'?'secondary':'value',...(typeof entry.label==='string'&&entry.label.trim()?{label:entry.label}:{}),labelPosition:entry.labelPosition==='start'?'start':'end',stroke:{...(stroke.color!==undefined?{color:stroke.color}:{}),width:typeof stroke.width==='number'&&Number.isFinite(stroke.width)?stroke.width:4/3,dash:stroke.dash==='solid'||stroke.dash==='dot'?stroke.dash:'dash'}}];
+    const stroke=entry.stroke==='none'?{width:0}:record(entry.stroke)?entry.stroke:{};
+    return [{value:entry.value,axis:entry.axis==='secondary'?'secondary':'value',...(typeof entry.label==='string'&&entry.label.trim()?{label:entry.label}:{}),labelPosition:entry.labelPosition==='start'?'start':'end',stroke:{...(stroke.color!==undefined?{color:stroke.color}:{}),width:typeof stroke.width==='number'&&Number.isFinite(stroke.width)?stroke.width:4/3,dash:stroke.dash==='solid'||stroke.dash==='dot'?stroke.dash:'dash'},...(entry.stroke!==undefined?{authoredStroke:entry.stroke}:{})}];
   });
 }
 const overlap=(a:Box,b:Box)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;

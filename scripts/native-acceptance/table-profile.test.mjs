@@ -5,7 +5,7 @@ import {validateTableGeneration, tableRelative, tableFileRecords, tableRegular} 
 import {assertTableLifecycle} from './compare-table-profile.mjs';
 import {digest} from './identity.mjs';
 import path from 'node:path';
-import {mkdtemp, readFile, writeFile, rm, symlink, mkdir} from 'node:fs/promises';
+import {mkdtemp, readFile, writeFile, rm, symlink, mkdir, realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 const clone = value => structuredClone(value);
 function sourceFixture() {
@@ -33,7 +33,7 @@ test('table profile requires the complete original six-slide source, data, color
 });
 test('table paths and sealed file records reject aliasing, traversal, duplicate paths and changed bytes', async () => {
   for (const relative of ['../a', '/a', 'C:/a', 'a\\b', 'a/../b', 'a//b', 'a/./b', 'a.', 'a ', 'a\u0000b']) assert.throws(() => tableRelative(relative));
-  const root = await mkdtemp(path.join(tmpdir(), 'opf-table-profile-path-'));
+  const root = await realpath(await mkdtemp(path.join(tmpdir(), 'opf-table-profile-path-')));
   try {
     await writeFile(path.join(root, 'a'), 'abc');
     const record = {path: 'a', bytes: 3, sha256: digest('abc')};
@@ -87,7 +87,7 @@ test('table execution adapter keeps genuine generation and controller identities
 
 test('external profile pin and stale-attempt guards fail before execution without overwriting evidence', async () => {
   const {bindTableProfile, assertTableFreshOutput} = await import('./table-profile.mjs');
-  const root = await mkdtemp(path.join(tmpdir(), 'opf-table-pin-'));
+  const root = await realpath(await mkdtemp(path.join(tmpdir(), 'opf-table-pin-')));
   try {
     await mkdir(path.join(root, 'table-colors'));
     const envelopeFile = path.join(root, 'table-profile.json');
@@ -107,7 +107,7 @@ test('external profile pin and stale-attempt guards fail before execution withou
 test('unchanged table comparator keeps all72cells, character colors,18rasters and all9current-data imports', async () => {
   const {generateTableColors} = await import('./table-colors.mjs');
   const {compareNativeTableColors} = await import('./compare-table-colors.mjs');
-  const parent = await mkdtemp(path.join(tmpdir(), 'opf-table-contract-'));
+  const parent = await realpath(await mkdtemp(path.join(tmpdir(), 'opf-table-contract-')));
   try {
     const modes = ['positive', 'missing-cell', 'wrong-character', 'wrong-color', 'wrong-prefix', 'edited-archive-hash', 'reopened-raster', ...Array.from({length: 9}, (_, i) => `import-${i + 1}`)];
     for (const mode of modes) {
@@ -162,7 +162,7 @@ test('full modeled profile binds old generator, worker and installed bytes separ
   const {installedIdentity, repositoryIdentity} = await import('./identity.mjs');
   const {TABLE_PROFILE_FILES, prepareTableProfile, bindTableProfile} = await import('./table-profile.mjs');
   const {generateTableColors} = await import('./table-colors.mjs');
-  const scratch = await mkdtemp(path.join(tmpdir(), 'opf-table-authority-'));
+  const scratch = await realpath(await mkdtemp(path.join(tmpdir(), 'opf-table-authority-')));
   const git = (root, ...args) => execFileSync('git', ['-C', root, ...args], {encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']}).trim();
   const commit = root => { git(root, 'add', '.'); git(root, '-c', 'user.name=OPF pure control', '-c', 'user.email=control@invalid.test', 'commit', '-qm', 'Synthetic test authority; no native evidence'); };
   async function repository(name, files) {

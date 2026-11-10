@@ -14,10 +14,10 @@ const deck = () => ({
     { id: "beta", name: "Beta", logo: "asset:beta-logo" },
   ],
   assets: { "beta-logo": "./beta.svg" },
-  design: { logo: "var:organization.logo", footer: { left: { image: "var:organization.logo.icon", text: "Acme" }, right: { image: "var:organization.beta.logo.wordmark" } } },
+  design: { logo: "var:organization.logo", footer: { start: { image: "var:organization.logo.icon", text: "Acme" }, end: { image: "var:organization.beta.logo.wordmark" } } },
   slides: [{ title: "One", text: "Body." }],
 });
-const footerImage = "/design/footer/left/image";
+const footerImage = "/design/footer/start/image";
 
 // The icon has a light and a dark asset: both get the alt; the reference itself is untouched.
 {
@@ -28,12 +28,12 @@ const footerImage = "/design/footer/left/image";
   ]);
   const editor = createEditorSession(presentation);
   assert.equal(setReviewAltText(editor, footerImage, "  Acme  ").changed, true);
-  assert.equal(editor.presentation.design.footer.left.image, "var:organization.logo.icon", "the reference stays a whole-field string");
+  assert.equal(editor.presentation.design.footer.start.image, "var:organization.logo.icon", "the reference stays a whole-field string");
   assert.deepEqual(editor.presentation.organization[0].logo.icon, { onLight: { src: "./mark.svg", alt: "Acme" }, onDark: { src: "./mark-white.svg", alt: "Acme" } });
   assert.equal(currentAltText(editor.presentation, footerImage), "Acme", "the field pre-fills from the organization");
   assert.equal(validate(editor.presentation).findings.filter((finding) => finding.severity === "error").length, 0);
   // Core still draws the logo from the reference (with its alt), not an image whose src is "var:…".
-  const [part] = layoutFurniture({}, { presentation: editor.presentation }).parts.filter((entry) => entry.type === "image" && entry.zone === "left");
+  const [part] = layoutFurniture({}, { presentation: editor.presentation }).parts.filter((entry) => entry.type === "image" && entry.zone === "start");
   assert.equal(part.reference, "var:organization.logo.icon");
   assert.deepEqual(part.image, { src: "./mark.svg", alt: "Acme" });
   assert.equal(setReviewAltText(editor, footerImage, "Acme").changed, false, "no change, no history entry");
@@ -47,8 +47,8 @@ assert.deepEqual(altTextPatch(deck(), "/design/logo", "Acme Corporation"), [{ op
 // Another organization's logo through the assets registry: the alt goes on the registry entry, once.
 {
   const editor = createEditorSession(deck());
-  markDecorative(editor, "/design/footer/right/image");
-  assert.equal(editor.presentation.design.footer.right.image, "var:organization.beta.logo.wordmark");
+  markDecorative(editor, "/design/footer/end/image");
+  assert.equal(editor.presentation.design.footer.end.image, "var:organization.beta.logo.wordmark");
   assert.deepEqual(editor.presentation.assets["beta-logo"], { src: "./beta.svg", alt: "" });
   assert.equal(editor.presentation.organization[1].logo, "asset:beta-logo");
 }

@@ -54,18 +54,18 @@ const plain = value => typeof value === 'string' ? value : Array.isArray(value) 
 
 // 3. More than one text region: one native body each; the first binds to Body, the others are ordinary native text boxes.
 {
-  const deck = {design: {fontScheme: 'roboto'}, slides: [{title: 'Two regions', left: {text: 'Left column paragraph that is long enough to wrap over a couple of visual lines in its column.'},
-    'center+right': {text: 'Right column paragraph with enough words to wrap onto a second visual line in its own region.'}}]};
+  const deck = {design: {fontScheme: 'roboto'}, slides: [{title: 'Two regions', start: {text: 'Left column paragraph that is long enough to wrap over a couple of visual lines in its column.'},
+    'center+end': {text: 'Right column paragraph with enough words to wrap onto a second visual line in its own region.'}}]};
   const native = await exported(deck, {bodyText: 'native'});
   const bodies = named(native.entries, 'OPF native body ');
   assert.equal(bodies.length, 2);
   assert.equal(bodies.filter(shape => /<p:ph type="body" idx="300"\/>/.test(shape)).length, 1, 'only the first is the Body placeholder');
   for (const body of bodies) { assert.match(body, /<a:noAutofit\/>/); assert.match(body, /wrap="square"/); assert.equal((body.match(/<a:p>/g) ?? []).length, 1); }
   assert.deepEqual(native.diagnostics.filter(item => item.code === 'native-body-fallback'), []);
-  assert.equal(named(native.entries, 'OPF text ').length + named(native.entries, 'OPF heading slides.0.left').length, 0, 'no measured per-line boxes for either region');
+  assert.equal(named(native.entries, 'OPF text ').length + named(native.entries, 'OPF heading slides.0.start').length, 0, 'no measured per-line boxes for either region');
   const {value} = await imported(native.bytes);
-  assert.equal(plain(value.slides[0].left.text), deck.slides[0].left.text);
-  assert.equal(plain(value.slides[0]['center+right'].text), deck.slides[0]['center+right'].text);
+  assert.equal(plain(value.slides[0].start.text), deck.slides[0].start.text);
+  assert.equal(plain(value.slides[0]['center+end'].text), deck.slides[0]['center+end'].text);
 }
 
 // 4. A numbered list: one native auto-numbered sequence. Entries that do not count up from one start stay measured.

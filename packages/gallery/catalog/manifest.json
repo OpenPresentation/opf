@@ -47,10 +47,10 @@
     "icon-sets": {
       "mode": "mirror",
       "records": 2,
-      "contentSha256": "fa9ad0987a0c10d60235c26855cea4758703079cf0f927012105d381b6f9b205",
+      "contentSha256": "85f090b4e554786f35d1e7cb286013da9a122964bfd543ebef001440c3b48ca5",
       "gallery": {
         "records": 2,
-        "contentSha256": "fa9ad0987a0c10d60235c26855cea4758703079cf0f927012105d381b6f9b205"
+        "contentSha256": "85f090b4e554786f35d1e7cb286013da9a122964bfd543ebef001440c3b48ca5"
       }
     },
     "languages": {
@@ -65,10 +65,10 @@
     "layouts": {
       "mode": "mirror",
       "records": 40,
-      "contentSha256": "8c60089c54bec20e3431beb37f2d4c62e80e4774cc50251d1ced0121ce8b33ea",
+      "contentSha256": "66d47ff798875602f19d283a31b6fdf15cf62ec832367987378af4381fc37d57",
       "gallery": {
         "records": 40,
-        "contentSha256": "8c60089c54bec20e3431beb37f2d4c62e80e4774cc50251d1ced0121ce8b33ea"
+        "contentSha256": "66d47ff798875602f19d283a31b6fdf15cf62ec832367987378af4381fc37d57"
       }
     },
     "narratives": {

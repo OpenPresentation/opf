@@ -99,8 +99,8 @@ to ask for), and elsewhere it is the validate finding `opf/layout-template`.
 region takes the subtitle out of it (a `subtitle` needs a `title`). Their `size` defaults to `auto` inside a `column` and to
 1 inside a `row`, so a cover that puts the title beside a picture is `{ "direction": "row", "regions": [{ "name": "title" },
 { "name": "media", ... }] }`. A layout with no `title` region gets an implicit `auto` row on top for a slide that has
-headings. Region names are unique across the whole record and may not be `tag`, `auto` or a promoted-region word (`left`,
-`center`, `right`, `top`, `middle`, `bottom`).
+headings. Region names are unique across the whole record and may not be `tag`, `auto` or a promoted-region word (`start`,
+`center`, `end`, `top`, `middle`, `bottom`).
 
 ### Regions
 
@@ -142,7 +142,7 @@ accent rule, 80 by 5 px at a 720 px short edge, half a gap above the title at it
 title). A tag is the group's eyebrow and takes the rule's place. Both engines fill it in the tag's color: the primary, or the
 text color where the primary is under 4.5:1 on the slide (`SlideComposition.titleRule`; the PPTX export writes a native
 rectangle tagged `OPF_TITLE_RULE_V1`, which import consumes as the layout's drawing). The gallery `cover` and `section` use
-both, with `titleAlignment` and `contentAlignment` `left` (start), so a display title sits low at the start edge as Claude
+both, with `titleAlignment` and `contentAlignment` `start`, so a display title sits low at the start edge as Claude
 Design sets it, with the section's tag ("Part 1") as its eyebrow.
 
 Over a picture background the group goes where the measured picture is calm under its text (LH-158, see
@@ -323,7 +323,7 @@ and no gap, and the columns left share the width by their own sizes, so two bloc
 column beside a neighbor that took the third column's width too. The empty region reports `collapsed` and a zero-wide cell where
 its column was. The column, and a nested group's new default gap (LH-89), are kept only when no block reads smaller than with
 the columns and gaps of before (unless that removes overflow). Headings are centered vertically in their region unless every
-row it spans is `auto`, so a `cover` or a title-only slide centers its title. A slide with promoted regions (`left`, `top:left`, ...)
+row it spans is `auto`, so a `cover` or a title-only slide centers its title. A slide with promoted regions (`start`, `top:start`, ...)
 composes them as in 0.18.
 
 In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promoted-region key keeps its 0.18 meaning.
@@ -567,7 +567,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   overflowing, at most 60% of the body covered, the body keeping its rows and columns (a body that may draw step badges or
   cards keeps the three steps, so those drawings are held to the same body). The stack then sits in the middle of the body under the headings, rather than
   at its top over an empty foot. Promoted regions that
-  each run the body's full height (`left`, `center+right`) and hold only paragraphs and lists set them as one band in the
+  each run the body's full height (`start`, `center+end`) and hold only paragraphs and lists set them as one band in the
   middle of the body, each block starting at the band's top. Both are composed with LH-48's centering and kept only when
   no block reads smaller and nothing overflows.
 - **Mixed cards (LH-64).** A row of middle- or bottom-anchored cards with a table, code panel or timeline among other measured

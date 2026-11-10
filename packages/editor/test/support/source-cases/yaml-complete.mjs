@@ -211,7 +211,7 @@ export const yamlSnippets = [
   ['Y-SNP-007', 'R-CMP-16', 'design: the snippet is one undo step', 'yaml', 'name: x\n|', [T('design'), K('Tab')], { undo: [1, 'name: x\ndesign|'] }],
   ['Y-SNP-008', 'R-CMP-16', 'design: the key is listed once', 'yaml', 'slides: []\n|', [T('des')], { popup: { open: 1, has: ['design', 'description', 'datasets'], count: [3, 3] } }],
   ['Y-INS-020', 'R-CMP-14', 'chain: accepting the key and its value is one undo step', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'] }],
-  ['Y-INS-021', 'R-CMP-14', 'redo puts the key and its value back together', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'], redo: [1, 'design:\n  titleAlignment: left|'] }],
+  ['Y-INS-021', 'R-CMP-14', 'redo puts the key and its value back together', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'], redo: [1, 'design:\n  titleAlignment: start|'] }],
 ];
 yamlCases.push(...yamlSnippets);
 

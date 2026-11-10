@@ -2,6 +2,7 @@
 // rebuilt: the values that are only the theme style's (the fill, line, shadow and text color a style gives, which the exporter writes out
 // explicitly) go back to absent, and the overlay shapes and connectors are assembled into `slide.shapes` in the order they were drawn.
 import {overlayIssues, slideBlockIds, isShapeBlock, shapeStyleLook, shapeTextColor} from '@openpresentation/opf/composition';
+import {logicalProvenancePath} from './legacy-tags.js';
 import {EFFECT_DEFAULTS} from './effects.js';
 import {REGION_KEYS, ROOT_PAYLOAD_FIELDS} from './content-topology.js';
 
@@ -136,7 +137,7 @@ export function validateOverlayRecord(value) {
     if (sites !== undefined && (!Array.isArray(sites) || sites.length !== 2 || !sites.every(site => site === 0 || site === 1))) throw Error('Invalid overlay connector sites.');
     if (Object.keys(rest).length || (id !== undefined && (typeof id !== 'string' || !id || id.length > MAX_ID))) throw Error('Invalid overlay record entry.');
     if (at !== undefined && (!object(at) || typeof at.block !== 'string' || !at.block || at.block.length > MAX_ID || !['top', 'bottom', 'start', 'end', 'center'].includes(at.edge)
-      || Object.keys(at).some(key => !['block', 'edge', 'offset', 'width', 'height', 'point', 'series'].includes(key)) || ['offset', 'width', 'height'].some(key => at[key] !== undefined && !Number.isFinite(at[key])))) throw Error('Invalid overlay anchor.');
+      || Object.keys(at).some(key => !['block', 'edge', 'offset', 'width', 'height', 'widthPx', 'heightPx', 'point', 'series'].includes(key)) || ['offset', 'width', 'height', 'widthPx', 'heightPx'].some(key => at[key] !== undefined && !Number.isFinite(at[key])))) throw Error('Invalid overlay anchor.');
     const pointKey = key => typeof key === 'string' && key.length > 0 || Number.isSafeInteger(key) && key >= 0;
     if (at && (at.point !== undefined && !pointKey(at.point) || at.series !== undefined && (!pointKey(at.series) || at.point === undefined))) throw Error('Invalid chart point anchor.');
   }
@@ -162,8 +163,9 @@ const PAYLOAD_SEGMENTS = new Set([...ROOT_PAYLOAD_FIELDS, 'shape', 'path']);
 function blockAtName(slide, name) {
   const match = /^OPF (?:shape|card) slides\.\d+\.((?:[A-Za-z0-9+:_-]+\.)*[A-Za-z0-9+:_-]+)$/.exec(name);
   if (!match) return undefined;
+  const current = logicalProvenancePath('slides.0.' + match[1]).slice('slides.0.'.length);
   let node = slide;
-  for (const segment of match[1].split('.')) {
+  for (const segment of current.split('.')) {
     if (PAYLOAD_SEGMENTS.has(segment) && node !== slide && !Array.isArray(node)) break;
     const next = Array.isArray(node) ? node[Number(segment)] : node?.[segment];
     if (!object(next) && !Array.isArray(next)) break;

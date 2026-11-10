@@ -1,0 +1,121 @@
+{
+  "name": "Genuine registry 0.33 legacy schema witness",
+  "slides": [
+    {
+      "title": "Legacy anchor units",
+      "blocks": [
+        {
+          "text": "Literal slides.0.left",
+          "id": "anchor-note"
+        },
+        {
+          "code": {
+            "language": "text",
+            "source": "slides.0.left"
+          }
+        }
+      ],
+      "shapes": [
+        {
+          "shape": "rect",
+          "decorative": true,
+          "id": "anchor-wide",
+          "at": {
+            "block": "anchor-note",
+            "edge": "end",
+            "width": 160,
+            "height": 64
+          }
+        },
+        {
+          "shape": "ellipse",
+          "fill": "accent2",
+          "decorative": true,
+          "id": "anchor-cliff",
+          "at": {
+            "block": "anchor-note",
+            "edge": "top",
+            "width": 1.01,
+            "height": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "title": "Legacy rich table",
+      "table": {
+        "columns": [
+          "Field",
+          "Value"
+        ],
+        "rows": [
+          [
+            "slides.0.left",
+            {
+              "value": [
+                {
+                  "text": "Bonjour ",
+                  "lang": "fr-FR",
+                  "bold": true
+                },
+                {
+                  "text": "slides.0.left",
+                  "lang": "fr-FR"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "borders": {
+                  "left": {
+                    "color": "accent1",
+                    "width": 1
+                  }
+                }
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "title": "Legacy shared dataset",
+      "chart": {
+        "type": "column",
+        "data": {
+          "dataset": "legacy-source"
+        }
+      }
+    }
+  ],
+  "language": "en-US",
+  "design": {
+    "footer": {
+      "right": {
+        "text": "slides.0.left"
+      }
+    },
+    "titleAlignment": "left"
+  },
+  "datasets": {
+    "legacy-source": {
+      "columns": [
+        "Key",
+        "Value"
+      ],
+      "rows": [
+        [
+          "slides.0.left",
+          12
+        ],
+        [
+          "Other",
+          18
+        ]
+      ]
+    }
+  },
+  "extensions": {
+    "slides.0.left": "slides.0.left",
+    "titleAlignment": "left"
+  }
+}

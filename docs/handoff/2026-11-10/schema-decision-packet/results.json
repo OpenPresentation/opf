@@ -1,0 +1,229 @@
+{
+  "scope": "schema validation and pure unadopted migration probe only; no composition, SVG, editor, PPTX or native acceptance",
+  "node": "v24.21.0",
+  "ajv": "8.20.0",
+  "ajvFormats": "3.0.1",
+  "schemas": {
+    "current": {
+      "ref": "7618e916dacc166463cddf5f2ea029f523bbe51d",
+      "path": "spec/schemas/opf.schema.json",
+      "sha256": "fe1c924543213dadbcae5f1f99c442c1b85f95179e1efbbe2d0acce3cb98359f"
+    },
+    "proposed": {
+      "ref": "c7d396520c324c2d448757e906c00cf326dbd99e",
+      "path": "spec/schemas/opf.schema.json",
+      "sha256": "de33036a6de5a5f70a7c4a1d6e5c33ae6214f6a04bb76a08c0781696f5260dd1"
+    }
+  },
+  "validations": [
+    {
+      "id": "anchor-pixels-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "anchor-pixels-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "anchor-boundary-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "anchor-boundary-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "logical-layout-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "logical-layout-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "physical-border-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "physical-border-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "run-language-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "run-language-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "arabic-proofing-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "arabic-proofing-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "border-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "border-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "reference-hidden-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "reference-hidden-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "custom-design-before",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "custom-extension-proposed",
+      "schema": "proposed",
+      "valid": true
+    },
+    {
+      "id": "explicit-combo-reference-current",
+      "schema": "current",
+      "valid": true
+    },
+    {
+      "id": "empty-pie-references-current",
+      "schema": "current",
+      "valid": true
+    }
+  ],
+  "legacy": {
+    "ref": "c7d396520c324c2d448757e906c00cf326dbd99e",
+    "path": "packages/pptx/src/legacy-tags.js",
+    "sha256": "d14a85c8fa30ffc42f7e25aeb3f11c16805b93f960d734093723e8fad80df566",
+    "corruptionCases": [
+      {
+        "id": "text",
+        "input": {
+          "text": "slides.0.left"
+        },
+        "output": {
+          "text": "slides.0.start"
+        },
+        "preserved": false
+      },
+      {
+        "id": "code",
+        "input": {
+          "code": {
+            "source": "slides.0.left",
+            "language": "text"
+          }
+        },
+        "output": {
+          "code": {
+            "source": "slides.0.start",
+            "language": "text"
+          }
+        },
+        "preserved": false
+      },
+      {
+        "id": "table",
+        "input": {
+          "table": {
+            "columns": [
+              "Field"
+            ],
+            "rows": [
+              [
+                "slides.0.left"
+              ]
+            ]
+          }
+        },
+        "output": {
+          "table": {
+            "columns": [
+              "Field"
+            ],
+            "rows": [
+              [
+                "slides.0.start"
+              ]
+            ]
+          }
+        },
+        "preserved": false
+      },
+      {
+        "id": "extension-string",
+        "input": {
+          "extensions": {
+            "note": "slides.0.left"
+          }
+        },
+        "output": {
+          "extensions": {
+            "note": "slides.0.start"
+          }
+        },
+        "preserved": false
+      },
+      {
+        "id": "extension-vocabulary",
+        "input": {
+          "extensions": {
+            "titleAlignment": "left"
+          }
+        },
+        "output": {
+          "extensions": {
+            "titleAlignment": "start"
+          }
+        },
+        "preserved": false
+      },
+      {
+        "id": "extension-key",
+        "input": {
+          "extensions": {
+            "slides.0.left": "literal data"
+          }
+        },
+        "output": {
+          "extensions": {
+            "slides.0.start": "literal data"
+          }
+        },
+        "preserved": false
+      }
+    ],
+    "structuralPositive": true,
+    "collisionPreserved": true
+  },
+  "typo": {
+    "currentAccepts": true,
+    "proposedRejects": true
+  }
+}

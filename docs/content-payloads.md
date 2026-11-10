@@ -1,6 +1,6 @@
 # Content Payloads
 
-Slide content lives directly on a slide as a full-slide payload, in layout-agnostic `blocks`, or inside a promoted region key such as `left`, `center+right`, or `top:left`.
+Slide content lives directly on a slide as a full-slide payload, in layout-agnostic `blocks`, or inside a promoted region key such as `start`, `center+end`, or `top:start`.
 
 The slide-level `title`, `subtitle` and `tag` are not payloads, but like `text` and `quote.text` they accept a string or `TextRun[]` (colored words, bold, links, `cite`/`footnote` markers); see [Rich text](rich-text.md#rich-headings-and-quotes).
 
@@ -245,7 +245,7 @@ Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measu
 
 ## Captions
 
-An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "left" | "center" | "right" }` (defaults `below`, `left`). It sits beside the payload field on a block or promoted-region payload, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
+An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "start" | "center" | "end" }` (defaults `below`, `start`). It sits beside the payload field on a block or promoted-region payload, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
 
 ```json
 {
@@ -411,45 +411,45 @@ Choose the payload by what the content is: `chart` for numbers plotted on axes, 
 
 ## Regions
 
-Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns (`left`, `center`, `right`):
+Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns (`start`, `center`, `end`). The columns follow the deck's direction: `start` is the left column in a left-to-right deck and the right column in a right-to-left deck (see [Right-to-left decks](dynamic-composition.md#right-to-left-decks)).
 
 ```
-                  left                 center                 right
+                  start                center                  end
          +--------------------+--------------------+--------------------+
-   top   |  top:left          |  top:center        |  top:right         |
+   top   |  top:start         |  top:center        |  top:end           |
          +--------------------+--------------------+--------------------+
-  middle |  middle:left       |  middle:center     |  middle:right      |
+  middle |  middle:start      |  middle:center     |  middle:end        |
          +--------------------+--------------------+--------------------+
-  bottom |  bottom:left       |  bottom:center     |  bottom:right      |
+  bottom |  bottom:start      |  bottom:center     |  bottom:end        |
          +--------------------+--------------------+--------------------+
 ```
 
-- A bare column key (`left`) spans all three rows; a bare row key (`top`) spans all three columns.
-- `+` spans adjacent rows or columns: `center+right`, `top+middle`.
-- `row:column` combines the two: `top:left`, `middle+bottom:center+right`.
+- A bare column key (`start`) spans all three rows; a bare row key (`top`) spans all three columns.
+- `+` spans adjacent rows or columns: `center+end`, `top+middle`.
+- `row:column` combines the two: `top:start`, `middle+bottom:center+end`.
 - Keys on one slide must not overlap, and regions cannot be mixed with root payload fields.
 
 Spans compose into common slide shapes:
 
 ```
-  "left" + "center+right"             "top" + "middle+bottom"
+  "start" + "center+end"              "top" + "middle+bottom"
   (sidebar + main)                    (headline band + body)
   +----------+------------------+     +-------------------------------+
   |          |                  |     |              top              |
   |          |                  |     +-------------------------------+
-  |   left   |  center+right    |     |                               |
+  |  start   |   center+end     |     |                               |
   |          |                  |     |         middle+bottom         |
   |          |                  |     |                               |
   +----------+------------------+     +-------------------------------+
 
-  "top" + "middle+bottom:left" + "middle+bottom:center+right"
+  "top" + "middle+bottom:start" + "middle+bottom:center+end"
   (headline band, then sidebar + main)
   +---------------------------------------------+
   |                     top                     |
   +---------------+-----------------------------+
   |               |                             |
-  | middle+bottom | middle+bottom:center+right  |
-  | :left         |                             |
+  | middle+bottom | middle+bottom:center+end    |
+  | :start        |                             |
   |               |                             |
   +---------------+-----------------------------+
 ```
@@ -459,7 +459,7 @@ The same payload objects work inside regions — here, the sidebar-plus-main sha
 ```json
 {
   "title": "Operating Snapshot",
-  "left": {
+  "start": {
     "table": {
       "columns": ["Metric", "Value"],
       "rows": [
@@ -468,7 +468,7 @@ The same payload objects work inside regions — here, the sidebar-plus-main sha
       ]
     }
   },
-  "center+right": {
+  "center+end": {
     "chart": {
       "type": "line",
       "data": {

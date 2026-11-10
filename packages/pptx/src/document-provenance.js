@@ -1,6 +1,7 @@
 import {nativeRunStyleEvidence, hasSourceRunStyles} from './source-run-styles.js';
 import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
+import {currentTag, upgradeTag} from './legacy-tags.js';
 import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks, validateListRuns, validateListScalars, listLineRoles, validateListRoles, MAX_LIST_PATHS} from './content-topology.js';
 import {runColorRecord, validateRunColors} from './run-colors.js';
 import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
@@ -696,7 +697,7 @@ function mediaExternalizer(entries) {
 }
 
 function tagPart(name, value) {
-  return enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${name}" val="${encodeTextTag(value)}"/></p:tagLst>`);
+  return enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${name}" val="${encodeTextTag(currentTag(value))}"/></p:tagLst>`);
 }
 
 function freeId(relsXml, base) {
@@ -845,7 +846,7 @@ export function attachDocumentProvenance(entries, provenance) {
   for (const [index, path] of paths.entries()) {
     const slideHashes = mediaHashes(prepared.slides[index], entries);
     const record = toStoredShape({...prepared.slides[index], ...(Object.keys(slideHashes).length ? {mediaHash: slideHashes} : {}), native: {...nativeSlide(entries, path, hasSourceRunStyles(prepared.slides[index].content)), ...((prepared.slides[index].listRoles || prepared.slides[index].listScalars) ? {listIdentity: nativeListIdentity(entries, path)} : {})}}, SLIDE_SUPPLEMENT);
-    const tag = `<p:tag name="${SLIDE_TAG}" val="${encodeTextTag(record)}"/>`;
+    const tag = `<p:tag name="${SLIDE_TAG}" val="${encodeTextTag(currentTag(record))}"/>`;
     let xml = dec.decode(entries[path]);
     const slideRels = relsPath(path);
     let relsXml = dec.decode(entries[slideRels]);
@@ -886,7 +887,7 @@ function readTag(entries, container, rels, name) {
   if (found.length > 1) throw Error(`Multiple ${name} tags.`);
   const value = found[0].val;
   if (typeof value !== 'string' || value.length > MAX_TAG_CHARS) throw Error(`Oversized or empty ${name} tag.`);
-  return {value: decodeTextTag(value)};
+  return {value: upgradeTag(decodeTextTag(value), name === DOCUMENT_TAG ? 'document' : 'slide')};
 }
 
 function validateOmitted(value) {

@@ -83,7 +83,7 @@ test('block units: one payload per root block, nothing else to move', () => {
   assert.equal(blockUnits({ blocks: [{ text: 'Lead' }, timeline(0), timeline(1)] }), undefined, 'one unit led by the text');
   assert.equal(blockUnits({ blocks: [timeline(0), { blocks: [timeline(1)] }] }), undefined, 'a nested group');
   assert.equal(blockUnits({ text: 'Root text', blocks: [timeline(0), timeline(1)] }), undefined, 'a root payload');
-  assert.equal(blockUnits({ left: { text: 'Side' }, blocks: [timeline(0), timeline(1)] }), undefined, 'a promoted region');
+  assert.equal(blockUnits({ start: { text: 'Side' }, blocks: [timeline(0), timeline(1)] }), undefined, 'a promoted region');
   assert.deepEqual(blockUnits({ blocks: [{ code: { source: 'a()' } }, { text: 'Why' }, { code: { source: 'b()' } }] }), { kind: 'code', units: [[0, 1], [2]] });
 });
 
@@ -97,7 +97,7 @@ test('a block that does not fit alone keeps the slide as written', () => {
 });
 
 test('a right-to-left deck splits the same way, and the slide count settles for {{deck.slideCount}}', () => {
-  const deck = { language: 'ar', design: { footer: { text: '{{slide.number}} / {{deck.slideCount}}' } }, slides: [timelines(8, { title: 'مسارات التنفيذ' })] };
+  const deck = { language: 'ar', design: { footer: { start: { text: '{{slide.number}} / {{deck.slideCount}}' } } }, slides: [timelines(8, { title: 'مسارات التنفيذ' })] };
   const result = continueOverfull(deck, { catalogs });
   assert.equal(result.continued.length, 1);
   assert.deepEqual(result.continued[0].blocks, [[0, 1, 2, 3], [4, 5, 6, 7]]);

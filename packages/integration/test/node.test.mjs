@@ -403,7 +403,7 @@ describe("convert without an output path", () => {
       const second = await opf.convert(structuredClone(deck), { format });
       assert.deepEqual(b64(first.files), b64(second.files), format);
     }
-    const dated = { design: { footer: { right: { date: true } } }, slides: [{ title: "Today" }] };
+    const dated = { design: { footer: { end: { date: true } } }, slides: [{ title: "Today" }] };
     assert.ok((await opf.convert(dated, { format: "svg" })).findings.some((found) => /host-supplied ISO date/.test(found.message)));
     assert.ok(!(await opf.convert(dated, { format: "svg", date: "2026-02-03" })).findings.some((found) => /host-supplied ISO date/.test(found.message)));
   });

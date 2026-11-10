@@ -3,10 +3,10 @@
   "slides": [
     {
       "title": "Market Shift",
-      "left": {
+      "start": {
         "text": "Signal"
       },
-      "center+right": {
+      "center+end": {
         "items": [
           "Demand moved upmarket",
           "Procurement cycles shortened",
@@ -16,13 +16,13 @@
     },
     {
       "title": "Operating Choice",
-      "left+center": {
+      "start+center": {
         "bullets": [
           "Standardize the intake path",
           "Keep escalation rules visible"
         ]
       },
-      "right": {
+      "end": {
         "text": "Decision owners need one place to see what changed."
       }
     }

@@ -162,16 +162,25 @@ export function issueFinding(
 		help = `Add the required ${JSON.stringify(issue.params.missingProperty)} field in this object, using the intended schema form.`;
 	else if (issue.keyword === 'additionalProperties')
 		help = `Review ${JSON.stringify(issue.params.additionalProperty)} against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.`;
-	else if (issue.keyword === 'enum')
-		help =
-			'Choose one of this schema branch’s allowed values; inspect the other alternatives if the field uses another form.';
-	else if (issue.keyword === 'opf')
-		help =
-			'Resolve the reported structural conflict while preserving every content field. Preview the result after editing.';
+	else if (issue.keyword === 'enum') {
+		// A short list is the fix: name the values. A long one (chart types, shape presets) stays in `suggestions`.
+		const values = Array.isArray(issue.params.allowedValues) ? issue.params.allowedValues.filter(primitive) : [];
+		help = values.length > 0 && values.length <= 12
+			? `Use one of: ${values.map((value) => JSON.stringify(value)).join(', ')}.`
+			: 'Choose one of this schema branch’s allowed values; inspect the other alternatives if the field uses another form.';
+	} else if (issue.keyword === 'dependentRequired')
+		help = `${JSON.stringify(issue.params.property)} only applies together with ${JSON.stringify(issue.params.missingProperty)}: add ${JSON.stringify(issue.params.missingProperty)}, or remove ${JSON.stringify(issue.params.property)}.`;
+	else if (issue.keyword === 'opf') help = semanticHelp(issue);
 	const allowed = Array.isArray(issue.params.allowedValues)
 		? issue.params.allowedValues.filter(primitive)
 		: [];
 	const nearest = issue.keyword === 'additionalProperties' ? nearestProperties(issue, entry.schema, precise?.pointer, precise?.schemaName) : [];
+	// A layout word written as a physical side (a `left` region, a `right` footer zone): the fix is the logical word.
+	const typedName = issue.keyword === 'additionalProperties' && typeof issue.params.additionalProperty === 'string' ? issue.params.additionalProperty : undefined;
+	if (typedName !== undefined && nearest[0]?.value === logicalName(typedName) && nearest[0].value !== typedName)
+		help = `Write ${JSON.stringify(nearest[0].value)}: layout words follow the deck's direction, so the sides are "start" and "end", not "left" and "right".`;
+	else if (typedName !== undefined && typeof nearest[0]?.value === 'string' && nearest[0].value.startsWith(typedName))
+		help = `Write ${JSON.stringify(nearest[0].value)}: ${JSON.stringify(typedName)} is not a field of this object.`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -198,11 +207,15 @@ export function issueFinding(
 
 /** The most near-miss names a "did you mean" offers. */
 const NEAREST_PROPERTIES = 3;
+/** A key with `left` and `right` read as the logical sides: `left` is `start`, `top:center+right` is `top:center+end`. */
+const logicalName = (name: string): string => name.split(':').map((part) => part.split('+').map((word) => (word === 'left' ? 'start' : word === 'right' ? 'end' : word)).join('+')).join(':');
 
 /**
  * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares whose
  * names are within edit distance 2 (1 for a name of three characters or fewer, or every short name would match), compared
- * case-insensitively, nearest first, at most three. A suggestion is a name the schema has, never a rewrite of authored content.
+ * case-insensitively, nearest first, at most three. Two exact readings come before those: the same key with `left` and `right` as the
+ * logical `start` and `end` (a region or a header or footer zone), and the one declared name the typed name abbreviates (`lang` for
+ * `language`; three characters or more). A suggestion is a name the schema has, never a rewrite of authored content.
  */
 function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, pointerToKeyword: string | undefined, schemaName: SchemaName | undefined): FindingSuggestion[] {
 	const typed = issue.params.additionalProperty;
@@ -211,19 +224,27 @@ function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, poi
 	let node: unknown = rootEntry?.schema ?? fallbackRoot;
 	const base = pointerToKeyword.split('/').slice(0, -1);
 	for (const token of base.slice(1)) {
-		if (!isRecord(node)) return [];
-		node = node[token.replaceAll('~1', '/').replaceAll('~0', '~')];
+		// A branch of a union is an array entry (`oneOf/1`): the object form of a text run, of a caption.
+		if (Array.isArray(node)) node = /^\d+$/.test(token) ? node[Number(token)] : undefined;
+		else if (isRecord(node)) node = node[token.replaceAll('~1', '/').replaceAll('~0', '~')];
+		else return [];
 	}
 	if (!isRecord(node) || !isRecord(node.properties)) return [];
 	const root = (rootEntry?.schema ?? fallbackRoot) as JsonSchema,
 		limit = typed.length <= 3 ? 1 : 2,
 		lower = typed.toLowerCase();
-	return Object.keys(node.properties)
+	const declared = Object.keys(node.properties),
+		logical = logicalName(typed),
+		longer = typed.length >= 3 ? declared.filter((name) => name !== typed && name.toLowerCase().startsWith(lower)) : [],
+		exact = logical !== typed && declared.includes(logical) ? [logical] : longer.length === 1 ? longer : [];
+	const near = declared
 		.map((name) => ({ name, away: distance(lower, name.toLowerCase()) }))
-		.filter(({ name, away }) => name !== typed && away <= limit)
+		.filter(({ name, away }) => name !== typed && away <= limit && !exact.includes(name))
 		.sort((a, b) => a.away - b.away || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+		.map(({ name }) => name);
+	return [...exact, ...near]
 		.slice(0, NEAREST_PROPERTIES)
-		.map(({ name }) => ({
+		.map((name) => ({
 			value: name,
 			label: name,
 			origin: 'schema' as const,
@@ -527,6 +548,123 @@ const HELP: Record<string, string> = {
  * author should write, with their own values converted, and the additional-property findings that only repeat the same mistake are dropped.
  * Other unknown keys of the same chart stay reported.
  */
+/** The fix for a semantic format error, from what it reports; the generic sentence where the message already says it all. */
+function semanticHelp(issue: ValidationIssue): string {
+	const params = issue.params ?? {}, field = typeof params.field === 'string' ? params.field : undefined, quoted = JSON.stringify(field);
+	if (params.code === 'image-option-unsupported-payload' && field) return `Remove ${quoted}, or put it on an image block ({ "image": ... }); it has no meaning on another kind of content.`;
+	if (params.code === 'shape-option-unsupported-payload' && field === 'alt' && params.type === 'image') return 'A picture\'s alt text goes inside its image object: { "image": { "src": "...", "alt": "..." } }.';
+	if (params.code === 'shape-option-unsupported-payload' && field) return `Remove ${quoted}, or draw this as a shape: a shape block ({ "shape": ... } with no "image") or an overlay shape in the slide's "shapes".`;
+	if (params.code === 'caption-unsupported-payload') return 'Put the caption on the image, chart, table, video or diagram it describes, or write it as a text block of its own.';
+	if (Array.isArray(params.incompatible) && params.incompatible.includes('bullets') && params.type === 'list') return 'For a list, write the entries under "items". To keep "bullets" (talking points, which belong to a text payload), remove "type" or write "type": "text".';
+	return 'Resolve the reported structural conflict while preserving every content field. Preview the result after editing.';
+}
+
+const BACKGROUND_TYPES = ['theme', 'solid', 'gradient', 'image', 'pattern'];
+const BACKGROUND_HELP = `A background is a string (a theme slot such as "light1", a hex color, or an image source such as "asset:hero" or "./photo.jpg") or an object with "type": ${BACKGROUND_TYPES.map((type) => JSON.stringify(type)).join(', ')}, for example { "type": "solid", "color": "accent1" }.`;
+
+/**
+ * Mistakes whose schema errors say nothing about the fix, reworded at the value the author wrote:
+ *  - a shape `fill` written like a background (`{ "type": "solid", "color": ... }`, or `{ "color": ... }` with nothing else): one finding
+ *    that says a solid fill is the color itself, with the fix, instead of an error for every branch of the fill union;
+ *  - a `background` no form accepts: the forms and the `type` values, instead of the names of schema definitions;
+ *  - `type: "list"` beside `bullets`: the raw "missing items" goes, the semantic finding says what to write;
+ *  - the `if` half of a failed `if`/`then` ("must match \"then\" schema"), which repeats the `then` error beside it.
+ */
+function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
+	const valueAt = (path: string): unknown => {
+		let node: unknown = document;
+		for (const segment of splitPointer(path)) node = Array.isArray(node) ? node[Number(segment)] : isRecord(node) ? node[segment] : undefined;
+		return node;
+	};
+	const schema = (entry: Finding | undefined): entry is Finding => entry?.ruleId === 'opf/schema';
+	// 1. The fill of a shape.
+	const fills = new Map<string, Finding>();
+	for (const entry of findings) {
+		if (!schema(entry)) continue;
+		const at = /^(.*\/fill)(?:\/[^/]+)?$/.exec(entry.path)?.[1];
+		if (!at || fills.has(at)) continue;
+		const fill = valueAt(at);
+		if (!isRecord(fill) || Object.hasOwn(fill, 'lighten') || Object.hasOwn(fill, 'darken')) continue;
+		const solid = (fill.type === 'solid' || fill.type === undefined) && fill.color !== undefined && !Object.hasOwn(fill, 'gradient') && !Object.hasOwn(fill, 'pattern');
+		const typed = (fill.type === 'gradient' && isRecord(fill.gradient)) || (fill.type === 'pattern' && isRecord(fill.pattern));
+		if (!solid && !typed) continue;
+		const color = typeof fill.color === 'string' ? JSON.stringify(fill.color) : '"accent1"';
+		fills.set(at, {
+			...entry,
+			path: at,
+			message: solid ? `A shape's solid fill is the color itself, not an object: write "fill": ${color}.` : `A shape's fill has no "type": write "fill": { ${JSON.stringify(fill.type)}: { ... } }.`,
+			help: solid
+				? `Write "fill": ${color}. A fill is "none", a color ("accent1", "#1E40AF", or { "color": "accent1", "lighten": 0.4 }), { "gradient": { ... } } or { "pattern": { ... } }; only a slide background takes { "type": "solid", ... }.`
+				: `Remove "type": a fill is told apart by its key, { "gradient": { ... } } or { "pattern": { ... } }; only a slide background takes "type".`,
+			fixes: [solid && typeof fill.color === 'string'
+				? { id: 'fill-color', title: `Write the fill as ${color}`, kind: 'patch' as const, safe: false, patch: [{ op: 'replace' as const, path: at, value: fill.color }] }
+				: { id: 'fill-remove-type', title: 'Remove "type"', kind: 'patch' as const, safe: false, patch: [{ op: 'remove' as const, path: `${at}/type` }] }],
+		});
+	}
+	if (fills.size) {
+		const seen = new Set<string>();
+		for (let index = 0; index < findings.length; index++) {
+			const entry = findings[index];
+			if (!schema(entry)) continue;
+			const at = [...fills.keys()].find((path) => entry.path === path || entry.path.startsWith(`${path}/`));
+			if (!at) continue;
+			if (seen.has(at)) { findings.splice(index--, 1); continue; }
+			seen.add(at);
+			findings[index] = fills.get(at)!;
+		}
+	}
+	// 2. A background no form accepts: no `type`, an unknown one, or a value that is neither a string nor an object. Every branch of
+	// the union would report its own missing keys; one finding names the forms.
+	const backgrounds = new Set<string>();
+	for (const entry of findings) {
+		if (!schema(entry)) continue;
+		const at = /^((?:.*\/)?design\/background)(?:\/.*)?$/.exec(entry.path)?.[1];
+		if (!at || backgrounds.has(at)) continue;
+		const background = valueAt(at), type = isRecord(background) ? background.type : undefined;
+		if (typeof background === 'string' || (isRecord(background) && typeof type === 'string' && BACKGROUND_TYPES.includes(type))) continue;
+		backgrounds.add(at);
+	}
+	for (const at of backgrounds) {
+		const background = valueAt(at), type = isRecord(background) ? background.type : undefined;
+		const first = findings.findIndex((entry) => schema(entry) && (entry.path === at || entry.path.startsWith(`${at}/`)));
+		const { fixes: _fixes, suggestions: _suggestions, ...kept } = findings[first]!;
+		const one: Finding = {
+			...kept,
+			path: at,
+			message: isRecord(background) ? (type === undefined ? 'A background object needs a "type".' : `${JSON.stringify(type)} is not a background type.`) : 'This is not a background OPF can read.',
+			help: BACKGROUND_HELP,
+		};
+		for (let index = findings.length - 1; index >= 0; index--) { const entry = findings[index]; if (schema(entry) && (entry.path === at || entry.path.startsWith(`${at}/`))) findings.splice(index, 1); }
+		findings.splice(first, 0, one);
+	}
+	// 3. The `if` half of a failed if/then.
+	for (let index = findings.length - 1; index >= 0; index--) {
+		const entry = findings[index];
+		if (!schema(entry) || entry.validation?.keyword !== 'if') continue;
+		const stem = entry.validation.schemaPath.replace(/if$/, '');
+		if (findings.some((other) => other !== entry && schema(other) && other.path.startsWith(entry.path) && typeof other.validation?.schemaPath === 'string' && (other.validation.schemaPath.startsWith(`${stem}then`) || other.validation.schemaPath.startsWith(`${stem}else`)))) findings.splice(index, 1);
+	}
+	// The missing `items` of a `type: "list"` that carries `bullets`: the semantic finding beside it says what to write.
+	for (let index = findings.length - 1; index >= 0; index--) {
+		const entry = findings[index];
+		if (!schema(entry) || entry.validation?.keyword !== 'required' || entry.validation.params.missingProperty !== 'items') continue;
+		const payload = valueAt(entry.path);
+		if (isRecord(payload) && payload.type === 'list' && Object.hasOwn(payload, 'bullets')) findings.splice(index, 1);
+	}
+	// An option on the wrong kind of block. The schema states the rule (ContentPayload dependentSchemas) so that any JSON Schema tool
+	// knows it; here the format check has already reported it at the option itself, with what to do, so the raw copy goes.
+	const OPTION_RULES = ['opf/image-option-unsupported-payload', 'opf/shape-option-unsupported-payload', 'opf/caption-unsupported-payload'];
+	// The raw copy is a missing kind key at the block ('image', 'shape' or 'path', or a captionable payload), or the `not` of "a shape with
+	// no image". After the union errors are reduced nothing in a finding names the definition it came from, so the wording is the test.
+	const optionDefinition = (entry: Finding): boolean => (entry.validation?.keyword === 'required' && /^must have required property '(?:image|shape|path|chart|table|video|diagram)'/.test(entry.message)) || (entry.validation?.keyword === 'not' && entry.message === 'must NOT be valid') || ((entry.validation?.keyword === 'anyOf' || entry.validation?.keyword === 'oneOf') && /must match a schema in anyOf|must match exactly one schema/.test(entry.message));
+	for (let index = findings.length - 1; index >= 0; index--) {
+		const entry = findings[index];
+		if (!schema(entry) || !optionDefinition(entry)) continue;
+		const prefix = `${entry.path}/`;
+		if (findings.some((other) => other !== entry && other.path.startsWith(prefix) && !other.path.slice(prefix.length).includes('/') && OPTION_RULES.includes(other.ruleId))) findings.splice(index, 1);
+	}
+}
+
 function collapseChartShape(document: unknown, findings: Finding[]): void {
 	const chartAt = (path: string): unknown => {
 		let node: unknown = document;
@@ -570,6 +708,7 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 		if (enabled(ruleId)) findings.push(issueFinding(issue, ruleId));
 	}
 	collapseChartShape(document, findings);
+	collapseAuthoringShapes(document, findings);
 	// RR-54: the migration fix of each chart value column whose text cells share one display style, by cell path.
 	let numberFixes: Map<string, ChartNumberFix> | undefined;
 	for (const issue of engine.warnings) {

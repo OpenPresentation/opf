@@ -41,7 +41,7 @@ const plainDocuments = {
   'column-no-options': chartDoc({ type: 'column', data: { columns: ['Quarter', 'North', 'South', 'West'], rows: plainRows } }),
   'line-string-numbers': chartDoc({ type: 'line', data: { columns: ['Quarter', 'North', 'South'], rows: [['Q1', '12.5', 3], ['Q2', 18, '5'], ['Q3', 21, 2]] } }),
   'histogram-lone-column': chartDoc({ type: 'histogram', data: { columns: ['Values'], rows: [[1], [2], [2], [3], [3], [3], [4], [8]] } }),
-  'table-styled': doc({ title: 'T', table: { columns: ['Region', { value: 'Growth', style: { align: 'right' } }], rows: [['EMEA', 8.2], [{ value: ['rich ', { text: 'run', bold: true }] }, { value: 0.4, style: { color: '#ff0000' } }], ['APAC', 'n/a']] } })
+  'table-styled': doc({ title: 'T', table: { columns: ['Region', { value: 'Growth', style: { align: 'end' } }], rows: [['EMEA', 8.2], [{ value: ['rich ', { text: 'run', bold: true }] }, { value: 0.4, style: { color: '#ff0000' } }], ['APAC', 'n/a']] } })
 };
 const digestOf = (svg) => createHash('sha256').update(svg).digest('hex').slice(0, 24);
 const digests = Object.fromEntries(Object.entries(plainDocuments).map(([name, document]) => [name, digestOf(render(document, { trace: true }))]));
@@ -217,7 +217,7 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
 
 {
   const table = {
-    columns: ['Region', { name: 'Revenue', format: '$#,##0.0' }, { value: 'Growth', style: { align: 'right' }, format: '0%' }],
+    columns: ['Region', { name: 'Revenue', format: '$#,##0.0' }, { value: 'Growth', style: { align: 'end' }, format: '0%' }],
     rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, { value: 0.52, format: '0.0%' }], ['AMER', 'n/a', null]]
   };
   const svg = render(doc({ title: 'T', table }), { trace: true });
@@ -227,7 +227,7 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
   assert.ok(paths(svg).some((path) => path.startsWith('slides.0.table.rows.0.1')), 'cells keep their authored paths');
   // The same table with the formatted text written out by hand draws the same. LH-117: a column aligns by how its cells read, so the
   // written text aligns as the formatted numbers do (Revenue, two numbers in three cells, reads as text; Growth's header aligns it right).
-  const written = { columns: ['Region', 'Revenue', { value: 'Growth', style: { align: 'right' } }], rows: [['EMEA', '$8.2', '40%'], ['APAC', '$6.1', '52.0%'], ['AMER', 'n/a', null]] };
+  const written = { columns: ['Region', 'Revenue', { value: 'Growth', style: { align: 'end' } }], rows: [['EMEA', '$8.2', '40%'], ['APAC', '$6.1', '52.0%'], ['AMER', 'n/a', null]] };
   const strip = (markup) => markup.replace(/ data-opf-path="[^"]*"/g, '');
   assert.equal(strip(render(doc({ title: 'T', table: written }), { trace: true })), strip(svg), 'formatting a cell draws what its text would draw');
 

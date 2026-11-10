@@ -166,12 +166,12 @@ const shapeImageFields = new Set<string>(["aspectRatio", "shape", "adjust", "str
 const shapeOptionFields = SHAPE_BLOCK_KEYS.filter((field) => field !== "path");
 
 const columnSpans: Record<string, readonly number[]> = {
-  left: [0],
+  start: [0],
   center: [1],
-  right: [2],
-  "left+center": [0, 1],
-  "center+right": [1, 2],
-  "left+center+right": [0, 1, 2],
+  end: [2],
+  "start+center": [0, 1],
+  "center+end": [1, 2],
+  "start+center+end": [0, 1, 2],
 };
 
 const rowSpans: Record<string, readonly number[]> = {
@@ -385,8 +385,11 @@ function validateContentPayload(
     ...spec.fields,
   ]);
 
+  // `bullets` are talking points of a text payload: `type: "list"` beside them is one mistake with one fix, not a missing `items`
+  // and an incompatible field.
+  const listOfBullets = resolvedKind === "list" && hasOwn(value, "bullets") && !hasOwn(value, "items");
   for (const required of spec.required) {
-    if (!hasOwn(value, required)) {
+    if (!hasOwn(value, required) && !listOfBullets) {
       issues.push(semanticIssue(path, `content payload type '${resolvedKind}' requires '${required}'`, {
         type: resolvedKind,
         required,
@@ -403,7 +406,7 @@ function validateContentPayload(
 
   const incompatible = payloadFields.filter((field) => !allowedFields.has(field));
   if (incompatible.length > 0) {
-    issues.push(semanticIssue(path, `content payload type '${resolvedKind}' cannot include incompatible fields: ${incompatible.join(", ")}`, {
+    issues.push(semanticIssue(path, listOfBullets && incompatible.length === 1 ? "'bullets' belongs to a text payload, so it cannot be a 'list': write the entries under 'items', or remove 'type'" : `content payload type '${resolvedKind}' cannot include incompatible fields: ${incompatible.join(", ")}`, {
       type: resolvedKind,
       incompatible,
     }));

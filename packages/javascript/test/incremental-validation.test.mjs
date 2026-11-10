@@ -82,7 +82,7 @@ test('shared metadata and data/reference diagnostics are never cached', () => {
 		d => { delete d.datasets.unused; },
 		d => { d.datasets.unused = clone(d.datasets.used); },
 		d => { d.design = { theme: 'minimal', background: { type: 'solid', color: '#112233' } }; },
-		d => { d.design.footer = { right: { text: '{{slide.number}} / {{deck.slideCount}}' } }; },
+		d => { d.design.footer = { end: { text: '{{slide.number}} / {{deck.slideCount}}' } }; },
 		d => { d.language = 'ar'; d.slides[0].blocks[0].text = [{ text: 'نص عربي', bold: true }, { text: ' mixed', fontSize: 18 }]; },
 	];
 	for (const [i, change] of changes.entries()) { change(document); assert.equal(parity(checker, document).schemaValid, i !== 2); }
@@ -140,7 +140,7 @@ test('citation numbering, variables, host policies and nested dataset consumers 
 	const policy = parity(checker, document, { contracts: [{ path: '/slides/*/layout', allowedValues: ['statement'], message: 'Use the required layout.' }] });
 	assert.ok(policy.findings.some(finding => finding.ruleId === 'opf/contract'));
 	document.datasets = { values: { columns: ['X', 'Y'], rows: [['A', 9]] } };
-	document.slides[1] = { id: 'nested', title: 'Nested', left: { blocks: [{ blocks: [{ chart: { type: 'column', data: { dataset: 'values' } } }] }] }, right: { table: { dataset: 'values' } } };
+	document.slides[1] = { id: 'nested', title: 'Nested', start: { blocks: [{ blocks: [{ chart: { type: 'column', data: { dataset: 'values' } } }] }] }, end: { table: { dataset: 'values' } } };
 	assert.equal(parity(checker, document).schemaValid, true);
 	document.datasets.values.rows[0][1] = 99;
 	assert.equal(parity(checker, document).schemaValid, true);

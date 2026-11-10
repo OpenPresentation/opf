@@ -43,7 +43,7 @@ test('LH-30: a required variable, a group without variables, a slide itself and 
   const slide = template(optional, [{ text: 'var:quote' }]);
   assert.equal(resolveVariables(slide).presentation.slides.length, 1);
   // A promoted region that is a group collapses as well.
-  const region = { template: true, language: 'en-US', variables: optional, slides: [{ title: 'Customers', left: { text: 'Always' }, right: quoteGroup }] };
+  const region = { template: true, language: 'en-US', variables: optional, slides: [{ title: 'Customers', start: { text: 'Always' }, right: quoteGroup }] };
   assert.equal(resolveVariables(region).presentation.slides[0].right, undefined);
 });
 

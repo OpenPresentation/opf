@@ -52,7 +52,7 @@ const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringi
 
 export const CONTENT_KINDS = Object.freeze(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape']);
 export const ROOT_PAYLOAD_FIELDS = Object.freeze(['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram']);
-const HORIZONTAL = ['left', 'center', 'right', 'left+center', 'center+right', 'left+center+right'];
+const HORIZONTAL = ['start', 'center', 'end', 'start+center', 'center+end', 'start+center+end'];
 const VERTICAL = ['top', 'middle', 'bottom', 'top+middle', 'middle+bottom', 'top+middle+bottom'];
 export const REGION_KEYS = Object.freeze([...HORIZONTAL, ...VERTICAL, ...VERTICAL.flatMap(row => HORIZONTAL.map(column => `${row}:${column}`))]);
 const REGION_KEY_PATTERN = /^[a-z]+(\+[a-z]+)*(:[a-z]+(\+[a-z]+)*)?$/;

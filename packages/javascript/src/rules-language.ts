@@ -37,7 +37,7 @@ export const languageTagRules: ValidationRule[] = [
 			}
 			for (const slide of context.slides)
 				for (const tv of slide.texts)
-					if (typeof tv.value !== 'string') for (const run of runsOf(tv)) report(context, run.style.lang, `${run.path}/lang`, slide);
+					if (typeof tv.value !== 'string') for (const run of runsOf(tv)) report(context, run.style.language, `${run.path}/language`, slide);
 		},
 	},
 ];

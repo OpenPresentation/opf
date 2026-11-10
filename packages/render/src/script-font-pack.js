@@ -98,7 +98,7 @@ export function* drawnStrings(presentation) {
 
 // Generated words are measured before the guarded status rule decides whether they draw. Source enum values alone do not cover them.
 // Only content payloads count: arbitrary variables, metadata, notes, catalogs and extensions never synthesize timeline labels.
-const PROMOTED_REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/;
+const PROMOTED_REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
 function* generatedTimelineWords(presentation) {
   if (!Array.isArray(presentation?.slides)) return;
   for (const [slideIndex, slide] of presentation.slides.entries()) {

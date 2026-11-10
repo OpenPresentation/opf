@@ -17,6 +17,7 @@
 // Tags are untrusted input: every field is checked before use and the result still validates.
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
+import {currentTags, upgradeTag} from './legacy-tags.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {CAPTION_TAG, FOOTNOTES_TAG, footnotesRuleName} from './annotation-export.js';
 
@@ -33,8 +34,8 @@ const engineKey = key => ENGINE_STYLE.has(key) || key.startsWith('_opf');
 const name = shape => shape?.['p:nvSpPr']?.['p:cNvPr']?.name ?? shape?.['p:nvPicPr']?.['p:cNvPr']?.name ?? shape?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name;
 
 export function attachAnnotationTags(entries, context) {
-  attachTextTags(entries, context.captionTags, CAPTION_TAG, 'opfCaption', 'caption');
-  attachTextTags(entries, context.footnoteTags, FOOTNOTES_TAG, 'opfFootnotes', 'footnotes');
+  attachTextTags(entries, currentTags(context.captionTags), CAPTION_TAG, 'opfCaption', 'caption');
+  attachTextTags(entries, currentTags(context.footnoteTags), FOOTNOTES_TAG, 'opfFootnotes', 'footnotes');
 }
 
 function readTags(shape, relationships, entries) {
@@ -55,7 +56,7 @@ function readRecord(shape, relationships, entries, tagName) {
   if (unreadable || own.length !== 1 || tags.some(tag => /^OPF_/i.test(tag.name ?? '') && String(tag.name).toUpperCase() !== tagName)) return null;
   try {
     if (typeof own[0].val !== 'string' || own[0].val.length > MAX_VALUE_CHARS * 2) return null;
-    const record = decodeTextTag(own[0].val);
+    const record = upgradeTag(decodeTextTag(own[0].val), 'annotation');
     if (!object(record) || record.v !== 1) return null;
     if (record.line !== undefined && (!Number.isSafeInteger(record.line) || record.line < 0 || !Number.isSafeInteger(record.count) || record.count < 1 || record.count > 1000 || record.line >= record.count)) return null;
     if (record.boundary !== undefined && !['hard', 'soft', 'end'].includes(record.boundary)) return null;
@@ -131,7 +132,7 @@ export function importAnnotations({shapes, paragraphs, relationships, entries, s
     const caption = readRecord(shape, relationships, entries, CAPTION_TAG);
     if (caption !== undefined) {
       consumed.add(shape);
-      if (!caption || caption.role !== 'caption' || typeof caption.path !== 'string' || typeof caption.field !== 'string' || !['below', 'above'].includes(caption.position) || !['left', 'center', 'right'].includes(caption.align) || caption.line === undefined) { report({code: 'invalid-caption-provenance', path: `slides.${slideIndex}`, message: 'A caption tag is unreadable or invalid; its text stays an ordinary text block.'}); consumed.delete(shape); continue; }
+      if (!caption || caption.role !== 'caption' || typeof caption.path !== 'string' || typeof caption.field !== 'string' || !['below', 'above'].includes(caption.position) || !['start', 'center', 'end'].includes(caption.align) || caption.line === undefined) { report({code: 'invalid-caption-provenance', path: `slides.${slideIndex}`, message: 'A caption tag is unreadable or invalid; its text stays an ordinary text block.'}); consumed.delete(shape); continue; }
       const key = caption.path;
       if (!captionGroups.has(key)) captionGroups.set(key, []);
       captionGroups.get(key).push({index, shape, record: caption});
@@ -175,7 +176,7 @@ export function importAnnotations({shapes, paragraphs, relationships, entries, s
 
 /** The caption value to write into a block: a string or TextRun[] with the default position and alignment, else the object form. */
 export function captionValue(caption) {
-  return caption.position === 'below' && caption.align === 'left' ? caption.value : {text: caption.value, position: caption.position, align: caption.align};
+  return caption.position === 'below' && caption.align === 'start' ? caption.value : {text: caption.value, position: caption.position, align: caption.align};
 }
 
 // Every run array of a slide payload that may carry markers, with a setter.
@@ -197,7 +198,7 @@ function runArrays(slide) {
   };
   // FA-10: the heading group (tag, title, subtitle) may carry markers when it is TextRun[].
   for (const field of ['tag', 'title', 'subtitle']) if (Array.isArray(slide[field])) found.push({path: field, get: () => slide[field], set: value => { slide[field] = value; }});
-  const keys = Object.keys(slide).filter(key => /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key) && object(slide[key]));
+  const keys = Object.keys(slide).filter(key => /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key) && object(slide[key]));
   if (keys.length) for (const key of keys.sort()) visit(slide[key], key); else visit(slide, '');
   return found;
 }

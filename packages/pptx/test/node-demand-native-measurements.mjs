@@ -8,8 +8,8 @@ import {gallery} from '@openpresentation/gallery';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 const deck = {slides: [{title: 'Title', text: [
-  {text: 'Bonjour 1\nWelcome 2 ', lang: 'ar-SA', fontFamily: 'Georgia'},
-  {text: 'Hello 2', lang: 'ar-SA', fontFamily: 'Times New Roman'},
+  {text: 'Bonjour 1\nWelcome 2 ', language: 'ar-SA', fontFamily: 'Georgia'},
+  {text: 'Hello 2', language: 'ar-SA', fontFamily: 'Times New Roman'},
 ]}]};
 const loading = {pack: 'office', substitutionPolicy: 'visual'};
 const keys = fonts => fonts.registry.describeFaces().map(({family, weight, italic}) => `${family}/${weight}/${italic}`);

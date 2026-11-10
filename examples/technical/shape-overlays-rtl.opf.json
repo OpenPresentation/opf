@@ -63,8 +63,8 @@
             "block": "first",
             "edge": "start",
             "offset": -24,
-            "width": 56,
-            "height": 56
+            "widthPx": 56,
+            "heightPx": 56
           },
           "style": "intense"
         },

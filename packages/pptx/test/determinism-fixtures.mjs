@@ -47,7 +47,7 @@ function scriptDeck(key) {
   const s = scripts[key];
   return {
     $schema: 'https://openpresentation.org/schema/opf/v1', name: `Determinism ${key}`, language: s.language, author: 'Determinism', organization: {id: 'org', name: 'İstanbul Örg 日本'},
-    design: {header: {left: {text: s.header}, center: {text: '{{organization.name}}'}}, footer: {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: s.footer}, right: {text: '{{slide.number}}'}}},
+    design: {header: {start: {text: s.header}, center: {text: '{{organization.name}}'}}, footer: {start: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: s.footer}, end: {text: '{{slide.number}}'}}},
     assets: {photo: {src: dataUri('wide.png', 'image/png'), alt: s.title}},
     slides: [
       {title: s.title, subtitle: s.text, items: s.items, notes: s.notes},

@@ -144,7 +144,7 @@ describe("inlineDatasets", () => {
     slides: [
       { title: "Chart", chart: { type: "column", data: { dataset: "revenue", fields: ["Quarter", "Revenue"] }, mapping: { series: ["Revenue"] } } },
       { title: "Table", blocks: [{ table: { dataset: "revenue" } }, { table: { dataset: "missing" } }] },
-      { title: "Regions", left: { chart: { type: "line", data: { dataset: "revenue" } } }, right: { text: "x" } },
+      { title: "Regions", start: { chart: { type: "line", data: { dataset: "revenue" } } }, end: { text: "x" } },
     ],
   });
 
@@ -162,7 +162,7 @@ describe("inlineDatasets", () => {
     assert.deepEqual(out.slides[0].chart.mapping, { series: ["Revenue"] });
     assert.deepEqual(out.slides[1].blocks[0].table, { columns: ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Costs"], rows: revenue().rows });
     assert.deepEqual(out.slides[1].blocks[1].table, { dataset: "missing" }, "unknown ids are left as they are");
-    assert.equal(out.slides[2].left.chart.data.columns.length, 3);
+    assert.equal(out.slides[2].start.chart.data.columns.length, 3);
     assert.deepEqual(out.datasets, input.datasets, "datasets stay in place");
     out.slides[1].blocks[0].table.rows[0][1] = 99;
     assert.equal(input.datasets.revenue.rows[0][1], 12, "rows are copies");
@@ -285,7 +285,7 @@ describe("resolveChartData", () => {
 describe("resolveTableData and display values", () => {
   test("inline tables: header formats (DataColumn and StyledTableCell)", () => {
     const table = {
-      columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "right" }, format: "0%" }],
+      columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "end" }, format: "0%" }],
       rows: [["EMEA", 8.2, 0.4], ["APAC", 6.1, { value: 0.52, format: "0.0%" }]],
     };
     const result = resolveTableData(table);
@@ -331,7 +331,7 @@ describe("validation findings", () => {
         { title: "Chart", chart: { type: "column", data: { dataset: "revenue", fields: ["Quarter", "Revenue", "Costs"] }, mapping: { category: "Quarter", series: ["Costs", "Revenue"] } } },
         { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31], ["Q2", "0.34"]], source: { src: "./margin.csv", sheet: "Sheet1", range: "A1:B3", fields: ["Quarter", "Margin"], retrieved: "2026-10-05T09:30:00Z", description: "Finance export" } } } },
         { title: "Table", table: { dataset: "revenue", fields: ["Quarter", "Revenue"] } },
-        { title: "Formats", table: { columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "right" }, format: "0%" }], rows: [["EMEA", 8.2, 0.4], ["APAC", 6.1, { value: 0.52, format: "0.0%" }]] } },
+        { title: "Formats", table: { columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "end" }, format: "0%" }], rows: [["EMEA", 8.2, 0.4], ["APAC", 6.1, { value: 0.52, format: "0.0%" }]] } },
       ],
     });
     assert.deepEqual(issues(document), { valid: true, errors: [], warnings: [] });
@@ -508,7 +508,7 @@ describe("core integration", () => {
     assert.equal(layout.rows[1].cells[1].value, "$12.0");
     assert.equal(layout.rows[1].cells[1].input, 12);
     assert.equal(layout.rows[1].cells[2].value, 8, "a column without a format keeps its value");
-    const styled = layoutTable({ columns: ["a", { value: "b", format: "0%" }], rows: [[1, 0.5], [2, { value: 0.25, format: "0.0%", style: { align: "right" } }]] }, { x: 0, y: 0, width: 600, height: 300 });
+    const styled = layoutTable({ columns: ["a", { value: "b", format: "0%" }], rows: [[1, 0.5], [2, { value: 0.25, format: "0.0%", style: { align: "end" } }]] }, { x: 0, y: 0, width: 600, height: 300 });
     assert.equal(styled.rows[1].cells[1].value, "50%");
     assert.equal(styled.rows[2].cells[1].value, "25.0%");
     assert.equal(styled.rows[2].cells[1].style.align, "right");
@@ -640,7 +640,7 @@ describe("RR-54 review", () => {
     ]);
     assert.equal(check(deck({ slides: [{ chart: { type: "column", data: { src: "asset:x", columns: ["a"] } } }] })).valid, false);
     // A table header object: 'value' selects StyledTableCell, 'name' DataColumn.
-    assert.deepEqual(errors(deck({ slides: [{ table: { columns: [{ name: "R", style: { align: "right" } }], rows: [[1]] } }] })), [
+    assert.deepEqual(errors(deck({ slides: [{ table: { columns: [{ name: "R", style: { align: "end" } }], rows: [[1]] } }] })), [
       ["/slides/0/table/columns/0", "must NOT have additional properties"],
     ]);
     // Dataset-backed and inline tables: the exclusive fields are named.
