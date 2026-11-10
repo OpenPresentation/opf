@@ -1,3 +1,47 @@
+# Current checkpoint: cold-start repair ready for paired measurement
+
+v0.33.0 is published. **v0.34.0 is unpublished.** All 31 original issue1139 checkbox lines remain intact (21 checked, 10 open). No original item is waived by the work below. Canonical PR1225 remains e5de880999235872f4c44fe646e78fec49c16baa; reviewed staging runtime is d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e, with prior metadata276f339a68069dc11970d649092d6181c9feba38. Evidence-only branches must never be merged, and folded feature leaves must never receive another push.
+
+## Owner's cold-start question
+
+The original 36-slide preparation plus first SVG batch measured3487→3960ms (13.6% slower). Independently replayed diagnostic697100785cc10bb21d03dce13907a926baf64935 proves that two complete recording/composition passes dominate preparation. Local font reads/hashing were about3ms; this is repeated analysis work, not hundreds of milliseconds reading three files. The original uninstrumented results and instrumented attribution remain distinct.
+
+New frozen replay candidate3360d18d0c0366b90ed0a746479097923b4acde3, runtime36c8eb798286fd8d30cc2a6cfe16e857d9338cde, is pushed on codex/rr-114-demand-replay. Root source review and independent111-record/485178-byte verifier pass, including104 exact functional SVG pairs across the original cap-refusal and final compact controls. The owner16/36 inputs now record16/36 rather than32/72 times, selecting exactly the same three faces/files. The unchanged4096-event/512KiB cap retains438742/511836 logical bytes; these are bounded logical accounting values, not physical process-memory claims. Initial cap refusals, semantic REDs and held-read callback/catalog-mutation controls remain lossless. Final33focused/21neighbor tests, lazy558/CE20 and337-file syntax checks pass. No timing or RSS improvement is claimed yet.
+
+The lead owns a NEW evidence-only before/after driver: demand3-face mode on both sides, fresh Node24 children in mirrored order, exact16/36 inputs, preparation+first total, two warm renders, CPU, rendering maxRSS and post-GC JS heap, exact output/font/file/license identities. Root must inspect and freeze it before one exclusive measurement. The first read-only control audit detected stale dist; this was a setup refusal before timing. Dedicated C:/opf-work/replay-control is now clean at exact276, pinned offline install and normal core/gallery/render build terminal0. Do not mutate that control or frozen candidate. Root alone authorizes the timing window. No whole131-versus-demand3 confounding, retries, raised caps or unmeasured speed claims.
+
+## Reviewed integration source and current main
+
+Fresh maina52dc9441f7eec9dc6f72debb174339758e1761e (MCP viewer redesignPR1254) is normally merged; its mainCI42719469318 actually completed SUCCESS. Reviewed folds are chart-conformance1b81e613, RR117a3df5821, validationreports64c27957, native fontcompat5a585739 and MCP-main alignmentd2edd18c. Root verifiers preserve all prior burndown bytes and exact8/11/11 affected runtime blobs for reports/fontcompat/main alignment. Main's UI/Export and staging's guarded exact-source/binary host transport remain together. The affected tests/source reviews are accepted; one coherent mapped/CI/Full/Slow/native/golden gate is still owed. No old-source suite qualifies this new union.
+
+## Recovery P0: real deployed flows checked; final head still needs qualification
+
+SitePR214 current head6fa5d44eb59b9d689de977f479dd84a9feb114aa/tree66b7021724b2b335781fdd8a65ce7c5ccf6937c5 is pushed and clean. Shipping application bytes remain exactly421aa6a6; the final delta changes only browser-test setup and append-only evidence. All prior30s case limits and semantic assertions are intact.
+
+421 completed ordinary CI and the maintained chained NativePreview. Its actual source-bound receipt is deploymentbed9066c-7d91-40c4-86e1-da1cdc8e635a, immutableURL https://bed9066c-openpresentation-site.michael-136.workers.dev; receiptartifact13721062693/qualificationartifact13720328721. Root and B checked29 distinct deployed flows:18 recovery/mobile/dark/sample/storage cases,9 workspace/source/Open cases and2 actual LayoutStudio asynchronous refusal handoffs. Root independently viewed4 deployed captures and replayed main127 plus supplemental2084 lossless evidence records. Earlier virtualized-source and cold-start setup failures remain preserved; they are not silently counted as passing app assertions.
+
+Current6fa needs its OWN maintained qualification and source-bound receipt. Sole root observer71287 runs scripts/pr-gate.mjs --expect-head6fa --required all --interval180; logs C:/opf-work/site214-gate05.log and eventual-exit JSON. Earlier1586 actually exited0 for421. Do not promote an old receipt, create a second observer, merge an old green head or manually duplicate uploads. After current qualification, use the maintained exact-head merge and inspect actual main production/source/MCP behavior. Later explicit deployment/Preview permission is effective; login/DNS/account visibility remain owner-only.
+
+## Native and future-site work remain separate
+
+Root reconciled existing A03/B01/C01 primary-proofing observations without another Office run. Evidence-only fb37046f043f860c8887e0574620ef3c507e3fa4 contains452 lossless records/3447922 decoded bytes,9 phases/27 actualLanguageID1025 observations. All9 PNGs are identical; the first English line remains visually reversed. All3 inheritance alternatives are rejected. Original glyph05/06/09/10 stay OPEN. B now owns SOURCE/PURE-only paragraph-direction getters mechanically derived from b846's three-phase safe lifecycle; no setters, language waiver or new Office run.
+
+A's new explicit-reference profile/controller passed18 focused tests,55 actual-function managed fake faults and actual-child default-pure admission on6bdd823a9ee2d6120c187f17df7ac023717b11ed. No genuine package generation/export/shape-count acceptance or Office run happened. A seals source/evidence for root review; root-only current-consumer and native acceptance remain next, with all original59 inputs and fd13/2400/ce92 producers immutable.
+
+Future034 site source is reviewed and frozen: orgPR216 head4f0d6020c466accaa473944485dc4a8f3ea19fe9 (G2 explicit reference lesson;3 full JSON fences,033 build/contracts pass) and galleryPR180 head2179efb61efed90afed87291a04a36b271a09b3f (H3 four new layout overlays;40 canonical records/prior36+18 overlays preserved). Root independently replayed17/20 evidence records and reviewed the content. Gallery's unchanged033 unknown-ID guard correctly refuses future layouts. Never merge these to033; fold into actual034 bump PRs, regenerate all assets, build and verify real previews then.
+
+## Unified next actions
+
+- Lead: freeze the paired replay benchmark; root reviews, authorizes a quiet window, measures and reviews before any fold.
+- A: finish/push explicit-reference controller source/evidence; root reviews before genuine current-consumer generation/export and root-only Office.
+- B: bounded read-only B07 paragraph-direction SOURCE/PURE diagnostic; keep all failed hypotheses and original native scope.
+- Root: current-head site214 qualification/merge/production; maintain issue1139 and this handoff, then complete original current59+references/table/histogram/seven/glyph/SH21 liveSmartArt/E1/E3 acceptance.
+- Final delivery: one coherent mapped/default-main/Full/Slow/cross-platform/packed/registry/npm12/native gate; ONE managed golden refresh and all moved sheets/causal PPTX archive review; strict trackers/catalog-free/bundles; Release dry run and trusted034 publish; then ALL THREE actual034 site/doc/example/gallery/MCP updates and production verification.
+
+DEV033 exact two-secret transfer remains held after automatic approval review rejected it. Do not read/copy values or work around it. D2, LibreOffice promotion, Claude connector setup and local .mcpb uninstall remain owner-only. All other meaningful work continues. No release, production deploy, Office run or managed golden refresh occurred in this checkpoint.
+
+## Prior checkpoint retained verbatim
+
 # Current source wave: reviewed font/report/main repairs folded
 
 Source union d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e normally includes freshmaina52 (MCPviewerPR1254), reviewedRR117a3df, validationreport64c, nativefontcompat5a585, chartconformance1b81 and all earlier original folds. v0.33published; v0.34UNPUBLISHED. CanonicalPR1225 remains e5 until the coherent final push. All31originalissue1139checkboxes (21checked/10open) remain intact and in scope. Every folded leaf is FROZEN: bee8/PR1255,2d765(validation),a7a59(fontcompat),e45e(mainalignment),5a881(chart); NEVERpush them. No evidence-only branch was merged.
