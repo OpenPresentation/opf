@@ -11,6 +11,7 @@ import {inspectReferenceRuntimeRoutes} from './reference-runtime-routes.mjs';
 import {preparationInputPaths} from './prepare.mjs';
 import {readB07PackedProof} from './b07-current-generate.mjs';
 import {readB07Sources,b07SourceSummary} from './b07-current-source.mjs';
+import {readB07SuccessfulStages} from './b07-stages.mjs';
 
 export const B07_PROFILE='b07-current-one-case-readonly-v1';
 export const B07_REVIEWED_WORKER='6831f30a6ecec7ffec870e9aaf80dda27f2bab9a';
@@ -163,7 +164,7 @@ export async function observeB07Profile(file,sha,output){
   for(const [key,original,snapshot,expected]of pairs){assert.equal(request[key].path,path.join(output,original));assert.equal(request[key].snapshotPath,path.join(output,snapshot));assert.equal(request[key].sha256,expected);assert.equal(request[key].snapshotSha256,expected);assert.equal(digest(await read(snapshot)),expected);assert.equal(report[key].path,request[key].path);assert.equal(report[key].sha256,expected);assert.equal(report[key].snapshotPath??report.source.openedPath,path.join(output,snapshot));assert.equal(report[key].snapshotSha256??report.source.openedSha256,expected);}
   for(const [key,name]of[['verifier','native-furniture-control.ps1'],['processHelper','native-process.ps1']]){const record=envelope.workerRepository.files.find(item=>item.path==='packages/pptx/test/'+name);assert.equal(request[key].path,path.join(envelope.spec.workerRepository,'packages/pptx/test',name));assert.equal(request[key].sha256,record.sha256);assert.equal(request[key].snapshotPath,path.join(native,'inputs',name));assert.equal(request[key].snapshotSha256,record.sha256);assert.equal(digest(await read('native/inputs/'+name)),record.sha256);assert.deepEqual(report.inputs[key],request[key]);}
   assert.deepEqual(report.actionPlan.actions,[]);assert.deepEqual(report.actionPlan.completed,[]);assert.equal(request.actionPlan.count,0);
-  const stageBytes=await read('native/stages.jsonl'),stages=stageBytes.toString('utf8').replace(/^\uFEFF/u,'').trim().split(/\r?\n/u).map(line=>JSON.parse(line));assert.ok(stages.length>0&&stages.length<5000);for(const [index,stage]of stages.entries()){assert.equal(stage.sequence,index+1);assert.equal(stage.error,null);assert.equal(stage.officeOperationsStopped,false);}assert.equal(stages.at(-1).stage,'worker.complete');assert.equal(stages.at(-1).status,'success');
+  readB07SuccessfulStages(await read('native/stages.jsonl'));
   const phases={};for(const phase of['original','edited','reopened']){
     const state=report.phases[phase],observed=bindB07ObservedPhase(state,source.probe.value),relative=`native/${phase}-slide-01.png`,png=await read(relative);assert.equal(state.rasters[0].path,path.join(output,relative));assert.equal(state.rasters[0].sha256,digest(png));const dimensions=b07PngDimensions(png);assert.deepEqual(dimensions,{width:1280,height:720});phases[phase]={observed,png:{path:relative,bytes:png.length,sha256:digest(png),...dimensions},raw:state};
   }
