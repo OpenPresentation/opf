@@ -1,0 +1,11 @@
+{
+  "classification": "Public/synthetic same-project OPF/PPTX, reviewed source/code, deterministic pure mutants, fake-object reports and mocked PNGs only",
+  "realOfficeBinaries": 0,
+  "fontBinaries": 0,
+  "syntheticExecutableMetadataStubs": 71,
+  "syntheticPngStubs": 23,
+  "environmentSnapshots": 0,
+  "credentialsOrSignedUrlsIncluded": false,
+  "source": "Explicit fixed source constructors and complete archived file inventory; not a blanket secret scanner claim",
+  "officeInvoked": false
+}

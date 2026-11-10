@@ -1,0 +1,318 @@
+{
+  "schemaVersion": 1,
+  "profile": "b07-independent-segments-readonly-v1",
+  "sourceHead": "74c129eac5c8cdc54b807375f47d3694ec8e9140",
+  "sourceTree": "666ce5e4fd8cb72e3b7b3ef523901d1f24b811dd",
+  "baseMain": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "artifactEvidenceHead": "07406627197535f77fb98fed27e601fb1a71832a",
+  "archive": {
+    "path": "raw.json.gz",
+    "bytes": 849515,
+    "sha256": "9cd2782fd93bf49d65523c48a6f92a64960868395a7c7755dfda593640c9097f",
+    "expandedBytes": 5397351
+  },
+  "rawRecords": 397,
+  "rawFileBytes": 3985102,
+  "sourceFiles": [
+    {
+      "path": "tools/rr105-native-segment-observer/.gitattributes",
+      "bytes": 42,
+      "sha256": "9cb1513f02ae8f9e475437641b70f055770cc15bbd4d444a23df739eb22d553d",
+      "gitBlob": "513e7f1171915347a703e0f51eeb95b488701325"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/README.md",
+      "bytes": 4772,
+      "sha256": "05ee2cbf8d1f3a247d23564ec2ac0375fd46c693b140bb249652dcfe021df540",
+      "gitBlob": "9d77c8ad86371e50ee2f17535d2b94a4c63f57ed"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/SOURCE.json",
+      "bytes": 9139,
+      "sha256": "ce67110ccd28b1467feb2dc2aeb460823fe041ccab350af340268dc3ea3633cb",
+      "gitBlob": "192a76273be5f7778917ba0c6f9199fc240af2c8"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/audit-functions.ps1",
+      "bytes": 1819,
+      "sha256": "6046cda1dc20360ea581ce966f507639ae320691b762ac53c200aa08036cb55e",
+      "gitBlob": "8d4be1307503d4f0bc0f58b22f451438c5ee804b"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/data-tools.mjs",
+      "bytes": 7315,
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8",
+      "gitBlob": "385ea2f4c775e70d600086c1054bce9606eb63e5"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/history/derive-initial.mjs",
+      "bytes": 14719,
+      "sha256": "51cab83ff32864a89d34af7a81da84296e66a61b496dbbcdfda2aded226eec39",
+      "gitBlob": "b48a2b995c81daac4dbc8965850715f044403c17"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/history/derive-managed-initial.mjs",
+      "bytes": 8621,
+      "sha256": "65bd8297b3e9c5e7d9ed71464a9bd9e47a840cf1c3fd9afcdaefc7a71f8d6b00",
+      "gitBlob": "d0379b7d2d5e4015c49b114bfdb245e184985949"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/managed.ps1",
+      "bytes": 20475,
+      "sha256": "ac77b6635d3c37d06e1124ce370d7f37b4a3acab50bbb56df3aaf787415749fa",
+      "gitBlob": "78051f118100a7d4493b562d4a3127888e0a1768"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+      "gitBlob": "3d8754b1d15baa944b1dabe42b71ec01b823afc1"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/prepare-references.mjs",
+      "bytes": 5655,
+      "sha256": "ba4a04b42f068c99dcc85892bd5127d4988e02e2f95cc11ea648ac4b160cf05c",
+      "gitBlob": "51c7eaf9d16785d9216e097665cde78654b90aaa"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/profile.mjs",
+      "bytes": 16724,
+      "sha256": "cdfa575aa7ba0525b0975b2d40609317a20f1c8839705a91be1b3daa3b4b1700",
+      "gitBlob": "b305883b816cc1c03d2687d4c93f595d5859ff0d"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-managed.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038",
+      "gitBlob": "eff934c819528ae88e4bc815a0deb14c93cedf33"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda",
+      "gitBlob": "2d998abcbb21965037dda8b677c50978ef7485f2"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/base-wrapper.ps1",
+      "bytes": 11352,
+      "sha256": "26f964e141cebe1f63ff39c18b6bda79364e134fa6436973bb2b5a603b21110d",
+      "gitBlob": "0bd4662d49cf3e8143ac9712a6e5856ddc2730a0"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/expectation.json",
+      "bytes": 4131,
+      "sha256": "dcfa2c313c38c1582a66df74c3e249738ac9fd9ef43da09603f14252ff6e2383",
+      "gitBlob": "3125d6732144a965f00148b1499cae564945241a"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+      "bytes": 101006,
+      "sha256": "7c4b61ae2421b1611c9ff4c2b0db6b871e2f5896d502f38a42ca796b44824a70",
+      "gitBlob": "76c4cceebc3fa2305334b32e19aebfb4997d6863"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/original.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+      "gitBlob": "b989682ee5a26555b09e7e9da79f3d5e64688708"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc",
+      "gitBlob": "ab48836e88091d50245e73de692e77c97bde2c36"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/expectation.json",
+      "bytes": 4208,
+      "sha256": "b3a484b739f756a2121d4f6b1c0cd389fcfec51c7f43ff6285d3ef7d63ae0ab2",
+      "gitBlob": "09d01f04c4319f77fcc727a83b81ef12f2e18905"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "bytes": 101005,
+      "sha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad",
+      "gitBlob": "baa0f97ab8c8a48f5ba35dc3a54a3ab48c27be7c"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/original.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331",
+      "gitBlob": "f5c31800bd77a0bd1f01d044a9824976aa13f500"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923",
+      "gitBlob": "75007af9dc6de097c2c0b867931152bb416550dc"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/expectation.json",
+      "bytes": 5248,
+      "sha256": "febc22a7a4ea534ed68bac19818c70925b9121ee2c9d4e77063ae1d63441f46d",
+      "gitBlob": "c2fdab5021e3dd100e14207c67c0411e59d8be16"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "bytes": 101121,
+      "sha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c",
+      "gitBlob": "242f1ef64cff1e1e0751765a2d26a8ece3105b3e"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/original.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+      "gitBlob": "99b91eebdf1526fdae510921e39849a5498d8e41"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c",
+      "gitBlob": "2723a64ab7ab54b2e094689233059e8d27d2456e"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/expectation.json",
+      "bytes": 18335,
+      "sha256": "383cf18a052d3c98df0b52d8302dbbf23cd2d64bdcca90b65fa950d6de6b6778",
+      "gitBlob": "bb0ae1f6f36ef6a2e27dd47d089bb800990a036f"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "bytes": 102841,
+      "sha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb",
+      "gitBlob": "bb20dbce25bc5dd4d2971b55f4e07c7fc89449d6"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/original.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2",
+      "gitBlob": "8fcc3a0656d91c83c45514226d3709ad192e66cd"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+      "gitBlob": "4d1522cf58872e8eac3168186ef3f68e128d4560"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/expectation.json",
+      "bytes": 3116,
+      "sha256": "52b79e6a85ea16c86386525d23ae43d308f032ef5418943849f44779c053be4c",
+      "gitBlob": "59b36fa4df9dcd02e85a78da5d1b13d549286160"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/input.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "gitBlob": "a7a52f2ddbb4fb0da67b8e6e25c0fed91c1469aa"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/original.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "gitBlob": "a7a52f2ddbb4fb0da67b8e6e25c0fed91c1469aa"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/references/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303",
+      "gitBlob": "dc567dbd3190da81a20450d9e66b1bfeca36a0ab"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/run-managed.mjs",
+      "bytes": 1870,
+      "sha256": "6be08c0b96e8788cc9653540a3dc28e98c21f6ee08e644bb168c37ff77c210b6",
+      "gitBlob": "c284c7d7dfc41fb0f1dfebc3ee51fd620bb397d0"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/run-segment-observer.ps1",
+      "bytes": 10845,
+      "sha256": "0ea83545c350752ec1c6f045004ce89071104173bc04458fc2924adabe39f93c",
+      "gitBlob": "d0e9462246a1f4db00e40e8adf13d4513c6a1027"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7",
+      "gitBlob": "ac83eb76eb0db5ac490def9b1b5b7ef49952ae71"
+    },
+    {
+      "path": "tools/rr105-native-segment-observer/test.mjs",
+      "bytes": 7805,
+      "sha256": "13b22dd6a388fabb4d202e3cba94f1a1bf73f8ab2a67e11b4bd44c1cac2378a6",
+      "gitBlob": "7fcd944ab6ae0987c8498c2f98cc9c5cac0af157"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "path": "packages",
+      "gitObject": "505c904c20eef735367e91058488c47b2c0238ad"
+    },
+    {
+      "path": "spec",
+      "gitObject": "d7107be1cf1e020d9e17769dec09c7c4bf2a808d"
+    },
+    {
+      "path": "scripts",
+      "gitObject": "902d74ad453e1127ac5124757cd8849d780de2c4"
+    },
+    {
+      "path": ".github",
+      "gitObject": "5a4a74222b1a29b70a1f3f5ccacf003eb525a8ed"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "gitObject": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "gitObject": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "path": "package.json",
+      "gitObject": "88d10438bf85e0131f824c5ec2b9787b97ef39cb"
+    },
+    {
+      "path": "biome.json",
+      "gitObject": "673b798c90addbb22a8769eea3f8909883e200ec"
+    },
+    {
+      "path": "AGENTS.md",
+      "gitObject": "2599428b920839cf7eca5004ebe1b3d22eb50d9a"
+    }
+  ],
+  "links": [
+    {
+      "path": "admission/aliased",
+      "type": "junction/symbolic link",
+      "target": "C:\\opf-work\\b07-seg-observe\\tools\\rr105-native-segment-observer",
+      "followed": false
+    }
+  ],
+  "results": {
+    "managedControls": 70,
+    "admissionControls": 45,
+    "neutralFunctionsExact": 18,
+    "totalBaseFunctions": 21,
+    "exactCases": 5,
+    "shapeCounts": [
+      4,
+      4,
+      5,
+      20,
+      3
+    ],
+    "serializedCoordinateChecks": 288,
+    "officeInvoked": false,
+    "nativeAcceptance": false,
+    "publicImportAcceptance": false,
+    "registryAcceptance": false
+  },
+  "qualificationScope": "Source, exact immutable archives, actual-function managed fake objects and actual default pure wrapper snapshots only; no Office/COM/real process query, install/build/export/ValidateOnly/native paint/public import.",
+  "earlierFailures": [
+    "managed01 source expected Decimal→Double ULP refusal, status1",
+    "PS5-number01 primitive formatting exception, no native calls",
+    "formatter01 configuration/version/ignored-path refusal, no source changed",
+    "whitespace01 new AST-audit final CRLF, corrected only new text endings"
+  ]
+}
