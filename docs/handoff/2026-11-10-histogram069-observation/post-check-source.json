@@ -1,0 +1,12 @@
+{
+  "producerHead": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "producerStatus": "",
+  "installedIdentityBeforeSha256": "724c718a2d449b912394f0bf76e828b3e2da72c8f9211881eadc864f2d40e15e",
+  "installedIdentityAfterSha256": "724c718a2d449b912394f0bf76e828b3e2da72c8f9211881eadc864f2d40e15e",
+  "identitiesDeepEqual": true,
+  "suiteSha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29",
+  "originalInputSha256": "84a5eaca1a7ca44f199e7f72b166eeaa7d33222e57766585b2fd4db6230c24f3",
+  "OfficeCalls": 0,
+  "producerBuild": false,
+  "consumerMutation": false
+}

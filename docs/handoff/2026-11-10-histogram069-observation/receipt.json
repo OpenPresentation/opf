@@ -1,0 +1,1936 @@
+{
+  "schema": 1,
+  "source": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "suiteSha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29",
+  "inputSha256": "84a5eaca1a7ca44f199e7f72b166eeaa7d33222e57766585b2fd4db6230c24f3",
+  "case": "chart-histogram-category",
+  "logicalFiles": 315,
+  "logicalBytes": 3991656,
+  "archive": {
+    "path": "raw-01.zip",
+    "bytes": 4054518,
+    "sha256": "c1de2944236821c51598a4b326a6eca989a3687544951f8f4ba047d6abfa22d8"
+  },
+  "files": [
+    {
+      "path": "audit-exit.json",
+      "member": "raw/audit-exit.json",
+      "bytes": 147,
+      "sha256": "1acde579fe849b647fd6c114d5853de9c9a89fa3d387c772b76fdff389715d77"
+    },
+    {
+      "path": "audit.json",
+      "member": "raw/audit.json",
+      "bytes": 123070,
+      "sha256": "413426c39ae2fae80c4d319e95508f2254271b2a3c9331a782464062e8d8e047"
+    },
+    {
+      "path": "audit.log",
+      "member": "raw/audit.log",
+      "bytes": 2782,
+      "sha256": "ebe8772e723a77b0865b6b7cd343e8c8dfc92a956f663cb082699a3a21f33a5e"
+    },
+    {
+      "path": "audit.mjs",
+      "member": "raw/audit.mjs",
+      "bytes": 8917,
+      "sha256": "35357b9cfa6f77857da757af507f1d3cbede1e2e66f2283473a3182e30101084"
+    },
+    {
+      "path": "installed-identity.json",
+      "member": "raw/installed-identity.json",
+      "bytes": 112950,
+      "sha256": "a90cf3028b21806fafc2062055d2a6da73c1b4a8e2bdcab90888d588ee3a733e"
+    },
+    {
+      "path": "original-import-diagnostics.json",
+      "member": "raw/original-import-diagnostics.json",
+      "bytes": 529,
+      "sha256": "8a409348d31367132155fca3a14fbe22b036c6902ef314f9ceda3218811e1e63"
+    },
+    {
+      "path": "original-import.json",
+      "member": "raw/original-import.json",
+      "bytes": 5452,
+      "sha256": "aed81d5017f88f9774d7261b56a756c70ee3ce4ce8b3cb8876f2b3fc1356e3f6"
+    },
+    {
+      "path": "original-ppt__charts___rels__chart1.xml.rels",
+      "member": "raw/original-ppt__charts___rels__chart1.xml.rels",
+      "bytes": 318,
+      "sha256": "e8251d095aee5afe902d788febf1b4ed304d0a5c3960ea903fd60dccf922b753"
+    },
+    {
+      "path": "original-ppt__charts__chart1.xml",
+      "member": "raw/original-ppt__charts__chart1.xml",
+      "bytes": 5136,
+      "sha256": "9c719120dfa879467ed00bef560829cb5a2cac8ca84c5edd3c893b8f6616527b"
+    },
+    {
+      "path": "original-ppt__slides__slide1.xml",
+      "member": "raw/original-ppt__slides__slide1.xml",
+      "bytes": 2390,
+      "sha256": "5d0efe76deeb1fa7f41626fc5b3a5c45938c7fb5a8be88a00c87526dbca8644a"
+    },
+    {
+      "path": "original-ppt__theme__theme1.xml",
+      "member": "raw/original-ppt__theme__theme1.xml",
+      "bytes": 8315,
+      "sha256": "f381fe5a6a325fae61db27da3d46b5c0901bdd94f4540abcc3bc482238f32bad"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-launch-setup-refusal01.json",
+      "member": "raw/raw/driver/n034-current-histogram-launch-setup-refusal01.json",
+      "bytes": 406,
+      "sha256": "672462b760ed8a81f99ca305d52dec15487cec50472d196a98f1ccc1cdb654e9"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-launch-setup-refusal01.log",
+      "member": "raw/raw/driver/n034-current-histogram-launch-setup-refusal01.log",
+      "bytes": 1487,
+      "sha256": "11569466ba4f52f8bb23f4a1f5026df93164fc933c4f5bc949bfdc070603ab3f"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-native-launch01.mjs",
+      "member": "raw/raw/driver/n034-current-histogram-native-launch01.mjs",
+      "bytes": 2604,
+      "sha256": "f36d92cb39b329254295e0640f6b50906a849c9e387fdb8f9fc9117c8eabe5ea"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-native01-exit.json",
+      "member": "raw/raw/driver/n034-current-histogram-native01-exit.json",
+      "bytes": 1205,
+      "sha256": "0eca677fd48507712b0fec6de1f474c98af741449993a6dde906e6bac6612028"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-native01-postflight.json",
+      "member": "raw/raw/driver/n034-current-histogram-native01-postflight.json",
+      "bytes": 82,
+      "sha256": "3a0929cbf6e2c96ec63ba94e8230f99e022af037bf8bcce01cdb3d02e2ffa2c1"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-native01-preflight.json",
+      "member": "raw/raw/driver/n034-current-histogram-native01-preflight.json",
+      "bytes": 82,
+      "sha256": "dbd3c33f8395d5f567df34782f5f1559a213f32b53e6e513099a91eacfa84712"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-native01.stderr.log",
+      "member": "raw/raw/driver/n034-current-histogram-native01.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-native01.stdout.log",
+      "member": "raw/raw/driver/n034-current-histogram-native01.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-validate-launch01.mjs",
+      "member": "raw/raw/driver/n034-current-histogram-validate-launch01.mjs",
+      "bytes": 2544,
+      "sha256": "f7bd256f325e61b455c073e914fc8ff6e05dc2e347607c1db1dc37b181d7cd52"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-validate-launch02.mjs",
+      "member": "raw/raw/driver/n034-current-histogram-validate-launch02.mjs",
+      "bytes": 2545,
+      "sha256": "ea1c2fe03125a69db1d28e6d12ac48b9d86d7ed91f8d5ed6b4899dc116e5d6d9"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-validate01-exit.json",
+      "member": "raw/raw/driver/n034-current-histogram-validate01-exit.json",
+      "bytes": 1229,
+      "sha256": "f2ce5e2ddd973c21b1ff4a9097e9b009f55582e3f3ecb2c70bad856794280764"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-validate01.stderr.log",
+      "member": "raw/raw/driver/n034-current-histogram-validate01.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/driver/n034-current-histogram-validate01.stdout.log",
+      "member": "raw/raw/driver/n034-current-histogram-validate01.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/native/furniture-harness.log",
+      "member": "raw/raw/native/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "path": "raw/native/harness/furniture.json",
+      "member": "raw/raw/native/harness/furniture.json",
+      "bytes": 310068,
+      "sha256": "08c46831e9eede35d3a869b9bbd07b3a19742d08d3723de6b079089670f8ef7b"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/close-failure.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/copy-failure.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/copy-identity-change.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/empty-list.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/existing-output-saved.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/existing-output.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/fractional-move-index.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-common-op-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-common-op-null.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-common-op-number.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/legacy-text-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/malformed-json.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/move-index-four.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/multi-empty-alt.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/non-list-root.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/null-entry.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/numeric-target.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/numeric-text.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-chartName-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-chartName-empty.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-chartName-number.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-chartName-too-long.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-common-op-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-common-op-null.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-common-op-number.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-common-shape-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-common-shape-null.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-common-shape-number.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-common-slide-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-common-slide-null.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-edge-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-edge-case.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-edge-unsupported.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-index-upper-bound.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-kind-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-kind-case.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-kind-marker.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-kind-slice.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-kind-unsupported.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-missing-chartKind.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-missing-chartName.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-missing-edge.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-missing-valueSign.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-pointIndex-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-pointIndex-null.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-pointIndex-string.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-shapeName-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-shapeName-empty.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-sign-array.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-sign-boolean.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-sign-fraction.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-sign-string.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-sign-too-high.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-sign-too-low.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-unknown-field.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/point-zero-sign.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/quit-failure.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/same-path.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "bytes": 9449,
+      "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/singleton-empty-text.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/slide-index-four.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/slide-index-zero.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/string-slide-index.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-bool-size.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-both.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-color.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-empty.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-extra-key.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-hash-color.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-overflow.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-reference-color.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-short-color.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-size.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-string-size.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-too-big.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/style-zero.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/success-saved.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/success.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/twenty-one-actions.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/unknown-operation.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/unknown-property.json",
+      "member": "raw/raw/native/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/unowned-quit.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/writable-open.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/furniture.json.plans/wrong-open-path.pptx",
+      "member": "raw/raw/native/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/native/harness/process/failure/owned worker with spaces.ps1",
+      "member": "raw/raw/native/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "path": "raw/native/harness/process/failure/worker.json",
+      "member": "raw/raw/native/harness/process/failure/worker.json",
+      "bytes": 342,
+      "sha256": "e0c95324cbfa54f631adeef81d2e7beef7efeeb86b515c8d6bce029e18c244e5"
+    },
+    {
+      "path": "raw/native/harness/process/failure/worker.stderr.log",
+      "member": "raw/raw/native/harness/process/failure/worker.stderr.log",
+      "bytes": 327,
+      "sha256": "9135553e5ec1a884bffee077407bd3651d828d5deae4bcd2800a441808c5e906"
+    },
+    {
+      "path": "raw/native/harness/process/failure/worker.stdout.log",
+      "member": "raw/raw/native/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/native/harness/process/report.json",
+      "member": "raw/raw/native/harness/process/report.json",
+      "bytes": 1744,
+      "sha256": "18473064b3b97853bbcf53d60633521c953ee2e3b9a2aa12dfd1c7164db409b9"
+    },
+    {
+      "path": "raw/native/harness/process/success/owned worker with spaces.ps1",
+      "member": "raw/raw/native/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "path": "raw/native/harness/process/success/worker.json",
+      "member": "raw/raw/native/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "a3ecdc703d516b23a67155f8280535fc61d20d4ce884270163b2401424a6eb7b"
+    },
+    {
+      "path": "raw/native/harness/process/success/worker.stderr.log",
+      "member": "raw/raw/native/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/native/harness/process/success/worker.stdout.log",
+      "member": "raw/raw/native/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "path": "raw/native/harness/process/timeout/owned worker with spaces.ps1",
+      "member": "raw/raw/native/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "path": "raw/native/harness/process/timeout/worker.json",
+      "member": "raw/raw/native/harness/process/timeout/worker.json",
+      "bytes": 339,
+      "sha256": "418595e8be10bee7e2b4de51ef8dc0a83b3f78f061c621c2ff8bc5edd497f1de"
+    },
+    {
+      "path": "raw/native/harness/process/timeout/worker.stderr.log",
+      "member": "raw/raw/native/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/native/harness/process/timeout/worker.stdout.log",
+      "member": "raw/raw/native/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/native/inputs/action-plan.json",
+      "member": "raw/raw/native/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "raw/native/inputs/case.pptx",
+      "member": "raw/raw/native/inputs/case.pptx",
+      "bytes": 107605,
+      "sha256": "84a5eaca1a7ca44f199e7f72b166eeaa7d33222e57766585b2fd4db6230c24f3"
+    },
+    {
+      "path": "raw/native/native/edited-slide-01.png",
+      "member": "raw/raw/native/native/edited-slide-01.png",
+      "bytes": 8993,
+      "sha256": "c3626ebf3dd7b257651d37cd12f2a96c32b93c265c876a6c0fb14b21818bb289"
+    },
+    {
+      "path": "raw/native/native/inputs/action-plan.json",
+      "member": "raw/raw/native/native/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "raw/native/native/inputs/input.pptx",
+      "member": "raw/raw/native/native/inputs/input.pptx",
+      "bytes": 107605,
+      "sha256": "84a5eaca1a7ca44f199e7f72b166eeaa7d33222e57766585b2fd4db6230c24f3"
+    },
+    {
+      "path": "raw/native/native/inputs/native-furniture-control.ps1",
+      "member": "raw/raw/native/native/inputs/native-furniture-control.ps1",
+      "bytes": 71285,
+      "sha256": "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+    },
+    {
+      "path": "raw/native/native/inputs/native-process.ps1",
+      "member": "raw/raw/native/native/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "raw/native/native/native-furniture-control.pptx",
+      "member": "raw/raw/native/native/native-furniture-control.pptx",
+      "bytes": 111448,
+      "sha256": "e5b75cd8cd647fad341a81738b3ff3044bfbfa35c520ac06453a293ae046ebc1"
+    },
+    {
+      "path": "raw/native/native/original-slide-01.png",
+      "member": "raw/raw/native/native/original-slide-01.png",
+      "bytes": 8993,
+      "sha256": "c3626ebf3dd7b257651d37cd12f2a96c32b93c265c876a6c0fb14b21818bb289"
+    },
+    {
+      "path": "raw/native/native/progress.json",
+      "member": "raw/raw/native/native/progress.json",
+      "bytes": 271,
+      "sha256": "d29f305624dd98cbeea8bbb9c29d07be19a07f680185b5a378066387d450d3a5"
+    },
+    {
+      "path": "raw/native/native/reopened-slide-01.png",
+      "member": "raw/raw/native/native/reopened-slide-01.png",
+      "bytes": 8993,
+      "sha256": "c3626ebf3dd7b257651d37cd12f2a96c32b93c265c876a6c0fb14b21818bb289"
+    },
+    {
+      "path": "raw/native/native/report.json",
+      "member": "raw/raw/native/native/report.json",
+      "bytes": 27272,
+      "sha256": "720d33f0f69376cd681f63ad62a9897bf0d5382bbc554c53dbb8c9dc50012d0e"
+    },
+    {
+      "path": "raw/native/native/request.json",
+      "member": "raw/raw/native/native/request.json",
+      "bytes": 2055,
+      "sha256": "85033bb6843ac42106fa2f9bef7ef9d3af4c510f12c80ec59d1de302de5bec5e"
+    },
+    {
+      "path": "raw/native/native/stages.jsonl",
+      "member": "raw/raw/native/native/stages.jsonl",
+      "bytes": 105243,
+      "sha256": "e44aad7015e1133a1e9fcd151d70a8104e40994ba40fc25a73d6a76be3c342f6"
+    },
+    {
+      "path": "raw/native/native/supervisor.json",
+      "member": "raw/raw/native/native/supervisor.json",
+      "bytes": 220,
+      "sha256": "19d600a999c7ace23bd062729d5eee34e246cc071c2c13b11419a85c838a310e"
+    },
+    {
+      "path": "raw/native/native/worker.json",
+      "member": "raw/raw/native/native/worker.json",
+      "bytes": 341,
+      "sha256": "1609476a0e7b1f079b181434ea2c6bd6ca710c03cd036bf3c9d757297d70105c"
+    },
+    {
+      "path": "raw/native/native/worker.stderr.log",
+      "member": "raw/raw/native/native/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/native/native/worker.stdout.log",
+      "member": "raw/raw/native/native/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "path": "raw/native/native-worker.log",
+      "member": "raw/raw/native/native-worker.log",
+      "bytes": 110,
+      "sha256": "7eb006d13c4063d29bcac3f0004c8ccedd7319bac904a88d3f4e7615fc4f63ca"
+    },
+    {
+      "path": "raw/native/process-check.log",
+      "member": "raw/raw/native/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "path": "raw/native/runner.json",
+      "member": "raw/raw/native/runner.json",
+      "bytes": 545227,
+      "sha256": "893f480c4c0c5a38942008744a2b2499b305f8432a13e90e15ac450bab6c5168"
+    },
+    {
+      "path": "raw/suite/actions/chart-histogram-category.json",
+      "member": "raw/raw/suite/actions/chart-histogram-category.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "raw/suite/inputs/chart-histogram-category.pptx",
+      "member": "raw/raw/suite/inputs/chart-histogram-category.pptx",
+      "bytes": 107605,
+      "sha256": "84a5eaca1a7ca44f199e7f72b166eeaa7d33222e57766585b2fd4db6230c24f3"
+    },
+    {
+      "path": "raw/suite/inspection/chart-histogram-category-imported.opf.json",
+      "member": "raw/raw/suite/inspection/chart-histogram-category-imported.opf.json",
+      "bytes": 655,
+      "sha256": "64496c3d018f02b09775050592a016f2519f6d865f7a6c43070919923ebbe728"
+    },
+    {
+      "path": "raw/suite/inspection/chart-histogram-category.json",
+      "member": "raw/raw/suite/inspection/chart-histogram-category.json",
+      "bytes": 15416,
+      "sha256": "e1dc2b6d4c9aeaf10220ee0d5fd1470af820d58cd51dbc8c3c4a3de742bc512c"
+    },
+    {
+      "path": "raw/suite/previews/chart-histogram-category-01.png",
+      "member": "raw/raw/suite/previews/chart-histogram-category-01.png",
+      "bytes": 18753,
+      "sha256": "a87f6bf407924d8e446abcd22a54ad34bd7db15ee1dba251b820a6958a592d01"
+    },
+    {
+      "path": "raw/suite/previews/chart-histogram-category-01.svg",
+      "member": "raw/raw/suite/previews/chart-histogram-category-01.svg",
+      "bytes": 433264,
+      "sha256": "ed5faeb646aaa7e41e7f30ce03cde1dbcd7a09b3392cf05ca386e33630649881"
+    },
+    {
+      "path": "raw/suite/sources/chart-histogram-category.opf.json",
+      "member": "raw/raw/suite/sources/chart-histogram-category.opf.json",
+      "bytes": 658,
+      "sha256": "feacbc02309d0af1e0c9c9ddfc92465f1f6ac13e1359c0a4e4fb15bc5de70344"
+    },
+    {
+      "path": "raw/suite/suite.json",
+      "member": "raw/raw/suite/suite.json",
+      "bytes": 579228,
+      "sha256": "34139d3a8c84b4d975333691b6a2a3801f5d3da402dfe701062b6677de393d29"
+    },
+    {
+      "path": "raw/validate/furniture-harness.log",
+      "member": "raw/raw/validate/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json",
+      "member": "raw/raw/validate/harness/furniture.json",
+      "bytes": 310080,
+      "sha256": "2abaa7cde6a4e5d781b3e12e020df6cfc8eb1cf05f3f35aa8aa6c98e61f7782d"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/close-failure.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/copy-failure.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/copy-identity-change.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/empty-list.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/existing-output-saved.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/existing-output.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/fractional-move-index.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-common-op-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-common-op-null.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-common-op-number.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/legacy-text-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/malformed-json.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/move-index-four.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/multi-empty-alt.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/non-list-root.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/null-entry.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/numeric-target.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/numeric-text.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-chartName-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-chartName-empty.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-chartName-number.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-chartName-too-long.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-common-op-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-common-op-null.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-common-op-number.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-common-shape-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-common-shape-null.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-common-shape-number.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-common-slide-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-common-slide-null.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-edge-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-edge-case.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-edge-unsupported.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-index-upper-bound.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-kind-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-kind-case.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-kind-marker.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-kind-slice.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-kind-unsupported.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-missing-chartKind.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-missing-chartName.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-missing-edge.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-missing-valueSign.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-pointIndex-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-pointIndex-null.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-pointIndex-string.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-shapeName-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-shapeName-empty.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-sign-array.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-sign-boolean.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-sign-fraction.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-sign-string.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-sign-too-high.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-sign-too-low.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-unknown-field.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/point-zero-sign.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/quit-failure.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/same-path.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "bytes": 9449,
+      "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/singleton-empty-text.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/slide-index-four.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/slide-index-zero.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/string-slide-index.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-bool-size.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-both.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-color.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-empty.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-extra-key.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-hash-color.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-overflow.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-reference-color.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-short-color.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-size.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-string-size.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-too-big.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/style-zero.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/success-saved.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/success.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/twenty-one-actions.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/unknown-operation.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/unknown-property.json",
+      "member": "raw/raw/validate/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/unowned-quit.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/writable-open.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/furniture.json.plans/wrong-open-path.pptx",
+      "member": "raw/raw/validate/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "raw/validate/harness/process/failure/owned worker with spaces.ps1",
+      "member": "raw/raw/validate/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "path": "raw/validate/harness/process/failure/worker.json",
+      "member": "raw/raw/validate/harness/process/failure/worker.json",
+      "bytes": 342,
+      "sha256": "b10f3c6ca5929c04f8b80b99fedc10822e11a10b7fceba74686e65dea5ace8df"
+    },
+    {
+      "path": "raw/validate/harness/process/failure/worker.stderr.log",
+      "member": "raw/raw/validate/harness/process/failure/worker.stderr.log",
+      "bytes": 329,
+      "sha256": "e0a5903a5cb423045bbecd30013139dea765bf405a14907e6123323724270182"
+    },
+    {
+      "path": "raw/validate/harness/process/failure/worker.stdout.log",
+      "member": "raw/raw/validate/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/validate/harness/process/report.json",
+      "member": "raw/raw/validate/harness/process/report.json",
+      "bytes": 1745,
+      "sha256": "0cdd45a9223ced666419e0822c3890a7c6a046217326b61c2f9f8209d2370d00"
+    },
+    {
+      "path": "raw/validate/harness/process/success/owned worker with spaces.ps1",
+      "member": "raw/raw/validate/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "path": "raw/validate/harness/process/success/worker.json",
+      "member": "raw/raw/validate/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "5153edf4fff4634450e778af0777a55cdffe386b36da58bb8330592cd8c11c95"
+    },
+    {
+      "path": "raw/validate/harness/process/success/worker.stderr.log",
+      "member": "raw/raw/validate/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/validate/harness/process/success/worker.stdout.log",
+      "member": "raw/raw/validate/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "path": "raw/validate/harness/process/timeout/owned worker with spaces.ps1",
+      "member": "raw/raw/validate/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "path": "raw/validate/harness/process/timeout/worker.json",
+      "member": "raw/raw/validate/harness/process/timeout/worker.json",
+      "bytes": 340,
+      "sha256": "04b3426eaa2c287c55c67160262dcbda8ccfd13e3ce737613157fa0ea0ee7449"
+    },
+    {
+      "path": "raw/validate/harness/process/timeout/worker.stderr.log",
+      "member": "raw/raw/validate/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/validate/harness/process/timeout/worker.stdout.log",
+      "member": "raw/raw/validate/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/validate/inputs/action-plan.json",
+      "member": "raw/raw/validate/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "raw/validate/inputs/case.pptx",
+      "member": "raw/raw/validate/inputs/case.pptx",
+      "bytes": 107605,
+      "sha256": "84a5eaca1a7ca44f199e7f72b166eeaa7d33222e57766585b2fd4db6230c24f3"
+    },
+    {
+      "path": "raw/validate/process-check.log",
+      "member": "raw/raw/validate/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "path": "raw/validate/runner.json",
+      "member": "raw/raw/validate/runner.json",
+      "bytes": 545197,
+      "sha256": "68d250d03a085f5cfe9a8956873d9c74b767fbfa8b6edb15d918af6807bbc676"
+    },
+    {
+      "path": "raw-inventory.json",
+      "member": "raw/raw-inventory.json",
+      "bytes": 89761,
+      "sha256": "df5ef8f1b1d454c0c962cfc79b1dcdaca655b8dbab520b02fe0a6817a5c749f3"
+    },
+    {
+      "path": "saved-import-diagnostics.json",
+      "member": "raw/saved-import-diagnostics.json",
+      "bytes": 529,
+      "sha256": "8a409348d31367132155fca3a14fbe22b036c6902ef314f9ceda3218811e1e63"
+    },
+    {
+      "path": "saved-import.json",
+      "member": "raw/saved-import.json",
+      "bytes": 5452,
+      "sha256": "aed81d5017f88f9774d7261b56a756c70ee3ce4ce8b3cb8876f2b3fc1356e3f6"
+    },
+    {
+      "path": "saved-ppt__charts___rels__chart1.xml.rels",
+      "member": "raw/saved-ppt__charts___rels__chart1.xml.rels",
+      "bytes": 319,
+      "sha256": "968712a0e9ecd4fed9698c19a8d3201b6e0dc431349027e8bc2d5469893025f5"
+    },
+    {
+      "path": "saved-ppt__charts__chart1.xml",
+      "member": "raw/saved-ppt__charts__chart1.xml",
+      "bytes": 4178,
+      "sha256": "6411908654384fa55ae40728e0ccf1f68225e01e945f06a42a0f18d2fa658049"
+    },
+    {
+      "path": "saved-ppt__slides__slide1.xml",
+      "member": "raw/saved-ppt__slides__slide1.xml",
+      "bytes": 2104,
+      "sha256": "558c9c48256bd1543c0388fbb171ee5ac1ffa3323e7566fde1e85d65b648f5fb"
+    },
+    {
+      "path": "saved-ppt__theme__theme1.xml",
+      "member": "raw/saved-ppt__theme__theme1.xml",
+      "bytes": 8317,
+      "sha256": "47bfd3012553150df3411b21812d753aace10d0c2e18ecdb9be4a5f2767845da"
+    },
+    {
+      "path": "style-facts.json",
+      "member": "raw/style-facts.json",
+      "bytes": 5171,
+      "sha256": "b7746ff3829383043e606401d27c11eed95e403aaf71891b1cc5bc4160fa70e4"
+    }
+  ],
+  "direct": [
+    {
+      "path": "native-original.png",
+      "original": "raw/native/native/original-slide-01.png",
+      "bytes": 8993,
+      "sha256": "c3626ebf3dd7b257651d37cd12f2a96c32b93c265c876a6c0fb14b21818bb289"
+    },
+    {
+      "path": "opf-preview.png",
+      "original": "raw/suite/previews/chart-histogram-category-01.png",
+      "bytes": 18753,
+      "sha256": "a87f6bf407924d8e446abcd22a54ad34bd7db15ee1dba251b820a6958a592d01"
+    }
+  ],
+  "scope": {
+    "rootNativeValidateSucceeded": true,
+    "childOfficeCalls": 0,
+    "publicImports": 2,
+    "newExports": 0,
+    "newRenders": 0,
+    "registryReads": 0,
+    "productChanges": false,
+    "rawNormalization": false,
+    "chartEditActions": 0,
+    "visualParity": false,
+    "nativeGlyphParity": false,
+    "B26OverallAccepted": false,
+    "coordinatorAcceptance": false
+  },
+  "classification": "Documented data-safe classic-column adaptation, not SaveCopyAs damage; actual SVG/native geometry/tick mismatch remains and is not accepted as parity."
+}

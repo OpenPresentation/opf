@@ -1,0 +1,103 @@
+{
+  "source": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "scope": "Normaldocs-onlystockcheck/newproofcheckoutonly",
+  "archive": {
+    "path": "checks.zip",
+    "bytes": 48696,
+    "sha256": "297b43b28e39b61f1e908b41c83a3dc3a83f192519241617c56b9b629e37f9fe"
+  },
+  "files": [
+    {
+      "path": "check-exit.json",
+      "member": "checks/check-exit.json",
+      "bytes": 420,
+      "sha256": "1350205b3578f7e15b7702635d93e5edd77e85a90c790dbb8ad06515d54ad7ca"
+    },
+    {
+      "path": "check.log",
+      "member": "checks/check.log",
+      "bytes": 2997,
+      "sha256": "f7dc65dbb759abaf91bedd0a8713727806d1f9e8c469e58b1489f28f94f3a53a"
+    },
+    {
+      "path": "fixture-recovery.json",
+      "member": "checks/fixture-recovery.json",
+      "bytes": 599,
+      "sha256": "7de756b98002a9e59a949c3eb8741ce5b06b9c633119ef983a5b9ec7fc84e7fc"
+    },
+    {
+      "path": "original-mapped-logs/biome.log",
+      "member": "checks/original-mapped-logs/biome.log",
+      "bytes": 689,
+      "sha256": "f7fec1719488b87ae89f9bc2b2afb44bcded95298ff86bb5c846444139fbe0e7"
+    },
+    {
+      "path": "original-mapped-logs/build.log",
+      "member": "checks/original-mapped-logs/build.log",
+      "bytes": 14577,
+      "sha256": "7fd86d6ba72a0e8682afedf9d3502eca09e6e1ea4fdaff883364e06cc9dfda32"
+    },
+    {
+      "path": "original-mapped-logs/install.log",
+      "member": "checks/original-mapped-logs/install.log",
+      "bytes": 4530,
+      "sha256": "3e58892cf2c77ef8fe899df5e9a9f7708cc12167458de161c5c3fe0564142b5f"
+    },
+    {
+      "path": "original-mapped-logs/pnpm_run_check_changes.log",
+      "member": "checks/original-mapped-logs/pnpm_run_check_changes.log",
+      "bytes": 2635,
+      "sha256": "23d15f29fc9ced77bd247f0de048efeb6415bdd2b26383e245f27fd810f4ef32"
+    },
+    {
+      "path": "original-mapped-logs/pnpm_run_check_skill-commands.log",
+      "member": "checks/original-mapped-logs/pnpm_run_check_skill-commands.log",
+      "bytes": 1035,
+      "sha256": "98eacd4df2cb9577ac8f6aa879e850f17b8d4261e130274ba044e6fd7e936dfc"
+    },
+    {
+      "path": "original-mapped-logs/pnpm_run_check_text.log",
+      "member": "checks/original-mapped-logs/pnpm_run_check_text.log",
+      "bytes": 1831,
+      "sha256": "0ff515c70113c9d9012e2bd8770fea2e90d52a414ebe6b4d4a0d49dd635da291"
+    },
+    {
+      "path": "text-recovery-exit.json",
+      "member": "checks/text-recovery-exit.json",
+      "bytes": 349,
+      "sha256": "d93cb3abe21eac9a176952939d9d7a49f10e9a5c7a945c0ceaa79da043d31c41"
+    },
+    {
+      "path": "text-recovery.log",
+      "member": "checks/text-recovery.log",
+      "bytes": 1098,
+      "sha256": "a5ed0e463ff15d9c2cb514aea4802779934a762d98c588dbc70d949579c312cb"
+    },
+    {
+      "path": "restored-prerequisite/painting-Linux.json.gz",
+      "member": "checks/restored-prerequisite/painting-Linux.json.gz",
+      "bytes": 16102,
+      "sha256": "0b7ef1b73bbd4f31c5ac67716bea08f22a64df066f4ad343765c0d3d74511e56"
+    }
+  ],
+  "mapped": {
+    "exitCode": 1,
+    "passed": 5,
+    "failed": 1,
+    "skipped": 1,
+    "reason": "Sparse tracked compressed-text fixture absent"
+  },
+  "recovery": {
+    "command": "pnpm run check:text ONLY",
+    "exitCode": 0,
+    "testsPassed": 7,
+    "fullTextScanFiles": 9286,
+    "extraBuild": false,
+    "restoredExactHEADBytes": 16102,
+    "indexUnchanged": true
+  },
+  "originalAggregateStillRED": true,
+  "producerBuilt": false,
+  "consumerMutated": false,
+  "OfficeCalls": 0
+}
