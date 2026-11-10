@@ -5,7 +5,7 @@ import {createRequire} from 'node:module';
 import {pathToFileURL,fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {sha,readZip,replaceMember,member,csVariant,assertOnlyCsChange,OLD,NEW} from './zip-tools.mjs';
-const here=path.dirname(fileURLToPath(import.meta.url)),repo=path.resolve(here,'../../../../..');
+const here=path.dirname(fileURLToPath(import.meta.url)),repo=path.resolve(here,'../../../..');
 const out=path.resolve(process.argv[2]??'');assert.equal(out,'C:\\opf-work\\b07-cs-slot\\artifacts\\pure01');assert.ok(!fs.existsSync(out),'Fresh output only');
 const root='C:/opf-work/rtl-native-contrast-export-01',a=root+'/cases/rtl-contrast-05-mixed-explicit-arabic',f=root+'/cases/rtl-contrast-11-long-explicit-french';
 const pins=[['original05.pptx',a+'/input.pptx','36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197'],['source05.opf.json',a+'/source.opf.json','7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc'],['french11.pptx',f+'/input.pptx','fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990'],['source11.opf.json',f+'/source.opf.json',null]];
