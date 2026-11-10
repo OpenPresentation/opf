@@ -3,6 +3,7 @@ import {test} from 'node:test';
 import {unzipSync,strFromU8} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {catalogs,toPptx,toSvg} from './helpers/default-catalog.mjs';
+// A selected color face holds its manifest-declared Noto Emoji400 raster companion; exact order/count stays strict.
 const policy={pack:'office',substitutionPolicy:'visual'};
 const scheme=family=>({major:family,minor:family});
 const documents=[
@@ -23,7 +24,7 @@ for(const document of documents)test(`${document.name}: demand native XML matche
  assert.equal(toSvg(document,1,{fonts,text:'paths'}),before,'native-only preparation does not change preview geometry/outlines');
  assert.deepEqual(fonts.pending(document,{catalogs}),[]);
  if(document.name.includes('emoji roles')){
-  assert.deepEqual(fonts.registry.describeFaces().map(face=>[face.family,face.weight]),[['Noto Sans',400],['Noto Color Emoji',400],['Noto Sans',700]]);
+  assert.deepEqual(fonts.registry.describeFaces().map(face=>[face.family,face.weight]),[['Noto Emoji',400],['Noto Sans',400],['Noto Color Emoji',400],['Noto Sans',700]]);
   assert.throws(()=>fonts.textMeasurement.measure('A',20,{fontFamily:'Noto Color Emoji',fontWeight:400}),{code:'missing-glyph'});
  }
  const held=fonts.fontFiles.length;
@@ -34,7 +35,7 @@ test('safe native preparation and later document edits preserve full-pack output
  const first=documents[0],fonts=await loadFonts({...policy,scripts:'auto',presentation:first,renderOptions:{catalogs}});
  for(const document of [first,{slides:[{title:'A new title',text:[{text:'A launch 🚀',fontFamily:'Segoe UI Emoji',italic:true}]}]}]){
   assert.deepEqual(parts(await toPptx(document,{fonts,typefaces:'safe'})),parts(await toPptx(document,{fonts:whole,typefaces:'safe'})));
-  if(document===first) assert.deepEqual(fonts.registry.describeFaces().map(face=>[face.family,face.weight]),[['Noto Sans',400],['Noto Color Emoji',400],['Noto Sans',700]],'safe mapping does not preload unused Arial substitutes for script-generated fallbacks');
+  if(document===first) assert.deepEqual(fonts.registry.describeFaces().map(face=>[face.family,face.weight]),[['Noto Emoji',400],['Noto Sans',400],['Noto Color Emoji',400],['Noto Sans',700]],'safe mapping does not preload unused Arial substitutes for script-generated fallbacks');
   assert.deepEqual(parts(await toPptx(document,{fonts})),parts(await toPptx(document,{fonts:whole})), 'switching native mapping modes never reuses the wrong preparation context');
  }
 });
