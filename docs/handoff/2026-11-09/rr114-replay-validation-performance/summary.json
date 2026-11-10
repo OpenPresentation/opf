@@ -1,0 +1,581 @@
+{
+  "schema": 1,
+  "trial": "formal03",
+  "status": "PASS",
+  "driver": "ca21b3ed2dcd8c8a9384ed022f7b86388bca407b",
+  "children": 8,
+  "exactSvgChecks": 624,
+  "replicatesPerCell": 2,
+  "warmCallsPerCell": 4,
+  "cells": [
+    {
+      "size": 16,
+      "variant": "control",
+      "preparationMs": {
+        "values": [
+          1061.4266,
+          1056.2803
+        ],
+        "mean": 1058.85345,
+        "median": 1058.85345,
+        "min": 1056.2803,
+        "max": 1061.4266
+      },
+      "continuousPrepToFirstMs": {
+        "values": [
+          2044.1113,
+          2045.1511999999998
+        ],
+        "mean": 2044.63125,
+        "median": 2044.63125,
+        "min": 2044.1113,
+        "max": 2045.1511999999998
+      },
+      "firstMs": {
+        "values": [
+          982.5387000000001,
+          988.7277999999999
+        ],
+        "mean": 985.63325,
+        "median": 985.63325,
+        "min": 982.5387000000001,
+        "max": 988.7277999999999
+      },
+      "warmMs": {
+        "values": [
+          803.8980999999999,
+          797.6873,
+          805.3705,
+          804.0556000000001
+        ],
+        "mean": 802.752875,
+        "median": 803.97685,
+        "min": 797.6873,
+        "max": 805.3705
+      },
+      "preparationCpuMs": {
+        "values": [
+          1718,
+          1829
+        ],
+        "mean": 1773.5,
+        "median": 1773.5,
+        "min": 1718,
+        "max": 1829
+      },
+      "prepPlusFirstCpuMs": {
+        "values": [
+          3031,
+          3016
+        ],
+        "mean": 3023.5,
+        "median": 3023.5,
+        "min": 3016,
+        "max": 3031
+      },
+      "warmCpuMs": {
+        "values": [
+          938,
+          843,
+          1016,
+          875
+        ],
+        "mean": 918,
+        "median": 906.5,
+        "min": 843,
+        "max": 1016
+      },
+      "firstPeakMiB": {
+        "values": [
+          294.73828125,
+          300.4921875
+        ],
+        "mean": 297.615234375,
+        "median": 297.615234375,
+        "min": 294.73828125,
+        "max": 300.4921875
+      },
+      "retainedThreeBatchPeakMiB": {
+        "values": [
+          305.296875,
+          310.7109375
+        ],
+        "mean": 308.00390625,
+        "median": 308.00390625,
+        "min": 305.296875,
+        "max": 310.7109375
+      },
+      "postDropHeapMiB": {
+        "values": [
+          53.982872009277344,
+          54.03388214111328
+        ],
+        "mean": 54.00837707519531,
+        "median": 54.00837707519531,
+        "min": 53.982872009277344,
+        "max": 54.03388214111328
+      },
+      "postDropRssMiB": {
+        "values": [
+          265.0390625,
+          267.28515625
+        ],
+        "mean": 266.162109375,
+        "median": 266.162109375,
+        "min": 265.0390625,
+        "max": 267.28515625
+      }
+    },
+    {
+      "size": 16,
+      "variant": "candidate",
+      "preparationMs": {
+        "values": [
+          1075.2887,
+          1077.5888
+        ],
+        "mean": 1076.43875,
+        "median": 1076.43875,
+        "min": 1075.2887,
+        "max": 1077.5888
+      },
+      "continuousPrepToFirstMs": {
+        "values": [
+          2059.2252,
+          2068.9228
+        ],
+        "mean": 2064.0739999999996,
+        "median": 2064.0739999999996,
+        "min": 2059.2252,
+        "max": 2068.9228
+      },
+      "firstMs": {
+        "values": [
+          983.7892999999999,
+          991.1904999999999
+        ],
+        "mean": 987.4898999999999,
+        "median": 987.4898999999999,
+        "min": 983.7892999999999,
+        "max": 991.1904999999999
+      },
+      "warmMs": {
+        "values": [
+          818.3490999999999,
+          802.8063999999999,
+          812.7134000000001,
+          794.6603
+        ],
+        "mean": 807.1323,
+        "median": 807.7599,
+        "min": 794.6603,
+        "max": 818.3490999999999
+      },
+      "preparationCpuMs": {
+        "values": [
+          1515,
+          1484
+        ],
+        "mean": 1499.5,
+        "median": 1499.5,
+        "min": 1484,
+        "max": 1515
+      },
+      "prepPlusFirstCpuMs": {
+        "values": [
+          2827,
+          2843
+        ],
+        "mean": 2835,
+        "median": 2835,
+        "min": 2827,
+        "max": 2843
+      },
+      "warmCpuMs": {
+        "values": [
+          954,
+          875,
+          1032,
+          844
+        ],
+        "mean": 926.25,
+        "median": 914.5,
+        "min": 844,
+        "max": 1032
+      },
+      "firstPeakMiB": {
+        "values": [
+          298.41796875,
+          300.640625
+        ],
+        "mean": 299.529296875,
+        "median": 299.529296875,
+        "min": 298.41796875,
+        "max": 300.640625
+      },
+      "retainedThreeBatchPeakMiB": {
+        "values": [
+          308.01953125,
+          309.73828125
+        ],
+        "mean": 308.87890625,
+        "median": 308.87890625,
+        "min": 308.01953125,
+        "max": 309.73828125
+      },
+      "postDropHeapMiB": {
+        "values": [
+          53.965232849121094,
+          53.966888427734375
+        ],
+        "mean": 53.966060638427734,
+        "median": 53.966060638427734,
+        "min": 53.965232849121094,
+        "max": 53.966888427734375
+      },
+      "postDropRssMiB": {
+        "values": [
+          267.76171875,
+          268.34765625
+        ],
+        "mean": 268.0546875,
+        "median": 268.0546875,
+        "min": 267.76171875,
+        "max": 268.34765625
+      }
+    },
+    {
+      "size": 36,
+      "variant": "control",
+      "preparationMs": {
+        "values": [
+          1923.7679999999998,
+          1935.9207999999999
+        ],
+        "mean": 1929.8444,
+        "median": 1929.8444,
+        "min": 1923.7679999999998,
+        "max": 1935.9207999999999
+      },
+      "continuousPrepToFirstMs": {
+        "values": [
+          3745.1709,
+          3742.6922
+        ],
+        "mean": 3743.9315500000002,
+        "median": 3743.9315500000002,
+        "min": 3742.6922,
+        "max": 3745.1709
+      },
+      "firstMs": {
+        "values": [
+          1821.2694999999999,
+          1806.6218
+        ],
+        "mean": 1813.94565,
+        "median": 1813.94565,
+        "min": 1806.6218,
+        "max": 1821.2694999999999
+      },
+      "warmMs": {
+        "values": [
+          1607.0207,
+          1613.4704000000002,
+          1617.0698999999995,
+          1603.3604999999998
+        ],
+        "mean": 1610.2303749999999,
+        "median": 1610.24555,
+        "min": 1603.3604999999998,
+        "max": 1617.0698999999995
+      },
+      "preparationCpuMs": {
+        "values": [
+          2843,
+          2640
+        ],
+        "mean": 2741.5,
+        "median": 2741.5,
+        "min": 2640,
+        "max": 2843
+      },
+      "prepPlusFirstCpuMs": {
+        "values": [
+          5124,
+          4890
+        ],
+        "mean": 5007,
+        "median": 5007,
+        "min": 4890,
+        "max": 5124
+      },
+      "warmCpuMs": {
+        "values": [
+          1813,
+          1719,
+          1829,
+          1734
+        ],
+        "mean": 1773.75,
+        "median": 1773.5,
+        "min": 1719,
+        "max": 1829
+      },
+      "firstPeakMiB": {
+        "values": [
+          315.19140625,
+          315.38671875
+        ],
+        "mean": 315.2890625,
+        "median": 315.2890625,
+        "min": 315.19140625,
+        "max": 315.38671875
+      },
+      "retainedThreeBatchPeakMiB": {
+        "values": [
+          315.55078125,
+          315.59765625
+        ],
+        "mean": 315.57421875,
+        "median": 315.57421875,
+        "min": 315.55078125,
+        "max": 315.59765625
+      },
+      "postDropHeapMiB": {
+        "values": [
+          55.983558654785156,
+          55.96666717529297
+        ],
+        "mean": 55.97511291503906,
+        "median": 55.97511291503906,
+        "min": 55.96666717529297,
+        "max": 55.983558654785156
+      },
+      "postDropRssMiB": {
+        "values": [
+          283.57421875,
+          283.95703125
+        ],
+        "mean": 283.765625,
+        "median": 283.765625,
+        "min": 283.57421875,
+        "max": 283.95703125
+      }
+    },
+    {
+      "size": 36,
+      "variant": "candidate",
+      "preparationMs": {
+        "values": [
+          1790.8443999999997,
+          1755.8508000000002
+        ],
+        "mean": 1773.3476,
+        "median": 1773.3476,
+        "min": 1755.8508000000002,
+        "max": 1790.8443999999997
+      },
+      "continuousPrepToFirstMs": {
+        "values": [
+          3646.643,
+          3606.5485
+        ],
+        "mean": 3626.59575,
+        "median": 3626.59575,
+        "min": 3606.5485,
+        "max": 3646.643
+      },
+      "firstMs": {
+        "values": [
+          1855.6448999999998,
+          1850.5523
+        ],
+        "mean": 1853.0985999999998,
+        "median": 1853.0985999999998,
+        "min": 1850.5523,
+        "max": 1855.6448999999998
+      },
+      "warmMs": {
+        "values": [
+          1634.6659,
+          1614.0279,
+          1684.103,
+          1643.08
+        ],
+        "mean": 1643.9692,
+        "median": 1638.87295,
+        "min": 1614.0279,
+        "max": 1684.103
+      },
+      "preparationCpuMs": {
+        "values": [
+          2499,
+          2344
+        ],
+        "mean": 2421.5,
+        "median": 2421.5,
+        "min": 2344,
+        "max": 2499
+      },
+      "prepPlusFirstCpuMs": {
+        "values": [
+          4781,
+          4641
+        ],
+        "mean": 4711,
+        "median": 4711,
+        "min": 4641,
+        "max": 4781
+      },
+      "warmCpuMs": {
+        "values": [
+          1969,
+          1750,
+          2046,
+          1766
+        ],
+        "mean": 1882.75,
+        "median": 1867.5,
+        "min": 1750,
+        "max": 2046
+      },
+      "firstPeakMiB": {
+        "values": [
+          313.66015625,
+          314.890625
+        ],
+        "mean": 314.275390625,
+        "median": 314.275390625,
+        "min": 313.66015625,
+        "max": 314.890625
+      },
+      "retainedThreeBatchPeakMiB": {
+        "values": [
+          314.4140625,
+          315.890625
+        ],
+        "mean": 315.15234375,
+        "median": 315.15234375,
+        "min": 314.4140625,
+        "max": 315.890625
+      },
+      "postDropHeapMiB": {
+        "values": [
+          55.88816833496094,
+          55.89982604980469
+        ],
+        "mean": 55.89399719238281,
+        "median": 55.89399719238281,
+        "min": 55.88816833496094,
+        "max": 55.89982604980469
+      },
+      "postDropRssMiB": {
+        "values": [
+          280.53515625,
+          282.32421875
+        ],
+        "mean": 281.4296875,
+        "median": 281.4296875,
+        "min": 280.53515625,
+        "max": 282.32421875
+      }
+    }
+  ],
+  "changes": [
+    {
+      "size": 16,
+      "preparationMs": {
+        "meanPercent": 1.6607869578174395,
+        "medianPercent": 1.6607869578174395
+      },
+      "continuousPrepToFirstMs": {
+        "meanPercent": 0.9509171886128431,
+        "medianPercent": 0.9509171886128431
+      },
+      "firstMs": {
+        "meanPercent": 0.1883712831319384,
+        "medianPercent": 0.1883712831319384
+      },
+      "warmMs": {
+        "meanPercent": 0.5455508334367476,
+        "medianPercent": 0.4705421555359468
+      },
+      "preparationCpuMs": {
+        "meanPercent": -15.44967578235128,
+        "medianPercent": -15.44967578235128
+      },
+      "prepPlusFirstCpuMs": {
+        "meanPercent": -6.234496444517945,
+        "medianPercent": -6.234496444517945
+      },
+      "warmCpuMs": {
+        "meanPercent": 0.8986928104575131,
+        "medianPercent": 0.8825151682294585
+      },
+      "firstPeakMiB": {
+        "meanPercent": 0.6431332401446443,
+        "medianPercent": 0.6431332401446443
+      },
+      "retainedThreeBatchPeakMiB": {
+        "meanPercent": 0.2840873061167537,
+        "medianPercent": 0.2840873061167537
+      },
+      "postDropHeapMiB": {
+        "meanPercent": -0.07835161702537397,
+        "medianPercent": -0.07835161702537397
+      },
+      "postDropRssMiB": {
+        "meanPercent": 0.7110621904237835,
+        "medianPercent": 0.7110621904237835
+      }
+    },
+    {
+      "size": 36,
+      "preparationMs": {
+        "meanPercent": -8.10929627279795,
+        "medianPercent": -8.10929627279795
+      },
+      "continuousPrepToFirstMs": {
+        "meanPercent": -3.134026315198002,
+        "medianPercent": -3.134026315198002
+      },
+      "firstMs": {
+        "meanPercent": 2.1584411859307817,
+        "medianPercent": 2.1584411859307817
+      },
+      "warmMs": {
+        "meanPercent": 2.095279378890136,
+        "medianPercent": 1.777828232470502
+      },
+      "preparationCpuMs": {
+        "meanPercent": -11.672442093744294,
+        "medianPercent": -11.672442093744294
+      },
+      "prepPlusFirstCpuMs": {
+        "meanPercent": -5.911723586978235,
+        "medianPercent": -5.911723586978235
+      },
+      "warmCpuMs": {
+        "meanPercent": 6.145172656800568,
+        "medianPercent": 5.300253735551164
+      },
+      "firstPeakMiB": {
+        "meanPercent": -0.32150556285155396,
+        "medianPercent": -0.32150556285155396
+      },
+      "retainedThreeBatchPeakMiB": {
+        "meanPercent": -0.13368487504177295,
+        "medianPercent": -0.13368487504177295
+      },
+      "postDropHeapMiB": {
+        "meanPercent": -0.1449139062557503,
+        "medianPercent": -0.1449139062557503
+      },
+      "postDropRssMiB": {
+        "meanPercent": -0.8231925554760156,
+        "medianPercent": -0.8231925554760156
+      }
+    }
+  ],
+  "limits": "Bounded local screening, not statistical/mobile/native/release qualification. First/final HWM precedes hashing; final HWM retains three output batches. Two runtimes both hold3faces. Historical whole131 absolute timing/RSS is a different workload/background condition. No universal startup or RSS improvement established."
+}

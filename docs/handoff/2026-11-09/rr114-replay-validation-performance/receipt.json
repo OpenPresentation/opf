@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "driver": "ca21b3ed2dcd8c8a9384ed022f7b86388bca407b",
+  "records": 38,
+  "rawBytes": 989987,
+  "compressedBytes": 278949,
+  "archiveSha256": "5427d611f17fc9a1a6550bcf7770a27d7f5316cf469bbf25c96772eb37986463",
+  "summarySha256": "a2f7e246be58cbfae3f7e8d101cf5d6f796444d5a773784a34f04a23223f16d3",
+  "rootSession": 97110,
+  "actualExit": 0
+}
