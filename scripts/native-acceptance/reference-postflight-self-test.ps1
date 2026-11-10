@@ -38,6 +38,23 @@ try { Invoke-ReferenceWitnessPostflight $terminal (New-Report) {$queryCalls.Add(
 Require ($failure -match 'managed append fault' -and $appendCalls.Count -eq 1 -and $queryCalls.Count -eq 1) 'Failed append was retried or continued'
 $results.Add([ordered]@{name='failed append latches without retry';status='PASS';queries=$queryCalls.Count;appendCalls=$appendCalls.Count;failure=$failure})
 
+
+# The query sample is durable before the final clock; append latency is part of the fixed budget.
+foreach($case in @(
+ [pscustomobject]@{name='slow append within deadline';after=4999.0;error=$null},
+ [pscustomobject]@{name='append reaches exact deadline';after=5000.0;error='deadline reached after append'},
+ [pscustomobject]@{name='append exceeds deadline';after=5001.0;error='deadline reached after append'},
+ [pscustomobject]@{name='append leaves backward final clock';after=-1.0;error='final clock moved backward'},
+ [pscustomobject]@{name='append leaves nonfinite final clock';after=[double]::NaN;error='final clock moved backward'},
+ [pscustomobject]@{name='append leaves invalid final clock type';after='0';error='final clock moved backward'}
+)) {
+ $state=[pscustomobject]@{time=0.0;queries=0;rows=[Collections.Generic.List[object]]::new()};$outcome=$null;$failure=$null
+ try {$outcome=Invoke-ReferenceWitnessPostflight $terminal (New-Report) {$state.queries++} {$state.time} {'2026-11-10T00:00:00Z'} {throw 'Final-clock failure must not delay'} {param($row)$state.rows.Add($row);if($row.status -ceq 'observed'){$state.time=$case.after}}}catch{$failure=$_.Exception.Message}
+ Require ($state.queries -eq 1 -and $state.rows[0].status -ceq 'observed' -and $state.rows[0].elapsedMilliseconds -eq 0 -and $state.rows[0].processIds.Count -eq 0) 'Actual query-time sample was not retained'
+ if($case.error){Require ($null -eq $outcome -and $failure -match $case.error -and $state.rows.Count -eq 2 -and $state.rows[-1].status -ceq 'failed') ('Final clock failure promoted: '+$case.name)}else{Require ($null -eq $failure -and $outcome.finishedElapsedMilliseconds -eq 4999 -and $outcome.elapsedMilliseconds -eq 0 -and $state.rows.Count -eq 1) 'Slow valid append lost separate times'}
+ $results.Add([ordered]@{name=$case.name;status='PASS';rows=@($state.rows);result=$outcome;failure=$failure})
+}
+
 $bad=[Collections.Generic.List[object]]::new()
 foreach($pair in @(@('cleanupConfirmed',$false),@('officeOperationsStopped',$true),@('error','failure'),@('lastStage','worker.failed'),@('lastStatus','error'),@('closes',1),@('saveCopies',2),@('quits',0))){$r=New-Report;$r.($pair[0])=$pair[1];$bad.Add([pscustomobject]@{name=$pair[0];report=$r;terminal=$terminal})}
 $r=New-Report;$r.PSObject.Properties.Remove('error');$bad.Add([pscustomobject]@{name='missing error field';report=$r;terminal=$terminal})

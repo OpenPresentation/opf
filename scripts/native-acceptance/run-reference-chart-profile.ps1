@@ -99,8 +99,13 @@ function Invoke-ReferenceWitnessPostflight($Terminal,$Report,[scriptblock]$ReadP
             [void][DateTimeOffset]::Parse($stamp,[Globalization.CultureInfo]::InvariantCulture)
             try { & $Append ([ordered]@{schemaVersion=1;sequence=$sequence;utc=$stamp;elapsedMilliseconds=$lastElapsed;status='observed';processIds=@($ids);error=$null}) | Out-Null } catch { $appendFailed=$true;throw }
             if($lastElapsed -ge $budget) { throw 'ReferenceWitness postflight deadline reached during query; even a late zero is refused' }
+            $finished=& $Clock
+            if(($finished -isnot [double] -and $finished -isnot [long] -and $finished -isnot [int]) -or [double]::IsNaN($finished) -or [double]::IsInfinity($finished) -or $finished -lt $after) { throw 'ReferenceWitness postflight final clock moved backward or is invalid' }
+            $finishedElapsed=[double]($finished-$start)
+            $lastElapsed=$finishedElapsed
+            if($finishedElapsed -ge $budget) { throw 'ReferenceWitness postflight deadline reached after append; even a late completion is refused' }
             if($null -eq $initial) { $initial=@($ids) } else { foreach($id in $ids) { if($initial -notcontains $id) { throw 'ReferenceWitness postflight observed a new global process; stop without touching Office' } } }
-            if($ids.Count -eq 0) { return [ordered]@{schemaVersion=1;policy='global-zero-after-completed-owned-quit-v1';budgetMilliseconds=$budget;intervalMilliseconds=$interval;maximumQueries=$maxQueries;sampleCount=$sequence;initialProcessIds=@($initial);initialCount=$initial.Count;finalProcessIds=@();finalCount=0;elapsedMilliseconds=$lastElapsed;observedZero=$true;officeActions=0} }
+            if($ids.Count -eq 0) { return [ordered]@{schemaVersion=1;policy='global-zero-after-completed-owned-quit-v1';budgetMilliseconds=$budget;intervalMilliseconds=$interval;maximumQueries=$maxQueries;sampleCount=$sequence;initialProcessIds=@($initial);initialCount=$initial.Count;finalProcessIds=@();finalCount=0;elapsedMilliseconds=[double]($after-$start);finishedElapsedMilliseconds=$finishedElapsed;observedZero=$true;officeActions=0} }
             & $Delay $interval | Out-Null
         }
     } catch {

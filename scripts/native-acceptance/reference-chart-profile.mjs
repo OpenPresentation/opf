@@ -462,6 +462,8 @@ export function assertReferenceWitnessPostflight(terminal, samples) {
   assert.deepEqual(result.finalProcessIds, []);
   assert.equal(result.finalCount, 0);
   assert.equal(result.elapsedMilliseconds, previous);
+  assert.ok(Number.isFinite(result.finishedElapsedMilliseconds) && result.finishedElapsedMilliseconds >= previous && result.finishedElapsedMilliseconds < 5000);
+
   assert.equal(terminal.powerPointPostflightInitialCount, initial.length);
   assert.equal(terminal.powerPointPostflightCount, 0);
   return true;
