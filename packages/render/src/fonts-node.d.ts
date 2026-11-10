@@ -1,3 +1,4 @@
+import type {TextStyle} from "@openpresentation/opf/composition";
 import type {FontRegistry,FontRegistryOptions,FontFaceInput,FontsHandle,EnsureResult,ScriptFontProfile} from "./fonts.js";
 import type {ToSvgOptions} from "./svg.js";
 /** A caller-supplied face (FF-31), for example a licensed copy of the real font. Node callers may pass a file path. */
@@ -90,7 +91,7 @@ export interface NodeFontsHandle extends FontsHandle {
    * the new faces. A package that is not installed or a script no pinned font serves is reported once through `onDiagnostic`.
    * Resolves with the script packages and exact face descriptors this call added (`scripts` and `lazy`).
    */
-  ensure(presentation: unknown, options?: Partial<ToSvgOptions> & { onDiagnostic?: ScriptPackOptions["onDiagnostic"]; renderOptions?: Partial<ToSvgOptions>; /** Additional preparation for an exporter that maps source families, such as safe PPTX typefaces. Does not rewrite the document. */ mapFamily?: (family: string) => string; /** Prepare native PPTX chosen-family roles/weights as well as physical preview faces. Does not alter ordinary rendering. */ preserveChosenFamilies?: boolean }): Promise<EnsureResult>;
+  ensure(presentation: unknown, options?: Partial<ToSvgOptions> & { onDiagnostic?: ScriptPackOptions["onDiagnostic"]; renderOptions?: Partial<ToSvgOptions>; /** Additional preparation for an exporter that maps source families, such as safe PPTX typefaces. Does not rewrite the document. */ mapFamily?: (family: string) => string; /** Prepare native PPTX chosen-family roles/weights as well as physical preview faces. Does not alter ordinary rendering. */ preserveChosenFamilies?: boolean; /** Actual exporter-only measurement dependencies, separate from SVG demand analysis. Families are already mapped by the exporter. */ measurementRequests?: readonly {text: string; size: number; style: TextStyle}[] }): Promise<EnsureResult>;
   /** Synchronous: the missing face resources and script packages the presentation needs. */
   pending(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
 }
