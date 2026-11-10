@@ -19,6 +19,8 @@ import {
   deps,
   sources,
 } from "./test-fixtures/reference-chart-synthetic.mjs";
+import { resolveChartData } from "../../packages/javascript/dist/index.js";
+const compareImports = (source, imported, canvas) => compareReferenceWitnessImports(source, imported, canvas, resolveChartData);
 const clone = structuredClone;
 test("synthetic direct classic archives preserve all nine source charts, helpers, workbooks, raw caps and exact source contracts", () => {
   assert.equal(REFERENCE_LIMITS.maxShapesPerSlide, 3);
@@ -142,7 +144,7 @@ test("public import comparison exposes helper data, dropped references, current 
     original: { document: clone(document), diagnostics: [] },
     "saved-reopened": { document: clone(document), diagnostics: [] },
   };
-  assert.deepEqual(compareReferenceWitnessImports(sources[0].document, imported, sourceCanvas), []);
+  assert.deepEqual(compareImports(sources[0].document, imported, sourceCanvas), []);
   for (const mutate of [
     (d) => d.slides[0].chart.data.columns.push("Unintended helper"),
     (d) => d.slides[0].chart.referenceLines.pop(),
@@ -151,7 +153,7 @@ test("public import comparison exposes helper data, dropped references, current 
   ]) {
     const changed = clone(imported);
     mutate(changed["saved-reopened"].document);
-    assert.ok(compareReferenceWitnessImports(sources[0].document, changed, sourceCanvas).length);
+    assert.ok(compareImports(sources[0].document, changed, sourceCanvas).length);
   }
   const gallery = { source: "https://synthetic.invalid/catalog" },
     warning = { code: "synthetic-uncertainty" },

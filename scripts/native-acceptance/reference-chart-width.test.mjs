@@ -11,6 +11,8 @@ import { readReferenceSources } from "./reference-chart-fixtures.mjs";
 import { inspectReferenceArchive, archiveDependencies } from "./reference-chart-archive.mjs";
 import { assertReferenceWitnessSource, compareReferenceWitnessImports } from "./reference-chart-profile.mjs";
 import { digest } from "./identity.mjs";
+import { resolveChartData } from "../../packages/javascript/dist/index.js";
+const compareImports = (source, imported, canvas) => compareReferenceWitnessImports(source, imported, canvas, resolveChartData);
 const folder=fileURLToPath(new URL("./test-fixtures/reference-width/",import.meta.url));
 const manifest=JSON.parse(fs.readFileSync(path.join(folder,"manifest.json"),"utf8"));
 const bytes=fs.readFileSync(path.join(folder,"reference-native-lines.pptx"));
@@ -27,7 +29,7 @@ test("real fractional1.5 reference import compares exact current14288EMU project
   assert.equal(source.slides[0].chart.referenceLines[1].stroke.width,1.5);
   assert.equal(floor.stroke.width,14288/9525);
   assert.notEqual(floor.stroke.width,1.5,"This real serialized boundary must remain exercised");
-  assert.deepEqual(compareReferenceWitnessImports(source,{original:imported,"saved-reopened":imported},archive.canvas),[]);
+  assert.deepEqual(compareImports(source,{original:imported,"saved-reopened":imported},archive.canvas),[]);
 });
 test("actual plus1EMU reference style edit stays current and refuses the source-bound expectation",async()=>{
   const require=createRequire(new URL("../../packages/pptx/package.json",import.meta.url)),{unzipSync,strFromU8,strToU8,zipSync}=require("fflate");
@@ -44,13 +46,13 @@ test("actual plus1EMU reference style edit stays current and refuses the source-
   assert.equal(charts(current.document).referenceLines[1].value,-10);
   assert.equal(charts(current.document).referenceLines[1].label,"Floor -10");
   assert.throws(()=>assertReferenceWitnessSource(inspectReferenceArchive(mutated,archiveDependencies()),source),/line width differs/);
-  const findings=compareReferenceWitnessImports(source,{original:unchanged,"saved-reopened":current},archive.canvas);
+  const findings=compareImports(source,{original:unchanged,"saved-reopened":current},archive.canvas);
   assert.ok(findings.some(f=>f.phase==="saved-reopened"&&f.reference===1&&f.code==="import-reference-value-label-style-differs"));
 });
 test("source-bound canvas is required and malformed canvas cannot define an expected stroke",async()=>{
   const imported=await original(),phases={original:imported,"saved-reopened":imported};
   for(const canvas of [undefined,null,{cx:0,cy:6858000},{cx:12192000,cy:NaN},{cx:12192000,cy:6858000.5}])
-    assert.throws(()=>compareReferenceWitnessImports(source,phases,canvas),/source canvas/);
+    assert.throws(()=>compareImports(source,phases,canvas),/source canvas/);
 });
 
 test("default width and legal0/64 remain exact while the64bound cannot accept an illegal65source",async()=>{
@@ -62,12 +64,12 @@ test("default width and legal0/64 remain exact while the64bound cannot accept an
     const wanted=structuredClone(source),current=structuredClone(imported);
     wanted.slides[0].chart.referenceLines[0].stroke.width=width;
     charts(current.document).referenceLines[0].stroke.width=width;
-    assert.deepEqual(compareReferenceWitnessImports(wanted,{original:current,"saved-reopened":current},archive.canvas),[]);
+    assert.deepEqual(compareImports(wanted,{original:current,"saved-reopened":current},archive.canvas),[]);
   }
   const illegal=structuredClone(source),current=structuredClone(imported);
   illegal.slides[0].chart.referenceLines[0].stroke.width=65;
   charts(current.document).referenceLines[0].stroke.width=64;
-  assert.ok(compareReferenceWitnessImports(illegal,{original:current,"saved-reopened":current},archive.canvas).some(f=>f.code==="import-reference-value-label-style-differs"));
+  assert.ok(compareImports(illegal,{original:current,"saved-reopened":current},archive.canvas).some(f=>f.code==="import-reference-value-label-style-differs"));
 });
 
 // Pure nonunit-canvas expectation: no export or native observation is performed.
@@ -84,8 +86,8 @@ test("nonunit source canvas uses exporter multiplication order at an observable 
       actual.referenceLines[reference].stroke.width=Math.min(64,Math.round(((line.stroke?.width??4/3)*scale)*9525)/(9525*scale));
   }
   assert.equal(charts(current.document).referenceLines[0].stroke.width,3578/(9525*scale));
-  assert.deepEqual(compareReferenceWitnessImports(wanted,{original:current,"saved-reopened":current},sourceCanvas),[]);
+  assert.deepEqual(compareImports(wanted,{original:current,"saved-reopened":current},sourceCanvas),[]);
   const wrong=structuredClone(current);
   charts(wrong.document).referenceLines[0].stroke.width=3579/(9525*scale);
-  assert.ok(compareReferenceWitnessImports(wanted,{original:current,"saved-reopened":wrong},sourceCanvas).some(f=>f.phase==="saved-reopened"&&f.reference===0&&f.code==="import-reference-value-label-style-differs"));
+  assert.ok(compareImports(wanted,{original:current,"saved-reopened":wrong},sourceCanvas).some(f=>f.phase==="saved-reopened"&&f.reference===0&&f.code==="import-reference-value-label-style-differs"));
 });
