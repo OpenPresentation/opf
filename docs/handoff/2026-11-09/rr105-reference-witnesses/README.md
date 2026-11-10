@@ -35,3 +35,8 @@ Only the coordinator may later authorize/execute Office after source review and 
 Decision (vetoable), RR105-REFERENCE-ISOLATION: source witnesses remain a separate closed profile; never retrofit old59/fd13 or infer qualification from previous chart runs. Existing B07 proofing/glyph observations are separate and do not accept these references.
 
 This WIP was checkpointed when the higher-priority cold-start replay peer review resumed. Coherent changed checks, consumer generation, exported count/frame proof, native observations/imports and release gates remain owed.
+
+
+## Durable source checkpoint
+
+Exact committed source is a33d2bbc7e2e73c377b7483366d1886400d92835, treeaf03ec2cd1320b98132ad2e707140db40923f365. The tests ran against those exact working source bytes before the source commit, while Git still named276; the manifest states that dirty-run revision honestly and binds13final source blobs. The272record/1661241byte lossless packet (157795byte gzip) preserves all source logs and original failed/corrected managed outputs. Fake executable/PPTX/PNG files are synthetic test data, not Office/render output. Replay: node docs/handoff/2026-11-09/rr105-reference-witnesses/verify.mjs. No full mapper or native profile admission pass is claimed. The branch remains OPEN/unfolded for the explicitly listed remaining controller/archive/generation work; this WIP does not close the original release requirement.
