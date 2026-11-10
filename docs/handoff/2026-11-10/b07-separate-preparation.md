@@ -14,3 +14,7 @@ Source c563 is clean and the actual default read-only inspect passed. The separa
 ## Narrow exact-source recovery
 
 Coordinator authorized three exact HEAD fixture restorations; OID/SHA/index guards passed and source2b825 stayed clean. Only the failed checks were rerun: text PASS, gallery-tracker still RED on additional omitted evidence. No further hydration/retry. [Separate lossless recovery packet](b07-check-recovery/README.md) retains all receipts and the read-only full tracker-input inventory. The original aggregate remains RED; actual suite/ValidateOnly/Office remain held.
+
+## Final source/check checkpoint
+
+The adapter stock check at clean8260546c passed (build/Biome/six mapped checks, TS skipped, no package suite). Frozen2b825 text and gallery failed-step recoveries both passed after exact declared inputs were restored; initial REDs remain literal. [Final42-record packet and offline verifier](b07-preparation-final/README.md) authenticate all1,808 prerequisite Git blobs and protected production objects, and preserve both verifier setup errors. No real suite, ValidateOnly or Office occurred. Root source review/preparation authorization remains the next step; source-only diagnostic results never close glyph/native acceptance.
