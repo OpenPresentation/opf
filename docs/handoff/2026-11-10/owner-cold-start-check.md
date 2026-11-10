@@ -16,6 +16,8 @@ Both paths used the same runtime, deck, font files and SVG output. These are Nod
 | Peak process memory during rendering | 487-488 MiB | 323-324 MiB |
 | Post-GC JavaScript heap | 99.8 MiB | 59.3 MiB |
 
+Both demand-loading repetitions were slower than both whole-pack controls: 3,839.90/4,079.53 ms versus 3,480.75/3,492.87 ms. This is two fresh processes per mode, not a single unlucky run; one machine and two repetitions still do not establish a universal performance rate.
+
 Preparation added about 1,756 ms; the first render saved about 1,283 ms. The net first-use penalty was about 473 ms, or 13.6%. This trial's 131-face whole-pack baseline is distinct from the earlier 53-face configuration. The three selected faces were Intos 400/700 and Intos Display 700. Whole-process memory includes the engine and its caches; it is not raw font-file size.
 
 [Original measurements](https://github.com/OpenPresentation/opf/blob/4d1ffa78440c47d955d9883575d347996325bf40/docs/handoff/2026-11-09/svg-performance/DEMAND-FONT-RESULTS.md).
@@ -37,3 +39,7 @@ Root independently replayed all 79 evidence records and exact output/input/sourc
 [Latest complete results](https://github.com/OpenPresentation/opf/blob/e8a813dd7325b302fb60638a8ad846928562d16f/docs/handoff/2026-11-10/rr114-replay-value-performance/RESULTS.md).
 
 Vetoable decision: keep the established demand-loader memory and warm-render gains, retain the explicit whole-pack option, and hold this startup candidate while the larger-deck regression remains unexplained. Reuse a prepared handle for repeated work, calling ensure after edits that need additional faces. Browser/mobile/cloud performance requires its own measurements; these Node results do not qualify those environments.
+
+## Follow-up source work — November 10
+
+Root and an independent peer reviewed a separate quadratic HarfBuzz cluster-boundary repair and replayed all68 evidence records/13 exact glyph pairs. An unchanged8100-character CLI paginate command that previously timed out at120s now finishes once in91.18s under the same cap. This fixture does not establish how much of the original36-slide473ms penalty it removes. A NEW private Node preparation path is testing cmap coverage without discarded shaping/metrics; it is not yet qualified or merged. The held layout-replay candidate and its unexplained48-slide regression remain held. No new whole-versus-demand timing trial was run for this update.

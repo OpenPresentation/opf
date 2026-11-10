@@ -2,7 +2,19 @@
 
 **v0.33.0 is published. v0.34.0 is unpublished.** The original31 checkbox lines in [issue1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact:21checked/10open. The current-state table below supersedes historical descriptions inside those preserved lines. Every original item remains in scope. [Previous detailed checkpoint](../2026-11-09/coordination-checkpoint.md) and [binding working rules](../2026-11-07/working-rules.md) remain available.
 
-## Latest coordinator checkpoint — November 10, 09:45 UTC
+## Latest coordinator checkpoint — November 10, 11:05 UTC
+
+[Closed full gate, exact performance repair, site218 merge and current source ownership](release-qualification-checkpoint05/README.md). v0.34 remains unpublished; canonical1225 is unchanged.
+
+- Full dc2 gate is terminal1:47PASS/fourRED/51steps. PPTX293 and editor146 scripts PASS; renderer126 scripts remainUNRUN. Exact12-input recovery then tracker38PASS is narrow, not a green full run.
+- Seven golden changes are attributed to explicit localized reference examples; root reviewed all seven actual canonical pairs plus five new slides. No local baseline promotion. New singleton example shows its data marker. Final pinned workflow/renderer tail remain owed.
+- Reviewed postflight/category-label/localized-QA leaves are FOLDED into local group b113; never push those leaves again. Group/source mapping and push remain pending.
+- Root and peer approve isolated HB cluster repair d4bb after68-record/13-pair replay. The unchanged8100-character CLI command clears the same120s cap in91.18s. This is separate from the original36-slide13.6percent cold penalty. A new private Node coverage-only preparation candidate is active, not accepted yet.
+- Site218 own689 preview is accepted, merged148; exact-main gate actually GREEN/terminal0. Current148 provider/receipt plus narrow owner-flow proof is in progress. No CI observer remains live.
+- B07 character diagnostic b35d is published; glyph05/06/09/10 remainOPEN. New composite1d1 is source-only/pure484PASS and awaits root/peer review before any native preparation.
+- Exact owner-only credential-transfer question remains pending after automatic rejection; no values read or copied. All31 original issue lines remain21checked/10open.
+
+## Historical coordinator checkpoint — November 10, 09:45 UTC
 
 [Current reviewed six-repair integration, actual consumer/native observations and closed receipts](release-qualification-checkpoint04/README.md). Working source dc2e94f77faeb5789421a3cf7d4cadf2536b1834; package bytes exact1b603. Canonical1225 is unchanged. All31 original checkbox lines remain21checked/10open; v0.34 is unpublished.
 
@@ -73,13 +85,13 @@ Never push a folded leaf. Never force-push. Normally merge origin/main. Evidence
 
 | Original open item | Current truth and next action |
 | --- | --- |
-|B05 final integration|Working source dc2 includes all17original wave2 heads plus reviewed1258–1265; package bytes exact1b603. Canonical1225 remains unchanged. Finish coherent source gates and one final assembly.|
-|B07 native glyphs|05/06/09/10 remainOPEN. Current24 exports preserve41PNGs/26tag-only changes. Actual original09 character diagnostic completed0/global0→0/30samples; API reorders laterLatin across the digit while continuation staysordered. No physical-font/BiDi cause or fix accepted.|
-|B17 all033sites|Org033/Gallery033 prior acceptance remains. Recovery217 mergedb68; exact-mainGREEN, production narrowly accepted with original19/20RED and correctedJ3 composite coverage explicit. PR218 own689Preview pending. DEV033 credential transfer staysheld.|
+|B05 final integration|Staging b5 contains all17 original wave2 heads and reviewed1258–1265; package bytes exact1b603. LOCAL reference group b113 and reviewed HB repair d4bb await final performance source/one coherent mapping/push. Canonical1225 unchanged.|
+|B07 native glyphs|05/06/09/10 remainOPEN. Published b35d original09 diagnostic confirms wrong API Latin ordering/ordered continuation with actual global0-to0/30samples. NEW composite1d1 is source-only, Node6/managed484/inherited23PASS, root/peer review and every native step pending.|
+|B17 all033sites|Org033/Gallery033 prior acceptance remains. Recovery218 exact689 own preview accepted and merged148; exact-mainGREEN. Current148 provider/receipt and narrow owner-flow proof in progress. DEV033 exact credential transfer held.|
 |B20 exact credential transfer|Automatic review still holds striped-fox-33 CONVEX_SERVICE_SECRET and AI_GATEWAY_API_KEY to Data-Advantage/pptx-dev preview. No values read/copied/workaround; build CONVEX_DEPLOY_KEY is not runtime.|
-|B24 final images/goldens|ONE final pinned workflow refresh after final source plus moved-slide/example/sheet and native archive/XML review. Seven current font-leaf raster differences remain unattributed; no local hashes/tolerance changes.|
-|B25 trackers/bundles|Committed117/863 tracker statuses retained. MCP actual serialized frame nowunder10MiB with functionality preserved; final coherent bundles remainowed. Current fullcheck fonttracker19/38 fails on12missing source-declared sparse inputs; no live-gate repair/waiver.|
-|B26 combined gate|Original519 stays41PASS/10RED. Actualdc2/default-main fullgate10576 LIVE; font sparseRED/corePASS/tails pending. Genuine1b603consumer/full59/reference04 nowpass; referenceNative, seven/native/SH21/E1/E3, goldens and platform/registry/release gates remainowed.|
+|B24 final images/goldens|Seven localized-reference raster changes are source-attributed and root visually reviewed against actual canonical images; five new examples also viewed, singleton marker corrected locally. ONE final pinned workflow refresh and renderer126-script tail remain owed after final source; no local hash/tolerance edits.|
+|B25 trackers/bundles|Committed117/863 tracker statuses retained. Twelve declared sparse inputs restored exact, failed font tracker alone now38PASS. MCP actual escaped frame under10MiB with functionality preserved; final coherent bundles remainowed.|
+|B26 combined gate|Original51941PASS/10RED and dc2 terminal47PASS/fourRED remain literal. Current full PPTX293/editor146PASS; renderer126UNRUN. Narrow tracker/QA/CLI repairs pass separately. Final grouped mapping, genuine final consumer/reference/seven/native/SH21/E1/E3/goldens/platform/registry gates remainowed.|
 |B27 release034|Accepted main/exact-head managed merge/mainverify, Release dryrun then real trusted tag; all7registry identities/provenance/changelogs/release/mcpb/checksum. No release occurred.|
 |B28 all034delivery|Actual034 registry bumps and all3site assets/docs/examples/gallery/MCP/E3 plus builds/NativePreview/service/public/production. Org216/Gallery180 remain future-adoption leaves; no third release assumed.|
 |B31 owner remainders|Chart design and deployment/Preview authority received. Exact held credentials, D2, LibreOffice promotion, Claudeconnector/local.mcpb removal, new logins/DNS/account-plan/visibility changes remain owner-only.|

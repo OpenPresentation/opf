@@ -1,0 +1,12 @@
+{
+  "name": "hb-clusters",
+  "cwd": "C:/opf-work/hb-clusters",
+  "file": "docs/handoff/2026-11-10/rr114-hb-cluster-carriers/verify.mjs",
+  "started": "2026-11-10T11:00:50.611Z",
+  "finished": "2026-11-10T11:00:50.752Z",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "stdout": "{\"status\":\"PASS\",\"records\":68,\"decodedRecordBytes\":28268983,\"uniqueBlobs\":51,\"allOriginalRefusalsAndProfilesRetained\":true,\"realWasmPairs\":13,\"allGlyphFieldsAndCodePointsExact\":true,\"fontFaces\":5,\"fontBytes\":27144952,\"actualOriginalCliCap\":120000,\"actualCandidateExit\":0,\"actualCandidateElapsedMs\":91182.9539,\"actualSvgPages\":5,\"actualSvgBytes\":10333649,\"noRetries\":true,\"noGoldenOrBudgetChanges\":true,\"currentSourceMatches\":true,\"broaderMappedGate\":\"PENDING coordinator-reviewed union\",\"generalStartupClaim\":false}\n",
+  "stderr": ""
+}
