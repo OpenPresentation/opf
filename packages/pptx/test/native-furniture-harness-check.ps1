@@ -227,12 +227,14 @@ function New-LifecycleFixture([string]$Name,[string]$Mode='') {
     $script:lifecycleMode=$Mode; $script:lifecycleCopies=@{}
     $fixtureInput=Join-Path $planRoot ($Name+'.pptx'); $copy=Join-Path $planRoot ($Name+'-saved.pptx')
     [IO.File]::WriteAllText($fixtureInput,'original')
+    $script:lifecycleOpenPaths=@($fixtureInput,$copy)
     $list=[pscustomobject]@{Count=0;Values=@()}
     $list | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
     $list | Add-Member -MemberType ScriptMethod -Name Open -Value {
         param($path,$readOnly,$untitled,$window)
         $script:lifecycleLog.Add('open:'+ $path + ':' + $readOnly)
-        if($readOnly -ne -1 -or $untitled -ne 0) { throw 'Writable or untitled open was requested' }
+        if($path -cnotin $script:lifecycleOpenPaths) { throw 'Unexpected open path' }
+        if($readOnly -ne -1 -or $untitled -ne 0 -or $window -ne 0) { throw 'Open must be read-only, titled and windowless' }
         $text=if($script:lifecycleCopies.ContainsKey($path)){$script:lifecycleCopies[$path]}else{'original'}
         $presentation=[pscustomobject]@{FullName=$path;ReadOnly=-1;Saved=0;Text=$text;Closed=$false}
         if($script:lifecycleMode -eq 'wrong-open-path') { $presentation.FullName='unrelated.pptx' }
