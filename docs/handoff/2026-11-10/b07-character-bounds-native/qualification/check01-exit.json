@@ -1,0 +1,9 @@
+{
+  "started": "2026-11-10T09:51:32.5884129Z",
+  "finished": "2026-11-10T09:52:03.8765047Z",
+  "exitCode": 1,
+  "command": "pnpm10.33.2 check:changed",
+  "node": "24.20.0",
+  "worktree": "C:/opf-work/b07-char-native-sealed",
+  "originalReviewCommit": "3c5c2f59cfc00a6995f814ff8e4ba2eaccc6a7d2"
+}

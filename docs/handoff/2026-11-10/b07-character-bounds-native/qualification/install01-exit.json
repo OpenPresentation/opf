@@ -1,0 +1,7 @@
+{
+  "started": "2026-11-10T09:51:24.4983654Z",
+  "finished": "2026-11-10T09:51:32.5759515Z",
+  "exitCode": 0,
+  "command": "pnpm10.33.2 install --offline --frozen-lockfile --store-dir C:/opf-work/.pnpm-store",
+  "node": "24.20.0"
+}

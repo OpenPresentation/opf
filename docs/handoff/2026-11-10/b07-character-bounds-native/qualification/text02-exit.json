@@ -1,0 +1,8 @@
+{
+  "started": "2026-11-10T09:53:09.5107174Z",
+  "finished": "2026-11-10T09:53:11.3595509Z",
+  "exitCode": 0,
+  "command": "pnpm10.33.2 check:text",
+  "onlyFailedStepRerun": true,
+  "normalMapperOriginalExit": 1
+}

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "normalGate": {
+    "command": "pnpm check:changed",
+    "exitCode": 1,
+    "passed": 4,
+    "failed": 1,
+    "skipped": 1,
+    "totalSeconds": 30.7,
+    "onlyFailure": "Declared sparse painting-Linux.json.gz absent"
+  },
+  "repair": {
+    "scope": "only exact HEAD missing blob; no source/assertion/tracker/golden change",
+    "oid": "2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6",
+    "bytes": 16102,
+    "sha256": "0b7ef1b73bbd4f31c5ac67716bea08f22a64df066f4ad343765c0d3d74511e56"
+  },
+  "focusedRerun": {
+    "command": "pnpm check:text",
+    "exitCode": 0,
+    "testsPassed": 6,
+    "formatFilesValid": 6780,
+    "mapperRepeated": false
+  },
+  "storage": {
+    "originalReview": "3c5c2f59cfc00a6995f814ff8e4ba2eaccc6a7d2",
+    "derivedComparisonOriginalBytes": 8701700,
+    "derivedComparisonGzipBytes": 217546,
+    "rawArchiveUnchanged": true,
+    "rawRecords": 453,
+    "realPngsUnchanged": true
+  },
+  "files": [
+    {
+      "path": "qualification/install01.log",
+      "bytes": 4639,
+      "sha256": "261b4297120bd3812746ced4328559df1d6c9b22c2afaba5c3054e9ece91ce9b"
+    },
+    {
+      "path": "qualification/install01-exit.json",
+      "bytes": 237,
+      "sha256": "15939ac2fc07cb6c0d6b17703e00e17bbfc0cdaa01dfea80f7c1b1bfaccc5244"
+    },
+    {
+      "path": "qualification/check01.log",
+      "bytes": 2825,
+      "sha256": "6c7827141689096020c62a9c2a3a1ee5e503fe2a4f65edee878a8d22011ea70d"
+    },
+    {
+      "path": "qualification/check01-exit.json",
+      "bytes": 303,
+      "sha256": "93940cdd7043023333a6204a2bf2c2872358e3335817d0dc81376c76514ef1c6"
+    },
+    {
+      "path": "qualification/restore01.json",
+      "bytes": 357,
+      "sha256": "b08e3b66350174e64b007b1c0edac1ff580a8d68f0b56ec09bad36e3049d3ed9"
+    },
+    {
+      "path": "qualification/text02.log",
+      "bytes": 1001,
+      "sha256": "cc4542b9f74ffce1a9b0eec0189a80fb8decd76e2a7c6cca04c7c81f303a62c0"
+    },
+    {
+      "path": "qualification/text02-exit.json",
+      "bytes": 220,
+      "sha256": "80a2c980db3e3e0851d28779c7f9b331f9c1aeb83f18a7d77b6a118698580a08"
+    }
+  ]
+}

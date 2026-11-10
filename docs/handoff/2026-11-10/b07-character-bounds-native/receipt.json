@@ -1,0 +1,3187 @@
+{
+  "schemaVersion": 1,
+  "archiveSha256": "5b686cb7653466aed49c13d3a6f2e7118a9c93398e6e39249a097969d6c4ea35",
+  "compressedBytes": 907102,
+  "rawBytes": 3718825,
+  "decodedBytes": 2687587,
+  "records": 453,
+  "manifest": [
+    {
+      "name": "actual-native/furniture-harness.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\furniture-harness.log",
+      "kind": "actual-native-observation",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "name": "actual-native/harness/furniture.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json",
+      "kind": "synthetic-harness",
+      "bytes": 309984,
+      "sha256": "3213d4375a72085f40a57dbef67b375cd896480bb7267c5e4859f9b7da65579c"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/close-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\close-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/copy-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\copy-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\copy-identity-change-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/copy-identity-change.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\copy-identity-change.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/empty-list.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\empty-list.json",
+      "kind": "synthetic-harness",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/existing-output-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\existing-output-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/existing-output.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\existing-output.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\foreign-at-adoption.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\foreign-at-quit.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/fractional-move-index.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\fractional-move-index.json",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-common-op-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-common-op-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-common-op-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-common-op-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-common-op-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-common-op-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-common-shape-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-common-shape-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-common-shape-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-common-slide-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-common-slide-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/legacy-text-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\legacy-text-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/malformed-json.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\malformed-json.json",
+      "kind": "synthetic-harness",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/move-index-four.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\move-index-four.json",
+      "kind": "synthetic-harness",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/multi-empty-alt.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\multi-empty-alt.json",
+      "kind": "synthetic-harness",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/non-list-root.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\non-list-root.json",
+      "kind": "synthetic-harness",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/null-entry.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\null-entry.json",
+      "kind": "synthetic-harness",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/numeric-target.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\numeric-target.json",
+      "kind": "synthetic-harness",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/numeric-text.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\numeric-text.json",
+      "kind": "synthetic-harness",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-chartName-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-chartName-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-chartName-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-chartName-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-chartName-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-chartName-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-chartName-too-long.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-chartName-too-long.json",
+      "kind": "synthetic-harness",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-common-op-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-common-op-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-common-op-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-common-op-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-common-op-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-common-op-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-common-shape-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-common-shape-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-common-shape-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-common-shape-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-common-shape-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-common-shape-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-common-slide-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-common-slide-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-common-slide-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-common-slide-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-edge-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-edge-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-edge-case.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-edge-case.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-edge-unsupported.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-edge-unsupported.json",
+      "kind": "synthetic-harness",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-index-upper-bound.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-index-upper-bound.json",
+      "kind": "synthetic-harness",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-kind-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-kind-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-kind-case.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-kind-case.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-kind-horizontal-bar.json",
+      "kind": "synthetic-harness",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-kind-marker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-kind-marker.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-kind-slice.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-kind-slice.json",
+      "kind": "synthetic-harness",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-kind-unsupported.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-kind-unsupported.json",
+      "kind": "synthetic-harness",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-kind-vertical-bar.json",
+      "kind": "synthetic-harness",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-missing-chartKind.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-missing-chartKind.json",
+      "kind": "synthetic-harness",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-missing-chartName.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-missing-chartName.json",
+      "kind": "synthetic-harness",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-missing-edge.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-missing-edge.json",
+      "kind": "synthetic-harness",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-missing-pointIndex.json",
+      "kind": "synthetic-harness",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-missing-seriesIndex.json",
+      "kind": "synthetic-harness",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-missing-valueSign.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-missing-valueSign.json",
+      "kind": "synthetic-harness",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-pointIndex-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-pointIndex-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-pointIndex-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-pointIndex-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-pointIndex-negative.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-pointIndex-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-pointIndex-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-pointIndex-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-pointIndex-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-pointIndex-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-pointIndex-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-seriesIndex-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-seriesIndex-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-seriesIndex-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-seriesIndex-negative.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-seriesIndex-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-seriesIndex-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-seriesIndex-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-seriesIndex-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-shapeName-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-shapeName-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-shapeName-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-shapeName-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-sign-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-sign-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-sign-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-sign-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-sign-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-sign-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-sign-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-sign-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-sign-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-sign-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-sign-too-low.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-sign-too-low.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-unknown-field.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-unknown-field.json",
+      "kind": "synthetic-harness",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/point-zero-sign.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\point-zero-sign.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/quit-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\quit-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/same-path.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\same-path.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\serialized-curved-refusal.json",
+      "kind": "synthetic-harness",
+      "bytes": 9449,
+      "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/singleton-empty-text.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\singleton-empty-text.json",
+      "kind": "synthetic-harness",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/slide-index-four.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\slide-index-four.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/slide-index-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\slide-index-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/string-slide-index.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\string-slide-index.json",
+      "kind": "synthetic-harness",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-bool-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-bool-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-both.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-both.json",
+      "kind": "synthetic-harness",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-extra-key.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-extra-key.json",
+      "kind": "synthetic-harness",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-hash-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-hash-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-overflow.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-overflow.json",
+      "kind": "synthetic-harness",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-reference-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-reference-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-short-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-short-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-string-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-string-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-too-big.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-too-big.json",
+      "kind": "synthetic-harness",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/style-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\style-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/success-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\success-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/success.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\success.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/twenty-one-actions.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\twenty-one-actions.json",
+      "kind": "synthetic-harness",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/unknown-operation.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\unknown-operation.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/unknown-property.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\unknown-property.json",
+      "kind": "synthetic-harness",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/unowned-quit.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\unowned-quit.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/writable-open.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\writable-open.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\wrong-close-owner.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/furniture.json.plans/wrong-open-path.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\furniture.json.plans\\wrong-open-path.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "actual-native/harness/process/failure/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\failure\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "name": "actual-native/harness/process/failure/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\failure\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 342,
+      "sha256": "a663730346f84c0877b48d639618b3549310192a3ba251c6af319919e0f1b350"
+    },
+    {
+      "name": "actual-native/harness/process/failure/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\failure\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 311,
+      "sha256": "754629668ebc532b42a4f4ba93eef0294e336584e07f1b81dffd027525f33e26"
+    },
+    {
+      "name": "actual-native/harness/process/failure/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\failure\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "actual-native/harness/process/report.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\report.json",
+      "kind": "synthetic-harness",
+      "bytes": 1745,
+      "sha256": "c894cab8d1d01c9b16fe9da894f57e2757fa76b0e1886cf1b74a17f59a108f23"
+    },
+    {
+      "name": "actual-native/harness/process/success/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\success\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "name": "actual-native/harness/process/success/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\success\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 341,
+      "sha256": "d2e602c6b6defbda1fadd2cafb179366e3f735e6cfa094697f8c3064c65469ea"
+    },
+    {
+      "name": "actual-native/harness/process/success/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\success\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "actual-native/harness/process/success/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\success\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "name": "actual-native/harness/process/timeout/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\timeout\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "name": "actual-native/harness/process/timeout/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\timeout\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 340,
+      "sha256": "e9d8dfe6d0136e8d31701e8dd40245040ad8ec84f69c65b5fb0f2bab0fac794b"
+    },
+    {
+      "name": "actual-native/harness/process/timeout/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\timeout\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "actual-native/harness/process/timeout/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\harness\\process\\timeout\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "actual-native/inputs/action-plan.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\inputs\\action-plan.json",
+      "kind": "actual-native-observation",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "name": "actual-native/inputs/case.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\inputs\\case.pptx",
+      "kind": "actual-native-observation",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "name": "actual-native/native/edited-slide-01.png",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\edited-slide-01.png",
+      "kind": "actual-native-observation",
+      "bytes": 10442,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+    },
+    {
+      "name": "actual-native/native/inputs/action-plan.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\inputs\\action-plan.json",
+      "kind": "actual-native-observation",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "name": "actual-native/native/inputs/input.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\inputs\\input.pptx",
+      "kind": "actual-native-observation",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "name": "actual-native/native/inputs/native-furniture-control.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\inputs\\native-furniture-control.ps1",
+      "kind": "actual-native-observation",
+      "bytes": 90099,
+      "sha256": "528b18d4af829a51ffbb288be0120d62a4a0cb9e9bd2b8ad2e0e36faf3414afa"
+    },
+    {
+      "name": "actual-native/native/inputs/native-process.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\inputs\\native-process.ps1",
+      "kind": "actual-native-observation",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "name": "actual-native/native/native-furniture-control.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\native-furniture-control.pptx",
+      "kind": "actual-native-observation",
+      "bytes": 104205,
+      "sha256": "638f02597edde0abfab3c1838c376002fe762a4eab21881259b0249b9ff95dd3"
+    },
+    {
+      "name": "actual-native/native/original-slide-01.png",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\original-slide-01.png",
+      "kind": "actual-native-observation",
+      "bytes": 10442,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+    },
+    {
+      "name": "actual-native/native/progress.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\progress.json",
+      "kind": "actual-native-observation",
+      "bytes": 271,
+      "sha256": "901e9589704d248c9bc42939c360dc412002fcbfb153df3b96a8fc32ab3cd02d"
+    },
+    {
+      "name": "actual-native/native/reopened-slide-01.png",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\reopened-slide-01.png",
+      "kind": "actual-native-observation",
+      "bytes": 10442,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba"
+    },
+    {
+      "name": "actual-native/native/report.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\report.json",
+      "kind": "actual-native-observation",
+      "bytes": 271183,
+      "sha256": "5f4ff930aa7e9f15a8bddc27ea81c68273d449241b6a803e6d63aa6485669e8c"
+    },
+    {
+      "name": "actual-native/native/request.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\request.json",
+      "kind": "actual-native-observation",
+      "bytes": 2025,
+      "sha256": "c5273a95ca3e9aa6f08a047d8d39904b40095d40ae8cc02db7880cc710ec78be"
+    },
+    {
+      "name": "actual-native/native/stages.jsonl",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\stages.jsonl",
+      "kind": "actual-native-observation",
+      "bytes": 254359,
+      "sha256": "98b2d6930aef81951bb6e8abf09e68fce50adaf5102ff246ea2a8754356b3a23"
+    },
+    {
+      "name": "actual-native/native/supervisor.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\supervisor.json",
+      "kind": "actual-native-observation",
+      "bytes": 220,
+      "sha256": "610a0899b11a70bddab9c4de420140c301a5c50763899332396137ad3e34de43"
+    },
+    {
+      "name": "actual-native/native/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\worker.json",
+      "kind": "actual-native-observation",
+      "bytes": 341,
+      "sha256": "f27b9e8461bc2fa27ea0e5e09090dcdd2315200dbb1aab359fdcb0c6781f46bf"
+    },
+    {
+      "name": "actual-native/native/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\worker.stderr.log",
+      "kind": "actual-native-observation",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "actual-native/native/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native\\worker.stdout.log",
+      "kind": "actual-native-observation",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "name": "actual-native/native-worker.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\native-worker.log",
+      "kind": "actual-native-observation",
+      "bytes": 110,
+      "sha256": "7eb006d13c4063d29bcac3f0004c8ccedd7319bac904a88d3f4e7615fc4f63ca"
+    },
+    {
+      "name": "actual-native/process-check.log",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\process-check.log",
+      "kind": "actual-native-observation",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "name": "actual-native/runner.json",
+      "sourcePath": "C:\\opf-work\\b07-char-native01\\runner.json",
+      "kind": "actual-native-observation",
+      "bytes": 12071,
+      "sha256": "f3618649ad34dd0cc264068ab9a1664d791733cfc7b5ec192f4564066656eae8"
+    },
+    {
+      "name": "suite/actions/empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-suite01\\actions\\empty.json",
+      "kind": "prepared-historical-input",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "name": "suite/inputs/original09.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-suite01\\inputs\\original09.pptx",
+      "kind": "prepared-historical-input",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "name": "suite/previews/sealed-cli-preview.png",
+      "sourcePath": "C:\\opf-work\\b07-char-suite01\\previews\\sealed-cli-preview.png",
+      "kind": "prepared-historical-input",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "name": "suite/sources/source.opf.json",
+      "sourcePath": "C:\\opf-work\\b07-char-suite01\\sources\\source.opf.json",
+      "kind": "prepared-historical-input",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "name": "suite/suite.json",
+      "sourcePath": "C:\\opf-work\\b07-char-suite01\\suite.json",
+      "kind": "prepared-historical-input",
+      "bytes": 4502,
+      "sha256": "5f5e3fe7d6b13e9bb4d407176bd47db49d441474d9448e8776cc2e5011dd3fa1"
+    },
+    {
+      "name": "validate02/furniture-harness.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\furniture-harness.log",
+      "kind": "pure-managed-controller",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "name": "validate02/harness/furniture.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json",
+      "kind": "synthetic-harness",
+      "bytes": 309996,
+      "sha256": "5b8331528da6915c0e30a720acd9ec2267494d056adbcc5b1aa08960dc029556"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/close-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\close-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/copy-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\copy-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\copy-identity-change-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/copy-identity-change.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\copy-identity-change.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/empty-list.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\empty-list.json",
+      "kind": "synthetic-harness",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/existing-output-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\existing-output-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/existing-output.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\existing-output.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\foreign-at-adoption.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\foreign-at-quit.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/fractional-move-index.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\fractional-move-index.json",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-common-op-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-common-op-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-common-op-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-common-op-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-common-op-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-common-op-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-common-shape-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-common-shape-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-common-shape-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-common-slide-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-common-slide-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/legacy-text-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\legacy-text-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/malformed-json.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\malformed-json.json",
+      "kind": "synthetic-harness",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/move-index-four.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\move-index-four.json",
+      "kind": "synthetic-harness",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/multi-empty-alt.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\multi-empty-alt.json",
+      "kind": "synthetic-harness",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/non-list-root.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\non-list-root.json",
+      "kind": "synthetic-harness",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/null-entry.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\null-entry.json",
+      "kind": "synthetic-harness",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/numeric-target.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\numeric-target.json",
+      "kind": "synthetic-harness",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/numeric-text.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\numeric-text.json",
+      "kind": "synthetic-harness",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-chartName-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-chartName-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-chartName-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-chartName-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-chartName-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-chartName-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-chartName-too-long.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-chartName-too-long.json",
+      "kind": "synthetic-harness",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-common-op-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-common-op-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-common-op-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-common-op-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-common-op-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-common-op-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-common-shape-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-common-shape-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-common-shape-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-common-shape-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-common-shape-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-common-shape-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-common-slide-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-common-slide-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-common-slide-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-common-slide-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-edge-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-edge-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-edge-case.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-edge-case.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-edge-unsupported.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-edge-unsupported.json",
+      "kind": "synthetic-harness",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-index-upper-bound.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-index-upper-bound.json",
+      "kind": "synthetic-harness",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-kind-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-kind-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-kind-case.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-kind-case.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-kind-horizontal-bar.json",
+      "kind": "synthetic-harness",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-kind-marker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-kind-marker.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-kind-slice.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-kind-slice.json",
+      "kind": "synthetic-harness",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-kind-unsupported.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-kind-unsupported.json",
+      "kind": "synthetic-harness",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-kind-vertical-bar.json",
+      "kind": "synthetic-harness",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-missing-chartKind.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-missing-chartKind.json",
+      "kind": "synthetic-harness",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-missing-chartName.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-missing-chartName.json",
+      "kind": "synthetic-harness",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-missing-edge.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-missing-edge.json",
+      "kind": "synthetic-harness",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-missing-pointIndex.json",
+      "kind": "synthetic-harness",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-missing-seriesIndex.json",
+      "kind": "synthetic-harness",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-missing-valueSign.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-missing-valueSign.json",
+      "kind": "synthetic-harness",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-pointIndex-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-pointIndex-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-pointIndex-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-pointIndex-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-pointIndex-negative.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-pointIndex-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-pointIndex-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-pointIndex-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-pointIndex-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-pointIndex-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-pointIndex-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-seriesIndex-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-seriesIndex-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-seriesIndex-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-seriesIndex-negative.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-seriesIndex-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-seriesIndex-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-seriesIndex-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-seriesIndex-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-shapeName-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-shapeName-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-shapeName-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-shapeName-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-sign-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-sign-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-sign-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-sign-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-sign-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-sign-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-sign-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-sign-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-sign-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-sign-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-sign-too-low.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-sign-too-low.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-unknown-field.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-unknown-field.json",
+      "kind": "synthetic-harness",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/point-zero-sign.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\point-zero-sign.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/quit-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\quit-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/same-path.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\same-path.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\serialized-curved-refusal.json",
+      "kind": "synthetic-harness",
+      "bytes": 9449,
+      "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/singleton-empty-text.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\singleton-empty-text.json",
+      "kind": "synthetic-harness",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/slide-index-four.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\slide-index-four.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/slide-index-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\slide-index-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/string-slide-index.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\string-slide-index.json",
+      "kind": "synthetic-harness",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-bool-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-bool-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-both.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-both.json",
+      "kind": "synthetic-harness",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-extra-key.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-extra-key.json",
+      "kind": "synthetic-harness",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-hash-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-hash-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-overflow.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-overflow.json",
+      "kind": "synthetic-harness",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-reference-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-reference-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-short-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-short-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-string-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-string-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-too-big.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-too-big.json",
+      "kind": "synthetic-harness",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/style-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\style-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/success-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\success-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/success.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\success.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/twenty-one-actions.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\twenty-one-actions.json",
+      "kind": "synthetic-harness",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/unknown-operation.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\unknown-operation.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/unknown-property.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\unknown-property.json",
+      "kind": "synthetic-harness",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/unowned-quit.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\unowned-quit.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/writable-open.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\writable-open.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\wrong-close-owner.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/furniture.json.plans/wrong-open-path.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\furniture.json.plans\\wrong-open-path.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate02/harness/process/failure/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\failure\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "name": "validate02/harness/process/failure/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\failure\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 342,
+      "sha256": "20f7dd92934bcab461eb69158cbf5769459c2b75731dfeb23959276c54f9ee14"
+    },
+    {
+      "name": "validate02/harness/process/failure/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\failure\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 313,
+      "sha256": "c321e30bde54b2099ec19fdcd3f22aea0f4b6ed7464db6fb80cf2b27bac5486b"
+    },
+    {
+      "name": "validate02/harness/process/failure/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\failure\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "validate02/harness/process/report.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\report.json",
+      "kind": "synthetic-harness",
+      "bytes": 1745,
+      "sha256": "a32b3a584b77add482ff43512f0b33447496cd29ad9e4f194f5caede7bd27f5d"
+    },
+    {
+      "name": "validate02/harness/process/success/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\success\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "name": "validate02/harness/process/success/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\success\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 341,
+      "sha256": "e2a561de91a12dc7765252f80e386d23c0941587f90c6508ded21792356bf288"
+    },
+    {
+      "name": "validate02/harness/process/success/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\success\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "validate02/harness/process/success/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\success\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "name": "validate02/harness/process/timeout/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\timeout\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "name": "validate02/harness/process/timeout/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\timeout\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 340,
+      "sha256": "c6e222b893bd758532326d23a168b08ac99e22e27ff78fa15796e56d70f9af24"
+    },
+    {
+      "name": "validate02/harness/process/timeout/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\timeout\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "validate02/harness/process/timeout/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\harness\\process\\timeout\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "validate02/inputs/action-plan.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\inputs\\action-plan.json",
+      "kind": "pure-managed-controller",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "name": "validate02/inputs/case.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\inputs\\case.pptx",
+      "kind": "pure-managed-controller",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "name": "validate02/process-check.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\process-check.log",
+      "kind": "pure-managed-controller",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "name": "validate02/runner.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate02\\runner.json",
+      "kind": "pure-managed-controller",
+      "bytes": 12009,
+      "sha256": "a124edb46255030f81df269b7cdcecc14595869defbdc88ca2c9b92e16a68b1c"
+    },
+    {
+      "name": "validate03/furniture-harness.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\furniture-harness.log",
+      "kind": "pure-managed-controller",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "name": "validate03/harness/furniture.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json",
+      "kind": "synthetic-harness",
+      "bytes": 309996,
+      "sha256": "0b5c200c3928b0e6c06030945afde2d83a043997b2107a6c7c822cb7708d6455"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/close-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\close-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/copy-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\copy-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\copy-identity-change-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/copy-identity-change.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\copy-identity-change.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/empty-list.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\empty-list.json",
+      "kind": "synthetic-harness",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/existing-output-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\existing-output-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/existing-output.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\existing-output.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\foreign-at-adoption.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\foreign-at-quit.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/fractional-move-index.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\fractional-move-index.json",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-common-op-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-common-op-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-common-op-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-common-op-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-common-op-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-common-op-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-common-shape-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-common-shape-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-common-shape-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-common-slide-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-common-slide-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/legacy-text-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\legacy-text-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/malformed-json.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\malformed-json.json",
+      "kind": "synthetic-harness",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/move-index-four.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\move-index-four.json",
+      "kind": "synthetic-harness",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/multi-empty-alt.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\multi-empty-alt.json",
+      "kind": "synthetic-harness",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/non-list-root.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\non-list-root.json",
+      "kind": "synthetic-harness",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/null-entry.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\null-entry.json",
+      "kind": "synthetic-harness",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/numeric-target.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\numeric-target.json",
+      "kind": "synthetic-harness",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/numeric-text.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\numeric-text.json",
+      "kind": "synthetic-harness",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-chartName-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-chartName-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-chartName-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-chartName-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-chartName-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-chartName-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-chartName-too-long.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-chartName-too-long.json",
+      "kind": "synthetic-harness",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-common-op-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-common-op-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-common-op-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-common-op-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-common-op-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-common-op-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-common-shape-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-common-shape-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-common-shape-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-common-shape-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-common-shape-number.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-common-shape-number.json",
+      "kind": "synthetic-harness",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-common-slide-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-common-slide-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-common-slide-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-common-slide-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-edge-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-edge-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-edge-case.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-edge-case.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-edge-unsupported.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-edge-unsupported.json",
+      "kind": "synthetic-harness",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-index-upper-bound.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-index-upper-bound.json",
+      "kind": "synthetic-harness",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-kind-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-kind-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-kind-case.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-kind-case.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-kind-horizontal-bar.json",
+      "kind": "synthetic-harness",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-kind-marker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-kind-marker.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-kind-slice.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-kind-slice.json",
+      "kind": "synthetic-harness",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-kind-unsupported.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-kind-unsupported.json",
+      "kind": "synthetic-harness",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-kind-vertical-bar.json",
+      "kind": "synthetic-harness",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-missing-chartKind.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-missing-chartKind.json",
+      "kind": "synthetic-harness",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-missing-chartName.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-missing-chartName.json",
+      "kind": "synthetic-harness",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-missing-edge.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-missing-edge.json",
+      "kind": "synthetic-harness",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-missing-pointIndex.json",
+      "kind": "synthetic-harness",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-missing-seriesIndex.json",
+      "kind": "synthetic-harness",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-missing-valueSign.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-missing-valueSign.json",
+      "kind": "synthetic-harness",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-pointIndex-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-pointIndex-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-pointIndex-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-pointIndex-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-pointIndex-negative.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-pointIndex-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-pointIndex-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-pointIndex-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-pointIndex-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-pointIndex-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-pointIndex-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-seriesIndex-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-seriesIndex-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-seriesIndex-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-seriesIndex-negative.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-seriesIndex-null.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-seriesIndex-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-seriesIndex-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-seriesIndex-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-shapeName-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-shapeName-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-shapeName-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-shapeName-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-sign-array.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-sign-array.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-sign-boolean.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-sign-boolean.json",
+      "kind": "synthetic-harness",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-sign-fraction.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-sign-fraction.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-sign-string.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-sign-string.json",
+      "kind": "synthetic-harness",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-sign-too-high.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-sign-too-high.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-sign-too-low.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-sign-too-low.json",
+      "kind": "synthetic-harness",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-unknown-field.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-unknown-field.json",
+      "kind": "synthetic-harness",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/point-zero-sign.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\point-zero-sign.json",
+      "kind": "synthetic-harness",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/quit-failure.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\quit-failure.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/same-path.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\same-path.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/serialized-curved-refusal.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\serialized-curved-refusal.json",
+      "kind": "synthetic-harness",
+      "bytes": 9449,
+      "sha256": "100f8f7f004471080470f5d445dca1d1e0de5e636425bfc65acdf5b2214305b9"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/singleton-empty-text.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\singleton-empty-text.json",
+      "kind": "synthetic-harness",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/slide-index-four.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\slide-index-four.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/slide-index-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\slide-index-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/string-slide-index.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\string-slide-index.json",
+      "kind": "synthetic-harness",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-bool-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-bool-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-both.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-both.json",
+      "kind": "synthetic-harness",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-empty.json",
+      "kind": "synthetic-harness",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-extra-key.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-extra-key.json",
+      "kind": "synthetic-harness",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-hash-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-hash-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-overflow.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-overflow.json",
+      "kind": "synthetic-harness",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-reference-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-reference-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-short-color.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-short-color.json",
+      "kind": "synthetic-harness",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-string-size.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-string-size.json",
+      "kind": "synthetic-harness",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-too-big.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-too-big.json",
+      "kind": "synthetic-harness",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/style-zero.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\style-zero.json",
+      "kind": "synthetic-harness",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/success-saved.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\success-saved.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/success.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\success.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/twenty-one-actions.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\twenty-one-actions.json",
+      "kind": "synthetic-harness",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/unknown-operation.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\unknown-operation.json",
+      "kind": "synthetic-harness",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/unknown-property.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\unknown-property.json",
+      "kind": "synthetic-harness",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/unowned-quit.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\unowned-quit.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/writable-open.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\writable-open.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\wrong-close-owner.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/furniture.json.plans/wrong-open-path.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\furniture.json.plans\\wrong-open-path.pptx",
+      "kind": "synthetic-harness",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "name": "validate03/harness/process/failure/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\failure\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "name": "validate03/harness/process/failure/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\failure\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 342,
+      "sha256": "062266a1a18c61e6959c4d3f2068c4e67b2eea3049dcf82303abf9820d7ccd36"
+    },
+    {
+      "name": "validate03/harness/process/failure/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\failure\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 313,
+      "sha256": "682dcd0b7b75b78ef8006fb09452d30fbcb154715e71a517401fe01415dc7c06"
+    },
+    {
+      "name": "validate03/harness/process/failure/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\failure\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "validate03/harness/process/report.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\report.json",
+      "kind": "synthetic-harness",
+      "bytes": 1745,
+      "sha256": "ee9730db8aaf3a5234243ddfab9c54dd671942f181f71338d2be2a6d7f754452"
+    },
+    {
+      "name": "validate03/harness/process/success/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\success\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "name": "validate03/harness/process/success/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\success\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 341,
+      "sha256": "b51567cb15bab557b405e0a8c409a2d5cf174eb1e23b6bd78ac70f26ae70eefc"
+    },
+    {
+      "name": "validate03/harness/process/success/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\success\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "validate03/harness/process/success/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\success\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "name": "validate03/harness/process/timeout/owned worker with spaces.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\timeout\\owned worker with spaces.ps1",
+      "kind": "synthetic-harness",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "name": "validate03/harness/process/timeout/worker.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\timeout\\worker.json",
+      "kind": "synthetic-harness",
+      "bytes": 340,
+      "sha256": "8bfacfbfa7eb25084a76f413313dc0bed82bebbf4bbcd0e613847fc43949a9b2"
+    },
+    {
+      "name": "validate03/harness/process/timeout/worker.stderr.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\timeout\\worker.stderr.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "validate03/harness/process/timeout/worker.stdout.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\harness\\process\\timeout\\worker.stdout.log",
+      "kind": "synthetic-harness",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "validate03/inputs/action-plan.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\inputs\\action-plan.json",
+      "kind": "pure-managed-controller",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "name": "validate03/inputs/case.pptx",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\inputs\\case.pptx",
+      "kind": "pure-managed-controller",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "name": "validate03/process-check.log",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\process-check.log",
+      "kind": "pure-managed-controller",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "name": "validate03/runner.json",
+      "sourcePath": "C:\\opf-work\\b07-char-validate03\\runner.json",
+      "kind": "pure-managed-controller",
+      "bytes": 12041,
+      "sha256": "c25d96e93c4deb983c4ff06359505c272ecbde0a9276ab0f7b4e08b71a7e799d"
+    },
+    {
+      "name": "root/b07-char-inspect01.json",
+      "sourcePath": "C:/opf-work/b07-char-inspect01.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 7473,
+      "sha256": "3ed6b29905abfdb450fa7ad9e130246f84c29009306aecf1df4418cb57d8e5fa"
+    },
+    {
+      "name": "root/b07-char-inspect01.stderr.log",
+      "sourcePath": "C:/opf-work/b07-char-inspect01.stderr.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-char-native01-exit.json",
+      "sourcePath": "C:/opf-work/b07-char-native01-exit.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 1132,
+      "sha256": "69b38a02c2ade3327e74c44811b656cd296b0c81090ccbaa69b8c7b868ed42a0"
+    },
+    {
+      "name": "root/b07-char-native01-launch.mjs",
+      "sourcePath": "C:/opf-work/b07-char-native01-launch.mjs",
+      "kind": "root-launch-or-receipt",
+      "bytes": 5155,
+      "sha256": "4f2702cf1f7aafb389a5a29bcd9f3130b3f7350fdf4dcd50f1ecc310f389e458"
+    },
+    {
+      "name": "root/b07-char-native01-office-before.json",
+      "sourcePath": "C:/opf-work/b07-char-native01-office-before.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 115,
+      "sha256": "c53e82d9896c97158b95d018f714226917a555292222fc0cca88bb9f35c46524"
+    },
+    {
+      "name": "root/b07-char-native01-office-immediate-after.json",
+      "sourcePath": "C:/opf-work/b07-char-native01-office-immediate-after.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 115,
+      "sha256": "9359e0ddc6729a3fc0b9aa6d8d944d1f9a2af7d72c38755705eb7a15ce1d4f4a"
+    },
+    {
+      "name": "root/b07-char-native01-preflight.json",
+      "sourcePath": "C:/opf-work/b07-char-native01-preflight.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 217,
+      "sha256": "838b3c11613b5279aedcd702514ce1543e3ba9aa79caaf4674139bdd66269254"
+    },
+    {
+      "name": "root/b07-char-native01.stderr.log",
+      "sourcePath": "C:/opf-work/b07-char-native01.stderr.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-char-native01.stdout.log",
+      "sourcePath": "C:/opf-work/b07-char-native01.stdout.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-char-prepare01-exit.json",
+      "sourcePath": "C:/opf-work/b07-char-prepare01-exit.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 151,
+      "sha256": "692cf00d5fa33f02c54ac094dcf83d83e20f0e148986f064ffab2c4d2053a0c2"
+    },
+    {
+      "name": "root/b07-char-prepare01.json",
+      "sourcePath": "C:/opf-work/b07-char-prepare01.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 505,
+      "sha256": "94690c36ccecdcaa947b4b767c48937d15926c7c54cb9ac56125e2f93f02cb54"
+    },
+    {
+      "name": "root/b07-char-prepare01.stderr.log",
+      "sourcePath": "C:/opf-work/b07-char-prepare01.stderr.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-char-validate01-exit.json",
+      "sourcePath": "C:/opf-work/b07-char-validate01-exit.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 802,
+      "sha256": "ad768691ee18db055d25db2caf8741428688323467a5abe206855f1560515911"
+    },
+    {
+      "name": "root/b07-char-validate01.stderr.log",
+      "sourcePath": "C:/opf-work/b07-char-validate01.stderr.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 480,
+      "sha256": "b199cd304f0469a46dba7ea39d2523c4422e5b5484455164cdf4bf0912937227"
+    },
+    {
+      "name": "root/b07-char-validate01.stdout.log",
+      "sourcePath": "C:/opf-work/b07-char-validate01.stdout.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-char-validate02-exit.json",
+      "sourcePath": "C:/opf-work/b07-char-validate02-exit.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 1055,
+      "sha256": "540eaf3a76e939c9f51b6541722efa0d1a365567e9fe2b09777d9aab59c5b235"
+    },
+    {
+      "name": "root/b07-char-validate02-launch.mjs",
+      "sourcePath": "C:/opf-work/b07-char-validate02-launch.mjs",
+      "kind": "root-launch-or-receipt",
+      "bytes": 3683,
+      "sha256": "0d7fa968c689ff01941e168ca142b26800e57588bc533b66046f1793572a6a03"
+    },
+    {
+      "name": "root/b07-char-validate02-preflight.json",
+      "sourcePath": "C:/opf-work/b07-char-validate02-preflight.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 217,
+      "sha256": "838b3c11613b5279aedcd702514ce1543e3ba9aa79caaf4674139bdd66269254"
+    },
+    {
+      "name": "root/b07-char-validate02.stderr.log",
+      "sourcePath": "C:/opf-work/b07-char-validate02.stderr.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-char-validate02.stdout.log",
+      "sourcePath": "C:/opf-work/b07-char-validate02.stdout.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-char-validate03-exit.json",
+      "sourcePath": "C:/opf-work/b07-char-validate03-exit.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 1080,
+      "sha256": "4acaf7989e84d179d8db119ebed1f8fd59f263d19ffc69686cc1fe97ec585079"
+    },
+    {
+      "name": "root/b07-char-validate03-launch.mjs",
+      "sourcePath": "C:/opf-work/b07-char-validate03-launch.mjs",
+      "kind": "root-launch-or-receipt",
+      "bytes": 3705,
+      "sha256": "7c4cacc2c3012c2fdbaed3a3a1df048f1b3d767e33c1862d8ecbbfe49f385e58"
+    },
+    {
+      "name": "root/b07-char-validate03-preflight.json",
+      "sourcePath": "C:/opf-work/b07-char-validate03-preflight.json",
+      "kind": "root-launch-or-receipt",
+      "bytes": 217,
+      "sha256": "838b3c11613b5279aedcd702514ce1543e3ba9aa79caaf4674139bdd66269254"
+    },
+    {
+      "name": "root/b07-char-validate03.stderr.log",
+      "sourcePath": "C:/opf-work/b07-char-validate03.stderr.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-char-validate03.stdout.log",
+      "sourcePath": "C:/opf-work/b07-char-validate03.stdout.log",
+      "kind": "root-launch-or-receipt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/worktree-helper.log",
+      "sourcePath": "C:/opf-work/b07-char-native-proof-worktree01.log",
+      "kind": "setup",
+      "bytes": 1123,
+      "sha256": "7395549980e930cb0857be35894708d6ee897dd5d2cc0f3751fbfe0e5df8dc9c"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/.gitattributes",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\.gitattributes",
+      "kind": "frozen-source-not-executed",
+      "bytes": 9,
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/managed-check.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\managed-check.ps1",
+      "kind": "frozen-source-not-executed",
+      "bytes": 11545,
+      "sha256": "edb0e72845f553ee9b6152dd005048bf54899f64bed45ad9f1509b1139ecfd98"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/prepare-suite.mjs",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\prepare-suite.mjs",
+      "kind": "frozen-source-not-executed",
+      "bytes": 7820,
+      "sha256": "434e6157f2b2e68768b432ad48c6a7c5a79d5259093f934b70e90639f49a702a"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/prepare-suite.test.mjs",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\prepare-suite.test.mjs",
+      "kind": "frozen-source-not-executed",
+      "bytes": 2661,
+      "sha256": "3146e454f5e15df9cef81d2bd4321985f75a3da3a7e657e6f35c7c35cdf44666"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/README.md",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\README.md",
+      "kind": "frozen-source-not-executed",
+      "bytes": 3782,
+      "sha256": "6f2db492900eb5f58f6d277de4d962d7d575b39178b76c88767ed55092e81182"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/references/base-worker.ps1.gz",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\references\\base-worker.ps1.gz",
+      "kind": "frozen-source-not-executed",
+      "bytes": 19222,
+      "sha256": "51d0402f73e14b5686267d29457c6b7bdfa7ffdc773ff2a756f5a163235f0774"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/references/empty.json",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\references\\empty.json",
+      "kind": "frozen-source-not-executed",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/references/original09.pptx.gz",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\references\\original09.pptx.gz",
+      "kind": "frozen-source-not-executed",
+      "bytes": 72471,
+      "sha256": "3d91bd0a042595cd3ad7c7233012bc73b37ee3a33a39b844f33da813ec89068c"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/references/sealed-cli-preview.png",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\references\\sealed-cli-preview.png",
+      "kind": "frozen-source-not-executed",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/references/source.opf.json",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\references\\source.opf.json",
+      "kind": "frozen-source-not-executed",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/SOURCE.json",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\SOURCE.json",
+      "kind": "frozen-source-not-executed",
+      "bytes": 4783,
+      "sha256": "b101710f03c75dd06a1267f2b8c0929cfff6b6011e268690ea334d3d5584f676"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/worker-package/test/fixtures/sh25-native-circle-observations.json",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\worker-package\\test\\fixtures\\sh25-native-circle-observations.json",
+      "kind": "frozen-source-not-executed",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/worker-package/test/native-furniture-control.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\worker-package\\test\\native-furniture-control.ps1",
+      "kind": "frozen-source-not-executed",
+      "bytes": 90099,
+      "sha256": "528b18d4af829a51ffbb288be0120d62a4a0cb9e9bd2b8ad2e0e36faf3414afa"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/worker-package/test/native-furniture-harness-check.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\worker-package\\test\\native-furniture-harness-check.ps1",
+      "kind": "frozen-source-not-executed",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/worker-package/test/native-process-check.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\worker-package\\test\\native-process-check.ps1",
+      "kind": "frozen-source-not-executed",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "name": "source/tools/rr105-character-bounds/worker-package/test/native-process.ps1",
+      "sourcePath": "C:\\opf-work\\b07-char\\tools\\rr105-character-bounds\\worker-package\\test\\native-process.ps1",
+      "kind": "frozen-source-not-executed",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "name": "source/ce92-run-windows.ps1",
+      "sourcePath": "C:/opf-work/b07-char-ce92/scripts/native-acceptance/run-windows.ps1",
+      "kind": "frozen-controller-not-executed",
+      "bytes": 15359,
+      "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+    },
+    {
+      "name": "source/windows-powershell-env.mjs",
+      "sourcePath": "C:/opf-work/b07-char-ce92/scripts/native-acceptance/windows-powershell-env.mjs",
+      "kind": "environment-helper-not-executed",
+      "bytes": 495,
+      "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+    }
+  ],
+  "factsSha256": "8f82b0826ffbbe3437bd57c5996f274e5b9326eefc905b139aaa33b5d2d11e3f",
+  "inspectionSha256": "0ba9474b6e83f4e5e54e16df918bbe2d7f8ba9e579f54821fd7b955f35b5be3d",
+  "observationsSha256": "f7eb9ff6f8a37a2407fa01edade358cacbd0d96fe1de8b6973093f6c81797ee0",
+  "inspectionCompressedSha256": "59a35a19848060148d329437fee7f5a0618a4e86ce1516481fdb9a93700874a8",
+  "inspectionRawBytes": 8701700,
+  "inspectionCompressedBytes": 217546
+}
