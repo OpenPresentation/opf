@@ -9,7 +9,7 @@ import {isBareSlideNumber} from '../dist/furniture-fields.js';
 // Insert > Header & Footer shows Slide number checked and renumbers it.
 const dec = new TextDecoder();
 const options = {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
-const deck = right => ({design: {footer: {left: {text: 'Acme Corp'}, right: {text: right}}}, slides: [{title: 'One'}, {title: 'Two'}, {title: 'Three'}]});
+const deck = right => ({design: {footer: {start: {text: 'Acme Corp'}, end: {text: right}}}, slides: [{title: 'One'}, {title: 'Two'}, {title: 'Three'}]});
 const slide = (entries, index) => dec.decode(entries[`ppt/slides/slide${index}.xml`]);
 const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match => match[0]).filter(shape => /name="OPF furniture/.test(shape));
 const phTypes = xml => shapes(xml).map(shape => shape.match(/<p:ph type="(\w+)"/)?.[1]).filter(Boolean);
@@ -59,7 +59,7 @@ for (const right of ['{{slide.number}} / {{deck.slideCount}}', 'Page {{slide.num
 
 // A header number (never a placeholder) also becomes fixed text when it has words around it.
 {
-  const source = {design: {header: {right: {text: 'Page {{slide.number}}'}}}, slides: [{title: 'One'}, {title: 'Two'}]};
+  const source = {design: {header: {end: {text: 'Page {{slide.number}}'}}}, slides: [{title: 'One'}, {title: 'Two'}]};
   assert.match(slide(unzipSync(await toPptx(source, options)), 2), /type="slidenum"/);
   const entries = unzipSync(await toPptx(source, {...options, slideNumberFields: 'static'}));
   assert.equal(/type="slidenum"/.test(slide(entries, 2)), false);

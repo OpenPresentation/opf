@@ -7,7 +7,7 @@ import { startPlayground } from './support/playground-harness.mjs';
 // formatting kept, an invalid pattern reported without breaking the page, and the accessible names the panel exposes.
 const source = {
   name: 'Acme review',
-  design: { theme: 'classic', fontScheme: 'roboto', footer: { right: { text: 'Page {{slide.number}} of {{deck.slideCount}}' } } },
+  design: { theme: 'classic', fontScheme: 'roboto', footer: { end: { text: 'Page {{slide.number}} of {{deck.slideCount}}' } } },
   slides: [
     { id: 'one', title: 'Acme grows', subtitle: 'The Acme story', notes: 'Mention Acme first.', text: [{ text: 'Acme ', bold: true }, { text: 'is the best', italic: true }, ' place to work'] },
     { id: 'two', title: 'Numbers', items: ['Acme revenue', 'Cost of acme', 'Profit'] },

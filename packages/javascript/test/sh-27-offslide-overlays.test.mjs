@@ -4,9 +4,10 @@ import {validate} from '../dist/index.js';
 import {composeSlide} from '../dist/composition.js';
 const shape={id:'glow',shape:'ellipse',x:0.2692,y:-0.1,width:0.42,height:0.75,fill:{color:'accent2',darken:0.2},stroke:'none',layer:'back',decorative:true,opacity:0.45,softEdge:60};
 const deck=shapes=>({name:'Bleed',language:'en-US',slides:[{title:'Slide',shapes}]});
-test('negative origins and positions beyond 1 are valid, while dimensions retain their limits',()=>{
+test('signed origins and oversized dimensions are valid, while negative or unrepresentable dimensions refuse',()=>{
  for(const [x,y] of [[0.2692,-0.1],[-0.1,0.2],[1.05,0.2],[0.2,1.05]])assert.equal(validate(deck([{...shape,x,y}])).findings.filter(f=>f.severity==='error').length,0);
- for(const [key,value] of [['width',-0.1],['height',1.1],['x',NaN],['y',Infinity]])assert.ok(validate(deck([{...shape,[key]:value}])).findings.filter(f=>f.severity==='error').length,key+' rejects '+value);
+ assert.equal(validate(deck([{...shape,width:1.2,height:1.6}]),{only:['format']}).valid,true);
+ for(const [key,value] of [['width',-0.1],['height',Infinity],['x',NaN],['y',Infinity]])assert.ok(validate(deck([{...shape,[key]:value}])).findings.filter(f=>f.severity==='error').length,key+' rejects '+value);
 });
 test('the reported ellipse retains its off-slide box and never moves content',()=>{
  const doc=deck([shape]);const options={width:1280,height:720,presentation:doc};

@@ -80,8 +80,8 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/image-placement-invalid": ex(
     "Use `placement` on a top-level block of the slide, with one placed image per slide edge.",
-    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "left" } }, { image: IMG("b"), placement: { edge: "left" } }] },
-    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "left" } }, { image: IMG("b"), placement: { edge: "right" } }] },
+    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "start" } }, { image: IMG("b"), placement: { edge: "start" } }] },
+    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "start" } }, { image: IMG("b"), placement: { edge: "end" } }] },
   ),
   "opf/layout-placeholder-group": ex(
     "Flatten the group so it nests at most three levels, and keep the headings (title, subtitle, tag) at the record's top level. Layout records written for current versions use `regions`, where the same limits apply to splits.",

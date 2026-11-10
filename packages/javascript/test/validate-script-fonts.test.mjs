@@ -59,7 +59,7 @@ const runInEnglish = {
 	name: 'Arabic run in an English deck',
 	language: 'en-US',
 	slides: [
-		{ title: ['Quarterly review: ', { text: 'مراجعة ربع سنوية', lang: 'ar-SA' }], text: ['The Arabic phrase ', { text: arabicTitle, lang: 'ar-SA', bold: true }, ' sits inside this English paragraph.'] },
+		{ title: ['Quarterly review: ', { text: 'مراجعة ربع سنوية', language: 'ar-SA' }], text: ['The Arabic phrase ', { text: arabicTitle, language: 'ar-SA', bold: true }, ' sits inside this English paragraph.'] },
 	],
 };
 

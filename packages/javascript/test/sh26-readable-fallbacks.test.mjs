@@ -40,7 +40,7 @@ test('six long labels use spare space to grow beyond the frozen26px fallback wit
   assert.ok(entries(item).every(entry=>entry.text.richLines.every(line=>line.fragments.map(f=>f.text).join('').trim().length<=70)));
 });
 test('fallback reflow keeps headings, title decoration, exact frame and footer unchanged',()=>{
-  const doc=documentFor(fixture.cases[0].slide);doc.design={footer:{left:{text:'Complete original footer'},right:{text:'{{slide.number}}'}}};
+  const doc=documentFor(fixture.cases[0].slide);doc.design={footer:{start:{text:'Complete original footer'},end:{text:'{{slide.number}}'}}};
   const plain=structuredClone(doc);for(const region of plain.catalogs.custom.layouts['inverted-pyramid'].regions){delete region.arrangement;delete region.pyramidDirection;}
   const before=compose(plain),after=compose(doc),heading=g=>g.items.filter(item=>!item.path.includes('.blocks.'));
   assert.deepEqual(heading(after),heading(before));assert.deepEqual(after.titleRule,before.titleRule);
@@ -85,9 +85,9 @@ test('RTL columns retain source order, numbering and exact authored gap',()=>{
   const [right,left]=item.listColumns;assert.ok(Math.abs(right.box.x-left.box.x-left.box.width-.02*720)<.01);
 });
 test('rich label runs retain their authored text, emphasis, language and family',()=>{
-  const doc=documentFor(fixture.cases[2].slide);doc.slides[0].blocks[0].items=doc.slides[0].blocks[0].items.map(text=>[{text:text.slice(0,8),bold:true,lang:'en-US'},text.slice(8)]);
+  const doc=documentFor(fixture.cases[2].slide);doc.slides[0].blocks[0].items=doc.slides[0].blocks[0].items.map(text=>[{text:text.slice(0,8),bold:true,language:'en-US'},text.slice(8)]);
   const saved=structuredClone(doc),result=compose(doc),item=body(result)[0];assert.deepEqual(doc,saved);assert.deepEqual(entries(item).map(entry=>entry.value),doc.slides[0].blocks[0].items);
-  const fragments=entries(item).flatMap(entry=>entry.text.richLines.flatMap(line=>line.fragments));assert.ok(fragments.some(fragment=>fragment.run?.bold===true));assert.ok(fragments.filter(fragment=>fragment.run?.bold).every(fragment=>fragment.run.lang==='en-US'));
+  const fragments=entries(item).flatMap(entry=>entry.text.richLines.flatMap(line=>line.fragments));assert.ok(fragments.some(fragment=>fragment.run?.bold===true));assert.ok(fragments.filter(fragment=>fragment.run?.bold).every(fragment=>fragment.run.language==='en-US'));
   assert.ok(fragments.every(fragment=>fragment.style.fontFamily===item.textStyle.fontFamily));
 });
 test('actual Venn circles and valid tree nodes keep their native arrangement rather than becoming fallback columns',()=>{

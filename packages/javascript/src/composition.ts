@@ -21,7 +21,7 @@ import {chartHistogram} from './chart-histogram.js';
 import {chartNumericAxes} from './chart-numeric-axes.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
-import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
+import {itemAlignment,resolveDesignHints,type DesignAlignment,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
@@ -141,7 +141,7 @@ export interface FontFaceSelection { family: string; bold: boolean; italic: bool
 export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection;
   /** Declared weight-named family before host substitution, retained for explicit bold overrides on rich runs. */
   sourceFontFamily?: string;
-  /** BCP-47 tag of a run that overrides the deck language (`TextRun.lang`); absent when the deck language applies. */
+  /** BCP-47 tag of a run that overrides the deck language (`TextRun.language`); absent when the deck language applies. */
   lang?: string;
   /**
    * LH-32: drawn in capitals (an eyebrow). The text stays as authored: it is measured and drawn upper-cased (`toUpperCase`), and
@@ -1052,8 +1052,8 @@ export interface ComposeSlideOptions {
    */
   direction?: TextDirection;
   /** Deck-level alignment a host resolved itself. It ranks with `presentation.design`, above the layout record's design and below the slide's own design; hosts normally omit it because composition reads `presentation.design` and the layout. */
-  contentAlignment?: 'left' | 'center' | 'right';
-  titleAlignment?: 'left' | 'center' | 'right';
+  contentAlignment?: DesignAlignment;
+  titleAlignment?: DesignAlignment;
   /** Unscaled reference pixels around provided vector outlines; defaults to 1 for body text and 2 for furniture. Explicit values apply to both. */
   textRasterPadding?: number;
   /** Deck-level body cards a host resolved itself, ranked like contentAlignment. A slide's explicit design.contentBox overrides this value. */
@@ -1101,13 +1101,14 @@ const fields = ["text", "items", "bullets", "image", "video", "chart", "table", 
 const leafFields = (host: Record<string, any>) => fields.filter(field => host[field] !== undefined && field !== 'shape' && field !== 'path');
 const headings = new Set(["title", "subtitle", "tag"]);
 const rows = ["top", "middle", "bottom"];
-const columns = ["left", "center", "right"];
+const columns = ["start", "center", "end"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
 const kind = (field: string) => field === "items" ? "list" : field === "bullets" ? "text" : field;
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
 /** Default share of the slide width (left/right) or height (top/bottom) given to a placed image's band. */
 const PLACEMENT_BAND = 0.5;
-const IMAGE_EDGES = ['left', 'right', 'top', 'bottom'] as const;
+/** The engine's side for an authored `edge`: `start` is `left` and `end` is `right` here, before a right-to-left deck mirrors them (`mirrorSide`). */
+const logicalEdge = (edge: unknown): ImageEdge | undefined => edge === 'start' ? 'left' : edge === 'end' ? 'right' : edge === 'top' || edge === 'bottom' ? edge : undefined;
 const IMAGE_FITS = ['cover', 'contain', 'stretch', 'auto'] as const;
 const BACKGROUND_FITS = ['cover', 'contain', 'stretch', 'tile'] as const;
 /** Image sources the background string shorthand accepts (opf.schema.json ImageSource). */
@@ -1232,7 +1233,7 @@ function composeRecolor(value: unknown): ComposedImage['recolor'] {
 function composeOverlay(value: unknown, frame: LayoutBox, shape: ImageShape, path: string, mirrorSide: (side: string) => string, diagnostics: LayoutDiagnostic[]): ComposedOverlay | undefined {
   const overlay = record(value), opacity = finite(overlay.opacity, 0, 1);
   if (overlay.color === undefined || opacity === undefined) return undefined;
-  const edge = (IMAGE_EDGES as readonly unknown[]).includes(overlay.edge) ? mirrorSide(overlay.edge as string) as ImageEdge : undefined;
+  const authoredEdge = logicalEdge(overlay.edge), edge = authoredEdge ? mirrorSide(authoredEdge) as ImageEdge : undefined;
   if (edge && shape.preset !== 'rect') {
     diagnostics.push({ code: 'unsupported-image-treatment', path: `${path}.edge`, message: 'An edge overlay needs a rectangle frame; a band cannot follow another preset mask as one native shape. Remove edge or use shape rect.' });
     return undefined;
@@ -1377,7 +1378,7 @@ function resolveBackgroundImage(slide: Record<string, any>, presentation: unknow
 
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
-  zone: 'left' | 'center' | 'right';
+  zone: 'start' | 'center' | 'end';
   field: 'text' | 'image' | 'socials' | 'date';
   /** Literal field or controlling flag, with the actual inherited/local path. */
   path: string;
@@ -1543,15 +1544,15 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     configured=true;
     const zones:FurniturePart[][]=[];
     // The three zones are columns on the content inset (the same left edge as the body), separated by a gutter. A zone
-    // with nothing in it lends its column to the occupied neighbours, so a lone `left` footer spans the content width
-    // and a footer with a left and a right zone shares the free centre. A centre zone stays centred on the slide.
+    // with nothing in it lends its column to the occupied neighbours, so a lone `start` footer spans the content width
+    // and a footer with a start and an end zone shares the free centre. A centre zone stays centred on the slide.
     const inset=Math.min((settings.padding??.08)*Math.min(width,height),width*.25),gutter=width*FURNITURE_ZONE_GUTTER,column=(width-2*inset-2*gutter)/3;
     const slotOf=(index:number)=>furnitureRtl&&index!==1?2-index:index;
-    const hasContent=(zone:'left'|'center'|'right')=>{
+    const hasContent=(zone:'start'|'center'|'end')=>{
       const item=record(record(value)[zone]);
       return item.image!==undefined||(typeof item.text==='string'?item.text.trim()!=='':item.text!==undefined)||item.socials===true||item.date===true||typeof item.date==='string';
     };
-    const slots=(['left','center','right'] as const).map((zone,index)=>({slot:slotOf(index),occupied:hasContent(zone)})).sort((a,b)=>a.slot-b.slot);
+    const slots=(['start','center','end'] as const).map((zone,index)=>({slot:slotOf(index),occupied:hasContent(zone)})).sort((a,b)=>a.slot-b.slot);
     const first=slots.findIndex(entry=>entry.occupied);
     const interval=(slot:number):{x:number;width:number}=>{
       const start=inset+slot*(column+gutter),end=start+column;
@@ -1562,10 +1563,10 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       const lend=slot===1?Math.min(left,right):undefined;
       return {x:start-(lend??left),width:column+(lend??left)+(lend??right)};
     };
-    for(const [index,zone]of (['left','center','right'] as const).entries()){
-      // Right to left: the authored `left` zone is drawn at the right and `right` at the left; `zone` keeps the authored name.
+    for(const [index,zone]of (['start','center','end'] as const).entries()){
+      // Right to left: the `start` zone is drawn at the right and `end` at the left; `zone` keeps the authored name.
       // `alignment` is the physical edge the zone's text sits on (never flipped again by line direction).
-      const side=furnitureRtl&&zone!=='center'?(zone==='left'?'right':'left'):zone;
+      const side=zone==='center'?'center':(zone==='start')!==furnitureRtl?'left':'right';
       const content=record(record(value)[zone]),path=`${root}.${zone}`,{x,width:zoneWidth}=interval(slotOf(index));
       type PendingText={type:'text';field:FurniturePartBase['field'];text:string;generated:boolean;sourcePath:string|undefined;extras:FurnitureTextExtras;partPath:string;style:TextStyle};
       type PendingImage={type:'image';sourcePath:string;image:unknown;reference?:string;width:number;height:number};
@@ -3540,7 +3541,7 @@ export interface RichTextRun {
   /** Inline code: the run takes the design's code font (`RichTextOptions.codeFontFamily`) unless it names its own `fontFamily`. */
   code?: boolean;
   /** BCP-47 tag that overrides the deck language for this run; it reaches the fragment style as `style.lang`. */
-  lang?: string;
+  language?: string;
   /** RR-34: reference ids this run cites (a marker follows the run; the deck's `references` list resolves them). */
   cite?: string | string[];
   /** RR-34: an inline footnote for this run (a marker follows the run; the note is listed in the slide's footnote area). */
@@ -3608,7 +3609,7 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const start=offset;offset+=run.text.length;
     const resolvedStyle=resolveTextStyle({...options.style,fontFamily:run.fontFamily??(run.code===true?options.codeFontFamily??'monospace':run.bold!==undefined?options.style.sourceFontFamily??options.style.fontFamily:options.style.fontFamily),fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
     // A run language reaches the measurement and the engines as `style.lang`, after the host resolved the family (it may rebuild the style).
-    const style:TextStyle=typeof run.lang==='string'&&run.lang?{...resolvedStyle,lang:run.lang}:resolvedStyle;
+    const style:TextStyle=typeof run.language==='string'&&run.language?{...resolvedStyle,lang:run.language}:resolvedStyle;
     // RR-34: a citation/footnote marker belongs to the run end; it needs a path and text to attach to.
     const marker=options.citationMarker&&options.style.path&&run.text?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
     return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
@@ -6125,7 +6126,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   let headingAlignment: 'left' | 'center' | 'right' | undefined;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
     headingAlignment && (field === 'title' || field === 'tag' || (subtitleInGroup && field === 'subtitle')) ? headingAlignment : ((field === 'title' || ((field === 'tag' || (subtitleInGroup && field === 'subtitle')) && hints.sources.contentAlignment !== 'slide')
-      ? hints.titleAlignment : hints.contentAlignment) ?? (field === 'metric' ? 'center' : 'left'));
+      ? itemAlignment(hints.titleAlignment) : itemAlignment(hints.contentAlignment)) ?? (field === 'metric' ? 'center' : 'left'));
   // LH-50: the paths of the text blocks drawn as the eyebrow of the text after them (eyebrowLabel), each with whether it is set in
   // capitals (eyebrowCaps). Filled when the body's blocks are grouped, before any of them is fitted.
   const eyebrowLabels = new Map<string, boolean>();
@@ -6559,8 +6560,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const own = node.block !== undefined && node.host.placement !== undefined ? record(node.host.placement) : undefined;
     const automatic = !own && autoTrack !== undefined && node.block === autoTrack.block;
     const value = automatic ? autoTrack : own;
-    if (!value || !(IMAGE_EDGES as readonly unknown[]).includes(value.edge)) return;
-    const edge = mirrorSide(value.edge) as ImageEdge;
+    const logical = automatic ? autoTrack.edge : logicalEdge(own?.edge);
+    if (!value || !logical) return;
+    const edge = mirrorSide(logical) as ImageEdge;
     if (usedEdges.has(edge)) return;
     usedEdges.add(edge);
     const size = finite(value.size, 0.1, 0.9) ?? PLACEMENT_BAND;
@@ -9971,7 +9973,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // mode in their column.
   // LH-61: a KPI column (kpiColumn) stacks the other blocks in a column whatever the slide's own mode.
   const chartTrack = (options as Record<symbol, unknown>)[CHART_TRACK] as { edge: ImageEdge; share: number; mode?: Composition['mode'] } | undefined;
-  const chartHint = chartTrack?.edge ?? hints.chartPrimary;
+  const chartHint = chartTrack?.edge ?? (hints.chartPrimary === 'start' ? 'left' : hints.chartPrimary === 'end' ? 'right' : hints.chartPrimary);
   const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
   const chartPrimary = chartSide !== undefined && !useTemplate && (chartTrack !== undefined || !ownMode) && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
@@ -11458,7 +11460,7 @@ export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapp
 export {chartDrawPlan,chartDrawDiagnostics,isPlaceLabel,markLabelColor} from './chart-fallback.js';
 export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 
-export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
+export { resolveDesignHints, itemAlignment, DESIGN_HINT_KEYS, type DesignAlignment, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
 export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';

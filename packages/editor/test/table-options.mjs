@@ -228,8 +228,8 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   const editor = session();
   const change = setTableCellStyle(editor, T, [body(0, 0), header(1)], { fill: "#FFEEEE", align: "right" });
   assert.equal(change.skipped, 0);
-  assert.deepEqual(editor.get(`${T}.rows.0.0`), { value: "North", style: { fill: "#FFEEEE", align: "right" } });
-  assert.deepEqual(editor.get(`${T}.columns.1`), { value: "Q1", style: { fill: "#FFEEEE", align: "right" } });
+  assert.deepEqual(editor.get(`${T}.rows.0.0`), { value: "North", style: { fill: "#FFEEEE", align: "end" } });
+  assert.deepEqual(editor.get(`${T}.columns.1`), { value: "Q1", style: { fill: "#FFEEEE", align: "end" } });
   setTableCellStyle(editor, T, body(0, 0), { align: null });
   assert.deepEqual(editor.get(`${T}.rows.0.0`), { value: "North", style: { fill: "#FFEEEE" } });
   setTableCellStyle(editor, T, body(0, 0), null);

@@ -128,7 +128,7 @@ const referenceRules: ValidationRuleInfo[] = [
 		'references',
 		'error',
 		"A layout template's regions are not valid.",
-		"Region names are unique across the whole record and may not be tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.",
+		"Region names are unique across the whole record and may not be tag, auto or a promoted-region word (start, center, end, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.",
 		{ standard: 'spec/schemas/layout.schema.json and the region rules (docs/layout-templates.md)' },
 	),
 	rule(
@@ -316,7 +316,7 @@ export const languageRule = rule(
 	'info',
 	'The presentation does not declare its language.',
 	'Screen readers and text-to-speech choose pronunciation and hyphenation from the declared language; spell checkers and translation tools use it too.',
-	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.lang`; opf/language-tag checks how those tags are written).' },
+	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written).' },
 );
 
 // rules-layout-content.ts
@@ -485,11 +485,11 @@ export const languageTagRule = rule(
 	'content',
 	'warning',
 	'A language tag is malformed, uses an unassigned region or is not in canonical case.',
-	'Engines read the deck and slide language and each run\'s `lang` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.',
+	'Engines read the deck and slide language and each run\'s `language` as BCP 47 tags to choose script fonts, text direction, proofing language and the PowerPoint `lang` attribute. A tag such as `en-a`, or a region that does not exist (`en-UK`; the United Kingdom is `GB`), is guessed at or dropped, and a wrong-case tag (`EN-us`) is not what a locale lookup expects.',
 	{
 		standard: 'BCP 47 (RFC 5646, section 2.1) and the platform locale data (Intl.getCanonicalLocales, Intl.DisplayNames)',
 		approximations:
-			'Checks the root and slide `language` (a tag string, or the `bcp47` of an inline Language object) and `lang` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime\'s CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.',
+			'Checks the root and slide `language` (a tag string, or the `bcp47` of an inline Language object) and `language` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime\'s CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.',
 	},
 );
 

@@ -73,7 +73,7 @@ const deck = () => ({
       layouts: { cover: { historical: true } },
     },
   },
-  design: { footer: { left: { text: "Authored" } } },
+  design: { footer: { start: { text: "Authored" } } },
   slides: [
     {
       id: "s02",

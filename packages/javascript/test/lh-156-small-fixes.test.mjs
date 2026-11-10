@@ -45,7 +45,7 @@ describe('LH-157: metrics with an inline unit share the value size of their row'
 });
 
 describe('LH-38: header and footer sit half a content margin from the slide edge', () => {
-  const presentation = { design: { header: { left: { text: 'Quarterly review' } }, footer: { left: { text: 'Confidential' }, right: { text: '{{slide.number}}' } } } };
+  const presentation = { design: { header: { start: { text: 'Quarterly review' } }, footer: { start: { text: 'Confidential' }, end: { text: '{{slide.number}}' } } } };
   const edges = (width, height, composition) => {
     const layout = layoutFurniture({ composition }, { width, height, presentation });
     const header = layout.parts.filter((part) => part.kind === 'header'), footer = layout.parts.filter((part) => part.kind === 'footer');

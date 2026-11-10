@@ -110,7 +110,7 @@
     {
       "id": "bullets-and-restart",
       "title": "Bullets and an entry start",
-      "left": {
+      "start": {
         "bullets": [
           "First point",
           "Second point",
@@ -122,7 +122,7 @@
         ],
         "numbering": "arabic"
       },
-      "right": {
+      "end": {
         "items": [
           "Plain bullet",
           "Plain bullet again"
@@ -132,7 +132,7 @@
     {
       "id": "beside-blocks",
       "title": "Beside other blocks",
-      "left": {
+      "start": {
         "items": [
           {
             "text": "Collect the requirements",
@@ -149,7 +149,7 @@
         ],
         "numbering": "arabic"
       },
-      "right": {
+      "end": {
         "metric": {
           "value": "3",
           "label": "steps to a decision"

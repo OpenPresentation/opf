@@ -40,7 +40,7 @@ const deck = () => ({
         { chart: { type: "column", data: { columns: ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Costs"], rows: [["Q1", 12.4, 5], ["Q2", 18.1, 8]] } } },
         { chart: { type: "column", data: { dataset: "revenue", fields: ["Quarter", "Costs"] } } },
         { table: { dataset: "revenue", fields: ["Quarter", "Revenue"] } },
-        { table: { columns: ["Region", { name: "Share", format: "0%" }, { value: "Growth", style: { align: "right" }, format: "0.0%" }], rows: [["EMEA", 0.4, 0.1], ["APAC", 0.6, { value: 0.2, format: "0%" }]] } },
+        { table: { columns: ["Region", { name: "Share", format: "0%" }, { value: "Growth", style: { align: "end" }, format: "0.0%" }], rows: [["EMEA", 0.4, 0.1], ["APAC", 0.6, { value: 0.2, format: "0%" }]] } },
         { chart: { type: "scatter", data: { columns: ["Label", "Spend", "Revenue", "Margin"], rows: [["A", 1, 10, 0.1], ["B", 2, 14, 0.2]] } } },
         { chart: { type: "column", data: { dataset: "revenue" }, mapping: { series: ["Costs"] } } },
       ],
@@ -198,10 +198,10 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
     assert.deepEqual(editor.get(`${T_INLINE}.columns.0`), { name: "Region", format: "0" });
   });
   step(editor, "set a format on a styled table header", () => grid.setGridColumnFormat(editor, T_INLINE, 2, "0%"), () => {
-    assert.deepEqual(editor.get(`${T_INLINE}.columns.2`), { value: "Growth", style: { align: "right" }, format: "0%" });
+    assert.deepEqual(editor.get(`${T_INLINE}.columns.2`), { value: "Growth", style: { align: "end" }, format: "0%" });
   });
   step(editor, "clear a styled header's format", () => grid.setGridColumnFormat(editor, T_INLINE, 2, null), () => {
-    assert.deepEqual(editor.get(`${T_INLINE}.columns.2`), { value: "Growth", style: { align: "right" } });
+    assert.deepEqual(editor.get(`${T_INLINE}.columns.2`), { value: "Growth", style: { align: "end" } });
   });
   const noHeader = session({ name: "NH", design: { theme: "minimal", fontScheme: "aptos" }, slides: [{ id: "n", title: "N", table: { rows: [["a", 1]] } }] });
   refuses(noHeader, "a table without a header", () => grid.setGridColumnFormat(noHeader, "slides.0.table", 1, "0"), "grid-no-header");
@@ -538,7 +538,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
     assert.equal(editor.get(`${T}.columns`), undefined);
   });
   step(editor, "style a DataColumn header cell", () => tables.setTableCellStyle(editor, T, [{ section: "header", column: 1 }], { align: "right" }), () => {
-    assert.deepEqual(editor.get(`${T}.columns.1`), { value: "Share", format: "0%", style: { align: "right" } }, "the column keeps its format as a styled header");
+    assert.deepEqual(editor.get(`${T}.columns.1`), { value: "Share", format: "0%", style: { align: "end" } }, "the column keeps its format as a styled header");
   });
   step(editor, "a table style over DataColumn headers", () => tables.setTableStyle(editor, T, "minimal"));
   step(editor, "merge a DataColumn header, joining the text", () => tables.mergeTableCells(editor, T, { section: "header", row: 0, column: 0 }, { colSpan: 2 }, { join: true }), () => {

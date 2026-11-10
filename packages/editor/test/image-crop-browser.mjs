@@ -35,7 +35,7 @@ try {
       { id: 'block', title: 'Block picture', blocks: [{ image: { src: 'asset:photo', alt: 'A red and blue picture' }, fit: 'contain' }, { text: 'Beside the picture', emphasis: false }] },
       { id: 'root', title: 'Root picture', image: 'asset:photo', text: 'Text beside it' },
       // OPF 0.15: an image block placed along the right edge (FA-22 placement), in place of the 0.14 slide image.
-      { id: 'placed', title: 'Placed picture', blocks: [{ image: 'asset:photo', placement: { edge: 'right', size: 0.45 } }, { text: 'Text' }] },
+      { id: 'placed', title: 'Placed picture', blocks: [{ image: 'asset:photo', placement: { edge: 'end', size: 0.45 } }, { text: 'Text' }] },
     ],
   };
   await app.load(source);

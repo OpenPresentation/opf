@@ -11,50 +11,50 @@ const parts = (footer, options = {}) => layoutFurniture({}, {presentation: {desi
 const box = (footer, zone, options) => parts(footer, options).find(part => part.zone === zone).box;
 
 test('a lone zone starts on the content inset and spans the content width', () => {
-  for (const zone of ['left', 'center', 'right']) {
+  for (const zone of ['start', 'center', 'end']) {
     const {x, width} = box({[zone]: {text: source}}, zone);
     near(x, INSET, `${zone} x`);
     near(width, 1280 - 2 * INSET, `${zone} width`);
   }
   // The long source that wrapped to four lines in a 26% zone now needs two.
-  assert.equal(parts({left: {text: source}})[0].fit.lines.length, 2);
+  assert.equal(parts({start: {text: source}})[0].fit.lines.length, 2);
   // Portrait and a custom padding move the inset with the composition.
-  near(box({left: {text: 'x'}}, 'left', {width: 720, height: 1280}).x, 0.08 * 720, 'portrait');
-  near(box({left: {text: 'x'}}, 'left', {width: 720, height: 1280}).width, 720 - 2 * 0.08 * 720, 'portrait width');
-  const padded = layoutFurniture({composition: {padding: 0.05}}, {presentation: {design: {footer: {left: {text: 'x'}}}}}).parts[0].box;
+  near(box({start: {text: 'x'}}, 'start', {width: 720, height: 1280}).x, 0.08 * 720, 'portrait');
+  near(box({start: {text: 'x'}}, 'start', {width: 720, height: 1280}).width, 720 - 2 * 0.08 * 720, 'portrait width');
+  const padded = layoutFurniture({composition: {padding: 0.05}}, {presentation: {design: {footer: {start: {text: 'x'}}}}}).parts[0].box;
   near(padded.x, 0.05 * 720, 'padding x');
   near(padded.width, 1280 - 2 * 0.05 * 720, 'padding width');
 });
 
 test('zones with occupied neighbours are columns; empty zones lend their width', () => {
-  const all = {left: {text: 'L'}, center: {text: 'C'}, right: {text: 'R'}};
-  near(box(all, 'left').x, INSET, 'left column x');
-  near(box(all, 'left').width, COLUMN, 'left column');
+  const all = {start: {text: 'L'}, center: {text: 'C'}, end: {text: 'R'}};
+  near(box(all, 'start').x, INSET, 'left column x');
+  near(box(all, 'start').width, COLUMN, 'left column');
   near(box(all, 'center').x, INSET + COLUMN + GUTTER, 'center column x');
   near(box(all, 'center').width, COLUMN, 'center column');
-  near(box(all, 'right').x + box(all, 'right').width, CONTENT_RIGHT, 'right column ends on the inset');
+  near(box(all, 'end').x + box(all, 'end').width, CONTENT_RIGHT, 'right column ends on the inset');
   // Left and right share the free centre; one gutter remains between them.
-  const [left, right] = [box({left: {text: 'L'}, right: {text: 'R'}}, 'left'), box({left: {text: 'L'}, right: {text: 'R'}}, 'right')];
+  const [left, right] = [box({start: {text: 'L'}, end: {text: 'R'}}, 'start'), box({start: {text: 'L'}, end: {text: 'R'}}, 'end')];
   near(left.x, INSET, 'left x');
   near(right.x + right.width, CONTENT_RIGHT, 'right edge');
   near(right.x - (left.x + left.width), GUTTER, 'one gutter between the zones');
   assert.ok(left.width > COLUMN && right.width > COLUMN);
   // Left and centre: the centre keeps its own column and stays centred on the slide.
-  const lc = {left: {text: 'L'}, center: {text: 'C'}};
+  const lc = {start: {text: 'L'}, center: {text: 'C'}};
   near(box(lc, 'center').x + box(lc, 'center').width / 2, 640, 'a centre zone stays centred on the slide');
-  assert.ok(box(lc, 'left').x + box(lc, 'left').width <= box(lc, 'center').x - GUTTER + 1e-6, 'no overlap');
+  assert.ok(box(lc, 'start').x + box(lc, 'start').width <= box(lc, 'center').x - GUTTER + 1e-6, 'no overlap');
   // A zone with no content (empty text, false flags) is empty.
-  near(box({left: {text: source}, center: {text: ''}, right: {socials: false}}, 'left').width, 1280 - 2 * INSET, 'empty zones are lent');
+  near(box({start: {text: source}, center: {text: ''}, end: {socials: false}}, 'start').width, 1280 - 2 * INSET, 'empty zones are lent');
 });
 
 test('right-to-left mirrors the zones and their lent width', () => {
   const rtl = {direction: 'rtl'};
-  const lone = parts({left: {text: source}}, rtl)[0];
+  const lone = parts({start: {text: source}}, rtl)[0];
   assert.equal(lone.alignment, 'right');
   near(lone.box.x, INSET, 'a lone zone spans the content width');
   near(lone.box.x + lone.box.width, CONTENT_RIGHT, 'and ends on the right inset');
-  const both = parts({left: {text: 'L'}, right: {text: 'R'}}, rtl);
-  const authoredLeft = both.find(part => part.zone === 'left'), authoredRight = both.find(part => part.zone === 'right');
+  const both = parts({start: {text: 'L'}, end: {text: 'R'}}, rtl);
+  const authoredLeft = both.find(part => part.zone === 'start'), authoredRight = both.find(part => part.zone === 'end');
   assert.equal(authoredLeft.alignment, 'right');
   near(authoredLeft.box.x + authoredLeft.box.width, CONTENT_RIGHT, 'authored left is drawn at the right');
   near(authoredRight.box.x, INSET, 'authored right is drawn at the left');
@@ -65,17 +65,17 @@ const wrapFindings = document => validate(document).findings.filter(finding => f
 
 test('opf/furniture-wraps warns when a header or footer zone wraps past two lines', () => {
   // Three lines in a column, two across the content width.
-  const crowded = wrapFindings(deck({left: {text: source}, center: {text: 'Centre'}, right: {text: '{{slide.number}}'}}));
+  const crowded = wrapFindings(deck({start: {text: source}, center: {text: 'Centre'}, end: {text: '{{slide.number}}'}}));
   assert.equal(crowded.length, 1);
   assert.equal(crowded[0].severity, 'warning');
-  assert.equal(crowded[0].path, '/design/footer/left/text');
+  assert.equal(crowded[0].path, '/design/footer/start/text');
   assert.match(crowded[0].help, /caption/);
   assert.match(crowded[0].help, /speaker notes/);
-  assert.equal(wrapFindings(deck({left: {text: source}})).length, 0, 'two lines across the whole width is fine');
-  assert.equal(wrapFindings(deck({left: {text: `${source} ${source}`}})).length, 1);
-  assert.equal(wrapFindings(deck({left: {text: 'Short'}})).length, 0);
+  assert.equal(wrapFindings(deck({start: {text: source}})).length, 0, 'two lines across the whole width is fine');
+  assert.equal(wrapFindings(deck({start: {text: `${source} ${source}`}})).length, 1);
+  assert.equal(wrapFindings(deck({start: {text: 'Short'}})).length, 0);
   // A header is covered too, and a deck-level zone is reported once for all slides.
-  const header = {...deck({}), design: {header: {left: {text: `${source} ${source}`}}}, slides: [{title: 'A'}, {title: 'B'}]};
+  const header = {...deck({}), design: {header: {start: {text: `${source} ${source}`}}}, slides: [{title: 'A'}, {title: 'B'}]};
   assert.equal(wrapFindings(header).length, 1);
-  assert.equal(wrapFindings(header)[0].path, '/design/header/left/text');
+  assert.equal(wrapFindings(header)[0].path, '/design/header/start/text');
 });

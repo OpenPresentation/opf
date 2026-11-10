@@ -350,8 +350,8 @@ export interface ComposedConnector {
 /** An entry of `SlideComposition.overlayShapes`, in draw order. */
 export type ComposedOverlayEntry = ComposedOverlayShape | ComposedConnector;
 
-/** The promoted region keys of a slide (`left`, `center+right`, `top:left` ...), whose payloads are blocks too. */
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:middle|bottom))*(?::(?:left|center|right)(?:\+(?:center|right))*)?|(?:left|center|right)(?:\+(?:center|right))*)$/;
+/** The promoted region keys of a slide (`start`, `center+end`, `top:start` ...), whose payloads are blocks too. */
+const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:middle|bottom))*(?::(?:start|center|end)(?:\+(?:center|end))*)?|(?:start|center|end)(?:\+(?:center|end))*)$/;
 
 /** Every block id of a slide with its dotted path (`slides.0.blocks.1.blocks.0`), in document order; the first of a repeated id wins. */
 export function slideBlockIds(slide: unknown, slidePath: string): Map<string, string> {
@@ -467,9 +467,12 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
  * An overlay shape's frame in slide pixels: `x`, `y`, `width`, `height` as fractions of the slide (`x` from the right edge in a right-to-left
  * deck), or `at` against a composed block. Undefined when the entry has neither placement, both, or a block that is not composed.
  */
+/** The largest width or height of an overlay shape, in slides (and of an anchored one, in targets): above 1 a shape bleeds off the slide. */
+export const OVERLAY_SIZE_MAX = Number.MAX_VALUE;
+
 function overlayBox(host: Rec, context: { path: string; width: number; height: number; scale: number; rtl: boolean; blockOf: (id: string) => BlockTarget | undefined; point: (block: BlockTarget, at: Rec) => ChartPointGeometry | undefined }): { box: LayoutBox; attachedTo?: ComposedOverlayShape['attachedTo'] } | undefined {
   const { width, height, scale, rtl } = context;
-  const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], key === 'x' || key === 'y' ? -Number.MAX_VALUE : 0, key === 'x' || key === 'y' ? Number.MAX_VALUE : 1));
+  const fractions = ['x', 'y', 'width', 'height'].map(key => finite(host[key], key === 'x' || key === 'y' ? -Number.MAX_VALUE : 0, key === 'x' || key === 'y' ? Number.MAX_VALUE : OVERLAY_SIZE_MAX));
   const hasFractions = ['x', 'y', 'width', 'height'].some(key => host[key] !== undefined), hasAt = host.at !== undefined;
   if (hasFractions === hasAt) return undefined;
   if (hasFractions) {
@@ -486,8 +489,12 @@ function overlayBox(host: Rec, context: { path: string; width: number; height: n
   const target = point?.box ?? block.box;
   const preset = typeof host.shape === 'string' && isPresetShape(host.shape) ? host.shape : host.path !== undefined ? undefined : 'rect';
   const aspect = presetAspect(preset);
-  const size = (value: unknown, along: number): number | undefined => { const own = finite(value, Number.MIN_VALUE, 1280); return own === undefined ? undefined : own <= 1 ? own * along : own * scale; };
-  let w = size(at.width, target.width), h = size(at.height, target.height);
+  // One unit per key: `width` and `height` are fractions of the target (the block's box, or a chart mark's bounds), `widthPx` and
+  // `heightPx` reference pixels. Conflicting units are refused even when validation was skipped.
+  const share = (value: unknown, along: number): number | undefined => { const own = finite(value, Number.MIN_VALUE, OVERLAY_SIZE_MAX); return own === undefined ? undefined : own * along; };
+  const pixels = (value: unknown): number | undefined => { const own = finite(value, Number.MIN_VALUE, 1280); return own === undefined ? undefined : own * scale; };
+  if (at.width !== undefined && at.widthPx !== undefined || at.height !== undefined && at.heightPx !== undefined) return undefined;
+  let w = pixels(at.widthPx) ?? share(at.width, target.width), h = pixels(at.heightPx) ?? share(at.height, target.height);
   if (w === undefined && h === undefined) {
     const short = point ? Math.max(12 * scale, OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height)) : OVERLAY_ANCHOR_SHARE * Math.min(target.width, target.height);
     if (aspect >= 1) { h = short; w = short * aspect; } else { w = short; h = short / aspect; }
@@ -496,13 +503,13 @@ function overlayBox(host: Rec, context: { path: string; width: number; height: n
   const offset = (finite(at.offset, -720, 720) ?? 0) * scale;
   if (point) {
     const {ok: _ok, ...chartPoint} = point;
-    return {box: {x: round(point.position.x + point.normal.x * offset - w! / 2), y: round(point.position.y + point.normal.y * offset - h! / 2), width: round(w!), height: round(h!)}, attachedTo: {id: at.block, ref: block.chart!.path, edge: 'center', chartPoint}};
+    return {box: representablePositionBox({x: point.position.x + point.normal.x * offset - w! / 2, y: point.position.y + point.normal.y * offset - h! / 2, width: w!, height: h!}, context.path), attachedTo: {id: at.block, ref: block.chart!.path, edge: 'center', chartPoint}};
   }
   const edge = at.edge === 'start' ? (rtl ? 'right' : 'left') : at.edge === 'end' ? (rtl ? 'left' : 'right') : at.edge as 'top' | 'bottom' | 'center';
   const middleX = target.x + (target.width - w!) / 2, middleY = target.y + (target.height - h!) / 2;
   const [x, y] = edge === 'top' ? [middleX, target.y - offset - h!] : edge === 'bottom' ? [middleX, target.y + target.height + offset]
     : edge === 'left' ? [target.x - offset - w!, middleY] : edge === 'right' ? [target.x + target.width + offset, middleY] : [middleX, middleY];
-  return { box: { x: round(x), y: round(y), width: round(w!), height: round(h!) }, attachedTo: { id: at.block, ref: block.ref, edge } };
+  return { box: representablePositionBox({ x, y, width: w!, height: h! }, context.path), attachedTo: { id: at.block, ref: block.ref, edge } };
 }
 
 // A common-engine exact-representation check, not PowerPoint's coordinate maximum.
@@ -605,7 +612,7 @@ export function overlayIssues(slide: unknown, slidePath: string, presentation?: 
     const fractions = ['x', 'y', 'width', 'height'].filter(key => host[key] !== undefined), anchored = host.at !== undefined;
     const missing = fractions.length ? ['x', 'y', 'width', 'height'].filter(key => host[key] === undefined) : [];
     for (const key of ['x', 'y']) if (typeof host[key] === 'number' && !Number.isFinite(host[key])) issues.push({ path: `${at}/${key}`, message: `an overlay shape's ${key} must be a finite fraction of the slide`, params: { key } });
-    if (canvas && !anchored && ['x', 'y', 'width', 'height'].every(key => typeof host[key] === 'number' && Number.isFinite(host[key])) && host.width >= 0 && host.width <= 1 && host.height >= 0 && host.height <= 1) {
+    if (canvas && !anchored && ['x', 'y', 'width', 'height'].every(key => typeof host[key] === 'number' && Number.isFinite(host[key])) && host.width >= 0 && host.width <= OVERLAY_SIZE_MAX && host.height >= 0 && host.height <= OVERLAY_SIZE_MAX) {
       try { fractionalOverlayFrame(host, canvas, at.replace(/^\//, '').replaceAll('/', '.')); }
       catch (error) {
         if (!(error instanceof PositionRangeError)) throw error;

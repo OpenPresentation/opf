@@ -6,11 +6,11 @@ import {toPptx,fromPptx} from './helpers/default-catalog.mjs';
 
 const hidden = ['Global header must be suppressed.','Global footer must be suppressed.'];
 const flags = {
-  design:{fontScheme:'roboto',header:{left:{text:hidden[0]}},footer:{right:{text:hidden[1]}}},
+  design:{fontScheme:'roboto',header:{start:{text:hidden[0]}},footer:{end:{text:hidden[1]}}},
   slides:[
     {title:'False and empty',text:'Body one',design:{header:false,footer:{}}},
     {title:'Empty and false',text:'Body two',design:{header:{},footer:false}},
-    {title:'Inactive fields',text:'Body three',design:{header:{left:{text:''},center:{date:false}},footer:{right:{text:''}}}}
+    {title:'Inactive fields',text:'Body three',design:{header:{start:{text:''},center:{date:false}},footer:{end:{text:''}}}}
   ]
 };
 const assertNoHidden = (bytes, document) => {
@@ -40,7 +40,7 @@ assertNoHidden(replay,reimported);
 // An actual newly added native footer placeholder wins; deleting it restores
 // the still-suppressed baseline, never either unrendered global definition.
 const addedText='New native footer';
-const control=unzipSync(await toPptx({slides:[{title:'Control',text:'Body',design:{footer:{right:{text:addedText}}}}]},{seed:1}));
+const control=unzipSync(await toPptx({slides:[{title:'Control',text:'Body',design:{footer:{end:{text:addedText}}}}]},{seed:1}));
 const footerShape=[...strFromU8(control['ppt/slides/slide1.xml']).matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match=>match[0]).find(shape=>shape.includes(`<a:t>${addedText}</a:t>`));
 assert.ok(footerShape);assert.match(footerShape,/<p:ph\b[^>]*type="ftr"/);
 const untaggedFooter=footerShape.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g,'').replace(/(<p:cNvPr\b[^>]*\bid=")\d+"/, (_, prefix) => `${prefix}999"`)
@@ -52,7 +52,7 @@ assert.notEqual(rightThird,untaggedFooter);
 const added=unzipSync(bytes);const baselineXml=strFromU8(added['ppt/slides/slide1.xml']);
 added['ppt/slides/slide1.xml']=strToU8(baselineXml.replace('</p:spTree>',`${rightThird}</p:spTree>`));
 const addedBytes=zipSync(added);const withFooter=await fromPptx(addedBytes);
-assert.equal(withFooter.slides[0].design.footer.right.text,addedText);
+assert.equal(withFooter.slides[0].design.footer.end.text,addedText);
 assert.deepEqual(withFooter.slides.slice(1).map(slide=>slide.design),flags.slides.slice(1).map(slide=>slide.design));
 assertNoHidden(addedBytes,withFooter);
 added['ppt/slides/slide1.xml']=strToU8(strFromU8(added['ppt/slides/slide1.xml']).replace(rightThird,''));

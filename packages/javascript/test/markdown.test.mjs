@@ -193,8 +193,8 @@ describe("blocks", () => {
   });
 
   test("region=... places a block in a promoted region; opf-block and opf-slide embed YAML", () => {
-    assert.deepEqual(one("# T\n\n<!-- block: region=top:left -->\nA\n\n<!-- block: id=r type=chart region=center+right -->\n```chart line\nx,y\n1,2\n```"), {
-      title: "T", "top:left": { text: "A" }, "center+right": { id: "r", type: "chart", chart: { type: "line", data: { columns: ["x", "y"], rows: [["1", 2]] } } },
+    assert.deepEqual(one("# T\n\n<!-- block: region=top:start -->\nA\n\n<!-- block: id=r type=chart region=center+end -->\n```chart line\nx,y\n1,2\n```"), {
+      title: "T", "top:start": { text: "A" }, "center+end": { id: "r", type: "chart", chart: { type: "line", data: { columns: ["x", "y"], rows: [["1", 2]] } } },
     });
     assert.deepEqual(one("```opf-block\nid: g\ntype: group\nblocks:\n  - text: a\n```\n\n```opf-slide\ncomposition:\n  mode: grid\nextensions:\n  x: 1\n```"), {
       blocks: [{ id: "g", type: "group", blocks: [{ text: "a" }] }], composition: { mode: "grid" }, extensions: { x: 1 },

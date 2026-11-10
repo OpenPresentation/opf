@@ -12,7 +12,7 @@ const hash=value=>createHash('sha256').update(value).digest('hex'),fontOptions =
 const imageBytes=await readFile(new URL('fixtures/images/wide.png',import.meta.url));
 const image={src:`data:image/png;base64,${imageBytes.toString('base64')}`,alt:'Header image with text'};
 for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const floor of [16,32])for(const local of [false,true]){
- const source={organization:{id:'primary',name:'Organization'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header:{left:{text:' Authored\twords \r\n\r\nlast  \r'},center:{text:'{{organization.name}}'},right:{text:'{{slide.section}}'}},footer:{left:{date:' 2026-09-10 '},right:{text:'{{slide.number}}'}}},slides:[{title:'Furniture',section:'Section',text:'Keep body words.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header:{left:{image,text:''},right:{text:'Local'}}}}:{})}]};
+ const source={organization:{id:'primary',name:'Organization'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header:{start:{text:' Authored\twords \r\n\r\nlast  \r'},center:{text:'{{organization.name}}'},end:{text:'{{slide.section}}'}},footer:{start:{date:' 2026-09-10 '},end:{text:'{{slide.number}}'}}},slides:[{title:'Furniture',section:'Section',text:'Keep body words.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header:{start:{image,text:''},end:{text:'Local'}}}}:{})}]};
  const before=structuredClone(source),options=measured?fontOptions:{},layout=resolvePresentation(source,options).slides[0].geometry.furniture;
  const bytes=await toPptx(source,{...options,strictAssets:true}),entries=unzipSync(bytes);
  // RR-72: the furniture the slide shows: its own shapes, then its layout's and its master's (a one-slide deck draws it all on the master).
@@ -43,8 +43,8 @@ for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1
  assert.deepEqual(source,before);assert.equal(hash(await toPptx(source,{...options,strictAssets:true})),hash(bytes));
  results.push({measured,width,height,floor,local,parts:layout.parts.length,textShapes:shapes.length,pictures:pictures.length,sha256:hash(bytes)});
 }
-const disabled={design:{fontScheme:'roboto',header:{left:{text:'Disabled'}},footer:{right:{text:'Disabled'}}},slides:[{text:'Body',design:{header:false,footer:false}}]};
+const disabled={design:{fontScheme:'roboto',header:{start:{text:'Disabled'}},footer:{end:{text:'Disabled'}}},slides:[{text:'Body',design:{header:false,footer:false}}]};
 assert.ok(!decode(unzipSync(await toPptx(disabled))['ppt/slides/slide1.xml']).includes('Disabled'));
-await assert.rejects(toPptx({design:{header:{left:{text:'Line\n'.repeat(100)}}},slides:[{text:'Body',composition:{overflow:'error'}}]}),{code:'layout-overflow'});
+await assert.rejects(toPptx({design:{header:{start:{text:'Line\n'.repeat(100)}}},slides:[{text:'Body',composition:{overflow:'error'}}]}),{code:'layout-overflow'});
 if(process.argv[2]){await mkdir(path.dirname(path.resolve(process.argv[2])),{recursive:true});await writeFile(process.argv[2],JSON.stringify({node:process.version,verifierSha256:hash(await readFile(new URL(import.meta.url))),results,scope:'16 deterministic PPTX exports match accepted core furniture text, fonts, tab source, boxes and fitted images. No semantic reimport or native Office claim; provenance remains separate pending work.'},null,2)+'\n');}
 console.log('16 furniture exports match accepted editable text boxes, fonts, source lines and images; explicit disabling and strict overflow controls pass.');

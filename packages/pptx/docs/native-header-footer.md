@@ -11,7 +11,7 @@ harness agree.
 
 ## Mapping
 
-OPF furniture has two bands (`design.header`, `design.footer`), three zones each (left, center, right) and parts
+OPF furniture has two bands (`design.header`, `design.footer`), three zones each (start, center, end) and parts
 laid out in one row in a zone (RR-71): image (a picture, or an organization logo reference such as `var:organization.logo.icon`), text, socials, date. Generated values (slide number, slide count, section, organization name,
 speaker) are `{{ }}` variables inside the zone's `text` (FA-31): there are no per-value flags. `{{slide.number}}`,
 `{{slide.section}}` and `{{deck.slideCount}}` are filled in for each slide as it is laid out; core marks each substituted
@@ -139,7 +139,7 @@ Core lays the parts of a zone out side by side (image, text, socials, date), eac
 vertically centered. A lone text part keeps the whole zone width, as before; a text part that shares its zone with a logo is only as
 wide as its words. The exporter draws every part at `part.box` and the native placeholder keeps that box, so a `ftr` beside a logo is a
 narrow placeholder at the right of the logo. The master and layout placeholders do not follow it: each spans the zone's band (the box
-core gives a lone part in that zone, `left` `.07`, `center` `.37`, `right` `.67` of the width, `.26` wide), at the edge the part is aligned to,
+core gives a lone part in that zone, `start` `.07`, `center` `.37`, `end` `.67` of the width in a left-to-right deck, `.26` wide), at the edge the part is aligned to,
 so a footer added through the dialog fits any text. On import, a placeholder's zone is still the third its centre falls in, which is the
 zone the row sits in. A row too wide for its zone is a `text-overflow` diagnostic from core.
 
@@ -167,7 +167,7 @@ do not change.
   image overlay, a watermark) covers the part's box it stays on that slide, drawn above the content as in the preview, and that slide's
   layout hides the master's copy; `furniture-on-slide` names the part and the slides.
 * **Per-script masters** (opf-pptx#168): each slide master is planned on its own, with its own slides.
-* **Provenance.** A lifted shape keeps its `OPF_FURNITURE_V1` tag, with `slot` (`footer.left.image`) in place of the slide's `group`
+* **Provenance.** A lifted shape keeps its `OPF_FURNITURE_V1` tag, with `slot` (`footer.start.image`) in place of the slide's `group`
   and `part`. Each slide manifest moves the part into `shared` (keyed by slot: its `parts` entry, `on: "master"` or `"layout"`, the
   definition's flag, and its stored `templates` text or `images` logo reference), and the remaining slide parts are renumbered.
   Importers before 0.18 read slide shapes only: they ignore `shared` and read the rest of each slide's furniture without a
@@ -184,8 +184,8 @@ do not change.
   where OPF draws that part if the author adds it to the deck's footer (the deck's `design.footer`, else the first slide's own),
   composed by core with the first slide's options:
   * a type the deck's footer has is composed where it is (a footer text beside a logo spans its zone, RR-71);
-  * a missing type is added to the first empty zone in PowerPoint's order for it (date: left, center, right; footer text: center,
-    left, right; number: right, center, left); when every zone holds a part, a date joins the row of the first zone that takes it
+  * a missing type is added to the first empty zone in PowerPoint's order for it (date: `start`, `center`, `end`; footer text: `center`,
+    `start`, `end`; number: `end`, `center`, `start`); when every zone holds a part, a date joins the row of the first zone that takes it
     clear of the words the slides draw, after what is there (`compliance-readiness-review`: after the organization name, not on
     it), as wide as its words with `wrap="none"`; where no row has the room (a 4:3 deck's narrow zones, where core would wrap the
     name to fit the date) it follows the start zone's words by one row gap, clear of the center text; a footer text or number goes

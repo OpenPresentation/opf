@@ -68,7 +68,7 @@ const mark = (name) => checks.push(name);
           phone: matchMedia('(max-width: 760px)').matches,
           slide: [slide.width, slide.height].map(Math.round),
           svg: svg ? [svg.width, svg.height].map(Math.round) : null,
-          inside: slide.top >= box.top - 0.5 && slide.bottom <= box.bottom + 0.5 && slide.left >= box.left - 0.5 && slide.right <= box.right + 0.5,
+          inside: slide.top >= box.top - 0.5 && slide.bottom <= box.bottom + 0.5 && slide.start >= box.left - 0.5 && slide.end <= box.right + 0.5,
           workspace: Math.round(host.querySelector('.opf-workspace').getBoundingClientRect().height),
           overflows,
         };

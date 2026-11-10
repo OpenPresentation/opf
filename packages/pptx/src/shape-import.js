@@ -650,8 +650,9 @@ const reportDropped = (dropped, name, slideIndex, report) => {
 export function placement(frame, {width, height, rtl}, report, name, slideIndex) {
   const left = rtl ? width - frame.x - frame.cx : frame.x;
   const place = {x: left / width, y: frame.y / height, width: frame.cx / width, height: frame.cy / height};
-  const clamped = Object.fromEntries(Object.entries(place).map(([key, value]) => [key, round(key === 'x' || key === 'y' ? value : Math.min(1, Math.max(0, value)), 6)]));
-  if (Object.keys(place).some(key => Math.abs(clamped[key] - round(place[key], 6)) > 1e-6)) report({code: 'shape-property-dropped', path: `slides.${slideIndex}`, property: 'shape larger than the slide', shape: name, message: `The native shape ${JSON.stringify(name)} has width or height outside OPF's supported fractions 0 to 1; its size was limited while its signed position was preserved.`});
+  // Native shapes may bleed beyond the slide. Preserve the observed finite size;
+  // composition checks resolved geometry instead of imposing an arbitrary slide multiple.
+  const clamped = Object.fromEntries(Object.entries(place).map(([key, value]) => [key, round(key === 'x' || key === 'y' ? value : Math.max(0, value), 6)]));
   return clamped;
 }
 

@@ -31,7 +31,7 @@ const edit = (entries, index, mutate) => {
 
 // FA-31: {{slide.number}} is a native field inside the tagged furniture shapes; {{deck.slideCount}} stays fixed text.
 {
-  const footer = {left: {text: 'Prepared for Northstar Health'}, right: {text: '{{slide.number}} / {{deck.slideCount}}'}};
+  const footer = {start: {text: 'Prepared for Northstar Health'}, end: {text: '{{slide.number}} / {{deck.slideCount}}'}};
   const {bytes, issues, entries} = await exportDeck(deck(footer));
   assert.deepEqual(issues, []);
   assert.deepEqual(furnitureParagraphs(slideXml(entries, 1)), [], 'The title slide override hides the footer.');
@@ -46,26 +46,26 @@ const edit = (entries, index, mutate) => {
   // live field: it imports as {{slide.number}}, and the fixed count beside it is now the words as they stand.
   const moved = await read(edit(entries, 2, xml => xml.replace(/(<a:fld\b[^>]*type="slidenum">[\s\S]*?<a:t>)2</, '$18<')));
   assert.deepEqual(moved.invalid, []);
-  assert.deepEqual(moved.imported.slides[1].design.footer.right, {text: '{{slide.number}} / 3'});
+  assert.deepEqual(moved.imported.slides[1].design.footer.end, {text: '{{slide.number}} / 3'});
   // Fixed text around the field that no longer matches the authored text is the current words; the field stays a token.
   const edited = await read(edit(entries, 3, xml => xml.replace('<a:t> / 3</a:t>', '<a:t> of 3</a:t>')));
   assert.deepEqual(edited.invalid, []);
-  assert.deepEqual(edited.imported.slides[2].design.footer.right, {text: '{{slide.number}} of 3'}, 'Current native words are retained.');
+  assert.deepEqual(edited.imported.slides[2].design.footer.end, {text: '{{slide.number}} of 3'}, 'Current native words are retained.');
   assert.deepEqual(edited.imported.slides[1].design.footer, footer, 'The slide that still agrees keeps the authored footer, as its own override once the slides disagree.');
 }
 {
-  const footer = {right: {text: 'A-{{slide.number}}'}};
+  const footer = {end: {text: 'A-{{slide.number}}'}};
   const {bytes, entries} = await exportDeck(deck(footer));
   assert.deepEqual(furnitureParagraphs(slideXml(entries, 3)).map(runs), ['A-[slidenum:3]']);
   assert.deepEqual((await read(bytes)).imported.design.footer, footer);
-  const plain = await exportDeck(deck({right: {text: '{{slide.number}}'}}));
+  const plain = await exportDeck(deck({end: {text: '{{slide.number}}'}}));
   assert.deepEqual(furnitureParagraphs(slideXml(plain.entries, 2)).map(runs), ['[slidenum:2]']);
-  assert.deepEqual((await read(plain.bytes)).imported.design.footer, {right: {text: '{{slide.number}}'}});
+  assert.deepEqual((await read(plain.bytes)).imported.design.footer, {end: {text: '{{slide.number}}'}});
 }
 
 // Fixed dates are formatted text; their ISO value and pattern return while the text round-trips.
 {
-  const footer = {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: 'v0.8'}, right: {text: '{{slide.number}}'}};
+  const footer = {start: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: 'v0.8'}, end: {text: '{{slide.number}}'}};
   const {bytes, issues, entries} = await exportDeck(deck(footer));
   assert.deepEqual(issues, []);
   assert.deepEqual(furnitureParagraphs(slideXml(entries, 2)).map(runs), ['Apr 23, 2026', 'v0.8', '[slidenum:2]']);
@@ -73,18 +73,18 @@ const edit = (entries, index, mutate) => {
   assert.deepEqual((await read(bytes)).imported.design.footer, footer);
   const rewritten = await read(edit(entries, 2, xml => xml.replace('Apr 23, 2026', 'Apr 24, 2026')));
   assert.deepEqual(rewritten.invalid, []);
-  assert.deepEqual(rewritten.imported.slides[1].design.footer.left, {dateFormat: 'MMM d, yyyy', date: '2026-04-24'});
+  assert.deepEqual(rewritten.imported.slides[1].design.footer.start, {dateFormat: 'MMM d, yyyy', date: '2026-04-24'});
   const words = await read(edit(entries, 2, xml => xml.replace('Apr 23, 2026', 'Spring 2026')));
-  assert.deepEqual(words.imported.slides[1].design.footer.left, {date: 'Spring 2026'}, 'Unparseable current words stay a literal date.');
+  assert.deepEqual(words.imported.slides[1].design.footer.start, {date: 'Spring 2026'}, 'Unparseable current words stay a literal date.');
   const month = await exportDeck(deck({center: {date: '2026-04-23', dateFormat: 'MMM yyyy'}}));
   assert.deepEqual((await read(month.bytes)).imported.design.footer, {center: {date: 'Apr 2026'}}, 'A pattern without a day cannot recover the ISO date.');
-  const literal = await exportDeck(deck({left: {date: ' 2026-09-14 '}}));
-  assert.deepEqual((await read(literal.bytes)).imported.design.footer, {left: {date: ' 2026-09-14 '}});
+  const literal = await exportDeck(deck({start: {date: ' 2026-09-14 '}}));
+  assert.deepEqual((await read(literal.bytes)).imported.design.footer, {start: {date: ' 2026-09-14 '}});
 }
 
 // Current dates are live PowerPoint date fields whose cached text is the host-supplied date.
 {
-  const footer = {left: {date: true, dateFormat: 'MMMM d, yyyy'}, center: {date: true}, right: {text: '{{slide.number}}'}};
+  const footer = {start: {date: true, dateFormat: 'MMMM d, yyyy'}, center: {date: true}, end: {text: '{{slide.number}}'}};
   const {bytes, issues, entries} = await exportDeck(deck(footer), {date: '2026-09-22'});
   assert.deepEqual(issues, []);
   assert.deepEqual(furnitureParagraphs(slideXml(entries, 2)).map(runs), ['[datetime4:September 22, 2026]', '[datetime1:9/22/2026]', '[slidenum:2]']);
@@ -93,17 +93,17 @@ const edit = (entries, index, mutate) => {
   assert.deepEqual(imported.design.footer, footer);
   // PowerPoint's Date and Time dialog can change the field type; the current type wins.
   const retyped = await read(edit(entries, 2, xml => xml.replace('type="datetime4"', 'type="datetime3"')));
-  assert.deepEqual(retyped.imported.slides[1].design.footer.left, {dateFormat: 'd MMMM yyyy', date: true});
+  assert.deepEqual(retyped.imported.slides[1].design.footer.start, {dateFormat: 'd MMMM yyyy', date: true});
   // A field replaced by typed text is a literal date.
   const typed = await read(edit(entries, 2, xml => xml.replace(/<a:fld\b[^>]*type="datetime1">(<a:rPr\b[^>]*>[\s\S]*?<\/a:rPr>)<a:t>[^<]*<\/a:t><\/a:fld>/, '<a:r>$1<a:t>Monday</a:t></a:r>')));
   assert.deepEqual(typed.imported.slides[1].design.footer.center, {date: 'Monday'});
   // Without a host date the current date is unresolved, as before; nothing reads a clock.
   const missing = await exportDeck(deck(footer));
-  assert.ok(missing.issues.some(issue => issue.code === 'unresolved-content' && issue.path === 'design.footer.left.date'));
+  assert.ok(missing.issues.some(issue => issue.code === 'unresolved-content' && issue.path === 'design.footer.start.date'));
   // A pattern without an en-US field type is exported as fixed text, with a diagnostic.
-  const iso = await exportDeck(deck({left: {date: true, dateFormat: 'yyyy-MM-dd'}}), {date: '2026-09-22'});
+  const iso = await exportDeck(deck({start: {date: true, dateFormat: 'yyyy-MM-dd'}}), {date: '2026-09-22'});
   assert.deepEqual(furnitureParagraphs(slideXml(iso.entries, 2)).map(runs), ['2026-09-22']);
-  assert.deepEqual(iso.issues.map(issue => [issue.code, issue.path]), [['furniture-date-fixed', 'design.footer.left.date'], ['furniture-date-fixed', 'design.footer.left.date']]);
+  assert.deepEqual(iso.issues.map(issue => [issue.code, issue.path]), [['furniture-date-fixed', 'design.footer.start.date'], ['furniture-date-fixed', 'design.footer.start.date']]);
   await assert.rejects(exportDeck(deck(footer), {date: '22/09/2026'}), RangeError);
 }
 

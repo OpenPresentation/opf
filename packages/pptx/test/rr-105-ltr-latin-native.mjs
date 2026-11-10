@@ -151,11 +151,11 @@ test('canonically equivalent Latin accents have equal numeric-shaping eligibilit
 
 test('mixed RTL paragraphs retain explicit French, English and same-base Arabic run languages',async()=>{
  const examples=[
-  ['fr-FR',['البند: ',{text:'Bonjour 1',lang:'fr-FR'}]],
-  ['fr-FR',['البند: ',{text:'Bonjour',lang:'fr-FR'}]],
-  ['en-US',['البند: ',{text:'Hello 1',lang:'en-US'}]],
-  ['ar-SA',['البند: ',{text:'Bonjour 1',lang:'ar-SA'}]],
-  ['ar-SA',[{text:'البند: Bonjour 1',lang:'ar-SA'}]],
+  ['fr-FR',['البند: ',{text:'Bonjour 1',language:'fr-FR'}]],
+  ['fr-FR',['البند: ',{text:'Bonjour',language:'fr-FR'}]],
+  ['en-US',['البند: ',{text:'Hello 1',language:'en-US'}]],
+  ['ar-SA',['البند: ',{text:'Bonjour 1',language:'ar-SA'}]],
+  ['ar-SA',[{text:'البند: Bonjour 1',language:'ar-SA'}]],
  ];
  for(const [lang,text]of examples){
   const document={language:'ar-SA',slides:[{items:[text],numbering:'arabic'}]},result=await native(document);

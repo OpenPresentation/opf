@@ -114,11 +114,11 @@ Two regions run at [85% utilization]{color=var:risk} with no spare capacity.
 <!-- slide: id=compare section=Next -->
 # Operating model
 
-<!-- block: as=bullets region=left -->
+<!-- block: as=bullets region=start -->
 - One on-call rotation per region
 - Quarterly capacity reviews
 
-<!-- block: region=right -->
+<!-- block: region=end -->
 Every change ships behind a flag, so a rollback is a configuration edit and not a deploy.
 
 ---

@@ -6,16 +6,16 @@
   "slides": [
     {
       "title": "Product Snapshot",
-      "left": {
+      "start": {
         "image": "asset:product-shot"
       },
-      "center+right": {
+      "center+end": {
         "text": "The dashboard pulls review status, owners, and exceptions into one operating view."
       }
     },
     {
       "title": "Follow-Up",
-      "left+center+right": {
+      "start+center+end": {
         "items": [
           "Confirm owners for open exceptions.",
           "Review aging thresholds with operations leads.",

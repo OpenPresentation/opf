@@ -147,28 +147,28 @@ for (const entry of cases) {
 {
   const editor = session();
   setDesignOption(editor, "titleAlignment", "center");
-  const change = setDesignOption(editor, "titleAlignment", "left", { slideIndex: 1 });
-  assert.deepEqual(change.patches, [{ op: "add", path: "/slides/1/design", value: { titleAlignment: "left" } }]);
+  const change = setDesignOption(editor, "titleAlignment", "start", { slideIndex: 1 });
+  assert.deepEqual(change.patches, [{ op: "add", path: "/slides/1/design", value: { titleAlignment: "start" } }]);
   assert.equal(change.scope, "slide");
   assert.deepEqual(getDesignOption(editor.presentation, "titleAlignment", { slideIndex: 1 }), { value: "left", scope: "slide", inherited: false });
   assert.deepEqual(getDesignOption(editor.presentation, "titleAlignment", { slideIndex: 0 }), { value: "center", scope: "deck", inherited: true });
-  setDesignOption(editor, "titleAlignment", "right", { slideIndex: 0 });
+  setDesignOption(editor, "titleAlignment", "end", { slideIndex: 0 });
   assert.notEqual(svg(editor.presentation, 0), svg(session(deck()).presentation, 0), "a slide alignment changes that slide");
   assert.equal(svg(editor.presentation, 2), svg(session(Object.assign(deck(), { design: { ...deck().design, titleAlignment: "center" } })).presentation, 2));
   editor.undo();
   setDesignOption(editor, "titleAlignment", null, { slideIndex: 1 });
   assert.equal(editor.get("slides.1.design.titleAlignment"), undefined);
   // A deck change reports the slides that hide it, and can clear them in the same transaction.
-  setDesignOption(editor, "titleAlignment", "right", { slideIndex: 2 });
-  const shadowed = setDesignOption(editor, "titleAlignment", "left");
+  setDesignOption(editor, "titleAlignment", "end", { slideIndex: 2 });
+  const shadowed = setDesignOption(editor, "titleAlignment", "start");
   assert.deepEqual(shadowed.shadowed, [2]);
   const depth = editor.snapshot().undoDepth;
-  const cleared = setDesignOption(editor, "titleAlignment", "right", { clearSlideOverrides: true });
+  const cleared = setDesignOption(editor, "titleAlignment", "end", { clearSlideOverrides: true });
   assert.deepEqual(cleared.patches.map((patch) => patch.op), ["replace", "remove"]);
   assert.deepEqual(cleared.shadowed, []);
   assert.equal(editor.snapshot().undoDepth, depth + 1);
   assert.throws(() => setDesignOption(editor, "organizationLogo", "asset:logo"), (error) => error.code === "unknown-design-option", "the organization logo is edited with setOrganizationLogo");
-  assert.throws(() => setDesignOption(editor, "titleAlignment", "left", { slideIndex: 9 }), (error) => error.code === "slide-index-out-of-range");
+  assert.throws(() => setDesignOption(editor, "titleAlignment", "start", { slideIndex: 9 }), (error) => error.code === "slide-index-out-of-range");
 }
 
 // Validation: bad values never reach the document.
@@ -193,7 +193,7 @@ for (const entry of cases) {
   assert.throws(() => setDesignOption(editor, "titleAlignment"), (error) => error.code === "invalid-design-value");
   assert.equal(editor.snapshot().undoDepth, 0);
   assert.deepEqual(editor.presentation, deck());
-  assert.throws(() => setDesignOption({}, "titleAlignment", "left"), (error) => error.code === "invalid-editor");
+  assert.throws(() => setDesignOption({}, "titleAlignment", "start"), (error) => error.code === "invalid-editor");
   // The organization logo needs an organization.
   const none = createEditorSession({ slides: [{ title: "x", text: "y" }] });
   assert.throws(() => setOrganizationLogo(none, "all", "asset:logo"), (error) => error.code === "missing-owner");
@@ -402,11 +402,11 @@ for (const entry of cases) {
   assert.deepEqual(text.patches, [{ op: "add", path: "/design/footer", value: { center: { text: "Confidential" } } }]);
   assert.ok(svg(editor.presentation, 1).includes("Confidential"), "the footer draws");
   setHeaderFooterZone(editor, "footer", "right", { text: "{{slide.number}}" });
-  assert.deepEqual(editor.get("design.footer"), { center: { text: "Confidential" }, right: { text: "{{slide.number}}" } });
+  assert.deepEqual(editor.get("design.footer"), { center: { text: "Confidential" }, end: { text: "{{slide.number}}" } });
   assert.ok(/>2</.test(svg(editor.presentation, 1)), "the slide number token draws the slide's number");
   const logo = setHeaderFooterZone(editor, "header", "left", { image: "var:organization.logo.icon" });
   assert.deepEqual(logo.warnings.map((warning) => warning.code), ["unresolved-logo"], "a logo reference with no logo is reported");
-  assert.equal(logo.warnings[0].path, "design.header.left.image");
+  assert.equal(logo.warnings[0].path, "design.header.start.image");
   assert.deepEqual(designWarnings(editor.presentation, 0).length, 1);
   setOrganizationLogo(editor, "all", "asset:logo");
   assert.deepEqual(designWarnings(editor.presentation, 0), [], "an organization logo resolves it");
@@ -416,20 +416,20 @@ for (const entry of cases) {
   assert.equal(editor.get("design.header"), undefined);
   // false, null and "" all remove; unknown fields are refused.
   setHeaderFooterZone(editor, "footer", "right", { text: null });
-  assert.equal(editor.get("design.footer.right"), undefined);
+  assert.equal(editor.get("design.footer.end"), undefined);
   assert.throws(() => setHeaderFooterZone(editor, "footer", "right", { sparkle: true }), (error) => error.code === "invalid-design-value");
   // The 0.16 flags and the 0.17 logo flag are gone with no alias; the message says what to write instead.
   assert.throws(() => setHeaderFooterZone(editor, "footer", "right", { logo: true }), (error) => error.code === "invalid-design-value" && error.message.includes("Unknown header/footer field: logo.") && error.message.includes("var:organization.logo.icon"));
   for (const [key, token] of [["organization", "{{organization.name}}"], ["speaker", "{{speaker.name}}"], ["section", "{{slide.section}}"], ["slideNumber", "{{slide.number}}"], ["slideNumberFormat", "{{deck.slideCount}}"]])
     assert.throws(() => setHeaderFooterZone(editor, "footer", "right", { [key]: key === "slideNumberFormat" ? "{current}" : true }), (error) => error.code === "invalid-design-value" && error.message.includes(`Unknown header/footer field: ${key}.`) && error.message.includes(token), key);
-  assert.equal(editor.get("design.footer.right"), undefined, "a refused field changes nothing");
+  assert.equal(editor.get("design.footer.end"), undefined, "a refused field changes nothing");
   assert.throws(() => setHeaderFooterZone(editor, "middle", "right", { text: "x" }), (error) => error.code === "invalid-design-value");
   assert.throws(() => setHeaderFooterZone(editor, "footer", "top", { text: "x" }), (error) => error.code === "invalid-design-value");
   // A slide scope writes the slide; a suppressed footer is replaced when a zone is set.
-  setDesignOption(editor, "titleAlignment", "left");
+  setDesignOption(editor, "titleAlignment", "start");
   editor.set("slides.1.design", { footer: false });
   setHeaderFooterZone(editor, "footer", "left", { text: "Only here" }, { slideIndex: 1 });
-  assert.deepEqual(editor.get("slides.1.design.footer"), { left: { text: "Only here" } });
+  assert.deepEqual(editor.get("slides.1.design.footer"), { start: { text: "Only here" } });
   const export_ = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true, catalogs });
   assert.ok(export_.byteLength > 0);
   // Picture bullets without a logo are reported too.
@@ -445,12 +445,12 @@ for (const entry of cases) {
   assert.deepEqual(headerFooterState(editor.presentation, "footer", { slideIndex: 1 }), { own: false, inherited: true, hidden: false });
   assert.deepEqual(readHeaderFooterZone(editor.presentation, "footer", "left", { slideIndex: 1 }), { text: "Acme" }, "a slide reads the deck's zone it inherits");
   const edit = setHeaderFooterZone(editor, "footer", "center", { text: "Draft" }, { slideIndex: 1 });
-  assert.deepEqual(edit.patches, [{ op: "add", path: "/slides/1/design", value: { footer: { left: { text: "Acme" }, right: { text: "{{slide.number}}" }, center: { text: "Draft" } } } }]);
+  assert.deepEqual(edit.patches, [{ op: "add", path: "/slides/1/design", value: { footer: { start: { text: "Acme" }, end: { text: "{{slide.number}}" }, center: { text: "Draft" } } } }]);
   assert.deepEqual(headerFooterState(editor.presentation, "footer", { slideIndex: 1 }), { own: true, inherited: false, hidden: false });
   assert.equal(editor.get("design.footer.center"), undefined, "the deck is untouched");
   // Clearing a zone the slide only inherited overrides it for this slide, and the other zones stay.
   setHeaderFooterZone(editor, "footer", "left", { text: null }, { slideIndex: 2 });
-  assert.deepEqual(editor.get("slides.2.design.footer"), { right: { text: "{{slide.number}}" } });
+  assert.deepEqual(editor.get("slides.2.design.footer"), { end: { text: "{{slide.number}}" } });
   // A slide emptied entirely hides the furniture instead of inheriting it again.
   setHeaderFooterZone(editor, "footer", "left", { text: null }, { slideIndex: 0 });
   setHeaderFooterZone(editor, "footer", "right", { text: null }, { slideIndex: 0 });
@@ -459,7 +459,7 @@ for (const entry of cases) {
   // The deck without any header or footer stays simple: no copy, no false.
   const bare = session();
   setHeaderFooterZone(bare, "header", "left", { text: "Only" }, { slideIndex: 0 });
-  assert.deepEqual(bare.get("slides.0.design.header"), { left: { text: "Only" } });
+  assert.deepEqual(bare.get("slides.0.design.header"), { start: { text: "Only" } });
   setHeaderFooterZone(bare, "header", "left", { text: null }, { slideIndex: 0 });
   assert.equal(bare.get("slides.0.design.header"), undefined);
 }
@@ -487,15 +487,15 @@ for (const entry of cases) {
   setHeaderFooterZone(editor, "footer", "left", { text: "Acme", socials: true });
   setHeaderFooterZone(editor, "footer", "left", { image: "asset:photo" });
   setHeaderFooterZone(editor, "footer", "right", { text: "Page {{slide.number}} of {{deck.slideCount}}", date: true, dateFormat: "MMMM d, yyyy" });
-  assert.deepEqual(editor.get("design.footer.left"), { text: "Acme", socials: true, image: "asset:photo" });
-  assert.deepEqual(editor.get("design.footer.right"), { text: "Page {{slide.number}} of {{deck.slideCount}}", date: true, dateFormat: "MMMM d, yyyy" });
+  assert.deepEqual(editor.get("design.footer.start"), { text: "Acme", socials: true, image: "asset:photo" });
+  assert.deepEqual(editor.get("design.footer.end"), { text: "Page {{slide.number}} of {{deck.slideCount}}", date: true, dateFormat: "MMMM d, yyyy" });
   // A fixed date replaces the current date; false removes a flag or the date.
   setHeaderFooterZone(editor, "footer", "right", { date: "2026-10-01" });
-  assert.equal(editor.get("design.footer.right.date"), "2026-10-01");
+  assert.equal(editor.get("design.footer.end.date"), "2026-10-01");
   setHeaderFooterZone(editor, "footer", "right", { date: false, dateFormat: null });
-  assert.deepEqual(editor.get("design.footer.right"), { text: "Page {{slide.number}} of {{deck.slideCount}}" });
+  assert.deepEqual(editor.get("design.footer.end"), { text: "Page {{slide.number}} of {{deck.slideCount}}" });
   setHeaderFooterZone(editor, "footer", "left", { socials: false, image: null });
-  assert.deepEqual(editor.get("design.footer.left"), { text: "Acme" });
+  assert.deepEqual(editor.get("design.footer.start"), { text: "Acme" });
   // Friendly validation before the schema.
   const bad = (fields, pattern) => assert.throws(() => setHeaderFooterZone(editor, "footer", "center", fields), (error) => error.code === "invalid-design-value" && pattern.test(error.message), JSON.stringify(fields));
   bad({ logo: true }, /Unknown header\/footer field: logo/);
@@ -511,10 +511,10 @@ for (const entry of cases) {
   setHeaderFooterZone(editor, "footer", "center", { date: null });
   // Warnings for parts with nothing to show.
   const warned = setHeaderFooterZone(editor, "header", "right", { text: "{{organization.name}}", socials: true });
-  assert.deepEqual(warned.warnings.map((warning) => warning.path).filter((path) => path.startsWith("design.header")), ["design.header.right.socials"], "the organization exists; its socials do not");
+  assert.deepEqual(warned.warnings.map((warning) => warning.path).filter((path) => path.startsWith("design.header")), ["design.header.end.socials"], "the organization exists; its socials do not");
   const none = createEditorSession({ slides: [{ title: "x", text: "y" }] });
   const both = setHeaderFooterZone(none, "footer", "left", { text: "{{organization.name}} {{speaker.name}}", socials: true });
-  assert.deepEqual(both.warnings.map((warning) => warning.path), ["design.footer.left.socials", "design.footer.left.text", "design.footer.left.text"], "no organization, no speaker, no socials");
+  assert.deepEqual(both.warnings.map((warning) => warning.path), ["design.footer.start.socials", "design.footer.start.text", "design.footer.start.text"], "no organization, no speaker, no socials");
   assert.deepEqual(both.warnings.filter((warning) => warning.path.endsWith(".text")).map((warning) => warning.message), [
     "The footer left zone shows {{organization.name}}, but the presentation has no value for it.",
     "The footer left zone shows {{speaker.name}}, but the presentation has no value for it.",
@@ -523,7 +523,7 @@ for (const entry of cases) {
   const sectioned = createEditorSession({ slides: [{ title: "One", section: "Intro", text: "a" }, { title: "Two", text: "b" }] });
   setHeaderFooterZone(sectioned, "header", "right", { text: "{{slide.section}} {{ slide.section }} \\{{speaker.name}}" });
   assert.deepEqual(designWarnings(sectioned.presentation, 0), [], "slide 1 has a section; an escaped token is literal text");
-  assert.deepEqual(designWarnings(sectioned.presentation, 1).map((warning) => [warning.path, warning.message]), [["design.header.right.text", "The header right zone shows {{slide.section}}, but this slide has no section."]]);
+  assert.deepEqual(designWarnings(sectioned.presentation, 1).map((warning) => [warning.path, warning.message]), [["design.header.end.text", "The header right zone shows {{slide.section}}, but this slide has no section."]]);
   // Preview and export carry the parts.
   const parts = createEditorSession({ ...deck(), organization: { id: "acme", name: "Acme Corp", socials: { linkedin: "acme" } } }, { rejectInvalid: true });
   setHeaderFooterZone(parts, "footer", "left", { text: "{{organization.name}}\nConfidential" });
@@ -538,32 +538,32 @@ for (const entry of cases) {
   const editor = session();
   // An empty zone gets the token; the edit is a single patch and one undo step.
   const first = insertZoneValue(editor, "footer", "right", "slide.number");
-  assert.deepEqual(first.patches, [{ op: "add", path: "/design/footer", value: { right: { text: "{{slide.number}}" } } }]);
+  assert.deepEqual(first.patches, [{ op: "add", path: "/design/footer", value: { end: { text: "{{slide.number}}" } } }]);
   assert.equal(editor.snapshot().undoDepth, 1);
   // At the end by default, in the middle with offsets, over a selection when start and end differ.
   insertZoneValue(editor, "footer", "right", "deck.slideCount");
-  assert.equal(editor.get("design.footer.right.text"), "{{slide.number}}{{deck.slideCount}}");
+  assert.equal(editor.get("design.footer.end.text"), "{{slide.number}}{{deck.slideCount}}");
   setHeaderFooterZone(editor, "footer", "right", { text: "Page  of " });
   insertZoneValue(editor, "footer", "right", "slide.number", { start: 5, end: 5 });
-  assert.equal(editor.get("design.footer.right.text"), "Page {{slide.number}} of ");
+  assert.equal(editor.get("design.footer.end.text"), "Page {{slide.number}} of ");
   insertZoneValue(editor, "footer", "right", "deck.slideCount");
-  assert.equal(editor.get("design.footer.right.text"), "Page {{slide.number}} of {{deck.slideCount}}");
+  assert.equal(editor.get("design.footer.end.text"), "Page {{slide.number}} of {{deck.slideCount}}");
   const depth = editor.snapshot().undoDepth;
   insertZoneValue(editor, "footer", "right", "slide.section", { start: 0, end: 4 });
-  assert.equal(editor.get("design.footer.right.text"), "{{slide.section}} {{slide.number}} of {{deck.slideCount}}", "a selection is replaced");
+  assert.equal(editor.get("design.footer.end.text"), "{{slide.section}} {{slide.number}} of {{deck.slideCount}}", "a selection is replaced");
   // Undo restores the text before the insert; redo puts it back.
   editor.undo();
-  assert.equal(editor.get("design.footer.right.text"), "Page {{slide.number}} of {{deck.slideCount}}");
+  assert.equal(editor.get("design.footer.end.text"), "Page {{slide.number}} of {{deck.slideCount}}");
   assert.equal(editor.snapshot().undoDepth, depth, "one insert is one undo step");
   editor.redo();
-  assert.equal(editor.get("design.footer.right.text"), "{{slide.section}} {{slide.number}} of {{deck.slideCount}}");
+  assert.equal(editor.get("design.footer.end.text"), "{{slide.section}} {{slide.number}} of {{deck.slideCount}}");
   editor.undo();
   // Text typed in a box but not yet committed is the base: it commits together with the token.
   const typed = insertZoneValue(editor, "header", "left", "organization.name", { text: "From ", start: 5, end: 5 });
-  assert.equal(editor.get("design.header.left.text"), "From {{organization.name}}");
+  assert.equal(editor.get("design.header.start.text"), "From {{organization.name}}");
   assert.equal(typed.changed, true);
   editor.undo();
-  assert.equal(editor.get("design.header.left"), undefined, "undo removes the whole header edit, typed text included");
+  assert.equal(editor.get("design.header.start"), undefined, "undo removes the whole header edit, typed text included");
   // Every menu value inserts its token and the document stays valid; each draws in the preview.
   const all = createEditorSession({ ...deck(), speaker: [{ id: "ada", name: "Ada Lovelace" }], slides: [{ ...deck().slides[0], section: "Intro" }, ...deck().slides.slice(1)] }, { rejectInvalid: true, catalogs });
   const places = [["header", "left"], ["header", "center"], ["header", "right"], ["footer", "left"], ["footer", "center"], ["footer", "right"]];
@@ -577,8 +577,8 @@ for (const entry of cases) {
   assert.ok(/>1</.test(drawnAll) && /3</.test(drawnAll), "the slide number and the slide count draw on slide 1");
   // A slide scope inserts into the slide's own copy of the footer and leaves the deck alone.
   insertZoneValue(editor, "footer", "left", "slide.number", { slideIndex: 1 });
-  assert.equal(editor.get("slides.1.design.footer.left.text"), "{{slide.number}}");
-  assert.equal(editor.get("design.footer.left"), undefined);
+  assert.equal(editor.get("slides.1.design.footer.start.text"), "{{slide.number}}");
+  assert.equal(editor.get("design.footer.start"), undefined);
   // Refusals change nothing.
   const before = JSON.stringify(editor.presentation);
   assert.throws(() => insertZoneValue(editor, "footer", "right", "slide.title"), (error) => error.code === "invalid-design-value");
@@ -607,8 +607,8 @@ for (const entry of cases) {
   });
   // The primary organization's icon by default; its logo is not set yet, so the edit works and says so.
   const first = insertZoneLogo(editor, "footer", "right");
-  assert.deepEqual(first.patches, [{ op: "add", path: "/design/footer", value: { right: { image: "var:organization.logo.icon" } } }]);
-  assert.deepEqual(first.warnings.map((warning) => [warning.code, warning.path]), [["unresolved-logo", "design.footer.right.image"]]);
+  assert.deepEqual(first.patches, [{ op: "add", path: "/design/footer", value: { end: { image: "var:organization.logo.icon" } } }]);
+  assert.deepEqual(first.warnings.map((warning) => [warning.code, warning.path]), [["unresolved-logo", "design.footer.end.image"]]);
   assert.equal(first.option, "footer");
   assert.equal(first.zone, "right");
   assert.equal(editor.snapshot().undoDepth, 1, "one undo step");
@@ -629,10 +629,10 @@ for (const entry of cases) {
   // Shapes and organizations: full is the plain reference, a named organization is addressed by id.
   for (const [shape, image] of [["full", "var:organization.logo"], ["stacked", "var:organization.logo.stacked"], ["icon", "var:organization.logo.icon"], ["wordmark", "var:organization.logo.wordmark"]]) {
     insertZoneLogo(editor, "header", "left", { shape });
-    assert.equal(editor.get("design.header.left.image"), image, shape);
+    assert.equal(editor.get("design.header.start.image"), image, shape);
   }
   const beta = insertZoneLogo(editor, "header", "left", { shape: "stacked", organization: "beta" });
-  assert.equal(editor.get("design.header.left.image"), "var:organization.beta.logo.stacked");
+  assert.equal(editor.get("design.header.start.image"), "var:organization.beta.logo.stacked");
   assert.deepEqual(beta.warnings, [], "beta has the stacked logo");
   assert.ok(svg(editor.presentation, 0).includes(GREEN), "another organization's logo draws");
   assert.deepEqual(insertZoneLogo(editor, "header", "left", { shape: "stacked", organization: "beta" }).changed, false, "the same again commits nothing");
@@ -648,12 +648,12 @@ for (const entry of cases) {
   assert.equal(editor.get("design.header.center.image"), "var:organization.logo.icon");
   // A slide scope writes the slide's own copy of the footer and leaves the deck alone.
   const slideScoped = insertZoneLogo(editor, "footer", "left", { slideIndex: 2, shape: "wordmark" });
-  assert.deepEqual(editor.get("slides.2.design.footer"), { right: { image: "var:organization.logo.icon" }, left: { image: "var:organization.logo.wordmark" } });
-  assert.equal(editor.get("design.footer.left"), undefined);
+  assert.deepEqual(editor.get("slides.2.design.footer"), { end: { image: "var:organization.logo.icon" }, start: { image: "var:organization.logo.wordmark" } });
+  assert.equal(editor.get("design.footer.start"), undefined);
   assert.equal(slideScoped.scope, "slide");
   // prepare computes the patch without a session; refusals change nothing.
   const before = JSON.stringify(editor.presentation);
-  assert.equal(prepareZoneLogo(deck(), "footer", "left").presentation.design.footer.left.image, "var:organization.logo.icon");
+  assert.equal(prepareZoneLogo(deck(), "footer", "left").presentation.design.footer.start.image, "var:organization.logo.icon");
   assert.throws(() => insertZoneLogo(editor, "footer", "left", { shape: "huge" }), (error) => error.code === "invalid-design-value");
   assert.throws(() => insertZoneLogo(editor, "footer", "left", { organization: "nobody" }), (error) => error.code === "unknown-organization");
   assert.throws(() => insertZoneLogo(editor, "middle", "left"), (error) => error.code === "invalid-design-value");

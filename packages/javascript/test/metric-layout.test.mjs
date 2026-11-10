@@ -22,13 +22,13 @@ function sourceIsComplete(result) {
 
 test('metric value, unit, labels, zero delta and trend retain their own editable source paths',()=>{
   const value=Object.freeze({value:42,unit:'ms',label:'Latency',description:'  Exact  supporting context\r\nretained. ',delta:0,trend:'flat'});
-  const result=layoutMetric(value,box,{path:'slides.2.left.metric'});
-  assert.deepEqual(rootLayoutMetric(value,box,{path:'slides.2.left.metric'}),result);
+  const result=layoutMetric(value,box,{path:'slides.2.start.metric'});
+  assert.deepEqual(rootLayoutMetric(value,box,{path:'slides.2.start.metric'}),result);
   assert.equal(result.algorithm,'metric-flow-v1');assert.equal(result.overflow,false);
   assert.equal(result.textMeasurement,'estimated');
   assert.deepEqual(Object.fromEntries(result.parts.map(part=>[part.role,part.sources[0].value])),value);
   assert.equal(result.parts.find(part=>part.role==='delta').text,'0');
-  assert.ok(result.parts.every(part=>(part.visible||part.role==='trend')&&part.path==='slides.2.left.metric.'+part.role));
+  assert.ok(result.parts.every(part=>(part.visible||part.role==='trend')&&part.path==='slides.2.start.metric.'+part.role));
   assert.equal(result.parts.find(part=>part.role==='trend').visible,false,'LH-53: the trend is drawn as an arrow');
   assert.ok(result.trendBox);
   sourceIsComplete(result);

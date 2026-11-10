@@ -42,9 +42,9 @@ for (const [algn, zone] of [['l', 'left'], ['ctr', 'center'], ['r', 'right']]) {
 // 3. A narrow box keeps the zone of its centre, even when its text aligns to the other edge.
 {
   const edit = shape => box(Math.round(SLIDE * .70), Math.round(SLIDE * .26))(shape).replace(/(<a:pPr\b[^>]*?)\salgn="\w+"/, '$1').replace(/<a:pPr\b/, '<a:pPr algn="l"');
-  assert.deepEqual(await footerOf({center: {text: 'Narrow'}}, editShape('ftr', edit)), {right: {text: 'Narrow'}}, 'a narrow box is placed by its centre');
+  assert.deepEqual(await footerOf({center: {text: 'Narrow'}}, editShape('ftr', edit)), {end: {text: 'Narrow'}}, 'a narrow box is placed by its centre');
   const edit3 = shape => box(Math.round(SLIDE * .37), Math.round(SLIDE * .26))(shape).replace(/(<a:pPr\b[^>]*?)\salgn="\w+"/, '$1').replace(/<a:pPr\b/, '<a:pPr algn="r"');
-  assert.deepEqual(await footerOf({left: {text: 'Narrow'}}, editShape('ftr', edit3)), {center: {text: 'Narrow'}}, 'and so is a centred one');
+  assert.deepEqual(await footerOf({start: {text: 'Narrow'}}, editShape('ftr', edit3)), {center: {text: 'Narrow'}}, 'and so is a centred one');
 }
 
 // 4. No own alignment: a wide box takes the master placeholder's (a slide-number placeholder is right-aligned there),
@@ -52,9 +52,9 @@ for (const [algn, zone] of [['l', 'left'], ['ctr', 'center'], ['r', 'right']]) {
 {
   const bare = shape => shape.replace(/\salgn="\w+"/g, '');
   const wide = shape => box(Math.round(SLIDE * .05), Math.round(SLIDE * .9))(bare(shape));
-  const inherited = await footerOf({right: {text: '{{slide.number}}'}}, editShape('sldNum', wide));
-  assert.deepEqual(inherited, {right: {text: '{{slide.number}}'}}, 'the inherited master alignment places the wide box');
-  const centred = await footerOf({right: {text: '{{slide.number}}'}}, entries => {
+  const inherited = await footerOf({end: {text: '{{slide.number}}'}}, editShape('sldNum', wide));
+  assert.deepEqual(inherited, {end: {text: '{{slide.number}}'}}, 'the inherited master alignment places the wide box');
+  const centred = await footerOf({end: {text: '{{slide.number}}'}}, entries => {
     editShape('sldNum', wide)(entries);
     // Nothing aligns the paragraphs anywhere: no layout or master alignment either.
     for (const path of Object.keys(entries)) if (/^ppt\/(slideMasters|slideLayouts)\//.test(path) && path.endsWith('.xml')) entries[path] = strToU8(strFromU8(entries[path]).replace(/\salgn="\w+"/g, ''));

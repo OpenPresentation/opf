@@ -42,7 +42,7 @@ test('explicit composition modes govern automatic content and templates preserve
 });
 
 test('contentDirection leaves promoted regions and nested groups untouched', () => {
-  const regions = {title: 'Regions', left: {text: 'L'}, right: {text: 'R'}};
+  const regions = {title: 'Regions', start: {text: 'L'}, end: {text: 'R'}};
   const twoColumn = {id: 'two-column', design: {contentDirection: 'horizontal'}, composition: {mode: 'row', gap: 0.06}, regions: [{name: 'title'}, {name: 'body-1', accepts: ['list'], flow: 'none'}, {name: 'body-2', accepts: ['list'], flow: 'none'}]};
   for (const layout of [twoColumn, undefined]) {
     const control = composeSlide(regions, {layout, explain: true});
@@ -96,15 +96,15 @@ test('chartPrimary splits the first chart from a synthetic container of the othe
   assert.equal(rootDecision(none).reason, 'lowest-score');
   assert.deepEqual(composeSlide(slide, {presentation: {design: {chartPrimary: 'middle'}}}).items.map(item => item.box), control.items.map(item => item.box));
   // A root chart payload beside nothing else is a single cell; two root blocks (chart and text) split 3:2.
-  const pair = composeSlide({title: 'Pair', blocks: [chart, {text: 'Support', emphasis: false}]}, {presentation: {design: {chartPrimary: 'right'}}});
+  const pair = composeSlide({title: 'Pair', blocks: [chart, {text: 'Support', emphasis: false}]}, {presentation: {design: {chartPrimary: 'end'}}});
   const [chartBox, textBox] = [pair.items.find(item => item.field === 'chart').box, pair.items.find(item => item.field === 'text').box];
   assert.ok(textBox.x < chartBox.x && Math.abs(textBox.width / chartBox.width - 2 / 3) < 1e-6);
 });
 
 test('chartPrimary does not apply with regions, an explicit mode, no chart, only charts, or a nested chart', () => {
-  const side = {presentation: {design: {chartPrimary: 'left'}}};
+  const side = {presentation: {design: {chartPrimary: 'start'}}};
   const cases = [
-    [{title: 'Regions', left: chart, right: {text: 'R'}}, 'promoted-regions'],
+    [{title: 'Regions', left: chart, end: {text: 'R'}}, 'promoted-regions'],
     [{title: 'Explicit', composition: {mode: 'grid', columns: 2}, blocks: [chart, {text: 'a'}]}, 'configured-mode'],
     // LH-71: a chart above a one-letter text fills more of the body than beside it (LH-06: not a foot band).
     [{title: 'Explicit', composition: {mode: 'auto'}, blocks: [chart, {text: 'a', emphasis: false}]}, 'split-fill'],

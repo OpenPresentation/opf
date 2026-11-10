@@ -127,6 +127,8 @@ export function insertOverlayShape(editor, options, meta = {}) {
 // --- moving and resizing ---------------------------------------------------------------------------------------------------------
 
 const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
+// The format's largest overlay width or height: bounded by finite representable geometry (above 1 it bleeds off).
+const OVERLAY_SIZE_MAX = Number.MAX_VALUE;
 
 /**
  * Compute the patch that places an overlay shape. A shape placed by fractions takes `{ x, y, width, height }` (any of them, fractions of the slide: the
@@ -146,7 +148,10 @@ export function prepareOverlayFrame(presentation, path, change) {
     if (old === undefined) patches.push({ op: "add", path: at, value });
     else if (!same(old, value)) patches.push({ op: "replace", path: at, value });
   };
-  for (const key of Object.keys(change)) if (change[key] !== undefined && !["x", "y", "width", "height", "offset"].includes(key)) throw bad(`Unknown frame key: ${key}. Use x, y, width, height or offset.`, { key });
+  for (const key of Object.keys(change)) if (change[key] !== undefined && !["x", "y", "width", "height", "widthPx", "heightPx", "offset"].includes(key)) throw bad(`Unknown frame key: ${key}. Use x, y, width, height or, on a shape attached to a block, offset, widthPx and heightPx.`, { key });
+  const drop = (key) => {
+    if (entry.at?.[key] !== undefined) patches.push({ op: "remove", path: opfPathToJsonPointer([...parts, "at", key]) });
+  };
   const number = (key) => {
     const value = Number(change[key]);
     if (!Number.isFinite(value)) throw bad(`${key} is a number.`, { key, value: change[key] });
@@ -155,11 +160,24 @@ export function prepareOverlayFrame(presentation, path, change) {
   if (found.placement === "at") {
     if (change.x !== undefined || change.y !== undefined) throw fail("overlay-anchored", "This shape is attached to a block, so it has no x and y of its own. Detach it from the block first.", { path: found.path });
     if (change.offset !== undefined) write(["at"], "offset", Math.round(clamp(number("offset"), -720, 720) * 100) / 100);
-    for (const key of ["width", "height"]) if (change[key] !== undefined) write(["at"], key, Math.round(clamp(number(key), 0.001, 1280) * 10000) / 10000);
+    // One unit per key: `width` and `height` are fractions of the target (1 is its own size), `widthPx` and `heightPx` reference pixels.
+    // Setting one removes the other, because an anchor takes one of the two for each side.
+    for (const [key, px] of [["width", "widthPx"], ["height", "heightPx"]]) {
+      if (change[key] !== undefined && change[px] !== undefined) throw bad(`Give ${key} (a fraction of the target) or ${px} (reference pixels), not both.`, { path: found.path });
+      if (change[key] !== undefined) {
+        write(["at"], key, Math.round(clamp(number(key), 0.001, OVERLAY_SIZE_MAX) * 10000) / 10000);
+        drop(px);
+      }
+      if (change[px] !== undefined) {
+        write(["at"], px, Math.round(clamp(number(px), 0.001, 1280) * 10000) / 10000);
+        drop(key);
+      }
+    }
   } else {
     if (change.offset !== undefined) throw bad("offset belongs to a shape attached to a block.", { path: found.path });
-    const width = clamp(change.width !== undefined ? number("width") : (entry.width ?? 0.2), 0.005, 1);
-    const height = clamp(change.height !== undefined ? number("height") : (entry.height ?? 0.2), 0.005, 1);
+    for (const px of ["widthPx", "heightPx"]) if (change[px] !== undefined) throw bad(`${px} belongs to a shape attached to a block; a free shape's width and height are fractions of the slide.`, { path: found.path });
+    const width = clamp(change.width !== undefined ? number("width") : (entry.width ?? 0.2), 0.005, OVERLAY_SIZE_MAX);
+    const height = clamp(change.height !== undefined ? number("height") : (entry.height ?? 0.2), 0.005, OVERLAY_SIZE_MAX);
     if (change.width !== undefined) write([], "width", rounded(width));
     if (change.height !== undefined) write([], "height", rounded(height));
     if (change.x !== undefined) write([], "x", rounded(number("x")));
@@ -182,8 +200,8 @@ export function prepareOverlayDetach(presentation, path, frame) {
   const found = requireOverlay(presentation, path, "shape");
   if (found.placement !== "at") throw bad("This shape is not attached to a block.", { path: found.path });
   if (![frame?.x, frame?.y, frame?.width, frame?.height].every(Number.isFinite)) throw bad("Pass the frame the shape has now, in fractions of the slide: { x, y, width, height }.", { frame });
-  const width = clamp(frame.width, 0.005, 1);
-  const height = clamp(frame.height, 0.005, 1);
+  const width = clamp(frame.width, 0.005, OVERLAY_SIZE_MAX);
+  const height = clamp(frame.height, 0.005, OVERLAY_SIZE_MAX);
   const parts = splitOpfPath(found.path);
   const at = (key) => opfPathToJsonPointer([...parts, key]);
   const patches = [

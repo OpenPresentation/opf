@@ -34,7 +34,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
 | `datasets` | no | `ref:Datasets` | Optional shared data tables, keyed by id. A chart ('chart.data': { "dataset": "<id>" }) or a table ('table': { "dataset": "<id>" }) references one instead of holding its own copy; engines inline the reference before c... |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
-| `icons` | no | `ref:Icons` | Optional deck-local icons (LH-14), keyed by name: an author's or an LLM's own SVG, written once and named by any `icon` of the deck. See docs/icons.md. |
+| `icons` | no | `ref:Icons` | Optional deck-local icons, keyed by name: an author's or an LLM's own SVG, written once and named by any `icon` of the deck. See docs/icons.md. |
 | `catalogs` | no | `ref:Catalogs` | The catalog records this document embeds, grouped by the catalog they came from: 'default' (the catalog bare ids come from), 'custom' (records the document defines itself) and any number of named catalogs ('acme', ref... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
 
@@ -75,8 +75,8 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `text` | yes | `string` | Plain editable text. Native edits preserve current words; an empty string is retained. |
-| `x` | yes | `number` | Signed fraction of the visible image frame width from its physical left edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds... |
-| `y` | yes | `number` | Signed fraction of the visible image frame height from its physical top edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. Slide viewport bounds... |
+| `x` | yes | `ref:FiniteNumber` | Signed fraction of the visible image frame width from its physical left edge. A callout points at pixels, and a picture never mirrors, so this coordinate is physical in every language. Negative values or values greate... |
+| `y` | yes | `ref:FiniteNumber` | Signed fraction of the visible image frame height from its physical top edge. Negative values or values greater than 1 position the panel outside the image; its text is not clipped to the image. The slide crops what l... |
 | `width` | yes | `number` | Positive fraction of the visible image frame width, at most 1. The signed x origin controls placement outside the frame. |
 | `height` | yes | `number` | Positive fraction of the visible image frame height, at most 1. The signed y origin controls placement outside the frame. |
 
@@ -230,15 +230,15 @@ _No named properties._
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
-| `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout... |
-| `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.content... |
+| `titleAlignment` | no | `enum:start \| center \| end` | Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout... |
+| `contentAlignment` | no | `enum:start \| center \| end` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.content... |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the theme's design.contentBox, then the layout record's design.contentBox,... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout re... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says t... |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| start \| end` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says t... |
 | `imageFit` | no | `enum:cover \| contain \| stretch \| auto` | Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture in a frame of its own proportion... |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the... |
-| `listStyle` | no | `enum:stack \| rows` | How list entries are arranged (LH-08). 'stack' draws each entry's text with its description under it, the entries close together, as before. 'rows' draws ruled rows: a hairline between two first-level entries (the sch... |
-| `mirror` | no | `boolean` | Draw the slide's template layout mirrored (OPF 0.19): each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Bin... |
+| `listStyle` | no | `enum:stack \| rows` | How list entries are arranged. 'stack' draws each entry's text with its description under it, the entries close together, as before. 'rows' draws ruled rows: a hairline between two first-level entries (the scheme's bo... |
+| `mirror` | no | `boolean` | Draw the slide's template layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and re... |
 
 
 ### ColorScheme
@@ -364,7 +364,7 @@ _No named properties._
 
 - Type: `oneOf:schema / schema`
 - Required fields: `color`
-- Purpose: A ColorRef made lighter or darker (SH-02), as PowerPoint's theme color tints and shades: 'lighten' moves the color's HSL luminance that share of the way to white (lumMod 1 - lighten, lumOff lighten), 'darken' that share of the way to black (lumMod 1 - darken). Exactly one of the two. PPTX export writes a:lumMod and a:lumOff on the base color, a scheme color where the base names one, so re-theming the deck keeps the tint.
+- Purpose: A ColorRef made lighter or darker, as PowerPoint's theme color tints and shades: 'lighten' moves the color's HSL luminance that share of the way to white (lumMod 1 - lighten, lumOff lighten), 'darken' that share of the way to black (lumMod 1 - darken). Exactly one of the two. PPTX export writes a:lumMod and a:lumOff on the base color, a scheme color where the base names one, so re-theming the deck keeps the tint.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -588,7 +588,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `tone` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture or gradient takes the deck's variant, else counts as light. |
 | `type` | yes | `const:"gradient"` | Fixed gradient background fill. |
-| `gradient` | yes | `object` | Gradient fill definition. |
+| `gradient` | yes | `object` | Gradient fill definition: a linear gradient along 'angle' (default 0, left to right). A shape fill's Gradient also takes radial and path types; a background does not. |
 | `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). |
 
 
@@ -634,7 +634,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `color` | yes | `ref:ColorRef` | Overlay fill color: a hex color (eight-digit hex keeps its alpha), a color-scheme slot or role name, or a 'var:<id>' variable reference. |
 | `opacity` | yes | `number` | Overlay fill opacity. |
-| `edge` | no | `enum:top \| bottom \| left \| right` | Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment.... |
+| `edge` | no | `enum:top \| bottom \| start \| end` | Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment.... |
 | `size` | no | `number` | Band share of the frame for an edge overlay. Default 0.3. Ignored without edge. |
 
 
@@ -646,8 +646,8 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `edge` | yes | `enum:left \| right \| top \| bottom` | The slide edge the image bleeds to. |
-| `size` | no | `number` | Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5. |
+| `edge` | yes | `enum:start \| end \| top \| bottom` | The slide edge the image bleeds to. |
+| `size` | no | `number` | Share of the slide width (start, end) or height (top, bottom) given to the band. Default 0.5. |
 | `inset` | no | `boolean` | Draw the frame inside the slide padding on every side of the band, like a card, instead of edge to edge. Default false. |
 
 
@@ -655,7 +655,7 @@ _No named properties._
 
 - Type: `anyOf:const:"none" / object`
 - Required fields: none
-- Purpose: A line along an outline (SH-02): a shape block's outline or a picture's frame (the picture key 'border' was renamed 'stroke' in 0.33, with no alias). DrawingML a:ln. 'none' removes the line.
+- Purpose: A line along an outline: a shape block's outline or a picture's frame (the picture key 'border' was renamed 'stroke' in 0.33, with no alias). DrawingML a:ln. 'none' removes the line.
 
 _No named properties._
 
@@ -677,7 +677,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `stops`
-- Purpose: A gradient fill (SH-02): the background gradient object extended with 'type'. DrawingML a:gradFill: a:lin for linear, a:path circle, rect or shape for the others. The gradient rotates with the shape.
+- Purpose: A gradient fill: the background gradient object extended with 'type'. DrawingML a:gradFill: a:lin for linear, a:path circle, rect or shape for the others. The gradient rotates with the shape.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -703,7 +703,7 @@ _No named properties._
 
 - Type: `anyOf:const:"none" / ref:ColorRef / object / object`
 - Required fields: none
-- Purpose: A shape block's fill (SH-02): 'none', a ColorRef, { gradient } or { pattern }. Without a fill a shape takes its style's fill (the theme's accent1 for the default style). Fills rotate with the shape (rotWithShape).
+- Purpose: A shape block's fill: 'none', a ColorRef, { gradient } or { pattern }. Without a fill a shape takes its style's fill (the theme's accent1 for the default style). Fills rotate with the shape (rotWithShape).
 - Conditional requirement: `gradient` or `pattern`
 
 _No named properties._
@@ -722,7 +722,7 @@ _No named properties._
 
 - Type: `anyOf:string / object`
 - Required fields: none
-- Purpose: Custom geometry (SH-02): SVG path data (M, L, H, V, C, S, Q, T, A and Z, absolute or relative) instead of a preset. PPTX export writes a:custGeom with the same path. A subpath that ends without Z is open: arrowheads draw at its ends (its fill closes it, as in PowerPoint).
+- Purpose: Custom geometry: SVG path data (M, L, H, V, C, S, Q, T, A and Z, absolute or relative) instead of a preset. PPTX export writes a:custGeom with the same path. A subpath that ends without Z is open: arrowheads draw at its ends (its fill closes it, as in PowerPoint).
 - Conditional requirement: `d` and `viewBox`
 
 _No named properties._
@@ -741,7 +741,7 @@ _No named properties._
 
 - Type: `anyOf:enum:soft | hard | perspective / object`
 - Required fields: none
-- Purpose: Outer shadow (a:outerShdw): a preset name (soft, hard, perspective) or { color, opacity, blur, distance, angle, size }. SH-03 draws it in both engines.
+- Purpose: Outer shadow (a:outerShdw): a preset name (soft, hard, perspective) or { color, opacity, blur, distance, angle, size }.
 
 _No named properties._
 
@@ -750,7 +750,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Inner shadow (a:innerShdw). SH-03 draws it in both engines.
+- Purpose: Inner shadow (a:innerShdw).
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -765,7 +765,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Glow around the outline (a:glow). SH-03 draws it in both engines.
+- Purpose: Glow around the outline (a:glow).
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -778,7 +778,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Reflection below the shape (a:reflection). SH-03 draws it in both engines.
+- Purpose: Reflection below the shape (a:reflection).
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -850,20 +850,20 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Repeated header or footer content split into left, center, and right zones. Header/footer content is slide furniture, separate from the main slide content payloads.
+- Purpose: Repeated header or footer content split into start, center, and end zones. The zones follow the deck's direction: 'start' is at the left of a left-to-right deck and at the right of a right-to-left one. Header/footer content is slide furniture, separate from the main slide content payloads.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `left` | no | `ref:HeaderFooterItem` | Left-aligned header/footer content. |
+| `start` | no | `ref:HeaderFooterItem` | Content at the start edge, aligned to it. |
 | `center` | no | `ref:HeaderFooterItem` | Centered header/footer content. |
-| `right` | no | `ref:HeaderFooterItem` | Right-aligned header/footer content. |
+| `end` | no | `ref:HeaderFooterItem` | Content at the end edge, aligned to it. |
 
 
 ### HeaderFooterItem
 
 - Type: `object`
 - Required fields: none
-- Purpose: One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (left, center or right) and vertically centered on each other; a line break inside text or socials ('\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide number, the slide count, t...
+- Purpose: One header/footer zone. Every configured field renders, side by side in one row in the order image, text, socials, date (mirrored in a right-to-left deck), aligned to the zone's edge (the start edge, the center or the end edge) and vertically centered on each other; a line break inside text or socials ('\n') stacks lines within that part. When the parts are wider than the zone their text wraps, and a row that cannot fit even so is reported as overflow. Generated values such as the slide numbe...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -878,15 +878,15 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'adjust', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in P...
+- Purpose: An entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'adjust', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoi...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'. |
-| `x` | no | `number` | Left edge as a signed fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. Negative values or values greater than 1 place the shape outsi... |
-| `y` | no | `number` | Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape outside the slide. |
-| `width` | no | `number` | Width as a fraction of the slide width. |
-| `height` | no | `number` | Height as a fraction of the slide height. |
+| `x` | no | `ref:FiniteNumber` | The shape's start edge as a signed fraction of the slide width, measured from the slide's start edge: the left edge in a left-to-right deck, the right edge in a right-to-left one. A shape sits over the layout, and the... |
+| `y` | no | `ref:FiniteNumber` | Top edge as a signed fraction of the slide height, from the top edge. Negative values or values greater than 1 place the shape partly or wholly outside the slide. |
+| `width` | no | `number` | Width as a fraction of the slide width, from 0 (a vertical line). Above 1 the shape is wider than the slide, for a circle or band that bleeds off it; the slide crops what lies outside. |
+| `height` | no | `number` | Height as a fraction of the slide height, from 0 (a horizontal line). Above 1 the shape is taller than the slide. |
 | `at` | no | `ref:OverlayAnchor` |  |
 | `layer` | no | `enum:front \| back` | Overlay shapes only. front (the default) draws the shape over the slide: above the content and the furniture. back draws it behind the slide: above the background and the watermark, below the content and the furniture... |
 | `connector` | no | `ref:Connector` | Makes the entry a connector: what it joins and how it runs. |
@@ -918,7 +918,7 @@ _No named properties._
 
 ### OverlayAnchor
 
-- Type: `object`
+- Type: `allOf:schema + schema`
 - Required fields: `block`, `edge`
 - Purpose: Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn. With point, block must carry a supported classic...
 
@@ -927,8 +927,10 @@ _No named properties._
 | `block` | yes | `string` | The id of a block on this slide (a content payload or a group, at any depth). |
 | `edge` | yes | `enum:top \| bottom \| start \| end \| center` | The edge of the block the shape sits outside of, or its center. |
 | `offset` | no | `number` | The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'. |
-| `width` | no | `number` | The shape's width: up to 1 a fraction of the block's width, above 1 reference pixels at a 720-pixel short edge. Default the preset's natural proportions with the shape's shorter side at 15% of the block's shorter side. |
-| `height` | no | `number` | The shape's height: up to 1 a fraction of the block's height, above 1 reference pixels at a 720-pixel short edge. Default as for width. |
+| `width` | no | `number` | The shape's width as a fraction of its target's width: the block's box, or with 'point' the chart mark's bounds. 1 is the target's own width and 1.08 a frame 8% wider. For a size in pixels use 'widthPx'; not both. Def... |
+| `height` | no | `number` | The shape's height as a fraction of its target's height. For a size in pixels use 'heightPx'; not both. Default as for width. |
+| `widthPx` | no | `number` | The shape's width in reference pixels at a 720-pixel short edge, whatever size its target has: a badge or a ring of a fixed size. Instead of 'width'. |
+| `heightPx` | no | `number` | The shape's height in reference pixels at a 720-pixel short edge. Instead of 'height'. |
 | `point` | no | `oneOf:string / integer` | Exact unique category label or zero-based data row index of the chart. Numeric strings name labels; numbers index rows. Empty/duplicate labels can be selected by index. Requires a supported classic chart block. |
 | `series` | no | `oneOf:string / integer` | Exact unique plotted value-column name or zero-based plotted-series index; omission selects the first plotted series. Requires point. Scatter X is not a value series. |
 
@@ -952,7 +954,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'left', 'center+right', and 'top:left'.
+- Purpose: A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'start', 'center+end', and 'top:start'. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -963,7 +965,7 @@ _No named properties._
 | `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'), or 'auto'. When omitted or 'auto', the slide is composed with no layout record: engines arrange title, subtitle, tag and content... |
 | `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. A v2 layout renders this in its title heading area, or an implicit heading row when that area is absent. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold,... |
 | `subtitle` | no | `oneOf:string / array<ref:TextRun>` | Slide-level subtitle or supporting line. A v2 layout renders this in its subtitle area when present, otherwise in the title heading group. Use a string for plain text or TextRun[] for inline rich text (a colored word,... |
-| `tag` | no | `oneOf:string / array<ref:TextRun>` | Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Engines draw it as an eyebrow (LH-32): 22 reference pixels, bold, in the prima... |
+| `tag` | no | `oneOf:string / array<ref:TextRun>` | Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Engines draw it as an eyebrow: 22 reference pixels, bold, in the primary color... |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Full-slide text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Full-slide structured list payload. Presence of this field infers type 'list'. Entries are strings, TextRun[] or objects with `text`, optional `description` (supporting detail under the entry), `level` and `start`. Us... |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries are strings, TextRun[] or objects with `text`,... |
@@ -976,64 +978,93 @@ _No named properties._
 | `metric` | no | `oneOf:string / number / ref:Metric` | Full-slide metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, trend, and sentiment metadata. Numeric values remain numbers; renderers... |
 | `quote` | no | `oneOf:string / ref:Quote` | Full-slide quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. Presence of this field infers type 'quote'. |
 | `timeline` | no | `ref:Timeline` | Full-slide timeline payload. An array is shorthand for { "events": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'. |
-| `diagram` | no | `oneOf:string / ref:Diagram` | Full-slide diagram payload: Mermaid source drawn in the deck's fonts and colors. A string is shorthand for { "source": value }; object form carries the source syntax and a text alternative. Presence of this field infe... |
+| `diagram` | no | `oneOf:string / ref:Diagram` | Full-slide diagram payload: Mermaid, Graphviz DOT or PlantUML source drawn in the deck's fonts and colors. A string is shorthand for { "source": value }; object form carries the source syntax and a text alternative. P... |
 | `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table, video or diagram payload. Valid only when the slide root holds exactly one of those payloads. |
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
-| `shapes` | no | `array<ref:OverlayShape>` | SH-04: shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or... |
+| `shapes` | no | `array<ref:OverlayShape>` | Shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overla... |
 | `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
-| `left` | no | `ref:ContentPayload` |  |
+| `start` | no | `ref:ContentPayload` |  |
 | `center` | no | `ref:ContentPayload` |  |
-| `right` | no | `ref:ContentPayload` |  |
-| `left+center` | no | `ref:ContentPayload` |  |
-| `center+right` | no | `ref:ContentPayload` |  |
-| `left+center+right` | no | `ref:ContentPayload` |  |
+| `end` | no | `ref:ContentPayload` |  |
+| `start+center` | no | `ref:ContentPayload` |  |
+| `center+end` | no | `ref:ContentPayload` |  |
+| `start+center+end` | no | `ref:ContentPayload` |  |
 | `top` | no | `ref:ContentPayload` |  |
 | `middle` | no | `ref:ContentPayload` |  |
 | `bottom` | no | `ref:ContentPayload` |  |
 | `top+middle` | no | `ref:ContentPayload` |  |
 | `middle+bottom` | no | `ref:ContentPayload` |  |
 | `top+middle+bottom` | no | `ref:ContentPayload` |  |
-| `top:left` | no | `ref:ContentPayload` |  |
+| `top:start` | no | `ref:ContentPayload` |  |
 | `top:center` | no | `ref:ContentPayload` |  |
-| `top:right` | no | `ref:ContentPayload` |  |
-| `top:left+center` | no | `ref:ContentPayload` |  |
-| `top:center+right` | no | `ref:ContentPayload` |  |
-| `top:left+center+right` | no | `ref:ContentPayload` |  |
-| `middle:left` | no | `ref:ContentPayload` |  |
+| `top:end` | no | `ref:ContentPayload` |  |
+| `top:start+center` | no | `ref:ContentPayload` |  |
+| `top:center+end` | no | `ref:ContentPayload` |  |
+| `top:start+center+end` | no | `ref:ContentPayload` |  |
+| `middle:start` | no | `ref:ContentPayload` |  |
 | `middle:center` | no | `ref:ContentPayload` |  |
-| `middle:right` | no | `ref:ContentPayload` |  |
-| `middle:left+center` | no | `ref:ContentPayload` |  |
-| `middle:center+right` | no | `ref:ContentPayload` |  |
-| `middle:left+center+right` | no | `ref:ContentPayload` |  |
-| `bottom:left` | no | `ref:ContentPayload` |  |
+| `middle:end` | no | `ref:ContentPayload` |  |
+| `middle:start+center` | no | `ref:ContentPayload` |  |
+| `middle:center+end` | no | `ref:ContentPayload` |  |
+| `middle:start+center+end` | no | `ref:ContentPayload` |  |
+| `bottom:start` | no | `ref:ContentPayload` |  |
 | `bottom:center` | no | `ref:ContentPayload` |  |
-| `bottom:right` | no | `ref:ContentPayload` |  |
-| `bottom:left+center` | no | `ref:ContentPayload` |  |
-| `bottom:center+right` | no | `ref:ContentPayload` |  |
-| `bottom:left+center+right` | no | `ref:ContentPayload` |  |
-| `top+middle:left` | no | `ref:ContentPayload` |  |
+| `bottom:end` | no | `ref:ContentPayload` |  |
+| `bottom:start+center` | no | `ref:ContentPayload` |  |
+| `bottom:center+end` | no | `ref:ContentPayload` |  |
+| `bottom:start+center+end` | no | `ref:ContentPayload` |  |
+| `top+middle:start` | no | `ref:ContentPayload` |  |
 | `top+middle:center` | no | `ref:ContentPayload` |  |
-| `top+middle:right` | no | `ref:ContentPayload` |  |
-| `top+middle:left+center` | no | `ref:ContentPayload` |  |
-| `top+middle:center+right` | no | `ref:ContentPayload` |  |
-| `top+middle:left+center+right` | no | `ref:ContentPayload` |  |
-| `middle+bottom:left` | no | `ref:ContentPayload` |  |
+| `top+middle:end` | no | `ref:ContentPayload` |  |
+| `top+middle:start+center` | no | `ref:ContentPayload` |  |
+| `top+middle:center+end` | no | `ref:ContentPayload` |  |
+| `top+middle:start+center+end` | no | `ref:ContentPayload` |  |
+| `middle+bottom:start` | no | `ref:ContentPayload` |  |
 | `middle+bottom:center` | no | `ref:ContentPayload` |  |
-| `middle+bottom:right` | no | `ref:ContentPayload` |  |
-| `middle+bottom:left+center` | no | `ref:ContentPayload` |  |
-| `middle+bottom:center+right` | no | `ref:ContentPayload` |  |
-| `middle+bottom:left+center+right` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:left` | no | `ref:ContentPayload` |  |
+| `middle+bottom:end` | no | `ref:ContentPayload` |  |
+| `middle+bottom:start+center` | no | `ref:ContentPayload` |  |
+| `middle+bottom:center+end` | no | `ref:ContentPayload` |  |
+| `middle+bottom:start+center+end` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:start` | no | `ref:ContentPayload` |  |
 | `top+middle+bottom:center` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:right` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:left+center` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:center+right` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:left+center+right` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:end` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:start+center` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:center+end` | no | `ref:ContentPayload` |  |
+| `top+middle+bottom:start+center+end` | no | `ref:ContentPayload` |  |
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. Also the slide-scoped built-in variable '{{sli... |
 | `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (o... |
 | `composition` | no | `ref:Composition` |  |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at slide scope; ignored by the engine but preserved across read/write round-trips. Use for review state, generation provenance, or authoring conventions such as { "authoring... |
+
+
+### ImageBlockOption
+
+- Type: `schema`
+- Required fields: `image`
+- Purpose: An option of image blocks only (fit, focus, recolor, overlay, placement, portrait): the block must hold an 'image'.
+
+_No named properties._
+
+
+### ImageOrShapeBlockOption
+
+- Type: `anyOf:schema / schema / schema`
+- Required fields: none
+- Purpose: An option of image blocks and shape blocks (aspectRatio, adjust, stroke, opacity): the block must hold an 'image', a 'shape' or a 'path'.
+- Conditional requirement: `image` or `shape` or `path`
+
+_No named properties._
+
+
+### ShapeBlockOption
+
+- Type: `anyOf:schema / schema`
+- Required fields: none
+- Purpose: An option of shape blocks only (fill, style, rotate, flip, the text frame, accessibility, link and the six effects): the block must be a shape block, which is a 'shape' with no 'image', or a 'path'.
+- Conditional requirement: `shape` or `path`
+
+_No named properties._
 
 
 ### ContentPayload
@@ -1046,18 +1077,18 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for this payload, unique among slide and payload ids in the document. Use when another system needs to address the payload across edits patch-style agent edits, comments, review state, or ge... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips. |
-| `region` | no | `string` | Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name (OPF 0.19). The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ign... |
+| `region` | no | `string` | Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ignored with a... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram \| shape \| group` | Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Structured list payload (type 'list'). Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object with optional `description`. List nesting uses item.level rather than nested content payl... |
 | `bullets` | no | `array<ref:BulletItem>` | Prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries have no `description`; use `items` for entries with suppo... |
 | `numbering` | no | `ref:NumberingSpec` | Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entr... |
-| `columns` | no | `oneOf:const:"auto" / integer` | Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a... |
+| `columns` | no | `oneOf:const:"auto" / integer` | Lay the payload's `items` or `bullets` out in columns. 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a quarter of... |
 | `image` | no | `ref:ImagePayload` | Source for an image item. |
 | `fit` | no | `enum:cover \| contain \| stretch \| auto` | Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by... |
 | `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in... |
 | `aspectRatio` | no | `number` | Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame... |
-| `shape` | no | `ref:ShapePreset` | The preset geometry. Without 'image' it makes the block a shape block (SH-02): the preset drawn at the block's own fitted size with 'fill', 'stroke' and 'style', and 'text' inside its text rectangle. On an image block... |
+| `shape` | no | `ref:ShapePreset` | The preset geometry. Without 'image' it makes the block a shape block: the preset drawn at the block's own fitted size with 'fill', 'stroke' and 'style', and 'text' inside its text rectangle. On an image block it is t... |
 | `stroke` | no | `ref:Stroke` | Shape and image blocks. The line along the outline: a shape's outline or the picture frame's shape (renamed from the picture key 'border' in 0.33, no alias). Without it a shape takes its style's line; a picture has none. |
 | `path` | no | `ref:ShapePath` | Shape blocks only. Custom geometry instead of a preset (a:custGeom): SVG path data in a 0 to 1 box, or { d, viewBox }. A block with 'path' is a shape block. |
 | `fill` | no | `ref:ShapeFill` | Shape blocks only. 'none', a ColorRef, { gradient } or { pattern }. Default the style's fill. |
@@ -1074,9 +1105,9 @@ _No named properties._
 | `shadow` | no | `ref:Shadow` | Shape blocks only. Outer shadow. |
 | `innerShadow` | no | `ref:InnerShadow` | Shape blocks only. Inner shadow. |
 | `glow` | no | `ref:Glow` | Shape blocks only. Glow. |
-| `softEdge` | no | `number` | Shape blocks only. Soft edges (a:softEdge): the radius over which the outline fades, in reference pixels at a 720-pixel short edge. SH-03 draws it in both engines. |
+| `softEdge` | no | `number` | Shape blocks only. Soft edges (a:softEdge): the radius over which the outline fades, in reference pixels at a 720-pixel short edge. |
 | `reflection` | no | `ref:Reflection` | Shape blocks only. Reflection. |
-| `blur` | no | `number` | Shape blocks only. Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge. SH-03 draws it in both engines. |
+| `blur` | no | `number` | Shape blocks only. Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge. |
 | `adjust` | no | `object` | Shape and image blocks. The preset's adjust handles (a:avLst), named as DrawingML's guides (adj, adj1, adj2 ... and hexagon's vf): fractions of the shape's shorter side or of its size as the preset defines them, degre... |
 | `opacity` | no | `number` | Image and shape blocks. On an image: the picture's opacity, exported as a native alphaModFix; the stroke and overlay keep their own. On a shape: the fill's opacity (a:alpha on the fill color, multiplied with an eight-... |
 | `recolor` | no | `ref:ImageRecolor` | Image payloads only. Grayscale or duotone treatment of the picture's pixels. |
@@ -1090,12 +1121,12 @@ _No named properties._
 | `metric` | no | `oneOf:string / number / ref:Metric` | Metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, trend, and sentiment metadata. Numeric values remain numbers; renderers format them... |
 | `quote` | no | `oneOf:string / ref:Quote` | Quote payload. A string is shorthand for { "text": value }; object form carries optional attribution, role, photo and source metadata. |
 | `timeline` | no | `ref:Timeline` | Timeline payload ordered by narrative or chronology. |
-| `diagram` | no | `oneOf:string / ref:Diagram` | Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families) drawn in the deck's fonts and colors. A string is shorthand... |
+| `diagram` | no | `oneOf:string / ref:Diagram` | Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families), or Graphviz DOT or PlantUML source with 'syntax', drawn in... |
 | `caption` | no | `ref:Caption` | Caption for an image, chart, table, video or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
 | `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
 | `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize, maxFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
 | `emphasis` | no | `boolean` | true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text color on i... |
-| `icon` | no | `ref:IconReference` | Groups only (LH-14): an icon drawn on a chip at the top of the group, before its heading, as a card of features or topics draws one: "<set>:<name>" ("lucide:shield-check"), a name from the deck's icons, or an SVG sour... |
+| `icon` | no | `ref:IconReference` | Groups only: an icon drawn on a chip at the top of the group, before its heading, as a card of features or topics draws one: "<set>:<name>" ("lucide:shield-check"), a name from the deck's icons, or an SVG source. A li... |
 
 
 ### Quote
@@ -1143,7 +1174,7 @@ _No named properties._
 | `delta` | no | `oneOf:string / number` | Metric change value. |
 | `trend` | no | `enum:up \| down \| flat` | Metric trend direction. The preview and the PowerPoint export draw it as an arrow that always points the way the trend does (up, down or flat), before the delta on its line (or before the label without a delta), and c... |
 | `sentiment` | no | `enum:positive \| negative \| neutral` | Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text colour, each kept at 4.5:1 contrast or more against the slide back... |
-| `icon` | no | `ref:IconReference` | An icon drawn on a chip above the metric (LH-14): "<set>:<name>" ("lucide:users"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is... |
+| `icon` | no | `ref:IconReference` | An icon drawn on a chip above the metric: "<set>:<name>" ("lucide:users"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not dra... |
 
 
 ### Diagram
@@ -1263,32 +1294,37 @@ _No named properties._
 | `url` | no | `string` | Optional link for the reference; a references slide links its entry to it. |
 
 
-### ChartReferenceStroke
+### FiniteNumber
 
-- Type: `object`
+- Type: `number`
 - Required fields: none
-- Purpose: Independent reference-line styling. Width uses reference pixels at a 720px short edge, as Stroke; unsupported arrows, gradients and compound strokes are not exposed.
+- Purpose: A finite number. JSON text such as 1e999 reads as Infinity in JavaScript and YAML has .inf and .nan; these bounds reject them.
 
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `color` | no | `ref:ColorRef` | Defaults to the chart-text neutral. |
-| `width` | no | `number` | Reference pixels at a 720px short edge. Zero hides only the stroke; the value still affects bounds and its optional label remains. |
-| `dash` | no | `enum:solid \| dash \| dot` |  |
+_No named properties._
+
+
+### Line
+
+- Type: `anyOf:const:"none" / object`
+- Required fields: none
+- Purpose: A plain line: its color, width and dash, or 'none' for no line. Shared by table cell borders and chart reference lines. A shape's outline is a Stroke, which adds what only an outline has (gradient, caps, joins, compound lines, arrowheads, sketch). Every part is optional and falls back to the default of the place the line is used.
+
+_No named properties._
 
 
 ### ChartReferenceLine
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement.
+- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category or a band between two values is not expressible yet; 'axis' and a separate key are reserved for them.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `value` | yes | `number` | Finite value in the associated data-axis units. With format 0%, 0.25 means 25%; 25 means 2500%. Every reference expands automatic bounds when needed. |
+| `value` | yes | `ref:FiniteNumber` | Finite value in the associated data-axis units. With format 0%, 0.25 means 25%; 25 means 2500%. Every reference expands automatic bounds when needed. |
 | `axis` | no | `enum:value \| secondary` | Secondary requires a combo chart with an actual secondary line series. |
 | `label` | no | `string` | Optional nonblank plain text, shown verbatim. Omission draws no label. |
 | `labelPosition` | no | `enum:start \| end` | Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label. |
-| `stroke` | no | `ref:ChartReferenceStroke` |  |
+| `stroke` | no | `ref:Line` | The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn. |
 
 
 ### Chart
@@ -1303,11 +1339,11 @@ _No named properties._
 | `data` | yes | `oneOf:ref:ChartData / ref:DatasetRef` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ "dataset": "<id>" }) plots a top-level dataset instead. Data from a spreadsheet or file is... |
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
 | `line` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
-| `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the right of the plot. That axis has its own scale, and its tick labels use the number format of the first secondary series' co... |
+| `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the end of the plot (the right; the left in a right-to-left deck, where the category axis runs from the right). That axis has i... |
 | `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references, supported on column, bar, line, line-with-markers, area and combo. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or m... |
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
-| `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent keeps today's behaviour exactly (a legend at the right of multi-series charts and of pie and doughnut charts, none for single-series charts). A named position... |
-| `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator. |
+| `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent leaves it to the engines: a line chart of two to four series names its series at the line ends and a pie or one-series doughnut names its slices, with no legen... |
+| `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position and false shows none. Absent leaves it to the engines: no labels, except on a small chart, which labels its values in place of its value ax... |
 | `alt` | no | `string` | Text alternative for the chart: what the data shows (the point and the key numbers), not 'a chart' or 'bar chart'. The preview exposes it as the chart's accessible name (role img with aria-label) and the PowerPoint ex... |
 | `colors` | no | `array<ref:ColorRef>` | Optional series colors, by position: entry i replaces palette color i, the color of series i (the i-th plotted value column), of slice or category i on a pie, doughnut, treemap or funnel chart, and of the i-th color a... |
 | `highlight` | no | `ref:ChartHighlight` | Optional emphasis: the series and/or categories that carry the message. The engines draw the highlighted marks in the deck's primary (accent) color and every other mark in a muted neutral derived from the theme (a lig... |
@@ -1322,8 +1358,8 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `category` | no | `string` | Title of the category (X) axis. |
-| `value` | no | `string` | Title of the value (Y) axis. On a combo chart, the primary (left) value axis. |
-| `secondary` | no | `string` | Combo charts only: title of the secondary value axis at the right of the plot, drawn rotated like the primary value axis title. Dropped with a 'chart-option-adapted' diagnostic on any other chart type and on a combo c... |
+| `value` | no | `string` | Title of the value (Y) axis. On a combo chart, the primary value axis (at the start of the plot). |
+| `secondary` | no | `string` | Combo charts only: title of the secondary value axis at the end of the plot (the right; the left in a right-to-left deck), drawn rotated like the primary value axis title. Dropped with a 'chart-option-adapted' diagnos... |
 
 
 ### ChartHighlight
@@ -1529,7 +1565,7 @@ _No named properties._
 | `fill` | no | `ref:ColorRef` | Cell background: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent. |
 | `color` | no | `ref:ColorRef` | Default text color, overridden by individual rich run colors. Accepts a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. |
 | `bold` | no | `boolean` | Bold cell text. Runs that set their own bold keep it; a number cell stays bold and still uses the cell's or column's number format. |
-| `align` | no | `enum:left \| center \| right` | Horizontal text alignment inside the cell. |
+| `align` | no | `enum:start \| center \| end` | Horizontal text alignment inside the cell. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge. |
 | `verticalAlign` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
 | `padding` | no | `ref:TableCellPadding` |  |
 | `borders` | no | `object` | Independent cell edges. An omitted edge keeps the table's default rule: a line under every row (and over the first row), none between columns. Width 0 removes an edge. |
@@ -1551,15 +1587,11 @@ _No named properties._
 
 ### TableCellBorder
 
-- Type: `object`
-- Required fields: `color`, `width`
-- Purpose: One explicit cell border.
+- Type: `ref:Line`
+- Required fields: none
+- Purpose: One explicit cell border: a Line, or 'none' to remove this edge. Defaults: the table's rule color (the scheme's border neutral), 1 reference pixel and 'solid'.
 
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `color` | yes | `ref:ColorRef` | Border color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent. |
-| `width` | yes | `number` | Border width in reference pixels; 0 removes this edge. |
-| `dash` | no | `enum:solid \| dash \| dot` | Default solid. |
+_No named properties._
 
 
 ### Catalogs
@@ -1591,14 +1623,14 @@ _No named properties._
 | `audiences` | no | `ref:CatalogRecords` | Audience records keyed by id, each with the fields of https://openpresentation.org/schema/opf-audience/v1. Referenced from audience. |
 | `purposes` | no | `ref:CatalogRecords` | Purpose records keyed by id, each with the fields of https://openpresentation.org/schema/opf-purpose/v1. Referenced from purpose. |
 | `tones` | no | `ref:CatalogRecords` | Tone records keyed by id, each with the fields of https://openpresentation.org/schema/opf-tone/v1. Referenced from tone. |
-| `iconSets` | no | `ref:CatalogRecords` | Icon-set records keyed by set id (LH-14), each with the fields of https://openpresentation.org/schema/opf-icon-set/v1, holding only the icons the document uses (no licenseText or tags). Referenced from an icon as "<se... |
+| `iconSets` | no | `ref:CatalogRecords` | Icon-set records keyed by set id, each with the fields of https://openpresentation.org/schema/opf-icon-set/v1, holding only the icons the document uses (no licenseText or tags). Referenced from an icon as "<set>:<name>". |
 
 
 ### IconReference
 
 - Type: `string`
 - Required fields: none
-- Purpose: An icon (LH-14): "<set>:<name>" names an icon of a set ("lucide:truck", "tabler:rocket"; the gallery bundles Lucide and Tabler outline), a bare name names one of the deck's `icons`, and an SVG source ("asset:<id>", "./icon.svg", an HTTPS URL or a data:image/svg+xml URI) names an SVG file, as pictures accept. A one-color icon draws in the accent and exports as a native, theme-colored PowerPoint shape; a multicolor SVG draws as a picture with its own colors. Unknown names are opf/icon-unknown,...
+- Purpose: An icon: "<set>:<name>" names an icon of a set ("lucide:truck", "tabler:rocket"; the gallery bundles Lucide and Tabler outline), a bare name names one of the deck's `icons`, and an SVG source ("asset:<id>", "./icon.svg", an HTTPS URL or a data:image/svg+xml URI) names an SVG file, as pictures accept. A one-color icon draws in the accent and exports as a native, theme-colored PowerPoint shape; a multicolor SVG draws as a picture with its own colors. Unknown names are opf/icon-unknown, unusable...
 
 _No named properties._
 
@@ -1607,7 +1639,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Deck-local icons (LH-14), keyed by name: SVG text ("<svg >") or an SVG source ("asset:<id>", "./icon.svg", an HTTPS URL or a data URI). An `icon` names one by its bare name. The SVG is read, never run: a script, an event handler, an external reference or a raster makes it opf/icon-invalid. One paint (or currentColor) makes it a recolorable glyph; several make it a picture with its own colors.
+- Purpose: Deck-local icons, keyed by name: SVG text ("<svg >") or an SVG source ("asset:<id>", "./icon.svg", an HTTPS URL or a data URI). An `icon` names one by its bare name. The SVG is read, never run: a script, an event handler, an external reference or a raster makes it opf/icon-invalid. One paint (or currentColor) makes it a recolorable glyph; several make it a picture with its own colors.
 
 _No named properties._
 

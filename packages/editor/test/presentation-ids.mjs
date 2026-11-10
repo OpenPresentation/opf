@@ -16,7 +16,7 @@ const fixture = JSON.parse(readFileSync(fixturePath, "utf8"));
 
 const payloadSlide = {
   id: "host",
-  left: { id: "kpi-adoption", metric: { value: "1x", label: "Adoption" } },
+  start: { id: "kpi-adoption", metric: { value: "1x", label: "Adoption" } },
 };
 
 assert.deepEqual(slideIds(payloadSlide).sort(), ["host", "kpi-adoption"].sort());

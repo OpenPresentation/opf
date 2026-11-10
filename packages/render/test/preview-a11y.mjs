@@ -91,7 +91,7 @@ for (const [background, label] of backgrounds) {
 
 // 7. Furniture pictures (a header or footer logo repeated on every slide) are hidden unless the author gave them alt.
 for (const [image, hidden] of [[{ src: png }, true], [{ src: png, alt: 'Acme logo' }, false]]) {
-  const picture = elements(parseXml(toSvg(deck({ title: 'T' }, { header: { right: { image } } }), 1))).find((node) => node.name === 'image');
+  const picture = elements(parseXml(toSvg(deck({ title: 'T' }, { header: { end: { image } } }), 1))).find((node) => node.name === 'image');
   assert.equal(picture.attrs['aria-hidden'], hidden ? 'true' : undefined, JSON.stringify(image));
   assert.equal(picture.attrs.role, hidden ? undefined : 'img');
 }

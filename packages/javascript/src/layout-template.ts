@@ -27,7 +27,7 @@ export const HEADING_AREAS = ['title', 'subtitle'] as const;
  * Names a body region may not take: the heading words, `auto`, and the six promoted-region words, so `region=` in the
  * Markdown dialect stays unambiguous. `title` and `subtitle` name the heading regions.
  */
-export const RESERVED_REGION_NAMES = ['title', 'subtitle', 'tag', 'auto', 'left', 'center', 'right', 'top', 'middle', 'bottom'] as const;
+export const RESERVED_REGION_NAMES = ['title', 'subtitle', 'tag', 'auto', 'start', 'center', 'end', 'top', 'middle', 'bottom'] as const;
 /** The compiled grid has at most this many rows and this many columns. */
 export const MAX_TEMPLATE_TRACKS = 12;
 /** A list of regions (the record's, or a split's) holds at most this many entries. */

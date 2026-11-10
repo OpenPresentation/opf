@@ -7,7 +7,7 @@ import { CONTENT_KEYS, type ConversionReport, type Json, Loss, type Obj, assertV
 /** Image sources the background string shorthand accepts (opf.schema.json ImageSource). */
 const IMAGE_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
 
-/** A path inside one slide: `["blocks", 1]` is its second block, `["left"]` the payload of its `left` region, `[]` the slide itself. */
+/** A path inside one slide: `["blocks", 1]` is its second block, `["start"]` the payload of its `start` region, `[]` the slide itself. */
 export type SlidePath = (string | number)[];
 
 export interface StructureChange extends ConversionReport {
@@ -93,8 +93,8 @@ export function unwrapGroup(slide: unknown, path: SlidePath): StructureChange {
 // --- blocks and regions ------------------------------------------------------------------------
 
 const ROWS = ["top", "middle", "bottom"];
-const COLUMNS = ["left", "center", "right"];
-/** The grid cells a region key covers: `left+center` is the whole left and center columns, `top:left` one cell. */
+const COLUMNS = ["start", "center", "end"];
+/** The grid cells a region key covers: `start+center` is the whole start and center columns, `top:start` one cell. */
 function cellsOf(key: string): Set<string> {
   const [first = "", second] = key.split(":");
   const parts = (text: string): string[] => text.split("+");
@@ -136,7 +136,7 @@ export function blocksToRegions(slide: unknown, regions: string[]): StructureCha
   if (!blocks.length) throw refuse("This slide has no blocks to place.");
   if (regions.length !== blocks.length) throw refuse(`Name a region for each of the ${blocks.length} blocks.`, { blocks: blocks.length, regions: regions.length });
   regions.forEach((key, index) => {
-    if (!isRegionKey(key)) throw refuse(`"${key}" is not a region (for example left, right, top:left, center+right).`, { region: key });
+    if (!isRegionKey(key)) throw refuse(`"${key}" is not a region (for example start, end, top:start, center+end).`, { region: key });
     const clash = regions.findIndex((other, otherIndex) => otherIndex < index && overlaps(other, key));
     if (clash >= 0) throw refuse(`Region "${key}" overlaps region "${regions[clash]}". Each block needs its own part of the slide.`, { region: key });
   });
@@ -167,7 +167,7 @@ export function regionsToBlocks(slide: unknown): StructureChange {
 export function moveRegion(slide: unknown, from: string, to: string, options: { swap?: boolean } = {}): StructureChange {
   const next = clone(slide as Obj);
   if (!isRegionKey(from) || next[from] === undefined) throw refuse(`This slide has no "${from}" region.`, { region: from });
-  if (!isRegionKey(to)) throw refuse(`"${to}" is not a region (for example left, right, top:left, center+right).`, { region: to });
+  if (!isRegionKey(to)) throw refuse(`"${to}" is not a region (for example start, end, top:start, center+end).`, { region: to });
   if (from === to) return { slide: next, changed: false, path: [from], ...report([]) };
   const occupied = next[to] !== undefined;
   if (occupied && !options.swap) throw refuse(`The "${to}" region already has content. Choose to swap the two regions instead.`, { region: to });

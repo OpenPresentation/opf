@@ -2,7 +2,7 @@ import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js
 
 export declare const IMAGE_FITS: readonly ["cover", "contain", "stretch", "auto"];
 export declare const IMAGE_SHAPES: readonly string[];
-export declare const IMAGE_EDGES: readonly ["left", "right", "top", "bottom"];
+export declare const IMAGE_EDGES: readonly ["start", "end", "top", "bottom"];
 /** LH-132: how a person's picture is drawn in a team. */
 export declare const IMAGE_PORTRAITS: readonly ["avatar", "side", "top"];
 export declare const IMAGE_TREATMENT_FIELDS: readonly ["fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"];

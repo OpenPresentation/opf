@@ -270,8 +270,8 @@ describe('anchor', () => {
 describe('design keys: theme level and precedence', () => {
   test('the seven keys a theme may carry rank below the deck and above the layout', () => {
     assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'imageFit', 'listBullet', 'listStyle']);
-    const layout = { design: { contentBox: false, titleAlignment: 'right' } };
-    const theme = { design: { contentBox: true, titleAlignment: 'center', chartPrimary: 'left' } };
+    const layout = { design: { contentBox: false, titleAlignment: 'end' } };
+    const theme = { design: { contentBox: true, titleAlignment: 'center', chartPrimary: 'start' } };
     const fromTheme = resolveDesignHints({ layout, theme });
     assert.equal(fromTheme.contentBox, true);
     assert.equal(fromTheme.sources.contentBox, 'theme');
@@ -279,8 +279,8 @@ describe('design keys: theme level and precedence', () => {
     assert.equal(fromTheme.chartPrimary, undefined, 'chartPrimary is not a theme key');
     const fromDeck = resolveDesignHints({ layout, theme, presentation: { design: { contentBox: false } } });
     assert.equal(fromDeck.sources.contentBox, 'deck');
-    const fromSlide = resolveDesignHints({ layout, theme, slide: { design: { titleAlignment: 'left', theme: 'x' } }, slideIndex: 2 });
-    assert.equal(fromSlide.titleAlignment, 'left');
+    const fromSlide = resolveDesignHints({ layout, theme, slide: { design: { titleAlignment: 'start', theme: 'x' } }, slideIndex: 2 });
+    assert.equal(fromSlide.titleAlignment, 'start');
     assert.equal(resolveDesignHints({ layout, theme, slide: { design: { theme: 'x' } }, slideIndex: 2 }).paths.titleAlignment, 'slides.2.design.theme');
   });
 
@@ -335,7 +335,7 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
 
   test('the boxes a slide composes to: header, footer, placed-image bands and bleed (RR-81 review)', async () => {
     const { composeLayoutAreas } = await import('../dist/composition.js');
-    const furniture = { header: { left: { text: 'Acme' }, right: { text: 'Confidential' } }, footer: { right: { text: '{{slide.number}}' } } };
+    const furniture = { header: { start: { text: 'Acme' }, end: { text: 'Confidential' } }, footer: { end: { text: '{{slide.number}}' } } };
     const placements = [{ edge: 'left', size: 0.25 }];
     // Without cards and with cards on the deck (the card insets live in the auto rows too).
     for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {

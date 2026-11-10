@@ -19,7 +19,7 @@ export const CONTENT_FIELDS = Object.freeze(["text", "items", "bullets", "image"
 const HEADINGS = ["tag", "title", "subtitle"];
 const HEADING_LABELS = { tag: "Tag", title: "Title", subtitle: "Subtitle" };
 const MODE_LABELS = { auto: "Group", grid: "Grid", row: "Row", column: "Column" };
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/;
+const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
 const NONE = Object.freeze({ move: false, group: false, delete: false, duplicate: false, resizeTracks: false });
 const CONTAINERS = new Set(["slide", "region", "group"]);
 

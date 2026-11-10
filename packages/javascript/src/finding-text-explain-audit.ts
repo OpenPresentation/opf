@@ -135,8 +135,8 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/furniture-wraps": ex(
     "Shorten the header or footer text, or move part of it to another zone. Headers and footers should fit on two lines.",
-    { design: { footer: { left: { text: "A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going" }, center: { text: "Confidential" }, right: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
-    { design: { footer: { left: { text: "Acme, confidential" }, right: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
+    { design: { footer: { start: { text: "A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going" }, center: { text: "Confidential" }, right: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
+    { design: { footer: { start: { text: "Acme, confidential" }, end: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
   ),
   "opf/font-outside-scheme": ex(
     "Remove `fontFamily` so the text uses the scheme font, or add the family to the deck's font scheme so it follows scheme changes.",
@@ -154,9 +154,9 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { slides: [{ title: "Findings", items: LONG_ITEMS.slice(0, 3) }, { title: "Findings (continued)", items: LONG_ITEMS.slice(3) }] },
   ),
   "opf/centered-body": ex(
-    "Align paragraphs and lists to the start edge (`contentAlignment: \"left\"`), and keep centering for titles, numbers and one- or two-line statements.",
+    "Align paragraphs and lists to the start edge (`contentAlignment: \"start\"`), and keep centering for titles, numbers and one- or two-line statements.",
     { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "center" } },
-    { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "left" } },
+    { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "start" } },
   ),
   "opf/tight-spacing": ex(
     "Keep the default spacing, or raise `composition.gap` and `composition.padding`, so blocks stand at least 0.25 in apart and 0.5 in from the slide edge.",

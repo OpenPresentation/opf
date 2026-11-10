@@ -13,7 +13,7 @@ const near = (actual, expected, label) => assert.ok(Math.abs(actual - expected) 
 const cases = [
   {language: 'ar-SA', slides: [{title: 'مراجعة ربع سنوية', subtitle: 'Revenue 2026'}]},
   {language: 'ar-SA', slides: [{title: 'Revenue مراجعة 2026', subtitle: 'Latin supporting text', text: 'الإيرادات Revenue والنمو Growth'}]},
-  {language: 'en-US', slides: [{title: 'Run language', text: ['Latin ', {text: 'مراجعة ربع سنوية', lang: 'ar-SA', bold: true}, ' end.']}]},
+  {language: 'en-US', slides: [{title: 'Run language', text: ['Latin ', {text: 'مراجعة ربع سنوية', language: 'ar-SA', bold: true}, ' end.']}]},
   {language: 'ar-SA', slides: [{title: 'مراجعة ربع سنوية'}, {design: {fontScheme: 'traditional-arabic'}, title: 'مراجعة مالية', text: 'الإيرادات والنمو'}]},
 ];
 for (const deck of cases) {

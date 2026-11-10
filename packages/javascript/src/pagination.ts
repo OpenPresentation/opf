@@ -192,7 +192,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
       if (Array.isArray(node.blocks)) node.blocks.forEach(child=>{ visit(child,minimum); });
     };
     visit(result,rootMinimum);
-    for (const [key,value] of Object.entries(result)) if (isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) visit(value,rootMinimum);
+    for (const [key,value] of Object.entries(result)) if (isRecord(value) && /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key)) visit(value,rootMinimum);
     return result;
   };
   // Persist the evaluated readability policy in the ordinary returned slides. Otherwise a
@@ -368,7 +368,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
             children.push(projected);
           });
           if (children.length) { result.blocks = children; hasContent = true; }
-        } else if (root && isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) {
+        } else if (root && isRecord(value) && /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key)) {
           const child = visit(value,childPath,outputPath);
           if (child) { result[key] = child; hasContent = true; }
         } else if (key === 'text' && isShapeBlock(node)) {
@@ -567,7 +567,7 @@ export interface ContinuationResult {
   layout: 'measured' | 'estimated';
 }
 
-const promotedKey = /^(top|middle|bottom|left|center|right)([+:]|$)/;
+const promotedKey = /^(top|middle|bottom|start|center|end)([+:]|$)/;
 /**
  * LH-90: the root blocks of a slide as the units a whole-block split keeps together, or undefined. Every root block must be one
  * payload (no nested group) and the slide must hold nothing else to move (no root payload, no promoted region). A unit starts at

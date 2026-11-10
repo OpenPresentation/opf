@@ -19,7 +19,7 @@ const LANGUAGES = ["javascript", "typescript", "python", "rust", "go", "bash", "
 const CHAIN_SLIDE = new Set(["layout", "type", "hidden"]);
 const CHAIN_BLOCK = new Set(["type", "as", "region"]);
 // The promoted regions of a slide that a block can be pinned to when the layout names none.
-const PROMOTED = ["top", "middle", "bottom", "left", "center", "right", "top:left", "top:center", "top:right", "middle:left", "middle:center", "middle:right", "bottom:left", "bottom:center", "bottom:right"];
+const PROMOTED = ["top", "middle", "bottom", "start", "center", "end", "top:start", "top:center", "top:end", "middle:start", "middle:center", "middle:end", "bottom:start", "bottom:center", "bottom:end"];
 
 const lineAt = (text, position) => {
   const start = Math.max(text.lastIndexOf("\n", position - 1), text.lastIndexOf("\r", position - 1)) + 1;
@@ -443,7 +443,7 @@ const BLOCK_DOCS = {
   id: "A name for the block, so a finding or a patch can point at it.",
   type: "The block's content kind, when it cannot be told from the content.",
   as: "bullets stores a list as bullets; video stores an image line as a video.",
-  region: "Pin the block to a region of the slide's layout, or to a promoted region (left, top:left, ...).",
+  region: "Pin the block to a region of the slide's layout, or to a promoted region (start, top:start, ...).",
 };
 
 // ---- accepting ---------------------------------------------------------------------------------------------------------------------

@@ -39,8 +39,8 @@ describe('LH-102: under-filled automatic bodies center', () => {
     test(`${direction}: full-height promoted regions set their blocks as one band in the middle of the body`, () => {
       const result = composeSlide({
         title: 'Operating Choice',
-        'left+center': { items: ['Standardize the intake path', 'Keep escalation rules visible'] },
-        right: { text: 'Decision owners need one place to see what changed.' },
+        'start+center': { items: ['Standardize the intake path', 'Keep escalation rules visible'] },
+        end: { text: 'Decision owners need one place to see what changed.' },
       }, { direction });
       assert.deepEqual(findings(result), []);
       const [list, text] = [body(result).find((item) => item.field === 'items'), body(result).find((item) => item.field === 'text')];
@@ -53,7 +53,7 @@ describe('LH-102: under-filled automatic bodies center', () => {
   }
 
   test('a short body grows past a list\'s display size before it is centered', () => {
-    const result = composeSlide({ title: 'Buyer Signal', left: { text: 'Teams want fewer exports.' }, 'center+right': { text: 'They want review status, owners, and exceptions in one operating view.' } });
+    const result = composeSlide({ title: 'Buyer Signal', start: { text: 'Teams want fewer exports.' }, 'center+end': { text: 'They want review status, owners, and exceptions in one operating view.' } });
     assert.deepEqual(findings(result), []);
     // LH-48 alone stops at 37 px (a list's display size at 1280 by 720); the body grows on, each text larger.
     for (const item of body(result)) assert.ok(item.text.fontSize > 37 + 0.01, `size ${item.text.fontSize}`);

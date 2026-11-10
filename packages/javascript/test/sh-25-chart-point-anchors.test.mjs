@@ -3,7 +3,7 @@ import test from 'node:test';
 import {overlayIssues,composeSlide}from'../dist/composition.js';
 import {validate}from'../dist/index.js';
 const chart={type:'column',data:{columns:['Country','Cost ($B)','Other'],rows:[['United States',20,30],['France',8,15]]}};
-const slide=at=>({blocks:[{id:'costs',chart}],shapes:[{shape:'ellipse',fill:'none',at:{block:'costs',edge:'end',width:80,height:80,...at}}]});
+const slide=at=>({blocks:[{id:'costs',chart}],shapes:[{shape:'ellipse',fill:'none',at:{block:'costs',edge:'end',widthPx:80,heightPx:80,...at}}]});
 const issues=(at,value=slide(at))=>overlayIssues(value,'/slides/0');
 test('point references accept exact unique labels or zero-based indexes, with an omitted first series',()=>{
  for(const at of [{point:'United States'},{point:0,series:0},{point:'France',series:'Other'},{point:1,series:1}]){

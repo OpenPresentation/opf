@@ -34,7 +34,7 @@ describe("schema errors name the form the value chose", () => {
   });
 
   test("an object cell without 'value' names the styled form's missing field", () => {
-    const deck = { name: "No value", slides: [{ table: { columns: ["A"], rows: [[{ style: { align: "right" } }]] } }] };
+    const deck = { name: "No value", slides: [{ table: { columns: ["A"], rows: [[{ style: { align: "end" } }]] } }] };
     const messages = schemaErrors(deck).map((error) => [error.path, error.message]);
     assert.deepEqual(messages, [["/slides/0/table/rows/0/0", "must have required property 'value'"]]);
   });

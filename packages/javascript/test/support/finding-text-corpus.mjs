@@ -34,7 +34,7 @@ const longItems = [
 	'Hiring for the platform team is behind plan, and two senior roles have been open since March',
 	'Cloud spend rose faster than usage, mostly from idle staging environments left running overnight',
 ];
-const footer = { left: { text: 'A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going' }, center: { text: 'Centre' }, right: { text: '{{slide.number}}' } };
+const footer = { start: { text: 'A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going' }, center: { text: 'Centre' }, end: { text: '{{slide.number}}' } };
 
 /** Real `validate` calls. `name` is unique; `rule` is the rule the case must trigger; `pick` chooses among several findings of that rule. */
 export const CASES = [
@@ -53,8 +53,8 @@ export const CASES = [
 	{ name: 'shape-link-hidden', rule: 'opf/shape-link-hidden', input: deck([{ title: 'T', blocks: [{ shape: 'rect', text: 'x', link: 'https://example.com', hidden: true }] }]) },
 	{ name: 'shape-anchor-missing', rule: 'opf/shape-anchor-missing', input: deck([{ title: 'T', blocks: [{ id: 'photo', text: 'x' }], shapes: [{ shape: 'ellipse', at: { block: 'phot', edge: 'top' } }] }]) },
 	{ name: 'connector-end-missing', rule: 'opf/connector-end-missing', input: deck([{ title: 'T', blocks: [{ id: 'plan', text: 'a' }, { id: 'ship', text: 'b' }], shapes: [{ connector: { from: 'plan', to: 'shipping' } }] }]) },
-	{ name: 'image-placement-invalid', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'left' } }, { image: { src: 'https://e.com/b.png', alt: 'b' }, placement: { edge: 'left' } }] }]) },
-	{ name: 'image-placement-in-group', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'left' } }, { text: 'x' }] }, { text: 'y' }] }]) },
+	{ name: 'image-placement-invalid', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'start' } }, { image: { src: 'https://e.com/b.png', alt: 'b' }, placement: { edge: 'start' } }] }]) },
+	{ name: 'image-placement-in-group', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'start' } }, { text: 'x' }] }, { text: 'y' }] }]) },
 	{ name: 'dataset-unknown', rule: 'opf/dataset-unknown', input: deck([{ title: 'T', chart: { type: 'column', data: { dataset: 'sale' } } }], { datasets: { sales: { columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'dataset-field-unknown', rule: 'opf/dataset-field-unknown', input: deck([{ title: 'T', table: { dataset: 'sales', fields: ['regon'] } }], { datasets: { sales: { columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'data-column-duplicate', rule: 'opf/data-column-duplicate', input: deck([{ title: 'T', chart: { type: 'column', data: { dataset: 'sales' } } }], { datasets: { sales: { columns: ['region', 'region'], rows: [['EMEA', 1]] } } }) },
@@ -77,7 +77,7 @@ export const CASES = [
 	{ name: 'asset-cycle', rule: 'opf/asset-cycle', input: deck([{ title: 'T', image: 'asset:a' }], { assets: { a: 'asset:b', b: 'asset:a' } }) },
 	{ name: 'catalog-record', rule: 'opf/catalog-record', input: deck([{ title: 'T', text: 'x' }], { catalogs: { custom: { themes: { custom: { name: 'C', background: 'light1' } } } } }) },
 	{ name: 'layout-template', rule: 'opf/layout-template', input: layoutDeck({ name: 'M', direction: 'row', regions: [{ name: 'title' }, { name: 'a', accepts: ['text'], size: 'auto' }, { name: 'b', accepts: ['text'] }] }) },
-	{ name: 'layout-region-reserved', rule: 'opf/layout-region', input: layoutDeck({ name: 'M', regions: [{ name: 'title' }, { name: 'left', accepts: ['text'] }] }) },
+	{ name: 'layout-region-reserved', rule: 'opf/layout-region', input: layoutDeck({ name: 'M', regions: [{ name: 'title' }, { name: 'start', accepts: ['text'] }] }) },
 	{ name: 'layout-region-twice', rule: 'opf/layout-region', input: layoutDeck({ name: 'M', regions: [{ name: 'title' }, { name: 'a', accepts: ['text'] }, { name: 'a', accepts: ['list'] }] }) },
 	{ name: 'unresolved-reference-layout', rule: 'opf/unresolved-reference', input: deck([{ title: 'T', layout: 'pilars' }]), options: withGallery },
 	{ name: 'unresolved-reference-theme', rule: 'opf/unresolved-reference', input: deck([{ title: 'T', text: 'x' }], { design: { theme: 'minimall' } }), options: withGallery },

@@ -29,7 +29,7 @@ const deck = () => ({
   slides: [
     { id: "intro", title: "Intro", text: "Hello", blocks: [] },
     { id: "kpis", title: "KPIs", blocks: [{ id: "kpi-row", blocks: [{ id: "kpi-a", text: "A" }, { text: "B" }] }, { id: "note", text: "Note" }] },
-    { id: "close", title: "Close", blocks: [], left: { id: "left-text", text: "L" }, right: { text: "R" } },
+    { id: "close", title: "Close", blocks: [], start: { id: "left-text", text: "L" }, end: { text: "R" } },
   ],
 });
 
@@ -142,7 +142,7 @@ describe("id-addressed paths", () => {
   test("resolveIdPointer maps ids to indexes at any depth and leaves other pointers alone", () => {
     const document = deck();
     assert.equal(resolveIdPointer(document, "/slides/@kpis/blocks/@kpi-row/blocks/@kpi-a/text"), "/slides/1/blocks/0/blocks/0/text");
-    assert.equal(resolveIdPointer(document, "/slides/@close/right"), "/slides/2/right");
+    assert.equal(resolveIdPointer(document, "/slides/@close/right"), "/slides/2/end");
     assert.equal(resolveIdPointer(document, "/slides/2/title"), "/slides/2/title");
     assert.equal(resolveIdPointer(document, ""), "");
   });
@@ -272,7 +272,7 @@ describe("id-addressed paths", () => {
       { op: "move", from: "/slides/2", path: "/slides/0" },
       { op: "add", path: "/slides/1/blocks/-", value: { id: "n", text: "n" } },
       { op: "remove", path: "/slides/2/blocks/0/blocks/1" },
-      { op: "copy", from: "/slides/0/left", path: "/slides/1/left" },
+      { op: "copy", from: "/slides/0/start", path: "/slides/1/start" },
       { op: "test", path: "/slides/1/title", value: "Welcome" },
     ];
     const withIds = toIdPatch(document, patch);
@@ -312,7 +312,7 @@ describe("assignIds", () => {
     slides: [
       { title: "One", text: "t" },
       { id: "slide-1", title: "Taken", blocks: [{ text: "a" }, { blocks: [{ text: "b" }, { id: "block-1", text: "c" }] }] },
-      { title: "Three", left: { text: "L" }, right: { text: "R" } },
+      { title: "Three", start: { text: "L" }, end: { text: "R" } },
     ],
   });
 
@@ -327,8 +327,8 @@ describe("assignIds", () => {
       ["/slides/1/blocks/1", "block-3"],
       ["/slides/1/blocks/1/blocks/0", "block-4"],
       ["/slides/2", "slide-3"],
-      ["/slides/2/left", "block-5"],
-      ["/slides/2/right", "block-6"],
+      ["/slides/2/start", "block-5"],
+      ["/slides/2/end", "block-6"],
     ]);
     assert.equal(document.slides[1].id, "slide-1");
     assert.equal(document.slides[1].blocks[1].blocks[1].id, "block-1");
@@ -458,7 +458,7 @@ describe("touches", () => {
     const whole = touches([{ op: "replace", path: "", value: { slides: [{ id: "only", title: "x" }] } }], document);
     assert.deepEqual(whole.kinds, ["document"]);
     assert.deepEqual(whole.writes[0].slideIds, ["intro", "kpis", "close", "only"]);
-    const regions = touches([{ op: "remove", path: "/slides/2/left" }], document);
+    const regions = touches([{ op: "remove", path: "/slides/2/start" }], document);
     assert.deepEqual(regions.writes[0].ids, ["close", "left-text"]);
     assert.equal(regions.writes[0].kind, "block");
   });
@@ -494,7 +494,7 @@ describe("touches", () => {
     assert.equal(kind("/slides/0/title"), "slide");
     assert.equal(kind("/slides/0/blocks"), "block");
     assert.equal(kind("/slides/0/blocks/1/blocks/0/text"), "block");
-    assert.equal(kind("/slides/0/left"), "block");
+    assert.equal(kind("/slides/0/start"), "block");
     assert.equal(kind(""), "document");
     const order = touches([{ op: "add", path: "/slides/-", value: { title: "n" } }, { op: "remove", path: "/slides/0" }, { op: "add", path: "/slides", value: [] }], document);
     assert.deepEqual(order.writes.map((touch) => touch.kind), ["slide-order", "slide-order", "slide-order"]);

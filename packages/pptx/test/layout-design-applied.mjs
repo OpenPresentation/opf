@@ -29,9 +29,9 @@ const slideXml = async deck => decoder.decode(unzipSync(await toPptx(deck, {seed
 // The effective alignment per field, stated independently of core. WI-2: the subtitle sits in the title area, so it follows
 // titleAlignment unless the slide's own design sets contentAlignment (the third case).
 const cases = [
-  ['layout only', deckOf({titleAlignment: 'right', contentAlignment: 'center'}), {title: 'right', subtitle: 'right', text: 'center'}],
-  ['deck over layout (per key)', deckOf({titleAlignment: 'right', contentAlignment: 'center'}, {}, {titleAlignment: 'left'}), {title: 'left', subtitle: 'left', text: 'center'}],
-  ['slide over deck over layout', deckOf({titleAlignment: 'right', contentAlignment: 'center'}, {design: {contentAlignment: 'right'}}, {titleAlignment: 'left', contentAlignment: 'left'}), {title: 'left', subtitle: 'right', text: 'right'}],
+  ['layout only', deckOf({titleAlignment: 'end', contentAlignment: 'center'}), {title: 'right', subtitle: 'right', text: 'center'}],
+  ['deck over layout (per key)', deckOf({titleAlignment: 'end', contentAlignment: 'center'}, {}, {titleAlignment: 'start'}), {title: 'left', subtitle: 'left', text: 'center'}],
+  ['slide over deck over layout', deckOf({titleAlignment: 'end', contentAlignment: 'center'}, {design: {contentAlignment: 'end'}}, {titleAlignment: 'start', contentAlignment: 'start'}), {title: 'left', subtitle: 'right', text: 'right'}],
 ];
 let compared = 0;
 for (const [name, deck, expected] of cases) {
@@ -79,11 +79,11 @@ assert.deepEqual(await fill(imageDeck({imageFit: 'contain'}, {design: {imageFit:
 assert.deepEqual(await fill(imageDeck({})), {preview: 'xMidYMid slice', cropped: true}, 'engine default cover');
 
 // Re-import keeps the layout record and writes no design the deck never had: the layout default still applies.
-const reimported = await fromPptx(await toPptx(deckOf({titleAlignment: 'right', contentAlignment: 'center'}, {}), {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'}));
+const reimported = await fromPptx(await toPptx(deckOf({titleAlignment: 'end', contentAlignment: 'center'}, {}), {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'}));
 assert.equal(reimported.slides[0].layout, 'design-layout');
 assert.equal(reimported.slides[0].design?.titleAlignment, undefined, 're-import does not copy the layout design into the slide');
 assert.equal(reimported.design?.titleAlignment, undefined);
-assert.deepEqual(reimported.catalogs?.custom?.layouts?.['design-layout']?.design, {titleAlignment: 'right', contentAlignment: 'center'});
+assert.deepEqual(reimported.catalogs?.custom?.layouts?.['design-layout']?.design, {titleAlignment: 'end', contentAlignment: 'center'});
 assert.equal(resolvePresentation(reimported, {}).slides[0].geometry.items.find(item => item.field === 'title').alignment, 'right', 'the re-imported layout still aligns the title');
 
 console.log(`Layout design applied: ${compared} text lines agree between preview and export for layout-only, deck-over-layout and slide-over-deck alignment; contentBox and imageFit follow the same merge; re-import keeps the layout record.`);

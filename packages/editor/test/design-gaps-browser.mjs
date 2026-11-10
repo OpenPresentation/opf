@@ -411,7 +411,7 @@ try {
     await field(design, 'Applies to').selectOption('slide');
     await settle();
     await field(design, 'Zone').selectOption('right');
-    await step('slide scope: a date part keeps the deck zones', () => design.getByLabel("Today's date").check(), current => current.slides[1].design?.footer?.left?.text === 'Acme' && current.slides[1].design.footer.right?.date === true && current.design.footer.right === undefined);
+    await step('slide scope: a date part keeps the deck zones', () => design.getByLabel("Today's date").check(), current => current.slides[1].design?.footer?.left?.text === 'Acme' && current.slides[1].design.footer.end?.date === true && current.design.footer.end === undefined);
     await field(design, 'Edit').selectOption('header');
     await step('slide scope: hide the header on this slide', () => design.getByLabel('Hide it').check(), current => current.slides[1].design?.header === false);
     await field(design, 'Applies to').selectOption('deck');

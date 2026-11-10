@@ -28,10 +28,10 @@
     },
     {
       "title": "Table beside text",
-      "left": {
+      "start": {
         "text": "Numbers on the right, the reading of them here: the second half carried the year."
       },
-      "center+right": {
+      "center+end": {
         "table": {
           "columns": [{ "name": "Half" }, { "name": "Revenue", "format": "$#,##0.0\"M\"" }, { "name": "Growth", "format": "0%" }],
           "rows": [["H1", 21.2, 0.08], ["H2", 30.5, 0.44]]

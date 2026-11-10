@@ -105,11 +105,11 @@ for (const save of [false, true]) {
   assert.deepEqual([grouped.id, grouped.type, grouped.blocks[0].id, grouped.blocks[0].extensions, grouped.blocks[1].text, outer.text], ['g', 'group', 't', {'x-a': 1}, 'Short', 'Outer']);
   assert.deepEqual(normalize(grouped.blocks[0].text), normalize(runs));
 
-  const region = await roundTrip({left: {text: runs}, right: {text: [{text: 'R1\n'}, {text: 'R2', bold: true}]}});
+  const region = await roundTrip({start: {text: runs}, end: {text: [{text: 'R1\n'}, {text: 'R2', bold: true}]}});
   assert.deepEqual(region.provenance, []);
   assert.equal(region.deck.slides[0].blocks, undefined);
-  assert.deepEqual(normalize(region.deck.slides[0].left.text), normalize(runs));
-  assert.deepEqual(normalize(region.deck.slides[0].right.text), [{text: 'R1\n'}, {text: 'R2', bold: true}]);
+  assert.deepEqual(normalize(region.deck.slides[0].start.text), normalize(runs));
+  assert.deepEqual(normalize(region.deck.slides[0].end.text), [{text: 'R1\n'}, {text: 'R2', bold: true}]);
 
   const sibling = await roundTrip({blocks: [{text: runs}, {type: 'list', items: ['a', 'b']}, {type: 'text', text: 'Tail'}]});
   assert.deepEqual(sibling.provenance, []);
@@ -216,7 +216,7 @@ for (const save of [false, true]) {
     root: [{items}, items, slide => slide.items],
     bullets: [{bullets: bulletItems}, bulletItems, slide => slide.bullets],
     group: [{blocks: [{type: 'group', id: 'g', blocks: [{items}, {type: 'text', text: 'beside'}]}]}, items, slide => slide.blocks[0].blocks[0].items],
-    region: [{left: {items}, right: {text: 'R'}}, items, slide => slide.left.items],
+    region: [{start: {items}, end: {text: 'R'}}, items, slide => slide.start.items],
     blocks: [{blocks: [{items}, {items: ['p\nq', 'r']}]}, items, slide => slide.blocks[0].items]
   };
   for (const save of [false, true]) for (const [name, [slide, authored, pick]] of Object.entries(forms)) {

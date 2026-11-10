@@ -21,7 +21,7 @@ for(const [index,control]of baseline.cases.entries()){
  const deck=structuredClone(control.deck),type=deck.slides[0].blocks[0].chart.type;
  if(type==='pie') {deck.slides[0].blocks[0].chart.data.columns.pop();for(const row of deck.slides[0].blocks[0].chart.data.rows)row.pop();}
  deck.slides[0].title='Follow the plotted '+type;
- deck.slides[0].shapes=['start','end','top','bottom','center'].map((edge,shape)=>({shape:'ellipse',fill:'none',stroke:{color:'accent2',width:3},at:{block:'chart',point:shape%4,series:shape===4&&type!=='pie'&&type!=='scatter'?1:0,edge,width:32,height:32}}));
+ deck.slides[0].shapes=['start','end','top','bottom','center'].map((edge,shape)=>({shape:'ellipse',fill:'none',stroke:{color:'accent2',width:3},at:{block:'chart',point:shape%4,series:shape===4&&type!=='pie'&&type!=='scatter'?1:0,edge,widthPx:32,heightPx:32}}));
  await fonts.ensure(deck,{renderOptions:{catalogs:[defaultCatalog]}});
  const plain=structuredClone(deck);delete plain.slides[0].shapes;const pair=[];
  for(const [side,document]of [['before',plain],['after',deck]]){

@@ -36,8 +36,8 @@ assert.ok(Object.entries(selectedZip).some(([name, value]) => /^ppt\/theme\/them
 // Explicit run languages are compared with their effective slide, never with slide zero.
 for (const bodyText of ['measured', 'native']) {
   const mixed = {language:'en-US',slides:[
-    {title:'English primary',text:[{text:'English surrounding text stays English. '},{text:'مرحبا',lang:'ar-SA'}]},
-    {language:'ar-SA',title:'العربية',text:[{text:'النص العربي الأساسي للشريحة يظل باللغة العربية. '},{text:'Hello',lang:'en-US'}]},
+    {title:'English primary',text:[{text:'English surrounding text stays English. '},{text:'مرحبا',language:'ar-SA'}]},
+    {language:'ar-SA',title:'العربية',text:[{text:'النص العربي الأساسي للشريحة يظل باللغة العربية. '},{text:'Hello',language:'en-US'}]},
   ]};
   const mixedBytes=await toPptx(mixed,{bodyText});
   const parts=unzipSync(new Uint8Array(mixedBytes));
@@ -53,8 +53,8 @@ for (const bodyText of ['measured', 'native']) {
 
 // A measured override can wrap into more native runs than the base language.
 const measuredDeck={language:'en-US',design:{theme:'minimal',fontScheme:'aptos'},slides:[
- {title:'English slide with an Arabic run',text:[{text:'This English paragraph keeps its own proofing language. '},{text:'مرحبا بالعالم',lang:'ar-SA'},{text:' The Arabic run keeps its explicit language.'}]},
- {language:{bcp47:'ar-SA',fontScheme:'noto-sans-arabic'},title:'شريحة عربية وفيها نص إنجليزي',text:[{text:'هذا النص العربي يحافظ على لغة الشريحة. '},{text:'Hello from this English run.',lang:'en-US'},{text:' ويظل هذا النص باللغة العربية.'}]},
+ {title:'English slide with an Arabic run',text:[{text:'This English paragraph keeps its own proofing language. '},{text:'مرحبا بالعالم',language:'ar-SA'},{text:' The Arabic run keeps its explicit language.'}]},
+ {language:{bcp47:'ar-SA',fontScheme:'noto-sans-arabic'},title:'شريحة عربية وفيها نص إنجليزي',text:[{text:'هذا النص العربي يحافظ على لغة الشريحة. '},{text:'Hello from this English run.',language:'en-US'},{text:' ويظل هذا النص باللغة العربية.'}]},
 ]};
 const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:measuredDeck});
 const allRuns=value=>Array.isArray(value)?value.flatMap(allRuns):value&&typeof value==='object'?[...(typeof value.text==='string'?[value]:[]),...Object.values(value).filter(x=>typeof x==='object').flatMap(allRuns)]:[];

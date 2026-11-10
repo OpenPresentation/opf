@@ -17,7 +17,7 @@ import { OPFEditorError, getValueAtPath, opfPathToJsonPointer } from "./index.js
 /** At most this many matches are collected; `truncated` says so. */
 export const MAX_MATCHES = 10000;
 
-const REGION_KEY = /^(?:top|middle|bottom|left|center|right)(?:[+:]|$)/;
+const REGION_KEY = /^(?:top|middle|bottom|start|center|end)(?:[+:]|$)/;
 const WORD_BEFORE = "(?<![\\p{L}\\p{N}_])";
 const WORD_AFTER = "(?![\\p{L}\\p{N}_])";
 
@@ -133,7 +133,7 @@ function furnitureFields(fields, state, base, design) {
   for (const part of ["header", "footer"]) {
     const zones = design[part];
     if (!isObject(zones)) continue;
-    for (const zone of ["left", "center", "right"]) {
+    for (const zone of ["start", "center", "end"]) {
       if (isObject(zones[zone])) field(fields, state, [...base, "design", part, zone, "text"], zones[zone].text, `${part === "header" ? "Header" : "Footer"} ${zone}`, "furniture");
     }
   }

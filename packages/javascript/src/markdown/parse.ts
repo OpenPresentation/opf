@@ -183,7 +183,7 @@ interface Pending {
 
 export function parseOptions(text: string, keys: readonly string[], kind: "slide" | "block", ctx: Ctx, range: Range): Obj | undefined {
   const { pairs, error } = parseAttributes(text);
-  const help = `A ${kind} options comment reads <!-- ${kind}: ${kind === "slide" ? 'id=cover layout=title section="Part 1" hidden' : "id=chart-1 as=bullets region=top:left"} -->. Keys: ${keys.join(", ")}.`;
+  const help = `A ${kind} options comment reads <!-- ${kind}: ${kind === "slide" ? 'id=cover layout=title section="Part 1" hidden' : "id=chart-1 as=bullets region=top:start"} -->. Keys: ${keys.join(", ")}.`;
   if (error) {
     ctx.error("options-syntax", error, help, range);
     return undefined;
@@ -762,7 +762,7 @@ class SlideParser {
     set("language", options.language);
     set("title", this.title);
     set("subtitle", this.subtitle);
-    // A block with region=<promoted key> (top, left, top:left, ...) is a promoted region of the slide. Any other region
+    // A block with region=<promoted key> (top, start, top:start, ...) is a promoted region of the slide. Any other region
     // name pins the block to that region of the slide's layout template (OPF 0.19); region names are never promoted keys.
     const promoted = (block: { options?: Obj }) => typeof block.options?.region === "string" && PROMOTED_REGION_KEY.test(block.options.region);
     const content = this.blocks.filter((block) => !promoted(block));

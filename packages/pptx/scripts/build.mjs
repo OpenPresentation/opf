@@ -9,6 +9,7 @@ await mkdir(dist, { recursive: true });
 await copyFile(new URL("src/index.js", root), new URL("index.js", dist));
 for (const name of ['errors.js', 'input-safety.js']) await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
 await copyFile(new URL('src/code-provenance.js', root), new URL('code-provenance.js', dist));
+await copyFile(new URL('src/legacy-tags.js', root), new URL('legacy-tags.js', dist));
 await copyFile(new URL('src/metric-provenance.js', root), new URL('metric-provenance.js', dist));
 await copyFile(new URL('src/card-provenance.js', root), new URL('card-provenance.js', dist));
 await copyFile(new URL('src/media-provenance.js', root), new URL('media-provenance.js', dist));

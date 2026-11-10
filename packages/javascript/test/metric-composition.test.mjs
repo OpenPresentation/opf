@@ -35,7 +35,7 @@ test('metric scoring includes long metadata and charges each failing leaf once',
 test('slide alignment overrides host alignment for complete metric parts',()=>{
   const metric={value:1,unit:'%',label:'Completion'};
   assert.equal(composeSlide({metric},{contentAlignment:'center'}).items[0].metricLayout.alignment,'center');
-  const item=composeSlide({design:{contentAlignment:'right'},metric},{contentAlignment:'center'}).items[0];
+  const item=composeSlide({design:{contentAlignment:'end'},metric},{contentAlignment:'center'}).items[0];
   assert.equal(item.metricLayout.alignment,'right');
   assert.ok(Math.abs(item.metricLayout.parts[1].box.x+item.metricLayout.parts[1].box.width-item.box.x-item.box.width)<1e-8);
 });

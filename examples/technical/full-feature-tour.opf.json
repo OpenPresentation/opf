@@ -71,16 +71,16 @@
     },
     "fontScheme": "aptos",
     "dimensions": "widescreen",
-    "titleAlignment": "left",
-    "contentAlignment": "left",
+    "titleAlignment": "start",
+    "contentAlignment": "start",
     "footer": {
-      "left": {
+      "start": {
         "text": "{{organization.name}}"
       },
       "center": {
         "text": "{{slide.section}}"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     }
@@ -543,7 +543,7 @@
         ", and ",
         {
           "text": "linked",
-          "href": "https://openpresentation.org"
+          "link": "https://openpresentation.org"
         },
         " segments."
       ],
@@ -553,7 +553,7 @@
       "beat": "performance-headline",
       "section": "Performance",
       "title": "Adoption Doubled",
-      "left": {
+      "start": {
         "metric": {
           "value": "2.1x",
           "label": "Quarter-over-quarter adoption",
@@ -561,7 +561,7 @@
           "trend": "up"
         }
       },
-      "center+right": {
+      "center+end": {
         "chart": {
           "type": "line",
           "data": {

@@ -13,7 +13,7 @@ import {latinPhrases} from '../src/script-fonts.js';
 const arabic = 'العنصر الأول مع رقم 2026';
 const deck = (language, extra = {}) => ({name: 'RTL layout', ...(language === undefined ? {} : {language}), ...extra, slides: [
   {title: 'عنوان العرض', items: [arabic, 'English item', {text: 'العنصر الثاني: v2.0 و PowerPoint 365', level: 1}, 'آخر']},
-  {title: 'مناطق', left: {text: 'النص الأيسر'}, right: {text: 'النص الأيمن'}},
+  {title: 'مناطق', start: {text: 'النص الأيسر'}, end: {text: 'النص الأيمن'}},
   {title: 'جدول', table: {columns: ['المؤشر', 'القيمة', 'الحالة'], rows: [['الإيرادات', 'Customers', 'جيد']]}},
   {title: 'مخطط', chart: {type: 'column', data: {columns: ['شهر', 'قيمة'], rows: [['يناير', 12], ['فبراير', 15], ['مارس', 18]]}}},
   {title: 'نص طويل', text: `${arabic} ${arabic} ${arabic} ${'abc '.repeat(40)}`.trim(), notes: 'ملاحظات المتحدث'},
@@ -31,7 +31,7 @@ const shapes = (xml, slide) => [...xml[`ppt/slides/slide${slide}.xml`].matchAll(
   x: Number(/<a:off x="(-?\d+)"/.exec(shape)?.[1]), width: Number(/<a:ext cx="(\d+)"/.exec(shape)?.[1]),
   pPr: /<a:pPr\b[^>]*>/.exec(shape)?.[0] ?? '',
   text: [...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''),
-  runs: [...shape.matchAll(/<a:r><a:rPr\b[^>]*?\slang="([^"]*)"[^>]*>[\s\S]*?<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(match => ({lang: match[1], text: match[2]})),
+  runs: [...shape.matchAll(/<a:r><a:rPr\b[^>]*?\slang="([^"]*)"[^>]*>[\s\S]*?<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(match => ({language: match[1], text: match[2]})),
 }));
 const attribute = (tag, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(tag)?.[1];
 

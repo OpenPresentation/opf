@@ -149,7 +149,7 @@ const furnitureSources = svg => [...svg.matchAll(/<g\b[^>]*data-opf-furniture-fi
 {
   const icon = await png(20, 160, 20, 48, 48), partner = await png(200, 120, 20, 48, 48), iconDark = await png(240, 240, 240, 48, 48);
   const orgs = [organization({ full: wide, icon: { onLight: icon, onDark: iconDark } }, { role: 'primary' }), { id: 'beta', name: 'Beta Inc', logo: { icon: partner } }];
-  const deck = { organization: orgs, design: { background: lightBackground, footer: { left: { image: 'var:organization.logo.icon', text: 'Acme Corp' }, right: { image: 'var:organization.beta.logo.icon' } }, header: { right: { image: 'var:organization.logo.icon', text: 'Confidential' } } },
+  const deck = { organization: orgs, design: { background: lightBackground, footer: { start: { image: 'var:organization.logo.icon', text: 'Acme Corp' }, end: { image: 'var:organization.beta.logo.icon' } }, header: { end: { image: 'var:organization.logo.icon', text: 'Confidential' } } },
     slides: [{ title: 'Content', text: 'Body copy.' }] };
   const svg = toSvg(deck, 1, { trace: true });
   const furniture = [...svg.matchAll(/<g\b[^>]*data-opf-furniture-field="image"[^>]*>/g)].map(match => match[0]);
@@ -168,7 +168,7 @@ const furnitureSources = svg => [...svg.matchAll(/<g\b[^>]*data-opf-furniture-fi
   assert.ok(near(left.box.x, 0.08 * 720), 'the image starts at the content inset (RR-91)');
   assert.ok(near(leftText.box.x, left.box.x + left.box.width + composition.FURNITURE_GAP), 'the text follows the image after the gap');
   assert.ok(near(leftText.box.y + leftText.box.height / 2, left.box.y + left.box.height / 2), 'the row is vertically centred');
-  const textGroup = [...svg.matchAll(/<g\b[^>]*>/g)].map(match => match[0]).find(group => attr(group, 'data-opf-path') === 'design.footer.left.text' && attr(group, 'data-opf-box-x') !== undefined);
+  const textGroup = [...svg.matchAll(/<g\b[^>]*>/g)].map(match => match[0]).find(group => attr(group, 'data-opf-path') === 'design.footer.start.text' && attr(group, 'data-opf-box-x') !== undefined);
   assert.ok(textGroup && near(Number(attr(textGroup, 'data-opf-box-x')), leftText.box.x), 'the text is drawn from its own box, beside the image');
   // The right zone ends at the right edge: the text is last, the image before it.
   const rightImage = imageParts.find(part => part.kind === 'header'), rightText = parts.find(part => part.kind === 'header' && part.type === 'text');
@@ -184,10 +184,10 @@ const furnitureSources = svg => [...svg.matchAll(/<g\b[^>]*data-opf-furniture-fi
   assert.deepEqual(furnitureSources(darkSlide).sort(), ['organization.0.logo.icon.onDark', 'organization.0.logo.icon.onDark', 'organization.1.logo.icon']);
   assert.ok(images(darkSlide).some(image => attr(image, 'href') === iconDark));
   // No logo to resolve: the reference is reported at its zone path and nothing is drawn.
-  const missing = { organization: organization(undefined), design: { footer: { left: { image: 'var:organization.logo.icon' } } }, slides: [{ title: 'Content', text: 'Body copy.' }] };
+  const missing = { organization: organization(undefined), design: { footer: { start: { image: 'var:organization.logo.icon' } } }, slides: [{ title: 'Content', text: 'Body copy.' }] };
   const reported = [];
   const bare = toSvg(missing, 1, { trace: true, onDiagnostic: diagnostic => reported.push(diagnostic) });
-  assert.deepEqual(reported.filter(item => item.code === 'unresolved-content').map(item => item.path), ['design.footer.left.image']);
+  assert.deepEqual(reported.filter(item => item.code === 'unresolved-content').map(item => item.path), ['design.footer.start.image']);
   assert.ok(!bare.includes('data-opf-furniture-field="image"'));
   checked++;
 }
