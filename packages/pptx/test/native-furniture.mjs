@@ -349,7 +349,7 @@ const footerOnly = {design: {fontScheme: 'roboto', footer: {start: {date: true, 
   for (const base of [noNumbers, stripTags(unzipSync(noNumbers))]) {
     const {imported, invalid} = await read(base);
     assert.deepEqual(invalid, []);
-    assert.deepEqual(imported.design.footer, {left: footerOnly.design.footer.start, center: footerOnly.design.footer.center});
+    assert.deepEqual(imported.design.footer, {start: footerOnly.design.footer.start, center: footerOnly.design.footer.center});
     assert.ok(imported.slides.every(slide => slide.design?.footer === undefined));
   }
   // Apply to All with a new footer text changes every slide's placeholder: the deck's footer changes.

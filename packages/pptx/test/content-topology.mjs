@@ -184,11 +184,11 @@ const roundTrip = async slide => {
 {
   const bytes = await toPptx({name: 'Damaged', tone: 'formal', slides: [{title: 'Probe', id: 'one', start: {text: 'L'}, end: {text: 'R'}}]}, EXPORT);
   for (const [name, mutate] of Object.entries({
-    'unknown region key': value => { value.content.regions['sideways:up'] = value.content.regions.left; },
+    'unknown region key': value => { value.content.regions['sideways:up'] = value.content.regions.start; },
     'unknown form': value => { value.content.form = 'tree'; },
-    'unknown kind': value => { value.content.regions.left.k = 'script'; },
+    'unknown kind': value => { value.content.regions.start.k = 'script'; },
     'bad box': value => { value.content.regions.start.box = ['1', 2, 3]; },
-    'too deep': value => { let node = value.content.regions.left; for (let depth = 0; depth <= MAX_GROUP_DEPTH; depth += 1) node = {t: 'group', blocks: [node]}; value.content.regions.left = node; },
+    'too deep': value => { let node = value.content.regions.start; for (let depth = 0; depth <= MAX_GROUP_DEPTH; depth += 1) node = {t: 'group', blocks: [node]}; value.content.regions.start = node; },
     'too many nodes': value => { value.content = {form: 'blocks', blocks: Array.from({length: 300}, () => ({t: 'leaf', k: 'text'}))}; },
     'bad section': value => { value.section = 42; },
     'bad extensions': value => { value.extensions = []; }
@@ -319,7 +319,7 @@ const roundTrip = async slide => {
   assert.equal(group.slide.blocks[1].text, 'Outer');
   const region = await roundTrip({start: {text: runs}, end: {text: 'Right'}});
   assert.deepEqual(region.provenance, []);
-  assert.ok(region.record.content.regions.left.lines >= 3);
+  assert.ok(region.record.content.regions.start.lines >= 3);
   assert.deepEqual(styled(region.slide.start.text), runs);
   assert.equal(region.slide.end.text, 'Right');
   assert.equal(region.slide.blocks, undefined);
