@@ -1,5 +1,7 @@
 // Pure review metadata construction; this module does not export or promote an archive.
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const deckHash=deck=>createHash('sha256').update(JSON.stringify(deck)).digest('hex');
 
 export const RR54_EXPORT_CALLER=Object.freeze({api:'toPptx',input:'structuredClone(entry.deck)',options:'omitted',catalogs:'not registered'});
 const digest=value=>assert.match(value,/^[a-f0-9]{64}$/u);
@@ -23,6 +25,23 @@ export function makeRr54ArchiveCandidate(fixture,review,sourceEvidence){
     assert.ok(Number.isSafeInteger(row.candidateParts)&&row.candidateParts>0);
     assert.ok(Array.isArray(row.changedParts)&&row.changedParts.every(file=>typeof file==='string'&&file.length>0));
     assert.equal(new Set(row.changedParts).size,row.changedParts.length,'Duplicate changed part');
+    let projectedDeck;
+    const projection=row.inputProjection??undefined;
+    if(projection){
+      assert.equal(row.name,'styled-table','Only the reviewed styled-table deck may be projected');
+      assert.deepEqual(Object.keys(projection).sort(),['path','before','after','scope','originalDeckSha256','currentDeckSha256'].sort(),'Only the closed input projection descriptor is accepted');
+      assert.equal(projection.path,'/slides/0/table/columns/1/style/align');
+      assert.equal(projection.before,'right');assert.equal(projection.after,'end');
+      assert.ok(typeof projection.scope==='string'&&projection.scope.length>0);
+      digest(projection.originalDeckSha256);digest(projection.currentDeckSha256);
+      assert.equal(deckHash(entry.deck),projection.originalDeckSha256);
+      assert.equal(entry.deck.language,undefined,'Closed default-LTR fixture only');
+      assert.equal(entry.deck.slides[0].table.columns[1].style.align,'right');
+      projectedDeck=structuredClone(entry.deck);projectedDeck.slides[0].table.columns[1].style.align='end';
+      assert.equal(deckHash(projectedDeck),projection.currentDeckSha256);
+      const inverse=structuredClone(projectedDeck);inverse.slides[0].table.columns[1].style.align='right';assert.deepEqual(inverse,entry.deck);
+      assert.ok(row.changedParts.length,'A projected input requires an actual changed archive review');
+    }
     if(!row.changedParts.length){
       assert.equal(row.candidate,row.baseline,'Unchanged archive hash must be identical');
       assert.equal(row.candidateBytes,row.baselineBytes);assert.equal(row.candidateParts,row.baselineParts);
@@ -32,7 +51,8 @@ export function makeRr54ArchiveCandidate(fixture,review,sourceEvidence){
     assert.notEqual(row.candidate,row.baseline,'Changed raw parts must change the archive hash');
     const history=entry.rr54ArchivePrevious??[];assert.ok(Array.isArray(history),'Entry lock history must be an array');
     const updated=next.entries[row.name];
-    updated.rr54ArchivePrevious=[...structuredClone(history),{sha256:entry.sha256,bytes:entry.rr20Bytes,partCount:entry.rr20PartCount,...(entry.nativeSlideSha256?{nativeSlideSha256:entry.nativeSlideSha256}:{}),reviewIndex}];
+    updated.rr54ArchivePrevious=[...structuredClone(history),{sha256:entry.sha256,bytes:entry.rr20Bytes,partCount:entry.rr20PartCount,...(projection?{deck:structuredClone(entry.deck),inputProjection:structuredClone(projection)}:{}),...(entry.nativeSlideSha256?{nativeSlideSha256:entry.nativeSlideSha256}:{}),reviewIndex}];
+    if(projectedDeck)updated.deck=projectedDeck;
     updated.sha256=row.candidate;updated.rr20Bytes=row.candidateBytes;updated.rr20PartCount=row.candidateParts;
     if(entry.nativeSlideSha256){digest(row.candidateNativeSlideSha256);updated.nativeSlideSha256=row.candidateNativeSlideSha256;}
   }
