@@ -16,6 +16,16 @@ Vetoable decisions: retain the private Node coverage preparation for measured me
 
 This update retains 21 lossless raw lifecycle/delta/check records (28745B) in coordinator-closed-delta-native01.json.gz (SHA256:818053ec1101c0ec7e29f5f801b4176b09cd5eab5e056220c9ec321dcdc90e4e); observation summaries are explicitly projections, with complete native data still in the separately sealed packet.
 
+### Later same-turn qualification progress
+
+The three previously failed checks now pass after restoring ONLY1860known absent tracked inputs (46,939,567B), with every blob revalidated against source57 HEAD and unchanged raw/staged index. Gallery-tracker2.4s/native-acceptance33.6s/text4.6s all actual0; the original9PASS/3RED/typeSKIP delta remains intact. B runs127remaining unchanged renderer commands under the maintained agent slot, with ordinal61 real-corpus golden comparison explicitlyUNRUN/pending the final pinned baseline; this is partialtailcoverage, never a fullgreen gate. Original golden-gate59 is not repeated. Source57 remains frozen.
+
+All9actual current reference original/save-reopened PNG pairs are BYTE-IDENTICAL. The thirdcase's geometry/paint findings compare rawXML descriptors, not changed PNGs; all13findings remain. The precise saved-overlay fault is strict identity over numeric attribute spellings, scaling whitespace and an added empty line-only textbody. Ownership/actual geometry/styles/labeltext survive. Lead proves a narrow CURRENT-state-only compatibility candidate before a new runtime leaf; no stale-source recovery or broad normalization is approved. Full three-case raw evidence is being sealed separately.
+
+[Published B07 feasibility074](https://github.com/OpenPresentation/opf/tree/07406627197535f77fb98fed27e601fb1a71832a/docs/handoff/2026-11-10/b07-native-segment-feasibility) independently replays168records/5archives/25segments/11untouchedshapes/10frames; required metadata5PASS26.6s. ROOT normalpush ACTUAL0. Public bundled Intos subset licenses are included. It remains diagnostic-only and NEVERMERGE, with persegmentediting and missing public reassembly explicit. A prepares a NEW closed5case/1slide/windowless/zeroactions/<=30shape diagnostic for future ROOT review; no Office is authorized by preparation.
+
+The PR1225 conversation now records the performance result, exact consumer proof, failed-only recovery, current reference import bug and B07 limitation. All original31scope/finalgates remain.
+
 ## Historical coordinator checkpoint — November 10, 12:30 UTC
 
 [Closed49/51gate, cold-start result, current production and actual native findings](release-qualification-checkpoint06/README.md). v0.34 remains unpublished; original31issue lines21checked/10open were freshly verified. Canonical1225 unchanged.
@@ -110,13 +120,13 @@ Never push a folded leaf. Never force-push. Normally merge origin/main. Evidence
 
 | Original open item | Current truth and next action |
 | --- | --- |
-|B05 final integration|Current coherent source57 includes reviewed QA6681/importerdf37; original0897 gate49PASS/twoRED. Closed24-file delta9PASS/3missing-evidenceRED; exact recovery underway. Canonical1225 unchanged; close native/goldens/finalCI before release.|
+|B05 final integration|Current coherent source57 includes reviewed QA6681/importerdf37; original0897 gate49PASS/twoRED. Closed24-file delta9PASS/3missing-evidenceRED; all3 failed checks recoveredexactPASS, partialrenderer127tail live. Canonical1225 unchanged; close native/goldens/finalCI before release.|
 |B07 native glyphs|05/06/09/10 OPEN. Publishedc984 LtrRun+exact1025 composite actual0 but unchangedbadPNG/bounds; no fix. Prior same-box numeric partition rejected. Independentnativeboxes only source feasibility, originalUTF16/proofing/fonts/geometry/markers mandatory.|
 |B17 all033sites|Org148 currentproduction2owner/MCP6/privacy9/provider100percent proof5610 accepted narrowly; old20case aggregation kept separate. Gallery033 prior acceptance remains. DEV033 exactcredentialtransferheld.|
 |B20 exact credential transfer|Automatic review still holds striped-fox-33 CONVEX_SERVICE_SECRET and AI_GATEWAY_API_KEY to Data-Advantage/pptx-dev preview. No values read/copied/workaround; build CONVEX_DEPLOY_KEY is not runtime.|
 |B24 final images/goldens|Earlier seven localized-reference canonicalpairs reviewed; current0897ordinarygate again reports7changes but tempdetailsdeleted, so keyidentitynotinferred. Finalpinned workflow/visualreview and128renderer tail remainowed. No manualbaseline/tolerance change.|
 |B25 trackers/bundles|1860declaredinputs recoveredexact for0897; font/gallerytracker/fullMCPpass in49/51gate. Finalsource bundles/MCPresource/registrygate stillowed; no sourcecheck waiver.|
-|B26 combined gate|0897full49PASS/twoRED; all294PPTX/editor146/integration33PASS, renderer128UNRUN. Source57affected delta9PASS/3sparseRED; failed-only recovery underway. Genuineconsumer0897/full59/3refs publishedeb362; new57 consumer/generation/pure/saved-importPASS, real3casesactual0, savedoverlayimportbug remains. Currentreference Saveimportbug fixedfocused, finalnative/SH21/E1/E3/platform/registry/release gates open.|
+|B26 combined gate|0897full49PASS/twoRED; all294PPTX/editor146/integration33PASS, renderer128UNRUN. Source57affected delta9PASS/3sparseRED; exactfailed-only3PASS. Genuineconsumer0897/full59/3refs publishedeb362; new57 consumer/generation/pure/saved-importPASS, real3casesactual0, savedoverlayimportbug remains. Currentreference Saveimportbug fixedfocused, finalnative/SH21/E1/E3/platform/registry/release gates open.|
 |B27 release034|Accepted main/exact-head managed merge/mainverify, Release dryrun then real trusted tag; all7registry identities/provenance/changelogs/release/mcpb/checksum. No release occurred.|
 |B28 all034delivery|Actual034 registry bumps and all3site assets/docs/examples/gallery/MCP/E3 plus builds/NativePreview/service/public/production. Org216/Gallery180 remain future-adoption leaves; no third release assumed.|
 |B31 owner remainders|Chart design and deployment/Preview authority received. Exact held credentials, D2, LibreOffice promotion, Claudeconnector/local.mcpb removal, new logins/DNS/account-plan/visibility changes remain owner-only.|
