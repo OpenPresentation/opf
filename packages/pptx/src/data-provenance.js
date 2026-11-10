@@ -1,5 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
-import {checkFormat, isValidFormat} from './format-check.js';
+import {checkFormat, checkImportedFormat, isValidFormat} from './format-check.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
 import {currentTag, upgradeTag} from './legacy-tags.js';
 import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableData, tableCellDisplayValue} from './chart-data.js';
@@ -416,6 +416,7 @@ export function readDataTag(entries, frame, relationships) {
 }
 
 const validWith = (payload, datasets) => isValidFormat({slides: [{title: 'Data', ...payload}], ...(datasets ? {datasets} : {})});
+const validImportedTable = (table, nativeSource) => checkImportedFormat({slides: [{title: 'Data', table}]}, nativeSource).valid;
 
 /**
  * The authored chart data while the native caches are unchanged: the imported chart (type and options) with the recorded
@@ -490,10 +491,10 @@ export function restoreTableData(table, record, {datasets, report, evidence: cur
     }));
     // LH-113: the authored highlight names rows by their key text; it is kept while every row it names still has that key.
     if (object(authored.highlight)) {
-      if (validWith({table: {...next, highlight: authored.highlight}})) next.highlight = clone(authored.highlight);
+      if (validImportedTable({...next, highlight: authored.highlight}, table)) next.highlight = clone(authored.highlight);
       else report({code: 'table-data-provenance-changed', message: 'The table highlight was not restored: a row it names no longer has that text in its first cell; the native cell fills are retained.'});
     }
-    if (!validWith({table: next})) {
+    if (!validImportedTable(next, table)) {
       report({code: 'table-data-provenance-changed', message: 'The authored cells no longer form a valid table with the native grid; native cells are retained.'});
       return table;
     }
@@ -517,7 +518,7 @@ export function restoreTableData(table, record, {datasets, report, evidence: cur
       ? {...current, value, ...(typeof format === 'string' ? {format} : {})}
       : typeof format === 'string' ? {value, format} : value;
   }
-  if (!validWith({table: next})) {
+  if (!validImportedTable(next, table)) {
     report({code: 'invalid-data-provenance', message: 'The table number formats recorded at export do not form a valid table; the table imports the cells it shows.'});
     return table;
   }
