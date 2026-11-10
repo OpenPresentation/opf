@@ -1,0 +1,302 @@
+{
+  "source": "90103d3546042af739acb454ccf243f0623449a3",
+  "records": 46,
+  "rawBytes": 1485491,
+  "compressedBytes": 677518,
+  "archiveSha256": "e52881e8e8727e4823afa8832c8bb8f4807c0acc4ded3056827b99e3fadd83c0",
+  "observations": {
+    "source": "90103d3546042af739acb454ccf243f0623449a3",
+    "roots": {
+      "driver": {
+        "path": "C:/opf-work/b07-bullet",
+        "revision": "90103d3546042af739acb454ccf243f0623449a3",
+        "dirty": false
+      },
+      "worker": {
+        "path": "C:/opf-work/b07-bullet-worker",
+        "revision": "90103d3546042af739acb454ccf243f0623449a3",
+        "dirty": false
+      }
+    },
+    "mutantSha256": "c01016d8214ff7b60ea3ea6f29b11563cd7fa958de9184130733b14cc739f29c",
+    "derivedWorkerSha256": "3a7da86bc984de3a43c29004006e4045dbf8fe4b91791fcf5f67411b2e06cea0",
+    "partCount": 147,
+    "unchangedParts": 146,
+    "managedInputGuards": 8,
+    "managedStructuralGroups": 1,
+    "finalManagedExit": 0,
+    "fixturePrepared": true,
+    "suitePrepared": false,
+    "validateOnlyRun": false,
+    "officeRun": false,
+    "glyphFix": false,
+    "currentRuntimeAcceptance": false,
+    "nativeAcceptance": false,
+    "earlierSourceRecovery": "Earlier executed source bytes recovered from immutable7deGitblobs plus knownPowerShellterminalCRLF serialization; each must exactly match the recorded executedSHA. Not a newly invented test result.",
+    "sealSetup": "First seal refused an incomplete whole-file newline recovery assumption; the known terminal-CRLF variant exactly matches both recorded original executed hashes. Refusal retained.",
+    "setupFailure": "First in-memory proof harness incorrectly called Buffer.equals on Uint8Array. Its source/log remain; Buffer.from correction passed without product/source change.",
+    "binding": {
+      "source": {
+        "schema": 1,
+        "diagnosticOnly": true,
+        "caseId": "proofing-bullet-none-original09",
+        "baseWorkerRevision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+        "baseWorkerSha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9",
+        "originalInputSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+        "mutantSha256": "c01016d8214ff7b60ea3ea6f29b11563cd7fa958de9184130733b14cc739f29c",
+        "fixtureReceiptSha256": "f4ee23e1b562446fbc6edab2e5d8d0b85e11c1f613cacbfe0de17c377466e8c4",
+        "derivedWorkerSha256": "3a7da86bc984de3a43c29004006e4045dbf8fe4b91791fcf5f67411b2e06cea0",
+        "workerFiles": [
+          {
+            "path": "test/native-furniture-control.ps1",
+            "bytes": 81652,
+            "sha256": "3a7da86bc984de3a43c29004006e4045dbf8fe4b91791fcf5f67411b2e06cea0"
+          },
+          {
+            "path": "test/native-process.ps1",
+            "bytes": 2341,
+            "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+          },
+          {
+            "path": "test/native-process-check.ps1",
+            "bytes": 2333,
+            "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+          },
+          {
+            "path": "test/native-furniture-harness-check.ps1",
+            "bytes": 45855,
+            "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+          },
+          {
+            "path": "test/fixtures/sh25-native-circle-observations.json",
+            "bytes": 2490,
+            "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+          }
+        ],
+        "baselineSuiteSha256": "a9c91a0bd1df36298bd920e3a578e39be5871ea39d9aaf856a036910d97ebf25",
+        "controllerRevision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+        "controllerFile": {
+          "path": "scripts/native-acceptance/run-windows.ps1",
+          "bytes": 15359,
+          "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+        },
+        "workerPackage": "tools/rr105-bullet-none/worker-package",
+        "limits": {
+          "slides": 1,
+          "shapes": 3,
+          "actions": 0,
+          "timeoutSeconds": 45,
+          "maximumSeconds": 60,
+          "phases": [
+            "original",
+            "edited",
+            "reopened"
+          ],
+          "pngs": 3
+        },
+        "markerIntentionallyOmitted": true,
+        "glyphFix": false,
+        "currentRuntimeAcceptance": false,
+        "nativeAcceptance": false,
+        "registryAcceptance": false
+      },
+      "roots": {
+        "driver": "C:\\opf-work\\b07-bullet",
+        "workerCheckout": "C:\\opf-work\\b07-bullet-worker",
+        "workerPackage": "C:\\opf-work\\b07-bullet-worker\\tools\\rr105-bullet-none\\worker-package",
+        "controller": "C:\\opf-work\\rr105-readonly-survey",
+        "fixture": "C:\\opf-work\\b07-bullet-fixture01",
+        "baselineSuite": "C:\\opf-work\\b07-direction-suite01"
+      },
+      "driver": {
+        "revision": "90103d3546042af739acb454ccf243f0623449a3",
+        "dirty": false,
+        "files": [
+          {
+            "path": "tools/rr105-bullet-none/fixture.mjs",
+            "bytes": 10461,
+            "sha256": "2f119c8dc0e1e2ce9b2cb1394f3eeb8a76d50188e46af947024845b1a7848926"
+          },
+          {
+            "path": "tools/rr105-bullet-none/prepare-suite.mjs",
+            "bytes": 6722,
+            "sha256": "b77faad53a9495a2b9b4503c17bcf07e04f43db2c6a7d34612ed77b2940a8f77"
+          },
+          {
+            "path": "tools/rr105-bullet-none/qualify-input.ps1",
+            "bytes": 8241,
+            "sha256": "e51a7d8e843b3c99beb7f5a5fb133a846af726b7826441ea6083682bb9a1801e"
+          },
+          {
+            "path": "tools/rr105-bullet-none/SOURCE.json",
+            "bytes": 2263,
+            "sha256": "441f0ab3950e2187a3cd8ee9ea1cfd98a61420c28ec9bcb0ddd5d3118ce0573b"
+          }
+        ]
+      },
+      "worker": {
+        "revision": "90103d3546042af739acb454ccf243f0623449a3",
+        "dirty": false,
+        "files": [
+          {
+            "path": "test/native-furniture-control.ps1",
+            "bytes": 81652,
+            "sha256": "3a7da86bc984de3a43c29004006e4045dbf8fe4b91791fcf5f67411b2e06cea0"
+          },
+          {
+            "path": "test/native-process.ps1",
+            "bytes": 2341,
+            "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+          },
+          {
+            "path": "test/native-process-check.ps1",
+            "bytes": 2333,
+            "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+          },
+          {
+            "path": "test/native-furniture-harness-check.ps1",
+            "bytes": 45855,
+            "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+          },
+          {
+            "path": "test/fixtures/sh25-native-circle-observations.json",
+            "bytes": 2490,
+            "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+          }
+        ]
+      },
+      "suiteRepository": {
+        "revision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+        "dirty": false,
+        "files": [
+          {
+            "path": "scripts/native-acceptance/run-windows.ps1",
+            "bytes": 15359,
+            "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+          }
+        ]
+      },
+      "baseline": {
+        "schemaVersion": 1,
+        "cases": [
+          {
+            "id": "proofing-direction-original09",
+            "worker": "furniture",
+            "automaticControlEligible": true,
+            "input": "inputs/original09.pptx",
+            "actionPlan": "actions/empty.json",
+            "archiveSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+            "slideCount": 1,
+            "declaredTopLevelShapes": 3,
+            "source": "sources/source.opf.json",
+            "preview": "previews/sealed-cli-preview.png",
+            "expectedPrimaryLanguageId": 1025,
+            "requiredPhaseNamePairs": 9,
+            "diagnosticOnly": true,
+            "knownPriorVisualFailure": true,
+            "nativeAcceptance": false
+          }
+        ],
+        "files": [
+          {
+            "path": "inputs/original09.pptx",
+            "bytes": 101027,
+            "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+          },
+          {
+            "path": "actions/empty.json",
+            "bytes": 3,
+            "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          },
+          {
+            "path": "sources/source.opf.json",
+            "bytes": 371,
+            "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+          },
+          {
+            "path": "previews/sealed-cli-preview.png",
+            "bytes": 30278,
+            "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+          }
+        ],
+        "provenance": {
+          "workerRepository": {
+            "revision": "2b825aa72e16dfa6593a8171011f7fcb6138255b",
+            "dirty": false,
+            "files": [
+              {
+                "path": "test/native-furniture-control.ps1",
+                "bytes": 81652,
+                "sha256": "51cb21003f058bd401669458e6f0afdd0acd899fdd54c4ee529595a32f5e65b9"
+              },
+              {
+                "path": "test/native-process.ps1",
+                "bytes": 2341,
+                "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+              },
+              {
+                "path": "test/native-process-check.ps1",
+                "bytes": 2333,
+                "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+              },
+              {
+                "path": "test/native-furniture-harness-check.ps1",
+                "bytes": 45855,
+                "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+              },
+              {
+                "path": "test/fixtures/sh25-native-circle-observations.json",
+                "bytes": 2490,
+                "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+              }
+            ]
+          },
+          "suiteRepository": {
+            "revision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+            "dirty": false,
+            "files": [
+              {
+                "path": "scripts/native-acceptance/run-windows.ps1",
+                "bytes": 15359,
+                "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+              }
+            ]
+          },
+          "preparation": {
+            "revision": "f9b713ca1c15fbfc9ed350e1f019e6b80658c6bb",
+            "dirty": false,
+            "files": [
+              {
+                "path": "tools/rr105-proofing-prepare/prepare-core.mjs",
+                "bytes": 11229,
+                "sha256": "c40eff97390711890960168bc806a529cf0322d00b2e7a2e2aae9283aad376ad"
+              },
+              {
+                "path": "tools/rr105-proofing-prepare/prepare-suite.mjs",
+                "bytes": 1829,
+                "sha256": "55a59d0e1fe0b6b8d714c7cebd62e810882edc85c2688fba494599233cca1080"
+              }
+            ]
+          },
+          "historicGeneration": {
+            "revision": "fb37046f043f860c8887e0574620ef3c507e3fa4",
+            "dirty": false,
+            "transportSha256": "beaaa89b3373c0c0e215ad86da5611f75edea6de8eb442957522fd1014583e31",
+            "suiteSha256": "50dc947be9220127c2a18f6b3e47d47479a275bf3563144b00b27c38fa18e097",
+            "original09Sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+            "originalWorkerRevision": "b8461d48b193e32dee4e6e1bb60896823f2303ff"
+          },
+          "diagnostic": {
+            "neverMerge": true,
+            "kind": "paragraph-direction-original09",
+            "nativeAuthorized": false,
+            "nativeRun": false,
+            "nativeAcceptance": false,
+            "registryAcceptance": false,
+            "guard": "Original09 only; primary1025/ordinalUTF16/geometry retained; TextDirection enum is an observation, not glyph acceptance."
+          }
+        }
+      }
+    }
+  }
+}
