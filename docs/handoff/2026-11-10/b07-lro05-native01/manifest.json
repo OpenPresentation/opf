@@ -1,0 +1,613 @@
+{
+  "schema": 1,
+  "neverMerge": true,
+  "diagnosticOnly": true,
+  "rootNativeObservation": true,
+  "agentOfficeInvoked": false,
+  "nativeAcceptance": false,
+  "publicImportAcceptance": false,
+  "controllerHead": "1f5bbb21aefbb110420ab30459d0eafb64c3a49a",
+  "baseMain": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "envelopeSha256": "556bc89623c05629c3ad2f03978af966d1c793d3494c761abdac513c20965ab3",
+  "historicalLreEnvelopeSha256": "79bbb5fab341e881b483c5e7b69a38085927ff1c7441a750020e17ff3fd0fb52",
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 1494198,
+    "sha256": "d79c99e8db24545c86157e40438ae49b228fa08071553208555cbe91b25e819b",
+    "expandedBytes": 2984151,
+    "records": 93,
+    "logicalBytes": 2221365
+  },
+  "images": [
+    {
+      "key": "actual",
+      "path": "images/actual.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "key": "reopened",
+      "path": "images/reopened.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "key": "cs",
+      "path": "images/cs.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "key": "lre",
+      "path": "images/lre.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "key": "core",
+      "path": "images/core.png",
+      "bytes": 12169,
+      "sha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e"
+    }
+  ],
+  "records": [
+    {
+      "name": "admission/execution-envelope.json",
+      "source": "C:\\opf-work\\b07-lro05-admission01\\execution-envelope.json",
+      "bytes": 3316,
+      "sha256": "556bc89623c05629c3ad2f03978af966d1c793d3494c761abdac513c20965ab3"
+    },
+    {
+      "name": "controller/.gitattributes",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\.gitattributes",
+      "bytes": 59,
+      "sha256": "a17b1665a27d015ddde4540b75485c16c6bf992302f00e5fcf16cf0a95edc43b"
+    },
+    {
+      "name": "controller/data-tools.mjs",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\data-tools.mjs",
+      "bytes": 7315,
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8"
+    },
+    {
+      "name": "controller/managed.ps1",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\managed.ps1",
+      "bytes": 20475,
+      "sha256": "ac77b6635d3c37d06e1124ce370d7f37b4a3acab50bbb56df3aaf787415749fa"
+    },
+    {
+      "name": "controller/native-process.ps1",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "name": "controller/profile.mjs",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\profile.mjs",
+      "bytes": 17128,
+      "sha256": "1a4d6725e89e67b66d267024a12a080c6aecb5869fae28a1765816486d0dcded"
+    },
+    {
+      "name": "controller/README.md",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\README.md",
+      "bytes": 532,
+      "sha256": "115f5b9b35163696aef695dcdd0248834bf35b9ba5100ad3a91a90f754eadd52"
+    },
+    {
+      "name": "controller/references/base-managed.ps1",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\base-managed.ps1",
+      "bytes": 16733,
+      "sha256": "93df6be95310271ca1b9dfde824309f259b6f908db147c67e81d6170dbba6038"
+    },
+    {
+      "name": "controller/references/base-worker.ps1",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\base-worker.ps1",
+      "bytes": 23783,
+      "sha256": "642cbe4b9d9a770a30a61bce804b68f87b5f083fca16e4feff2d9246972e2cda"
+    },
+    {
+      "name": "controller/references/base-wrapper.ps1",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\base-wrapper.ps1",
+      "bytes": 11352,
+      "sha256": "26f964e141cebe1f63ff39c18b6bda79364e134fa6436973bb2b5a603b21110d"
+    },
+    {
+      "name": "controller/references/rtl-contrast-05-mixed-explicit-arabic/expectation.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-05-mixed-explicit-arabic\\expectation.json",
+      "bytes": 2487,
+      "sha256": "3c1714c03700627d6b2aec4185fcca1b9339ffd53b4dfb343e700d00d3a58188"
+    },
+    {
+      "name": "controller/references/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-05-mixed-explicit-arabic\\input.pptx",
+      "bytes": 100900,
+      "sha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858"
+    },
+    {
+      "name": "controller/references/rtl-contrast-05-mixed-explicit-arabic/original.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-05-mixed-explicit-arabic\\original.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197"
+    },
+    {
+      "name": "controller/references/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-05-mixed-explicit-arabic\\source.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc"
+    },
+    {
+      "name": "controller/references/rtl-contrast-06-whole-explicit-arabic/expectation.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-06-whole-explicit-arabic\\expectation.json",
+      "bytes": 4208,
+      "sha256": "b3a484b739f756a2121d4f6b1c0cd389fcfec51c7f43ff6285d3ef7d63ae0ab2"
+    },
+    {
+      "name": "controller/references/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-06-whole-explicit-arabic\\input.pptx",
+      "bytes": 101005,
+      "sha256": "742538697bcb0b962cf80f330136a5f5e9b2640a8107e5ff1b6d0c56d84c73ad"
+    },
+    {
+      "name": "controller/references/rtl-contrast-06-whole-explicit-arabic/original.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-06-whole-explicit-arabic\\original.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331"
+    },
+    {
+      "name": "controller/references/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-06-whole-explicit-arabic\\source.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923"
+    },
+    {
+      "name": "controller/references/rtl-contrast-09-long-explicit-arabic/expectation.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-09-long-explicit-arabic\\expectation.json",
+      "bytes": 5248,
+      "sha256": "febc22a7a4ea534ed68bac19818c70925b9121ee2c9d4e77063ae1d63441f46d"
+    },
+    {
+      "name": "controller/references/rtl-contrast-09-long-explicit-arabic/input.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-09-long-explicit-arabic\\input.pptx",
+      "bytes": 101121,
+      "sha256": "540b63316b78162f4aa051b43e4e4af04719be1773ec5ad3123bca5df1f8920c"
+    },
+    {
+      "name": "controller/references/rtl-contrast-09-long-explicit-arabic/original.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-09-long-explicit-arabic\\original.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "name": "controller/references/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-09-long-explicit-arabic\\source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "name": "controller/references/rtl-contrast-10-non-ascii-digits/expectation.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-10-non-ascii-digits\\expectation.json",
+      "bytes": 18335,
+      "sha256": "383cf18a052d3c98df0b52d8302dbbf23cd2d64bdcca90b65fa950d6de6b6778"
+    },
+    {
+      "name": "controller/references/rtl-contrast-10-non-ascii-digits/input.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-10-non-ascii-digits\\input.pptx",
+      "bytes": 102841,
+      "sha256": "56d6442f0fe7441304a6f551062ee058cce884d33f7f8822d1a62b5d4f7144bb"
+    },
+    {
+      "name": "controller/references/rtl-contrast-10-non-ascii-digits/original.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-10-non-ascii-digits\\original.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2"
+    },
+    {
+      "name": "controller/references/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-10-non-ascii-digits\\source.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "name": "controller/references/rtl-contrast-11-long-explicit-french/expectation.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-11-long-explicit-french\\expectation.json",
+      "bytes": 3116,
+      "sha256": "52b79e6a85ea16c86386525d23ae43d308f032ef5418943849f44779c053be4c"
+    },
+    {
+      "name": "controller/references/rtl-contrast-11-long-explicit-french/input.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-11-long-explicit-french\\input.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "name": "controller/references/rtl-contrast-11-long-explicit-french/original.pptx",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-11-long-explicit-french\\original.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "name": "controller/references/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\references\\rtl-contrast-11-long-explicit-french\\source.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "name": "controller/run-managed.mjs",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\run-managed.mjs",
+      "bytes": 1870,
+      "sha256": "6be08c0b96e8788cc9653540a3dc28e98c21f6ee08e644bb168c37ff77c210b6"
+    },
+    {
+      "name": "controller/run-segment-observer.ps1",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\run-segment-observer.ps1",
+      "bytes": 18838,
+      "sha256": "f0f0ae0a50366db9649da47b0c0f8133364e60c11fa2f1738a05b08adfecb84c"
+    },
+    {
+      "name": "controller/segment-worker.ps1",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7"
+    },
+    {
+      "name": "controller/SOURCE.json",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\SOURCE.json",
+      "bytes": 12125,
+      "sha256": "44a0751f5713f5ea364930d00e08804c511974de072fad991cf7acb7017cb94d"
+    },
+    {
+      "name": "controller/test.mjs",
+      "source": "C:\\opf-work\\b07-lro\\tools\\rr105-native-segment-observer\\test.mjs",
+      "bytes": 7805,
+      "sha256": "4e4e116ceedf58d4a87ed2569983e790ea278d48e1e1d8dee5db0230708094b7"
+    },
+    {
+      "name": "cs-reference/input.pptx",
+      "source": "C:/opf-work/b07-cs05-native01/inputs/case.pptx",
+      "bytes": 100889,
+      "sha256": "4bde59d9a5e6e08e365d0a92c111081efea6efb9dfc9e7807ad83f7262166bf7"
+    },
+    {
+      "name": "cs-reference/report.json",
+      "source": "C:/opf-work/b07-cs05-native01/native/report.json",
+      "bytes": 41345,
+      "sha256": "bf161e44746429c8c853cadf25298b8c2162f72b992e63601db504491b855b3d"
+    },
+    {
+      "name": "environment/windows-powershell-env.mjs",
+      "source": "C:/opf-work/n034-save-ref-controller/scripts/native-acceptance/windows-powershell-env.mjs",
+      "bytes": 495,
+      "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+    },
+    {
+      "name": "images/actual.png",
+      "source": "C:/opf-work/b07-lro05-native01/native/original-01.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "name": "images/core.png",
+      "source": "C:/opf-work/rtl-native-contrast-export-01/preview/rtl-contrast-05-mixed-explicit-arabic/slide-1.png",
+      "bytes": 12169,
+      "sha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e"
+    },
+    {
+      "name": "images/cs.png",
+      "source": "C:/opf-work/b07-cs05-native01/native/original-01.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "name": "images/lre.png",
+      "source": "C:/opf-work/b07-lre05-native01/native/original-01.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "name": "images/reopened.png",
+      "source": "C:/opf-work/b07-lro05-native01/native/saved-reopened-01.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "name": "lre-reference/input.pptx",
+      "source": "C:/opf-work/b07-lre05-native01/inputs/case.pptx",
+      "bytes": 100900,
+      "sha256": "faa5324ec7371f9802119d618089bf27f68816c19370e5b892272fd228700dc9"
+    },
+    {
+      "name": "lre-reference/report.json",
+      "source": "C:/opf-work/b07-lre05-native01/native/report.json",
+      "bytes": 41397,
+      "sha256": "afe204da12c568e8666d3f5b70a72099984cd6a56093063a6c43d71e5b3c768e"
+    },
+    {
+      "name": "native/execution-envelope.json",
+      "source": "C:\\opf-work\\b07-lro05-native01\\execution-envelope.json",
+      "bytes": 3316,
+      "sha256": "556bc89623c05629c3ad2f03978af966d1c793d3494c761abdac513c20965ab3"
+    },
+    {
+      "name": "native/inputs/case.pptx",
+      "source": "C:\\opf-work\\b07-lro05-native01\\inputs\\case.pptx",
+      "bytes": 100900,
+      "sha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858"
+    },
+    {
+      "name": "native/inputs/native-process.ps1",
+      "source": "C:\\opf-work\\b07-lro05-native01\\inputs\\native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "name": "native/inputs/segment-worker.ps1",
+      "source": "C:\\opf-work\\b07-lro05-native01\\inputs\\segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7"
+    },
+    {
+      "name": "native/native/original-01.png",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\original-01.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "name": "native/native/postflight.jsonl",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\postflight.jsonl",
+      "bytes": 2734,
+      "sha256": "0061f571302a28eaeb1d254b5c6c3c3c3d07178010627da1963d1e26a72de9c8"
+    },
+    {
+      "name": "native/native/report.json",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\report.json",
+      "bytes": 41397,
+      "sha256": "343cd3c5c0bda690acde1020f8759803a66bbe45e6a0ac64e8a38eb51704cd6f"
+    },
+    {
+      "name": "native/native/saved-reopened-01.png",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\saved-reopened-01.png",
+      "bytes": 3824,
+      "sha256": "f53426f165ad6ce7da516adfd49ae51afe69808534decc6f14c782d4050f84ea"
+    },
+    {
+      "name": "native/native/saved.pptx",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\saved.pptx",
+      "bytes": 104076,
+      "sha256": "7396afb2b33b87119511dddb51cb3cf751f4236b2174af590536a27ace0111c5"
+    },
+    {
+      "name": "native/native/stages.jsonl",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\stages.jsonl",
+      "bytes": 48193,
+      "sha256": "0cbe5dcbd9a5d1e863f5f5bc45241927db19cab484c955b6c0bc36fc53d96e78"
+    },
+    {
+      "name": "native/native/supervisor.json",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\supervisor.json",
+      "bytes": 1745,
+      "sha256": "c98b2b6dd24a0590acd5462074789a038037833592351f06f6e09758b1a401d4"
+    },
+    {
+      "name": "native/native/worker.json",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\worker.json",
+      "bytes": 341,
+      "sha256": "1b2db6e2eec572fa1aead37206591f9b2288d8732b70abfada082f8e0e2220d8"
+    },
+    {
+      "name": "native/native/worker.stderr.log",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "native/native/worker.stdout.log",
+      "source": "C:\\opf-work\\b07-lro05-native01\\native\\worker.stdout.log",
+      "bytes": 4673,
+      "sha256": "bf6aeb744b7f347b964126b5bad36a40a4dd121c4e7dce3ff9392a427c7ef44c"
+    },
+    {
+      "name": "native/runner.json",
+      "source": "C:\\opf-work\\b07-lro05-native01\\runner.json",
+      "bytes": 6339,
+      "sha256": "2b9bb1cc8e1597f052fe374b6f59362bda693044d2ac82b00caab81628616d4a"
+    },
+    {
+      "name": "pure/execution-envelope.json",
+      "source": "C:\\opf-work\\b07-lro05-pure01\\execution-envelope.json",
+      "bytes": 3316,
+      "sha256": "556bc89623c05629c3ad2f03978af966d1c793d3494c761abdac513c20965ab3"
+    },
+    {
+      "name": "pure/inputs/case.pptx",
+      "source": "C:\\opf-work\\b07-lro05-pure01\\inputs\\case.pptx",
+      "bytes": 100900,
+      "sha256": "d862f43ed87e008815a5828ca62c62610ed50359ecc4dcf283e58cb3bef0a858"
+    },
+    {
+      "name": "pure/inputs/native-process.ps1",
+      "source": "C:\\opf-work\\b07-lro05-pure01\\inputs\\native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "name": "pure/inputs/segment-worker.ps1",
+      "source": "C:\\opf-work\\b07-lro05-pure01\\inputs\\segment-worker.ps1",
+      "bytes": 24934,
+      "sha256": "fb5e64f9f74af2ba4d7c9248c8e2792754602f45b6c507646861fca22bee2ad7"
+    },
+    {
+      "name": "pure/runner.json",
+      "source": "C:\\opf-work\\b07-lro05-pure01\\runner.json",
+      "bytes": 6327,
+      "sha256": "15f3b5fa39c85155aa61c097c03594bb84d7b218bfacc5338b5a101df7550b69"
+    },
+    {
+      "name": "root/b07-lro05-native01-exit.json",
+      "source": "C:/opf-work/b07-lro05-native01-exit.json",
+      "bytes": 1100,
+      "sha256": "a92704eec8f5cb322ae64969b1714d286c3a9014b3d07a23230c00d09bb0acce"
+    },
+    {
+      "name": "root/b07-lro05-native01-launch.mjs",
+      "source": "C:/opf-work/b07-lro05-native01-launch.mjs",
+      "bytes": 3410,
+      "sha256": "7ad628ded889af1ddb0e325c1cad8d30d9335ef10a5a377fca59f118d7fb70d1"
+    },
+    {
+      "name": "root/b07-lro05-native01-office-before.json",
+      "source": "C:/opf-work/b07-lro05-native01-office-before.json",
+      "bytes": 115,
+      "sha256": "bf4d98f3ff4ea3bb68f9f6df68a5f82bc3a3c4f7b7894632d0638f0c616e24e7"
+    },
+    {
+      "name": "root/b07-lro05-native01-office-immediate-after.json",
+      "source": "C:/opf-work/b07-lro05-native01-office-immediate-after.json",
+      "bytes": 115,
+      "sha256": "1f4d3b0c6beaca31cdf76ac345f4d3e8ac93ce736131fa93f6cb563174dc4496"
+    },
+    {
+      "name": "root/b07-lro05-native01.stderr.log",
+      "source": "C:/opf-work/b07-lro05-native01.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-lro05-native01.stdout.log",
+      "source": "C:/opf-work/b07-lro05-native01.stdout.log",
+      "bytes": 14019,
+      "sha256": "6f6315ad9c81bfbbac2217b3d4b125aa991adaff2a1a6cc9e3b95c6699978d51"
+    },
+    {
+      "name": "root/b07-lro05-pure01-create-exit.json",
+      "source": "C:/opf-work/b07-lro05-pure01-create-exit.json",
+      "bytes": 644,
+      "sha256": "3a6dfb865ac17f2a204d97e6ae1e96e22848bd908db11007c8c3d434f60bb44b"
+    },
+    {
+      "name": "root/b07-lro05-pure01-create.stderr.log",
+      "source": "C:/opf-work/b07-lro05-pure01-create.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-lro05-pure01-create.stdout.log",
+      "source": "C:/opf-work/b07-lro05-pure01-create.stdout.log",
+      "bytes": 257,
+      "sha256": "4b82f8f9ee73c6d3c673b827eeedcf9c350d8d15ecc1577e15da0f41abee019a"
+    },
+    {
+      "name": "root/b07-lro05-pure01-launch.mjs",
+      "source": "C:/opf-work/b07-lro05-pure01-launch.mjs",
+      "bytes": 4241,
+      "sha256": "f2e1bf09655cfffc3bea33fecb5215c369fc4dc535402f48bf64a9361ff4a181"
+    },
+    {
+      "name": "root/b07-lro05-pure01-receipt.json",
+      "source": "C:/opf-work/b07-lro05-pure01-receipt.json",
+      "bytes": 1142,
+      "sha256": "6c726e9c568d590412b493d595130082879ec640497a96a9ad93ab2f64db29aa"
+    },
+    {
+      "name": "root/b07-lro05-pure01-verify-exit.json",
+      "source": "C:/opf-work/b07-lro05-pure01-verify-exit.json",
+      "bytes": 696,
+      "sha256": "235184793a8336d30d3662faeacc0c15451ecbb902ac4e950237a6dc044daa48"
+    },
+    {
+      "name": "root/b07-lro05-pure01-verify.stderr.log",
+      "source": "C:/opf-work/b07-lro05-pure01-verify.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-lro05-pure01-verify.stdout.log",
+      "source": "C:/opf-work/b07-lro05-pure01-verify.stdout.log",
+      "bytes": 4671,
+      "sha256": "c6b596556250d0a48d5ce805ec3395dbb4ab1074afc85159068d7d8e92be54a7"
+    },
+    {
+      "name": "root/b07-lro05-pure01-wrapper-exit.json",
+      "source": "C:/opf-work/b07-lro05-pure01-wrapper-exit.json",
+      "bytes": 883,
+      "sha256": "a7edee4f5de977acc0f84a9c4ef69e2177ddcc5f0cb51a10c63ebba8630074ec"
+    },
+    {
+      "name": "root/b07-lro05-pure01-wrapper.stderr.log",
+      "source": "C:/opf-work/b07-lro05-pure01-wrapper.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root/b07-lro05-pure01-wrapper.stdout.log",
+      "source": "C:/opf-work/b07-lro05-pure01-wrapper.stdout.log",
+      "bytes": 4671,
+      "sha256": "c6b596556250d0a48d5ce805ec3395dbb4ab1074afc85159068d7d8e92be54a7"
+    },
+    {
+      "name": "source-preparation/.gitattributes",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\.gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "name": "source-preparation/inputs/prior05-lre-pdf.pptx",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\inputs\\prior05-lre-pdf.pptx",
+      "bytes": 100900,
+      "sha256": "faa5324ec7371f9802119d618089bf27f68816c19370e5b892272fd228700dc9"
+    },
+    {
+      "name": "source-preparation/manifest.json",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\manifest.json",
+      "bytes": 17201,
+      "sha256": "c2d7e5f641059cac3b6f85f979a84da28d45a9f1601efb348233ac372b407008"
+    },
+    {
+      "name": "source-preparation/parent-source.json",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\parent-source.json",
+      "bytes": 11063,
+      "sha256": "d2fe52486fbfff823ce0bd5082cdf8f1604ee059702b1b9be217f03a42b4e97f"
+    },
+    {
+      "name": "source-preparation/prepare-variant.mjs",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\prepare-variant.mjs",
+      "bytes": 2768,
+      "sha256": "9bb52f177fdad997bfadbc4f7eb98a02fd8857187fa392784232eedf46e9c0bc"
+    },
+    {
+      "name": "source-preparation/prepared-report.json",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\prepared-report.json",
+      "bytes": 1400,
+      "sha256": "fbec629ab1366845014771ba7aa27b081ad51d59b8f5241bb5eaf7c48da240eb"
+    },
+    {
+      "name": "source-preparation/raw.json.gz",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\raw.json.gz",
+      "bytes": 16855,
+      "sha256": "8b788ce60dcc4e3700c65b4f7bab090124c8efc7d9b5097af176b1cb794942d3"
+    },
+    {
+      "name": "source-preparation/README.md",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\README.md",
+      "bytes": 3355,
+      "sha256": "54c75c1c711640bf52a3eab38bc93e30775780d287a29337c373a01d968813b7"
+    },
+    {
+      "name": "source-preparation/variant.mjs",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\variant.mjs",
+      "bytes": 3396,
+      "sha256": "4dbbe94c17431bcb97272a5c16431044e733e61222986bd64daadfdea61fd2df"
+    },
+    {
+      "name": "source-preparation/verify.mjs",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\verify.mjs",
+      "bytes": 5484,
+      "sha256": "18084a650882188cdbcbec5853336ad2f2dce2c85886f236b1aa198829881f5b"
+    },
+    {
+      "name": "source-preparation/zip-tools.mjs",
+      "source": "C:\\opf-work\\b07-lro\\docs\\handoff\\2026-11-10\\b07-lro-pdf-diagnostic\\zip-tools.mjs",
+      "bytes": 6991,
+      "sha256": "b8196b349751751df8c7f0dff63268433ae1ccd7c4de73655abc8121a043792b"
+    }
+  ]
+}
