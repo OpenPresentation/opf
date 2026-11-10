@@ -5,6 +5,7 @@
 // equal to the measured advance, deterministic bytes), and that Latin output is byte-identical to resvg's own.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
+import {validate} from '@openpresentation/opf';
 import {toPng, toPdf, toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
 import {clusterPieces, pinScriptClusters} from '../dist/raster-text.js';
@@ -28,7 +29,24 @@ assert.deepEqual(pieces('Quarterly review 2026'), ['Quarterly review 2026'], 'te
 assert.deepEqual(clusterPieces('한글 한', true).map(piece => piece.affected), [true, true, true, true], 'KOR text pins every grapheme');
 
 const hindi = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Hindi', language: 'hi', slides: [{title: 'हिन्दी भाषा में तिमाही समीक्षा', text: 'रिपोर्ट Q3 2026 और OPF: विज्ञान क्षत्रिय श्रीमान द्वार'}]};
-const prepared = await loadFonts({pack: 'office', scripts: ['Deva', 'Thai', 'Mymr', 'Kore'], presentation: hindi}), {registry} = prepared;
+// The hand-written positive SVG fixtures below draw these exact families at400normal.
+// Eligibility in an explicit script list does not request unrelated physical faces on a presentation-aware handle.
+const handSamples = [
+  ['Noto Sans Devanagari', `${hindi.slides[0].title} ${hindi.slides[0].text} भाषा कामा`],
+  ['Noto Sans Thai', 'สำนักงาน Q3 คำสั่ง'],
+  ['Roboto', 'Quarterly review'],
+  ['Intos', 'Q3 2026 '],
+];
+const manualPresentation = {...hindi, name: 'Actual hand-SVG font inputs', slides: handSamples.map(([fontFamily, text], index) => ({id: `manual-${index}`, text: [{text, fontFamily, bold: false, italic: false}]}))};
+assert.equal(validate(manualPresentation, {only: ['format']}).valid, true, 'manual font preparation is one valid OPF presentation');
+const prepared = await loadFonts({pack: 'office', scripts: ['Deva', 'Thai', 'Mymr', 'Kore'], presentation: manualPresentation}), {registry} = prepared;
+for (const [family, text] of handSamples) {
+  const face = registry.resolveFont({fontFamily: family, fontWeight: 400, italic: false});
+  assert.equal(face.resolvedFamily, family);
+  assert.equal(face.resolvedWeight, 400);
+  assert.ok(registry.textMeasurement.measure(text, 40, {fontFamily: family, fontWeight: 400, italic: false}) > 0, 'each actual hand-SVG family strictly covers its source text');
+}
+assert.ok(!registry.describeFaces().some((face) => ['Noto Sans Myanmar', 'Noto Sans KR'].includes(face.family)), 'unused eligible scripts do not load physical faces; the real exports below prepare their own needs');
 const fontFiles = prepared.fontFiles;
 const measure = (text, size, family, lang) => registry.textMeasurement.measure(text, size, {fontFamily: family, fontWeight: 400, lang});
 const svgOf = (body, attrs = '') => `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="200" xml:lang="hi"${attrs}><rect width="100%" height="100%" fill="#fff"/>${body}</svg>`;
