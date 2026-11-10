@@ -1,0 +1,122 @@
+{
+  "kind": "B07_CHARACTER_BOUNDS_SOURCE_PREPARATION_ONLY",
+  "source": "3b52f1638424e73c0b5920451d245847db6f4422",
+  "tree": "0f7f79c6ee284554cab4078e740cd5a02b705e38",
+  "integrationBase": "e2fc890d8d8e0776b27a6bfecdd08b690ec96608",
+  "sourceFiles": [
+    {
+      "path": "tools/rr105-character-bounds/.gitattributes",
+      "bytes": 9,
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+    },
+    {
+      "path": "tools/rr105-character-bounds/README.md",
+      "bytes": 3348,
+      "sha256": "1b00a5890529d06f8e6e1ac6c87bf02f5c8290ef9004ed0da39caed0a3c73466"
+    },
+    {
+      "path": "tools/rr105-character-bounds/SOURCE.json",
+      "bytes": 4640,
+      "sha256": "a5090ab568fa9b4eec0d31d55f91cfe9ccfd32bc70c95992eeeb4c4a697dd0ea"
+    },
+    {
+      "path": "tools/rr105-character-bounds/managed-check.ps1",
+      "bytes": 10726,
+      "sha256": "cc5c67f2c70afa9a8111c871806817734338b4eba82c2a9c3cd04892e00e6ac2"
+    },
+    {
+      "path": "tools/rr105-character-bounds/prepare-suite.mjs",
+      "bytes": 7820,
+      "sha256": "434e6157f2b2e68768b432ad48c6a7c5a79d5259093f934b70e90639f49a702a"
+    },
+    {
+      "path": "tools/rr105-character-bounds/prepare-suite.test.mjs",
+      "bytes": 2661,
+      "sha256": "3146e454f5e15df9cef81d2bd4321985f75a3da3a7e657e6f35c7c35cdf44666"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/base-worker.ps1.gz",
+      "bytes": 19222,
+      "sha256": "51d0402f73e14b5686267d29457c6b7bdfa7ffdc773ff2a756f5a163235f0774"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/empty.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/original09.pptx.gz",
+      "bytes": 72471,
+      "sha256": "3d91bd0a042595cd3ad7c7233012bc73b37ee3a33a39b844f33da813ec89068c"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/sealed-cli-preview.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "tools/rr105-character-bounds/references/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/fixtures/sh25-native-circle-observations.json",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/native-furniture-control.ps1",
+      "bytes": 90059,
+      "sha256": "d460945c9cb82f8ddcf101438c625c8d7e991167882e35286aa930070524180d"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/native-furniture-harness-check.ps1",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "tools/rr105-character-bounds/worker-package/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    }
+  ],
+  "raw": {
+    "file": "raw.json.gz",
+    "bytes": 329934,
+    "sha256": "47430cf6f152c968e635275b73ce28acf5aa31e72a5f9f0ffcb4e95d08b78b2d",
+    "expandedBytes": 1050431,
+    "records": 32,
+    "decodedBytes": 783931
+  },
+  "qualification": {
+    "nodeControls": 4,
+    "managedCases": 21,
+    "baseFunctions": 45,
+    "unchangedFunctions": 44,
+    "onlyChangedBaseFunction": "Read-FurnitureState",
+    "originalArchiveBytes": 101027,
+    "originalArchiveSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+    "originalZipEntries": 147,
+    "originalShapes": 3,
+    "samplesPerPhase": 10,
+    "phases": [
+      "original",
+      "edited",
+      "reopened"
+    ],
+    "actualPrepareRun": false,
+    "validateOnlyRun": false,
+    "nativeRun": false,
+    "officeActivated": false,
+    "buildRun": false,
+    "registryRun": false
+  },
+  "glyphFix": false,
+  "currentRuntimeAcceptance": false,
+  "nativeAcceptance": false
+}
