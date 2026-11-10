@@ -29,9 +29,10 @@ globalThis.gc();
 const baselinePostGc=memory(),prepareCpuStart=process.cpuUsage(),prepareStart=performance.now();
 const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions:{catalogs:[gallery]}});
 const prepareEnd=performance.now(),preparationMs=prepareEnd-prepareStart,preparationCpu=cpu(process.cpuUsage(prepareCpuStart));
-const afterPreparation=memory(),samples=[];
-let outputs=[];
-for(let index=0;index<3;index++){
+const afterPreparation=memory();
+function renderThreeBatches(){
+ const samples=[],outputs=[];
+ for(let index=0;index<3;index++){
   if(index>0)globalThis.gc(); // Outside each warm interval; no forced GC between preparation and first rendering.
   const before=memory(),cpuStart=process.cpuUsage(),start=performance.now();
   const svgs=toSvg(deck,{fonts,catalogs:[gallery]});
@@ -40,7 +41,9 @@ for(let index=0;index<3;index++){
   assert.ok(Array.isArray(svgs));assert.equal(svgs.length,size);
   outputs.push(svgs);samples.push({kind:index===0?'first':'warm',elapsedMs,cpu:renderCpu,before,after,...(index===0?{continuousPreparationToFirstMs:end-prepareStart}:{})});
 }
-const finalRenderMemory=memory(); // True process HWM through the common retained-three-output workload.
+ return {outputs,samples,finalRenderMemory:memory()}; // True process HWM before any evidence work.
+}
+let {outputs,samples,finalRenderMemory}=renderThreeBatches();
 function validateOutputs(values){
   let hashes,bytes;
   for(const svgs of values){const current=svgs.map(svg=>sha(svg));if(!hashes){hashes=current;bytes=svgs.reduce((sum,svg)=>sum+Buffer.byteLength(svg),0);}else assert.deepEqual(current,hashes,'all three rendered batches byte-equivalent');}
