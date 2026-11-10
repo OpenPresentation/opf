@@ -6,7 +6,8 @@ param(
     [ValidateRange(5,60)][int]$TimeoutSeconds=45,
     [switch]$ValidateOnly,
     [switch]$CaptureTextFonts,
-    [switch]$ReadOnlySurvey
+    [switch]$ReadOnlySurvey,
+    [switch]$CaptureTextProbes
 )
 $ErrorActionPreference='Stop'
 
@@ -94,7 +95,7 @@ function Assert-FreshNativeOutput([string]$Directory,[string[]]$ProtectedRoots) 
     }
     return $full
 }
-function Import-NativePlanValidation([string]$Worker,[bool]$Survey=$false) {
+function Import-NativePlanValidation([string]$Worker,[bool]$Survey=$false,[bool]$Probes=$false) {
     $tokens=$null;$parseErrors=$null
     $ast=[System.Management.Automation.Language.Parser]::ParseFile($Worker,[ref]$tokens,[ref]$parseErrors)
     if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
@@ -104,6 +105,7 @@ function Import-NativePlanValidation([string]$Worker,[bool]$Survey=$false) {
         if($surveyParameter.Count -ne 1 -or $surveyParameter[0].StaticType -ne [System.Management.Automation.SwitchParameter]) { throw 'Selected worker does not support reviewed read-only survey mode' }
         $definitions+=@('Get-FurnitureSurveySlideCount','Assert-FurnitureSurvey')
     }
+    if($Probes) { $definitions+=@('Assert-FurnitureProbeKeys','Test-FurnitureProbeFinite','Read-AndValidateTextProbePlan') }
     foreach($name in $definitions) {
         $function=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
         if($null -eq $function) { throw "Missing pure plan validator: $name" }
@@ -125,6 +127,21 @@ function Assert-NativeFontCaptureSupport([string]$Worker,[bool]$Requested) {
 function Get-NativeFontCaptureArguments([bool]$Requested) {
     if($Requested) { return '-CaptureTextFonts' }
 }
+function Read-NativeTextProbeBinding($Binding,[string]$Worker,[bool]$Requested,[bool]$Fonts,$Actions) {
+    if(-not $Requested) { return $null }
+    if(-not $Fonts -or $Actions -isnot [array] -or $Actions.Count -ne 0) { throw 'Text probes require CaptureTextFonts and an empty action plan' }
+    $tokens=$null;$errors=$null;$ast=[System.Management.Automation.Language.Parser]::ParseFile($Worker,[ref]$tokens,[ref]$errors)
+    if($errors.Count -ne 0) { throw 'Text probe worker has parser errors' }
+    $parameter=@($ast.ParamBlock.Parameters | Where-Object { $_.Name.VariablePath.UserPath -ceq 'TextProbePlan' })
+    if($parameter.Count -ne 1 -or $parameter[0].StaticType -ne [string]) { throw 'Selected worker lacks the reviewed TextProbePlan parameter' }
+    $relative=$Binding.selected.textProbePlan
+    if($relative -isnot [string]) { throw 'Selected case must declare a sealed textProbePlan asset' }
+    $records=@($Binding.suite.files | Where-Object { $_.path -ceq $relative })
+    if($records.Count -ne 1) { throw 'Text probe plan must name exactly one sealed suite file' }
+    $probePath=Resolve-NativeAsset $Binding.root $relative
+    $null=Read-AndValidateTextProbePlan $probePath (Get-FileHash -LiteralPath $Binding.inputPath -Algorithm SHA256).Hash.ToLowerInvariant() $Fonts $Actions
+    return [ordered]@{path=$probePath;record=$records[0]}
+}
 function Invoke-NativeChild([string]$Shell,[string]$Script,[string[]]$Arguments,[string]$Log) {
     & $Shell -NoProfile -NonInteractive -File $Script @Arguments *> $Log
     if($LASTEXITCODE -ne 0) { throw "Child failed; preserve $Log. No retry was started." }
@@ -137,9 +154,10 @@ $suiteRoot=Assert-PlainNativePath (Join-Path $PSScriptRoot '../..')
 $workerIdentity=Assert-NativeRepositoryIdentity $workerRoot $binding.suite.provenance.workerRepository @('test/native-furniture-control.ps1','test/native-process.ps1','test/native-process-check.ps1','test/native-furniture-harness-check.ps1')
 $suiteIdentity=Assert-NativeRepositoryIdentity $suiteRoot $binding.suite.provenance.suiteRepository @('scripts/native-acceptance/run-windows.ps1')
 $worker=Resolve-NativeAsset $workerRoot 'test/native-furniture-control.ps1'
-Import-NativePlanValidation $worker ([bool]$ReadOnlySurvey)
+Import-NativePlanValidation $worker ([bool]$ReadOnlySurvey) ([bool]$CaptureTextProbes)
 Assert-NativeFontCaptureSupport $worker ([bool]$CaptureTextFonts)
 $validatedActions=Read-AndValidateActionPlan $binding.planPath
+$probeBinding=Read-NativeTextProbeBinding $binding $worker ([bool]$CaptureTextProbes) ([bool]$CaptureTextFonts) $validatedActions
 if($ReadOnlySurvey) {
     if(-not (Test-Integer $binding.selected.slideCount) -or $binding.selected.slideCount -ne 1) { throw 'Read-only survey requires exactly one declared slide' }
     Assert-FurnitureSurvey $true $validatedActions $binding.inputPath
@@ -158,12 +176,19 @@ $inputSnapshot=Join-Path $snapshots 'case.pptx';$planSnapshot=Join-Path $snapsho
 $expectedInput=@($binding.suite.files | Where-Object { $_.path -ceq $binding.selected.input })[0]
 $expectedPlan=@($binding.suite.files | Where-Object { $_.path -ceq $binding.selected.actionPlan })[0]
 $snapshotRecords=@([pscustomobject]@{path='case.pptx';sha256=$expectedInput.sha256;bytes=$expectedInput.bytes},[pscustomobject]@{path='action-plan.json';sha256=$expectedPlan.sha256;bytes=$expectedPlan.bytes})
+$probeSnapshot=$null
+if($null -ne $probeBinding) {
+    $probeSnapshot=Join-Path $snapshots 'text-probe-plan.json'
+    $snapshotRecords+=@([pscustomobject]@{path='text-probe-plan.json';sha256=$probeBinding.record.sha256;bytes=$probeBinding.record.bytes})
+    $receipt.textProbePlan=[ordered]@{source=$probeBinding.record;snapshotPath=$probeSnapshot;nativeAcceptance=$false}
+}
 $receiptPath=Join-Path $output 'runner.json'
 function Write-RunnerReceipt { $receipt | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $receiptPath -Encoding UTF8 }
 Write-RunnerReceipt
 try {
     Copy-Item -LiteralPath $binding.inputPath -Destination $inputSnapshot
     Copy-Item -LiteralPath $binding.planPath -Destination $planSnapshot
+    if($null -ne $probeBinding) { Copy-Item -LiteralPath $probeBinding.path -Destination $probeSnapshot }
     Assert-NativeFileRecords $snapshots $snapshotRecords
     Invoke-NativeChild $shell (Join-Path $workerRoot 'test/native-process-check.ps1') @('-OutputDirectory',(Join-Path $harness 'process')) (Join-Path $output 'process-check.log')
     Invoke-NativeChild $shell (Join-Path $workerRoot 'test/native-furniture-harness-check.ps1') @('-ScriptPath',$worker,'-ReportPath',(Join-Path $harness 'furniture.json')) (Join-Path $output 'furniture-harness.log')
@@ -175,9 +200,11 @@ try {
     $validatedActions=Read-AndValidateActionPlan $planSnapshot
     if($ReadOnlySurvey) { Assert-FurnitureSurvey $true $validatedActions $inputSnapshot }
     Assert-NativeFileRecords $snapshots $snapshotRecords
+    if($null -ne $probeBinding) { $null=Read-AndValidateTextProbePlan $probeSnapshot (Get-FileHash -LiteralPath $inputSnapshot -Algorithm SHA256).Hash.ToLowerInvariant() ([bool]$CaptureTextFonts) $validatedActions }
     $receipt.status='native-worker-pending';Write-RunnerReceipt
     $workerArguments=@('-InputPresentation',$inputSnapshot,'-ActionPlan',$planSnapshot,'-OutputDirectory',(Join-Path $output 'native'),'-TimeoutSeconds',([string]$TimeoutSeconds)) + @(Get-NativeFontCaptureArguments ([bool]$CaptureTextFonts))
     if($ReadOnlySurvey) { $workerArguments+='-ReadOnlySurvey' }
+    if($null -ne $probeBinding) { $workerArguments+=@('-TextProbePlan',$probeSnapshot) }
     Invoke-NativeChild $shell $worker $workerArguments (Join-Path $output 'native-worker.log')
     $terminal=Get-Content -LiteralPath (Join-Path $output 'native/supervisor.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if($terminal.timedOut -ne $false -or $terminal.exitCode -ne 0 -or $terminal.cleanupConfirmed -ne $true) { throw 'Worker did not confirm successful completion and cleanup; preserve the attempt and inspect Office' }

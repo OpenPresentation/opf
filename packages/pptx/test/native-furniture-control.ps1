@@ -5,7 +5,8 @@ param(
     [ValidateRange(5,60)][int]$TimeoutSeconds=45,
     [switch]$Worker,
     [switch]$CaptureTextFonts,
-    [switch]$ReadOnlySurvey
+    [switch]$ReadOnlySurvey,
+    [string]$TextProbePlan=''
 )
 $ErrorActionPreference='Stop'
 
@@ -133,12 +134,111 @@ function Assert-FurnitureSurvey([bool]$Requested,$Actions,[string]$Path) {
     if((Get-FurnitureSurveySlideCount $Path) -ne 1) { throw 'Read-only survey requires exactly one slide part' }
 }
 
+# Opt-in fixed authored ranges. All validation is pure and occurs before output/Office.
+function Assert-FurnitureProbeKeys($Object,[string[]]$Allowed,[string]$Context) {
+    if($null -eq $Object -or $Object -isnot [pscustomobject]) { throw "$Context must be an object" }
+    foreach($property in $Object.PSObject.Properties) { if($property.Name -cnotin $Allowed) { throw "$Context has unknown property '$($property.Name)'" } }
+    foreach($name in $Allowed) { $null=Require-Property $Object $name $Context }
+}
+function Test-FurnitureProbeFinite($Value) {
+    return ($Value -is [single] -or $Value -is [double] -or $Value -is [int] -or $Value -is [long] -or $Value -is [decimal]) -and -not [double]::IsNaN([double]$Value) -and -not [double]::IsInfinity([double]$Value)
+}
+function Read-AndValidateTextProbePlan([string]$Path,[string]$ArchiveSha256,[bool]$Fonts,$Actions) {
+    if($Path -ceq '') { return $null }
+    if(-not $Fonts -or $Actions -isnot [array] -or $Actions.Count -ne 0) { throw 'Text probes require CaptureTextFonts and an empty action plan' }
+    if((Get-Item -LiteralPath $Path).Length -gt 65536) { throw 'Text probe plan exceeds 64 KiB' }
+    $plan=Get-Content -LiteralPath $Path -Raw -Encoding UTF8 | ConvertFrom-Json
+    Assert-FurnitureProbeKeys $plan @('schemaVersion','archiveSha256','targets') 'Text probe plan'
+    if(-not (Test-Integer $plan.schemaVersion) -or $plan.schemaVersion -ne 1 -or $plan.archiveSha256 -isnot [string] -or $plan.archiveSha256 -cnotmatch '^[a-f0-9]{64}$' -or $plan.archiveSha256 -cne $ArchiveSha256) { throw 'Text probe plan is unsupported or bound to a different archive' }
+    if($plan.targets -isnot [array] -or $plan.targets.Count -lt 1 -or $plan.targets.Count -gt 3) { throw 'Text probe plan requires 1 through 3 exact targets' }
+    $targets=@();$totalRanges=0;$totalUnits=0
+    foreach($target in $plan.targets) {
+        Assert-FurnitureProbeKeys $target @('slideIndex','shapeId','shapeName','text','ranges') 'Text probe target'
+        if(-not (Test-Integer $target.slideIndex) -or $target.slideIndex -lt 1 -or $target.slideIndex -gt 3 -or -not (Test-Integer $target.shapeId) -or $target.shapeId -lt 1 -or $target.shapeId -gt 2147483647) { throw 'Text probe target has an invalid slide or shape ID' }
+        Assert-String $target.shapeName 'shapeName' 'Text probe target' 255 $false
+        Assert-String $target.text 'text' 'Text probe target' 4096 $false
+        foreach($prior in $targets) { if($prior.slideIndex -eq $target.slideIndex -and ($prior.shapeId -eq $target.shapeId -or [string]::Equals($prior.shapeName,$target.shapeName,[StringComparison]::Ordinal))) { throw 'Duplicate text probe target' } }
+        $targets+=@($target)
+        if($target.ranges -isnot [array] -or $target.ranges.Count -lt 1 -or $target.ranges.Count -gt 8) { throw 'Text probe target requires a bounded explicit range list' }
+        $seen=@()
+        foreach($sample in $target.ranges) {
+            Assert-FurnitureProbeKeys $sample @('start1Based','length','text','style') 'Text probe range'
+            if(-not (Test-Integer $sample.start1Based) -or -not (Test-Integer $sample.length) -or $sample.start1Based -lt 1 -or $sample.length -lt 1 -or $sample.length -gt 32 -or $sample.start1Based -gt $target.text.Length -or $sample.length -gt ($target.text.Length-$sample.start1Based+1)) { throw 'Text probe range exceeds the literal source text' }
+            $start=$sample.start1Based-1;$end=$start+$sample.length
+            if(($start -gt 0 -and [char]::IsHighSurrogate($target.text[$start-1]) -and [char]::IsLowSurrogate($target.text[$start])) -or ($end -lt $target.text.Length -and [char]::IsHighSurrogate($target.text[$end-1]) -and [char]::IsLowSurrogate($target.text[$end]))) { throw 'Text probe range splits a UTF16 surrogate pair' }
+            Assert-String $sample.text 'text' 'Text probe range' 32 $false
+            if(-not [string]::Equals($sample.text,$target.text.Substring($start,$sample.length),[StringComparison]::Ordinal)) { throw 'Text probe range text differs from exact UTF16 source' }
+            foreach($prior in $seen) { if($start -lt ($prior.start1Based-1+$prior.length) -and ($prior.start1Based-1) -lt $end) { throw 'Duplicate or overlapping text probe ranges' } }
+            $seen+=@($sample)
+            Assert-FurnitureProbeKeys $sample.style @('name','sizePoints','bold','italic') 'Text probe source style'
+            Assert-String $sample.style.name 'name' 'Text probe source style' 128 $false
+            if(-not (Test-FurnitureProbeFinite $sample.style.sizePoints) -or $sample.style.sizePoints -le 0 -or $sample.style.sizePoints -gt 400) { throw 'Text probe source size must be finite positive points, at most 400' }
+            foreach($flag in @('bold','italic')) { if(-not (Test-Integer $sample.style.$flag) -or $sample.style.$flag -notin @(-1,0)) { throw 'Text probe source style flag must be exactly -1 or 0' } }
+            $totalRanges++;$totalUnits+=$sample.length
+        }
+    }
+    if($totalRanges -gt 8 -or $totalUnits -gt 32) { throw 'Text probes exceed 8 ranges or 32 sampled UTF16 units' }
+    return ,$plan
+}
+function Assert-FurnitureTextProbeIntegrity($Probe,[string]$Source,[string]$Snapshot,[string]$SourceHash,[string]$ActionsSnapshot,[string]$ActionsHash) {
+    if($null -eq $Probe) { return }
+    try {
+        foreach($pair in @(@($Source,$SourceHash),@($Snapshot,$SourceHash),@($ActionsSnapshot,$ActionsHash),@($Probe.path,$Probe.sha256),@($Probe.snapshotPath,$Probe.sha256))) {
+            if((Get-FurnitureSha256 $pair[0]) -cne $pair[1]) { Stop-FurnitureLifecycle 'Source, action or text probe plan changed across the owned lifecycle' }
+        }
+    } catch { Stop-FurnitureLifecycle $_.Exception.Message }
+}
+function Read-FurnitureProbeDescriptor($Range,[string]$Prefix) {
+    $font=Read-FurnitureProperty $Range 'Font' "$Prefix.font.get"
+    $language=Read-FurnitureProperty $Range 'LanguageID' "$Prefix.languageId.get"
+    $slots=[ordered]@{}
+    foreach($name in @('Name','NameAscii','NameOther','NameFarEast','NameComplexScript')) {
+        $value=Read-FurnitureProperty $font $name "$Prefix.font.$name.get"
+        $status=if($value -is [string] -and -not [string]::IsNullOrWhiteSpace($value)){'reported'}else{'mixed-or-unavailable'}
+        $slots[$name]=[ordered]@{value=$value;status=$status}
+    }
+    $size=Read-FurnitureProperty $font 'Size' "$Prefix.font.size.get"
+    if($null -ne $size -and -not (Test-FurnitureProbeFinite $size)) { Stop-FurnitureLifecycle 'Observed probe font size is nonfinite or nonnumeric' }
+    $bold=Read-FurnitureProperty $font 'Bold' "$Prefix.font.bold.get"
+    $italic=Read-FurnitureProperty $font 'Italic' "$Prefix.font.italic.get"
+    return [ordered]@{languageId=[ordered]@{value=$language;status=$(if((Test-Integer $language) -and $language -gt 0){'reported'}else{'mixed-or-unavailable'})};fontSlots=$slots;sizePoints=$size;bold=$bold;italic=$italic;scope='Reported primary TextRange descriptors only; not physical font-file or glyph identity.'}
+}
+function Read-FurnitureTextProbe($Shape,$Target,[string]$Prefix) {
+    $frame=Read-FurnitureProperty $Shape 'TextFrame' "$Prefix.frame.get"
+    $primary=Read-FurnitureProperty $frame 'TextRange' "$Prefix.range.get"
+    $frame2=Read-FurnitureProperty $Shape 'TextFrame2' "$Prefix.frame2.get"
+    $secondary=Read-FurnitureProperty $frame2 'TextRange' "$Prefix.range2.get"
+    foreach($range in @($primary,$secondary)) { $text=Read-FurnitureProperty $range 'Text' "$Prefix.sourceText.get";if($text -isnot [string] -or -not [string]::Equals($text,$Target.text,[StringComparison]::Ordinal)) { Stop-FurnitureLifecycle 'Foreign or stale text probe selection: exact UTF16 shape text differs' } }
+    $record=[ordered]@{shapeId=$Target.shapeId;shapeName=$Target.shapeName;text=$Target.text;primary=(Read-FurnitureProbeDescriptor $primary "$Prefix.whole");ranges=@();nativeAcceptance=$false;scope='Fixed authored UTF16 ranges, not enumerated native run boundaries or physical glyph correctness.'}
+    foreach($sample in $Target.ranges) {
+        $tag="$Prefix.characters-$($sample.start1Based)-$($sample.length)"
+        $one=Invoke-FurnitureCom "$tag.primary.get" { return ,$primary.Characters($sample.start1Based,$sample.length) }
+        $two=Invoke-FurnitureCom "$tag.secondary.get" { return ,$secondary.Characters($sample.start1Based,$sample.length) }
+        foreach($range in @($one,$two)) { $text=Read-FurnitureProperty $range 'Text' "$tag.text.get";if($text -isnot [string] -or -not [string]::Equals($text,$sample.text,[StringComparison]::Ordinal)) { Stop-FurnitureLifecycle 'Foreign or stale text probe range: exact UTF16 characters differ' } }
+        $descriptor=Read-FurnitureProbeDescriptor $one $tag
+        $bounds=[ordered]@{}
+        foreach($property in @('BoundLeft','BoundTop','BoundWidth','BoundHeight')) {
+            $value=Read-FurnitureProperty $two $property "$tag.$property.get"
+            if($null -ne $value -and (-not (Test-FurnitureProbeFinite $value) -or ($property -in @('BoundWidth','BoundHeight') -and $value -lt 0))) { Stop-FurnitureLifecycle 'Observed probe bound is nonfinite, nonnumeric or negative in size' }
+            $bounds[$property]=[ordered]@{value=$(if($null -eq $value){$null}else{[double]$value});status=$(if($null -eq $value){'unavailable'}else{'reported'});unit='pt'}
+        }
+        $mismatches=@()
+        if(-not [string]::Equals($descriptor.fontSlots.Name.value,$sample.style.name,[StringComparison]::Ordinal)) { $mismatches+='name' }
+        if($descriptor.sizePoints -ne $sample.style.sizePoints) { $mismatches+='sizePoints' }
+        foreach($flag in @('bold','italic')) { if($descriptor.$flag -ne $sample.style.$flag) { $mismatches+=$flag } }
+        $record.ranges+=@([ordered]@{start1Based=$sample.start1Based;length=$sample.length;text=$sample.text;expectedStyle=$sample.style;observed=$descriptor;styleMismatches=$mismatches;bounds=$bounds;nativeAcceptance=$false})
+    }
+    return ,$record
+}
+
 if(-not $Worker) {
     $inputPath=(Resolve-Path -LiteralPath $InputPresentation).Path
     if([IO.Path]::GetExtension($inputPath) -ine '.pptx') { throw 'InputPresentation must select one existing .pptx file' }
     $plan=Read-AndValidateActionPlan $ActionPlan
     Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $plan $inputPath
     $planPath=$(if($ActionPlan -eq ''){$null}else{(Resolve-Path -LiteralPath $ActionPlan).Path})
+    $probePlan=Read-AndValidateTextProbePlan $TextProbePlan (Get-FurnitureSha256 $inputPath) ([bool]$CaptureTextFonts) $plan
+    $probePath=$(if($null -eq $probePlan){$null}else{(Resolve-Path -LiteralPath $TextProbePlan).Path})
     $outputRoot=[IO.Path]::GetFullPath($OutputDirectory)
     if(Test-Path -LiteralPath $outputRoot) { throw 'Preserve the prior attempt and select a fresh output directory' }
     [void](New-Item -ItemType Directory -Path $outputRoot)
@@ -161,11 +261,18 @@ if(-not $Worker) {
         verifier=[ordered]@{path=$PSCommandPath;sha256=(Get-FurnitureSha256 $PSCommandPath);snapshotPath=$verifierSnapshot;snapshotSha256=(Get-FurnitureSha256 $verifierSnapshot)}
         processHelper=[ordered]@{path=$helperOriginal;sha256=(Get-FurnitureSha256 $helperOriginal);snapshotPath=$helperSnapshot;snapshotSha256=(Get-FurnitureSha256 $helperSnapshot)}
     }
+    if($null -ne $probePath) {
+        $probeSnapshot=Join-Path $snapshotRoot 'text-probe-plan.json'
+        Copy-Item -LiteralPath $probePath -Destination $probeSnapshot
+        $request.textProbePlan=[ordered]@{path=$probePath;sha256=(Get-FurnitureSha256 $probePath);snapshotPath=$probeSnapshot;snapshotSha256=(Get-FurnitureSha256 $probeSnapshot)}
+        if($request.textProbePlan.sha256 -cne $request.textProbePlan.snapshotSha256) { throw 'Text probe snapshot changed during copy' }
+    }
     $request | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $outputRoot 'request.json') -Encoding UTF8
     . (Join-Path $PSScriptRoot 'native-process.ps1')
     $workerArguments=@('-OutputDirectory',$outputRoot,'-InputPresentation',$presentationSnapshot,'-ActionPlan',$planSnapshot,'-Worker')
     if($CaptureTextFonts) { $workerArguments+='-CaptureTextFonts' }
     if($ReadOnlySurvey) { $workerArguments+='-ReadOnlySurvey' }
+    if($null -ne $probePath) { $workerArguments+=@('-TextProbePlan',$probeSnapshot) }
     $result=Invoke-OpfNativeWorker -ScriptPath $PSCommandPath -WorkerArguments $workerArguments -OutputDirectory $outputRoot -TimeoutSeconds $TimeoutSeconds
     $lastDurable=$null
     if(Test-Path -LiteralPath (Join-Path $outputRoot 'progress.json')) { try { $lastDurable=Get-Content -LiteralPath (Join-Path $outputRoot 'progress.json') -Raw -Encoding UTF8 | ConvertFrom-Json } catch { } }
@@ -208,6 +315,12 @@ if((Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Presentation
 if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256 -or $actions.Count -ne $request.actionPlan.count) { throw 'Action-plan snapshot does not match the validated request' }
 
 Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $actions $sourceSnapshot
+$script:textProbePlan=$null
+if($null -ne $request.PSObject.Properties['textProbePlan']) {
+    $probe=$request.textProbePlan
+    if($TextProbePlan -ceq '' -or (Resolve-Path -LiteralPath $TextProbePlan).Path -ine $probe.snapshotPath -or $probe.sha256 -cne $probe.snapshotSha256 -or (Get-FurnitureSha256 $probe.path) -cne $probe.sha256 -or (Get-FurnitureSha256 $TextProbePlan) -cne $probe.sha256) { throw 'Text probe plan request/source/snapshot differs' }
+    $script:textProbePlan=Read-AndValidateTextProbePlan $TextProbePlan $sourceHash ([bool]$CaptureTextFonts) $actions
+} elseif($TextProbePlan -cne '') { throw 'Text probe plan is not bound to the validated request' }
 
 $script:sequence=0; $script:lastStage='worker.initialize'; $script:lastStatus='begin'; $script:cleanupConfirmed=$true; $script:officeOperationsStopped=$false
 $script:ownedPresentationPath=$null; $script:presentation=$null; $script:ownedApplication=$null
@@ -226,6 +339,7 @@ $report=[ordered]@{
     cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;lastStage=$script:lastStage;lastStatus=$script:lastStatus;error=$null
     scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations.'
 }
+if($null -ne $script:textProbePlan) { $report.textProbePlan=$request.textProbePlan }
 if($ReadOnlySurvey) { $report.scope='One explicitly supplied read-only survey: exactly one slide, at most 100 shapes, an empty action plan, source at most 16 MiB/4096 ZIP entries and the unchanged 60-second maximum. Owned read-only Open, SaveCopyAs, read-only reopen and observations only; no content edits, UI, process termination or retry.' }
 function Write-FurnitureReport {
     $report.cleanupConfirmed=$script:cleanupConfirmed; $report.officeOperationsStopped=$script:officeOperationsStopped; $report.lastStage=$script:lastStage; $report.lastStatus=$script:lastStatus
@@ -307,7 +421,7 @@ function Read-FurnitureState($Presentation,[string]$Phase) {
     $slides=Invoke-FurnitureCom "$Phase.slides.get" { return ,$Presentation.Slides }; $slideCount=Invoke-FurnitureCom "$Phase.slides.count.get" { $slides.Count }
     if($slideCount -lt 1 -or $slideCount -gt 3) { throw "Presentation must contain 1 through 3 slides; observed $slideCount" }
     if($ReadOnlySurvey -and $slideCount -ne 1) { throw 'Read-only survey requires exactly one actual slide' }
-    $slideRecords=@(); $rasters=@()
+    $slideRecords=@(); $rasters=@(); $probeTargetsSeen=0
     for($slideIndex=1;$slideIndex -le $slideCount;$slideIndex++) {
         $slide=Invoke-FurnitureCom "$Phase.slide-$slideIndex.get" { $slides.Item($slideIndex) }
         $slideId=Invoke-FurnitureCom "$Phase.slide-$slideIndex.id.get" { $slide.SlideID }; $slideName=Invoke-FurnitureCom "$Phase.slide-$slideIndex.name.get" { $slide.Name }
@@ -329,12 +443,22 @@ function Read-FurnitureState($Presentation,[string]$Phase) {
             $shapeTagsObject=Invoke-FurnitureCom "$Phase.slide-$slideIndex.shape-$shapeIndex.tags.get" { return ,$shape.Tags }; $shapeTags=Read-NativeTags $shapeTagsObject "$Phase.slide-$slideIndex.shape-$shapeIndex.tags"
             $shapeRecord=[ordered]@{index=$shapeIndex;id=$id;name=$name;type=$type;left=$left;top=$top;width=$width;height=$height;rotation=$rotation;hasTextFrame=$hasTextFrame;text=$text;alternativeText=$alt;tags=$shapeTags}
             if($CaptureTextFonts) { $shapeRecord.textFont=Read-FurnitureTextFont $shape $text "$Phase.slide-$slideIndex.shape-$shapeIndex" }
+            if($null -ne $script:textProbePlan) {
+                foreach($target in $script:textProbePlan.targets) {
+                    if($target.slideIndex -eq $slideIndex -and ([string]::Equals($target.shapeName,$name,[StringComparison]::Ordinal) -or $target.shapeId -eq $id)) {
+                        if(-not [string]::Equals($target.shapeName,$name,[StringComparison]::Ordinal) -or $target.shapeId -ne $id) { Stop-FurnitureLifecycle 'Foreign or stale text probe shape name/ID pair' }
+                        $shapeRecord.textProbe=Read-FurnitureTextProbe $shape $target "$Phase.slide-$slideIndex.shape-$shapeIndex.probe"
+                        $probeTargetsSeen++
+                    }
+                }
+            }
             $shapeRecords+=@($shapeRecord)
         }
         $png=Join-Path $root "$Phase-slide-$('{0:D2}' -f $slideIndex).png"; Invoke-FurnitureCom "$Phase.slide-$slideIndex.export.png" { $slide.Export($png,'PNG',1280,720) }
         $rasters+=@([ordered]@{slideIndex=$slideIndex;path=$png;sha256=(Get-FurnitureSha256 $png)})
         $slideRecords+=@([ordered]@{index=$slideIndex;slideId=$slideId;name=$slideName;tags=$slideTags;shapeCount=$shapeCount;shapes=$shapeRecords})
     }
+    if($null -ne $script:textProbePlan -and $probeTargetsSeen -ne $script:textProbePlan.targets.Count) { Stop-FurnitureLifecycle 'Missing or repeated exact text probe target' }
     return [ordered]@{slideCount=$slideCount;slides=$slideRecords;rasters=$rasters;chartSeriesNames=(Read-FurnitureSeriesNameState $Presentation $actions $Phase)}
 }
 function Get-ActionTags($Presentation,$Action,[string]$Prefix) {
@@ -740,7 +864,7 @@ function Open-OwnedFurniture($Application,[string]$Path,[string]$Phase) {
     Assert-PresentationNotOpen $Application $Path "$Phase.preflight"
     $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$Path; Write-FurnitureReport
     $presentations=Invoke-FurnitureCom "$Phase.presentations.get" { return ,$Application.Presentations }
-    $script:presentation=Invoke-FurnitureCom "$Phase.presentation.open" { $presentations.Open($Path,-1,0,-1) }
+    $script:presentation=Invoke-FurnitureCom "$Phase.presentation.open" { $presentations.Open($Path,-1,0,0) }
     $actual=Invoke-FurnitureCom "$Phase.presentation.fullName.get" { $script:presentation.FullName }
     if($actual -ine $Path) { Stop-FurnitureLifecycle "Opened presentation path differs from exact owned path: $actual" }
     $readonly=Invoke-FurnitureCom "$Phase.presentation.readOnly.get" { $script:presentation.ReadOnly }
@@ -763,6 +887,7 @@ function Close-OwnedFurniture([string]$Phase,[string]$ExpectedPath) {
 
 Write-FurnitureReport; Write-FurnitureStage 'worker.initialize' 'success'
 try {
+    Assert-FurnitureTextProbeIntegrity $request.textProbePlan $sourcePath $sourceSnapshot $sourceHash $planSnapshot $request.actionPlan.snapshotSha256
     Assert-FurnitureOfficeIdle
     $app=Invoke-FurnitureCom 'application.create' { New-Object -ComObject PowerPoint.Application }
     Assert-OwnedFurnitureApplication $app
@@ -773,14 +898,17 @@ try {
     $report.phases.original=Read-FurnitureState $script:presentation 'original'; Write-FurnitureReport
     for($index=0;$index -lt $actions.Count;$index++) { Apply-FurnitureAction $script:presentation $actions[$index] ($index+1); $report.actionPlan.completed+=@([ordered]@{index=$index+1;op=$actions[$index].op;status='success'}) }
     Write-FurnitureReport
+    Assert-FurnitureTextProbeIntegrity $request.textProbePlan $sourcePath $sourceSnapshot $sourceHash $planSnapshot $request.actionPlan.snapshotSha256
     Save-OwnedFurnitureCopy $sourceSnapshot $savedPath
     $report.phases.edited=Read-FurnitureState $script:presentation 'edited'; Write-FurnitureReport
     Close-OwnedFurniture 'edited.presentation' $sourceSnapshot; $report.saved.sha256=Get-FurnitureSha256 $savedPath; Write-FurnitureReport
+    Assert-FurnitureTextProbeIntegrity $request.textProbePlan $sourcePath $sourceSnapshot $sourceHash $planSnapshot $request.actionPlan.snapshotSha256
     Open-OwnedFurniture $app $savedPath 'reopen'
     $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport
     Close-OwnedFurniture 'reopened.presentation' $savedPath; $report.reopened.sha256=Get-FurnitureSha256 $savedPath
     if((Get-FurnitureSha256 $sourcePath) -cne $sourceHash -or (Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Requested source or its snapshot changed during the native lifecycle' }
     if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256) { throw 'Action-plan snapshot changed during the native lifecycle' }
+    Assert-FurnitureTextProbeIntegrity $request.textProbePlan $sourcePath $sourceSnapshot $sourceHash $planSnapshot $request.actionPlan.snapshotSha256
     Quit-OwnedFurnitureApplication $app
     Write-FurnitureStage 'worker.complete' 'success'; Write-FurnitureReport; Write-Output "Native furniture control completed with $($actions.Count) action(s)."
 } catch {
