@@ -1,0 +1,4595 @@
+{
+  "pass": true,
+  "sourceRevision": "57acc14a61c19cceab26d5bce7b3ce6c6aa745c2",
+  "consumer": "C:/opf-work/n034-save-fixed/artifacts/npm/consumer",
+  "runtimeDigest": "7da60ea18bc5676153c2dd06edddaa1209fc7e262c6dc2d2fa5296151133d53e",
+  "actualPublicEntries": {
+    "core": {
+      "path": "C:\\opf-work\\n034-save-fixed\\artifacts\\npm\\consumer\\node_modules\\@openpresentation\\opf\\dist\\index.js",
+      "bytes": 5855,
+      "sha256": "877183f01962c97e566356c23034a977c2ee86ba43f306a99a2006d60131f0ae"
+    },
+    "pptx": {
+      "path": "C:\\opf-work\\n034-save-fixed\\artifacts\\npm\\consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+      "bytes": 483687,
+      "sha256": "caeecc09bb86b84b003c8998684d9181f1e4f1770ac8ee22b783f4f55213dcc6"
+    }
+  },
+  "inputs": {
+    "source": {
+      "path": "C:/opf-work/n034-save-fixed-reference-suite01/sources/reference-native-lines.opf.json",
+      "bytes": 2418,
+      "sha256": "87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e"
+    },
+    "original": {
+      "path": "C:/opf-work/n034-save-fixed-reference-suite01/inputs/reference-native-lines.pptx",
+      "bytes": 128805,
+      "sha256": "77305632e835d3fbf4e5348ec29eaddf916f0894896ac06988e431e7f575f748"
+    },
+    "saved": {
+      "path": "C:/opf-work/n034-cmap-ref-native-lines01/native/saved.pptx",
+      "bytes": 134053,
+      "sha256": "850f10044211acaed135951c6730a5a63e178091f2cd5389833b837273aa56c0"
+    }
+  },
+  "original": {
+    "document": {
+      "name": "Reference witnesses: native lines",
+      "slides": [
+        {
+          "id": "line-multiple",
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "Period",
+                "Actual"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  40
+                ],
+                [
+                  "Feb",
+                  60
+                ],
+                [
+                  "Mar",
+                  50
+                ]
+              ]
+            },
+            "referenceLines": [
+              {
+                "value": 80,
+                "axis": "value",
+                "label": "Target 80",
+                "labelPosition": "end",
+                "stroke": {
+                  "color": "#C44900",
+                  "width": 2,
+                  "dash": "dash"
+                }
+              },
+              {
+                "value": -10,
+                "axis": "value",
+                "label": "Floor -10",
+                "labelPosition": "start",
+                "stroke": {
+                  "color": "#087E8B",
+                  "width": 1.5000524934383201,
+                  "dash": "dot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "line-defaults",
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "Period",
+                "Actual"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  40
+                ],
+                [
+                  "Feb",
+                  60
+                ],
+                [
+                  "Mar",
+                  50
+                ]
+              ]
+            },
+            "referenceLines": [
+              {
+                "value": 55,
+                "axis": "value",
+                "stroke": {
+                  "color": "#595959",
+                  "width": 1.3333333333333333,
+                  "dash": "dash"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "title": "Target 92%",
+          "subtitle": "Threshold 30",
+          "id": "no-inference",
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Period",
+                "Actual"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  40
+                ],
+                [
+                  "Feb",
+                  60
+                ],
+                [
+                  "Mar",
+                  50
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "description": "Public synthetic source. Explicit values and styles; native helper ownership and title inference control. Not native acceptance.",
+      "design": {
+        "theme": "minimal",
+        "fontScheme": "roboto"
+      }
+    },
+    "diagnostics": [
+      {
+        "code": "chart-option-adapted",
+        "option": "series.0.line.color",
+        "message": "Line series 'Actual' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+        "path": "slides.0.charts.0.series.0.line.color"
+      },
+      {
+        "code": "chart-option-adapted",
+        "option": "series.0.line.color",
+        "message": "Line series 'Actual' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+        "path": "slides.1.charts.0.series.0.line.color"
+      }
+    ]
+  },
+  "saved": {
+    "document": {
+      "name": "Reference witnesses: native lines",
+      "slides": [
+        {
+          "id": "line-multiple",
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "Period",
+                "Actual"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  40
+                ],
+                [
+                  "Feb",
+                  60
+                ],
+                [
+                  "Mar",
+                  50
+                ]
+              ]
+            },
+            "referenceLines": [
+              {
+                "value": 80,
+                "axis": "value",
+                "label": "Target 80",
+                "labelPosition": "end",
+                "stroke": {
+                  "color": "#C44900",
+                  "width": 2,
+                  "dash": "dash"
+                }
+              },
+              {
+                "value": -10,
+                "axis": "value",
+                "label": "Floor -10",
+                "labelPosition": "start",
+                "stroke": {
+                  "color": "#087E8B",
+                  "width": 1.5000524934383201,
+                  "dash": "dot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "line-defaults",
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "Period",
+                "Actual"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  40
+                ],
+                [
+                  "Feb",
+                  60
+                ],
+                [
+                  "Mar",
+                  50
+                ]
+              ]
+            },
+            "referenceLines": [
+              {
+                "value": 55,
+                "axis": "value",
+                "stroke": {
+                  "color": "#595959",
+                  "width": 1.3333333333333333,
+                  "dash": "dash"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "title": "Target 92%",
+          "subtitle": "Threshold 30",
+          "id": "no-inference",
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Period",
+                "Actual"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  40
+                ],
+                [
+                  "Feb",
+                  60
+                ],
+                [
+                  "Mar",
+                  50
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "description": "Public synthetic source. Explicit values and styles; native helper ownership and title inference control. Not native acceptance.",
+      "design": {
+        "theme": "minimal",
+        "fontScheme": "roboto"
+      }
+    },
+    "diagnostics": [
+      {
+        "code": "chart-option-adapted",
+        "option": "series.0.line.color",
+        "message": "Line series 'Actual' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+        "path": "slides.0.charts.0.series.0.line.color"
+      },
+      {
+        "code": "chart-option-adapted",
+        "option": "series.0.line.color",
+        "message": "Line series 'Actual' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+        "path": "slides.1.charts.0.series.0.line.color"
+      }
+    ]
+  },
+  "slides": [
+    {
+      "slide": 1,
+      "type": "line",
+      "sourceData": {
+        "columns": [
+          "Period",
+          "Actual"
+        ],
+        "rows": [
+          [
+            "Jan",
+            40
+          ],
+          [
+            "Feb",
+            60
+          ],
+          [
+            "Mar",
+            50
+          ]
+        ]
+      },
+      "currentData": {
+        "columns": [
+          "Period",
+          "Actual"
+        ],
+        "rows": [
+          [
+            "Jan",
+            40
+          ],
+          [
+            "Feb",
+            60
+          ],
+          [
+            "Mar",
+            50
+          ]
+        ]
+      },
+      "models": {
+        "source": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        },
+        "original": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        },
+        "saved": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        }
+      },
+      "referenceLines": [
+        {
+          "value": 80,
+          "axis": "value",
+          "label": "Target 80",
+          "labelPosition": "end",
+          "stroke": {
+            "color": "#C44900",
+            "width": 2,
+            "dash": "dash"
+          }
+        },
+        {
+          "value": -10,
+          "axis": "value",
+          "label": "Floor -10",
+          "labelPosition": "start",
+          "stroke": {
+            "color": "#087E8B",
+            "width": 1.5000524934383201,
+            "dash": "dot"
+          }
+        }
+      ],
+      "duplicateReferenceShapes": 0
+    },
+    {
+      "slide": 2,
+      "type": "line",
+      "sourceData": {
+        "columns": [
+          "Period",
+          "Actual"
+        ],
+        "rows": [
+          [
+            "Jan",
+            40
+          ],
+          [
+            "Feb",
+            60
+          ],
+          [
+            "Mar",
+            50
+          ]
+        ]
+      },
+      "currentData": {
+        "columns": [
+          "Period",
+          "Actual"
+        ],
+        "rows": [
+          [
+            "Jan",
+            40
+          ],
+          [
+            "Feb",
+            60
+          ],
+          [
+            "Mar",
+            50
+          ]
+        ]
+      },
+      "models": {
+        "source": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        },
+        "original": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        },
+        "saved": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        }
+      },
+      "referenceLines": [
+        {
+          "value": 55,
+          "axis": "value",
+          "stroke": {
+            "color": "#595959",
+            "width": 1.3333333333333333,
+            "dash": "dash"
+          }
+        }
+      ],
+      "duplicateReferenceShapes": 0
+    },
+    {
+      "slide": 3,
+      "type": "column",
+      "sourceData": {
+        "columns": [
+          "Period",
+          "Actual"
+        ],
+        "rows": [
+          [
+            "Jan",
+            40
+          ],
+          [
+            "Feb",
+            60
+          ],
+          [
+            "Mar",
+            50
+          ]
+        ]
+      },
+      "currentData": {
+        "columns": [
+          "Period",
+          "Actual"
+        ],
+        "rows": [
+          [
+            "Jan",
+            40
+          ],
+          [
+            "Feb",
+            60
+          ],
+          [
+            "Mar",
+            50
+          ]
+        ]
+      },
+      "models": {
+        "source": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        },
+        "original": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        },
+        "saved": {
+          "ok": true,
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "hasX": false,
+          "formats": [
+            null,
+            null
+          ],
+          "rows": [
+            [
+              "Jan",
+              40
+            ],
+            [
+              "Feb",
+              60
+            ],
+            [
+              "Mar",
+              50
+            ]
+          ],
+          "diagnostics": []
+        }
+      },
+      "referenceLines": [],
+      "duplicateReferenceShapes": 0
+    }
+  ],
+  "fullDocumentByteEquivalent": true,
+  "diagnosticsEquivalent": true,
+  "originalFindingsRetained": [
+    {
+      "slide": 1,
+      "code": "exposed-cache-or-workbook-changed",
+      "before": {
+        "family": "classic",
+        "layout": {
+          "c:manualLayout": {
+            "c:layoutTarget": {
+              "val": "inner"
+            },
+            "c:xMode": {
+              "val": "edge"
+            },
+            "c:yMode": {
+              "val": "edge"
+            },
+            "c:x": {
+              "val": "0.0461"
+            },
+            "c:y": {
+              "val": "0.0413"
+            },
+            "c:w": {
+              "val": "0.9367"
+            },
+            "c:h": {
+              "val": "0.8925"
+            }
+          }
+        },
+        "groups": [
+          {
+            "construct": "c:lineChart",
+            "grouping": "standard",
+            "direction": null,
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "0",
+                "order": "0",
+                "c:tx": {
+                  "formula": "Sheet1!$B$1",
+                  "values": [
+                    "Actual"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$B$2:$B$4",
+                  "values": [
+                    40,
+                    60,
+                    50
+                  ]
+                },
+                "owner": null,
+                "paint": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "a:satMod": {
+                        "val": "75000"
+                      },
+                      "a:lumMod": {
+                        "val": "75000"
+                      },
+                      "a:lumOff": {
+                        "val": "25000"
+                      },
+                      "val": "accent1"
+                    }
+                  },
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:schemeClr": {
+                        "a:satMod": {
+                          "val": "75000"
+                        },
+                        "a:lumMod": {
+                          "val": "75000"
+                        },
+                        "a:lumOff": {
+                          "val": "25000"
+                        },
+                        "val": "accent1"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "solid"
+                    },
+                    "a:round": "",
+                    "w": "25400",
+                    "cap": "flat"
+                  },
+                  "a:effectLst": "",
+                  "#text": "  "
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  },
+                  "c:size": {
+                    "val": "6"
+                  },
+                  "c:spPr": {
+                    "a:solidFill": {
+                      "a:schemeClr": {
+                        "a:satMod": {
+                          "val": "75000"
+                        },
+                        "a:lumMod": {
+                          "val": "75000"
+                        },
+                        "a:lumOff": {
+                          "val": "25000"
+                        },
+                        "val": "accent1"
+                      }
+                    },
+                    "a:ln": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:satMod": {
+                            "val": "75000"
+                          },
+                          "a:lumMod": {
+                            "val": "75000"
+                          },
+                          "a:lumOff": {
+                            "val": "25000"
+                          },
+                          "val": "accent1"
+                        }
+                      },
+                      "a:prstDash": {
+                        "val": "solid"
+                      },
+                      "a:round": "",
+                      "w": "9525",
+                      "cap": "flat"
+                    },
+                    "a:effectLst": "",
+                    "#text": "              "
+                  },
+                  "#text": "    "
+                },
+                "labels": {
+                  "c:numFmt": {
+                    "formatCode": "#,##0",
+                    "sourceLinked": "0"
+                  },
+                  "c:txPr": {
+                    "a:bodyPr": "",
+                    "a:lstStyle": "",
+                    "a:p": {
+                      "a:pPr": {
+                        "a:defRPr": {
+                          "a:solidFill": {
+                            "a:schemeClr": {
+                              "a:lumMod": {
+                                "val": "65000"
+                              },
+                              "a:lumOff": {
+                                "val": "35000"
+                              },
+                              "val": "tx1"
+                            }
+                          },
+                          "a:latin": {
+                            "typeface": "Roboto"
+                          },
+                          "a:ea": {
+                            "typeface": "Roboto"
+                          },
+                          "a:cs": {
+                            "typeface": "Roboto"
+                          },
+                          "b": "0",
+                          "i": "0",
+                          "strike": "noStrike",
+                          "sz": "1500",
+                          "u": "none"
+                        }
+                      }
+                    }
+                  },
+                  "c:showLegendKey": {
+                    "val": "0"
+                  },
+                  "c:showVal": {
+                    "val": "0"
+                  },
+                  "c:showCatName": {
+                    "val": "0"
+                  },
+                  "c:showSerName": {
+                    "val": "0"
+                  },
+                  "c:showPercent": {
+                    "val": "0"
+                  },
+                  "c:showBubbleSize": {
+                    "val": "0"
+                  },
+                  "c:showLeaderLines": {
+                    "val": "0"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "construct": "c:lineChart",
+            "grouping": "standard",
+            "direction": null,
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "1",
+                "order": "1",
+                "c:tx": {
+                  "formula": "Sheet1!$C$1",
+                  "values": [
+                    "OPF reference 1"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$C$2:$C$4",
+                  "values": [
+                    80,
+                    80,
+                    80
+                  ]
+                },
+                "owner": {
+                  "v": 1,
+                  "id": "OPF chart 1:0"
+                },
+                "paint": {
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:srgbClr": {
+                        "val": "C44900"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "dash"
+                    },
+                    "w": "19050",
+                    "cap": "flat"
+                  }
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  }
+                },
+                "labels": {
+                  "c:dLbl": {
+                    "c:idx": {
+                      "val": "2"
+                    },
+                    "c:tx": {
+                      "c:rich": {
+                        "a:bodyPr": "",
+                        "a:lstStyle": "",
+                        "a:p": {
+                          "a:pPr": "",
+                          "a:r": {
+                            "a:rPr": {
+                              "a:solidFill": {
+                                "a:schemeClr": {
+                                  "val": "tx1"
+                                }
+                              },
+                              "a:latin": {
+                                "typeface": "Roboto"
+                              },
+                              "a:ea": {
+                                "typeface": "Roboto"
+                              },
+                              "a:cs": {
+                                "typeface": "Roboto"
+                              },
+                              "lang": "en-US",
+                              "sz": "1500"
+                            },
+                            "a:t": "Target 80"
+                          }
+                        }
+                      }
+                    },
+                    "c:dLblPos": {
+                      "val": "t"
+                    },
+                    "c:showLegendKey": {
+                      "val": "0"
+                    },
+                    "c:showVal": {
+                      "val": "0"
+                    },
+                    "c:showCatName": {
+                      "val": "0"
+                    },
+                    "c:showSerName": {
+                      "val": "0"
+                    }
+                  },
+                  "c:delete": {
+                    "val": "0"
+                  },
+                  "c:showLegendKey": {
+                    "val": "0"
+                  },
+                  "c:showVal": {
+                    "val": "0"
+                  },
+                  "c:showCatName": {
+                    "val": "0"
+                  },
+                  "c:showSerName": {
+                    "val": "0"
+                  }
+                }
+              },
+              {
+                "index": "2",
+                "order": "2",
+                "c:tx": {
+                  "formula": "Sheet1!$D$1",
+                  "values": [
+                    "OPF reference 2"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$D$2:$D$4",
+                  "values": [
+                    -10,
+                    -10,
+                    -10
+                  ]
+                },
+                "owner": {
+                  "v": 1,
+                  "id": "OPF chart 1:1"
+                },
+                "paint": {
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:srgbClr": {
+                        "val": "087E8B"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "dot"
+                    },
+                    "w": "14288",
+                    "cap": "flat"
+                  }
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  }
+                },
+                "labels": {
+                  "c:dLbl": {
+                    "c:idx": {
+                      "val": "0"
+                    },
+                    "c:tx": {
+                      "c:rich": {
+                        "a:bodyPr": "",
+                        "a:lstStyle": "",
+                        "a:p": {
+                          "a:pPr": "",
+                          "a:r": {
+                            "a:rPr": {
+                              "a:solidFill": {
+                                "a:schemeClr": {
+                                  "val": "tx1"
+                                }
+                              },
+                              "a:latin": {
+                                "typeface": "Roboto"
+                              },
+                              "a:ea": {
+                                "typeface": "Roboto"
+                              },
+                              "a:cs": {
+                                "typeface": "Roboto"
+                              },
+                              "lang": "en-US",
+                              "sz": "1500"
+                            },
+                            "a:t": "Floor -10"
+                          }
+                        }
+                      }
+                    },
+                    "c:dLblPos": {
+                      "val": "t"
+                    },
+                    "c:showLegendKey": {
+                      "val": "0"
+                    },
+                    "c:showVal": {
+                      "val": "0"
+                    },
+                    "c:showCatName": {
+                      "val": "0"
+                    },
+                    "c:showSerName": {
+                      "val": "0"
+                    }
+                  },
+                  "c:delete": {
+                    "val": "0"
+                  },
+                  "c:showLegendKey": {
+                    "val": "0"
+                  },
+                  "c:showVal": {
+                    "val": "0"
+                  },
+                  "c:showCatName": {
+                    "val": "0"
+                  },
+                  "c:showSerName": {
+                    "val": "0"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "axes": [
+          {
+            "kind": "c:catAx",
+            "id": "2094734554",
+            "cross": "2094734552",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": null,
+            "placement": {
+              "c:axPos": {
+                "val": "l"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": null,
+              "c:tickLblPos": {
+                "val": "low"
+              },
+              "c:lblAlgn": {
+                "val": "ctr"
+              },
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": {
+                "val": "1"
+              },
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "#text": "                     ",
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    },
+                    "#text": "        "
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  },
+                  "#text": "        "
+                },
+                "#text": "         "
+              }
+            }
+          },
+          {
+            "kind": "c:valAx",
+            "id": "2094734552",
+            "cross": "2094734554",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              },
+              "c:max": {
+                "val": "100"
+              },
+              "c:min": {
+                "val": "-20"
+              },
+              "#text": "  "
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": {
+              "val": "20"
+            },
+            "placement": {
+              "c:axPos": {
+                "val": "b"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": {
+                "val": "between"
+              },
+              "c:tickLblPos": {
+                "val": "low"
+              },
+              "c:lblAlgn": null,
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": null,
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "#text": "                              ",
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    },
+                    "#text": "          "
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  },
+                  "#text": "        "
+                },
+                "#text": "       "
+              }
+            }
+          }
+        ],
+        "ownership": {
+          "v": 1,
+          "key": "OPF chart 1",
+          "helpers": [
+            {
+              "id": "OPF chart 1:0",
+              "index": 0
+            },
+            {
+              "id": "OPF chart 1:1",
+              "index": 1
+            }
+          ],
+          "overlays": []
+        },
+        "workbook": {
+          "part": "ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx",
+          "sheet": "Sheet1",
+          "cells": [
+            {
+              "cell": "A1",
+              "value": "Period"
+            },
+            {
+              "cell": "B1",
+              "value": "Actual"
+            },
+            {
+              "cell": "C1",
+              "value": "OPF reference 1"
+            },
+            {
+              "cell": "D1",
+              "value": "OPF reference 2"
+            },
+            {
+              "cell": "A2",
+              "value": "Jan"
+            },
+            {
+              "cell": "B2",
+              "value": 40
+            },
+            {
+              "cell": "C2",
+              "value": 80
+            },
+            {
+              "cell": "D2",
+              "value": -10
+            },
+            {
+              "cell": "A3",
+              "value": "Feb"
+            },
+            {
+              "cell": "B3",
+              "value": 60
+            },
+            {
+              "cell": "C3",
+              "value": 80
+            },
+            {
+              "cell": "D3",
+              "value": -10
+            },
+            {
+              "cell": "A4",
+              "value": "Mar"
+            },
+            {
+              "cell": "B4",
+              "value": 50
+            },
+            {
+              "cell": "C4",
+              "value": 80
+            },
+            {
+              "cell": "D4",
+              "value": -10
+            }
+          ],
+          "styles": {
+            "numFmts": {
+              "numFmt": {
+                "numFmtId": "0",
+                "formatCode": "General"
+              },
+              "count": "1"
+            },
+            "fonts": {
+              "font": [
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "10"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "18"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                }
+              ],
+              "count": "4"
+            },
+            "fills": {
+              "fill": [
+                {
+                  "patternFill": {
+                    "patternType": "none"
+                  }
+                },
+                {
+                  "patternFill": {
+                    "patternType": "gray125"
+                  }
+                }
+              ],
+              "count": "2"
+            },
+            "borders": {
+              "border": {
+                "left": "",
+                "right": "",
+                "top": "",
+                "bottom": "",
+                "diagonal": ""
+              },
+              "count": "1"
+            },
+            "dxfs": {
+              "count": "0"
+            },
+            "tableStyles": {
+              "count": "0"
+            },
+            "colors": {
+              "indexedColors": {
+                "rgbColor": [
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ffff0000"
+                  },
+                  {
+                    "rgb": "ff00ff00"
+                  },
+                  {
+                    "rgb": "ff0000ff"
+                  },
+                  {
+                    "rgb": "ffffff00"
+                  },
+                  {
+                    "rgb": "ffff00ff"
+                  },
+                  {
+                    "rgb": "ff00ffff"
+                  },
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ff878787"
+                  },
+                  {
+                    "rgb": "fff9f9f9"
+                  }
+                ]
+              }
+            },
+            "xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+          }
+        }
+      },
+      "after": {
+        "family": "classic",
+        "layout": {
+          "c:manualLayout": {
+            "c:layoutTarget": {
+              "val": "inner"
+            },
+            "c:xMode": {
+              "val": "edge"
+            },
+            "c:yMode": {
+              "val": "edge"
+            },
+            "c:x": {
+              "val": "4.6100000000000002E-2"
+            },
+            "c:y": {
+              "val": "4.1300000000000003E-2"
+            },
+            "c:w": {
+              "val": "0.93669999999999998"
+            },
+            "c:h": {
+              "val": "0.89249999999999996"
+            }
+          }
+        },
+        "groups": [
+          {
+            "construct": "c:lineChart",
+            "grouping": "standard",
+            "direction": null,
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "0",
+                "order": "0",
+                "c:tx": {
+                  "formula": "Sheet1!$B$1",
+                  "values": [
+                    "Actual"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$B$2:$B$4",
+                  "values": [
+                    40,
+                    60,
+                    50
+                  ]
+                },
+                "owner": null,
+                "paint": {
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:schemeClr": {
+                        "a:satMod": {
+                          "val": "75000"
+                        },
+                        "a:lumMod": {
+                          "val": "75000"
+                        },
+                        "a:lumOff": {
+                          "val": "25000"
+                        },
+                        "val": "accent1"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "solid"
+                    },
+                    "a:round": "",
+                    "w": "25400",
+                    "cap": "flat"
+                  },
+                  "a:effectLst": ""
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  }
+                },
+                "labels": null
+              }
+            ]
+          },
+          {
+            "construct": "c:lineChart",
+            "grouping": "standard",
+            "direction": null,
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "1",
+                "order": "1",
+                "c:tx": {
+                  "formula": "Sheet1!$C$1",
+                  "values": [
+                    "OPF reference 1"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$C$2:$C$4",
+                  "values": [
+                    80,
+                    80,
+                    80
+                  ]
+                },
+                "owner": {
+                  "v": 1,
+                  "id": "OPF chart 1:0"
+                },
+                "paint": {
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:srgbClr": {
+                        "val": "C44900"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "dash"
+                    },
+                    "w": "19050",
+                    "cap": "flat"
+                  }
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  }
+                },
+                "labels": {
+                  "c:dLbl": {
+                    "c:idx": {
+                      "val": "2"
+                    },
+                    "c:tx": {
+                      "c:rich": {
+                        "a:bodyPr": "",
+                        "a:lstStyle": "",
+                        "a:p": {
+                          "a:r": {
+                            "a:rPr": {
+                              "a:solidFill": {
+                                "a:schemeClr": {
+                                  "val": "tx1"
+                                }
+                              },
+                              "a:latin": {
+                                "typeface": "Roboto"
+                              },
+                              "a:ea": {
+                                "typeface": "Roboto"
+                              },
+                              "a:cs": {
+                                "typeface": "Roboto"
+                              },
+                              "lang": "en-US",
+                              "sz": "1500"
+                            },
+                            "a:t": "Target 80"
+                          }
+                        }
+                      }
+                    },
+                    "c:dLblPos": {
+                      "val": "t"
+                    },
+                    "c:showLegendKey": {
+                      "val": "0"
+                    },
+                    "c:showVal": {
+                      "val": "0"
+                    },
+                    "c:showCatName": {
+                      "val": "0"
+                    },
+                    "c:showSerName": {
+                      "val": "0"
+                    },
+                    "c:showPercent": {
+                      "val": "1"
+                    },
+                    "c:showBubbleSize": {
+                      "val": "1"
+                    },
+                    "c:extLst": {
+                      "c:ext": [
+                        {
+                          "c15:showDataLabelsRange": {
+                            "val": "0"
+                          },
+                          "uri": "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}",
+                          "xmlns:c15": "http://schemas.microsoft.com/office/drawing/2012/chart"
+                        },
+                        {
+                          "c16:uniqueId": {
+                            "val": "{00000001-CA3F-4401-BFC9-6741BEFE00B7}"
+                          },
+                          "uri": "{C3380CC4-5D6E-409C-BE32-E72D297353CC}",
+                          "xmlns:c16": "http://schemas.microsoft.com/office/drawing/2014/chart"
+                        }
+                      ]
+                    }
+                  },
+                  "c:spPr": {
+                    "a:noFill": "",
+                    "a:ln": {
+                      "a:noFill": ""
+                    },
+                    "a:effectLst": ""
+                  },
+                  "c:showLegendKey": {
+                    "val": "0"
+                  },
+                  "c:showVal": {
+                    "val": "0"
+                  },
+                  "c:showCatName": {
+                    "val": "0"
+                  },
+                  "c:showSerName": {
+                    "val": "0"
+                  },
+                  "c:showPercent": {
+                    "val": "1"
+                  },
+                  "c:showBubbleSize": {
+                    "val": "1"
+                  },
+                  "c:showLeaderLines": {
+                    "val": "0"
+                  },
+                  "c:extLst": {
+                    "c:ext": {
+                      "c15:showLeaderLines": {
+                        "val": "0"
+                      },
+                      "uri": "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}",
+                      "xmlns:c15": "http://schemas.microsoft.com/office/drawing/2012/chart"
+                    }
+                  }
+                }
+              },
+              {
+                "index": "2",
+                "order": "2",
+                "c:tx": {
+                  "formula": "Sheet1!$D$1",
+                  "values": [
+                    "OPF reference 2"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$D$2:$D$4",
+                  "values": [
+                    -10,
+                    -10,
+                    -10
+                  ]
+                },
+                "owner": {
+                  "v": 1,
+                  "id": "OPF chart 1:1"
+                },
+                "paint": {
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:srgbClr": {
+                        "val": "087E8B"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "dot"
+                    },
+                    "w": "14288",
+                    "cap": "flat"
+                  }
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  }
+                },
+                "labels": {
+                  "c:dLbl": {
+                    "c:idx": {
+                      "val": "0"
+                    },
+                    "c:tx": {
+                      "c:rich": {
+                        "a:bodyPr": "",
+                        "a:lstStyle": "",
+                        "a:p": {
+                          "a:r": {
+                            "a:rPr": {
+                              "a:solidFill": {
+                                "a:schemeClr": {
+                                  "val": "tx1"
+                                }
+                              },
+                              "a:latin": {
+                                "typeface": "Roboto"
+                              },
+                              "a:ea": {
+                                "typeface": "Roboto"
+                              },
+                              "a:cs": {
+                                "typeface": "Roboto"
+                              },
+                              "lang": "en-US",
+                              "sz": "1500"
+                            },
+                            "a:t": "Floor -10"
+                          }
+                        }
+                      }
+                    },
+                    "c:dLblPos": {
+                      "val": "t"
+                    },
+                    "c:showLegendKey": {
+                      "val": "0"
+                    },
+                    "c:showVal": {
+                      "val": "0"
+                    },
+                    "c:showCatName": {
+                      "val": "0"
+                    },
+                    "c:showSerName": {
+                      "val": "0"
+                    },
+                    "c:showPercent": {
+                      "val": "1"
+                    },
+                    "c:showBubbleSize": {
+                      "val": "1"
+                    },
+                    "c:extLst": {
+                      "c:ext": [
+                        {
+                          "c15:showDataLabelsRange": {
+                            "val": "0"
+                          },
+                          "uri": "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}",
+                          "xmlns:c15": "http://schemas.microsoft.com/office/drawing/2012/chart"
+                        },
+                        {
+                          "c16:uniqueId": {
+                            "val": "{00000003-CA3F-4401-BFC9-6741BEFE00B7}"
+                          },
+                          "uri": "{C3380CC4-5D6E-409C-BE32-E72D297353CC}",
+                          "xmlns:c16": "http://schemas.microsoft.com/office/drawing/2014/chart"
+                        }
+                      ]
+                    }
+                  },
+                  "c:spPr": {
+                    "a:noFill": "",
+                    "a:ln": {
+                      "a:noFill": ""
+                    },
+                    "a:effectLst": ""
+                  },
+                  "c:showLegendKey": {
+                    "val": "0"
+                  },
+                  "c:showVal": {
+                    "val": "0"
+                  },
+                  "c:showCatName": {
+                    "val": "0"
+                  },
+                  "c:showSerName": {
+                    "val": "0"
+                  },
+                  "c:showPercent": {
+                    "val": "1"
+                  },
+                  "c:showBubbleSize": {
+                    "val": "1"
+                  },
+                  "c:showLeaderLines": {
+                    "val": "0"
+                  },
+                  "c:extLst": {
+                    "c:ext": {
+                      "c15:showLeaderLines": {
+                        "val": "0"
+                      },
+                      "uri": "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}",
+                      "xmlns:c15": "http://schemas.microsoft.com/office/drawing/2012/chart"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "axes": [
+          {
+            "kind": "c:catAx",
+            "id": "2094734554",
+            "cross": "2094734552",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": null,
+            "placement": {
+              "c:axPos": {
+                "val": "b"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": null,
+              "c:tickLblPos": {
+                "val": "low"
+              },
+              "c:lblAlgn": {
+                "val": "ctr"
+              },
+              "c:lblOffset": {
+                "val": "100"
+              },
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": {
+                "val": "1"
+              },
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    }
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "kind": "c:valAx",
+            "id": "2094734552",
+            "cross": "2094734554",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              },
+              "c:max": {
+                "val": "100"
+              },
+              "c:min": {
+                "val": "-20"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": {
+              "val": "20"
+            },
+            "placement": {
+              "c:axPos": {
+                "val": "l"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": {
+                "val": "between"
+              },
+              "c:tickLblPos": {
+                "val": "low"
+              },
+              "c:lblAlgn": null,
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": null,
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    }
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "ownership": {
+          "v": 1,
+          "key": "OPF chart 1",
+          "helpers": [
+            {
+              "id": "OPF chart 1:0",
+              "index": 0
+            },
+            {
+              "id": "OPF chart 1:1",
+              "index": 1
+            }
+          ],
+          "overlays": []
+        },
+        "workbook": {
+          "part": "ppt/embeddings/Microsoft_Excel_Worksheet.xlsx",
+          "sheet": "Sheet1",
+          "cells": [
+            {
+              "cell": "A1",
+              "value": "Period"
+            },
+            {
+              "cell": "B1",
+              "value": "Actual"
+            },
+            {
+              "cell": "C1",
+              "value": "OPF reference 1"
+            },
+            {
+              "cell": "D1",
+              "value": "OPF reference 2"
+            },
+            {
+              "cell": "A2",
+              "value": "Jan"
+            },
+            {
+              "cell": "B2",
+              "value": 40
+            },
+            {
+              "cell": "C2",
+              "value": 80
+            },
+            {
+              "cell": "D2",
+              "value": -10
+            },
+            {
+              "cell": "A3",
+              "value": "Feb"
+            },
+            {
+              "cell": "B3",
+              "value": 60
+            },
+            {
+              "cell": "C3",
+              "value": 80
+            },
+            {
+              "cell": "D3",
+              "value": -10
+            },
+            {
+              "cell": "A4",
+              "value": "Mar"
+            },
+            {
+              "cell": "B4",
+              "value": 50
+            },
+            {
+              "cell": "C4",
+              "value": 80
+            },
+            {
+              "cell": "D4",
+              "value": -10
+            }
+          ],
+          "styles": {
+            "numFmts": {
+              "numFmt": {
+                "numFmtId": "0",
+                "formatCode": "General"
+              },
+              "count": "1"
+            },
+            "fonts": {
+              "font": [
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "10"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "18"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                }
+              ],
+              "count": "4"
+            },
+            "fills": {
+              "fill": [
+                {
+                  "patternFill": {
+                    "patternType": "none"
+                  }
+                },
+                {
+                  "patternFill": {
+                    "patternType": "gray125"
+                  }
+                }
+              ],
+              "count": "2"
+            },
+            "borders": {
+              "border": {
+                "left": "",
+                "right": "",
+                "top": "",
+                "bottom": "",
+                "diagonal": ""
+              },
+              "count": "1"
+            },
+            "dxfs": {
+              "count": "0"
+            },
+            "tableStyles": {
+              "count": "0"
+            },
+            "colors": {
+              "indexedColors": {
+                "rgbColor": [
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ffff0000"
+                  },
+                  {
+                    "rgb": "ff00ff00"
+                  },
+                  {
+                    "rgb": "ff0000ff"
+                  },
+                  {
+                    "rgb": "ffffff00"
+                  },
+                  {
+                    "rgb": "ffff00ff"
+                  },
+                  {
+                    "rgb": "ff00ffff"
+                  },
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ff878787"
+                  },
+                  {
+                    "rgb": "fff9f9f9"
+                  }
+                ]
+              }
+            },
+            "xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+          }
+        }
+      }
+    },
+    {
+      "slide": 2,
+      "code": "exposed-cache-or-workbook-changed",
+      "before": {
+        "family": "classic",
+        "layout": {
+          "c:manualLayout": {
+            "c:layoutTarget": {
+              "val": "inner"
+            },
+            "c:xMode": {
+              "val": "edge"
+            },
+            "c:yMode": {
+              "val": "edge"
+            },
+            "c:x": {
+              "val": "0.0365"
+            },
+            "c:y": {
+              "val": "0.0413"
+            },
+            "c:w": {
+              "val": "0.9464"
+            },
+            "c:h": {
+              "val": "0.8925"
+            }
+          }
+        },
+        "groups": [
+          {
+            "construct": "c:lineChart",
+            "grouping": "standard",
+            "direction": null,
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "0",
+                "order": "0",
+                "c:tx": {
+                  "formula": "Sheet1!$B$1",
+                  "values": [
+                    "Actual"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$B$2:$B$4",
+                  "values": [
+                    40,
+                    60,
+                    50
+                  ]
+                },
+                "owner": null,
+                "paint": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "a:satMod": {
+                        "val": "75000"
+                      },
+                      "a:lumMod": {
+                        "val": "75000"
+                      },
+                      "a:lumOff": {
+                        "val": "25000"
+                      },
+                      "val": "accent1"
+                    }
+                  },
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:schemeClr": {
+                        "a:satMod": {
+                          "val": "75000"
+                        },
+                        "a:lumMod": {
+                          "val": "75000"
+                        },
+                        "a:lumOff": {
+                          "val": "25000"
+                        },
+                        "val": "accent1"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "solid"
+                    },
+                    "a:round": "",
+                    "w": "25400",
+                    "cap": "flat"
+                  },
+                  "a:effectLst": "",
+                  "#text": "  "
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  },
+                  "c:size": {
+                    "val": "6"
+                  },
+                  "c:spPr": {
+                    "a:solidFill": {
+                      "a:schemeClr": {
+                        "a:satMod": {
+                          "val": "75000"
+                        },
+                        "a:lumMod": {
+                          "val": "75000"
+                        },
+                        "a:lumOff": {
+                          "val": "25000"
+                        },
+                        "val": "accent1"
+                      }
+                    },
+                    "a:ln": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:satMod": {
+                            "val": "75000"
+                          },
+                          "a:lumMod": {
+                            "val": "75000"
+                          },
+                          "a:lumOff": {
+                            "val": "25000"
+                          },
+                          "val": "accent1"
+                        }
+                      },
+                      "a:prstDash": {
+                        "val": "solid"
+                      },
+                      "a:round": "",
+                      "w": "9525",
+                      "cap": "flat"
+                    },
+                    "a:effectLst": "",
+                    "#text": "              "
+                  },
+                  "#text": "    "
+                },
+                "labels": {
+                  "c:numFmt": {
+                    "formatCode": "#,##0",
+                    "sourceLinked": "0"
+                  },
+                  "c:txPr": {
+                    "a:bodyPr": "",
+                    "a:lstStyle": "",
+                    "a:p": {
+                      "a:pPr": {
+                        "a:defRPr": {
+                          "a:solidFill": {
+                            "a:schemeClr": {
+                              "a:lumMod": {
+                                "val": "65000"
+                              },
+                              "a:lumOff": {
+                                "val": "35000"
+                              },
+                              "val": "tx1"
+                            }
+                          },
+                          "a:latin": {
+                            "typeface": "Roboto"
+                          },
+                          "a:ea": {
+                            "typeface": "Roboto"
+                          },
+                          "a:cs": {
+                            "typeface": "Roboto"
+                          },
+                          "b": "0",
+                          "i": "0",
+                          "strike": "noStrike",
+                          "sz": "1500",
+                          "u": "none"
+                        }
+                      }
+                    }
+                  },
+                  "c:showLegendKey": {
+                    "val": "0"
+                  },
+                  "c:showVal": {
+                    "val": "0"
+                  },
+                  "c:showCatName": {
+                    "val": "0"
+                  },
+                  "c:showSerName": {
+                    "val": "0"
+                  },
+                  "c:showPercent": {
+                    "val": "0"
+                  },
+                  "c:showBubbleSize": {
+                    "val": "0"
+                  },
+                  "c:showLeaderLines": {
+                    "val": "0"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "construct": "c:lineChart",
+            "grouping": "standard",
+            "direction": null,
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "1",
+                "order": "1",
+                "c:tx": {
+                  "formula": "Sheet1!$C$1",
+                  "values": [
+                    "OPF reference 1"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$C$2:$C$4",
+                  "values": [
+                    55,
+                    55,
+                    55
+                  ]
+                },
+                "owner": {
+                  "v": 1,
+                  "id": "OPF chart 2:0"
+                },
+                "paint": {
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:schemeClr": {
+                        "a:lumMod": {
+                          "val": "65000"
+                        },
+                        "a:lumOff": {
+                          "val": "35000"
+                        },
+                        "val": "tx1"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "dash"
+                    },
+                    "w": "12700",
+                    "cap": "flat"
+                  }
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  }
+                },
+                "labels": {
+                  "c:delete": {
+                    "val": "1"
+                  },
+                  "c:showLegendKey": {
+                    "val": "0"
+                  },
+                  "c:showVal": {
+                    "val": "0"
+                  },
+                  "c:showCatName": {
+                    "val": "0"
+                  },
+                  "c:showSerName": {
+                    "val": "0"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "axes": [
+          {
+            "kind": "c:catAx",
+            "id": "2094734554",
+            "cross": "2094734552",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": null,
+            "placement": {
+              "c:axPos": {
+                "val": "l"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": null,
+              "c:tickLblPos": {
+                "val": "nextTo"
+              },
+              "c:lblAlgn": {
+                "val": "ctr"
+              },
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": {
+                "val": "1"
+              },
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "#text": "                     ",
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    },
+                    "#text": "        "
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  },
+                  "#text": "        "
+                },
+                "#text": "         "
+              }
+            }
+          },
+          {
+            "kind": "c:valAx",
+            "id": "2094734552",
+            "cross": "2094734554",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              },
+              "c:max": {
+                "val": "70"
+              },
+              "c:min": {
+                "val": "0"
+              },
+              "#text": "  "
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": {
+              "val": "20"
+            },
+            "placement": {
+              "c:axPos": {
+                "val": "b"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": {
+                "val": "between"
+              },
+              "c:tickLblPos": {
+                "val": "low"
+              },
+              "c:lblAlgn": null,
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": null,
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "#text": "                              ",
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    },
+                    "#text": "          "
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  },
+                  "#text": "        "
+                },
+                "#text": "       "
+              }
+            }
+          }
+        ],
+        "ownership": {
+          "v": 1,
+          "key": "OPF chart 2",
+          "helpers": [
+            {
+              "id": "OPF chart 2:0",
+              "index": 0
+            }
+          ],
+          "overlays": []
+        },
+        "workbook": {
+          "part": "ppt/embeddings/Microsoft_Excel_Worksheet2.xlsx",
+          "sheet": "Sheet1",
+          "cells": [
+            {
+              "cell": "A1",
+              "value": "Period"
+            },
+            {
+              "cell": "B1",
+              "value": "Actual"
+            },
+            {
+              "cell": "C1",
+              "value": "OPF reference 1"
+            },
+            {
+              "cell": "A2",
+              "value": "Jan"
+            },
+            {
+              "cell": "B2",
+              "value": 40
+            },
+            {
+              "cell": "C2",
+              "value": 55
+            },
+            {
+              "cell": "A3",
+              "value": "Feb"
+            },
+            {
+              "cell": "B3",
+              "value": 60
+            },
+            {
+              "cell": "C3",
+              "value": 55
+            },
+            {
+              "cell": "A4",
+              "value": "Mar"
+            },
+            {
+              "cell": "B4",
+              "value": 50
+            },
+            {
+              "cell": "C4",
+              "value": 55
+            }
+          ],
+          "styles": {
+            "numFmts": {
+              "numFmt": {
+                "numFmtId": "0",
+                "formatCode": "General"
+              },
+              "count": "1"
+            },
+            "fonts": {
+              "font": [
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "10"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "18"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                }
+              ],
+              "count": "4"
+            },
+            "fills": {
+              "fill": [
+                {
+                  "patternFill": {
+                    "patternType": "none"
+                  }
+                },
+                {
+                  "patternFill": {
+                    "patternType": "gray125"
+                  }
+                }
+              ],
+              "count": "2"
+            },
+            "borders": {
+              "border": {
+                "left": "",
+                "right": "",
+                "top": "",
+                "bottom": "",
+                "diagonal": ""
+              },
+              "count": "1"
+            },
+            "dxfs": {
+              "count": "0"
+            },
+            "tableStyles": {
+              "count": "0"
+            },
+            "colors": {
+              "indexedColors": {
+                "rgbColor": [
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ffff0000"
+                  },
+                  {
+                    "rgb": "ff00ff00"
+                  },
+                  {
+                    "rgb": "ff0000ff"
+                  },
+                  {
+                    "rgb": "ffffff00"
+                  },
+                  {
+                    "rgb": "ffff00ff"
+                  },
+                  {
+                    "rgb": "ff00ffff"
+                  },
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ff878787"
+                  },
+                  {
+                    "rgb": "fff9f9f9"
+                  }
+                ]
+              }
+            },
+            "xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+          }
+        }
+      },
+      "after": {
+        "family": "classic",
+        "layout": {
+          "c:manualLayout": {
+            "c:layoutTarget": {
+              "val": "inner"
+            },
+            "c:xMode": {
+              "val": "edge"
+            },
+            "c:yMode": {
+              "val": "edge"
+            },
+            "c:x": {
+              "val": "3.6499999999999998E-2"
+            },
+            "c:y": {
+              "val": "4.1300000000000003E-2"
+            },
+            "c:w": {
+              "val": "0.94640000000000002"
+            },
+            "c:h": {
+              "val": "0.89249999999999996"
+            }
+          }
+        },
+        "groups": [
+          {
+            "construct": "c:lineChart",
+            "grouping": "standard",
+            "direction": null,
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "0",
+                "order": "0",
+                "c:tx": {
+                  "formula": "Sheet1!$B$1",
+                  "values": [
+                    "Actual"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$B$2:$B$4",
+                  "values": [
+                    40,
+                    60,
+                    50
+                  ]
+                },
+                "owner": null,
+                "paint": {
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:schemeClr": {
+                        "a:satMod": {
+                          "val": "75000"
+                        },
+                        "a:lumMod": {
+                          "val": "75000"
+                        },
+                        "a:lumOff": {
+                          "val": "25000"
+                        },
+                        "val": "accent1"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "solid"
+                    },
+                    "a:round": "",
+                    "w": "25400",
+                    "cap": "flat"
+                  },
+                  "a:effectLst": ""
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  }
+                },
+                "labels": null
+              }
+            ]
+          },
+          {
+            "construct": "c:lineChart",
+            "grouping": "standard",
+            "direction": null,
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "1",
+                "order": "1",
+                "c:tx": {
+                  "formula": "Sheet1!$C$1",
+                  "values": [
+                    "OPF reference 1"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$C$2:$C$4",
+                  "values": [
+                    55,
+                    55,
+                    55
+                  ]
+                },
+                "owner": {
+                  "v": 1,
+                  "id": "OPF chart 2:0"
+                },
+                "paint": {
+                  "a:ln": {
+                    "a:solidFill": {
+                      "a:schemeClr": {
+                        "a:lumMod": {
+                          "val": "65000"
+                        },
+                        "a:lumOff": {
+                          "val": "35000"
+                        },
+                        "val": "tx1"
+                      }
+                    },
+                    "a:prstDash": {
+                      "val": "dash"
+                    },
+                    "w": "12700",
+                    "cap": "flat"
+                  }
+                },
+                "marker": {
+                  "c:symbol": {
+                    "val": "none"
+                  }
+                },
+                "labels": null
+              }
+            ]
+          }
+        ],
+        "axes": [
+          {
+            "kind": "c:catAx",
+            "id": "2094734554",
+            "cross": "2094734552",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": null,
+            "placement": {
+              "c:axPos": {
+                "val": "b"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": null,
+              "c:tickLblPos": {
+                "val": "nextTo"
+              },
+              "c:lblAlgn": {
+                "val": "ctr"
+              },
+              "c:lblOffset": {
+                "val": "100"
+              },
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": {
+                "val": "1"
+              },
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    }
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "kind": "c:valAx",
+            "id": "2094734552",
+            "cross": "2094734554",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              },
+              "c:max": {
+                "val": "70"
+              },
+              "c:min": {
+                "val": "0"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": {
+              "val": "20"
+            },
+            "placement": {
+              "c:axPos": {
+                "val": "l"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": {
+                "val": "between"
+              },
+              "c:tickLblPos": {
+                "val": "low"
+              },
+              "c:lblAlgn": null,
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": null,
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    }
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "ownership": {
+          "v": 1,
+          "key": "OPF chart 2",
+          "helpers": [
+            {
+              "id": "OPF chart 2:0",
+              "index": 0
+            }
+          ],
+          "overlays": []
+        },
+        "workbook": {
+          "part": "ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx",
+          "sheet": "Sheet1",
+          "cells": [
+            {
+              "cell": "A1",
+              "value": "Period"
+            },
+            {
+              "cell": "B1",
+              "value": "Actual"
+            },
+            {
+              "cell": "C1",
+              "value": "OPF reference 1"
+            },
+            {
+              "cell": "A2",
+              "value": "Jan"
+            },
+            {
+              "cell": "B2",
+              "value": 40
+            },
+            {
+              "cell": "C2",
+              "value": 55
+            },
+            {
+              "cell": "A3",
+              "value": "Feb"
+            },
+            {
+              "cell": "B3",
+              "value": 60
+            },
+            {
+              "cell": "C3",
+              "value": 55
+            },
+            {
+              "cell": "A4",
+              "value": "Mar"
+            },
+            {
+              "cell": "B4",
+              "value": 50
+            },
+            {
+              "cell": "C4",
+              "value": 55
+            }
+          ],
+          "styles": {
+            "numFmts": {
+              "numFmt": {
+                "numFmtId": "0",
+                "formatCode": "General"
+              },
+              "count": "1"
+            },
+            "fonts": {
+              "font": [
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "10"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "18"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                }
+              ],
+              "count": "4"
+            },
+            "fills": {
+              "fill": [
+                {
+                  "patternFill": {
+                    "patternType": "none"
+                  }
+                },
+                {
+                  "patternFill": {
+                    "patternType": "gray125"
+                  }
+                }
+              ],
+              "count": "2"
+            },
+            "borders": {
+              "border": {
+                "left": "",
+                "right": "",
+                "top": "",
+                "bottom": "",
+                "diagonal": ""
+              },
+              "count": "1"
+            },
+            "dxfs": {
+              "count": "0"
+            },
+            "tableStyles": {
+              "count": "0"
+            },
+            "colors": {
+              "indexedColors": {
+                "rgbColor": [
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ffff0000"
+                  },
+                  {
+                    "rgb": "ff00ff00"
+                  },
+                  {
+                    "rgb": "ff0000ff"
+                  },
+                  {
+                    "rgb": "ffffff00"
+                  },
+                  {
+                    "rgb": "ffff00ff"
+                  },
+                  {
+                    "rgb": "ff00ffff"
+                  },
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ff878787"
+                  },
+                  {
+                    "rgb": "fff9f9f9"
+                  }
+                ]
+              }
+            },
+            "xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+          }
+        }
+      }
+    },
+    {
+      "slide": 3,
+      "code": "exposed-cache-or-workbook-changed",
+      "before": {
+        "family": "classic",
+        "layout": "",
+        "groups": [
+          {
+            "construct": "c:barChart",
+            "grouping": "clustered",
+            "direction": "col",
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "0",
+                "order": "0",
+                "c:tx": {
+                  "formula": "Sheet1!$B$1",
+                  "values": [
+                    "Actual"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$B$2:$B$4",
+                  "values": [
+                    40,
+                    60,
+                    50
+                  ]
+                },
+                "owner": null,
+                "paint": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "a:satMod": {
+                        "val": "75000"
+                      },
+                      "a:lumMod": {
+                        "val": "75000"
+                      },
+                      "a:lumOff": {
+                        "val": "25000"
+                      },
+                      "val": "accent1"
+                    }
+                  },
+                  "a:effectLst": "",
+                  "#text": "  "
+                },
+                "marker": null,
+                "labels": {
+                  "c:numFmt": {
+                    "formatCode": "#,##0",
+                    "sourceLinked": "0"
+                  },
+                  "c:txPr": {
+                    "a:bodyPr": "",
+                    "a:lstStyle": "",
+                    "a:p": {
+                      "a:pPr": {
+                        "a:defRPr": {
+                          "a:solidFill": {
+                            "a:schemeClr": {
+                              "a:lumMod": {
+                                "val": "65000"
+                              },
+                              "a:lumOff": {
+                                "val": "35000"
+                              },
+                              "val": "tx1"
+                            }
+                          },
+                          "a:latin": {
+                            "typeface": "Roboto"
+                          },
+                          "a:ea": {
+                            "typeface": "Roboto"
+                          },
+                          "a:cs": {
+                            "typeface": "Roboto"
+                          },
+                          "b": "0",
+                          "i": "0",
+                          "strike": "noStrike",
+                          "sz": "1500",
+                          "u": "none"
+                        }
+                      }
+                    }
+                  },
+                  "c:showLegendKey": {
+                    "val": "0"
+                  },
+                  "c:showVal": {
+                    "val": "0"
+                  },
+                  "c:showCatName": {
+                    "val": "0"
+                  },
+                  "c:showSerName": {
+                    "val": "0"
+                  },
+                  "c:showPercent": {
+                    "val": "0"
+                  },
+                  "c:showBubbleSize": {
+                    "val": "0"
+                  },
+                  "c:showLeaderLines": {
+                    "val": "0"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "axes": [
+          {
+            "kind": "c:catAx",
+            "id": "2094734554",
+            "cross": "2094734552",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": null,
+            "placement": {
+              "c:axPos": {
+                "val": "b"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": null,
+              "c:tickLblPos": {
+                "val": "low"
+              },
+              "c:lblAlgn": {
+                "val": "ctr"
+              },
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": {
+                "val": "1"
+              },
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "#text": "                     ",
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    },
+                    "#text": "        "
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  },
+                  "#text": "        "
+                },
+                "#text": "         "
+              }
+            }
+          },
+          {
+            "kind": "c:valAx",
+            "id": "2094734552",
+            "cross": "2094734554",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              },
+              "c:max": {
+                "val": "70"
+              },
+              "c:min": {
+                "val": "0"
+              },
+              "#text": "  "
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": {
+              "val": "20"
+            },
+            "placement": {
+              "c:axPos": {
+                "val": "l"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": {
+                "val": "between"
+              },
+              "c:tickLblPos": {
+                "val": "nextTo"
+              },
+              "c:lblAlgn": null,
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": null,
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "#text": "                              ",
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    },
+                    "#text": "          "
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  },
+                  "#text": "        "
+                },
+                "#text": "       "
+              }
+            }
+          }
+        ],
+        "ownership": null,
+        "workbook": {
+          "part": "ppt/embeddings/Microsoft_Excel_Worksheet3.xlsx",
+          "sheet": "Sheet1",
+          "cells": [
+            {
+              "cell": "A1",
+              "value": "Period"
+            },
+            {
+              "cell": "B1",
+              "value": "Actual"
+            },
+            {
+              "cell": "A2",
+              "value": "Jan"
+            },
+            {
+              "cell": "B2",
+              "value": 40
+            },
+            {
+              "cell": "A3",
+              "value": "Feb"
+            },
+            {
+              "cell": "B3",
+              "value": 60
+            },
+            {
+              "cell": "A4",
+              "value": "Mar"
+            },
+            {
+              "cell": "B4",
+              "value": 50
+            }
+          ],
+          "styles": {
+            "numFmts": {
+              "numFmt": {
+                "numFmtId": "0",
+                "formatCode": "General"
+              },
+              "count": "1"
+            },
+            "fonts": {
+              "font": [
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "10"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "18"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                }
+              ],
+              "count": "4"
+            },
+            "fills": {
+              "fill": [
+                {
+                  "patternFill": {
+                    "patternType": "none"
+                  }
+                },
+                {
+                  "patternFill": {
+                    "patternType": "gray125"
+                  }
+                }
+              ],
+              "count": "2"
+            },
+            "borders": {
+              "border": {
+                "left": "",
+                "right": "",
+                "top": "",
+                "bottom": "",
+                "diagonal": ""
+              },
+              "count": "1"
+            },
+            "dxfs": {
+              "count": "0"
+            },
+            "tableStyles": {
+              "count": "0"
+            },
+            "colors": {
+              "indexedColors": {
+                "rgbColor": [
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ffff0000"
+                  },
+                  {
+                    "rgb": "ff00ff00"
+                  },
+                  {
+                    "rgb": "ff0000ff"
+                  },
+                  {
+                    "rgb": "ffffff00"
+                  },
+                  {
+                    "rgb": "ffff00ff"
+                  },
+                  {
+                    "rgb": "ff00ffff"
+                  },
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ff878787"
+                  },
+                  {
+                    "rgb": "fff9f9f9"
+                  }
+                ]
+              }
+            },
+            "xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+          }
+        }
+      },
+      "after": {
+        "family": "classic",
+        "layout": "",
+        "groups": [
+          {
+            "construct": "c:barChart",
+            "grouping": "clustered",
+            "direction": "col",
+            "axes": [
+              "2094734554",
+              "2094734552"
+            ],
+            "series": [
+              {
+                "index": "0",
+                "order": "0",
+                "c:tx": {
+                  "formula": "Sheet1!$B$1",
+                  "values": [
+                    "Actual"
+                  ]
+                },
+                "c:cat": {
+                  "formula": "Sheet1!$A$2:$A$4",
+                  "values": [
+                    "Jan",
+                    "Feb",
+                    "Mar"
+                  ]
+                },
+                "c:val": {
+                  "formula": "Sheet1!$B$2:$B$4",
+                  "values": [
+                    40,
+                    60,
+                    50
+                  ]
+                },
+                "owner": null,
+                "paint": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "a:satMod": {
+                        "val": "75000"
+                      },
+                      "a:lumMod": {
+                        "val": "75000"
+                      },
+                      "a:lumOff": {
+                        "val": "25000"
+                      },
+                      "val": "accent1"
+                    }
+                  },
+                  "a:effectLst": ""
+                },
+                "marker": null,
+                "labels": null
+              }
+            ]
+          }
+        ],
+        "axes": [
+          {
+            "kind": "c:catAx",
+            "id": "2094734554",
+            "cross": "2094734552",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": null,
+            "placement": {
+              "c:axPos": {
+                "val": "b"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": null,
+              "c:tickLblPos": {
+                "val": "low"
+              },
+              "c:lblAlgn": {
+                "val": "ctr"
+              },
+              "c:lblOffset": {
+                "val": "100"
+              },
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": {
+                "val": "1"
+              },
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    }
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "kind": "c:valAx",
+            "id": "2094734552",
+            "cross": "2094734554",
+            "scaling": {
+              "c:orientation": {
+                "val": "minMax"
+              },
+              "c:max": {
+                "val": "70"
+              },
+              "c:min": {
+                "val": "0"
+              }
+            },
+            "format": {
+              "formatCode": "General",
+              "sourceLinked": "0"
+            },
+            "major": {
+              "val": "20"
+            },
+            "placement": {
+              "c:axPos": {
+                "val": "l"
+              },
+              "c:crosses": {
+                "val": "autoZero"
+              },
+              "c:crossesAt": null,
+              "c:crossBetween": {
+                "val": "between"
+              },
+              "c:tickLblPos": {
+                "val": "nextTo"
+              },
+              "c:lblAlgn": null,
+              "c:lblOffset": null,
+              "c:tickLblSkip": null,
+              "c:tickMarkSkip": null,
+              "c:noMultiLvlLbl": null,
+              "c:delete": {
+                "val": "0"
+              },
+              "c:title": null,
+              "c:txPr": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:defRPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "a:lumMod": {
+                            "val": "65000"
+                          },
+                          "a:lumOff": {
+                            "val": "35000"
+                          },
+                          "val": "tx1"
+                        }
+                      },
+                      "a:latin": {
+                        "typeface": "Roboto"
+                      },
+                      "a:ea": {
+                        "typeface": "Roboto"
+                      },
+                      "a:cs": {
+                        "typeface": "Roboto"
+                      },
+                      "sz": "1500",
+                      "b": "0",
+                      "i": "0",
+                      "u": "none",
+                      "strike": "noStrike"
+                    }
+                  },
+                  "a:endParaRPr": {
+                    "lang": "en-US"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "ownership": null,
+        "workbook": {
+          "part": "ppt/embeddings/Microsoft_Excel_Worksheet2.xlsx",
+          "sheet": "Sheet1",
+          "cells": [
+            {
+              "cell": "A1",
+              "value": "Period"
+            },
+            {
+              "cell": "B1",
+              "value": "Actual"
+            },
+            {
+              "cell": "A2",
+              "value": "Jan"
+            },
+            {
+              "cell": "B2",
+              "value": 40
+            },
+            {
+              "cell": "A3",
+              "value": "Feb"
+            },
+            {
+              "cell": "B3",
+              "value": 60
+            },
+            {
+              "cell": "A4",
+              "value": "Mar"
+            },
+            {
+              "cell": "B4",
+              "value": 50
+            }
+          ],
+          "styles": {
+            "numFmts": {
+              "numFmt": {
+                "numFmtId": "0",
+                "formatCode": "General"
+              },
+              "count": "1"
+            },
+            "fonts": {
+              "font": [
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "9"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "10"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                },
+                {
+                  "sz": {
+                    "val": "18"
+                  },
+                  "color": {
+                    "indexed": "8"
+                  },
+                  "name": {
+                    "val": "Roboto"
+                  }
+                }
+              ],
+              "count": "4"
+            },
+            "fills": {
+              "fill": [
+                {
+                  "patternFill": {
+                    "patternType": "none"
+                  }
+                },
+                {
+                  "patternFill": {
+                    "patternType": "gray125"
+                  }
+                }
+              ],
+              "count": "2"
+            },
+            "borders": {
+              "border": {
+                "left": "",
+                "right": "",
+                "top": "",
+                "bottom": "",
+                "diagonal": ""
+              },
+              "count": "1"
+            },
+            "dxfs": {
+              "count": "0"
+            },
+            "tableStyles": {
+              "count": "0"
+            },
+            "colors": {
+              "indexedColors": {
+                "rgbColor": [
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ffff0000"
+                  },
+                  {
+                    "rgb": "ff00ff00"
+                  },
+                  {
+                    "rgb": "ff0000ff"
+                  },
+                  {
+                    "rgb": "ffffff00"
+                  },
+                  {
+                    "rgb": "ffff00ff"
+                  },
+                  {
+                    "rgb": "ff00ffff"
+                  },
+                  {
+                    "rgb": "ff000000"
+                  },
+                  {
+                    "rgb": "ffffffff"
+                  },
+                  {
+                    "rgb": "ff878787"
+                  },
+                  {
+                    "rgb": "fff9f9f9"
+                  }
+                ]
+              }
+            },
+            "xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+          }
+        }
+      }
+    },
+    {
+      "phase": "saved-reopened",
+      "slide": 1,
+      "code": "import-authored-data-differs",
+      "source": {
+        "columns": [
+          "Period",
+          "Actual"
+        ],
+        "rows": [
+          [
+            "Jan",
+            40
+          ],
+          [
+            "Feb",
+            60
+          ],
+          [
+            "Mar",
+            50
+          ]
+        ]
+      },
+      "actual": {
+        "columns": [
+          "Period",
+          "Actual",
+          "OPF reference 1",
+          "OPF reference 2"
+        ],
+        "rows": [
+          [
+            "Jan",
+            40,
+            80,
+            -10
+          ],
+          [
+            "Feb",
+            60,
+            80,
+            -10
+          ],
+          [
+            "Mar",
+            50,
+            80,
+            -10
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "saved-reopened",
+      "slide": 1,
+      "code": "import-reference-count-differs",
+      "source": [
+        {
+          "value": 80,
+          "label": "Target 80",
+          "stroke": {
+            "color": "#C44900",
+            "width": 2,
+            "dash": "dash"
+          }
+        },
+        {
+          "value": -10,
+          "label": "Floor -10",
+          "labelPosition": "start",
+          "stroke": {
+            "color": "#087E8B",
+            "width": 1.5,
+            "dash": "dot"
+          }
+        }
+      ],
+      "actual": []
+    },
+    {
+      "code": "saved-public-import-differs",
+      "scope": "Both full documents retained; no generated helper data, duplicate visible shape or adaptation is waived."
+    },
+    {
+      "code": "saved-public-import-diagnostics-differ"
+    }
+  ],
+  "scope": "New genuine installed public importer audit of existing actual saved archive only. No Office run, new save/edit, export, font load, normalization waiver or native/release acceptance.",
+  "officeActivated": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}

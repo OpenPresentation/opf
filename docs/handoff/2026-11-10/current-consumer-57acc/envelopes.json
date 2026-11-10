@@ -1,0 +1,17 @@
+[
+  {
+    "id": "reference-native-lines",
+    "path": "C:/opf-work/n034-save-fixed-ref-admission01/reference-native-lines.json",
+    "sha256": "cb97965ca4d69ecbcd33ecbc2c960e2e45685f9e85669fcca16edb834c667e35"
+  },
+  {
+    "id": "reference-native-axes",
+    "path": "C:/opf-work/n034-save-fixed-ref-admission01/reference-native-axes.json",
+    "sha256": "90c0e2cda24a7f1388a063d7ae99aebbfa335585f3d044cb7dab13662675c614"
+  },
+  {
+    "id": "reference-overlays-markers",
+    "path": "C:/opf-work/n034-save-fixed-ref-admission01/reference-overlays-markers.json",
+    "sha256": "faa9114e818d4f72431105cd5a3df953d9c4f1767873932fcc3d2f75c34397d9"
+  }
+]
