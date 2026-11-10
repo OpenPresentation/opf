@@ -1,0 +1,1643 @@
+{
+  "comparisons": [
+    {
+      "id": "2",
+      "name": "OPF heading slides.0.title line 0",
+      "texts": [
+        "نص لاتيني بلغة عربية صريحة"
+      ],
+      "textsEqual": true,
+      "bodyStructurallyEqual": true,
+      "bodyDifferences": [],
+      "geometryEqual": true
+    },
+    {
+      "id": "3",
+      "name": "OPF list slides.0.items line 0",
+      "texts": [
+        "Item 1: Customers told us onboarding took too long, so we rebuilt it "
+      ],
+      "textsEqual": true,
+      "bodyStructurallyEqual": false,
+      "bodyDifferences": [
+        {
+          "path": "$/children/2/children/1/children/0/attributes/{}dirty",
+          "before": "0"
+        }
+      ],
+      "geometryEqual": true
+    },
+    {
+      "id": "4",
+      "name": "OPF list slides.0.items line 1",
+      "texts": [
+        "around the customer journey."
+      ],
+      "textsEqual": true,
+      "bodyStructurallyEqual": true,
+      "bodyDifferences": [],
+      "geometryEqual": true
+    }
+  ],
+  "slides": {
+    "original": [
+      {
+        "id": "2",
+        "name": "OPF heading slides.0.title line 0",
+        "texts": [
+          "نص لاتيني بلغة عربية صريحة"
+        ],
+        "bodyCanonicalSha256": "860015d5f9a984ae98e0342ce82cd11bdf606757b5bc6abdc14c303ade89bb85",
+        "body": {
+          "name": "{http://schemas.openxmlformats.org/presentationml/2006/main}txBody",
+          "attributes": {},
+          "children": [
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+              "attributes": {
+                "{}anchor": "t",
+                "{}bIns": "0",
+                "{}lIns": "0",
+                "{}rIns": "0",
+                "{}rtlCol": "1",
+                "{}tIns": "0",
+                "{}wrap": "none"
+              },
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lstStyle",
+              "attributes": {},
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}p",
+              "attributes": {},
+              "children": [
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+                  "attributes": {
+                    "{}algn": "r",
+                    "{}indent": "0",
+                    "{}marL": "0",
+                    "{}rtl": "1"
+                  },
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                          "attributes": {
+                            "{}val": "100000"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buNone",
+                      "attributes": {},
+                      "children": []
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}tabLst",
+                      "attributes": {},
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}r",
+                  "attributes": {},
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+                      "attributes": {
+                        "{}b": "1",
+                        "{}dirty": "0",
+                        "{}lang": "ar-SA",
+                        "{}sz": "4050"
+                      },
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                          "attributes": {},
+                          "children": [
+                            {
+                              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                              "attributes": {
+                                "{}val": "tx1"
+                              },
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                          "attributes": {
+                            "{}charset": "0",
+                            "{}pitchFamily": "34",
+                            "{}typeface": "Aptos Display"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}t",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "text": "نص لاتيني بلغة عربية صريحة"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+                  "attributes": {
+                    "{}dirty": "0",
+                    "{}lang": "ar-SA",
+                    "{}sz": "4050"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        "shapeGeometry": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}xfrm",
+            "attributes": {},
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}off",
+                "attributes": {
+                  "{}x": "548640",
+                  "{}y": "548640"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}ext",
+                "attributes": {
+                  "{}cx": "11094720",
+                  "{}cy": "627507"
+                },
+                "children": []
+              }
+            ]
+          }
+        ],
+        "rPr": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+            "attributes": {
+              "{}anchor": "t",
+              "{}bIns": "0",
+              "{}lIns": "0",
+              "{}rIns": "0",
+              "{}rtlCol": "1",
+              "{}tIns": "0",
+              "{}wrap": "none"
+            },
+            "children": []
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+            "attributes": {
+              "{}algn": "r",
+              "{}indent": "0",
+              "{}marL": "0",
+              "{}rtl": "1"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                    "attributes": {
+                      "{}val": "100000"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buNone",
+                "attributes": {},
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}tabLst",
+                "attributes": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+            "attributes": {
+              "{}b": "1",
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "4050"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                    "attributes": {
+                      "{}val": "tx1"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                "attributes": {
+                  "{}charset": "0",
+                  "{}pitchFamily": "34",
+                  "{}typeface": "Aptos Display"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+            "attributes": {
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "4050"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "name": "OPF list slides.0.items line 0",
+        "texts": [
+          "Item 1: Customers told us onboarding took too long, so we rebuilt it "
+        ],
+        "bodyCanonicalSha256": "bde1fb5b6c67407b3d322e93eabaca4ec1903a4be8a1d7f63eddc55b0a5da915",
+        "body": {
+          "name": "{http://schemas.openxmlformats.org/presentationml/2006/main}txBody",
+          "attributes": {},
+          "children": [
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+              "attributes": {
+                "{}anchor": "t",
+                "{}bIns": "0",
+                "{}lIns": "0",
+                "{}rIns": "0",
+                "{}rtlCol": "0",
+                "{}tIns": "0",
+                "{}wrap": "none"
+              },
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lstStyle",
+              "attributes": {},
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}p",
+              "attributes": {},
+              "children": [
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+                  "attributes": {
+                    "{}algn": "l",
+                    "{}indent": "-394654",
+                    "{}marL": "394654",
+                    "{}rtl": "0"
+                  },
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                          "attributes": {
+                            "{}val": "100000"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buClr",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                          "attributes": {
+                            "{}val": "tx1"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buSzPts",
+                      "attributes": {
+                        "{}val": "2775"
+                      },
+                      "children": []
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buFont",
+                      "attributes": {
+                        "{}typeface": "Aptos"
+                      },
+                      "children": []
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buAutoNum",
+                      "attributes": {
+                        "{}type": "arabicPeriod"
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}r",
+                  "attributes": {},
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+                      "attributes": {
+                        "{}altLang": "en-US",
+                        "{}dirty": "0",
+                        "{}lang": "ar-SA",
+                        "{}sz": "2775"
+                      },
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                          "attributes": {},
+                          "children": [
+                            {
+                              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                              "attributes": {
+                                "{}val": "tx1"
+                              },
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                          "attributes": {
+                            "{}charset": "0",
+                            "{}pitchFamily": "34",
+                            "{}typeface": "Aptos"
+                          },
+                          "children": []
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+                          "attributes": {
+                            "{}typeface": "Arabic Typesetting"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}t",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it "
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+                  "attributes": {
+                    "{}dirty": "0",
+                    "{}lang": "ar-SA",
+                    "{}sz": "2775"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        "shapeGeometry": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}xfrm",
+            "attributes": {},
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}off",
+                "attributes": {
+                  "{}x": "548640",
+                  "{}y": "3430822"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}ext",
+                "attributes": {
+                  "{}cx": "11094720",
+                  "{}cy": "429959"
+                },
+                "children": []
+              }
+            ]
+          }
+        ],
+        "rPr": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+            "attributes": {
+              "{}anchor": "t",
+              "{}bIns": "0",
+              "{}lIns": "0",
+              "{}rIns": "0",
+              "{}rtlCol": "0",
+              "{}tIns": "0",
+              "{}wrap": "none"
+            },
+            "children": []
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+            "attributes": {
+              "{}algn": "l",
+              "{}indent": "-394654",
+              "{}marL": "394654",
+              "{}rtl": "0"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                    "attributes": {
+                      "{}val": "100000"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buClr",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                    "attributes": {
+                      "{}val": "tx1"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buSzPts",
+                "attributes": {
+                  "{}val": "2775"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buFont",
+                "attributes": {
+                  "{}typeface": "Aptos"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buAutoNum",
+                "attributes": {
+                  "{}type": "arabicPeriod"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+            "attributes": {
+              "{}altLang": "en-US",
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "2775"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                    "attributes": {
+                      "{}val": "tx1"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                "attributes": {
+                  "{}charset": "0",
+                  "{}pitchFamily": "34",
+                  "{}typeface": "Aptos"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+                "attributes": {
+                  "{}typeface": "Arabic Typesetting"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+            "attributes": {
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "2775"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "name": "OPF list slides.0.items line 1",
+        "texts": [
+          "around the customer journey."
+        ],
+        "bodyCanonicalSha256": "1ca45665078a2d04a600f62c8e23c6606bb88949e9fcf8fc8059543e2063ea55",
+        "body": {
+          "name": "{http://schemas.openxmlformats.org/presentationml/2006/main}txBody",
+          "attributes": {},
+          "children": [
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+              "attributes": {
+                "{}anchor": "t",
+                "{}bIns": "0",
+                "{}lIns": "0",
+                "{}rIns": "0",
+                "{}rtlCol": "0",
+                "{}tIns": "0",
+                "{}wrap": "none"
+              },
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lstStyle",
+              "attributes": {},
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}p",
+              "attributes": {},
+              "children": [
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+                  "attributes": {
+                    "{}algn": "l",
+                    "{}indent": "0",
+                    "{}marL": "0",
+                    "{}rtl": "0"
+                  },
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                          "attributes": {
+                            "{}val": "100000"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buNone",
+                      "attributes": {},
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}r",
+                  "attributes": {},
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+                      "attributes": {
+                        "{}altLang": "en-US",
+                        "{}dirty": "0",
+                        "{}lang": "ar-SA",
+                        "{}sz": "2775"
+                      },
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                          "attributes": {},
+                          "children": [
+                            {
+                              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                              "attributes": {
+                                "{}val": "tx1"
+                              },
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                          "attributes": {
+                            "{}charset": "0",
+                            "{}pitchFamily": "34",
+                            "{}typeface": "Aptos"
+                          },
+                          "children": []
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+                          "attributes": {
+                            "{}typeface": "Arabic Typesetting"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}t",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "text": "around the customer journey."
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+                  "attributes": {
+                    "{}dirty": "0",
+                    "{}lang": "ar-SA",
+                    "{}sz": "2775"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        "shapeGeometry": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}xfrm",
+            "attributes": {},
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}off",
+                "attributes": {
+                  "{}x": "943294",
+                  "{}y": "3860780"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}ext",
+                "attributes": {
+                  "{}cx": "10700066",
+                  "{}cy": "429959"
+                },
+                "children": []
+              }
+            ]
+          }
+        ],
+        "rPr": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+            "attributes": {
+              "{}anchor": "t",
+              "{}bIns": "0",
+              "{}lIns": "0",
+              "{}rIns": "0",
+              "{}rtlCol": "0",
+              "{}tIns": "0",
+              "{}wrap": "none"
+            },
+            "children": []
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+            "attributes": {
+              "{}algn": "l",
+              "{}indent": "0",
+              "{}marL": "0",
+              "{}rtl": "0"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                    "attributes": {
+                      "{}val": "100000"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buNone",
+                "attributes": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+            "attributes": {
+              "{}altLang": "en-US",
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "2775"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                    "attributes": {
+                      "{}val": "tx1"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                "attributes": {
+                  "{}charset": "0",
+                  "{}pitchFamily": "34",
+                  "{}typeface": "Aptos"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+                "attributes": {
+                  "{}typeface": "Arabic Typesetting"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+            "attributes": {
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "2775"
+            },
+            "children": []
+          }
+        ]
+      }
+    ],
+    "saved": [
+      {
+        "id": "2",
+        "name": "OPF heading slides.0.title line 0",
+        "texts": [
+          "نص لاتيني بلغة عربية صريحة"
+        ],
+        "bodyCanonicalSha256": "860015d5f9a984ae98e0342ce82cd11bdf606757b5bc6abdc14c303ade89bb85",
+        "body": {
+          "name": "{http://schemas.openxmlformats.org/presentationml/2006/main}txBody",
+          "attributes": {},
+          "children": [
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+              "attributes": {
+                "{}anchor": "t",
+                "{}bIns": "0",
+                "{}lIns": "0",
+                "{}rIns": "0",
+                "{}rtlCol": "1",
+                "{}tIns": "0",
+                "{}wrap": "none"
+              },
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lstStyle",
+              "attributes": {},
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}p",
+              "attributes": {},
+              "children": [
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+                  "attributes": {
+                    "{}algn": "r",
+                    "{}indent": "0",
+                    "{}marL": "0",
+                    "{}rtl": "1"
+                  },
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                          "attributes": {
+                            "{}val": "100000"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buNone",
+                      "attributes": {},
+                      "children": []
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}tabLst",
+                      "attributes": {},
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}r",
+                  "attributes": {},
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+                      "attributes": {
+                        "{}b": "1",
+                        "{}dirty": "0",
+                        "{}lang": "ar-SA",
+                        "{}sz": "4050"
+                      },
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                          "attributes": {},
+                          "children": [
+                            {
+                              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                              "attributes": {
+                                "{}val": "tx1"
+                              },
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                          "attributes": {
+                            "{}charset": "0",
+                            "{}pitchFamily": "34",
+                            "{}typeface": "Aptos Display"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}t",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "text": "نص لاتيني بلغة عربية صريحة"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+                  "attributes": {
+                    "{}dirty": "0",
+                    "{}lang": "ar-SA",
+                    "{}sz": "4050"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        "shapeGeometry": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}xfrm",
+            "attributes": {},
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}off",
+                "attributes": {
+                  "{}x": "548640",
+                  "{}y": "548640"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}ext",
+                "attributes": {
+                  "{}cx": "11094720",
+                  "{}cy": "627507"
+                },
+                "children": []
+              }
+            ]
+          }
+        ],
+        "rPr": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+            "attributes": {
+              "{}anchor": "t",
+              "{}bIns": "0",
+              "{}lIns": "0",
+              "{}rIns": "0",
+              "{}rtlCol": "1",
+              "{}tIns": "0",
+              "{}wrap": "none"
+            },
+            "children": []
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+            "attributes": {
+              "{}algn": "r",
+              "{}indent": "0",
+              "{}marL": "0",
+              "{}rtl": "1"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                    "attributes": {
+                      "{}val": "100000"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buNone",
+                "attributes": {},
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}tabLst",
+                "attributes": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+            "attributes": {
+              "{}b": "1",
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "4050"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                    "attributes": {
+                      "{}val": "tx1"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                "attributes": {
+                  "{}charset": "0",
+                  "{}pitchFamily": "34",
+                  "{}typeface": "Aptos Display"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+            "attributes": {
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "4050"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "name": "OPF list slides.0.items line 0",
+        "texts": [
+          "Item 1: Customers told us onboarding took too long, so we rebuilt it "
+        ],
+        "bodyCanonicalSha256": "3b1b84f4a37846baaa522f7946aef0e78cb2fdf742a756bbb76582564d520e16",
+        "body": {
+          "name": "{http://schemas.openxmlformats.org/presentationml/2006/main}txBody",
+          "attributes": {},
+          "children": [
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+              "attributes": {
+                "{}anchor": "t",
+                "{}bIns": "0",
+                "{}lIns": "0",
+                "{}rIns": "0",
+                "{}rtlCol": "0",
+                "{}tIns": "0",
+                "{}wrap": "none"
+              },
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lstStyle",
+              "attributes": {},
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}p",
+              "attributes": {},
+              "children": [
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+                  "attributes": {
+                    "{}algn": "l",
+                    "{}indent": "-394654",
+                    "{}marL": "394654",
+                    "{}rtl": "0"
+                  },
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                          "attributes": {
+                            "{}val": "100000"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buClr",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                          "attributes": {
+                            "{}val": "tx1"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buSzPts",
+                      "attributes": {
+                        "{}val": "2775"
+                      },
+                      "children": []
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buFont",
+                      "attributes": {
+                        "{}typeface": "Aptos"
+                      },
+                      "children": []
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buAutoNum",
+                      "attributes": {
+                        "{}type": "arabicPeriod"
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}r",
+                  "attributes": {},
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+                      "attributes": {
+                        "{}altLang": "en-US",
+                        "{}lang": "ar-SA",
+                        "{}sz": "2775"
+                      },
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                          "attributes": {},
+                          "children": [
+                            {
+                              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                              "attributes": {
+                                "{}val": "tx1"
+                              },
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                          "attributes": {
+                            "{}charset": "0",
+                            "{}pitchFamily": "34",
+                            "{}typeface": "Aptos"
+                          },
+                          "children": []
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+                          "attributes": {
+                            "{}typeface": "Arabic Typesetting"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}t",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it "
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+                  "attributes": {
+                    "{}dirty": "0",
+                    "{}lang": "ar-SA",
+                    "{}sz": "2775"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        "shapeGeometry": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}xfrm",
+            "attributes": {},
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}off",
+                "attributes": {
+                  "{}x": "548640",
+                  "{}y": "3430822"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}ext",
+                "attributes": {
+                  "{}cx": "11094720",
+                  "{}cy": "429959"
+                },
+                "children": []
+              }
+            ]
+          }
+        ],
+        "rPr": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+            "attributes": {
+              "{}anchor": "t",
+              "{}bIns": "0",
+              "{}lIns": "0",
+              "{}rIns": "0",
+              "{}rtlCol": "0",
+              "{}tIns": "0",
+              "{}wrap": "none"
+            },
+            "children": []
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+            "attributes": {
+              "{}algn": "l",
+              "{}indent": "-394654",
+              "{}marL": "394654",
+              "{}rtl": "0"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                    "attributes": {
+                      "{}val": "100000"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buClr",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                    "attributes": {
+                      "{}val": "tx1"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buSzPts",
+                "attributes": {
+                  "{}val": "2775"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buFont",
+                "attributes": {
+                  "{}typeface": "Aptos"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buAutoNum",
+                "attributes": {
+                  "{}type": "arabicPeriod"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+            "attributes": {
+              "{}altLang": "en-US",
+              "{}lang": "ar-SA",
+              "{}sz": "2775"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                    "attributes": {
+                      "{}val": "tx1"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                "attributes": {
+                  "{}charset": "0",
+                  "{}pitchFamily": "34",
+                  "{}typeface": "Aptos"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+                "attributes": {
+                  "{}typeface": "Arabic Typesetting"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+            "attributes": {
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "2775"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "name": "OPF list slides.0.items line 1",
+        "texts": [
+          "around the customer journey."
+        ],
+        "bodyCanonicalSha256": "1ca45665078a2d04a600f62c8e23c6606bb88949e9fcf8fc8059543e2063ea55",
+        "body": {
+          "name": "{http://schemas.openxmlformats.org/presentationml/2006/main}txBody",
+          "attributes": {},
+          "children": [
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+              "attributes": {
+                "{}anchor": "t",
+                "{}bIns": "0",
+                "{}lIns": "0",
+                "{}rIns": "0",
+                "{}rtlCol": "0",
+                "{}tIns": "0",
+                "{}wrap": "none"
+              },
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lstStyle",
+              "attributes": {},
+              "children": []
+            },
+            {
+              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}p",
+              "attributes": {},
+              "children": [
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+                  "attributes": {
+                    "{}algn": "l",
+                    "{}indent": "0",
+                    "{}marL": "0",
+                    "{}rtl": "0"
+                  },
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                          "attributes": {
+                            "{}val": "100000"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buNone",
+                      "attributes": {},
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}r",
+                  "attributes": {},
+                  "children": [
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+                      "attributes": {
+                        "{}altLang": "en-US",
+                        "{}dirty": "0",
+                        "{}lang": "ar-SA",
+                        "{}sz": "2775"
+                      },
+                      "children": [
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                          "attributes": {},
+                          "children": [
+                            {
+                              "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                              "attributes": {
+                                "{}val": "tx1"
+                              },
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                          "attributes": {
+                            "{}charset": "0",
+                            "{}pitchFamily": "34",
+                            "{}typeface": "Aptos"
+                          },
+                          "children": []
+                        },
+                        {
+                          "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+                          "attributes": {
+                            "{}typeface": "Arabic Typesetting"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}t",
+                      "attributes": {},
+                      "children": [
+                        {
+                          "text": "around the customer journey."
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+                  "attributes": {
+                    "{}dirty": "0",
+                    "{}lang": "ar-SA",
+                    "{}sz": "2775"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        "shapeGeometry": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}xfrm",
+            "attributes": {},
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}off",
+                "attributes": {
+                  "{}x": "943294",
+                  "{}y": "3860780"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}ext",
+                "attributes": {
+                  "{}cx": "10700066",
+                  "{}cy": "429959"
+                },
+                "children": []
+              }
+            ]
+          }
+        ],
+        "rPr": [
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}bodyPr",
+            "attributes": {
+              "{}anchor": "t",
+              "{}bIns": "0",
+              "{}lIns": "0",
+              "{}rIns": "0",
+              "{}rtlCol": "0",
+              "{}tIns": "0",
+              "{}wrap": "none"
+            },
+            "children": []
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}pPr",
+            "attributes": {
+              "{}algn": "l",
+              "{}indent": "0",
+              "{}marL": "0",
+              "{}rtl": "0"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}lnSpc",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}spcPct",
+                    "attributes": {
+                      "{}val": "100000"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}buNone",
+                "attributes": {},
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}rPr",
+            "attributes": {
+              "{}altLang": "en-US",
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "2775"
+            },
+            "children": [
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}solidFill",
+                "attributes": {},
+                "children": [
+                  {
+                    "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}schemeClr",
+                    "attributes": {
+                      "{}val": "tx1"
+                    },
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                "attributes": {
+                  "{}charset": "0",
+                  "{}pitchFamily": "34",
+                  "{}typeface": "Aptos"
+                },
+                "children": []
+              },
+              {
+                "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+                "attributes": {
+                  "{}typeface": "Arabic Typesetting"
+                },
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "{http://schemas.openxmlformats.org/drawingml/2006/main}endParaRPr",
+            "attributes": {
+              "{}dirty": "0",
+              "{}lang": "ar-SA",
+              "{}sz": "2775"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "limit": "Complete actual txBody/shape geometry compared; no inference about unobserved intermediate1033 painting or physical font-file identity."
+}

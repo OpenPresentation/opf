@@ -1,0 +1,7 @@
+*.gz -text
+images/*.png -text
+files/*.pptx -text
+*-audit.json -text
+source-identities.json -text
+data-tools.mjs -text
+checks/* -text

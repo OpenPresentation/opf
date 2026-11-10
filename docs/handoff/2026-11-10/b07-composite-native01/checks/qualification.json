@@ -1,0 +1,57 @@
+{
+  "receipts": [
+    {
+      "step": "helper-syntax",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "command": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+      "args": [
+        "--check",
+        "C:/opf-work/b07-composite-proof/docs/handoff/2026-11-10/b07-composite-native01/data-tools.mjs"
+      ],
+      "measuredTrialRepeated": false,
+      "officeExecuted": false
+    },
+    {
+      "step": "verifier-syntax",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "command": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+      "args": [
+        "--check",
+        "C:/opf-work/b07-composite-proof/docs/handoff/2026-11-10/b07-composite-native01/verify.mjs"
+      ],
+      "measuredTrialRepeated": false,
+      "officeExecuted": false
+    },
+    {
+      "step": "offline-verifier",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "command": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+      "args": [
+        "C:/opf-work/b07-composite-proof/docs/handoff/2026-11-10/b07-composite-native01/verify.mjs"
+      ],
+      "measuredTrialRepeated": false,
+      "officeExecuted": false
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "verify.mjs",
+      "sha256": "7df823dce3bb1d94252a6e0b3801a17434e0e10e09fbb27f4ce786111fbb3657"
+    },
+    {
+      "path": "data-tools.mjs",
+      "sha256": "884f1ecf570877791286f5009eb7790db418a5d6ec19dde4f004292a292cc3b8"
+    }
+  ],
+  "noInstall": true,
+  "noBuild": true,
+  "noMappedCheck": true,
+  "noOffice": true,
+  "scope": "Syntax and actual offline replay only; not a normal repository qualification or rerun of any native/pure managed worker."
+}

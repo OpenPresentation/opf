@@ -1,0 +1,149 @@
+{
+  "images": [
+    {
+      "phase": "original",
+      "bytes": 10442,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+      "width": 1280,
+      "height": 720,
+      "bitDepth": 8,
+      "colorType": 3,
+      "interlace": 0,
+      "rgbaSha256": "96e6d72edf5be928f00c4697fb98813b7ca6a3c34ac6beca878f4912620b7b59",
+      "dominantRGBA": [
+        1,
+        24,
+        66,
+        255
+      ],
+      "dominantPixels": 905253,
+      "uniqueRGBA": 33,
+      "nonBackground": {
+        "pixels": 16347,
+        "bounds": {
+          "left": 61,
+          "top": 68,
+          "right": 1223,
+          "bottom": 441
+        }
+      },
+      "bright": {
+        "pixels": 10169,
+        "bounds": {
+          "left": 61,
+          "top": 69,
+          "right": 1223,
+          "bottom": 441
+        }
+      },
+      "bodyRegion": {
+        "definition": "All x; y300..499 in existing1280x720 image, for bounded body-ink observation only",
+        "pixels": 8145,
+        "bounds": {
+          "left": 61,
+          "top": 366,
+          "right": 1156,
+          "bottom": 441
+        }
+      }
+    },
+    {
+      "phase": "edited",
+      "bytes": 10442,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+      "width": 1280,
+      "height": 720,
+      "bitDepth": 8,
+      "colorType": 3,
+      "interlace": 0,
+      "rgbaSha256": "96e6d72edf5be928f00c4697fb98813b7ca6a3c34ac6beca878f4912620b7b59",
+      "dominantRGBA": [
+        1,
+        24,
+        66,
+        255
+      ],
+      "dominantPixels": 905253,
+      "uniqueRGBA": 33,
+      "nonBackground": {
+        "pixels": 16347,
+        "bounds": {
+          "left": 61,
+          "top": 68,
+          "right": 1223,
+          "bottom": 441
+        }
+      },
+      "bright": {
+        "pixels": 10169,
+        "bounds": {
+          "left": 61,
+          "top": 69,
+          "right": 1223,
+          "bottom": 441
+        }
+      },
+      "bodyRegion": {
+        "definition": "All x; y300..499 in existing1280x720 image, for bounded body-ink observation only",
+        "pixels": 8145,
+        "bounds": {
+          "left": 61,
+          "top": 366,
+          "right": 1156,
+          "bottom": 441
+        }
+      }
+    },
+    {
+      "phase": "reopened",
+      "bytes": 10442,
+      "sha256": "add5221afa2afa4d7193acc77d03d0dc77ed047b5c7806ad9f3a0edb60c6c3ba",
+      "width": 1280,
+      "height": 720,
+      "bitDepth": 8,
+      "colorType": 3,
+      "interlace": 0,
+      "rgbaSha256": "96e6d72edf5be928f00c4697fb98813b7ca6a3c34ac6beca878f4912620b7b59",
+      "dominantRGBA": [
+        1,
+        24,
+        66,
+        255
+      ],
+      "dominantPixels": 905253,
+      "uniqueRGBA": 33,
+      "nonBackground": {
+        "pixels": 16347,
+        "bounds": {
+          "left": 61,
+          "top": 68,
+          "right": 1223,
+          "bottom": 441
+        }
+      },
+      "bright": {
+        "pixels": 10169,
+        "bounds": {
+          "left": 61,
+          "top": 69,
+          "right": 1223,
+          "bottom": 441
+        }
+      },
+      "bodyRegion": {
+        "definition": "All x; y300..499 in existing1280x720 image, for bounded body-ink observation only",
+        "pixels": 8145,
+        "bounds": {
+          "left": 61,
+          "top": 366,
+          "right": 1156,
+          "bottom": 441
+        }
+      }
+    }
+  ],
+  "allBytesIdentical": true,
+  "allRGBAIdentical": true,
+  "displayBlankClaimWithdrawn": true,
+  "glyphSemanticAcceptance": false
+}

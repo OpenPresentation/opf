@@ -1,0 +1,13 @@
+{
+  "step": "verifier-syntax",
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "command": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+  "args": [
+    "--check",
+    "C:/opf-work/b07-composite-proof/docs/handoff/2026-11-10/b07-composite-native01/verify.mjs"
+  ],
+  "measuredTrialRepeated": false,
+  "officeExecuted": false
+}

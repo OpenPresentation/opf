@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "rawRecords": 764,
+  "logicalBytes": 10366969,
+  "nativeRuns": 1,
+  "source1d": true,
+  "controllerCe92": true,
+  "imagesByteIdentical": true,
+  "nonBackgroundPixels": 16347,
+  "bodyBrightPixels": 8145,
+  "allThirtyBoundsUnchanged": true,
+  "partCounts": [
+    147,
+    147
+  ],
+  "tagContentsRetained": 44,
+  "wholeCommonXmlCompared": 103,
+  "hypothesis": "rejected unchanged bad image",
+  "blankClaimWithdrawn": true,
+  "OfficeExecutedByVerifier": false,
+  "nativeAcceptance": false
+}

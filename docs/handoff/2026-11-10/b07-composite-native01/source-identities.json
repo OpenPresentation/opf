@@ -1,0 +1,157 @@
+{
+  "diagnosticSource": {
+    "head": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+    "tree": "db6890e2eda3811fc73afc4d2e5ac006e96d6beb",
+    "files": [
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/.gitattributes",
+        "gitBlob": "625449502ba4b4d7c229c6ccee42e3ec41cc780c",
+        "bytes": 9,
+        "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/README.md",
+        "gitBlob": "93ea5b4296b7b1fbbffcaf942cf5d7414c3ae5b7",
+        "bytes": 7523,
+        "sha256": "a27e776dc07c1597ae45bb8aca5cb57ca8b541c8360c11b601b19010fc2ab150"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/SOURCE.json",
+        "gitBlob": "6df3d9042d480c00c3cf9323fb387c297c0b3179",
+        "bytes": 5945,
+        "sha256": "033a8e195b0fcc2dffcde25fc90ab492c56f6ce2ca964f89995ddd81a159497f"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/character-check.ps1",
+        "gitBlob": "3ff95680123053cb1b59fe5b53b3b2b0b258ef2c",
+        "bytes": 11636,
+        "sha256": "3f8c742334fea9d5828abded92ddf28d80cab728a8c0435e5702f253146eb0e7"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/managed-check.ps1",
+        "gitBlob": "858df0996d18eefb475fe9bddf3b15a623ad1063",
+        "bytes": 18284,
+        "sha256": "326d904908608683b2d6ec8df418c5386852dd719edd75c5100b82fc8dea9ff7"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/prepare-suite.mjs",
+        "gitBlob": "2641c0b214a69d1917b5b8aad3b7438a97f8700a",
+        "bytes": 8566,
+        "sha256": "c77a88c3bbaffb902f87b0bfa2e7d17c0a7d0c115741928a8314b7b97b85e731"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/prepare-suite.test.mjs",
+        "gitBlob": "751fb540758dad052909d1aac42af79985831dcd",
+        "bytes": 4997,
+        "sha256": "b84cc1725eb65e5e27d0e4d6659712bc38a3f0f76cbd9bd6d27fdf36b6878fe2"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/references/base-worker.ps1.gz",
+        "gitBlob": "f8547f11d86003e5db191d8a6f3361c2cdb25a79",
+        "bytes": 20624,
+        "sha256": "36a372979cff6a8acd75f2e9c5c69702148ef2555eaa48e28c1523d4b5e18bdd"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/references/composite.json",
+        "gitBlob": "11cef97579ced08767ca48e6892cf08c894f4ce1",
+        "bytes": 93,
+        "sha256": "dfa47cf3b3ed6a390e46f41bd8d94a00731f48a613458a3d38317ad7f45fc6db"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/references/empty.json",
+        "gitBlob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/references/original09.pptx.gz",
+        "gitBlob": "b653f8f6cb9c035d5ecb74a1fa938b86daf2968f",
+        "bytes": 72471,
+        "sha256": "3d91bd0a042595cd3ad7c7233012bc73b37ee3a33a39b844f33da813ec89068c"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/references/prior-one-call-worker.ps1.gz",
+        "gitBlob": "53e8ab55b595edcc59274e778088558156b35f97",
+        "bytes": 17983,
+        "sha256": "16a79a4e07d12376598270a6e68677871f6578c2c42f69b18e9bf8a967be85ab"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/references/sealed-cli-preview.png",
+        "gitBlob": "e5eec090cd77e88cdc13247d14b8c287a4ab9c6b",
+        "bytes": 30278,
+        "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/references/source.opf.json",
+        "gitBlob": "2723a64ab7ab54b2e094689233059e8d27d2456e",
+        "bytes": 371,
+        "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/worker-package/test/fixtures/sh25-native-circle-observations.json",
+        "gitBlob": "295d8acd054c81dbb8071597b89aa7ff9507ac80",
+        "bytes": 2490,
+        "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/worker-package/test/native-furniture-control.ps1",
+        "gitBlob": "fe47759ed86f84ae4cdc91d26ae96de7213f3181",
+        "bytes": 102750,
+        "sha256": "8886a36368c4909536ef13c6ba6fa0fb93209760ad005dd10846324c58076202"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/worker-package/test/native-furniture-harness-check.ps1",
+        "gitBlob": "16bb02d2cc9ab8dc5b79edfa14d3f71a368b8785",
+        "bytes": 45855,
+        "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/worker-package/test/native-process-check.ps1",
+        "gitBlob": "e7baec2618b005f0532c272fba718ee198c008cc",
+        "bytes": 2333,
+        "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+      },
+      {
+        "revision": "1d1efa6af2c6dbcffd477ecf424bc7f120b7f438",
+        "path": "tools/rr105-ltr-proofing-composite/worker-package/test/native-process.ps1",
+        "gitBlob": "3d8754b1d15baa944b1dabe42b71ec01b823afc1",
+        "bytes": 2341,
+        "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+      }
+    ]
+  },
+  "controller": {
+    "head": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+    "path": "scripts/native-acceptance/run-windows.ps1",
+    "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a",
+    "bytes": 15359
+  },
+  "generation": {
+    "originalExporter": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+    "originalArchiveSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+  },
+  "evidenceBase": {
+    "head": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+    "tree": "49bdf8b51f02bde62dcd701c0c112e7b89432724"
+  },
+  "noDiagnosticBranchesMerged": true,
+  "currentProductRuntimeAcceptance": false
+}

@@ -1,0 +1,761 @@
+{
+  "cleanupConfirmed": true,
+  "officeOperationsStopped": false,
+  "error": null,
+  "composite": {
+    "ltrRunAttempts": 1,
+    "ltrRunCalls": 1,
+    "ltrRunSucceeded": true,
+    "intermediateLanguageId": 1033,
+    "languageAssignments": 1,
+    "languageAssignmentSucceeded": true,
+    "allThreeShapesVerifiedBeforeSave": true,
+    "completed": true,
+    "states": [
+      {
+        "stage": "action-1-ltr-run-restore-ar-sa.before",
+        "textLength": 69,
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "languageId": 1025,
+        "font": {
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0
+        },
+        "geometry": {
+          "Left": 43.20000076293945,
+          "Top": 270.1434631347656,
+          "Width": 873.5999755859375,
+          "Height": 33.855037689208984,
+          "Rotation": 0
+        },
+        "status": "observed"
+      },
+      {
+        "stage": "action-1-ltr-run-restore-ar-sa.intermediate",
+        "textLength": 69,
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "languageId": 1033,
+        "font": {
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0
+        },
+        "geometry": {
+          "Left": 43.20000076293945,
+          "Top": 270.1434631347656,
+          "Width": 873.5999755859375,
+          "Height": 33.855037689208984,
+          "Rotation": 0
+        },
+        "status": "observed"
+      },
+      {
+        "stage": "action-1-ltr-run-restore-ar-sa.final",
+        "textLength": 69,
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "languageId": 1025,
+        "font": {
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0
+        },
+        "geometry": {
+          "Left": 43.20000076293945,
+          "Top": 270.1434631347656,
+          "Width": 873.5999755859375,
+          "Height": 33.855037689208984,
+          "Rotation": 0
+        },
+        "status": "observed"
+      },
+      {
+        "stage": "action-1-ltr-run-restore-ar-sa.preSave-0",
+        "textLength": 26,
+        "text": "نص لاتيني بلغة عربية صريحة",
+        "languageId": 1025,
+        "font": {
+          "name": "Aptos Display",
+          "sizePoints": 40.5,
+          "bold": -1,
+          "italic": 0
+        },
+        "geometry": {
+          "Left": 43.20000076293945,
+          "Top": 43.20000076293945,
+          "Width": 873.5999755859375,
+          "Height": 49.40999984741211,
+          "Rotation": 0
+        },
+        "status": "observed"
+      },
+      {
+        "stage": "action-1-ltr-run-restore-ar-sa.preSave-1",
+        "textLength": 69,
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "languageId": 1025,
+        "font": {
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0
+        },
+        "geometry": {
+          "Left": 43.20000076293945,
+          "Top": 270.1434631347656,
+          "Width": 873.5999755859375,
+          "Height": 33.855037689208984,
+          "Rotation": 0
+        },
+        "status": "observed"
+      },
+      {
+        "stage": "action-1-ltr-run-restore-ar-sa.preSave-2",
+        "textLength": 28,
+        "text": "around the customer journey.",
+        "languageId": 1025,
+        "font": {
+          "name": "Aptos",
+          "sizePoints": 27.75,
+          "bold": 0,
+          "italic": 0
+        },
+        "geometry": {
+          "Left": 74.27511596679688,
+          "Top": 303.9984130859375,
+          "Width": 842.52490234375,
+          "Height": 33.855037689208984,
+          "Rotation": 0
+        },
+        "status": "observed"
+      }
+    ]
+  },
+  "phaseStates": [
+    {
+      "phase": "original",
+      "shapes": [
+        {
+          "id": 2,
+          "name": "OPF heading slides.0.title line 0",
+          "type": 14,
+          "text": "نص لاتيني بلغة عربية صريحة",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 43.20000076293945,
+            "Top": 43.20000076293945,
+            "Width": 873.5999755859375,
+            "Height": 49.40999984741211,
+            "Rotation": 0
+          }
+        },
+        {
+          "id": 3,
+          "name": "OPF list slides.0.items line 0",
+          "type": 17,
+          "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 43.20000076293945,
+            "Top": 270.1434631347656,
+            "Width": 873.5999755859375,
+            "Height": 33.855037689208984,
+            "Rotation": 0
+          }
+        },
+        {
+          "id": 4,
+          "name": "OPF list slides.0.items line 1",
+          "type": 17,
+          "text": "around the customer journey.",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 74.27511596679688,
+            "Top": 303.9984130859375,
+            "Width": 842.52490234375,
+            "Height": 33.855037689208984,
+            "Rotation": 0
+          }
+        }
+      ],
+      "status": "verified"
+    },
+    {
+      "phase": "edited",
+      "shapes": [
+        {
+          "id": 2,
+          "name": "OPF heading slides.0.title line 0",
+          "type": 14,
+          "text": "نص لاتيني بلغة عربية صريحة",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 43.20000076293945,
+            "Top": 43.20000076293945,
+            "Width": 873.5999755859375,
+            "Height": 49.40999984741211,
+            "Rotation": 0
+          }
+        },
+        {
+          "id": 3,
+          "name": "OPF list slides.0.items line 0",
+          "type": 17,
+          "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 43.20000076293945,
+            "Top": 270.1434631347656,
+            "Width": 873.5999755859375,
+            "Height": 33.855037689208984,
+            "Rotation": 0
+          }
+        },
+        {
+          "id": 4,
+          "name": "OPF list slides.0.items line 1",
+          "type": 17,
+          "text": "around the customer journey.",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 74.27511596679688,
+            "Top": 303.9984130859375,
+            "Width": 842.52490234375,
+            "Height": 33.855037689208984,
+            "Rotation": 0
+          }
+        }
+      ],
+      "status": "verified"
+    },
+    {
+      "phase": "reopened",
+      "shapes": [
+        {
+          "id": 2,
+          "name": "OPF heading slides.0.title line 0",
+          "type": 14,
+          "text": "نص لاتيني بلغة عربية صريحة",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 43.20000076293945,
+            "Top": 43.20000076293945,
+            "Width": 873.5999755859375,
+            "Height": 49.40999984741211,
+            "Rotation": 0
+          }
+        },
+        {
+          "id": 3,
+          "name": "OPF list slides.0.items line 0",
+          "type": 17,
+          "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 43.20000076293945,
+            "Top": 270.1434631347656,
+            "Width": 873.5999755859375,
+            "Height": 33.855037689208984,
+            "Rotation": 0
+          }
+        },
+        {
+          "id": 4,
+          "name": "OPF list slides.0.items line 1",
+          "type": 17,
+          "text": "around the customer journey.",
+          "languageId": 1025,
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 27.75,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          },
+          "geometry": {
+            "Left": 74.27511596679688,
+            "Top": 303.9984130859375,
+            "Width": 842.52490234375,
+            "Height": 33.855037689208984,
+            "Rotation": 0
+          }
+        }
+      ],
+      "status": "verified"
+    }
+  ],
+  "proofing": {
+    "expectedLanguageId": 1025,
+    "api": "PowerPoint.TextFrame.TextRange.LanguageID",
+    "observations": [
+      {
+        "phase": "original",
+        "slideIndex": 1,
+        "shapeName": "OPF heading slides.0.title line 0",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      },
+      {
+        "phase": "original",
+        "slideIndex": 1,
+        "shapeName": "OPF list slides.0.items line 0",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      },
+      {
+        "phase": "original",
+        "slideIndex": 1,
+        "shapeName": "OPF list slides.0.items line 1",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      },
+      {
+        "phase": "edited",
+        "slideIndex": 1,
+        "shapeName": "OPF heading slides.0.title line 0",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      },
+      {
+        "phase": "edited",
+        "slideIndex": 1,
+        "shapeName": "OPF list slides.0.items line 0",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      },
+      {
+        "phase": "edited",
+        "slideIndex": 1,
+        "shapeName": "OPF list slides.0.items line 1",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      },
+      {
+        "phase": "reopened",
+        "slideIndex": 1,
+        "shapeName": "OPF heading slides.0.title line 0",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      },
+      {
+        "phase": "reopened",
+        "slideIndex": 1,
+        "shapeName": "OPF list slides.0.items line 0",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      },
+      {
+        "phase": "reopened",
+        "slideIndex": 1,
+        "shapeName": "OPF list slides.0.items line 1",
+        "expectedLanguageId": 1025,
+        "observedLanguageId": 1025,
+        "status": "uniform-exact",
+        "failure": null
+      }
+    ],
+    "completedPhases": [
+      "original",
+      "edited",
+      "reopened"
+    ],
+    "scope": "Actual primary whole-range LanguageID only; no alternate-language or glyph-file assertion."
+  },
+  "bounds": [
+    {
+      "phase": "original",
+      "shapeId": 3,
+      "position1Based": 1,
+      "text": "I",
+      "left": 74.30000305175781,
+      "width": 7.255039215087891,
+      "relativeLeft": 31.10000228881836,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 3,
+      "position1Based": 2,
+      "text": "t",
+      "left": 81.55000305175781,
+      "width": 8.869999885559082,
+      "relativeLeft": 38.35000228881836,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 3,
+      "position1Based": 3,
+      "text": "e",
+      "left": 90.4150390625,
+      "width": 14.630000114440918,
+      "relativeLeft": 47.21503829956055,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 3,
+      "position1Based": 4,
+      "text": "m",
+      "left": 105.04000091552734,
+      "width": 23.6299991607666,
+      "relativeLeft": 61.84000015258789,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 3,
+      "position1Based": 6,
+      "text": "1",
+      "left": 861.9099731445312,
+      "width": 9.25503921508789,
+      "relativeLeft": 818.7099723815918,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 3,
+      "position1Based": 9,
+      "text": "C",
+      "left": 829.155029296875,
+      "width": 19.254961013793945,
+      "relativeLeft": 785.9550285339355,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 4,
+      "position1Based": 1,
+      "text": "a",
+      "left": 74.27511596679688,
+      "width": 14.75503921508789,
+      "relativeLeft": 0,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 4,
+      "position1Based": 2,
+      "text": "r",
+      "left": 89.02511596679688,
+      "width": 8.875039100646973,
+      "relativeLeft": 14.75,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 4,
+      "position1Based": 3,
+      "text": "o",
+      "left": 97.8951187133789,
+      "width": 15.25503921508789,
+      "relativeLeft": 23.62000274658203,
+      "status": "observed"
+    },
+    {
+      "phase": "original",
+      "shapeId": 4,
+      "position1Based": 4,
+      "text": "u",
+      "left": 113.1451187133789,
+      "width": 15.50503921508789,
+      "relativeLeft": 38.87000274658203,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 3,
+      "position1Based": 1,
+      "text": "I",
+      "left": 74.30000305175781,
+      "width": 7.255039215087891,
+      "relativeLeft": 31.10000228881836,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 3,
+      "position1Based": 2,
+      "text": "t",
+      "left": 81.55000305175781,
+      "width": 8.869999885559082,
+      "relativeLeft": 38.35000228881836,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 3,
+      "position1Based": 3,
+      "text": "e",
+      "left": 90.4150390625,
+      "width": 14.630000114440918,
+      "relativeLeft": 47.21503829956055,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 3,
+      "position1Based": 4,
+      "text": "m",
+      "left": 105.04000091552734,
+      "width": 23.6299991607666,
+      "relativeLeft": 61.84000015258789,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 3,
+      "position1Based": 6,
+      "text": "1",
+      "left": 861.9099731445312,
+      "width": 9.25503921508789,
+      "relativeLeft": 818.7099723815918,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 3,
+      "position1Based": 9,
+      "text": "C",
+      "left": 829.155029296875,
+      "width": 19.254961013793945,
+      "relativeLeft": 785.9550285339355,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 4,
+      "position1Based": 1,
+      "text": "a",
+      "left": 74.27511596679688,
+      "width": 14.75503921508789,
+      "relativeLeft": 0,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 4,
+      "position1Based": 2,
+      "text": "r",
+      "left": 89.02511596679688,
+      "width": 8.875039100646973,
+      "relativeLeft": 14.75,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 4,
+      "position1Based": 3,
+      "text": "o",
+      "left": 97.8951187133789,
+      "width": 15.25503921508789,
+      "relativeLeft": 23.62000274658203,
+      "status": "observed"
+    },
+    {
+      "phase": "edited",
+      "shapeId": 4,
+      "position1Based": 4,
+      "text": "u",
+      "left": 113.1451187133789,
+      "width": 15.50503921508789,
+      "relativeLeft": 38.87000274658203,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 3,
+      "position1Based": 1,
+      "text": "I",
+      "left": 74.30000305175781,
+      "width": 7.255039215087891,
+      "relativeLeft": 31.10000228881836,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 3,
+      "position1Based": 2,
+      "text": "t",
+      "left": 81.55000305175781,
+      "width": 8.869999885559082,
+      "relativeLeft": 38.35000228881836,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 3,
+      "position1Based": 3,
+      "text": "e",
+      "left": 90.4150390625,
+      "width": 14.630000114440918,
+      "relativeLeft": 47.21503829956055,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 3,
+      "position1Based": 4,
+      "text": "m",
+      "left": 105.04000091552734,
+      "width": 23.6299991607666,
+      "relativeLeft": 61.84000015258789,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 3,
+      "position1Based": 6,
+      "text": "1",
+      "left": 861.9099731445312,
+      "width": 9.25503921508789,
+      "relativeLeft": 818.7099723815918,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 3,
+      "position1Based": 9,
+      "text": "C",
+      "left": 829.155029296875,
+      "width": 19.254961013793945,
+      "relativeLeft": 785.9550285339355,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 4,
+      "position1Based": 1,
+      "text": "a",
+      "left": 74.27511596679688,
+      "width": 14.75503921508789,
+      "relativeLeft": 0,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 4,
+      "position1Based": 2,
+      "text": "r",
+      "left": 89.02511596679688,
+      "width": 8.875039100646973,
+      "relativeLeft": 14.75,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 4,
+      "position1Based": 3,
+      "text": "o",
+      "left": 97.8951187133789,
+      "width": 15.25503921508789,
+      "relativeLeft": 23.62000274658203,
+      "status": "observed"
+    },
+    {
+      "phase": "reopened",
+      "shapeId": 4,
+      "position1Based": 4,
+      "text": "u",
+      "left": 113.1451187133789,
+      "width": 15.50503921508789,
+      "relativeLeft": 38.87000274658203,
+      "status": "observed"
+    }
+  ],
+  "allThirtyBoundsStable": true,
+  "interpretation": "All sampled bounds and exact text/descriptors/geometry are unchanged. Positive bounds and primary1025 do not prove glyph shape/file identity. Pixel identity retains the original bad Latin image and rejects this composite hypothesis; no blank native output is established."
+}
