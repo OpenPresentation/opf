@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "source": "f652094a822d60c8e4a5822670aba4ef17ac779f",
+  "records": 339,
+  "rawBytes": 2924680,
+  "compressedBytes": 818007,
+  "archiveSha256": "00f715aa1b31892456b56be7340d3f91ff6f35289dd14631f8b5bb9b305027b6",
+  "observations": {
+    "suiteSha256": "18b8bb0225c843511c6a10e6b7e731fedb05a2d42ee066d7a2ac8749d19625dd"
+  },
+  "neverMerge": true,
+  "dataOnly": true
+}
