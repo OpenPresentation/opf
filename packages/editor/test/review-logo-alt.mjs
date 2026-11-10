@@ -33,7 +33,7 @@ const footerImage = "/design/footer/start/image";
   assert.equal(currentAltText(editor.presentation, footerImage), "Acme", "the field pre-fills from the organization");
   assert.equal(validate(editor.presentation).findings.filter((finding) => finding.severity === "error").length, 0);
   // Core still draws the logo from the reference (with its alt), not an image whose src is "var:…".
-  const [part] = layoutFurniture({}, { presentation: editor.presentation }).parts.filter((entry) => entry.type === "image" && entry.zone === "left");
+  const [part] = layoutFurniture({}, { presentation: editor.presentation }).parts.filter((entry) => entry.type === "image" && entry.zone === "start");
   assert.equal(part.reference, "var:organization.logo.icon");
   assert.deepEqual(part.image, { src: "./mark.svg", alt: "Acme" });
   assert.equal(setReviewAltText(editor, footerImage, "Acme").changed, false, "no change, no history entry");

@@ -44,9 +44,9 @@ const org = {start: {text: 'Tandem BioSystems'}, center: {text: 'Internal planni
   assert.ok(boxes.dt.x > name.ink.right, 'The date starts after the organization name: turning it on never covers the name.');
   assert.equal(boxes.dt.noWrap, true, 'A date beside another part does not wrap.');
   const own = drawn({design: {fontScheme: 'roboto', footer: org}, slides});
-  assert.equal(boxes.ftr.x, own.find(part => part.zone === 'left').x, 'The footer text stays where the deck draws it.');
-  assert.equal(boxes.sldNum.x + boxes.sldNum.cx, own.find(part => part.zone === 'right').x + own.find(part => part.zone === 'right').width);
-  assert.deepEqual(new Set([boxes.dt.y, boxes.ftr.y, boxes.sldNum.y]), new Set([own.find(part => part.zone === 'left').y]), 'One baseline: the deck\'s footer text.');
+  assert.equal(boxes.ftr.x, own.find(part => part.zone === 'start').x, 'The footer text stays where the deck draws it.');
+  assert.equal(boxes.sldNum.x + boxes.sldNum.cx, own.find(part => part.zone === 'end').x + own.find(part => part.zone === 'end').width);
+  assert.deepEqual(new Set([boxes.dt.y, boxes.ftr.y, boxes.sldNum.y]), new Set([own.find(part => part.zone === 'start').y]), 'One baseline: the deck\'s footer text.');
   assert.equal(boxes.dt.field, 'datetimeFigureOut', 'A deck without a date keeps PowerPoint\'s own master date field.');
 }
 
@@ -56,7 +56,7 @@ const org = {start: {text: 'Tandem BioSystems'}, center: {text: 'Internal planni
   const footer = {...org, start: {text: 'Pine County Emergency Management'}};
   const deck = {design: {fontScheme: 'roboto', dimensions: '4:3', footer}, slides};
   const {boxes} = await masterBoxes(deck);
-  const own = drawn(deck), name = own.find(part => part.zone === 'left'), center = own.find(part => part.zone === 'center');
+  const own = drawn(deck), name = own.find(part => part.zone === 'start'), center = own.find(part => part.zone === 'center');
   assert.ok(boxes.dt.x > name.ink.right, 'The date starts after the name.');
   assert.ok(boxes.dt.x + boxes.dt.cx < center.ink.left, 'and ends before the center text.');
   assert.equal(boxes.dt.noWrap, true);
@@ -72,7 +72,7 @@ const org = {start: {text: 'Tandem BioSystems'}, center: {text: 'Internal planni
   const {boxes} = await masterBoxes(deck);
   const own = drawn(deck), name = own.find(part => part.text === 'Fixture Org');
   assert.deepEqual(new Set([boxes.dt.y, boxes.ftr.y, boxes.sldNum.y]), new Set([name.y]), 'One baseline: the footer text\'s.');
-  assert.notEqual(own.find(part => part.zone === 'right').y, name.y, 'OPF draws the lone number on another line than the text beside the logo (RR-72 decision 21).');
+  assert.notEqual(own.find(part => part.zone === 'end').y, name.y, 'OPF draws the lone number on another line than the text beside the logo (RR-72 decision 21).');
   assert.ok(boxes.ftr.cx > name.width && boxes.ftr.x < name.x, 'Beside a logo the master footer text spans its zone.');
   assert.ok(boxes.dt.x > name.ink.right, 'The date follows the name.');
 }

@@ -126,7 +126,7 @@ if (record) {
       const result = await current(transform);
       assert.ok(!JSON.stringify(result.slides[0]).includes('ORIGINAL_LITERAL'), `${mode}: current clear/delete does not replay old words`);
       assert.notEqual(effective(result, 0)?.center?.text, 'ORIGINAL_LITERAL');
-      assert.equal(effective(result, 0).right.text, '{{slide.number}}', 'Current live number remains a number field');
+      assert.equal(effective(result, 0).end.text, '{{slide.number}}', 'Current live number remains a number field');
       for (const index of [1, 2]) assert.equal(effective(result, index).center.text, 'ORIGINAL_LITERAL');
     }
   }

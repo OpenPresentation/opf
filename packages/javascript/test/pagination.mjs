@@ -35,8 +35,8 @@ const listResult=paginateSlide({items:list});assert.deepEqual(listResult.slides.
 const table={columns:['Item','Value'],rows:Array.from({length:80},(_,i)=>[`Row ${i}`,i])};
 const tableResult=paginateSlide({table});assert.ok(tableResult.slides.length>1);assert.deepEqual(tableResult.slides.flatMap(s=>s.table.rows),table.rows);
 for(const s of tableResult.slides){assert.deepEqual(s.table.columns,table.columns);assert.equal(composeSlide(s).diagnostics.length,0);}
-const region=paginateSlide({start:{text:original},end:{text:'Context'}});assert.equal(region.slides.map(s=>s.left?.text??'').join(''),original);
-assert.equal(region.slides.filter(s=>s.right).length,1);
+const region=paginateSlide({start:{text:original},end:{text:'Context'}});assert.equal(region.slides.map(s=>s.start?.text??'').join(''),original);
+assert.equal(region.slides.filter(s=>s.end).length,1);
 assert.throws(()=>paginateSlide(slide,{maxSlides:1}),OPFPaginationError);
 assert.throws(()=>paginateSlide({title:original,text:'body'}),OPFPaginationError);
 assert.throws(()=>paginateSlide({items:[original]}),OPFPaginationError);

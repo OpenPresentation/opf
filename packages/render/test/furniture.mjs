@@ -28,7 +28,7 @@ for(const measured of [false,true])for(const floor of [16,32])for(const [width,h
  // whole words only (core caps the image at FURNITURE_IMAGE_SHARE of the zone and never breaks a word silently).
  wholeWords(geometry,svg,'Keep both');
  assert.equal((svg.match(/data-opf-furniture-field=/g)??[]).length,geometry.furniture.parts.length);
- {const [picture,label]=geometry.furniture.parts.filter(part=>part.kind==='header'&&part.zone==='left');assert.deepEqual([picture.type,label.type],['image','text'],'image, then text');assert.ok(Math.abs(label.box.x-(picture.box.x+picture.box.width+FURNITURE_GAP*Math.min(width,height)/720))<.01,'text beside the image after the furniture gap');}
+ {const [picture,label]=geometry.furniture.parts.filter(part=>part.kind==='header'&&part.zone==='start');assert.deepEqual([picture.type,label.type],['image','text'],'image, then text');assert.ok(Math.abs(label.box.x-(picture.box.x+picture.box.width+FURNITURE_GAP*Math.min(width,height)/720))<.01,'text beside the image after the furniture gap');}
  for(const match of svg.matchAll(/<text\b([^>]*)data-opf-path="design\.(header|footer)\.[^"]+"([^>]*)>/g))assert.ok(Number(/font-size="([^"]+)"/.exec(match[0])[1])>=floor);
  const disabled=structuredClone(deck);disabled.slides[0].design={header:false,footer:false};const plain=toSvg(disabled, 1,config);assert.ok(!plain.includes('data-opf-furniture-field'));
  const empty=structuredClone(deck);empty.slides[0].design={header:{},footer:{}};assert.ok(!toSvg(empty, 1,config).includes('data-opf-furniture-field'));
@@ -57,7 +57,7 @@ assert.throws(()=>toSvg({design:{header:{start:{date:true}}},slides:[{text:'Body
   assert.deepEqual(parts.map(part=>part.text),['Internal Use Only','Apr 23, 2026','September 22, 2026',`${index+1} / 3`]);
   for(const text of ['Apr 23, 2026','September 22, 2026',`${index+1} / 3`])assert.ok(svg.includes(text),text);
   assert.equal((svg.match(/data-opf-furniture-field="date"/g)??[]).length,2);assert.ok(!/<g[^>]*data-opf-furniture-editable="true"[^>]*data-opf-furniture-field="date"/.test(svg),'Formatted and current dates are generated, not editable source text.');
-  assert.deepEqual(parts.find(part=>part.zone==='right').fields,[{type:'slideNumber',start:0,end:1}]);
+  assert.deepEqual(parts.find(part=>part.zone==='end').fields,[{type:'slideNumber',start:0,end:1}]);
  }
  assert.throws(()=>toSvg({design:{footer:{start:{date:true}}},slides:[{text:'Body',composition:{overflow:'error'}}]}, 1,{date:'22/09/2026'}),RangeError);
  const literal=toSvg({design:{footer:{start:{date:'Q3 2026'}}},slides:[{text:'Body'}]}, 1,{trace:true});

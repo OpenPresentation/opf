@@ -49,6 +49,31 @@ for (const [index, fixture] of manifest.fixtures.entries()) {
   const bytes = new Uint8Array(await readFile(new URL(fixture.file, directory)));
   assert.equal(bytes.length, fixture.bytes); assert.equal(hash(bytes), fixture.sha256);
   const current = await read(bytes), expected = slotFills(structuredClone(before[index].document));
+  // The immutable676d control uses the earlier public vocabulary. Project only
+  // its13 known typed slots into the approved current contract; physical cell
+  // borders/padding and all strings, diagnostics and archived bytes stay exact.
+  assert.deepEqual(Object.keys(expected.design.footer), ['right']);
+  expected.design.footer = {end: expected.design.footer.right};
+  let projectedCells = 0;
+  for (const slideIndex of [11, 12]) {
+    const table = expected.slides[slideIndex].blocks[0].table;
+    for (const cell of [...table.columns, ...table.rows.flat()]) {
+      assert.equal(cell.style.align, 'left');
+      cell.style.align = 'start'; projectedCells++;
+    }
+  }
+  assert.equal(projectedCells, 12);
+  const inverse = structuredClone(expected);
+  assert.deepEqual(Object.keys(inverse.design.footer), ['end']);
+  inverse.design.footer = {right: inverse.design.footer.end};
+  for (const slideIndex of [11, 12]) {
+    const table = inverse.slides[slideIndex].blocks[0].table;
+    for (const cell of [...table.columns, ...table.rows.flat()]) {
+      assert.equal(cell.style.align, 'start'); cell.style.align = 'left';
+    }
+  }
+  assert.deepEqual(inverse, slotFills(before[index].document), 'Inverse proves exactly13 typed changes, preserving physical sides and literals');
+  assert.equal(hash(await readFile(new URL(integratedManifest.beforeImport.file, directory))), integratedManifest.beforeImport.sha256, 'Sealed historical bytes remain untouched');
   assert.equal(before[index].name, index ? 'B' : 'A');
   for (const slide of expected.slides) {
     const matches = slide.blocks?.filter(block => block.type === 'text' && block.text?.[0]?.text === 'Keynote qualification');
@@ -64,7 +89,7 @@ for (const [index, fixture] of manifest.fixtures.entries()) {
   assert.deepEqual(current.issues.filter(value => value.path === 'slides.10.charts.0.series.0.line.color'), [integratedManifest.expectedK11Diagnostic]);
   assert.equal(current.document.slides.length, 16);
   assert.equal(hasLiteral(current.document), false);
-  assert.equal(footer(current.document).right.text, '{{slide.number}}');
+  assert.equal(footer(current.document).end.text, '{{slide.number}}');
   assert.equal(composed(current.document).filter(part => part.text === 'Keynote qualification').length, 1);
   fixtures.push({bytes, entries: unzipSync(bytes)});
 }
@@ -82,14 +107,14 @@ const textXml = value => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').repl
 const words = (shape, value) => shape.replace(/<a:t>[\s\S]*?<\/a:t>/, `<a:t>${textXml(value)}</a:t>`);
 const mutate = async callback => {const entries = {...base}; callback(entries); return read(zipSync(entries));};
 const noLiteral = result => {
-  assert.equal(footer(result.document)?.left, undefined, 'Current slide has no recovered literal; deck majority cannot restore it');
+  assert.equal(footer(result.document)?.start, undefined, 'Current slide has no recovered literal; deck majority cannot restore it');
   assert.ok(!composed(result.document).some(part => part.text === 'Keynote qualification'));
 };
 let controls = 2;
 for (const current of ['  current edited words  ', 'Changed footer']) {
   const result = await mutate(entries => editShape(entries, 0, shape => words(shape, current)));
-  assert.equal(footer(result.document).left.text, current);
-  assert.equal(composed(result.document).find(part => part.zone === 'left').text, current);
+  assert.equal(footer(result.document).start.text, current);
+  assert.equal(composed(result.document).find(part => part.zone === 'start').text, current);
   assert.ok(!bodyWords(result.document.slides[7]).includes(current)); controls++;
 }
 for (const transform of [shape => words(shape, ''), () => '']) {
@@ -172,10 +197,10 @@ const context = {root, shapes: nativeTextShapes(root['p:cSld']['p:spTree']), par
   inherited: () => ({master: {root: {'p:txStyles': {'p:otherStyle': {'a:lvl1pPr': {'a:buNone': ''}}}}}})};
 const anchor = context.shapes.findIndex(shape => shape['p:nvSpPr']['p:cNvPr'].name === name(1));
 const literal = context.shapes.findIndex(shape => shape['p:nvSpPr']['p:cNvPr'].name === name(0));
-const accepted = [{index: anchor, ph: 'sldNum', zone: 'right', field: 'text', value: '{{slide.number}}'}];
+const accepted = [{index: anchor, ph: 'sldNum', zone: 'end', field: 'text', value: '{{slide.number}}'}];
 assert.deepEqual(classifyNativeFooters(context, new Set(), [], new Set(), () => {}), [], 'Refused higher-priority number is not a witness');
 assert.deepEqual(classifyNativeFooters(context, new Set([literal]), accepted, new Set(), () => {}), [], 'Existing claims cannot be consumed again');
-assert.deepEqual(classifyNativeFooters(context, new Set(), accepted, new Set(['left']), () => {}), [], 'Higher-priority zone wins');
+assert.deepEqual(classifyNativeFooters(context, new Set(), accepted, new Set(['start']), () => {}), [], 'Higher-priority zone wins');
 assert.deepEqual(classifyNativeFooters(context, new Set(), accepted, new Set(), () => {}).map(item => item.index), [literal], 'Accepted anchor witnesses but is not consumed twice');
 controls += 4;
 const frameControls = [
@@ -206,11 +231,11 @@ for (const transform of [
   const result = await mutate(entries => editShape(entries, 0, transform));
   noLiteral(result); assert.ok(bodyWords(result.document.slides[7]).includes('Keynote qualification')); controls++;
 }
-for (const [x, zone] of [[4063998, 'left'], [4063999, 'center'], [8127999, 'center'], [8128000, 'right']]) {
+for (const [x, zone] of [[4063998, 'start'], [4063999, 'center'], [8127999, 'center'], [8128000, 'end']]) {
   const current = structuredClone({...context, inherited: undefined}); current.inherited = context.inherited;
   current.shapes[literal]['p:spPr']['a:xfrm']['a:off'].x = String(x);
   current.shapes[literal]['p:spPr']['a:xfrm']['a:ext'].cx = '2';
-  assert.equal(classifyNativeFooters(current, new Set(), accepted, new Set(), () => {})[0]?.zone, zone, 'Exact physical zone boundary'); controls++;
+  assert.equal(classifyNativeFooters(current, new Set(), accepted, new Set(), () => {})[0]?.zone, zone, 'Exact physical coordinate boundary yields its logical zone'); controls++;
 }
 for (const dimensions of [{slideWidth: 0}, {slideHeight: NaN}, {slideWidth: 1.5}, {slideHeight: undefined}]) {
   assert.deepEqual(classifyNativeFooters({...context, ...dimensions}, new Set(), accepted, new Set(), () => {}), []); controls++;
@@ -236,7 +261,7 @@ assert.deepEqual(classifyNativeFooters(context, new Set([anchor]), accepted, new
 }
 for (const raw of ['{{slide.number}}', '{{slide.section}}', '{{deck.slideCount}}', String.raw`\{{slide.number}}`, String.raw`\\{{deck.slideCount}}`, '{{deck.name}}', '{{customer}}']) {
   const result = await mutate(entries => editShape(entries, 0, shape => words(shape, raw)));
-  const part = composed(result.document).find(item => item.zone === 'left');
+  const part = composed(result.document).find(item => item.zone === 'start');
   assert.equal(part.text, raw, 'Displayed token/backslash words stay literal during composition');
   assert.deepEqual(part.fields ?? [], [], 'No live field is invented');
   for (const provenance of [undefined, 'references-only', false]) {

@@ -135,7 +135,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   switchDimension(editor, "image-treatments", { fit: "contain", placement: { edge: "start", size: 0.4 } }, { path: "slides.2.blocks.2" });
   const removed = switchDimension(editor, "image-treatments", { fit: null }, { path: "slides.2.blocks.2" });
   assert.deepEqual(removed.patches, [{ op: "remove", path: "/slides/2/blocks/2/fit" }]);
-  assert.deepEqual(editor.get("slides.2.blocks.2.placement"), { edge: "left", size: 0.4 });
+  assert.deepEqual(editor.get("slides.2.blocks.2.placement"), { edge: "start", size: 0.4 });
 }
 
 // Themes: the default lets the theme's own schemes apply so fonts follow; bundle:false changes only the reference.

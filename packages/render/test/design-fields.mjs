@@ -164,7 +164,7 @@ const furnitureSources = svg => [...svg.matchAll(/<g\b[^>]*data-opf-furniture-fi
   const near = (a, b) => Math.abs(a - b) < 0.002;
   for (const part of imageParts) assert.ok(drawn.some(box => box.every((value, index) => near(value, [part.box.x, part.box.y, part.box.width, part.box.height][index]))), `${part.kind} ${part.zone} logo drawn in its part box`);
   // Row layout: the image sits first, the text next to it after FURNITURE_GAP, both on the zone's left edge and vertically centred.
-  const left = imageParts.find(part => part.kind === 'footer' && part.zone === 'left'), leftText = parts.find(part => part.kind === 'footer' && part.zone === 'left' && part.type === 'text');
+  const left = imageParts.find(part => part.kind === 'footer' && part.zone === 'start'), leftText = parts.find(part => part.kind === 'footer' && part.zone === 'start' && part.type === 'text');
   assert.ok(near(left.box.x, 0.08 * 720), 'the image starts at the content inset (RR-91)');
   assert.ok(near(leftText.box.x, left.box.x + left.box.width + composition.FURNITURE_GAP), 'the text follows the image after the gap');
   assert.ok(near(leftText.box.y + leftText.box.height / 2, left.box.y + left.box.height / 2), 'the row is vertically centred');

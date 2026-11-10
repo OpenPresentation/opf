@@ -25,7 +25,7 @@ for(const scale of [1,.5]){
  assert.equal(actual.rows[0][0].rowSpan,2);assert.equal(actual.rows[0][0].colSpan,2);
  assert.equal(actual.rows[0][1],null);assert.equal(actual.rows[1][0],null);assert.equal(actual.rows[1][1],null);
  const style=actual.rows[0][0].style;
- assert.equal(style.fill,'#12345680');assert.equal(style.align,'right');assert.equal(style.verticalAlign,'bottom');
+ assert.equal(style.fill,'#12345680');assert.equal(style.align,'end');assert.equal(style.verticalAlign,'bottom');
  for(const edge of ['top','right','bottom','left'])assert.ok(Math.abs(style.padding[edge]-table.rows[0][0].style.padding[edge])<.001);
  for(const edge of ['top','right']){
   const expected=table.rows[0][0].style.borders[edge],actual=style.borders[edge];

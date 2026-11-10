@@ -194,7 +194,7 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   const deck = {organization, design: {background: light, footer: {start: {image: 'var:organization.logo.icon', text: 'Confidential'}, end: {text: '{{slide.number}}'}}}, slides: [{title: 'One', text: 'Body.'}, {title: 'Two', text: 'Body.'}]};
   const {entries, bytes: output} = await exportDeck(deck);
   const parts = geometry(deck, 0).furniture.parts;
-  const text = parts.find(part => part.field === 'text' && part.zone === 'left'), icon = parts.find(part => part.type === 'image');
+  const text = parts.find(part => part.field === 'text' && part.zone === 'start'), icon = parts.find(part => part.type === 'image');
   assert.ok(text.box.x >= icon.box.x + icon.box.width, 'the text follows the logo in the row');
   const xml = slideXml(entries, 0);
   const placeholder = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match => match[0]).find(shape => /<p:ph type="ftr"/.test(shape));
@@ -226,7 +226,7 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   const parts = geometry(deck, 0).furniture.parts, {width: slideWidth, height: slideHeight} = resolveSlideContext(deck, 0).options;
   // RR-91: the left zone shares the empty centre with the right one: its own column plus half the free column and gutter.
   const gutter = slideWidth * 0.02, column = (slideWidth - 2 * 0.08 * Math.min(slideWidth, slideHeight) - 2 * gutter) / 3, zone = column + (column + gutter) / 2;
-  const logo = parts.find(part => part.type === 'image'), text = parts.find(part => part.field === 'text' && part.zone === 'left');
+  const logo = parts.find(part => part.type === 'image'), text = parts.find(part => part.field === 'text' && part.zone === 'start');
   near(logo.box.width, zone * FURNITURE_IMAGE_SHARE, 'the 8:1 logo is capped at its share of the zone', .01);
   near(text.box.x, logo.box.x + logo.box.width + FURNITURE_GAP, 'the text follows the capped logo', .01);
   const [picture] = furniturePictures(entries, 0);

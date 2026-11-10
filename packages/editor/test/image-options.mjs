@@ -44,7 +44,7 @@ const deck = () => ({
   for (const [key, value] of Object.entries(fields)) assert.deepEqual(block[key], value, key);
   const state = readImageTreatments(editor.presentation, "slides.0.blocks.0");
   assert.equal(state.placeable, true);
-  assert.deepEqual(state.placement, { edge: "right", size: 0.45 });
+  assert.deepEqual(state.placement, { edge: "end", size: 0.45 });
   // The composition draws what was set: the block bleeds to the right edge and carries its fit and focus.
   const geometry = composeSlide(editor.presentation.slides[0], resolveSlideContext(editor.presentation, 0).options);
   const image = geometry.items.find((item) => item.path === "slides.0.blocks.0.image" || item.path === "slides.0.blocks.0");

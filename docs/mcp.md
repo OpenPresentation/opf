@@ -74,7 +74,7 @@ Resources have stable URIs. The server lists them (`resources/list`) and also of
 | `opf://catalog/<kind>/<id>` | A record of the default catalog (`@openpresentation/gallery`): `opf://catalog/layouts/two-column` |
 | `opf://skills/<name>` | A skill entrypoint (`opf-author`, `opf-layout`, `opf-presets`, `opf-edit`, `opf-export`, `opf-inspect`) |
 | `opf://skills/<name>/<path>` | A reference or asset of a skill: `opf://skills/opf-author/references/content.md` |
-| `ui://opf/deck` | The OPF viewer (`text/html;profile=mcp-app`): one HTML page, about 10 MB (2.8 MB compressed), that `show_deck` opens |
+| `ui://opf/deck` | The OPF viewer (`text/html;profile=mcp-app`): one HTML page (10,055,279 UTF-8 bytes; 2,770,399 gzip bytes at level 9 in the reviewed 0.34 candidate) that `show_deck` opens |
 
 Skill scripts and agent manifests are not served; the server runs no code from them.
 
@@ -145,7 +145,7 @@ export default {
 
 `createOpfServer({ version, opfVersion?, sources?, checkText?, deckApp?, processDecks? })` returns an SDK `McpServer`. `sources` replaces any of the bundled `docs`, `examples`, `skills` and `whatsNew`. `checkText` replaces the check behind `validate_deck`; `opf-mcp` passes the one that measures layout with the fonts `opf convert` draws with. Without it, layout is estimated and the report's `hint` says so.
 
-The default entry bundles the viewer and data (about 27.3 MB minified, 9.7 MB gzipped with the viewer's Export menu; the example source module is 9.2 MB and the documentation source module is 1.8 MB). A host that must stay small imports `createOpfMcpServer` from `@openpresentation/mcp/server`, which bundles none of it (about 5.3 MB minified, 1.2 MB gzipped), and takes `sources: { docs, examples, skills, whatsNew? }` from wherever it keeps them (KV, R2, static assets): `docs` is `[{ slug, title, markdown }]`, `examples` is `[{ slug, category, file, deck }]`, `skills` maps a skill name to `{ "SKILL.md": text, ... }`. `defaultSources()` and `DOC_SLUGS` (the pages served) are exported from `@openpresentation/mcp`.
+The default entry bundles the viewer, example decks and public documentation. A host that must stay small imports `createOpfMcpServer` from `@openpresentation/mcp/server`, which bundles none of that data, and takes `sources: { docs, examples, skills, whatsNew? }` from wherever it keeps them (KV, R2, static assets): `docs` is `[{ slug, title, markdown }]`, `examples` is `[{ slug, category, file, deck }]`, `skills` maps a skill name to `{ "SKILL.md": text, ... }`. `defaultSources()` and `DOC_SLUGS` (the pages served) are exported from `@openpresentation/mcp`.
 
 **A hosted server that does no deck work.** A tool call always runs on the server the client calls, so a hosted server runs every call on your compute. Pass `processDecks: false` and it does no OPF processing of decks: `show_deck` only opens the viewer, which reads, checks and renders the deck on the user's machine and sends its findings to the model as context; `validate_deck`, `convert` and the `fix_validation_findings` prompt are left out, and `start_here` and the other prompts point to `show_deck`. What stays on the server is the lookups (docs, schemas, catalog, examples), which are small and the same for every caller, and handing over the viewer's HTML. A client without MCP Apps gets no check from such a server. `deckApp: { readFontFile }` gives the viewer font files (the local server reads the installed renderer's); `deckApp: false` leaves the viewer out. The lean `createOpfMcpServer` takes `deckApp: { html }` with `DECK_APP_HTML` from `@openpresentation/mcp`, or a function that returns the same page from storage; the function runs only when a client opens the viewer, so other requests never load the 8 MB page.
 
@@ -164,7 +164,7 @@ It reads only font files under the font folders and the faces the site's manifes
 
 ## Limits
 
-- The viewer is about 10 MB of HTML (2.8 MB compressed), loaded once per conversation or cached by the client. A client may cap the size of an MCP App or ask the user before it shows one.
+- The reviewed 0.34 viewer is 10,055,279 bytes of UTF-8 HTML (2,770,399 bytes with gzip level 9), loaded once per conversation or cached by the client. A client may cap the size of an MCP App or ask the user before it shows one.
 - Export needs a client that saves files for the viewer (`ui/download-file`); in one that does not, there is no Export menu. A PowerPoint or PNG export draws an SVG picture through the browser's image decoder from a `data:` URL (`svgSource: "data"` of the renderer's `export-browser`), because the sandbox allows no `blob:` image. The model sees the deck as JSON, not as pictures of the slides.
 - Text formats only for `convert`. Rendering and PowerPoint need the local `opf` command, which can write files.
 - `validate_deck` reads no files, so a local image path in a deck is not looked up (the CLI warns with `cli/asset-missing`). Pass images as data URIs or assets.
