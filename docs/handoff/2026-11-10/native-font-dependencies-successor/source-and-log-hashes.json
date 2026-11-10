@@ -1,0 +1,83 @@
+{
+  "sourceCommit": "6fb439401b132ed8342041a343313ec5932d72bd",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "files": [
+    {
+      "path": "packages/pptx/src/index.js",
+      "sha256": "f0fe5a42d43794477b60fe0058a1bfd6634254caa0bdd580462297cc3df47fc9"
+    },
+    {
+      "path": "packages/pptx/src/native-body.js",
+      "sha256": "d71a82fbf18737715b47e2d622e580032ad698d12c30fef1e0966112fa28ef76"
+    },
+    {
+      "path": "packages/render/src/font-demand.js",
+      "sha256": "f9e380aff656a1e988b528f9a12bcffdfffdbe1b695f5d82f4698c79cfbb9a33"
+    },
+    {
+      "path": "packages/render/src/fonts-node.js",
+      "sha256": "2a1201b3c2143d5ebf50aced132719288ecf12e1bdc8f79a9b6cbde3cf38f736"
+    },
+    {
+      "path": "packages/render/src/fonts-node.d.ts",
+      "sha256": "6397e4f11a9d9d19f7d918647b7bbad3dd4a7aeb75a400936bbe334fcdb10e54"
+    },
+    {
+      "path": "packages/pptx/test/node-demand-native-measurements.mjs",
+      "sha256": "302a4efd68056a62c9624c78a89aa287d1d201b624a39deab9c91bb4865446d4"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/changed01-slot-refusal.log",
+      "sha256": "b507166839f2f3ef59fa9bbddea74d9565897dd8ceeae5d456a37d630ab41195"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/changed02.log",
+      "sha256": "bd39046ab4d685d54ec0855e519dd0072fa44e8b60ff3de9edd207c8ace7398f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/focused01.log",
+      "sha256": "dd0fbaffb91b3ae102b6c5dcf9ad49dbeac796b811a3ef1ebe2964883103bd47"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/focused02.log",
+      "sha256": "2859670ff410e5ed39d7f3f0151943420396217527141ec0d2093c00793e8d18"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/gallery-replay.log",
+      "sha256": "be7fc5f874ef91abe9808e1cc97576d95a9fe095f388e836f0922521506c94ca"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/hydration.log",
+      "sha256": "7840ab4c00a830569156c9b0068c1320be60ded1e6865eb54c690e6fb053ed8f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/mapped-gallery-sparse.log",
+      "sha256": "359168ff63f96d57f710dc132ec25b62648b05b0cbbbf60fb3b95767d01bfa6f"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/mapped-pptx.log",
+      "sha256": "b3506c9f3f09ef859c12cc49b1e029a3154068f31fdbbae0d02cababc123bf6d"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/mapped-render.log",
+      "sha256": "f398b04d303f5ff239feb8c0ef40b110da1c541b0199ff627e50cc80e5c89cf0"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/mapped-text-sparse.log",
+      "sha256": "338a2058298794f870b69817d5a9712be4aad71825d76e3b417ec052a5b251dd"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/mapped-types.log",
+      "sha256": "7478b765fd1e74a94b6387ee6c4ca0bd17b1e438551b6d5a99a0d9316b8f37ca"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/neighbors.log",
+      "sha256": "4cad5f6fb22dfa90660d3026bc8a3d282d436529cda264bb6f6d140452fba9dc"
+    },
+    {
+      "path": "docs/handoff/2026-11-10/native-font-dependencies-successor/logs/text-replay.log",
+      "sha256": "5b1480600a154b3871e7be4196d7dfab854e82bda88dcc4e0965cf4b99547b2d"
+    }
+  ]
+}
