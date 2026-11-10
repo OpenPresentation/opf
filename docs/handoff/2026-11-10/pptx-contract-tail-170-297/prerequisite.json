@@ -1,0 +1,18 @@
+{
+  "base": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "path": "docs/evidence/rich-input-and-platform-ci-20260915/painting-Linux.json.gz",
+  "oid": "2bb264bd47d1382c5cf50c9b7c4f75e2750be7f6",
+  "bytes": 16102,
+  "sha256": "0b7ef1b73bbd4f31c5ac67716bea08f22a64df066f4ad343765c0d3d74511e56",
+  "absentBefore": true,
+  "exclusiveWrite": true,
+  "noFilters": true,
+  "noOverwrite": true,
+  "parentsVerifiedWithinOwnedWorktree": true,
+  "indexBefore": "5f0572a1554b2722d984b083d9bca380105c05bff1dd919aaf7790d3443296d8",
+  "indexAfter": "5f0572a1554b2722d984b083d9bca380105c05bff1dd919aaf7790d3443296d8",
+  "stageBefore": "80dbf505f242594cc6f358f3504889a153f6cac29fd9488ceddb3ded21c8bb1f",
+  "stageAfter": "80dbf505f242594cc6f358f3504889a153f6cac29fd9488ceddb3ded21c8bb1f",
+  "trackedSourceChange": false,
+  "preemptedKnownSparsePrerequisite": true
+}

@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "neverMerge": true,
+  "evidenceOnly": true,
+  "base": "a52dc9441f7eec9dc6f72debb174339758e1761e",
+  "folder": "docs/handoff/2026-11-10/pptx-contract-tail-170-297",
+  "source": "d7d95b83f6209fbe5a62eca8039a58ec20ea2bc9",
+  "sourceTree": "064041678d78d3e81164184398d5729cb249c195",
+  "archive": {
+    "path": "raw.json.gz",
+    "bytes": 110691,
+    "sha256": "f8cd07b752c5c7a24a5617b7ffc9d7e43c0e58510dea8d930d08dfb3a512255a",
+    "expandedBytes": 502338,
+    "records": 393,
+    "logicalBytes": 332869
+  },
+  "maintained": {
+    "runner": "scripts/run-tests.mjs",
+    "runnerBlob": "101dbb51381d68ae11e0b8c972386ea93d4f8032",
+    "runnerSHA256": "d612fee0d60877522d37febf41a195c5d88cd3fad14abaadba8eff9846450e93",
+    "suitesBlob": "05e9285abd6544a4026f63b4f48b908ac61e9e42"
+  },
+  "tailManifest": {
+    "path": "tail-manifest.json",
+    "bytes": 68383,
+    "sha256": "b06cb24cf6ab71140619a9ed75e0ae4d0c8be7f73a5d0302de68d9cbdcde2d9f"
+  },
+  "prerequisite": {
+    "path": "prerequisite.json",
+    "bytes": 848,
+    "sha256": "e68c6080f7fc09b01e2deca79e3ff00a5115c2554e71a8f7d30cf224211dd4c7"
+  },
+  "scope": {
+    "suite": "contract",
+    "scripts": 297,
+    "range": [
+      170,
+      297
+    ],
+    "pass": 128,
+    "unvisited": 0,
+    "fullSuite": false,
+    "first169Rerun": false,
+    "office": false
+  },
+  "proofFiles": [
+    {
+      "path": "README.md",
+      "bytes": 2578,
+      "sha256": "7857f4b585386111fabfb76d94da1e7aad1e4489b6996200a808e47883b057dd"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 7457,
+      "sha256": "ffb50265843fb732d51d5383ef93de1cd60f71ff4cb2ae5a2acc8998978d5906"
+    }
+  ]
+}
