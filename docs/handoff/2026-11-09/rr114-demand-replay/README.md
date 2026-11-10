@@ -1,5 +1,9 @@
 # RR-114 bounded demand replay
 
+Final tested runtime `36c8eb798286fd8d30cc2a6cfe16e857d9338cde`:33 focused tests, final demand11/fault3/native7, lazy558-resolution/CE20 cache neighbors and337-file syntax check pass. Actual owner16 records16 rather than32 times (2333events/438742logicalB); owner36 records36 rather than72 (2386events/511836B). Both retain exactly3 faces and all52 emitted SVG hash pairs/font files match the same-candidate cold control under unchanged4096/512KiB caps. A reviewed the immutable semantic and compact deltas without a blocker. Coordinator final review, exclusive timing/RSS and the one coherent mapped/CI/native gate remain separate. No speed, RSS or release claim is made.
+
+## Historical compact checkpoint
+
 Compact retention checkpoint: actual owner16/36 first refused the unchanged512KiB cap at753/649 events (32/72 binds, identical52 SVG pairs and3 faces). Those actual receipts remain preserved. The approved repair interns FULL validated base snapshots with presence-tagged signatures, exact texts and FIRST path states; ordered events hold scalar IDs and first size/outcome/selection fingerprints, and nested seen maps avoid duplicated style-plus-text strings. All tables/keys/events count toward the same cap.33 focused controls pass after the representation change; actual16/36 repeat and peer review are pending. The byte-cap fixture now uses two160k texts because one200k text is retained once rather than duplicated; approved limits are unchanged.
 
 ## Earlier semantic checkpoint
@@ -28,3 +32,7 @@ Do not push the folded compatibility/font/chart leaves. Work only on codex/rr-11
 ## Remaining structural proof
 
 Before timing, run a non-timed actual16/36 input check using the accepted manifest hashes, actual loader bind/analysis counters and same-candidate cold SVG/face equality. Report cap/context/style refusals honestly. Do not raise4096/512KiB caps to manufacture admission; any compact retention repair needs measured structural evidence and review.
+
+## Lossless qualification packet
+
+`raw.json.gz` contains 111 lossless members and `receipt.json` binds the exact tested Git source and byte-identical built replay modules. It preserves both genuine REDs, setup failures, original owner-cap refusals, compact admission controls, accepted exact input files/manifest, all raw case outputs/stdout/stderr, scripts and final neighbors. Run `node docs/handoff/2026-11-09/rr114-demand-replay/verify.mjs` offline from the repository root to check every member, both104 functional SVG pairs, input/source/module identities and current relevant-source/build matches. Historical validity does not mark a future merged revision as tested. No shared font/license files were changed. No timer/performance trial, aggregate, CI watcher, Office, golden or release action ran here.

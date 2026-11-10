@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "source": "36c8eb798286fd8d30cc2a6cfe16e857d9338cde",
+  "base": "276f339a68069dc11970d649092d6181c9feba38",
+  "sourceTree": "45daf146f85cc57194381fe2a650528d80994366",
+  "records": 111,
+  "rawBytes": 485178,
+  "compressedBytes": 110049,
+  "archiveSha256": "7b1c819db8c321fe8b579ce9c106a4abdb204e44677f562331d748465e26f072",
+  "bindings": [
+    {
+      "file": "packages/render/README.md",
+      "sha256": "f9fc20a006086950ce94a3ce6033649a2810388542d6cb5fd2f031c5b029fe07"
+    },
+    {
+      "file": "packages/render/scripts/build.mjs",
+      "sha256": "8894601801b54738d6c10d8fe919f9014f81653208d1346134e5155835569f08"
+    },
+    {
+      "file": "packages/render/src/font-demand.js",
+      "sha256": "b909a71f3a88099be6f040277689ce6321593a3263676261022a03ce155d66a9"
+    },
+    {
+      "file": "packages/render/src/font-preparation-context.js",
+      "sha256": "e932dafb28742997df6bd727e02e7349508edc595108184a44884a86ffff6ba1"
+    },
+    {
+      "file": "packages/render/src/font-preparation-replay.js",
+      "sha256": "909b7184c1b4c1fc5ca82ae8d1e642b35895de4ce29173cb4ee1ada93677a869"
+    },
+    {
+      "file": "packages/render/src/lazy-fonts.js",
+      "sha256": "685da6dca08eb8964fe3ed69046bda2b042960580aedee453a1a3c24b24b0e43"
+    },
+    {
+      "file": "packages/render/test/node-demand-replay.mjs",
+      "sha256": "b2bef6873b34d8cc2829c7d66887d92600b78ea67f56ab91751dada2a86bd607"
+    }
+  ],
+  "built": [
+    {
+      "file": "packages/render/src/font-demand.js",
+      "output": "packages/render/dist/font-demand.js",
+      "sourceOnDiskSha256": "b909a71f3a88099be6f040277689ce6321593a3263676261022a03ce155d66a9",
+      "builtSha256": "b909a71f3a88099be6f040277689ce6321593a3263676261022a03ce155d66a9"
+    },
+    {
+      "file": "packages/render/src/font-preparation-context.js",
+      "output": "packages/render/dist/font-preparation-context.js",
+      "sourceOnDiskSha256": "e932dafb28742997df6bd727e02e7349508edc595108184a44884a86ffff6ba1",
+      "builtSha256": "e932dafb28742997df6bd727e02e7349508edc595108184a44884a86ffff6ba1"
+    },
+    {
+      "file": "packages/render/src/font-preparation-replay.js",
+      "output": "packages/render/dist/font-preparation-replay.js",
+      "sourceOnDiskSha256": "909b7184c1b4c1fc5ca82ae8d1e642b35895de4ce29173cb4ee1ada93677a869",
+      "builtSha256": "909b7184c1b4c1fc5ca82ae8d1e642b35895de4ce29173cb4ee1ada93677a869"
+    },
+    {
+      "file": "packages/render/src/lazy-fonts.js",
+      "output": "packages/render/dist/lazy-fonts.js",
+      "sourceOnDiskSha256": "685da6dca08eb8964fe3ed69046bda2b042960580aedee453a1a3c24b24b0e43",
+      "builtSha256": "685da6dca08eb8964fe3ed69046bda2b042960580aedee453a1a3c24b24b0e43"
+    }
+  ],
+  "observed": {
+    "baselineSource": "276f339a68069dc11970d649092d6181c9feba38",
+    "baselineControl": "artifacts/font-replay/initial-control.mjs",
+    "baselineSlides": 6,
+    "expectedSlides": 3,
+    "firstCheckpoint": "af6bfc2f09a10aace551889e1ab7d923fb52819b",
+    "semanticCheckpoint": "aa4c4cc4cf069e28a420ded194b3a4178fbcb615",
+    "focusedTests": 33,
+    "finalNeighborSession": 4357,
+    "finalNeighborExit": 0,
+    "neighborTests": {
+      "demand": 11,
+      "fault": 3,
+      "native": 7
+    },
+    "lazySelectionPairs": 558,
+    "syntaxFiles": 337,
+    "functionalBefore": {
+      "session": 73722,
+      "exit": 0,
+      "source": "aa4c4cc4cf069e28a420ded194b3a4178fbcb615",
+      "svgPairs": 52
+    },
+    "functionalCompact": {
+      "session": 6196,
+      "exit": 0,
+      "source": "36c8eb798286fd8d30cc2a6cfe16e857d9338cde",
+      "svgPairs": 52
+    },
+    "limits": {
+      "events": 4096,
+      "logicalBytes": 524288
+    },
+    "formalTimingRun": false,
+    "nativeApplicationRun": false
+  },
+  "limitations": [
+    "Historical baseline/semantic RED logs and exact controls/Git sources are retained. Their old built modules were overwritten by later normal builds; no retrospective old built-file measurement is claimed.",
+    "Actual functional drivers use read-only module-load diagnostics; cold controls disable only the replay scope. No CPU/RSS/duration benchmark is derived from these runs.",
+    "Guard-disabled size-sensitive callback differential is an explicitly modified in-memory owned control, not a historical full-runtime/native result.",
+    "First test-harness delimiter syntax refusals are setup failures, preserved separately from genuine6vs3/6vs8 runtime assertions.",
+    "One coherent aggregate/CI/native gate and exclusive controlled timing/RSS remain coordinator-owned."
+  ]
+}
