@@ -671,7 +671,7 @@ export function importReferenceOverlays(shapes, frames, rels, entries, { scale =
       pairs = multiAxis ? overlayAxisPairs(plot) : undefined;
     const refs = [];
     for (const o of r.overlays) {
-      const pair = multiAxis ? pairs?.[o.axis] : undefined,
+      const pair = multiAxis && (o.axis === 'value' || o.axis === 'secondary') ? pairs?.[o.axis] : undefined,
         axis = multiAxis ? pair?.value : arr(plot?.['c:valAx'])[0],
         min = Number(axis?.['c:scaling']?.['c:min']?.val),
         max = Number(axis?.['c:scaling']?.['c:max']?.val);
