@@ -49,7 +49,7 @@ item's state edits its row and appends a log line in the same PR.
   `pptx/diagram-shapes-unavailable` (an export option is not a validation rule). (3) Right-to-left text keeps a picture (PowerPoint's own
   bidirectional layout decides its placement). (4) All 32 families are allowlisted: the misses in the light, serif, Segoe UI and Japanese
   comparisons are glyph-only (the preview's stand-ins for Aptos, Segoe UI and Yu Gothic), with geometry and label positions matching.
-- **D2 diagrams: recommended against** (awaiting the owner).
+- **D2 diagrams: excluded from v0.34 by the owner on 2026-11-10.** The coordinator presented the recommended exclusion and the owner selected “Leave D2 out of v0.34 (Recommended)”. Mermaid, Graphviz DOT and PlantUML retain their existing scope.
 - **SH-10 decisions (vetoable, 2026-11-07).** (1) Shape text grows as a lone body block does (LH-48 and the lone-block rule): full steps of the type scale, capped at a paragraph's display size (`LONE_DISPLAY_SIZES.text`), while it fits at that size and fills at most `LONE_TARGET` of the text rectangle. (2) Growth only: text that does not hold the body size is still fitted down to the floor (an overflowing shape would be worse). (3) Sibling shapes keep one size (LH-43): of the shapes of one parent that grew, each takes the smallest size any of them reached that holds the body size.
 - **SH-12 decisions (vetoable, 2026-11-07).** (1) OPF reads DOT itself and writes the graph as pele flowchart source (`dotToMermaid`), so the
   preview, sizing, palette, SH-07's native shapes and provenance are the flowchart's, unchanged; no second layout. (2) DOT's default
@@ -220,3 +220,5 @@ item's state edits its row and appends a log line in the same PR.
 - 2026-11-09: SH-27 explicit image annotation bleed is separately approved: signed physical origins, bounded sizes/focus/stops, strict genuine text fit, no forced clip/move/shrink/reflow or bleed warning. Schema/composition/native frame recovery/docs are under focused qualification after the old-build three-layer regression refusal; original frozen SH27 mapped gate is unchanged.
 
 - 2026-11-09: SH-27 explicit overlay insertion center is a separate approved API consistency follow-up: honor finite signed centers and keep omitted-center gallery insertion visible; preserve sizes and Undo. Focused qualification pending, with final coherent integration gate owed.
+
+- 2026-11-10 — Owner explicitly decided to leave D2 support out of v0.34 after the coordinator presented the outstanding decision. This closes the D2 scope decision; no D2 parser, schema syntax, renderer or export support is claimed. Existing Mermaid/DOT/PlantUML acceptance remains required.

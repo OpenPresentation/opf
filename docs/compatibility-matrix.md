@@ -46,8 +46,8 @@ imply universal Office or full-catalog visual parity.
 
 ## Current source inventory
 
-This checkout's v0.34 source contains **148 JSON** example decks (101 gallery,
-47 technical), **40 default layouts** and a **53-slide sampler** (40 layouts plus
+This checkout's v0.34 source contains **149 JSON** example decks (101 gallery,
+48 technical), **40 default layouts** and a **53-slide sampler** (40 layouts plus
 13 dynamic compositions). Two Markdown decks and the quickstart fixture are
 outside the JSON catalog. These counts describe source, not an already-published
 v0.34 registry set. The recorded 0.33 release contains 137 JSON examples,
@@ -234,7 +234,7 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
-| Bundled examples catalog | `@openpresentation/opf/examples` | **147 JSON** decks in this source (101 gallery, 46 technical); published counts follow the installed release; two Markdown decks and quickstart JSON are outside this catalog |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **149 JSON** decks in this source (101 gallery, 48 technical); published counts follow the installed release; two Markdown decks and quickstart JSON are outside this catalog |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Supported theme-slot colors write native `schemeClr` references; arbitrary native Office recoloring and full visual fidelity remain separately scoped. |
 | Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |

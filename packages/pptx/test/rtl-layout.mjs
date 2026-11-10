@@ -31,7 +31,7 @@ const shapes = (xml, slide) => [...xml[`ppt/slides/slide${slide}.xml`].matchAll(
   x: Number(/<a:off x="(-?\d+)"/.exec(shape)?.[1]), width: Number(/<a:ext cx="(\d+)"/.exec(shape)?.[1]),
   pPr: /<a:pPr\b[^>]*>/.exec(shape)?.[0] ?? '',
   text: [...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''),
-  runs: [...shape.matchAll(/<a:r><a:rPr\b[^>]*?\slang="([^"]*)"[^>]*>[\s\S]*?<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(match => ({language: match[1], text: match[2]})),
+  runs: [...shape.matchAll(/<a:r>(<a:rPr\b[^>]*?\slang="([^"]*)"[^>]*>[\s\S]*?)<a:t>([^<]*)<\/a:t><\/a:r>/g)].map(match => ({lang: match[2], text: match[3], latin: /<a:latin typeface="([^"]*)"/.exec(match[1])?.[1], cs: /<a:cs typeface="([^"]*)"/.exec(match[1])?.[1]})),
 }));
 const attribute = (tag, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(tag)?.[1];
 
@@ -114,7 +114,11 @@ const rtl = await read(deck('ar')), ltr = await read(deck('en'));
 {
   const list = shapes(rtl.xml, 1);
   const nested = list.find(shape => shape.text.includes('v2.0'));
-  assert.deepEqual(nested.runs.map(run => `${run.lang}:${run.text}`), ['ar-SA:العنصر الثاني: ', 'en-US:v2.0', 'ar-SA: و ', 'en-US:PowerPoint 365']);
+  assert.deepEqual(nested.runs.map(run => `${run.lang}:${run.text}`), ['ar-SA:العنصر الثاني: ', 'en-US:v2.0', 'ar-SA: ', 'ar-SA:و ', 'en-US:PowerPoint 365']);
+  // The neutral after v2.0 belongs to its original Latin font span even though
+  // the proofing adapter keeps Arabic language on the intervening whitespace.
+  assert.equal(nested.runs[2].cs,nested.runs[2].latin);
+  assert.equal(nested.runs[3].cs,undefined,'Arabic words continue to use the theme complex-script face');
   const first = list[1];
   assert.deepEqual(first.runs.map(run => run.lang), ['ar-SA'], 'digits next to Arabic words keep the Arabic run');
   assert.deepEqual(latinPhrases('x1 y-2.0 z.'), [[0, 10]], 'spaces and word punctuation join a phrase; trailing punctuation does not');

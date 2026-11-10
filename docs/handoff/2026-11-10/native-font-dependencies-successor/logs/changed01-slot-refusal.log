@@ -1,0 +1,16 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/opf-native-deps
+> node scripts/check-changed.mjs --base origin/codex/integration-034
+
+check-changed: 11 changed files since 7618e916d (plus uncommitted and untracked)
+FAILED  build (0.0 s)
+
+--- build failed (exit 1); last 1 lines of artifacts/check-changed/build.log:
+agent-slot: EPERM: operation not permitted, open '/Users/michael/.cache/opf-agent-slots/slot-0.lock'
+
+step   status   time
+build  FAILED  0.0 s
+total          0.0 s
+
+check-changed: 1 of 1 steps failed: build
+ ELIFECYCLE  Command failed with exit code 1.

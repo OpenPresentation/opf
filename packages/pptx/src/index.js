@@ -4,6 +4,7 @@ import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './number
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
+import {createNativeLatinSlots} from './native-latin-slots.js';
 import {officeSafeTypeface, safeMeasurement, sameMetrics, typefaceClasses, unsafeTypefacesIn, writeSafeTypefaces} from './safe-typefaces.js';
 import {PICTURE_SCALE, defaultSlideRasterizer, pictureDeck} from './picture-slides.js';
 import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-themes.js';
@@ -303,7 +304,7 @@ export async function toPptx(input, options = {}) {
   if (options.as === 'images') { if(options.fonts?.registry?.fontNames)await options.fonts?.ensure?.(presentation,{catalogs:options.catalogs,...(options.date?{date:options.date}:{}),renderOptions:{catalogs:options.catalogs,...(options.date?{date:options.date}:{})}}); return pictureSlidesPptx(presentation, options); }
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
   // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
-  options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map()};
+  options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map(), nativeMeasurementRequests: new Set()};
   // LH-28: safe mode measures each Latin text family as the Office-safe family it is written as, so composition lays out the
   // text PowerPoint draws on any machine. The design class of a family (sans-serif, serif, monospace) comes from the font
   // scheme records the slides resolve.
@@ -446,6 +447,7 @@ export async function toPptx(input, options = {}) {
     report: diagnostic => options.onDiagnostic?.(diagnostic)
   });
   context.scriptFonts = planScriptFonts(presentation, options.onDiagnostic, {catalogs: options.catalogs});
+  context.nativeLatinSlots = createNativeLatinSlots(context.scriptFonts, (language, slideIndex) => resolveScriptFonts(presentation, {slideIndex, ...(language ? {language} : {}), ...(options.catalogs !== undefined ? {catalogs:options.catalogs} : {})}), options.onDiagnostic);
   // RR-102: the deck language every run is written in (lang); a date field that shows English words says en-US instead.
   context.deckLang = context.scriptFonts?.lang ?? 'en-US';
   // Slide section labels become PowerPoint's native section list (src/sections.js).
@@ -2637,6 +2639,15 @@ function configurePresentation(pptx, presentation, context) {
   };
 }
 
+// Requests are already resolved through the chosen/safe measurement wrappers. One export never prepares the same request twice.
+async function prepareNativeMeasurements(presentation, options, requests) {
+  const key = ({text, style}) => JSON.stringify([text, style.fontFamily, style.fontWeight ?? 400, !!style.italic]);
+  const pending = requests.filter(request => !options.nativeMeasurementRequests.has(key(request)));
+  if (!pending.length) return;
+  await options.fonts.ensure(presentation, {renderOptions: {catalogs: options.catalogs, ...(options.date ? {date: options.date} : {})}, preserveChosenFamilies: true, ...(options.safeTypeface ? {mapFamily: options.safeTypeface} : {}), measurementRequests: pending});
+  for (const request of pending) options.nativeMeasurementRequests.add(key(request));
+}
+
 async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, options) {
   options = {...options, textMeasurement: slideTextMeasurement(presentation, slideIndex, options)};
   const slide = pptx.addSlide();
@@ -2670,6 +2681,13 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // what import reads the slide's layout from), in a variant whose Body placeholder sits at the recomposed body's box.
   const recomposed = template !== undefined && geometry.recomposed !== undefined;
   const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto' || recomposed;
+  // Native wrap measures an undrawn base alphabet after the ordinary SVG demand analysis.
+  // Collect at the planner's actual request boundary; prepare asynchronously before its unchanged synchronous plan.
+  if (options.bodyText === 'native' && options.fonts?.registry?.fontNames && options.fonts?.ensure) {
+    const measurementRequests = [];
+    planNativeBody(opfSlide, geometry, {automatic, textMeasurement: options.textMeasurement, collectMeasurement: request => measurementRequests.push(request)});
+    await prepareNativeMeasurements(presentation, options, measurementRequests);
+  }
   const nativeBody = options.bodyText === 'native' ? planNativeBody(opfSlide, geometry, {automatic, report: options.onDiagnostic, textMeasurement: options.textMeasurement}) : undefined;
   if (template && nativeBody) template = recomposed
     ? {...template, key: `${template.key}\u0000recomposed-native-body`, recomposedBody: {box: nativeBody.box, anchor: nativeBody.anchor, style: {...nativeBody.item.textStyle, fontSize: nativeBody.item.text.fontSize, alignment: nativeBody.item.alignment}}}
@@ -2738,6 +2756,11 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     // block, so it can bind to the Title placeholder like a one-line title (Keynote reports `title showing` only for a bound title).
     const wantsNativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
     const titleFace = wantsNativeTitle ? nativeFontOptions(item.textStyle) : undefined;
+    if (wantsNativeTitle && options.fonts?.registry?.fontNames && options.fonts?.ensure) {
+      const measurementRequests = [];
+      nativeTitleWrapBox(item, geometry, options.textMeasurement, {nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true}, collectMeasurement: request => measurementRequests.push(request)});
+      await prepareNativeMeasurements(presentation, options, measurementRequests);
+    }
     const nativeTitle = wantsNativeTitle ? nativeTitleWrapBox(item, geometry, options.textMeasurement, {
       nativeStyle: {fontFamily: options.safeTypeface ? options.safeTypeface(titleFace.fontFace) : titleFace.fontFace, fontWeight: titleFace.bold ? 700 : 400, italic: titleFace.italic === true},
       report: reason => options.onDiagnostic?.({
@@ -2799,6 +2822,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       // role tag. Role recovery must not depend on outline measurement support.
       const split = titleSplitLines(item, geometry.items, opfSlide.title), objectName = `OPF heading ${item.path} line ${split?.offset ?? 0}`;
       context.headingTags.set(objectName,{v:1,group:item.path,field:split?'title':item.field,line:split?.offset??0,count:split?.count??1});
+      context.nativeLatinSlots.rememberLines(slideIndex,objectName,item.text.lines,String(item.value),item.textStyle,item.path);
       slide.addText(item.text.lines.join("\n"), {
         ...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),
         ...nativeFontOptions(item.textStyle), ...eyebrowOptions(item.textStyle, item.text.fontSize),
@@ -3116,6 +3140,7 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         const lineAlign=physicalAlignment('left',lineDirection);
         const objectName=`OPF list ${path} line ${lineNumber++}`;
         const number=first?entry.marker.number:undefined;
+        context.nativeLatinSlots.remember(context.slideIndex,objectName,line.fragments.map(fragment=>({text:fragment.text,source:fragment.run.text,start:fragment.start,end:fragment.end,style:fragment.style,sourceRun:fragment.runIndex,marker:fragment.kind==='marker'})),path);
         if(first&&!markerless)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
         const paragraph=first&&!markerless?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false,...(keepLevels?{indentLevel:level}:{})};
         const runs=richLineRuns(line,color,native,context,path);
@@ -4153,6 +4178,7 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
     }
     // LH-12: an untagged body line is still named for its block (`OPF text <path> line N`), never PowerPoint's generic "Text N".
     // LH-63: a plain-text group has a shape for every line, a blank one included (keepEmpty), as an unformatted body's lines do.
+    context.nativeLatinSlots.remember(context.slideIndex,name ?? `OPF text ${path} line ${index}`,line.fragments.map(fragment=>({text:fragment.text,source:fragment.run.text,start:fragment.start,end:fragment.end,style:fragment.style,sourceRun:fragment.runIndex,marker:fragment.kind==='marker'})),path);
     if (runs.length || keepEmpty) slide.addText(runs.length ? runs : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, ...smallRunSpacing(line, placed), objectName: name ?? `OPF text ${path} line ${index}`});
   }
 }
@@ -4206,6 +4232,7 @@ function addNativeTitle(slide, item, context, options, deckContext, wrap) {
   deckContext.headingTags.set(objectName, {v: 1, group: item.path, field: 'title', line: 0, count: 1, boundary: 'end', separator: ''});
   deckContext.nativeTitles.add(objectName);
   const style = item.textStyle ?? resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, path: item.path}, options.textMeasurement);
+  context.nativeLatinSlots.remember(context.slideIndex,objectName,[{text:bindNoBreak(item.value),source:item.value,style:item.textStyle}],item.path);
   slide.addText(bindNoBreak(item.value), {
     ...textBoxOptions({x: box.x / 96, y: top / 96, w: box.width / 96, h: height / 96}, context, fit.fontSize * .75),
     ...nativeFontOptions(style),
@@ -4225,7 +4252,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, diagnostics: [diagnostic]});
   }
   // Generated socials carry one link per explicit source line; wrapped lines share it.
-  let sourceLineIndex = 0;
+  let sourceLineIndex = 0, latinSourceOffset = 0;
   for (const [index, line] of fit.lines.entries()) {
     const link = config.links?.[sourceLineIndex];
     if (fit.sourceLines?.[index]?.boundary === 'hard') sourceLineIndex += 1;
@@ -4248,6 +4275,9 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     // A run-level link keeps the muted, non-underlined furniture look of the preview (hlinkClr=tx, u=none).
     const lineColor = pptxColor(config.color ?? context.textColor);
+    const latinStart = sourceLine?.start ?? String(text ?? '').indexOf(line,latinSourceOffset);
+    context.nativeLatinSlots.remember(context.slideIndex,objectName,[{text:line,source:String(text ?? ''),start:latinStart,end:latinStart+line.length,style:{...style,...(config.lang?{lang:config.lang}:{})}}],config.path);
+    latinSourceOffset = latinStart+line.length;
     slide.addText(link?.href && line ? [{text: line, options: {hyperlink: {url: link.href}, color: lineColor, underline: {style: 'none'}}}] : line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
       ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, config.lang),
@@ -5812,10 +5842,16 @@ async function normalizePptxZip(raw, context) {
         ? `${family} is written as ${safe}, which has the same character widths, so the text wraps as in the preview.`
         : `${family} is written as ${safe}, an Office-safe family on every Windows and macOS machine; the text was laid out with ${safe}'s widths, so its line breaks can differ from the preview drawn in ${family}.`});
   }
+  for (const path of Object.keys(output)) {
+    const match = /^ppt\/slides\/slide(\d+)\.xml$/.exec(path);
+    if (!match) continue;
+    const xml = decodeText(output[path][0]), next = context.nativeLatinSlots.write(xml, Number(match[1])-1);
+    if (next !== xml) output[path] = [encodeText(next), output[path][1]];
+  }
   finalizeFontsUsed(output);
   // Structural proofing records are needed even without full source provenance.
   const languageParts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));
-  attachNativeLanguageTags(languageParts);
+  attachNativeLanguageTags(languageParts,context.nativeLatinSlots.groups);
   sealReferenceBindings(languageParts,context.chartHeadings,parseRelationships);
   for (const [path, bytes] of Object.entries(languageParts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];
   // Document references record evidence from the final normalized parts.

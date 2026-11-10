@@ -1,6 +1,6 @@
 // RR-86 opt-in prototype. Native paragraphs trade measured line positions for a
 // single editable body. No source words or per-line recovery tags are stored.
-import {bindNoBreak, paragraphDirection, resolveTextStyle, textWidthMeasurer} from '@openpresentation/opf/composition';
+import {bindNoBreak, paragraphDirection, resolveTextStyle, styledText, textWidthMeasurer} from '@openpresentation/opf/composition';
 import {autoNumScheme} from './numbered-list.js';
 
 const FIELDS = new Set(['text', 'items', 'bullets']);
@@ -18,7 +18,7 @@ const escapeXml = value => String(value).replace(/[&<>"']/g, char => ({'&': '&am
  * The first is returned with the rest as `others`; the first alone binds to the Body placeholder, each other one is an ordinary
  * native text box at its region (RR-88). An item that cannot be a native body falls back to measured shapes with a visible diagnostic.
  */
-export function planNativeBody(slide, geometry, {automatic = false, report = () => {}, textMeasurement} = {}) {
+export function planNativeBody(slide, geometry, {automatic = false, report = () => {}, textMeasurement, collectMeasurement} = {}) {
   const candidates = geometry.items.filter(item => FIELDS.has(item.field));
   const reject = (item, reason) => report({code: 'native-body-fallback', path: item.path, reason,
     message: `Native body export cannot represent this ${reason.replaceAll('-', ' ')}; the current measured shapes were exported.`});
@@ -29,13 +29,13 @@ export function planNativeBody(slide, geometry, {automatic = false, report = () 
   }
   const plans = [];
   for (const item of candidates) {
-    const plan = planOne(item, geometry, automatic, reason => reject(item, reason), textMeasurement);
+    const plan = planOne(item, geometry, automatic, reason => reject(item, reason), textMeasurement, collectMeasurement);
     if (plan) plans.push(plan);
   }
   return plans.length ? {...plans[0], others: plans.slice(1)} : undefined;
 }
 
-function planOne(item, geometry, automatic, reject, textMeasurement) {
+function planOne(item, geometry, automatic, reject, textMeasurement, collectMeasurement) {
   const region = geometry.regions?.find(region => region.name === item.region);
   if (!/^slides\.\d+\.(?:blocks\.\d+\.|[A-Za-z][A-Za-z0-9+_-]*\.)?(?:text|items|bullets)$/.test(item.path) || !automatic && (!region || region.collapsed || region.content.length !== 1 || region.overflow?.length)) {
     reject('complex-composition'); return undefined;
@@ -77,7 +77,7 @@ function planOne(item, geometry, automatic, reject, textMeasurement) {
   // RR-105 (opf#1089): PowerPoint wraps the body itself, so its box must keep core's lines whole (see nativeWrapBox); a body whose lines
   // PowerPoint could break differently at any width keeps its measured shapes.
   const limits = item.frameBox ? {left: item.frameBox.x + CARD_BORDER, right: item.frameBox.x + item.frameBox.width - CARD_BORDER} : {left: 0, right: geometry.width ?? Infinity};
-  const wrap = nativeWrapBox(item, values, list, limits, textMeasurement);
+  const wrap = nativeWrapBox(item, values, list, limits, textMeasurement, collectMeasurement);
   if (!wrap) { reject('tight-wrap'); return undefined; }
   if (item.frameBox) return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...item.box}, anchor: 'top', carded: true, wrap};
   // LH-48: core sets a lone block that fills too little of the body in the middle of its region; the placeholder anchors it there too.
@@ -180,12 +180,17 @@ export function nativeWrapWidths(item, values, list, textMeasurement) {
  * never past `limits` (a card's inner edge, else the slide) on the side the alignment grows (both sides for centered text, which keeps its
  * center). Undefined when no width keeps every line.
  */
-export function nativeWrapBox(item, values, list, limits, textMeasurement) {
+export function nativeWrapBox(item, values, list, limits, textMeasurement, collectMeasurement) {
   const indent = list ? item.text.listEntries[0].marker.indent : 0, wrapWidth = item.box.width - indent;
   const widths = wrapWidth > 0 ? nativeWrapWidths(item, values, list, textMeasurement) : undefined;
   if (!widths) return undefined;
   const margin = WRAP_MARGIN * wrapWidth;
-  const average = textWidthMeasurer(resolveTextStyle(item.textStyle, textMeasurement), textMeasurement)('abcdefghijklmnopqrstuvwxyz', item.text.fontSize) / 26;
+  const style = resolveTextStyle(item.textStyle, textMeasurement);
+  if (collectMeasurement) {
+    collectMeasurement({text: styledText('abcdefghijklmnopqrstuvwxyz', style), size: item.text.fontSize, style});
+    return undefined;
+  }
+  const average = textWidthMeasurer(style, textMeasurement)('abcdefghijklmnopqrstuvwxyz', item.text.fontSize) / 26;
   const alignment = item.alignment ?? 'left';
   const left = Math.max(0, item.box.x - limits.left), right = Math.max(0, limits.right - (item.box.x + item.box.width));
   const room = alignment === 'center' ? 2 * Math.min(left, right) : alignment === 'right' ? left : right;
@@ -198,7 +203,7 @@ export function nativeWrapBox(item, values, list, limits, textMeasurement) {
 
 // RR-105 (opf#1127): the same two-sided wrap margin for a plain wrapped title. Its heading area is a hard boundary;
 // an automatic heading uses the content frame horizontally when that frame contains it.
-export function nativeTitleWrapBox(item, geometry, textMeasurement, {nativeStyle, report = () => {}} = {}) {
+export function nativeTitleWrapBox(item, geometry, textMeasurement, {nativeStyle, report = () => {}, collectMeasurement} = {}) {
   const style = {...item.textStyle, ...nativeStyle};
   // The physical family and style flags the writer serializes are the measurement target. Do not carry metadata for another face.
   delete style.fontFace;
@@ -215,7 +220,7 @@ export function nativeTitleWrapBox(item, geometry, textMeasurement, {nativeStyle
     // A placed-picture heading can be wider than the body's frame. Its authored title box is then the conservative boundary.
     if (!inside) area = item.box;
     const limits = {left: Math.max(0, area.x), right: Math.min(geometry.width, area.x + area.width)};
-    const wrap = nativeWrapBox({...item, textStyle: style}, [item.value], false, limits, textMeasurement);
+    const wrap = nativeWrapBox({...item, textStyle: style}, [item.value], false, limits, textMeasurement, collectMeasurement);
     if (!wrap) report('tight-wrap');
     return wrap;
   } catch (error) {
@@ -241,7 +246,8 @@ export function addNativeBody(slide, plan, context, options, helpers) {
   const {item, values, list, box, anchor} = plan;
   const base = item.textStyle;
   const baseFont = helpers.nativeFontOptions(base);
-  const paragraphs = [];
+  const paragraphs = [], latinFragments = [];
+  let sourceRun = 0;
   for (const value of values) {
     let paragraph = [];
     paragraphs.push(paragraph);
@@ -257,10 +263,14 @@ export function addNativeBody(slide, plan, context, options, helpers) {
         hyperlink: run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url: run.link} : undefined, ...helpers.langOptions(context, run.language)};
       // LH-11: PowerPoint wraps the body itself, so the spaces core's line breaker never breaks at are no-break spaces (import writes them back).
       const pieces = bindNoBreak(run.text).split(/\r\n|\r|\n/);
+      let sourceOffset = 0;
       pieces.forEach((text, index) => {
         if (index) { paragraph = []; paragraphs.push(paragraph); }
         paragraph.push({text, options: {...runOptions}});
+        latinFragments.push({text,source:run.text,start:sourceOffset,end:sourceOffset+text.length,sourceRun,style:{...style,...(run.language?{lang:run.language}:{})}});
+        sourceOffset += text.length + (/^(?:\r\n|\r|\n)/.exec(run.text.slice(sourceOffset+text.length))?.[0].length ?? 0);
       });
+      sourceRun++;
     }
   }
   const indent = list ? item.text.listEntries[0].marker.indent * .75 : undefined;
@@ -283,6 +293,7 @@ export function addNativeBody(slide, plan, context, options, helpers) {
       breakLine: position === paragraph.length - 1 && index < paragraphs.length - 1}}));
   });
   const objectName = `OPF native body ${item.path}`;
+  context.nativeLatinSlots.remember(context.slideIndex,objectName,latinFragments,item.path);
   // RR-105: the box wraps where core wrapped (nativeWrapBox), at the item's columns (a region can be wider than core's measure).
   const {x, width} = plan.wrap;
   slide.addText(runs, {...helpers.textBoxOptions({x: x / 96, y: box.y / 96, w: width / 96, h: box.height / 96}, context, item.text.fontSize * .75),
