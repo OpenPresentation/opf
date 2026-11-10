@@ -1,0 +1,4 @@
+// Source/build/input checks only. This command never loads fonts or renders slides.
+import {writeFileSync,mkdirSync,existsSync} from 'node:fs';import {dirname,resolve} from 'node:path';import {preflight} from './shared.mjs';
+const argument=process.argv.find(value=>value.startsWith('--out='));if(!argument)throw Error('--out=<fresh receipt> required');const output=resolve(argument.slice(6));if(existsSync(output))throw Error('fresh preflight output required');
+const result=preflight();mkdirSync(dirname(output),{recursive:true});writeFileSync(output,JSON.stringify(result,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({passed:true,kind:result.kind,control:result.runtimes.control.head,candidate:result.runtimes.candidate.head,sharedBuiltModules:result.runtimes.control.built.length,driverFiles:result.driverFiles.length}));
