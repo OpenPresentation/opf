@@ -2,7 +2,31 @@
 
 **v0.33.0 is published. v0.34.0 is unpublished.** The original31 checkbox lines in [issue1139](https://github.com/OpenPresentation/opf/issues/1139) remain intact:21checked/10open. The current-state table below supersedes historical descriptions inside those preserved lines. Every original item remains in scope. [Previous detailed checkpoint](../2026-11-09/coordination-checkpoint.md) and [binding working rules](../2026-11-07/working-rules.md) remain available.
 
-## Latest coordinator checkpoint — November 10, 12:47 UTC
+## Latest coordinator checkpoint — 2026-11-10T14:10:26.403Z
+
+[Full baseline coverage](source57-renderer-terminal/full-baseline-coverage.json) now accounts for197scripts on unchanged57:196attempted,189PASS/7RED/onehelddirectgolden. All10full-only tests have now been attempted; no further renderer tail remains unvisited. The seven red names are golden-gate, script-family-hosts, script-name-hosts, symbol-fonts, symbol-role-emoji-fallback, lazy-face-fallback and raster-script-clusters. The six font/fixture cases nowPASSon reviewed438857ea (runtime3042/fixtures9e120), with originalfailures preserved in206-record proof; the pending pinnedgoldenworkflow remains. Currentfullcombined andbrowsercheck are stillOWED, not inferredgreenfromhistoricalcoverage. Additional sixwave rawlogs/indices/drivers are losslessly retained alongside the original309-record packet.
+
+Ready reviewed sources: saved-overlayf5b579a97 (296PPTX/failed-onlygallery+textPASS,47-recordrootreplay); needed-font438857ea (11new/strictneighbors/59lazy-renders/5rasterlanguages,206-recordrootreplay and3actualPNGsrootviewed); secondary-singleton0df13bafd (69focused/478syntax/4archivebytepairs,118-recordrootreplay andsamplePNGrootviewed; Apeerclosed inherited-axiscrash at876). Fourthqualifier65973082 addsclosed3/3/1shape case, no cap/originalfixturechange; Bpeerreviewpending. Rootwillnormalfoldafterthismetadata commit andrunONEcoherentrequiredgate. Noagentleafpush/mapperduplicates.
+
+B07source-prepC3 andqualifiedpostflight00 are public/NEVERMERGE; metadata5PASS29.8/26.7s. ROOTselected05defaultpurePASS using00 andtrueauthorityenvelope00ace8...; ONEactualattempt13:52:57–13:53:02 failedatfirsttitleTEXT: expectedNode-to-PS5OEMmojibake, actualcorrectArabic.1readonlyopen/0close/0copy/0Quit,cleanupunconfirmed; globalbefore/immediateafter both0, noattribution/cleanup/retry. NoPNG/glyphresult. Aprovedhidden437 IPCcause andpreparesnarrowASCII-stdoutfollowup withvalidUnicodecontrols; no source/nativevalues orgeometrychange. Fullfailedoutputpreserved C:/opf-work/b07-segment-05-native01 plus sibling receipts, Asealsseparately. ROOTwrong-checkout testdiffreview was explicitlywithdrawn; actual438 retainsstrictCovers/STIX-onlyMath and strengthensfixtures.
+
+All original31scope andownerremainder remain. v0.34unpublished; canonical1225/mainunadvanced.
+
+
+## Historical coordinator checkpoint — November 10, 13:18 UTC
+
+v0.34 remains UNPUBLISHED. Root staging ae4a13f9a2912454013ed0e55a23fecac77b0017 normally folds reviewed source57;12product/program objects matched exactly and5coordinator metadata checks passed29.1s. Actual normalpush0. Canonical PR1225 stille5de8809, maina52 unchanged. Never push folded leaves.
+
+- [Exact recovery and original partial renderer terminal](source57-renderer-terminal/README.md): current57mapped9PASS/3sparseRED/typeSKIP; exact1860input restoration then ONLY three failed checks PASS. Original renderer tier is CONTRACT187, full197plusbrowserstillowed. Partialtail75PASS/1RED136/51laterUNRUN+61held. Separate137–140PASS then141sameemoji-rastercompanionRED; root31771continuesindependent46contract+10full-only commands, source/index/baselinesguarded. Shapes/DOT/PlantUML/SmartArt/chartanchors/offslide have passed in this third run, no native/edit/release inference.
+
+- [Published complete native reference observations](https://github.com/OpenPresentation/opf/tree/013956bedc90de00f39bf9584735cbb029588307/docs/handoff/2026-11-10/reference-native57-observations): rootindependent84-record replayPASS plus5metadataPASS28.3s, normalpush0. All3actualcases0/all9PNGpairsidentical/first2fullpublicimportsdeepEqual. Thirdsavedbar/singletonoverlay semanticbug remains. New frozen1ea5a67f runtime passes56focused groups, rootcriticalreviewapproved; one requirednormalleafmapper11680 live, knownsparsemetadataREDsawaitfailed-onlyrecovery. A separately flagged secondary-axis singleton-combo overlay gap is READONLY/unverified and remains within approvedscope.
+
+- B reproduces actualPUBLICdemandPNG/PDFraster differences while SVGbytes remainexact: selectedColorEmoji omitted declaredNotoEmoji companion. Newisolatedminimalclosure has6focusedPASS and more strictneighbors underway; no wholepack/testweakening. Knowncoldtrial ddbd1 stillroughparity3.417s versuswhole3.461 with306versus488MiB, original13.6percenttrial preserved.
+
+- A prepares NEW closed5case native-segment observer from reviewedwindowlesslifecycle. Actual70managed/45purecontrols pass, noOffice. Existing074source-onlyfeasibility is public; no product/nativeglyph/importreassembly approval follows. RootaloneownsOffice. DEV heldsecrets/D2/LibreOffice/Claude steps remain owner-only; laterdeploymentauthority stillapplies.
+
+Root owns stage/finalgates/handoff and independentrendererremainder; lead owns saved-overlay repair/secondaryrepro; B owns selected-color-raster fix; A owns closedobserver preparation. No CI watcher, golden dispatch or release. Everyoriginal31issue1139item remains in scope.
+## Historical coordinator checkpoint — November 10, 12:47 UTC
 
 The owner cold-start question has a measured repair: [six fresh children, full results](https://github.com/OpenPresentation/opf/blob/ddbd1aebbfdf8420e2210bc2ab96d42a994de4ea/docs/handoff/2026-11-10/rr114-cmap-cold/RESULTS.md), about3.42s new versus3.46s whole-loader control, with306 versus488MiB process high-water memory. Two samples per mode show rough parity, not a universal or mobile speed claim. The original13.6percent slowdown and cause remain recorded separately. v0.34 is UNPUBLISHED.
 
