@@ -9,7 +9,7 @@ function Import-PureDefinitions([string]$Path,[string[]]$Names) {
         Invoke-Expression ($found[0].Extent.Text -replace '^function\s+', 'function script:')
     }
 }
-Import-PureDefinitions $ScriptPath @('Get-FurnitureSha256','Assert-FurnitureTextProbeIntegrity','Test-Integer','Require-Property','Assert-String','Assert-FurnitureProbeKeys','Test-FurnitureProbeFinite','Read-AndValidateTextProbePlan','Read-FurnitureProbeDescriptor','Read-FurnitureTextProbe','Read-FurnitureProperty','Invoke-FurnitureCom','Stop-FurnitureLifecycle')
+Import-PureDefinitions $ScriptPath @('Get-FurnitureSha256','Assert-FurnitureTextProbeIntegrity','Test-Integer','Require-Property','Assert-String','Assert-FurnitureProbeKeys','Test-FurnitureProbeFinite','Read-AndValidateTextProbePlan','Read-FurnitureProbeDescriptor','Read-FurnitureTextProbe','Read-FurnitureState','Read-NativeTags','Read-FurnitureProperty','Invoke-FurnitureCom','Stop-FurnitureLifecycle')
 Import-PureDefinitions $RunnerPath @('Assert-PlainNativePath','Resolve-NativeAsset','Read-NativeTextProbeBinding','Import-NativePlanValidation')
 function Write-FurnitureStage { param($Name,$Status,$Message) $script:events+=@($Name+':'+$Status) }
 function Reset-Probe { $script:events=@();$script:officeOperationsStopped=$false;$script:cleanupConfirmed=$true }
@@ -110,6 +110,25 @@ try {
         }
         Reject $mode { $null=Read-FurnitureTextProbe $shape $target $mode } $true
     }
+    # Invoke the actual state selection against plain managed collections; a linguistic alias must not select a shape.
+    function Read-FurnitureSeriesNameState { return ,@() }
+    $script:CaptureTextFonts=$false;$script:ReadOnlySurvey=$false;$script:actions=@()
+    $namePlan=New-Plan;$namePlan.targets[0].shapeName=[string][char]0xE9
+    $script:textProbePlan=$namePlan;$script:probeMockShape=New-Shape
+    $script:probeMockShape | Add-Member -NotePropertyMembers @{Id=3;Name=('e'+[char]0x301);Type=17;Left=0;Top=0;Width=100;Height=40;Rotation=0;HasTextFrame=-1;AlternativeText='';Tags=[pscustomobject]@{Count=0}}
+    $shapes=[pscustomobject]@{Count=1};$shapes | Add-Member ScriptMethod Item {param($index) return $script:probeMockShape}
+    $script:probeMockSlide=[pscustomobject]@{SlideID=1;Name='mock';Tags=[pscustomobject]@{Count=0};Shapes=$shapes}
+    # Fake bytes are a managed collection continuation only, never an image or native artifact.
+    $script:probeMockSlide | Add-Member ScriptMethod Export {param($path,$format,$width,$height) [IO.File]::WriteAllBytes($path,[byte[]](1))}
+    $slides=[pscustomobject]@{Count=1};$slides | Add-Member ScriptMethod Item {param($index) return $script:probeMockSlide}
+    $presentation=[pscustomobject]@{Slides=$slides}
+    Reject 'canonically equivalent native shape name is stale' { $null=Read-FurnitureState $presentation 'ordinal-shape' } $true
+    $script:textProbePlan=$null
+    $distinct=New-Plan;$other=(New-Plan).targets[0];$distinct.targets[0].shapeName=[string][char]0xE9;$other.shapeName='e'+[char]0x301;$other.shapeId=4;$distinct.targets+=@($other);Save-Plan $distinct;$null=Read-Plan;$passed++
+    $fontTarget=(New-Plan).targets[0];$fontTarget.ranges[0].style.name=[string][char]0xE9;$shape=New-Shape;$shape.TextFrame.TextRange.Font.Name='e'+[char]0x301
+    Reset-Probe;$fontResult=Read-FurnitureTextProbe $shape $fontTarget 'ordinal-font'
+    if($fontResult.ranges[0].styleMismatches -cnotcontains 'name') { throw 'Canonically equivalent font family was treated as exact identity' };$passed++
+    Save-Plan (New-Plan)
     # Phase-boundary integrity reads only exact owned files; each mutation latches before further COM.
     $sourceCopy=Join-Path $root 'source-copy.pptx';$actionsCopy=Join-Path $root 'actions.json';$probeCopy=Join-Path $root 'probe-copy.json'
     [IO.File]::WriteAllBytes($sourceCopy,[IO.File]::ReadAllBytes($inputPath));[IO.File]::WriteAllText($actionsCopy,'[]');[IO.File]::WriteAllText($probeCopy,'{}')

@@ -157,7 +157,7 @@ function Read-AndValidateTextProbePlan([string]$Path,[string]$ArchiveSha256,[boo
         if(-not (Test-Integer $target.slideIndex) -or $target.slideIndex -lt 1 -or $target.slideIndex -gt 3 -or -not (Test-Integer $target.shapeId) -or $target.shapeId -lt 1 -or $target.shapeId -gt 2147483647) { throw 'Text probe target has an invalid slide or shape ID' }
         Assert-String $target.shapeName 'shapeName' 'Text probe target' 255 $false
         Assert-String $target.text 'text' 'Text probe target' 4096 $false
-        foreach($prior in $targets) { if($prior.slideIndex -eq $target.slideIndex -and ($prior.shapeId -eq $target.shapeId -or $prior.shapeName -ceq $target.shapeName)) { throw 'Duplicate text probe target' } }
+        foreach($prior in $targets) { if($prior.slideIndex -eq $target.slideIndex -and ($prior.shapeId -eq $target.shapeId -or [string]::Equals($prior.shapeName,$target.shapeName,[StringComparison]::Ordinal))) { throw 'Duplicate text probe target' } }
         $targets+=@($target)
         if($target.ranges -isnot [array] -or $target.ranges.Count -lt 1 -or $target.ranges.Count -gt 8) { throw 'Text probe target requires a bounded explicit range list' }
         $seen=@()
@@ -223,7 +223,7 @@ function Read-FurnitureTextProbe($Shape,$Target,[string]$Prefix) {
             $bounds[$property]=[ordered]@{value=$(if($null -eq $value){$null}else{[double]$value});status=$(if($null -eq $value){'unavailable'}else{'reported'});unit='pt'}
         }
         $mismatches=@()
-        if($descriptor.fontSlots.Name.value -cne $sample.style.name) { $mismatches+='name' }
+        if(-not [string]::Equals($descriptor.fontSlots.Name.value,$sample.style.name,[StringComparison]::Ordinal)) { $mismatches+='name' }
         if($descriptor.sizePoints -ne $sample.style.sizePoints) { $mismatches+='sizePoints' }
         foreach($flag in @('bold','italic')) { if($descriptor.$flag -ne $sample.style.$flag) { $mismatches+=$flag } }
         $record.ranges+=@([ordered]@{start1Based=$sample.start1Based;length=$sample.length;text=$sample.text;expectedStyle=$sample.style;observed=$descriptor;styleMismatches=$mismatches;bounds=$bounds;nativeAcceptance=$false})
@@ -445,8 +445,8 @@ function Read-FurnitureState($Presentation,[string]$Phase) {
             if($CaptureTextFonts) { $shapeRecord.textFont=Read-FurnitureTextFont $shape $text "$Phase.slide-$slideIndex.shape-$shapeIndex" }
             if($null -ne $script:textProbePlan) {
                 foreach($target in $script:textProbePlan.targets) {
-                    if($target.slideIndex -eq $slideIndex -and ($target.shapeName -ceq $name -or $target.shapeId -eq $id)) {
-                        if($target.shapeName -cne $name -or $target.shapeId -ne $id) { Stop-FurnitureLifecycle 'Foreign or stale text probe shape name/ID pair' }
+                    if($target.slideIndex -eq $slideIndex -and ([string]::Equals($target.shapeName,$name,[StringComparison]::Ordinal) -or $target.shapeId -eq $id)) {
+                        if(-not [string]::Equals($target.shapeName,$name,[StringComparison]::Ordinal) -or $target.shapeId -ne $id) { Stop-FurnitureLifecycle 'Foreign or stale text probe shape name/ID pair' }
                         $shapeRecord.textProbe=Read-FurnitureTextProbe $shape $target "$Phase.slide-$slideIndex.shape-$shapeIndex.probe"
                         $probeTargetsSeen++
                     }
