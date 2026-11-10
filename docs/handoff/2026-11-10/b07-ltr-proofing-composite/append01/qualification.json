@@ -1,0 +1,168 @@
+{
+  "schema": 1,
+  "neverMerge": true,
+  "sourcePreparationOnly": true,
+  "historicalRevision": "5070b8d2fe7ec9b4a5cc18eae12302f8742ca414",
+  "historicalPacket": {
+    "records": 61,
+    "bytes": 735986,
+    "sha256": "45f6a5c5c25c166b6e49274b510f0929cd4863a28085ebd44a788bf6ba1640c6"
+  },
+  "raw": {
+    "path": "raw.json.gz",
+    "records": 49,
+    "bytes": 650284,
+    "sha256": "07a4313a8a6fde16e5c17bc4d12dc03d4244c583f57da79c64f4e030b3e5c129",
+    "expandedBytes": 2341346
+  },
+  "logicalRawRecords": 110,
+  "sourceFiles": [
+    {
+      "path": "tools/rr105-ltr-proofing-composite/.gitattributes",
+      "bytes": 9,
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/character-check.ps1",
+      "bytes": 11636,
+      "sha256": "3f8c742334fea9d5828abded92ddf28d80cab728a8c0435e5702f253146eb0e7"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/managed-check.ps1",
+      "bytes": 18284,
+      "sha256": "326d904908608683b2d6ec8df418c5386852dd719edd75c5100b82fc8dea9ff7"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/prepare-suite.mjs",
+      "bytes": 8566,
+      "sha256": "c77a88c3bbaffb902f87b0bfa2e7d17c0a7d0c115741928a8314b7b97b85e731"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/prepare-suite.test.mjs",
+      "bytes": 4997,
+      "sha256": "b84cc1725eb65e5e27d0e4d6659712bc38a3f0f76cbd9bd6d27fdf36b6878fe2"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/README.md",
+      "bytes": 7523,
+      "sha256": "a27e776dc07c1597ae45bb8aca5cb57ca8b541c8360c11b601b19010fc2ab150"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/references/base-worker.ps1.gz",
+      "bytes": 20624,
+      "sha256": "36a372979cff6a8acd75f2e9c5c69702148ef2555eaa48e28c1523d4b5e18bdd"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/references/composite.json",
+      "bytes": 93,
+      "sha256": "dfa47cf3b3ed6a390e46f41bd8d94a00731f48a613458a3d38317ad7f45fc6db"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/references/empty.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/references/original09.pptx.gz",
+      "bytes": 72471,
+      "sha256": "3d91bd0a042595cd3ad7c7233012bc73b37ee3a33a39b844f33da813ec89068c"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/references/prior-one-call-worker.ps1.gz",
+      "bytes": 17983,
+      "sha256": "16a79a4e07d12376598270a6e68677871f6578c2c42f69b18e9bf8a967be85ab"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/references/sealed-cli-preview.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/references/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/SOURCE.json",
+      "bytes": 5945,
+      "sha256": "033a8e195b0fcc2dffcde25fc90ab492c56f6ce2ca964f89995ddd81a159497f"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/worker-package/test/fixtures/sh25-native-circle-observations.json",
+      "bytes": 2490,
+      "sha256": "e8e452a52977f6a76925cfb31c92f8d1340448dd59566193468e616a98322af0"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/worker-package/test/native-furniture-control.ps1",
+      "bytes": 102750,
+      "sha256": "8886a36368c4909536ef13c6ba6fa0fb93209760ad005dd10846324c58076202"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/worker-package/test/native-furniture-harness-check.ps1",
+      "bytes": 45855,
+      "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/worker-package/test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "tools/rr105-ltr-proofing-composite/worker-package/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    }
+  ],
+  "protectedObjects": [
+    {
+      "path": "packages",
+      "headObject": "505c904c20eef735367e91058488c47b2c0238ad",
+      "baseObject": "505c904c20eef735367e91058488c47b2c0238ad"
+    },
+    {
+      "path": "spec",
+      "headObject": "d7107be1cf1e020d9e17769dec09c7c4bf2a808d",
+      "baseObject": "d7107be1cf1e020d9e17769dec09c7c4bf2a808d"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "headObject": "2e45923e6a027db20e2593a5befef39473259f2a",
+      "baseObject": "2e45923e6a027db20e2593a5befef39473259f2a"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "headObject": "c84e4ff16c7f717d30d69498f565b2b519d13e19",
+      "baseObject": "c84e4ff16c7f717d30d69498f565b2b519d13e19"
+    },
+    {
+      "path": "scripts/native-acceptance/run-windows.ps1",
+      "headObject": "0dcaf41bfbe490fc2eba6af60353a2310bf463be",
+      "baseObject": "0dcaf41bfbe490fc2eba6af60353a2310bf463be"
+    }
+  ],
+  "results": {
+    "node": 6,
+    "managed": 484,
+    "character": 23,
+    "newComStages": 112,
+    "actionReportWrites": 186,
+    "stageJournalFaults": 147,
+    "protectedFunctions": 49,
+    "originalParts": 147
+  },
+  "workerSha256": "8886a36368c4909536ef13c6ba6fa0fb93209760ad005dd10846324c58076202",
+  "corrections": [
+    "Independent same-type fixture copies and positive copy controls prevent type-only refusal from satisfying phase mutants",
+    "Unexpected nonprimitive/nonfinite/overlong getter results are recorded safely and refused before assignment to snapshot fields; spy-object serialization control remains zero property reads"
+  ],
+  "sourceReviewPending": true,
+  "peerReviewPending": true,
+  "mappedCheckRun": false,
+  "suitePrepared": false,
+  "validateOnlyRun": false,
+  "officeActivated": false,
+  "nativeRun": false,
+  "glyphFix": false,
+  "nativeAcceptance": false,
+  "currentRuntimeAcceptance": false
+}

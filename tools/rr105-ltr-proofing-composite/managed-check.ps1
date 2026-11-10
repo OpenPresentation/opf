@@ -9,9 +9,10 @@ $extract=@('Test-Integer','Require-Property','Assert-String','Assert-LiteralSeri
 foreach($name in $extract){$f=@($ast.FindAll({param($n)$n -is [Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -ceq $name},$true));if($f.Count -ne 1){throw "Missing/ambiguous function $name"};Invoke-Expression $f[0].Extent.Text}
 Add-Type -TypeDefinition @"
 using System;using System.Collections.Generic;using System.Runtime.InteropServices;
-public static class CP {public static string Stage="",Fail="",Mode="normal";public static int Step=0,Ltr=0,Set=0;public static List<string> Calls=new List<string>();public static void Reset(string mode){Stage="";Fail="";Mode=mode;Step=0;Ltr=0;Set=0;Calls.Clear();}public static void Hit(){Calls.Add(Stage);if(Stage==Fail)throw new COMException("injected "+Stage);}public static bool Mut(string suffix){return Mode==suffix&&Step==1||Mode=="final-"+suffix&&Step==2;}}
+public static class CP {public static string Stage="",Fail="",Mode="normal";public static int UnsafeReads=0;public static int Step=0,Ltr=0,Set=0;public static List<string> Calls=new List<string>();public static void Reset(string mode){Stage="";Fail="";Mode=mode;UnsafeReads=0;Step=0;Ltr=0;Set=0;Calls.Clear();}public static void Hit(){Calls.Add(Stage);if(Stage==Fail)throw new COMException("injected "+Stage);}public static bool Mut(string suffix){return Mode==suffix&&Step==1||Mode=="final-"+suffix&&Step==2;}}
+public class CPUnsafe {public object Value {get{CP.UnsafeReads++;return "unexpected proxy traversal";}}}
 public class CPFont {public object Name{get{CP.Hit();return CP.Mut("font")?"Other":"Aptos";}}public object Size{get{CP.Hit();return (float)24;}}public object Bold{get{CP.Hit();return 0;}}public object Italic{get{CP.Hit();return 0;}}}
-public class CPRange {string text;public CPRange(string value){text=value;}public object Text{get{CP.Hit();return CP.Mut("text")?text+"x":text;}}public object LanguageID{get{CP.Hit();if(CP.Mode=="middle-invalid"&&CP.Step==1)return 0;if(CP.Mode=="middle-string"&&CP.Step==1)return "1033";if(CP.Mode=="final-language"&&CP.Step==2)return 1033;return CP.Step==1&&CP.Mode!="middle-1025"?1033:1025;}set{CP.Hit();CP.Set++;if(CP.Step!=1||(int)value!=1025)throw new Exception("not literal one-step 1025 assignment");CP.Step=2;}}public void LtrRun(){CP.Hit();CP.Ltr++;if(CP.Step!=0)throw new Exception("LtrRun retried");CP.Step=1;}public object Font{get{CP.Hit();return new CPFont();}}}
+public class CPRange {string text;public CPRange(string value){text=value;}public object Text{get{CP.Hit();return CP.Mut("text")?text+"x":text;}}public object LanguageID{get{CP.Hit();if(CP.Mode=="middle-object"&&CP.Step==1)return new CPUnsafe();if(CP.Mode=="middle-nonfinite"&&CP.Step==1)return double.NaN;if(CP.Mode=="middle-overlong"&&CP.Step==1)return new string('x',257);if(CP.Mode=="middle-invalid"&&CP.Step==1)return 0;if(CP.Mode=="middle-string"&&CP.Step==1)return "1033";if(CP.Mode=="final-language"&&CP.Step==2)return 1033;return CP.Step==1&&CP.Mode!="middle-1025"?1033:1025;}set{CP.Hit();CP.Set++;if(CP.Step!=1||(int)value!=1025)throw new Exception("not literal one-step 1025 assignment");CP.Step=2;}}public void LtrRun(){CP.Hit();CP.Ltr++;if(CP.Step!=0)throw new Exception("LtrRun retried");CP.Step=1;}public object Font{get{CP.Hit();return new CPFont();}}}
 public class CPFrame {CPRange r;public CPFrame(CPRange value){r=value;}public object TextRange{get{CP.Hit();return r;}}}
 public class CPShape {int id;string name;CPRange r;public CPShape(int i,string n,string text){id=i;name=n;r=new CPRange(text);}public object Id{get{CP.Hit();return CP.Mut("id")?99:id;}}public object Name{get{CP.Hit();return name;}}public object Type{get{CP.Hit();return 17;}}public object Left{get{CP.Hit();return (float)(CP.Mut("geometry")?45:43.2);}}public object Top{get{CP.Hit();return (float)270.1;}}public object Width{get{CP.Hit();return (float)870.5;}}public object Height{get{CP.Hit();return (float)33.8;}}public object Rotation{get{CP.Hit();return (float)0;}}public object TextFrame{get{CP.Hit();return new CPFrame(r);}}public object TextFrame2{get{CP.Hit();return new CPFrame(r);}}}
 public class CPShapes {CPShape[] shapes;public CPShapes(CPShape[] s){shapes=s;}public object Count{get{CP.Hit();return shapes.Length;}}public object Item(int i){CP.Hit();return shapes[i-1];}}
@@ -41,6 +42,24 @@ function Assert-Latched {
     try{Invoke-FurnitureCom 'forbidden.after.failure' {[CP]::Calls.Add('UNSAFE')}}catch{$denied=$true}
     if(-not $denied -or [CP]::Calls.Count -ne $calls -or [CP]::Ltr -ne $ltr -or [CP]::Set -ne $set){throw 'Office call continued after failure'}
 }
+
+function Copy-CompositeRecords($Records) {
+    $copy=@()
+    foreach($record in $Records){
+        $item=[ordered]@{}
+        foreach($key in $record.Keys){
+            $value=$record[$key]
+            if($value -is [Collections.IDictionary]){
+                $nested=if($value -is [Collections.Specialized.OrderedDictionary]){[ordered]@{}}else{@{}}
+                foreach($field in $value.Keys){$nested[$field]=$value[$field]}
+                $item[$key]=$nested
+            }else{$item[$key]=$value}
+        }
+        $copy+=@($item)
+    }
+    return ,$copy
+}
+
 $cases=@()
 foreach($mode in @('normal','middle-1025')){
     Reset-Composite $mode;Run-Composite
@@ -49,7 +68,9 @@ foreach($mode in @('normal','middle-1025')){
     $calls=@([CP]::Calls);$ltrIndex=[Array]::IndexOf($calls,'action-1-ltr-run-restore-ar-sa.LtrRun.call');$setterIndex=[Array]::IndexOf($calls,'action-1-ltr-run-restore-ar-sa.LanguageID.set.literal1025')
     if($ltrIndex -lt 0 -or $setterIndex -le $ltrIndex){throw 'Declared operation order changed'}
     $actionWrites=$writes
-    Assert-FurnitureCompositePhase 'edited' $originalRecords;Assert-FurnitureCompositePhase 'reopened' $originalRecords
+    $independent=Copy-CompositeRecords $originalRecords
+    if([object]::ReferenceEquals($independent[0],$originalRecords[0]) -or [object]::ReferenceEquals($independent[0].textFont,$originalRecords[0].textFont) -or $independent[0].textFont.GetType() -ne $originalRecords[0].textFont.GetType()){throw 'Independent fixture copy lost dictionary type or identity'}
+    Assert-FurnitureCompositePhase 'edited' $independent;Assert-FurnitureCompositePhase 'reopened' (Copy-CompositeRecords $originalRecords)
     $cases+=@([ordered]@{name=$mode;passed=$true;ltrRunCalls=[CP]::Ltr;languageAssignments=[CP]::Set;intermediateLanguageId=$middle.languageId;completedPhases=@($report.composite.phaseStates|ForEach-Object {$_.phase});persistedPrimitives=$persisted.Count})
     if($mode -ceq 'normal'){$positiveIoStages=@($begun|Select-Object -Unique);$positiveStages=@($positiveIoStages|Where-Object {$_ -notmatch '\.preSave-[0-2]\.(shapes|shape-[0-9])' -and ($_ -match '\.(before|intermediate|final|preSave-[0-2])\.' -or $_ -match '\.LtrRun\.call$|\.LanguageID\.set\.literal1025$|^action-1-ltr-run-restore-ar-sa\.Text(Frame|Range)\.get$')});$positiveWrites=$actionWrites;$positiveCalls=$calls;$positiveJournal=$report.composite}
 }
@@ -73,12 +94,21 @@ foreach($stage in $positiveIoStages){
     if(-not $caught){throw "Stage journal fault was not exercised: $stage"};Assert-Latched
     $cases+=@([ordered]@{name='stage-io:'+ $stage;passed=$true;ltrRunCalls=[CP]::Ltr;languageAssignments=[CP]::Set;stopped=$officeOperationsStopped})
 }
-foreach($mode in @('text','font','geometry','id','middle-invalid','middle-string','final-text','final-font','final-geometry','final-id','final-language')){
+foreach($mode in @('text','font','geometry','id','middle-invalid','middle-string','middle-object','middle-nonfinite','middle-overlong','final-text','final-font','final-geometry','final-id','final-language')){
     Reset-Composite $mode;$caught=$false;try{Run-Composite}catch{$caught=$true}
     if(-not $caught){throw "Mutation accepted: $mode"};Assert-Latched
     if($mode -notlike 'final-*' -and [CP]::Set -ne 0){throw 'Invalid intermediate state reached the language setter'}
     if($mode -ceq 'middle-invalid' -and $persisted['action-1-ltr-run-restore-ar-sa.intermediate.LanguageID.get'].value -ne 0){throw 'Actual invalid primitive was not persisted before refusal'}
     if($mode -ceq 'middle-string' -and $persisted['action-1-ltr-run-restore-ar-sa.intermediate.LanguageID.get'].kind -cne 'string'){throw 'Actual invalid type was not persisted'}
+
+    if($mode -in @('middle-object','middle-nonfinite','middle-overlong')){
+        $entry=$persisted['action-1-ltr-run-restore-ar-sa.intermediate.LanguageID.get']
+        $expected=if($mode -ceq 'middle-object'){'nonprimitive'}elseif($mode -ceq 'middle-nonfinite'){'nonfinite-number'}else{'overlong-string'}
+        if($entry.kind -cne $expected -or $null -ne $entry.value -or $null -ne $report.composite.states[-1].languageId){throw 'Unsafe getter result escaped the primitive journal into a state snapshot'}
+        $serialized=ConvertTo-Json -Depth 40 -InputObject $report.composite
+        if([CP]::UnsafeReads -ne 0){throw 'Report serialization traversed an unexpected object after failure'}
+    }
+
     $cases+=@([ordered]@{name=$mode;passed=$true;stopped=$officeOperationsStopped;languageAssignments=[CP]::Set;persistedPrimitives=$persisted.Count})
 }
 foreach($mode in @('no-original','wrong-prefix','retry','phase-order','phase-font','phase-geometry','phase-text','phase-id')){
@@ -88,7 +118,7 @@ foreach($mode in @('no-original','wrong-prefix','retry','phase-order','phase-fon
         'wrong-prefix' {Invoke-FurnitureLtrProofingComposite $presentation $action 'action-2-ltr-run-restore-ar-sa'}
         'retry' {Run-Composite;Run-Composite}
         'phase-order' {Run-Composite;Assert-FurnitureCompositePhase 'reopened' $originalRecords}
-        default {Run-Composite;$mutated=$originalRecords|ConvertTo-Json -Depth 20|ConvertFrom-Json;switch($mode){'phase-font'{$mutated[2].textFont.name='Other'}'phase-geometry'{$mutated[2].width=1}'phase-text'{$mutated[2].text+='x'}'phase-id'{$mutated[2].id=99}};Assert-FurnitureCompositePhase 'edited' $mutated}
+        default {Run-Composite;$mutated=Copy-CompositeRecords $originalRecords;switch($mode){'phase-font'{$mutated[2].textFont.name='Other'}'phase-geometry'{$mutated[2].width=1}'phase-text'{$mutated[2].text+='x'}'phase-id'{$mutated[2].id=99}};Assert-FurnitureCompositePhase 'edited' $mutated}
     }}catch{$caught=$true}
     if(-not $caught){throw "Identity/phase mutation accepted: $mode"};Assert-Latched
     $cases+=@([ordered]@{name=$mode;passed=$true;stopped=$officeOperationsStopped;ltrRunCalls=[CP]::Ltr;languageAssignments=[CP]::Set})

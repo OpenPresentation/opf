@@ -35,8 +35,8 @@
   "workerFiles": [
     {
       "path": "test/native-furniture-control.ps1",
-      "bytes": 102550,
-      "sha256": "ae1d7a8504e59832f2ac2b70e9d698f954b0d7bdb92664d929f3da1d07761423"
+      "bytes": 102750,
+      "sha256": "8886a36368c4909536ef13c6ba6fa0fb93209760ad005dd10846324c58076202"
     },
     {
       "path": "test/native-process.ps1",

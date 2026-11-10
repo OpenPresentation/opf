@@ -23,3 +23,7 @@ node docs/handoff/2026-11-10/b07-ltr-proofing-composite/verify.mjs
 ```
 
 Next: root plus peer review of actual source and fault proofs; then the repository-required mapped source check in an isolated check environment if authorized. No install/build/check aggregate has run here. Only after separate root authorization may clean, pinned, distinct driver/worker/controller checkouts inspect/prepare one fresh suite and later ValidateOnly or execute Office. Do not reuse or mutate historical496/d7ba/b35/b846/ce92 producers, suites or evidence. The future driver must preserve generation, controller and new worker identities separately and use fresh disjoint output.
+
+## Superseding source-safety follow-up
+
+The original5070 checkpoint, raw packet and verifier above remain unchanged historical records. It is NOT the executable candidate: a subsequent self-review reproduced a pure fixture-type weakness and an unexpected-object serialization risk in the new diagnostic reader. Both are corrected and qualified in [append01](append01/README.md). Use append01/verify.mjs for the final descendant; it verifies this older packet and original5070 source through immutable Git objects instead of treating old source hashes as current. No suite, ValidateOnly or Office execution occurred from either source.

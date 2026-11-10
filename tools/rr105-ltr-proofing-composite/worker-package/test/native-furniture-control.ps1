@@ -909,6 +909,7 @@ function Read-FurnitureCompositeValue($Object,[string]$Property,[string]$Stage) 
         elseif($value -is [single] -or $value -is [double] -or $value -is [decimal]){$entry.kind='number';if(-not [double]::IsNaN([double]$value) -and -not [double]::IsInfinity([double]$value)){$entry.value=[double]$value}else{$entry.kind='nonfinite-number'}}
         else{$entry.kind='nonprimitive'}
         $entry.status='observed';Write-FurnitureCompositeJournal
+        if($entry.kind -cnotin @('null','string','integer','boolean','number')){Stop-FurnitureLifecycle 'Composite getter returned an unsafe primitive kind; no raw object may enter a state snapshot'}
         return ,$value
     } catch {
         $script:officeOperationsStopped=$true;$script:cleanupConfirmed=$false
