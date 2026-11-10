@@ -44,6 +44,7 @@ const cyrb53 = text => {
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, '0');
 };
+export const nativeTextHash = cyrb53;
 const fingerprint = (geometry, paragraphs) => cyrb53(JSON.stringify([geometry, paragraphs]));
 const wrapShape = shape => `<p:sld><p:cSld><p:spTree>${shape}</p:spTree></p:cSld></p:sld>`;
 function exportedSignature(shape) {

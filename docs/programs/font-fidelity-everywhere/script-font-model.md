@@ -491,3 +491,9 @@ All changes are additive:
 7. **ICU dependence.** Catalog ids and catalog tags are deterministic
    (vendored alias and likely-script tables, as above). Only uncatalogued tags
    without a script subtag use `Intl.Locale`.
+
+## Shared source itemization and native Latin slots (RR-105)
+
+Core's `itemizeScripts(text, profile)` returns the renderer's existing ordered `{text, script, role}` runs without loading fonts or measuring text. `scriptOfCharacter(character)` is the same Unicode classifier. The renderer re-exports these exact functions; contextual neutrals, Arabic-context digits and UTF-16 source boundaries retain the previous algorithm. The renderer's whole-run ASCII shortcut remains separate and unchanged.
+
+For Arabic proofing, PPTX captures eligible ASCII Latin ranges from the original composed source runs before native language adapters and wrapping. The final font pass copies only the final post-safe Latin typeface into those spans' complex-script slot. It preserves other script spans, explicit rich families, language, text and geometry. A bounded extension of the existing native-language tag can recover source-run boundaries from unchanged current native paragraphs; it never replays source words or merges separate authored runs. Changed or ambiguous evidence retains current native parts. The change-detection hash is not authentication. This is a font-slot consistency repair, not a bidirectional ordering fix; physical native qualification remains separately scoped.
