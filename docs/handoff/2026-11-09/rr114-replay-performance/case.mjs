@@ -1,13 +1,13 @@
 // Explicitly measured only via the frozen coordinator-authorized runner.
 import assert from 'node:assert/strict';
-import {readFileSync,writeFileSync,readdirSync,statSync,realpathSync} from 'node:fs';
+import {readFileSync,writeFileSync,realpathSync} from 'node:fs';
 import {createRequire,registerHooks} from 'node:module';
 import {performance} from 'node:perf_hooks';
-import {resolve,join,dirname,basename,parse} from 'node:path';
+import {resolve,join,dirname,basename} from 'node:path';
 import {pathToFileURL,fileURLToPath} from 'node:url';
 import {cpus,totalmem,release} from 'node:os';
 import {RUNTIMES,INPUT_ROOT,FACE_KEYS} from './config.mjs';
-import {sha,normalized} from './shared.mjs';
+import {sha,normalized,describeBackendAssets} from './shared.mjs';
 const arg=name=>process.argv.find(value=>value.startsWith('--'+name+'='))?.slice(name.length+3);
 assert.ok(process.argv.includes('--measure'),'explicit --measure required');
 assert.match(process.version,/^v24\./);assert.equal(typeof globalThis.gc,'function','--expose-gc required');
@@ -73,9 +73,9 @@ for(const file of fonts.fontFiles){
   fontRecords.push({package:pkg.name,version:pkg.version??null,family:face.family,weight:face.weight,italic:!!face.italic,file:normalized(runtime.root,file),bytes:fontData.length,sha256:sha(fontData),license:pkg.license,licenseFile:pkg.licenseFile,licenseSha256:sha(license),noticeFile:pkg.noticeFile??null,noticeSha256:notice?sha(notice):null});
 }
 const loadedModules=[...loaded].map(url=>{const file=realpathSync(fileURLToPath(url)),data=readFileSync(file);return{file:normalized(runtime.root,file),bytes:data.length,sha256:sha(data)};}).sort((a,b)=>a.file.localeCompare(b.file));
-const assetDirectories=new Set();for(const url of loaded){const file=fileURLToPath(url);if(!/harfbuzzjs/.test(file))continue;let current=dirname(file);while(current!==parse(current).root){const manifestFile=join(current,'package.json');try{const pkg=JSON.parse(readFileSync(manifestFile,'utf8'));if(pkg.name==='harfbuzzjs'){assetDirectories.add(current);break;}}catch{}current=dirname(current);}}
-const dependencyAssets=[];for(const directory of assetDirectories)for(const name of readdirSync(directory).sort())if(name.endsWith('.wasm')){const file=join(directory,name),data=readFileSync(file);dependencyAssets.push({file:normalized(runtime.root,file),bytes:data.length,sha256:sha(data)});}
-assert.ok(dependencyAssets.length>=1,'HarfBuzz binary dependency identities');
-const result={schema:1,status:'PASS',variant,size,node:process.version,versions:process.versions,platform:process.platform,arch:process.arch,machine:{cpu:cpus()[0]?.model,logicalProcessors:cpus().length,totalMemoryBytes:totalmem(),release:release()},runtime:{root:runtime.root,head:runtime.head,tree:runtime.tree,runtime:runtime.runtime},preflightSha256,inputSha256:sha(input),fontMode:'office/visual/scripts:auto/presentation/catalogs',faceCount:faces.length,faces,fontRecords,preparationMs,preparationCpu,prepPlusFirstMs:preparationMs+samples[0].elapsedMs,continuousPreparationToFirstMs:samples[0].continuousPreparationToFirstMs,prepPlusFirstCpuMs:preparationCpu.totalMs+samples[0].cpu.totalMs,baselinePostGc,afterPreparation,firstRenderMemory:samples[0].after,finalRenderMemory,postDropGc,samples,hashes:validated.hashes,svgBytes:validated.bytes,loadedModules,dependencyAssets,protocol:'Uninstrumented product functions; URL observation only. First/final render HWM captured before output hashing. Three SVG batches retained until validation; all SVG refs dropped before GC/post-drop heap; then module/font/license evidence. No compression.'};
+const dependencyAssets=describeBackendAssets(runtime.root);
+assert.deepEqual(dependencyAssets,runtime.backendAssets,'exact source-bound HarfBuzz binary identities');
+const backendAvailability={subsetEngineAvailable:Boolean(fonts.subsets),outlineProviderAvailable:Boolean(fonts.outlines),shaperState:'not separately exposed by handle'};
+const result={schema:1,status:'PASS',variant,size,node:process.version,versions:process.versions,platform:process.platform,arch:process.arch,machine:{cpu:cpus()[0]?.model,logicalProcessors:cpus().length,totalMemoryBytes:totalmem(),release:release()},runtime:{root:runtime.root,head:runtime.head,tree:runtime.tree,runtime:runtime.runtime},preflightSha256,inputSha256:sha(input),fontMode:'office/visual/scripts:auto/presentation/catalogs',faceCount:faces.length,faces,fontRecords,preparationMs,preparationCpu,prepPlusFirstMs:preparationMs+samples[0].elapsedMs,continuousPreparationToFirstMs:samples[0].continuousPreparationToFirstMs,prepPlusFirstCpuMs:preparationCpu.totalMs+samples[0].cpu.totalMs,baselinePostGc,afterPreparation,firstRenderMemory:samples[0].after,finalRenderMemory,postDropGc,samples,hashes:validated.hashes,svgBytes:validated.bytes,loadedModules,dependencyAssets,backendAvailability,protocol:'Uninstrumented product functions; URL observation only. First/final render HWM captured before output hashing. Three SVG batches retained until validation; all SVG refs dropped before GC/post-drop heap; then module/font/license evidence. No compression.'};
 writeFileSync(output,JSON.stringify(result,null,2)+'\n',{flag:'wx'});
 console.log(JSON.stringify({status:'PASS',variant,size,faces:faces.length,preparationMs,firstMs:samples[0].elapsedMs,prepPlusFirstMs:result.prepPlusFirstMs,firstMaxRssBytes:result.firstRenderMemory.maxRssBytes,finalRenderMaxRssBytes:finalRenderMemory.maxRssBytes,postDropHeapUsed:postDropGc.heapUsed}));

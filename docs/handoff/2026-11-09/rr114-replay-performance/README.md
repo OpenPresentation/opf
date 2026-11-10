@@ -1,6 +1,6 @@
 # RR-114 paired replay performance screening
 
-NEVER MERGE this evidence branch. No formal measurement has run at this checkpoint. Both product runtimes are frozen in separate clean worktrees; this branch changes only the benchmark protocol and evidence.
+NEVER MERGE this evidence branch. Formal01 stopped after its first16-slide control: the post-metric evidence lookup wrongly inferred WASM locations from imported JavaScript, although the engine reads two exact nested filesystem assets. No candidate/remaining child ran and no valid performance comparison exists. Its original raw receipt/stdout/stderr/root exit log are immutable. The narrow correction resolves and hashes the two source-bound HARFBUZZ specifiers in source-only preflight and after metrics; it never removes the binary assertion. A new formal02 requires fresh review and quiet authorization. Both product runtimes are frozen in separate clean worktrees; this branch changes only the benchmark protocol and evidence.
 
 The control is exact `276f339a68069dc11970d649092d6181c9feba38` in `C:/opf-work/replay-control` (runtime source `d2edd18ced67ea8370ae2d03f5f954d91ff9cb6e`). The candidate is exact `3360d18d0c0366b90ed0a746479097923b4acde3` in `C:/opf-work/font-replay` (runtime source `36c8eb798286fd8d30cc2a6cfe16e857d9338cde`). Both use presentation-aware Office/visual/scripts-auto loading and exactly the same three Intos faces. The original 131-face whole-pack result is historical context, not this trial's control.
 
@@ -22,13 +22,13 @@ This is a bounded local paired screening, not statistical confidence, physical-m
 `preflight.mjs` only hashes/checks source, builds and inputs; it never loads fonts or renders. `case.mjs` and `run.mjs` require explicit `--measure`. First run syntax checks, then a fresh source-only receipt:
 
 ```powershell
-node docs/handoff/2026-11-09/rr114-replay-performance/preflight.mjs --out=artifacts/replay-preflight-04.json
+node docs/handoff/2026-11-09/rr114-replay-performance/preflight.mjs --out=artifacts/replay-preflight-05.json
 ```
 
 After the coordinator reviews the frozen driver and explicitly authorizes the all-team quiet window, run once, substituting the actual frozen driver head:
 
 ```powershell
-node docs/handoff/2026-11-09/rr114-replay-performance/run.mjs --measure --expect-driver-head=<full40> --preflight=artifacts/replay-preflight-04.json --out=artifacts/replay-paired-formal-01
+node docs/handoff/2026-11-09/rr114-replay-performance/run.mjs --measure --expect-driver-head=<full40> --preflight=artifacts/replay-preflight-05.json --out=artifacts/replay-paired-formal-02
 ```
 
 Capture actual stdout/stderr/process exit. Do not run, retry, change a deadline or mutate either runtime before that authorization. Root owns interpretation, source integration and the coherent mapped/CI/native gates. No release or Office action belongs to this evidence branch.
