@@ -1,0 +1,9 @@
+# RR-114: HarfBuzz cluster carrier boundary lookup
+
+Source candidate only; not released or published. Root already reproduced the unchanged exact8,100-character CLI paginate command exceeding its120s cap. Its streaming V8 profile has843/1,894ticks in ArrayIndexOf, with842/843 caller samples through font-registry metrics/demand coverage. That diagnostic is not a latency benchmark. Original setup/profiler failures remain preserved separately.
+
+Vetoable RR114-HB-CLUSTERS: preserve existing glyph creation, sorted cluster starts and carrier selection; initialize each glyph codePoints array, then assign the selected carrier using the next indexed start. No new map/cache or font-family preload, no shaping/WASM/features/glyph/position/coverage relaxation. The held preparation replay candidate is separate and unchanged.
+
+Before/after actual pinned-WASM controls13PASS each; every returned glyph ID/codePoints/advance/xOffset/yOffset and selected font/file/WASM identity is exactly equal. Independent public harfbuzzjs glyph/position and point-first Unicode ownership checks cover longASCII8100,ligatures/featuresoff,marks/clusterlevel2,ArabicRTL/LTR,Devanagari multiglyph clusters,nonBMP/ZWJ and empty text. The five verified faces total27,144,952font bytes, maximumtext8100UTF16 units; unit process maxRSS observed156,956/156,612KiB before/after. These bounded controls are not a startup/memory benchmark.
+
+The root timeout source dc2 and this b5 baseline have no relevant core/CLI/render source or spec differences. Three actual route modules (CLI, node-engine, fonts-node) are byte-identical to the original timeout run. Required same-input/same120s-cap CLI acceptance is next; no unmodified120s baseline rerun, golden update, budget change, full mapper, Office, release or speed claim. Normal source checks and coordinator review remain owed.
