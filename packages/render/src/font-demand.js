@@ -211,7 +211,7 @@ export async function createNodeDemand(
       },
     },
   });
-  function context(presentation, renderOptions, initial = false, mapFamily, preserveChosenFamilies = false) {
+  function context(presentation, renderOptions, initial = false, mapFamily, preserveChosenFamilies = false, measurementRequests = []) {
     const empty =
       Array.isArray(presentation.slides) && presentation.slides.length === 0;
     const scriptAnalysis = empty
@@ -335,7 +335,16 @@ export async function createNodeDemand(
                 );
             },
           });
-    const wanted = new Set(drawn.map(key)), rasterRequired = new Set();
+    // Exporters may measure undrawn text (native wrap slack). Keep those explicit requests out of the SVG analysis/cache.
+    const measured = measurementRequests.filter(request => request.text !== '').map(request => {
+      const style = request.style;
+      const selected = pickFace(faces, style.fontFamily, style, {
+        policy: registryOptions.substitutionPolicy ?? 'none', aliases,
+        fallbackFamily: registryOptions.fallbackFamily,
+      }).face;
+      return {request, selected};
+    });
+    const wanted = new Set([...drawn, ...measured.map(({selected}) => selected)].map(key)), rasterRequired = new Set();
     // A selected manifest colour face also needs its effective monochrome raster face.
     // This is a dependency of the drawn face, not another script/pack or a caller-face substitution.
     for (const face of universe) {
@@ -346,6 +355,7 @@ export async function createNodeDemand(
     }
     return {
       scriptAnalysis,
+      measured,
       selection,
       mode,
       required,
@@ -375,6 +385,7 @@ export async function createNodeDemand(
       initial = false,
       mapFamily,
       preserveChosenFamilies = false,
+      measurementRequests = [],
     } = {},
   ) {
     if (presentation === null || typeof presentation !== 'object')
@@ -382,10 +393,15 @@ export async function createNodeDemand(
         'invalid-font-scripts',
         'ensure needs the presentation whose text decides its fonts.',
       );
+    if (!Array.isArray(measurementRequests) || measurementRequests.some(request =>
+      !request || typeof request.text !== 'string' || !Number.isFinite(request.size) || request.size <= 0 ||
+      !request.style || typeof request.style.fontFamily !== 'string' || !request.style.fontFamily.trim() ||
+      !Number.isFinite(request.style.fontWeight ?? 400) || (request.style.fontWeight ?? 400) < 1 || (request.style.fontWeight ?? 400) > 1000))
+      throw new OPFFontError('invalid-font-measurement-request', 'Measurement requests need text, a positive finite size, and a concrete font style.');
     const added = [],
       addedPackages = new Set();
     for (;;) {
-      const plan = context(presentation, renderOptions, initial, mapFamily, preserveChosenFamilies);
+      const plan = context(presentation, renderOptions, initial, mapFamily, preserveChosenFamilies, measurementRequests);
       // Preserve the historical whole-pack CSS order, independently of which styles an edit happens to add first.
       for (const pkg of plan.orderedPackages) remember(pkg.faces);
       if (plan.mode === 'auto') {
@@ -529,6 +545,8 @@ export async function createNodeDemand(
           )
             loaded.selection.packages.push(name);
       }
+      for (const {request, selected} of plan.measured)
+        coverage(request.text, request.size, {...request.style, fontFamily: selected.family, fontWeight: selected.weight, italic: selected.italic});
       return {
         scripts: [...addedPackages],
         lazy: added,
