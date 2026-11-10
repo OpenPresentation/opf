@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "base": "519dd89a80904907a3d0120f90b732065d99a0b1",
+  "baselineRuntimeBuildsExit": 1,
+  "focusedRuntimeBuildsExit": 0,
+  "focusedTests": 12,
+  "scriptWidthRecoveryTests": 35,
+  "sourceCodeChanged": false,
+  "indexTsChange": "documentationcommentonly",
+  "runtimeRebuiltAfterComment": false,
+  "records": [
+    {
+      "path": "raw/baseline-build.exit.json",
+      "original": "C:/opf-work/runtime519-check01/baseline-build.exit.json",
+      "bytes": 632,
+      "sha256": "e24214f022ff04d3dc8411f20c673004617ca2e89389a3ced1a4dd18a16ba016"
+    },
+    {
+      "path": "raw/baseline-build.stderr.log",
+      "original": "C:/opf-work/runtime519-check01/baseline-build.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/baseline-build.stdout.log",
+      "original": "C:/opf-work/runtime519-check01/baseline-build.stdout.log",
+      "bytes": 14562,
+      "sha256": "88e4e034d1ae5d5ef8eb9a7daa7fb3c205b4c0dd5674a77d21ca7b6b6ae3a474"
+    },
+    {
+      "path": "raw/baseline-driver.mjs",
+      "original": "C:/opf-work/runtime519-check01/baseline-driver.mjs",
+      "bytes": 2323,
+      "sha256": "627f11da065e3af4b053d52f4205fd833c80bddb3947c2df415f98fae6fafc2f"
+    },
+    {
+      "path": "raw/baseline-runtime-builds.exit.json",
+      "original": "C:/opf-work/runtime519-check01/baseline-runtime-builds.exit.json",
+      "bytes": 431,
+      "sha256": "5031f89799529135b2cca521c2979f8b6f7afcac2a0ad18087c59efdfea6c25b"
+    },
+    {
+      "path": "raw/baseline-runtime-builds.stderr.log",
+      "original": "C:/opf-work/runtime519-check01/baseline-runtime-builds.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/baseline-runtime-builds.stdout.log",
+      "original": "C:/opf-work/runtime519-check01/baseline-runtime-builds.stdout.log",
+      "bytes": 2213,
+      "sha256": "078bd1d509ab686dcb8fcdf4dc747b9c99e3b221a5f7ca500335b9e8e4ef41d4"
+    },
+    {
+      "path": "raw/focused-runtime-builds.exit.json",
+      "original": "C:/opf-work/runtime519-check01/focused-runtime-builds.exit.json",
+      "bytes": 498,
+      "sha256": "cece26e10812af2eea68e43030d25dae7121703546b249ffa5d288d51d4a417f"
+    },
+    {
+      "path": "raw/focused-runtime-builds.stderr.log",
+      "original": "C:/opf-work/runtime519-check01/focused-runtime-builds.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/focused-runtime-builds.stdout.log",
+      "original": "C:/opf-work/runtime519-check01/focused-runtime-builds.stdout.log",
+      "bytes": 1571,
+      "sha256": "cb49f6fdf1c85db3a0dea8fdccb05c72137dcde6d7b1d90faefb8cffa2cc0561"
+    },
+    {
+      "path": "raw/install.exit.json",
+      "original": "C:/opf-work/runtime519-check01/install.exit.json",
+      "bytes": 567,
+      "sha256": "beaa89a27ea6acf2f0cd3f00a90ebc6e0d2bccfe29ba69c7693136ffc799dd89"
+    },
+    {
+      "path": "raw/install.stderr.log",
+      "original": "C:/opf-work/runtime519-check01/install.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/install.stdout.log",
+      "original": "C:/opf-work/runtime519-check01/install.stdout.log",
+      "bytes": 4208,
+      "sha256": "b88e8b00262c10b702d028c2fc29bf2b3b14e28b851a24cf87154199937d09bf"
+    },
+    {
+      "path": "raw/original-root-core.identity.json",
+      "original": "C:/opf-work/runtime519-check01/original-root-core.identity.json",
+      "bytes": 237,
+      "sha256": "0770e5ac1c91294be59ec88d4715f2bb57c0b9b8e7a50ea6a9d46f72ee6b66dd"
+    },
+    {
+      "path": "raw/original-root-core.log",
+      "original": "C:/opf-work/runtime519-check01/original-root-core.log",
+      "bytes": 402261,
+      "sha256": "b6cd8ec9f2dc7eaaf4b83772b6eff3a131500be8527131ead53036562f9ba994"
+    },
+    {
+      "path": "raw/script-corpus-hydration.json",
+      "original": "C:/opf-work/runtime519-check01/script-corpus-hydration.json",
+      "bytes": 882,
+      "sha256": "e255c242e3ccfc1f57870f2af8f804231b9a60ca5df8814ac2071ecb7cb99c69"
+    },
+    {
+      "path": "raw/script-width-recovery.exit.json",
+      "original": "C:/opf-work/runtime519-check01/script-width-recovery.exit.json",
+      "bytes": 421,
+      "sha256": "90d8cf8420f52300b0e69a6856d673b6f9ccc3d46cd6c364e22dee5417fbd0bd"
+    },
+    {
+      "path": "raw/script-width-recovery.stderr.log",
+      "original": "C:/opf-work/runtime519-check01/script-width-recovery.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/script-width-recovery.stdout.log",
+      "original": "C:/opf-work/runtime519-check01/script-width-recovery.stdout.log",
+      "bytes": 3090,
+      "sha256": "67c727406d5aa0b32526bffb010a5f40598c2bf898a9a478db47c5170c44d5a5"
+    },
+    {
+      "path": "raw/runtime519-baseline.mjs",
+      "original": "C:/opf-work/runtime519-baseline.mjs",
+      "bytes": 2323,
+      "sha256": "627f11da065e3af4b053d52f4205fd833c80bddb3947c2df415f98fae6fafc2f"
+    },
+    {
+      "path": "raw/runtime519-focused.mjs",
+      "original": "C:/opf-work/runtime519-focused.mjs",
+      "bytes": 1220,
+      "sha256": "d34cfa4f48810d793cdd7671ac74d0908542234f4941b5608185ad946e2154ed"
+    },
+    {
+      "path": "raw/runtime519-recover-corpus.mjs",
+      "original": "C:/opf-work/runtime519-recover-corpus.mjs",
+      "bytes": 3045,
+      "sha256": "bef600c1528c304be0ea5a5667fd56a21dfebc9cb28c6ee68159c562beabeb40"
+    }
+  ]
+}

@@ -4,7 +4,7 @@
 
 `validate` is read-only, local and deterministic. It fetches nothing (no images, fonts or catalogs), consults no clock and calls no model. The same document, options and fonts give byte-identical findings.
 
-For repeated editing-session reviews, `createValidator()` returns `{ validate, clear, cache }`. Its `validate(input, options)` runs the same complete selected checks and rebuilds every finding, fix and source location. It can reuse only equivalent derived slide geometry. Plain `validate()` always starts cold and remains the comparison oracle.
+For repeated editing-session reviews, `createValidator()` returns `{ validate, clear, cache }`. Its `validate(input, options)` runs the same complete selected checks and rebuilds every finding, fix and source location. It can reuse only equivalent derived slide geometry. Plain `validate()` always starts cold and remains the comparison oracle. In Node, each session has the same default gallery registration as Node `validate()`; the browser/worker session registers no catalog unless the host passes one. An explicit `catalogs: []` disables the Node fallback for that call, and custom catalogs are passed through unchanged.
 
 The session cache retains detached plain data for at most 64 slide compositions and 8 MiB of logical keys/data, including at most 2 MiB of shared exact keys. These are retention limits, not measured JavaScript heap sizes. Global metadata/catalog/options changes invalidate the cache; slide order, IDs, prior section/citation/message context and each chart/table's referenced data are part of equivalence. An oversized or opaque input and a failed composition are checked cold. Keys share one current-deck snapshot and prefix tokens rather than copying the whole deck into every entry.
 
